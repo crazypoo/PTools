@@ -157,10 +157,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
             make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
         }
         
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.optionChange(style: previousTraitCollection.userInterfaceStyle)
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.optionChange(style: previousTraitCollection.userInterfaceStyle)
         }
     }
     

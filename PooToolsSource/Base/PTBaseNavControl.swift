@@ -42,12 +42,10 @@ open class PTBaseNavControl: UINavigationController {
         // Do any additional setup after loading the view.
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
+            self.setNeedsStatusBarAppearanceUpdate()
         }
     }
     

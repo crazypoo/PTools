@@ -417,12 +417,14 @@ open class PTTipsView: UIView {
         return bounds.integral
     }
 
+    @MainActor // 标记主参与者，确保 UI 操作的并发安全
     fileprivate func setup() {
         guard let containerView = containerView else { return }
 
         var rect = CGRect.zero
         backgroundColor = .clear
 
+        // 1. 优化自动方向推断
         if direction.isAuto {
             var spaces: [PopTipDirection: CGFloat] = [:]
             if direction == .autoHorizontal || direction == .auto {
@@ -433,61 +435,71 @@ open class PTTipsView: UIView {
                 spaces[.up] = from.minY - containerView.frame.minY
                 spaces[.down] = containerView.frame.maxY - from.maxY
             }
-            // 优化点：安全解包，防止无空间时崩溃，提供默认值 .up
-            direction = spaces.sorted(by: { $0.1 > $1.1 }).first?.key ?? .up
+            // 优化点：使用 max(by:) 替代 sorted().first，提升查找性能
+            direction = spaces.max(by: { $0.value < $1.value })?.key ?? .up
         }
 
+        // 2. 计算最大宽度
         if direction == .left {
-            maxWidth = CGFloat.minimum(maxWidth, from.origin.x - padding * 2 - edgeInsets.horizontal - arrowSize.width)
+            maxWidth = min(maxWidth, from.minX - padding * 2 - edgeInsets.horizontal - arrowSize.width)
         }
         if direction == .right {
-            maxWidth = CGFloat.minimum(maxWidth, containerView.bounds.width - from.origin.x - from.width - padding * 2 - edgeInsets.horizontal - arrowSize.width)
+            maxWidth = min(maxWidth, containerView.bounds.width - from.minX - from.width - padding * 2 - edgeInsets.horizontal - arrowSize.width)
         }
 
         textBounds = textBounds(for: text, attributedText: attributedText, view: customView, with: font, padding: padding, edges: edgeInsets, in: maxWidth)
 
-        // 优化点：防御除以0，防止 anchor 计算导致界面异常
+        // 3. 布局计算
         switch direction {
-        case .auto, .autoHorizontal, .autoVertical: break
+        case .auto, .autoHorizontal, .autoVertical:
+            break
+            
         case .up:
-            let dimensions = setupVertically()
-            rect = dimensions.0
-            arrowPosition = dimensions.1
-            let anchorX = rect.size.width > 0 ? arrowPosition.x / rect.size.width : 0.5
+            let (frameRect, arrowPos) = setupVertically()
+            rect = frameRect
+            arrowPosition = arrowPos
+            let anchorX = rect.width > 0 ? arrowPosition.x / rect.width : 0.5
             layer.anchorPoint = CGPoint(x: anchorX, y: 1)
             layer.position = CGPoint(x: layer.position.x + rect.width * anchorX, y: layer.position.y + rect.height / 2)
+            
         case .down:
-            let dimensions = setupVertically()
-            rect = dimensions.0
-            arrowPosition = dimensions.1
-            let anchorX = rect.size.width > 0 ? arrowPosition.x / rect.size.width : 0.5
-            textBounds.origin = CGPoint(x: textBounds.origin.x, y: textBounds.origin.y + arrowSize.height)
+            let (frameRect, arrowPos) = setupVertically()
+            rect = frameRect
+            arrowPosition = arrowPos
+            let anchorX = rect.width > 0 ? arrowPosition.x / rect.width : 0.5
+            textBounds.origin.y += arrowSize.height // 更简洁的坐标修改
             layer.anchorPoint = CGPoint(x: anchorX, y: 0)
             layer.position = CGPoint(x: layer.position.x + rect.width * anchorX, y: layer.position.y - rect.height / 2)
+            
         case .left:
-            let dimensions = setupHorizontally()
-            rect = dimensions.0
-            arrowPosition = dimensions.1
+            let (frameRect, arrowPos) = setupHorizontally()
+            rect = frameRect
+            arrowPosition = arrowPos
             let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5
             layer.anchorPoint = CGPoint(x: 1, y: anchorY)
             layer.position = CGPoint(x: layer.position.x - rect.width / 2, y: layer.position.y + rect.height * anchorY)
+            
         case .right:
-            let dimensions = setupHorizontally()
-            rect = dimensions.0
-            arrowPosition = dimensions.1
-            textBounds.origin = CGPoint(x: textBounds.origin.x + arrowSize.height, y: textBounds.origin.y)
+            let (frameRect, arrowPos) = setupHorizontally()
+            rect = frameRect
+            arrowPosition = arrowPos
+            textBounds.origin.x += arrowSize.height // 更简洁的坐标修改
             let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5
             layer.anchorPoint = CGPoint(x: 0, y: anchorY)
             layer.position = CGPoint(x: layer.position.x + rect.width / 2, y: layer.position.y + rect.height * anchorY)
+            
         case .none:
-            rect.size = CGSize(width: textBounds.width + padding * 2.0 + edgeInsets.horizontal + borderWidth * 2, height: textBounds.height + padding * 2.0 + edgeInsets.vertical + borderWidth * 2)
-            rect.origin = CGPoint(x: from.midX - rect.size.width / 2, y: from.midY - rect.height / 2)
+            let rw = textBounds.width + padding * 2.0 + edgeInsets.horizontal + borderWidth * 2
+            let rh = textBounds.height + padding * 2.0 + edgeInsets.vertical + borderWidth * 2
+            rect.size = CGSize(width: rw, height: rh)
+            rect.origin = CGPoint(x: from.midX - rw / 2, y: from.midY - rh / 2)
             rect = rectContained(rect: rect)
-            arrowPosition = CGPoint.zero
+            arrowPosition = .zero
             layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             layer.position = CGPoint(x: from.midX, y: from.midY)
         }
 
+        // 4. 应用 UI 框架
         label.frame = textBounds
         if label.superview == nil {
             addSubview(label)
@@ -510,25 +522,36 @@ open class PTTipsView: UIView {
 
         setNeedsDisplay()
 
+        // 5. 调用独立出来的注册方法
+        setupGesturesAndNotifications()
+    }
+
+    @MainActor
+    private func setupGesturesAndNotifications() {
+        // 消除强制解包(!)，安全配置并保存手势
         if tapGestureRecognizer == nil {
-            tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PTTipsView.handleTap(_:)))
-            tapGestureRecognizer?.cancelsTouchesInView = false
-            self.addGestureRecognizer(tapGestureRecognizer!)
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+            tap.cancelsTouchesInView = false
+            addGestureRecognizer(tap)
+            tapGestureRecognizer = tap
         }
+        
         if shouldDismissOnTapOutside && tapToRemoveGestureRecognizer == nil {
-            tapToRemoveGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PTTipsView.handleTapOutside(_:)))
+            tapToRemoveGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside(_:)))
         }
+        
         if shouldDismissOnSwipeOutside && swipeGestureRecognizer == nil {
-            swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(PTTipsView.handleSwipeOutside(_:)))
-            swipeGestureRecognizer?.direction = swipeRemoveGestureDirection
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeOutside(_:)))
+            swipe.direction = swipeRemoveGestureDirection
+            swipeGestureRecognizer = swipe
         }
 
         if isApplicationInBackground == nil {
-            NotificationCenter.default.addObserver(self, selector: #selector(PTTipsView.handleApplicationActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(PTTipsView.handleApplicationResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleApplicationActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleApplicationResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         }
     }
-
+    
     open override func draw(_ rect: CGRect) {
         if isRounded {
             let showHorizontally = direction == .left || direction == .right
@@ -892,107 +915,156 @@ open class PTTipsView: UIView {
 
 // MARK: - 贝塞尔曲线辅助方法 (Bezier Path Helpers)
 public extension PTTipsView {
-    class func pathWith(rect: CGRect, frame: CGRect, direction: PopTipDirection, arrowSize: CGSize, arrowPosition: CGPoint, arrowRadius: CGFloat, borderWidth: CGFloat = 0, radius: CGFloat = 0) -> UIBezierPath {
-        var path = UIBezierPath()
-        var baloonFrame = CGRect.zero
+    @MainActor class func pathWith(rect: CGRect,
+                        frame: CGRect,
+                        direction: PopTipDirection,
+                        arrowSize: CGSize,
+                        arrowPosition: CGPoint,
+                        arrowRadius: CGFloat,
+                        borderWidth: CGFloat = 0,
+                        radius: CGFloat = 0) -> UIBezierPath {
+        
+        let path = UIBezierPath()
+        
+        // 1. 提取角度常量，极大减轻 Swift 编译器的类型推断负担
+        let pi = CGFloat.pi
+        let pi_2 = pi / 2.0
+        let pi_3_2 = pi * 1.5
+        
+        // 2. 提取公共计算参数
+        let aw_2 = arrowSize.width / 2.0
+        let ah = arrowSize.height
+        let ax = arrowPosition.x
+        let ay = arrowPosition.y
         
         switch direction {
-        case .auto, .autoHorizontal, .autoVertical: break
+        case .auto, .autoHorizontal, .autoVertical:
+            break
+            
         case .none:
-            baloonFrame = CGRect(x: borderWidth, y: borderWidth, width: frame.width - borderWidth * 2, height: frame.height - borderWidth * 2)
-            path = UIBezierPath(roundedRect: baloonFrame, cornerRadius: radius)
+            let bWidth = frame.width - borderWidth * 2
+            let bHeight = frame.height - borderWidth * 2
+            let baloonFrame = CGRect(x: borderWidth, y: borderWidth, width: bWidth, height: bHeight)
+            return UIBezierPath(roundedRect: baloonFrame, cornerRadius: radius)
+            
         case .down:
-            baloonFrame = CGRect(x: 0, y: arrowSize.height, width: rect.width - borderWidth * 2, height: rect.height - arrowSize.height - borderWidth * 2)
+            let bWidth = rect.width - borderWidth * 2
+            let bHeight = rect.height - ah - borderWidth * 2
+            let baloonFrame = CGRect(x: 0, y: ah, width: bWidth, height: bHeight)
             
-            let arrowStartPoint = CGPoint(x: arrowPosition.x - arrowSize.width / 2, y: arrowPosition.y + arrowSize.height)
-            let arrowEndPoint = CGPoint(x: arrowPosition.x + arrowSize.width / 2, y: arrowPosition.y + arrowSize.height)
-            let arrowVertex = arrowPosition
+            let arrowStartPoint = CGPoint(x: ax - aw_2, y: ay + ah)
+            let arrowEndPoint = CGPoint(x: ax + aw_2, y: ay + ah)
             
-            path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
+            // 提取高频使用的坐标点
+            let minX = baloonFrame.minX
+            let maxX = baloonFrame.maxX
+            let minY = baloonFrame.minY
+            let maxY = baloonFrame.maxY
+            
+            path.move(to: arrowStartPoint)
+            if let cornerPoint = roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowPosition, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
+            path.addLine(to: arrowEndPoint)
+            
+            path.addLine(to: CGPoint(x: maxX - radius, y: minY))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: minY + radius), radius: radius, startAngle: pi_3_2, endAngle: 0, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX, y: maxY - radius - borderWidth))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: maxY - radius), radius: radius, startAngle: 0, endAngle: pi_2, clockwise: true)
+            path.addLine(to: CGPoint(x: minX + radius + borderWidth, y: maxY))
+            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: maxY - radius), radius: radius, startAngle: pi_2, endAngle: pi, clockwise: true)
+            path.addLine(to: CGPoint(x: borderWidth, y: minY + radius + borderWidth))
+            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: minY + radius), radius: radius, startAngle: pi, endAngle: pi_3_2, clockwise: true)
             path.close()
-
+            
         case .up:
-            baloonFrame = CGRect(x: 0, y: 0, width: rect.size.width - borderWidth * 2, height: rect.size.height - arrowSize.height - borderWidth * 2)
+            let bWidth = rect.size.width - borderWidth * 2
+            let bHeight = rect.size.height - ah - borderWidth * 2
+            let baloonFrame = CGRect(x: 0, y: 0, width: bWidth, height: bHeight)
             
-            let arrowStartPoint = CGPoint(x: arrowPosition.x + arrowSize.width / 2, y: arrowPosition.y - arrowSize.height)
-            let arrowEndPoint = CGPoint(x: arrowPosition.x - arrowSize.width / 2, y: arrowPosition.y - arrowSize.height)
-            let arrowVertex = arrowPosition
+            let arrowStartPoint = CGPoint(x: ax + aw_2, y: ay - ah)
+            let arrowEndPoint = CGPoint(x: ax - aw_2, y: ay - ah)
             
-            path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
+            let minX = baloonFrame.minX
+            let maxX = baloonFrame.maxX
+            let minY = baloonFrame.minY
+            let maxY = baloonFrame.maxY
+            
+            path.move(to: arrowStartPoint)
+            if let cornerPoint = roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowPosition, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
+            path.addLine(to: arrowEndPoint)
+            path.addLine(to: CGPoint(x: minX + radius + borderWidth, y: maxY))
+            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: maxY - radius), radius: radius, startAngle: pi_2, endAngle: pi, clockwise: true)
+            path.addLine(to: CGPoint(x: borderWidth, y: minY + radius + borderWidth))
+            path.addArc(withCenter: CGPoint(x: minX + radius + borderWidth, y: minY + radius), radius: radius, startAngle: pi, endAngle: pi_3_2, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX - radius, y: minY))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: minY + radius), radius: radius, startAngle: pi_3_2, endAngle: 0, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX, y: maxY - radius - borderWidth))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: maxY - radius), radius: radius, startAngle: 0, endAngle: pi_2, clockwise: true)
             path.close()
-
+            
         case .left:
-            baloonFrame = CGRect(x: 0, y: 0, width: rect.size.width - arrowSize.height - borderWidth * 2, height: rect.size.height - borderWidth * 2)
+            let bWidth = rect.size.width - ah - borderWidth * 2
+            let bHeight = rect.size.height - borderWidth * 2
+            let baloonFrame = CGRect(x: 0, y: 0, width: bWidth, height: bHeight)
             
-            let arrowStartPoint = CGPoint(x: arrowPosition.x - arrowSize.height, y: arrowPosition.y - arrowSize.width / 2)
-            let arrowEndPoint = CGPoint(x: arrowPosition.x - arrowSize.height, y: arrowPosition.y + arrowSize.width / 2)
-            let arrowVertex = arrowPosition
+            let arrowStartPoint = CGPoint(x: ax - ah, y: ay - aw_2)
+            let arrowEndPoint = CGPoint(x: ax - ah, y: ay + aw_2)
             
-            path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
+            let minX = baloonFrame.minX
+            let maxX = baloonFrame.maxX
+            let minY = baloonFrame.minY
+            let maxY = baloonFrame.maxY
+            
+            path.move(to: arrowStartPoint)
+            if let cornerPoint = roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowPosition, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
+            path.addLine(to: arrowEndPoint)
+            path.addLine(to: CGPoint(x: maxX, y: maxY - radius - borderWidth))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: maxY - radius), radius: radius, startAngle: 0, endAngle: pi_2, clockwise: true)
+            path.addLine(to: CGPoint(x: minX + radius + borderWidth, y: maxY))
+            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: maxY - radius), radius: radius, startAngle: pi_2, endAngle: pi, clockwise: true)
+            path.addLine(to: CGPoint(x: borderWidth, y: minY + radius + borderWidth))
+            path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: minY + radius + borderWidth), radius: radius, startAngle: pi, endAngle: pi_3_2, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX - radius, y: minY + borderWidth))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: minY + radius + borderWidth), radius: radius, startAngle: pi_3_2, endAngle: 0, clockwise: true)
             path.close()
-
+            
         case .right:
-            baloonFrame = CGRect(x: arrowSize.height, y: 0, width: rect.size.width - arrowSize.height - borderWidth * 2, height: rect.size.height - borderWidth * 2)
+            let bWidth = rect.size.width - ah - borderWidth * 2
+            let bHeight = rect.size.height - borderWidth * 2
+            let baloonFrame = CGRect(x: ah, y: 0, width: bWidth, height: bHeight)
             
-            let arrowStartPoint = CGPoint(x: arrowPosition.x + arrowSize.height, y: arrowPosition.y + arrowSize.width / 2)
-            let arrowEndPoint = CGPoint(x: arrowPosition.x + arrowSize.height, y: arrowPosition.y - arrowSize.width / 2)
-            let arrowVertex = arrowPosition
+            let arrowStartPoint = CGPoint(x: ax + ah, y: ay + aw_2)
+            let arrowEndPoint = CGPoint(x: ax + ah, y: ay - aw_2)
             
-            path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
+            let minX = baloonFrame.minX
+            let maxX = baloonFrame.maxX
+            let minY = baloonFrame.minY
+            let maxY = baloonFrame.maxY
+            
+            path.move(to: arrowStartPoint)
+            if let cornerPoint = roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowPosition, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            path.addLine(to: CGPoint(x: baloonFrame.minX, y: baloonFrame.minY + radius + borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + borderWidth))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            path.addLine(to: CGPoint(x: baloonFrame.maxX, y: baloonFrame.maxY - radius))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            path.addLine(to: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.maxY ))
-            path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
+            path.addLine(to: arrowEndPoint)
+            path.addLine(to: CGPoint(x: minX, y: minY + radius + borderWidth))
+            path.addArc(withCenter: CGPoint(x: minX + radius, y: minY + radius + borderWidth), radius: radius, startAngle: pi, endAngle: pi_3_2, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX - radius, y: minY + borderWidth))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: minY + radius + borderWidth), radius: radius, startAngle: pi_3_2, endAngle: 0, clockwise: true)
+            path.addLine(to: CGPoint(x: maxX, y: maxY - radius))
+            path.addArc(withCenter: CGPoint(x: maxX - radius, y: maxY - radius), radius: radius, startAngle: 0, endAngle: pi_2, clockwise: true)
+            path.addLine(to: CGPoint(x: minX + radius, y: maxY))
+            path.addArc(withCenter: CGPoint(x: minX + radius, y: maxY - radius), radius: radius, startAngle: pi_2, endAngle: pi, clockwise: true)
             path.close()
-          }
-          
-          return path
+        }
+        
+        return path
     }
-    
+
     private class func roundCornerCircleCenter(start: CGPoint, vertex: CGPoint, end: CGPoint, radius: CGFloat) -> CornerPoint? {
         let firstLineAngle: CGFloat = atan2(vertex.y - start.y, vertex.x - start.x)
         let secondLineAngle: CGFloat = atan2(end.y - vertex.y, end.x - vertex.x)

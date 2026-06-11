@@ -1121,12 +1121,11 @@ open class PTBaseViewController: UIViewController {
         definesPresentationContext = true
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
+            self.setNeedsStatusBarAppearanceUpdate()
         }
+
     }
     
     @objc func backButtonTapped() {
@@ -1250,16 +1249,7 @@ extension PTBaseViewController {
             PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .viewCycle)
         }
     }
-    
-    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
-    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
+        
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
     
     public func returnFrontVC(completion:PTActionTask? = nil) {

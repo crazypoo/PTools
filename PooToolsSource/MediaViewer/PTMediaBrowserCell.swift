@@ -343,22 +343,20 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 self.videoAVItem(avItem: avPlayerItem)
             case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
-                Task {
-                    let result = try await PTLivePhoto.extractResources(from: livePhotoTarget)
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: result.pairedImage.path) {
-                        guard let keyPhotoImage = UIImage(contentsOfFile: result.pairedImage.path) else {
-                            return
-                        }
-                        self.gifImage = keyPhotoImage
+                let result = try await PTLivePhoto.extractResources(from: livePhotoTarget)
+                if FileManager.pt.judgeFileOrFolderExists(filePath: result.pairedImage.path) {
+                    guard let keyPhotoImage = UIImage(contentsOfFile: result.pairedImage.path) else {
+                        return
                     }
-                    self.livePhoto.livePhoto = livePhotoTarget
-                    self.adjustFrame(normal: false) {
-                        PTGCDManager.shared.runOnMain {
-                            self.livePhoto.startPlayback(with: .hint)
-                        }
-                    }
-                    self.livePhoto.isHidden = false
+                    self.gifImage = keyPhotoImage
                 }
+                self.livePhoto.livePhoto = livePhotoTarget
+                self.adjustFrame(normal: false) {
+                    PTGCDManager.shared.runOnMain {
+                        self.livePhoto.startPlayback(with: .hint)
+                    }
+                }
+                self.livePhoto.isHidden = false
             default:
                 self.baseLoadImageData(imageData: self.dataModel.imageURL as Any, currentID: currentID)
             }

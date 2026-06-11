@@ -6,7 +6,7 @@ let package = Package(
     // 💡 修复错误 2：存在 .lproj 等多语言资源时，必须指定默认本地化语言
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v17)
     ],
     products: [
         // ==========================================

@@ -32,10 +32,8 @@ public class PTActionCell:UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.blurChange(style: previousTraitCollection.userInterfaceStyle)
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.blurChange(style: previousTraitCollection.userInterfaceStyle)
         }
         addSubviews([blur,cellButton])
         blur.snp.makeConstraints { make in

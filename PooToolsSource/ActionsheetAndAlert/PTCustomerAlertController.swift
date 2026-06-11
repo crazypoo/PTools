@@ -159,10 +159,8 @@ public class PTCustomerAlertController: PTAlertController {
 
         contentSubsSet()
         
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
         }
     }
     

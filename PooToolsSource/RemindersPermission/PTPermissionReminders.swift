@@ -38,17 +38,9 @@ public class PTPermissionReminders: PTPermission {
         
         let eventStore = EKEventStore()
         
-        if #available(iOS 17.0, *) {
-            eventStore.requestFullAccessToReminders { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.shared.runOnMain {
-                    completion()
-                }
-            }
-        } else {
-            eventStore.requestAccess(to: EKEntityType.reminder) { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.shared.runOnMain {
-                    completion()
-                }
+        eventStore.requestFullAccessToReminders { (accessGranted: Bool, error: Error?) in
+            PTGCDManager.shared.runOnMain {
+                completion()
             }
         }
     }

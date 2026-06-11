@@ -88,9 +88,7 @@ class AppDelegate: PTAppWindowsDelegate {
         
         permissionStatic.permissionModels = [locationAlways,locationWhen,camera,mic,photo]
         
-        if #available(iOS 17.0, *) {
-            PTTip.shared.appdelegateTipSet()
-        }
+        PTTip.shared.appdelegateTipSet()
         // Override point for customization after application launch.
         var debugDevice = false
         let buglyConfig = BuglyConfig()

@@ -134,25 +134,7 @@ public extension UIImage {
     ///   - lossless: 是否使用无损压缩，默认为 false
     /// - Returns: 转换后的 HEIC 格式 Data，若转换失败则返回 nil
     func heicDataBelow17Version(quality: CGFloat? = 1.0, lossless: Bool = false) -> Data? {
-        if #available(iOS 17.0, *) {
-            return self.heicData()
-        } else {
-            guard let cgImage = self.cgImage else { return nil }
-            
-            let mutableData = NSMutableData()
-            guard let destination = CGImageDestinationCreateWithData(mutableData, UTType.heic.identifier as CFString, 1, nil) else {
-                return nil
-            }
-            
-            var options: [CFString: Any] = [:]
-            if !lossless {
-                options[kCGImageDestinationLossyCompressionQuality] = quality ?? 1.0
-            }
-            
-            CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
-            
-            return CGImageDestinationFinalize(destination) ? mutableData as Data : nil
-        }
+        return self.heicData()
     }
 
     //MARK: 更改圖片大小

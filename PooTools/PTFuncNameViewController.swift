@@ -966,17 +966,13 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 } else if itemRow.title == .tipkit {
                     PTGCDManager.shared.runOnMain {
-                        if #available(iOS 17.0, *) {
-                            let vc = PTTipsDemoController()
-                            self.navigationController?.pushViewController(vc)
-                        }
+                        let vc = PTTipsDemoController()
+                        self.navigationController?.pushViewController(vc)
                     }
                 } else if itemRow.title == .document {
                     PTGCDManager.shared.runOnMain {
-                        if #available(iOS 17.0, *) {
-                            let vc = PTDocumentViewController()
-                            self.navigationController?.pushViewController(vc)
-                        }
+                        let vc = PTDocumentViewController()
+                        self.navigationController?.pushViewController(vc)
                     }
                 } else if itemRow.title == .svga {
     //                let vc = PTSVGAViewController()

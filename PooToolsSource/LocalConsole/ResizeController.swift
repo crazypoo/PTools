@@ -416,10 +416,8 @@ class PlatterView: UIView {
             make.centerX.equalToSuperview()
         }
 
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.layer.borderColor = UIColor.randomColor.cgColor
-            }
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.layer.borderColor = UIColor.randomColor.cgColor
         }
     }
     

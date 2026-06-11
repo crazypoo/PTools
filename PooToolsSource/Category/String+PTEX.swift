@@ -890,17 +890,10 @@ public extension String {
     //MARK: 检查URL是否可以读取
     ///检查URL是否可以读取
     func checkURLCanLoad(encodingInvalidCharacters:Bool = false) ->Bool {
-        if #available(iOS 17.0, *) {
-            if URL(string: self, encodingInvalidCharacters: encodingInvalidCharacters) != nil {
-                return true
-            }
-            return false
-        } else {
-            if URL(string: self) != nil {
-                return true
-            }
-            return false
+        if URL(string: self, encodingInvalidCharacters: encodingInvalidCharacters) != nil {
+            return true
         }
+        return false
     }
     
     //MARK: 检查字符串

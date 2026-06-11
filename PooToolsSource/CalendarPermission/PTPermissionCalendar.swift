@@ -79,40 +79,31 @@ public class PTPermissionCalendar: PTPermission {
         
         let eventStore = EKEventStore()
         
-        if #available(iOS 17.0, *) {
-            
-            let requestWriteOnly = {
-                eventStore.requestWriteOnlyAccessToEvents { (accessGranted: Bool, error: Error?) in
-                    PTGCDManager.shared.runOnMain {
-                        completion()
-                    }
-                }
-            }
-            
-            let requestFull = {
-                eventStore.requestFullAccessToEvents { (accessGranted: Bool, error: Error?) in
-                    PTGCDManager.shared.runOnMain {
-                        completion()
-                    }
-                }
-            }
-            
-            switch kind {
-            case .calendar(let access):
-                if access == .write {
-                    requestWriteOnly()
-                } else {
-                    requestFull()
-                }
-            default:
-                requestFull()
-            }
-        } else {
-            eventStore.requestAccess(to: EKEntityType.event) { (accessGranted: Bool, error: Error?) in
+        let requestWriteOnly = {
+            eventStore.requestWriteOnlyAccessToEvents { (accessGranted: Bool, error: Error?) in
                 PTGCDManager.shared.runOnMain {
                     completion()
                 }
             }
+        }
+        
+        let requestFull = {
+            eventStore.requestFullAccessToEvents { (accessGranted: Bool, error: Error?) in
+                PTGCDManager.shared.runOnMain {
+                    completion()
+                }
+            }
+        }
+        
+        switch kind {
+        case .calendar(let access):
+            if access == .write {
+                requestWriteOnly()
+            } else {
+                requestFull()
+            }
+        default:
+            requestFull()
         }
     }
 }

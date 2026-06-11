@@ -1237,11 +1237,7 @@ extension PTCollectionView {
         }
         
         if !collectionData.isEmpty {
-            if #available(iOS 17.0, *) {
-                PTUnavailableManager.hideUnavailableView(in: self)
-            } else {
-                self.collectionView.reloadEmptyDataSet()
-            }
+            PTUnavailableManager.hideUnavailableView(in: self)
         }
         
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
@@ -1803,17 +1799,11 @@ extension PTCollectionView {
     fileprivate func setiOS17EmptyDataView() {
         switch self.viewConfig.emptyShowType {
         case .Auto:
-            if #available(iOS 17.0, *) {
-                self.showEmptyConfig()
-            } else {
-                self.below17EmptyDataSet()
-            }
+            self.showEmptyConfig()
         case .ThirtyParty:
             self.below17EmptyDataSet()
         case .System:
-            if #available(iOS 17.0, *) {
-                self.showEmptyConfig()
-            }
+            self.showEmptyConfig()
         }
     }
     
