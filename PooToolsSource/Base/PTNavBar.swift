@@ -13,6 +13,11 @@ import SwifterSwift
 @MainActor
 open class PTNavBar: PTNavigationBarContainer {
     
+    fileprivate func navOffset() -> CGFloat {
+        let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
+        return offsetHeight
+    }
+    
     // ✅ 标记是否为普通的 View（不接管系统状态栏）
     public var isFakeNav: Bool = false {
         didSet {
@@ -77,13 +82,31 @@ open class PTNavBar: PTNavigationBarContainer {
             }
             
             titleContainer.isHidden = false // 👈 关键修复
-            
-            if let labelTitle = newView as? UILabel {
-                labelTitle.setContentHuggingPriority(.required, for: .horizontal)
-                labelTitle.setContentCompressionResistancePriority(.required, for: .horizontal)
-            }
+
             titleContainer.addSubview(newView)
-            applyTitleViewConstraints(newView)
+            // 如果该边有按钮：边界 = 基础边距 + 按钮总宽度 + 标题间距
+            // 如果该边没按钮：边界 = 仅仅保留基础的安全边距（不浪费一丝多余空间）
+            let leftSpace = leftContainerWidth > 0
+                ? (PTAppBaseConfig.share.defaultViewSpace + leftContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
+                : PTAppBaseConfig.share.defaultViewSpace
+            
+            let rightSpace = rightContainerWidth > 0
+                ? (PTAppBaseConfig.share.defaultViewSpace + rightContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
+                : PTAppBaseConfig.share.defaultViewSpace
+
+            let top = isFakeNav ? 0 : (CGFloat.statusBarHeight() + navOffset())
+            titleContainer.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.top.equalToSuperview().inset(top)
+                make.left.equalToSuperview().offset(leftSpace)
+                make.right.equalToSuperview().offset(-rightSpace)
+            }
+            
+            newView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(newView.bounds.size.height)
+                make.centerY.equalToSuperview()
+            }
         }
     }
     
