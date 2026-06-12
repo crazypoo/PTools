@@ -11,7 +11,6 @@ import Photos
 
 public enum PTMediaEditorAction {
     case draw(PTDrawPath)
-    case eraser([PTDrawPath])
     case clip(oldStatus: PTClipStatus, newStatus: PTClipStatus)
     case sticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?)
     case mosaic(PTMosaicPath)

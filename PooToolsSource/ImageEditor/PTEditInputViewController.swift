@@ -721,7 +721,7 @@ extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
 }
 
 public class PTTextStickerView: PTBaseStickerView {
-    static let fontSize: CGFloat = 32
+    public static let fontSize: CGFloat = 32
     
     private static let edgeInset: CGFloat = 10
     

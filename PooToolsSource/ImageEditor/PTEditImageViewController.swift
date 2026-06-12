@@ -347,6 +347,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.setImage(UIImage(.eraser.fill), for: .selected)
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
+            self.eraserCircleView.isHidden = !sender.isSelected
         }
         return view
     }()
@@ -1101,8 +1102,6 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         switch action {
         case let .draw(path):
             undoDraw(path)
-        case let .eraser(paths):
-            undoEraser(paths)
         case let .clip(oldStatus, _):
             undoOrRedoClip(oldStatus)
         case let .sticker(oldState, newState):
@@ -1122,8 +1121,6 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         switch action {
         case let .draw(path):
             redoDraw(path)
-        case let .eraser(paths):
-            redoEraser(paths)
         case let .clip(_, newStatus):
             undoOrRedoClip(newStatus)
         case let .sticker(oldState, newState):
@@ -1148,19 +1145,7 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         drawEngine.drawPaths.append(path)
         drawEngine.reloadRenderState()
     }
-    
-    private func undoEraser(_ paths: [PTDrawPath]) {
-        paths.forEach { $0.willDelete = false }
-        drawEngine.drawPaths.append(contentsOf: paths)
-        drawEngine.drawPaths.sort { $0.index < $1.index }
-        drawEngine.reloadRenderState()
-    }
-    
-    private func redoEraser(_ paths: [PTDrawPath]) {
-        drawEngine.drawPaths.removeAll { paths.contains($0) }
-        drawEngine.reloadRenderState()
-    }
-    
+        
     private func undoOrRedoClip(_ status: PTClipStatus) {
         clipImage(status: status)
         preClipStatus = status

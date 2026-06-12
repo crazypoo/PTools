@@ -13,19 +13,15 @@ public class PTDrawPath: NSObject {
     @MainActor private static var pathIndex = 0
     
     private let pathColor: UIColor
-    
-    private var bgPath: UIBezierPath
-    
     private let ratio: CGFloat
-    
     private var points: [CGPoint] = []
     
     let index: Int
-    
     var path: UIBezierPath
     
-    var willDelete = false
-    
+    // 🌟 1. 新增：标记这条路径是不是橡皮擦
+    public var isEraser = false
+        
     public override var hash: Int {
         return index.hashValue
     }
@@ -35,19 +31,15 @@ public class PTDrawPath: NSObject {
         return self.index == other.index
     }
 
-    @MainActor init(pathColor: UIColor, pathWidth: CGFloat, defaultLinePath: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    // 初始化方法中去掉了 defaultLinePath 参数，因为用不到 bgPath 了
+    @MainActor init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
+        
         path = UIBezierPath()
         path.lineWidth = pathWidth / ratio
         path.lineCapStyle = .round
         path.lineJoinStyle = .round
         path.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
-        
-        bgPath = UIBezierPath()
-        bgPath.lineWidth = pathWidth / ratio + defaultLinePath
-        bgPath.lineCapStyle = .round
-        bgPath.lineJoinStyle = .round
-        bgPath.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
         
         points.append(startPoint)
         self.ratio = ratio
@@ -66,18 +58,13 @@ public class PTDrawPath: NSObject {
         
         guard points.count >= 4 else {
             path.addLine(to: divRatio(point))
-            bgPath.addLine(to: divRatio(point))
             return
         }
         
         path.removeAllPoints()
-        bgPath.removeAllPoints()
         
         path.move(to: divRatio(points[0]))
         path.addLine(to: divRatio(points[1]))
-        
-        bgPath.move(to: divRatio(points[0]))
-        bgPath.addLine(to: divRatio(points[1]))
         
         let granularity = 4
         for i in 3..<points.count {
@@ -103,25 +90,32 @@ public class PTDrawPath: NSObject {
                     (3 * p1.y - p0.y - 3 * p2.y + p3.y) * ttt
                 )
                 path.addLine(to: divRatio(point))
-                bgPath.addLine(to: divRatio(point))
             }
             
             path.addLine(to: divRatio(p2))
-            bgPath.addLine(to: divRatio(p2))
         }
         
         path.addLine(to: divRatio(points[points.count - 1]))
-        bgPath.addLine(to: divRatio(points[points.count - 1]))
     }
     
+    // 🌟 2. 核心渲染魔法
     func drawPath() {
-        if willDelete {
-            UIColor.white.set()
-            bgPath.stroke()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        
+        if isEraser {
+            // 如果是橡皮擦，设置混合模式为透明抠除
+            context.setBlendMode(.clear)
+            UIColor.clear.set()
+        } else {
+            // 如果是正常画笔，使用正常混合模式
+            context.setBlendMode(.normal)
+            pathColor.set()
         }
         
-        pathColor.set()
         path.stroke()
+        
+        // 🌟 3. 必须恢复模式，否则后面的普通画笔也会变成橡皮擦！
+        context.setBlendMode(.normal)
     }
 }
 

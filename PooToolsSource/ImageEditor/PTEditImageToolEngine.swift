@@ -153,50 +153,47 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 具体手势实现: 绘制
     
     private func handleDrawGesture(_ pan: UIPanGestureRecognizer, context: PTEditImageEngineContext) {
-        Task { @MainActor in
-            let point = pan.location(in: drawingImageView)
-            let scrollView = context.engineScrollView
-            let originalImageSize = context.engineOriginalImageSize
-            let editRect = context.engineEditRect
+        let point = pan.location(in: drawingImageView)
+        let scrollView = context.engineScrollView
+        let originalImageSize = context.engineOriginalImageSize
+        let editRect = context.engineEditRect
+        
+        if pan.state == .began {
+            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
             
-            if pan.state == .began {
-                onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
-                
-                let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-                let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-                let scale = ratio / originalRatio
-                
-                var size = drawingImageView.frame.size
-                size.width /= scale
-                size.height /= scale
-                if context.engineShouldSwapSize {
-                    swap(&size.width, &size.height)
-                }
-                
-                var toImageScale = Self.maxDrawLineImageWidth / size.width
-                if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-                    toImageScale = Self.maxDrawLineImageWidth / size.height
-                }
-                
-                let path = PTDrawPath(
-                    pathColor: drawColor,
-                    pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
-                    defaultLinePath: defaultDrawPathWidth,
-                    ratio: ratio / originalRatio / toImageScale,
-                    startPoint: point
-                )
-                drawPaths.append(path)
-                
-            } else if pan.state == .changed {
-                let path = drawPaths.last
-                path?.addLine(to: point)
-                drawLine()
-                
-            } else if pan.state == .cancelled || pan.state == .ended {
-                onInteractStateChanged?(false) // 通知 VC 恢复工具栏
-                if let path = drawPaths.last {
-                    context.engineEditorManager.storeAction(.draw(path))
-                }
+            let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
+            let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
+            let scale = ratio / originalRatio
+            
+            var size = drawingImageView.frame.size
+            size.width /= scale
+            size.height /= scale
+            if context.engineShouldSwapSize {
+                swap(&size.width, &size.height)
+            }
+            
+            var toImageScale = Self.maxDrawLineImageWidth / size.width
+            if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
+                toImageScale = Self.maxDrawLineImageWidth / size.height
+            }
+            
+            let path = PTDrawPath(
+                pathColor: drawColor,
+                pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
+                ratio: ratio / originalRatio / toImageScale,
+                startPoint: point
+            )
+            drawPaths.append(path)
+            
+        } else if pan.state == .changed {
+            let path = drawPaths.last
+            path?.addLine(to: point)
+            drawLine()
+            
+        } else if pan.state == .cancelled || pan.state == .ended {
+            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
+            if let path = drawPaths.last {
+                context.engineEditorManager.storeAction(.draw(path))
             }
         }
     }
@@ -210,6 +207,7 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         let editRect = context.engineEditRect
         let eraserCircleView = context.engineEraserCircleView
         
+        // --- 坐标与缩放计算（保留你原有的优秀逻辑） ---
         let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
         let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
         let scale = ratio / originalRatio
@@ -217,57 +215,62 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         var size = drawingImageView.frame.size
         size.width /= scale
         size.height /= scale
-        if context.engineShouldSwapSize {
-            swap(&size.width, &size.height)
-        }
+        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
         
         var toImageScale = Self.maxDrawLineImageWidth / size.width
         if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
             toImageScale = Self.maxDrawLineImageWidth / size.height
         }
+        // ------------------------------------------
         
-        let pointScale = ratio / originalRatio / toImageScale
-        let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
+        // 计算橡皮擦 UI 圈圈的位置
+        var transform: CGAffineTransform = .identity
+        let angle = ((Int(context.engineCurrentAngle) % 360) + 360) % 360
+        let drawingImageViewSize = drawingImageView.frame.size
         
+        if angle == 90 { transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width) }
+        else if angle == 180 { transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height) }
+        else if angle == 270 { transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0) }
+        transform = transform.concatenating(drawingImageView.transform)
+        
+        
+        // MARK: - 手势状态机
         if pan.state == .began {
+            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
             eraserCircleView.isHidden = false
+            eraserCircleView.center = point.applying(transform)
             impactFeedback?.prepare()
-        }
-        
-        if pan.state == .began || pan.state == .changed {
-            var transform: CGAffineTransform = .identity
-            let angle = ((Int(context.engineCurrentAngle) % 360) + 360) % 360
-            let drawingImageViewSize = drawingImageView.frame.size
             
-            if angle == 90 {
-                transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width)
-            } else if angle == 180 {
-                transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height)
-            } else if angle == 270 {
-                transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
-            }
-            transform = transform.concatenating(drawingImageView.transform)
+            // 🌟 1. 像画笔一样，创建一条“橡皮擦路径”
+            // 计算出和橡皮擦 UI 一样大的实际线宽 (UI大小是 44)
+            let actualEraserWidth = (44.0 / scrollView.zoomScale) / (ratio / originalRatio / toImageScale)
+            
+            let path = PTDrawPath(
+                pathColor: .clear, // 颜色无所谓，反正要被 clear 掉
+                pathWidth: actualEraserWidth,
+                ratio: ratio / originalRatio / toImageScale,
+                startPoint: point
+            )
+            path.isEraser = true // 标记为橡皮擦！
+            
+            drawPaths.append(path)
+            impactFeedback?.impactOccurred()
+            
+        } else if pan.state == .changed {
             eraserCircleView.center = point.applying(transform)
             
-            var needDraw = false
-            for path in drawPaths {
-                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
-                    path.willDelete = true
-                    deleteDrawPaths.insert(path) // O(1) 插入
-                    needDraw = true
-                    impactFeedback?.impactOccurred()
-                }
-            }
-            if needDraw {
-                drawLine()
-            }
-        } else {
+            // 🌟 2. 把手指经过的点加入路径，并立刻重绘
+            let path = drawPaths.last
+            path?.addLine(to: point)
+            drawLine() // 触发重新渲染，橡皮擦划过的地方瞬间变透明！
+            
+        } else if pan.state == .cancelled || pan.state == .ended {
+            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
             eraserCircleView.isHidden = true
-            if !deleteDrawPaths.isEmpty {
-                context.engineEditorManager.storeAction(.eraser(Array(deleteDrawPaths)))
-                drawPaths.removeAll { deleteDrawPaths.contains($0) }
-                deleteDrawPaths.removeAll()
-                drawLine()
+            
+            // 🌟 3. 神奇的 Undo 逻辑：橡皮擦的轨迹也算作一条“线”存起来
+            if let path = drawPaths.last {
+                context.engineEditorManager.storeAction(.draw(path))
             }
         }
     }
