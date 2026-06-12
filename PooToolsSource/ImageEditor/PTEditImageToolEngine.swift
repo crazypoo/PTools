@@ -12,6 +12,14 @@ import SwifterSwift
 import CoreImage
 import AVFoundation
 
+/// 统一下发的画布计算参数
+public struct PTCanvasMetrics {
+    public let ratio: CGFloat
+    public let originalRatio: CGFloat
+    public let toImageScale: CGFloat
+    public let renderSize: CGSize
+}
+
 public enum PTClipPanEdge {
     case none, top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight
 }
@@ -53,6 +61,53 @@ public protocol PTEditImageEngineContext: AnyObject {
     var engineThumbnailImage: UIImage? { get }
     /// 当滤镜引擎处理完底图后，通知 VC 更新流水线
     func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage)
+}
+
+public extension PTEditImageEngineContext {
+    
+    /// 统一计算：获取画布当前的缩放率、比例和渲染尺寸
+    @MainActor func calculateCanvasMetrics(currentViewSize: CGSize, maxImageWidth: CGFloat = 600) -> PTCanvasMetrics {
+        // 利用协议自带的属性进行运算
+        let originalRatio = min(engineScrollView.frame.width / engineOriginalImageSize.width, engineScrollView.frame.height / engineOriginalImageSize.height)
+        let ratio = min(engineScrollView.frame.width / engineEditRect.width, engineScrollView.frame.height / engineEditRect.height)
+        let scale = ratio / originalRatio
+        
+        var size = currentViewSize
+        size.width /= scale
+        size.height /= scale
+        
+        if engineShouldSwapSize {
+            swap(&size.width, &size.height)
+        }
+        
+        var toImageScale = maxImageWidth / size.width
+        if engineEditImageSize.width / engineEditImageSize.height > 1 {
+            toImageScale = maxImageWidth / size.height
+        }
+        
+        return PTCanvasMetrics(
+            ratio: ratio,
+            originalRatio: originalRatio,
+            toImageScale: toImageScale,
+            renderSize: size
+        )
+    }
+    
+    /// 统一计算：获取橡皮擦 UI 的偏移矩阵
+    func calculateEraserTransform(viewTransform: CGAffineTransform, viewSize: CGSize) -> CGAffineTransform {
+        var transform: CGAffineTransform = .identity
+        let angle = ((Int(engineCurrentAngle) % 360) + 360) % 360
+        
+        if angle == 90 {
+            transform = transform.translatedBy(x: 0, y: -viewSize.width)
+        } else if angle == 180 {
+            transform = transform.translatedBy(x: -viewSize.width, y: -viewSize.height)
+        } else if angle == 270 {
+            transform = transform.translatedBy(x: -viewSize.height, y: 0)
+        }
+        
+        return transform.concatenating(viewTransform)
+    }
 }
 
 public class PTPassthroughView: UIView {
@@ -139,169 +194,72 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     }
     
     // MARK: - 手势路由
+    // MARK: - 具体手势实现: 绘制
     
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
-        
-        if isEraserMode {
-            handleEraserGesture(pan, context: context)
-        } else {
-            handleDrawGesture(pan, context: context)
-        }
-    }
-    
-    // MARK: - 具体手势实现: 绘制
-    
-    private func handleDrawGesture(_ pan: UIPanGestureRecognizer, context: PTEditImageEngineContext) {
         let point = pan.location(in: drawingImageView)
-        let scrollView = context.engineScrollView
-        let originalImageSize = context.engineOriginalImageSize
-        let editRect = context.engineEditRect
+        
+        // 🌟 核心：一行代码拿到所有复杂的数学计算结果！
+        let metrics = context.calculateCanvasMetrics(currentViewSize: drawingImageView.frame.size)
         
         if pan.state == .began {
-            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
+            onInteractStateChanged?(true)
+            impactFeedback?.prepare()
             
-            let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-            let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-            let scale = ratio / originalRatio
-            
-            var size = drawingImageView.frame.size
-            size.width /= scale
-            size.height /= scale
-            if context.engineShouldSwapSize {
-                swap(&size.width, &size.height)
-            }
-            
-            var toImageScale = Self.maxDrawLineImageWidth / size.width
-            if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-                toImageScale = Self.maxDrawLineImageWidth / size.height
-            }
+            // 计算真实线宽 (橡皮擦模式 vs 普通画笔)
+            let strokeWidth = PTImageEditorConfig.share.drawLineWidth / context.engineScrollView.zoomScale
+            let actualWidth = isEraserMode ? (44.0 / context.engineScrollView.zoomScale) : strokeWidth
             
             let path = PTDrawPath(
-                pathColor: drawColor,
-                pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
-                ratio: ratio / originalRatio / toImageScale,
+                pathColor: isEraserMode ? .clear : drawColor,
+                pathWidth: actualWidth,
+                ratio: metrics.ratio / metrics.originalRatio / metrics.toImageScale,
                 startPoint: point
             )
+            path.isEraser = isEraserMode
             drawPaths.append(path)
             
+            if isEraserMode {
+                context.engineEraserCircleView.isHidden = false
+                // 🌟 一行代码拿到橡皮擦矩阵
+                let transform = context.calculateEraserTransform(viewTransform: drawingImageView.transform, viewSize: drawingImageView.frame.size)
+                context.engineEraserCircleView.center = point.applying(transform)
+                impactFeedback?.impactOccurred()
+            }
+            
         } else if pan.state == .changed {
+            if isEraserMode {
+                let transform = context.calculateEraserTransform(viewTransform: drawingImageView.transform, viewSize: drawingImageView.frame.size)
+                context.engineEraserCircleView.center = point.applying(transform)
+            }
+            
             let path = drawPaths.last
             path?.addLine(to: point)
             drawLine()
             
         } else if pan.state == .cancelled || pan.state == .ended {
-            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
+            onInteractStateChanged?(false)
+            context.engineEraserCircleView.isHidden = true
             if let path = drawPaths.last {
                 context.engineEditorManager.storeAction(.draw(path))
             }
         }
     }
-    
-    // MARK: - 具体手势实现: 橡皮擦
-    
-    private func handleEraserGesture(_ pan: UIPanGestureRecognizer, context: PTEditImageEngineContext) {
-        let point = pan.location(in: drawingImageView)
-        let scrollView = context.engineScrollView
-        let originalImageSize = context.engineOriginalImageSize
-        let editRect = context.engineEditRect
-        let eraserCircleView = context.engineEraserCircleView
         
-        // --- 坐标与缩放计算（保留你原有的优秀逻辑） ---
-        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-        let scale = ratio / originalRatio
-        
-        var size = drawingImageView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
-        
-        var toImageScale = Self.maxDrawLineImageWidth / size.width
-        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-            toImageScale = Self.maxDrawLineImageWidth / size.height
-        }
-        // ------------------------------------------
-        
-        // 计算橡皮擦 UI 圈圈的位置
-        var transform: CGAffineTransform = .identity
-        let angle = ((Int(context.engineCurrentAngle) % 360) + 360) % 360
-        let drawingImageViewSize = drawingImageView.frame.size
-        
-        if angle == 90 { transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width) }
-        else if angle == 180 { transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height) }
-        else if angle == 270 { transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0) }
-        transform = transform.concatenating(drawingImageView.transform)
-        
-        
-        // MARK: - 手势状态机
-        if pan.state == .began {
-            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
-            eraserCircleView.isHidden = false
-            eraserCircleView.center = point.applying(transform)
-            impactFeedback?.prepare()
-            
-            // 🌟 1. 像画笔一样，创建一条“橡皮擦路径”
-            // 计算出和橡皮擦 UI 一样大的实际线宽 (UI大小是 44)
-            let actualEraserWidth = (44.0 / scrollView.zoomScale) / (ratio / originalRatio / toImageScale)
-            
-            let path = PTDrawPath(
-                pathColor: .clear, // 颜色无所谓，反正要被 clear 掉
-                pathWidth: actualEraserWidth,
-                ratio: ratio / originalRatio / toImageScale,
-                startPoint: point
-            )
-            path.isEraser = true // 标记为橡皮擦！
-            
-            drawPaths.append(path)
-            impactFeedback?.impactOccurred()
-            
-        } else if pan.state == .changed {
-            eraserCircleView.center = point.applying(transform)
-            
-            // 🌟 2. 把手指经过的点加入路径，并立刻重绘
-            let path = drawPaths.last
-            path?.addLine(to: point)
-            drawLine() // 触发重新渲染，橡皮擦划过的地方瞬间变透明！
-            
-        } else if pan.state == .cancelled || pan.state == .ended {
-            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
-            eraserCircleView.isHidden = true
-            
-            // 🌟 3. 神奇的 Undo 逻辑：橡皮擦的轨迹也算作一条“线”存起来
-            if let path = drawPaths.last {
-                context.engineEditorManager.storeAction(.draw(path))
-            }
-        }
-    }
-    
     // MARK: - 渲染引擎
     
     public func drawLine() {
         guard let context = context else { return }
-        let scrollView = context.engineScrollView
-        let originalImageSize = context.engineOriginalImageSize
-        let editRect = context.engineEditRect
         
-        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-        let scale = ratio / originalRatio
+        // 🌟 渲染尺寸计算同样只需一行！
+        let metrics = context.calculateCanvasMetrics(currentViewSize: drawingImageView.frame.size)
+        let renderSize = CGSize(
+            width: metrics.renderSize.width * metrics.toImageScale,
+            height: metrics.renderSize.height * metrics.toImageScale
+        )
         
-        var size = drawingImageView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if context.engineShouldSwapSize {
-            swap(&size.width, &size.height)
-        }
-        
-        var toImageScale = Self.maxDrawLineImageWidth / size.width
-        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-            toImageScale = Self.maxDrawLineImageWidth / size.height
-        }
-        size.width *= toImageScale
-        size.height *= toImageScale
-        
-        drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { renderContext in
+        drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
             renderContext.setAllowsAntialiasing(true)
             renderContext.setShouldAntialias(true)
             for path in self.drawPaths {
@@ -383,54 +341,39 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
         let point = pan.location(in: mosaicContainerView)
-        let scrollView = context.engineScrollView
-        let editRect = context.engineEditRect
-        let originalImageSize = context.engineOriginalImageSize
-        let eraserCircleView = context.engineEraserCircleView
         
-        // --- 坐标与缩放计算 ---
-        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-        let scale = ratio / originalRatio
-        
-        var size = mosaicContainerView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
-        
-        var toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.width
-        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-            toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.height
-        }
-        // ------------------
-        
-        let strokeWidth = PTImageEditorConfig.share.mosaicLineWidth / scrollView.zoomScale
+        // 🌟 核心：一行代码拿到所有复杂的数学计算结果！
+        let metrics = context.calculateCanvasMetrics(currentViewSize: mosaicContainerView.frame.size)
         
         if pan.state == .began {
             onInteractStateChanged?(true)
             impactFeedback?.prepare()
             
-            // 🌟 创建路径：无论是画马赛克还是擦除，统一使用 PTDrawPath
+            // 计算真实线宽 (橡皮擦模式 vs 马赛克画笔)
+            let strokeWidth = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
+            let actualWidth = isEraserMode ? (44.0 / context.engineScrollView.zoomScale) : strokeWidth
+            
             let path = PTDrawPath(
                 pathColor: .black, // Mask 中黑色代表不透明（显示马赛克）
-                pathWidth: isEraserMode ? (44.0 / scrollView.zoomScale) : strokeWidth, // 橡皮擦宽度与 UI 匹配
-                ratio: ratio / originalRatio / toImageScale,
+                pathWidth: actualWidth,
+                ratio: metrics.ratio / metrics.originalRatio / metrics.toImageScale,
                 startPoint: point
             )
             path.isEraser = isEraserMode // 标记身份
             mosaicPaths.append(path)
             
             if isEraserMode {
-                eraserCircleView.isHidden = false
-                let transform = CGAffineTransform.identity.concatenating(mosaicContainerView.transform)
-                eraserCircleView.center = point.applying(transform)
+                context.engineEraserCircleView.isHidden = false
+                // 🌟 一行代码拿到橡皮擦矩阵
+                let transform = context.calculateEraserTransform(viewTransform: mosaicContainerView.transform, viewSize: mosaicContainerView.frame.size)
+                context.engineEraserCircleView.center = point.applying(transform)
                 impactFeedback?.impactOccurred()
             }
             
         } else if pan.state == .changed {
             if isEraserMode {
-                let transform = CGAffineTransform.identity.concatenating(mosaicContainerView.transform)
-                eraserCircleView.center = point.applying(transform)
+                let transform = context.calculateEraserTransform(viewTransform: mosaicContainerView.transform, viewSize: mosaicContainerView.frame.size)
+                context.engineEraserCircleView.center = point.applying(transform)
             }
             
             let path = mosaicPaths.last
@@ -439,7 +382,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             
         } else if pan.state == .cancelled || pan.state == .ended {
             onInteractStateChanged?(false)
-            eraserCircleView.isHidden = true
+            context.engineEraserCircleView.isHidden = true
             
             if let path = mosaicPaths.last {
                 context.engineEditorManager.storeAction(.mosaic(path)) // 存入撤销栈
@@ -450,28 +393,16 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 渲染引擎 (渲染遮罩)
     private func drawMask() {
         guard let context = context else { return }
-        let scrollView = context.engineScrollView
-        let originalImageSize = context.engineOriginalImageSize
-        let editRect = context.engineEditRect
         
-        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-        let scale = ratio / originalRatio
-        
-        var size = mosaicContainerView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
-        
-        var toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.width
-        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-            toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.height
-        }
-        size.width *= toImageScale
-        size.height *= toImageScale
+        // 🌟 渲染尺寸计算同样只需一行！
+        let metrics = context.calculateCanvasMetrics(currentViewSize: mosaicContainerView.frame.size)
+        let renderSize = CGSize(
+            width: metrics.renderSize.width * metrics.toImageScale,
+            height: metrics.renderSize.height * metrics.toImageScale
+        )
         
         // 将路径渲染为一张带透明度的图片，交给 maskImageView
-        maskImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { renderContext in
+        maskImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
             renderContext.setAllowsAntialiasing(true)
             renderContext.setShouldAntialias(true)
             for path in self.mosaicPaths {
@@ -479,7 +410,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             }
         }
     }
-    
+
     public func updateBaseMosaicImage(_ newBaseImage: UIImage) {
         // 重新生成打好马赛克的全屏底图
         mosaicImageView.image = newBaseImage.pt.mosaicImage()
