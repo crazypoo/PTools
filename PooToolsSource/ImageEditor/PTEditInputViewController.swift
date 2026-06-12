@@ -808,6 +808,7 @@ public class PTTextStickerView: PTBaseStickerView {
         )
         
         borderView.addSubview(imageView)
+        borderView.sendSubviewToBack(imageView)
     }
     
     @available(*, unavailable)
@@ -830,22 +831,13 @@ public class PTTextStickerView: PTBaseStickerView {
     }
     
     func changeSize(to newSize: CGSize) {
-        // Revert zoom scale.
-        transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
-        // Revert ges scale.
-        transform = transform.scaledBy(x: 1 / gesScale, y: 1 / gesScale)
-        // Revert ges rotation.
-        transform = transform.rotated(by: -gesRotation)
-        transform = transform.rotated(by: -originAngle.pt.toPi)
+        // ✅ 核心修复：永远不要在有 transform 的情况下修改 frame！
+        // 直接修改 bounds.size，UIKit 会自动以当前的 center 为中心进行缩放
+        var newBounds = self.bounds
+        newBounds.size = newSize
+        self.bounds = newBounds
         
-        // Recalculate current frame.
-        let center = CGPoint(x: frame.midX, y: frame.midY)
-        var frame = frame
-        frame.origin.x = center.x - newSize.width / 2
-        frame.origin.y = center.y - newSize.height / 2
-        frame.size = newSize
-        self.frame = frame
-        
+        // 更新原状态的 originFrame 保持同步
         let oc = CGPoint(x: originFrame.midX, y: originFrame.midY)
         var of = originFrame
         of.origin.x = oc.x - newSize.width / 2
@@ -853,15 +845,8 @@ public class PTTextStickerView: PTBaseStickerView {
         of.size = newSize
         originFrame = of
         
-        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
-        
-        // Readd zoom scale.
-        transform = transform.scaledBy(x: originScale, y: originScale)
-        // Readd ges scale.
-        transform = transform.scaledBy(x: gesScale, y: gesScale)
-        // Readd ges rotation.
-        transform = transform.rotated(by: gesRotation)
-        transform = transform.rotated(by: originAngle.pt.toPi)
+        // 更新内部 imageView 的大小
+        imageView.frame = self.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
     }
     
     class func calculateSize(image: UIImage) -> CGSize {

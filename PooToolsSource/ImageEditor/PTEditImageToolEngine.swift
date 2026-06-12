@@ -55,6 +55,21 @@ public protocol PTEditImageEngineContext: AnyObject {
     func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage)
 }
 
+public class PTPassthroughView: UIView {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hitView = super.hitTest(point, with: event)
+        
+        // 如果系统判定当前点中的是容器本身（即空白区域）
+        if hitView == self {
+            // 返回 nil，让触摸事件直接穿透下去，交给底下的视图（比如文字引擎画布或背景图）处理
+            return nil
+        }
+        
+        // 如果点中的是子视图（即具体的图片贴纸 / 文字贴纸），则正常拦截并响应
+        return hitView
+    }
+}
+
 // 所有交互式编辑工具（涂鸦、马赛克等）的通用协议
 @MainActor public protocol PTEditImageToolEngine: AnyObject {
     /// 关联的画布视图（引擎在这个视图上进行渲染）
@@ -498,8 +513,8 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     public var canvasView: UIView { stickersContainer }
     
-    private lazy var stickersContainer: UIView = {
-        let view = UIView()
+    private lazy var stickersContainer: PTPassthroughView = {
+        let view = PTPassthroughView()
         view.backgroundColor = .clear
         view.clipsToBounds = false // 允许贴纸部分拖出边界
         return view
@@ -511,6 +526,8 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     /// 交互状态回调 (用于隐藏/显示主工具栏)
     public var onInteractStateChanged: ((Bool) -> Void)?
     
+    public var currentSelectedSticker: PTBaseStickerView?
+
     // MARK: - 生命周期
     
     public init(context: PTEditImageEngineContext) {
@@ -528,6 +545,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         stickersContainer.subviews.forEach { view in
             (view as? PTStickerViewAdditional)?.resetState()
         }
+        currentSelectedSticker = nil
     }
     
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
@@ -572,6 +590,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         // 解决手势冲突
         context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
         context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
+        currentSelectedSticker = sticker
     }
     
     private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
@@ -645,6 +664,17 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         
         context.engineViewController.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    public func bringSelectedToFront() {
+        guard let sticker = currentSelectedSticker else { return }
+        stickersContainer.bringSubviewToFront(sticker)
+    }
+    
+    /// 将选中图片置于最底层
+    public func sendSelectedToBack() {
+        guard let sticker = currentSelectedSticker else { return }
+        stickersContainer.sendSubviewToBack(sticker)
+    }
 }
 
 // MARK: - PTStickerViewDelegate (核心交互与垃圾桶动画)
@@ -654,7 +684,8 @@ extension PTStickerEngine: PTStickerViewDelegate {
     public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
         guard let context = context else { return }
         preStickerState = sticker.state
-        
+        currentSelectedSticker = sticker
+
         onInteractStateChanged?(true) // 通知 VC 隐藏底部栏
         
         let ashbinView = context.engineAshbinView
@@ -1218,8 +1249,8 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     public var canvasView: UIView { imageStickersContainer }
     
     /// 图片贴纸的专属容器
-    private lazy var imageStickersContainer: UIView = {
-        let view = UIView()
+    private lazy var imageStickersContainer: PTPassthroughView = {
+        let view = PTPassthroughView()
         view.backgroundColor = .clear
         view.clipsToBounds = false // 允许贴纸拖出边界
         return view
@@ -1484,7 +1515,7 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
             endState = nil
         }
         
-        context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+        context.engineEditorManager.storeAction(.imageSticker(oldState: preStickerState, newState: endState))
         preStickerState = nil
         
         imageStickersContainer.subviews.forEach { view in
