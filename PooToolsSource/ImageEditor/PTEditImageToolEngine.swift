@@ -313,200 +313,176 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
 
 public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     
-    // MARK: - 核心视图与图层
-    
-    /// 马赛克的渲染容器
+    // MARK: - 核心视图
     public var canvasView: UIView { mosaicContainerView }
     
     private lazy var mosaicContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = true
+        view.clipsToBounds = true
         return view
     }()
     
-    public var mosaicPaths: [PTMosaicPath] = []
-    
-    private var mosaicImage: UIImage?
-    private var mosaicImageLayer: CALayer?
-    private var mosaicImageLayerMaskLayer: CAShapeLayer?
-    
-    // MARK: - 内部依赖
-    
-    private weak var context: PTEditImageEngineContext?
-    
-    // 🔥 新增：GPU 渲染上下文。复用同一个 Context 能极大提升性能
-    private lazy var ciContext: CIContext = {
-        // 强制使用 GPU (Metal) 渲染，拒绝 CPU 软解
-        return CIContext(options: [.useSoftwareRenderer: false])
+    /// 底层：放置全屏的马赛克图片
+    private lazy var mosaicImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
     }()
     
-    /// 手势交互状态改变回调 (传回 true 代表开始交互，VC 需隐藏工具栏；false 则显示)
-    public var onInteractStateChanged: ((Bool) -> Void)?
+    /// 遮罩层：用户画的线都在这里，利用透明度决定漏出多少马赛克
+    private lazy var maskImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
     
-    // MARK: - 生命周期
+    // 🌟 直接复用完美的 PTDrawPath！
+    public var mosaicPaths: [PTDrawPath] = []
+    public var isEraserMode: Bool = false
+    
+    private weak var context: PTEditImageEngineContext?
+    private var impactFeedback: UIImpactFeedbackGenerator?
+    public var onInteractStateChanged: ((Bool) -> Void)?
     
     public init(context: PTEditImageEngineContext) {
         self.context = context
         super.init()
+        if PTImageEditorConfig.share.tools.contains(.mosaic) {
+            impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        }
     }
     
     public func toolDidActivate() {
-        // 激活时，准备好马赛克图层
-        generateNewMosaicImageLayer()
+        guard let context = context else { return }
+        
+        // 1. 生成全屏马赛克底图 (只生成一次)
+        let baseImage = context.engineCurrentEditImage
+        mosaicImageView.image = baseImage.pt.mosaicImage()
+        
+        // 2. 绑定遮罩关系：maskImageView 画了黑线的地方（alpha=1）会透出马赛克，透明的地方（alpha=0）隐藏马赛克
+        mosaicImageView.frame = mosaicContainerView.bounds
+        maskImageView.frame = mosaicContainerView.bounds
+        mosaicImageView.mask = maskImageView
+        
+        if mosaicImageView.superview == nil {
+            mosaicContainerView.addSubview(mosaicImageView)
+        }
     }
     
     public func toolDidDeactivate() {
-        // 离开时，如果有未烘焙的图层，可以选择清理或保持
+        isEraserMode = false
     }
     
     public func reloadRenderState() {
-        // 撤销/重做时触发，重新生成马赛克图
-        generateNewMosaicImage()
+        drawMask()
     }
     
-    // MARK: - 手势路由
-    
+    // MARK: - 手势路由与实现
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
-        Task { @MainActor in
-            let point = pan.location(in: mosaicContainerView)
+        let point = pan.location(in: mosaicContainerView)
+        let scrollView = context.engineScrollView
+        let editRect = context.engineEditRect
+        let originalImageSize = context.engineOriginalImageSize
+        let eraserCircleView = context.engineEraserCircleView
+        
+        // --- 坐标与缩放计算 ---
+        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
+        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
+        let scale = ratio / originalRatio
+        
+        var size = mosaicContainerView.frame.size
+        size.width /= scale
+        size.height /= scale
+        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
+        
+        var toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.width
+        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
+            toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.height
+        }
+        // ------------------
+        
+        let strokeWidth = PTImageEditorConfig.share.mosaicLineWidth / scrollView.zoomScale
+        
+        if pan.state == .began {
+            onInteractStateChanged?(true)
+            impactFeedback?.prepare()
             
-            if pan.state == .began {
-                onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
-                
-                var actualSize = context.engineEditRect.size
-                if context.engineShouldSwapSize {
-                    swap(&actualSize.width, &actualSize.height)
-                }
-                let ratio = min(
-                    context.engineScrollView.frame.width / context.engineEditRect.width,
-                    context.engineScrollView.frame.height / context.engineEditRect.height
-                )
-                
-                let pathW = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
-                let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
-                
-                mosaicImageLayerMaskLayer?.lineWidth = pathW
-                mosaicImageLayerMaskLayer?.path = path.path.cgPath
-                mosaicPaths.append(path)
-                
-            } else if pan.state == .changed {
-                let path = mosaicPaths.last
-                path?.addLine(to: point)
-                mosaicImageLayerMaskLayer?.path = path?.path.cgPath
-                
-            } else if pan.state == .cancelled || pan.state == .ended {
-                onInteractStateChanged?(false) // 通知 VC 恢复工具栏
-                
-                if let path = mosaicPaths.last {
-                    context.engineEditorManager.storeAction(.mosaic(path))
-                }
-                
-                // 手指抬起，烘焙马赛克到图片
-                generateNewMosaicImage()
+            // 🌟 创建路径：无论是画马赛克还是擦除，统一使用 PTDrawPath
+            let path = PTDrawPath(
+                pathColor: .black, // Mask 中黑色代表不透明（显示马赛克）
+                pathWidth: isEraserMode ? (44.0 / scrollView.zoomScale) : strokeWidth, // 橡皮擦宽度与 UI 匹配
+                ratio: ratio / originalRatio / toImageScale,
+                startPoint: point
+            )
+            path.isEraser = isEraserMode // 标记身份
+            mosaicPaths.append(path)
+            
+            if isEraserMode {
+                eraserCircleView.isHidden = false
+                let transform = CGAffineTransform.identity.concatenating(mosaicContainerView.transform)
+                eraserCircleView.center = point.applying(transform)
+                impactFeedback?.impactOccurred()
+            }
+            
+        } else if pan.state == .changed {
+            if isEraserMode {
+                let transform = CGAffineTransform.identity.concatenating(mosaicContainerView.transform)
+                eraserCircleView.center = point.applying(transform)
+            }
+            
+            let path = mosaicPaths.last
+            path?.addLine(to: point)
+            drawMask() // 触发遮罩重绘
+            
+        } else if pan.state == .cancelled || pan.state == .ended {
+            onInteractStateChanged?(false)
+            eraserCircleView.isHidden = true
+            
+            if let path = mosaicPaths.last {
+                context.engineEditorManager.storeAction(.mosaic(path)) // 存入撤销栈
             }
         }
     }
     
-    // MARK: - 渲染引擎 (包含修复过 OOM 内存尖峰的逻辑)
-    
-    /// 准备马赛克图层与遮罩
-    public func generateNewMosaicImageLayer() {
+    // MARK: - 渲染引擎 (渲染遮罩)
+    private func drawMask() {
         guard let context = context else { return }
-        let currentEditImage = context.engineCurrentEditImage
+        let scrollView = context.engineScrollView
+        let originalImageSize = context.engineOriginalImageSize
+        let editRect = context.engineEditRect
         
-        // 注: 这里调用了原图的 pt.mosaicImage() 扩展方法
-        mosaicImage = currentEditImage.pt.mosaicImage()
+        let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
+        let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
+        let scale = ratio / originalRatio
         
-        mosaicImageLayer?.removeFromSuperlayer()
+        var size = mosaicContainerView.frame.size
+        size.width /= scale
+        size.height /= scale
+        if context.engineShouldSwapSize { swap(&size.width, &size.height) }
         
-        mosaicImageLayer = CALayer()
-        mosaicImageLayer?.frame = mosaicContainerView.bounds
-        mosaicImageLayer?.contents = mosaicImage?.cgImage
+        var toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.width
+        if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
+            toImageScale = PTDrawEngine.maxDrawLineImageWidth / size.height
+        }
+        size.width *= toImageScale
+        size.height *= toImageScale
         
-        mosaicImageLayerMaskLayer = CAShapeLayer()
-        mosaicImageLayerMaskLayer?.strokeColor = UIColor.blue.cgColor
-        mosaicImageLayerMaskLayer?.fillColor = nil
-        mosaicImageLayerMaskLayer?.lineCap = .round
-        mosaicImageLayerMaskLayer?.lineJoin = .round
-        mosaicImageLayerMaskLayer?.frame = mosaicContainerView.bounds
-        
-        mosaicContainerView.layer.addSublayer(mosaicImageLayer!)
-        mosaicImageLayer?.mask = mosaicImageLayerMaskLayer
-    }
-    
-    /// 极速生成黑白遮罩 (Mask)：黑色代表原图，白色代表马赛克区域
-    private func generateMaskImage(size: CGSize) -> UIImage? {
-        // 对于遮罩，单通道灰度图即可，不需要占用巨大内存的 RGB 画布
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1.0
-        
-        let renderer = UIGraphicsImageRenderer(size: size, format: format)
-        return renderer.image { ctx in
-            // 背景填黑
-            ctx.cgContext.setFillColor(UIColor.black.cgColor)
-            ctx.cgContext.fill(CGRect(origin: .zero, size: size))
-            
-            // 笔刷填白
-            ctx.cgContext.setStrokeColor(UIColor.white.cgColor)
-            ctx.cgContext.setLineCap(.round)
-            ctx.cgContext.setLineJoin(.round)
-            
-            // 快速绘制路径
-            for path in mosaicPaths {
-                ctx.cgContext.beginPath()
-                ctx.cgContext.move(to: path.startPoint)
-                for point in path.linePoints {
-                    ctx.cgContext.addLine(to: point)
-                }
-                ctx.cgContext.setLineWidth(path.path.lineWidth / path.ratio)
-                ctx.cgContext.strokePath()
+        // 将路径渲染为一张带透明度的图片，交给 maskImageView
+        maskImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { renderContext in
+            renderContext.setAllowsAntialiasing(true)
+            renderContext.setShouldAntialias(true)
+            for path in self.mosaicPaths {
+                path.drawPath() // 会自动处理普通画笔(.normal)和橡皮擦(.clear)的混合模式
             }
         }
     }
     
-    /// 核心合成函数：将用户划过的马赛克路径合成到最终图片上
-    @discardableResult
-    public func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
-        guard let context = context else { return nil }
-        
-        let originalImage = inputImage ?? context.engineCurrentEditImage
-        let bgMosaicImage = inputMosaicImage ?? self.mosaicImage
-        
-        guard let bgMosaicImage = bgMosaicImage else { return nil }
-        
-        return autoreleasepool {
-            // 1. 将 UIImage 转为 GPU 友好的 CIImage (几乎不消耗时间，只是创建指针)
-            guard let backgroundCI = CIImage(image: originalImage),
-                  let foregroundCI = CIImage(image: bgMosaicImage),
-                  let maskUIImage = generateMaskImage(size: originalImage.size),
-                  let maskCI = CIImage(image: maskUIImage) else {
-                return nil
-            }
-            
-            // 2. 调用硬件级混合滤镜：CIBlendWithMask
-            guard let blendFilter = CIFilter(name: "CIBlendWithMask") else { return nil }
-            blendFilter.setValue(foregroundCI, forKey: kCIInputImageKey) // 前景：全屏马赛克
-            blendFilter.setValue(backgroundCI, forKey: kCIInputBackgroundImageKey) // 背景：清晰原图
-            blendFilter.setValue(maskCI, forKey: kCIInputMaskImageKey) // 遮罩：刚才画的黑白路径
-            
-            // 3. 让 GPU 渲染出结果
-            guard let outputCI = blendFilter.outputImage,
-                  let cgImage = ciContext.createCGImage(outputCI, from: outputCI.extent) else {
-                return nil
-            }
-            
-            // 4. 转回 UIImage 并更新到屏幕
-            let finalImage = UIImage(cgImage: cgImage, scale: originalImage.scale, orientation: originalImage.imageOrientation)
-            
-            if inputImage == nil {
-                mosaicImageLayerMaskLayer?.path = nil
-                context.engineUpdateEditImage(finalImage)
-            }
-            
-            return finalImage
-        }
+    public func updateBaseMosaicImage(_ newBaseImage: UIImage) {
+        // 重新生成打好马赛克的全屏底图
+        mosaicImageView.image = newBaseImage.pt.mosaicImage()
     }
 }
 

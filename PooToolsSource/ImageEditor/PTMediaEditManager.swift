@@ -13,7 +13,7 @@ public enum PTMediaEditorAction {
     case draw(PTDrawPath)
     case clip(oldStatus: PTClipStatus, newStatus: PTClipStatus)
     case sticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?)
-    case mosaic(PTMosaicPath)
+    case mosaic(PTDrawPath)
     case filter(oldFilter: PTHarBethFilter?, newFilter: PTHarBethFilter?)
     case adjust(oldStatus: PTAdjustStatus, newStatus: PTAdjustStatus)
     case imageSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?)

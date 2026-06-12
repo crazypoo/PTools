@@ -12,7 +12,7 @@ import UIKit
 public class PTEditModel:NSObject {
     public let drawPaths: [PTDrawPath]
     
-    public let mosaicPaths: [PTMosaicPath]
+    public let mosaicPaths: [PTDrawPath]
     
     public let clipStatus: PTClipStatus
     
@@ -25,7 +25,7 @@ public class PTEditModel:NSObject {
     public let actions: [PTMediaEditorAction]
     
     public init(drawPaths: [PTDrawPath],
-                mosaicPaths: [PTMosaicPath],
+                mosaicPaths: [PTDrawPath],
                 clipStatus: PTClipStatus,
                 adjustStatus: PTAdjustStatus,
                 selectFilter: PTHarBethFilter,

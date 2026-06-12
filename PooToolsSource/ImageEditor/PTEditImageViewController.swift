@@ -463,6 +463,7 @@ public class PTEditImageViewController: PTBaseViewController {
             if let pan = sender as? UIPanGestureRecognizer {
                 // 告诉涂鸦引擎，当前是否处于橡皮擦模式
                 self.drawEngine.isEraserMode = self.eraser.isSelected
+                self.mosaicEngine.isEraserMode = self.eraser.isSelected
                 // 🔥 核心魔法：VC 不再关心具体手势计算，直接抛给当前活跃的引擎！
                 self.activeEngine?.handlePanGesture(pan)
             }
@@ -709,6 +710,22 @@ public class PTEditImageViewController: PTBaseViewController {
             autoreleasepool {
                 editImage.draw(at: .zero)
                 
+                // 👇 新增：把马赛克画进去
+                if !mosaicEngine.mosaicPaths.isEmpty {
+                    let scale = imageSize.width / mosaicEngine.canvasView.frame.width
+                    context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                    mosaicEngine.canvasView.layer.render(in: context)
+                    context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+                }
+                
+                // 👇 新增：把涂鸦画笔画进去
+                if !drawEngine.drawPaths.isEmpty {
+                    let scale = imageSize.width / drawEngine.canvasView.frame.width
+                    context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                    drawEngine.canvasView.layer.render(in: context)
+                    context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+                }
+
                 if !stickerEngine.canvasView.subviews.isEmpty {
                     let scale = imageSize.width / stickerEngine.canvasView.frame.width
                     stickerEngine.canvasView.subviews.forEach { view in
@@ -774,34 +791,35 @@ extension PTEditImageViewController {
                 make.bottom.equalTo(self.toolCollectionView.snp.top)
             }
             
-            drawBar.addSubviews([eraser,drawColorButton])
+            var subs = [UIView]()
+            if isMosaic {
+                subs = [eraser]
+            } else {
+                subs = [eraser,drawColorButton]
+            }
+
+            drawBar.addSubviews(subs)
             eraser.snp.makeConstraints { make in
                 make.size.equalTo(44)
                 make.centerY.equalToSuperview()
-                make.right.equalTo(self.drawBar.snp.centerX).offset(-15)
+                if isMosaic {
+                    make.centerX.equalToSuperview()
+                } else {
+                    make.right.equalTo(self.drawBar.snp.centerX).offset(-15)
+                }
             }
             
-            drawColorButton.snp.makeConstraints { make in
-                make.size.centerY.equalTo(self.eraser)
-                make.left.equalTo(self.drawBar.snp.centerX).offset(15)
+            if !isMosaic {
+                drawColorButton.snp.makeConstraints { make in
+                    make.size.centerY.equalTo(self.eraser)
+                    make.left.equalTo(self.drawBar.snp.centerX).offset(15)
+                }
             }
             drawDismissButton.isHidden = false
             drawDismissButton.isUserInteractionEnabled = true
         } else {
-            if isMosaic {
-                view.addSubviews([drawDismissButton])
-                drawDismissButton.snp.makeConstraints { make in
-                    make.size.equalTo(34)
-                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                    make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - 34) / 2)
-                }
-                drawDismissButton.isHidden = false
-                drawDismissButton.isUserInteractionEnabled = true
-                drawBar.removeFromSuperview()
-            } else {
-                drawDismissButton.removeFromSuperview()
-                drawBar.removeFromSuperview()
-            }
+            drawDismissButton.removeFromSuperview()
+            drawBar.removeFromSuperview()
         }
     }
             
@@ -814,7 +832,7 @@ extension PTEditImageViewController {
         activeEngine = isSelected ? mosaicEngine : nil
         activeEngine?.toolDidActivate()
 
-        showHandDrawBar(show: false,isMosaic: true)
+        showHandDrawBar(show: true,isMosaic: true)
         showFilter(show: false)
         showAdjust(show:false)
     }
@@ -1151,12 +1169,12 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         preClipStatus = status
     }
     
-    private func undoMosaic(_ path: PTMosaicPath) {
+    private func undoMosaic(_ path: PTDrawPath) {
         mosaicEngine.mosaicPaths.removeLast()
         mosaicEngine.reloadRenderState()
     }
     
-    private func redoMosaic(_ path: PTMosaicPath) {
+    private func redoMosaic(_ path: PTDrawPath) {
         mosaicEngine.mosaicPaths.append(path)
         mosaicEngine.reloadRenderState()
     }
@@ -1249,10 +1267,11 @@ extension PTEditImageViewController: @MainActor PTEditImageEngineContext {
     // 这个就是核心桥梁：当 Adjust 激活时，VC 调动 Mosaic 引擎为它生成专属底图
     public func engineRequestAdjustReferenceImage() -> UIImage {
         // 利用马赛克引擎暴露的方法生成图
-        return mosaicEngine.generateNewMosaicImage(
-            inputImage: editImageWithoutAdjust,
-            inputMosaicImage: editImageWithoutAdjust.pt.mosaicImage()
-        ) ?? editImageWithoutAdjust
+        return editImageWithoutAdjust
+//        return mosaicEngine.generateNewMosaicImage(
+//            inputImage: editImageWithoutAdjust,
+//            inputMosaicImage: editImageWithoutAdjust.pt.mosaicImage()
+//        ) ?? editImageWithoutAdjust
     }
     
     public var engineThumbnailImage: UIImage? { thumbnailImage }
@@ -1273,21 +1292,14 @@ extension PTEditImageViewController {
         
         // 第二站：送进参数调节引擎 (如果亮度/饱和度都是0，它会直接原样返回)
         let adjustedImage = adjustEngine.adjustFilterValueSet(filterImage: baseImage) ?? baseImage
-        self.editImage = adjustedImage // 暂时保存这个状态
+        self.editImage = adjustedImage
         
-        // 第三站：通知马赛克引擎更新它底层的原图图层
+        // 第三站：直接更新主画布
+        self.imageView.image = self.editImage
+        
+        // 第四站：通知马赛克引擎更新它的模糊底图（防止原图加了滤镜，但马赛克还是原来的颜色）
         if PTImageEditorConfig.share.tools.contains(.mosaic) {
-            mosaicEngine.generateNewMosaicImageLayer()
-            
-            if mosaicEngine.mosaicPaths.isEmpty {
-                // 如果没有马赛克，直接显示调色后的图
-                self.imageView.image = self.editImage
-            } else {
-                // 如果有马赛克，让马赛克引擎把以前的马赛克重新烘焙到新图上！
-                mosaicEngine.generateNewMosaicImage()
-            }
-        } else {
-            self.imageView.image = self.editImage
+            mosaicEngine.updateBaseMosaicImage(self.editImage)
         }
     }
 }
