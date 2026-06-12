@@ -17,6 +17,7 @@ public enum PTMediaEditorAction {
     case mosaic(PTMosaicPath)
     case filter(oldFilter: PTHarBethFilter?, newFilter: PTHarBethFilter?)
     case adjust(oldStatus: PTAdjustStatus, newStatus: PTAdjustStatus)
+    case imageSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?)
 }
 
 protocol PTMediaEditorManagerDelegate: AnyObject {

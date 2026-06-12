@@ -89,6 +89,7 @@ public class PTImageEditorConfig: NSObject {
         case mosaic
         case filter
         case adjust
+        case imageSticker
     }
     
     private var pri_tools: [PTImageEditorConfig.EditTool] = PTImageEditorConfig.EditTool.allCases

@@ -10,6 +10,7 @@ import UIKit
 import Harbeth
 import SwifterSwift
 import CoreImage
+import AVFoundation
 
 public enum PTClipPanEdge {
     case none, top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight
@@ -648,6 +649,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
 
 // MARK: - PTStickerViewDelegate (核心交互与垃圾桶动画)
 extension PTStickerEngine: PTStickerViewDelegate {
+    public func sticker(_ imageSticker: PTImageStickerView, editImage image: UIImage) { }
     
     public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
         guard let context = context else { return }
@@ -1205,7 +1207,314 @@ public class PTClipEngine: NSObject {
         }
         
         // 计算完毕，更新内部状态并回调给 VC 进行 UI 刷新
-//        clipBoxFrame = frame
         onClipBoxFrameChanged?(frame)
     }
+}
+
+public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
+    
+    // MARK: - 核心视图与状态
+    
+    public var canvasView: UIView { imageStickersContainer }
+    
+    /// 图片贴纸的专属容器
+    private lazy var imageStickersContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.clipsToBounds = false // 允许贴纸拖出边界
+        return view
+    }()
+    
+    private weak var context: PTEditImageEngineContext?
+    private var preStickerState: PTBaseStickertState?
+    
+    /// 交互状态回调 (用于隐藏/显示主工具栏)
+    public var onInteractStateChanged: ((Bool) -> Void)?
+    public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)?
+    /// 当前选中的贴纸 (用于应用图层和对齐操作)
+    public var currentSelectedSticker: PTBaseStickerView?
+    
+    // MARK: - 生命周期
+    
+    public init(context: PTEditImageEngineContext) {
+        self.context = context
+        super.init()
+    }
+    
+    public func toolDidActivate() {
+        // 激活时唤起相册选择器等逻辑交由 VC 处理
+    }
+    
+    public func toolDidDeactivate() {
+        // 离开工具时，取消所有贴纸的选中状态（比如隐藏边框）
+        imageStickersContainer.subviews.forEach { view in
+            (view as? PTStickerViewAdditional)?.resetState()
+        }
+        currentSelectedSticker = nil
+    }
+    
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+        // 贴纸继承自 PTBaseStickerView，自带手势，无需全局路由派发
+    }
+    
+    public func reloadRenderState() {
+        // 撤销/重做触发时的视图刷新
+    }
+    
+    // MARK: - 需求 1: 添加图片并自适应大小
+    
+    /// 外部调用此方法传入选择的图片
+    public func addImageSticker(_ image: UIImage) {
+        guard let context = context else { return }
+        
+        let scale = context.engineScrollView.zoomScale
+        let safeArea = context.engineMainView.bounds
+        
+        // 【自适应大小计算】: 限制图片初始最大尺寸为屏幕可视区域宽高的 70%
+        let maxLimitSize = CGSize(width: safeArea.width * 0.7, height: safeArea.height * 0.7)
+        let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(origin: .zero, size: maxLimitSize))
+        let targetSize = rect.size
+        
+        // 计算初始坐标（居中放置）
+        let originFrame = getStickerOriginFrame(targetSize)
+        
+        // 假设你有一个继承自 PTBaseStickerView 的 PTImageStickerView
+        // 如果没有，你需要基于 PTBaseStickerView 封装一个专门装载 UIImage 的类
+        let imageSticker = PTImageStickerView(
+            image: image,
+            originScale: 1 / scale,
+            originAngle: -context.engineCurrentAngle,
+            originFrame: originFrame
+        )
+        
+        addSticker(imageSticker)
+        context.engineEditorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+    }
+    
+    private func addSticker(_ sticker: PTBaseStickerView) {
+        guard let context = context else { return }
+        imageStickersContainer.addSubview(sticker)
+        sticker.frame = sticker.originFrame
+        
+        // 设置代理以处理手势冲突和垃圾桶逻辑 (复用你原有的委托逻辑)
+        sticker.delegate = self
+        
+        context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
+        context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
+        
+        // 默认将最新添加的设置为当前选中
+        currentSelectedSticker = sticker
+    }
+    
+    private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
+        guard let context = context else { return .zero }
+        let scale = context.engineScrollView.zoomScale
+        let scrollView = context.engineScrollView
+        
+        // 计算当前屏幕在图片上的居中显示区域
+        let x = (scrollView.contentOffset.x - imageStickersContainer.frame.minX) / scale
+        let y = (scrollView.contentOffset.y - imageStickersContainer.frame.minY) / scale
+        let w = context.engineMainView.frame.width / scale
+        let h = context.engineMainView.frame.height / scale
+        
+        let r = context.engineMainView.convert(CGRect(x: x, y: y, width: w, height: h), to: imageStickersContainer)
+        return CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+    }
+    
+    // MARK: - 需求 2: 图层层级控制 (最上 / 最下)
+    
+    /// 将选中图片置于最顶层
+    public func bringSelectedToFront() {
+        guard let sticker = currentSelectedSticker else { return }
+        imageStickersContainer.bringSubviewToFront(sticker)
+    }
+    
+    /// 将选中图片置于最底层
+    public func sendSelectedToBack() {
+        guard let sticker = currentSelectedSticker else { return }
+        imageStickersContainer.sendSubviewToBack(sticker)
+    }
+    
+    // MARK: - 需求 3: 居中控制 (左右 / 上下)
+    
+    /// 将选中图片水平居中
+    public func centerSelectedHorizontally() {
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        
+        // 获取当前可视区域在容器中的转换坐标
+        let scrollView = context.engineScrollView
+        let scale = scrollView.zoomScale
+        let centerX = (scrollView.contentOffset.x + context.engineMainView.bounds.width / 2) / scale
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+            sticker.center = CGPoint(x: centerX, y: sticker.center.y)
+        }
+    }
+    
+    /// 将选中图片垂直居中
+    public func centerSelectedVertically() {
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        
+        let scrollView = context.engineScrollView
+        let scale = scrollView.zoomScale
+        let centerY = (scrollView.contentOffset.y + context.engineMainView.bounds.height / 2) / scale
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+            sticker.center = CGPoint(x: sticker.center.x, y: centerY)
+        }
+    }
+    
+    // MARK: - Undo & Redo 引擎接口
+        
+    /// 处理图片贴纸的撤销与重做
+    public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
+        if isUndo {
+            // 撤销 (Undo)
+            if let oldState = oldState {
+                // 恢复到旧状态：先删掉当前的新状态，再把旧状态加回来
+                removeSticker(id: newState?.id ?? oldState.id)
+                if let sticker = PTBaseStickerView.initWithState(oldState) {
+                    addSticker(sticker)
+                }
+            } else {
+                // 如果旧状态是 nil，说明这步操作是“新增贴纸”，那么撤销就是“删除它”
+                removeSticker(id: newState?.id)
+            }
+        } else {
+            // 重做 (Redo)
+            if let newState = newState {
+                // 恢复到新状态：先删掉当前的旧状态，再把新状态加回来
+                removeSticker(id: oldState?.id ?? newState.id)
+                if let sticker = PTBaseStickerView.initWithState(newState) {
+                    addSticker(sticker)
+                }
+            } else {
+                // 如果新状态是 nil，说明这步操作是“删除了贴纸”，那么重做就是“再次删除它”
+                removeSticker(id: oldState?.id)
+            }
+        }
+    }
+    
+    /// 根据 ID 找到对应的图片贴纸并移入垃圾桶
+    private func removeSticker(id: String?) {
+        guard let id = id else { return }
+        // 倒序遍历，提高查找顶部视图的效率
+        for sticker in imageStickersContainer.subviews.reversed() {
+            guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
+            // 调用你封装好的方法，既移除了视图，又清理了定时器
+            stickerView.moveToAshbin()
+            
+            // 如果删除的正好是当前选中的贴纸，清空指针
+            if currentSelectedSticker === stickerView {
+                currentSelectedSticker = nil
+            }
+            break
+        }
+    }
+}
+
+extension PTImageStickerEngine: PTStickerViewDelegate {
+    public func sticker(_ textSticker: PTTextStickerView, editText text: String) { }
+    
+    public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
+        guard let context = context else { return }
+        currentSelectedSticker = sticker
+        
+        onInteractStateChanged?(true) // 通知 VC 隐藏底部栏
+        
+        let ashbinView = context.engineAshbinView
+        ashbinView.layer.removeAllAnimations()
+        ashbinView.isHidden = false
+        
+        var frame = ashbinView.frame
+        let diff = context.engineMainView.frame.height - frame.minY
+        frame.origin.y += diff
+        ashbinView.frame = frame
+        frame.origin.y -= diff
+        
+        UIView.animate(withDuration: 0.25) {
+            ashbinView.frame = frame
+        }
+        
+        imageStickersContainer.subviews.forEach { view in
+            if view !== sticker {
+                (view as? PTStickerViewAdditional)?.resetState()
+                (view as? PTStickerViewAdditional)?.gesIsEnabled = false
+            }
+        }
+    }
+    
+    public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
+        guard let context = context else { return }
+        let point = panGes.location(in: context.engineMainView)
+        let ashbinView = context.engineAshbinView
+        let ashbinImgView = context.engineAshbinImgView
+        
+        if ashbinView.frame.contains(point) {
+            ashbinView.backgroundColor = .gray
+            ashbinImgView.isHighlighted = true
+            if sticker.alpha == 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) { sticker.alpha = 0.5 }
+            }
+        } else {
+            ashbinView.backgroundColor = .systemRed
+            ashbinImgView.isHighlighted = false
+            if sticker.alpha != 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) { sticker.alpha = 1 }
+            }
+        }
+    }
+    
+    public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
+        guard let context = context else { return }
+        
+        onInteractStateChanged?(false) // 通知 VC 恢复底部栏
+        
+        let ashbinView = context.engineAshbinView
+        ashbinView.layer.removeAllAnimations()
+        ashbinView.isHidden = true
+        
+        var endState: PTBaseStickertState? = sticker.state
+        let point = panGes.location(in: context.engineMainView)
+        
+        if ashbinView.frame.contains(point) {
+            sticker.moveToAshbin()
+            endState = nil
+        }
+        
+        context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+        preStickerState = nil
+        
+        imageStickersContainer.subviews.forEach { view in
+            (view as? PTStickerViewAdditional)?.gesIsEnabled = true
+        }
+    }
+    
+    public func stickerDidTap(_ sticker: PTBaseStickerView) {
+        imageStickersContainer.subviews.forEach { view in
+            if view !== sticker {
+                (view as? PTStickerViewAdditional)?.resetState()
+            }
+        }
+    }
+    
+    /// 当图片贴纸触发“编辑”操作时调用 (比如双击贴纸)
+    public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) {
+        onRequestImageSelection? { [weak self, weak imageSticker] newImage in
+            guard let self = self, let imageSticker = imageSticker, let newImage = newImage else { return }
+            
+            imageSticker.startTimer()
+            imageSticker.image = newImage
+            
+            // 重新计算并调整尺寸 (用我们上一轮写好的逻辑)
+            let contextWidth = self.context?.engineMainView.frame.width ?? UIScreen.main.bounds.width
+            let newSize = PTImageStickerView.calculateSize(image: newImage, width: contextWidth)
+            imageSticker.changeSize(to: newSize)
+            
+            // 记录到撤销栈
+            // self.context?.engineEditorManager.storeAction(...)
+        }
+    }    
 }

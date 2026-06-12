@@ -19,7 +19,8 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
     public let picker = UIColorPickerViewController()
 
     public var selectedColorCallback:((UIColor)->Void)?
-    
+    public var viewDismiss:PTActionTask?
+
     public lazy var backButton:UIButton = {
         let colorPickerBack = UIButton(type: .custom)
         colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
@@ -43,6 +44,11 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
         PTGCDManager.shared.delayOnMain(time: 0.2) {
             self.changeStatusBar(type: .Dark)
         }
+    }
+    
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.viewDismiss?()
     }
     
     open override func viewDidLoad() {

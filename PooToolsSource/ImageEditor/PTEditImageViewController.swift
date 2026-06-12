@@ -71,6 +71,8 @@ public class PTEditImageViewController: PTBaseViewController {
             case .adjust:
                 model.normalImage = UIImage(.ellipsis.rectangle)
                 model.selectedImage = UIImage(.ellipsis.rectangleFill)
+            case .imageSticker:
+                model.normalImage = UIImage(.photo.fill)
             }
             model.currentType = tool
             return model
@@ -84,7 +86,7 @@ public class PTEditImageViewController: PTBaseViewController {
         config.viewType = .Custom
         let view = PTCollectionView(viewConfig: config)
         view.customerLayout = { sectionIndex,sectionModel in
-            return UICollectionView.girdCollectionLayout(data: sectionModel.rows, itemHeight: self.toolCollectionHeight,cellRowCount:6,originalX: PTAppBaseConfig.share.defaultViewSpace,cellLeadingSpace: 15)
+            return UICollectionView.horizontalLayout(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: self.toolCollectionHeight,itemHeight: self.toolCollectionHeight,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 15)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTEditToolsCell {
@@ -114,6 +116,8 @@ public class PTEditImageViewController: PTBaseViewController {
                         self.filterAction()
                     case .adjust:
                         self.adjustActions()
+                    case .imageSticker:
+                        self.showImageAction()
                     }
                 }
             }
@@ -231,6 +235,11 @@ public class PTEditImageViewController: PTBaseViewController {
             stickerStates.append(view.state)
         }
         
+        for view in self.imageStickerEngine.canvasView.subviews {
+            guard let view = view as? PTBaseStickerView else { continue }
+            stickerStates.append(view.state)
+        }
+        
         var hasEdit = true
         if self.drawEngine.drawPaths.isEmpty,
            self.currentClipStatus.editRect.size == self.imageSize,
@@ -342,6 +351,21 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     
+    private lazy var drawDismissButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(PTImageEditorConfig.share.backImage, for: .normal)
+        view.addActionHandlers { sender in
+            self.activeEngine?.toolDidDeactivate()
+            self.activeEngine = nil
+            
+            self.showHandDrawBar(show: false)
+            self.viewToolsBar(show: true)
+        }
+        view.isHidden = true
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
     static let maxDrawLineImageWidth: CGFloat = 600
     private lazy var drawColor:UIColor = .systemRed
     private var defaultDrawPathWidth: CGFloat = 0
@@ -349,6 +373,7 @@ public class PTEditImageViewController: PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage(UIImage(.paintpalette), for: .normal)
         view.addActionHandlers { sender in
+            self.navigationController?.navigationBar.alpha = 1
             let colorPicker = PTColorPickerContainerViewController()
             colorPicker.backButton.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
             colorPicker.picker.selectedColor = self.drawColor
@@ -357,6 +382,13 @@ public class PTEditImageViewController: PTBaseViewController {
             }
             self.navigationController?.pushViewController(colorPicker, completion: {
             })
+            colorPicker.viewDismiss = {
+                PTGCDManager.shared.runOnMain {
+                    if let engine = self.activeEngine {
+                        self.navigationController?.navigationBar.alpha = 0
+                    }
+                }
+            }
         }
         return view
     }()
@@ -412,6 +444,19 @@ public class PTEditImageViewController: PTBaseViewController {
         return PTFilterEngine(context: self)
     }()
 
+    private var imageReplacementCompletion: ((UIImage?) -> Void)?
+    private lazy var imageStickerEngine: PTImageStickerEngine = {
+        let engine = PTImageStickerEngine(context: self)
+        engine.onInteractStateChanged = { [weak self] isInteracting in
+            self?.viewToolsBar(show: !isInteracting)
+        }
+        engine.onRequestImageSelection = { [weak self] completion in
+            // 把引擎的接收闭包存起来，然后去开相册
+            self?.openImagePicker(forReplacement: completion)
+        }
+        return engine
+    }()
+    
     private lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer { sender in
             if let pan = sender as? UIPanGestureRecognizer {
@@ -522,7 +567,7 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         mainScrollView.addSubviews([containerView])
         
-        containerView.addSubviews([imageView,mosaicEngine.canvasView,drawEngine.canvasView,eraserCircleView,stickerEngine.canvasView])
+        containerView.addSubviews([imageView,mosaicEngine.canvasView,drawEngine.canvasView,eraserCircleView,stickerEngine.canvasView,imageStickerEngine.canvasView])
         
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -612,6 +657,7 @@ public class PTEditImageViewController: PTBaseViewController {
         drawEngine.canvasView.frame = imageView.frame
         mosaicEngine.canvasView.frame = imageView.frame
         stickerEngine.canvasView.frame = imageView.frame
+        imageStickerEngine.canvasView.frame = imageView.frame
         // 针对于长图的优化
         if (editRect.height / editRect.width) > (view.frame.height / view.frame.width * 1.1) {
             let widthScale = view.frame.width / w
@@ -636,8 +682,6 @@ public class PTEditImageViewController: PTBaseViewController {
     }
     
     func viewToolsBar(show:Bool) {
-        toolCollectionView.layer.removeAllAnimations()
-        navigationController?.navigationBar.layer.removeAllAnimations()
         if show {
             UIView.animate(withDuration: 0.25) {
                 self.toolCollectionView.alpha = 1
@@ -673,6 +717,16 @@ public class PTEditImageViewController: PTBaseViewController {
                     stickerEngine.canvasView.layer.render(in: context)
                     context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
                 }
+                
+                if !imageStickerEngine.canvasView.subviews.isEmpty {
+                    let scale = imageSize.width / imageStickerEngine.canvasView.frame.width
+                    imageStickerEngine.canvasView.subviews.forEach { view in
+                        (view as? PTStickerViewAdditional)?.resetState()
+                    }
+                    context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                    imageStickerEngine.canvasView.layer.render(in: context)
+                    context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+                }
             }
         }
         
@@ -699,16 +753,20 @@ extension PTEditImageViewController {
         activeEngine?.toolDidDeactivate()
         activeEngine = toolsSelected ? drawEngine : nil
         activeEngine?.toolDidActivate()
-
         
         showHandDrawBar(show: toolsSelected)
         showFilter(show: false)
         showAdjust(show:false)
     }
     
-    func showHandDrawBar(show:Bool) {
+    func showHandDrawBar(show:Bool,isMosaic:Bool = false) {
         if show {
-            view.addSubview(drawBar)
+            view.addSubviews([drawBar,drawDismissButton])
+            drawDismissButton.snp.makeConstraints { make in
+                make.size.equalTo(34)
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - 34) / 2)
+            }
             drawBar.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(54)
@@ -726,8 +784,23 @@ extension PTEditImageViewController {
                 make.size.centerY.equalTo(self.eraser)
                 make.left.equalTo(self.drawBar.snp.centerX).offset(15)
             }
+            drawDismissButton.isHidden = false
+            drawDismissButton.isUserInteractionEnabled = true
         } else {
-            drawBar.removeFromSuperview()
+            if isMosaic {
+                view.addSubviews([drawDismissButton])
+                drawDismissButton.snp.makeConstraints { make in
+                    make.size.equalTo(34)
+                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                    make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - 34) / 2)
+                }
+                drawDismissButton.isHidden = false
+                drawDismissButton.isUserInteractionEnabled = true
+                drawBar.removeFromSuperview()
+            } else {
+                drawDismissButton.removeFromSuperview()
+                drawBar.removeFromSuperview()
+            }
         }
     }
             
@@ -740,7 +813,7 @@ extension PTEditImageViewController {
         activeEngine = isSelected ? mosaicEngine : nil
         activeEngine?.toolDidActivate()
 
-        showHandDrawBar(show: false)
+        showHandDrawBar(show: false,isMosaic: true)
         showFilter(show: false)
         showAdjust(show:false)
     }
@@ -803,6 +876,51 @@ extension PTEditImageViewController {
         showHandDrawBar(show: false)
         showFilter(show: false)
         showAdjust(show:false)
+    }
+}
+
+//MARK: ImageInput
+extension PTEditImageViewController {
+    func showImageAction() {
+        openImagePicker(forReplacement: nil)
+        selectedTool = self.toolsModel.first(where: { $0.currentType == .imageSticker } )
+        let toolsSelected = selectedTool?.isSelected ?? false
+        // 引擎切换逻辑
+        activeEngine?.toolDidDeactivate()
+        activeEngine = toolsSelected ? imageStickerEngine : nil
+        activeEngine?.toolDidActivate()
+        
+        showHandDrawBar(show: false)
+        showFilter(show: false)
+        showAdjust(show:false)
+    }
+    
+    private func openImagePicker(forReplacement completion: ((UIImage?) -> Void)?) {
+        self.imageReplacementCompletion = completion
+        
+        let config = PTMediaLibConfig.share
+        config.allowSelectImage = true
+        config.allowSelectVideo = false
+        config.allowSelectGif = false
+        config.maxSelectCount = 1
+        config.allowEditImage = false
+        
+        let vc = PTMediaLibViewController()
+        vc.mediaLibShow()
+        vc.selectImageBlock = { item,isOriginal in
+            if let completion = self.imageReplacementCompletion {
+                if let image = item.first?.image {
+                    completion(image)
+                } else {
+                    completion(nil)
+                }
+                self.imageReplacementCompletion = nil
+            } else {
+                if let image = item.first?.image {
+                    self.imageStickerEngine.addImageSticker(image)
+                }
+            }
+        }
     }
 }
 
@@ -995,6 +1113,8 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
             undoOrRedoFilter(oldFilter)
         case let .adjust(oldStatus, _):
             undoOrRedoAdjust(oldStatus)
+        case let .imageSticker(oldState, newState):
+            undoImageSticker(oldState, newState)
         }
     }
     
@@ -1014,6 +1134,8 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
             undoOrRedoFilter(newFilter)
         case let .adjust(_, newStatus):
             undoOrRedoAdjust(newStatus)
+        case let .imageSticker(oldState, newState):
+            redoImageSticker(oldState, newState)
         }
     }
     
@@ -1060,6 +1182,14 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
     
     private func redoSticker(_ oldState: PTBaseStickertState?, _ newState: PTBaseStickertState?) {
         stickerEngine.undoOrRedoSticker(oldState: oldState, newState: newState, isUndo: false)
+    }
+    
+    private func undoImageSticker(_ oldState: PTBaseStickertState?, _ newState: PTBaseStickertState?) {
+        imageStickerEngine.undoOrRedoSticker(oldState: oldState, newState: newState, isUndo: true)
+    }
+    
+    private func redoImageSticker(_ oldState: PTBaseStickertState?, _ newState: PTBaseStickertState?) {
+        imageStickerEngine.undoOrRedoSticker(oldState: oldState, newState: newState, isUndo: false)
     }
     
     private func undoOrRedoFilter(_ filter: PTHarBethFilter?) {

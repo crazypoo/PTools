@@ -25,9 +25,13 @@ public enum PTInputTextStyle {
     }
 }
 
-class PTImageStickerView: PTBaseStickerView {
-    private let image: UIImage
-    
+public class PTImageStickerView: PTBaseStickerView {
+    public var image: UIImage {
+        didSet {
+            imageView.image = image
+        }
+    }
+
     private static let edgeInset: CGFloat = 20
     
     private lazy var imageView: UIImageView = {
@@ -114,6 +118,53 @@ class PTImageStickerView: PTBaseStickerView {
         size.height += Self.edgeInset * 2
         return size
     }
+    
+    override func tapAction(_ ges: UITapGestureRecognizer) {
+        guard gesIsEnabled else { return }
+        
+        // 如果当前是选中激活状态（边框显示且定时器有效），再次点击触发替换图片
+        if let timer = timer, timer.isValid {
+            delegate?.sticker(self, editImage: image)
+        } else {
+            // 否则执行父类的选中逻辑（显示边框）
+            super.tapAction(ges)
+        }
+    }
+    
+    func changeSize(to newSize: CGSize) {
+        // Revert zoom scale.
+        transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
+        // Revert ges scale.
+        transform = transform.scaledBy(x: 1 / gesScale, y: 1 / gesScale)
+        // Revert ges rotation.
+        transform = transform.rotated(by: -gesRotation)
+        transform = transform.rotated(by: -originAngle.pt.toPi)
+        
+        // Recalculate current frame.
+        let center = CGPoint(x: frame.midX, y: frame.midY)
+        var frame = frame
+        frame.origin.x = center.x - newSize.width / 2
+        frame.origin.y = center.y - newSize.height / 2
+        frame.size = newSize
+        self.frame = frame
+        
+        let oc = CGPoint(x: originFrame.midX, y: originFrame.midY)
+        var of = originFrame
+        of.origin.x = oc.x - newSize.width / 2
+        of.origin.y = oc.y - newSize.height / 2
+        of.size = newSize
+        originFrame = of
+        
+        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        
+        // Readd zoom scale.
+        transform = transform.scaledBy(x: originScale, y: originScale)
+        // Readd ges scale.
+        transform = transform.scaledBy(x: gesScale, y: gesScale)
+        // Readd ges rotation.
+        transform = transform.rotated(by: gesRotation)
+        transform = transform.rotated(by: originAngle.pt.toPi)
+    }
 }
 
 @MainActor public protocol PTStickerViewDelegate: NSObject {
@@ -130,6 +181,8 @@ class PTImageStickerView: PTBaseStickerView {
     func stickerDidTap(_ sticker: PTBaseStickerView)
     
     func sticker(_ textSticker: PTTextStickerView, editText text: String)
+    
+    func sticker(_ imageSticker: PTImageStickerView, editImage image: UIImage)
 }
 
 protocol PTStickerViewAdditional: NSObject {
@@ -231,9 +284,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         return view
     }()
 
-    deinit {
-//        cleanTimer()
-    }
+    deinit { }
     
     class func initWithState(_ state: PTBaseStickertState) -> PTBaseStickerView? {
         if let state = state as? PTTextStickerState {
@@ -755,8 +806,8 @@ class PTEditInputViewController: PTBaseViewController {
     private static let toolViewHeight: CGFloat = 70
     
     // 用于节流的高频绘制任务
-    private var drawBgWorkItem: DispatchWorkItem?
-
+    private var drawBgTask: Task<Void, Never>?
+    
     private let image: UIImage?
     
     private var text: String
@@ -1048,64 +1099,73 @@ class PTEditInputViewController: PTBaseViewController {
 
 // MARK: Draw text layer
 extension PTEditInputViewController {
+    
+    @MainActor
     private func drawTextBackground() {
         guard textStyle == .bg, !textView.text.isEmpty else {
             textLayer.removeFromSuperlayer()
             return
         }
         
-        // 1. 取消上一次还没来得及画的任务（防手抖节流）
-        drawBgWorkItem?.cancel()
+        // 取消上一次的任务（防手抖节流）
+        drawBgTask?.cancel()
         
-        // 2. [主线程]：光速获取基础排版数据（UITextView 的数据必须在主线程读）
-        let rawRects = getRawTextRects()
-        guard !rawRects.isEmpty else { return }
-        let currentRadius = textLayerRadius
-        let fillColor = currentColor.cgColor
-        
-        // 3. 创建异步绘制任务
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
+        // 开启 Swift 6 原生主线程 Task 进行节流
+        drawBgTask = Task { @MainActor [weak self] in
+            guard let self else { return }
             
-            // [子线程]：进行消耗 CPU 的矩形合并与贝塞尔路径计算
-            let optimizedRects = self.optimizeRects(rawRects)
-            let cgPath = self.buildPath(from: optimizedRects, radius: currentRadius)
-            
-            // 如果计算期间用户又打字了，直接丢弃这次计算结果
-            if self.drawBgWorkItem?.isCancelled == true { return }
-            
-            // 4. [切回主线程]：光速赋值渲染
-            DispatchQueue.main.async {
-                // 🔥 绝杀：关闭 Core Animation 的隐式动画，省下巨量 GPU 开销
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-                
-                self.textLayer.path = cgPath
-                self.textLayer.fillColor = fillColor
-                if self.textLayer.superlayer == nil {
-                    self.textView.layer.insertSublayer(self.textLayer, at: 0)
-                }
-                
-                CATransaction.commit()
+            // 节流：等待 30 毫秒（iOS 16+ 现代 API）。
+            // 如果用户这 30ms 内又打字了，Task 会被 cancel，抛出 CancellationError 并退出
+            do {
+                try await Task.sleep(for: .milliseconds(30))
+            } catch {
+                return // 任务被取消，直接退出
             }
+            
+            // 再次校验任务状态
+            guard !Task.isCancelled else { return }
+            // 获取原生排版矩形 (全部在安全的 MainActor 下执行)
+            let rawRects = self.getRawTextRects()
+            guard !rawRects.isEmpty else { return }
+            
+            let currentRadius = self.textLayerRadius
+            let fillColor = self.currentColor.cgColor
+            
+            // 数学计算（数据量极小，主线程运算耗时极短，彻底避免并发隔离崩溃）
+            let optimizedRects = Self.optimizeRects(rawRects, radius: currentRadius)
+            let cgPath = Self.buildPath(from: optimizedRects, radius: currentRadius)
+            
+            // 光速渲染，关闭隐式动画省去开销
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            
+            self.textLayer.path = cgPath
+            self.textLayer.fillColor = fillColor
+            if self.textLayer.superlayer == nil {
+                self.textView.layer.insertSublayer(self.textLayer, at: 0)
+            }
+            
+            CATransaction.commit()
         }
-        
-        drawBgWorkItem = workItem
-        // 将高强度数学计算丢入后台高优先级队列
-        DispatchQueue.global(qos: .userInteractive).async(execute: workItem)
     }
     
-    // 主线程提取原生排版矩形 (极快)
+    @MainActor
     private func getRawTextRects() -> [CGRect] {
         let layoutManager = textView.layoutManager
-        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+        let textContainer = textView.textContainer
+        
+        // iOS 17 中安全的字形范围获取
+        let glyphRange = layoutManager.glyphRange(for: textContainer)
+        guard glyphRange.length > 0 else { return [] }
         
         var rects: [CGRect] = []
         let insetLeft = textView.textContainerInset.left
         let insetTop = textView.textContainerInset.top
         
         layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, _, _ in
+            // 过滤无用的幽灵矩形
+            guard usedRect.width > 0 && usedRect.height > 0 else { return }
+            
             rects.append(CGRect(x: usedRect.minX - 10 + insetLeft,
                                 y: usedRect.minY - 8 + insetTop,
                                 width: usedRect.width + 20,
@@ -1114,8 +1174,8 @@ extension PTEditInputViewController {
         return rects
     }
     
-    // 子线程构建复杂的贝塞尔路径 (不堵塞 UI)
-    private func buildPath(from rects: [CGRect], radius: CGFloat) -> CGPath {
+    // 纯静态方法，断开与控制器的关联，满足 Swift 6 Sendable 严格要求
+    private static func buildPath(from rects: [CGRect], radius: CGFloat) -> CGPath {
         let path = UIBezierPath()
         for (index, rect) in rects.enumerated() {
             if index == 0 {
@@ -1154,17 +1214,15 @@ extension PTEditInputViewController {
         return path.cgPath
     }
 
-    /// 将原本深层递归的算法改为 O(N) 复杂度的迭代平滑算法
-    private func optimizeRects(_ rects: [CGRect]) -> [CGRect] {
+    // 纯静态方法，断开与控制器的关联
+    private static func optimizeRects(_ rects: [CGRect], radius: CGFloat) -> [CGRect] {
         guard rects.count > 1 else { return rects }
         var result = rects
-        let threshold = textLayerRadius * 2
+        let threshold = radius * 2
         
-        // 第一遍正向扫描：平滑向下宽度的突变
         for i in 1..<result.count {
             let pre = result[i - 1]
             let curr = result[i]
-            
             if curr.width > pre.width && (curr.width - pre.width) < threshold {
                 result[i - 1].size.width = curr.width
             } else if curr.width < pre.width && (pre.width - curr.width) < threshold {
@@ -1172,11 +1230,9 @@ extension PTEditInputViewController {
             }
         }
         
-        // 第二遍反向扫描：确保突变平滑能向上层传导
         for i in (1..<result.count).reversed() {
             let pre = result[i - 1]
             let curr = result[i]
-            
             if curr.width > pre.width && (curr.width - pre.width) < threshold {
                 result[i - 1].size.width = curr.width
             } else if curr.width < pre.width && (pre.width - curr.width) < threshold {

@@ -9,7 +9,6 @@
 import UIKit
 import SmartCodable
 
-
 class LXSiwftBaseModel:SmartCodableX {
     var code:String = ""
     var tip:String = ""
@@ -57,17 +56,17 @@ class YDSBaseResultModel: PTModelProtocol {
 /*
  继承用聪明子分类
  */
-@SmartSubclass
-class YDSBaseModel: YDSBaseModelEX,@unchecked Sendable{
+//@SmartSubclass
+class YDSBaseModel: YDSBaseModelEX,@unchecked Sendable {
     var msg:String = ""
 }
 
-@SmartSubclass
+//@SmartSubclass
 class YDSHomeBannerMainModel:YDSBaseModel, @unchecked Sendable {
     @SmartAny var result:YDSHomeBannerResultModel?
 }
 
-@SmartSubclass
+//@SmartSubclass
 class YDSHomeBannerResultModel:YDSBaseResultModel {
     @SmartAny var data:[YDSHomeBannerModel] = []
 }
