@@ -65,7 +65,7 @@ public class PTImageStickerView: PTBaseStickerView {
             gesScale: state.gesScale,
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
-            showBorder: false
+            showBorder: true
         )
     }
     
@@ -247,42 +247,39 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         return pan
     }()
     
-    var state: PTBaseStickertState {
-        fatalError()
-    }
+    var state: PTBaseStickertState { fatalError() }
     
-    var borderView: UIView {
-        self
-    }
+    var borderView: UIView { self }
     
     weak var delegate: PTStickerViewDelegate?
     
-    // MARK: - 单指控制手柄
-        
-    private var lastFrameDistance: CGFloat = 0
-    private var lastFrameAngle: CGFloat = 0
+    private lazy var rotateLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBlue
+        return view
+    }()
     
-    // 右下角控制手柄
-    lazy var scaleRotateHandle: UIImageView = {
-        // 使用一个自带的符号，或者你可以换成你自己的 UIImage
-        let image = UIImage(.arrow.upLeftAndArrowDownRight).withTintColor(.white)
-        let view = UIImageView(image: image)
-        view.tintColor = .black
-        view.backgroundColor = .clear
-        // 给手柄加个圆角和阴影，看起来更精致
-        view.layer.cornerRadius = 12
-        view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 0, height: 1)
-        view.layer.shadowOpacity = 0.3
-        view.layer.shadowRadius = 2
-        view.isUserInteractionEnabled = true
-        
-        // 挂载单指拖拽手势
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleScaleRotatePan(_:)))
+    private lazy var tlHandle = createCornerHandle() // 左上
+    private lazy var trHandle = createCornerHandle() // 右上
+    private lazy var blHandle = createCornerHandle() // 左下
+    private lazy var brHandle = createCornerHandle() // 右下
+
+    private lazy var rotateHandle: UIView = {
+        let view = createCornerHandle()
+        // 给旋转手柄单独挂载旋转手势
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleRotatePan(_:)))
         view.addGestureRecognizer(pan)
         return view
     }()
+    
+    // MARK: - 拖拽状态记录器
+    private var startDistance: CGFloat = 0
+    private var startGesScale: CGFloat = 1
+    private var fixedPointAbs: CGPoint = .zero
+    private var startCenter: CGPoint = .zero
+    
+    private var startAngle: CGFloat = 0
+    private var startGesRotation: CGFloat = 0
 
     deinit { }
     
@@ -316,10 +313,6 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         self.totalTranslationPoint = totalTranslationPoint
         
         borderView.layer.borderWidth = borderWidth
-        hideBorder()
-        if showBorder {
-            startTimer()
-        }
         
         addGestureRecognizer(tapGes)
         addGestureRecognizer(pinchGes)
@@ -331,9 +324,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         addGestureRecognizer(panGes)
         tapGes.require(toFail: panGes)
         
-        borderView.addSubview(scaleRotateHandle)
-        // 初始状态隐藏手柄
-        scaleRotateHandle.isHidden = true
+        borderView.addSubviews([rotateLine, tlHandle, trHandle, blHandle, brHandle, rotateHandle])
+        if showBorder {
+            startTimer()
+        } else {
+            hideBorder()
+        }
     }
     
     @available(*, unavailable)
@@ -344,20 +340,21 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        let handleSize: CGFloat = 24
-        scaleRotateHandle.frame = CGRect(
-            x: bounds.width - handleSize / 2,
-            y: bounds.height - handleSize / 2,
-            width: handleSize,
-            height: handleSize
-        )
-        guard firstLayout else {
-            return
-        }
+        // 🌟 布局 5 个点和连接线
+        let handleSize: CGFloat = 20
+        tlHandle.frame = CGRect(x: -handleSize/2, y: -handleSize/2, width: handleSize, height: handleSize)
+        trHandle.frame = CGRect(x: bounds.width - handleSize/2, y: -handleSize/2, width: handleSize, height: handleSize)
+        blHandle.frame = CGRect(x: -handleSize/2, y: bounds.height - handleSize/2, width: handleSize, height: handleSize)
+        brHandle.frame = CGRect(x: bounds.width - handleSize/2, y: bounds.height - handleSize/2, width: handleSize, height: handleSize)
         
-        // Rotate must be first when first layout.
+        let rotateHandleY: CGFloat = -35
+        rotateHandle.frame = CGRect(x: bounds.width/2 - handleSize/2, y: rotateHandleY, width: handleSize, height: handleSize)
+        rotateLine.frame = CGRect(x: bounds.width/2 - 1, y: rotateHandleY + handleSize/2, width: 2, height: abs(rotateHandleY) - handleSize/2)
+        
+        guard firstLayout else { return }
+        
+        // 初始矩阵计算逻辑保持不变
         transform = transform.rotated(by: originAngle.pt.toPi)
-        
         if totalTranslationPoint != .zero {
             let direction = direction(for: originAngle)
             if direction == .right {
@@ -370,17 +367,11 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
                 transform = transform.translatedBy(x: totalTranslationPoint.x, y: totalTranslationPoint.y)
             }
         }
-        
         transform = transform.scaledBy(x: originScale, y: originScale)
-        
         originTransform = transform
         
-        if gesScale != 1 {
-            transform = transform.scaledBy(x: gesScale, y: gesScale)
-        }
-        if gesRotation != 0 {
-            transform = transform.rotated(by: gesRotation)
-        }
+        if gesScale != 1 { transform = transform.scaledBy(x: gesScale, y: gesScale) }
+        if gesRotation != 0 { transform = transform.rotated(by: gesRotation) }
         
         firstLayout = false
         setupUIFrameWhenFirstLayout()
@@ -477,8 +468,8 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         if isOn, !onOperation {
             onOperation = true
             cleanTimer()
-            borderView.layer.borderColor = UIColor.white.cgColor
-            scaleRotateHandle.isHidden = false // 显示手柄
+            borderView.layer.borderColor = UIColor.systemBlue.cgColor // 边框改为蓝色
+            setHandlesHidden(false) // 显示 5 个点
             superview?.bringSubviewToFront(self)
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
@@ -489,10 +480,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     func updateTransform() {
-        // 1. 始终从最原始/上次保存的稳定矩阵开始
         var transform = originTransform
-        
-        // 2. 根据初始角度计算当前的拖拽方向，并应用【纯增量】平移
         let direction = direction(for: originAngle)
         if direction == .right {
             transform = transform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
@@ -503,26 +491,24 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         } else {
             transform = transform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
         }
-        
-        // 3. 叠加增量缩放 (Scale 必须在 Translate 之后)
         transform = transform.scaledBy(x: gesScale, y: gesScale)
-        
-        // 4. 叠加增量旋转 (Rotate 必须在 Scale 之后)
         transform = transform.rotated(by: gesRotation)
-        
-        // 5. 赋值并通知外界 (驱动垃圾桶动画)
         self.transform = transform
         delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
     @objc private func hideBorder() {
-        borderView.layer.borderColor = UIColor.clear.cgColor
-        scaleRotateHandle.isHidden = true // 隐藏手柄
+        setHandlesHidden(true)
     }
     
+    private func setHandlesHidden(_ hidden: Bool) {
+        [tlHandle, trHandle, blHandle, brHandle, rotateHandle, rotateLine].forEach { $0.isHidden = hidden }
+    }
+
     func startTimer() {
         cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
+        borderView.layer.borderColor = UIColor.systemBlue.cgColor
+        setHandlesHidden(false)
         timer = Timer.scheduledTimer(timeInterval: 2, target: PTWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -533,60 +519,144 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     // MARK: UIGestureRecognizerDelegate
-
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
+        
+    private func createCornerHandle() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.systemBlue.cgColor
+        view.layer.borderWidth = 2
+        view.layer.cornerRadius = 10
+        view.isUserInteractionEnabled = true
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleCornerPan(_:)))
+        view.addGestureRecognizer(pan)
+        return view
+    }
     
-    // MARK: - 单指缩放与旋转算法
-    @objc private func handleScaleRotatePan(_ ges: UIPanGestureRecognizer) {
-        guard gesIsEnabled, let superview = self.superview else { return }
+    @objc private func handleCornerPan(_ ges: UIPanGestureRecognizer) {
+        guard gesIsEnabled, let superview = self.superview, let handle = ges.view else { return }
         
-        // 获取手柄在父视图（画布）中的绝对坐标
         let point = ges.location(in: superview)
-        // 贴纸中心点在父视图中的坐标
-        let center = self.center
-        
-        // 核心数学：计算当前手指距离中心的距离 (用于缩放)
-        let currentDistance = hypot(point.x - center.x, point.y - center.y)
-        // 核心数学：计算当前手指与中心的向量角度 (用于旋转)
-        let currentAngle = atan2(point.y - center.y, point.x - center.x)
         
         if ges.state == .began {
-            // 1. 初始化“上一帧”状态为当前状态
-            lastFrameDistance = currentDistance
-            lastFrameAngle = currentAngle
             setOperation(true)
-            cleanTimer() // 拖拽时不要让边框消失
+            cleanTimer()
+            
+            // 1. 寻找对角点作为绝对固定点 (Fixed Point)
+            let fixedHandle: UIView
+            if handle === tlHandle { fixedHandle = brHandle }
+            else if handle === trHandle { fixedHandle = blHandle }
+            else if handle === blHandle { fixedHandle = trHandle }
+            else { fixedHandle = tlHandle }
+            
+            // 2. 记录初始状态参数
+            startCenter = self.center
+            fixedPointAbs = self.convert(fixedHandle.center, to: superview) // 获取固定点在画布上的绝对坐标
+            startDistance = hypot(point.x - fixedPointAbs.x, point.y - fixedPointAbs.y) // 获取手指到固定点的初始距离
+            startGesScale = gesScale
             
         } else if ges.state == .changed {
-            // 安全拦截：防止除以0导致的崩溃
-            if lastFrameDistance == 0 { lastFrameDistance = currentDistance }
+            if startDistance == 0 { return }
             
-            // 2. 🔥 【增量计算】核心逻辑：
+            // 3. 计算手指与固定点的当前距离
+            let currentDistance = hypot(point.x - fixedPointAbs.x, point.y - fixedPointAbs.y)
+            let ratio = currentDistance / startDistance // 距离变化率就是缩放率
             
-            // 计算当前帧相对于上一帧的缩放比率 (Delta Scale)
-            let scaleDelta = currentDistance / lastFrameDistance
-            // 将增量叠加到总的手势缩放比例中，并应用最大限制
-            let cumulativeScale = gesScale * scaleDelta
-            // 如果超限，调整增量比率，使其刚好达到上限
-            gesScale = min(maxGesScale, cumulativeScale)
+            // 4. 计算并限制新的缩放倍数
+            gesScale = max(0.1, min(maxGesScale, startGesScale * ratio))
             
-            // 计算当前帧相对于上一帧的角度差 (Delta Angle)
-            let angleDelta = currentAngle - lastFrameAngle
-            // 将增量直接叠加到总的手势旋转角度中
-            gesRotation += angleDelta
+            // 5. 核心：补偿位移计算。因为 scaling 默认是以 center 为锚点的，所以我们需要把 center 偏移过去，从而保证 fixedPoint 视觉上没有移动。
+            let actualScaleRatio = gesScale / startGesScale
+            // 算出中心点到固定点的向量
+            let vX = fixedPointAbs.x - startCenter.x
+            let vY = fixedPointAbs.y - startCenter.y
+            // 补偿位移 = 向量 * (1 - 缩放比例)
+            let deltaCX = vX * (1 - actualScaleRatio)
+            let deltaCY = vY * (1 - actualScaleRatio)
             
-            // 3. 应用并刷新 UI (此时 updateTransform 内部的数据已经是平滑累加的了)
+            // 将绝对位移转换为相对 originScale 的位移
+            gesTranslationPoint = CGPoint(x: deltaCX / originScale, y: deltaCY / originScale)
             updateTransform()
             
-            // 4. 🔥 重要：更新“上一帧”状态为当前状态，供下一帧使用
-            lastFrameDistance = currentDistance
-            lastFrameAngle = currentAngle
-
         } else if ges.state == .ended || ges.state == .cancelled {
-            startTimer() // 拖拽结束，重启隐藏边框的定时器
+            // 6. 拖拽结束时，将临时补偿位移固化到基础矩阵中
+            let actualScaleRatio = gesScale / startGesScale
+            let vX = fixedPointAbs.x - startCenter.x
+            let vY = fixedPointAbs.y - startCenter.y
+            let deltaCX = vX * (1 - actualScaleRatio)
+            let deltaCY = vY * (1 - actualScaleRatio)
+            
+            let direction = direction(for: originAngle)
+            if direction == .right {
+                originTransform = originTransform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
+            } else if direction == .bottom {
+                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.x, y: -gesTranslationPoint.y)
+            } else if direction == .left {
+                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.y, y: gesTranslationPoint.x)
+            } else {
+                originTransform = originTransform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
+            }
+            
+            // 将增量追加到大管家 totalTranslationPoint 中
+            totalTranslationPoint.x += deltaCX
+            totalTranslationPoint.y += deltaCY
+            
+            gesTranslationPoint = .zero
+            startTimer()
         }
+    }
+    
+    // MARK: - 🌟 核心算法 2：顶部独立旋转
+    
+    @objc private func handleRotatePan(_ ges: UIPanGestureRecognizer) {
+        guard gesIsEnabled, let superview = self.superview else { return }
+        
+        let point = ges.location(in: superview)
+        let center = self.center
+        
+        if ges.state == .began {
+            setOperation(true)
+            cleanTimer()
+            // 记录手指在画布上的绝对角度
+            startAngle = atan2(point.y - center.y, point.x - center.x)
+            startGesRotation = gesRotation
+            
+        } else if ges.state == .changed {
+            // 计算当前手势偏离初始手势的角度差，并累加到初始旋转角上
+            let currentAngle = atan2(point.y - center.y, point.x - center.x)
+            gesRotation = startGesRotation + (currentAngle - startAngle)
+            updateTransform()
+            
+        } else if ges.state == .ended || ges.state == .cancelled {
+            startTimer()
+        }
+    }
+    
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        // 如果当前视图被隐藏、透明或禁止交互，按系统默认处理
+        guard !isHidden && alpha > 0.01 && isUserInteractionEnabled else {
+            return nil
+        }
+        
+        // 倒序遍历所有子视图（后添加的视图在最上面，优先响应）
+        for subview in subviews.reversed() {
+            // 确保子视图没有被隐藏且允许交互
+            guard !subview.isHidden && subview.isUserInteractionEnabled && subview.alpha > 0.01 else {
+                continue
+            }
+            
+            // 将触摸点转换到子视图的坐标系中
+            let subPoint = subview.convert(point, from: self)
+            // 询问子视图：这个点是否在你（或你的子视图）身上？
+            if let result = subview.hitTest(subPoint, with: event) {
+                return result
+            }
+        }
+        
+        // 如果子视图都没命中，再检查自己
+        return super.hitTest(point, with: event)
     }
 }
 
@@ -705,7 +775,7 @@ public class PTTextStickerView: PTBaseStickerView {
                   gesScale: state.gesScale,
                   gesRotation: state.gesRotation,
                   totalTranslationPoint: state.totalTranslationPoint,
-                  showBorder: false)
+                  showBorder: true)
     }
     
     init(id: String = UUID().uuidString,
