@@ -468,7 +468,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     // MARK: - 贴纸增删改查
     
-    public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
+    public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) {
         showInputTextVC(text, textColor: textColor, font: font, style: style) { [weak self] newText, newColor, newFont, image, newStyle in
             guard let self = self, !newText.isEmpty, let image = image else { return }
             self.addTextStickersView(newText, textColor: newColor, font: newFont, image: image, style: newStyle)
@@ -550,7 +550,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     // MARK: - 文字输入控制器调配
     
-    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void) {
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle(), completion: @escaping (String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void) {
         guard let context = context else { return }
         
         let scrollView = context.engineScrollView

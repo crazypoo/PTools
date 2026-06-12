@@ -11,12 +11,27 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
-public enum PTInputTextStyle {
-    case normal
-    case bg
+public struct PTInputTextStyle: Equatable {
+    // 保留你原来的背景状态枚举
+    public enum BackgroundStyle: Int {
+        case normal
+        case bg
+    }
     
-    fileprivate var btnImage: UIImage? {
-        switch self {
+    // 所有的排版属性都装在这里
+    public var bgStyle: BackgroundStyle = .normal
+    public var alignment: NSTextAlignment = .left
+    public var isBold: Bool = true
+    public var isItalic: Bool = false
+    public var hasUnderline: Bool = false
+    public var hasStrikethrough: Bool = false
+    
+    // 供外部快速初始化使用
+    public init() {}
+    
+    // 保留你原来获取按钮图标的优雅属性，完全向后兼容！
+    var btnImage: UIImage? {
+        switch bgStyle {
         case .normal:
             return UIImage(.f.square)
         case .bg:
@@ -910,6 +925,19 @@ class PTEditInputViewController: PTBaseViewController {
         return textView
     }()
     
+    private lazy var formatScrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.showsHorizontalScrollIndicator = false
+        return view
+    }()
+    private lazy var formatStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 15
+        stack.alignment = .center
+        return stack
+    }()
+
     private lazy var toolView = UIView(frame: CGRect(x: 0, y: view.pt.jx_height - Self.toolViewHeight, width: view.pt.jx_width, height: Self.toolViewHeight))
     
     private lazy var textStyleBtn: UIButton = {
@@ -975,7 +1003,7 @@ class PTEditInputViewController: PTBaseViewController {
         changeStatusBar(type: .Auto)
     }
 
-    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
+    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) {
         self.image = image
         self.text = text ?? ""
         if let font = font {
@@ -1025,7 +1053,7 @@ class PTEditInputViewController: PTBaseViewController {
         coverView.alpha = 0.4
         bgImageView.addSubview(coverView)
         
-        view.addSubviews([textView,toolView])
+        view.addSubviews([textView,toolView,formatScrollView])
         
         textView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -1051,39 +1079,110 @@ class PTEditInputViewController: PTBaseViewController {
             make.left.equalTo(self.toolView.snp.centerX).offset(15)
         }
         
+        formatScrollView.addSubview(formatStackView)
+        
+        // 布局格式栏 (紧贴在 toolView 上方)
+        formatScrollView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(15)
+            make.bottom.equalTo(toolView.snp.top)
+            make.height.equalTo(44)
+        }
+        formatStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+
+        setupFormatButtons()
         // 这个要放到这里，不能放到懒加载里，因为放到懒加载里会触发layoutManager(_:, didCompleteLayoutFor:,atEnd)，导致循环调用
         textView.textAlignment = .left
         
         refreshTextViewUI()
     }
     
-    private func refreshTextViewUI() {
-        textStyleBtn.setImage(textStyle.btnImage, for: .normal)
-        textStyleBtn.setImage(textStyle.btnImage, for: .highlighted)
+    private func setupFormatButtons() {
+        // 配置数据源: (SF Symbol 图标, 初始状态, 点击闭包)
+        let buttonConfigs: [(String, Bool, (UIButton) -> Void)] = [
+            ("bold", textStyle.isBold, { [weak self] btn in
+                self?.textStyle.isBold.toggle()
+                btn.tintColor = self?.textStyle.isBold == true ? .white : .gray
+                self?.updateTextAttributes()
+            }),
+            ("italic", textStyle.isItalic, { [weak self] btn in
+                self?.textStyle.isItalic.toggle()
+                btn.tintColor = self?.textStyle.isItalic == true ? .white : .gray
+                self?.updateTextAttributes()
+            }),
+            ("underline", textStyle.hasUnderline, { [weak self] btn in
+                self?.textStyle.hasUnderline.toggle()
+                btn.tintColor = self?.textStyle.hasUnderline == true ? .white : .gray
+                self?.updateTextAttributes()
+            }),
+            ("strikethrough", textStyle.hasStrikethrough, { [weak self] btn in
+                self?.textStyle.hasStrikethrough.toggle()
+                btn.tintColor = self?.textStyle.hasStrikethrough == true ? .white : .gray
+                self?.updateTextAttributes()
+            }),
+            ("textformat", false, { [weak self] _ in
+                self?.showFontPicker()
+            }),
+            // 对齐方式按钮，默认左对齐，点击轮换
+            ("text.alignleft", true, { [weak self] btn in
+                guard let self = self else { return }
+                if self.textStyle.alignment == .left {
+                    self.textStyle.alignment = .center
+                    btn.setImage(UIImage(.text.aligncenter), for: .normal)
+                } else if self.textStyle.alignment == .center {
+                    self.textStyle.alignment = .right
+                    btn.setImage(UIImage(.text.alignright), for: .normal)
+                } else {
+                    self.textStyle.alignment = .left
+                    btn.setImage(UIImage(.text.alignleft), for: .normal)
+                }
+                self.updateTextAttributes()
+            })
+        ]
         
-        drawTextBackground()
-        
-        guard textStyle == .bg else {
-            textView.textColor = currentColor
-            return
-        }
-        
-        if currentColor == .white {
-            textView.textColor = .black
-        } else if currentColor == .black {
-            textView.textColor = .white
-        } else {
-            textView.textColor = .white
+        for config in buttonConfigs {
+            let btn = UIButton(type: .system)
+            btn.setImage(UIImage(systemName: config.0), for: .normal)
+            btn.tintColor = config.1 ? .white : .gray // 选中白色，未选中灰色
+            btn.addActionHandlers { _ in
+                config.2(btn)
+            }
+            btn.snp.makeConstraints { make in
+                make.size.equalTo(34)
+            }
+            formatStackView.addArrangedSubview(btn)
         }
     }
     
-    @objc private func textStyleBtnClick() {
-        if textStyle == .normal {
-            textStyle = .bg
-        } else {
-            textStyle = .normal
-        }
+    // MARK: - 字体选择器 (UIFontPickerViewController)
+    private func showFontPicker() {
+        let config = UIFontPickerViewController.Configuration()
+        config.includeFaces = true // 允许选择字体的具体字重 (如 Light, Black 等)
+        config.displayUsingSystemFont = false // 强制使用字体原本的样貌展示列表
         
+        let fontPicker = UIFontPickerViewController(configuration: config)
+        fontPicker.delegate = self
+        
+        // 弹出选择器
+        self.present(fontPicker, animated: true)
+    }
+
+    private func refreshTextViewUI() {
+        textStyleBtn.setImage(textStyle.btnImage, for: .normal)
+        textStyleBtn.setImage(textStyle.btnImage, for: .highlighted)
+        // 统一走富文本更新逻辑
+        updateTextAttributes()
+    }
+    
+    @objc private func textStyleBtnClick() {
+        if textStyle.bgStyle == .normal {
+            textStyle.bgStyle = .bg
+        } else {
+            textStyle.bgStyle = .normal
+        }
+
         refreshTextViewUI()
     }
     
@@ -1102,7 +1201,7 @@ class PTEditInputViewController: PTBaseViewController {
                 if NSStringFromClass(subview.classForCoder) == "_UITextContainerView" {
                     let size = textView.sizeThatFits(subview.frame.size)
                     image = UIGraphicsImageRenderer.pt.renderImage(size: size) { context in
-                        if textStyle == .bg {
+                        if textStyle.bgStyle == .bg {
                             textLayer.render(in: context)
                         }
 
@@ -1150,6 +1249,70 @@ class PTEditInputViewController: PTBaseViewController {
             self.textView.frame = textViewFrame
         }
     }
+    
+    // MARK: - 富文本属性更新
+    private func updateTextAttributes() {
+        // 处理字体：合成粗体与斜体
+        let baseDescriptor = self.font.fontDescriptor
+        var symTraits = baseDescriptor.symbolicTraits
+        
+        if textStyle.isBold {
+            symTraits.insert(.traitBold)
+        } else {
+            symTraits.remove(.traitBold)
+        }
+
+        if textStyle.isItalic {
+            symTraits.insert(.traitItalic)
+        } else {
+            symTraits.remove(.traitItalic)
+        }
+        
+        // 尝试生成带有新特征的字体（有些特殊艺术字体可能不支持加粗/倾斜，需要安全降级）
+        if let newDescriptor = baseDescriptor.withSymbolicTraits(symTraits) {
+            self.font = UIFont(descriptor: newDescriptor, size: PTTextStickerView.fontSize)
+        }
+        
+        // 处理段落格式：对齐方式
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = textStyle.alignment
+        
+        // 确定最终文本颜色 (适配你之前的背景样式逻辑)
+        var finalTextColor = currentColor
+        if textStyle.bgStyle == .bg {
+            finalTextColor = (currentColor == .white) ? .black : .white
+        }
+        
+        // 组装富文本属性字典
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: finalTextColor,
+            .paragraphStyle: paragraphStyle
+        ]
+        
+        if textStyle.hasUnderline {
+            attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
+        }
+        if textStyle.hasStrikethrough {
+            attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+        }
+        
+        // 安全地应用到 TextView (保留用户的光标位置)
+        let selectedRange = textView.selectedRange
+        
+        textView.typingAttributes = attributes
+        if let currentText = textView.text, !currentText.isEmpty {
+            textView.textStorage.beginEditing()
+            let fullRange = NSRange(location: 0, length: textView.textStorage.length)
+            textView.textStorage.setAttributes(attributes, range: fullRange)
+            textView.textStorage.endEditing()
+        }
+        
+        textView.selectedRange = selectedRange
+        
+        // 触发你之前的背景色块重绘
+        drawTextBackground()
+    }
 }
 
 // MARK: Draw text layer
@@ -1157,7 +1320,7 @@ extension PTEditInputViewController {
     
     @MainActor
     private func drawTextBackground() {
-        guard textStyle == .bg, !textView.text.isEmpty else {
+        guard textStyle.bgStyle == .bg, !textView.text.isEmpty else {
             textLayer.removeFromSuperlayer()
             return
         }
@@ -1329,5 +1492,33 @@ extension PTEditInputViewController: @MainActor NSLayoutManagerDelegate {
         }
         
         drawTextBackground()
+    }
+}
+
+extension PTEditInputViewController: UIFontPickerViewControllerDelegate {
+    
+    func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
+        guard let descriptor = viewController.selectedFontDescriptor else { return }
+        
+        // 1. 获取用户选择的新字体 (保持我们规定的统一字号)
+        let newFont = UIFont(descriptor: descriptor, size: PTTextStickerView.fontSize)
+        
+        // 2. 更新状态变量
+        self.font = newFont
+        
+        // 3. 重新应用所有的粗体、斜体、对齐方式到新字体上
+        updateTextAttributes()
+        
+        // 4. 用户选完字体后，界面会 dismiss，我们让输入框重新获取焦点，弹回键盘
+        PTGCDManager.shared.delayOnMain(time: 0.3) {
+            self.textView.becomeFirstResponder()
+        }
+    }
+    
+    func fontPickerViewControllerDidCancel(_ viewController: UIFontPickerViewController) {
+        // 用户取消选择，直接让键盘弹回来即可
+        PTGCDManager.shared.delayOnMain(time: 0.3) {
+            self.textView.becomeFirstResponder()
+        }
     }
 }
