@@ -1191,28 +1191,40 @@ class PTEditInputViewController: PTBaseViewController {
     }
     
     @objc private func doneBtnClick() {
+        
         textView.tintColor = .clear
+        textView.showsVerticalScrollIndicator = false
+        textView.showsHorizontalScrollIndicator = false
         textView.endEditing(true)
 
         var image: UIImage?
         
-        if !textView.text.isEmpty {
-            for subview in textView.subviews {
-                if NSStringFromClass(subview.classForCoder) == "_UITextContainerView" {
-                    let size = textView.sizeThatFits(subview.frame.size)
-                    image = UIGraphicsImageRenderer.pt.renderImage(size: size) { context in
-                        if textStyle.bgStyle == .bg {
-                            textLayer.render(in: context)
-                        }
-
-                        subview.layer.render(in: context)
-                    }
+        if let text = textView.text, !text.isEmpty {
+            // 2. 获取所有的文字精准坐标块
+            let rawRects = self.getRawTextRects()
+            
+            if !rawRects.isEmpty {
+                // 3. 计算所有文字块的并集，得出最终的精准包围盒 (Bounding Box)
+                var contentRect = rawRects[0]
+                for r in rawRects {
+                    contentRect = contentRect.union(r)
+                }
+                
+                // 4. 开启画板，尺寸完美贴合文字
+                image = UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
+                    // 🌟 核心魔法：将上下文原点反向平移！
+                    // 把包围盒的左上角平移到 (0,0) 位置，这样右对齐/居中的文字就会被完美拽回画面中心，绝不会被裁剪！
+                    context.translateBy(x: -contentRect.minX, y: -contentRect.minY)
+                    
+                    // 将包含文字和彩色背景块的整个 Layer 渲染进去
+                    self.textView.layer.render(in: context)
                 }
             }
         }
         
+        // 5. 回调并退出
         endInput?(textView.text, currentColor, font, image, textStyle)
-        navigationController?.popViewController()
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func keyboardWillShow(_ notify: Notification) {
@@ -1273,6 +1285,8 @@ class PTEditInputViewController: PTBaseViewController {
             self.font = UIFont(descriptor: newDescriptor, size: PTTextStickerView.fontSize)
         }
         
+        textView.textAlignment = textStyle.alignment
+        
         // 处理段落格式：对齐方式
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textStyle.alignment
@@ -1287,7 +1301,8 @@ class PTEditInputViewController: PTBaseViewController {
         var attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: finalTextColor,
-            .paragraphStyle: paragraphStyle
+            .paragraphStyle: paragraphStyle,
+            .obliqueness: textStyle.isItalic ? 0.25 : 0
         ]
         
         if textStyle.hasUnderline {
