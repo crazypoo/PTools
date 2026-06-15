@@ -345,8 +345,14 @@ public class PTEditImageViewController: PTBaseViewController {
         view.setImage(UIImage(.eraser), for: .normal)
         view.setImage(UIImage(.eraser.fill), for: .selected)
         view.addActionHandlers { sender in
-            sender.isSelected = !sender.isSelected
-            self.eraserCircleView.isHidden = !sender.isSelected
+            switch self.selectedTool?.currentType {
+            case .draw,.mosaic:
+                sender.isSelected = !sender.isSelected
+                self.eraserCircleView.isHidden = !sender.isSelected
+            case .imageSticker:
+                self.imageStickerEngine.removeBackgroundForSelectedSticker()
+            default:break
+            }
         }
         return view
     }()
@@ -453,6 +459,14 @@ public class PTEditImageViewController: PTBaseViewController {
         engine.onRequestImageSelection = { [weak self] completion in
             // 把引擎的接收闭包存起来，然后去开相册
             self?.openImagePicker(forReplacement: completion)
+        }
+        engine.onProcessingStateChanged = { [weak self] isProcessing in
+            if isProcessing {
+                PTNSLogConsole("正在进行智能抠图...")
+            } else {
+                // 隐藏 Loading HUD
+                PTNSLogConsole("抠图完成")
+            }
         }
         return engine
     }()
@@ -778,6 +792,7 @@ extension PTEditImageViewController {
     
     func showHandDrawBar(show:Bool,isMosaic:Bool = false) {
         if show {
+            
             view.addSubviews([drawBar,drawDismissButton])
             drawDismissButton.snp.makeConstraints { make in
                 make.size.equalTo(34)
@@ -791,29 +806,41 @@ extension PTEditImageViewController {
             }
             
             var subs = [UIView]()
-            if isMosaic {
-                subs = [eraser]
-            } else {
+            switch selectedTool?.currentType {
+            case .draw:
                 subs = [eraser,drawColorButton]
+            case .mosaic:
+                subs = [eraser]
+            case .imageSticker:
+                subs = [eraser]
+            default:
+                subs = []
             }
-
+            
             drawBar.addSubviews(subs)
             eraser.snp.makeConstraints { make in
                 make.size.equalTo(44)
                 make.centerY.equalToSuperview()
-                if isMosaic {
-                    make.centerX.equalToSuperview()
-                } else {
+                switch selectedTool?.currentType {
+                case .draw:
                     make.right.equalTo(self.drawBar.snp.centerX).offset(-15)
+                case .mosaic:
+                    make.centerX.equalToSuperview()
+                case .imageSticker:
+                    make.centerX.equalToSuperview()
+                default:break
                 }
             }
             
-            if !isMosaic {
+            switch selectedTool?.currentType {
+            case .draw:
                 drawColorButton.snp.makeConstraints { make in
                     make.size.centerY.equalTo(self.eraser)
                     make.left.equalTo(self.drawBar.snp.centerX).offset(15)
                 }
+            default:break
             }
+
             drawDismissButton.isHidden = false
             drawDismissButton.isUserInteractionEnabled = true
         } else {
@@ -908,7 +935,7 @@ extension PTEditImageViewController {
         activeEngine = toolsSelected ? imageStickerEngine : nil
         activeEngine?.toolDidActivate()
         
-        showHandDrawBar(show: false)
+        showHandDrawBar(show: true)
         showFilter(show: false)
         showAdjust(show:false)
     }

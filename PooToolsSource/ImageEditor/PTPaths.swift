@@ -124,32 +124,3 @@ public extension PTDrawPath {
         return lhs.index == rhs.index
     }
 }
-
-// MARK: 马赛克path
-public class PTMosaicPath: NSObject {
-    let path: UIBezierPath
-    
-    let ratio: CGFloat
-    
-    let startPoint: CGPoint
-    
-    var linePoints: [CGPoint] = []
-    
-    public init(pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
-        path = UIBezierPath()
-        path.lineWidth = pathWidth
-        path.lineCapStyle = .round
-        path.lineJoinStyle = .round
-        path.move(to: startPoint)
-        
-        self.ratio = ratio
-        self.startPoint = CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio)
-        
-        super.init()
-    }
-    
-    func addLine(to point: CGPoint) {
-        path.addLine(to: point)
-        linePoints.append(CGPoint(x: point.x / ratio, y: point.y / ratio))
-    }
-}

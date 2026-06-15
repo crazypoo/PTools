@@ -11,6 +11,7 @@ import Harbeth
 import SwifterSwift
 import CoreImage
 import AVFoundation
+import Vision
 
 /// 统一下发的画布计算参数
 public struct PTCanvasMetrics {
@@ -1172,6 +1173,8 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     /// 交互状态回调 (用于隐藏/显示主工具栏)
     public var onInteractStateChanged: ((Bool) -> Void)?
     public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)?
+    /// 用于通知外部 (VC) 当前是否正在进行 AI 抠图，以便外部显示/隐藏 Loading 菊花图
+    public var onProcessingStateChanged: ((Bool) -> Void)?
     /// 当前选中的贴纸 (用于应用图层和对齐操作)
     public var currentSelectedSticker: PTBaseStickerView?
     
@@ -1434,6 +1437,7 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
     }
     
     public func stickerDidTap(_ sticker: PTBaseStickerView) {
+        currentSelectedSticker = sticker
         imageStickersContainer.subviews.forEach { view in
             if view !== sticker {
                 (view as? PTStickerViewAdditional)?.resetState()
@@ -1458,4 +1462,91 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
             // self.context?.engineEditorManager.storeAction(...)
         }
     }    
+}
+
+extension PTImageStickerEngine {
+    /// 尝试为当前选中的图片贴纸消除背景
+    public func removeBackgroundForSelectedSticker() {
+        guard let imageSticker = currentSelectedSticker as? PTImageStickerView else { return }
+        let originalImage = imageSticker.image
+                
+        // 记录旧状态，用于支持撤销 (Undo)
+        let oldState = imageSticker.state
+        
+        // 通知外部开始处理 (可以转菊花)
+        onProcessingStateChanged?(true)
+        
+        // 开启异步任务处理抠图
+        Task {
+            do {
+                // 调用核心算法
+                if let cutoutImage = try await performForegroundMasking(on: originalImage) {
+                    await MainActor.run {
+                        UIView.transition(with: imageSticker, duration: 0.35, options: .transitionCrossDissolve) {
+                            imageSticker.image = cutoutImage
+                        }
+                        // 重新计算并刷新贴纸尺寸
+                        let contextWidth = self.context?.engineMainView.frame.width ?? UIScreen.main.bounds.width
+                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, width: contextWidth)
+                        imageSticker.changeSize(to: newSize)
+                        
+                        // 存入撤销栈
+                        self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
+                        
+                        // 结束 Loading
+                        self.onProcessingStateChanged?(false)
+                    }
+                } else {
+                    // 抠图失败或未找到主体
+                    await MainActor.run { self.onProcessingStateChanged?(false) }
+                }
+            } catch {
+                PTNSLogConsole("抠图失败: \(error.localizedDescription)")
+                await MainActor.run { self.onProcessingStateChanged?(false) }
+            }
+        }
+    }
+    
+    /// 核心算法：调用 Vision 框架提取前景
+    private func performForegroundMasking(on inputImage: UIImage) async throws -> UIImage? {
+        guard let cgImage = inputImage.cgImage else { return nil }
+        
+        // 创建请求
+        let request = VNGenerateForegroundInstanceMaskRequest()
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        
+        // 执行请求 (这里会在后台线程运行，极其吃性能)
+        try handler.perform([request])
+        
+        // 获取所有识别到的主体结果
+        guard let observation = request.results?.first else { return nil }
+        
+        // 为所有识别到的主体生成 Mask 遮罩
+        let maskPixelBuffer = try observation.generateScaledMaskForImage(
+            forInstances: observation.allInstances,
+            from: handler
+        )
+        
+        // 使用 CoreImage 合成图片
+        let originalCIImage = CIImage(cgImage: cgImage)
+        let maskCIImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+        
+        let bgCIImage = CIImage(color: .clear).cropped(to: originalCIImage.extent)
+        
+        guard let filter = CIFilter(name: "CIBlendWithMask") else { return nil }
+        filter.setValue(originalCIImage, forKey: kCIInputImageKey) // 原图作为前景
+        filter.setValue(bgCIImage, forKey: kCIInputBackgroundImageKey) // 透明色作为新背景
+        filter.setValue(maskCIImage, forKey: kCIInputMaskImageKey) // 刚刚生成的遮罩
+        
+        guard let outputCIImage = filter.outputImage else { return nil }
+        
+        // 渲染最终的透明背景图片
+        let context = CIContext(options: [.useSoftwareRenderer: false])
+        guard let outputCGImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else {
+            return nil
+        }
+        
+        // 保留原图的缩放比例和方向
+        return UIImage(cgImage: outputCGImage, scale: inputImage.scale, orientation: inputImage.imageOrientation)
+    }
 }

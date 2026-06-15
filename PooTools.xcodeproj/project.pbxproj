@@ -173,6 +173,7 @@
 		554A67382C855BB900FE1B10 /* UITraitCollection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */; };
 		554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
+		554D79C02FDF9EC20038E33D /* PTStickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554D79BF2FDF9EC20038E33D /* PTStickerManager.swift */; };
 		554E649F2D4A236800042565 /* PTHTMLHeightCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */; };
 		554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */; };
 		554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554F3A112E94C21D001F4078 /* PTTipsView.swift */; };
@@ -1141,6 +1142,7 @@
 		554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITraitCollection+PTEX.swift"; sourceTree = "<group>"; };
 		554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+PTEX.swift"; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
+		554D79BF2FDF9EC20038E33D /* PTStickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStickerManager.swift; sourceTree = "<group>"; };
 		554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHTMLHeightCalculator.swift; sourceTree = "<group>"; };
 		554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPageControllable.swift; sourceTree = "<group>"; };
 		554F3A112E94C21D001F4078 /* PTTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsView.swift; sourceTree = "<group>"; };
@@ -2943,6 +2945,7 @@
 				55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */,
 				55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */,
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
+				554D79BF2FDF9EC20038E33D /* PTStickerManager.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
 			);
@@ -4207,7 +4210,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4217,9 +4221,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4234,9 +4242,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4594,6 +4606,7 @@
 				55BA90732D29A7D70065FBD0 /* UITextContentType+InspectorEX.swift in Sources */,
 				55BA90742D29A7D70065FBD0 /* CALayer+InspectorEX.swift in Sources */,
 				55BA90752D29A7D70065FBD0 /* SizeControl.swift in Sources */,
+				554D79C02FDF9EC20038E33D /* PTStickerManager.swift in Sources */,
 				55BA90762D29A7D70065FBD0 /* HierarchyInspectorTableViewCell.swift in Sources */,
 				55BA90772D29A7D70065FBD0 /* MapViewAttributesSectionDataSource.swift in Sources */,
 				55BA90782D29A7D70065FBD0 /* TabBarItemAttributesSectionDataSource.swift in Sources */,
