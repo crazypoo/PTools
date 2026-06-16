@@ -146,12 +146,13 @@ public class PTDarkModeControl: PTBaseViewController {
         return view
     }()
     
-    lazy var backButton:UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var backButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTDarkModeOption.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
+        view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
 
@@ -161,7 +162,6 @@ public class PTDarkModeControl: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        backButton.frame = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         setCustomBackButtonView(backButton)
     }
     

@@ -12,12 +12,9 @@ import SwifterSwift
 
 class PTMediaBrowserNav: UIView {
     
-    lazy var closeButton:UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var closeButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.imageView?.contentMode = .scaleAspectFit
-        if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
-        }
         view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view
     }()

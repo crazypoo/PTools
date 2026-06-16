@@ -85,8 +85,8 @@ class PTCutViewController: PTBaseViewController {
         return layer
     }()
     
-    private lazy var cancelBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    private lazy var cancelBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutBackImage, for: .normal)
         btn.addActionHandlers(handler: { _ in
             self.cancelBtnClick()
@@ -95,24 +95,24 @@ class PTCutViewController: PTBaseViewController {
         return btn
     }()
     
-    private lazy var revertBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    private lazy var revertBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setTitleColor(.white, for: .normal)
         btn.setImage(PTImageEditorConfig.share.cutUndoImage, for: .normal)
         btn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         return btn
     }()
     
-    lazy var doneBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    lazy var doneBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.bounds = CGRect(x: 0, y: 0, width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize)
         return btn
     }()
     
-    private lazy var rotateBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    private lazy var rotateBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutRotateImage, for: .normal)
         btn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         return btn

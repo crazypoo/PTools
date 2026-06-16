@@ -21,8 +21,8 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
     public var selectedColorCallback:((UIColor)->Void)?
     public var viewDismiss:PTActionTask?
 
-    public lazy var backButton:UIButton = {
-        let colorPickerBack = UIButton(type: .custom)
+    public lazy var backButton:PTBaseButton = {
+        let colorPickerBack = PTBaseButton(type: .custom)
         colorPickerBack.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         colorPickerBack.addActionHandlers { sender in
             if self.checkVCIsPresenting() {

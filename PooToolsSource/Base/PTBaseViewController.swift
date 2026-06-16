@@ -966,8 +966,8 @@ open class PTBaseViewController: UIViewController {
         setCustomBackButtonView(backBtn)
     }
 
-    private func baseBackButton() -> UIButton {
-        let backBtn = UIButton(type: .custom)
+    private func baseBackButton() -> PTBaseButton {
+        let backBtn = PTBaseButton(type: .custom)
         backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
         backBtn.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return backBtn

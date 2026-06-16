@@ -64,18 +64,18 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         return view
     }()
 
-    private lazy var dismissButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var dismissButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
+        view.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dismissButton.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         setCustomBackButtonView(dismissButton)
     }
     

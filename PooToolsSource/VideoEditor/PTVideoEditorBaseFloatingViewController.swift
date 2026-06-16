@@ -12,8 +12,8 @@ import SwifterSwift
 
 open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
 
-    lazy var doneButton:UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var doneButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTVideoEditorConfig.share.doneImage, for: .normal)
         return view
     }()

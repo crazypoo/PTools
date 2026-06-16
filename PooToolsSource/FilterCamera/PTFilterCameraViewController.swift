@@ -177,8 +177,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var flashButton:UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var flashButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(cameraConfig.flashImage, for: .normal)
         view.setImage(cameraConfig.flashImageSelected, for: .selected)
         view.addActionHandlers { sender in
@@ -202,16 +202,13 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 }
             }
         }
-        if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
-        }
         return view
     }()
     
-    lazy var switchCameraButton:UIButton = {
+    lazy var switchCameraButton:PTBaseButton = {
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
 
-        let view = UIButton(type: .custom)
+        let view = PTBaseButton(type: .custom)
         view.setImage(cameraConfig.switchCameraImage, for: .normal)
         view.setImage(cameraConfig.switchCameraImageSelected, for: .selected)
         view.isHidden = cameraCount <= 1
@@ -237,8 +234,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var backBtn : UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var backBtn : PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(cameraConfig.backImage, for: .normal)
         view.addActionHandlers { _ in
             self.camera.stopRunning()
@@ -249,9 +246,6 @@ public class PTFilterCameraViewController: PTBaseViewController {
             } else {
                 self.returnFrontVC()
             }
-        }
-        if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()
@@ -314,17 +308,14 @@ public class PTFilterCameraViewController: PTBaseViewController {
         return view
     }()
 
-    lazy var filtersButton : UIButton = {
-        let view = UIButton(type: .custom)
+    lazy var filtersButton : PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(cameraConfig.filtersImage, for: .normal)
         view.setImage(cameraConfig.filtersImageSelected, for: .selected)
         view.isSelected = false
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
             self.showFilterView(show: sender.isSelected)
-        }
-        if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()

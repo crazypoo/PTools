@@ -175,7 +175,7 @@ public class PTPermissionViewController: PTBaseViewController {
         super.viewDidLoad()
         permissions = permissionStatic.permissionModels
         
-        let closeButton = UIButton(type: .close)
+        let closeButton = PTBaseButton(type: .close)
         view?.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)

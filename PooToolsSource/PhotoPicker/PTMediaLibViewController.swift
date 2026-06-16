@@ -702,27 +702,21 @@ public class PTMediaLibViewController: PTBaseViewController {
         return view
     }()
 
-    private lazy var dismissButton: UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var dismissButton: PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.backImage, for: .normal)
         view.addActionHandlers { [weak self] _ in
             self?.returnFrontVC()
-        }
-        if #available(iOS 26.0, *) {
-            view.configuration = .clearGlass()
         }
         view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view
     }()
 
-    private lazy var submitButton: UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var submitButton: PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.submitImage, for: .normal)
         view.addActionHandlers { [weak self] _ in
             self?.requestSelectPhoto(viewController: self)
-        }
-        if #available(iOS 26.0, *) {
-            view.configuration = .clearGlass()
         }
         view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view

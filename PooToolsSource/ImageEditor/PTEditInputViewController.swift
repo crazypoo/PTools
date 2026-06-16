@@ -32,16 +32,16 @@ class PTEditInputViewController: PTBaseViewController {
     
     private var textStyle: PTInputTextStyle
     
-    private lazy var cancelBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    private lazy var cancelBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.textBackImage, for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return btn
     }()
     
-    private lazy var doneBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+    private lazy var doneBtn: PTBaseButton = {
+        let btn = PTBaseButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.textSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.layer.masksToBounds = true

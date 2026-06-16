@@ -51,13 +51,13 @@ class PTUserDefultsViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let backBtn = UIButton(type: .custom)
+        let backBtn = PTBaseButton(type: .custom)
         backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         backBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
         
-        let cleanBtn = UIButton(type: .custom)
+        let cleanBtn = PTBaseButton(type: .custom)
         cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         cleanBtn.addActionHandlers { sender in
             self.clearUserdefults()

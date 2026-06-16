@@ -14,9 +14,9 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
 
     var cropImageHandler:((CGSize,CGRect)->Void)!
     
-    lazy var dismissButtonItem:UIButton = {
+    lazy var dismissButtonItem:PTBaseButton = {
         let image = PTVideoEditorConfig.share.dismissImage
-        let buttonItem = UIButton(type: .custom)
+        let buttonItem = PTBaseButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
             self.returnFrontVC()
@@ -24,9 +24,9 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         return buttonItem
     }()
     
-    lazy var doneButtonItem:UIButton = {
+    lazy var doneButtonItem:PTBaseButton = {
         let image = PTVideoEditorConfig.share.cutImage
-        let buttonItem = UIButton(type: .custom)
+        let buttonItem = PTBaseButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
             self.cropView.crop { [weak self = self] (crop) in

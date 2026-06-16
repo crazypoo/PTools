@@ -19,11 +19,8 @@ open class PTPlayerViewController: PTBaseViewController {
     private let slider = UISlider()
     private let currentTimeLabel = UILabel()
     private let durationLabel = UILabel()
-    private lazy var closeButton:UIButton = {
-        let view = UIButton(type: .custom)
-        if #available(iOS 26, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
-        }
+    private lazy var closeButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
         view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         view.addActionHandlers(handler: { _ in

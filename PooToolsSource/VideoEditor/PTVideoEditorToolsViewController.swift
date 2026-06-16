@@ -141,9 +141,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public var onEditCompleteHandler:((URL)->Void)?
     public var onlyOutput:Bool = false
     
-    lazy var dismissButtonItem:UIButton = {
+    lazy var dismissButtonItem:PTBaseButton = {
         let image = PTVideoEditorConfig.share.dismissImage
-        let buttonItem = UIButton(type: .custom)
+        let buttonItem = PTBaseButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { [weak self] sender in
             guard let self = self else { return }
@@ -155,68 +155,60 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return buttonItem
     }()
     
-    lazy var doneButtonItem:UIButton = {
+    lazy var doneButtonItem:PTBaseButton = {
         let image = PTVideoEditorConfig.share.doneImage
-        let buttonItem = UIButton(type: .custom)
+        let buttonItem = PTBaseButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { [weak self] sender in
-            guard let self = self else { return }
-            self.c7Player.pause()
-            
-            // 开启现代化的异步流水线！
-            Task {
-                do {
-                    // 1. 准备和转换原视频/音频 (UI主线程操作)
-                    await MainActor.run {
+            PTGCDManager.shared.runOnMain { [weak self] in
+                guard let self = self else { return }
+                self.c7Player.pause()
+                
+                // 开启现代化的异步流水线！
+                Task {
+                    do {
+                        // 1. 准备和转换原视频/音频 (UI主线程操作)
                         self.originImageView.clearProgressLayer()
                         self.originFilterImageView.clearProgressLayer()
-                    }
-                    
-                    // 等待转换完成...
-                    let convertedURL = try await self.setOutPutAsync()
-                    
-                    // 如果是纯音频，直接结束返回
-                    if await self.isOnlyAudio {
-                        await MainActor.run {
+
+                        // 等待转换完成...
+                        let convertedURL = try await self.setOutPutAsync()
+                        
+                        // 如果是纯音频，直接结束返回
+                        if self.isOnlyAudio {
                             self.onEditCompleteHandler?(convertedURL)
                             if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
+                            return
                         }
-                        return
-                    }
-                    
-                    // 2. 视频滤镜渲染阶段
-                    
-                    let random = Int(arc4random_uniform(89999) + 10000)
-                    let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\(await self.currentOutputType.name)")
-                    
-                    // 等待滤镜导出完成...
-                    let finalURL = try await self.harbethExportAsync(sourceURL: convertedURL, outputURL: URL(fileURLWithPath: outputURL))
-                    
-                    // 3. 收尾与相册保存阶段
-                    if await self.onlyOutput {
-                        await MainActor.run {
+                        
+                        // 2. 视频滤镜渲染阶段
+                        
+                        let random = Int(arc4random_uniform(89999) + 10000)
+                        let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\( self.currentOutputType.name)")
+                        
+                        // 等待滤镜导出完成...
+                        let finalURL = try await self.harbethExportAsync(sourceURL: convertedURL, outputURL: URL(fileURLWithPath: outputURL))
+                        
+                        // 3. 收尾与相册保存阶段
+                        if self.onlyOutput {
                             self.onEditCompleteHandler?(finalURL)
                             if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
-                        }
-                    } else {
-                        // 等待相册保存完成...
-                        try await self.saveToAlbumAsync(outputURL: finalURL, rewrite: self.rewrite, localIdentifier: self.videoAsset.localIdentifier)
-                        
-                        // 及时清理临时垃圾
-                        await FileManager.pt.removefile(filePath: finalURL.path)
-                        
-                        await MainActor.run {
+                        } else {
+                            // 等待相册保存完成...
+                            try await self.saveToAlbumAsync(outputURL: finalURL, rewrite: self.rewrite, localIdentifier: self.videoAsset.localIdentifier)
+                            
+                            // 及时清理临时垃圾
+                            FileManager.pt.removefile(filePath: finalURL.path)
+                            
                             PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
                             if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
                         }
-                    }
-                    
-                } catch {
-                    // 🚀 终极优势：统一集中处理所有可能发生的错误！
-                    await MainActor.run {
+                        
+                    } catch {
+                        // 🚀 终极优势：统一集中处理所有可能发生的错误！
                         if let hud = self.hudToHide { hud.hide(completion: nil) }
                         self.originImageView.clearProgressLayer()
                         self.originFilterImageView.clearProgressLayer()
@@ -879,9 +871,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     deinit {
         // 清理幽灵定时器
-//        if let token = timeObserverToken {
-//            avPlayer?.removeTimeObserver(token)
-//        }
         // 清理可能正在导出的残缺废料
         Task { @MainActor [weak self] in
             self?.videoConverter?.restore(cleanupDisk: true)

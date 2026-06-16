@@ -221,8 +221,8 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     
-    private lazy var dismissButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var dismissButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
@@ -231,8 +231,8 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     
-    private lazy var undoButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var undoButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.undoNormal, for: .normal)
         view.setImage(PTImageEditorConfig.share.undoDisable, for: .disabled)
         view.addActionHandlers { sender in
@@ -242,8 +242,8 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     
-    private lazy var redoButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var redoButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.redoNormal, for: .normal)
         view.setImage(PTImageEditorConfig.share.redoDisable.withTintColor(.lightGray), for: .disabled)
         view.addActionHandlers { sender in
@@ -314,8 +314,8 @@ public class PTEditImageViewController: PTBaseViewController {
         }
     }
     
-    private lazy var doneButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var doneButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.submitImage, for: .normal)
         view.addActionHandlers { _ in
             self.doneAction()

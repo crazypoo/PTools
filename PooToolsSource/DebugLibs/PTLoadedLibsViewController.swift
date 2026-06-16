@@ -275,8 +275,8 @@ class PTClassExplorerViewController: PTBaseViewController {
         return tableView
     }()
     
-    private lazy var createInstanceButton: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var createInstanceButton: PTBaseButton = {
+        let button = PTBaseButton(type: .system)
         button.setImage(UIImage(.plus), for: .normal)
         button.addActionHandlers(handler: { [weak self] sender in
             self?.createInstanceTapped()
@@ -285,8 +285,8 @@ class PTClassExplorerViewController: PTBaseViewController {
         return button
     }()
     
-    private lazy var backButton:UIButton = {
-        let button = UIButton(type: .custom)
+    private lazy var backButton:PTBaseButton = {
+        let button = PTBaseButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
         button.addActionHandlers { [weak self] sender in
             self?.navigationController?.popViewController()

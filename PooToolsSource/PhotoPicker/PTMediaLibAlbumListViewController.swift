@@ -20,14 +20,11 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     var selectedModelHandler:((PTMediaLibListModel) -> Void)?
     
-    private lazy var dismissButton:UIButton = {
-        let view = UIButton(type: .custom)
+    private lazy var dismissButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.ablumListBackImage, for: .normal)
         view.addActionHandlers { sender in
             self.navigationController?.popViewController(animated: true)
-        }
-        if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
         }
         view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view
