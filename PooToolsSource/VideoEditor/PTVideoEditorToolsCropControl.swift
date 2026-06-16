@@ -66,8 +66,8 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
 
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav,textColor: .white,navColor: .black)
-        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        dismissButtonItem.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
+        doneButtonItem.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         setCustomBackButtonView(dismissButtonItem)
         setCustomRightButtons(buttons: [doneButtonItem])
     }

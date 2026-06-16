@@ -545,7 +545,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         
         switchCameraButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.size.equalTo(34)
+            make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
         }
         

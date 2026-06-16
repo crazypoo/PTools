@@ -179,7 +179,7 @@ public class PTPermissionViewController: PTBaseViewController {
         view?.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.height.equalTo(34)
+            make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
             make.top.equalToSuperview().inset(5)
         }
         closeButton.addActionHandlers(handler: { sender in

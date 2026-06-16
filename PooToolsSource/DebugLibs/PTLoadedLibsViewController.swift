@@ -281,7 +281,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         button.addActionHandlers(handler: { [weak self] sender in
             self?.createInstanceTapped()
         })
-        button.bounds = CGRectMake(0, 0, 34, 34)
+        button.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return button
     }()
     

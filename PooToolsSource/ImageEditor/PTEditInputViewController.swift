@@ -12,6 +12,7 @@ import SwifterSwift
 import SafeSFSymbols
 
 class PTEditInputViewController: PTBaseViewController {
+        
     private static let toolViewHeight: CGFloat = 70
     
     // 用于节流的高频绘制任务
@@ -35,7 +36,7 @@ class PTEditInputViewController: PTBaseViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.textBackImage, for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
-        btn.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        btn.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return btn
     }()
     
@@ -44,7 +45,7 @@ class PTEditInputViewController: PTBaseViewController {
         btn.setImage(PTImageEditorConfig.share.textSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.layer.masksToBounds = true
-        btn.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        btn.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return btn
     }()
     
@@ -261,6 +262,12 @@ class PTEditInputViewController: PTBaseViewController {
                 btn.tintColor = self?.textStyle.hasStrikethrough == true ? .white : .gray
                 self?.updateTextAttributes()
             }),
+            ("arrow.left.and.right.square", textStyle.outputWithTextViewBound, { [weak self] btn in
+                self?.textStyle.outputWithTextViewBound.toggle()
+                // 选中时变成白色（全宽），未选中时灰色（紧凑）
+                btn.tintColor = self?.textStyle.outputWithTextViewBound == true ? .white : .gray
+                // 提示：这个开关不改变 TextView 预览样式，只决定最后输出图片的裁剪方式
+            }),
             ("textformat", false, { [weak self] _ in
                 self?.showFontPicker()
             }),
@@ -336,6 +343,9 @@ class PTEditInputViewController: PTBaseViewController {
         textView.showsHorizontalScrollIndicator = false
         textView.endEditing(true)
 
+        textView.setNeedsLayout()
+        textView.layoutIfNeeded()
+        
         var image: UIImage?
         
         if let text = textView.text, !text.isEmpty {
@@ -349,6 +359,11 @@ class PTEditInputViewController: PTBaseViewController {
                     contentRect = contentRect.union(r)
                 }
                 
+                if textStyle.outputWithTextViewBound {
+                    contentRect.origin.x = 0
+                    contentRect.size.width = self.textView.bounds.width
+                }
+                
                 // 4. 开启画板，尺寸完美贴合文字
                 image = UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
                     // 🌟 核心魔法：将上下文原点反向平移！
@@ -360,7 +375,7 @@ class PTEditInputViewController: PTBaseViewController {
                 }
             }
         }
-        
+
         // 5. 回调并退出
         endInput?(textView.text, currentColor, font, image, textStyle)
         navigationController?.popViewController(animated: true)

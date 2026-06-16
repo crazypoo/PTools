@@ -18,7 +18,7 @@ class PTMediaBrowserNav: UIView {
         if #available(iOS 26.0, *) {
             view.configuration = UIButton.Configuration.clearGlass()
         }
-        view.bounds = CGRectMake(0, 0, 34, 34)
+        view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view
     }()
     

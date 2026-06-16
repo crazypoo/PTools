@@ -2077,6 +2077,24 @@ extension PTCollectionView {
             }
         }
     }
+    
+    public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) {
+        Task { @MainActor in
+            var snapshot = self.diffableDataSource.snapshot()
+            let allItems = snapshot.itemIdentifiers
+            
+            guard !allItems.isEmpty else {
+                completion?()
+                return
+            }
+                        
+            snapshot.reconfigureItems(allItems)
+
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                completion?()
+            }
+        }
+    }
 }
 
 //MARK: Get Models (Data Query)

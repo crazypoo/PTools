@@ -62,8 +62,8 @@ class PTUserDefultsViewController: PTBaseViewController {
         cleanBtn.addActionHandlers { sender in
             self.clearUserdefults()
         }
-        backBtn.frame = CGRectMake(0, 0, 34, 34)
-        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
+        backBtn.frame = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
+        cleanBtn.frame = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         setCustomBackButtonView(backBtn)
         setCustomRightButtons(buttons: [cleanBtn])
     }

@@ -75,7 +75,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        dismissButton.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         setCustomBackButtonView(dismissButton)
     }
     

@@ -161,7 +161,7 @@ public class PTDarkModeControl: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        backButton.frame = CGRectMake(0, 0, 34, 34)
+        backButton.frame = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         setCustomBackButtonView(backButton)
     }
     

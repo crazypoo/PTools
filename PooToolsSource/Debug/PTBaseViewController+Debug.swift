@@ -37,7 +37,7 @@ public extension PTBaseViewController {
         if #available(iOS 26.0, *) {
             button.configuration = UIButton.Configuration.clearGlass()
         }
-        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        button.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return button
     }
 }

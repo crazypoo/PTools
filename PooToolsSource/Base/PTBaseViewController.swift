@@ -969,7 +969,7 @@ open class PTBaseViewController: UIViewController {
     private func baseBackButton() -> UIButton {
         let backBtn = UIButton(type: .custom)
         backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-        backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+        backBtn.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return backBtn
     }
     
@@ -1039,13 +1039,13 @@ open class PTBaseViewController: UIViewController {
     
     // 新增：直接传入任意自定义 view
     open func setCustomBackButtonView(_ customView: UIView,
-                                      size: CGSize = CGSize(width: 34, height: 34),
+                                      size: CGSize? = nil,
                                       action: PTActionTask? = nil) {
         // 容器 UIView
         let container = UIView()
         container.isUserInteractionEnabled = true
         container.clipsToBounds = true
-        container.bounds = CGRect(origin: .zero, size: size)
+        container.bounds = CGRect(origin: .zero, size: size ?? CGSize(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         // 加 customView
         container.addSubview(customView)
         customView.snp.makeConstraints { make in

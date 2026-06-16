@@ -26,6 +26,7 @@ public struct PTInputTextStyle: Equatable {
     public var isItalic: Bool = false
     public var hasUnderline: Bool = false
     public var hasStrikethrough: Bool = false
+    public var outputWithTextViewBound: Bool = false
     
     // 供外部快速初始化使用
     public init() {}

@@ -25,7 +25,7 @@ open class PTPlayerViewController: PTBaseViewController {
             view.configuration = UIButton.Configuration.clearGlass()
         }
         view.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
-        view.bounds = .init(origin: .zero, size: .init(width: 34, height: 34))
+        view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         view.addActionHandlers(handler: { _ in
             self.closeTapped()
         })

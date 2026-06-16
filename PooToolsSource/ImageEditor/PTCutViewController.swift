@@ -91,7 +91,7 @@ class PTCutViewController: PTBaseViewController {
         btn.addActionHandlers(handler: { _ in
             self.cancelBtnClick()
         })
-        btn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        btn.bounds = CGRect(x: 0, y: 0, width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize)
         return btn
     }()
     
@@ -107,7 +107,7 @@ class PTCutViewController: PTBaseViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        btn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        btn.bounds = CGRect(x: 0, y: 0, width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize)
         return btn
     }()
     

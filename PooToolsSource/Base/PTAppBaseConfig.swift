@@ -55,7 +55,8 @@ public class PTAppBaseConfig: NSObject {
     public var hidesBarsOnSwipe:Bool = false
     public var navGradientColors:[UIColor] = []
     public var bavTitleContainerHeight:CGFloat = 32
-    
+    @PTClampedPropertyWrapper(range:0...CGFloat.kNavBarHeight) public var navBarButtonSize:CGFloat = 40
+
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
     public var permissionTitleColor:UIColor = .black

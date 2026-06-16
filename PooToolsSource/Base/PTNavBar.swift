@@ -186,7 +186,7 @@ open class PTNavBar: PTNavigationBarContainer {
             if isFakeNav {
                 // FakeNav 模式：绝对居中
                 make.centerY.equalToSuperview()
-                make.height.equalTo(34)
+                make.height.equalTo(CGFloat.kNavBarHeight)
             } else {
                 // 父类系统接管模式：扣去 statusBar 高度往下顶
                 let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0

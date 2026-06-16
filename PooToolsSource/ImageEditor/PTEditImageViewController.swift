@@ -97,33 +97,58 @@ public class PTEditImageViewController: PTBaseViewController {
             return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            let cellTools = self.toolsModel[indexPath.row]
-            for i in self.toolsModel.indices {
-                self.toolsModel[i].isSelected = i == indexPath.row
+            // 找出之前被选中的那个 Model 的索引 (假设你记录了，或者遍历找一下)
+            guard let oldSelectedIndex = self.toolsModel.firstIndex(where: { $0.isSelected }) else {
+                self.toolsModel[indexPath.row].isSelected = true
+                self.selectedTool(indexPath: indexPath)
+                return
             }
-            self.toolCollectionView.reloadSections(at: [0]) {
-                PTGCDManager.shared.runOnMain {
-                    switch cellTools.currentType {
-                    case .draw:
-                        self.showHandDrawAction()
-                    case .clip:
-                        self.showClipAction()
-                    case .textSticker:
-                        self.showTextAction()
-                    case .mosaic:
-                        self.mosaicAction()
-                    case .filter:
-                        self.filterAction()
-                    case .adjust:
-                        self.adjustActions()
-                    case .imageSticker:
-                        self.showImageAction()
-                    }
+            let oldIndexPath = IndexPath(row: oldSelectedIndex, section: indexPath.section)
+            
+            // 只有当点击的不是同一个才执行
+            if oldSelectedIndex != indexPath.row {
+                // 修改本地数据源状态
+                self.toolsModel[oldSelectedIndex].isSelected = false
+                self.toolsModel[indexPath.row].isSelected = true
+                
+                // 取出这两个位置对应的底层 PTRows 模型
+                if let oldRowModel = self.toolCollectionView.getRow(at: oldIndexPath),
+                   let newRowModel = self.toolCollectionView.getRow(at: indexPath) {
+                    
+                    // 🌟 关键：只把这两个 Row 传进去刷新！
+                    // 因为没有清空整个 Layout 缓存，滚动条绝对不会跳动，且性能极高！
+                    self.toolCollectionView.reloadRows([oldRowModel, newRowModel], in: indexPath.section)
                 }
+                self.selectedTool(indexPath: indexPath)
+            } else {
+                self.toolsModel[indexPath.row].isSelected = false
+                self.selectedTool(indexPath: indexPath)
             }
         }
         return view
     }()
+    
+    func selectedTool(indexPath:IndexPath) {
+        let cellTools = self.toolsModel[indexPath.row]
+        PTGCDManager.shared.runOnMain {
+            switch cellTools.currentType {
+            case .draw:
+                self.showHandDrawAction()
+            case .clip:
+                self.showClipAction()
+            case .textSticker:
+                self.showTextAction()
+            case .mosaic:
+                self.mosaicAction()
+            case .filter:
+                self.filterAction()
+            case .adjust:
+                self.adjustActions()
+            case .imageSticker:
+                self.showImageAction()
+            }
+        }
+    }
     
     private lazy var filterCollectionView : PTCollectionView = {
         let config = PTCollectionViewConfig()
@@ -213,7 +238,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
-        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        view.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
     
@@ -224,7 +249,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
-        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        view.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
     
@@ -295,7 +320,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { _ in
             self.doneAction()
         }
-        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        view.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
     
@@ -792,12 +817,11 @@ extension PTEditImageViewController {
     
     func showHandDrawBar(show:Bool,isMosaic:Bool = false) {
         if show {
-            
             view.addSubviews([drawBar,drawDismissButton])
             drawDismissButton.snp.makeConstraints { make in
-                make.size.equalTo(34)
+                make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - 34) / 2)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
             }
             drawBar.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()

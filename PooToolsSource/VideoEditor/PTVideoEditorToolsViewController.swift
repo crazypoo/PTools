@@ -151,7 +151,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             self.videoConverter?.restore(cleanupDisk: true)
             self.returnFrontVC()
         }
-        buttonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        buttonItem.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return buttonItem
     }()
     
@@ -225,7 +225,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 }
             }
         }
-        buttonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        buttonItem.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return buttonItem
     }()
     
