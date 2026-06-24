@@ -125,7 +125,7 @@ public extension UIButton {
                     self.isUserInteractionEnabled = countdownFinishCanTap
                     timeFinish?()
                 } else {
-                    let buttonTime = String(format: "%02d%@", time, uni) // 优化：使用 %02d 替代 %.2d 更加规范
+                    let buttonTime = String(format: "%00d%@", time, uni) // 优化：使用 %02d 替代 %.2d 更加规范
                     self.setTitle(buttonTime, for: self.state)
                     self.isUserInteractionEnabled = countdowningCanTap
                     timingCallPack?(TimeInterval(time))

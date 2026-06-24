@@ -44,6 +44,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     private var dismissCallBack: PTActionTask?
     private var timeUpCallBack: PTActionTask?
     
+    private let baseSkipButtonSize:CGFloat = 44
+    
     // 💡 优化1：使用轻量级的 AVPlayerLayer 代替 AVPlayerViewController，提升冷启动渲染速度
     private var player: AVPlayer?
     private lazy var playerLayer: AVPlayerLayer = {
@@ -177,18 +179,29 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         }
         
         skipButton.snp.makeConstraints { make in
-            make.size.equalTo(44)
+            make.height.equalTo(self.baseSkipButtonSize)
+            make.width.equalTo(self.baseSkipButtonSize)
             make.right.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
         
         self.skipButton.layoutIfNeeded()
-        self.skipButton.viewCorner(radius: 22,capsule: true)
+        self.skipButton.viewCorner(radius: baseSkipButtonSize / 2,capsule: true)
         self.playerLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - self.bottomViewHeight)
     }
     
     private final class PTIndexBox: @unchecked Sendable {
         var value: Int = -1
+    }
+    
+    private func resetSkipWidth() {
+        var buttonWidth = skipButton.sizeFor().width + 15
+        if baseSkipButtonSize > buttonWidth {
+            buttonWidth = baseSkipButtonSize
+        }
+        skipButton.snp.updateConstraints { make in
+            make.width.equalTo(buttonWidth)
+        }
     }
     
     // MARK: - 私有方法：启动广告序列
@@ -199,13 +212,11 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         
         let indexBox = PTIndexBox()
                 
-        skipButton.setTitle("\(totalTime)", for: .normal)
-        let buttonWidth = skipButton.sizeFor().width + 15
-        skipButton.snp.updateConstraints { make in
-            make.size.equalTo(buttonWidth)
-        }
+        let totalString = String(format: "%.0f", totalTime)
+        skipButton.setTitle(totalString, for: .normal)
+        resetSkipWidth()
         skipButton.layoutIfNeeded()
-        skipButton.viewCorner(radius: buttonWidth / 2, capsule: true)
+        skipButton.viewCorner(radius: baseSkipButtonSize / 2, capsule: true)
         
         // 💡 优化5：定时器闭包严格使用 [weak self]，确保广告结束后彻底释放资源
         skipButton.buttonTimeRun(timeInterval: totalTime, originalTitle: "", timeFinish: { [weak self] in
@@ -220,6 +231,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                 self.adShowed = true
                 
                 guard let newIndex = self.currentCountdownIndex(remainTime: time, totalTime: totalTime, timeline: timeline) else { return }
+                
+                self.resetSkipWidth()
                 
                 if newIndex != indexBox.value {
                     indexBox.value = newIndex
