@@ -768,16 +768,26 @@ final public class PTTabBarView: UIView {
                 } else {
                     value = 0
                 }
-                badgeWidth = UIView.sizeFor(string: "\(value)", font: config.font).width
+                if value == 0 {
+                    badgeWidth = 0
+                } else {
+                    badgeWidth = UIView.sizeFor(string: "\(value)", font: config.font).width
+                }
             default:
-                badgeWidth = UIView.sizeFor(string: "\(0)", font: config.font).width
+                badgeWidth = 0
             }
         case .new:
             let str = (badgeValue as? String) ?? "new"
-            badgeWidth = UIView.sizeFor(string: "\(str)", font: config.font).width
+            badgeWidth = str.stringIsEmpty() ? 0 : UIView.sizeFor(string: "\(str)", font: config.font).width
         }
-        
-        config.centerOffset = CGPointMake(PTTabBarItemView.itemImageSize() + badgeWidth / 2, 7)
+        var offX:CGFloat = 0
+        switch badgeStyle {
+        case .new:
+            offX = PTTabBarItemView.itemImageSize() - badgeWidth / 4
+        default:
+            offX = PTTabBarItemView.itemImageSize() + badgeWidth / 2
+        }
+        config.centerOffset = CGPointMake(offX, 7)
         item.imageContent.badgeConfig = config
         item.imageContent.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
         if !badgeCanDrag {
