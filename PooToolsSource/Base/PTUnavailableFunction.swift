@@ -29,7 +29,6 @@ open class PTEmptyDataViewConfig: NSObject, @unchecked Sendable {
 }
 
 @MainActor
-@available(iOS 17.0 , *)
 public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态方法
     // 使用 Tag 来标记视图，避免单例持有 View 导致内存泄漏和状态冲突
     private static let emptyViewTag = 99991

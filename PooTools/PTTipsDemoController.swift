@@ -11,7 +11,6 @@ import TipKit
 import SnapKit
 
 // MARK: - UIViewController
-@available(iOS 17.0,*)
 class PTTipsDemoController: PTBaseViewController {
     lazy var button: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 30))

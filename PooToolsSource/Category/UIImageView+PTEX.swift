@@ -124,7 +124,6 @@ public extension UIImageView {
         return frameForImageInImageViewAspectFit
     }
     
-    @available(iOS 17.0, *)
     func hdrSet(hdrModel:UIImage.DynamicRange = .constrainedHigh) {
         self.preferredImageDynamicRange = hdrModel
     }

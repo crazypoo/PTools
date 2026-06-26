@@ -1277,36 +1277,30 @@ class PTFuncNameViewController: PTBaseViewController {
             make.left.right.equalToSuperview()
         }
                 
-        if #unavailable(iOS 17.0) {
-            PTGCDManager.shared.delayOnMain(time: 10) {
-                self.showCollectionViewData()
-            }
-        } else {
-            if vcEmpty {
-                let emptyConfig = PTEmptyDataViewConfig()
-                emptyConfig.buttonTitle = "點我刷新"
-                emptyConfig.image = UIImage(.exclamationmark.triangle)
-                emptyConfig.mainTitleAtt = """
-                    \(wrap: .embedding("""
-                    \("PT Alert Opps".localized(),.foreground(.random),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
-                    """))
-                    """
-                emptyConfig.secondaryEmptyAtt = """
-                    \(wrap: .embedding("""
-                    \("PT Photo picker empty media".localized(),.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
-                    """))
-                    """
+        if vcEmpty {
+            let emptyConfig = PTEmptyDataViewConfig()
+            emptyConfig.buttonTitle = "點我刷新"
+            emptyConfig.image = UIImage(.exclamationmark.triangle)
+            emptyConfig.mainTitleAtt = """
+                \(wrap: .embedding("""
+                \("PT Alert Opps".localized(),.foreground(.random),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+                """))
+                """
+            emptyConfig.secondaryEmptyAtt = """
+                \(wrap: .embedding("""
+                \("PT Photo picker empty media".localized(),.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+                """))
+                """
 
-                emptyDataViewConfig = emptyConfig
-                showEmptyView {
-                    Task { @MainActor in
-                        self.emptyReload()
-                    }
-                }
-                
-                PTGCDManager.shared.delayOnMain(time: 5) {
+            emptyDataViewConfig = emptyConfig
+            showEmptyView {
+                Task { @MainActor in
                     self.emptyReload()
                 }
+            }
+            
+            PTGCDManager.shared.delayOnMain(time: 5) {
+                self.emptyReload()
             }
         }
         

@@ -8,7 +8,6 @@
 
 import UIKit
 
-@available(iOS 17.0, *)
 class PTDocumentViewController: PTBaseViewController {
     public var rootDirectoryPath = FileManager.pt.getFileDirectory(type: .Directory)
 
@@ -25,7 +24,6 @@ class PTDocumentViewController: PTBaseViewController {
     }
 }
 
-@available(iOS 17.0, *)
 class CustomDocumentViewController: UIDocumentViewController {
     override func documentDidOpen() {
         PTNSLogConsole(#function)

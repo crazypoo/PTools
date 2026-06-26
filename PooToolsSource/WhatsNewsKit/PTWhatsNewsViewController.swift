@@ -185,6 +185,14 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([imageView,titleLabel])
+        subMakeContent()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func subMakeContent() {
         imageView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.top.equalToSuperview().inset(7.5)
@@ -196,10 +204,7 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
             make.top.bottom.equalToSuperview().inset(7.5)
             make.right.equalToSuperview()
         }
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
     }
     
     override func layoutSubviews() {
@@ -207,17 +212,7 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
         
         if let _ = cellModel?.newsImage {
             imageView.isHidden = false
-            imageView.snp.makeConstraints { make in
-                make.left.equalToSuperview()
-                make.top.equalToSuperview().inset(7.5)
-                make.height.equalTo(49)
-            }
-            
-            titleLabel.snp.makeConstraints { make in
-                make.left.equalTo(self.imageView.snp.right).offset(10)
-                make.top.bottom.equalToSuperview().inset(7.5)
-                make.right.equalToSuperview()
-            }
+            subMakeContent()
         } else {
             imageView.isHidden = true
             imageView.snp.makeConstraints { make in

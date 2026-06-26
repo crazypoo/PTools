@@ -193,6 +193,12 @@ public final class NetworkReachability: @unchecked Sendable {
     }
 }
 
+// 🌟 内部极轻量级状态码映射模型（取代消耗性能的 JSONSerialization 字典转换）
+private struct PTNetworkStatusModel: Decodable {
+    let code: Int?
+    let msg: String?
+}
+
 public final class PTNetWorkStatus: @unchecked Sendable {
     public static let shared = PTNetWorkStatus()
     private let queue = DispatchQueue(label: "pt.network.status.monitor")
@@ -626,6 +632,14 @@ private enum PreparedUploadMedia {
     case fileURL(URL, mimeType: String, fileName: String)
 }
 
+// 用于在并发任务组中安全传递图片处理结果的内部结构
+fileprivate struct PreparedImageResult: Sendable {
+    let key: String
+    let fileName: String
+    let mimeType: String
+    let data: Data
+}
+
 public final class Network: @unchecked Sendable {
     static public let share = Network()
     public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
@@ -636,25 +650,25 @@ public final class Network: @unchecked Sendable {
     
     // 1. 内部消化：利用编译宏判断是否是 Debug 环境，速度最快且绝对线程安全
     private static let isDebugEnvironment: Bool = {
-        #if DEBUG
+#if DEBUG
         return true
-        #else
+#else
         return false
-        #endif
+#endif
     }()
-
+    
     // 2. 内部消化：利用 Bundle 底层特征判断是否是 App Store 环境
     private static let isAppStoreEnvironment: Bool = {
-        #if DEBUG
+#if DEBUG
         return false
-        #else
+#else
         // 业界标准方案：App Store 正式包在苹果后台处理后，会剥离 embedded.mobileprovision 文件。
         // 而 TestFlight、AdHoc 或企业包都会保留这个文件。我们通过判断这个文件是否存在来区分。
         let hasProvision = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") != nil
         return !hasProvision
-        #endif
+#endif
     }()
-
+    
     public var config: PTNetworkConfig {
         get {
             configLock.lock()
@@ -676,7 +690,7 @@ public final class Network: @unchecked Sendable {
         var protocols = configuration.protocolClasses ?? []
         protocols.insert(PTCustomHTTPProtocol.self, at: 0)
         configuration.protocolClasses = protocols
-
+        
         configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)
         return Session(configuration: configuration, interceptor: RetryHandler())
     }()
@@ -789,7 +803,7 @@ public final class Network: @unchecked Sendable {
         if let contentType = response?.value(forHTTPHeaderField: "Content-Type")?.lowercased(), contentType.contains("application/json") { return true }
         return false
     }
-
+    
     /// 🌟 内部核心日志美化转换工具
     private static func prettyPrintedJSONString(from data: Data) -> String {
         do {
@@ -800,7 +814,7 @@ public final class Network: @unchecked Sendable {
             return String(data: data, encoding: .utf8) ?? ""
         }
     }
-        
+    
     /// 🌟 内部通用预处理：脱离外壳保护、Pretty 输出与截断盾
     private static func validateAndPreprocessResponse<T>(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel<T>, String) {
         var result = PTBaseStructModel<T>()
@@ -831,11 +845,14 @@ public final class Network: @unchecked Sendable {
         let rawJsonString = String(data: data, encoding: .utf8) ?? ""
         result.originalString = rawJsonString
         
-        if let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            let businessCode = jsonDict["code"] as? Int ?? 200
-            let businessMsg = jsonDict["msg"] as? String ?? "Unknown error"
+        if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {
+            let businessCode = statusModel.code ?? 200
+            let businessMsg = statusModel.msg ?? "Unknown error"
+            
             if businessCode == 401 {
-                PTGCDManager.shared.runOnMain { NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil) }
+                PTGCDManager.shared.runOnMain {
+                    NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil)
+                }
                 throw PTNetworkError.businessError(code: businessCode, msg: businessMsg)
             }
         }
@@ -848,7 +865,7 @@ public final class Network: @unchecked Sendable {
         }
         return (result, rawJsonString)
     }
-
+    
     private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool,cachePolicy: PTNetworkCachePolicy? = nil) -> HTTPHeaders {
         var apiHeader = header ?? HTTPHeaders()
         if jsonRequest {
@@ -873,7 +890,7 @@ public final class Network: @unchecked Sendable {
     public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>
     
     // MARK: - ================= 5. 底层核心执行引擎 =================
-
+    
     private class func _internalRequestApi<T>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
@@ -904,7 +921,7 @@ public final class Network: @unchecked Sendable {
         }
         return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
     }
-
+    
     private class func _internalRequestBodyAPI<T>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
@@ -946,16 +963,15 @@ public final class Network: @unchecked Sendable {
     }
     
     // 确保你的 parser 带有 @Sendable 标记
-    private class func _internalFileUpload<T>(
-        needGobal: Bool,
-        media: Any,
-        path: URLConvertible,
-        method: HTTPMethod,
-        fileKey: String,
-        params: [String: String]?,
-        header: HTTPHeaders?,
-        jsonRequest: Bool,
-        parser: @escaping @Sendable UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
+    private class func _internalFileUpload<T>(needGobal: Bool,
+                                              media: Any,
+                                              path: URLConvertible,
+                                              method: HTTPMethod,
+                                              fileKey: String,
+                                              params: [String: String]?,
+                                              header: HTTPHeaders?,
+                                              jsonRequest: Bool,
+                                              parser: @escaping UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
     ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         let safeBox = PTSafeUploadParamsBox(media: media, path: path)
         
@@ -1073,7 +1089,7 @@ public final class Network: @unchecked Sendable {
             throw PTNetworkError.uploadDataError("Unsupported media type")
         }
     }
-
+    
     // 🌟 步骤 4：独立处理 FileProvider 沙盒文件的拷贝逻辑
     private class func processUploadFileURL(_ findUrl: URL) throws -> PreparedUploadMedia {
         guard findUrl.isFileURL else {
@@ -1094,29 +1110,74 @@ public final class Network: @unchecked Sendable {
         let fileName = uploadURL.lastPathComponent
         return .fileURL(uploadURL, mimeType: MimeTypeHelper.mimeType(for: ext), fileName: fileName)
     }
-
-
-    private class func _internalImageUpload<T>(needGobal: Bool, images: [UIImage]?, path: URLConvertible, method: HTTPMethod, fileKey: [String], params: [String: String]?, header: HTTPHeaders?, jsonRequest: Bool, pngData: Bool, parser: @escaping UploadResponseParser<T>) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+    
+    /// 核心：通用多图并发上传引擎 (TaskGroup 高性能版)
+    private class func _internalImageUpload<T>(
+        needGobal: Bool, images: [UIImage]?, path: URLConvertible, method: HTTPMethod, fileKey: [String], params: [String: String]?,
+        header: HTTPHeaders?, jsonRequest: Bool, pngData: Bool, parser: @escaping UploadResponseParser<T>
+    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+        
         AsyncThrowingStream { continuation in
             Task {
                 do {
                     let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
+                    // 🚀 优化点 1：开启 TaskGroup 并行处理所有图片的压缩任务，充分利用多核 CPU
+                    var processedImages: [PreparedImageResult] = []
+                    
+                    // 确保有图片才进行处理
+                    if let rawImages = images, !rawImages.isEmpty {
+                        processedImages = await withTaskGroup(of: PreparedImageResult?.self) { group in
+                            var results: [PreparedImageResult] = []
+                            
+                            for (index, image) in rawImages.enumerated() {
+                                // 将每张图片的压缩分配给独立的并发任务
+                                group.addTask {
+                                    // 模拟 autoreleasepool 以防单次循环内存堆积
+                                    return autoreleasepool {
+                                        let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
+                                        guard let imageData = data else { return nil }
+                                        
+                                        let key = fileKey[safe: index] ?? "image"
+                                        let ext = pngData ? "png" : "jpg"
+                                        
+                                        return PreparedImageResult(
+                                            key: key,
+                                            fileName: "image_\(index).\(ext)",
+                                            mimeType: pngData ? "image/png" : "image/jpeg",
+                                            data: imageData
+                                        )
+                                    }
+                                }
+                            }
+                            
+                            // 收集并发处理完成的结果
+                            for await result in group {
+                                if let validResult = result {
+                                    results.append(validResult)
+                                }
+                            }
+                            return results
+                        }
+                    }
+                    
+                    // 🚀 优化点 2：等所有图片都在并发池里处理完 Data 后，再安全地、同步地交给 Alamofire
                     let session = Network.share.session
                     session.upload(multipartFormData: { multipartFormData in
-                        images?.enumerated().forEach { index, image in
-                            autoreleasepool {
-                                let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
-                                guard let imageData = data else { return }
-                                let key = fileKey[safe: index] ?? "image"
-                                let ext = pngData ? "png" : "jpg"
-                                multipartFormData.append(imageData, withName: key, fileName: "image_\(index).\(ext)", mimeType: pngData ? "image/png" : "image/jpeg")
+                        
+                        // 1. 追加已处理好的图片数据
+                        for img in processedImages {
+                            multipartFormData.append(img.data, withName: img.key, fileName: img.fileName, mimeType: img.mimeType)
+                        }
+                        
+                        // 2. 追加普通文本参数
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
                             }
                         }
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) { multipartFormData.append(data, withName: key) }
-                        }
+                        
                     }, to: pathUrl, method: method, headers: apiHeader)
                     .uploadProgress { progress in continuation.yield((progress, nil)) }
                     .response { resp in
@@ -1138,7 +1199,7 @@ public final class Network: @unchecked Sendable {
     }
     
     // MARK: - ================= 6. 🌟 强类型解析层：SmartCodable 暴露接口 =================
-
+    
     private static func parseCodableResponse<T: SmartCodableX & Sendable>(url: String, response: HTTPURLResponse?, data: Data?, modelType: T.Type?) throws -> PTBaseStructModel<T> {
         var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data) as (PTBaseStructModel<T>, String)
         if !jsonString.isEmpty, let modelType = modelType {
@@ -1148,12 +1209,12 @@ public final class Network: @unchecked Sendable {
         }
         return result
     }
-
+    
     /// 🌟 便捷重载方法：当接口只返回成功/失败时使用，底层自动代劳传入占位模型
     class public func requestCodableApi(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil, cachePolicy: PTNetworkCachePolicy? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<PTDummyModel> {
         return try await self.requestCodableApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, modelType: PTDummyModel.self, encoder: encoder, jsonRequest: jsonRequest)
     }
-
+    
     /// 核心项目调用总接口
     class public func requestCodableApi<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil, cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<T> {
         let typeBox = PTSendableTypeBox(modelType)
@@ -1163,7 +1224,7 @@ public final class Network: @unchecked Sendable {
     }
     
     public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,
-        cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil) async throws -> PTBaseStructModel<T> {
+                                                                         cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil) async throws -> PTBaseStructModel<T> {
         let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
             try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
@@ -1171,7 +1232,7 @@ public final class Network: @unchecked Sendable {
     }
     
     class public func fileCodableUpload<T: SmartCodableX & Sendable>(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "",
-        params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+                                                                     params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         let typeBox = PTSendableTypeBox(modelType)
         return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
             return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
@@ -1184,9 +1245,9 @@ public final class Network: @unchecked Sendable {
             return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
-
+    
     // MARK: - ================= 7. ⚠️ 动态兼容层：KakaJSON 旧版保留接口 =================
-
+    
     private static func parseResponse(url: String, response: HTTPURLResponse?, data: Data?, modelType: Convertible.Type?) throws -> PTBaseStructModel<Any> {
         var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data) as (PTBaseStructModel<Any>, String)
         if !jsonString.isEmpty, let modelType = modelType {
@@ -1196,7 +1257,7 @@ public final class Network: @unchecked Sendable {
         }
         return result
     }
-
+    
     public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {
         let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
@@ -1205,7 +1266,7 @@ public final class Network: @unchecked Sendable {
     }
     
     class public func requestApi(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil,
-        cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<Any> {
+                                 cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<Any> {
         let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
             try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
@@ -1227,7 +1288,7 @@ public final class Network: @unchecked Sendable {
     }
     
     // MARK: - ================= 8. 下载引擎与流式控制 =================
-
+    
     private lazy var downloadSession: Session = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = Network.share.config.downloadRequsetTime
@@ -1247,7 +1308,8 @@ public final class Network: @unchecked Sendable {
     }
     private let store = DownloadStore()
     
-    final class DownloadTask: @unchecked Sendable {
+    // 🌟 核心升级：直接声明为 actor，彻底告别 @unchecked 和 NSLock，编译器自动保证线程绝对安全！
+    final actor DownloadTask {
         let url: String
         let destination: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
         var request: DownloadRequest?
@@ -1257,7 +1319,6 @@ public final class Network: @unchecked Sendable {
         private var successHandlers: [FileDownloadSuccess] = []
         private var failHandlers: [FileDownloadFail] = []
         private var lastProgressTime: CFTimeInterval = 0
-        private let lock = NSLock()
         private(set) var isDownloading: Bool = false
         
         init(url: String, destination: @escaping @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
@@ -1266,8 +1327,6 @@ public final class Network: @unchecked Sendable {
         }
         
         func appendHandlers(progress: FileDownloadProgress?, success: FileDownloadSuccess?, fail: FileDownloadFail?) {
-            lock.lock()
-            defer { lock.unlock() }
             if let p = progress { progressHandlers.append(p) }
             if let s = success { successHandlers.append(s) }
             if let f = fail { failHandlers.append(f) }
@@ -1280,77 +1339,73 @@ public final class Network: @unchecked Sendable {
         }
         
         func start(session: Session) {
-            lock.lock()
-            if isDownloading { lock.unlock(); return }
+            if isDownloading { return }
             isDownloading = true
-            lock.unlock()
             
             if let data = resumeData { request = session.download(resumingWith: data, to: destination) }
             else { request = session.download(url, to: destination) }
             
-            request?.downloadProgress(queue: .main) { [weak self] p in
+            // 💡 闭包跳回 actor 上下文：通过 Task { await ... } 安全跨域
+            request?.downloadProgress(queue: .global()) { [weak self] p in
                 guard let self = self else { return }
-                let now = CACurrentMediaTime()
-                if now - self.lastProgressTime > 0.1 || p.isFinished {
-                    self.lastProgressTime = now
-                    self.lock.lock()
-                    let handlers = self.progressHandlers
-                    self.lock.unlock()
-                    for cb in handlers {
-                        PTGCDManager.shared.runOnMain {
-                            cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted)
-                        }
-                    }
-                }
+                Task { await self.handleProgress(p) }
             }
             
             request?.response { [weak self] resp in
-                PTGCDManager.shared.runOnMain { [weak self] in
-                    self?.lock.lock()
-                    self?.isDownloading = false
-                    self?.resumeData = nil
-                    let currentFails = self?.failHandlers
-                    let currentSuccesses = self?.successHandlers
-                    self?.clearHandlers()
-                    self?.lock.unlock()
-                    
-                    if let error = resp.error {
-                        if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
-                            self?.resumeData = resp.resumeData
-                        } else {
-                            Task {
-                                if let urls = self?.url {
-                                    await Network.share.store.remove(urls)
-                                }
-                            }
-                        }
-                        currentFails?.forEach { $0(error) }
-                    } else {
-                        Task {
-                            if let urls = self?.url {
-                                await Network.share.store.remove(urls)
-                            }
-                        }
-                        currentSuccesses?.forEach { $0(resp) }
-                    }
+                guard let self = self else { return }
+                Task { await self.handleResponse(resp) }
+            }
+        }
+        
+        // 🌟 专门处理进度的内部方法，运行在 actor 隔离区内
+        private func handleProgress(_ p: Progress) {
+            let now = CACurrentMediaTime()
+            if now - lastProgressTime > 0.1 || p.isFinished {
+                lastProgressTime = now
+                let handlers = progressHandlers
+                // 派发到主线程更新 UI
+                for cb in handlers {
+                    Task { @MainActor in cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted) }
                 }
+            }
+        }
+        
+        // 🌟 专门处理结束回调的内部方法，运行在 actor 隔离区内
+        private func handleResponse(_ resp: AFDownloadResponse<URL?>) async {
+            isDownloading = false
+            resumeData = nil
+            
+            let currentFails = failHandlers
+            let currentSuccesses = successHandlers
+            clearHandlers() // 清空回调防止内存泄漏
+            
+            if let error = resp.error {
+                if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
+                    resumeData = resp.resumeData
+                } else {
+                    await Network.share.store.remove(self.url)
+                }
+                for cb in currentFails { Task { @MainActor in cb(error) } }
+            } else {
+                await Network.share.store.remove(self.url)
+                for cb in currentSuccesses { Task { @MainActor in cb(resp) } }
             }
         }
         
         func suspend() {
-            lock.lock()
             isDownloading = false
-            lock.unlock()
             request?.cancel { [weak self] data in
-                self?.resumeData = data
-                self?.request = nil
+                Task { await self?.saveResumeData(data) }
             }
         }
         
+        private func saveResumeData(_ data: Data?) {
+            self.resumeData = data
+            self.request = nil
+        }
+        
         func cancel() {
-            lock.lock()
             isDownloading = false
-            lock.unlock()
             request?.cancel()
         }
     }
@@ -1365,13 +1420,15 @@ public final class Network: @unchecked Sendable {
             let task: DownloadTask
             if let existing = await store.get(fileUrl) {
                 task = existing
-                task.appendHandlers(progress: progress, success: success, fail: fail)
+                await task.appendHandlers(progress: progress, success: success, fail: fail)
             } else {
                 task = DownloadTask(url: fileUrl, destination: dest)
-                task.appendHandlers(progress: progress, success: success, fail: fail)
+                await task.appendHandlers(progress: progress, success: success, fail: fail)
                 await store.set(fileUrl, task: task)
             }
-            if !task.isDownloading { task.start(session: downloadSession) }
+            
+            let isDownloading = await task.isDownloading
+            if !isDownloading { await task.start(session: downloadSession) }
         }
     }
     
@@ -1385,8 +1442,8 @@ public final class Network: @unchecked Sendable {
     }
     
     public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }
-    public func resume(fileUrl: String)  { Task { if let task = await store.get(fileUrl) { task.start(session: downloadSession) } } }
-    public func cancel(fileUrl: String)  { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); task.cancel() } } }
+    public func resume(fileUrl: String)  { Task { await store.get(fileUrl)?.start(session: downloadSession) } }
+    public func cancel(fileUrl: String)  { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } }
     
     /// 🌟 全新现代化的流式下载方法，支持在业务层循环获取进度
     public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {

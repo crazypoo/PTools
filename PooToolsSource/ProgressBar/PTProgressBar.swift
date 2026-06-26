@@ -40,13 +40,12 @@ public class PTProgressBar: UIView {
         return animationEnd
     }
 
-    /// 当进度变化时回调，回传范围 0~1 (现在支持动画过程中的实时回调)
+    /// 当进度变化时回调，回传范围 0~1 (支持动画过程中的实时回调)
     public var progressChanged: ((CGFloat) -> Void)?
     
     fileprivate var animationEnd: Bool = false
     fileprivate var isAnimating: Bool = false
     
-    // 优化：改为 public let，避免使用隐式解包可选型 (!) 提高代码安全性
     public let showType: PTProgressBarShowType
     
     fileprivate lazy var trackView: UIView = {
@@ -62,8 +61,6 @@ public class PTProgressBar: UIView {
     }()
     
     private var currentProgress: CGFloat = 0
-    
-    // 优化：引入 CADisplayLink 监听动画过程中的真实 UI 渲染状态
     private var displayLink: CADisplayLink?
 
     public init(showType: PTProgressBarShowType) {
@@ -76,9 +73,14 @@ public class PTProgressBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // 清理 DisplayLink 防止内存泄漏
-    deinit {
-//        stopDisplayLink()
+    // MARK: - 生命周期管理
+    
+    deinit { }
+    
+    /// 优化：处理视图被意外移除父视图时的场景，防止 CADisplayLink 导致内存泄漏
+    public override func removeFromSuperview() {
+        super.removeFromSuperview()
+        stopDisplayLink()
     }
 
     private func setupUI() {
@@ -93,10 +95,9 @@ public class PTProgressBar: UIView {
         updateConstraints(for: 0)
     }
     
-    // MARK: - 核心约束更新机制 (替代 layoutSubviews)
-    /// 使用 SnapKit 的 multipliedBy 实现比例布局，完美适配屏幕旋转和尺寸变化
+    // MARK: - 核心约束更新机制
+    
     private func updateConstraints(for progress: CGFloat) {
-        // 确保进度始终在 0~1 之间
         let safeProgress = max(0, min(1, progress))
         
         progressView.snp.remakeConstraints { make in
@@ -133,28 +134,31 @@ public class PTProgressBar: UIView {
         let safeValue = max(0, min(1, value))
         currentProgress = safeValue
         
-        // 1. 更新约束目标
+        // 优化：在更新目标约束前，强制刷新一次布局，确保起点正确
+        self.layoutIfNeeded()
+        
+        // 更新约束目标
         updateConstraints(for: safeValue)
         
-        // 2. 开启实时进度监听
+        // 开启实时进度监听
         startDisplayLink()
         
         let options: UIView.AnimationOptions = (type == .Reverse) ? [.autoreverse, .curveEaseInOut] : [.curveEaseInOut]
         
-        // 3. 执行动画，加入 [weak self] 防止闭包引起的内存泄漏
-        UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: options, animations: {
+        // 优化：执行阻尼弹簧动画 (Spring Animation)，让进度条更加生动自然
+        // dampingRatio: 0.82 意味着有一点点非常轻微的弹性，不会太夸张，但极其顺滑
+        // initialVelocity: 0.2 提供一个微小的初速度
+        UIView.animate(withDuration: TimeInterval(duration), delay: 0, usingSpringWithDamping: 0.82, initialSpringVelocity: 0.2, options: options, animations: {
             self.layoutIfNeeded()
-        }) { [weak self] _ in
+        }) { [weak self] finished in
             guard let self = self else { return }
             self.stopDisplayLink()
             
             if type == .Reverse {
-                // 修复：如果是 Reverse 动画，视觉上已经回到了 0，此时必须将真实数据和约束也重置为 0
                 self.currentProgress = 0
                 self.updateConstraints(for: 0)
                 self.progressChanged?(0)
             } else {
-                // 确保最终回调的值是绝对精确的目标值
                 self.progressChanged?(safeValue)
             }
             
@@ -172,12 +176,14 @@ public class PTProgressBar: UIView {
         currentProgress = 0
         updateConstraints(for: 0)
         
-        UIView.animate(withDuration: 0.25) {
+        // 停止动画的回落过程也可以稍微加入弹簧效果
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.layoutIfNeeded()
-        } completion: { [weak self] _ in
-            self?.isAnimating = false
-            self?.animationEnd = false
-            self?.progressChanged?(0)
+        }) { [weak self] _ in
+            guard let self = self else { return }
+            self.isAnimating = false
+            self.animationEnd = false
+            self.progressChanged?(0)
         }
     }
 
@@ -199,7 +205,6 @@ public class PTProgressBar: UIView {
     }
 
     @objc private func updateProgressFromPresentationLayer() {
-        // 读取视图层级在动画过程中的“渲染帧”，以计算最真实的视觉进度
         guard let presentationLayer = progressView.layer.presentation() else { return }
         let currentSize = presentationLayer.bounds.size
         let totalSize = trackView.bounds.size
@@ -211,7 +216,6 @@ public class PTProgressBar: UIView {
             progress = totalSize.height > 0 ? currentSize.height / totalSize.height : 0
         }
         
-        // 触发回调
         progressChanged?(max(0, min(1, progress)))
     }
 }
