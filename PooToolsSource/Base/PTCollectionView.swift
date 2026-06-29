@@ -1807,7 +1807,6 @@ extension PTCollectionView {
         }
     }
     
-    @available(iOS 17, *)
     private func showEmptyConfig() {
         let snapshot = self.diffableDataSource.snapshot()
         let isEmpty = snapshot.numberOfItems == 0
@@ -1831,12 +1830,10 @@ extension PTCollectionView {
         }
     }
     
-    @available(iOS 17, *)
     public func hideEmptyLoading(task: PTActionTask?) {
         PTUnavailableManager.hideUnavailableView(in: self, task: task)
     }
     
-    @available(iOS 17, *)
     public func showEmptyLoading() {
         PTUnavailableManager.showEmptyLoadingView(in: self)
     }

@@ -46,11 +46,7 @@ class PTTestVC: PTBaseViewController {
         }
         aaaaaaa.headerRefreshTask = {
             PTGCDManager.shared.runOnMain {
-                if #available(iOS 17, *) {
-                    self.collectionView.clearAllData { collectionview in
-                        self.collectionView.endRefresh()
-                    }
-                } else {
+                self.collectionView.clearAllData { collectionview in
                     self.collectionView.endRefresh()
                 }
             }

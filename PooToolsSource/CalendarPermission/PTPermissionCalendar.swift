@@ -28,20 +28,16 @@ public class PTPermissionCalendar: PTPermission {
     
     open override var kind: PTPermission.Kind { _kind }
     open var usageDescriptionKey: String? {
-        if #available(iOS 17, *) {
-            switch kind {
-            case .calendar(let access):
-                switch access {
-                case .full:
-                    return "NSCalendarsFullAccessUsageDescription"
-                case .write:
-                    return "NSCalendarsWriteOnlyAccessUsageDescription"
-                }
-            default:
-                fatalError()
+        switch kind {
+        case .calendar(let access):
+            switch access {
+            case .full:
+                return "NSCalendarsFullAccessUsageDescription"
+            case .write:
+                return "NSCalendarsWriteOnlyAccessUsageDescription"
             }
-        } else {
-            return "NSCalendarsUsageDescription"
+        default:
+            fatalError()
         }
     }
     
@@ -56,20 +52,16 @@ public class PTPermissionCalendar: PTPermission {
         case .notDetermined: return .notDetermined
         case .restricted: return .denied
         case .writeOnly:
-            if #available(iOS 17, *) {
-                switch kind {
-                case .calendar(let access):
-                    switch access {
-                    case .full:
-                        return .denied
-                    case .write:
-                        return .authorized
-                    }
-                default:
-                    fatalError()
+            switch kind {
+            case .calendar(let access):
+                switch access {
+                case .full:
+                    return .denied
+                case .write:
+                    return .authorized
                 }
-            } else {
-                return .authorized
+            default:
+                fatalError()
             }
         @unknown default: return .denied
         }

@@ -1070,11 +1070,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         aaaaaaa.headerRefreshTask = { [weak self] in
             PTGCDManager.shared.runOnMain {
-                if #available(iOS 17, *) {
-                    self?.collectionView.clearAllData { collectionview in
-                        self?.collectionView.endRefresh()
-                    }
-                } else {
+                self?.collectionView.clearAllData { collectionview in
                     self?.collectionView.endRefresh()
                 }
             }
@@ -1086,18 +1082,14 @@ class PTFuncNameViewController: PTBaseViewController {
             })
         }
         aaaaaaa.emptyTap = { sender in
-            if #available(iOS 17, *) {
-                self.collectionView.showEmptyLoading()
-                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                    self.collectionView.hideEmptyLoading(task: {
-                        Task { @MainActor in
-                            self.showCollectionViewData()
-                        }
-                    })
+            self.collectionView.showEmptyLoading()
+            PTGCDManager.shared.delayOnMain(time: 1, block: {
+                self.collectionView.hideEmptyLoading(task: {
+                    Task { @MainActor in
+                        self.showCollectionViewData()
+                    }
                 })
-            } else {
-                self.showCollectionViewData()
-            }
+            })
         }
         aaaaaaa.emptyButtonTap = { sender in
             PTNSLogConsole("12312312312312312")
@@ -1491,7 +1483,6 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
     
-    @available(iOS 17, *)
     func emptyReload() {
         emptyViewLoading()
         PTGCDManager.shared.delayOnMain(time: 2) {

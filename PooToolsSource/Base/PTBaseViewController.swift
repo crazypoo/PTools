@@ -1356,7 +1356,6 @@ extension PTBaseViewController {
 }
 
 //MARK: 空数据的界面展示iOS17之后
-@available(iOS 17, *)
 extension PTBaseViewController {
     
     public func showEmptyView(task: PTActionTask? = nil) {

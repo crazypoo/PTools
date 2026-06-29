@@ -10,7 +10,6 @@ import UIKit
 import TipKit
 import SnapKit
 
-@available(iOS 17, *)
 // MARK: - 自定义Tip
 public struct TestTip: Tip {
     // 标题
@@ -70,7 +69,6 @@ public struct TestTip: Tip {
     }
 }
 
-@available(iOS 17, *)
 // MARK: - 自定义Tip
 public struct Test1Tip: Tip {
     public var title: Text {
@@ -93,7 +91,6 @@ public struct Test1Tip: Tip {
     }
 }
 
-@available(iOS 17, *)
 @MainActor
 public class PTTip: NSObject {
     public static let shared = PTTip()
