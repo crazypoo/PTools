@@ -347,6 +347,7 @@
 		5590CB982F1F2F3A003DD740 /* PTTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */; };
 		5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */; };
 		5590CE2F2F2731FF003DD740 /* PTVideoCoverCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */; };
+		55935D6E2FF4CA9B009A9742 /* PTFlexibleSteppedProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55935D6D2FF4CA9B009A9742 /* PTFlexibleSteppedProgressBar.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
 		5593A2D22F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D12F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift */; };
 		5593A2D42F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */; };
@@ -1316,6 +1317,7 @@
 		5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarView.swift; sourceTree = "<group>"; };
 		5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarTestOneViewController.swift; sourceTree = "<group>"; };
 		5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoCoverCache.swift; sourceTree = "<group>"; };
+		55935D6D2FF4CA9B009A9742 /* PTFlexibleSteppedProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFlexibleSteppedProgressBar.swift; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
 		5593A2D12F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSetDelegate.swift; sourceTree = "<group>"; };
 		5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSetSource.swift; sourceTree = "<group>"; };
@@ -2668,6 +2670,7 @@
 				5528931E2AE88378009135F9 /* PTMediaBrowserLoadingView.swift */,
 				555818B72AFA4E750051C0AA /* PTProgressBar.swift */,
 				553177382FA068D900E53214 /* PTCircularProgressView.swift */,
+				55935D6D2FF4CA9B009A9742 /* PTFlexibleSteppedProgressBar.swift */,
 			);
 			path = ProgressBar;
 			sourceTree = "<group>";
@@ -4210,8 +4213,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4221,13 +4223,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4242,13 +4240,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4823,6 +4817,7 @@
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				5593A2D62F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
+				55935D6E2FF4CA9B009A9742 /* PTFlexibleSteppedProgressBar.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				5585F5842C500D620033E1D1 /* PTGradientBorderView.swift in Sources */,
 				557E3A4E2C0316F5002466A0 /* PTContrastDisplayContext.swift in Sources */,

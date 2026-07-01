@@ -92,10 +92,8 @@ class AppDelegate: PTAppWindowsDelegate {
         // Override point for customization after application launch.
         var debugDevice = false
         let buglyConfig = BuglyConfig()
-        #if DEBUG
         debugDevice = true
         buglyConfig.debugMode = true
-        #endif
         buglyConfig.channel = "iOS"
         buglyConfig.blockMonitorEnable = true
         buglyConfig.blockMonitorTimeout = 2

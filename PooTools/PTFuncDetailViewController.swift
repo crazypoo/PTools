@@ -415,8 +415,15 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.progressBar:
             let verProgress = PTProgressBar(showType: .Vertical)
             let horProgress = PTProgressBar(showType: .Horizontal)
-            
-            view.addSubviews([verProgress,horProgress])
+            let progressBar = PTFlexibleSteppedProgressBar()
+            progressBar.numberOfPoints = 5
+            progressBar.currentIndex = 1
+            progressBar.radius = 15
+            progressBar.progressRadius = 15
+            progressBar.lineHeight = 5
+            progressBar.textDistance = 15
+            progressBar.delegate = self
+            view.addSubviews([verProgress,horProgress,progressBar])
             verProgress.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(20)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -431,6 +438,15 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.height.equalTo(22)
             }
             
+            progressBar.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                // 只需要指定左右边距，高度会自动根据 intrinsicContentSize 撑开！
+                make.left.equalTo(verProgress.snp.right).offset(20)
+//                make.right.equalToSuperview().inset(20)
+                make.right.equalTo(horProgress)
+                make.height.equalTo(64)
+            }
+
             Task { @MainActor in
                 verProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 horProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
@@ -441,6 +457,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 verProgress.animationProgress(duration: 1, value: 0.5)
                 horProgress.animationProgress(duration: 1, value: 0.75)
             }
+            
         case String.encryption:
             
             let testKey = "0523iZTd7tkX0820"
@@ -1117,3 +1134,41 @@ extension PTFuncDetailViewController:@preconcurrency GCDWebUploaderDelegate {
 }
 
 extension PTFuncDetailViewController : PHLivePhotoViewDelegate { }
+
+extension PTFuncDetailViewController : PTFlexibleSteppedProgressBarDelegate {
+    func progressBar(_ progressBar: PTFlexibleSteppedProgressBar,
+                 didSelectItemAtIndex index: Int) {
+        PTNSLogConsole("Index selected!")
+    }
+    
+    func progressBar(_ progressBar: PTFlexibleSteppedProgressBar,
+                 willSelectItemAtIndex index: Int) {
+        PTNSLogConsole("Index selected!")
+    }
+
+    func progressBar(_ progressBar: PTFlexibleSteppedProgressBar,
+                     canSelectItemAtIndex index: Int) -> Bool {
+        return false
+    }
+
+    func progressBar(_ progressBar: PTFlexibleSteppedProgressBar,
+                     textAtIndex index: Int, position: PTFlexibleSteppedProgressBarTextLocation) -> String {
+        switch position {
+        case .top:
+            return ""
+        case .bottom:
+            switch index {
+                
+            case 0: return "First"
+            case 1: return "Second"
+            case 2: return "Third"
+            case 3: return "Fourth"
+            case 4: return "Fifth"
+            default: return "Date"
+                
+            }
+        case .center:
+            return ""
+        }
+    }
+}
