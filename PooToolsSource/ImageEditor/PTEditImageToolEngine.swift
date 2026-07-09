@@ -129,15 +129,15 @@ public class PTPassthroughView: UIView {
 // 所有交互式编辑工具（涂鸦、马赛克等）的通用协议
 @MainActor public protocol PTEditImageToolEngine: AnyObject {
     /// 关联的画布视图（引擎在这个视图上进行渲染）
-    var canvasView: UIView { get }
+    public var canvasView: UIView { get }
     /// 工具被选中时触发
-    func toolDidActivate()
+    public func toolDidActivate()
     /// 工具被取消选中时触发
-    func toolDidDeactivate()
+    public func toolDidDeactivate()
     /// 处理拖拽手势
-    func handlePanGesture(_ pan: UIPanGestureRecognizer)
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer)
     /// 撤销/重做操作时，通知引擎刷新图层
-    func reloadRenderState()
+    public func reloadRenderState()
 }
 
 public class PTDrawEngine: NSObject, PTEditImageToolEngine {

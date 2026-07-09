@@ -37,7 +37,7 @@ public class PTImageClipRatio: NSObject {
 }
 
 extension PTImageClipRatio {
-    static func == (lhs: PTImageClipRatio, rhs: PTImageClipRatio) -> Bool {
+    public static func == (lhs: PTImageClipRatio, rhs: PTImageClipRatio) -> Bool {
         lhs.whRatio == rhs.whRatio && lhs.title == rhs.title
     }
 }

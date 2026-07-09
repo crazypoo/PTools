@@ -9,11 +9,11 @@
 import UIKit
 import SnapKit
 
-class PTEditImageToolModel:NSObject,@unchecked Sendable {
-    var normalImage:UIImage = UIImage()
-    var selectedImage:UIImage?
-    var currentType:PTImageEditorConfig.EditTool = .draw
-    var isSelected:Bool = false
+public class PTEditImageToolModel:NSObject,@unchecked Sendable {
+    public var normalImage:UIImage = UIImage()
+    public var selectedImage:UIImage?
+    public var currentType:PTImageEditorConfig.EditTool = .draw
+    public var isSelected:Bool = false
 }
 
 //MARK: 编辑工具
