@@ -19,7 +19,7 @@ public enum PTMediaEditorAction {
     case imageSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?)
 }
 
-protocol PTMediaEditorManagerDelegate: AnyObject {
+public protocol PTMediaEditorManagerDelegate: AnyObject {
     func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction])
     
     func editorManager(_ manager: PTMediaEditManager, undoAction action: PTMediaEditorAction)

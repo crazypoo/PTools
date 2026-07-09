@@ -9,16 +9,16 @@
 import UIKit
 
 public class PTBaseStickertState: NSObject {
-    let id: String
-    let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
+    public let id: String
+    public let image: UIImage
+    public let originScale: CGFloat
+    public let originAngle: CGFloat
+    public let originFrame: CGRect
+    public let gesScale: CGFloat
+    public let gesRotation: CGFloat
+    public let totalTranslationPoint: CGPoint
     
-    init(id: String,
+    public init(id: String,
          image: UIImage,
          originScale: CGFloat,
          originAngle: CGFloat,

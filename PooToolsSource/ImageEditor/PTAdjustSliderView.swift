@@ -10,11 +10,11 @@ import UIKit
 import SwifterSwift
 
 public struct PTAdjustStatus {
-    var brightness: Float = 1
-    var contrast: Float = 0
-    var saturation: Float = 0
+    public var brightness: Float = 1
+    public var contrast: Float = 0
+    public var saturation: Float = 0
     
-    var allValueIsZero: Bool {
+    public var allValueIsZero: Bool {
         brightness == 1 && contrast == 0 && saturation == 0
     }
 }
