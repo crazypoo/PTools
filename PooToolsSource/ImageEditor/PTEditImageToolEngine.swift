@@ -1252,17 +1252,23 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     
     private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
         guard let context = context else { return .zero }
-        let scale = context.engineScrollView.zoomScale
-        let scrollView = context.engineScrollView
         
-        // 计算当前屏幕在图片上的居中显示区域
-        let x = (scrollView.contentOffset.x - imageStickersContainer.frame.minX) / scale
-        let y = (scrollView.contentOffset.y - imageStickersContainer.frame.minY) / scale
-        let w = context.engineMainView.frame.width / scale
-        let h = context.engineMainView.frame.height / scale
+        // 1. 直接获取 engineMainView 自身的中心点 (相对自身 bounds)
+        let mainViewCenter = CGPoint(
+            x: context.engineMainView.bounds.midX,
+            y: context.engineMainView.bounds.midY
+        )
         
-        let r = context.engineMainView.convert(CGRect(x: x, y: y, width: w, height: h), to: imageStickersContainer)
-        return CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+        // 2. 将该中心点转换到 imageStickersContainer 的坐标系下
+        let centerInContainer = context.engineMainView.convert(mainViewCenter, to: imageStickersContainer)
+        
+        // 3. 根据转换后的中心点和传入的 size，推算出完美的 CGRect
+        return CGRect(
+            x: centerInContainer.x - size.width / 2,
+            y: centerInContainer.y - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
     }
     
     // MARK: - 需求 2: 图层层级控制 (最上 / 最下)
@@ -1286,12 +1292,12 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
         guard let sticker = currentSelectedSticker, let context = context else { return }
         
         // 获取当前可视区域在容器中的转换坐标
-        let scrollView = context.engineScrollView
-        let scale = scrollView.zoomScale
-        let centerX = (scrollView.contentOffset.x + context.engineMainView.bounds.width / 2) / scale
-        
+        let mainViewCenterX = context.engineMainView.bounds.midX
+        // 我们只关心 X 轴，Y 轴可以随便传 0
+        let targetPoint = context.engineMainView.convert(CGPoint(x: mainViewCenterX, y: 0), to: imageStickersContainer)
+
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            sticker.center = CGPoint(x: centerX, y: sticker.center.y)
+            sticker.center = CGPoint(x: targetPoint.x, y: sticker.center.y)
         }
     }
     
@@ -1299,12 +1305,13 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     public func centerSelectedVertically() {
         guard let sticker = currentSelectedSticker, let context = context else { return }
         
-        let scrollView = context.engineScrollView
-        let scale = scrollView.zoomScale
-        let centerY = (scrollView.contentOffset.y + context.engineMainView.bounds.height / 2) / scale
+        // 获取 engineMainView 的垂直中心，并转换到贴纸容器
+        let mainViewCenterY = context.engineMainView.bounds.midY
+        // 我们只关心 Y 轴，X 轴可以随便传 0
+        let targetPoint = context.engineMainView.convert(CGPoint(x: 0, y: mainViewCenterY), to: imageStickersContainer)
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            sticker.center = CGPoint(x: sticker.center.x, y: centerY)
+            sticker.center = CGPoint(x: sticker.center.x, y: targetPoint.y)
         }
     }
     
@@ -1461,7 +1468,7 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
             // 记录到撤销栈
             // self.context?.engineEditorManager.storeAction(...)
         }
-    }    
+    }
 }
 
 extension PTImageStickerEngine {

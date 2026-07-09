@@ -9,9 +9,15 @@
 import UIKit
 
 public struct PTClipStatus {
-    var angle: CGFloat = 0
-    var editRect: CGRect
-    var ratio: PTImageClipRatio?
+    public var angle: CGFloat = 0
+    public var editRect: CGRect
+    public var ratio: PTImageClipRatio?
+    
+    public init(angle: CGFloat = 0, editRect: CGRect, ratio: PTImageClipRatio? = nil) {
+        self.angle = angle
+        self.editRect = editRect
+        self.ratio = ratio
+    }
 }
 
 // MARK: 裁剪比例

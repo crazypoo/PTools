@@ -34,26 +34,26 @@ public class PTMediaEditManager:NSObject {
     
     weak var delegate: PTMediaEditorManagerDelegate?
     
-    init(actions: [PTMediaEditorAction] = []) {
+    public init(actions: [PTMediaEditorAction] = []) {
         self.actions = actions
         redoActions = actions
     }
 
-    func storeAction(_ action: PTMediaEditorAction) {
+    public func storeAction(_ action: PTMediaEditorAction) {
         actions.append(action)
         redoActions = actions
         
         deliverUpdate()
     }
 
-    func undoAction() {
+    public func undoAction() {
         guard let preAction = actions.popLast() else { return }
         
         delegate?.editorManager(self, undoAction: preAction)
         deliverUpdate()
     }
     
-    func redoAction() {
+    public func redoAction() {
         guard actions.count < redoActions.count else { return }
         
         let action = redoActions[actions.count]
