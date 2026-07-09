@@ -32,7 +32,7 @@ public class PTMediaEditManager:NSObject {
     private(set) var actions: [PTMediaEditorAction] = []
     private(set) var redoActions: [PTMediaEditorAction] = []
     
-    weak var delegate: PTMediaEditorManagerDelegate?
+    public weak var delegate: PTMediaEditorManagerDelegate?
     
     public init(actions: [PTMediaEditorAction] = []) {
         self.actions = actions

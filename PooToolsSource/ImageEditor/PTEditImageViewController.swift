@@ -1161,12 +1161,12 @@ extension PTEditImageViewController {
 
 // MARK: unod & redo
 extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
-    func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction]) {
+    public func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction]) {
         undoButton.isEnabled = !actions.isEmpty
         redoButton.isEnabled = actions.count != redoActions.count
     }
     
-    func editorManager(_ manager: PTMediaEditManager, undoAction action: PTMediaEditorAction) {
+    public func editorManager(_ manager: PTMediaEditManager, undoAction action: PTMediaEditorAction) {
         switch action {
         case let .draw(path):
             undoDraw(path)
@@ -1185,7 +1185,7 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         }
     }
     
-    func editorManager(_ manager: PTMediaEditManager, redoAction action: PTMediaEditorAction) {
+    public func editorManager(_ manager: PTMediaEditManager, redoAction action: PTMediaEditorAction) {
         switch action {
         case let .draw(path):
             redoDraw(path)
