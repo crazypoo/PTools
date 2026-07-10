@@ -1204,34 +1204,46 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     public func reloadRenderState() {
         // 撤销/重做触发时的视图刷新
     }
-    
-    // MARK: - 需求 1: 添加图片并自适应大小
-    
+        
     /// 外部调用此方法传入选择的图片
     public func addImageSticker(_ image: UIImage) {
         guard let context = context else { return }
         
-        let scale = context.engineScrollView.zoomScale
-        let safeArea = context.engineMainView.bounds
+        let mainViewBounds = context.engineMainView.bounds
+        let currentZoomScale = context.engineScrollView.zoomScale
         
-        // 【自适应大小计算】: 限制图片初始最大尺寸为屏幕可视区域宽高的 70%
-        let maxLimitSize = CGSize(width: safeArea.width * 0.7, height: safeArea.height * 0.7)
-        let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(origin: .zero, size: maxLimitSize))
-        let targetSize = rect.size
+        // 兜底保护：确保 mainView 已经完成布局
+        guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
+            PTNSLogConsole("错误：engineMainView 尚未正确布局")
+            return
+        }
         
-        // 计算初始坐标（居中放置）
+        // 1. 严格基准：直接取 engineMainView 自身宽高的 70% 作为极限框 (不要除以 zoomScale)
+        let maxLimitSize = CGSize(
+            width: mainViewBounds.width * 0.5,
+            height: mainViewBounds.height * 0.5
+        )
+        
+        let targetSize = PTImageStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize)
+        // 3. 利用之前写好的修复版居中算法，获取初始 Frame
         let originFrame = getStickerOriginFrame(targetSize)
         
-        // 假设你有一个继承自 PTBaseStickerView 的 PTImageStickerView
-        // 如果没有，你需要基于 PTBaseStickerView 封装一个专门装载 UIImage 的类
+        // 4. 实例化贴纸
+        // 这里的 originScale: 1.0 / currentZoomScale 会自动处理画布的缩放转换
         let imageSticker = PTImageStickerView(
             image: image,
-            originScale: 1 / scale,
+            originScale: 1.0 / currentZoomScale,
             originAngle: -context.engineCurrentAngle,
             originFrame: originFrame
         )
         
+        // 5. 添加视图并记录撤销栈
         addSticker(imageSticker)
+        
+        // [防备机制]：我看你在 editImage 里调用了 changeSize。
+        // 如果你的 PTImageStickerView 内部必须调用 changeSize 才能正确刷新 UI，请取消下面这行的注释：
+        // imageSticker.changeSize(to: targetSize)
+        
         context.engineEditorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
     }
     
@@ -1460,11 +1472,30 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
             imageSticker.startTimer()
             imageSticker.image = newImage
             
+            let mainViewBounds = self.context?.engineMainView.bounds ?? UIScreen.main.bounds
+            let currentScale = max(1.0, imageSticker.gesScale)
             // 重新计算并调整尺寸 (用我们上一轮写好的逻辑)
-            let contextWidth = self.context?.engineMainView.frame.width ?? UIScreen.main.bounds.width
-            let newSize = PTImageStickerView.calculateSize(image: newImage, width: contextWidth)
+            let maxLimitSize = CGSize(
+                width: (mainViewBounds.width * 0.5) / currentScale,
+                height: (mainViewBounds.height * 0.4) / currentScale
+            )
+            let newSize = PTImageStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
             imageSticker.changeSize(to: newSize)
             
+            // 🌟 3. 终极防线：边缘安全回弹 (Auto-Nudge)
+            // 计算当前贴纸的“视觉顶部边界”在画布中的坐标
+            let visualTopY = imageSticker.center.y - (newSize.height * imageSticker.gesScale) / 2
+            let safeTopMargin: CGFloat = 90 // 为顶部 45pt 的摇杆预留出充足的操作空间
+            
+            // 如果顶部边界太靠近屏幕边缘，甚至出去了，就平滑地把它拉回来
+            if visualTopY < safeTopMargin {
+                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                    imageSticker.center = CGPoint(
+                        x: imageSticker.center.x,
+                        y: imageSticker.center.y + (safeTopMargin - visualTopY)
+                    )
+                }
+            }
             // 记录到撤销栈
             // self.context?.engineEditorManager.storeAction(...)
         }
@@ -1493,8 +1524,11 @@ extension PTImageStickerEngine {
                             imageSticker.image = cutoutImage
                         }
                         // 重新计算并刷新贴纸尺寸
-                        let contextWidth = self.context?.engineMainView.frame.width ?? UIScreen.main.bounds.width
-                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, width: contextWidth)
+                        let maxLimitSize = CGSize(
+                            width: (self.context?.engineMainView.bounds.width ?? UIScreen.main.bounds.width) * 0.5,
+                            height: (self.context?.engineMainView.bounds.height ?? UIScreen.main.bounds.height) * 0.5
+                        )
+                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
                         imageSticker.changeSize(to: newSize)
                         
                         // 存入撤销栈

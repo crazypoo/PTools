@@ -92,7 +92,7 @@ public class PTImageStickerView: PTBaseStickerView {
          originAngle: CGFloat,
          originFrame: CGRect,
          gesScale: CGFloat = 1,
-        gesRotation: CGFloat = 0,
+         gesRotation: CGFloat = 0,
          totalTranslationPoint: CGPoint = .zero,
          showBorder: Bool = true) {
         self.image = image
@@ -105,7 +105,7 @@ public class PTImageStickerView: PTBaseStickerView {
                    totalTranslationPoint: totalTranslationPoint,
                    showBorder: showBorder)
         
-        borderView.addSubview(imageView)
+        borderView.insertSubview(imageView, at: 0)
     }
     
     @available(*, unavailable)
@@ -117,23 +117,34 @@ public class PTImageStickerView: PTBaseStickerView {
         imageView.frame = bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
     }
     
-    class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
-        let maxSide = width / 2
-        let minSide: CGFloat = 100
-        let whRatio = image.size.width / image.size.height
-        var size: CGSize = .zero
-        if whRatio >= 1 {
-            let w = min(maxSide, max(minSide, image.size.width))
-            let h = w / whRatio
-            size = CGSize(width: w, height: h)
+    class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {
+        // 1. 预留出边距空间，计算图片真正可以占据的极限大小
+        let imageLimitWidth = maxLimitSize.width - (Self.edgeInset * 2)
+        let imageLimitHeight = maxLimitSize.height - (Self.edgeInset * 2)
+        
+        // 兜底：防止极限大小过小
+        let safeMaxWidth = max(imageLimitWidth, 50)
+        let safeMaxHeight = max(imageLimitHeight, 50)
+        
+        let imageRatio = image.size.width / image.size.height
+        let limitRatio = safeMaxWidth / safeMaxHeight
+        
+        var targetSize = CGSize.zero
+        if imageRatio > limitRatio {
+            // 图片偏宽，以宽为基准等比例缩小
+            targetSize.width = safeMaxWidth
+            targetSize.height = safeMaxWidth / imageRatio
         } else {
-            let h = min(maxSide, max(minSide, image.size.width))
-            let w = h * whRatio
-            size = CGSize(width: w, height: h)
+            // 图片偏高，以高为基准等比例缩小
+            targetSize.height = safeMaxHeight
+            targetSize.width = safeMaxHeight * imageRatio
         }
-        size.width += Self.edgeInset * 2
-        size.height += Self.edgeInset * 2
-        return size
+        
+        // 2. 最终返回的 Sticker 整体尺寸必须把内边距加回来！
+        targetSize.width += Self.edgeInset * 2
+        targetSize.height += Self.edgeInset * 2
+        
+        return targetSize
     }
     
     override func tapAction(_ ges: UITapGestureRecognizer) {
@@ -149,22 +160,13 @@ public class PTImageStickerView: PTBaseStickerView {
     }
     
     func changeSize(to newSize: CGSize) {
-        // Revert zoom scale.
-        transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
-        // Revert ges scale.
-        transform = transform.scaledBy(x: 1 / gesScale, y: 1 / gesScale)
-        // Revert ges rotation.
-        transform = transform.rotated(by: -gesRotation)
-        transform = transform.rotated(by: -originAngle.pt.toPi)
+        // 1. ✅ 核心修复：永远不要在有 transform 的情况下修改 frame！
+        // 直接修改 bounds.size，UIKit 会自动以当前的 center 为中心，保留 transform 进行缩放
+        var newBounds = self.bounds
+        newBounds.size = newSize
+        self.bounds = newBounds
         
-        // Recalculate current frame.
-        let center = CGPoint(x: frame.midX, y: frame.midY)
-        var frame = frame
-        frame.origin.x = center.x - newSize.width / 2
-        frame.origin.y = center.y - newSize.height / 2
-        frame.size = newSize
-        self.frame = frame
-        
+        // 2. 同步更新 originFrame，保证后续手势操作（如平移、重置等）的基准数据是正确的
         let oc = CGPoint(x: originFrame.midX, y: originFrame.midY)
         var of = originFrame
         of.origin.x = oc.x - newSize.width / 2
@@ -172,15 +174,13 @@ public class PTImageStickerView: PTBaseStickerView {
         of.size = newSize
         originFrame = of
         
-        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        // 3. 更新内部 imageView 的大小，使其贴合新 bounds 并保留边距
+        imageView.frame = self.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
         
-        // Readd zoom scale.
-        transform = transform.scaledBy(x: originScale, y: originScale)
-        // Readd ges scale.
-        transform = transform.scaledBy(x: gesScale, y: gesScale)
-        // Readd ges rotation.
-        transform = transform.rotated(by: gesRotation)
-        transform = transform.rotated(by: originAngle.pt.toPi)
+        // 4. 强制触发父类 layoutSubviews
+        // 这一步非常重要，它会让父类重新根据新的 bounds.width 准确计算顶部“旋转遥控器”和 4 个角手柄的位置
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
 }
 
@@ -358,16 +358,25 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         super.layoutSubviews()
         
         // 🌟 布局 5 个点和连接线
-        let handleSize: CGFloat = 20
-        tlHandle.frame = CGRect(x: -handleSize/2, y: -handleSize/2, width: handleSize, height: handleSize)
-        trHandle.frame = CGRect(x: bounds.width - handleSize/2, y: -handleSize/2, width: handleSize, height: handleSize)
-        blHandle.frame = CGRect(x: -handleSize/2, y: bounds.height - handleSize/2, width: handleSize, height: handleSize)
-        brHandle.frame = CGRect(x: bounds.width - handleSize/2, y: bounds.height - handleSize/2, width: handleSize, height: handleSize)
+        let handleSize: CGFloat = 44
+        // 设置所有手柄的绝对尺寸
+        [tlHandle, trHandle, blHandle, brHandle, rotateHandle].forEach {
+            $0.bounds = CGRect(x: 0, y: 0, width: handleSize, height: handleSize)
+        }
         
-        let rotateHandleY: CGFloat = -35
-        rotateHandle.frame = CGRect(x: bounds.width/2 - handleSize/2, y: rotateHandleY, width: handleSize, height: handleSize)
-        rotateLine.frame = CGRect(x: bounds.width/2 - 1, y: rotateHandleY + handleSize/2, width: 2, height: abs(rotateHandleY) - handleSize/2)
+        // 设置所有手柄的中心点坐标
+        tlHandle.center = CGPoint(x: 0, y: 0)
+        trHandle.center = CGPoint(x: bounds.width, y: 0)
+        blHandle.center = CGPoint(x: 0, y: bounds.height)
+        brHandle.center = CGPoint(x: bounds.width, y: bounds.height)
         
+        let rotateHandleY: CGFloat = -45
+        rotateHandle.center = CGPoint(x: bounds.width/2, y: rotateHandleY)
+        
+        // 连线的布局
+        rotateLine.bounds = CGRect(x: 0, y: 0, width: 2, height: abs(rotateHandleY) - 10)
+        rotateLine.center = CGPoint(x: bounds.width/2, y: rotateHandleY / 2 + 5)
+
         guard firstLayout else { return }
         
         // 初始矩阵计算逻辑保持不变
@@ -392,8 +401,29 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         
         firstLayout = false
         setupUIFrameWhenFirstLayout()
+        
+        updateHandlesScale()
     }
     
+    private func updateHandlesScale() {
+        // 计算当前贴纸受到的总缩放力
+        let totalScale = originScale * gesScale
+        guard totalScale > 0 else { return }
+        
+        // 施加逆向倍数（比如贴纸放大了 2 倍，手柄就缩小 0.5 倍，视觉上就抵消了）
+        let inverseScale = 1.0 / totalScale
+        let inverseTransform = CGAffineTransform(scaleX: inverseScale, y: inverseScale)
+        
+        tlHandle.transform = inverseTransform
+        trHandle.transform = inverseTransform
+        blHandle.transform = inverseTransform
+        brHandle.transform = inverseTransform
+        rotateHandle.transform = inverseTransform
+        
+        // 线条只需抵消 X 轴宽度即可，Y 轴高度保持跟随贴纸
+        rotateLine.transform = CGAffineTransform(scaleX: inverseScale, y: 1.0)
+    }
+
     func setupUIFrameWhenFirstLayout() {}
     
     private func direction(for angle: CGFloat) -> PTBaseStickerView.Direction {
@@ -511,6 +541,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         transform = transform.scaledBy(x: gesScale, y: gesScale)
         transform = transform.rotated(by: gesRotation)
         self.transform = transform
+        updateHandlesScale()
         delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
@@ -541,15 +572,28 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
         
     private func createCornerHandle() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.borderColor = UIColor.systemBlue.cgColor
-        view.layer.borderWidth = 2
-        view.layer.cornerRadius = 10
-        view.isUserInteractionEnabled = true
+        // 1. 创建一个透明的、足够大的容器作为手势接收器 (44x44 是最佳触摸区域)
+        let handleView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        handleView.backgroundColor = .clear // 透明，纯粹用来“接客”响应手势
+        handleView.isUserInteractionEnabled = true
+        
+        // 2. 内部真正显示的小圆点 (20x20)
+        let visibleDot = UIView(frame: CGRect(x: 12, y: 12, width: 20, height: 20))
+        visibleDot.backgroundColor = .white
+        visibleDot.layer.borderColor = UIColor.systemBlue.cgColor
+        visibleDot.layer.borderWidth = 2
+        visibleDot.layer.cornerRadius = 10
+        visibleDot.isUserInteractionEnabled = false // 关掉交互，让外层 handleView 接管手势
+        
+        // 保证贴纸缩放时，圆点始终在 44x44 容器的正中心
+        visibleDot.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
+        
+        handleView.addSubview(visibleDot)
+        
+        // 3. 将手势挂载到大的透明容器上
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handleCornerPan(_:)))
-        view.addGestureRecognizer(pan)
-        return view
+        handleView.addGestureRecognizer(pan)
+        return handleView
     }
     
     @objc private func handleCornerPan(_ ges: UIPanGestureRecognizer) {

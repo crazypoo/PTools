@@ -29,9 +29,9 @@ public protocol PTMediaEditorManagerDelegate: AnyObject {
 
 public class PTMediaEditManager:NSObject {
     
-    private(set) var actions: [PTMediaEditorAction] = []
-    private(set) var redoActions: [PTMediaEditorAction] = []
-    
+    public private(set) var actions: [PTMediaEditorAction] = []
+    public private(set) var redoActions: [PTMediaEditorAction] = []
+
     public weak var delegate: PTMediaEditorManagerDelegate?
     
     public init(actions: [PTMediaEditorAction] = []) {
