@@ -118,7 +118,7 @@ class PTEditInputViewController: PTBaseViewController {
     }
     
     override var prefersStatusBarHidden: Bool {
-        true
+        false
     }
             
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {

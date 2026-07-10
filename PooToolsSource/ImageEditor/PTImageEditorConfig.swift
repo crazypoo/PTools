@@ -182,4 +182,6 @@ public class PTImageEditorConfig: NSObject {
     
     public var drawLineWidth:CGFloat = 6
     public var mosaicLineWidth:CGFloat = 25
+    
+    public var staticEdgeInset:CGFloat = 20
 }

@@ -48,8 +48,6 @@ public class PTImageStickerView: PTBaseStickerView {
             imageView.image = image
         }
     }
-
-    private static let edgeInset: CGFloat = 20
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
@@ -59,7 +57,7 @@ public class PTImageStickerView: PTBaseStickerView {
     }()
     
     // Convert all states to model.
-    override var state: PTImageStickerState {
+    public override var state: PTImageStickerState {
         PTImageStickerState(
                 id: id,
                 image: image,
@@ -114,39 +112,9 @@ public class PTImageStickerView: PTBaseStickerView {
     }
     
     override func setupUIFrameWhenFirstLayout() {
-        imageView.frame = bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        imageView.frame = bounds.insetBy(dx: PTImageEditorConfig.share.staticEdgeInset, dy: PTImageEditorConfig.share.staticEdgeInset)
     }
-    
-    class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {
-        // 1. 预留出边距空间，计算图片真正可以占据的极限大小
-        let imageLimitWidth = maxLimitSize.width - (Self.edgeInset * 2)
-        let imageLimitHeight = maxLimitSize.height - (Self.edgeInset * 2)
         
-        // 兜底：防止极限大小过小
-        let safeMaxWidth = max(imageLimitWidth, 50)
-        let safeMaxHeight = max(imageLimitHeight, 50)
-        
-        let imageRatio = image.size.width / image.size.height
-        let limitRatio = safeMaxWidth / safeMaxHeight
-        
-        var targetSize = CGSize.zero
-        if imageRatio > limitRatio {
-            // 图片偏宽，以宽为基准等比例缩小
-            targetSize.width = safeMaxWidth
-            targetSize.height = safeMaxWidth / imageRatio
-        } else {
-            // 图片偏高，以高为基准等比例缩小
-            targetSize.height = safeMaxHeight
-            targetSize.width = safeMaxHeight * imageRatio
-        }
-        
-        // 2. 最终返回的 Sticker 整体尺寸必须把内边距加回来！
-        targetSize.width += Self.edgeInset * 2
-        targetSize.height += Self.edgeInset * 2
-        
-        return targetSize
-    }
-    
     override func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
         
@@ -175,7 +143,7 @@ public class PTImageStickerView: PTBaseStickerView {
         originFrame = of
         
         // 3. 更新内部 imageView 的大小，使其贴合新 bounds 并保留边距
-        imageView.frame = self.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        imageView.frame = self.bounds.insetBy(dx: PTImageEditorConfig.share.staticEdgeInset, dy: PTImageEditorConfig.share.staticEdgeInset)
         
         // 4. 强制触发父类 layoutSubviews
         // 这一步非常重要，它会让父类重新根据新的 bounds.width 准确计算顶部“旋转遥控器”和 4 个角手柄的位置
@@ -202,7 +170,7 @@ public class PTImageStickerView: PTBaseStickerView {
     func sticker(_ imageSticker: PTImageStickerView, editImage image: UIImage)
 }
 
-protocol PTStickerViewAdditional: NSObject {
+public protocol PTStickerViewAdditional: NSObject {
     var gesIsEnabled: Bool { get set }
     
     func resetState()
@@ -246,7 +214,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var onOperation = false
     
-    var gesIsEnabled = true
+    public var gesIsEnabled = true
     
     var originFrame: CGRect
     
@@ -264,7 +232,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         return pan
     }()
     
-    var state: PTBaseStickertState { fatalError() }
+    public var state: PTBaseStickertState { fatalError() }
     
     var borderView: UIView { self }
     
@@ -300,6 +268,36 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
 
     deinit { }
     
+    public class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {
+        // 1. 预留出边距空间，计算图片真正可以占据的极限大小
+        let imageLimitWidth = maxLimitSize.width - (PTImageEditorConfig.share.staticEdgeInset * 2)
+        let imageLimitHeight = maxLimitSize.height - (PTImageEditorConfig.share.staticEdgeInset * 2)
+        
+        // 兜底：防止极限大小过小
+        let safeMaxWidth = max(imageLimitWidth, 50)
+        let safeMaxHeight = max(imageLimitHeight, 50)
+        
+        let imageRatio = image.size.width / image.size.height
+        let limitRatio = safeMaxWidth / safeMaxHeight
+        
+        var targetSize = CGSize.zero
+        if imageRatio > limitRatio {
+            // 图片偏宽，以宽为基准等比例缩小
+            targetSize.width = safeMaxWidth
+            targetSize.height = safeMaxWidth / imageRatio
+        } else {
+            // 图片偏高，以高为基准等比例缩小
+            targetSize.height = safeMaxHeight
+            targetSize.width = safeMaxHeight * imageRatio
+        }
+        
+        // 2. 最终返回的 Sticker 整体尺寸必须把内边距加回来！
+        targetSize.width += PTImageEditorConfig.share.staticEdgeInset * 2
+        targetSize.height += PTImageEditorConfig.share.staticEdgeInset * 2
+        
+        return targetSize
+    }
+
     class func initWithState(_ state: PTBaseStickertState) -> PTBaseStickerView? {
         if let state = state as? PTTextStickerState {
             return PTTextStickerView(state: state)
@@ -722,18 +720,18 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
 }
 
 extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
-    func resetState() {
+    public func resetState() {
         onOperation = false
         cleanTimer()
         hideBorder()
     }
     
-    func moveToAshbin() {
+    public func moveToAshbin() {
         cleanTimer()
         removeFromSuperview()
     }
     
-    func addScale(_ scale: CGFloat) {
+    public func addScale(_ scale: CGFloat) {
         // Revert zoom scale.
         transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
         // Revert ges scale.
@@ -783,9 +781,7 @@ extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
 
 public class PTTextStickerView: PTBaseStickerView {
     public static let fontSize: CGFloat = 32
-    
-    private static let edgeInset: CGFloat = 10
-    
+        
     private lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
         view.contentMode = .scaleAspectFit
@@ -808,7 +804,7 @@ public class PTTextStickerView: PTBaseStickerView {
     }
 
     // Convert all states to model.
-    override var state: PTTextStickerState {
+    public override var state: PTTextStickerState {
         PTTextStickerState(id: id,
                            text: text,
                            textColor: textColor,
@@ -878,7 +874,7 @@ public class PTTextStickerView: PTBaseStickerView {
     }
     
     override func setupUIFrameWhenFirstLayout() {
-        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        imageView.frame = borderView.bounds.insetBy(dx: PTImageEditorConfig.share.staticEdgeInset, dy: PTImageEditorConfig.share.staticEdgeInset)
     }
     
     override func tapAction(_ ges: UITapGestureRecognizer) {
@@ -907,13 +903,6 @@ public class PTTextStickerView: PTBaseStickerView {
         originFrame = of
         
         // 更新内部 imageView 的大小
-        imageView.frame = self.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
-    }
-    
-    class func calculateSize(image: UIImage) -> CGSize {
-        var size = image.size
-        size.width += Self.edgeInset * 2
-        size.height += Self.edgeInset * 2
-        return size
+        imageView.frame = self.bounds.insetBy(dx: PTImageEditorConfig.share.staticEdgeInset, dy: PTImageEditorConfig.share.staticEdgeInset)
     }
 }

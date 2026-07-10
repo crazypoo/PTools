@@ -479,8 +479,22 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     private func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage, style: PTInputTextStyle) {
         guard let context = context else { return }
         
+        let mainViewBounds = context.engineMainView.bounds
+        
+        // 兜底保护：确保 mainView 已经完成布局
+        guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
+            PTNSLogConsole("错误：engineMainView 尚未正确布局")
+            return
+        }
+        
+        // 1. 严格基准：直接取 engineMainView 自身宽高的 70% 作为极限框 (不要除以 zoomScale)
+        let maxLimitSize = CGSize(
+            width: mainViewBounds.width * 0.5,
+            height: mainViewBounds.height * 0.5
+        )
+
         let scale = context.engineScrollView.zoomScale
-        let size = PTTextStickerView.calculateSize(image: image)
+        let size = PTTextStickerView.calculateSize(image: image,maxLimitSize:maxLimitSize)
         let originFrame = getStickerOriginFrame(size)
         
         let textSticker = PTTextStickerView(
@@ -686,13 +700,24 @@ extension PTStickerEngine: PTStickerViewDelegate {
             
             textSticker.startTimer()
             guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style else { return }
+            guard let context = self.context else { return }
+            let mainViewBounds = context.engineMainView.bounds
             
+            guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
+                PTNSLogConsole("错误：engineMainView 尚未正确布局")
+                return
+            }
+            
+            let maxLimitSize = CGSize(
+                width: mainViewBounds.width * 0.5,
+                height: mainViewBounds.height * 0.5
+            )
             textSticker.text = text
             textSticker.textColor = textColor
             textSticker.font = font
             textSticker.style = style
             textSticker.image = image
-            let newSize = PTTextStickerView.calculateSize(image: image)
+            let newSize = PTTextStickerView.calculateSize(image: image,maxLimitSize: maxLimitSize)
             textSticker.changeSize(to: newSize)
         }
     }
