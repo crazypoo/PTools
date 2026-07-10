@@ -297,6 +297,27 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         
         return targetSize
     }
+    
+    public class func getStickerOriginFrame(_ size: CGSize,current: PTEditImageEngineContext?,container:PTPassthroughView) -> CGRect {
+        guard let context = current else { return .zero }
+        
+        // 1. 直接获取 engineMainView 自身的中心点 (相对自身 bounds)
+        let mainViewCenter = CGPoint(
+            x: context.engineMainView.bounds.midX,
+            y: context.engineMainView.bounds.midY
+        )
+        
+        // 2. 将该中心点转换到 imageStickersContainer 的坐标系下
+        let centerInContainer = context.engineMainView.convert(mainViewCenter, to: container)
+        
+        // 3. 根据转换后的中心点和传入的 size，推算出完美的 CGRect
+        return CGRect(
+            x: centerInContainer.x - size.width / 2,
+            y: centerInContainer.y - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
+    }
 
     class func initWithState(_ state: PTBaseStickertState) -> PTBaseStickerView? {
         if let state = state as? PTTextStickerState {

@@ -495,7 +495,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
 
         let scale = context.engineScrollView.zoomScale
         let size = PTTextStickerView.calculateSize(image: image,maxLimitSize:maxLimitSize)
-        let originFrame = getStickerOriginFrame(size)
+        let originFrame = PTBaseStickerView.getStickerOriginFrame(size, current: context, container: stickersContainer)
         
         let textSticker = PTTextStickerView(
             text: text, textColor: textColor, font: font, style: style, image: image,
@@ -517,23 +517,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
         currentSelectedSticker = sticker
     }
-    
-    private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
-        guard let context = context else { return .zero }
-        let scale = context.engineScrollView.zoomScale
-        let scrollView = context.engineScrollView
         
-        // 计算当前屏幕在图片上的居中显示区域
-        let x = (scrollView.contentOffset.x - stickersContainer.frame.minX) / scale
-        let y = (scrollView.contentOffset.y - stickersContainer.frame.minY) / scale
-        let w = context.engineMainView.frame.width / scale
-        let h = context.engineMainView.frame.height / scale
-        
-        // 转换坐标系并居中
-        let r = context.engineMainView.convert(CGRect(x: x, y: y, width: w, height: h), to: stickersContainer)
-        return CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
-    }
-    
     // MARK: - Undo & Redo 引擎接口
     
     public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
@@ -1251,8 +1235,7 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
         
         let targetSize = PTImageStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize)
         // 3. 利用之前写好的修复版居中算法，获取初始 Frame
-        let originFrame = getStickerOriginFrame(targetSize)
-        
+        let originFrame = PTBaseStickerView.getStickerOriginFrame(targetSize, current: context, container: imageStickersContainer)
         // 4. 实例化贴纸
         // 这里的 originScale: 1.0 / currentZoomScale 会自动处理画布的缩放转换
         let imageSticker = PTImageStickerView(
@@ -1286,28 +1269,7 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
         // 默认将最新添加的设置为当前选中
         currentSelectedSticker = sticker
     }
-    
-    private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
-        guard let context = context else { return .zero }
         
-        // 1. 直接获取 engineMainView 自身的中心点 (相对自身 bounds)
-        let mainViewCenter = CGPoint(
-            x: context.engineMainView.bounds.midX,
-            y: context.engineMainView.bounds.midY
-        )
-        
-        // 2. 将该中心点转换到 imageStickersContainer 的坐标系下
-        let centerInContainer = context.engineMainView.convert(mainViewCenter, to: imageStickersContainer)
-        
-        // 3. 根据转换后的中心点和传入的 size，推算出完美的 CGRect
-        return CGRect(
-            x: centerInContainer.x - size.width / 2,
-            y: centerInContainer.y - size.height / 2,
-            width: size.width,
-            height: size.height
-        )
-    }
-    
     // MARK: - 需求 2: 图层层级控制 (最上 / 最下)
     
     /// 将选中图片置于最顶层
