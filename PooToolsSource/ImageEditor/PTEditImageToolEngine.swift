@@ -437,6 +437,8 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     /// 交互状态回调 (用于隐藏/显示主工具栏)
     public var onInteractStateChanged: ((Bool) -> Void)?
     
+    public var onStickerTapped: ((PTBaseStickerView) -> Void)?
+    
     public var currentSelectedSticker: PTBaseStickerView?
 
     // MARK: - 生命周期
@@ -668,11 +670,13 @@ extension PTStickerEngine: PTStickerViewDelegate {
     }
     
     public func stickerDidTap(_ sticker: PTBaseStickerView) {
+        currentSelectedSticker = sticker
         stickersContainer.subviews.forEach { view in
             if view !== sticker {
                 (view as? PTStickerViewAdditional)?.resetState()
             }
         }
+        onStickerTapped?(sticker)
     }
     
     public func sticker(_ textSticker: PTTextStickerView, editText text: String) {
@@ -1186,7 +1190,7 @@ public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
     public var onProcessingStateChanged: ((Bool) -> Void)?
     /// 当前选中的贴纸 (用于应用图层和对齐操作)
     public var currentSelectedSticker: PTBaseStickerView?
-    
+    public var onStickerTapped: ((PTBaseStickerView) -> Void)?
     // MARK: - 生命周期
     
     public init(context: PTEditImageEngineContext) {
@@ -1449,6 +1453,7 @@ extension PTImageStickerEngine: PTStickerViewDelegate {
                 (view as? PTStickerViewAdditional)?.resetState()
             }
         }
+        onStickerTapped?(sticker)
     }
     
     /// 当图片贴纸触发“编辑”操作时调用 (比如双击贴纸)
