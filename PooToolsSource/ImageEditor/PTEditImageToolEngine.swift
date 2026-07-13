@@ -111,6 +111,100 @@ public extension PTEditImageEngineContext {
     }
 }
 
+extension UITextView {
+    @MainActor
+    public func getRawTextRects() -> [CGRect] {
+        let layoutManager = self.layoutManager
+        let textContainer = self.textContainer
+        
+        // iOS 17 中安全的字形范围获取
+        let glyphRange = layoutManager.glyphRange(for: textContainer)
+        guard glyphRange.length > 0 else { return [] }
+        
+        var rects: [CGRect] = []
+        let insetLeft = self.textContainerInset.left
+        let insetTop = self.textContainerInset.top
+        
+        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, _, _ in
+            // 过滤无用的幽灵矩形
+            guard usedRect.width > 0 && usedRect.height > 0 else { return }
+            
+            rects.append(CGRect(x: usedRect.minX - 10 + insetLeft,
+                                y: usedRect.minY - 8 + insetTop,
+                                width: usedRect.width + 20,
+                                height: usedRect.height + 16))
+        }
+        return rects
+    }
+}
+
+/// 专门用于离屏生成文字贴纸图片的工具类
+public struct PTTextStickerRenderer {
+    
+    /// 根据文字、字体、颜色和样式，离屏生成 UIImage
+    @MainActor
+    public static func generateImage(text: String,
+                                     font: UIFont,
+                                     textColor: UIColor,
+                                     style: PTInputTextStyle,
+                                     maxWidth: CGFloat) -> UIImage? {
+        
+        // 1. 创建离屏的 TextView
+        // ⚠️ 注意：如果你的 getRawTextRects 是定义在特定的子类中（例如 PTInputTextView），请将 UITextView 替换为你的子类。
+        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: maxWidth, height: 10000))
+        
+        // 2. 基础配置：去除内边距，确保和输入界面的排版引擎行为一致
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
+        textView.backgroundColor = .clear
+        textView.isScrollEnabled = false
+        
+        // 3. 应用新的文字属性
+        textView.text = text
+        textView.font = font
+        textView.textColor = textColor
+        
+        // 4. 应用你的 style (如果有对齐方式、行间距等，请在这里配置)
+        // 例如：textView.textAlignment = style.alignment 等，根据你的实际业务逻辑补充
+        
+        // 5. 强制系统立刻进行文字排版计算，产生真实的 Rect 坐标
+        textView.layoutIfNeeded()
+        
+        // --- 👇 下面完全复用你提供的核心渲染逻辑 👇 ---
+        var image: UIImage?
+        
+        if let currentText = textView.text, !currentText.isEmpty {
+            // 获取所有的文字精准坐标块
+            let rawRects = textView.getRawTextRects()
+            
+            if !rawRects.isEmpty {
+                // 计算所有文字块的并集，得出最终的精准包围盒 (Bounding Box)
+                var contentRect = rawRects[0]
+                for r in rawRects {
+                    contentRect = contentRect.union(r)
+                }
+                
+                if style.outputWithTextViewBound {
+                    contentRect.origin.x = 0
+                    contentRect.size.width = textView.bounds.width
+                }
+                
+                // 开启画板，尺寸完美贴合文字
+                image = UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
+                    // 🌟 核心魔法：将上下文原点反向平移！
+                    // 把包围盒的左上角平移到 (0,0) 位置，确保文字完美居中且不被裁剪
+                    context.translateBy(x: -contentRect.minX, y: -contentRect.minY)
+                    
+                    // 将包含文字和彩色背景块的整个 Layer 渲染进去
+                    textView.layer.render(in: context)
+                }
+            }
+        }
+        
+        return image
+    }
+}
+
 public class PTPassthroughView: UIView {
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
@@ -585,6 +679,45 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     public func sendSelectedToBack() {
         guard let sticker = currentSelectedSticker else { return }
         stickersContainer.sendSubviewToBack(sticker)
+    }
+    
+    public func updateSelectedTextSticker(newFont: UIFont? = nil, newColor: UIColor? = nil, newStyle: PTInputTextStyle? = nil) {
+        guard let textSticker = currentSelectedSticker as? PTTextStickerView else { return }
+        guard let context = self.context else { return }
+        
+        let oldState = textSticker.state
+        
+        let targetFont = newFont ?? (textSticker.font ?? .boldSystemFont(ofSize: PTTextStickerView.fontSize))
+        let targetColor = newColor ?? textSticker.textColor
+        let targetStyle = newStyle ?? textSticker.style
+        let currentText = textSticker.text
+        
+        let maxWidth = context.engineMainView.bounds.width
+        
+        guard let newImage = PTTextStickerRenderer.generateImage(
+            text: currentText,
+            font: targetFont,
+            textColor: targetColor,
+            style: targetStyle,
+            maxWidth: maxWidth
+        ) else {
+            return
+        }
+        
+        textSticker.font = targetFont
+        textSticker.textColor = targetColor
+        textSticker.style = targetStyle
+        textSticker.image = newImage
+        
+        let mainViewBounds = context.engineMainView.bounds
+        let maxLimitSize = CGSize(
+            width: mainViewBounds.width * 0.5,
+            height: mainViewBounds.height * 0.5
+        )
+        let newSize = PTTextStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
+        textSticker.changeSize(to: newSize)
+        
+        context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: textSticker.state))
     }
 }
 

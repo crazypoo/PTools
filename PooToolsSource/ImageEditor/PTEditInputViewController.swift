@@ -304,15 +304,16 @@ class PTEditInputViewController: PTBaseViewController {
     
     // MARK: - 字体选择器 (UIFontPickerViewController)
     private func showFontPicker() {
-        let config = UIFontPickerViewController.Configuration()
-        config.includeFaces = true // 允许选择字体的具体字重 (如 Light, Black 等)
-        config.displayUsingSystemFont = false // 强制使用字体原本的样貌展示列表
-        
-        let fontPicker = UIFontPickerViewController(configuration: config)
-        fontPicker.delegate = self
-        
-        // 弹出选择器
-        self.present(fontPicker, animated: true)
+        let fontPicker = PTFontPickerViewController()
+        fontPicker.backButton.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+        fontPicker.selectedFontCallback = { value in
+            self.font = value
+            self.updateTextAttributes()
+            PTGCDManager.shared.delayOnMain(time: 0.3) {
+                self.textView.becomeFirstResponder()
+            }
+        }
+        self.navigationController?.pushViewController(fontPicker, animated: true)
     }
 
     private func refreshTextViewUI() {
@@ -350,7 +351,7 @@ class PTEditInputViewController: PTBaseViewController {
         
         if let text = textView.text, !text.isEmpty {
             // 2. 获取所有的文字精准坐标块
-            let rawRects = self.getRawTextRects()
+            let rawRects = textView.getRawTextRects()
             
             if !rawRects.isEmpty {
                 // 3. 计算所有文字块的并集，得出最终的精准包围盒 (Bounding Box)
@@ -374,6 +375,7 @@ class PTEditInputViewController: PTBaseViewController {
                     self.textView.layer.render(in: context)
                 }
             }
+            textStyle.rects = rawRects
         }
 
         // 5. 回调并退出
@@ -512,7 +514,7 @@ extension PTEditInputViewController {
             // 再次校验任务状态
             guard !Task.isCancelled else { return }
             // 获取原生排版矩形 (全部在安全的 MainActor 下执行)
-            let rawRects = self.getRawTextRects()
+            let rawRects = textView.getRawTextRects()
             guard !rawRects.isEmpty else { return }
             
             let currentRadius = self.textLayerRadius
@@ -535,32 +537,7 @@ extension PTEditInputViewController {
             CATransaction.commit()
         }
     }
-    
-    @MainActor
-    private func getRawTextRects() -> [CGRect] {
-        let layoutManager = textView.layoutManager
-        let textContainer = textView.textContainer
         
-        // iOS 17 中安全的字形范围获取
-        let glyphRange = layoutManager.glyphRange(for: textContainer)
-        guard glyphRange.length > 0 else { return [] }
-        
-        var rects: [CGRect] = []
-        let insetLeft = textView.textContainerInset.left
-        let insetTop = textView.textContainerInset.top
-        
-        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, _, _ in
-            // 过滤无用的幽灵矩形
-            guard usedRect.width > 0 && usedRect.height > 0 else { return }
-            
-            rects.append(CGRect(x: usedRect.minX - 10 + insetLeft,
-                                y: usedRect.minY - 8 + insetTop,
-                                width: usedRect.width + 20,
-                                height: usedRect.height + 16))
-        }
-        return rects
-    }
-    
     // 纯静态方法，断开与控制器的关联，满足 Swift 6 Sendable 严格要求
     private static func buildPath(from rects: [CGRect], radius: CGFloat) -> CGPath {
         let path = UIBezierPath()
@@ -661,33 +638,5 @@ extension PTEditInputViewController: @MainActor NSLayoutManagerDelegate {
         }
         
         drawTextBackground()
-    }
-}
-
-extension PTEditInputViewController: UIFontPickerViewControllerDelegate {
-    
-    func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
-        guard let descriptor = viewController.selectedFontDescriptor else { return }
-        
-        // 1. 获取用户选择的新字体 (保持我们规定的统一字号)
-        let newFont = UIFont(descriptor: descriptor, size: PTTextStickerView.fontSize)
-        
-        // 2. 更新状态变量
-        self.font = newFont
-        
-        // 3. 重新应用所有的粗体、斜体、对齐方式到新字体上
-        updateTextAttributes()
-        
-        // 4. 用户选完字体后，界面会 dismiss，我们让输入框重新获取焦点，弹回键盘
-        PTGCDManager.shared.delayOnMain(time: 0.3) {
-            self.textView.becomeFirstResponder()
-        }
-    }
-    
-    func fontPickerViewControllerDidCancel(_ viewController: UIFontPickerViewController) {
-        // 用户取消选择，直接让键盘弹回来即可
-        PTGCDManager.shared.delayOnMain(time: 0.3) {
-            self.textView.becomeFirstResponder()
-        }
     }
 }

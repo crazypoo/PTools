@@ -27,6 +27,7 @@ public struct PTInputTextStyle: Equatable {
     public var hasUnderline: Bool = false
     public var hasStrikethrough: Bool = false
     public var outputWithTextViewBound: Bool = false
+    public var rects:[CGRect] = []
     
     // 供外部快速初始化使用
     public init() {}
@@ -810,15 +811,15 @@ public class PTTextStickerView: PTBaseStickerView {
         return view
     }()
     
-    var text: String
+    public var text: String
     
-    var textColor: UIColor
+    public var textColor: UIColor
     
-    var font: UIFont?
+    public var font: UIFont?
     
-    var style: PTInputTextStyle
+    public var style: PTInputTextStyle
     
-    var image: UIImage {
+    public var image: UIImage {
         didSet {
             imageView.image = image
         }

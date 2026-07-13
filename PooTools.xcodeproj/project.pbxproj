@@ -118,6 +118,7 @@
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55228F172B0909130010E76E /* PTDocumentViewController.swift */; };
+		5524F78C3004C203009A2AB8 /* PTFontPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */; };
 		5525542F2C0E0CB600C2653A /* PTLogConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */; };
 		552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552748502BF8BF2900BF4D18 /* PTSwitch.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
@@ -1087,6 +1088,7 @@
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		55228F172B0909130010E76E /* PTDocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDocumentViewController.swift; sourceTree = "<group>"; };
+		5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFontPickerViewController.swift; sourceTree = "<group>"; };
 		5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogConsoleViewController.swift; sourceTree = "<group>"; };
 		552748502BF8BF2900BF4D18 /* PTSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwitch.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
@@ -2951,6 +2953,7 @@
 				554D79BF2FDF9EC20038E33D /* PTStickerManager.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
+				5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -4753,6 +4756,7 @@
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
 				557451242C09B0A60008FCAD /* PTMenuSheetArrowButton.swift in Sources */,
 				558B77C42BBC52B300BD7AB0 /* PTChatVoiceCell.swift in Sources */,
+				5524F78C3004C203009A2AB8 /* PTFontPickerViewController.swift in Sources */,
 				557E3A582C031FF1002466A0 /* PTColorHSL.swift in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				55B3F49E2B6AD3CB00A7CC66 /* PTPinyin.swift in Sources */,
