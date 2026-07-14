@@ -515,7 +515,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
 public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     // MARK: - 核心视图与状态
-    
+    public var customTextEditorClass: PTTextEditorConfigurable.Type = PTEditInputViewController.self
     public var canvasView: UIView { stickersContainer }
     
     private lazy var stickersContainer: PTPassthroughView = {
@@ -587,6 +587,32 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
             break
         }
     }
+    
+    /// 供外部调用：移除当前选中的贴纸（例如：点击外部工具栏的“删除”按钮）
+    public func removeCurrentSelectedSticker() {
+        // 1. 确保当前有选中的贴纸，并且能获取到上下文
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        
+        // 2. 记录即将被删除的贴纸状态，用于支持撤销 (Undo)
+        let oldState = sticker.state
+        
+        // 3. 🌟 智能区分：存入对应类型的撤销栈记录
+        // 因为是删除操作，所以新的状态 (newState) 是 nil
+        if sticker is PTTextStickerView {
+            context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: nil))
+        } else {
+            context.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: nil))
+        }
+        
+        // 4. 执行移除逻辑 (复用贴纸自身封装好的销毁方法，自动清理视图和定时器)
+        sticker.moveToAshbin()
+        
+        // 5. 清空当前选中的指针
+        currentSelectedSticker = nil
+        
+        // 6. 如果外部有监听交互状态，可以通知外部刷新 UI (例如恢复底部栏等)
+        onInteractStateChanged?(false)
+    }
 
     // MARK: - 文字贴纸专属业务
     // MARK: - 贴纸增删改查
@@ -636,7 +662,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         // 获取高斯模糊的背景底图
         let bgImage = context.engineCurrentEditImage.pt.clipImage(angle: 0, editRect: r, isCircle: false)
         
-        let vc = PTEditInputViewController(image: bgImage, text: text, textColor: textColor, font: font, style: style)
+        let vc = customTextEditorClass.init(image: bgImage, text: text, textColor: textColor, font: font, style: style)
         vc.endInput = { text, textColor, font, image, style in
             completion(text, textColor, font, image, style)
         }

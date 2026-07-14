@@ -11,7 +11,7 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
-class PTEditInputViewController: PTBaseViewController {
+public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigurable {
         
     private static let toolViewHeight: CGFloat = 70
     
@@ -31,6 +31,8 @@ class PTEditInputViewController: PTBaseViewController {
     }
     
     private var textStyle: PTInputTextStyle
+    
+    public var endInput: ((String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void)?
     
     private lazy var cancelBtn: PTBaseButton = {
         let btn = PTBaseButton(type: .custom)
@@ -110,14 +112,11 @@ class PTEditInputViewController: PTBaseViewController {
     
     private let maxTextCount = 100
     
-    /// text, textColor, image, style
-    var endInput: ((String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void)?
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .portrait
     }
     
-    override var prefersStatusBarHidden: Bool {
+    public override var prefersStatusBarHidden: Bool {
         false
     }
             
@@ -125,25 +124,25 @@ class PTEditInputViewController: PTBaseViewController {
         return .solid(.clear)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn])
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTGCDManager.shared.delayOnMain(time: 0.35, block: {
             self.changeStatusBar(type: .Dark)
         })
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         changeStatusBar(type: .Auto)
     }
 
-    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) {
+    required public init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) {
         self.image = image
         self.text = text ?? ""
         if let font = font {
@@ -163,7 +162,7 @@ class PTEditInputViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
@@ -176,7 +175,7 @@ class PTEditInputViewController: PTBaseViewController {
         }
     }
         
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
     
@@ -609,7 +608,7 @@ extension PTEditInputViewController {
 }
 
 extension PTEditInputViewController: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
+    public func textViewDidChange(_ textView: UITextView) {
         let markedTextRange = textView.markedTextRange
         guard markedTextRange == nil || (markedTextRange?.isEmpty ?? true) else {
             return
@@ -622,7 +621,7 @@ extension PTEditInputViewController: UITextViewDelegate {
         }
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == String.newline {
             doneBtnClick()
             return false
@@ -632,11 +631,10 @@ extension PTEditInputViewController: UITextViewDelegate {
 }
 
 extension PTEditInputViewController: @MainActor NSLayoutManagerDelegate {
-    func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
+    public func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
         guard layoutFinishedFlag else {
             return
         }
-        
         drawTextBackground()
     }
 }

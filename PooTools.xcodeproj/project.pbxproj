@@ -834,6 +834,7 @@
 		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
 		55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */; };
 		55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */; };
+		55D930653005E97700C56618 /* PTEditInputProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D930643005E97700C56618 /* PTEditInputProtocol.swift */; };
 		55DD93582B9169A000F65872 /* PTSortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD93572B9169A000F65872 /* PTSortButton.swift */; };
 		55DD936C2B932A0400F65872 /* Logger+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD936B2B932A0400F65872 /* Logger+PTEX.swift */; };
 		55DD936F2B938C6800F65872 /* UIViewController+Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD936E2B938C6800F65872 /* UIViewController+Container.swift */; };
@@ -1810,6 +1811,7 @@
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
 		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
 		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
+		55D930643005E97700C56618 /* PTEditInputProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditInputProtocol.swift; sourceTree = "<group>"; };
 		55DBAFBD2DA005050002DD6F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		55DBAFBE2DA005060002DD6F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		55DD93572B9169A000F65872 /* PTSortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSortButton.swift; sourceTree = "<group>"; };
@@ -2954,6 +2956,7 @@
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
 				5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */,
+				55D930643005E97700C56618 /* PTEditInputProtocol.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -5173,6 +5176,7 @@
 				55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				55F3C2802F7A0EFC0062D864 /* PTBannerMediaManager.swift in Sources */,
+				55D930653005E97700C56618 /* PTEditInputProtocol.swift in Sources */,
 				553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */,
 				556CA4C02B29535900A5B189 /* NSLayoutConstraint+PTEX.swift in Sources */,
 				557E3A6C2C036CCD002466A0 /* PTDebugPerformanceViewController.swift in Sources */,
