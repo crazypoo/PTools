@@ -585,6 +585,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
             stickerView.moveToAshbin()
             if currentSelectedSticker === stickerView {
                 currentSelectedSticker = nil
+                onInteractStateChanged?(false)
             }
             break
         }
