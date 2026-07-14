@@ -455,7 +455,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     @objc func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
         
-        superview?.bringSubviewToFront(self)
+//        superview?.bringSubviewToFront(self)
         delegate?.stickerDidTap(self)
         startTimer()
     }
@@ -537,7 +537,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             cleanTimer()
             borderView.layer.borderColor = UIColor.systemBlue.cgColor // 边框改为蓝色
             setHandlesHidden(false) // 显示 5 个点
-            superview?.bringSubviewToFront(self)
+//            superview?.bringSubviewToFront(self)
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
             onOperation = false
