@@ -530,21 +530,22 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     /// 交互状态回调 (用于隐藏/显示主工具栏)
     public var onInteractStateChanged: ((Bool) -> Void)?
-    
+    /// 贴纸点击回调
     public var onStickerTapped: ((PTBaseStickerView) -> Void)?
     
     public var currentSelectedSticker: PTBaseStickerView?
 
-    // MARK: - 生命周期
+    public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)?
+    public var onProcessingStateChanged: ((Bool) -> Void)?
     
+    // MARK: - 生命周期
     public init(context: PTEditImageEngineContext) {
         self.context = context
         super.init()
     }
     
     public func toolDidActivate() {
-        // 贴纸工具其实是一个“触发器”，激活时通常是为了弹出文字输入框或图片选择器
-        // 引擎可以保持挂起，这里什么都不用做，直接由 VC 调用 createTextSticker()
+        // 贴纸工具其实是一个“触发器”，激活逻辑交由 VC 处理
     }
     
     public func toolDidDeactivate() {
@@ -555,16 +556,40 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         currentSelectedSticker = nil
     }
     
-    public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
-        // 贴纸自带手势，不需要通过主控制器派发，留空即可
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer) { }
+    
+    public func reloadRenderState() { }
+    
+    // MARK: - 通用贴纸管理 (核心复用)
+    /// 统一的添加贴纸底层方法
+    private func addSticker(_ sticker: PTBaseStickerView) {
+        guard let context = context else { return }
+        stickersContainer.addSubview(sticker)
+        sticker.frame = sticker.originFrame
+        
+        sticker.delegate = self
+        // 解决手势冲突
+        context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
+        context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
+        
+        currentSelectedSticker = sticker
     }
     
-    public func reloadRenderState() {
-        // 预留给未来整体刷新贴纸层的接口
+    /// 根据 ID 移除对应的贴纸
+    private func removeSticker(id: String?) {
+        guard let id = id else { return }
+        for sticker in stickersContainer.subviews.reversed() {
+            guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
+            stickerView.moveToAshbin()
+            if currentSelectedSticker === stickerView {
+                currentSelectedSticker = nil
+            }
+            break
+        }
     }
-    
+
+    // MARK: - 文字贴纸专属业务
     // MARK: - 贴纸增删改查
-    
     public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) {
         showInputTextVC(text, textColor: textColor, font: font, style: style) { [weak self] newText, newColor, newFont, image, newStyle in
             guard let self = self, !newText.isEmpty, let image = image else { return }
@@ -574,21 +599,13 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     private func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage, style: PTInputTextStyle) {
         guard let context = context else { return }
-        
         let mainViewBounds = context.engineMainView.bounds
-        
-        // 兜底保护：确保 mainView 已经完成布局
         guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
             PTNSLogConsole("错误：engineMainView 尚未正确布局")
             return
         }
         
-        // 1. 严格基准：直接取 engineMainView 自身宽高的 70% 作为极限框 (不要除以 zoomScale)
-        let maxLimitSize = CGSize(
-            width: mainViewBounds.width * 0.5,
-            height: mainViewBounds.height * 0.5
-        )
-
+        let maxLimitSize = CGSize(width: mainViewBounds.width * 0.5, height: mainViewBounds.height * 0.5)
         let scale = context.engineScrollView.zoomScale
         let size = PTTextStickerView.calculateSize(image: image,maxLimitSize:maxLimitSize)
         let originFrame = PTBaseStickerView.getStickerOriginFrame(size, current: context, container: stickersContainer)
@@ -601,49 +618,6 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         addSticker(textSticker)
         context.engineEditorManager.storeAction(.sticker(oldState: nil, newState: textSticker.state))
     }
-    
-    private func addSticker(_ sticker: PTBaseStickerView) {
-        guard let context = context else { return }
-        stickersContainer.addSubview(sticker)
-        sticker.frame = sticker.originFrame
-        
-        sticker.delegate = self
-        // 解决手势冲突
-        context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
-        context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
-        currentSelectedSticker = sticker
-    }
-        
-    // MARK: - Undo & Redo 引擎接口
-    
-    public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
-        if isUndo {
-            if let oldState = oldState {
-                removeSticker(id: newState?.id ?? oldState.id)
-                if let sticker = PTBaseStickerView.initWithState(oldState) { addSticker(sticker) }
-            } else {
-                removeSticker(id: newState?.id)
-            }
-        } else {
-            if let newState = newState {
-                removeSticker(id: oldState?.id ?? newState.id)
-                if let sticker = PTBaseStickerView.initWithState(newState) { addSticker(sticker) }
-            } else {
-                removeSticker(id: oldState?.id)
-            }
-        }
-    }
-    
-    private func removeSticker(id: String?) {
-        guard let id = id else { return }
-        for sticker in stickersContainer.subviews.reversed() {
-            guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
-            stickerView.moveToAshbin()
-            break
-        }
-    }
-    
-    // MARK: - 文字输入控制器调配
     
     private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle(), completion: @escaping (String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void) {
         guard let context = context else { return }
@@ -669,18 +643,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         
         context.engineViewController.navigationController?.pushViewController(vc, animated: true)
     }
-    
-    public func bringSelectedToFront() {
-        guard let sticker = currentSelectedSticker else { return }
-        stickersContainer.bringSubviewToFront(sticker)
-    }
-    
-    /// 将选中图片置于最底层
-    public func sendSelectedToBack() {
-        guard let sticker = currentSelectedSticker else { return }
-        stickersContainer.sendSubviewToBack(sticker)
-    }
-    
+
     public func updateSelectedTextSticker(newFont: UIFont? = nil, newColor: UIColor? = nil, newStyle: PTInputTextStyle? = nil) {
         guard let textSticker = currentSelectedSticker as? PTTextStickerView else { return }
         guard let context = self.context else { return }
@@ -694,15 +657,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         
         let maxWidth = context.engineMainView.bounds.width
         
-        guard let newImage = PTTextStickerRenderer.generateImage(
-            text: currentText,
-            font: targetFont,
-            textColor: targetColor,
-            style: targetStyle,
-            maxWidth: maxWidth
-        ) else {
-            return
-        }
+        guard let newImage = PTTextStickerRenderer.generateImage(text: currentText, font: targetFont, textColor: targetColor, style: targetStyle, maxWidth: maxWidth) else { return }
         
         textSticker.font = targetFont
         textSticker.textColor = targetColor
@@ -710,27 +665,205 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         textSticker.image = newImage
         
         let mainViewBounds = context.engineMainView.bounds
-        let maxLimitSize = CGSize(
-            width: mainViewBounds.width * 0.5,
-            height: mainViewBounds.height * 0.5
-        )
+        let maxLimitSize = CGSize(width: mainViewBounds.width * 0.5, height: mainViewBounds.height * 0.5)
         let newSize = PTTextStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
         textSticker.changeSize(to: newSize)
         
         context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: textSticker.state))
     }
+
+    // MARK: - 图片贴纸专属业务
+        
+    public func addImageSticker(_ image: UIImage) {
+        guard let context = context else { return }
+        let mainViewBounds = context.engineMainView.bounds
+        let currentZoomScale = context.engineScrollView.zoomScale
+        guard mainViewBounds.width > 0, mainViewBounds.height > 0 else { return }
+        
+        let maxLimitSize = CGSize(width: mainViewBounds.width * 0.5, height: mainViewBounds.height * 0.5)
+        let targetSize = PTImageStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize)
+        let originFrame = PTBaseStickerView.getStickerOriginFrame(targetSize, current: context, container: stickersContainer)
+        
+        let imageSticker = PTImageStickerView(
+            image: image, originScale: 1.0 / currentZoomScale, originAngle: -context.engineCurrentAngle, originFrame: originFrame
+        )
+        addSticker(imageSticker)
+        context.engineEditorManager.storeAction(.imageSticker(oldState: nil, newState: imageSticker.state))
+    }
+
+    public func removeBackgroundForSelectedSticker() {
+        guard let imageSticker = currentSelectedSticker as? PTImageStickerView else { return }
+        let originalImage = imageSticker.image
+        let oldState = imageSticker.state
+        
+        onProcessingStateChanged?(true)
+        Task {
+            do {
+                if let cutoutImage = try await performForegroundMasking(on: originalImage) {
+                    await MainActor.run {
+                        UIView.transition(with: imageSticker, duration: 0.35, options: .transitionCrossDissolve) {
+                            imageSticker.image = cutoutImage
+                        }
+                        let maxLimitSize = CGSize(width: (self.context?.engineMainView.bounds.width ?? 0) * 0.5, height: (self.context?.engineMainView.bounds.height ?? 0) * 0.5)
+                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
+                        imageSticker.changeSize(to: newSize)
+                        self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
+                        self.onProcessingStateChanged?(false)
+                    }
+                } else {
+                    await MainActor.run { self.onProcessingStateChanged?(false) }
+                }
+            } catch {
+                await MainActor.run { self.onProcessingStateChanged?(false) }
+            }
+        }
+    }
+
+    private func performForegroundMasking(on inputImage: UIImage) async throws -> UIImage? {
+        guard let cgImage = inputImage.cgImage else { return nil }
+        let request = VNGenerateForegroundInstanceMaskRequest()
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        try handler.perform([request])
+        guard let observation = request.results?.first else { return nil }
+        let maskPixelBuffer = try observation.generateScaledMaskForImage(forInstances: observation.allInstances, from: handler)
+        
+        let originalCIImage = CIImage(cgImage: cgImage)
+        let maskCIImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+        let bgCIImage = CIImage(color: .clear).cropped(to: originalCIImage.extent)
+        
+        guard let filter = CIFilter(name: "CIBlendWithMask") else { return nil }
+        filter.setValue(originalCIImage, forKey: kCIInputImageKey)
+        filter.setValue(bgCIImage, forKey: kCIInputBackgroundImageKey)
+        filter.setValue(maskCIImage, forKey: kCIInputMaskImageKey)
+        
+        guard let outputCIImage = filter.outputImage else { return nil }
+        let context = CIContext(options: [.useSoftwareRenderer: false])
+        guard let outputCGImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
+        return UIImage(cgImage: outputCGImage, scale: inputImage.scale, orientation: inputImage.imageOrientation)
+    }
+
+    // MARK: - Undo & Redo 引擎接口
+    public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
+        if isUndo {
+            if let oldState = oldState {
+                removeSticker(id: newState?.id ?? oldState.id)
+                if let sticker = PTBaseStickerView.initWithState(oldState) { addSticker(sticker) }
+            } else {
+                removeSticker(id: newState?.id)
+            }
+        } else {
+            if let newState = newState {
+                removeSticker(id: oldState?.id ?? newState.id)
+                if let sticker = PTBaseStickerView.initWithState(newState) { addSticker(sticker) }
+            } else {
+                removeSticker(id: oldState?.id)
+            }
+        }
+    }
+}
+
+extension PTStickerEngine {
+    // MARK: - 通用图层及撤销重做控制
+    public func bringSelectedToFront() {
+        guard let sticker = currentSelectedSticker else { return }
+        stickersContainer.bringSubviewToFront(sticker)
+    }
+
+    public func sendSelectedToBack() {
+        guard let sticker = currentSelectedSticker else { return }
+        stickersContainer.sendSubviewToBack(sticker)
+    }
+
+    public func centerSelectedHorizontally() {
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        let targetPoint = context.engineMainView.convert(CGPoint(x: context.engineMainView.bounds.midX, y: 0), to: stickersContainer)
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) { sticker.center.x = targetPoint.x }
+    }
+    
+    public func centerSelectedVertically() {
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        let targetPoint = context.engineMainView.convert(CGPoint(x: 0, y: context.engineMainView.bounds.midY), to: stickersContainer)
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) { sticker.center.y = targetPoint.y }
+    }
+    
+    /// 将选中贴纸上移一层
+    public func moveSelectedOneLayerUp() {
+        guard let sticker = currentSelectedSticker else { return }
+        
+        // 获取当前贴纸在容器中的索引
+        guard let currentIndex = stickersContainer.subviews.firstIndex(of: sticker) else { return }
+        let totalCount = stickersContainer.subviews.count
+        
+        // 如果它还不是最顶层，就和它上面的那层交换位置
+        if currentIndex < totalCount - 1 {
+            stickersContainer.exchangeSubview(at: currentIndex, withSubviewAt: currentIndex + 1)
+        }
+    }
+    
+    /// 将选中贴纸下移一层
+    public func moveSelectedOneLayerDown() {
+        guard let sticker = currentSelectedSticker else { return }
+        
+        // 获取当前贴纸在容器中的索引
+        guard let currentIndex = stickersContainer.subviews.firstIndex(of: sticker) else { return }
+        
+        // 如果它还不是最底层，就和它下面的那层交换位置
+        if currentIndex > 0 {
+            stickersContainer.exchangeSubview(at: currentIndex, withSubviewAt: currentIndex - 1)
+        }
+    }
+    
+    /// 将选中贴纸铺满整个主视图（居中并等比放大适配）
+    public func fillSelectedStickerToScreen() {
+        guard let sticker = currentSelectedSticker, let context = context else { return }
+        
+        // 1. 获取主视图的绝对中心，并转换到贴纸容器的坐标系下
+        let targetCenter = context.engineMainView.convert(
+            CGPoint(x: context.engineMainView.bounds.midX, y: context.engineMainView.bounds.midY),
+            to: stickersContainer
+        )
+        
+        // 2. 计算缩放倍数
+        // 贴纸的基础物理大小（需乘动画底图的 zoomScale 来还原真实视觉尺寸）
+        let baseWidthInMainView = sticker.bounds.width * context.engineScrollView.zoomScale
+        let baseHeightInMainView = sticker.bounds.height * context.engineScrollView.zoomScale
+        
+        let mainViewBounds = context.engineMainView.bounds
+        
+        // 为了确保能“铺满”且不被裁剪（Aspect Fit 逻辑），取宽高比中较小的值作为目标缩放倍数。
+        // 💡 如果你希望的是强制填满不留白边（Aspect Fill，可能会裁剪部分贴纸内容），请把 min 改成 max。
+        let targetScaleX = mainViewBounds.width / baseWidthInMainView
+        let targetScaleY = mainViewBounds.height / baseHeightInMainView
+        let targetGesScale = min(targetScaleX, targetScaleY)
+        
+        // 计算从当前缩放到目标缩放，还需要乘多少倍
+        let currentScale = max(0.01, sticker.gesScale) // 限制下限，避免除以0
+        let scaleMultiplier = targetGesScale / currentScale
+        
+        // 3. 执行丝滑的动画
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+            // 移到中心
+            sticker.center = targetCenter
+            
+            // 🌟 核心：在现有的 Transform 基础上再叠加缩放。
+            // 这样做的好处是：无论用户之前把贴纸旋转了多少度，旋转角度都会被完美保留！
+            sticker.transform = sticker.transform.scaledBy(x: scaleMultiplier, y: scaleMultiplier)
+            
+            // 同步更新贴纸底层的数据模型，防止下次手指捏合时画面发生跳动
+            sticker.gesScale = targetGesScale
+        }
+    }
 }
 
 // MARK: - PTStickerViewDelegate (核心交互与垃圾桶动画)
 extension PTStickerEngine: PTStickerViewDelegate {
-    public func sticker(_ imageSticker: PTImageStickerView, editImage image: UIImage) { }
     
     public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
         guard let context = context else { return }
         preStickerState = sticker.state
         currentSelectedSticker = sticker
 
-        onInteractStateChanged?(true) // 通知 VC 隐藏底部栏
+        onInteractStateChanged?(true)
         
         let ashbinView = context.engineAshbinView
         ashbinView.layer.removeAllAnimations()
@@ -742,9 +875,7 @@ extension PTStickerEngine: PTStickerViewDelegate {
         ashbinView.frame = frame
         frame.origin.y -= diff
         
-        UIView.animate(withDuration: 0.25) {
-            ashbinView.frame = frame
-        }
+        UIView.animate(withDuration: 0.25) { ashbinView.frame = frame }
         
         stickersContainer.subviews.forEach { view in
             if view !== sticker {
@@ -753,7 +884,7 @@ extension PTStickerEngine: PTStickerViewDelegate {
             }
         }
     }
-    
+
     public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
         guard let context = context else { return }
         let point = panGes.location(in: context.engineMainView)
@@ -776,11 +907,11 @@ extension PTStickerEngine: PTStickerViewDelegate {
             }
         }
     }
-    
+
     public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
         guard let context = context else { return }
-        
-        onInteractStateChanged?(false) // 通知 VC 恢复底部栏
+                
+        onInteractStateChanged?(false)
         
         let ashbinView = context.engineAshbinView
         ashbinView.layer.removeAllAnimations()
@@ -794,7 +925,12 @@ extension PTStickerEngine: PTStickerViewDelegate {
             endState = nil
         }
         
-        context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+        // 🌟 智能区分：存入对应类型的撤销栈记录
+        if sticker is PTTextStickerView {
+            context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+        } else {
+            context.engineEditorManager.storeAction(.imageSticker(oldState: preStickerState, newState: endState))
+        }
         preStickerState = nil
         
         stickersContainer.subviews.forEach { view in
@@ -813,33 +949,49 @@ extension PTStickerEngine: PTStickerViewDelegate {
     }
     
     public func sticker(_ textSticker: PTTextStickerView, editText text: String) {
-        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, image, style in
-            guard let image = image, !text.isEmpty else {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { [weak self] text, textColor, font, image, style in
+            guard let self = self, let image = image, !text.isEmpty else {
                 textSticker.moveToAshbin()
                 return
             }
-            
             textSticker.startTimer()
             guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style else { return }
             guard let context = self.context else { return }
-            let mainViewBounds = context.engineMainView.bounds
             
-            guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
-                PTNSLogConsole("错误：engineMainView 尚未正确布局")
-                return
-            }
+            let maxWidth = context.engineMainView.bounds.width
+            let maxLimitSize = CGSize(width: maxWidth * 0.5, height: context.engineMainView.bounds.height * 0.5)
             
-            let maxLimitSize = CGSize(
-                width: mainViewBounds.width * 0.5,
-                height: mainViewBounds.height * 0.5
-            )
             textSticker.text = text
             textSticker.textColor = textColor
             textSticker.font = font
             textSticker.style = style
             textSticker.image = image
-            let newSize = PTTextStickerView.calculateSize(image: image,maxLimitSize: maxLimitSize)
-            textSticker.changeSize(to: newSize)
+            textSticker.changeSize(to: PTTextStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize))
+        }
+    }
+    
+    public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) {
+        onRequestImageSelection? { [weak self, weak imageSticker] newImage in
+            guard let self = self, let imageSticker = imageSticker, let newImage = newImage else { return }
+            imageSticker.startTimer()
+            imageSticker.image = newImage
+            
+            let currentScale = max(1.0, imageSticker.gesScale)
+            let maxWidth = self.context?.engineMainView.bounds.width ?? UIScreen.main.bounds.width
+            let maxHeight = self.context?.engineMainView.bounds.height ?? UIScreen.main.bounds.height
+            
+            let maxLimitSize = CGSize(width: (maxWidth * 0.5) / currentScale, height: (maxHeight * 0.4) / currentScale)
+            let newSize = PTImageStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
+            imageSticker.changeSize(to: newSize)
+            
+            // 安全回弹
+            let visualTopY = imageSticker.center.y - (newSize.height * imageSticker.gesScale) / 2
+            let safeTopMargin: CGFloat = 90
+            if visualTopY < safeTopMargin {
+                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                    imageSticker.center.y += (safeTopMargin - visualTopY)
+                }
+            }
         }
     }
 }
@@ -1296,423 +1448,5 @@ public class PTClipEngine: NSObject {
         
         // 计算完毕，更新内部状态并回调给 VC 进行 UI 刷新
         onClipBoxFrameChanged?(frame)
-    }
-}
-
-public class PTImageStickerEngine: NSObject, PTEditImageToolEngine {
-    
-    // MARK: - 核心视图与状态
-    
-    public var canvasView: UIView { imageStickersContainer }
-    
-    /// 图片贴纸的专属容器
-    private lazy var imageStickersContainer: PTPassthroughView = {
-        let view = PTPassthroughView()
-        view.backgroundColor = .clear
-        view.clipsToBounds = false // 允许贴纸拖出边界
-        return view
-    }()
-    
-    private weak var context: PTEditImageEngineContext?
-    private var preStickerState: PTBaseStickertState?
-    
-    /// 交互状态回调 (用于隐藏/显示主工具栏)
-    public var onInteractStateChanged: ((Bool) -> Void)?
-    public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)?
-    /// 用于通知外部 (VC) 当前是否正在进行 AI 抠图，以便外部显示/隐藏 Loading 菊花图
-    public var onProcessingStateChanged: ((Bool) -> Void)?
-    /// 当前选中的贴纸 (用于应用图层和对齐操作)
-    public var currentSelectedSticker: PTBaseStickerView?
-    public var onStickerTapped: ((PTBaseStickerView) -> Void)?
-    // MARK: - 生命周期
-    
-    public init(context: PTEditImageEngineContext) {
-        self.context = context
-        super.init()
-    }
-    
-    public func toolDidActivate() {
-        // 激活时唤起相册选择器等逻辑交由 VC 处理
-    }
-    
-    public func toolDidDeactivate() {
-        // 离开工具时，取消所有贴纸的选中状态（比如隐藏边框）
-        imageStickersContainer.subviews.forEach { view in
-            (view as? PTStickerViewAdditional)?.resetState()
-        }
-        currentSelectedSticker = nil
-    }
-    
-    public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
-        // 贴纸继承自 PTBaseStickerView，自带手势，无需全局路由派发
-    }
-    
-    public func reloadRenderState() {
-        // 撤销/重做触发时的视图刷新
-    }
-        
-    /// 外部调用此方法传入选择的图片
-    public func addImageSticker(_ image: UIImage) {
-        guard let context = context else { return }
-        
-        let mainViewBounds = context.engineMainView.bounds
-        let currentZoomScale = context.engineScrollView.zoomScale
-        
-        // 兜底保护：确保 mainView 已经完成布局
-        guard mainViewBounds.width > 0, mainViewBounds.height > 0 else {
-            PTNSLogConsole("错误：engineMainView 尚未正确布局")
-            return
-        }
-        
-        // 1. 严格基准：直接取 engineMainView 自身宽高的 70% 作为极限框 (不要除以 zoomScale)
-        let maxLimitSize = CGSize(
-            width: mainViewBounds.width * 0.5,
-            height: mainViewBounds.height * 0.5
-        )
-        
-        let targetSize = PTImageStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize)
-        // 3. 利用之前写好的修复版居中算法，获取初始 Frame
-        let originFrame = PTBaseStickerView.getStickerOriginFrame(targetSize, current: context, container: imageStickersContainer)
-        // 4. 实例化贴纸
-        // 这里的 originScale: 1.0 / currentZoomScale 会自动处理画布的缩放转换
-        let imageSticker = PTImageStickerView(
-            image: image,
-            originScale: 1.0 / currentZoomScale,
-            originAngle: -context.engineCurrentAngle,
-            originFrame: originFrame
-        )
-        
-        // 5. 添加视图并记录撤销栈
-        addSticker(imageSticker)
-        
-        // [防备机制]：我看你在 editImage 里调用了 changeSize。
-        // 如果你的 PTImageStickerView 内部必须调用 changeSize 才能正确刷新 UI，请取消下面这行的注释：
-        // imageSticker.changeSize(to: targetSize)
-        
-        context.engineEditorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
-    }
-    
-    private func addSticker(_ sticker: PTBaseStickerView) {
-        guard let context = context else { return }
-        imageStickersContainer.addSubview(sticker)
-        sticker.frame = sticker.originFrame
-        
-        // 设置代理以处理手势冲突和垃圾桶逻辑 (复用你原有的委托逻辑)
-        sticker.delegate = self
-        
-        context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
-        context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
-        
-        // 默认将最新添加的设置为当前选中
-        currentSelectedSticker = sticker
-    }
-        
-    // MARK: - 需求 2: 图层层级控制 (最上 / 最下)
-    
-    /// 将选中图片置于最顶层
-    public func bringSelectedToFront() {
-        guard let sticker = currentSelectedSticker else { return }
-        imageStickersContainer.bringSubviewToFront(sticker)
-    }
-    
-    /// 将选中图片置于最底层
-    public func sendSelectedToBack() {
-        guard let sticker = currentSelectedSticker else { return }
-        imageStickersContainer.sendSubviewToBack(sticker)
-    }
-    
-    // MARK: - 需求 3: 居中控制 (左右 / 上下)
-    
-    /// 将选中图片水平居中
-    public func centerSelectedHorizontally() {
-        guard let sticker = currentSelectedSticker, let context = context else { return }
-        
-        // 获取当前可视区域在容器中的转换坐标
-        let mainViewCenterX = context.engineMainView.bounds.midX
-        // 我们只关心 X 轴，Y 轴可以随便传 0
-        let targetPoint = context.engineMainView.convert(CGPoint(x: mainViewCenterX, y: 0), to: imageStickersContainer)
-
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            sticker.center = CGPoint(x: targetPoint.x, y: sticker.center.y)
-        }
-    }
-    
-    /// 将选中图片垂直居中
-    public func centerSelectedVertically() {
-        guard let sticker = currentSelectedSticker, let context = context else { return }
-        
-        // 获取 engineMainView 的垂直中心，并转换到贴纸容器
-        let mainViewCenterY = context.engineMainView.bounds.midY
-        // 我们只关心 Y 轴，X 轴可以随便传 0
-        let targetPoint = context.engineMainView.convert(CGPoint(x: 0, y: mainViewCenterY), to: imageStickersContainer)
-        
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            sticker.center = CGPoint(x: sticker.center.x, y: targetPoint.y)
-        }
-    }
-    
-    // MARK: - Undo & Redo 引擎接口
-        
-    /// 处理图片贴纸的撤销与重做
-    public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
-        if isUndo {
-            // 撤销 (Undo)
-            if let oldState = oldState {
-                // 恢复到旧状态：先删掉当前的新状态，再把旧状态加回来
-                removeSticker(id: newState?.id ?? oldState.id)
-                if let sticker = PTBaseStickerView.initWithState(oldState) {
-                    addSticker(sticker)
-                }
-            } else {
-                // 如果旧状态是 nil，说明这步操作是“新增贴纸”，那么撤销就是“删除它”
-                removeSticker(id: newState?.id)
-            }
-        } else {
-            // 重做 (Redo)
-            if let newState = newState {
-                // 恢复到新状态：先删掉当前的旧状态，再把新状态加回来
-                removeSticker(id: oldState?.id ?? newState.id)
-                if let sticker = PTBaseStickerView.initWithState(newState) {
-                    addSticker(sticker)
-                }
-            } else {
-                // 如果新状态是 nil，说明这步操作是“删除了贴纸”，那么重做就是“再次删除它”
-                removeSticker(id: oldState?.id)
-            }
-        }
-    }
-    
-    /// 根据 ID 找到对应的图片贴纸并移入垃圾桶
-    private func removeSticker(id: String?) {
-        guard let id = id else { return }
-        // 倒序遍历，提高查找顶部视图的效率
-        for sticker in imageStickersContainer.subviews.reversed() {
-            guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
-            // 调用你封装好的方法，既移除了视图，又清理了定时器
-            stickerView.moveToAshbin()
-            
-            // 如果删除的正好是当前选中的贴纸，清空指针
-            if currentSelectedSticker === stickerView {
-                currentSelectedSticker = nil
-            }
-            break
-        }
-    }
-}
-
-extension PTImageStickerEngine: PTStickerViewDelegate {
-    public func sticker(_ textSticker: PTTextStickerView, editText text: String) { }
-    
-    public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
-        guard let context = context else { return }
-        currentSelectedSticker = sticker
-        
-        onInteractStateChanged?(true) // 通知 VC 隐藏底部栏
-        
-        let ashbinView = context.engineAshbinView
-        ashbinView.layer.removeAllAnimations()
-        ashbinView.isHidden = false
-        
-        var frame = ashbinView.frame
-        let diff = context.engineMainView.frame.height - frame.minY
-        frame.origin.y += diff
-        ashbinView.frame = frame
-        frame.origin.y -= diff
-        
-        UIView.animate(withDuration: 0.25) {
-            ashbinView.frame = frame
-        }
-        
-        imageStickersContainer.subviews.forEach { view in
-            if view !== sticker {
-                (view as? PTStickerViewAdditional)?.resetState()
-                (view as? PTStickerViewAdditional)?.gesIsEnabled = false
-            }
-        }
-    }
-    
-    public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
-        guard let context = context else { return }
-        let point = panGes.location(in: context.engineMainView)
-        let ashbinView = context.engineAshbinView
-        let ashbinImgView = context.engineAshbinImgView
-        
-        if ashbinView.frame.contains(point) {
-            ashbinView.backgroundColor = .gray
-            ashbinImgView.isHighlighted = true
-            if sticker.alpha == 1 {
-                sticker.layer.removeAllAnimations()
-                UIView.animate(withDuration: 0.25) { sticker.alpha = 0.5 }
-            }
-        } else {
-            ashbinView.backgroundColor = .systemRed
-            ashbinImgView.isHighlighted = false
-            if sticker.alpha != 1 {
-                sticker.layer.removeAllAnimations()
-                UIView.animate(withDuration: 0.25) { sticker.alpha = 1 }
-            }
-        }
-    }
-    
-    public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
-        guard let context = context else { return }
-        
-        onInteractStateChanged?(false) // 通知 VC 恢复底部栏
-        
-        let ashbinView = context.engineAshbinView
-        ashbinView.layer.removeAllAnimations()
-        ashbinView.isHidden = true
-        
-        var endState: PTBaseStickertState? = sticker.state
-        let point = panGes.location(in: context.engineMainView)
-        
-        if ashbinView.frame.contains(point) {
-            sticker.moveToAshbin()
-            endState = nil
-        }
-        
-        context.engineEditorManager.storeAction(.imageSticker(oldState: preStickerState, newState: endState))
-        preStickerState = nil
-        
-        imageStickersContainer.subviews.forEach { view in
-            (view as? PTStickerViewAdditional)?.gesIsEnabled = true
-        }
-    }
-    
-    public func stickerDidTap(_ sticker: PTBaseStickerView) {
-        currentSelectedSticker = sticker
-        imageStickersContainer.subviews.forEach { view in
-            if view !== sticker {
-                (view as? PTStickerViewAdditional)?.resetState()
-            }
-        }
-        onStickerTapped?(sticker)
-    }
-    
-    /// 当图片贴纸触发“编辑”操作时调用 (比如双击贴纸)
-    public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) {
-        onRequestImageSelection? { [weak self, weak imageSticker] newImage in
-            guard let self = self, let imageSticker = imageSticker, let newImage = newImage else { return }
-            
-            imageSticker.startTimer()
-            imageSticker.image = newImage
-            
-            let mainViewBounds = self.context?.engineMainView.bounds ?? UIScreen.main.bounds
-            let currentScale = max(1.0, imageSticker.gesScale)
-            // 重新计算并调整尺寸 (用我们上一轮写好的逻辑)
-            let maxLimitSize = CGSize(
-                width: (mainViewBounds.width * 0.5) / currentScale,
-                height: (mainViewBounds.height * 0.4) / currentScale
-            )
-            let newSize = PTImageStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
-            imageSticker.changeSize(to: newSize)
-            
-            // 🌟 3. 终极防线：边缘安全回弹 (Auto-Nudge)
-            // 计算当前贴纸的“视觉顶部边界”在画布中的坐标
-            let visualTopY = imageSticker.center.y - (newSize.height * imageSticker.gesScale) / 2
-            let safeTopMargin: CGFloat = 90 // 为顶部 45pt 的摇杆预留出充足的操作空间
-            
-            // 如果顶部边界太靠近屏幕边缘，甚至出去了，就平滑地把它拉回来
-            if visualTopY < safeTopMargin {
-                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                    imageSticker.center = CGPoint(
-                        x: imageSticker.center.x,
-                        y: imageSticker.center.y + (safeTopMargin - visualTopY)
-                    )
-                }
-            }
-            // 记录到撤销栈
-            // self.context?.engineEditorManager.storeAction(...)
-        }
-    }
-}
-
-extension PTImageStickerEngine {
-    /// 尝试为当前选中的图片贴纸消除背景
-    public func removeBackgroundForSelectedSticker() {
-        guard let imageSticker = currentSelectedSticker as? PTImageStickerView else { return }
-        let originalImage = imageSticker.image
-                
-        // 记录旧状态，用于支持撤销 (Undo)
-        let oldState = imageSticker.state
-        
-        // 通知外部开始处理 (可以转菊花)
-        onProcessingStateChanged?(true)
-        
-        // 开启异步任务处理抠图
-        Task {
-            do {
-                // 调用核心算法
-                if let cutoutImage = try await performForegroundMasking(on: originalImage) {
-                    await MainActor.run {
-                        UIView.transition(with: imageSticker, duration: 0.35, options: .transitionCrossDissolve) {
-                            imageSticker.image = cutoutImage
-                        }
-                        // 重新计算并刷新贴纸尺寸
-                        let maxLimitSize = CGSize(
-                            width: (self.context?.engineMainView.bounds.width ?? UIScreen.main.bounds.width) * 0.5,
-                            height: (self.context?.engineMainView.bounds.height ?? UIScreen.main.bounds.height) * 0.5
-                        )
-                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
-                        imageSticker.changeSize(to: newSize)
-                        
-                        // 存入撤销栈
-                        self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
-                        
-                        // 结束 Loading
-                        self.onProcessingStateChanged?(false)
-                    }
-                } else {
-                    // 抠图失败或未找到主体
-                    await MainActor.run { self.onProcessingStateChanged?(false) }
-                }
-            } catch {
-                PTNSLogConsole("抠图失败: \(error.localizedDescription)")
-                await MainActor.run { self.onProcessingStateChanged?(false) }
-            }
-        }
-    }
-    
-    /// 核心算法：调用 Vision 框架提取前景
-    private func performForegroundMasking(on inputImage: UIImage) async throws -> UIImage? {
-        guard let cgImage = inputImage.cgImage else { return nil }
-        
-        // 创建请求
-        let request = VNGenerateForegroundInstanceMaskRequest()
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-        
-        // 执行请求 (这里会在后台线程运行，极其吃性能)
-        try handler.perform([request])
-        
-        // 获取所有识别到的主体结果
-        guard let observation = request.results?.first else { return nil }
-        
-        // 为所有识别到的主体生成 Mask 遮罩
-        let maskPixelBuffer = try observation.generateScaledMaskForImage(
-            forInstances: observation.allInstances,
-            from: handler
-        )
-        
-        // 使用 CoreImage 合成图片
-        let originalCIImage = CIImage(cgImage: cgImage)
-        let maskCIImage = CIImage(cvPixelBuffer: maskPixelBuffer)
-        
-        let bgCIImage = CIImage(color: .clear).cropped(to: originalCIImage.extent)
-        
-        guard let filter = CIFilter(name: "CIBlendWithMask") else { return nil }
-        filter.setValue(originalCIImage, forKey: kCIInputImageKey) // 原图作为前景
-        filter.setValue(bgCIImage, forKey: kCIInputBackgroundImageKey) // 透明色作为新背景
-        filter.setValue(maskCIImage, forKey: kCIInputMaskImageKey) // 刚刚生成的遮罩
-        
-        guard let outputCIImage = filter.outputImage else { return nil }
-        
-        // 渲染最终的透明背景图片
-        let context = CIContext(options: [.useSoftwareRenderer: false])
-        guard let outputCGImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else {
-            return nil
-        }
-        
-        // 保留原图的缩放比例和方向
-        return UIImage(cgImage: outputCGImage, scale: inputImage.scale, orientation: inputImage.imageOrientation)
     }
 }

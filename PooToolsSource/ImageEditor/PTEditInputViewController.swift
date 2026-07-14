@@ -305,7 +305,6 @@ class PTEditInputViewController: PTBaseViewController {
     // MARK: - 字体选择器 (UIFontPickerViewController)
     private func showFontPicker() {
         let fontPicker = PTFontPickerViewController()
-        fontPicker.backButton.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
         fontPicker.selectedFontCallback = { value in
             self.font = value
             self.updateTextAttributes()
@@ -313,7 +312,8 @@ class PTEditInputViewController: PTBaseViewController {
                 self.textView.becomeFirstResponder()
             }
         }
-        self.navigationController?.pushViewController(fontPicker, animated: true)
+        fontPicker.modalPresentationStyle = .pageSheet
+        UIViewController.currentPresentToSheet(vc: fontPicker,sizes: [.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.kNavBarHeight_Total)])
     }
 
     private func refreshTextViewUI() {

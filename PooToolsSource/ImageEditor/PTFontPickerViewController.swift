@@ -28,23 +28,10 @@ public class PTFontPickerViewController: PTBaseViewController {
 
     public var selectedFontCallback:((UIFont)->Void)?
     public var viewDismiss:PTActionTask?
-
-    public lazy var backButton:PTBaseButton = {
-        let colorPickerBack = PTBaseButton(type: .custom)
-        colorPickerBack.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
-        colorPickerBack.addActionHandlers { sender in
-            if self.checkVCIsPresenting() {
-                self.dismissAnimated()
-            } else {
-                self.navigationController?.popViewController()
-            }
-        }
-        return colorPickerBack
-    }()
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setCustomBackButtonView(backButton)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -85,14 +72,15 @@ extension PTFontPickerViewController: UIFontPickerViewControllerDelegate {
         let newFont = UIFont(descriptor: descriptor, size: PTTextStickerView.fontSize)
         
         self.selectedFontCallback?(newFont)
-        if self.checkVCIsPresenting() {
-            self.dismissAnimated()
-        } else {
-            self.navigationController?.popViewController(animated: true)
-        }
+        self.closeFontPicker()
     }
     
     public func fontPickerViewControllerDidCancel(_ viewController: UIFontPickerViewController) {
+        self.closeFontPicker()
+    }
+    
+    // 统一处理退出逻辑
+    private func closeFontPicker() {
         if self.checkVCIsPresenting() {
             self.dismissAnimated()
         } else {
