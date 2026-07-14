@@ -532,6 +532,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     public var onInteractStateChanged: ((Bool) -> Void)?
     /// 贴纸点击回调
     public var onStickerTapped: ((PTBaseStickerView) -> Void)?
+    public var onStickerAdded: ((PTBaseStickerView) -> Void)?
     
     public var currentSelectedSticker: PTBaseStickerView?
 
@@ -573,6 +574,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
         
         currentSelectedSticker = sticker
+        onStickerAdded?(sticker)
     }
     
     /// 根据 ID 移除对应的贴纸
