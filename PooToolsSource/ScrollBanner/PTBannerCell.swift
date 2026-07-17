@@ -14,7 +14,7 @@ import SnapKit
 public class PTBannerCell: PTBaseNormalCell {
     public static let ID = "PTBannerCell"
     
-    let imageView = UIImageView()
+    let imageView = PTGAnimationImageView()
     let playerContainer = UIView()
     let playButton = UIButton()
 
@@ -39,7 +39,7 @@ public class PTBannerCell: PTBaseNormalCell {
 
     public override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        imageView.imageSet = ""
         videoURL = nil
         playerContainer.layer.sublayers?.removeAll()
     }
@@ -55,7 +55,7 @@ public class PTBannerCell: PTBaseNormalCell {
                 playButton.isUserInteractionEnabled = true
 
                 PTBannerVideoManager.shared.loadCover(url: mediaReal) { [weak self] img in
-                    self?.imageView.image = img
+                    self?.imageView.imageSet = img
                     if let _ = PTVideoFileCache.shared.cachedFileURL(for: mediaURL) {
                     } else {
                         PTVideoFileCache.shared.prepareVideo(url: mediaURL) { _ in }
@@ -64,12 +64,12 @@ public class PTBannerCell: PTBaseNormalCell {
             } else {
                 playButton.isHidden = true
                 playButton.isUserInteractionEnabled = false
-                imageView.loadImage(contentData: url)
+                imageView.imageSet = url
             }
         } else {
             playButton.isHidden = true
             playButton.isUserInteractionEnabled = false
-            imageView.loadImage(contentData: data)
+            imageView.imageSet = data
         }
         
         contentView.viewCornerRectCorner(radius: data.cellCornerRadius,corner: data.corner)

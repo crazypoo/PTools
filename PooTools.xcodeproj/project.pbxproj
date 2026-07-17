@@ -309,6 +309,7 @@
 		557E3ABA2C047EC6002466A0 /* PTCrashDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
+		5580D0503009CC4100DF3324 /* PTGAnimationImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5580D04F3009CC4100DF3324 /* PTGAnimationImageView.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
 		5585F5842C500D620033E1D1 /* PTGradientBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */; };
 		55868D4B2CC761D800A2DD25 /* PTFrostedGlassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */; };
@@ -1281,6 +1282,7 @@
 		557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashDetailViewController.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
+		5580D04F3009CC4100DF3324 /* PTGAnimationImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGAnimationImageView.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
 		5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGradientBorderView.swift; sourceTree = "<group>"; };
 		55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFrostedGlassView.swift; sourceTree = "<group>"; };
@@ -3723,6 +3725,7 @@
 				5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */,
 				5593A2D52F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift */,
 				5593A2D72F8E0C150005BFA3 /* PTEmptyDataSet.swift */,
+				5580D04F3009CC4100DF3324 /* PTGAnimationImageView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -5019,6 +5022,7 @@
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				556CA4AB2B28F66200A5B189 /* VideoConverter.swift in Sources */,
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,
+				5580D0503009CC4100DF3324 /* PTGAnimationImageView.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				55BF36F42C4A504100AB36EB /* PTAssociatedObjectStore.swift in Sources */,
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
