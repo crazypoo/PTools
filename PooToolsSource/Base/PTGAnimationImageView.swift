@@ -9,7 +9,7 @@
 import UIKit
 import Lottie
 
-public class PTGAnimationImageView: UIView {
+open class PTGAnimationImageView: UIView {
     public var imageSet:Any? {
         didSet {
             if let findAny = imageSet {
@@ -59,7 +59,7 @@ public class PTGAnimationImageView: UIView {
         return view
     }()
 
-    override init(frame:CGRect) {
+    public override init(frame:CGRect) {
         super.init(frame: frame)
         
         lottieView.contentMode = .scaleAspectFit
@@ -77,7 +77,7 @@ public class PTGAnimationImageView: UIView {
         }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
