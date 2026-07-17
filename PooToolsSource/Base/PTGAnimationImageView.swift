@@ -51,10 +51,16 @@ open class PTGAnimationImageView: UIView {
         }
     }
     
+    public override var contentMode: UIView.ContentMode {
+        didSet {
+            imageBG.contentMode = contentMode
+            lottieView.contentMode = contentMode
+        }
+    }
+    
     private let lottieView = LottieAnimationView()
     private lazy var imageBG:UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
         view.clipsToBounds = false
         return view
     }()
@@ -62,7 +68,6 @@ open class PTGAnimationImageView: UIView {
     public override init(frame:CGRect) {
         super.init(frame: frame)
         
-        lottieView.contentMode = .scaleAspectFit
         lottieView.clipsToBounds = false
         lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
