@@ -76,8 +76,21 @@ public class PTMotion: NSObject, @unchecked Sendable {
     // 实例化一个内部数据模型，作为唯一的数据源头
     private var currentData = PTMotionData()
     
+    private var referenceRoll: Double = 0.0
+    private var smoothedRoll: Double = 0.0
+    private let lowPassFactor: Double = 0.15 // 0.0~1.0，值越小 UI 越平滑跟手
+
+    public var motionStarted:Bool = false
+    
     private override init() {
         super.init()
+    }
+
+    public func calibrateZeroPoint() {
+        if let currentAttitude = motionManager.deviceMotion?.attitude {
+            referenceRoll = currentAttitude.roll
+            PTNSLogConsole("✅ [机车姿态] 压弯零点基准已重新校准")
+        }
     }
 
     // MARK: - Start Motion Tracking
@@ -97,6 +110,7 @@ public class PTMotion: NSObject, @unchecked Sendable {
         startPedometerEventUpdates()
         // 🌟 启动机车姿态感应
         startBikeOrientationUpdates()
+        motionStarted = true
     }
 
     // MARK: - Stop Motion Tracking
@@ -108,6 +122,7 @@ public class PTMotion: NSObject, @unchecked Sendable {
             altimeter.stopRelativeAltitudeUpdates() // 停止气压计
         }
         motionManager.stopDeviceMotionUpdates()
+        motionStarted = false
     }
 
     // MARK: - Authorization Check (iOS 11+)
@@ -254,25 +269,32 @@ public class PTMotion: NSObject, @unchecked Sendable {
             
             self.currentData.pitch = motion.attitude.pitch * 180 / .pi
             // 1. 计算当前倾角 (将弧度转换为角度)
-            // 默认手机竖直固定在车把上时，roll 代表左右倾斜
-            let rollDegrees = motion.attitude.roll * 180.0 / .pi
-            self.currentData.roll = rollDegrees
+            let rawRoll = motion.attitude.roll - self.referenceRoll
+            let rawRollDegrees = rawRoll * 180.0 / .pi
             
+            // 🚨 升级 2：低通滤波平滑处理，消除引擎高频震动带来的杂波
+            self.smoothedRoll = (rawRollDegrees * self.lowPassFactor) + (self.smoothedRoll * (1.0 - self.lowPassFactor))
+            
+            // 🚨 升级 3：消除 1.5 度以内的微小传感器噪点漂移，让直线行驶时稳稳保持在 0°
+            let displayAngle = abs(self.smoothedRoll) < 1.5 ? 0.0 : self.smoothedRoll
+            
+            self.currentData.roll = displayAngle
+
             // 2. 统计左右极限压弯角度 (剔除超过60度的异常摔车角度)
-            if rollDegrees < 0 {
+            if displayAngle < 0 {
                 // 左压弯 (roll 为负数)
-                let leftAngle = abs(rollDegrees)
+                let leftAngle = abs(displayAngle)
                 if leftAngle > self.currentData.maxLeftLean && leftAngle < 60.0 {
                     self.currentData.maxLeftLean = leftAngle
                 }
             } else {
                 // 右压弯 (roll 为正数)
-                let rightAngle = rollDegrees
+                let rightAngle = displayAngle
                 if rightAngle > self.currentData.maxRightLean && rightAngle < 60.0 {
                     self.currentData.maxRightLean = rightAngle
                 }
             }
-            
+
             self.triggerCallback()
         }
     }
