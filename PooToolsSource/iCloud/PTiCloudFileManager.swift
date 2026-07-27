@@ -14,7 +14,7 @@ public class PTiCloudFileManager {
     
     // 单例模式，方便在全局调用
     public static let shared = PTiCloudFileManager()
-    private let fileManager = FileManager.default
+    public let fileManager = FileManager.default
     
     // 私有初始化方法
     private init() {}
@@ -101,7 +101,7 @@ public class PTiCloudFileManager {
 extension PTiCloudFileManager {
     
     /// 获取本地沙盒的 Documents 目录路径
-    private var localDocumentsURL: URL {
+    public var localDocumentsURL: URL {
         return fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
