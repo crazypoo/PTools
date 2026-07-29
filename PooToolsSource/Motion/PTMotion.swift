@@ -9,6 +9,8 @@
 import UIKit
 @preconcurrency import CoreMotion
 
+public let PTMotionEngineDidUpdate = NSNotification.Name("PTMotionEngineDidUpdate")
+
 // MARK: - 数据模型
 public struct PTMotionData: Sendable {
     // 基础计步
@@ -46,15 +48,11 @@ public struct PTMotionData: Sendable {
     public var altitudeAlertMessage: String? = nil // 海拔突变预警提示语 (为 nil 表示正常)
 }
 
-public typealias PTMotionBlock = (_ data: PTMotionData) -> Void
-
 @objcMembers
 public class PTMotion: NSObject, @unchecked Sendable {
 
     public static let shared = PTMotion()
-    
-    public var motionBlock: PTMotionBlock?
-    
+        
     private let operationQueue = OperationQueue()
     private let pedometer = CMPedometer()
     private let activityManager = CMMotionActivityManager()
@@ -188,7 +186,7 @@ public class PTMotion: NSObject, @unchecked Sendable {
         // 确保回调一定在主线程触发，方便外部直接更新 UI
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.motionBlock?(self.currentData)
+            NotificationCenter.default.post(name: PTMotionEngineDidUpdate, object: self.currentData)
         }
     }
 
