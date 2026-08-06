@@ -9,88 +9,136 @@
 import UIKit
 @preconcurrency import CoreMotion
 
-public let PTMotionEngineDidUpdate = NSNotification.Name("PTMotionEngineDidUpdate")
+public enum PTMotionDataSource: String, Sendable {
+    case iphone = "📱"
+    case airpods = "🎧"
+}
 
 // MARK: - 数据模型
 public struct PTMotionData: Sendable {
-    // 基础计步
+    public var currentDataSource: PTMotionDataSource = .iphone
+    
+    // --- 基础计步与运动状态 (仅 iPhone 支持) ---
     public var stepCount: Int = 0
-    public var distance: Double = 0.0          // 距离 (米)
-    
-    // 进阶运动数据
-    public var currentPace: Double = 0.0       // 配速 (秒/米)
-    public var currentCadence: Double = 0.0    // 步频 (步/秒)
-    
-    // 爬楼与海拔 (利用气压计和协处理器)
-    public var floorsAscended: Int = 0         // 上楼层数
-    public var floorsDescended: Int = 0        // 下楼层数
-    public var relativeAltitude: Double = 0.0  // 相对高度变化 (米)
-    public var pressure: Double = 0.0          // 环境气压 (千帕 kPa)
-    
-    // 状态与置信度
+    public var distance: Double = 0.0
+    public var currentPace: Double = 0.0
+    public var currentCadence: Double = 0.0
+    public var isWalkingPaused: Bool = false
     public var confidence: String = "Unknown"
     public var status: String = "Unknown"
     
-    // 自动启停侦测
-    public var isWalkingPaused: Bool = false   // 侦测用户是否临时停下脚步
+    // --- 爬楼与海拔预警 (仅 iPhone 支持) ---
+    public var floorsAscended: Int = 0
+    public var floorsDescended: Int = 0
+    public var relativeAltitude: Double = 0.0
+    public var pressure: Double = 0.0
+    public var altitudeAlertMessage: String? = nil
     
-    // 🌟 新增：G 值与姿态数据
-    public var gForceZ: Double = 0.0 // 上下颠簸 G 值 (非铺装路面震动)
-    public var gForceX: Double = 0.0 // 左右 G 值 (转弯)
-    public var gForceY: Double = 0.0 // 前后 G 值 (加减速)
-    public var pitch: Double = 0.0   // 俯仰角 (坡度度数)
-    public var roll: Double = 0.0    // 侧倾角 (左右倾斜度数)
+    // --- 🌟 核心姿态与机车动态 (智能切换：AirPods / iPhone) ---
+    // G 值
+    public var gForceX: Double = 0.0
+    public var gForceY: Double = 0.0
+    public var gForceZ: Double = 0.0
     
-    public var maxLeftLean: Double = 0.0       // 历史最大左压弯角度 (正数)
-    public var maxRightLean: Double = 0.0      // 历史最大右压弯角度 (正数)
+    // 欧拉角 (压弯与俯仰)
+    public var pitch: Double = 0.0
+    public var roll: Double = 0.0
+    public var yaw: Double = 0.0
     
-    public var isTipOverDetected: Bool = false  // 是否侦测到倒车/摔车事故
-    public var altitudeAlertMessage: String? = nil // 海拔突变预警提示语 (为 nil 表示正常)
+    // 机车硬核统计
+    public var maxLeftLean: Double = 0.0
+    public var maxRightLean: Double = 0.0
+    public var isTipOverDetected: Bool = false
+    
+    // 极客进阶数据 (AirPods 优势领域)
+    public var rotX: Double = 0.0 // 角速度
+    public var rotY: Double = 0.0
+    public var rotZ: Double = 0.0
+    public var gravX: Double = 0.0 // 重力矢量
+    public var gravY: Double = 0.0
+    public var gravZ: Double = 0.0
+    public var quatX: Double = 0.0 // 四元数
+    public var quatY: Double = 0.0
+    public var quatZ: Double = 0.0
+    public var quatW: Double = 0.0
+    
+    public var sensorLocation: CMDeviceMotion.SensorLocation? = nil
+}
+
+public protocol PTMotionDelegate: AnyObject {
+    /// 任何数据发生变化时，都会抛出这个完整的超级数据包
+    func motionManager(_ manager: PTMotion, didUpdateData data: PTMotionData)
+    
+    /// 仅在数据源 (iPhone <-> AirPods) 发生切换时回调，用于更新 UI 图标
+    func motionManager(_ manager: PTMotion, didChangeDataSource source: PTMotionDataSource)
+}
+
+public extension PTMotionDelegate {
+    func motionManager(_ manager: PTMotion, didChangeDataSource source: PTMotionDataSource) {}
 }
 
 @objcMembers
-public class PTMotion: NSObject, @unchecked Sendable {
-
+public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {
+    
     public static let shared = PTMotion()
-        
+    
+    private class WeakDelegateWrapper {
+        weak var delegate: PTMotionDelegate?
+        init(_ delegate: PTMotionDelegate) { self.delegate = delegate }
+    }
+    private var delegates: [WeakDelegateWrapper] = []
+    
+    // --- 传感器矩阵 ---
     private let operationQueue = OperationQueue()
     private let pedometer = CMPedometer()
     private let activityManager = CMMotionActivityManager()
     private let altimeter = CMAltimeter() // 新增：气压高度计
+    private let phoneManager = CMMotionManager()             // 手机主控
+    private let headphoneManager = CMHeadphoneMotionManager() // 耳机主控
     
-    private let motionManager = CMMotionManager() // 新增核心传感器
-    
+    // --- 数据源头与状态缓存 ---
+    public private(set) var currentData = PTMotionData()
     public var currentSpeedKmh: Double = 0.0
+    public var motionStarted:Bool = false
     
-    // 🌟 用于计算海拔变动率的历史队列 (缓存最近 30 秒的数据)
+    // --- 压弯与摔车算法缓存 ---
     private var altitudeHistory: [(time: Date, altitude: Double)] = []
-
-    // 用于记录最后一次检测到剧烈物理撞击的时间
     private var lastImpactTime: Date?
-    
-    // 设定触发疑似撞击的物理 G 值门槛 (3.0G 以上通常代表非正常落地或硬物砸击)
     private let crashGForceThreshold: Double = 3.0
-    
-    // 实例化一个内部数据模型，作为唯一的数据源头
-    private var currentData = PTMotionData()
-    
     private var referenceRoll: Double = 0.0
     private var smoothedRoll: Double = 0.0
-    private let lowPassFactor: Double = 0.15 // 0.0~1.0，值越小 UI 越平滑跟手
-
-    public var motionStarted:Bool = false
+    private let lowPassFactor: Double = 0.15
     
     private override init() {
         super.init()
+        headphoneManager.delegate = self // 监听耳机断开/连接
     }
-
-    public func calibrateZeroPoint() {
-        if let currentAttitude = motionManager.deviceMotion?.attitude {
-            referenceRoll = currentAttitude.roll
-            PTNSLogConsole("✅ [机车姿态] 压弯零点基准已重新校准")
+    
+    // MARK: - 代理管理
+    public func addDelegate(_ delegate: PTMotionDelegate) {
+        delegates.removeAll { $0.delegate == nil }
+        if !delegates.contains(where: { $0.delegate === delegate }) {
+            delegates.append(WeakDelegateWrapper(delegate))
+            // 立即推送一次当前状态
+            delegate.motionManager(self, didChangeDataSource: currentData.currentDataSource)
         }
     }
-
+    
+    public func calibrateZeroPoint() {
+        let activeMotion = currentData.currentDataSource == .airpods ? headphoneManager.deviceMotion : phoneManager.deviceMotion
+        if let currentAttitude = activeMotion?.attitude {
+            referenceRoll = currentAttitude.roll
+            PTNSLogConsole("✅ [机车姿态] 压弯零点基准已重新校准 (基于 \(currentData.currentDataSource.rawValue))")
+        }
+    }
+    
+    public func resetLeanAngles() {
+        currentData.maxLeftLean = 0.0
+        currentData.maxRightLean = 0.0
+        currentData.isTipOverDetected = false
+        triggerCallback()
+    }
+    
     // MARK: - Start Motion Tracking
     @MainActor public func startMotion(from startDate: Date = Date()) {
         guard CMPedometer.isStepCountingAvailable(), CMMotionActivityManager.isActivityAvailable() else {
@@ -100,238 +148,233 @@ public class PTMotion: NSObject, @unchecked Sendable {
             PTNSLogConsole(msg)
             return
         }
-
-        // 启动所有传感器
+        
         startPedometer(from: startDate)
         startActivityUpdates()
         startAltimeterUpdates()
         startPedometerEventUpdates()
-        // 🌟 启动机车姿态感应
-        startBikeOrientationUpdates()
+        
+        // 🌟 启动双擎姿态感应
+        startDualMotionUpdates()
         motionStarted = true
     }
-
+    
     // MARK: - Stop Motion Tracking
     public func stopMotion() {
         pedometer.stopUpdates()
-        pedometer.stopEventUpdates() // 停止事件侦测
+        pedometer.stopEventUpdates()
         activityManager.stopActivityUpdates()
-        if CMAltimeter.isRelativeAltitudeAvailable() {
-            altimeter.stopRelativeAltitudeUpdates() // 停止气压计
-        }
-        motionManager.stopDeviceMotionUpdates()
+        if CMAltimeter.isRelativeAltitudeAvailable() { altimeter.stopRelativeAltitudeUpdates() }
+        
+        phoneManager.stopDeviceMotionUpdates()
+        if headphoneManager.isDeviceMotionActive { headphoneManager.stopDeviceMotionUpdates() }
         motionStarted = false
     }
-
-    // MARK: - Authorization Check (iOS 11+)
-    public func checkAuthorizationStatus() -> Bool {
-        if #available(iOS 11.0, *) {
-            let status = CMPedometer.authorizationStatus()
-            switch status {
-            case .authorized: return true
-            case .notDetermined, .restricted, .denied: return false
-            @unknown default: return false
+    
+    // MARK: - 双擎运动数据调度核心
+    private func startDualMotionUpdates() {
+        // 1. 启动 iPhone 传感器 (作为底层保底)
+        if phoneManager.isDeviceMotionAvailable {
+            phoneManager.deviceMotionUpdateInterval = 1.0 / 30.0 // 30Hz
+            phoneManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
+                guard let self = self, let motion = motion, error == nil else { return }
+                
+                // 🌟 智能拦截：如果耳机在线，直接丢弃手机的姿态数据
+                guard self.currentData.currentDataSource == .iphone else { return }
+                self.processDeviceMotion(motion, source: .iphone)
+            }
+        }
+        
+        // 2. 启动 AirPods 传感器 (作为高级覆写)
+        if headphoneManager.isDeviceMotionAvailable {
+            headphoneManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
+                guard let self = self, let motion = motion, error == nil else { return }
+                
+                // 只要耳机有数据，立刻切换数据源状态
+                self.updateDataSourceState(to: .airpods)
+                self.processDeviceMotion(motion, source: .airpods)
             }
         } else {
-            return true
+            PTNSLogConsole("⚠️ 未检测到支持的 AirPods，仅使用 iPhone 传感器。")
         }
     }
-
-    // MARK: - Private Methods: Sensors
+    
+    // MARK: - CMHeadphoneMotionManagerDelegate (无缝回退魔法)
+    public func headphoneMotionManagerDidDisconnect(_ manager: CMHeadphoneMotionManager) {
+        PTNSLogConsole("📱 [传感器调度] AirPods 已断开/摘下。无缝回退至 iPhone 传感器！")
+        updateDataSourceState(to: .iphone) // 强制切回手机
+    }
+    
+    private func updateDataSourceState(to newSource: PTMotionDataSource) {
+        if currentData.currentDataSource != newSource {
+            currentData.currentDataSource = newSource
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegates.removeAll { $0.delegate == nil }
+                self.delegates.forEach { $0.delegate?.motionManager(self, didChangeDataSource: newSource) }
+            }
+        }
+    }
+    
+    // MARK: - 统一物理引擎计算 (无论手机还是耳机，都走这个算法)
+    private func processDeviceMotion(_ motion: CMDeviceMotion, source: PTMotionDataSource) {
+        let gx = motion.userAcceleration.x
+        let gy = motion.userAcceleration.y
+        let gz = motion.userAcceleration.z
+        
+        // 更新 G 值
+        currentData.gForceX = gx
+        currentData.gForceY = gy
+        currentData.gForceZ = gz
+        
+        // --- 🚨 摔车侦测算法 ---
+        let totalGForce = sqrt(gx * gx + gy * gy + gz * gz)
+        if totalGForce > crashGForceThreshold {
+            lastImpactTime = Date()
+        }
+        
+        let now = Date()
+        if let impactTime = lastImpactTime, now.timeIntervalSince(impactTime) < 10.0 {
+            if currentSpeedKmh < 2.0 {
+                currentData.isTipOverDetected = true
+            } else if currentSpeedKmh > 10.0 {
+                currentData.isTipOverDetected = false
+                lastImpactTime = nil
+            }
+        } else {
+            currentData.isTipOverDetected = false
+            lastImpactTime = nil
+        }
+        
+        // --- 🚨 倾角平滑与计算 ---
+        currentData.pitch = motion.attitude.pitch * 180.0 / .pi
+        currentData.yaw = motion.attitude.yaw * 180.0 / .pi
+        
+        let rawRollDegrees = (motion.attitude.roll - referenceRoll) * 180.0 / .pi
+        smoothedRoll = (rawRollDegrees * lowPassFactor) + (smoothedRoll * (1.0 - lowPassFactor))
+        let displayAngle = abs(smoothedRoll) < 1.5 ? 0.0 : smoothedRoll
+        currentData.roll = displayAngle
+        
+        if displayAngle < 0 {
+            let leftAngle = abs(displayAngle)
+            if leftAngle > currentData.maxLeftLean && leftAngle < 60.0 { currentData.maxLeftLean = leftAngle }
+        } else {
+            let rightAngle = displayAngle
+            if rightAngle > currentData.maxRightLean && rightAngle < 60.0 { currentData.maxRightLean = rightAngle }
+        }
+        
+        // --- 补充 AirPods 独占的极客数据 ---
+        currentData.rotX = motion.rotationRate.x
+        currentData.rotY = motion.rotationRate.y
+        currentData.rotZ = motion.rotationRate.z
+        currentData.gravX = motion.gravity.x
+        currentData.gravY = motion.gravity.y
+        currentData.gravZ = motion.gravity.z
+        currentData.quatX = motion.attitude.quaternion.x
+        currentData.quatY = motion.attitude.quaternion.y
+        currentData.quatZ = motion.attitude.quaternion.z
+        currentData.quatW = motion.attitude.quaternion.w
+        
+        // 如果是耳机，提取传感器位置
+        if source == .airpods {
+            // 注意：sensorLocation 仅在 CMHeadphoneMotionManager 返回的子类中有效
+            // 但苹果底层通常封装在 extension 中。为安全起见，这里忽略或通过特定强转获取。
+            // 简单处理：仅通过状态通知 UI 即可。
+        }
+        
+        triggerCallback()
+    }
+    
+    // MARK: - 辅助传感器 (计步与海拔，均来自 iPhone)
+    // (保留你原本完美的代码，只需将结果赋值给 currentData 并调用 triggerCallback)
     
     private func startPedometer(from date: Date) {
-        pedometer.startUpdates(from: date) { [weak self] pedometerData, error in
-            guard let self = self, let data = pedometerData, error == nil else { return }
-            
+        pedometer.startUpdates(from: date) { [weak self] data, error in
+            guard let self = self, let data = data, error == nil else { return }
             self.currentData.stepCount = data.numberOfSteps.intValue
             self.currentData.distance = data.distance?.doubleValue ?? 0.0
             self.currentData.currentPace = data.currentPace?.doubleValue ?? 0.0
-            self.currentData.currentCadence = data.currentCadence?.doubleValue ?? 0.0 // 新增步频
+            self.currentData.currentCadence = data.currentCadence?.doubleValue ?? 0.0
             self.currentData.floorsAscended = data.floorsAscended?.intValue ?? 0
             self.currentData.floorsDescended = data.floorsDescended?.intValue ?? 0
-            
             self.triggerCallback()
         }
     }
-
+    
     private func startActivityUpdates() {
         activityManager.startActivityUpdates(to: operationQueue) { [weak self] activity in
             guard let self = self, let activity = activity else { return }
-            
             self.currentData.confidence = self.confidenceString(from: activity.confidence)
             self.currentData.status = self.statusDescription(from: activity)
-            
             self.triggerCallback()
         }
     }
     
-    // 新增：侦测运动是否暂停或恢复
     private func startPedometerEventUpdates() {
         guard CMPedometer.isPedometerEventTrackingAvailable() else { return }
-        
         pedometer.startEventUpdates { [weak self] event, error in
             guard let self = self, let event = event, error == nil else { return }
-            
-            // 当用户停下脚步休息时，会收到 .pause；重新走动时会收到 .resume
-            DispatchQueue.main.async {
-                self.currentData.isWalkingPaused = (event.type == .pause)
-                self.triggerCallback()
-            }
+            self.currentData.isWalkingPaused = (event.type == .pause)
+            self.triggerCallback()
         }
     }
     
-    // MARK: - Data Dispatch
+    private func startAltimeterUpdates() {
+        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
+        altimeter.startRelativeAltitudeUpdates(to: operationQueue) { [weak self] data, error in
+            guard let self = self, let data = data, error == nil else { return }
+            let relativeAlt = data.relativeAltitude.doubleValue
+            self.currentData.relativeAltitude = relativeAlt
+            self.currentData.pressure = data.pressure.doubleValue
+            
+            let now = Date()
+            self.altitudeHistory.append((time: now, altitude: relativeAlt))
+            self.altitudeHistory = self.altitudeHistory.filter { now.timeIntervalSince($0.time) <= 30.0 }
+            
+            if let firstRecord = self.altitudeHistory.first {
+                let heightDifference = relativeAlt - firstRecord.altitude
+                let timeDifference = now.timeIntervalSince(firstRecord.time)
+                if timeDifference > 5.0 {
+                    if heightDifference > 15.0 {
+                        self.currentData.altitudeAlertMessage = "⛰️ 海拔急速爬升中，注意防风降温与胎压变化"
+                    } else if heightDifference < -15.0 {
+                        self.currentData.altitudeAlertMessage = "📉 正在急速下山，注意控制刹车热衰减"
+                    } else {
+                        self.currentData.altitudeAlertMessage = nil
+                    }
+                }
+            }
+            self.triggerCallback()
+        }
+    }
     
+    // MARK: - 数据分发
     private func triggerCallback() {
-        // 确保回调一定在主线程触发，方便外部直接更新 UI
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            NotificationCenter.default.post(name: PTMotionEngineDidUpdate, object: self.currentData)
+            self.delegates.removeAll { $0.delegate == nil }
+            self.delegates.forEach { $0.delegate?.motionManager(self, didUpdateData: self.currentData) }
         }
     }
-
-    // MARK: - Helpers
     
+    // MARK: - Helpers
     private func statusDescription(from activity: CMMotionActivity) -> String {
         var states: [String] = []
-
         if activity.stationary { states.append("Not Moving") }
         if activity.walking { states.append("Walking") }
         if activity.running { states.append("Running") }
         if activity.automotive { states.append("In a Vehicle") }
         if activity.cycling { states.append("Cycling") }
-
         if activity.unknown || states.isEmpty { states.append("Unknown") }
-
         return states.joined(separator: ", ")
     }
-
+    
     private func confidenceString(from confidence: CMMotionActivityConfidence) -> String {
         switch confidence {
         case .low: return "Low"
         case .medium: return "Medium"
         case .high: return "High"
         @unknown default: return "Unknown"
-        }
-    }
-        
-    // 🌟 新增：手动重置压弯极限数据
-    public func resetLeanAngles() {
-        currentData.maxLeftLean = 0.0
-        currentData.maxRightLean = 0.0
-        currentData.isTipOverDetected = false
-        triggerCallback()
-    }
-
-    // MARK: - 核心功能 1 & 2：压弯与摔车侦测
-    private func startBikeOrientationUpdates() {
-        guard motionManager.isDeviceMotionAvailable else { return }
-        
-        // 机车动态瞬息万变，采用 30Hz 高频采样
-        motionManager.deviceMotionUpdateInterval = 1.0 / 30.0
-        motionManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
-            guard let self = self, let motion = motion, error == nil else { return }
-            
-            let gx = motion.userAcceleration.x
-            let gy = motion.userAcceleration.y
-            let gz = motion.userAcceleration.z
-            
-            self.currentData.gForceX = gx
-            self.currentData.gForceY = gy
-            self.currentData.gForceZ = gz
-
-            let totalGForce = sqrt(gx * gx + gy * gy + gz * gz)
-            if totalGForce > self.crashGForceThreshold {
-                // 瞬间冲击力爆表！立刻在后台打下时间戳
-                self.lastImpactTime = Date()
-            }
-            let now = Date()
-            if let impactTime = self.lastImpactTime, now.timeIntervalSince(impactTime) < 10.0 {
-                // 状态：在过去 10 秒内刚刚发生过剧烈撞击！
-                
-                if self.currentSpeedKmh < 2.0 {
-                    // 致命条件达成：遭受了 > 3.0G 的撞击，并且现在车停了 (人爬不起来了)
-                    self.currentData.isTipOverDetected = true
-                } else if self.currentSpeedKmh > 10.0 {
-                    // 误报排除：撞击后车速依然很快 (> 10km/h)，说明只是飞了个大坡落地，或者是烂路颠簸
-                    self.currentData.isTipOverDetected = false
-                    // 既然确认没摔，提前清空撞击记录，结束观察期
-                    self.lastImpactTime = nil
-                }
-                
-            } else {
-                // 状态：超过 10 秒都没有速度归零，或者压根没发生过剧烈撞击，警报解除
-                self.currentData.isTipOverDetected = false
-                self.lastImpactTime = nil
-            }
-            
-            self.currentData.pitch = motion.attitude.pitch * 180 / .pi
-            // 1. 计算当前倾角 (将弧度转换为角度)
-            let rawRoll = motion.attitude.roll - self.referenceRoll
-            let rawRollDegrees = rawRoll * 180.0 / .pi
-            
-            // 🚨 升级 2：低通滤波平滑处理，消除引擎高频震动带来的杂波
-            self.smoothedRoll = (rawRollDegrees * self.lowPassFactor) + (self.smoothedRoll * (1.0 - self.lowPassFactor))
-            
-            // 🚨 升级 3：消除 1.5 度以内的微小传感器噪点漂移，让直线行驶时稳稳保持在 0°
-            let displayAngle = abs(self.smoothedRoll) < 1.5 ? 0.0 : self.smoothedRoll
-            
-            self.currentData.roll = displayAngle
-
-            // 2. 统计左右极限压弯角度 (剔除超过60度的异常摔车角度)
-            if displayAngle < 0 {
-                // 左压弯 (roll 为负数)
-                let leftAngle = abs(displayAngle)
-                if leftAngle > self.currentData.maxLeftLean && leftAngle < 60.0 {
-                    self.currentData.maxLeftLean = leftAngle
-                }
-            } else {
-                // 右压弯 (roll 为正数)
-                let rightAngle = displayAngle
-                if rightAngle > self.currentData.maxRightLean && rightAngle < 60.0 {
-                    self.currentData.maxRightLean = rightAngle
-                }
-            }
-
-            self.triggerCallback()
-        }
-    }
-
-    // MARK: - 核心功能 3：气压与海拔突变预警
-    private func startAltimeterUpdates() {
-        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
-        
-        altimeter.startRelativeAltitudeUpdates(to: operationQueue) { [weak self] altitudeData, error in
-            guard let self = self, let data = altitudeData, error == nil else { return }
-            
-            let relativeAlt = data.relativeAltitude.doubleValue
-            self.currentData.relativeAltitude = relativeAlt
-            self.currentData.pressure = data.pressure.doubleValue
-            
-            // 🌟 爬升率计算算法：
-            let now = Date()
-            self.altitudeHistory.append((time: now, altitude: relativeAlt))
-            
-            // 清理掉超过 30 秒前的历史数据，保持队列轻量
-            self.altitudeHistory = self.altitudeHistory.filter { now.timeIntervalSince($0.time) <= 30.0 }
-            
-            if let firstRecord = self.altitudeHistory.first {
-                let heightDifference = relativeAlt - firstRecord.altitude
-                let timeDifference = now.timeIntervalSince(firstRecord.time)
-                
-                if timeDifference > 5.0 { // 至少积累了 5 秒的数据才开始评估
-                    // 如果 30 秒内爬升超过 15 米（换算算成车速相当于在极陡的盘山公路上狂飙爬升）
-                    if heightDifference > 15.0 {
-                        self.currentData.altitudeAlertMessage = "⛰️ 海拔急速爬升中，注意防风降温与胎压变化"
-                    } else if heightDifference < -15.0 {
-                        self.currentData.altitudeAlertMessage = "📉 正在急速下山，注意控制刹车热衰减"
-                    } else {
-                        self.currentData.altitudeAlertMessage = nil // 恢复正常
-                    }
-                }
-            }
-            
-            self.triggerCallback()
         }
     }
 }
