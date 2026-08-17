@@ -113,16 +113,13 @@ open class PTNavigationBarContainer: UIView {
         largeTitleContainer.addSubview(largeTitleLabel)
         topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            var offsetHeight:CGFloat = 0
             if let findCurrent = PTUtils.getCurrentVC(),let sheet = findCurrent.sheetViewController {
-                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() * 2 : sheet.options.pullBarHeight
+                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() : sheet.options.pullBarHeight
                 make.top.equalToSuperview().offset(-offset)
-                offsetHeight = offset
             } else {
                 make.top.equalToSuperview()
-                offsetHeight = CGFloat.statusBarHeight()
             }
-            make.height.equalTo(offsetHeight + CGFloat.kNavBarHeight)
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         largeTitleContainer.snp.makeConstraints { make in
@@ -200,22 +197,22 @@ extension PTNavigationBarContainer {
             return
         }
         
-        // ===== 2. 正常收缩 =====
+        // ===== 正常收缩 =====
         let height = maxHeight * (1 - p)
         
         largeTitleContainer.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
         
-        // ===== 3. alpha 渐变 =====
+        // ===== alpha 渐变 =====
         largeTitleLabel.alpha = 1 - p
         titleContainer.alpha = p
         
-        // ===== 4. scale（系统 subtle 动画）=====
+        // ===== scale（系统 subtle 动画）=====
         let scale = 1 - 0.05 * p
         largeTitleLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
         
-        // ===== 5. 字重动态变化（🔥重点）=====
+        // ===== 字重动态变化（🔥重点）=====
         let baseFont = PTAppBaseConfig.share.navLargeTitleFont
         let fontSize = baseFont.pointSize
         
@@ -303,16 +300,12 @@ public final class PTNavigationBarManager:NSObject {
         let navBar = nav.navigationBar
         resetSystemNavBarAppearance(nav)
         
-        // 🌟 核心修复 1：Present 瞬间 view 还没上树，window 为 nil
-        // 绝对不能用 nav.view.window，直接使用你已有的全局方法来获取状态栏高度！
-        let statusBarHeight = CGFloat.statusBarHeight()
-        
-        let totalHeight = navBar.bounds.height + statusBarHeight
+        let totalHeight = navBar.bounds.height
         
         // 往上扩展，打好地基
         let container = PTNavigationBarContainer(
             frame: CGRect(x: 0,
-                          y: -statusBarHeight,
+                          y: 0,
                           width: navBar.bounds.width,
                           height: totalHeight)
         )
@@ -433,7 +426,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         currentVC = viewController
         resetSystemNavBarAppearance(navigationController)
         
-        // 1. 安全准备默认返回按钮数据（来自我们上一步的优化）
+        // 安全准备默认返回按钮数据（来自我们上一步的优化）
         if let baseVC = viewController as? PTBaseViewController {
             baseVC.prepareDefaultNavigationBarItem()
         }
@@ -462,7 +455,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         container.prepareTransition(from: fromStyle, to: toStyle)
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
 
-        // 🌟 核心修复 2：判断这是否是导航栈的“根视图”（代表是新 Present 出来的）
+        // 🌟 判断这是否是导航栈的“根视图”（代表是新 Present 出来的）
         let isRoot = navigationController.viewControllers.first == viewController
 
         if isRoot {
@@ -538,7 +531,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         viewController.navigationItem.titleView = nil
     }
     
-    // 🌟 3. 新增的辅助方法：提取转场完成后的状态重置逻辑，保持代码清晰
+    // 🌟 新增的辅助方法：提取转场完成后的状态重置逻辑，保持代码清晰
     private func finishTransition(context: UIViewControllerTransitionCoordinatorContext,
                                   container: PTNavigationBarContainer,
                                   fromStyle: PTNavigationBarStyle,
@@ -605,7 +598,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             container.titleContainer.alpha = 0
 
         } else {
-            // ❗关键：彻底关闭 largeTitle            
+            // ❗关键：彻底关闭 largeTitle
             container.largeTitleContainer.isHidden = true
             
             container.largeTitleContainer.snp.updateConstraints { make in
@@ -639,7 +632,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         apply(style: item.barColorStyle, in: nav)
         apply(item: item)
         
-        // 3. 🔥 关键：同步更新状态栏单例并通知系统刷新
+        // 🔥 关键：同步更新状态栏单例并通知系统刷新
         StatusBarManager.shared.update(with: item.barColorStyle)
         realVC.setNeedsStatusBarAppearanceUpdate()
         nav.setNeedsStatusBarAppearanceUpdate()
@@ -698,7 +691,7 @@ extension PTNavigationBarManager {
             container.leftContainerWidth = 0 // 👈 记录宽度为 0
             container.leftContainer.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+                make.top.equalToSuperview()
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -719,7 +712,7 @@ extension PTNavigationBarManager {
         
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -737,7 +730,7 @@ extension PTNavigationBarManager {
             container.rightContainerWidth = 0 // 👈 记录宽度为 0
             container.rightContainer.snp.remakeConstraints { make in
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+                make.top.equalToSuperview()
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -758,7 +751,7 @@ extension PTNavigationBarManager {
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -770,7 +763,7 @@ extension PTNavigationBarManager {
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
         container.titleContainer.isHidden = true
         guard let view else { return }
-        // 🛠️ 终极防遮挡核心 1：物理裁剪，不允许超长文字渲染到容器外部
+        // 🛠️ 终极防遮挡核心 物理裁剪，不允许超长文字渲染到容器外部
         container.titleContainer.clipsToBounds = true
         container.titleContainer.isHidden = false
         container.titleContainer.addSubview(view)
@@ -789,7 +782,7 @@ extension PTNavigationBarManager {
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
             // 注意：这里保留了你代码里的 self.navOffset()
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview()
             // ✅ 根据模式应用不同的约束策略
             if fillSpace {
                 // 🔥 填满模式：直接等于左右物理边界，强制拉伸（非常适合搜索框等自定义 View）
@@ -919,11 +912,19 @@ open class PTBaseViewController: UIViewController {
         if #available(iOS 18.0, *) {
             /*
             该方式在以下方法中自动生效。
-
             UIView：draw()、layoutSubviews()、updateConstraints()。
             UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
              */
             baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
+        }
+    }
+    
+    open override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: findCurrent)
+        } else {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: self)
         }
     }
     
