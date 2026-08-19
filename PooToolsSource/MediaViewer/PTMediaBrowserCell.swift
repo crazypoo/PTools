@@ -22,6 +22,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
     private var loadIdentifier = UUID()
+    private var loadTask: Task<Void, Never>?
 
     var viewerDismissBlock:PTActionTask?
     var zoomTask:PTBoolTask?
@@ -254,6 +255,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         super.prepareForReuse()
 
         // MARK: - 2. 彻底清理状态，取消正在进行的任务防止卡顿和错乱
+        loadTask?.cancel()
+        loadTask = nil
         loadIdentifier = UUID()
         imageView.kf.cancelDownloadTask() // 假设底层下载使用了 Kingfisher，取消未完成的网络请求
         livePhoto.stopPlayback() // 滑出屏幕时停止 LivePhoto 播放
@@ -284,6 +287,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func adjustFrame(normal:Bool = true,fixed:PTActionTask? = nil) {
         guard let image = gifImage else {
+            imageView.frame = bounds
+            livePhoto.frame = bounds
+            contentScrolView.contentSize = bounds.size
+            return
+        }
+        guard image.size.width > 0, image.size.height > 0 else {
             imageView.frame = bounds
             livePhoto.frame = bounds
             contentScrolView.contentSize = bounds.size
@@ -324,41 +333,47 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func cellLoadData() {
-        Task { @MainActor in
-            let currentID = UUID()
-            self.loadIdentifier = currentID
+        loadTask?.cancel()
+        let currentID = UUID()
+        loadIdentifier = currentID
+        loadTask = Task { @MainActor [weak self] in
+            guard let self, let dataModel = self.dataModel else { return }
             self.showLoading()
             
-            switch self.dataModel.imageURL {
+            switch dataModel.imageURL {
             case let urlString as String:
                 self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "",currentID: currentID)
             case let url as URL:
                 self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "",currentID: currentID)
             case let avItem as AVPlayerItem:
                 self.videoOriginalItem = avItem
-                self.videoAVItem(avItem: avItem)
+                self.videoAVItem(avItem: avItem, currentID: currentID)
             case let avAsset as AVAsset:
                 let avPlayerItem = AVPlayerItem(asset: avAsset)
                 self.videoOriginalItem = avPlayerItem
-                self.videoAVItem(avItem: avPlayerItem)
+                self.videoAVItem(avItem: avPlayerItem, currentID: currentID)
             case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
-                let result = try await PTLivePhoto.extractResources(from: livePhotoTarget)
-                if FileManager.pt.judgeFileOrFolderExists(filePath: result.pairedImage.path) {
-                    guard let keyPhotoImage = UIImage(contentsOfFile: result.pairedImage.path) else {
-                        return
+                do {
+                    let result = try await PTLivePhoto.extractResources(from: livePhotoTarget)
+                    guard !Task.isCancelled, self.loadIdentifier == currentID else { return }
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: result.pairedImage.path) {
+                        self.gifImage = UIImage(contentsOfFile: result.pairedImage.path)
                     }
-                    self.gifImage = keyPhotoImage
-                }
-                self.livePhoto.livePhoto = livePhotoTarget
-                self.adjustFrame(normal: false) {
-                    PTGCDManager.shared.runOnMain {
+                    self.livePhoto.livePhoto = livePhotoTarget
+                    self.adjustFrame(normal: false) {
                         self.livePhoto.startPlayback(with: .hint)
                     }
+                    self.livePhoto.isHidden = false
+                    self.hideLoading()
+                } catch {
+                    guard !Task.isCancelled, self.loadIdentifier == currentID else { return }
+                    self.currentCellType = .None
+                    self.hideLoading()
+                    self.createReloadButton()
                 }
-                self.livePhoto.isHidden = false
             default:
-                self.baseLoadImageData(imageData: self.dataModel.imageURL as Any, currentID: currentID)
+                self.baseLoadImageData(imageData: dataModel.imageURL as Any, currentID: currentID)
             }
         }
     }
@@ -442,15 +457,11 @@ extension PTMediaBrowserCell {
 
     private func baseLoadImageData(imageData:Any, currentID: UUID) {
         imageView.loadImage(contentData: imageData, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
-            Task { @MainActor in
-                let progress = CGFloat(receivedSize / totalSize)
-                self.loading.progress = progress
-            }
+            guard totalSize > 0 else { return }
+            self.loading.progress = CGFloat(receivedSize) / CGFloat(totalSize)
         } loadFinish: { value in
-            Task { @MainActor in
-                guard self.loadIdentifier == currentID else { return }
-                self.handleImageLoadFinish(result:value)
-            }
+            guard self.loadIdentifier == currentID else { return }
+            self.handleImageLoadFinish(result: value)
         }
     }
 
@@ -492,7 +503,6 @@ extension PTMediaBrowserCell {
     func handleVideoLoading(videoUrl: String, currentID: UUID) {
         if let url = URL(string: videoUrl) {
             PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { item in
-                Task { @MainActor in
                     guard self.loadIdentifier == currentID else { return }
                     if let findImage = item.coverImage {
                         self.hideLoading()
@@ -500,21 +510,9 @@ extension PTMediaBrowserCell {
                     } else {
                         self.handleVideoLoadError()
                     }
-                }
             } videoReady: { item in
-                Task { @MainActor in
                     guard self.loadIdentifier == currentID else { return }
                     self.videoCacheURL = item.localVideoURL
-                    
-                    if let _ = self.videoCacheURL {
-                    } else {
-                        PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
-                            Task { @MainActor in
-                                self.videoCacheURL = localURL
-                            }
-                        }
-                    }
-                }
             }
         } else {
             self.handleVideoLoadError()
@@ -579,7 +577,6 @@ extension PTMediaBrowserCell {
         } coverReady: { item in
             
         } videoReady: { item in
-            Task { @MainActor in
                 self.hideLoading()
                 self.videoCacheURL = item.localVideoURL
                 if let findLocal = item.localVideoURL {
@@ -588,7 +585,6 @@ extension PTMediaBrowserCell {
                 } else {
                     PTNSLogConsole("Video url error")
                 }
-            }
         }
     }
     
@@ -601,12 +597,13 @@ extension PTMediaBrowserCell {
         createReloadButton()
     }
     
-    private func videoAVItem(avItem:AVPlayerItem) {
+    private func videoAVItem(avItem: AVPlayerItem, currentID: UUID) {
         reloadButton.isHidden = true
         imageView.image = UIImage()
         gifImage = nil
         avItem.generateThumbnail { image in
             Task { @MainActor in
+                guard self.loadIdentifier == currentID else { return }
                 if image != nil {
                     self.currentCellType = .Video
                     self.hideLoading()

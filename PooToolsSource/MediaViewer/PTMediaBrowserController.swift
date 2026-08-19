@@ -339,6 +339,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 
         // MARK: -  取消不必要的硬编码延时，提早设置初始状态
         currentIndex = min(defaultIndex, max(0, mediaData.count - 1))
+        defaultIndex = currentIndex
         if !mediaData.isEmpty {
             updateBottom(models: mediaData[currentIndex])
         }
@@ -351,7 +352,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             if self.mediaData.count > 1 {
                 self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
                 if self.viewConfig.pageControlShow {
-                    self.setPageControlValue(0)
+                    let initialIndex = min(self.defaultIndex, max(0, self.mediaData.count - 1))
+                    self.setPageControlValue(initialIndex)
                 }
             } else {
                 self.bottomControl.pageControlView.isHidden = true
@@ -445,6 +447,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     public func reloadConfig(mediaData:[PTMediaBrowserModel]) {
         self.mediaData = mediaData
+        self.defaultIndex = min(self.defaultIndex, max(0, mediaData.count - 1))
         if viewConfig.dynamicBackground {
             view.backgroundColor = viewConfig.viewerContentBackgroundColor
         } else {
@@ -598,7 +601,7 @@ fileprivate extension PTMediaBrowserController {
         let url = NSURL.fileURL(withPath: videoPath)
         let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible {
-            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
+            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(videoPath:didFinishSavingWithError:contextInfo:)), nil)
         } else {
             if let urlReal = URL(string: videoOrURL) {
                 PTVideoFileCache.shared.prepareVideo(url: urlReal,completion: { _ in })
@@ -751,11 +754,8 @@ fileprivate extension PTMediaBrowserController {
     func labelContentWidth() -> CGFloat {
         var labelW:CGFloat = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
 
-        switch viewConfig.actionType {
-        case .Empty:break
-        default:
-            labelW -= (ContentMoreSpacing - BottomMoreHeight)
-        }
+        guard viewConfig.actionType != .Empty else { return labelW }
+        labelW -= ContentMoreSpacing + BottomMoreHeight
         return labelW
     }
     
