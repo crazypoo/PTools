@@ -12,7 +12,8 @@ import CryptoKit
 
 /// 统一的视频缓存数据对象
 /// 符合 Sendable 协议，确保可在多线程间安全传递
-public struct PTVideoCacheItem: Sendable {
+@MainActor
+public struct PTVideoCacheItem {
     /// 原始的远程视频 URL
     public let originalURLString: String
     
@@ -145,7 +146,7 @@ public final class PTVideoFileCache: Sendable {
     /// 核心：获取可用的视频文件（本地已有则直接返回，没有则调用网络库下载）
     public func prepareVideo(url: URL,
                              progress: FileDownloadProgress? = nil,
-                             completion: @escaping @Sendable (URL?) -> Void) { // 🌟 Swift 6: 异步回调标记 @Sendable
+                             completion: @escaping @MainActor @Sendable (URL?) -> Void) {
         Task { @MainActor in
             // 本地文件直接返回
             if let cached = cachedFileURL(for: url) {
@@ -159,6 +160,11 @@ public final class PTVideoFileCache: Sendable {
 
             // 假定 Network.share.download 的成功和失败回调在 Swift 6 环境下也支持并发安全
             Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
+                let size = (try? FileManager.default.attributesOfItem(atPath: localURL.path))?[.size] as? NSNumber
+                guard size?.int64Value ?? 0 > 0 else {
+                    completion(nil)
+                    return
+                }
                 completion(localURL)
             } fail: { _ in
                 completion(nil)
@@ -197,7 +203,7 @@ public enum PTVideoCoverCache {
     /// 获取视频第一帧图片（支持内存、磁盘缓存及异步生成）
     @MainActor public static func getVideoFirstImage(videoUrl: String,
                                           maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                                          closure: @escaping @Sendable (UIImage?) -> Void) { // 🌟 Swift 6: 标记 @Sendable
+                                          closure: @escaping @MainActor (UIImage?) -> Void) {
         let cacheKey = cacheKeyForVideo(videoUrl)
 
         // 1️⃣ 内存缓存（直接返回）
@@ -239,9 +245,9 @@ public enum PTVideoCoverCache {
     }
     
     /// 异步生成视频首帧
-    static func generateFirstFrame(videoUrl: String,
+    @MainActor static func generateFirstFrame(videoUrl: String,
                                    maximumSize: CGSize,
-                                   completion: @escaping @Sendable (UIImage?) -> Void) { // 🌟 Swift 6: 标记 @Sendable
+                                   completion: @escaping @MainActor (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
             completion(nil)
             return

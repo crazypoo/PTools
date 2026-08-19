@@ -8,6 +8,16 @@
 
 import Foundation
 
+/// Transfers ownership of a legacy Objective-C service through the actor registry.
+/// Consumers must access `instance` on the main actor; the wrapped object is not thread-safe.
+public final class PTLegacyRouterServiceBox: @unchecked Sendable {
+    @MainActor public let instance: NSObject
+
+    @MainActor public init(instance: NSObject) {
+        self.instance = instance
+    }
+}
+
 public typealias PTServiceCreator = @Sendable () -> any Sendable
 // 1. 服务生命周期定义
 public enum PTServiceScope {
@@ -68,6 +78,10 @@ public extension PTRouterServiceManager {
     func registerService(named: String, instance: Sendable) {
         // 直接传实例的话，强制当做 singleton 存入缓存
         self.servicesCache[named] = instance
+    }
+
+    func registerLegacyService(named: String, box: PTLegacyRouterServiceBox) {
+        servicesCache[named] = box
     }
     
     func registerService(named: String, scope: PTServiceScope = .singleton, lazyCreator: @escaping @autoclosure PTServiceCreator) {

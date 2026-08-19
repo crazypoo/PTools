@@ -594,12 +594,10 @@ public class PTCollectionView: UIView {
     }
     
     @objc private func didReceiveMemoryWarning() {
-        Task { @MainActor in
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            self.waterfallCache.removeAll()
-            self.fallbackLayouts.removeAll()
-        }
+        layoutCache.removeAll()
+        heightCache.removeAll()
+        waterfallCache.removeAll()
+        fallbackLayouts.removeAll()
     }
     
     ///展示界面

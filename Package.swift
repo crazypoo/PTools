@@ -241,7 +241,9 @@ let package = Package(
                 .define("POOTOOLS_SECURITYSUITE"),
                 .define("POOTOOLS_VIDEOCACHE"),
                 .define("POOTOOLS_POPOVERKIT"),
-                .define("POOTOOLS_CGDWEBSERVER")
+                .define("POOTOOLS_CGDWEBSERVER"),
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
 

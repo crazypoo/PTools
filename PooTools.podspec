@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 #    s.requires_arc = true
 #    s.static_framework = true
     s.ios.deployment_target = '17.0'
-    s.swift_versions = '5.0'
+    s.swift_versions = ['6.0']
     s.xcconfig = {"ENABLE_BITCODE" => "NO"}
     s.pod_target_xcconfig = {
       'OTHER_SWIFT_FLAGS[config=Debug]' => '-D DEBUG'

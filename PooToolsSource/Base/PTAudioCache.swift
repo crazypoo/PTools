@@ -15,22 +15,16 @@ public final class PTAudioCacheFileManager {
 
     public static let shared = PTAudioCacheFileManager()
 
-    private let directoryName = "PTAudio"
+    private let cacheDirectory: URL
 
-    private init() {}
-
-    // Cache 目录
-    private var cacheDirectory: URL {
-        let base = FileManager.default.urls(for: .cachesDirectory,in: .userDomainMask).first!
-        let dir = base.appendingPathComponent(directoryName)
-        if !FileManager.default.fileExists(atPath: dir.path) {
-            try? FileManager.default.createDirectory(
-                at: dir,
-                withIntermediateDirectories: true
-            )
-        }
-        return dir
+    private init() {
+        let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let directory = base.appendingPathComponent("PTAudio", isDirectory: true)
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        cacheDirectory = directory
     }
+
 
     // 同一个 URL → 同一个文件
     public func cacheFileURL(for url: URL) -> URL {
@@ -45,7 +39,7 @@ public final class PTAudioCacheFileManager {
     }
 
     /// 核心方法：拿到“可用的本地音频文件”
-    public func prepareLocalFile(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (URL?) -> Void) {
+    public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) {
         // 本地文件直接返回
         if url.isFileURL {
             completion(url)
@@ -55,31 +49,36 @@ public final class PTAudioCacheFileManager {
         let localURL = cacheFileURL(for: url)
 
         let finalM4AURL = localURL.deletingPathExtension().appendingPathExtension("m4a")
-        if FileManager.default.fileExists(atPath: finalM4AURL.path) {
+        if let attributes = try? FileManager.default.attributesOfItem(atPath: finalM4AURL.path),
+           let size = attributes[.size] as? NSNumber,
+           size.int64Value > 0 {
             completion(finalM4AURL)
             return
         }
 
         let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
         
-        Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress:progress, success: { data in
-            DispatchQueue.main.async {
-                // 需要转码
-                if PTAudioTranscoder.needTranscode(localURL) {
-                    Task {
-                        let resultURL = await PTAudioTranscoder.transcodeToM4A(from: localURL, to: finalM4AURL)
-                        try? FileManager.default.removeItem(at: localURL)
-                        completion(resultURL)
-                    }
-                } else {
-                    completion(localURL)
-                }
-            }}, fail: { error in
-                DispatchQueue.main.async {
-                    completion(nil)
-                }
+        Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
+            let fileSize = (try? FileManager.default.attributesOfItem(atPath: localURL.path))?[.size] as? NSNumber
+            guard fileSize?.int64Value ?? 0 > 0 else {
+                completion(nil)
+                return
             }
-        )
+
+            guard PTAudioTranscoder.needTranscode(localURL) else {
+                completion(localURL)
+                return
+            }
+
+            Task { @MainActor in
+                try? FileManager.default.removeItem(at: finalM4AURL)
+                let resultURL = await PTAudioTranscoder.transcodeToM4A(from: localURL, to: finalM4AURL)
+                try? FileManager.default.removeItem(at: localURL)
+                completion(resultURL)
+            }
+        } fail: { _ in
+            completion(nil)
+        }
     }
 }
 
@@ -171,6 +170,7 @@ public enum PTAudioTranscoder {
             return nil
         }
 
+        try? FileManager.default.removeItem(at: targetURL)
         exporter.outputURL = targetURL
         exporter.outputFileType = .m4a
         exporter.shouldOptimizeForNetworkUse = true
@@ -180,7 +180,10 @@ public enum PTAudioTranscoder {
         await exporter.export()
 
         // 导出结束后，直接在当前上下文中读取 status
-        if exporter.status == .completed {
+        if exporter.status == .completed,
+           let attributes = try? FileManager.default.attributesOfItem(atPath: targetURL.path),
+           let size = attributes[.size] as? NSNumber,
+           size.int64Value > 0 {
             return targetURL
         } else {
             // 可选调试：如果出错，可以在这里打印 exporter.error 了解具体原因

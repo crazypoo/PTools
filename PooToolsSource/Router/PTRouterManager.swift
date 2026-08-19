@@ -117,6 +117,8 @@ extension PTRouterManager {
     
     class func runtimeRouterList(_ excludeCocoapods: Bool = false) {
         
+        apiArray.removeAll(keepingCapacity: true)
+        classMapArray.removeAll(keepingCapacity: true)
         let bundles = CFBundleGetAllBundles() as? [CFBundle]
         for bundle in bundles ?? [] {
             let identifier = CFBundleGetIdentifier(bundle);
@@ -232,9 +234,11 @@ extension PTRouterManager {
             guard let execURL = CFBundleCopyExecutableURL(bundle) as NSURL? else { continue }
             let imageURL = execURL.fileSystemRepresentation
             let classCount = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+            defer { classCount.deallocate() }
             guard let classNames = objc_copyClassNamesForImage(imageURL, classCount) else {
                 continue
             }
+            defer { free(classNames) }
             
             
             for idx in 0..<classCount.pointee {
@@ -303,6 +307,7 @@ extension PTRouterManager {
 
     
     // MARK: - 自动注册服务
+    @MainActor
     public class func registerServices(excludeCocoapods: Bool = false) {
         
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
@@ -325,9 +330,11 @@ extension PTRouterManager {
             guard let execURL = CFBundleCopyExecutableURL(bundle) as NSURL? else { continue }
             let imageURL = execURL.fileSystemRepresentation
             let classCount = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+            defer { classCount.deallocate() }
             guard let classNames = objc_copyClassNamesForImage(imageURL, classCount) else {
                 continue
             }
+            defer { free(classNames) }
             
             for idx in 0..<classCount.pointee {
                 let currentClassName = String(cString: classNames[Int(idx)])
@@ -337,11 +344,12 @@ extension PTRouterManager {
                 if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
                    class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil,
                    let cls = currentClass as? PTRouterServiceProtocol.Type {
-                    let serviceName = cls.seriverName
+                   let serviceName = cls.seriverName
                     guard let nsClass = cls as? NSObject.Type else { return }
                     let serviceInstance = nsClass.init()
+                    let box = PTLegacyRouterServiceBox(instance: serviceInstance)
                     Task {
-                        await PTRouterServiceManager.shared.registerService(named: serviceName, lazyCreator: serviceInstance)
+                        await PTRouterServiceManager.shared.registerLegacyService(named: serviceName, box: box)
                     }
                 }
             }

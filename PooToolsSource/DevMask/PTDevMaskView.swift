@@ -71,11 +71,13 @@ public class PTDevMaskView: PTBaseMaskView {
         view.onTintColor = .randomColor
         view.isOn = false
         view.valueChangeCallBack = { value in
-            self.focusBool = value
-            if value {
-                self.eyeTrackingFunction.hideCursorView()
-            } else {
-                self.eyeTrackingFunction.showCursorView()
+            PTGCDManager.shared.runOnMain {
+                self.focusBool = value
+                if value {
+                    self.eyeTrackingFunction.hideCursorView()
+                } else {
+                    self.eyeTrackingFunction.showCursorView()
+                }
             }
         }
         return view
