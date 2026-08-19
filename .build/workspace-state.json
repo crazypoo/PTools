@@ -92,23 +92,6 @@
       {
         "basedOn" : null,
         "packageRef" : {
-          "identity" : "brpickerview",
-          "kind" : "remoteSourceControl",
-          "location" : "https://github.com/borenfocus/BRPickerView.git",
-          "name" : "BRPickerView"
-        },
-        "state" : {
-          "checkoutState" : {
-            "revision" : "c9e0e9813c1885467f353911cf58d92f5c989d1a",
-            "version" : "2.9.9"
-          },
-          "name" : "sourceControlCheckout"
-        },
-        "subpath" : "BRPickerView"
-      },
-      {
-        "basedOn" : null,
-        "packageRef" : {
           "identity" : "cocoalumberjack",
           "kind" : "remoteSourceControl",
           "location" : "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
@@ -269,8 +252,8 @@
         },
         "state" : {
           "checkoutState" : {
-            "revision" : "3989683f60dfc33df6063f9a8d0fabb50a910e9d",
-            "version" : "7.2.0"
+            "revision" : "0972dd6eded87c930fb6ad36b3c5ecd620f06894",
+            "version" : "8.0.3"
           },
           "name" : "sourceControlCheckout"
         },
@@ -296,6 +279,57 @@
       {
         "basedOn" : null,
         "packageRef" : {
+          "identity" : "iqkeyboardreturnmanager",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/hackiftekhar/IQKeyboardReturnManager.git",
+          "name" : "IQKeyboardReturnManager"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "495f694a6e62e431d776b4926a18fc26c62db317",
+            "version" : "1.0.6"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "IQKeyboardReturnManager"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "iqkeyboardtoolbar",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/hackiftekhar/IQKeyboardToolbar.git",
+          "name" : "IQKeyboardToolbar"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "81f444408e5ab5d9293c427f96f399ed444f1e95",
+            "version" : "1.1.4"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "IQKeyboardToolbar"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "iqkeyboardtoolbarmanager",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/hackiftekhar/IQKeyboardToolbarManager.git",
+          "name" : "IQKeyboardToolbarManager"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "9907fa3ef1f1aec26cb11ea752c96ef62359e251",
+            "version" : "1.1.5"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "IQKeyboardToolbarManager"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
           "identity" : "iqtextinputviewnotification",
           "kind" : "remoteSourceControl",
           "location" : "https://github.com/hackiftekhar/IQTextInputViewNotification.git",
@@ -309,6 +343,23 @@
           "name" : "sourceControlCheckout"
         },
         "subpath" : "IQTextInputViewNotification"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "iqtextview",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/hackiftekhar/IQTextView.git",
+          "name" : "IQTextView"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "76f514eba5218bdf67659168ba227c77da5f75fe",
+            "version" : "1.0.5"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "IQTextView"
       },
       {
         "basedOn" : null,
@@ -466,23 +517,6 @@
       {
         "basedOn" : null,
         "packageRef" : {
-          "identity" : "mjrefresh",
-          "kind" : "remoteSourceControl",
-          "location" : "https://github.com/CoderMJLee/MJRefresh.git",
-          "name" : "MJRefresh"
-        },
-        "state" : {
-          "checkoutState" : {
-            "revision" : "535d39c86e592d73f8b8e75f9bf1eda62ca4a4ce",
-            "version" : "3.7.9"
-          },
-          "name" : "sourceControlCheckout"
-        },
-        "subpath" : "MJRefresh"
-      },
-      {
-        "basedOn" : null,
-        "packageRef" : {
           "identity" : "notificationbanner",
           "kind" : "remoteSourceControl",
           "location" : "https://github.com/Daltron/NotificationBanner.git",
@@ -490,8 +524,8 @@
         },
         "state" : {
           "checkoutState" : {
-            "revision" : "1406ac60bcab58074fc969e9b4cb804679832c8e",
-            "version" : "3.2.1"
+            "revision" : "a9ec5cd29b4669f5fdf3dcd494a08cea4776913c",
+            "version" : "3.2.0"
           },
           "name" : "sourceControlCheckout"
         },
@@ -626,8 +660,8 @@
         },
         "state" : {
           "checkoutState" : {
-            "revision" : "2cf7ef3eeb0df84318c75662c257651285f8289f",
-            "version" : "4.0.2"
+            "revision" : "08e02ff214c41df49bdd189ff837d68ba11c437b",
+            "version" : "4.0.0"
           },
           "name" : "sourceControlCheckout"
         },
@@ -700,23 +734,6 @@
           "name" : "sourceControlCheckout"
         },
         "subpath" : "SwifterSwift"
-      },
-      {
-        "basedOn" : null,
-        "packageRef" : {
-          "identity" : "visionfaceaware",
-          "kind" : "remoteSourceControl",
-          "location" : "https://github.com/gentique/VisionFaceAware.git",
-          "name" : "VisionFaceAware"
-        },
-        "state" : {
-          "checkoutState" : {
-            "revision" : "7c7026e89d553b519f2b0fd8bd2b3ba9fcd5120a",
-            "version" : "1.0.0"
-          },
-          "name" : "sourceControlCheckout"
-        },
-        "subpath" : "VisionFaceAware"
       },
       {
         "basedOn" : null,

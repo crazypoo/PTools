@@ -65,19 +65,17 @@ extension PTRouterManager {
                                         _ urlPath: String,
                                         _ userInfo: [String: Sendable],
                                         forceCheckEnable: Bool = false) async -> (any Sendable)? {
-        Task {
-            do {
-                let beginRegisterTime = CFAbsoluteTimeGetCurrent()
-                if registerRouterList.isEmpty {
-                    registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
-                }
-                for item in registerRouterList {
-                    var priority: UInt32 = 0
-                    if let number = UInt32(item[PTRouterPriority] ?? "0") {
-                        priority = number
-                    }
-                    PTRouter.addRouterItem(patternString: item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
-                }
+        let beginRegisterTime = CFAbsoluteTimeGetCurrent()
+        if registerRouterList.isEmpty {
+            registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
+        }
+        for item in registerRouterList {
+            var priority: UInt32 = 0
+            if let number = UInt32(item[PTRouterPriority] ?? "0") {
+                priority = number
+            }
+            PTRouter.addRouterItem(patternString: item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
+        }
                 let endRegisterTime = CFAbsoluteTimeGetCurrent()
                 PTRouter.routerLoadStatus(true)
                 if PTRouterManager.shareInstance.useCache {
@@ -90,13 +88,12 @@ extension PTRouterManager {
                     routerForceRecheck(excludeCocoapods)
         #endif
                 }
-                let anys = try await PTRouter.openURL(urlPath, userInfo: userInfo)
-                return anys
-            } catch {
-                PTNSLogConsole("\(error)")
-                return nil
-            }
-        }
+                do {
+                    return try await PTRouter.openURL(urlPath, userInfo: userInfo)
+                } catch {
+                    PTNSLogConsole("\(error)")
+                    return nil
+                }
     }
     
     // MARK: - 客户端强制校验，是否匹配
@@ -423,6 +420,10 @@ extension PTRouterManager {
         }
         
         let url = URL(fileURLWithPath: resultJSONPath)
-        try! jsonData.write(to: url, options: .atomic)
+        do {
+            try jsonData.write(to: url, options: .atomic)
+        } catch {
+            PTNSLogConsole("Error writing router map: \(error)")
+        }
     }
 }
