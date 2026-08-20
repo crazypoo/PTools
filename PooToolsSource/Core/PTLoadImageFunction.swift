@@ -13,7 +13,7 @@ import SwifterSwift
 import ImageIO
 
 // --- 1. 新增：图片类型枚举 ---
-public enum PTImageType {
+public enum PTImageType : Sendable {
     case jpeg
     case png
     case gif
@@ -23,6 +23,7 @@ public enum PTImageType {
 
 public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)
 
+@MainActor
 public struct PTLoadImageResult {
     public let allImages: [UIImage]?
     public let firstImage: UIImage?
@@ -39,8 +40,7 @@ public struct PTLoadImageResult {
     }
 }
 
-extension PTLoadImageResult: @unchecked Sendable {}
-
+@MainActor
 @objcMembers
 public class PTLoadImageFunction: NSObject {
 
@@ -91,10 +91,8 @@ public class PTLoadImageFunction: NSObject {
             return await handleURLContent(dataUrlString, iCloudDocumentName, progressHandle)
         } else if dataUrlString.isSingleEmoji {
             // 优化：将 Emoji 转图片耗时操作移至后台线程，避免阻塞主线程
-            return await Task.detached(priority: .userInitiated) {
-                let emojiImage = dataUrlString.emojiToImage()
-                return PTLoadImageResult(allImages: [emojiImage], firstImage: emojiImage, loadTime: 0, imageType: .other)
-            }.value
+            let emojiImage = dataUrlString.emojiToImage()
+            return PTLoadImageResult(allImages: [emojiImage], firstImage: emojiImage, loadTime: 0, imageType: .other)
         } else if let image = UIImage(named: dataUrlString) ?? UIImage(systemName: dataUrlString) {
             return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other)
         } else {
@@ -137,13 +135,11 @@ public class PTLoadImageFunction: NSObject {
         // --- 优化：将耗时的 GIF 解析完全移至后台线程 ---
         if imageType == .gif {
              // 预先分配容量可以轻微提升性能
-             return await Task.detached(priority: .userInitiated) {
-                 if let gifImage = imagesAndDurationFromGif(data: data) {
-                     return PTLoadImageResult(allImages: gifImage.images, firstImage: gifImage.images.first, loadTime: gifImage.duration, imageType: .gif)
-                 } else {
-                     return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .gif)
-                 }
-             }.value
+             if let gifImage = imagesAndDurationFromGif(data: data) {
+                 return PTLoadImageResult(allImages: gifImage.images, firstImage: gifImage.images.first, loadTime: gifImage.duration, imageType: .gif)
+             } else {
+                 return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .gif)
+             }
         } else {
             if let image = UIImage(data: data) {
                 return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: imageType)
@@ -164,10 +160,8 @@ public class PTLoadImageFunction: NSObject {
             return await handleURLContent(dataUrlString, iCloudDocumentName, progressHandle)
         } else if dataUrlString.isSingleEmoji {
             // --- 优化：将 Emoji 转图片耗时操作完全移至后台线程 ---
-            return await Task.detached(priority: .userInitiated) {
-                let emojiImage = dataUrlString.emojiToImage()
-                return PTLoadImageResult(allImages: [emojiImage], firstImage: emojiImage, loadTime: 0, imageType: .other)
-            }.value
+            let emojiImage = dataUrlString.emojiToImage()
+            return PTLoadImageResult(allImages: [emojiImage], firstImage: emojiImage, loadTime: 0, imageType: .other)
         } else if let image = UIImage(named: dataUrlString) ?? UIImage(systemName: dataUrlString) {
             return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other)
         } else {

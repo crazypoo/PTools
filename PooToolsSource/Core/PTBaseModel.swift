@@ -68,7 +68,7 @@ public struct PTBaseStructModel<T>: @unchecked Sendable {
 public typealias PTLegacyStructModel = PTBaseStructModel<Any>
 
 // 🌟 Swift 6 安全补丁：跨线程安全传递元类型的容器
-public struct PTSendableTypeBox<T>: @unchecked Sendable {
+public struct PTSendableTypeBox<T: Sendable>: Sendable {
     let type: T?
     init(_ type: T?) { self.type = type }
 }

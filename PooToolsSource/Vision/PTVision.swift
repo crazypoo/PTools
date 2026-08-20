@@ -10,7 +10,8 @@ import UIKit
 import Vision
 import VisionKit
 
-public struct PTVisionTextResult: @unchecked Sendable {
+@MainActor
+public struct PTVisionTextResult {
     public let text: String
     public let observations: [VNRecognizedTextObservation]
     
@@ -77,6 +78,7 @@ public final class PTVision: NSObject, @unchecked Sendable {
     }
         
     // MARK: - OCR查找文字方法(UIImage) (Async/Await)
+    @MainActor
     public static func findText(withImage image: UIImage,
                                 revision: Int = VNRecognizeTextRequestRevision2,
                                 recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> PTVisionTextResult {
