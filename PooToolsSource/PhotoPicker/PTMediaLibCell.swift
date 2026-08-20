@@ -123,6 +123,10 @@ class PTMediaLibCell: PTBaseNormalCell {
         let ident = cellModel.ident
         let scale = UIScreen.main.scale
         let targetWidth = bounds.width * scale
+        guard cellModel.whRatio.isFinite, cellModel.whRatio > 0 else {
+            imageView.image = PTAppBaseConfig.share.defaultEmptyImage
+            return
+        }
         
         let size: CGSize
         if cellModel.whRatio > 1 {
@@ -142,15 +146,19 @@ class PTMediaLibCell: PTBaseNormalCell {
     func fetchBigImage() {
         cancelFetchBigImage()
         let asset = cellModel.asset
+        let ident = cellModel.ident
         
         bigImageRequestID = PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
             Task { @MainActor in
-                guard let self = self, self.cellModel.isSelected else { return }
+                guard let self = self, self.imageIdentifier == ident, self.cellModel.isSelected else { return }
                 self.imageView.alpha = 0.5
                 if progress >= 1 { self.resetProgressViewStatus() }
             }
         }, completion: { [weak self = self] _, _, _ in
-            Task { @MainActor in self?.resetProgressViewStatus() }
+            Task { @MainActor in
+                guard let self = self, self.imageIdentifier == ident else { return }
+                self.resetProgressViewStatus()
+            }
         })
     }
 

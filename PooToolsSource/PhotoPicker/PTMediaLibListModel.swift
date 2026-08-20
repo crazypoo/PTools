@@ -128,7 +128,10 @@ public final class PTMediaModel:NSObject,@unchecked Sendable {
     }
     
     public var whRatio: CGFloat {
-        CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
+        guard asset.pixelWidth > 0, asset.pixelHeight > 0 else {
+            return 1
+        }
+        return CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
     }
     
     @MainActor public var previewSize: CGSize {

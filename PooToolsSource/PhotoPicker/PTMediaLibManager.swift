@@ -230,14 +230,13 @@ public class PTMediaLibManager: NSObject {
         }
         
         return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { image, info in
-            var downloadFinished = false
-            if let info = info {
-                downloadFinished = !(info[PHImageCancelledKey] as? Bool ?? false) && (info[PHImageErrorKey] == nil)
-            }
+            let isCancelled = info?[PHImageCancelledKey] as? Bool ?? false
+            let hasError = info?[PHImageErrorKey] != nil
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-            if downloadFinished {
+            // 即使 PhotoKit 返回错误，也要结束回调；否则提交时的 Operation 会永久等待。
+            if !isCancelled {
                 PTGCDManager.shared.runOnMain {
-                    completion(image, isDegraded)
+                    completion(hasError ? nil : image, isDegraded)
                 }
             }
         }
@@ -250,7 +249,7 @@ public class PTMediaLibManager: NSObject {
 
     /// Fetch asset data.
     @discardableResult
-    public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+    public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @MainActor @Sendable (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         if asset.pt.isGif {
             option.version = .original
@@ -266,7 +265,11 @@ public class PTMediaLibManager: NSObject {
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if !cancel, let data = data {
-                completion(data, info, isDegraded)
+                // PhotoKit 的 info 不是 Sendable；先在回调线程复制，再跨到 MainActor。
+                let infoSnapshot = PTSendableDictionaryBox(info)
+                PTGCDManager.shared.runOnMain {
+                    completion(data, infoSnapshot.info, isDegraded)
+                }
             }
         }
     }

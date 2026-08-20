@@ -87,8 +87,9 @@ extension PTAlbumObject:PTImagePickerObject {
 extension PTPhotoObject:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         let data = try Data.fetchFromPicker(info)
-        let imageUrl:URL = info[.imageURL] as! URL
+        guard let imageUrl = info[.imageURL] as? URL else {
+            throw PTImagePicker.PickerError.ObjFetchFaild
+        }
         return Self.init(image: UIImage(data: data), url: imageUrl)
     }
 }
-
