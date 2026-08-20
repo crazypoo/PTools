@@ -21,6 +21,8 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
     // 💡 使用 Atomic 或 MainActor 保护 ID，防止 cancel 和 start 在不同线程竞争
     private var requestImageID: PHImageRequestID = PHInvalidImageRequestID
     private let idLock = NSLock()
+    private let completionLock = NSLock()
+    private var hasDeliveredCompletion = false
 
     // MARK: - 状态管理
     // Operation 的状态属性必须是线程安全的。在 Swift 6 中，我们手动触发 KVO。
@@ -73,11 +75,11 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             if let editImage = model.editImage {
                 if PTMediaLibConfig.share.saveNewImageAfterEdit {
                     PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self = self] _, asset in
-                        self?.completion(editImage, asset)
+                        self?.deliver(image: editImage, asset: asset)
                         self?.fetchFinish()
                     }
                 } else {
-                    self.completion(editImage, nil)
+                    self.deliver(image: editImage, asset: nil)
                     self.fetchFinish()
                 }
                 return
@@ -88,7 +90,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
                 let id = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self = self] data, _, isDegraded in
                     if !isDegraded {
                         let image = UIImage.pt.animateGifImage(data: data)
-                        self?.completion(image, nil)
+                        self?.deliver(image: image, asset: nil)
                         self?.fetchFinish()
                     }
                 }
@@ -107,7 +109,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
                 let finalImage = self.isOriginal ? fixedImage : self.scaleImage(fixedImage)
                 
                 PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .media)
-                self.completion(finalImage, nil)
+                self.deliver(image: finalImage, asset: nil)
                 self.fetchFinish()
             }
 
@@ -133,6 +135,9 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             PHImageManager.default().cancelImageRequest(idToCancel)
         }
 
+        // Operation 的消费者通过 completion 等待结果；取消时也必须结束等待。
+        deliver(image: nil, asset: model.asset)
+
         if isExecuting {
             fetchFinish()
         }
@@ -153,6 +158,19 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
         if !isFinished {
             isFinished = true
         }
+    }
+
+    private func deliver(image: UIImage?, asset: PHAsset?) {
+        completionLock.lock()
+        guard !hasDeliveredCompletion else {
+            completionLock.unlock()
+            return
+        }
+        hasDeliveredCompletion = true
+        completionLock.unlock()
+
+        // 不要在锁内调用外部回调，避免回调重入 cancel() 时死锁。
+        completion(image, asset)
     }
 
     private func scaleImage(_ image: UIImage?) -> UIImage? {

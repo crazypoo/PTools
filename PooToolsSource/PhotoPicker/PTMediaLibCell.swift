@@ -18,9 +18,9 @@ import SafeSFSymbols
 class PTMediaLibCell: PTBaseNormalCell {
     static let ID = "PTMediaLibCell"
     
-    // 💡 优化：使用 Task 句柄管理异步任务，Swift 6 标准做法
-    private var smallImageTask: Task<Void, Never>?
-    private var bigImageTask: Task<Void, Never>?
+    // PHImageManager 的请求不是结构化 Task，必须保存 request ID 才能真正取消。
+    private var smallImageRequestID: PHImageRequestID = PHInvalidImageRequestID
+    private var bigImageRequestID: PHImageRequestID = PHInvalidImageRequestID
     private var imageIdentifier: String = ""
 
     var selectedBlock: (@Sendable (@escaping PTBoolTask) -> Void)?
@@ -47,11 +47,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     // MARK: - 生命周期与重用
     override func prepareForReuse() {
         super.prepareForReuse()
-        // 💡 彻底取消任务，防止滑动时图片错位或流量浪费
-        smallImageTask?.cancel()
-        bigImageTask?.cancel()
-        smallImageTask = nil
-        bigImageTask = nil
+        cancelImageRequests()
         
         imageIdentifier = ""
         imageView.image = nil
@@ -121,7 +117,7 @@ class PTMediaLibCell: PTBaseNormalCell {
 
     // MARK: - 异步加载逻辑
     private func fetchSmallImage() {
-        smallImageTask?.cancel()
+        cancelSmallImageRequest()
         
         let asset = cellModel.asset
         let ident = cellModel.ident
@@ -135,12 +131,10 @@ class PTMediaLibCell: PTBaseNormalCell {
             size = CGSize(width: targetWidth, height: targetWidth / cellModel.whRatio)
         }
 
-        smallImageTask = Task {
-            PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self = self] image, isDegraded in
-                Task { @MainActor in
-                    guard let self = self, self.imageIdentifier == ident else { return }
-                    self.imageView.image = image
-                }
+        smallImageRequestID = PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self = self] image, _ in
+            Task { @MainActor in
+                guard let self = self, self.imageIdentifier == ident else { return }
+                self.imageView.image = image
             }
         }
     }
@@ -149,23 +143,37 @@ class PTMediaLibCell: PTBaseNormalCell {
         cancelFetchBigImage()
         let asset = cellModel.asset
         
-        bigImageTask = Task {
-            PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
-                Task { @MainActor in
-                    guard let self = self, self.cellModel.isSelected else { return }
-                    self.imageView.alpha = 0.5
-                    if progress >= 1 { self.resetProgressViewStatus() }
-                }
-            }, completion: { [weak self = self] _, _, _ in
-                Task { @MainActor in self?.resetProgressViewStatus() }
-            })
-        }
+        bigImageRequestID = PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
+            Task { @MainActor in
+                guard let self = self, self.cellModel.isSelected else { return }
+                self.imageView.alpha = 0.5
+                if progress >= 1 { self.resetProgressViewStatus() }
+            }
+        }, completion: { [weak self = self] _, _, _ in
+            Task { @MainActor in self?.resetProgressViewStatus() }
+        })
     }
 
     func cancelFetchBigImage() {
-        bigImageTask?.cancel()
-        bigImageTask = nil
+        cancelBigImageRequest()
         resetProgressViewStatus()
+    }
+
+    private func cancelImageRequests() {
+        cancelSmallImageRequest()
+        cancelBigImageRequest()
+    }
+
+    private func cancelSmallImageRequest() {
+        guard smallImageRequestID != PHInvalidImageRequestID else { return }
+        PHImageManager.default().cancelImageRequest(smallImageRequestID)
+        smallImageRequestID = PHInvalidImageRequestID
+    }
+
+    private func cancelBigImageRequest() {
+        guard bigImageRequestID != PHInvalidImageRequestID else { return }
+        PHImageManager.default().cancelImageRequest(bigImageRequestID)
+        bigImageRequestID = PHInvalidImageRequestID
     }
     
     private func resetProgressViewStatus() {
