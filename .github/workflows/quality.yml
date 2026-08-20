@@ -1,0 +1,16 @@
+name: Quality
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build-contract:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate build contract
+        run: bash Scripts/validate_build_entries.sh
+      - name: Validate patch formatting
+        run: git diff --check

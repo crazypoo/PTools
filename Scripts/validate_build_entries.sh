@@ -29,5 +29,18 @@ require_pattern "PooTools.podspec" "'SWIFT_VERSION' => '6.0'" "CocoaPods target 
 require_pattern "PooTools.xcodeproj/project.pbxproj" "IPHONEOS_DEPLOYMENT_TARGET = 17.0;" "Xcode deployment target is iOS 17"
 require_pattern "PooTools.xcodeproj/project.pbxproj" "SWIFT_VERSION = 6.0;" "Xcode Swift version is 6.0"
 
+xcode_settings="$(xcodebuild -workspace "$repo_root/PooTools.xcworkspace" -scheme PooTools-Example -showBuildSettings 2>/dev/null)"
+if ! rg -q --fixed-strings "IPHONEOS_DEPLOYMENT_TARGET = 17.0" <<< "$xcode_settings"; then
+  printf 'FAIL: Xcode scheme resolves to iOS 17\n' >&2
+  exit 1
+fi
+printf 'PASS: Xcode scheme resolves to iOS 17\n'
+
+if ! rg -q --fixed-strings "SWIFT_VERSION = 6.0" <<< "$xcode_settings"; then
+  printf 'FAIL: Xcode scheme resolves to Swift 6.0\n' >&2
+  exit 1
+fi
+printf 'PASS: Xcode scheme resolves to Swift 6.0\n'
+
 swift package dump-package >/dev/null
 printf 'PASS: Package.swift manifest resolves\n'
