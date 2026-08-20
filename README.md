@@ -23,6 +23,17 @@
 
 ## Installation
 
+## Quality and release
+
+项目统一要求 iOS 17.0+ 与 Swift 6.0。提交代码前运行：
+
+```bash
+bash Scripts/validate_build_entries.sh
+git diff --check
+```
+
+版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。
+
 ### Swift Package Manager
 
 在 Xcode 中添加仓库地址：

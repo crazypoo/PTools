@@ -12,36 +12,6 @@ import CocoaLumberjack
 import SwifterSwift
 import OSLog
 
-// 🚀 优化点 1：现代化并发，使用 actor 处理文件写入，天生线程安全。
-public actor PTLogFileManager {
-    public static let shared = PTLogFileManager()
-    private let fileManager = FileManager.default
-    
-    private init() {}
-    
-    /// 异步安全地将日志追加到文件
-    public func append(logText: String) {
-        let cachePath = FileManager.pt.CachesDirectory()
-        let logURL = URL(fileURLWithPath: cachePath).appendingPathComponent("log.txt")
-        
-        guard let data = logText.data(using: .utf8) else { return }
-        
-        do {
-            if !fileManager.fileExists(atPath: logURL.path) {
-                fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
-            }
-            let fileHandle = try FileHandle(forWritingTo: logURL)
-            defer { try? fileHandle.close() }
-            
-            try fileHandle.seekToEnd()
-            fileHandle.write(data)
-        } catch {
-            // 内部错误直接使用基础打印，避免循环调用
-            print("❌ [PTLogFileManager] 写入日志文件失败: \(error)")
-        }
-    }
-}
-
 // 🚀 优化点 2：使用 Bundle 底层状态判断环境，彻底摆脱对 UIApplication 的 @MainActor 依赖。
 // 这样一来，这段代码在任何线程初始化都不会触发 Swift 6 的严格并发警告。
 private let currentAppEnvironment: String = {

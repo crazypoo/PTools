@@ -84,80 +84,6 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {
     }
 }
 
-@MainActor public let AppTestMode = "PT App network environment test".localized()
-@MainActor public let AppCustomMode = "PT App network environment custom".localized()
-@MainActor public let AppDisMode = "PT App network environment distribution".localized()
-
-public enum NetworkCellularType : String,Sendable {
-    case ALL = "Cellular"
-    case Cellular2G = "2G"
-    case Cellular3G = "3G"
-    case Cellular4G = "4G"
-    case Cellular5G = "5G"
-}
-
-public enum NetWorkStatus:Sendable {
-    case unknown
-    case notReachable
-    case wwan(type:NetworkCellularType)
-    case wifi
-    case requiresConnection
-    case wiredEthernet
-    case loopback
-    case other
-    case checking
-    
-    @MainActor public static func valueName(type:NetWorkStatus) -> String {
-        switch type {
-        case .unknown:            return "PT App network status unknow".localized()
-        case .notReachable:       return "PT App network status disconnect".localized()
-        case .wwan(let subType):  return subType.rawValue
-        case .wifi:               return "WIFI"
-        case .requiresConnection: return "RequiresConnection"
-        case .wiredEthernet:      return "WiredEthernet"
-        case .loopback:           return "loopback"
-        case .other:              return "Other"
-        case .checking:           return "Checking"
-        }
-    }
-}
-
-public enum NetWorkEnvironment : Int, Sendable {
-    case Development
-    case Test
-    case Distribution
-    
-    @MainActor public static func valueName(type:NetWorkEnvironment) -> String {
-        switch type {
-        case .Development:  return "PT App network environment custom".localized()
-        case .Test:         return "PT App network environment test".localized()
-        case .Distribution: return "PT App network environment distribution".localized()
-        }
-    }
-}
-
-public typealias NetWorkStatusBlock = @Sendable (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
-public typealias UploadProgress = @MainActor @Sendable (_ progress: Progress) -> Void
-public typealias FileDownloadProgress = @MainActor @Sendable (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
-public typealias FileDownloadSuccess = @MainActor @Sendable (_ reponse:AFDownloadResponse<URL?>) -> ()
-public typealias FileDownloadFail = @MainActor @Sendable (_ error:Error?) -> ()
-
-public var PTBaseURLMode:NetWorkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
-    if sliderValue == "1" { return .Distribution }
-    else if sliderValue == "2" { return .Test }
-    else if sliderValue == "3" { return .Development }
-    return .Distribution
-}
-
-public var PTSocketURLMode:NetWorkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppSocketServiceIdentifier else { return .Distribution }
-    if sliderValue == "1" { return .Distribution }
-    else if sliderValue == "2" { return .Test }
-    else if sliderValue == "3" { return .Development }
-    return .Distribution
-}
-
 /// 🌟 步骤 1：标记为 @unchecked Sendable。
 /// 这告诉编译器：“虽然我内部有 var，但我会通过加锁的方式自己保证线程安全，请允许我跨线程传递。”
 public final class NetworkReachability: @unchecked Sendable {
@@ -787,7 +713,11 @@ public final class Network: @unchecked Sendable {
     
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
         let paramsStr = parameters != nil ? String(describing: parameters!) : "没有参数"
-        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(String(describing: headers.dictionary))\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
+        let safeHeaders = headers.dictionary.reduce(into: [String: String]()) { result, item in
+            let key = item.key.lowercased()
+            result[item.key] = ["authorization", "token", "cookie", "set-cookie"].contains(key) ? "<redacted>" : item.value
+        }
+        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(safeHeaders)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
     }
     
     private static func logRequestSuccess(url: String, jsonStr: String) {
@@ -869,8 +799,14 @@ public final class Network: @unchecked Sendable {
         }
         
         if !isAppStoreEnvironment {
-            let prettyStr = prettyPrintedJSONString(from: data)
             let maxLen = Int(Network.share.config.logMaxCount)
+            // 大响应不进入完整 JSON 格式化，避免调试日志制造额外 CPU 和内存峰值。
+            let prettyStr: String
+            if data.count > maxLen * 4 {
+                prettyStr = String(decoding: data.prefix(maxLen), as: UTF8.self)
+            } else {
+                prettyStr = prettyPrintedJSONString(from: data)
+            }
             let printStr = prettyStr.count > maxLen ? String(prettyStr.prefix(maxLen)) + "\n\n...[JSON过大，为保护控制台已截断]..." : prettyStr
             logRequestSuccess(url: url, jsonStr: printStr)
         }

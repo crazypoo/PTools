@@ -121,6 +121,8 @@
 		5524F78C3004C203009A2AB8 /* PTFontPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */; };
 		5525542F2C0E0CB600C2653A /* PTLogConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */; };
 		552660C83035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660C73035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift */; };
+		552660EB303741BA00582606 /* PTLogFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EA303741BA00582606 /* PTLogFileManager.swift */; };
+		552660ED303741C700582606 /* NetworkTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EC303741C700582606 /* NetworkTypes.swift */; };
 		552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552748502BF8BF2900BF4D18 /* PTSwitch.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
@@ -1094,6 +1096,8 @@
 		5524F78B3004C203009A2AB8 /* PTFontPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFontPickerViewController.swift; sourceTree = "<group>"; };
 		5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogConsoleViewController.swift; sourceTree = "<group>"; };
 		552660C73035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTMediaBrowserController+PhotoLibrary.swift"; sourceTree = "<group>"; };
+		552660EA303741BA00582606 /* PTLogFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogFileManager.swift; sourceTree = "<group>"; };
+		552660EC303741C700582606 /* NetworkTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTypes.swift; sourceTree = "<group>"; };
 		552748502BF8BF2900BF4D18 /* PTSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwitch.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
@@ -2290,6 +2294,7 @@
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
+				552660EC303741C700582606 /* NetworkTypes.swift */,
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 			);
 			path = NetWork;
@@ -4094,6 +4099,7 @@
 		9AE4468D2858680A007DC2B5 /* Log */ = {
 			isa = PBXGroup;
 			children = (
+				552660EA303741BA00582606 /* PTLogFileManager.swift */,
 				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
 				55DD936B2B932A0400F65872 /* Logger+PTEX.swift */,
 			);
@@ -4346,6 +4352,7 @@
 				55BA8F772D29A7D70065FBD0 /* Inspector.swift in Sources */,
 				55BA8F782D29A7D70065FBD0 /* ViewHierarchyCoordinator+AsyncOperationProtocol.swift in Sources */,
 				55BA8F792D29A7D70065FBD0 /* Notification.Name+InspectorEX.swift in Sources */,
+				552660ED303741C700582606 /* NetworkTypes.swift in Sources */,
 				55BA8F7A2D29A7D70065FBD0 /* ElementInspectorCoordinator+ElementInspectorFormPanelDelegate.swift in Sources */,
 				55BA8F7B2D29A7D70065FBD0 /* InspectorElementLayoutConstraintSectionView.swift in Sources */,
 				55BA8F7C2D29A7D70065FBD0 /* BaseControl.swift in Sources */,
@@ -4681,6 +4688,7 @@
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
 				553BFE6A2EC7052400D6DCB6 /* UITableView+PTSnapShot.swift in Sources */,
 				55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */,
+				552660EB303741BA00582606 /* PTLogFileManager.swift in Sources */,
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
 				557E3A5E2C0322C5002466A0 /* PTDynamicGradient.swift in Sources */,
