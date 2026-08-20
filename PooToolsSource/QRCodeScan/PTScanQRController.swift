@@ -371,12 +371,14 @@ public class PTScanQRController: PTBaseViewController {
                 handle()
             case .notDetermined:
                 PTPermission.camera.request {
-                    switch PTPermission.camera.status {
-                    case .authorized:
-                        handle()
-                    default:
-                        Task { @MainActor in
-                            self.processResult(result: "",error: NSError(domain: "PT Setting reject camera".localized(), code: 501))
+                    PTGCDManager.shared.runOnMain {
+                        switch PTPermission.camera.status {
+                        case .authorized:
+                            handle()
+                        default:
+                            Task { @MainActor in
+                                self.processResult(result: "",error: NSError(domain: "PT Setting reject camera".localized(), code: 501))
+                            }
                         }
                     }
                 }

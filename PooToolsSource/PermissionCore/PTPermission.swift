@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 open class PTPermission {
     
     open var authorized: Bool {
@@ -55,6 +56,15 @@ open class PTPermission {
     open func request(completion: @escaping PTActionTask) {
         preconditionFailure("This method must be overridden.")
     }
+
+    /// Async bridge for permission requests while preserving the callback API.
+    public func request() async {
+        await withCheckedContinuation { continuation in
+            request {
+                continuation.resume()
+            }
+        }
+    }
     
     open var canBePresentWithCustomInterface: Bool {
         true
@@ -66,7 +76,7 @@ open class PTPermission {
     
     // MARK: - Models
     
-    @objc public enum Status: Int, CustomStringConvertible {
+    @objc public enum Status: Int, CustomStringConvertible, Sendable {
         
         case authorized
         case denied
@@ -83,7 +93,7 @@ open class PTPermission {
         }
     }
     
-    public enum Kind {
+    public enum Kind: Sendable {
         
         case camera
         case notification
@@ -144,13 +154,13 @@ open class PTPermission {
         }
     }
     
-    public enum CalendarAccess {
+    public enum CalendarAccess: Sendable {
         
         case full
         case write
     }
     
-    public enum LocationAccess {
+    public enum LocationAccess: Sendable {
         
         case whenInUse
         case always

@@ -925,9 +925,11 @@ public class PTMediaLibViewController: PTBaseViewController {
             loadImageData()
         case .notDetermined:
             PTPermission.photoLibrary.request { [weak self] in
-                if PTPermission.photoLibrary.status == .authorized {
-                    Task { @MainActor in
-                        self?.loadImageData()
+                PTGCDManager.shared.runOnMain {
+                    if PTPermission.photoLibrary.status == .authorized {
+                        Task { @MainActor in
+                            self?.loadImageData()
+                        }
                     }
                 }
             }

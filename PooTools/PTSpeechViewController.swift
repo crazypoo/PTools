@@ -31,14 +31,16 @@ class PTSpeechViewController: PTBaseViewController {
         switch PTPermission.speech.status {
         case .notDetermined:
             PTPermission.speech.request {
-                switch PTPermission.speech.status {
-                case .authorized:
-                    Task { @MainActor in
-                        self.uiSet()
-                    }
-                default:
-                    Task { @MainActor in
-                        PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+                PTGCDManager.shared.runOnMain {
+                    switch PTPermission.speech.status {
+                    case .authorized:
+                        Task { @MainActor in
+                            self.uiSet()
+                        }
+                    default:
+                        Task { @MainActor in
+                            PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+                        }
                     }
                 }
             }

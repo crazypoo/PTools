@@ -116,22 +116,24 @@ public class PTEventOnCalendar: NSObject {
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         switch eventType {
         case .event:
-            switch PTPermission.calendar(access: .full).status {
-            case .authorized:
-                eventStore.requestFullAccessToEvents { granted, error in
-                    PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
-                }
-            case .denied:
-                switch PTPermission.calendar(access: .write).status {
+            PTGCDManager.shared.runOnMain {
+                switch PTPermission.calendar(access: .full).status {
                 case .authorized:
-                    eventStore.requestWriteOnlyAccessToEvents { granted, error in
+                    eventStore.requestFullAccessToEvents { granted, error in
                         PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
+                    }
+                case .denied:
+                    switch PTPermission.calendar(access: .write).status {
+                    case .authorized:
+                        eventStore.requestWriteOnlyAccessToEvents { granted, error in
+                            PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
+                        }
+                    default:
+                        handle?(false,PTEventOnCalendar.PTEventError)
                     }
                 default:
                     handle?(false,PTEventOnCalendar.PTEventError)
                 }
-            default:
-                handle?(false,PTEventOnCalendar.PTEventError)
             }
         case .reminder:
             eventStore.requestFullAccessToReminders { granted, error in

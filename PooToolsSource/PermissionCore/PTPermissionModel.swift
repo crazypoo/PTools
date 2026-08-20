@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTPermissionModel: NSObject {
     public var name:String!

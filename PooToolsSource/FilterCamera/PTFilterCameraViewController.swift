@@ -490,13 +490,15 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 switch PTPermission.camera.status {
                 case .notDetermined:
                     PTPermission.camera.request {
-                        switch PTPermission.camera.status {
-                        case .authorized:
-                            Task { @MainActor in
-                                self.camera.startRunning()
+                        PTGCDManager.shared.runOnMain {
+                            switch PTPermission.camera.status {
+                            case .authorized:
+                                Task { @MainActor in
+                                    self.camera.startRunning()
+                                }
+                            default:
+                                return
                             }
-                        default:
-                            return
                         }
                     }
                 case .authorized:
