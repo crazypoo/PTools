@@ -7,6 +7,8 @@
 //
 
 import UIKit
+// Alamofire 5 callback types are not fully concurrency-annotated; all
+// callbacks are normalized inside Network's request executor.
 @preconcurrency import Alamofire
 import Network
 import SwifterSwift
@@ -209,7 +211,7 @@ extension Error {
 
 // MARK: - ================= 3. 拦截器、配置与去重池 =================
 
-fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
+fileprivate final class RetryHandler: Sendable, RequestInterceptor {
     private let retryLimitSnapshot: Int
     private let baseDelaySnapshot: TimeInterval
     private let statusCodeToRetry: Int

@@ -99,6 +99,51 @@ public struct PTMediaImageRequestResult {
     }
 }
 
+@MainActor
+public struct PTMediaImageDataRequestResult {
+    public let data: Data?
+    public let info: [AnyHashable: Any]?
+    public let isDegraded: Bool
+    public let isCancelled: Bool
+    public let error: PTMediaImageRequestError?
+
+    public init(data: Data?,
+                info: [AnyHashable: Any]?,
+                isDegraded: Bool,
+                isCancelled: Bool,
+                error: PTMediaImageRequestError?) {
+        self.data = data
+        self.info = info
+        self.isDegraded = isDegraded
+        self.isCancelled = isCancelled
+        self.error = error
+    }
+}
+
+/// Typed video request result. The legacy dictionary is retained only for the
+/// compatibility wrapper and is rebuilt on MainActor from a value snapshot.
+@MainActor
+public struct PTMediaVideoRequestResult {
+    public let playerItem: AVPlayerItem?
+    public let info: [AnyHashable: Any]?
+    public let isDegraded: Bool
+    public let isCancelled: Bool
+    public let error: PTMediaImageRequestError?
+
+    public init(playerItem: AVPlayerItem?,
+                info: [AnyHashable: Any]?,
+                isDegraded: Bool,
+                isCancelled: Bool,
+                error: PTMediaImageRequestError?) {
+        self.playerItem = playerItem
+        self.info = info
+        self.isDegraded = isDegraded
+        self.isCancelled = isCancelled
+        self.error = error
+    }
+}
+
+@MainActor
 func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) {
     guard !selected.isEmpty else {
         return
@@ -241,10 +286,10 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     }
     
     // 给容器内的属性赋值
-    container.id = PTMediaLibManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
+    container.id = PTMediaLibManager.requestVideo(for: model.asset, completion: { result in
         // 网络请求一回来，马上取消超时任务
         timeoutTask.cancel()
-        if !isDegraded {
+        if !result.isDegraded, result.error == nil {
             completion()
         }
     })
@@ -267,7 +312,8 @@ public class PTMediaLibManager: NSObject {
     }
 
     @discardableResult
-    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    @available(*, deprecated, message: "Use requestImage(for:targetSize:completion:) instead")
+    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
 
@@ -281,7 +327,7 @@ public class PTMediaLibManager: NSObject {
                                    deliveryMode: PHImageRequestOptionsDeliveryMode = .opportunistic,
                                    version: PHImageRequestOptionsVersion = .current,
                                    supportIcloud: Bool = true,
-                                   progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                   progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
                                    completion: @escaping @MainActor @Sendable (PTMediaImageRequestResult) -> Void) -> PHImageRequestID {
         guard !asset.localIdentifier.isEmpty else {
             Task { @MainActor in
@@ -311,8 +357,9 @@ public class PTMediaLibManager: NSObject {
             let error = (info?[PHImageErrorKey] as? Error).map {
                 PTMediaImageRequestError.failed($0.localizedDescription)
             }
+            let imageBox = image.map { PTSafeMediaBox(mediaItem: $0) }
             Task { @MainActor in
-                let result = PTMediaImageRequestResult(image: image,
+                let result = PTMediaImageRequestResult(image: imageBox?.mediaItem,
                                                        isDegraded: isDegraded,
                                                        isCancelled: isCancelled,
                                                        error: isCancelled ? .cancelled : error)
@@ -322,7 +369,7 @@ public class PTMediaLibManager: NSObject {
     }
     
     /// Fetch image for asset.
-    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         requestImage(for: asset, targetSize: size, resizeMode: resizeMode, supportIcloud: true, progress: progress) { result in
             // 即使 PhotoKit 返回错误，也要结束回调；否则提交时的 Operation 会永久等待。
             guard !result.isCancelled else { return }
@@ -331,13 +378,37 @@ public class PTMediaLibManager: NSObject {
     }
     
     @discardableResult
-    public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    @available(*, deprecated, message: "Use requestImage(for:targetSize:completion:) instead")
+    public class func fetchOriginalImage(for asset: PHAsset, progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
 
     /// Fetch asset data.
     @discardableResult
-    public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @MainActor @Sendable (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+    @available(*, deprecated, message: "Use requestImageData(for:completion:) instead")
+    public class func fetchOriginalImageData(for asset: PHAsset, progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @MainActor @Sendable (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+        requestImageData(for: asset, progress: progress) { result in
+            guard !result.isCancelled, let data = result.data else { return }
+            completion(data, result.info, result.isDegraded)
+        }
+    }
+
+    /// Unified typed image-data request boundary.
+    @discardableResult
+    public class func requestImageData(for asset: PHAsset,
+                                      progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                      completion: @escaping @MainActor @Sendable (PTMediaImageDataRequestResult) -> Void) -> PHImageRequestID {
+        guard !asset.localIdentifier.isEmpty else {
+            Task { @MainActor in
+                completion(PTMediaImageDataRequestResult(data: nil,
+                                                         info: nil,
+                                                         isDegraded: false,
+                                                         isCancelled: false,
+                                                         error: .failed("媒体资源标识无效")))
+            }
+            return PHInvalidImageRequestID
+        }
+
         let option = PHImageRequestOptions()
         if asset.pt.isGif {
             option.version = .original
@@ -352,17 +423,21 @@ public class PTMediaLibManager: NSObject {
         return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-            if !cancel, let data = data {
-                // PhotoKit 的 info 不是 Sendable；先复制可传输的基础值，再跨到 MainActor。
-                let infoSnapshot = PTImageInfoSnapshot(info)
-                PTGCDManager.shared.runOnMain {
-                    completion(data, infoSnapshot.dictionary(), isDegraded)
-                }
+            // PhotoKit 的 info 不是 Sendable；先复制可传输的基础值，再跨到 MainActor。
+            let infoSnapshot = PTImageInfoSnapshot(info)
+            let error = (info?[PHImageErrorKey] as? Error).map { PTMediaImageRequestError.failed($0.localizedDescription) }
+            Task { @MainActor in
+                completion(PTMediaImageDataRequestResult(data: data,
+                                                          info: infoSnapshot.dictionary(),
+                                                          isDegraded: isDegraded,
+                                                          isCancelled: cancel,
+                                                          error: cancel ? .cancelled : error))
             }
         }
     }
     
     /// Fetch photos from result.
+    @MainActor
     public class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [PTMediaModel] {
         var models: [PTMediaModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
@@ -421,32 +496,32 @@ public class PTMediaLibManager: NSObject {
         return predicates
     }
     
+    @MainActor
     public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping @MainActor @Sendable (PTMediaLibListModel) -> Void) {
-        PTGCDManager.shared.runOnBackground {
-            let option = PHFetchOptions()
-            let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
+        // PHFetchOptions is mutable and PhotoKit does not make it Sendable.
+        // Create, configure, consume, and retain it on the same actor so the
+        // model never captures an option that was mutated on a background queue.
+        let option = PHFetchOptions()
+        let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
-            // 组合多个条件（如果有）
-            if !predicates.isEmpty {
-                option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
-            }
+        if !predicates.isEmpty {
+            option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        }
 
-            let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
-            smartAlbums.enumerateObjects { collection, _, stop in
-                if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                    stop.pointee = true
-                    let result = PHAsset.fetchAssets(in: collection, options: option)
-                    let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
-                    PTGCDManager.shared.runOnMain {
-                        handler(albumModel)
-                    }
-                }
-            }
+        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        for index in 0..<smartAlbums.count {
+            let collection = smartAlbums.object(at: index)
+            guard collection.assetCollectionSubtype == .smartAlbumUserLibrary else { continue }
+            let result = PHAsset.fetchAssets(in: collection, options: option)
+            let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
+            handler(albumModel)
+            break
         }
     }
     
     /// Fetch all album list.
-    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, completion: ([PTMediaLibListModel]) -> Void) {
+    @MainActor
+    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, completion: @escaping @MainActor @Sendable ([PTMediaLibListModel]) -> Void) {
         let option = PHFetchOptions()
         let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
@@ -503,69 +578,101 @@ public class PTMediaLibManager: NSObject {
         return size / 1024
     }
     
-    public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {
+    public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping @MainActor @Sendable (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {
         let options = PHVideoRequestOptions()
         options.deliveryMode = .automatic
         options.isNetworkAccessAllowed = true
         
         if asset.pt.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { session, info in
-                // iOS11 and earlier, callback is not on the main thread.
-                if let avAsset = session?.asset {
-                    completion(avAsset, info)
-                } else {
-                    completion(nil, info)
+                let infoSnapshot = PTImageInfoSnapshot(info)
+                let assetBox = session.map { PTSafeMediaBox(mediaItem: $0.asset) }
+                Task { @MainActor in
+                    completion(assetBox?.mediaItem, infoSnapshot.dictionary())
                 }
             }
         } else {
             return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, info in
-                completion(avAsset, info)
+                let infoSnapshot = PTImageInfoSnapshot(info)
+                let assetBox = avAsset.map { PTSafeMediaBox(mediaItem: $0) }
+                Task { @MainActor in
+                    completion(assetBox?.mediaItem, infoSnapshot.dictionary())
+                }
             }
         }
     }
-    
-    public class func fetchVideo(for asset: PHAsset,
-                                 progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
-                                 completion: @escaping @Sendable (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
-        
+
+    /// Unified typed video request boundary. Legacy `fetchVideo` remains as a
+    /// compatibility wrapper below.
+    @discardableResult
+    public class func requestVideo(for asset: PHAsset,
+                                  progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                  completion: @escaping @MainActor @Sendable (PTMediaVideoRequestResult) -> Void) -> PHImageRequestID {
+        guard !asset.localIdentifier.isEmpty else {
+            Task { @MainActor in
+                completion(PTMediaVideoRequestResult(playerItem: nil,
+                                                     info: nil,
+                                                     isDegraded: false,
+                                                     isCancelled: false,
+                                                     error: .failed("媒体资源标识无效")))
+            }
+            return PHInvalidImageRequestID
+        }
+
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
         option.progressHandler = { pro, error, stop, info in
             progress?(CGFloat(pro), error, stop, info)
         }
-        
+
+        let finish: @MainActor @Sendable (PTSafeMediaBox<AVPlayerItem>?, [AnyHashable: Any]?, Bool, PTMediaImageRequestError?) -> Void = { itemBox, info, degraded, error in
+            let isCancelled: Bool
+            if let error, case .cancelled = error {
+                isCancelled = true
+            } else {
+                isCancelled = false
+            }
+            completion(PTMediaVideoRequestResult(playerItem: itemBox?.mediaItem,
+                                                 info: info,
+                                                 isDegraded: degraded,
+                                                 isCancelled: isCancelled,
+                                                 error: error))
+        }
+
         if asset.pt.isInCloud {
-            return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
-                
-                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                // 只复制基础值，避免把 PhotoKit 的原始字典跨线程传递。
+            return PHImageManager.default().requestExportSession(forVideo: asset,
+                                                                  options: option,
+                                                                  exportPreset: AVAssetExportPresetHighestQuality) { session, info in
                 let infoSnapshot = PTImageInfoSnapshot(info)
-                
-                if let avAsset = session?.asset {
-                    let safeAssetBox = PTSafeMediaBox(mediaItem: avAsset)
-                    
-                    // 3. 派发到主线程上下文，完美消除 MainActor 报错
-                    Task { @MainActor in
-                        // 现在环境是主线程，可以安全地初始化 AVPlayerItem
-                        let item = AVPlayerItem(asset: safeAssetBox.mediaItem)
-                        completion(item, infoSnapshot.dictionary(), isDegraded)
-                    }
-                } else {
-                    Task { @MainActor in
-                        completion(nil, infoSnapshot.dictionary(), true)
-                    }
-                }
-            })
-        } else {
-            return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { item, info in
-                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                let infoSnapshot = PTImageInfoSnapshot(info)
-                
-                // 派发到主线程进行回调，保持 API 行为的一致性
+                let assetBox = session.map { PTSafeMediaBox(mediaItem: $0.asset) }
+                let degraded = info?[PHImageResultIsDegradedKey] as? Bool ?? false
+                let cancelled = info?[PHImageCancelledKey] as? Bool ?? false
+                let error = (info?[PHImageErrorKey] as? Error).map { PTMediaImageRequestError.failed($0.localizedDescription) }
                 Task { @MainActor in
-                    completion(item, infoSnapshot.dictionary(), isDegraded)
+                    let itemBox = assetBox.map { PTSafeMediaBox(mediaItem: AVPlayerItem(asset: $0.mediaItem)) }
+                    finish(itemBox, infoSnapshot.dictionary(), degraded, cancelled ? .cancelled : error)
                 }
             }
+        }
+
+        return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { item, info in
+            let infoSnapshot = PTImageInfoSnapshot(info)
+            let itemBox = item.map { PTSafeMediaBox(mediaItem: $0) }
+            let degraded = info?[PHImageResultIsDegradedKey] as? Bool ?? false
+            let cancelled = info?[PHImageCancelledKey] as? Bool ?? false
+            let error = (info?[PHImageErrorKey] as? Error).map { PTMediaImageRequestError.failed($0.localizedDescription) }
+            Task { @MainActor in
+                finish(itemBox, infoSnapshot.dictionary(), degraded, cancelled ? .cancelled : error)
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Use requestVideo(for:completion:) instead")
+    public class func fetchVideo(for asset: PHAsset,
+                                 progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                 completion: @escaping @Sendable (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+        requestVideo(for: asset, progress: progress) { result in
+            completion(result.playerItem, result.info, result.isDegraded)
         }
     }
 

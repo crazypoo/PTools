@@ -6,7 +6,7 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-@preconcurrency import Foundation
+import Foundation
 import UIKit
 
 /// 对于KVO监听，动态创建子类，需要特殊处理

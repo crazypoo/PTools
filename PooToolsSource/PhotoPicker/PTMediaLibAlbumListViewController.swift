@@ -156,8 +156,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     func loadAlbumList() {
         
         PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo,allowSelectLivePhotoOnly: PTMediaLibConfig.share.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: PTMediaLibConfig.share.allowOnlySelectRegularImage) { models in
-            albumList.removeAll()
-            albumList.append(contentsOf: models)
+            self.albumList.removeAll()
+            self.albumList.append(contentsOf: models)
             
             let rows = models.map {
                 let row = PTRows(dataModel: $0)
@@ -165,7 +165,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                 return row
             }
             let section = PTSection(rows:rows)
-            collectionView.showCollectionDetail(collectionData: [section])
+            self.collectionView.showCollectionDetail(collectionData: [section])
         }
     }
 }

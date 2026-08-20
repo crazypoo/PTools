@@ -352,9 +352,9 @@ extension PTMediaLibView {
     
     #if POOTOOLS_IMAGEEDITOR
     func handleImageEdit(model: PTMediaModel) {
-        PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
+        PTMediaLibManager.requestImage(for: model.asset, targetSize: model.previewSize) { [weak self] result in
             PTGCDManager.shared.runOnMain { [weak self] in
-                guard !isDegraded, let image = image else { return }
+                guard !result.isDegraded, let image = result.image else { return }
                 
                 let vc = PTEditImageViewController(readyEditImage: image)
                 vc.editFinishBlock = { [weak self] editedImage, editModel in

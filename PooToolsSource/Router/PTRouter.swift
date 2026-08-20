@@ -149,8 +149,10 @@ public enum PTRouterError: Error, LocalizedError {
     }
 }
 
-// 定义一个封装类来存储和执行接受参数的闭包
-public class PTRouerParamsClosureWrapper: NSObject,@unchecked Sendable {
+// Route parameter closures are UI callbacks; keeping the wrapper on MainActor
+// avoids claiming that an arbitrary Any payload is safe to cross actors.
+@MainActor
+public final class PTRouerParamsClosureWrapper: NSObject {
     public var closure: ((Any) -> Void)?
 
     public init(closure: @escaping (Any) -> Void) {

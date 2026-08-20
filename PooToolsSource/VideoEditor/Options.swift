@@ -6,6 +6,7 @@
 //
 
 import Foundation
+// AVAssetTrack async loading is not fully annotated in the SDK.
 @preconcurrency import AVFoundation
 import CoreVideo
 

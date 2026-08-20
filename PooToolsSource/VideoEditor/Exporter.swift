@@ -6,6 +6,8 @@
 //
 
 import Foundation
+// AVFoundation asset/compositor APIs are legacy reference-type boundaries;
+// export state is isolated on MainActor and assets use a narrow system box.
 @preconcurrency import AVFoundation
 import CoreVideo
 

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+// CoreNFC delegate APIs are legacy callback-based system APIs; only the
+// narrowly-scoped session/tag boxes cross into MainActor tasks.
 @preconcurrency import CoreNFC
 
 private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {

@@ -341,7 +341,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             guard let self, let dataModel = self.dataModel else { return }
             self.showLoading()
             
-            switch dataModel.imageURL {
+            guard let imageData = dataModel.imageURL else {
+                self.currentCellType = .None
+                self.createReloadButton()
+                self.hideLoading()
+                return
+            }
+
+            switch imageData {
             case let urlString as String:
                 self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "",currentID: currentID)
             case let url as URL:
@@ -376,7 +383,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     self.createReloadButton()
                 }
             default:
-                self.baseLoadImageData(imageData: dataModel.imageURL as Any, currentID: currentID)
+                self.baseLoadImageData(imageData: imageData, currentID: currentID)
             }
         }
     }

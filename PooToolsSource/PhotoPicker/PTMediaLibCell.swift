@@ -152,13 +152,13 @@ class PTMediaLibCell: PTBaseNormalCell {
         let asset = cellModel.asset
         let ident = cellModel.ident
         
-        bigImageRequestID = PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
+        bigImageRequestID = PTMediaLibManager.requestImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
             Task { @MainActor in
                 guard let self = self, self.imageIdentifier == ident, self.cellModel.isSelected else { return }
                 self.imageView.alpha = 0.5
                 if progress >= 1 { self.resetProgressViewStatus() }
             }
-        }, completion: { [weak self = self] _, _, _ in
+        }, completion: { [weak self = self] _ in
             Task { @MainActor in
                 guard let self = self, self.imageIdentifier == ident else { return }
                 self.resetProgressViewStatus()

@@ -5,6 +5,8 @@
 //  Unified PhotoKit media saving boundary.
 //
 
+// PhotoKit completion APIs are legacy callback-based system APIs; UI results
+// are delivered through the MainActor save service.
 @preconcurrency import Photos
 import UIKit
 import os.lock

@@ -13,11 +13,12 @@ critical_files=(
   PooToolsSource/Contact/PTContact.swift
   PooToolsSource/Debug/PTDebugFunction.swift
   PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
+  PooToolsSource/Animation/PTAnimationFunction.swift
   PooToolsSource/PhotoPicker
   PooToolsSource/VideoEditor
 )
 
-if rg -n '\btry!|\bas!' "${critical_files[@]}"; then
+if rg -n 'try!|as!' "${critical_files[@]}"; then
   printf 'FAIL: forceful error/type casts remain in production Swift sources\n' >&2
   exit 1
 fi

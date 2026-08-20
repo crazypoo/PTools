@@ -7,6 +7,8 @@
 //
 
 import UIKit
+// AVFoundation editor objects are retained and used on the MainActor;
+// asynchronous export helpers use explicit system compatibility boxes.
 @preconcurrency import AVFoundation
 import SwifterSwift
 import SnapKit
@@ -15,11 +17,6 @@ import Photos
 import SafeSFSymbols
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
-
-private struct PTSendablePairBox<T, U>: @unchecked Sendable {
-    let first: T
-    let second: U
-}
 
 /// 基于 Swift Actor 的现代化防抖器，保证高并发下的线程安全
 public actor PTDebouncer {
@@ -1193,17 +1190,16 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         await self.videoConverter = VideoConverter(asset:safeConvertAsset)
         
         // 挂起等待外部处理完毕
-        let safeBox = await withCheckedContinuation { continuation in
+        let safePair = await withCheckedContinuation { continuation in
             self.videoConverter?.convert(options) { resultAc, resultAvc in
-                let box = PTSendablePairBox(first: resultAc, second: resultAvc)
-                continuation.resume(returning: box)
+                continuation.resume(returning: (resultAc, resultAvc))
             }
         }
         
-        self.avPlayerItem = AVPlayerItem(asset: safeBox.first)
-        self.avPlayerItem.videoComposition = safeBox.second
+        self.avPlayerItem = AVPlayerItem(asset: safePair.0)
+        self.avPlayerItem.videoComposition = safePair.1
         
-        let generator = AVAssetImageGenerator(asset: safeBox.first)
+        let generator = AVAssetImageGenerator(asset: safePair.0)
         generator.appliesPreferredTrackTransform = true
         generator.requestedTimeToleranceBefore = .zero
         generator.requestedTimeToleranceAfter = .zero

@@ -9,7 +9,7 @@
 import UIKit
 import AVKit
 
-private struct PTVideoExportBox: @unchecked Sendable {
+private struct PTVideoExportBox: Sendable {
     let isCancelledState: Bool
 }
 // 新增：引入 @MainActor 保证外部调用的安全，解决绝大部分 Sendable 捕获警告
@@ -162,16 +162,13 @@ open class VideoConverter {
         self.asset = asset
         let allPresets = AVAssetExportSession.allExportPresets()
         
-        struct UnsafeAssetBox: @unchecked Sendable {
-            let safeAsset: AVAsset
-        }
-        let box = UnsafeAssetBox(safeAsset: asset)
+        let box = PTSystemAVAssetBox(asset: asset)
         
         let compatiblePresets = await withTaskGroup(of: (String, Bool).self) { group in
             for preset in allPresets {
                 group.addTask {
                     let isCompatible = await AVAssetExportSession.compatibility(
-                        ofExportPreset: preset, with: box.safeAsset, outputFileType: nil)
+                        ofExportPreset: preset, with: box.asset, outputFileType: nil)
                     return (preset, isCompatible)
                 }
             }

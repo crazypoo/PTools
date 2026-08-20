@@ -9,7 +9,8 @@
 import UIKit
 import Photos
 
-public class PTMediaLibListModel: NSObject,@unchecked Sendable {
+@MainActor
+public class PTMediaLibListModel: NSObject {
     public let title: String
     
     public var count: Int {
@@ -60,6 +61,7 @@ public class PTMediaLibListModel: NSObject,@unchecked Sendable {
         self.models.append(contentsOf: models)
     }
     
+    @MainActor
     func refreshResult() {
         result = PHAsset.fetchAssets(in: collection, options: option)
     }
@@ -74,8 +76,9 @@ extension PTMediaLibListModel {
 }
 
 //MARK: MediaModel
-// 🌟 优化：添加 final 关键字和 @unchecked Sendable 协议
-public final class PTMediaModel:NSObject,@unchecked Sendable {
+// PhotoKit/UIKit state is UI-owned and must stay on MainActor.
+@MainActor
+public final class PTMediaModel: NSObject {
     public let ident: String
     
     public let asset: PHAsset
@@ -218,7 +221,8 @@ public extension PTMediaModel {
 }
 
 //MARK: 结果输出Model
-public class PTResultModel: NSObject ,@unchecked Sendable {
+@MainActor
+public class PTResultModel: NSObject {
     @objc public let asset: PHAsset
     
     @objc public let image: UIImage

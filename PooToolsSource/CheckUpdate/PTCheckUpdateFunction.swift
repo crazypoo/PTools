@@ -12,36 +12,36 @@ import SwiftJWT
 import Alamofire
 import SmartCodable
 
-class IpadScreenshotUrls :PTModelProtocol,@unchecked Sendable {
-    required init() {}
+struct IpadScreenshotUrls: PTModelProtocol, Sendable {
+    init() {}
 }
 
-class AppletvScreenshotUrls :PTModelProtocol,@unchecked Sendable {
-    required init() {}
+struct AppletvScreenshotUrls: PTModelProtocol, Sendable {
+    init() {}
 }
 
-class Features :PTModelProtocol,@unchecked Sendable {
-    required init() {}
+struct Features: PTModelProtocol, Sendable {
+    init() {}
 }
 
-class Results :PTModelProtocol,@unchecked Sendable {
+struct Results: PTModelProtocol, Sendable {
     var primaryGenreName: String = ""
     var artworkUrl100: String = ""
     var currency: String = ""
     var artworkUrl512: String = ""
-    @SmartAny var ipadScreenshotUrls: [IpadScreenshotUrls] = []
+    var ipadScreenshotUrls: [IpadScreenshotUrls] = []
     var fileSizeBytes: String = ""
-    @SmartAny var genres: [String] = []
-    @SmartAny var languageCodesISO2A: [String] = []
+    var genres: [String] = []
+    var languageCodesISO2A: [String] = []
     var artworkUrl60: String = ""
-    @SmartAny var supportedDevices: [String] = []
+    var supportedDevices: [String] = []
     var bundleId: String = ""
     var trackViewUrl: String = ""
     var version: String = ""
     var description: String = ""
     var releaseDate: String = ""
-    @SmartAny var genreIds: [String] = []
-    @SmartAny var appletvScreenshotUrls: [AppletvScreenshotUrls] = []
+    var genreIds: [String] = []
+    var appletvScreenshotUrls: [AppletvScreenshotUrls] = []
     var wrapperType: String = ""
     var isGameCenterEnabled: Bool = false
     var averageUserRatingForCurrentVersion: Int = 0
@@ -61,25 +61,30 @@ class Results :PTModelProtocol,@unchecked Sendable {
     var trackName: String = ""
     var kind: String = ""
     var contentAdvisoryRating: String = ""
-    @SmartAny var features: [Features] = []
-    @SmartAny var screenshotUrls: [String] = []
+    var features: [Features] = []
+    var screenshotUrls: [String] = []
     var releaseNotes: String = ""
     var isVppDeviceBasedLicensingEnabled: Bool = false
     var sellerName: String = ""
     var averageUserRating: Int = 0
-    @SmartAny var advisories: [String] = []
+    var advisories: [String] = []
     
-    required init() {}
+    init() {}
 }
 
-class PTCheckUpdateModel:PTModelProtocol,@unchecked Sendable {
-    @SmartAny var results: [Results] = []
+struct PTCheckUpdateModel: PTModelProtocol, Sendable {
+    var results: [Results] = []
     var resultCount: Int = 0
-    required init() {}
+    init() {}
 }
 
 /*
  TF Mode
+
+ These legacy reference models are retained for SmartCodable's TestFlight
+ response shape. They are only consumed inside MainActor callbacks; the
+ unchecked conformance is an explicit compatibility allowlist until this
+ public class-based decoder API can migrate to immutable snapshot structs.
  */
 public class PTTFPaging :PTModelProtocol,@unchecked Sendable {
     public var total: Int = 0
@@ -484,7 +489,7 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         }
     }
     
-    public static func appConnectApiRequest<T:SmartCodableX & Sendable>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping @Sendable (Any?,String) -> Void,fail:@escaping @Sendable (NSError) -> Void) {
+    public static func appConnectApiRequest<T:SmartCodableX & Sendable>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping @MainActor @Sendable (Any?,String) -> Void,fail:@escaping @MainActor @Sendable (NSError) -> Void) {
         if showHud {
             toggleHud(show: true)
         }
@@ -497,7 +502,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                 if showHud {
                     toggleHud(show: false)
                 }
-                success(model.customerModel,model.originalString)
+                await MainActor.run {
+                    success(model.customerModel, model.originalString)
+                }
             } catch {
                 if showHud {
                     toggleHud(show: false)
@@ -505,7 +512,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                 PTNSLogConsole("\(error.localizedDescription)",levelType: .notice,loggerType: .network)
                 
                 let nsError = error as NSError
-                fail(nsError)
+                await MainActor.run {
+                    fail(nsError)
+                }
             }
         }
     }
@@ -517,7 +526,7 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         var downLoadLink: String = ""
     }
     
-    public static func fetchTestFlightBuilds(issuerID: String, keyID: String, privateKey: String, expTime: TimeInterval = 1200, updateModelCallback: @escaping @Sendable (PTTFUpdateCustomModel?) -> Void) {
+    public static func fetchTestFlightBuilds(issuerID: String, keyID: String, privateKey: String, expTime: TimeInterval = 1200, updateModelCallback: @escaping @MainActor @Sendable (PTTFUpdateCustomModel?) -> Void) {
         
         guard let token = generateJWT(issuerID: issuerID, keyID: keyID, privateKey: privateKey, expTime: expTime) else {
             PTNSLogConsole("无法生成 JWT")

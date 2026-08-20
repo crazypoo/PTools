@@ -91,7 +91,11 @@ public class PTAnimationFunction: NSObject {
         }
         
         let offscreenAnimation = POPBasicAnimation.easeOut()
-        offscreenAnimation?.property = (POPAnimatableProperty.property(withName: propertyNamed) as! POPAnimatableProperty)
+        guard let property = POPAnimatableProperty.property(withName: propertyNamed) as? POPAnimatableProperty else {
+            completion(false)
+            return
+        }
+        offscreenAnimation?.property = property
         offscreenAnimation?.toValue = offsetValue
         offscreenAnimation?.duration = duration
         offscreenAnimation?.completionBlock = { _, _ in

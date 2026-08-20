@@ -93,8 +93,8 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
 
             // 3. 处理 GIF
             if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
-                let id = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self = self] data, _, isDegraded in
-                    if !isDegraded {
+                let id = PTMediaLibManager.requestImageData(for: model.asset) { [weak self = self] result in
+                    if !result.isCancelled, !result.isDegraded, let data = result.data {
                         let image = UIImage.pt.animateGifImage(data: data)
                         self?.deliver(image: image, asset: nil)
                         self?.fetchFinish()
@@ -108,10 +108,10 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             let size = model.previewSize
             let asset = model.asset
             
-            let resultHandler: @Sendable (UIImage?, Bool) -> Void = { [weak self = self] image, isDegraded in
-                guard let self = self, !isDegraded else { return }
+            let resultHandler: @MainActor @Sendable (PTMediaImageRequestResult) -> Void = { [weak self = self] result in
+                guard let self = self, !result.isCancelled, !result.isDegraded else { return }
                 
-                let fixedImage = image?.pt.fixOrientation()
+                let fixedImage = result.image?.pt.fixOrientation()
                 let finalImage = self.isOriginal ? fixedImage : self.scaleImage(fixedImage)
                 
                 PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .media)
@@ -120,11 +120,12 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             }
 
             let id: PHImageRequestID
-            if isOriginal {
-                id = PTMediaLibManager.fetchOriginalImage(for: asset, progress: progress, completion: resultHandler)
-            } else {
-                id = PTMediaLibManager.fetchImage(for: asset, size: size, progress: progress, completion: resultHandler)
-            }
+            id = PTMediaLibManager.requestImage(for: asset,
+                                                targetSize: isOriginal ? PHImageManagerMaximumSize : size,
+                                                resizeMode: .fast,
+                                                deliveryMode: .highQualityFormat,
+                                                progress: progress,
+                                                completion: resultHandler)
             self.updateRequestID(id)
         }
     }
@@ -142,10 +143,14 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
         }
 
         // Operation 的消费者通过 completion 等待结果；取消时也必须结束等待。
-        deliver(image: nil, asset: model.asset)
-
-        if isExecuting {
-            fetchFinish()
+        // PTMediaModel is MainActor-owned, so read its PhotoKit asset there too.
+        let model = self.model
+        Task { @MainActor [weak self, model] in
+            guard let self else { return }
+            self.deliver(image: nil, asset: model.asset)
+            if self.isExecuting {
+                self.fetchFinish()
+            }
         }
     }
 

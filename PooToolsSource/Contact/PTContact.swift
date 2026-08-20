@@ -7,6 +7,8 @@
 //
 
 import UIKit
+// Contacts.framework returns reference objects from legacy callbacks; they
+// are converted to PTContactSnapshot before crossing the callback boundary.
 @preconcurrency import Contacts
 
 private struct PTContactSnapshot: Sendable {

@@ -11,7 +11,10 @@ import UIKit
 @MainActor
 public final class PTMediaBrowserModel: NSObject {
     public var imageInfo: String = ""
-    public var imageURL: Any!
+    /// The viewer accepts URLs, local media objects and PhotoKit live photos.
+    /// Keep the type-erased value optional so an incomplete data model renders
+    /// an error state instead of trapping through an implicitly unwrapped value.
+    public var imageURL: Any?
     public var modelEX: String = ""
     
     public override init() {
