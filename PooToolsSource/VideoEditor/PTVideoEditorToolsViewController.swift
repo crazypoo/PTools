@@ -870,12 +870,15 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     fileprivate var rewrite:Bool = false
     
     deinit {
-        // 清理幽灵定时器
-        // 清理可能正在导出的残缺废料
         Task { @MainActor [weak self] in
+            if let token = self?.timeObserverToken, let player = self?.avPlayer {
+                player.removeTimeObserver(token)
+            }
+            self?.scrubTask?.cancel()
+            // deinit 后 weak self 可能已经为空，直接使用现有 converter 完成清理。
             self?.videoConverter?.restore(cleanupDisk: true)
         }
-        
+
         PTNSLogConsole("🎬 PTVideoEditorToolsViewController 成功销毁并清理内存/磁盘", levelType: .info, loggerType: .media)
     }
 
@@ -984,7 +987,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                 let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                 
-                let safeAsset = self.videoAVAsset!
+                guard let safeAsset = self.videoAVAsset else {
+                    throw NSError(domain: "PTVideoEditor", code: 401, userInfo: [NSLocalizedDescriptionKey: "视频资源尚未准备完成"])
+                }
                 // 【核心修改点】：统一调用封装好的 Service，默认限制了 maximumSize 保护内存
                 let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
                     for: safeAsset,
@@ -1143,7 +1148,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             outputModel: currentOutputType)
 
         Task {
-            let safeOutputAsset = self.videoAVAsset!
+            guard let safeOutputAsset = self.videoAVAsset else {
+                completion(nil, NSError(domain: "PTVideoEditor", code: 400, userInfo: [NSLocalizedDescriptionKey: "视频资源尚未准备完成"]))
+                return
+            }
             await self.videoConverter = VideoConverter(asset:safeOutputAsset)
             videoConverter?.convert(options,progress: { progress in
                 Task { @MainActor in
@@ -1177,7 +1185,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: false,
             speed: speed)
 
-        let safeConvertAsset = self.videoAVAsset!
+        guard let safeConvertAsset = self.videoAVAsset else { return }
         await self.videoConverter = VideoConverter(asset:safeConvertAsset)
         
         // 挂起等待外部处理完毕

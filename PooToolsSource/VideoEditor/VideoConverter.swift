@@ -101,6 +101,7 @@ open class VideoConverter {
             guard let crop = self.option?.convertCrop else { return nil }
             guard let naturalSize = await self.naturalSize else { return nil }
             let contrastSize = crop.contrastSize
+            guard contrastSize.width > 0, contrastSize.height > 0 else { return nil }
             let frame = crop.frame
             let cropX = frame.origin.x * naturalSize.width / contrastSize.width
             let cropY = frame.origin.y * naturalSize.height / contrastSize.height
@@ -210,6 +211,17 @@ open class VideoConverter {
         self.restore()
         self.isCancelledState = false
         self.option = option
+
+        if let option {
+            guard option.speed.isFinite, option.speed > 0 else {
+                throw NSError(domain: "PTVideoEditor", code: 400, userInfo: [NSLocalizedDescriptionKey: "视频速度参数无效"])
+            }
+            let trim = option.trimRange
+            guard trim.0.isFinite, trim.1.isFinite,
+                  trim.0 >= 0, trim.1 <= 1, trim.0 < trim.1 else {
+                throw NSError(domain: "PTVideoEditor", code: 401, userInfo: [NSLocalizedDescriptionKey: "视频裁剪范围无效"])
+            }
+        }
         
         guard let videoTrack = await self.videoTrack else {
             throw NSError(domain: "Can't find video", code: 404, userInfo: nil)
@@ -222,7 +234,9 @@ open class VideoConverter {
         let currentRenderSize = await currentRenderSizeTask
         let currentTransform = await currentTransformTask
         
-        if currentRenderSize?.width == 0 || currentRenderSize?.height == 0 {
+        if let currentRenderSize,
+           !currentRenderSize.width.isFinite || !currentRenderSize.height.isFinite ||
+           currentRenderSize.width <= 0 || currentRenderSize.height <= 0 {
             self.restore()
             throw NSError(domain: "The crop size is too small", code: 503, userInfo: nil)
         }
@@ -248,7 +262,7 @@ open class VideoConverter {
             range = CMTimeRange(start: .zero, duration: duration)
         }
         
-        try? videoCompositionTrack.insertTimeRange(range, of: videoTrack, at: .zero)
+        try videoCompositionTrack.insertTimeRange(range, of: videoTrack, at: .zero)
 
         let newDuration = Double(duration.seconds) / (self.option?.speed ?? 1)
         let time = CMTime(seconds: newDuration, preferredTimescale: duration.timescale)
@@ -263,7 +277,7 @@ open class VideoConverter {
             let audioTracks = try await self.asset.loadTracks(withMediaType: .audio)
             if let audioTrack = audioTracks.first {
                 let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                try? audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
+                try audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
                 audioCompositionTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: time)
             }
         }
@@ -341,6 +355,7 @@ open class VideoConverter {
         let result = FileManager.pt.removefile(filePath: filePath)
         guard result.isSuccess else {
             PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: result.error, icon: .Error)
+            completion(nil, NSError(domain: "PTVideoEditor", code: 403, userInfo: [NSLocalizedDescriptionKey: result.error]))
             return
         }
         
@@ -509,5 +524,7 @@ open class VideoConverter {
     // MARK: - 引擎 C (MP3 第三方转换)
     private func exportMP3UsingLame(ac: AVMutableComposition, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         PTNSLogConsole("准备调用第三方库转码 MP3...")
+        completion(nil, NSError(domain: "PTVideoEditor", code: 404, userInfo: [NSLocalizedDescriptionKey: "当前构建未提供 MP3 编码器"]))
+        self.restore(cleanupDisk: true)
     }
 }
