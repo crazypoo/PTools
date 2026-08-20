@@ -618,8 +618,8 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         // 1. 動態構建年份數據源 (根據邊界自動縮放)
         let defaultMinYear = 1900
         let defaultMaxYear = calendar.component(.year, from: Date()) + 50
-        let startYear = minDate != nil ? calendar.component(.year, from: minDate!) : defaultMinYear
-        let endYear = maxDate != nil ? calendar.component(.year, from: maxDate!) : defaultMaxYear
+        let startYear = minDate.map { calendar.component(.year, from: $0) } ?? defaultMinYear
+        let endYear = maxDate.map { calendar.component(.year, from: $0) } ?? defaultMaxYear
         self.yearArray = Array(startYear...max(startYear, endYear))
         
         // 2. 解析默認日期 (提取到專門的函數)
@@ -953,7 +953,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         
         // 3. 將滾輪撥動到對應的位置
         for (col, levelData) in currentColumns.enumerated() {
-            let defaultRow = (defaultIndices != nil && col < defaultIndices!.count) ? defaultIndices![col] : 0
+            let defaultRow = defaultIndices.flatMap { col < $0.count ? $0[col] : nil } ?? 0
             let safeRow = max(0, min(defaultRow, levelData.count - 1))
             pickerView.selectRow(safeRow, inComponent: col, animated: false)
         }
@@ -972,7 +972,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         // 遞迴向下尋找子節點，直到葉子節點為止
         while !currentLevel.isEmpty {
             // 獲取當前層應該選中的 index
-            let defaultRow = (defaultIndices != nil && colIndex < defaultIndices!.count) ? defaultIndices![colIndex] : 0
+            let defaultRow = defaultIndices.flatMap { colIndex < $0.count ? $0[colIndex] : nil } ?? 0
             let safeRow = max(0, min(defaultRow, currentLevel.count - 1))
             
             // 如果安全，則取出它的子節點

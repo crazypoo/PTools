@@ -27,20 +27,20 @@ open class PTShareItem: NSObject,UIActivityItemSource {
     public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         switch activityType {
         case .postToFacebook?:
-            if url != nil {
-                return "\(title)\n\(content)\n\(url!)"
+            if let url {
+                return "\(title)\n\(content)\n\(url)"
             } else {
                 return "\(title)\n\(content)"
             }
         case .postToTwitter?:
-            if url != nil {
-                return "\(title) \(url!)"
+            if let url {
+                return "\(title) \(url)"
             } else {
                 return "\(title)"
             }
         case .message?:
-            if url != nil {
-                return "\(title)\n\(content)\n\(url!)"
+            if let url {
+                return "\(title)\n\(content)\n\(url)"
             } else {
                 return "\(title)\n\(content)"
             }
@@ -52,12 +52,12 @@ open class PTShareItem: NSObject,UIActivityItemSource {
 
 public class PTShareCustomActivity: UIActivity {
     //用于保存传递过来的要分享的数据
-    open var text:String!
-    open var url:URL!
-    open var image:UIImage!
+    open var text:String?
+    open var url:URL?
+    open var image:UIImage?
      
-    open var customActivityTitle:String!
-    open var customActivityImage:UIImage!
+    open var customActivityTitle:String?
+    open var customActivityImage:UIImage?
 
     //显示在分享框里的名称
     public override var activityTitle: String?  {
@@ -99,13 +99,13 @@ public class PTShareCustomActivity: UIActivity {
     public override func prepare(withActivityItems activityItems: [Any]) {
         for item in activityItems {
             if item is UIImage {
-                image = (item as! UIImage)
+                image = item as? UIImage
             }
             if item is String {
-                text = (item as! String)
+                text = item as? String
             }
             if item is URL {
-                url = (item as! URL)
+                url = item as? URL
             }
         }
     }
@@ -298,7 +298,8 @@ open class PTActivityViewController:UIActivityViewController {
         UIView.animate(withDuration: fadeInDuration) {
             self.previewContainer.alpha = 1
         }
-        AppWindows!.addSubviews([previewContainer])
+        guard let appWindow = AppWindows else { return }
+        appWindow.addSubviews([previewContainer])
         previewContainer.snp.makeConstraints { make in
 //            make.edges.equalToSuperview()
             make.left.right.top.equalToSuperview()

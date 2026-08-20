@@ -74,9 +74,15 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
         Task { @MainActor in
             if let editImage = model.editImage {
                 if PTMediaLibConfig.share.saveNewImageAfterEdit {
-                    PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self = self] _, asset in
-                        self?.deliver(image: editImage, asset: asset)
-                        self?.fetchFinish()
+                    PTMediaSaveService.save(image: editImage) { [weak self = self] result in
+                        guard let self else { return }
+                        switch result {
+                        case .success(let asset):
+                            self.deliver(image: editImage, asset: asset)
+                        case .failure:
+                            self.deliver(image: editImage, asset: nil)
+                        }
+                        self.fetchFinish()
                     }
                 } else {
                     self.deliver(image: editImage, asset: nil)

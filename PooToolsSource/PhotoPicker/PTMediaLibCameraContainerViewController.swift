@@ -61,26 +61,18 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
     }
 
     /// 统一保存逻辑
+    @MainActor
     fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
         PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart)
 
-        let completion: @Sendable (Bool, PHAsset?) -> Void = { [weak self] success, asset in
-            guard success, let asset = asset else {
-                PTGCDManager.shared.runOnMain {
-                    let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
-                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
-                }
-                return
-            }
-            PTGCDManager.shared.runOnMain { [weak self] in
+        PTMediaSaveService.save(image: image, videoURL: videoUrl) { [weak self] result in
+            switch result {
+            case .success(let asset):
                 self?.handleNewAsset(asset)
+            case .failure:
+                let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
             }
-        }
-
-        if let img = image {
-            PHPhotoLibrary.pt.saveImageToAlbum(image: img, completion: completion)
-        } else if let url = videoUrl {
-            PTMediaLibManager.saveVideoToAlbum(url: url, completion: completion)
         }
     }
 
@@ -89,4 +81,3 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
         handleNewAssetCallback?(asset)
     }
 }
-

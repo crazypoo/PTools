@@ -12,5 +12,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate build contract
         run: bash Scripts/validate_build_entries.sh
+      - name: Validate release metadata
+        run: bash Scripts/validate_release.sh
+      - name: Scan unsafe Swift constructs
+        run: bash Scripts/validate_quality_scans.sh
       - name: Validate patch formatting
         run: git diff --check
+      - name: CocoaPods lint
+        run: pod lib lint PooTools.podspec --allow-warnings --skip-tests
+      - name: Build iOS Simulator entry
+        run: xcodebuild -workspace PooTools.xcworkspace -scheme PooTools -destination 'generic/platform=iOS Simulator' -configuration Release CODE_SIGNING_ALLOWED=NO build

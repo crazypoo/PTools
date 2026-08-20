@@ -239,13 +239,13 @@ public extension PHAsset {
                     version: PHImageRequestOptionsVersion = .current,
                     supportIcloud: Bool  = true,
                     completion: @escaping @Sendable (UIImage?) -> Void) {
-        let options = PHImageRequestOptions()
-        options.version = version
-        options.deliveryMode = deliveryMode
-        options.isNetworkAccessAllowed = supportIcloud
-
-        PHImageManager.default().requestImage(for: self, targetSize: targetSize, contentMode: contentMode, options: options) { image, _ in
-            completion(image)
+        PTMediaLibManager.requestImage(for: self,
+                                       targetSize: targetSize,
+                                       contentMode: contentMode,
+                                       deliveryMode: deliveryMode,
+                                       version: version,
+                                       supportIcloud: supportIcloud) { result in
+            completion(result.image)
         }
     }
     

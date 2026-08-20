@@ -23,6 +23,26 @@ private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {
     let tag:NFCNDEFTag
 }
 
+private struct PTNFCNDEFPayloadSnapshot: Sendable {
+    let format: UInt8
+    let type: Data
+    let identifier: Data
+    let payload: Data
+
+    init(_ payload: NFCNDEFPayload) {
+        format = payload.typeNameFormat.rawValue
+        type = payload.type
+        identifier = payload.identifier
+        self.payload = payload.payload
+    }
+
+    @MainActor
+    func makePayload() -> NFCNDEFPayload? {
+        guard let format = NFCTypeNameFormat(rawValue: format) else { return nil }
+        return NFCNDEFPayload(format: format, type: type, identifier: identifier, payload: payload)
+    }
+}
+
 @MainActor
 @available(iOS 13.0, *)
 public class PTNFCToolKit: NSObject {
@@ -291,12 +311,12 @@ extension PTNFCToolKit {
                 safeBox.session.alertMessage = localReadSuccessMsg
                 safeBox.session.invalidate()
                 
-                // 【核心修复】使用 nonisolated(unsafe) 包装非 Sendable 的 records
-                // 这明确告诉 Swift 6 编译器：我们将安全地把这个对象转移给主线程，后台不再触碰它
-                nonisolated(unsafe) let safeRecords = records
-                
+                // 只把 NDEF 记录中的值类型快照带入 MainActor，避免跨 actor 转移
+                // CoreNFC 对象本身。原始 records 在此回调结束后不再被使用。
+                let recordSnapshots = records.map(PTNFCNDEFPayloadSnapshot.init)
+
                 Task { @MainActor in
-                    // 在主线程中使用包装好的 safeRecords
+                    let safeRecords = recordSnapshots.compactMap { $0.makePayload() }
                     self?.onReadSuccess?(safeRecords)
                     self?.clear()
                 }

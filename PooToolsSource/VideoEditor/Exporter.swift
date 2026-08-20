@@ -6,10 +6,17 @@
 //
 
 import Foundation
-import AVFoundation
+@preconcurrency import AVFoundation
 import CoreVideo
 
 public typealias ExporterBuffer = CVPixelBuffer
+
+/// AVFoundation's asset classes are imported as non-Sendable reference types.
+/// This box is deliberately limited to the read-only asset used by the export
+/// pipeline; mutable export state never crosses this boundary.
+struct PTSystemAVAssetBox: @unchecked Sendable {
+    let asset: AVAsset
+}
 
 public struct Exporter {
     
@@ -17,6 +24,19 @@ public struct Exporter {
     public typealias ExportComplete = @Sendable (Result<URL, Exporter.Error>) -> Void
     
     let provider: Exporter.Provider
+
+    /// Values copied from the public `[Option: Any]` input before the first
+    /// suspension point. The raw dictionary must not cross the async/render
+    /// boundary because its `Any` values are not concurrency-safe.
+    private struct ExportSettings {
+        let presetName: String
+        let optimizeForNetworkUse: Bool
+        let frameDuration: CMTime
+        let renderSize: CGSize?
+        let enablePostProcessing: Bool
+        let containsTweening: Bool
+        let layerInstructions: [AVVideoCompositionLayerInstruction]?
+    }
     
     /// Craate exporter.
     /// - Parameter provider: Configure export information.
@@ -29,37 +49,39 @@ public struct Exporter {
     ///   - options: Setup other parameters about export video.
     ///   - filtering: Filters work to filter pixel buffer.
     ///   - complete: The conversion is complete, including success or failure.
+    @MainActor
     public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async {
         do {
-            let (composition, videoComposition) = try await setupComposition(options: options, filtering: filtering)
+            // Snapshot every supported option while still on the caller's
+            // actor. No async helper or compositor instruction receives the
+            // original `[Option: Any]` dictionary.
+            let settings = Self.makeSettings(from: options)
+            let provider = self.provider
+            let assetBox = PTSystemAVAssetBox(asset: provider.asset)
+            let (composition, videoComposition) = try await Self.setupComposition(assetBox: assetBox, settings: settings, filtering: filtering)
             
-            // 🚀 修复核心 1：使用 nonisolated(unsafe) 关键字。
-            // 这明确告诉 Swift 6 编译器：我知道这个 export 对象不是 Sendable，
-            // 但我保证它的生命周期是安全的，请允许它被闭包捕获。
-            nonisolated(unsafe) let export = try setupExportSession(composition: composition, options: options)
+            let export = try Self.setupExportSession(composition: composition,
+                                                     outputURL: provider.outputURL,
+                                                     fileType: provider.fileType,
+                                                     settings: settings)
             export.videoComposition = videoComposition
             
-            // 🚀 修复核心 2：提前提取 URL，切断对 self 的依赖。
-            // URL 类型天生是 Sendable 的，这样 Task 就只会捕获 targetURL，彻底忘掉 self。
             let targetURL = provider.outputURL
             
-            Task {
-                do {
-                    await export.export()
-                    switch export.status {
-                    case .failed:
-                        if let error = export.error {
-                            complete(.failure(Exporter.Error.error(error)))
-                        } else {
-                            complete(.failure(Exporter.Error.unknown))
-                        }
-                    case .completed:
-                        // 🚀 修复核心 3：在这里使用刚刚提取的安全局部变量 targetURL
-                        complete(.success(targetURL))
-                    default:
-                        complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
-                        break
+            do {
+                await export.export()
+                switch export.status {
+                case .failed:
+                    if let error = export.error {
+                        complete(.failure(Exporter.Error.error(error)))
+                    } else {
+                        complete(.failure(Exporter.Error.unknown))
                     }
+                case .completed:
+                    complete(.success(targetURL))
+                default:
+                    complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
+                    break
                 }
             }
         } catch {
@@ -74,38 +96,33 @@ public struct Exporter {
 
 extension Exporter {
     
-    private func setupExportSession(composition: AVComposition, options: [Exporter.Option: Any]) throws -> AVAssetExportSession {
-        let presetName = setupPresetName(options: options)
-        guard let export = AVAssetExportSession(asset: composition, presetName: presetName) else {
+    @MainActor
+    private static func setupExportSession(composition: AVComposition,
+                                           outputURL: URL,
+                                           fileType: MovieFileType,
+                                           settings: ExportSettings) throws -> AVAssetExportSession {
+        guard let export = AVAssetExportSession(asset: composition, presetName: settings.presetName) else {
             throw(Exporter.Error.exportSessionEmpty)
         }
-        export.outputURL = provider.outputURL
-        export.outputFileType = provider.fileType.avFileType
-        export.shouldOptimizeForNetworkUse = setupOptimizeForNetworkUse(options: options)
+        export.outputURL = outputURL
+        export.outputFileType = fileType.avFileType
+        export.shouldOptimizeForNetworkUse = settings.optimizeForNetworkUse
         return export
     }
 
-    private func setupComposition(options: [Exporter.Option: Any], filtering: @escaping PixelBufferCallback) async throws -> (AVComposition, AVVideoComposition) {
+    @MainActor
+    private static func setupComposition(assetBox: PTSystemAVAssetBox,
+                                         settings: ExportSettings,
+                                         filtering: @escaping PixelBufferCallback) async throws -> (AVComposition, AVVideoComposition) {
+        let asset = assetBox.asset
         
-        var videoFrameDuration = CMTimeMake(value: 1, timescale: 30)
-        
-        // 🌟 2. 字典取值极简优化：告别啰嗦的 for 循环 switch
-        if let value = options[.VideoCompositionFrameDuration] as? CMTime {
-            videoFrameDuration = value
-        }
-        
-        let asset = self.provider.asset
-        
-        // 🌟 3. 异步获取视频轨道
         let videoTracks = try await asset.loadTracks(withMediaType: .video)
         guard let track = videoTracks.first else {
             throw(Exporter.Error.videoTrackEmpty)
         }
         
-        // 🌟 4. 无缝衔接刚才重构的异步方法
-        let naturalSize = try await setupVideoRenderSize(videoTracks, asset: asset, options: options)
+        let naturalSize = try await Self.setupVideoRenderSize(videoTracks, assetBox: assetBox, renderSize: settings.renderSize)
         
-        // 🌟 5. 异步获取资产总时长
         let duration = try await asset.load(.duration)
         
         let composition = AVMutableComposition()
@@ -116,23 +133,48 @@ extension Exporter {
         
         try videoTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: duration), of: track, at: .zero)
         
-        // 🌟 6. 异步获取音频轨道
         let audioTracks = try await asset.loadTracks(withMediaType: .audio)
         if let audio = audioTracks.first,
            let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) {
             try audioCompositionTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: duration), of: audio, at: .zero)
         }
         
-        let instruction = CompositionInstruction(videoTrack: videoTrack, bufferCallback: filtering, options: options)
+        let instruction = CompositionInstruction(videoTrack: videoTrack,
+                                                 bufferCallback: filtering,
+                                                 containsTweening: settings.containsTweening,
+                                                 enablePostProcessing: settings.enablePostProcessing,
+                                                 layerInstructions: settings.layerInstructions)
         instruction.timeRange = CMTimeRangeMake(start: .zero, duration: duration)
         
-        // 🌟 7. iOS 16+ 专属适配：使用异步工厂方法初始化 VideoComposition，防止阻塞底层
         let videoComposition = try await AVMutableVideoComposition.videoComposition(withPropertiesOf: asset)
         videoComposition.customVideoCompositorClass = Compositor.self
-        videoComposition.frameDuration = videoFrameDuration
+        videoComposition.frameDuration = settings.frameDuration
         videoComposition.renderSize = naturalSize
         videoComposition.instructions = [instruction]
         
         return (composition, videoComposition)
+    }
+
+    @MainActor
+    private static func makeSettings(from options: [Exporter.Option: Any]) -> ExportSettings {
+        let presetName: String
+        if let value = options[.ExportSessionPresetName] as? String,
+           AVAssetExportSession.allExportPresets().contains(value) {
+            presetName = value
+        } else if options[.ExportSessionPresetName] != nil {
+            presetName = AVAssetExportPresetMediumQuality
+        } else {
+            presetName = AVAssetExportPresetHighestQuality
+        }
+
+        return ExportSettings(
+            presetName: presetName,
+            optimizeForNetworkUse: (options[.OptimizeForNetworkUse] as? Bool) ?? true,
+            frameDuration: (options[.VideoCompositionFrameDuration] as? CMTime) ?? CMTime(value: 1, timescale: 30),
+            renderSize: options[.VideoCompositionRenderSize] as? CGSize,
+            enablePostProcessing: (options[.VideoCompositionInstructionEnablePostProcessing] as? Bool) ?? true,
+            containsTweening: (options[.VideoCompositionInstructionContainsTweening] as? Bool) ?? false,
+            layerInstructions: options[.VideoCompositionInstructionLayerInstructions] as? [AVVideoCompositionLayerInstruction]
+        )
     }
 }

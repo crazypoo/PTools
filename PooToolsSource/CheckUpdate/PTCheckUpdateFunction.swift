@@ -225,7 +225,7 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
             appStoreVersion += "00"
         }
         
-        var currentVersion = kAppVersion!.replacingOccurrences(of: ".", with: "")
+        var currentVersion = (kAppVersion ?? "0.0.0").replacingOccurrences(of: ".", with: "")
         if currentVersion.nsString.length == 2 {
             currentVersion += "0"
         } else if currentVersion.nsString.length == 1 {
@@ -248,19 +248,15 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
             switch index {
             case 0:
                 if force {
-                    if url != nil {
-                        Task { @MainActor in
-                            PTAppStoreFunction.jumpLink(url: url!)
-                        }
+                    if let url {
+                        PTAppStoreFunction.jumpLink(url: url)
                     } else {
                         PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                     }
                 }
             case 1:
-                if url != nil {
-                    Task { @MainActor in
-                        PTAppStoreFunction.jumpLink(url: url!)
-                    }
+                if let url {
+                    PTAppStoreFunction.jumpLink(url: url)
                 } else {
                     PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                 }
@@ -278,7 +274,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         let versionResult = self.renewVersion(newVersion: version)
         let currentVersion = versionResult.0
         let appStoreVersion = versionResult.1
-        if appStoreVersion.float()! > currentVersion.float()! {
+        guard let appStoreFloat = appStoreVersion.float(),
+              let currentFloat = currentVersion.float() else { return }
+        if appStoreFloat > currentFloat {
             var okBtns = [String]()
             if force {
                 okBtns = ["PT Upgrade".localized()]
@@ -301,7 +299,11 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                 })
             case .User:
                 Task { @MainActor in
-                    self.alert_updateTips(oldVersion: kAppVersion!, newVersion: version, description: (note ?? ""), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
+                    guard let storeURL = URL(string: PTAppStoreFunction.appStoreURL(appid: appid)) else {
+                        PTNSLogConsole("非法 App Store URL", levelType: .error, loggerType: .checkUpdate)
+                        return
+                    }
+                    self.alert_updateTips(oldVersion: kAppVersion ?? "0.0.0", newVersion: version, description: (note ?? ""), downloadUrl: storeURL)
                 }
             }
         }
@@ -339,7 +341,10 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                         let result = try await Network.requestCodableApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(aID)",modelType: PTCheckUpdateModel.self)
                         if let responseModel = result.customerModel {
                             if !responseModel.results.isEmpty {
-                                let versionModel = responseModel.results.first!
+                                guard let versionModel = responseModel.results.first else {
+                                    PTNSLogConsole("Data error", levelType: .error, loggerType: .checkUpdate)
+                                    return
+                                }
                                 let versionStr = versionModel.version
                                 
                                 self.updateAlert(force: force, appid: aID, version: versionStr, note: versionModel.releaseNotes, alertType: alertType)
@@ -401,7 +406,12 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
             }
         },doneTitle: "PT Upgrade".localized()) {
             Task { @MainActor in
-                let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL(string: "https://" + url.description)! : url
+                guard let realURL = (url.scheme ?? "").stringIsEmpty()
+                        ? URL(string: "https://" + url.description)
+                        : Optional(url) else {
+                    PTNSLogConsole("非法url", levelType: .error, loggerType: .checkUpdate)
+                    return
+                }
                 PTAppStoreFunction.jumpLink(url: realURL)
             }
         } tipContentView: { contentView in
@@ -425,13 +435,13 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         self.hudConfig()
         if self.hud == nil {
             self.hud = PTHudView()
-            self.hud!.hudShow()
+            self.hud?.hudShow()
         }
     }
     
     @MainActor func hudHide(completion:PTActionTask? = nil) {
         if self.hud != nil {
-            self.hud!.hide { [weak self] in
+            self.hud?.hide { [weak self] in
                 self?.hud = nil
                 completion?()
             }

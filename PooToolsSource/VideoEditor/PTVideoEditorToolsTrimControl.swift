@@ -17,14 +17,14 @@ private struct PTSafeMediaBox<T>: @unchecked Sendable {
 
 class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
 
-    var trimPosotionsHandler:(((Double, Double))->Void)!
+    var trimPosotionsHandler:(((Double, Double))->Void)?
     // MARK: Private Properties
     private lazy var trimmingControlView: PTVideoEditorToolsTrimmingControl = {
         let view = PTVideoEditorToolsTrimmingControl(trimPositions: self.trimPositions)
         return view
     }()
-    var asset: AVAsset!
-    fileprivate var trimPositions: (Double, Double)!
+    let asset: AVAsset
+    fileprivate let trimPositions: (Double, Double)
 
     init(trimPositions: (Double, Double), asset: AVAsset,typeModel:PTVideoEditorToolsModel) {
         self.trimPositions = trimPositions
@@ -74,7 +74,7 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
                     
                     // 后台去疯狂截帧，主线程在这里暂停等待
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
-                        for: newAsset.mediaItem!,
+                        for: newAsset.mediaItem,
                         numberOfFrames: count,
                         maximumSize: maxSize
                     )
@@ -92,7 +92,7 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         }
 
         doneButton.addActionHandlers { sender in
-            self.trimPosotionsHandler(self.trimmingControlView.trimPositions)
+            self.trimPosotionsHandler?(self.trimmingControlView.trimPositions)
             self.returnFrontVC()
         }
     }

@@ -13,25 +13,32 @@ public class PTDebugFunction: NSObject {
     //MARK: App測試模式的檢測
     ///App測試模式的檢測
     @MainActor class open func registerDefaultsFromSettingsBundle(pod:Bool = false) {
-        var bundleSelected:Bundle!
+        let bundleSelected: Bundle
         if pod {
             let bundle = PTUtils.cgBaseBundle()
             let podBundle = bundle.path(forResource: CorePodBundleName, ofType: "bundle")
-            bundleSelected = Bundle(path: podBundle!)!
+            guard let podBundle, let resolvedBundle = Bundle(path: podBundle) else {
+                PTNSLogConsole("无法加载 PooTools 资源 Bundle", levelType: .error, loggerType: .settings)
+                return
+            }
+            bundleSelected = resolvedBundle
         } else {
             bundleSelected = Bundle.main
         }
         
         if let settingsBundle = bundleSelected.path(forResource: "Settings", ofType: "bundle") {
-            let settings = NSDictionary(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist"))
-            let prefernces = settings!["PreferenceSpecifiers"] as! [NSDictionary]
-            let defaultsToRegister = NSMutableDictionary(capacity: prefernces.count)
+            guard let settings = NSDictionary(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist")),
+                  let prefernces = settings["PreferenceSpecifiers"] as? [NSDictionary] else {
+                PTNSLogConsole("Settings.bundle Root.plist 格式无效", levelType: .error, loggerType: .settings)
+                return
+            }
+            var defaultsToRegister: [String: Any] = [:]
             for prefSpecification in prefernces {
                 if let key :String = prefSpecification["Key"] as? String {
                     defaultsToRegister[key] = prefSpecification["DefaultValue"]
                 }
             }
-            UserDefaults.standard.register(defaults: defaultsToRegister as! [String : Any])
+            UserDefaults.standard.register(defaults: defaultsToRegister)
             UserDefaults.standard.synchronize()
         } else {
             PTCoreUserDefultsWrapper.shared.AppServiceIdentifier = "1"

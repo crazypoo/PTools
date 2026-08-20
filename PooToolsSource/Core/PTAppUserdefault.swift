@@ -94,5 +94,9 @@ public final class PTCoreUserDefultsWrapper: @unchecked Sendable {
     @PTUserDefault(withKey: "MockLocationLat", defaultValue: 0) public var PTMockLocationLat:CGFloat
     @PTUserDefault(withKey: "MockLocationLng", defaultValue: 0) public var PTMockLocationLng:CGFloat
     @PTUserDefault(withKey: "MockLocationOpen", defaultValue: false) public var PTMockLocationOpen:Bool
+#if DEBUG
     @PTUserDefault(withKey: "LogWriteToTextFile", defaultValue: true) public var PTLogWrite:Bool
+#else
+    @PTUserDefault(withKey: "LogWriteToTextFile", defaultValue: false) public var PTLogWrite:Bool
+#endif
 }

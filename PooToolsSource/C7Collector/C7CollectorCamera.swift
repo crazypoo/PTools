@@ -12,6 +12,13 @@ import Harbeth
 import Photos
 import Kakapos
 
+/// CVPixelBuffer is supplied by AVFoundation on a capture queue. It is kept in
+/// this narrow system-framework compatibility box until it reaches the
+/// MainActor-owned collector; business models do not use this escape hatch.
+private struct PTSystemPixelBufferBox: @unchecked Sendable {
+    let value: CVPixelBuffer
+}
+
 /// 相机数据采集器，在主线程返回图片
 /// The camera data collector returns pictures in the main thread.
 @MainActor
@@ -432,11 +439,10 @@ extension C7CollectorCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
     nonisolated public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        nonisolated(unsafe) let safePixelBuffer = pixelBuffer
-        // 3. 因为你的 C7CollectorCamera 是 @MainActor，所以调用 processing 需要切回主线程
+        let safePixelBuffer = PTSystemPixelBufferBox(value: pixelBuffer)
         Task { @MainActor [weak self] in
             guard let self = self else { return }
-            self.processing(with: safePixelBuffer)
+            self.processing(with: safePixelBuffer.value)
         }
     }
 }
@@ -754,4 +760,3 @@ extension UIImage {
         return rotatedImage
     }
 }
-

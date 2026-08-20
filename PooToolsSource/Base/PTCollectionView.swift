@@ -219,17 +219,6 @@ final class PTIndexItemView: UILabel {
     }
 }
 
-struct LayoutCacheKey: Hashable {
-    let section: Int
-    let width: CGFloat
-    let version: Int
-}
-
-struct HeightCacheKey: Hashable {
-    let id: String
-    let width: CGFloat
-}
-
 private struct DiffThreshold {
     static let smallItem = 200      // 完整 diff
     static let mediumItem = 500     // 只 section diff
@@ -246,21 +235,6 @@ private struct WaterfallCacheKey: Hashable {
     let section: Int
     let width: CGFloat
     let version: Int
-}
-
-public enum PTDiffAnimation {
-    case none
-    case fade
-    case right
-    case left
-    case top
-    case bottom
-    case automatic
-    case `default`
-}
-
-public enum CornerPosition {
-    case single, top, middle, bottom
 }
 
 // 1. 定义一个基于 NSCache 的强类型缓存
@@ -1808,23 +1782,18 @@ extension PTCollectionView {
     private func showEmptyConfig() {
         let snapshot = self.diffableDataSource.snapshot()
         let isEmpty = snapshot.numberOfItems == 0
-        if viewConfig.showEmptyAlert {
-            if isEmpty {
-                PTUnavailableManager.hideUnavailableView(in: self) {
-                    if let config = self.viewConfig.emptyViewConfig {
-                        PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self = self] in
-                            self?.showEmptyLoading()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                self?.emptyTap?(nil)
-                            }
-                        }
-                    }
-                }
-            } else {
-                PTUnavailableManager.hideUnavailableView(in: self)
+        guard viewConfig.showEmptyAlert, isEmpty, let config = viewConfig.emptyViewConfig else {
+            PTUnavailableManager.render(.content, in: self)
+            return
+        }
+
+        PTUnavailableManager.render(.empty, in: self, config: config) { [weak self = self] in
+            self?.showEmptyLoading()
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(100))
+                guard !Task.isCancelled else { return }
+                self?.emptyTap?(nil)
             }
-        } else {
-            PTUnavailableManager.hideUnavailableView(in: self)
         }
     }
     

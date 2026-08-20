@@ -23,34 +23,50 @@
 
 ## Installation
 
+PTools 当前支持 iOS 17.0+ 和 Swift 6.0。按需选择模块，避免无关功能进入宿主 App。
+
+### Swift Package Manager
+
+在 Xcode 中添加：
+
+```text
+https://github.com/crazypoo/PTools.git
+```
+
+常用产品：`ptools`、`PooToolsNetWork`、`PooToolsPhotoPicker`、
+`PooToolsVideoEditor`、`PooToolsMediaViewer`、`PooToolsRouter`。
+
+### CocoaPods
+
+```ruby
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '4.5.14'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '4.5.14'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '4.5.14'
+```
+
+### Swift 6 迁移要点
+
+- UI 配置、空状态和媒体保存回调在 `MainActor` 上执行。
+- 图片请求统一使用 `PTMediaLibManager.requestImage`；旧 `fetchImage` 入口继续兼容。
+- 媒体保存优先使用 `PTMediaSaveService.save(image:videoURL:completion:)`；旧保存入口保留并逐步弃用。
+- Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。
+
+完整发布和迁移清单见 [RELEASE.md](RELEASE.md)。
+
 ## Quality and release
 
 项目统一要求 iOS 17.0+ 与 Swift 6.0。提交代码前运行：
 
 ```bash
 bash Scripts/validate_build_entries.sh
+bash Scripts/validate_release.sh
+bash Scripts/validate_quality_scans.sh
 git diff --check
 ```
 
 版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。
 
-### Swift Package Manager
-
-在 Xcode 中添加仓库地址：
-
-```text
-https://github.com/crazypoo/PTools.git
-```
-
-SPM 入口统一支持 iOS 17.0+，并使用 Swift 6 language mode。默认产品为 `ptools`，也可以按需选择独立模块产品。
-
-默认
-
-```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
-```
-
-其他根据自己个人喜好加载
+其他模块根据项目需要选择：
 
 ```ruby
 ### 数据加密

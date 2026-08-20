@@ -123,6 +123,10 @@
 		552660C83035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660C73035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift */; };
 		552660EB303741BA00582606 /* PTLogFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EA303741BA00582606 /* PTLogFileManager.swift */; };
 		552660ED303741C700582606 /* NetworkTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EC303741C700582606 /* NetworkTypes.swift */; };
+		552660EF3037544D00582606 /* PTBaseViewController+NavigationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */; };
+		552660F13037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F03037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift */; };
+		552660F3303758BB00582606 /* PTCollectionViewTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F2303758BB00582606 /* PTCollectionViewTypes.swift */; };
+		552660F53037590000582606 /* PTMediaSaveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F43037590000582606 /* PTMediaSaveService.swift */; };
 		552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552748502BF8BF2900BF4D18 /* PTSwitch.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
@@ -1098,6 +1102,10 @@
 		552660C73035F33A00582606 /* PTMediaBrowserController+PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTMediaBrowserController+PhotoLibrary.swift"; sourceTree = "<group>"; };
 		552660EA303741BA00582606 /* PTLogFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogFileManager.swift; sourceTree = "<group>"; };
 		552660EC303741C700582606 /* NetworkTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTypes.swift; sourceTree = "<group>"; };
+		552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+NavigationTypes.swift"; sourceTree = "<group>"; };
+		552660F03037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTVideoEditorToolsViewController+Lifecycle.swift"; sourceTree = "<group>"; };
+		552660F2303758BB00582606 /* PTCollectionViewTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionViewTypes.swift; sourceTree = "<group>"; };
+		552660F43037590000582606 /* PTMediaSaveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaSaveService.swift; sourceTree = "<group>"; };
 		552748502BF8BF2900BF4D18 /* PTSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwitch.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
@@ -2602,6 +2610,7 @@
 		552F078A2B15C26B00CB47CD /* PhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
+				552660F43037590000582606 /* PTMediaSaveService.swift */,
 				55BCB96C2B1732030016A4C2 /* PTFetchImageOperation.swift */,
 				55BCB97F2B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift */,
 				55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */,
@@ -2831,6 +2840,7 @@
 		5585F6C72AD298C800F878B4 /* VideoEditor */ = {
 			isa = PBXGroup;
 			children = (
+				552660F03037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift */,
 				55FF40732B2B002A00CD3906 /* CALayer+VideoEditorEX.swift */,
 				556CA4B12B29500500A5B189 /* CompositionInstruction.swift */,
 				556CA4B22B29500500A5B189 /* Compositor.swift */,
@@ -3703,6 +3713,8 @@
 		55D59C6928F537BA00B4FF76 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				552660F2303758BB00582606 /* PTCollectionViewTypes.swift */,
+				552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				552CCF4A2E82BA2200646943 /* PTBaseButton.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
@@ -4231,7 +4243,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4241,9 +4254,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4258,9 +4275,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4303,6 +4324,7 @@
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55557DC62F28568D008EB4B2 /* PTAudioCache.swift in Sources */,
+				552660EF3037544D00582606 /* PTBaseViewController+NavigationTypes.swift in Sources */,
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
@@ -4320,6 +4342,7 @@
 				55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */,
 				557E3AB02C047517002466A0 /* StdoutCapture.swift in Sources */,
 				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
+				552660F3303758BB00582606 /* PTCollectionViewTypes.swift in Sources */,
 				557E3AA82C046F85002466A0 /* PTCacheStoragePolicy.swift in Sources */,
 				559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
@@ -4781,6 +4804,7 @@
 				55F163072B19DC5400320925 /* PTFilterImageCell.swift in Sources */,
 				55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */,
 				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
+				552660F53037590000582606 /* PTMediaSaveService.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
@@ -5147,6 +5171,7 @@
 				55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
 				55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */,
+				552660F13037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift in Sources */,
 				5597CADA2D8F093E00947B58 /* MetricsManager.swift in Sources */,
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,

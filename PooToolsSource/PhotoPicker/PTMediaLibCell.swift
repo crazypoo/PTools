@@ -135,11 +135,15 @@ class PTMediaLibCell: PTBaseNormalCell {
             size = CGSize(width: targetWidth, height: targetWidth / cellModel.whRatio)
         }
 
-        smallImageRequestID = PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self = self] image, _ in
-            Task { @MainActor in
-                guard let self = self, self.imageIdentifier == ident else { return }
-                self.imageView.image = image
-            }
+        smallImageRequestID = PTMediaLibManager.requestImage(for: asset,
+                                                             targetSize: size,
+                                                             contentMode: .aspectFill,
+                                                             resizeMode: .fast,
+                                                             deliveryMode: .opportunistic) { [weak self = self] result in
+            guard let self = self,
+                  self.imageIdentifier == ident,
+                  !result.isCancelled else { return }
+            self.imageView.image = result.image
         }
     }
 
@@ -291,7 +295,7 @@ class PTMediaLibCell: PTBaseNormalCell {
 @MainActor
 class PTMediaLibAlbumCell: PTBaseNormalCell {
     static let ID = "PTMediaLibAlbumCell"
-    private var fetchTask: Task<Void, Never>?
+    private var imageRequestID: PHImageRequestID = PHInvalidImageRequestID
     private var imageIdentifier: String?
 
     var albumModel: PTMediaLibListModel! {
@@ -311,29 +315,36 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         
         imageIdentifier = albumModel.headImageAsset?.localIdentifier
         imageView.image = PTAppBaseConfig.share.defaultEmptyImage
-        fetchTask?.cancel()
+        cancelImageRequest()
         
         if let asset = albumModel.headImageAsset {
             let ident = asset.localIdentifier
             let side = bounds.height * UIScreen.main.scale
-            
-            fetchTask = Task {
-                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: side, height: side)) { [weak self = self] image, _ in
-                    Task { @MainActor in
-                        guard let self = self, self.imageIdentifier == ident else { return }
-                        self.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
-                    }
-                }
+
+            imageRequestID = PTMediaLibManager.requestImage(for: asset,
+                                                            targetSize: CGSize(width: side, height: side),
+                                                            contentMode: .aspectFill,
+                                                            resizeMode: .fast,
+                                                            deliveryMode: .opportunistic) { [weak self = self] result in
+                guard let self = self,
+                      self.imageIdentifier == ident,
+                      !result.isCancelled else { return }
+                self.imageView.image = result.image ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        fetchTask?.cancel()
-        fetchTask = nil
+        cancelImageRequest()
         imageView.image = nil
         imageIdentifier = nil
+    }
+
+    private func cancelImageRequest() {
+        guard imageRequestID != PHInvalidImageRequestID else { return }
+        PHImageManager.default().cancelImageRequest(imageRequestID)
+        imageRequestID = PHInvalidImageRequestID
     }
     
     lazy var imageView: UIImageView = {

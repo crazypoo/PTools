@@ -128,10 +128,11 @@ public extension PTPOP where Base: UIApplication {
     ///获取应用的location
     static var currentApplicationLocal:String {
         let locale:NSLocale = NSLocale.current as NSLocale
-        let countryCode = locale.object(forKey: NSLocale.Key.countryCode)
+        guard let countryCode = locale.object(forKey: NSLocale.Key.countryCode) as? String else {
+            return ""
+        }
         let usLocale = NSLocale.init(localeIdentifier: "en_US")
-        let country = usLocale.displayName(forKey: NSLocale.Key.countryCode, value: countryCode!)
-        return country!
+        return usLocale.displayName(forKey: NSLocale.Key.countryCode, value: countryCode) ?? ""
     }
     
     /*! @brief iOS更换App图标
@@ -170,7 +171,7 @@ public extension PTPOP where Base: UIApplication {
         guard let weakInfoDictionary = Bundle.main.infoDictionary, let content = weakInfoDictionary[String(kCFBundleLocalizationsKey)] else {
             return nil
         }
-        return (content as! String)
+        return content as? String
     }
 }
 

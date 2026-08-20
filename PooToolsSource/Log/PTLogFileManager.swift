@@ -20,7 +20,9 @@ public actor PTLogFileManager {
             }
             if let fileSize = try? logURL.resourceValues(forKeys: [.fileSizeKey]).fileSize,
                UInt64(fileSize) >= maxFileSize {
-                try? fileManager.removeItem(at: logURL)
+                let rotatedURL = logURL.deletingPathExtension().appendingPathExtension("1.log")
+                try? fileManager.removeItem(at: rotatedURL)
+                try? fileManager.moveItem(at: logURL, to: rotatedURL)
                 fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
             }
 

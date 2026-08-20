@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import AVFoundation
+@preconcurrency import AVFoundation
 import CoreVideo
 
 extension Exporter {
@@ -53,7 +53,7 @@ extension Exporter.Option {
 
 extension Exporter {
     
-    func setupPresetName(options: [Exporter.Option: Any]) -> String {
+    static func setupPresetName(options: [Exporter.Option: Any]) -> String {
         guard options.keys.contains(where: { $0 == .ExportSessionPresetName }),
               let presetName = options[.ExportSessionPresetName] as? String else {
             return AVAssetExportPresetHighestQuality
@@ -64,15 +64,17 @@ extension Exporter {
         return presetName
     }
     
-    func setupVideoRenderSize(_ videoTracks: [AVAssetTrack], asset: AVAsset, options: [Exporter.Option: Any]) async throws -> CGSize {
+    @MainActor
+    static func setupVideoRenderSize(_ videoTracks: [AVAssetTrack], assetBox: PTSystemAVAssetBox, renderSize: CGSize?) async throws -> CGSize {
         
         // 🌟 优化点 1：字典直接通过 Key 取值并强转，如果不存在自然是 nil，不需要先 contains 判断
-        if let size = options[.VideoCompositionRenderSize] as? CGSize {
-            return size
+        if let renderSize {
+            return renderSize
         }
         
         /// AVMutableVideoComposition's renderSize property is buggy with some assets.
         /// Calculate the renderSize here based on the documentation of `AVMutableVideoComposition(propertiesOf:)`
+        let asset = assetBox.asset
         if let composition = asset as? AVComposition {
             return composition.naturalSize
             
@@ -92,7 +94,7 @@ extension Exporter {
         }
     }
     
-    func setupOptimizeForNetworkUse(options: [Exporter.Option: Any]) -> Bool {
+    static func setupOptimizeForNetworkUse(options: [Exporter.Option: Any]) -> Bool {
         guard options.keys.contains(where: { $0 == .OptimizeForNetworkUse }),
               let value = options[.OptimizeForNetworkUse] as? Bool else {
             return true

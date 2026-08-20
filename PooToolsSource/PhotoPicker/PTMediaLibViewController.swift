@@ -295,26 +295,18 @@ extension PTMediaLibView {
     }
 
     /// 统一保存逻辑
+    @MainActor
     fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
         PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart)
 
-        let completion: @Sendable (Bool, PHAsset?) -> Void = { [weak self] success, asset in
-            guard success, let asset = asset else {
-                PTGCDManager.shared.runOnMain {
-                    let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
-                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
-                }
-                return
-            }
-            PTGCDManager.shared.runOnMain { [weak self] in
+        PTMediaSaveService.save(image: image, videoURL: videoUrl) { [weak self] result in
+            switch result {
+            case .success(let asset):
                 self?.handleNewAsset(asset)
+            case .failure:
+                let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
             }
-        }
-
-        if let img = image {
-            PHPhotoLibrary.pt.saveImageToAlbum(image: img, completion: completion)
-        } else if let url = videoUrl {
-            PTMediaLibManager.saveVideoToAlbum(url: url, completion: completion)
         }
     }
 
@@ -605,17 +597,14 @@ extension PTMediaLibView {
             }
             
             // 3. 将缓存文件写入系统相册
-            PTMediaLibManager.saveVideoToAlbum(url: finalURL) { isFinish, asset in
-                guard isFinish, let asset = asset else {
-                    PTGCDManager.shared.runOnMain {
+            Task { @MainActor in
+                PTMediaSaveService.save(videoURL: finalURL) { result in
+                    switch result {
+                    case .success(let asset):
+                        self.updateSelectedModelWithNewAsset(asset)
+                    case .failure:
                         PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
                     }
-                    return
-                }
-                
-                // 4. 更新已选模型数组
-                PTGCDManager.shared.runOnMain {
-                    self.updateSelectedModelWithNewAsset(asset)
                 }
             }
         }
@@ -663,7 +652,8 @@ extension PTMediaLibView {
     
     /// 生成唯一的输出路径
     fileprivate static func outputURL() -> URL {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+            ?? FileManager.default.temporaryDirectory
         // 使用时间戳防止文件名冲突
         let fileName = "\(Int(Date().timeIntervalSince1970)).mp4"
         return documentsDirectory.appendingPathComponent(fileName)

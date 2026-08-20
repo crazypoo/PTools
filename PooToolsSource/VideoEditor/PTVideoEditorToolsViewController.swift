@@ -305,8 +305,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.originFilterImageView.isHidden = true
                 if self.currentFilter.type == .none {
                     self.c7Player.filters = []
-                } else {
-                    self.c7Player.filters = [self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
+                } else if let texture = PTHarBethFilter.overTexture(),
+                          let filter = self.currentFilter.type.getFilterResult(texture: texture).filter {
+                    self.c7Player.filters = [filter]
                 }
 
                 if self.currentPlayTime != 0  {
@@ -621,13 +622,15 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                     self.sheetPresent(vc: vc, size: 0.3)
                 case .trim:
-                    let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
+                    guard let asset = self.avPlayer.currentItem?.asset else { return }
+                    let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: asset,typeModel: cellModel)
                     self.sheetPresent(vc: vc, size: 0.3)
                     vc.trimPosotionsHandler = { value in
                         self.trimPositions = value
                     }
                 case .crop:
-                    guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
+                    guard let sourceImage = self.originImageView.image,
+                          let image = sourceImage.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
                     
                     let vc = PTVideoEditorToolsCropControl(image: image)
                     vc.cropImageHandler = { [weak self = self] returnedImageSize,cropFrame in
@@ -810,18 +813,19 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         // 2. 获取滤镜实例（确保 Harbeth 的 Metal 纹理正常）
-        if let filterResult = currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter {
-            // 【核心实现】：直接替换渲染器的滤镜链，无需重启播放器
-            c7Player.filters = [filterResult]
-            
-            // 3. 如果当前没有在播放，手动触发一次静态帧渲染更新预览
-            if !playerButton.isSelected {
-                // 利用 Harbeth 直接处理静态图显示效果
-                let dest = HarbethIO(element: self.originImageView.image!, filters: [filterResult])
-                if let output = try? dest.output() {
-                    self.originFilterImageView.image = output
-                    self.originFilterImageView.isHidden = false
-                }
+        guard let texture = PTHarBethFilter.overTexture(),
+              let filterResult = currentFilter.type.getFilterResult(texture: texture).filter,
+              let sourceImage = self.originImageView.image else { return }
+        // 【核心实现】：直接替换渲染器的滤镜链，无需重启播放器
+        c7Player.filters = [filterResult]
+
+        // 3. 如果当前没有在播放，手动触发一次静态帧渲染更新预览
+        if !playerButton.isSelected {
+            // 利用 Harbeth 直接处理静态图显示效果
+            let dest = HarbethIO(element: sourceImage, filters: [filterResult])
+            if let output = try? dest.output() {
+                self.originFilterImageView.image = output
+                self.originFilterImageView.isHidden = false
             }
         }
     }
@@ -1238,8 +1242,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                     
                     // 【核心修改点】：再次统一调用 Service，注意这里的 asset 是 avPlayer 的 currentItem
+                    guard let asset = self.avPlayer.currentItem?.asset else { return }
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
-                        for: self.avPlayer.currentItem!.asset,
+                        for: asset,
                         numberOfFrames: frameCount
                     )
                     
@@ -1365,7 +1370,8 @@ extension PTVideoEditorToolsViewController {
                         if self.currentFilter.type == .none {
                             self.originFilterImageView.isHidden = true
                         } else {
-                            if let filterResult = self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter {
+                            if let texture = PTHarBethFilter.overTexture(),
+                               let filterResult = self.currentFilter.type.getFilterResult(texture: texture).filter {
                                 let dest = HarbethIO(element: frameImage, filters: [filterResult])
                                 if let output = try? dest.output() {
                                     self.originFilterImageView.image = output
@@ -1501,45 +1507,5 @@ fileprivate extension PTVideoEditorToolsViewController {
         
         let (cgImage, _) = try await generator.image(at: time)
         return cgImage
-    }
-}
-
-// MARK: - 系统级生命周期与音频管控 (App Lifecycle & Audio Session)
-fileprivate extension PTVideoEditorToolsViewController {
-    
-    /// 配置音频会话，突破物理静音键限制
-    func setupAudioSession() {
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            // .playback 确保在物理静音键开启时依然能发声
-            // .videoChat 或 .default 确保不会打断系统其他重要音频
-            try audioSession.setCategory(.playback, mode: .default, options: [])
-            try audioSession.setActive(true)
-        } catch {
-            PTNSLogConsole("🎬 AVAudioSession 设置失败: \(error.localizedDescription)", levelType: .error, loggerType: .media)
-        }
-    }
-    
-    /// 注册后台运行通知，防止 GPU 后台崩溃
-    func setupLifecycleNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(applicationDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
-    }
-    
-    /// 退到后台时的安全管控
-    @objc func applicationDidEnterBackground() {
-        // 1. 强制暂停播放，释放硬件解码器压力
-        if self.playerButton.isSelected {
-            self.playerButton.isSelected = false
-            self.c7Player?.pause()
-        }
-        
-        // 2. 如果你的 timeObserverToken 正在狂跑，它也会随着暂停而停止执行
-        // 确保 UI 处于绝对静止状态
-        PTNSLogConsole("🎬 App进入后台，视频编辑器已安全静默", levelType: .info, loggerType: .media)
     }
 }

@@ -579,6 +579,20 @@ extension PTRouter {
         
         return ("", [:])
     }
+
+    private class func makeViewController(_ viewControllerType: UIViewController.Type,
+                                           queries: [String: Sendable]) throws -> UIViewController {
+        if let routableType = viewControllerType as? PTRoutableController.Type {
+            guard let viewController = routableType.init(routerParams: queries) as? UIViewController else {
+                throw PTRouterError.initializationFailed
+            }
+            return viewController
+        }
+
+        let viewController = viewControllerType.init()
+        _ = viewController.setPropertyParameter(queries)
+        return viewController
+    }
     
 }
 
@@ -709,13 +723,7 @@ extension PTRouter {
         }
         
         // 4. 实例化 VC
-        let resultVC: UIViewController
-        if let routableClass = vcClass as? PTRoutableController.Type {
-            resultVC = routableClass.init(routerParams: queries) as! UIViewController
-        } else {
-            resultVC = vcClass.init()
-            _ = resultVC.setPropertyParameter(queries)
-        }
+        let resultVC = try makeViewController(vcClass, queries: queries)
         
         // 5. 执行跳转
         jump(jumpType: resultJumpType, vc: resultVC, queries: queries)
@@ -802,19 +810,11 @@ extension PTRouter {
         }
         
         let resultVC: UIViewController
-        
-        // 【核心优化点】：判断是否实现了安全的传参协议
-        if let routableClass = vcClass as? PTRoutableController.Type {
-            // 走现代 Swift 安全初始化方案
-            resultVC = routableClass.init(routerParams: queries) as! UIViewController
-            shareInstance.logcat?(uriTuple.0, .logNormal, "使用 PTRoutableController 协议安全初始化")
-        } else {
-            // 降级兜底方案：走原有的旧逻辑 (init() + KVC)
-            resultVC = vcClass.init()
-            Task { @MainActor in
-                _ = resultVC.setPropertyParameter(queries)
-                shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
-            }
+        do {
+            resultVC = try makeViewController(vcClass, queries: queries)
+        } catch {
+            shareInstance.logcat?(uriTuple.0, .logError, "控制器初始化失败: \(error.localizedDescription)")
+            return nil
         }
         
         // 执行跳转
@@ -1053,9 +1053,14 @@ public extension PTRouter {
 public extension PTRouter {
     class func routeJump(vcName:String,scheme:String) async {
         let relocationMap: NSDictionary = ["routerType": 2 ,"className": vcName, "path": scheme]
-        let data = try! JSONSerialization.data(withJSONObject: relocationMap, options: [])
-        let routeReMapInfo = try! JSONDecoder().decode(PTRouterInfo.self, from: data)
-        PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
+        do {
+            let data = try JSONSerialization.data(withJSONObject: relocationMap, options: [])
+            let routeReMapInfo = try JSONDecoder().decode(PTRouterInfo.self, from: data)
+            PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
+        } catch {
+            PTNSLogConsole("路由重定向配置失败: \(error)", levelType: .error, loggerType: .router)
+            return
+        }
         Task  {
             do {
                 let _ = try await PTRouter.openURL(scheme)

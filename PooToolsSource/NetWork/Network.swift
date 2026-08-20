@@ -25,7 +25,7 @@ private let PTNetworkLocalizationBundle: Bundle = {
 }()
 
 public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {
-    
+
     // MARK: - 基础网络错误
     case noNetwork
     case checkIPFail
@@ -248,7 +248,7 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
         let isURLErrorDomain = (nsError.domain == NSURLErrorDomain)
         let temporaryURLErrors: Set<URLError.Code> = [.timedOut, .cannotFindHost, .cannotConnectToHost, .networkConnectionLost, .dnsLookupFailed]
         let isTemporaryNetworkIssue = isURLErrorDomain && temporaryURLErrors.contains(urlErrorCode)
-        
+
         let canRetryByError = error.isNetworkError || isTemporaryNetworkIssue
         let canRetryByStatus = shouldRetry(statusCode: statusCode)
         
@@ -315,7 +315,8 @@ public actor NetworkCache {
     private var lastCleanTime: TimeInterval = 0
     
     private init() {
-        let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
+        let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+            ?? FileManager.default.temporaryDirectory.path
         diskPath = path.nsString.appendingPathComponent("PTNetworkCache")
         try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)
     }
@@ -645,7 +646,7 @@ public final class Network: @unchecked Sendable {
             let _ = Network.share.hudConfig
             if self.hud == nil {
                 self.hud = PTHudView()
-                self.hud!.hudShow()
+                self.hud?.hudShow()
             }
         }
     }
@@ -712,7 +713,7 @@ public final class Network: @unchecked Sendable {
     }
     
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-        let paramsStr = parameters != nil ? String(describing: parameters!) : "没有参数"
+        let paramsStr = parameters.map(String.init(describing:)) ?? "没有参数"
         let safeHeaders = headers.dictionary.reduce(into: [String: String]()) { result, item in
             let key = item.key.lowercased()
             result[item.key] = ["authorization", "token", "cookie", "set-cookie"].contains(key) ? "<redacted>" : item.value
@@ -837,41 +838,62 @@ public final class Network: @unchecked Sendable {
     public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>
     
     // MARK: - ================= 5. 底层核心执行引擎 =================
-    
-    private class func _internalRequestApi<T>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
-        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
-        
-        let session = Network.share.session
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
-        urlRequest = try encoder.encode(urlRequest, with: parameters)
-        
-        for plugin in Network.share.plugins { await plugin.willSend(&urlRequest) }
-        
-        if urlRequest.isMock {
-            if let mockData = await NetworkCache.shared.read(request: urlRequest) { return try parser(urlStr1, nil, mockData) }
+
+    /// 所有非上传请求共用的执行边界：插件、mock、取消、去重和错误日志
+    /// 在这里完成，避免 URL 参数请求和 Body 请求各自维护一套生命周期。
+    private class func execute<T>(url: String,
+                                  request: URLRequest,
+                                  uploadBody: Data? = nil,
+                                  parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+        var request = request
+        for plugin in Network.share.plugins {
+            await plugin.willSend(&request)
         }
-        
-        let policy: PTNetworkDedupPolicy = (urlRequest.cachePolicyType == .none) ? .none : .identical
-        let finalRequest = urlRequest
-        
+
+        if request.isMock,
+           let mockData = await NetworkCache.shared.read(request: request) {
+            return try parser(url, nil, mockData)
+        }
+
+        let policy: PTNetworkDedupPolicy = request.cachePolicyType == .none ? .none : .identical
+        let finalRequest = request
+        let session = Network.share.session
         let realRequest: @Sendable () async throws -> PTBaseStructModel<T> = {
-            let dataTask = session.request(finalRequest).serializingData()
+            let dataTask = uploadBody.map {
+                session.upload($0, with: finalRequest).serializingData()
+            } ?? session.request(finalRequest).serializingData()
             let response = await withTaskCancellationHandler(operation: {
                 await dataTask.response
             }, onCancel: {
                 dataTask.cancel()
             })
             try Task.checkCancellation()
-            for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
-            
+
+            for plugin in Network.share.plugins {
+                await plugin.didReceive(response.result, request: finalRequest, response: response.response)
+            }
+
             switch response.result {
-            case .success(let data):   return try parser(urlStr1, response.response, data)
-            case .failure(let error):  logRequestFailure(url: urlStr1, error: error); throw error
+            case .success(let data):
+                return try parser(url, response.response, data)
+            case .failure(let error):
+                logRequestFailure(url: url, error: error)
+                throw error
             }
         }
-        return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
+        return try await RequestDeduplicator.shared.execute(request: finalRequest, policy: policy) {
+            try await realRequest()
+        }
+    }
+
+    private class func _internalRequestApi<T>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
+        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
+
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        urlRequest = try encoder.encode(urlRequest, with: parameters)
+        return try await execute(url: urlStr1, request: urlRequest, parser: parser)
     }
     
     private class func _internalRequestBodyAPI<T>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
@@ -883,35 +905,9 @@ public final class Network: @unchecked Sendable {
         if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
         
-        let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
         urlRequest.httpBody = body
-        
-        for plugin in Network.share.plugins { await plugin.willSend(&urlRequest) }
-        
-        if urlRequest.isMock {
-            if let mockData = await NetworkCache.shared.read(request: urlRequest) { return try parser(urlStr1, nil, mockData) }
-        }
-        
-        let policy: PTNetworkDedupPolicy = (urlRequest.cachePolicyType == .none) ? .none : .identical
-        let finalRequest = urlRequest
-        
-        let realRequest: @Sendable () async throws -> PTBaseStructModel<T> = {
-            let dataTask = session.upload(body, with: finalRequest).serializingData()
-            let response = await withTaskCancellationHandler(operation: {
-                await dataTask.response
-            }, onCancel: {
-                dataTask.cancel()
-            })
-            try Task.checkCancellation()
-            for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
-            
-            switch response.result {
-            case .success(let data):   return try parser(urlStr1, response.response, data)
-            case .failure(let error):  logRequestFailure(url: urlStr1, error: error); throw error
-            }
-        }
-        return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
+        return try await execute(url: urlStr1, request: urlRequest, uploadBody: body, parser: parser)
     }
     
     private struct PTSafeUploadParamsBox: @unchecked Sendable {
