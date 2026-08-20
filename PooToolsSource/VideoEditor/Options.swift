@@ -12,7 +12,7 @@ import CoreVideo
 extension Exporter {
     
     /// Exporter with options.
-    public struct Option : Hashable, Equatable, RawRepresentable, @unchecked Sendable {
+    public struct Option : Hashable, Equatable, RawRepresentable, Sendable {
         public let rawValue: UInt16
         public init(rawValue: UInt16) {
             self.rawValue = rawValue

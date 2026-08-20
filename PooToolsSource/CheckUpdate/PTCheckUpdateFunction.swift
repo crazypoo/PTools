@@ -190,7 +190,7 @@ public class PTTFNewerBuildVersionModel:PTModelProtocol,@unchecked Sendable {
     required public init() {}
 }
 
-public struct PTAppleClaims: Claims,@unchecked Sendable {
+public struct PTAppleClaims: Claims, Sendable {
     let iss: String
     let iat: Date
     let exp: Date
