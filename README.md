@@ -23,6 +23,16 @@
 
 ## Installation
 
+### Swift Package Manager
+
+在 Xcode 中添加仓库地址：
+
+```text
+https://github.com/crazypoo/PTools.git
+```
+
+SPM 入口统一支持 iOS 17.0+，并使用 Swift 6 language mode。默认产品为 `ptools`，也可以按需选择独立模块产品。
+
 默认
 
 ```ruby

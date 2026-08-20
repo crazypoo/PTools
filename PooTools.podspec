@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
     s.swift_versions = ['6.0']
     s.xcconfig = {"ENABLE_BITCODE" => "NO"}
     s.pod_target_xcconfig = {
+      'IPHONEOS_DEPLOYMENT_TARGET' => '17.0',
+      'SWIFT_VERSION' => '6.0',
       'OTHER_SWIFT_FLAGS[config=Debug]' => '-D DEBUG'
     }
     s.header_mappings_dir = 'PooToolsSource'

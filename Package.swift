@@ -1,4 +1,4 @@
-// swift-tools-version: 6.3
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -369,5 +369,6 @@ let package = Package(
             path: "PooToolsSource/LaunchTimeProfiler",
             swiftSettings: [.define("POOTOOLS_LAUNCHTIMEPROFILER"), .define("POOTOOLS_COCOAPODS")]
         )
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
