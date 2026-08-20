@@ -863,8 +863,10 @@ class PTFuncDetailViewController: PTBaseViewController {
                                     let _ = avURLAsset.exportToDocuments(filename: self.pickedVideoName) { outputURL in
                                         let finalURL = URL(fileURLWithPath: outputURL.absoluteString)
                                         UIImage.pt.getVideoFirstImage(videoUrl: finalURL.absoluteString) { image in
-                                            self.pickedVideoURL = finalURL
-                                            videoImageView.image = image
+                                            PTGCDManager.shared.runOnMain {
+                                                self.pickedVideoURL = finalURL
+                                                videoImageView.image = image
+                                            }
                                         }
                                     }
                                 }

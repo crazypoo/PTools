@@ -18,6 +18,7 @@ import PhotosUI
 import KTVHTTPCache
 #endif
 
+@MainActor
 class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
@@ -336,7 +337,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         loadTask?.cancel()
         let currentID = UUID()
         loadIdentifier = currentID
-        loadTask = Task { @MainActor [weak self] in
+        loadTask = Task { [weak self] in
             guard let self, let dataModel = self.dataModel else { return }
             self.showLoading()
             
@@ -362,7 +363,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     }
                     self.livePhoto.livePhoto = livePhotoTarget
                     self.adjustFrame(normal: false) {
-                        self.livePhoto.startPlayback(with: .hint)
+                        PTGCDManager.shared.runOnMain {
+                            self.livePhoto.startPlayback(with: .hint)
+                        }
                     }
                     self.livePhoto.isHidden = false
                     self.hideLoading()
@@ -503,6 +506,7 @@ extension PTMediaBrowserCell {
     func handleVideoLoading(videoUrl: String, currentID: UUID) {
         if let url = URL(string: videoUrl) {
             PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { item in
+                PTGCDManager.shared.runOnMain {
                     guard self.loadIdentifier == currentID else { return }
                     if let findImage = item.coverImage {
                         self.hideLoading()
@@ -510,9 +514,12 @@ extension PTMediaBrowserCell {
                     } else {
                         self.handleVideoLoadError()
                     }
+                }
             } videoReady: { item in
+                PTGCDManager.shared.runOnMain {
                     guard self.loadIdentifier == currentID else { return }
                     self.videoCacheURL = item.localVideoURL
+                }
             }
         } else {
             self.handleVideoLoadError()
@@ -577,6 +584,7 @@ extension PTMediaBrowserCell {
         } coverReady: { item in
             
         } videoReady: { item in
+            PTGCDManager.shared.runOnMain {
                 self.hideLoading()
                 self.videoCacheURL = item.localVideoURL
                 if let findLocal = item.localVideoURL {
@@ -585,6 +593,7 @@ extension PTMediaBrowserCell {
                 } else {
                     PTNSLogConsole("Video url error")
                 }
+            }
         }
     }
     

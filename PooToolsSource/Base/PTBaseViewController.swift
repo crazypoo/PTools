@@ -905,6 +905,7 @@ extension PTNavigationBarManager {
 }
 
 @objcMembers
+@MainActor
 open class PTBaseViewController: UIViewController {
 
     private var statusBarUpdateTask: Task<Void, Never>?

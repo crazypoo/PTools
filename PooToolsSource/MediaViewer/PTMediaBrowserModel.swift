@@ -8,7 +8,8 @@
 
 import UIKit
 
-public final class PTMediaBrowserModel: NSObject, @unchecked Sendable {
+@MainActor
+public final class PTMediaBrowserModel: NSObject {
     public var imageInfo: String = ""
     public var imageURL: Any!
     public var modelEX: String = ""
