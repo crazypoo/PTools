@@ -25,6 +25,7 @@ let package = Package(
         .library(name: "PooToolsLivePhoto", targets: ["PooToolsLivePhoto"]),
         .library(name: "PooToolsShare", targets: ["PooToolsShare"]),
         .library(name: "PooToolsPDF", targets: ["PooToolsPDF"]),
+        .library(name: "PooToolsSVG", targets: ["PooToolsSVG"]),
 
         // ==========================================
         // 权限模块 (Permissions)
@@ -124,6 +125,7 @@ let package = Package(
             "ptools",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
             "PooToolsHud", "PooToolsLivePhoto", "PooToolsShare", "PooToolsPDF",
+            "PooToolsSVG",
             "PTCameraPermission", "PTLocationPermission", "PTCalendarPermission", "PTMotionPermission",
             "PTTrackingPermission", "PTRemindersPermission", "PTSpeechPermission", "PTHealthPermission",
             "PTFaceIDPermission", "PTContactsPermission", "PTMicPermission", "PTMediaPermission",
@@ -291,9 +293,10 @@ let package = Package(
         // ==========================================
         .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PTCameraPermission", "PooToolsNetWork", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker", "ImagePicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsFilterCamera", dependencies: ["ptools", "PTCameraPermission", "PTMicPermission", "PooToolsHarbethKit", "PooToolsMediaViewer"], path: "PooToolsSource/FilterCamera", swiftSettings: [.define("POOTOOLS_FILTERCAMERA"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PooToolsFilterCamera"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsFilterCamera", dependencies: ["ptools", "Harbeth", "PTCameraPermission", "PTMicPermission", "PooToolsHarbethKit", "PooToolsMediaViewer"], path: "PooToolsSource/FilterCamera", swiftSettings: [.define("POOTOOLS_FILTERCAMERA"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "Harbeth", "PooToolsFilterCamera"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSVG", dependencies: ["ptools", "Kingfisher", "PocketSVG"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCheckDirtyWord", dependencies: ["ptools"], path: "PooToolsSource/CheckDirtyWord", resources: [.process("Resource")], swiftSettings: [.define("POOTOOLS_CHECKDIRTYWORD"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
