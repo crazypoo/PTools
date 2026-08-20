@@ -15,7 +15,16 @@ import Photos
 import SmartCodable
 import KakaJSON
 
-public enum PTNetworkError: Error, @preconcurrency LocalizedError, CustomNSError, Sendable {
+private let PTNetworkLocalizationBundle: Bundle = {
+    let mainBundle = Bundle.main
+    guard let path = mainBundle.path(forResource: CorePodBundleName, ofType: "bundle"),
+          let resourceBundle = Bundle(path: path) else {
+        return mainBundle
+    }
+    return resourceBundle
+}()
+
+public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {
     
     // MARK: - 基础网络错误
     case noNetwork
@@ -36,13 +45,13 @@ public enum PTNetworkError: Error, @preconcurrency LocalizedError, CustomNSError
     /// 🌟 修复：移除了 @MainActor。
     /// LocalizedError 协议要求此属性是非隔离的 (non-isolated)。
     /// 只要 `.localized()` 扩展没有修改外部状态，它就是线程安全的。
-    @MainActor public var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
-        case .noNetwork:        return "PT Network no network".localized()
+        case .noNetwork:        return "PT Network no network".localized(tableName: nil, bundle: PTNetworkLocalizationBundle)
         case .checkIPFail:      return "IP address error"
-        case .downloadFail:     return "PT Network download fail".localized()
-        case .jsonExplainFail:  return "PT Network json fail".localized()
-        case .modelExplainFail: return "PT Network model fail".localized()
+        case .downloadFail:     return "PT Network download fail".localized(tableName: nil, bundle: PTNetworkLocalizationBundle)
+        case .jsonExplainFail:  return "PT Network json fail".localized(tableName: nil, bundle: PTNetworkLocalizationBundle)
+        case .modelExplainFail: return "PT Network model fail".localized(tableName: nil, bundle: PTNetworkLocalizationBundle)
             
         case .dataEmpty:              return "Data empty"
         case .htmlResponse(let html): return html
@@ -113,7 +122,7 @@ public enum NetWorkStatus:Sendable {
     }
 }
 
-public enum NetWorkEnvironment : Int {
+public enum NetWorkEnvironment : Int, Sendable {
     case Development
     case Test
     case Distribution
@@ -127,7 +136,7 @@ public enum NetWorkEnvironment : Int {
     }
 }
 
-public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
+public typealias NetWorkStatusBlock = @Sendable (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
 public typealias UploadProgress = @MainActor @Sendable (_ progress: Progress) -> Void
 public typealias FileDownloadProgress = @MainActor @Sendable (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
 public typealias FileDownloadSuccess = @MainActor @Sendable (_ reponse:AFDownloadResponse<URL?>) -> ()
@@ -551,15 +560,17 @@ public enum PTNetworkDedupPolicy : Sendable {
     }
 }
 
-public struct RequestKey: Hashable {
+public struct RequestKey: Hashable, Sendable {
     let url: String
     let method: String
     let paramsHash: Int
+    let responseType: String
     
-    init(request: URLRequest) {
+    init<T>(request: URLRequest, responseType: T.Type = Never.self) {
         self.url = request.url?.absoluteString ?? ""
         self.method = request.httpMethod ?? ""
         self.paramsHash = request.httpBody?.hashValue ?? 0
+        self.responseType = String(reflecting: responseType)
     }
 }
 
@@ -581,7 +592,7 @@ public actor RequestDeduplicator {
         switch policy {
         case .none: return try await task()
         default:
-            let key = RequestKey(request: request)
+            let key = RequestKey(request: request, responseType: T.self)
             
             // 1. 检查是否存在同类型同参数的正在运行任务
             if let existingTask = runningTasks[key] as? Task<PTBaseStructModel<T>, Error> {
@@ -911,7 +922,12 @@ public final class Network: @unchecked Sendable {
         
         let realRequest: @Sendable () async throws -> PTBaseStructModel<T> = {
             let dataTask = session.request(finalRequest).serializingData()
-            let response = await dataTask.response
+            let response = await withTaskCancellationHandler(operation: {
+                await dataTask.response
+            }, onCancel: {
+                dataTask.cancel()
+            })
+            try Task.checkCancellation()
             for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
             
             switch response.result {
@@ -946,7 +962,12 @@ public final class Network: @unchecked Sendable {
         
         let realRequest: @Sendable () async throws -> PTBaseStructModel<T> = {
             let dataTask = session.upload(body, with: finalRequest).serializingData()
-            let response = await dataTask.response
+            let response = await withTaskCancellationHandler(operation: {
+                await dataTask.response
+            }, onCancel: {
+                dataTask.cancel()
+            })
+            try Task.checkCancellation()
             for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
             
             switch response.result {
@@ -1433,12 +1454,16 @@ public final class Network: @unchecked Sendable {
     }
     
     @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
-        try await withCheckedThrowingContinuation { continuation in
-            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
-                if let fileURL = response.fileURL { continuation.resume(returning: fileURL) }
-                else { continuation.resume(throwing: PTNetworkError.downloadFail) }
-            }, fail: { error in continuation.resume(throwing: error ?? PTNetworkError.downloadFail) })
-        }
+        try await withTaskCancellationHandler(operation: {
+            try await withCheckedThrowingContinuation { continuation in
+                self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
+                    if let fileURL = response.fileURL { continuation.resume(returning: fileURL) }
+                    else { continuation.resume(throwing: PTNetworkError.downloadFail) }
+                }, fail: { error in continuation.resume(throwing: error ?? PTNetworkError.downloadFail) })
+            }
+        }, onCancel: {
+            self.cancel(fileUrl: fileUrl)
+        })
     }
     
     public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }
@@ -1457,6 +1482,9 @@ public final class Network: @unchecked Sendable {
                         continuation.finish()
                     } else { continuation.finish(throwing: PTNetworkError.downloadFail) }
                 } fail: { error in continuation.finish(throwing: error ?? PTNetworkError.downloadFail) }
+            }
+            continuation.onTermination = { @Sendable _ in
+                self.cancel(fileUrl: fileUrl)
             }
         }
     }
