@@ -154,17 +154,17 @@ open class PTNavigationBarContainer: UIView {
     public func apply(style: PTNavigationBarStyle) {
         backgroundView.alpha = 1.0
         largeTitleContainer.alpha = 1.0
-        switch style {
-        case .gradient(let type, let colors):
-            backgroundView.backgroundGradient(type: type, colors: colors)
-            largeTitleContainer.backgroundGradient(type: type, colors: colors)
-        case .solid(let color):
-            backgroundView.backgroundColor = color
-            largeTitleContainer.backgroundColor = color
-        case .transparent:
-            backgroundView.backgroundColor = .clear
-            largeTitleContainer.backgroundColor = .clear
-        }
+//        switch style {
+//        case .gradient(let type, let colors):
+//            backgroundView.backgroundGradient(type: type, colors: colors)
+//            largeTitleContainer.backgroundGradient(type: type, colors: colors)
+//        case .solid(let color):
+//            backgroundView.backgroundColor = color
+//            largeTitleContainer.backgroundColor = color
+//        case .transparent:
+//            backgroundView.backgroundColor = .clear
+//            largeTitleContainer.backgroundColor = .clear
+//        }
     }
     
     public override func layoutSubviews() {
@@ -234,22 +234,108 @@ extension PTNavigationBarContainer {
 
     /// 核心：根据 progress 渐变
     func updateTransition(progress: CGFloat) {
-        guard let from = fromStyle, let to = toStyle else { return }
-        
+        guard let from = fromStyle, let to = toStyle,let nav = PTNavigationBarManager.shared.currentNav else { return }
+        let progress = min(max(progress, 0), 1)
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = nil   // ❗关键（去 blur）
+
         switch (from, to) {
-            
-        case (.solid(let c1), .solid(let c2)):
-            backgroundView.backgroundColor = c1.interpolate(to: c2, progress: progress)
-            
-        case (.transparent, .solid(let c)):
-            backgroundView.backgroundColor = c.withAlphaComponent(progress)
-            
-        case (.solid(let c), .transparent):
-            backgroundView.backgroundColor = c.withAlphaComponent(1 - progress)
-            
-        default:
-            // gradient 你可以后面扩展（先支持 solid 最稳）
-            break
+        case let (.solid(c1), .solid(c2)):// MARK: - Solid -> Solid
+            appearance.backgroundColor = c1.interpolate(to: c2, progress: progress)
+            appearance.backgroundImage = UIImage()
+        case let (.transparent, .solid(c)):// MARK: - Transparent -> Solid
+            appearance.backgroundColor = c.withAlphaComponent(progress)
+            appearance.backgroundImage = UIImage()
+        case let (.solid(c), .transparent):// MARK: - Solid -> Transparent
+            appearance.backgroundColor = c.withAlphaComponent(1 - progress)
+            appearance.backgroundImage = UIImage()
+        case (.transparent, .transparent):// MARK: - Transparent -> Transparent
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = UIImage()
+        case let (.gradient(type1, colors1),.gradient(type2, colors2)):// MARK: - Gradient -> Gradient
+            let image = makeTransitionGradientImage(fromType: type1, fromColors: colors1, toType: type2, toColors: colors2, boundsSize:nav.navigationBar.bounds.size, progress: progress)
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = image
+        case let (.gradient(type, colors), .solid(color)):// MARK: - Gradient -> Solid
+            let gradientColors = colors.map { $0 }
+            let transitionColors = gradientColors.map {
+                $0.interpolate(to: color, progress: progress)
+            }
+
+            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = image
+        case let ( .solid(color), .gradient(type, colors)):// MARK: - Solid -> Gradient
+            let gradientColors = colors.map { $0 }
+            let transitionColors = gradientColors.map {
+                color.interpolate(to: $0, progress: progress)
+            }
+
+            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = image
+        case let (.gradient(type, colors), .transparent):// MARK: - Gradient -> Transparent
+            let transitionColors = colors.map {
+                $0.withAlphaComponent(1 - progress)
+            }
+
+            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = image
+        case let (.transparent, .gradient(type, colors)):// MARK: - Transparent -> Gradient
+            let transitionColors = colors.map {
+                $0.withAlphaComponent(progress)
+            }
+
+            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = image
+        }
+        
+        nav.navigationBar.compactScrollEdgeAppearance = appearance
+        nav.navigationBar.standardAppearance = appearance
+        nav.navigationBar.scrollEdgeAppearance = appearance
+        nav.navigationBar.compactAppearance = appearance
+        nav.navigationBar.isTranslucent = true
+        nav.navigationBar.subviews.forEach {
+            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
+                $0.isHidden = true
+                $0.isUserInteractionEnabled = false
+                $0.alpha = 0
+            }
+        }
+    }
+    
+    private func makeTransitionGradientImage(fromType: Imagegradien,
+                                             fromColors: [DynamicColor],
+                                             toType: Imagegradien,
+                                             toColors: [DynamicColor],
+                                             boundsSize:CGSize,
+                                             progress: CGFloat) -> UIImage? {
+
+        let direction: Imagegradien = progress < 0.5 ? fromType : toType
+
+        let colors = interpolateGradientColors(from: fromColors, to: toColors, progress: progress)
+
+        return UIImage.gradient(colors: colors, size: boundsSize,direction: direction)
+    }
+    
+    private func interpolateGradientColors(from: [DynamicColor], to: [DynamicColor], progress: CGFloat) -> [UIColor] {
+        
+        guard !from.isEmpty else {
+            return to.map( {$0.withAlphaComponent(progress)} )
+        }
+        
+        guard !to.isEmpty else {
+            return from.map( { $0.withAlphaComponent(progress)} )
+        }
+        
+        let count = min(from.count, to.count)
+        
+        return (0..<count).map { index in
+            from[index].interpolate(to: to[index], progress: progress)
         }
     }
 }
@@ -283,7 +369,7 @@ public final class PTNavigationBarManager:NSObject {
     private var containerMap = NSMapTable<UINavigationController, PTNavigationBarContainer>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
-    private weak var currentNav: UINavigationController?
+    fileprivate weak var currentNav: UINavigationController?
     
     private var displayLink: CADisplayLink?
     private weak var transitionCoordinatorRef: UIViewControllerTransitionCoordinator?
@@ -303,12 +389,7 @@ public final class PTNavigationBarManager:NSObject {
         let totalHeight = navBar.bounds.height
         
         // 往上扩展，打好地基
-        let container = PTNavigationBarContainer(
-            frame: CGRect(x: 0,
-                          y: 0,
-                          width: navBar.bounds.width,
-                          height: totalHeight)
-        )
+        let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: navBar.bounds.width, height: totalHeight))
         
         container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 
@@ -327,13 +408,28 @@ public final class PTNavigationBarManager:NSObject {
         resetSystemNavBarAppearance(nav)
     }
     
-    private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
+    private func resetSystemNavBarAppearance(_ nav: UINavigationController,alpha:CGFloat = 1) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = nil   // ❗关键（去 blur）
-        appearance.backgroundColor = .clear
+        switch lastStyle {
+        case .solid(let color):
+            appearance.backgroundColor = color
+            appearance.backgroundImage = UIImage()
+        case .transparent:
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = UIImage()
+        case .gradient(let type,let colors):
+            let map = colors.map { value in
+                value.withAlphaComponent(alpha)
+            }
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = UIImage.gradient(colors: map, size: nav.navigationBar.bounds.size, direction: type)
+        default:
+            appearance.backgroundColor = .clear
+            appearance.backgroundImage = UIImage()
+        }
         appearance.shadowColor = .clear
-        appearance.backgroundImage = UIImage()
         appearance.shadowImage = UIImage()
         
         appearance.titleTextAttributes = [
@@ -360,8 +456,8 @@ public final class PTNavigationBarManager:NSObject {
     
     public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
-              let container = containerMap.object(forKey: nav) else { return }
-        container.backgroundView.alpha = alpha
+              let _ = containerMap.object(forKey: nav) else { return }
+        resetSystemNavBarAppearance(nav, alpha: alpha)
     }
     
     public func bind(to nav: UINavigationController) {

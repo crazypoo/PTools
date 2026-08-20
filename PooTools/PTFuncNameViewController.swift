@@ -117,7 +117,8 @@ class PTFuncNameViewController: PTBaseViewController {
     }
 
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .solid(.random)
+//        return .solid(.random)
+        return .gradient(type: .TopToBottom, colors: [.random,.random])
     }
 
     var cacheSize = ""
@@ -1077,7 +1078,6 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         aaaaaaa.footRefreshTask = {
             PTGCDManager.shared.delayOnMain(time: 5, block: {
-                PTNSLogConsole("12312312312312312312312312312312312313")
                 self.collectionView.endRefresh()
             })
         }
@@ -1096,6 +1096,13 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         aaaaaaa.forceController = { cView,index,model in
             return PTBaseViewController()
+        }
+        aaaaaaa.orthogonalDidScroll = { index,point in
+            var scale = (abs(point.y) / 101)
+            if scale > 1 {
+                scale = 1
+            }
+            PTNavigationBarManager.shared.setAlpha(scale)
         }
         return aaaaaaa
     }()

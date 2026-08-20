@@ -539,6 +539,45 @@ public extension UIImage {
         // 从CGImage创建UIImage
         return UIImage(cgImage: blurredImage.takeRetainedValue())
     }
+    
+    static func gradient(colors: [UIColor],
+                         size: CGSize,
+                         direction: Imagegradien) -> UIImage? {
+            
+            guard !colors.isEmpty,
+                  size.width > 0,
+                  size.height > 0 else {
+                return nil
+            }
+            
+            let renderer = UIGraphicsImageRenderer(size: size)
+            
+            return renderer.image { context in
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.frame = CGRect(origin: .zero, size: size)
+                gradientLayer.colors = colors.map(\.cgColor)
+                
+                switch direction {
+                case .LeftToRight:
+                    gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+                    gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+                    
+                case .TopToBottom:
+                    gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+                    gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+                    
+                case .RightToLeft:
+                    gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
+                    gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
+                    
+                case .BottomToTop:
+                    gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+                    gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
+                }
+                
+                gradientLayer.render(in: context.cgContext)
+            }
+        }
 }
 
 public extension PTPOP where Base: UIImage {
