@@ -12,6 +12,22 @@ import UIKit
 public typealias PTActionTask = @Sendable () -> Void
 public typealias PTActionAsyncTask = @Sendable () async -> Void
 
+private final class PTGCDOnce: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didRun = false
+
+    func run(_ action: () -> Void) {
+        lock.lock()
+        guard !didRun else {
+            lock.unlock()
+            return
+        }
+        didRun = true
+        lock.unlock()
+        action()
+    }
+}
+
 // 使用 actor 来保证内部状态的绝对线程安全，完美契合 Swift 6
 public actor PTGCDManager {
     
@@ -34,6 +50,8 @@ public actor PTGCDManager {
         
         // 如果已存在同名任务，先取消，防止内存泄漏或重复执行
         cancelTimer(withName: name)
+
+        guard timeInterval.isFinite, timeInterval >= 0 else { return }
         
         let task = Task {
             let nanoseconds = UInt64(timeInterval * 1_000_000_000)
@@ -87,6 +105,12 @@ public actor PTGCDManager {
                                  threadCount: Int,
                                  doSomeThing: @escaping @Sendable (_ currentIndex: Int, _ finishTask: @escaping @Sendable () -> Void) -> Void,
                                  allRequestsFinished: @escaping @MainActor @Sendable () -> Void) async {
+        guard semaphoreCount > 0, threadCount > 0 else {
+            await MainActor.run {
+                allRequestsFinished()
+            }
+            return
+        }
         
         await withTaskGroup(of: Void.self) { group in
             var activeTasks = 0
@@ -104,11 +128,14 @@ public actor PTGCDManager {
                     // 技能培训：withCheckedContinuation 是连接旧时代回调和新时代 async 的桥梁
                     // 它会挂起当前 Task，直到 continuation.resume() 被调用
                     await withCheckedContinuation { continuation in
+                        let finishGate = PTGCDOnce()
                         
                         // 派发任务给外部，并提供一个 finishTask 闭包给外部调用
                         doSomeThing(i) {
                             // 当外部调用 finishTask() 时，我们恢复协程，系统此时才知道任务真正完成
-                            continuation.resume()
+                            finishGate.run {
+                                continuation.resume()
+                            }
                         }
                     }
                 }
@@ -126,10 +153,16 @@ public actor PTGCDManager {
     // MARK: - 现代化的快捷调度 (nonisolated)
     // nonisolated 关键字允许在 actor 外部不使用 await 直接调用这些无需访问 actor 内部状态的方法
     
-    public nonisolated func delayOnMain(time: TimeInterval, block: @escaping @MainActor @Sendable () -> Void) {
+    @discardableResult
+    public nonisolated func delayOnMain(time: TimeInterval, block: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
         Task { @MainActor in
-            let nanoseconds = UInt64(time * 1_000_000_000)
-            try? await Task.sleep(nanoseconds: nanoseconds)
+            guard time.isFinite, time >= 0 else { return }
+            do {
+                try await Task.sleep(nanoseconds: UInt64(time * 1_000_000_000))
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
             block()
         }
     }
@@ -138,22 +171,24 @@ public actor PTGCDManager {
     /// - Parameters:
     ///   - priority: 任务优先级，默认是 .background。相当于以前的 qosCls
     ///   - block: 要执行的后台任务闭包
+    @discardableResult
     public nonisolated func runOnBackground(priority: TaskPriority? = nil,
-                                            block: @escaping PTActionTask) {
-        // 使用 Task.detached 创建一个完全脱离当前上下文的独立后台任务
-        // 这样可以确保它绝对不会在 MainActor(主线程) 上运行
+                                            block: @escaping PTActionTask) -> Task<Void, Never> {
+        // detached 用于明确脱离调用方 Actor；它不承诺固定线程，只承诺不继承 MainActor。
         Task.detached(priority: priority) {
             block()
         }
     }
     
-    public nonisolated func runOnBackground(block: @escaping PTActionTask) {
-        // detached 创建完全独立的任务，不继承上下文，真正的后台执行
+    @discardableResult
+    public nonisolated func runOnBackground(block: @escaping PTActionTask) -> Task<Void, Never> {
         PTGCDManager.shared.runOnBackground(priority: .background, block: block)
     }
     
-    public nonisolated func runOnMain(block: @escaping @MainActor @Sendable () -> Void) {
+    @discardableResult
+    public nonisolated func runOnMain(block: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
         Task { @MainActor in
+            guard !Task.isCancelled else { return }
             block()
         }
     }
@@ -163,6 +198,7 @@ public actor PTGCDManager {
     public nonisolated func countdown(timeInterval: TimeInterval,
                                       progressBlock: @escaping @MainActor @Sendable (_ isFinished: Bool, _ remainingTime: Int) -> Void) -> Task<Void, Never> {
         return Task {
+            guard timeInterval.isFinite, timeInterval >= 0 else { return }
             var remaining = Int(timeInterval) + 1
             
             while remaining > 0 {
@@ -176,7 +212,11 @@ public actor PTGCDManager {
                 }
                 
                 if currentRemaining > 0 {
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    do {
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                    } catch {
+                        return
+                    }
                 }
             }
             
