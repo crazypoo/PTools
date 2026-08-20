@@ -906,6 +906,9 @@ extension PTNavigationBarManager {
 
 @objcMembers
 open class PTBaseViewController: UIViewController {
+
+    private var statusBarUpdateTask: Task<Void, Never>?
+    private var hidesBaseNavigationBarOnLoad = false
                    
     open func prefersLargeTitle() -> Bool {
         return false
@@ -924,6 +927,7 @@ open class PTBaseViewController: UIViewController {
     }
 
     deinit {
+        statusBarUpdateTask?.cancel()
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .viewCycle)
     }
     
@@ -968,13 +972,22 @@ open class PTBaseViewController: UIViewController {
             }
         }
 
-        PTGCDManager.shared.delayOnMain(time: 0.1, block: {
+        statusBarUpdateTask?.cancel()
+        statusBarUpdateTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: 100_000_000)
+            } catch {
+                return
+            }
+            guard let self, !Task.isCancelled else { return }
             self.updateStatusBar(self.preferredNavigationBarStyle())
-        })
+        }
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
         super.viewWillDisappear(animated)
+        statusBarUpdateTask?.cancel()
+        statusBarUpdateTask = nil
         PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         if let presenting = presentingViewController {
             PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
@@ -994,6 +1007,10 @@ open class PTBaseViewController: UIViewController {
             if let nav = navigationController {
                 PTNavigationBarManager.shared.bind(to: nav)
             }
+        }
+
+        if hidesBaseNavigationBarOnLoad {
+            navigationController?.navigationBar.isHidden = true
         }
 
         PTRotationManager.shared.orientationMaskDidChange = { [weak self] orientationMask in
@@ -1317,7 +1334,7 @@ extension PTBaseViewController {
     ///是否隱藏NavBar
     public convenience init(hideBaseNavBar: Bool) {
         self.init()
-        navigationController?.navigationBar.isHidden = hideBaseNavBar
+        hidesBaseNavigationBarOnLoad = hideBaseNavBar
     }
             
     //MARK: 動態更換StatusBar
@@ -1356,11 +1373,8 @@ extension PTBaseViewController {
                 completion?()
             })
         } else if let nav = navigationController {
-            // pop 时用主线程保证安全
-            Task { @MainActor in
-                nav.popViewController(animated: true) {
-                    completion?()
-                }
+            nav.popViewController(animated: true) {
+                completion?()
             }
         } else {
             completion?()
