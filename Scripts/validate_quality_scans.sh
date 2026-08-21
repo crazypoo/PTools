@@ -14,6 +14,10 @@ critical_files=(
   PooToolsSource/Debug/PTDebugFunction.swift
   PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
   PooToolsSource/Animation/PTAnimationFunction.swift
+  PooToolsSource/QRCodeScan/PTScanQRController.swift
+  PooToolsSource/Category/UIScreen+PTEX.swift
+  PooToolsSource/Category/UIViewController+Swizzled.swift
+  PooToolsSource/LocalConsole/LocalConsole.swift
   PooToolsSource/PhotoPicker
   PooToolsSource/VideoEditor
 )
@@ -44,6 +48,23 @@ new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sen
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2
+  exit 1
+fi
+
+new_unsafe="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*nonisolated\(unsafe\)' || true)"
+if [[ -n "$new_unsafe" ]]; then
+  printf '%s\n' "$new_unsafe" >&2
+  printf 'FAIL: this change introduces a new nonisolated(unsafe) declaration\n' >&2
+  exit 1
+fi
+
+new_forceful_operations="$(git diff --unified=0 -- '*.swift' \
+  | rg '^\+[^+]' \
+  | rg 'try!|as!' \
+  | rg -v '^\+[[:space:]]*(//|/\*|\*)' || true)"
+if [[ -n "$new_forceful_operations" ]]; then
+  printf '%s\n' "$new_forceful_operations" >&2
+  printf 'FAIL: this change introduces a new try! or as! operation\n' >&2
   exit 1
 fi
 

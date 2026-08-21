@@ -84,6 +84,9 @@ public class PTScanQRController: PTBaseViewController {
     private var torchOn:Bool = false
     ///首次進入,addTimer那裏不執行startSession的操作,不然容易和初始化的start重複導致多次start
     private var hasEntered:Bool = true
+    private var isProcessingScanResult = false
+    private var hasDeliveredScanResult = false
+    private var pendingScanResultTask: Task<Void, Never>?
     private var timer = Timer()
     ///處理掃描線動畫
     private var flag = true
@@ -213,6 +216,8 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        pendingScanResultTask?.cancel()
+        pendingScanResultTask = nil
         configureNavigationBar(hidden: false)
         sessionQueue.async {
             PTGCDManager.shared.runOnMain {
@@ -502,6 +507,13 @@ public class PTScanQRController: PTBaseViewController {
             }
         }
     }
+
+    private func processMetadataResult(result: String, error: NSError?) {
+        guard !hasDeliveredScanResult else { return }
+        hasDeliveredScanResult = true
+        pendingScanResultTask = nil
+        processResult(result: result, error: error)
+    }
     
     //MARK: 根據UIImage來查找QR code
     func findQR(inImage image:UIImage) {
@@ -512,15 +524,21 @@ public class PTScanQRController: PTBaseViewController {
             }
         }
         Task { @MainActor in
-            let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
-            let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
-            if features!.count == 0 {
-                self.processResult(result:"" ,error: NSError(domain: "PT Scan no code".localized(), code: 500))
-            } else {
-                let feature:CIQRCodeFeature = features![0] as! CIQRCodeFeature
-                let resultString = feature.messageString
-                self.processResult(result: resultString!,error: nil)
+            guard let cgImage = image.cgImage,
+                  let detector = CIDetector(
+                    ofType: CIDetectorTypeQRCode,
+                    context: nil,
+                    options: [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+                  ),
+                  let result = detector.features(in: CIImage(cgImage: cgImage))
+                    .compactMap({ $0 as? CIQRCodeFeature })
+                    .compactMap(\.messageString)
+                    .first(where: { !$0.isEmpty }) else {
+                self.processResult(result: "", error: NSError(domain: "PT Scan no code".localized(), code: 500))
+                return
             }
+
+            self.processResult(result: result, error: nil)
         }
     }
 }
@@ -541,6 +559,10 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
                     layer.codeView.removeFromSuperview()
                 }
                 self.layerArr.removeAll()
+                self.isProcessingScanResult = false
+                self.hasDeliveredScanResult = false
+                self.pendingScanResultTask?.cancel()
+                self.pendingScanResultTask = nil
                 if !self.session.isRunning {
                     self.hasEntered = true
                     self.addTimer()
@@ -568,13 +590,12 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
         return maskView
     }
     
-    func showCodeButton(bounds:CGRect,icon:Bool) -> UIButton {
+    func showCodeButton(bounds:CGRect,icon:Bool,codeString:String) -> UIButton {
         let btn = UIButton(type: .custom)
         btn.frame = bounds
         btn.backgroundColor = .clear
-        btn.addActionHandlers { sender in
-            let barinfo = self.layerArr[sender.tag]
-            self.processResult(result: barinfo.codeString,error: nil)
+        btn.addActionHandlers { _ in
+            self.processMetadataResult(result: codeString,error: nil)
         }
         
         if icon {
@@ -602,17 +623,30 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
     }
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        if metadataObjects.count > 0 {
-            removeTimer()
-            
-            let impactLight = UIImpactFeedbackGenerator(style: .light)
-            impactLight.impactOccurred()
+        guard !metadataObjects.isEmpty, !isProcessingScanResult, !hasDeliveredScanResult else { return }
+        isProcessingScanResult = true
+
+        let detectedCodes: [(bounds: CGRect, message: String)] = metadataObjects.compactMap { value in
+            guard let code = videoPreviewLayer.transformedMetadataObject(for: value) as? AVMetadataMachineReadableCodeObject,
+                  let message = code.stringValue,
+                  !message.isEmpty else {
+                return nil
+            }
+            return (code.bounds, message)
         }
+
+        guard !detectedCodes.isEmpty else {
+            processMetadataResult(result: "", error: NSError(domain: "PT Scan no code".localized(), code: 500))
+            return
+        }
+
+        removeTimer()
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         
         AudioServicesPlaySystemSound(1108)
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         
-        let maskView = showMaskView(showTips: (metadataObjects.count > 1))
+        let maskView = showMaskView(showTips: (detectedCodes.count > 1))
         maskView.alpha = 0
         view.addSubview(maskView)
         UIView.animate(withDuration: 0.6) {
@@ -624,23 +658,23 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
         barInfo.codeString = ""
         layerArr.append(barInfo)
         
-        metadataObjects.enumerated().forEach { index,value in
-            let code:AVMetadataMachineReadableCodeObject = videoPreviewLayer.transformedMetadataObject(for: value) as! AVMetadataMachineReadableCodeObject
-            let codeBtn = showCodeButton(bounds: code.bounds, icon: (metadataObjects.count > 1))
-            codeBtn.tag = index + 1
+        detectedCodes.forEach { code in
+            let codeBtn = showCodeButton(bounds: code.bounds, icon: (detectedCodes.count > 1), codeString: code.message)
             view.addSubview(codeBtn)
             
             let barInfo = PTScanBarInfo()
             barInfo.codeView = codeBtn
-            barInfo.codeString = code.stringValue ?? ""
+            barInfo.codeString = code.message
             layerArr.append(barInfo)
         }
         
         backBtn.isHidden = true
-        if metadataObjects.count == 1 {
-            PTGCDManager.shared.delayOnMain(time: 0.8) {
-                let barInfo = self.layerArr[1]
-                self.processResult(result: barInfo.codeString,error: nil)
+        if detectedCodes.count == 1, let result = detectedCodes.first?.message {
+            pendingScanResultTask?.cancel()
+            pendingScanResultTask = Task { @MainActor [weak self] in
+                try? await Task.sleep(for: .milliseconds(800))
+                guard !Task.isCancelled, let self else { return }
+                self.processMetadataResult(result: result,error: nil)
             }
         }
     }

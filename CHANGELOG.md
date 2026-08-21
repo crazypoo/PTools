@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.5.19 - 2026-08-21
+
+- 修正 Xcode 警告门禁，按各 target 自身配置构建，并区分 PooTools 源码、Pods 和工程环境诊断。
+- 修复二维码图片识别、相机 metadata 转换、导航生命周期日志和无活动窗口场景中的崩溃风险。
+- 移除屏幕圆角私有 KVC，改用活动窗口公开的 safe-area 信息。
+- 优化 `PTCollectionView` 骨架路径缓存、离屏动画暂停和 Reduce Motion 动态切换。
+
+## 4.5.18 - 2026-08-21
+
+- 为 `PTCollectionView` 增加独立覆盖层骨架，支持现有布局模式、深色模式和 Reduce Motion。
+- 骨架显示不修改 Diffable snapshot，也不触发业务 Cell 注册或数据回调。
+
 ## 4.5.17 - 2026-08-21
 
 - 统一 PhotoPicker、MediaViewer 和 VideoEditor 的媒体保存服务到 Core 模块。
@@ -7,7 +19,7 @@
 - 统一图片加载配置、视频首帧生成、Router VC 解析和 Network 请求上下文。
 - 收敛权限请求 completion 的 MainActor 桥接，移除通知权限状态读取的数据竞争。
 - 增加重复入口清单脚本，并保留旧公开入口作为兼容包装器。
-- Xcode 完整警告验收仍受外部 Pods 的 Swift 6 并发错误阻断，未创建 `v4.5.17` tag。
+- Xcode 完整警告验收记录了外部 Pods 的 Swift 6 并发阻断，并已按仓库格式创建 `4.5.17` tag。
 
 ## 4.5.16 - 2026-08-21
 

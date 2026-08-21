@@ -286,9 +286,16 @@ public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
 private final class PTSkeletonOverlayView: UIView {
     private static let animationKey = "PTCollectionView.skeletonShimmer"
 
+    private struct LayoutSignature: Equatable {
+        let rects: [CGRect]
+        let cornerRadius: CGFloat
+    }
+
     private let baseLayer = CAShapeLayer()
     private let shimmerLayer = CAGradientLayer()
     private let shimmerMask = CAShapeLayer()
+    private var layoutSignature: LayoutSignature?
+    private var wantsShimmer = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -305,10 +312,20 @@ private final class PTSkeletonOverlayView: UIView {
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: PTSkeletonOverlayView, _) in
             view.updateColors()
         }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reduceMotionStatusDidChange),
+            name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+            object: nil
+        )
     }
 
     required init?(coder: NSCoder) {
         return nil
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func layoutSubviews() {
@@ -318,9 +335,18 @@ private final class PTSkeletonOverlayView: UIView {
         shimmerMask.frame = bounds
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateShimmerState()
+    }
+
     func update(rects: [CGRect], cornerRadius: CGFloat) {
-        let path = UIBezierPath()
         let radius = max(0, cornerRadius)
+        let signature = LayoutSignature(rects: rects, cornerRadius: radius)
+        guard signature != layoutSignature else { return }
+        layoutSignature = signature
+
+        let path = UIBezierPath()
         for rect in rects {
             path.append(UIBezierPath(roundedRect: rect, cornerRadius: radius))
         }
@@ -329,13 +355,27 @@ private final class PTSkeletonOverlayView: UIView {
     }
 
     func startShimmerIfNeeded() {
-        guard !UIAccessibility.isReduceMotionEnabled else {
+        wantsShimmer = true
+        updateShimmerState()
+    }
+
+    func stopShimmer() {
+        wantsShimmer = false
+        updateShimmerState()
+    }
+
+    @objc private func reduceMotionStatusDidChange() {
+        updateShimmerState()
+    }
+
+    private func updateShimmerState() {
+        let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
+        shimmerLayer.isHidden = reduceMotionEnabled
+        guard wantsShimmer, window != nil, !isHidden, !reduceMotionEnabled else {
             shimmerLayer.removeAnimation(forKey: Self.animationKey)
-            shimmerLayer.isHidden = true
             return
         }
 
-        shimmerLayer.isHidden = false
         guard shimmerLayer.animation(forKey: Self.animationKey) == nil else { return }
 
         let animation = CABasicAnimation(keyPath: "locations")
@@ -345,11 +385,6 @@ private final class PTSkeletonOverlayView: UIView {
         animation.repeatCount = .infinity
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         shimmerLayer.add(animation, forKey: Self.animationKey)
-    }
-
-    func stopShimmer() {
-        shimmerLayer.removeAnimation(forKey: Self.animationKey)
-        shimmerLayer.isHidden = false
     }
 
     private func updateColors() {

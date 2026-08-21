@@ -71,23 +71,21 @@ public extension UIViewController {
     
     
     private func printPath() {
-        // no parent
-        if parent == nil {
+        guard let parent else {
             logWithLevel(level: 0)
             return
         }
         
         // tabbar
-        if (parent!.isKind(of: UITabBarController.classForCoder())) {
+        if parent is UITabBarController {
             logWithLevel(level: 1)
             return
         }
          
         // nav
-        if (parent!.isKind(of: UINavigationController.classForCoder())) {
-            let nav: UINavigationController = parent as! UINavigationController
-            let integer = nav.viewControllers.firstIndex(of: self)
-            logWithLevel(level: UInt(integer!))
+        if let navigationController = parent as? UINavigationController,
+           let index = navigationController.viewControllers.firstIndex(of: self) {
+            logWithLevel(level: UInt(index))
         }
     }
 }

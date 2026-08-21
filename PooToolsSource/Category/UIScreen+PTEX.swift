@@ -30,7 +30,15 @@ public extension UIScreen {
                height: UIScreen.main.nativeBounds.height / UIScreen.main.nativeScale)
     }
     
-    static var hasRoundedCorners = UIScreen.main.value(forKey: "_" + "display" + "Corner" + "Radius") as! CGFloat > 0
+    @MainActor
+    static var hasRoundedCorners: Bool {
+        let activeWindow = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)
+        guard let safeAreaInsets = activeWindow?.safeAreaInsets else { return false }
+        return safeAreaInsets.bottom > 0 || safeAreaInsets.left > 0 || safeAreaInsets.right > 0
+    }
     
 }
 

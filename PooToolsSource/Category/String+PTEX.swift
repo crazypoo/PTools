@@ -1579,7 +1579,7 @@ public extension String {
     @MainActor func color(traitCollection:UITraitCollection? = nil,
                bundle:Bundle? = nil) -> UIColor {
         let newBundle = bundle ?? PTUtils.cgBaseBundle()
-        let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
+        let traitCollection_new = traitCollection ?? AppWindows?.rootViewController?.traitCollection ?? UITraitCollection.current
         return UIColor(named: self, in: newBundle, compatibleWith: traitCollection_new) ?? .randomColor
     }
     
@@ -1591,7 +1591,7 @@ public extension String {
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
     @MainActor func image(traitCollection:UITraitCollection? = nil,
                           bundle:Bundle? = nil) -> UIImage {
-        let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
+        let traitCollection_new = traitCollection ?? AppWindows?.rootViewController?.traitCollection ?? UITraitCollection.current
         let newBundle = bundle ?? PTUtils.cgBaseBundle()
         return UIImage(named: self, in: newBundle, compatibleWith: traitCollection_new) ?? UIColor.randomColor.createImageWithColor()
     }

@@ -54,7 +54,7 @@ struct InspectorModifier: ViewModifier {
                     elementLibraries: elementLibraries,
                     elementIconProvider: inspectorIconProvider,
                     didFinish: {
-                        withAnimation(.spring()) {
+                        let _ = withAnimation(.spring) {
                             PTGCDManager.shared.runOnMain {
                                 self.isPresented = false
                             }

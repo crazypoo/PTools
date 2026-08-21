@@ -95,7 +95,7 @@ extension UIImage {
     static func displayImage()-> UIImage {
         let result: String
 
-        let hasHomeButton = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat == 0
+        let hasHomeButton = !UIScreen.hasRoundedCorners
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             if hasHomeButton {
@@ -895,9 +895,6 @@ extension LocalConsole {
     @MainActor func respringAction() {
         guard let window = AppWindows else { return }
         
-        window.layer.cornerRadius = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat
-        window.layer.masksToBounds = true
-        
         UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
             window.transform = .init(scaleX: 0.96, y: 0.96)
             window.alpha = 0
@@ -1222,6 +1219,7 @@ extension LocalConsole {
         hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
 
         let supportApplePencilString = UIDevice.pt.supportApplePencil.description
+        let safeAreaInsets = AppWindows?.safeAreaInsets ?? .zero
 
         let systemText = """
                 ModelName: \(SystemReport.shared.gestaltMarketingName)
@@ -1247,7 +1245,7 @@ extension LocalConsole {
                 HasLidarSensor: \(Device.current.hasLidarSensor ? "Yes" : "No")
                 PPI: \(Device.current.ppi ?? 0)
                 ScreenSize: \(UIScreen.main.bounds.size)
-                ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
+                ScreenSafeAreaInsets: \(safeAreaInsets)
                 ScreenScale: \(UIScreen.main.scale)
                 \(hzString)
                 Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
@@ -1280,7 +1278,7 @@ extension LocalConsole {
             print(
                   """
                   Screen Size:       \(UIScreen.main.bounds.size)
-                  Corner Radius:     \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
+                  Rounded Corners:   \(UIScreen.hasRoundedCorners ? "Yes" : "No")
                   Screen Scale:      \(UIScreen.main.scale)
                   Max Frame Rate:    \(UIScreen.main.maximumFramesPerSecond) Hz
                   Brightness:        \(String(format: "%.2f", UIScreen.main.brightness))
