@@ -160,6 +160,10 @@ public class PTCollectionViewConfig: NSObject {
     open var enableSmartPrefetch: Bool = false
     /// 触发预加载的阈值：距离底部还有多少个 Item 时触发（默认距离最后 5 个时触发）
     open var prefetchThreshold: Int = 5
+    /// 骨架加载时默认展示的占位数量
+    open var skeletonItemCount: Int = 6
+    /// 骨架占位块的圆角半径
+    open var skeletonCornerRadius: CGFloat = 8
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {
@@ -278,6 +282,87 @@ public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> {
 public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>
 public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
 
+@MainActor
+private final class PTSkeletonOverlayView: UIView {
+    private static let animationKey = "PTCollectionView.skeletonShimmer"
+
+    private let baseLayer = CAShapeLayer()
+    private let shimmerLayer = CAGradientLayer()
+    private let shimmerMask = CAShapeLayer()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = true
+        isAccessibilityElement = false
+        accessibilityElementsHidden = true
+        clipsToBounds = true
+        backgroundColor = .clear
+
+        shimmerLayer.mask = shimmerMask
+        layer.addSublayer(baseLayer)
+        layer.addSublayer(shimmerLayer)
+        updateColors()
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: PTSkeletonOverlayView, _) in
+            view.updateColors()
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        return nil
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        baseLayer.frame = bounds
+        shimmerLayer.frame = bounds
+        shimmerMask.frame = bounds
+    }
+
+    func update(rects: [CGRect], cornerRadius: CGFloat) {
+        let path = UIBezierPath()
+        let radius = max(0, cornerRadius)
+        for rect in rects {
+            path.append(UIBezierPath(roundedRect: rect, cornerRadius: radius))
+        }
+        baseLayer.path = path.cgPath
+        shimmerMask.path = path.cgPath
+    }
+
+    func startShimmerIfNeeded() {
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            shimmerLayer.removeAnimation(forKey: Self.animationKey)
+            shimmerLayer.isHidden = true
+            return
+        }
+
+        shimmerLayer.isHidden = false
+        guard shimmerLayer.animation(forKey: Self.animationKey) == nil else { return }
+
+        let animation = CABasicAnimation(keyPath: "locations")
+        animation.fromValue = [-1, -0.5, 0]
+        animation.toValue = [1, 1.5, 2]
+        animation.duration = 1.2
+        animation.repeatCount = .infinity
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        shimmerLayer.add(animation, forKey: Self.animationKey)
+    }
+
+    func stopShimmer() {
+        shimmerLayer.removeAnimation(forKey: Self.animationKey)
+        shimmerLayer.isHidden = false
+    }
+
+    private func updateColors() {
+        let baseColor = UIColor.secondarySystemBackground.resolvedColor(with: traitCollection)
+        let highlightColor = UIColor.tertiarySystemBackground.resolvedColor(with: traitCollection)
+        baseLayer.fillColor = baseColor.cgColor
+        shimmerLayer.colors = [baseColor.cgColor, highlightColor.cgColor, baseColor.cgColor]
+        shimmerLayer.locations = [0, 0.5, 1]
+        shimmerLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        shimmerLayer.endPoint = CGPoint(x: 1, y: 0.5)
+    }
+}
+
 //MARK: 界面展示
 @objcMembers
 @MainActor
@@ -291,6 +376,10 @@ public class PTCollectionView: UIView {
     ///Photos
     let imageManager = PHCachingImageManager()
     var photoAssets: [PHAsset] = []
+
+    private lazy var skeletonOverlayView = PTSkeletonOverlayView()
+    private var activeSkeletonItemCount: Int?
+    public private(set) var isSkeletonVisible = false
     
     ///索引
     fileprivate lazy var indicator: UIView = {
@@ -532,6 +621,10 @@ public class PTCollectionView: UIView {
             if collectionView.superview != nil {
                 collectionView.collectionViewLayout.invalidateLayout()
             }
+
+            if isSkeletonVisible {
+                updateSkeletonLayout()
+            }
         }
     }
     
@@ -557,6 +650,12 @@ public class PTCollectionView: UIView {
         
         setupDiffableDataSource()
         setiOS17EmptyDataView()
+
+        skeletonOverlayView.isHidden = true
+        addSubview(skeletonOverlayView)
+        skeletonOverlayView.snp.makeConstraints { make in
+            make.edges.equalTo(collectionView)
+        }
     }
         
     required init?(coder: NSCoder) {
@@ -581,6 +680,112 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        updateSkeletonLayout()
+    }
+
+    /// 显示独立的骨架覆盖层，不改变当前 Diffable snapshot。
+    public func showSkeleton(itemCount: Int? = nil) {
+        let requestedCount = itemCount ?? viewConfig.skeletonItemCount
+        activeSkeletonItemCount = min(max(requestedCount, 1), 50)
+        isSkeletonVisible = true
+        skeletonOverlayView.isHidden = false
+        bringSubviewToFront(skeletonOverlayView)
+        updateSkeletonLayout()
+        skeletonOverlayView.startShimmerIfNeeded()
+    }
+
+    /// 隐藏骨架覆盖层，不改变当前空状态或内容状态。
+    public func hideSkeleton() {
+        guard isSkeletonVisible || !skeletonOverlayView.isHidden else { return }
+        isSkeletonVisible = false
+        activeSkeletonItemCount = nil
+        skeletonOverlayView.stopShimmer()
+        skeletonOverlayView.isHidden = true
+    }
+}
+
+private extension PTCollectionView {
+    func updateSkeletonLayout() {
+        guard isSkeletonVisible else { return }
+        bringSubviewToFront(skeletonOverlayView)
+        let count = activeSkeletonItemCount ?? viewConfig.skeletonItemCount
+        skeletonOverlayView.update(rects: skeletonFrames(itemCount: count), cornerRadius: viewConfig.skeletonCornerRadius)
+    }
+
+    func skeletonFrames(itemCount: Int) -> [CGRect] {
+        let count = min(max(itemCount, 1), 50)
+        guard let config = viewConfig else { return [] }
+        let bounds = skeletonOverlayView.bounds
+        guard bounds.width > 0, bounds.height > 0 else { return [] }
+
+        let leading = max(0, config.itemOriginalX + config.cellLeadingSpace)
+        let trailing = max(0, config.itemOriginalX + config.cellLeadingSpace)
+        let verticalSpacing = max(0, config.cellTrailingSpace)
+        let contentTop = max(0, config.contentTopSpace)
+        let contentBottom = max(0, config.contentBottomSpace)
+        let contentWidth = max(1, bounds.width - leading - trailing)
+        let baseHeight = max(1, config.itemHeight)
+        let columnCount = max(1, config.rowCount)
+        let columnSpacing = max(0, config.cellLeadingSpace)
+        let availableColumnWidth = max(1, (contentWidth - CGFloat(columnCount - 1) * columnSpacing) / CGFloat(columnCount))
+
+        func photoHeight(for width: CGFloat, fallback: CGFloat) -> CGFloat {
+            guard config.viewForPhoto,
+                  config.previewImageSize.width > 0,
+                  config.previewImageSize.height > 0 else {
+                return fallback
+            }
+            return max(1, width * config.previewImageSize.height / config.previewImageSize.width)
+        }
+
+        switch config.viewType {
+        case .Normal, .Custom:
+            let width = max(1, bounds.width - leading - trailing)
+            let height = photoHeight(for: width, fallback: baseHeight)
+            return (0..<count).map { index in
+                CGRect(x: leading,
+                       y: contentTop + CGFloat(index) * (height + verticalSpacing),
+                       width: width,
+                       height: height)
+            }
+
+        case .Gird, .Tag:
+            let height = photoHeight(for: availableColumnWidth, fallback: baseHeight)
+            return (0..<count).map { index in
+                let row = index / columnCount
+                let column = index % columnCount
+                return CGRect(x: leading + CGFloat(column) * (availableColumnWidth + columnSpacing),
+                              y: contentTop + CGFloat(row) * (height + verticalSpacing),
+                              width: availableColumnWidth,
+                              height: height)
+            }
+
+        case .WaterFall:
+            var columnHeights = Array(repeating: contentTop, count: columnCount)
+            let heightMultipliers: [CGFloat] = [0.82, 1.0, 1.18]
+            return (0..<count).map { index in
+                let column = index % columnCount
+                let width = availableColumnWidth
+                let height = photoHeight(for: width, fallback: baseHeight) * heightMultipliers[index % heightMultipliers.count]
+                let frame = CGRect(x: leading + CGFloat(column) * (width + columnSpacing),
+                                   y: columnHeights[column],
+                                   width: width,
+                                   height: max(1, height))
+                columnHeights[column] = frame.maxY + verticalSpacing
+                return frame
+            }
+
+        case .Horizontal, .HorizontalLayoutSystem:
+            let width = max(1, config.itemWidth)
+            let height = min(baseHeight, max(1, bounds.height - contentTop - contentBottom))
+            let y = max(contentTop, (bounds.height - height) / 2)
+            return (0..<count).map { index in
+                CGRect(x: leading + CGFloat(index) * (width + columnSpacing),
+                       y: y,
+                       width: width,
+                       height: height)
+            }
+        }
     }
 }
 
