@@ -39,9 +39,7 @@ public class PTPermissionReminders: PTPermission {
         let eventStore = EKEventStore()
         
         eventStore.requestFullAccessToReminders { (accessGranted: Bool, error: Error?) in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+            PTPermission.completeRequest(completion)
         }
     }
 }

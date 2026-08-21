@@ -825,27 +825,15 @@ public extension PTPOP where Base: FileManager {
             videoURL = url
         }
         
-        guard let weakVideoURL = videoURL else {
+        guard let videoURL else { return nil }
+        guard let image = PTVideoThumbnailService.image(for: videoURL,
+                                                        at: seconds,
+                                                        preferredTimescale: preferredTimescale,
+                                                        maximumSize: maximumSize,
+                                                        appliesPreferredTrackTransform: preferredTrackTransform) else {
+            PTNSLogConsole("获取缩略图失败", levelType: .error, loggerType: .fileManager)
             return nil
         }
-        let videoAsset = AVURLAsset(url: weakVideoURL)
-    
-        let imageGenerator = AVAssetImageGenerator(asset: videoAsset)
-        // 设定缩略图的方向
-        // 如果不设定，可能会在视频旋转90/180/270°时，获取到的缩略图是被旋转过的，而不是正向的
-        imageGenerator.appliesPreferredTrackTransform = preferredTrackTransform
-        // 设置图片的最大size(分辨率)
-        if let size = maximumSize {
-            imageGenerator.maximumSize = size
-        }
-        // 取第几秒，一秒钟几帧
-        let cmTime = CMTime(seconds: seconds, preferredTimescale: preferredTimescale)
-        if let cgImg = try? imageGenerator.copyCGImage(at: cmTime, actualTime: nil) {
-            let img = UIImage(cgImage: cgImg)
-            return img
-        } else {
-            PTNSLogConsole("获取缩略图失败",levelType: .error,loggerType: .fileManager)
-            return nil
-        }
+        return image
     }
 }

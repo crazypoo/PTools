@@ -2,11 +2,10 @@
 //  PTMediaSaveService.swift
 //  PooTools
 //
-//  Unified PhotoKit media saving boundary.
+//  Shared PhotoKit media saving boundary used by PhotoPicker, MediaViewer and
+//  VideoEditor targets.
 //
 
-// PhotoKit completion APIs are legacy callback-based system APIs; UI results
-// are delivered through the MainActor save service.
 @preconcurrency import Photos
 import UIKit
 import os.lock
@@ -19,14 +18,10 @@ public enum PTMediaSaveError: Error, LocalizedError, Sendable {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidInput:
-            return "必须提供一张图片或一个视频文件"
-        case .permissionDenied:
-            return "没有相册写入权限"
-        case .imageEncodingFailed:
-            return "图片编码失败"
-        case .saveFailed(let message):
-            return message
+        case .invalidInput: return "必须提供一张图片或一个视频文件"
+        case .permissionDenied: return "没有相册写入权限"
+        case .imageEncodingFailed: return "图片编码失败"
+        case .saveFailed(let message): return message
         }
     }
 }
@@ -37,9 +32,6 @@ public enum PTMediaSaveResult {
     case failure(PTMediaSaveError)
 }
 
-/// The single media-save entry point used by PhotoPicker and camera flows.
-/// PhotoKit callbacks remain outside MainActor; only a local identifier and
-/// value-type error snapshot cross back to the UI actor.
 @MainActor
 public enum PTMediaSaveService {
     public static func save(image: UIImage?,
@@ -68,12 +60,12 @@ public enum PTMediaSaveService {
             return
         }
 
-        guard let changeRequest = PTMediaSaveService.prepareChangeRequest(image: image, videoURL: videoURL) else {
+        guard let changeRequest = prepareChangeRequest(image: image, videoURL: videoURL) else {
             completion(.failure(image != nil ? .imageEncodingFailed : .saveFailed("视频资源不可用")))
             return
         }
-        let identifierStorage = OSAllocatedUnfairLock<String?>(initialState: nil)
 
+        let identifierStorage = OSAllocatedUnfairLock<String?>(initialState: nil)
         PHPhotoLibrary.shared().performChanges({
             changeRequest.request(identifierStorage: identifierStorage)
         }) { success, error in
@@ -83,7 +75,6 @@ public enum PTMediaSaveService {
                     completion(.failure(.saveFailed(failureMessage)))
                     return
                 }
-
                 guard let localIdentifier = identifierStorage.withLock({ $0 }) else {
                     completion(.failure(.saveFailed("保存成功但无法获取资源标识")))
                     return
@@ -98,7 +89,7 @@ public enum PTMediaSaveService {
         }
     }
 
-    private enum ChangeRequest {
+    private enum ChangeRequest: Sendable {
         case image(Data)
         case video(URL)
 
@@ -117,12 +108,9 @@ public enum PTMediaSaveService {
 
     private static func prepareChangeRequest(image: UIImage?, videoURL: URL?) -> ChangeRequest? {
         if let image {
-            let data: Data?
-            if image.pt.hasAlphaChannel() {
-                data = image.pngData()
-            } else {
-                data = image.jpegData(compressionQuality: 1)
-            }
+            let data = image.pt.hasAlphaChannel()
+                ? image.pngData()
+                : image.jpegData(compressionQuality: 1)
             guard let data else { return nil }
             return .image(data)
         }

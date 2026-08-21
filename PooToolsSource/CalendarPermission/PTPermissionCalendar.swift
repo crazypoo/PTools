@@ -73,17 +73,13 @@ public class PTPermissionCalendar: PTPermission {
         
         let requestWriteOnly = {
             eventStore.requestWriteOnlyAccessToEvents { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.shared.runOnMain {
-                    completion()
-                }
+                PTPermission.completeRequest(completion)
             }
         }
         
         let requestFull = {
             eventStore.requestFullAccessToEvents { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.shared.runOnMain {
-                    completion()
-                }
+                PTPermission.completeRequest(completion)
             }
         }
         

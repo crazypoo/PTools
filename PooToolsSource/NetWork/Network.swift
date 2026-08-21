@@ -850,6 +850,28 @@ public final class Network: @unchecked Sendable {
         let gobalUrl = needGobal ? await Network.gobalUrl() : ""
         return gobalUrl + original
     }
+
+    /// Shared value for all request-shaped entry points. The legacy KakaJSON
+    /// parser still lives at the boundary, but URL/header construction no
+    /// longer has separate implementations for modern and legacy requests.
+    private struct PTNetworkRequestContext {
+        let url: String
+        let method: HTTPMethod
+        let headers: HTTPHeaders
+    }
+
+    private class func makeRequestContext(urlStr: URLConvertible,
+                                          needGobal: Bool,
+                                          method: HTTPMethod,
+                                          header: HTTPHeaders?,
+                                          jsonRequest: Bool,
+                                          cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkRequestContext {
+        let url = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        let headers = prepareRequestHeaders(header: header,
+                                            jsonRequest: jsonRequest,
+                                            cachePolicy: cachePolicy)
+        return PTNetworkRequestContext(url: url, method: method, headers: headers)
+    }
     
     private typealias ResponseParser<T> = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel<T>
     public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>
@@ -946,27 +968,36 @@ public final class Network: @unchecked Sendable {
     }
 
     private class func _internalRequestApi<T: Sendable>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
-        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
+        let context = try await makeRequestContext(urlStr: urlStr,
+                                                   needGobal: needGobal,
+                                                   method: method,
+                                                   header: header,
+                                                   jsonRequest: jsonRequest,
+                                                   cachePolicy: cachePolicy)
+        logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
 
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
-        return try await execute(url: urlStr1, request: urlRequest, parser: parser)
+        return try await execute(url: context.url, request: urlRequest, parser: parser)
     }
     
     private class func _internalRequestBodyAPI<T: Sendable>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
+        let context = try await makeRequestContext(urlStr: urlStr,
+                                                   needGobal: needGobal,
+                                                   method: method,
+                                                   header: header,
+                                                   jsonRequest: false,
+                                                   cachePolicy: cachePolicy)
+        var newHeader = context.headers
         if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
         
         var dic: [String: any Any & Sendable] = [:]
         if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
-        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
+        logRequestStart(url: context.url, parameters: dic, headers: newHeader, method: context.method)
         
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
+        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
         urlRequest.httpBody = body
-        return try await execute(url: urlStr1, request: urlRequest, uploadBody: body, parser: parser)
+        return try await execute(url: context.url, request: urlRequest, uploadBody: body, parser: parser)
     }
 
     private class func _internalLegacyRequestApi(needGobal: Bool,
@@ -978,12 +1009,16 @@ public final class Network: @unchecked Sendable {
                                                  encoder: ParameterEncoding,
                                                  jsonRequest: Bool,
                                                  parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
-        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        let context = try await makeRequestContext(urlStr: urlStr,
+                                                   needGobal: needGobal,
+                                                   method: method,
+                                                   header: header,
+                                                   jsonRequest: jsonRequest,
+                                                   cachePolicy: cachePolicy)
+        logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
+        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
-        return try await executeLegacy(url: urlStr1, request: urlRequest, parser: parser)
+        return try await executeLegacy(url: context.url, request: urlRequest, parser: parser)
     }
 
     private class func _internalLegacyRequestBodyAPI(needGobal: Bool,
@@ -993,15 +1028,20 @@ public final class Network: @unchecked Sendable {
                                                      method: HTTPMethod,
                                                      cachePolicy: PTNetworkCachePolicy?,
                                                      parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
+        let context = try await makeRequestContext(urlStr: urlStr,
+                                                   needGobal: needGobal,
+                                                   method: method,
+                                                   header: header,
+                                                   jsonRequest: false,
+                                                   cachePolicy: cachePolicy)
+        var newHeader = context.headers
         if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
         var dic: [String: any Any & Sendable] = [:]
         if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
-        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
+        logRequestStart(url: context.url, parameters: dic, headers: newHeader, method: context.method)
+        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
         urlRequest.httpBody = body
-        return try await executeLegacy(url: urlStr1, request: urlRequest, uploadBody: body, parser: parser)
+        return try await executeLegacy(url: context.url, request: urlRequest, uploadBody: body, parser: parser)
     }
     
     private struct PTSafeUploadParamsBox: @unchecked Sendable {

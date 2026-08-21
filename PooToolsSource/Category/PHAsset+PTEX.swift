@@ -254,7 +254,7 @@ public extension PHAsset {
                               version: PHVideoRequestOptionsVersion = .current,
                               supportIcloud: Bool  = true,
                               deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-                              completion: @escaping @Sendable (UIImage?) -> Void) {
+                              completion: @escaping @MainActor @Sendable (UIImage?) -> Void) {
         self.converPHAssetToAVURLAsset(version: version, supportIcloud: supportIcloud, deliveryMode: deliveryMode) { asset in
             asset?.getVideoFirstImage(maximumSize: targetSize) { image in
                 completion(image)

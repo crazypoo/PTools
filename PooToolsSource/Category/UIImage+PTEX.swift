@@ -622,31 +622,16 @@ public extension PTPOP where Base: UIImage {
     ///   - maximumSize: 图片的最大尺寸
     ///   - closure:
     /// - Returns: 视频的第一帧
-    static func getVideoFirstImage(videoUrl: String,
+static func getVideoFirstImage(videoUrl: String,
                                    maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                                   closure: @escaping @Sendable (UIImage?) -> Void) {
+                                   closure: @escaping @MainActor @Sendable (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
-            closure(nil)
+            Task { @MainActor in closure(nil) }
             return
         }
-        
-        let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
-        let avAsset = AVURLAsset(url: url, options: opts)
-        let generator = AVAssetImageGenerator(asset: avAsset)
-        generator.appliesPreferredTrackTransform = true
-        generator.maximumSize = maximumSize
-        
-        let time = CMTimeMake(value: 0, timescale: 600)
-        
-        generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { _, imageRef, _, result, error in
-            DispatchQueue.main.async {
-                if let cgImage = imageRef, result == .succeeded {
-                    closure(UIImage(cgImage: cgImage))
-                } else {
-                    closure(nil)
-                }
-            }
-        }
+        PTVideoThumbnailService.image(for: url,
+                                      maximumSize: maximumSize,
+                                      completion: closure)
     }
         
     //MARK: 设置图片透明度

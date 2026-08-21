@@ -24,6 +24,68 @@ public enum PTImageType : Sendable {
 public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)
 
 @MainActor
+public enum PTImageSource {
+    case image(UIImage)
+    case data(Data)
+    case asset(PHAsset)
+    case color(UIColor)
+    case url(URL)
+    case named(String)
+}
+
+/// Shared rendering options used by UIImageView, UIButton and the UIView
+/// image-loading core. The legacy argument-heavy APIs remain as adapters.
+public struct PTImageLoadConfiguration {
+    public var iCloudDocumentName: String
+    public var radius: CGFloat
+    public var topLeft: CGFloat
+    public var topRight: CGFloat
+    public var bottomLeft: CGFloat
+    public var bottomRight: CGFloat
+    public var corner: UIRectCorner
+    public var capsule: Bool
+    public var borderWidth: CGFloat?
+    public var borderColor: UIColor?
+    public var showValueLabel: Bool?
+    public var valueLabelFont: UIFont?
+    public var valueLabelColor: UIColor?
+    public var uniCount: Int?
+    public var emptyImage: UIImage?
+
+    public init(iCloudDocumentName: String = "",
+                radius: CGFloat = 0,
+                topLeft: CGFloat = 0,
+                topRight: CGFloat = 0,
+                bottomLeft: CGFloat = 0,
+                bottomRight: CGFloat = 0,
+                corner: UIRectCorner = .allCorners,
+                capsule: Bool = false,
+                borderWidth: CGFloat? = nil,
+                borderColor: UIColor? = nil,
+                showValueLabel: Bool? = nil,
+                valueLabelFont: UIFont? = nil,
+                valueLabelColor: UIColor? = nil,
+                uniCount: Int? = nil,
+                emptyImage: UIImage? = nil) {
+        self.iCloudDocumentName = iCloudDocumentName
+        self.radius = radius
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+        self.corner = corner
+        self.capsule = capsule
+        self.borderWidth = borderWidth
+        self.borderColor = borderColor
+        self.showValueLabel = showValueLabel
+        self.valueLabelFont = valueLabelFont
+        self.valueLabelColor = valueLabelColor
+        self.uniCount = uniCount
+        self.emptyImage = emptyImage
+    }
+}
+
+@MainActor
 public struct PTLoadImageResult {
     public let allImages: [UIImage]?
     public let firstImage: UIImage?
@@ -56,6 +118,37 @@ public class PTLoadImageFunction: NSObject {
     }
 
     // 主入口方法
+    @MainActor public static func loadImage(source: PTImageSource,
+                                            iCloudDocumentName: String = "",
+                                            progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
+        switch source {
+        case .image(let image):
+            return await loadImage(contentData: image,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        case .data(let data):
+            return await loadImage(contentData: data,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        case .asset(let asset):
+            return await loadImage(contentData: asset,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        case .color(let color):
+            return await loadImage(contentData: color,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        case .url(let url):
+            return await loadImage(contentData: url,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        case .named(let name):
+            return await loadImage(contentData: name,
+                                   iCloudDocumentName: iCloudDocumentName,
+                                   progressHandle: progressHandle)
+        }
+    }
+
     @MainActor public static func loadImage(contentData: Any,
                                  iCloudDocumentName: String = "",
                                  progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {

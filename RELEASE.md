@@ -8,7 +8,7 @@
 - Git tag（格式：`v<version>`）
 - `CHANGELOG.md` 对应版本章节
 
-本轮发布目标为 `4.5.16`。`Package.swift` 和 Xcode 工程只维护平台与 Swift
+本轮发布目标为 `4.5.17`。`Package.swift` 和 Xcode 工程只维护平台与 Swift
 语言契约，不重复维护产品版本号。
 
 `Package.swift` 与 Xcode 工程不单独维护产品版本号，避免三套构建入口产生漂移。
@@ -25,6 +25,8 @@ xcodebuild -workspace PooTools.xcworkspace -scheme PooTools -destination 'generi
 ```
 
 随后在 Xcode 中使用 `PooTools-Example` scheme 完成 iOS Simulator 构建，并确认 GitHub Actions 的 Quality 检查通过。
+
+如果 Xcode 构建仅因外部 Pods 的 Swift 6 并发诊断失败，必须记录为环境阻断，不能将该状态标记为源码警告通过，也不能创建版本 tag。
 
 ## 发布步骤
 

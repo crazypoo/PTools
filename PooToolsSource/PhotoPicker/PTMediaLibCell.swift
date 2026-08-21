@@ -18,9 +18,8 @@ import SafeSFSymbols
 class PTMediaLibCell: PTBaseNormalCell {
     static let ID = "PTMediaLibCell"
     
-    // PHImageManager 的请求不是结构化 Task，必须保存 request ID 才能真正取消。
-    private var smallImageRequestID: PHImageRequestID = PHInvalidImageRequestID
-    private var bigImageRequestID: PHImageRequestID = PHInvalidImageRequestID
+    // PHImageManager 的请求不是结构化 Task，由协调器统一保存并取消。
+    private let requestCoordinator = PTMediaRequestCoordinator()
     private var imageIdentifier: String = ""
 
     var selectedBlock: (@Sendable (@escaping PTBoolTask) -> Void)?
@@ -119,7 +118,7 @@ class PTMediaLibCell: PTBaseNormalCell {
 
     // MARK: - 异步加载逻辑
     private func fetchSmallImage() {
-        cancelSmallImageRequest()
+        let generation = requestCoordinator.begin("small")
         
         guard let cellModel else { return }
         let asset = cellModel.asset
@@ -138,58 +137,53 @@ class PTMediaLibCell: PTBaseNormalCell {
             size = CGSize(width: targetWidth, height: targetWidth / cellModel.whRatio)
         }
 
-        smallImageRequestID = PTMediaLibManager.requestImage(for: asset,
-                                                             targetSize: size,
-                                                             contentMode: .aspectFill,
-                                                             resizeMode: .fast,
-                                                             deliveryMode: .opportunistic) { [weak self = self] result in
+        let requestID = PTMediaLibManager.requestImage(for: asset,
+                                                       targetSize: size,
+                                                       contentMode: .aspectFill,
+                                                       resizeMode: .fast,
+                                                       deliveryMode: .opportunistic) { [weak self = self] result in
             guard let self = self,
                   self.imageIdentifier == ident,
+                  self.requestCoordinator.isCurrent("small", generation: generation),
                   !result.isCancelled else { return }
             self.imageView.image = result.image
         }
+        requestCoordinator.store(requestID, for: "small", generation: generation)
     }
 
     func fetchBigImage() {
-        cancelFetchBigImage()
         guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
+        let generation = requestCoordinator.begin("big")
         
-        bigImageRequestID = PTMediaLibManager.requestImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
+        let requestID = PTMediaLibManager.requestImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
             Task { @MainActor in
-                guard let self = self, self.imageIdentifier == ident, self.cellModel?.isSelected == true else { return }
+                guard let self = self,
+                      self.imageIdentifier == ident,
+                      self.requestCoordinator.isCurrent("big", generation: generation),
+                      self.cellModel?.isSelected == true else { return }
                 self.imageView.alpha = 0.5
                 if progress >= 1 { self.resetProgressViewStatus() }
             }
         }, completion: { [weak self = self] _ in
             Task { @MainActor in
-                guard let self = self, self.imageIdentifier == ident else { return }
+                guard let self = self,
+                      self.imageIdentifier == ident,
+                      self.requestCoordinator.isCurrent("big", generation: generation) else { return }
                 self.resetProgressViewStatus()
             }
         })
+        requestCoordinator.store(requestID, for: "big", generation: generation)
     }
 
     func cancelFetchBigImage() {
-        cancelBigImageRequest()
+        requestCoordinator.cancel("big")
         resetProgressViewStatus()
     }
 
     private func cancelImageRequests() {
-        cancelSmallImageRequest()
-        cancelBigImageRequest()
-    }
-
-    private func cancelSmallImageRequest() {
-        guard smallImageRequestID != PHInvalidImageRequestID else { return }
-        PHImageManager.default().cancelImageRequest(smallImageRequestID)
-        smallImageRequestID = PHInvalidImageRequestID
-    }
-
-    private func cancelBigImageRequest() {
-        guard bigImageRequestID != PHInvalidImageRequestID else { return }
-        PHImageManager.default().cancelImageRequest(bigImageRequestID)
-        bigImageRequestID = PHInvalidImageRequestID
+        requestCoordinator.cancelAll()
     }
     
     private func resetProgressViewStatus() {
@@ -299,7 +293,7 @@ class PTMediaLibCell: PTBaseNormalCell {
 @MainActor
 class PTMediaLibAlbumCell: PTBaseNormalCell {
     static let ID = "PTMediaLibAlbumCell"
-    private var imageRequestID: PHImageRequestID = PHInvalidImageRequestID
+    private let requestCoordinator = PTMediaRequestCoordinator()
     private var imageIdentifier: String?
 
     var albumModel: PTMediaLibListModel? {
@@ -320,38 +314,34 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         
         imageIdentifier = albumModel.headImageAsset?.localIdentifier
         imageView.image = PTAppBaseConfig.share.defaultEmptyImage
-        cancelImageRequest()
+        let generation = requestCoordinator.begin("album")
         
         if let asset = albumModel.headImageAsset {
             let ident = asset.localIdentifier
             let side = bounds.height * UIScreen.main.scale
 
-            imageRequestID = PTMediaLibManager.requestImage(for: asset,
-                                                            targetSize: CGSize(width: side, height: side),
-                                                            contentMode: .aspectFill,
-                                                            resizeMode: .fast,
-                                                            deliveryMode: .opportunistic) { [weak self = self] result in
+            let requestID = PTMediaLibManager.requestImage(for: asset,
+                                                           targetSize: CGSize(width: side, height: side),
+                                                           contentMode: .aspectFill,
+                                                           resizeMode: .fast,
+                                                           deliveryMode: .opportunistic) { [weak self = self] result in
                 guard let self = self,
                       self.imageIdentifier == ident,
+                      self.requestCoordinator.isCurrent("album", generation: generation),
                       !result.isCancelled else { return }
                 self.imageView.image = result.image ?? PTAppBaseConfig.share.defaultEmptyImage
             }
+            requestCoordinator.store(requestID, for: "album", generation: generation)
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        cancelImageRequest()
+        requestCoordinator.cancelAll()
         imageView.image = nil
         imageIdentifier = nil
     }
 
-    private func cancelImageRequest() {
-        guard imageRequestID != PHInvalidImageRequestID else { return }
-        PHImageManager.default().cancelImageRequest(imageRequestID)
-        imageRequestID = PHInvalidImageRequestID
-    }
-    
     lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill

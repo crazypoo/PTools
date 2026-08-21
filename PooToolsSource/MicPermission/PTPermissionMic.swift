@@ -33,9 +33,7 @@ public class PTPermissionMic: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         AVAudioApplication.requestRecordPermission { granted in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+            PTPermission.completeRequest(completion)
         }
     }
 }

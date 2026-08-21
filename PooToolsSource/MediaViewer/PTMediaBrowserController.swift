@@ -598,10 +598,17 @@ fileprivate extension PTMediaBrowserController {
     }
         
     func saveVideo(videoPath:String,videoOrURL:String) {
-        let url = NSURL.fileURL(withPath: videoPath)
+        let url = URL(fileURLWithPath: videoPath)
         let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible {
-            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(videoPath:didFinishSavingWithError:contextInfo:)), nil)
+            PTMediaSaveService.save(videoURL: url) { [weak self] result in
+                guard let self else { return }
+                if case .success = result {
+                    self.viewSaveImageBlock?(true)
+                } else {
+                    self.viewSaveImageBlock?(false)
+                }
+            }
         } else {
             if let urlReal = URL(string: videoOrURL) {
                 PTVideoFileCache.shared.prepareVideo(url: urlReal,completion: { _ in })
@@ -611,7 +618,14 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func saveImageToPhotos(saveImage:UIImage) {
-        UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
+        PTMediaSaveService.save(image: saveImage) { [weak self] result in
+            guard let self else { return }
+            if case .success = result {
+                self.viewSaveImageBlock?(true)
+            } else {
+                self.viewSaveImageBlock?(false)
+            }
+        }
     }
     
     @objc func save(image:UIImage, didFinishSavingWithError:NSError?,contextInfo:AnyObject) {

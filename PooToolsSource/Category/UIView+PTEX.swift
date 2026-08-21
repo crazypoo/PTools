@@ -844,6 +844,33 @@ public extension UIView {
 }
 
 public extension UIView {
+
+    @MainActor
+    func pt_loadCoreImage(contentData: Any,
+                          configuration: PTImageLoadConfiguration,
+                          progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                          setImageBlock: @escaping @MainActor @Sendable (UIImage?) -> Void,
+                          loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
+        pt_loadCoreImage(contentData: contentData,
+                         iCloudDocumentName: configuration.iCloudDocumentName,
+                         radius: configuration.radius,
+                         topLeft: configuration.topLeft,
+                         topRight: configuration.topRight,
+                         bottomLeft: configuration.bottomLeft,
+                         bottomRight: configuration.bottomRight,
+                         corner: configuration.corner,
+                         capsule: configuration.capsule,
+                         borderWidth: configuration.borderWidth,
+                         borderColor: configuration.borderColor,
+                         showValueLabel: configuration.showValueLabel,
+                         valueLabelFont: configuration.valueLabelFont,
+                         valueLabelColor: configuration.valueLabelColor,
+                         uniCount: configuration.uniCount,
+                         emptyImage: configuration.emptyImage,
+                         progressHandle: progressHandle,
+                         setImageBlock: setImageBlock,
+                         loadFinish: loadFinish)
+    }
     
     // 2. 手动取消
     // 🌟 标记 @MainActor 确保在主线程操作 Task 引用

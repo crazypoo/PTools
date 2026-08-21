@@ -39,9 +39,7 @@ public class PTPermissionContacts: PTPermission {
     public override func request(completion: @escaping PTActionTask) {
         let store = CNContactStore()
         store.requestAccess(for: .contacts, completionHandler: { (granted, error) in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+            PTPermission.completeRequest(completion)
         })
     }
 }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.5.17 - 2026-08-21
+
+- 统一 PhotoPicker、MediaViewer 和 VideoEditor 的媒体保存服务到 Core 模块。
+- 统一 PhotoKit Cell 请求取消、资源标识校验和复用 generation，避免旧请求回写新 Cell。
+- 统一图片加载配置、视频首帧生成、Router VC 解析和 Network 请求上下文。
+- 收敛权限请求 completion 的 MainActor 桥接，移除通知权限状态读取的数据竞争。
+- 增加重复入口清单脚本，并保留旧公开入口作为兼容包装器。
+- Xcode 完整警告验收仍受外部 Pods 的 Swift 6 并发错误阻断，未创建 `v4.5.17` tag。
+
 ## 4.5.16 - 2026-08-21
 
 - 增加 PooTools 源码 Xcode warning 门禁，并区分源码问题与外部 Pods 环境阻断。

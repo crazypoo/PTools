@@ -40,10 +40,8 @@ public class PTPermissionPhotoLibrary: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         PHPhotoLibrary.requestAuthorization({
-            finished in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+            _ in
+            PTPermission.completeRequest(completion)
         })
     }
 }

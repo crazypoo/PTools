@@ -66,31 +66,24 @@ public extension UIImageView {
                    progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
         
-        let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
-        let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
-        let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
-        let valueLabelF = valueLabelFont ?? PTAppBaseConfig.share.loadImageShowValueFont
-        let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
-        let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
-        let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
-        // 直接调用父类 UIView 封装好的核心逻辑
+        let configuration = PTImageLoadConfiguration(iCloudDocumentName: iCloudDocumentName,
+                                                     radius: radius,
+                                                     topLeft: topLeft,
+                                                     topRight: topRight,
+                                                     bottomLeft: bottomLeft,
+                                                     bottomRight: bottomRight,
+                                                     corner: corner,
+                                                     capsule: capsule,
+                                                     borderWidth: borderWidth,
+                                                     borderColor: borderColor,
+                                                     showValueLabel: showValueLabel,
+                                                     valueLabelFont: valueLabelFont,
+                                                     valueLabelColor: valueLabelColor,
+                                                     uniCount: uniCount,
+                                                     emptyImage: emptyImage)
         pt_loadCoreImage(
             contentData: contentData,
-            iCloudDocumentName: iCloudDocumentName,
-            radius: radius,
-            topLeft: topLeft,
-            topRight: topRight,
-            bottomLeft: bottomLeft,
-            bottomRight: bottomRight,
-            corner: corner,
-            capsule: capsule,
-            borderWidth: borderW,
-            borderColor: borderC,
-            showValueLabel: showValueL,
-            valueLabelFont: valueLabelF,
-            valueLabelColor: valueLabelC,
-            uniCount: uniC,
-            emptyImage: placeholder,
+            configuration: configuration,
             progressHandle: progressHandle,
             setImageBlock: { [weak self] image in
                 self?.image = image // UIImageView 特有的渲染方式

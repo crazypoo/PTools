@@ -57,6 +57,15 @@ open class PTPermission {
         preconditionFailure("This method must be overridden.")
     }
 
+    /// Shared callback bridge for system permission APIs that complete on an
+    /// arbitrary queue. Permission subclasses only provide the system call;
+    /// this helper owns the MainActor boundary.
+    public nonisolated static func completeRequest(_ completion: @escaping PTActionTask) {
+        Task { @MainActor in
+            completion()
+        }
+    }
+
     /// Async bridge for permission requests while preserving the callback API.
     public func request() async {
         await withCheckedContinuation { continuation in

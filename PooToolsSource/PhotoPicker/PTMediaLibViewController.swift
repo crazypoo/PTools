@@ -297,16 +297,8 @@ extension PTMediaLibView {
     /// 统一保存逻辑
     @MainActor
     fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
-        PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart)
-
-        PTMediaSaveService.save(image: image, videoURL: videoUrl) { [weak self] result in
-            switch result {
-            case .success(let asset):
-                self?.handleNewAsset(asset)
-            case .failure:
-                let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
-            }
+        PTMediaSaveUI.save(image: image, videoURL: videoUrl) { [weak self] asset in
+            self?.handleNewAsset(asset)
         }
     }
 

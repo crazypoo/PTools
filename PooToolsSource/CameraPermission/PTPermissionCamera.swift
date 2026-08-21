@@ -35,10 +35,8 @@ public class PTPermissionCamera: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: {
-            finished in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+            _ in
+            PTPermission.completeRequest(completion)
         })
     }
 }

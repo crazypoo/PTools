@@ -7,11 +7,7 @@
 //
 
 @preconcurrency import UserNotifications
-
-private final class ResultBox<T>: @unchecked Sendable {
-    var value: T?
-    init() {}
-}
+import os.lock
 
 public extension PTPermission {
     
@@ -58,26 +54,24 @@ public class PTPermissionNotification: PTPermission {
     }
     
     private func fetchAuthorizationStatus() -> UNAuthorizationStatus {
-        let box = ResultBox<UNAuthorizationStatus>()
+        let value = OSAllocatedUnfairLock<UNAuthorizationStatus?>(initialState: nil)
         let semaphore = DispatchSemaphore(value: 0)
         
         // 2. 优化点：直接调用系统 API，无需再包一层 runOnBackground
         // 系统内部会自动在子线程获取设置并回调
         UNUserNotificationCenter.current().getNotificationSettings { settings in
-            box.value = settings.authorizationStatus
+            value.withLock { $0 = settings.authorizationStatus }
             semaphore.signal()
         }
-        
+
         semaphore.wait()
-        return box.value ?? .notDetermined
+        return value.withLock { $0 ?? .notDetermined }
     }
     
     public override func request(completion: @escaping PTActionTask) {
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-            PTGCDManager.shared.runOnMain {
-                completion()
-            }
+        center.requestAuthorization(options:[.badge, .alert, .sound]) { _, _ in
+            PTPermission.completeRequest(completion)
         }
     }
 }

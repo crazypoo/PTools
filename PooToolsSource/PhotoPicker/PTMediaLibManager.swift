@@ -371,9 +371,10 @@ public class PTMediaLibManager: NSObject {
     /// Fetch image for asset.
     private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         requestImage(for: asset, targetSize: size, resizeMode: resizeMode, supportIcloud: true, progress: progress) { result in
-            // 即使 PhotoKit 返回错误，也要结束回调；否则提交时的 Operation 会永久等待。
-            guard !result.isCancelled else { return }
-            completion(result.error == nil ? result.image : nil, result.isDegraded)
+            // 取消和失败也必须结束旧回调，否则依赖 completion 的
+            // Operation/批量加载会永久等待。
+            completion(result.isCancelled || result.error != nil ? nil : result.image,
+                       result.isDegraded)
         }
     }
     

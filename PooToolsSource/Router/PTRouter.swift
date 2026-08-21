@@ -681,6 +681,28 @@ public struct PTRouterInfo: Decodable {
 //MARK: Jump
 //MARK: extension of viewcontroller jump for PTRouter
 extension PTRouter {
+
+    private static func routeJumpType(from queries: [String: Sendable]) -> PTJumpType {
+        guard let typeString = queries[PTJumpTypeKey] as? String,
+              let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) else {
+            return .push
+        }
+        return jumpType
+    }
+
+    private static func resolveViewController(urlString: String,
+                                              response: RouteResponse) throws -> (UIViewController, PTJumpType, [String: Sendable]) {
+        guard let pattern = response.pattern else {
+            throw PTRouterError.notFound(url: urlString)
+        }
+        guard let viewControllerType = NSClassFromString(pattern.classString) as? UIViewController.Type else {
+            shareInstance.logcat?(urlString, .logError, "解析类名失败: \(pattern.classString)")
+            throw PTRouterError.invalidClass(className: pattern.classString)
+        }
+
+        let viewController = try makeViewController(viewControllerType, queries: response.queries)
+        return (viewController, routeJumpType(from: response.queries), response.queries)
+    }
     
     class func processParameter(_ parameter: Any) -> Int? {
         if let intValue = parameter as? Int {
@@ -705,32 +727,11 @@ extension PTRouter {
         
         // 2. 匹配 URL
         let response = await PTRouter.matchURL(urlString, userInfo: userInfo)
-        guard let pattern = response.pattern else {
-            throw PTRouterError.notFound(url: urlString)
-        }
+        let resolved = try resolveViewController(urlString: urlString, response: response)
         
-        let queries = response.queries
+        jump(jumpType: resolved.1, vc: resolved.0, queries: resolved.2)
         
-        // 解析 JumpType
-        var resultJumpType: PTJumpType = .push
-        if let typeString = queries[PTJumpTypeKey] as? String,
-           let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) {
-            resultJumpType = jumpType
-        }
-        
-        // 3. 解析类名
-        guard let vcClass = NSClassFromString(pattern.classString) as? UIViewController.Type else {
-            shareInstance.logcat?(urlString, .logError, "解析类名失败: \(pattern.classString)")
-            throw PTRouterError.invalidClass(className: pattern.classString)
-        }
-        
-        // 4. 实例化 VC
-        let resultVC = try makeViewController(vcClass, queries: queries)
-        
-        // 5. 执行跳转
-        jump(jumpType: resultJumpType, vc: resultVC, queries: queries)
-        
-        return resultVC
+        return resolved.0
     }
 
     @discardableResult
@@ -796,34 +797,15 @@ extension PTRouter {
     public class func routerJump(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> (any Sendable)? {
         
         let response = await PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
-        let queries = response.queries
-        
-        // 解析 JumpType
-        var resultJumpType: PTJumpType = .push
-        if let typeString = queries[PTJumpTypeKey] as? String,
-           let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) {
-            resultJumpType = jumpType
-        }
-        
-        guard let className = response.pattern?.classString,
-              let vcClass = NSClassFromString(className) as? UIViewController.Type else {
-            shareInstance.logcat?(uriTuple.0 , .logError, "解析类名失败或类不存在")
-            return nil
-        }
-        
-        let resultVC: UIViewController
         do {
-            resultVC = try makeViewController(vcClass, queries: queries)
+            let resolved = try resolveViewController(urlString: uriTuple.0, response: response)
+            jump(jumpType: resolved.1, vc: resolved.0, queries: resolved.2)
+            complateHandler?(resolved.2, resolved.0)
+            return resolved.0
         } catch {
             shareInstance.logcat?(uriTuple.0, .logError, "控制器初始化失败: \(error.localizedDescription)")
             return nil
         }
-        
-        // 执行跳转
-        jump(jumpType: resultJumpType, vc: resultVC, queries: queries)
-        
-        complateHandler?(queries, resultVC)
-        return resultVC
     }
     
     public class func jump(jumpType: PTJumpType, vc: UIViewController, queries: [String: Any]) {
