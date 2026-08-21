@@ -123,8 +123,8 @@ public class PTContact: NSObject {
                                 let keyModel = PTContactModel()
                                 keyModel.key = key
                                 if let contacts = contactDict[key] {
-                                    let subModel = PTContactSubModel()
                                     for contact in contacts {
+                                        let subModel = PTContactSubModel()
                                         if let image = contact.1 {
                                             // 处理联系人头像
                                             subModel.image = image
@@ -170,7 +170,7 @@ public class PTContact: NSObject {
                     try store.execute(saveRequest)
                     completion(true, nil)
                 } catch {
-                    completion(true, error)
+                    completion(false, error)
                 }
             } else {
                 completion(false, error)

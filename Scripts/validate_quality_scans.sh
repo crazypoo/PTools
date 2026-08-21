@@ -28,6 +28,16 @@ if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate Poo
   exit 1
 fi
 
+allowlist="Scripts/unchecked_sendable_allowlist.txt"
+current_unchecked="$(rg -l --glob '*.swift' '@unchecked Sendable' PooToolsSource | sort)"
+allowed_unchecked="$(rg -v '^\s*(#|$)' "$allowlist" | sort)"
+unlisted_unchecked="$(comm -23 <(printf '%s\n' "$current_unchecked") <(printf '%s\n' "$allowed_unchecked") || true)"
+if [[ -n "$unlisted_unchecked" ]]; then
+  printf '%s\n' "$unlisted_unchecked" >&2
+  printf 'FAIL: @unchecked Sendable declaration is outside the centralized allowlist\n' >&2
+  exit 1
+fi
+
 new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2

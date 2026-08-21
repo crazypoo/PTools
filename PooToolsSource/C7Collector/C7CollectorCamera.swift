@@ -699,12 +699,16 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
                     completion(error)
                 } else {
                     // 回到原始逻辑，保存到相册
-                    PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
-                        if finish {
+                    PTMediaSaveService.save(videoURL: outputURL) { result in
+                        switch result {
+                        case .success:
                             try? FileManager.default.removeItem(at: outputURL)
                             try? FileManager.default.removeItem(at: inputURL)
                             completion(nil)
-                        } else {
+                        case .failure(let saveError):
+                            let error = NSError(domain: "C7CollectorCamera",
+                                                 code: 502,
+                                                 userInfo: [NSLocalizedDescriptionKey: saveError.localizedDescription])
                             completion(error)
                         }
                     }

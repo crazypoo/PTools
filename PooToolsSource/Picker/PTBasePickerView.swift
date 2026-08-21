@@ -137,7 +137,7 @@ open class PTBasePickerView: UIView {
     private let containerHeight: CGFloat = 300.0
     private let toolbarHeight: CGFloat = 50.0
     
-    public var pickerStyle: PTPickerStyle!
+    public var pickerStyle: PTPickerStyle = PTPickerStyle.shared
     
     public init(style: PTPickerStyle? = nil) {
         self.pickerStyle = style ?? PTPickerStyle.shared

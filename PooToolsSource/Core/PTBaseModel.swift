@@ -55,14 +55,18 @@ public extension PTModelProtocol {
     func didFinishMapping() {}
 }
 
-// 🌟 Swift 6 终极数据包裹：支持强泛型推断与向后兼容的并发载体
-public struct PTBaseStructModel<T>: @unchecked Sendable {
+// Modern network responses are Sendable only when their payload is Sendable.
+// The legacy KakaJSON/Any APIs keep the unconstrained specialization below;
+// they do not gain a false Sendable guarantee from this value type.
+public struct PTBaseStructModel<T> {
     public var originalString: String = ""
     public var customerModel: T? = nil
     public var resultData: Data? = Data()
     
     public init() {}
 }
+
+extension PTBaseStructModel: Sendable where T: Sendable {}
 
 // 向下兼容旧版单体擦除模型
 public typealias PTLegacyStructModel = PTBaseStructModel<Any>

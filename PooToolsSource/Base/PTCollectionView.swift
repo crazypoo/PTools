@@ -1209,7 +1209,7 @@ extension PTCollectionView {
         }
         
         if !collectionData.isEmpty {
-            PTUnavailableManager.hideUnavailableView(in: self)
+            PTUnavailableManager.render(.content, in: self)
         }
         
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
@@ -1802,7 +1802,7 @@ extension PTCollectionView {
     }
     
     public func showEmptyLoading() {
-        PTUnavailableManager.showEmptyLoadingView(in: self)
+        PTUnavailableManager.render(.loading, in: self)
     }
     
     private func below17EmptyDataSet() {

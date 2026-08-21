@@ -38,7 +38,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         }
     }
     
-    var cellModel: PTMediaModel! {
+    var cellModel: PTMediaModel? {
         didSet {
             updateCellContent()
         }
@@ -57,6 +57,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     }
 
     private func updateCellContent() {
+        guard let cellModel else { return }
         let mediaLibConfig = PTMediaLibConfig.share
         imageIdentifier = cellModel.ident
         
@@ -87,6 +88,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     }
     
     private func configureMediaType() {
+        guard let cellModel else { return }
         switch cellModel.type {
         case .video:
             mediaTypeImageView.isHidden = false
@@ -119,6 +121,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     private func fetchSmallImage() {
         cancelSmallImageRequest()
         
+        guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
         let scale = UIScreen.main.scale
@@ -149,12 +152,13 @@ class PTMediaLibCell: PTBaseNormalCell {
 
     func fetchBigImage() {
         cancelFetchBigImage()
+        guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
         
         bigImageRequestID = PTMediaLibManager.requestImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
             Task { @MainActor in
-                guard let self = self, self.imageIdentifier == ident, self.cellModel.isSelected else { return }
+                guard let self = self, self.imageIdentifier == ident, self.cellModel?.isSelected == true else { return }
                 self.imageView.alpha = 0.5
                 if progress >= 1 { self.resetProgressViewStatus() }
             }
@@ -298,13 +302,14 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
     private var imageRequestID: PHImageRequestID = PHInvalidImageRequestID
     private var imageIdentifier: String?
 
-    var albumModel: PTMediaLibListModel! {
+    var albumModel: PTMediaLibListModel? {
         didSet {
             updateAlbumUI()
         }
     }
     
     private func updateAlbumUI() {
+        guard let albumModel else { return }
         let att: ASAttributedString = """
         \(wrap: .embedding("""
         \(albumModel.title, .foreground(PTAppBaseConfig.share.viewDefaultTextColor), .font(PTMediaLibUIConfig.share.albumCellTitleFont))

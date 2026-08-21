@@ -16,6 +16,8 @@ jobs:
         run: bash Scripts/validate_release.sh
       - name: Scan unsafe Swift constructs
         run: bash Scripts/validate_quality_scans.sh
+      - name: Scan Xcode source warnings
+        run: bash Scripts/validate_xcode_source_warnings.sh
       - name: Validate patch formatting
         run: git diff --check
       - name: CocoaPods lint

@@ -14,7 +14,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
 
     public var filterHandler:((PTHarBethFilter)->Void)!
     
-    private var currentFilter: PTHarBethFilter! = PTHarBethFilter.none
+    private var currentFilter: PTHarBethFilter = PTHarBethFilter.none
     
     private var thumbnailFilterImages: [UIImage] = []
 
@@ -50,7 +50,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         return view
     }()
     
-    var currentImage:UIImageView!
+    var currentImage: UIImageView?
     
     public init(currentImage:UIImageView,currentFilter:PTHarBethFilter,viewControl: PTVideoEditorToolsModel) {
         self.currentImage = currentImage
@@ -90,7 +90,10 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
     }
     
     private func generateFilterImages(finish:@escaping PTActionTask) {
-        let image = currentImage.image!
+        guard let image = currentImage?.image else {
+            finish()
+            return
+        }
         let size: CGSize
         let ratio = (image.size.width / image.size.height)
         let fixLength: CGFloat = 200

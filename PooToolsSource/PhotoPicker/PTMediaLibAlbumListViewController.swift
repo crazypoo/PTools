@@ -16,7 +16,7 @@ import SafeSFSymbols
 class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     var albumList = [PTMediaLibListModel]()
-    var selectedAlbum:PTMediaLibListModel!
+    var selectedAlbum: PTMediaLibListModel?
 
     var selectedModelHandler:((PTMediaLibListModel) -> Void)?
     
@@ -58,7 +58,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             let config = PTMediaLibConfig.share
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell {
                 cell.albumModel = cellModel
-                cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum.title)
+                cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum?.title)
                 return cell
             }
             return nil
@@ -129,6 +129,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         fakeNavSet()
         
 
+        guard let selectedAlbum else {
+            return
+        }
         if selectedAlbum.models.isEmpty {
             selectedAlbum.refetchPhotos()
         }

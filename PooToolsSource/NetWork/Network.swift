@@ -326,7 +326,8 @@ public actor NetworkCache {
     private func cacheKey(_ request: URLRequest) -> String {
         let url = request.url?.absoluteString ?? ""
         let sortedQuery = request.url?.query?.split(separator: "&").sorted().joined(separator: "&") ?? ""
-        let body = request.httpBody?.sortedJSONData() ?? Data()
+        let rawBody = request.httpBody ?? Data()
+        let body = rawBody.sortedJSONData() ?? rawBody
         return (url + sortedQuery + body.base64EncodedString()).md5
     }
     
@@ -492,13 +493,16 @@ public enum PTNetworkDedupPolicy : Sendable {
 public struct RequestKey: Hashable, Sendable {
     let url: String
     let method: String
-    let paramsHash: Int
+    let paramsHash: String
     let responseType: String
     
     init<T>(request: URLRequest, responseType: T.Type = Never.self) {
         self.url = request.url?.absoluteString ?? ""
         self.method = request.httpMethod ?? ""
-        self.paramsHash = request.httpBody?.hashValue ?? 0
+        // Swift's hashValue is randomized per process. A stable body snapshot
+        // keeps identical requests deduplicated across all call sites.
+        let body = request.httpBody?.sortedJSONData() ?? Data()
+        self.paramsHash = body.base64EncodedString()
         self.responseType = String(reflecting: responseType)
     }
 }
@@ -512,7 +516,7 @@ public actor RequestDeduplicator {
     
     private init() {}
     
-    public func execute<T>(
+    public func execute<T: Sendable>(
         request: URLRequest,
         policy: PTNetworkDedupPolicy,
         task: @escaping @Sendable () async throws -> PTBaseStructModel<T>
@@ -715,12 +719,23 @@ public final class Network: @unchecked Sendable {
     }
     
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-        let paramsStr = parameters.map(String.init(describing:)) ?? "没有参数"
+        let paramsStr = isDebugEnvironment ? sanitizedParameters(parameters) : "<redacted>"
         let safeHeaders = headers.dictionary.reduce(into: [String: String]()) { result, item in
             let key = item.key.lowercased()
-            result[item.key] = ["authorization", "token", "cookie", "set-cookie"].contains(key) ? "<redacted>" : item.value
+            let isSensitive = key == "authorization" || key.contains("token") || key == "cookie" || key == "set-cookie"
+            result[item.key] = isSensitive ? "<redacted>" : item.value
         }
         PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(safeHeaders)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
+    }
+
+    private static func sanitizedParameters(_ parameters: Parameters?) -> String {
+        guard let parameters, !parameters.isEmpty else { return "没有参数" }
+        let sanitized = parameters.reduce(into: [String: String]()) { result, item in
+            let key = item.key.lowercased()
+            let isSensitive = key == "authorization" || key.contains("token") || key == "cookie" || key == "set-cookie"
+            result[item.key] = isSensitive ? "<redacted>" : String(describing: item.value)
+        }
+        return String(describing: sanitized)
     }
     
     private static func logRequestSuccess(url: String, jsonStr: String) {
@@ -801,7 +816,7 @@ public final class Network: @unchecked Sendable {
             }
         }
         
-        if !isAppStoreEnvironment {
+        if isDebugEnvironment {
             let maxLen = Int(Network.share.config.logMaxCount)
             // 大响应不进入完整 JSON 格式化，避免调试日志制造额外 CPU 和内存峰值。
             let prettyStr: String
@@ -843,7 +858,7 @@ public final class Network: @unchecked Sendable {
 
     /// 所有非上传请求共用的执行边界：插件、mock、取消、去重和错误日志
     /// 在这里完成，避免 URL 参数请求和 Body 请求各自维护一套生命周期。
-    private class func execute<T>(url: String,
+    private class func execute<T: Sendable>(url: String,
                                   request: URLRequest,
                                   uploadBody: Data? = nil,
                                   parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
@@ -888,7 +903,49 @@ public final class Network: @unchecked Sendable {
         }
     }
 
-    private class func _internalRequestApi<T>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    /// Compatibility executor for the old KakaJSON/Any APIs. It deliberately
+    /// does not enter the Sendable deduplication pool; raw `Any` stays inside
+    /// this legacy boundary and cannot leak into the modern executor.
+    private class func executeLegacy<T>(url: String,
+                                        request: URLRequest,
+                                        uploadBody: Data? = nil,
+                                        parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+        var request = request
+        for plugin in Network.share.plugins {
+            await plugin.willSend(&request)
+        }
+
+        if request.isMock,
+           let mockData = await NetworkCache.shared.read(request: request) {
+            return try parser(url, nil, mockData)
+        }
+
+        let finalRequest = request
+        let session = Network.share.session
+        let dataTask = uploadBody.map {
+            session.upload($0, with: finalRequest).serializingData()
+        } ?? session.request(finalRequest).serializingData()
+        let response = await withTaskCancellationHandler(operation: {
+            await dataTask.response
+        }, onCancel: {
+            dataTask.cancel()
+        })
+        try Task.checkCancellation()
+
+        for plugin in Network.share.plugins {
+            await plugin.didReceive(response.result, request: finalRequest, response: response.response)
+        }
+
+        switch response.result {
+        case .success(let data):
+            return try parser(url, response.response, data)
+        case .failure(let error):
+            logRequestFailure(url: url, error: error)
+            throw error
+        }
+    }
+
+    private class func _internalRequestApi<T: Sendable>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
@@ -898,7 +955,7 @@ public final class Network: @unchecked Sendable {
         return try await execute(url: urlStr1, request: urlRequest, parser: parser)
     }
     
-    private class func _internalRequestBodyAPI<T>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    private class func _internalRequestBodyAPI<T: Sendable>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
         if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
@@ -910,6 +967,41 @@ public final class Network: @unchecked Sendable {
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
         urlRequest.httpBody = body
         return try await execute(url: urlStr1, request: urlRequest, uploadBody: body, parser: parser)
+    }
+
+    private class func _internalLegacyRequestApi(needGobal: Bool,
+                                                 urlStr: URLConvertible,
+                                                 method: HTTPMethod,
+                                                 header: HTTPHeaders?,
+                                                 parameters: Parameters?,
+                                                 cachePolicy: PTNetworkCachePolicy?,
+                                                 encoder: ParameterEncoding,
+                                                 jsonRequest: Bool,
+                                                 parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
+        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        urlRequest = try encoder.encode(urlRequest, with: parameters)
+        return try await executeLegacy(url: urlStr1, request: urlRequest, parser: parser)
+    }
+
+    private class func _internalLegacyRequestBodyAPI(needGobal: Bool,
+                                                     urlStr: String,
+                                                     body: Data,
+                                                     header: HTTPHeaders?,
+                                                     method: HTTPMethod,
+                                                     cachePolicy: PTNetworkCachePolicy?,
+                                                     parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
+        if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
+        var dic: [String: any Any & Sendable] = [:]
+        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
+        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
+        urlRequest.httpBody = body
+        return try await executeLegacy(url: urlStr1, request: urlRequest, uploadBody: body, parser: parser)
     }
     
     private struct PTSafeUploadParamsBox: @unchecked Sendable {
@@ -1213,21 +1305,24 @@ public final class Network: @unchecked Sendable {
         return result
     }
     
+    @available(*, deprecated, message: "Use requestCodableBodyAPI(_:body:modelType:) with a Sendable model instead")
     public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {
         let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
+        return try await _internalLegacyRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
             try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
+    @available(*, deprecated, message: "Use requestCodableApi(_:modelType:) with a Sendable model instead")
     class public func requestApi(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil,
                                  cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<Any> {
         let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
+        return try await _internalLegacyRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
             try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
+    @available(*, deprecated, message: "Use the Codable upload API with a Sendable model instead")
     class public func fileUpload(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "", params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: Convertible.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<Any>?), Error> {
         let typeBox = PTSendableTypeBox(modelType)
         return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
@@ -1235,6 +1330,7 @@ public final class Network: @unchecked Sendable {
         }
     }
     
+    @available(*, deprecated, message: "Use imageCodableUpload with a Sendable model instead")
     class public func imageUpload(needGobal: Bool = true, images: [UIImage]?, path: URLConvertible, method: HTTPMethod = .post, fileKey: [String] = ["images"], params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: Convertible.Type? = nil, jsonRequest: Bool = false, pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<Any>?), Error> {
         let typeBox = PTSendableTypeBox(modelType)
         return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in

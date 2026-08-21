@@ -78,8 +78,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     self.takePhotoView?.actionHandle = { type,images in
                         let vc = PTEditImageViewController(readyEditImage: images)
                         vc.editFinishBlock = { ei ,_ in
-                            PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, _ in
-                                if !finish {
+                            PTMediaSaveService.save(image: ei) { result in
+                                if case .failure = result {
                                     PTGCDManager.shared.runOnMain {
                                         PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
                                     }
@@ -106,8 +106,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                             self.takePhotoView = nil
                         }
                     }
-                    PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self = self] finish, _ in
-                        if !finish {
+                    PTMediaSaveService.save(image: image) { [weak self = self] result in
+                        if case .failure = result {
                             PTGCDManager.shared.runOnMain {
                                 PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
                             }

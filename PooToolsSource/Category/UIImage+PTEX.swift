@@ -20,10 +20,6 @@ import CoreImage
 extension UIImage : PTProtocolCompatible {}
 extension CIImage : PTProtocolCompatible {}
 
-private final class PTAssetIdentifierBox: @unchecked Sendable {
-    var identifier: String?
-}
-
 public extension UIImage {
     
     // MARK: - 1. 基础初始化与主题支持
@@ -699,37 +695,29 @@ public extension PTPOP where Base: UIImage {
     
     //MARK: 保存图片到相册
     ///保存图片到相册
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(image:completion:) instead")
     func savePhotosImageToAlbum(completion: @escaping @Sendable (Bool, Error?) -> Void) {
-        PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: base)
-        } completionHandler: { (isSuccess: Bool, error: Error?) in
-            completion(isSuccess, error)
+        Task { @MainActor in
+            PTMediaSaveService.save(image: base) { result in
+                switch result {
+                case .success:
+                    completion(true, nil)
+                case .failure(let error):
+                    completion(false, error)
+                }
+            }
         }
     }
     
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(image:completion:) instead")
     func saveImageToAlbum(completion: @escaping @Sendable (String?) -> Void) {
-        PHPhotoLibrary.requestAuthorization { status in
-            guard status == .authorized else {
-                PTNSLogConsole("無法存取相簿權限")
-                completion(nil)
-                return
-            }
-
-            let box = PTAssetIdentifierBox()
-            
-            // 在相簿執行寫入操作
-            PHPhotoLibrary.shared().performChanges {
-                let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
-                box.identifier = request.placeholderForCreatedAsset?.localIdentifier
-            } completionHandler: { success, error in
-                DispatchQueue.main.async {
-                    if success, let identifier = box.identifier {
-                        PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
-                        completion(identifier)
-                    } else {
-                        PTNSLogConsole("保存失敗: \(error?.localizedDescription ?? "未知錯誤")")
-                        completion(nil)
-                    }
+        Task { @MainActor in
+            PTMediaSaveService.save(image: base) { result in
+                switch result {
+                case .success(let asset):
+                    completion(asset.localIdentifier)
+                case .failure:
+                    completion(nil)
                 }
             }
         }
@@ -751,31 +739,15 @@ public extension PTPOP where Base: UIImage {
     }
     
     /// 保存圖片到相簿，並回傳 `PHAsset`
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(image:completion:) instead")
     func saveImageToAlbum(completion: @escaping @Sendable (PHAsset?) -> Void) {
-        // 檢查並請求相簿存取權限
-        PHPhotoLibrary.requestAuthorization { status in
-            guard status == .authorized else {
-                PTNSLogConsole("無法存取相簿權限")
-                completion(nil)
-                return
-            }
-
-            let box = PTAssetIdentifierBox()
-
-            // 執行寫入操作
-            PHPhotoLibrary.shared().performChanges {
-                let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
-                box.identifier = request.placeholderForCreatedAsset?.localIdentifier
-            } completionHandler: { success, error in
-                DispatchQueue.main.async {
-                    if success, let identifier = box.identifier {
-                        PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
-                        let assets = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
-                        completion(assets.firstObject)
-                    } else {
-                        PTNSLogConsole("保存失敗: \(error?.localizedDescription ?? "未知錯誤")")
-                        completion(nil)
-                    }
+        Task { @MainActor in
+            PTMediaSaveService.save(image: base) { result in
+                switch result {
+                case .success(let asset):
+                    completion(asset)
+                case .failure:
+                    completion(nil)
                 }
             }
         }

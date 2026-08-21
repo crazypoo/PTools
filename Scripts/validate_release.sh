@@ -15,5 +15,11 @@ rg -q --fixed-strings "s.version     = '$version'" PooTools.podspec \
   || { printf 'FAIL: podspec version mismatch: %s\n' "$version" >&2; exit 1; }
 rg -q --fixed-strings "## $version -" CHANGELOG.md \
   || { printf 'FAIL: CHANGELOG.md has no release heading for %s\n' "$version" >&2; exit 1; }
+rg -q --fixed-strings "tag => '$version'" README.md \
+  || { printf 'FAIL: README.md has no CocoaPods example for %s\n' "$version" >&2; exit 1; }
+rg -q --fixed-strings "发布目标为 \`$version\`" RELEASE.md \
+  || { printf 'FAIL: RELEASE.md target version mismatch: %s\n' "$version" >&2; exit 1; }
+rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
+  || { printf 'FAIL: Podfile.lock is not synchronized to %s\n' "$version" >&2; exit 1; }
 
 printf 'Release metadata OK: %s\n' "$version"

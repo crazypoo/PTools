@@ -144,7 +144,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { [weak self] sender in
             guard let self = self else { return }
-            self.c7Player.pause()
+            self.c7Player?.pause()
             self.videoConverter?.restore(cleanupDisk: true)
             self.returnFrontVC()
         }
@@ -159,7 +159,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.addActionHandlers { [weak self] sender in
             PTGCDManager.shared.runOnMain { [weak self] in
                 guard let self = self else { return }
-                self.c7Player.pause()
+                self.c7Player?.pause()
                 
                 // 开启现代化的异步流水线！
                 Task {
@@ -218,9 +218,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return buttonItem
     }()
     
-    fileprivate var videoAsset:PHAsset!
-    fileprivate var videoAVAsset:AVAsset!
-    var c7Player:C7CollectorVideo!
+    fileprivate let videoAsset: PHAsset
+    fileprivate let videoAVAsset: AVAsset
+    var c7Player: C7CollectorVideo?
     
     lazy var imageContent:UIView = {
         let view = UIView()
@@ -243,13 +243,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     }()
 
     
-    fileprivate var avPlayer : AVPlayer!
-    fileprivate var avPlayerItem : AVPlayerItem!
+    fileprivate var avPlayer: AVPlayer?
+    fileprivate var avPlayerItem: AVPlayerItem?
     var assetAspectRatio: CGFloat {
         get async {
             do {
                 // 1. 异步获取视频轨道 (iOS 16+)
-                let tracks = try await avPlayerItem.asset.loadTracks(withMediaType: .video)
+                guard let asset = avPlayerItem?.asset else { return .zero }
+                let tracks = try await asset.loadTracks(withMediaType: .video)
                 guard let track = tracks.first else {
                     return .zero
                 }
@@ -296,34 +297,38 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         view.midSpacing = 0
         view.addActionHandlers { [weak self] sender in
             guard let self = self else { return }
+            guard let c7Player = self.c7Player, let avPlayer = self.avPlayer else {
+                sender.isSelected = false
+                return
+            }
             sender.isSelected = !sender.isSelected
             
             if sender.isSelected {
                 self.originFilterImageView.isHidden = true
                 if self.currentFilter.type == .none {
-                    self.c7Player.filters = []
+                    c7Player.filters = []
                 } else if let texture = PTHarBethFilter.overTexture(),
                           let filter = self.currentFilter.type.getFilterResult(texture: texture).filter {
-                    self.c7Player.filters = [filter]
+                    c7Player.filters = [filter]
                 }
 
                 if self.currentPlayTime != 0  {
                     let cmTime = CMTimeMakeWithSeconds(self.currentPlayTime, preferredTimescale: Int32(NSEC_PER_MSEC))
-                    self.avPlayer.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
+                    avPlayer.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 } else {
                     let startTimeSecond = self.videoTime * self.trimPositions.0
                     let startTime = CMTimeMakeWithSeconds(startTimeSecond, preferredTimescale: Int32(NSEC_PER_MSEC))
-                    self.avPlayer.seek(to: startTime, toleranceBefore: .zero, toleranceAfter: .zero)
+                    avPlayer.seek(to: startTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 }
                 
                 // 【核心优化 2】：在添加新监听器前，必须清除旧的监听器！
                 if let token = self.timeObserverToken {
-                    self.avPlayer.removeTimeObserver(token)
+                    avPlayer.removeTimeObserver(token)
                     self.timeObserverToken = nil
                 }
                 
                 let interval = CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
-                self.timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+                self.timeObserverToken = avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
                     guard let self = self else { return }
                     Task { @MainActor in
                         self.currentPlayTime = CMTimeGetSeconds(time)
@@ -336,7 +341,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         
                         let endTimeSecond = self.videoTime * self.trimPositions.1
                         if self.currentPlayTime >= endTimeSecond {
-                            self.c7Player.pause()
+                            c7Player.pause()
                             // 播放完毕，回到剪辑起点
                             self.currentPlayTime = self.videoTime * self.trimPositions.0
                             sender.isSelected = false
@@ -345,18 +350,18 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                             
                             // 播放结束后移除监听器
                             if let token = self.timeObserverToken {
-                                self.avPlayer.removeTimeObserver(token)
+                                avPlayer.removeTimeObserver(token)
                                 self.timeObserverToken = nil
                             }
                         }
                     }
                 }
-                self.c7Player.play()
+                c7Player.play()
             } else {
-                self.c7Player.pause()
+                self.c7Player?.pause()
                 // 手动暂停时移除监听器
                 if let token = self.timeObserverToken {
-                    self.avPlayer.removeTimeObserver(token)
+                    avPlayer.removeTimeObserver(token)
                     self.timeObserverToken = nil
                 }
             }
@@ -514,7 +519,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 if self.playerButton.isSelected {
                     self.playerButton.isSelected = false
                 }
-                self.c7Player.pause()
+                self.c7Player?.pause()
             }
         }
     }
@@ -607,7 +612,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             return nil
         }
         view.collectionDidSelect = { collectionViews,sectionModel,indexPath in
-            self.c7Player.pause()
+            self.c7Player?.pause()
             self.playerButton.isSelected = false
             
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTVideoEditorToolsModel {
@@ -619,7 +624,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                     self.sheetPresent(vc: vc, size: 0.3)
                 case .trim:
-                    guard let asset = self.avPlayer.currentItem?.asset else { return }
+                    guard let asset = self.avPlayer?.currentItem?.asset else { return }
                     let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: asset,typeModel: cellModel)
                     self.sheetPresent(vc: vc, size: 0.3)
                     vc.trimPosotionsHandler = { value in
@@ -730,7 +735,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     func presentAction() {
         Task { @MainActor in
-            guard let asset = self.avPlayer.currentItem?.asset else { return }
+            guard let asset = self.avPlayer?.currentItem?.asset else { return }
             
             // 1. 获取系统底层支持的所有预设 (同步方法，瞬间返回)
             let allPresets = AVAssetExportSession.allExportPresets()
@@ -974,11 +979,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
         Task { @MainActor in
             do {
-                self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
-                self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
-                self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+                let playerItem = AVPlayerItem(asset: self.videoAVAsset)
+                let player = AVPlayer(playerItem: playerItem)
+                self.avPlayerItem = playerItem
+                self.avPlayer = player
+                self.c7Player = C7CollectorVideo(player: player, delegate: self)
 
-                self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+                self.videoTime = player.currentItem?.duration.seconds ?? 0.0
                 self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
                 let formattedDuration = self.videoTime >= 3600 ?
                     DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
@@ -988,9 +995,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                 let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                 
-                guard let safeAsset = self.videoAVAsset else {
-                    throw NSError(domain: "PTVideoEditor", code: 401, userInfo: [NSLocalizedDescriptionKey: "视频资源尚未准备完成"])
-                }
+                let safeAsset = self.videoAVAsset
                 // 【核心修改点】：统一调用封装好的 Service，默认限制了 maximumSize 保护内存
                 let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
                     for: safeAsset,
@@ -1149,11 +1154,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             outputModel: currentOutputType)
 
         Task {
-            guard let safeOutputAsset = self.videoAVAsset else {
-                completion(nil, NSError(domain: "PTVideoEditor", code: 400, userInfo: [NSLocalizedDescriptionKey: "视频资源尚未准备完成"]))
-                return
-            }
-            await self.videoConverter = VideoConverter(asset:safeOutputAsset)
+            await self.videoConverter = VideoConverter(asset: self.videoAVAsset)
             videoConverter?.convert(options,progress: { progress in
                 Task { @MainActor in
                     if progress ?? 0 >= 1 {
@@ -1186,8 +1187,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: false,
             speed: speed)
 
-        guard let safeConvertAsset = self.videoAVAsset else { return }
-        await self.videoConverter = VideoConverter(asset:safeConvertAsset)
+        await self.videoConverter = VideoConverter(asset: self.videoAVAsset)
         
         // 挂起等待外部处理完毕
         let safePair = await withCheckedContinuation { continuation in
@@ -1196,8 +1196,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             }
         }
         
-        self.avPlayerItem = AVPlayerItem(asset: safePair.0)
-        self.avPlayerItem.videoComposition = safePair.1
+        let playerItem = AVPlayerItem(asset: safePair.0)
+        playerItem.videoComposition = safePair.1
+        self.avPlayerItem = playerItem
         
         let generator = AVAssetImageGenerator(asset: safePair.0)
         generator.appliesPreferredTrackTransform = true
@@ -1207,15 +1208,16 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         self.scrubImageGenerator = generator
 
         if self.avPlayer == nil {
-            self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
-            self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+            let player = AVPlayer(playerItem: playerItem)
+            self.avPlayer = player
+            self.c7Player = C7CollectorVideo(player: player, delegate: self)
         } else {
-            self.avPlayer.pause()
-            self.avPlayer.replaceCurrentItem(with: self.avPlayerItem)
+            self.avPlayer?.pause()
+            self.avPlayer?.replaceCurrentItem(with: playerItem)
         }
         
         // 此处的闭包可以保留（如果你封装了 getVideoFirstImage），但整个流程已经是干净的了。
-        self.avPlayerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
+        playerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
             PTGCDManager.shared.runOnMain {
                 self.originImageView.image = image
             }
@@ -1224,7 +1226,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
     func reloadAsset() {
         PTGCDManager.shared.delayOnMain(time: 0.35) {
-            self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+            self.videoTime = self.avPlayer?.currentItem?.duration.seconds ?? 0.0
             self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
             let formattedDuration = self.videoTime >= 3600 ?
                 DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
@@ -1238,7 +1240,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                     
                     // 【核心修改点】：再次统一调用 Service，注意这里的 asset 是 avPlayer 的 currentItem
-                    guard let asset = self.avPlayer.currentItem?.asset else { return }
+                    guard let asset = self.avPlayer?.currentItem?.asset else { return }
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
                         for: asset,
                         numberOfFrames: frameCount
@@ -1424,7 +1426,10 @@ fileprivate extension PTVideoEditorToolsViewController {
     
     /// 包装 Harbeth 的 Exporter 滤镜渲染为 async
     func harbethExportAsync(sourceURL: URL, outputURL: URL) async throws -> URL {
-        let safeBox = PTC7SafeBox(filters: self.c7Player.filters)
+        guard let c7Player = self.c7Player else {
+            throw NSError(domain: "PTVideoEditor", code: 405, userInfo: [NSLocalizedDescriptionKey: "播放器尚未初始化"])
+        }
+        let safeBox = PTC7SafeBox(filters: c7Player.filters)
         return try await withCheckedThrowingContinuation { continuation in
             Task {
                 let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: URL(fileURLWithPath: outputURL.path)))
@@ -1472,11 +1477,14 @@ fileprivate extension PTVideoEditorToolsViewController {
                     }
                 }
             } else {
-                PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
-                    if finish {
+                PTMediaSaveService.save(videoURL: outputURL) { result in
+                    switch result {
+                    case .success:
                         continuation.resume(returning: ())
-                    } else {
-                        continuation.resume(throwing: error ?? NSError(domain: "PTVideoEditor", code: 502, userInfo: [NSLocalizedDescriptionKey: "保存相册失败"]))
+                    case .failure(let error):
+                        continuation.resume(throwing: NSError(domain: "PTVideoEditor",
+                                                              code: 502,
+                                                              userInfo: [NSLocalizedDescriptionKey: error.localizedDescription]))
                     }
                 }
             }

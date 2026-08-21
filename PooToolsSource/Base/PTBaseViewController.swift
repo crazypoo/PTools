@@ -1443,21 +1443,19 @@ extension PTBaseViewController {
     public func showEmptyView(task: PTActionTask? = nil) {
         // 使用 if let 解包更安全、更 Swift 风格
         if let config = emptyDataViewConfig {
-            // 🌟 直接调用全新的静态方法，把 config 和 点击事件 传进去
-            PTUnavailableManager.showEmptyView(viewController: self, config: config, action: task)
+            PTUnavailableManager.render(.empty, in: self, config: config, action: task)
         } else {
             assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
         }
     }
     
     public func hideEmptyView(task: PTActionTask? = nil) {
-        // 🌟 直接调用静态隐藏方法
-        PTUnavailableManager.hideUnavailableView(viewController: self, task: task)
+        PTUnavailableManager.render(.content, in: self)
+        task?()
     }
     
     public func emptyViewLoading() {
-        // 🌟 直接调用静态 Loading 方法
-        PTUnavailableManager.showEmptyLoadingView(viewController: self)
+        PTUnavailableManager.render(.loading, in: self)
     }
 }
 

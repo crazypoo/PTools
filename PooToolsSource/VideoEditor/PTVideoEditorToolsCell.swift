@@ -29,7 +29,7 @@ class PTVideoEditorToolsCell: PTBaseNormalCell {
         return view
     }()
 
-    private var viewModel: PTVideoEditorToolsModel!
+    private var viewModel: PTVideoEditorToolsModel?
 
     // MARK: Init
 

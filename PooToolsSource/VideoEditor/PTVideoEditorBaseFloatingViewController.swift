@@ -31,11 +31,11 @@ open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
         return view
     }()
 
-    fileprivate var viewControl:PTVideoEditorToolsModel!
+    fileprivate let viewControl: PTVideoEditorToolsModel
     
     init(viewControl:PTVideoEditorToolsModel) {
-        super.init(nibName: nil, bundle: nil)
         self.viewControl = viewControl
+        super.init(nibName: nil, bundle: nil)
     }
     
     required public init?(coder: NSCoder) {

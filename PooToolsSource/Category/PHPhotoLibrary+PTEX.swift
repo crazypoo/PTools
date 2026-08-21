@@ -9,89 +9,65 @@
 import UIKit
 import Photos
 
-private final class AssetIdentifierStorage: @unchecked Sendable {
-    private var identifier: String?
-    private let lock = NSLock()
-    
-    func setIdentifier(_ id: String?) {
-        lock.lock()
-        identifier = id
-        lock.unlock()
-    }
-    
-    func getIdentifier() -> String? {
-        lock.lock()
-        defer { lock.unlock() }
-        return identifier
-    }
-}
-
 extension PHPhotoLibrary: PTProtocolCompatible { }
 public extension PTPOP where Base: PHPhotoLibrary {
 
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(videoURL:completion:) instead")
     static func saveVideoToAlbum(fileURL:URL,result: @escaping @Sendable (_ finish:Bool, _ error:NSError?) -> Void) {
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL)
-        }) { success, error in
-            if success {
-                result(true,nil)
-            } else {
-                result(false,NSError(domain: "Video save error：\(error?.localizedDescription ?? "")", code: 0))
+        Task { @MainActor in
+            PTMediaSaveService.save(videoURL: fileURL) { saveResult in
+                switch saveResult {
+                case .success:
+                    result(true, nil)
+                case .failure(let error):
+                    result(false, NSError(domain: "PTools.MediaSave",
+                                          code: 1,
+                                          userInfo: [NSLocalizedDescriptionKey: error.localizedDescription]))
+                }
             }
         }
     }
     
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(image:completion:) or save(videoURL:completion:) instead")
     static func saveImageUrlToAlbum(fileUrl:URL,result: @escaping @Sendable (_ finish:Bool, _ error:NSError?) -> Void) {
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileUrl)
-        }) { success, error in
-            if success {
-                result(true,nil)
-            } else {
-                result(false,NSError(domain: "Image url save error：\(error?.localizedDescription ?? "")", code: 0))
+        // The canonical service accepts UIImage/video URLs. Keep this legacy
+        // URL API as a compatibility shim and encode the image before saving.
+        Task { @MainActor in
+            guard let image = UIImage(contentsOfFile: fileUrl.path) else {
+                result(false, NSError(domain: "PTools.MediaSave",
+                                      code: 2,
+                                      userInfo: [NSLocalizedDescriptionKey: "无法读取图片文件"]))
+                return
+            }
+            PTMediaSaveService.save(image: image) { saveResult in
+                switch saveResult {
+                case .success:
+                    result(true, nil)
+                case .failure(let error):
+                    result(false, NSError(domain: "PTools.MediaSave",
+                                          code: 3,
+                                          userInfo: [NSLocalizedDescriptionKey: error.localizedDescription]))
+                }
             }
         }
     }
     
     /// Save image to album.
+    @available(*, deprecated, message: "Use PTMediaSaveService.save(image:completion:) instead")
     static func saveImageToAlbum(image: UIImage, completion: (@Sendable (Bool, PHAsset?) -> Void)?) {
-        let status = PHPhotoLibrary.authorizationStatus()
-        
-        if status == .denied || status == .restricted {
-            completion?(false, nil)
-            return
-        }
-        
-        // 2. 实例化线程安全的包装类
-        let assetStorage = AssetIdentifierStorage()
-        
-        // 3. 这里的 completionHandler 明确声明为 @Sendable
-        let completionHandler: @Sendable (Bool, Error?) -> Void = { suc, _ in
-            if suc {
-                // 安全地读取 Identifier 并获取 Asset
-                let asset = getAsset(from: assetStorage.getIdentifier())
-                completion?(suc, asset)
-            } else {
-                completion?(false, nil)
+        Task { @MainActor in
+            PTMediaSaveService.save(image: image) { saveResult in
+                switch saveResult {
+                case .success(let asset):
+                    completion?(true, asset)
+                case .failure:
+                    completion?(false, nil)
+                }
             }
-        }
-
-        if image.pt.hasAlphaChannel(), let data = image.pngData() {
-            PHPhotoLibrary.shared().performChanges({
-                let newAssetRequest = PHAssetCreationRequest.forAsset()
-                newAssetRequest.addResource(with: .photo, data: data, options: nil)
-                // 4. 安全地存入 Identifier
-                assetStorage.setIdentifier(newAssetRequest.placeholderForCreatedAsset?.localIdentifier)
-            }, completionHandler: completionHandler)
-        } else {
-            PHPhotoLibrary.shared().performChanges({
-                let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                // 4. 安全地存入 Identifier
-                assetStorage.setIdentifier(newAssetRequest.placeholderForCreatedAsset?.localIdentifier)
-            }, completionHandler: completionHandler)
         }
     }
     
+    @available(*, deprecated, message: "Use PHAsset.fetchAssets(withLocalIdentifiers:options:) directly")
     static func getAsset(from localIdentifier: String?) -> PHAsset? {
         guard let id = localIdentifier else {
             return nil

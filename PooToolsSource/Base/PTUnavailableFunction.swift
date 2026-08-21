@@ -62,6 +62,25 @@ public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态
             hideUnavailableView(in: view)
         }
     }
+
+    /// View-controller counterpart of the single state renderer.
+    public static func render(_ state: PTUnavailableState,
+                              in viewController: UIViewController,
+                              config: PTEmptyDataViewConfig? = nil,
+                              action: (() -> Void)? = nil) {
+        switch state {
+        case .loading:
+            showEmptyLoadingView(viewController: viewController)
+        case .empty, .error:
+            guard let config else {
+                hideUnavailableView(viewController: viewController)
+                return
+            }
+            showEmptyView(viewController: viewController, config: config, action: action)
+        case .content:
+            hideUnavailableView(viewController: viewController)
+        }
+    }
     
     /// 展示空数据视图
     public static func showEmptyView(in view: UIView, config: PTEmptyDataViewConfig, action: (() -> Void)? = nil) {
