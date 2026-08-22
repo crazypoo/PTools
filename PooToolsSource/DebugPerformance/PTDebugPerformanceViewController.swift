@@ -104,7 +104,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         view.collectionDidSelect = { collection,model,indexPath in
             if let itemRow = model.rows?[indexPath.row] {
                 if itemRow.reuseID == PTFusionCell.ID,let cellModel = itemRow.dataModel as? PTFusionCellModel {
-                    if cellModel.name == "Set Memory warning" {
+                    if cellModel.name == "Record memory snapshot" {
                         UIDevice.pt.impactFeedbackGenerator(style: .heavy)
                         PTDebugPerformanceToolKit.generate()
                     } else if cellModel.name == "⚠️show leaks" {
@@ -150,6 +150,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
             make.top.equalToSuperview()
         }
         
+        toolkit.setupPerformanceMeasurement()
         listDataSet()
         
         toolkit.performanceDataUpdateCallBack = { toolKit in 
@@ -239,7 +240,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
             let cpuUsageMax_row = PTRows(dataModel: usageMaxModel)
             cpuUsageMax_row.cellClass = PTFusionCell.self
 
-            let memoryWarningModel = self.baseCellModel(name: "Set Memory warning", value: "")
+            let memoryWarningModel = self.baseCellModel(name: "Record memory snapshot", value: "")
             let memoryWarning_row = PTRows(dataModel: memoryWarningModel)
             memoryWarning_row.cellClass = PTFusionCell.self
 

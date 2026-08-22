@@ -14,15 +14,10 @@ final class PTDebugPerformanceToolKit {
     static let shared = PTDebugPerformanceToolKit.init()
     
     static func generate() {
-        UIApplication.shared.perform(Selector(("_performMemoryWarning")))
-
-        for _ in 0...1200 {
-            var p: [UnsafeMutableRawPointer] = []
-            var allocatedMB = 0
-            p.append(malloc(1048576))
-            memset(p[allocatedMB], 0, 1048576)
-            allocatedMB += 1
-        }
+        // iOS 不提供公开 API 主动制造内存警告，也不应通过私有 API 或大块泄漏模拟。
+        // 这里保留调试入口，改为记录当前内存状态，实际压力测试请使用 Instruments。
+        let currentMemory = shared.memory()
+        PTNSLogConsole("当前内存约为 \(String(format: "%.1f MB", currentMemory))，请使用 Instruments 进行内存压力测试")
     }
     
     private var floatingView : PFloatingButton?
@@ -76,71 +71,70 @@ final class PTDebugPerformanceToolKit {
 
     var performanceDataUpdateCallBack:((PTDebugPerformanceToolKit)->Void)?
     
-    init() {
-        Task { @MainActor in
-            setupPerformanceMeasurement()
-        }
-    }
+    init() {}
     
     deinit {
 //        performanceClose()
     }
     
     func performanceClose() {
-        Task { @MainActor in
-            measurementsTimer?.invalidate()
-            measurementsTimer = nil
-            fpsCounter.close()
-        }
+        measurementsTimer?.invalidate()
+        measurementsTimer = nil
+        fpsCounter.close()
     }
     
     func performanceRestart() {
-        Task { @MainActor in
-            fpsCounter.open()
-            measurementsTimer = Timer( timeInterval: 1.0, target: self, selector: #selector(updateMeasurements), userInfo: nil, repeats: true)
-            RunLoop.main.add(measurementsTimer!, forMode: .common)
-        }
+        measurementsTimer?.invalidate()
+        fpsCounter.open()
+        let timer = Timer(timeInterval: timeBetweenMeasurements,
+                          target: self,
+                          selector: #selector(updateMeasurements),
+                          userInfo: nil,
+                          repeats: true)
+        measurementsTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     @MainActor func setupPerformanceMeasurement() {
+        currentMeasurementIndex = 0
+        cpuMeasurements.removeAll(keepingCapacity: true)
+        memoryMeasurements.removeAll(keepingCapacity: true)
+        fpsMeasurements.removeAll(keepingCapacity: true)
+        leaksMeasurements.removeAll(keepingCapacity: true)
+        currentCPU = 0
+        currentMemory = 0
+        currentFPS = 0
+        currentLeaks = 0
+        maxCPU = 0
+        maxMemory = 0
+        minFPS = .greatestFiniteMagnitude
+        maxFPS = 0
+        maxLeaks = 0
         performanceRestart()
-        // Additional setup for measurements
-        cpuMeasurements = Array(repeating: 0, count: measurementsLimit)
-        memoryMeasurements = Array(repeating: 0, count: measurementsLimit)
-        fpsMeasurements = Array(repeating: 0, count: measurementsLimit)
-        leaksMeasurements = Array(repeating: 0, count: measurementsLimit)
-
         floatingButtonCreate()
     }
     
     @objc private func updateMeasurements() {
-        // CPU measurements
         currentCPU = cpu()
         cpuMeasurements = array(cpuMeasurements, byAddingMeasurement: currentCPU)
         maxCPU = max(maxCPU, currentCPU)
 
-        // Memory measurements
         currentMemory = memory()
         memoryMeasurements = array(memoryMeasurements, byAddingMeasurement: currentMemory)
         maxMemory = max(maxMemory, currentMemory)
 
-        // FPS measurements
-        Task { @MainActor in
-            currentFPS = fps()
-            fpsMeasurements = array(fpsMeasurements, byAddingMeasurement: currentFPS)
-            if !currentFPS.isZero {
-                minFPS = min(minFPS, currentFPS)
-            }
-            maxFPS = max(maxFPS, currentFPS)
+        currentFPS = fps()
+        fpsMeasurements = array(fpsMeasurements, byAddingMeasurement: currentFPS)
+        if !currentFPS.isZero {
+            minFPS = min(minFPS, currentFPS)
         }
+        maxFPS = max(maxFPS, currentFPS)
         
         currentLeaks = leak()
         maxLeaks = max(maxLeaks, currentLeaks)
-        leaksMeasurements = array(leaksMeasurements, byAddingMeasurement: leak())
+        leaksMeasurements = array(leaksMeasurements, byAddingMeasurement: currentLeaks)
 
-        Task { @MainActor in
-            self.updateFloatingView()
-        }
+        updateFloatingView()
         
         performanceDataUpdateCallBack?(self)
         currentMeasurementIndex = min(measurementsLimit, currentMeasurementIndex + 1)

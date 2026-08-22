@@ -116,13 +116,19 @@ public func PTNSLog(_ msg: Any...,
                 logger.notice("\(logOutput)")
             }
             
-    #if PTOOLS_DEBUG
-            // 🚀 优化点 5：仅针对触及 UI 的 LocalConsole，在内部进行主线程隔离派发。
-            // 这样外部调用者对并发完全无感知！
-            Task { @MainActor in
-                if LocalConsole.shared.isVisiable {
-                    LocalConsole.shared.print(logOutput)
+    #if POOTOOLS_DEBUG
+            // 仅在调试工具目标中同步到 LocalConsole，避免核心日志模块依赖调试模块。
+            if LocalConsole.shared.isVisiable {
+                let consoleLevel: PTLogLevel
+                switch levelType {
+                case .error, .critical, .fault:
+                    consoleLevel = .error
+                case .warning:
+                    consoleLevel = .warning
+                default:
+                    consoleLevel = .info
                 }
+                LocalConsole.shared.print(logOutput, level: consoleLevel)
             }
     #endif
         }
@@ -289,7 +295,7 @@ public struct PTMems<T> {
             || v is AnyClass {
             return UnsafeRawPointer(bitPattern: unsafeBitCast(v, to: UInt.self))!
         } else if v is String {
-            var mstr = v as! String
+            guard var mstr = v as? String else { return _EMPTY_PTR }
             if mstr.mems.type() != .heap {
                 return _EMPTY_PTR
             }

@@ -120,7 +120,7 @@ public class PTDebugViewController: PTBaseViewController {
                         }
 
                         self.settingCellModels[indexPath.row].content = modeName
-                        let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                        guard let cell = collection.cellForItem(at: indexPath) as? PTFusionCell else { return }
                         cell.cellModel = self.settingCellModels[indexPath.row]
                     })
                 } else if itemRow.title == .addressInput {
@@ -135,12 +135,13 @@ public class PTDebugViewController: PTBaseViewController {
                         }
                         
                         UIAlertController.base_textfield_alertVC(title:"PT Debug network input title".localized(),okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
-                            let newURL = result.values.first
-                            PTCoreUserDefultsWrapper.shared.AppRequestUrl = newURL!
+                            guard let newURL = result.values.first, !newURL.isEmpty else { return }
+                            PTCoreUserDefultsWrapper.shared.AppRequestUrl = newURL
                             
-                            self.settingCellModels[indexPath.row].content = newURL!
-                            let cell = collection.cellForItem(at: IndexPath(row: 1, section: 0)) as! PTFusionCell
-                            cell.cellModel = self.settingCellModels[indexPath.row]
+                            self.settingCellModels[indexPath.row].content = newURL
+                            if let cell = collection.cellForItem(at: IndexPath(row: 1, section: 0)) as? PTFusionCell {
+                                cell.cellModel = self.settingCellModels[indexPath.row]
+                            }
                         }
                     default:
                         UIViewController.gobal_drop(title: "Input with custom mode")
@@ -160,7 +161,7 @@ public class PTDebugViewController: PTBaseViewController {
                         }
 
                         self.settingCellModels[indexPath.row].content = modeName
-                        let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                        guard let cell = collection.cellForItem(at: indexPath) as? PTFusionCell else { return }
                         cell.cellModel = self.settingCellModels[indexPath.row]
                     })
                 } else if itemRow.title == .socketAddressInput {
@@ -175,12 +176,13 @@ public class PTDebugViewController: PTBaseViewController {
                         }
                         
                         UIAlertController.base_textfield_alertVC(title:"Socket address input",okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
-                            let newURL = result.values.first
-                            PTCoreUserDefultsWrapper.shared.AppSocketUrl = newURL!
+                            guard let newURL = result.values.first, !newURL.isEmpty else { return }
+                            PTCoreUserDefultsWrapper.shared.AppSocketUrl = newURL
                             
-                            self.settingCellModels[indexPath.row].content = newURL!
-                            let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
-                            cell.cellModel = self.settingCellModels[indexPath.row]
+                            self.settingCellModels[indexPath.row].content = newURL
+                            if let cell = collection.cellForItem(at: indexPath) as? PTFusionCell {
+                                cell.cellModel = self.settingCellModels[indexPath.row]
+                            }
                         }
                     default:
                         UIViewController.gobal_drop(title: "Input with custom mode")

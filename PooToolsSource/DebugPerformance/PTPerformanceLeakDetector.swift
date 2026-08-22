@@ -335,7 +335,12 @@ extension UIViewController {
         let ignoredVC = PTPerformanceLeakDetector.ignoredViewControllerClassNames.contains(
             type(of: self).description()
         )
-        let ignoredWindow = isViewLoaded && view?.window != nil && PTPerformanceLeakDetector.ignoredWindowClassNames.contains(type(of: view.window!).description())
+        let ignoredWindow: Bool
+        if let window = view?.window {
+            ignoredWindow = isViewLoaded && PTPerformanceLeakDetector.ignoredWindowClassNames.contains(type(of: window).description())
+        } else {
+            ignoredWindow = false
+        }
 
         let ignoreLVCD = objc_getAssociatedObject(self, &LVCDSplitViewAssociatedObject.key) != nil
 
@@ -468,8 +473,8 @@ extension UIViewController {
                         }
                         errorMessage = """
                             \(errorMessage)
-                            title: \"\((alertVC.title ?? "") == "" ? "" : alertVC.title!)\"
-                            message: \"\((alertVC.message ?? "") == "" ? "" : alertVC.message!)\"
+                            title: \"\(alertVC.title ?? "")\"
+                            message: \"\(alertVC.message ?? "")\"
                             actions: \(actions);
                         """
                         if alertVC.textFields?.isEmpty == false {
@@ -650,7 +655,8 @@ extension UIApplication {
 
     private class func lvcdTopViewController(controller: UIViewController? = nil) -> UIViewController? {
         let new = controller ?? UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController
-        return new?.presentedViewController != nil ? lvcdTopViewController(controller: new?.presentedViewController!) : new
+        guard let presentedViewController = new?.presentedViewController else { return new }
+        return lvcdTopViewController(controller: presentedViewController)
     }
 
     private class func lvcdFindViewControllerWithTag(controller: UIViewController? = nil, tag: Int ) -> UIViewController? {
@@ -686,8 +692,8 @@ extension String {
             Self.lvcdModuleName = Self.lvcdBundleName
             Self.lvcdModuleName?.lvcdRegReplace(pattern: "[^A-Za-z0-9]", replaceWith: "_")
         }
-        if Self.lvcdBundleName != nil, Self.lvcdModuleName != nil {
-            return replacingOccurrences(of: "\(Self.lvcdBundleName!).", with: "").replacingOccurrences(of: "\(Self.lvcdModuleName!).", with: "")
+        if let bundleName = Self.lvcdBundleName, let moduleName = Self.lvcdModuleName {
+            return replacingOccurrences(of: "\(bundleName).", with: "").replacingOccurrences(of: "\(moduleName).", with: "")
         }
         return self
     }

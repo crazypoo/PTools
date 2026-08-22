@@ -23,24 +23,16 @@ class ResizeController {
                                           y: PTConsoleWindow.shared.bounds.midY)
         
     @MainActor lazy var consoleOutlineView: UIView = {
-        
-        let consoleViewReference = LocalConsole.shared.terminal!
-        
         let view = UIView()
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.randomColor.cgColor
-        view.layer.cornerRadius = consoleViewReference.layer.cornerRadius + 6
+        view.layer.cornerRadius = (LocalConsole.shared.terminal?.layer.cornerRadius ?? 22) + 6
         view.layer.cornerCurve = .continuous
         view.alpha = 0
-        
-        consoleViewReference.addSubview(view)
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(-6)
-            make.bottom.right.equalToSuperview().offset(6)
+
+        if let terminal = LocalConsole.shared.terminal {
+            attachOutline(view, to: terminal)
         }
-        
         return view
     }()
     
@@ -116,7 +108,10 @@ class ResizeController {
         didSet {
             guard isActive != oldValue else { return }
             
-            guard let termial = LocalConsole.shared.terminal else { return }
+            guard let termial = LocalConsole.shared.terminal else {
+                isActive = false
+                return
+            }
 
             if isActive {
                 
@@ -125,6 +120,7 @@ class ResizeController {
                 _ = consoleOutlineView
                 _ = bottomGrabber
                 _ = rightGrabber
+                attachOutline(consoleOutlineView, to: termial)
                 
                 platterView.fontText.text = String(format: "%f", termial.fontSize)
                 // 🔴 修复闭包循环引用
@@ -207,6 +203,21 @@ class ResizeController {
             termial.draggable = !isActive
             termial.isUserInteractionEnabled = !isActive
         }
+    }
+
+    private func attachOutline(_ outline: UIView, to terminal: PTTerminal) {
+        guard outline.superview !== terminal else { return }
+        outline.removeFromSuperview()
+        terminal.addSubview(outline)
+        outline.snp.remakeConstraints { make in
+            make.top.left.equalToSuperview().offset(-6)
+            make.bottom.right.equalToSuperview().offset(6)
+        }
+    }
+
+    func detachFromConsole() {
+        isActive = false
+        consoleOutlineView.removeFromSuperview()
     }
     
     // 🔴 抽取纯数学公式，极致提高性能
@@ -595,7 +606,7 @@ class PlatterView: UIView {
     var initialPlatterOriginY = CGFloat.zero
     
     @objc func platterPanner(recognizer: UIPanGestureRecognizer) {
-        
+        guard let terminal = LocalConsole.shared.terminal else { return }
         let translation = recognizer.translation(in: superview)
         let velocity = recognizer.velocity(in: superview)
         
@@ -611,7 +622,7 @@ class PlatterView: UIView {
                     // Stick buttons to bottom.
                     [fontText,doneButton, resetButton,
                      ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                     LocalConsole.shared.terminal!
+                     terminal
                     ].forEach {
                         $0.transform = .identity
                     }
@@ -627,7 +638,7 @@ class PlatterView: UIView {
                     
                     ResizeController.shared.bottomGrabber.transform = .init(translationX: 0, y: -excess / 2.5)
                     ResizeController.shared.rightGrabber.transform = .init(translationX: 0, y: -excess / 2)
-                    LocalConsole.shared.terminal!.transform = .init(translationX: 0, y: -excess / 2)
+                    terminal.transform = .init(translationX: 0, y: -excess / 2)
                     
                     return possibleEndpoints[0].y - excess
                 }
@@ -667,7 +678,7 @@ class PlatterView: UIView {
 
                 [fontText,doneButton, resetButton,
                  ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                 LocalConsole.shared.terminal!
+                 terminal
                 ].forEach {
                     $0.transform = .identity
                 }

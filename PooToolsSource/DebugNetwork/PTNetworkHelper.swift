@@ -31,6 +31,7 @@ final class PTNetworkHelper {
         return label
     }()
     var measurementsTimer: Timer?
+    private var speedUpdateTask: Task<Void, Never>?
 
     private init() {
         self.mainColor = UIColor(hexString: "#42d459") ?? UIColor.green
@@ -56,6 +57,8 @@ final class PTNetworkHelper {
         }
         measurementsTimer?.invalidate()
         measurementsTimer = nil
+        speedUpdateTask?.cancel()
+        speedUpdateTask = nil
     }
     
     @MainActor private func floatingButtonCreate() {
@@ -71,12 +74,13 @@ final class PTNetworkHelper {
     }
     
     @MainActor @objc private func updateSpeedLabels() {
-        Task { @MainActor in
-            // 安全读取第一步重构的线程安全测速池数据
+        guard speedUpdateTask == nil else { return }
+        speedUpdateTask = Task { @MainActor [weak self] in
+            defer { self?.speedUpdateTask = nil }
             let downloadSpeed = await PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024.0
             let uploadSpeed = await PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024.0
 
-            PTNetworkHelper.shared.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
+            self?.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
         }
     }
 }

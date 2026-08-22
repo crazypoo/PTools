@@ -19,6 +19,9 @@ let PTNetworkTestFloatingTap = 9997
 class PTNetworkWatcherViewController: PTBaseViewController {
 
     private let viewModel = PTNetworkViewModel()
+    private var reloadNotificationToken: NSObjectProtocol?
+    private var testTask: Task<Void, Never>?
+    private var testRunID = UUID()
     let titleViewContainerWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - 88
     
     lazy var searchBar: PTSearchBar = {
@@ -114,42 +117,35 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     }()
     
     func testAction() {
-        // 1. 开启一个绑定到主线程的异步 Task，为使用 await 提供环境
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            
+        testTask?.cancel()
+        let runID = UUID()
+        testRunID = runID
+        testTask = Task { @MainActor [weak self] in
+            guard let self else { return }
             let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
-            
-            // 2. 异步调用 actor 的方法启动测速
             await networkSpeedMonitor.startMonitoring()
             self.floatingButtonCreate()
-            
-            // 3. 现代 Swift 6 轮询方案：使用 for 循环 + Task.sleep 代替 Timer
+
             for _ in 1...10 {
-                // 暂停 1 秒 (1_000_000_000 纳秒 = 1 秒)
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                
-                // 防御性编程：如果用户在这 10 秒内退出了当前页面，直接中断循环避免内存泄漏
                 guard !Task.isCancelled else { break }
-                
-                // 4. 安全地跨越并发边界，从 actor 获取最新速度
+//                guard let self else { break }
                 let currentDownloadSpeed = await networkSpeedMonitor.downloadSpeed
                 let currentUploadSpeed = await networkSpeedMonitor.uploadSpeed
-                
-                // 终极修复：正确换算至 MB/s 级别
                 let downloadSpeedMB = currentDownloadSpeed / 1048576.0
                 let uploadSpeedMB = currentUploadSpeed / 1048576.0
 
                 self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
             }
-            
-            // 5. 10 秒循环自然结束，执行清理逻辑
+
+            guard self.testRunID == runID else {
+                await networkSpeedMonitor.stopMonitoring()
+                return
+            }
             if let floatingView = self.floatingView {
                 floatingView.removeFromSuperview()
                 self.floatingView = nil
             }
-            
-            // 异步停止测速器
             await networkSpeedMonitor.stopMonitoring()
         }
     }
@@ -167,6 +163,9 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         setCustomBackButtonView(backButton)
         setCustomRightButtons(buttons: [deleteButton, valueSwitch, testButton])
         setCustomTitleView(titleViewContailer)
+        if reloadNotificationToken == nil {
+            observers()
+        }
     }
 
     override func viewDidLoad() {
@@ -196,12 +195,25 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     func setup() { observers() }
     
     func observers() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "reloadHttp_PooTools"), object: nil, queue: .main) { [weak self] notification in
+        reloadNotificationToken = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "reloadHttp_PooTools"), object: nil, queue: .main) { [weak self] notification in
             if let success = notification.object as? Bool {
                 Task { @MainActor in
                     self?.reloadHttp(needScrollToEnd: self?.viewModel.reachEnd ?? true, success: success)
                 }
             }
+        }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        testTask?.cancel()
+        testTask = nil
+        testRunID = UUID()
+        floatingView?.removeFromSuperview()
+        floatingView = nil
+        if let reloadNotificationToken {
+            NotificationCenter.default.removeObserver(reloadNotificationToken)
+            self.reloadNotificationToken = nil
         }
     }
     

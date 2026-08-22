@@ -89,7 +89,7 @@ extension UIView {
 
     // MARK: - Method swizzling
     static func swizzleMethods() {
-        DispatchQueue.once(token: UUID().uuidString) {
+        DispatchQueue.once(token: "pootools.uiview.debug.swizzleMethods") {
             Swizzle(UIView.self) {
                 #selector(UIView.init(coder:)) <-> #selector(UIView.swizzledInitWithCoder(_:))
                 #selector(UIView.init(frame:)) <-> #selector(UIView.swizzledInitWithFrame(_:))
@@ -140,4 +140,3 @@ extension UIView {
         layer.borderColor = previousBorderColor
     }
 }
-

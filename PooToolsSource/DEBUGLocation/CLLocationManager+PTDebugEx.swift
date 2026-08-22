@@ -10,10 +10,12 @@ import CoreLocation
 import Foundation
 
 extension CLLocationManager {
-    static func swizzleMethods() {
-        Swizzle(CLLocationManager.self) {
-            #selector(CLLocationManager.startUpdatingLocation) <-> #selector(swizzledStartLocation)
-            #selector(CLLocationManager.requestLocation) <-> #selector(swizzedRequestLocation)
+    @MainActor static func swizzleMethods() {
+        DispatchQueue.once(token: "pootools.cllocationmanager.debug.swizzleMethods") {
+            Swizzle(CLLocationManager.self) {
+                #selector(CLLocationManager.startUpdatingLocation) <-> #selector(swizzledStartLocation)
+                #selector(CLLocationManager.requestLocation) <-> #selector(swizzedRequestLocation)
+            }
         }
     }
     

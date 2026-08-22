@@ -22,7 +22,9 @@ class PTDebugLocationViewController: PTBaseViewController {
         view.valueChangeCallBack = { value in
             PTCoreUserDefultsWrapper.shared.PTMockLocationOpen = value
             if value {
-                CLLocationManager.swizzleMethods()
+                PTGCDManager.shared.runOnMain {
+                    CLLocationManager.swizzleMethods()
+                }
             }
         }
         view.bounds = CGRect(origin: .zero, size: CGSize.SwitchSize)

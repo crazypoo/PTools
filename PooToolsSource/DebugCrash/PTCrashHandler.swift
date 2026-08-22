@@ -200,10 +200,14 @@ public class PTCrashHandler {
     /// 统一对外的异常回调
     public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?
 
+    /// 是否接管 Unix 信号。默认关闭，避免与 Bugly 等崩溃 SDK 互相覆盖处理器。
+    @MainActor public var capturesSignals = false
+
     @MainActor public static let shared = PTCrashHandler()
 
     private let uncaughtExceptionHandler: CrashUncaughtExceptionHandler
     private let signalExceptionHandler: CrashSignalExceptionHandler
+    private var isPrepared = false
 
     @MainActor private init() {
         self.uncaughtExceptionHandler = CrashUncaughtExceptionHandler()
@@ -234,7 +238,11 @@ public class PTCrashHandler {
 
     /// 启动崩溃捕获监听（建议在 App 启动的尽早阶段调用，如 AppDelegate）
     @MainActor public func prepare() {
+        guard !isPrepared else { return }
+        isPrepared = true
         uncaughtExceptionHandler.prepare()
-        signalExceptionHandler.prepare()
+        if capturesSignals {
+            signalExceptionHandler.prepare()
+        }
     }
 }

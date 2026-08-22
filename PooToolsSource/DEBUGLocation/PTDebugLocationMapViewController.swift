@@ -16,7 +16,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
 
     var locationCallBack:((CLLocation)->Void)?
     
-    private var mapView: MKMapView?
+    private let mapView = MKMapView()
 
     private var selectedLocationAnnotation: MKPointAnnotation?
     private var selectedLocation: CLLocation?
@@ -52,7 +52,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
         super.viewWillDisappear(animated)
         if isMovingFromParent {
             // If the user is navigating back, but not pressing "Done", remove the selected location annotation
-            selectedLocationAnnotation.map { mapView?.removeAnnotation($0) }
+            selectedLocationAnnotation.map { mapView.removeAnnotation($0) }
         }
     }
     
@@ -64,37 +64,35 @@ class PTDebugLocationMapViewController: PTBaseViewController {
         setupMapView()
         setupGestureRecognizer()
         
-        view.addSubviews([mapView!])
+        view.addSubview(mapView)
         
-        mapView!.snp.makeConstraints { make in
+        mapView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
     }
     
     private func setupMapView() {
-        mapView = MKMapView()
-
         if let initialLocation = selectedLocation {
             let initialCoordinate = initialLocation.coordinate
             let annotation = MKPointAnnotation()
             annotation.coordinate = initialCoordinate
-            mapView?.addAnnotation(annotation)
+            mapView.addAnnotation(annotation)
 
             let region = MKCoordinateRegion(
                 center: initialCoordinate,
                 span: MKCoordinateSpan(latitudeDelta: 30, longitudeDelta: 30)
             )
 
-            mapView?.setRegion(region, animated: true)
-            mapView?.translatesAutoresizingMaskIntoConstraints = false
+            mapView.setRegion(region, animated: true)
+            mapView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
     private func setupGestureRecognizer() {
         let tapGesture = UITapGestureRecognizer() { sender in
-            let gestureRecognizer = sender as! UITapGestureRecognizer
-            guard let mapView  = self.mapView else { return }
+            guard let gestureRecognizer = sender as? UITapGestureRecognizer else { return }
+            let mapView = self.mapView
             let locationInView = gestureRecognizer.location(in: mapView)
             let coordinate = mapView.convert(locationInView, toCoordinateFrom: mapView)
 
@@ -104,9 +102,11 @@ class PTDebugLocationMapViewController: PTBaseViewController {
                 self.selectedLocationAnnotation = MKPointAnnotation()
                 self.selectedLocationAnnotation?.coordinate = coordinate
                 self.selectedLocationAnnotation.map { mapView.removeAnnotation($0) }
-                mapView.addAnnotation(self.selectedLocationAnnotation!)
+                if let annotation = self.selectedLocationAnnotation {
+                    mapView.addAnnotation(annotation)
+                }
             }
         }
-        mapView?.addGestureRecognizer(tapGesture)
+        mapView.addGestureRecognizer(tapGesture)
     }
 }

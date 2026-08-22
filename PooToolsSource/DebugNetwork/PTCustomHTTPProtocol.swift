@@ -8,18 +8,19 @@
 
 import Foundation
 import SwiftDate
+import os.lock
 
-protocol PTCustomHTTPProtocolDelegate: AnyObject {
-    func customHTTPProtocol(_ proto: PTCustomHTTPProtocol, didReceive response: URLResponse)
-    func customHTTPProtocol(_ proto: PTCustomHTTPProtocol, didReceive data: Data)
-    func customHTTPProtocolDidFinishLoading(_ proto: PTCustomHTTPProtocol)
-    func customHTTPProtocol(_ proto: PTCustomHTTPProtocol, didFailWithError error: Error)
+private enum PTNetworkCaptureState {
+    private static let lock = OSAllocatedUnfairLock<Bool>(initialState: false)
+
+    static var isEnabled: Bool {
+        get { lock.withLock { $0 } }
+        set { lock.withLock { $0 = newValue } }
+    }
 }
 
 final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
     private static let requestProperty = "com.custom.http.protocol"
-    nonisolated(unsafe) static var classDelegate: PTCustomHTTPProtocolDelegate?
-    private var delegate: PTCustomHTTPProtocolDelegate? { PTCustomHTTPProtocol.classDelegate }
     
     struct UncheckedSendableBox<T>: @unchecked Sendable {
         let value: T
@@ -34,30 +35,18 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
     }
 
     class func start() {
+        PTNetworkCaptureState.isEnabled = true
         URLProtocol.registerClass(self)
     }
 
     class func stop() {
+        PTNetworkCaptureState.isEnabled = false
         URLProtocol.unregisterClass(self)
     }
 
     private class func checkNetworkEnableSynchronously() -> Bool {
-        // 如果当前恰好已经在主线程，直接读取，避免死锁
-        if Thread.isMainThread {
-            // MainActor.assumeIsolated 是 Swift 6 提供的安全逃生舱口
-            // 它告诉编译器：“我保证现在已经在主线程了，请允许我读取主线程数据”
-            return MainActor.assumeIsolated {
-                return PTNetworkHelper.shared.isNetworkEnable
-            }
-        } else {
-            // 如果在后台网络线程，则同步派发到主线程去获取结果
-            return DispatchQueue.main.sync {
-                // 此时已经切换到了主线程，再次使用 assumeIsolated 放行编译器检查
-                return MainActor.assumeIsolated {
-                    return PTNetworkHelper.shared.isNetworkEnable
-                }
-            }
-        }
+        // URLProtocol 回调可能运行在任意线程，只读取锁保护的布尔快照。
+        PTNetworkCaptureState.isEnabled
     }
 
     private class func canServeRequest(_ request: URLRequest) -> Bool {
@@ -96,34 +85,30 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
     private var error: Error?
     private var prevUrl: URL?
     private var prevStartTime: Date?
+    private let maximumCapturedDataSize = 2 * 1024 * 1024
+    private var capturedDataSize = 0
+    private var didTruncateCapturedData = false
 
     private var threadOperator: PTThreadOperator?
 
-    private func use(_ cache: CachedURLResponse) {
-        // 1. 🌟 局部变量提取：在当前线程，把主线程回调需要用到的对象和数据提前剥离出来。
-        // 因为 classDelegate 被标记为 nonisolated(unsafe)，在这里直接读取是完全合规的。
-        let currentDelegate = PTCustomHTTPProtocol.classDelegate
-        
-        // 将引用类型的 proto 参数准备好，由于我们要传 self 过去，
-        // 为了防止编译器在 MainActor 闭包里对 self 进行二次检查，我们使用之前写好的 UncheckedSendableBox 包装它。
-        let protoBox = UncheckedSendableBox(self)
-        let responseData = cache.data
-        let urlResponse = cache.response
-        
-        // 2. 🌟 开启主线程任务：闭包内部“只认数据，不认 self”，完美绕过编译器的 Task-isolated 拦截。
-        Task { @MainActor in
-            // 安全解包提取出来的局部代理
-            guard let delegate = currentDelegate else { return }
-            
-            // 从安全的盒子中拿出实例作为参数传给代理
-            let safeProto = protoBox.value
-            
-            delegate.customHTTPProtocol(safeProto, didReceive: urlResponse)
-            delegate.customHTTPProtocol(safeProto, didReceive: responseData)
-            delegate.customHTTPProtocolDidFinishLoading(safeProto)
+    private func appendCapturedData(_ newData: Data) {
+        capturedDataSize += newData.count
+        guard data.count < maximumCapturedDataSize else {
+            didTruncateCapturedData = true
+            return
         }
-        
-        // 3. 底层系统的 client 回调留在当前非隔离线程直接同步执行
+
+        let remaining = maximumCapturedDataSize - data.count
+        if newData.count <= remaining {
+            data.append(newData)
+        } else {
+            data.append(contentsOf: newData.prefix(remaining))
+            didTruncateCapturedData = true
+        }
+    }
+
+    private func use(_ cache: CachedURLResponse) {
+        // 缓存命中时直接通知 URLProtocol client，不再通过无消费者的中间代理转发。
         client?.urlProtocol(self, didReceive: cache.response, cacheStoragePolicy: .allowed)
         client?.urlProtocol(self, didLoad: cache.data)
         client?.urlProtocolDidFinishLoading(self)
@@ -131,7 +116,8 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
 
     override func startLoading() {
         guard let mutableRequest = (request as NSObject).mutableCopy() as? NSMutableURLRequest else {
-            fatalError("Can not convert to NSMutableURLRequest")
+            client?.urlProtocol(self, didFailWithError: URLError(.badURL))
+            return
         }
         
         URLProtocol.setProperty(true, forKey: PTCustomHTTPProtocol.requestProperty, in: mutableRequest)
@@ -161,7 +147,15 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
             // 异步等待读取 Actor 缓存（跨边界读取数据天然安全）
             Task { @MainActor in
                 if let hitBusinessCacheData = await NetworkCache.shared.read(request: originalRequest) {
-                    let fakeResponse = HTTPURLResponse(url: originalRequest.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: originalRequest.allHTTPHeaderFields)!
+                    guard let url = originalRequest.url,
+                          let fakeResponse = HTTPURLResponse(url: url,
+                                                             statusCode: 200,
+                                                             httpVersion: "HTTP/1.1",
+                                                             headerFields: originalRequest.allHTTPHeaderFields) else {
+                        selfBox.value.client?.urlProtocol(selfBox.value,
+                                                          didFailWithError: URLError(.badURL))
+                        return
+                    }
                     let cachedResp = CachedURLResponse(response: fakeResponse, data: hitBusinessCacheData)
                     
                     // 🌟 在 MainActor 保护下，从盒子中取出 self 安全调用内部方法
@@ -217,7 +211,7 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
         }
 
         model.responseData = data
-        model.size = data.formattedSize()
+        model.size = ByteCountFormatter.string(fromByteCount: Int64(capturedDataSize), countStyle: .file)
         model.isImage = (response?.mimeType?.contains("image")) ?? false
 
         // 耗时精准计算
@@ -249,7 +243,7 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
             }
         }
 
-        model.requestId = request.requestId
+        model.requestId = UUID().uuidString
         
         let finalModel = PTErrorHelper.handle(error, model: model)
         
@@ -316,7 +310,6 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
                 self.cachePolicy = PTCacheStoragePolicy.cacheStoragePolicy(for: originalRequest, and: httpResponse)
             }
             
-            self.delegate?.customHTTPProtocol(self, didReceive: response)
             self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: self.cachePolicy)
             self.response = response as? HTTPURLResponse
             self.endTime = Date()
@@ -347,22 +340,15 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
         threadOperator?.execute { [weak self] in
             guard let self = self else { return }
 
-            var hasAddedData = false
-            if self.cachePolicy == .allowed {
-                self.data.append(data)
-                hasAddedData = true
-            }
-
-            self.delegate?.customHTTPProtocol(self, didReceive: data)
-
             self.client?.urlProtocol(self, didLoad: data)
             self.didReceiveData = true
-            
-            if self.prevUrl == self.response?.url, self.prevStartTime == self.startTime {
-                if !hasAddedData { self.data.append(data) }
-            } else {
-                self.data = data
+
+            if self.prevUrl != self.response?.url || self.prevStartTime != self.startTime {
+                self.data.removeAll(keepingCapacity: true)
+                self.capturedDataSize = 0
+                self.didTruncateCapturedData = false
             }
+            self.appendCapturedData(data)
             
             self.endTime = Date()
             
@@ -390,13 +376,9 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
                     self.dataTask?.resume()
                     return
                 }
-                self.delegate?.customHTTPProtocol(self, didFailWithError: error)
-
                 self.client?.urlProtocol(self, didFailWithError: error)
                 return
             }
-
-            self.delegate?.customHTTPProtocolDidFinishLoading(self)
 
             self.client?.urlProtocolDidFinishLoading(self)
             
@@ -405,7 +387,9 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
                 Task { await PTNetworkSpeedMonitor.shared.clearSpeeds() }
                 
                 // 按需写入本地自定义持久化磁盘缓存
-                URLCache.customHttp.storeIfNeeded(for: task, data: self.data)
+                if !self.didTruncateCapturedData {
+                    URLCache.customHttp.storeIfNeeded(for: task, data: self.data)
+                }
             }
         }
     }
@@ -434,11 +418,17 @@ public actor PTNetworkSpeedMonitor {
     /// 记录当前瞬时下载速度
     public func addDownloadSpeed(_ speed: Double) {
         downloadSpeeds.append(speed)
+        if downloadSpeeds.count > 60 {
+            downloadSpeeds.removeFirst(downloadSpeeds.count - 60)
+        }
     }
     
     /// 记录当前瞬时上传速度
     public func addUploadSpeed(_ speed: Double) {
         uploadSpeeds.append(speed)
+        if uploadSpeeds.count > 60 {
+            uploadSpeeds.removeFirst(uploadSpeeds.count - 60)
+        }
     }
     
     /// 计算平均下载速度
@@ -455,10 +445,7 @@ public actor PTNetworkSpeedMonitor {
     
     /// 清理所有测速缓存数据
     public func clearSpeeds() {
-        downloadSpeeds.removeAll()
-        downloadSpeeds.append(0) // 保留初始值
-        
-        uploadSpeeds.removeAll()
-        uploadSpeeds.append(0)
+        downloadSpeeds = [0]
+        uploadSpeeds = [0]
     }
 }

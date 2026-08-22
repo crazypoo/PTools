@@ -85,7 +85,7 @@ extension UIImage {
     static func maskImage()-> UIImage {
         return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static let maskBubbleImage = UIImage(systemName: "bubble.right")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let maskBubbleImage = (UIImage(systemName: "bubble.right") ?? UIImage()).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func viewFrameImage()-> UIImage {
         return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
@@ -114,7 +114,7 @@ extension UIImage {
         }
         let deviceSymbol: String = result
 
-        return UIImage(systemName: deviceSymbol)!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        return (UIImage(systemName: deviceSymbol) ?? UIImage()).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let debugControllerImage = UIImage(.pencil).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let terminateAppImage = UIImage(.xmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -209,6 +209,17 @@ public final class PTLogBuffer {
 
     private var logs: [LogItem] = []
     private let maxCount: Int
+    private var nextSequence: UInt64 = 0
+
+    struct Entry {
+        let sequence: UInt64
+        let item: LogItem
+    }
+
+    struct PendingEntries {
+        let entries: [Entry]
+        let latestSequence: UInt64
+    }
     
     init(maxCount: Int = 1000) {
         self.maxCount = maxCount
@@ -216,6 +227,7 @@ public final class PTLogBuffer {
     
     func append(_ text: String, level: PTLogLevel = .info) {
         logs.append(LogItem(text: text, level: level))
+        nextSequence &+= 1
         if logs.count > maxCount {
             logs.removeFirst(logs.count - maxCount)
         }
@@ -225,8 +237,22 @@ public final class PTLogBuffer {
         logs.removeAll()
     }
     
-    func all() -> [LogItem] {
-        logs
+    var latestSequence: UInt64 {
+        nextSequence
+    }
+
+    func pending(after sequence: UInt64) -> PendingEntries {
+        guard !logs.isEmpty else {
+            return PendingEntries(entries: [], latestSequence: nextSequence)
+        }
+
+        let firstSequence = nextSequence - UInt64(logs.count) + 1
+        let effectiveSequence = max(sequence, firstSequence - 1)
+        let startIndex = min(logs.count, Int(effectiveSequence - firstSequence + 1))
+        let entries = logs.dropFirst(startIndex).enumerated().map { offset, item in
+            Entry(sequence: firstSequence + UInt64(startIndex + offset), item: item)
+        }
+        return PendingEntries(entries: entries, latestSequence: nextSequence)
     }
 }
 
@@ -265,6 +291,9 @@ final class PTDebugPluginManager {
     }
     
     func register(_ plugin: PTDebugPlugin) {
+        guard !plugins.contains(where: { ObjectIdentifier($0 as AnyObject) == ObjectIdentifier(plugin as AnyObject) }) else {
+            return
+        }
         plugins.append(plugin)
     }
     
@@ -293,13 +322,30 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 @objcMembers
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
+
+    /// 注册一个调试插件。插件会按分组和优先级显示在控制台菜单中。
+    public func registerDebugPlugin(_ plugin: PTDebugPlugin) {
+        PTDebugPluginManager.shared.register(plugin)
+    }
+
+    /// 清理所有外部调试插件。
+    public func clearDebugPlugins() {
+        PTDebugPluginManager.shared.clearAll()
+    }
             
-    // 新增一个游标，记录已经渲染到 UI 的日志索引
-    private var lastFlushedIndex: Int = 0
+    // 使用单调序号，避免缓冲区裁剪旧日志后 UI 游标失效。
+    private var lastFlushedSequence: UInt64 = 0
     
     private let logBuffer = PTLogBuffer(maxCount: 50000)
     private var pendingUpdate = false
-    private let throttleInterval: TimeInterval = 0.05
+    private let throttleInterval: UInt64 = 50_000_000
+    private var pendingUpdateTask: Task<Void, Never>?
+    private var networkStatusTask: Task<Void, Never>?
+    private var isMonitoring = false
+    private var didInstallGlobalHooks = false
+    private var didInstallBorderHook = false
+    private var didRegisterCrashHandler = false
+    private var keyboardObserverTokens: [NSObjectProtocol] = []
     private var dynamicLogs: [String: String] = [:]
     private var dynamicRange: NSRange?
 
@@ -310,31 +356,43 @@ public class LocalConsole: NSObject {
     public var menu: UIMenuElement? = nil {
         didSet {
             Task { @MainActor in
-                terminal!.menuButton.menu = makeMenu()
+                terminal?.menuButton.menu = makeMenu()
             }
         }
     }
 
-    @MainActor public var isVisiable:Bool = PTCoreUserDefultsWrapper.shared.AppDebugMode {
+    @MainActor public var isVisiable:Bool = {
+#if POOTOOLS_DEBUG
+        guard UIApplication.shared.inferredEnvironment_PT != .appStore else { return false }
+#else
+        return false
+#endif
+        return PTCoreUserDefultsWrapper.shared.AppDebugMode
+    }() {
         didSet {
             guard oldValue != isVisiable else { return }
+            if UIApplication.shared.inferredEnvironment_PT == .appStore {
+                isVisiable = false
+                return
+            }
             PTCoreUserDefultsWrapper.shared.AppDebugMode = isVisiable
             if isVisiable {
                 createSystemLogView()
-                terminal!.transform = .init(scaleX: 0.9, y: 0.9)
+                guard let terminal else { return }
+                terminal.transform = .init(scaleX: 0.9, y: 0.9)
                 UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.6) { [self] in
-                    terminal!.transform = .init(scaleX: 1, y: 1)
+                    terminal.transform = .init(scaleX: 1, y: 1)
                 }.startAnimation()
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
-                    terminal!.alpha = 1
+                    terminal.alpha = 1
                 }.startAnimation()
                 
                 let animation = CABasicAnimation(keyPath: "shadowOpacity")
                 animation.fromValue = 0
                 animation.toValue = 0.5
                 animation.duration = 0.6
-                terminal!.layer.add(animation, forKey: animation.keyPath)
-                terminal!.layer.shadowOpacity = 0.5
+                terminal.layer.add(animation, forKey: animation.keyPath)
+                terminal.layer.shadowOpacity = 0.5
                 if PTCoreUserDefultsWrapper.shared.AppDebbugMark {
                     maskOpenFunction()
                 }
@@ -342,29 +400,30 @@ public class LocalConsole: NSObject {
                 commitTextChanges(requestMenuUpdate: true)
                 watcherInit()
             } else {
-                Inspector.sharedInstance.stop()
-                PTNetworkHelper.shared.disable()
-                UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
-                    terminal!.transform = .init(scaleX: 0.9, y: 0.9)
-                }.startAnimation()
-                
-                UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1) { [self] in
-                    Task { @MainActor in
-                        terminal!.alpha = 0
-                        cleanSystemLogView()
-                    }
-                }.startAnimation()
+                guard let terminal else {
+                    cleanSystemLogView()
+                    return
+                }
+                stopMonitoringIfNeeded()
+                let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1) {
+                    terminal.transform = .init(scaleX: 0.9, y: 0.9)
+                    terminal.alpha = 0
+                }
+                animator.addCompletion { [weak self] _ in
+                    self?.cleanSystemLogView()
+                }
+                animator.startAnimation()
             }
         }
     }
     
     public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
         PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize = fontSizes
-        terminal!.fontSize = fontSizes
+        terminal?.fontSize = fontSizes
     }
     
     public func setAttFontColor(color:UIColor) {
-        terminal!.fontColor = color
+        terminal?.fontColor = color
     }
     
     public var terminal:PTTerminal?
@@ -383,7 +442,7 @@ public class LocalConsole: NSObject {
         if menuUpdateRequested {
             // Update the context menu to show the clipboard/clear actions.
             Task { @MainActor in
-                terminal!.menuButton.menu = makeMenu()
+                terminal?.menuButton.menu = makeMenu()
             }
         }
     }
@@ -393,8 +452,11 @@ public class LocalConsole: NSObject {
     var debugBordersEnabled = false {
         didSet {
             
-            Swizzle(UIView.self) {
-                #selector(UIView.layoutSubviews) <-> #selector(UIView.swizzled_layoutSubviews)
+            if !didInstallBorderHook {
+                Swizzle(UIView.self) {
+                    #selector(UIView.layoutSubviews) <-> #selector(UIView.swizzled_layoutSubviews)
+                }
+                didInstallBorderHook = true
             }
             
             guard debugBordersEnabled else {
@@ -413,7 +475,7 @@ public class LocalConsole: NSObject {
             
             var allViews: [UIView] = []
             
-            for window in UIApplication.shared.currentWindows! {
+            for window in UIApplication.shared.currentWindows ?? [] {
                 allViews.append(contentsOf: subviewsRecursive(in: window))
             }
             allViews.forEach {
@@ -440,12 +502,17 @@ public class LocalConsole: NSObject {
     }
     
     @MainActor private func watcherInit() {
+        guard !isMonitoring else { return }
+        isMonitoring = true
         Inspector.sharedInstance.start()
 //        PTAlertDebugWindow.shared.show()
-        UIView.swizzleMethods()
-        UIWindow.db_swizzleMethods()
-        URLSessionConfiguration.swizzleMethods()
-        UIViewController.lvcdSwizzleLifecycleMethods()
+        if !didInstallGlobalHooks {
+            UIView.swizzleMethods()
+            UIWindow.db_swizzleMethods()
+            URLSessionConfiguration.swizzleMethods()
+            UIViewController.lvcdSwizzleLifecycleMethods()
+            didInstallGlobalHooks = true
+        }
         if PTCoreUserDefultsWrapper.shared.PTMockLocationOpen {
             CLLocationManager.swizzleMethods()
         }
@@ -454,22 +521,48 @@ public class LocalConsole: NSObject {
         StderrCapture.syncData()
         PTNetworkHelper.shared.enable()
         PTLaunchTimeTracker.measureAppStartUpTime()
-        PTCrashManager.register()
+        if !didRegisterCrashHandler {
+            PTCrashManager.register()
+            didRegisterCrashHandler = true
+        }
         PTPerformanceLeakDetector.delay = 1
         PTPerformanceLeakDetector.callback = leakCallback
         
-        Task {
+        networkStatusTask = Task { @MainActor [weak self] in
             // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
             for await currentStatus in PTNetWorkStatus.shared.statusStream {
+                guard !Task.isCancelled, let self else { return }
                 PTNSLogConsole("当前网络状态发生了改变：\(NetWorkStatus.valueName(type: currentStatus))")
-                Task { @MainActor in
-                    LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: currentStatus)
-                }
+                self.networkStatus = NetWorkStatus.valueName(type: currentStatus)
             }
-        }        
+        }
+    }
+
+    @MainActor private func stopMonitoringIfNeeded() {
+        guard isMonitoring else { return }
+        isMonitoring = false
+        networkStatusTask?.cancel()
+        networkStatusTask = nil
+        pendingUpdateTask?.cancel()
+        pendingUpdateTask = nil
+        pendingUpdate = false
+        Inspector.sharedInstance.stop()
+        PTNetworkHelper.shared.disable()
+        StdoutCapture.stopCapturing()
+        StderrCapture.stopCapturing()
+        PTPerformanceLeakDetector.callback = nil
+    }
+
+    @MainActor private func removeKeyboardObservers() {
+        keyboardObserverTokens.forEach(NotificationCenter.default.removeObserver)
+        keyboardObserverTokens.removeAll()
     }
     
     @MainActor public func cleanSystemLogView() {
+        stopMonitoringIfNeeded()
+        removeKeyboardObservers()
+        dynamicReportTimer = nil
+        ResizeController.shared.detachFromConsole()
         terminal?.removeFromSuperview()
         terminal = nil
         closeAllFunction()
@@ -580,7 +673,7 @@ public class LocalConsole: NSObject {
     /// The fixed size of the console view.
     lazy var consoleSize = defaultConsoleSize {
         didSet {
-            terminal!.frame.size = consoleSize
+            terminal?.frame.size = consoleSize
                                     
             PTCoreUserDefultsWrapper.shared.PTLocalConsoleWidth = consoleSize.width
             PTCoreUserDefultsWrapper.shared.PTLocalConsoleHeight = consoleSize.height
@@ -589,10 +682,14 @@ public class LocalConsole: NSObject {
 
     func snapToCachedEndpoint() {
         Task { @MainActor in
-            let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.shared.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.shared.PTLocalConsoleY ?? possibleEndpoints.first!.y)
-            
-            terminal!.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
-            terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
+            guard let terminal, let firstEndpoint = possibleEndpoints.first else { return }
+            let cachedConsolePosition = CGPoint(
+                x: PTCoreUserDefultsWrapper.shared.PTLocalConsoleX ?? firstEndpoint.x,
+                y: PTCoreUserDefultsWrapper.shared.PTLocalConsoleY ?? firstEndpoint.y
+            )
+
+            terminal.center = cachedConsolePosition // 先更新位置，再根据当前窗口计算吸附点。
+            terminal.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
         }
     }
     
@@ -633,27 +730,44 @@ public class LocalConsole: NSObject {
 
         setupTerminalActions()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        removeKeyboardObservers()
+        keyboardObserverTokens = [
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { [weak self] _ in
+                PTGCDManager.shared.runOnMain {
+                    self?.keyboardWillHide()
+                }
+            },
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { [weak self] notification in
+                let box = PTReadCompletionNotificationBox(value: notification)
+                self?.keyboardWillShow(box.value)
+            }
+        ]
+        flushUI()
     }
     
     private func setupTerminalActions() {
 
         terminal?.dragEnd = { [weak self] in
             Task { @MainActor in
+                guard let self, let terminal = self.terminal else { return }
+                let endpoints = self.possibleEndpoints
+                guard !endpoints.isEmpty else { return }
                 // After the PiP is thrown, determine the best corner and re-target it there.
                 let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
-                
-                let projectedPosition = CGPoint(x: self!.terminal!.center.x + project(initialVelocity: self!.terminal!.x, decelerationRate: decelerationRate), y: self!.terminal!.center.y + project(initialVelocity: self!.terminal!.y, decelerationRate: decelerationRate))
-                
-                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self!.possibleEndpoints)
-                
-                let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.y, to: nearestTargetPosition.y))
+                let projectedPosition = CGPoint(
+                    x: terminal.center.x + project(initialVelocity: terminal.x, decelerationRate: decelerationRate),
+                    y: terminal.center.y + project(initialVelocity: terminal.y, decelerationRate: decelerationRate)
+                )
+                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: endpoints)
+                let relativeInitialVelocity = CGVector(
+                    dx: relativeVelocity(forVelocity: terminal.x, from: terminal.center.x, to: nearestTargetPosition.x),
+                    dy: relativeVelocity(forVelocity: terminal.y, from: terminal.center.y, to: nearestTargetPosition.y)
+                )
                 
                 let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
                 let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
                 positionAnimator.addAnimations { [self] in
-                    self!.terminal!.center = nearestTargetPosition
+                    terminal.center = nearestTargetPosition
                 }
                 positionAnimator.startAnimation()
                 PTCoreUserDefultsWrapper.shared.PTLocalConsoleX = nearestTargetPosition.x
@@ -680,10 +794,13 @@ public class LocalConsole: NSObject {
     func scheduleUIUpdate() {
         guard !pendingUpdate else { return }
         pendingUpdate = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + throttleInterval) { [weak self] in
+
+        pendingUpdateTask = Task { @MainActor [weak self] in
             guard let self else { return }
+            try? await Task.sleep(nanoseconds: self.throttleInterval)
+            guard !Task.isCancelled else { return }
             self.pendingUpdate = false
+            self.pendingUpdateTask = nil
             self.flushUI()
         }
     }
@@ -692,28 +809,16 @@ public class LocalConsole: NSObject {
     private func flushUI() {
         guard let terminal else { return }
         
-        let allLogs = logBuffer.all()
-        let totalCount = allLogs.count
-        
-        // 如果没有新日志，直接返回
-        guard lastFlushedIndex < totalCount else { return }
-        
-        // 1. 只获取真正的新日志（避免重复拼接）
-        let newLogs = allLogs[lastFlushedIndex..<totalCount]
-        
-        // 2. 将所有新日志在内存中合并为一整块，而不是多次操作 UI
-        let combinedText = newLogs.map { $0.text }.joined(separator: "\n") + "\n"
-        
-        // 取第一条的 Level 颜色作为基准（或者你可以改造 appendLogs 支持多颜色块）
-        let item = PTLogBuffer.LogItem(text: combinedText, level: newLogs.last?.level ?? .info)
-        
-        // 3. 一次性送给 Terminal 渲染
-        terminal.appendLog(item)
-        
-        // 4. 更新游标
-        lastFlushedIndex = totalCount
-        
-        commitTextChanges(requestMenuUpdate: true)
+        let pending = logBuffer.pending(after: lastFlushedSequence)
+        guard !pending.entries.isEmpty else { return }
+
+        let batch = Array(pending.entries.prefix(200))
+        terminal.appendLogs(batch.map(\.item))
+        lastFlushedSequence = batch.last?.sequence ?? lastFlushedSequence
+
+        if batch.count < pending.entries.count {
+            scheduleUIUpdate()
+        }
     }
     
     var dynamicReportTimer: Timer? {
@@ -793,7 +898,8 @@ extension LocalConsole {
     
     func shareAction() {
         Task { @MainActor in
-            let activityViewController = PTActivityViewController(text: terminal!.systemText!.pt_fullText)
+            guard let text = terminal?.systemText?.pt_fullText, !text.isEmpty else { return }
+            let activityViewController = PTActivityViewController(text: text)
             activityViewController.previewNumberOfLines = 10
             PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
         }
@@ -803,7 +909,10 @@ extension LocalConsole {
     public func clear() {
         terminal?.systemText?.text = ""
         logBuffer.clear()
-        lastFlushedIndex = 0 // 清空时重置游标
+        lastFlushedSequence = logBuffer.latestSequence
+        pendingUpdateTask?.cancel()
+        pendingUpdateTask = nil
+        pendingUpdate = false
     }
     
     func loadedLibs() {
@@ -854,17 +963,16 @@ extension LocalConsole {
                 
                 let maskConfig = PTDevMaskConfig()
                 maskView = PTDevMaskView(config: maskConfig)
-                maskView?.frame = AppWindows!.frame
-                AppWindows?.addSubview(maskView!)
+                guard let window = AppWindows, let maskView else { return }
+                maskView.frame = window.bounds
+                window.addSubview(maskView)
             }
         }
     }
     
     func maskOpenBubbleFunction() {
         PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble = !PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
-        if maskView != nil {
-            maskView!.showTouch = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
-        }
+        maskView?.showTouch = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
     }
 
     @MainActor func closeAllFunction() {
@@ -872,6 +980,7 @@ extension LocalConsole {
         PTViewRulerPlugin.share.hide()
         PTColorPickPlugin.share.close()
         PTNetworkHelper.shared.disable()
+        StdoutCapture.stopCapturing()
         StderrCapture.stopCapturing()
         PTDebugPerformanceToolKit.shared.floatingShow = false
         PTDebugPerformanceToolKit.shared.performanceClose()
@@ -889,35 +998,9 @@ extension LocalConsole {
     }
     
     func copyTextAction() {
-        terminal!.systemText!.pt_fullText.copyToPasteboard()
+        terminal?.systemText?.pt_fullText.copyToPasteboard()
     }
     
-    @MainActor func respringAction() {
-        guard let window = AppWindows else { return }
-        
-        UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
-            window.transform = .init(scaleX: 0.96, y: 0.96)
-            window.alpha = 0
-        }.startAnimation()
-        
-        // Concurrently run these snapshots to decrease the time to crash.
-        for _ in 0...1000 {
-            PTGCDManager.shared.runOnBackground {
-
-                // This will cause jetsam to terminate backboardd.
-                while true {
-                    Task { @MainActor in
-                        window.snapshotView(afterScreenUpdates: false)
-                    }
-                }
-            }
-        }
-    }
-
-    func terminateApplicationAction() {
-        UIApplication.shared.perform(NSSelectorFromString("terminateWithSuccess"))
-    }
-
     func viewFramesAction() {
         debugBordersEnabled.toggle()
     }
@@ -1022,18 +1105,38 @@ extension LocalConsole {
         // 性能优化：使用系统底层的本地化对比，极速排序
         let sortedActions = normalActions.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         debugActions.append(contentsOf: sortedActions)
+
+        if let pluginMenu = buildPluginMenu() {
+            debugActions.append(pluginMenu)
+        }
         
-        // 2.3 破坏性操作 (红色警告样式)
+        // 2.3 需要用户确认的操作
         let destructActions = [
-            UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { [weak self] _ in self?.debugControllerAction() },
-            UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { [weak self] _ in self?.terminateApplicationAction() },
-            UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { [weak self] _ in self?.respringAction() }
+            UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { [weak self] _ in self?.debugControllerAction() }
         ]
         
         return UIMenu(title: .debug, image: UIImage.debugImage, children: [
             UIMenu(title: "", options: .displayInline, children: debugActions),
             UIMenu(title: "", options: .displayInline, children: destructActions)
         ])
+    }
+
+    /// 将外部插件统一转换为菜单，避免插件各自修改控制台菜单结构。
+    @MainActor
+    private func buildPluginMenu() -> UIMenu? {
+        let groupedPlugins = PTDebugPluginManager.shared.groupedPlugins()
+        let groupMenus = groupedPlugins.keys.sorted().compactMap { group -> UIMenu? in
+            guard let plugins = groupedPlugins[group], !plugins.isEmpty else { return nil }
+            let actions = plugins.sorted { lhs, rhs in
+                if lhs.priority == rhs.priority {
+                    return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
+                }
+                return lhs.priority < rhs.priority
+            }.map(\.action)
+            return UIMenu(title: group, options: .displayInline, children: actions)
+        }
+        guard !groupMenus.isEmpty else { return nil }
+        return UIMenu(title: "Plugins", image: UIImage.dev3thPartyImage, children: groupMenus)
     }
     
     /// 3. 构建 UserDefaults 专属动态菜单
@@ -1143,29 +1246,18 @@ extension LocalConsole {
 //MARK: System report
 extension LocalConsole {
     func systemReport() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
+        dynamicReportTimer?.invalidate()
+        dynamicReportTimer = nil
+        printStaticSystemInfo()
 
-            if self.dynamicReportTimer?.isValid == true {
-                self.dynamicReportTimer?.invalidate()
-                self.dynamicReportTimer = nil
+        dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            guard let self,
+                  let terminal = self.terminal?.systemText,
+                  !terminal.pt_fullText.stringIsEmpty() else {
+                timer.invalidate()
+                return
             }
-
-            self.printStaticSystemInfo()
-
-            self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-                let safeTimer = PTTimerBox(timer: timer)
-                PTGCDManager.shared.runOnMain { [weak self] in
-                    guard let self,let terminal = self.terminal?.systemText,!terminal.pt_fullText.stringIsEmpty() else {
-                        safeTimer.timer.invalidate()
-                        return
-                    }
-
-                    Task {
-                        self.updateDynamicSystemInfo()
-                    }
-                }
-            }
+            self.updateDynamicSystemInfo()
         }
     }
     
@@ -1206,14 +1298,13 @@ extension LocalConsole {
     }
     
     private func printStaticSystemInfo() {
-        // 提取静态信息构造字符串（保持你原来的逻辑）
-        // 加入所有 volume、battery 等静态内容的打印
-        var volumeAvailableCapacityForImportantUsageString = ""
-        var volumeAvailableCapacityForOpportunisticUsageString = ""
-        var volumesString = ""
-        volumeAvailableCapacityForImportantUsageString = String(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
-        volumeAvailableCapacityForOpportunisticUsageString = String(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
-        volumesString = String(format: "%d", Device.volumes!)
+        let volumeAvailableCapacityForImportantUsageString = String(describing: Device.volumeAvailableCapacityForImportantUsage)
+        let volumeAvailableCapacityForOpportunisticUsageString = String(describing: Device.volumeAvailableCapacityForOpportunisticUsage)
+        let volumesString = String(describing: Device.volumes)
+        let batteryStateString = String(describing: Device.current.batteryState)
+        let batteryLevelString = String(describing: Device.current.batteryLevel)
+        let volumeTotalCapacityString = String(describing: Device.volumeTotalCapacity)
+        let volumeAvailableCapacityString = String(describing: Device.volumeAvailableCapacity)
 
         var hzString = ""
         hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
@@ -1250,10 +1341,10 @@ extension LocalConsole {
                 \(hzString)
                 Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
                 IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
-                BatteryState: \(Device.current.batteryState!)
-                BatteryLevel: \(String(format: "%d", Device.current.batteryLevel!))
-                VolumeTotalCapacity: \(String(format: "%d", Device.volumeTotalCapacity!))
-                VolumeAvailableCapacity: \(String(format: "%d", Device.volumeAvailableCapacity!))
+                BatteryState: \(batteryStateString)
+                BatteryLevel: \(batteryLevelString)
+                VolumeTotalCapacity: \(volumeTotalCapacityString)
+                VolumeAvailableCapacity: \(volumeAvailableCapacityString)
                 VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
                 VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
                 Volumes: \(volumesString)
@@ -1323,19 +1414,20 @@ public class PTTerminal:PFloatingButton {
             make.left.right.top.bottom.equalToSuperview()
         }
         
-        systemText = PTInvertedTextView()
-        systemText?.isEditable = false
-        systemText?.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
-        systemText?.isSelectable = false
-        systemText?.showsVerticalScrollIndicator = false
-        systemText?.contentInsetAdjustmentBehavior = .never
-        systemText?.backgroundColor = .clear
-        addSubview(systemText!)
-        systemText?.snp.makeConstraints { (make) in
+        let textView = PTInvertedTextView()
+        textView.isEditable = false
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
+        textView.isSelectable = false
+        textView.showsVerticalScrollIndicator = false
+        textView.contentInsetAdjustmentBehavior = .never
+        textView.backgroundColor = .clear
+        systemText = textView
+        addSubview(textView)
+        textView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
         }
-        systemText?.layer.cornerRadius = (layer.cornerRadius) - 2
-        systemText?.layer.cornerCurve = .continuous
+        textView.layer.cornerRadius = layer.cornerRadius - 2
+        textView.layer.cornerCurve = .continuous
 
         
         menuButton = ConsoleMenuButton()
@@ -1356,16 +1448,6 @@ public class PTTerminal:PFloatingButton {
         
     public override func layoutIfNeeded() {
         super.layoutIfNeeded()
-        
-        systemText?.snp.makeConstraints { (make) in
-            make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
-        }
-
-        menuButton.snp.makeConstraints { make in
-            make.width.equalTo(44)
-            make.height.equalTo(40)
-            make.right.bottom.equalToSuperview().inset(borderLine)
-        }
     }
     
     public override func layoutSubviews() {
@@ -1377,13 +1459,9 @@ public class PTTerminal:PFloatingButton {
             cornerRadius: layer.cornerRadius
         ).cgPath
         
-        // 你原来的布局代码
-        systemText?.snp.makeConstraints { (make) in
-            make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
-        }
     }
-    
-    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor)!
+
+    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
     var fontSize: CGFloat = PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize
 
     public func setAttributedText(_ string: String) {
@@ -1404,29 +1482,43 @@ public class PTTerminal:PFloatingButton {
     }
     
     public func appendLog(_ item: PTLogBuffer.LogItem) {
-        guard let textStorage = systemText?.textStorage else { return }
-        
-        let attr = NSAttributedString(
-            string: item.text,
-            attributes: currentAttributes
-        )
-        
-        // 使用 beginEditing 和 endEditing 将多次重绘合并为一次
+        appendLogs([item])
+    }
+
+    func appendLogs(_ items: [PTLogBuffer.LogItem]) {
+        guard let textStorage = systemText?.textStorage, !items.isEmpty else { return }
+
+        let shouldScroll = isNearBottom
+        let combined = NSMutableAttributedString()
+        for item in items {
+            let text = item.text.hasSuffix("\n") ? item.text : item.text + "\n"
+            var attributes = currentAttributes
+            attributes[.foregroundColor] = item.level.color
+            combined.append(NSAttributedString(string: text, attributes: attributes))
+        }
+
         textStorage.beginEditing()
-        textStorage.append(attr)
-        
-        // 🔴 关键性能保护：防止 TextView 内存无限暴涨！
-        // 即使 Buffer 限制了 50000 条，UITextView 的渲染层如果超过几万行一样会卡死
+        textStorage.append(combined)
+
         let maxCharacterCount = 100_000
         if textStorage.length > maxCharacterCount {
             let overage = textStorage.length - maxCharacterCount
-            // 截断头部最旧的日志
-            textStorage.deleteCharacters(in: NSRange(location: 0, length: overage))
+            let prefix = NSRange(location: 0, length: min(overage, textStorage.length))
+            let newline = (textStorage.string as NSString).range(of: "\n", options: .backwards, range: prefix)
+            let deleteLength = newline.location == NSNotFound ? overage : NSMaxRange(newline)
+            textStorage.deleteCharacters(in: NSRange(location: 0, length: deleteLength))
         }
-        
+
         textStorage.endEditing()
-        
-        scrollToBottom()
+        if shouldScroll {
+            scrollToBottom()
+        }
+    }
+
+    private var isNearBottom: Bool {
+        guard let textView = systemText else { return true }
+        let visibleBottom = textView.contentOffset.y + textView.bounds.height
+        return textView.contentSize.height - visibleBottom <= 32
     }
     
     private func scrollToBottom() {

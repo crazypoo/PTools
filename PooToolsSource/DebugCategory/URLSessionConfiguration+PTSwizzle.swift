@@ -10,32 +10,46 @@ import Foundation
 
 extension URLSessionConfiguration {
 
-    @objc
+    @MainActor @objc
     static func swizzleMethods() {
         guard self == URLSessionConfiguration.self else {
             return
         }
         
-        Swizzle(URLSessionConfiguration.self) {
-            #selector(getter: URLSessionConfiguration.default) <-> #selector(URLSessionConfiguration.swizzledDefaultSessionConfiguration)
-            #selector(getter: URLSessionConfiguration.ephemeral) <-> #selector(URLSessionConfiguration.swizzledEphemeralSessionConfiguration)
+        DispatchQueue.once(token: "pootools.urlsessionconfiguration.debug.swizzleMethods") {
+            Swizzle(URLSessionConfiguration.self) {
+                #selector(getter: URLSessionConfiguration.default) <-> #selector(URLSessionConfiguration.swizzledDefaultSessionConfiguration)
+                #selector(getter: URLSessionConfiguration.ephemeral) <-> #selector(URLSessionConfiguration.swizzledEphemeralSessionConfiguration)
+            }
         }
     }
 
-    @objc
+    @MainActor private static func registerDebugProtocolIfNeeded() {
+        DispatchQueue.once(token: "pootools.urlsessionconfiguration.debug.protocol") {
+            URLProtocol.registerClass(PTCustomHTTPProtocol.self)
+        }
+    }
+
+    @MainActor @objc
     private class func swizzledDefaultSessionConfiguration() -> URLSessionConfiguration {
         let configuration = swizzledDefaultSessionConfiguration()
-        configuration.protocolClasses?.insert(PTCustomHTTPProtocol.self, at: .zero)
-        URLProtocol.registerClass(PTCustomHTTPProtocol.self)
+        addDebugProtocol(to: configuration)
         return configuration
     }
 
-    @objc
+    @MainActor @objc
     private class func swizzledEphemeralSessionConfiguration() -> URLSessionConfiguration {
         let configuration = swizzledEphemeralSessionConfiguration()
-        configuration.protocolClasses?.insert(PTCustomHTTPProtocol.self, at: .zero)
-        URLProtocol.registerClass(PTCustomHTTPProtocol.self)
+        addDebugProtocol(to: configuration)
         return configuration
     }
-}
 
+    @MainActor private static func addDebugProtocol(to configuration: URLSessionConfiguration) {
+        var protocolClasses = configuration.protocolClasses ?? []
+        if !protocolClasses.contains(where: { $0 == PTCustomHTTPProtocol.self }) {
+            protocolClasses.insert(PTCustomHTTPProtocol.self, at: .zero)
+            configuration.protocolClasses = protocolClasses
+        }
+        registerDebugProtocolIfNeeded()
+    }
+}

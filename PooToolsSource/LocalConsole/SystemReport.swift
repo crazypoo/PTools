@@ -17,7 +17,7 @@ public class SystemReport {
             .replacingOccurrences(of: "Version ", with: "")
     }
     
-    // Current device thermal state.
+    // 当前设备的温度状态。
     public var thermalState: String {
         let state = ProcessInfo.processInfo.thermalState
         switch state {
@@ -29,22 +29,21 @@ public class SystemReport {
         }
     }
     
-    // Retrieve device mobile gestalt cache.
+    // 不读取系统私有 MobileGestalt 文件，避免私有路径、KVC 和沙盒限制。
     public lazy var gestaltCacheExtra: NSDictionary? = {
-        let url = URL(fileURLWithPath: "/pri" + "vate/va" + "r/containe" + "rs/Shared/Sys" + "temGroup/sys" + "temgroup.com.apple.mobilegestal" + "tcache/Libr" + "ary/Ca" + "ches/com.app" + "le.MobileGes" + "talt.plist")
-        
-        let dictionary = NSDictionary(contentsOf: url)
-        return dictionary?.value(forKey: "CacheE" + "xtra") as? NSDictionary
+        nil
     }()
     
-    // Device marketing name.
-    public lazy var gestaltMarketingName: Any = gestaltCacheExtra?.value(forKey: "Z/dqyWS6OZ" + "TRy10UcmUAhw") ?? "Unknown"
+    // 设备营销名称使用公开环境信息和机器标识作为兜底。
+    public lazy var gestaltMarketingName: Any = {
+        ProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] ?? modelIdentifier
+    }()
     
-    // iBoot (second-stage loader) version.
-    public lazy var gestaltFirmwareVersion: Any = gestaltCacheExtra?.value(forKey: "LeSRsiLoJC" + "Mhjn6nd6GWbQ") ?? "Unknown"
+    // 不暴露私有 iBoot 信息，使用系统版本作为公开替代值。
+    public lazy var gestaltFirmwareVersion: Any = versionString
     
-    // CPU architecture.
-    public lazy var gestaltArchitecture: Any = gestaltCacheExtra?.value(forKey: "k7QIBwZJJO" + "Vw+Sej/8h8VA") ?? deviceArchitecture
+    // CPU 架构使用编译目标提供的公开信息。
+    public lazy var gestaltArchitecture: Any = deviceArchitecture
     
     // Fallback in case gestaltArchitecture doesn't return a value.
     public var deviceArchitecture: String {
@@ -61,33 +60,24 @@ public class SystemReport {
     #endif
     }
     
-    public lazy var gestaltModelIdentifier: Any = gestaltCacheExtra?.value(forKey: "h9jDsbgj7xI" + "VeIQ8S3/X3Q") ?? modelIdentifier
+    public lazy var gestaltModelIdentifier: Any = modelIdentifier
     
     // Fallback in case gestaltModelIdentifier doesn't return a value.
     public var modelIdentifier: String {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MO" + "DEL_IDENTIFIER"] { return simulatorModelIdentifier }
         var sysinfo = utsname()
-        uname(&sysinfo) // ignore return value
+        uname(&sysinfo)
         return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)?.trimmingCharacters(in: .controlCharacters) ?? "Unknown"
     }
     
     public var kernel: String {
         var size = 0
-        // 第一次调用：获取所需的内存空间大小
         sysctlbyname("ker" + "n.os" + "type", nil, &size, nil, 0)
         
         var string = [CChar](repeating: 0, count: Int(size))
-        // 第二次调用：将数据写入预先分配的 string 数组中
         sysctlbyname("ker" + "n.os" + "type", &string, &size, nil, 0)
-        
-        // 👉 步骤 1：截断空终止符 (\0)
-        // 遍历数组，只要遇到不为 0 的字符就保留，这样可以完美剔除末尾的 C 字符串终止符
         let validCharacters = string.prefix(while: { $0 != 0 })
-        
-        // 👉 步骤 2：将 CChar (Int8) 映射为 Swift 标准的 UInt8 字节数组
         let utf8Bytes = validCharacters.map { UInt8(bitPattern: $0) }
-        
-        // 👉 步骤 3：使用 Xcode 官方推荐的 API 进行 UTF8 解码
         return String(decoding: utf8Bytes, as: UTF8.self)
     }
     
