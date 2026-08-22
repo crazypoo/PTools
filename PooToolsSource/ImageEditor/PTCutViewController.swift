@@ -162,7 +162,7 @@ class PTCutViewController: PTBaseViewController {
         
     private var thumbnailImage: UIImage?
     
-    private lazy var maxClipFrame = calculateMaxClipFrame()
+    private var maxClipFrame = CGRect.zero
     
     private var minClipSize = CGSize(width: 45, height: 45)
     
@@ -227,8 +227,8 @@ class PTCutViewController: PTBaseViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
     
-    deinit {
-//        cleanTimer()
+    isolated deinit {
+        cleanTimer()
     }
     
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
@@ -269,7 +269,7 @@ class PTCutViewController: PTBaseViewController {
             selectedRatio = ratio
         } else {
             firstEnter = true
-            selectedRatio = PTImageEditorConfig.share.clipRatios.first!
+            selectedRatio = PTImageEditorConfig.share.clipRatios.first ?? .custom
         }
         super.init(nibName: nil, bundle: nil)
         if firstEnter {
@@ -338,8 +338,13 @@ class PTCutViewController: PTBaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        guard shouldLayout else {
+
+        let layoutFrame = calculateMaxClipFrame()
+        if layoutFrame != maxClipFrame {
+            maxClipFrame = layoutFrame
+            shouldLayout = true
+        }
+        guard shouldLayout, maxClipFrame.width > 0, maxClipFrame.height > 0 else {
             return
         }
         shouldLayout = false
@@ -350,7 +355,6 @@ class PTCutViewController: PTBaseViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         shouldLayout = true
-        maxClipFrame = calculateMaxClipFrame()
     }
     
     private func setupUI() {
@@ -422,26 +426,26 @@ class PTCutViewController: PTBaseViewController {
     }
     
     private func generateThumbnailImage() {
-        let size: CGSize
-        let ratio = (editImage.size.width / editImage.size.height)
         let fixLength: CGFloat = 100
-        if ratio >= 1 {
-            size = CGSize(width: fixLength * ratio, height: fixLength)
-        } else {
-            size = CGSize(width: fixLength, height: fixLength / ratio)
+        guard editImage.size.width > 0, editImage.size.height > 0 else {
+            thumbnailImage = editImage
+            return
         }
+        let scale = min(fixLength / editImage.size.width, fixLength / editImage.size.height)
+        let size = CGSize(width: max(1, editImage.size.width * scale),
+                          height: max(1, editImage.size.height * scale))
         thumbnailImage = editImage.pt.resize_vI(size)
     }
     
     /// 计算最大裁剪范围
     private func calculateMaxClipFrame() -> CGRect {
-        var insets = deviceSafeAreaInsets()
+        var insets = view.safeAreaInsets
         insets.top += 20
         var rect = CGRect.zero
         rect.origin.x = 15
         rect.origin.y = insets.top
-        rect.size.width = UIScreen.main.bounds.width - 15 * 2
-        rect.size.height = UIScreen.main.bounds.height - insets.top - 90 - PTCutViewController.clipRatioItemSize.height - 25
+        rect.size.width = max(0, view.bounds.width - 15 * 2)
+        rect.size.height = max(0, view.bounds.height - insets.top - 90 - PTCutViewController.clipRatioItemSize.height - 25)
         return rect
     }
     
@@ -649,9 +653,11 @@ class PTCutViewController: PTBaseViewController {
     
     private func startTimer() {
         cleanTimer()
-        // TODO: 换target写法
-        resetTimer = Timer.scheduledTimer(timeInterval: 0.8, target: PTWeakProxy(target: self), selector: #selector(endEditing), userInfo: nil, repeats: false)
-        RunLoop.current.add(resetTimer!, forMode: .common)
+        let timer = Timer(timeInterval: 0.8, repeats: false) { [weak self] _ in
+            self?.endEditing()
+        }
+        resetTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     private func cleanTimer() {

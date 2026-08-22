@@ -346,36 +346,15 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         textView.setNeedsLayout()
         textView.layoutIfNeeded()
         
-        var image: UIImage?
-        
-        if let text = textView.text, !text.isEmpty {
-            // 2. 获取所有的文字精准坐标块
-            let rawRects = textView.getRawTextRects()
-            
-            if !rawRects.isEmpty {
-                // 3. 计算所有文字块的并集，得出最终的精准包围盒 (Bounding Box)
-                var contentRect = rawRects[0]
-                for r in rawRects {
-                    contentRect = contentRect.union(r)
-                }
-                
-                if textStyle.outputWithTextViewBound {
-                    contentRect.origin.x = 0
-                    contentRect.size.width = self.textView.bounds.width
-                }
-                
-                // 4. 开启画板，尺寸完美贴合文字
-                image = UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
-                    // 🌟 核心魔法：将上下文原点反向平移！
-                    // 把包围盒的左上角平移到 (0,0) 位置，这样右对齐/居中的文字就会被完美拽回画面中心，绝不会被裁剪！
-                    context.translateBy(x: -contentRect.minX, y: -contentRect.minY)
-                    
-                    // 将包含文字和彩色背景块的整个 Layer 渲染进去
-                    self.textView.layer.render(in: context)
-                }
-            }
-            textStyle.rects = rawRects
-        }
+        let currentText = textView.text ?? ""
+        let image = currentText.isEmpty
+            ? nil
+            : PTTextStickerRenderer.generateImage(text: currentText,
+                                                  font: font,
+                                                  textColor: currentColor,
+                                                  style: textStyle,
+                                                  maxWidth: textView.bounds.width)
+        textStyle.rects = currentText.isEmpty ? [] : textView.getRawTextRects()
 
         // 5. 回调并退出
         endInput?(textView.text, currentColor, font, image, textStyle)

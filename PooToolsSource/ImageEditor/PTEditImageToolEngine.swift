@@ -68,6 +68,20 @@ public extension PTEditImageEngineContext {
     
     /// 统一计算：获取画布当前的缩放率、比例和渲染尺寸
     @MainActor func calculateCanvasMetrics(currentViewSize: CGSize, maxImageWidth: CGFloat = 600) -> PTCanvasMetrics {
+        guard currentViewSize.width > 0,
+              currentViewSize.height > 0,
+              engineOriginalImageSize.width > 0,
+              engineOriginalImageSize.height > 0,
+              engineEditRect.width > 0,
+              engineEditRect.height > 0,
+              engineEditImageSize.width > 0,
+              engineEditImageSize.height > 0 else {
+            return PTCanvasMetrics(ratio: 1,
+                                   originalRatio: 1,
+                                   toImageScale: 1,
+                                   renderSize: currentViewSize)
+        }
+
         // 利用协议自带的属性进行运算
         let originalRatio = min(engineScrollView.frame.width / engineOriginalImageSize.width, engineScrollView.frame.height / engineOriginalImageSize.height)
         let ratio = min(engineScrollView.frame.width / engineEditRect.width, engineScrollView.frame.height / engineEditRect.height)
@@ -148,60 +162,73 @@ public struct PTTextStickerRenderer {
                                      textColor: UIColor,
                                      style: PTInputTextStyle,
                                      maxWidth: CGFloat) -> UIImage? {
+        let safeWidth = max(1, maxWidth)
+        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: safeWidth, height: 1))
         
-        // 1. 创建离屏的 TextView
-        // ⚠️ 注意：如果你的 getRawTextRects 是定义在特定的子类中（例如 PTInputTextView），请将 UITextView 替换为你的子类。
-        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: maxWidth, height: 10000))
-        
-        // 2. 基础配置：去除内边距，确保和输入界面的排版引擎行为一致
+        // 基础配置与输入页面保持一致。
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
-        
-        // 3. 应用新的文字属性
-        textView.text = text
-        textView.font = font
-        textView.textColor = textColor
-        
-        // 4. 应用你的 style (如果有对齐方式、行间距等，请在这里配置)
-        // 例如：textView.textAlignment = style.alignment 等，根据你的实际业务逻辑补充
-        
-        // 5. 强制系统立刻进行文字排版计算，产生真实的 Rect 坐标
-        textView.layoutIfNeeded()
-        
-        // --- 👇 下面完全复用你提供的核心渲染逻辑 👇 ---
-        var image: UIImage?
-        
-        if let currentText = textView.text, !currentText.isEmpty {
-            // 获取所有的文字精准坐标块
-            let rawRects = textView.getRawTextRects()
-            
-            if !rawRects.isEmpty {
-                // 计算所有文字块的并集，得出最终的精准包围盒 (Bounding Box)
-                var contentRect = rawRects[0]
-                for r in rawRects {
-                    contentRect = contentRect.union(r)
-                }
-                
-                if style.outputWithTextViewBound {
-                    contentRect.origin.x = 0
-                    contentRect.size.width = textView.bounds.width
-                }
-                
-                // 开启画板，尺寸完美贴合文字
-                image = UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
-                    // 🌟 核心魔法：将上下文原点反向平移！
-                    // 把包围盒的左上角平移到 (0,0) 位置，确保文字完美居中且不被裁剪
-                    context.translateBy(x: -contentRect.minX, y: -contentRect.minY)
-                    
-                    // 将包含文字和彩色背景块的整个 Layer 渲染进去
-                    textView.layer.render(in: context)
-                }
-            }
+
+        var traits = font.fontDescriptor.symbolicTraits
+        if style.isBold {
+            traits.insert(.traitBold)
+        } else {
+            traits.remove(.traitBold)
         }
-        
-        return image
+        if style.isItalic {
+            traits.insert(.traitItalic)
+        } else {
+            traits.remove(.traitItalic)
+        }
+        let styledFont = font.fontDescriptor.withSymbolicTraits(traits).map {
+            UIFont(descriptor: $0, size: font.pointSize)
+        } ?? font
+        let finalTextColor = style.bgStyle == .bg
+            ? (textColor == .white ? UIColor.black : UIColor.white)
+            : textColor
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = style.alignment
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: styledFont,
+            .foregroundColor: finalTextColor,
+            .paragraphStyle: paragraphStyle,
+            .obliqueness: style.isItalic ? 0.25 : 0
+        ]
+        if style.hasUnderline {
+            attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
+        }
+        if style.hasStrikethrough {
+            attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+        }
+        textView.attributedText = NSAttributedString(string: text, attributes: attributes)
+        let fittingSize = textView.sizeThatFits(CGSize(width: safeWidth, height: .greatestFiniteMagnitude))
+        textView.frame.size.height = max(1, fittingSize.height)
+        textView.layoutIfNeeded()
+
+        let rawRects = textView.getRawTextRects()
+        guard !rawRects.isEmpty else { return nil }
+        var contentRect = rawRects[0]
+        rawRects.dropFirst().forEach { contentRect = contentRect.union($0) }
+        if style.outputWithTextViewBound {
+            contentRect.origin.x = 0
+            contentRect.size.width = textView.bounds.width
+        }
+
+        if style.bgStyle == .bg {
+            let backgroundLayer = CAShapeLayer()
+            let backgroundPath = UIBezierPath()
+            rawRects.forEach { backgroundPath.append(UIBezierPath(roundedRect: $0, cornerRadius: 10)) }
+            backgroundLayer.path = backgroundPath.cgPath
+            backgroundLayer.fillColor = textColor.cgColor
+            textView.layer.insertSublayer(backgroundLayer, at: 0)
+        }
+
+        return UIGraphicsImageRenderer.pt.renderImage(size: contentRect.size) { context in
+            context.translateBy(x: -contentRect.minX, y: -contentRect.minY)
+            textView.layer.render(in: context)
+        }
     }
 }
 
@@ -260,6 +287,8 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     
     private weak var context: PTEditImageEngineContext?
     private var impactFeedback: UIImpactFeedbackGenerator?
+    private var committedDrawingImage: UIImage?
+    private var hasActiveStroke = false
     static let maxDrawLineImageWidth: CGFloat = 600
     
     /// 手势交互状态改变回调 (传回 true 代表开始交互，VC 需隐藏工具栏；false 则显示)
@@ -285,6 +314,8 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     }
     
     public func reloadRenderState() {
+        committedDrawingImage = nil
+        hasActiveStroke = false
         drawLine()
     }
     
@@ -301,6 +332,8 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         if pan.state == .began {
             onInteractStateChanged?(true)
             impactFeedback?.prepare()
+            committedDrawingImage = drawingImageView.image
+            hasActiveStroke = true
             
             // 计算真实线宽 (橡皮擦模式 vs 普通画笔)
             let strokeWidth = PTImageEditorConfig.share.drawLineWidth / context.engineScrollView.zoomScale
@@ -336,7 +369,26 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         } else if pan.state == .cancelled || pan.state == .ended {
             onInteractStateChanged?(false)
             context.engineEraserCircleView.isHidden = true
-            if let path = drawPaths.last {
+            guard let path = drawPaths.last else {
+                committedDrawingImage = nil
+                hasActiveStroke = false
+                return
+            }
+            if pan.state == .cancelled {
+                drawPaths.removeLast()
+                committedDrawingImage = nil
+                hasActiveStroke = false
+                drawLine()
+            } else if !path.hasMovement {
+                drawPaths.removeLast()
+                committedDrawingImage = nil
+                hasActiveStroke = false
+                drawLine()
+            } else {
+                path.finish()
+                committedDrawingImage = nil
+                hasActiveStroke = false
+                drawLine()
                 context.engineEditorManager.storeAction(.draw(path))
             }
         }
@@ -354,11 +406,18 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
             height: metrics.renderSize.height * metrics.toImageScale
         )
         
+        guard renderSize.width > 0, renderSize.height > 0 else { return }
+
         drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
             renderContext.setAllowsAntialiasing(true)
             renderContext.setShouldAntialias(true)
-            for path in self.drawPaths {
-                path.drawPath()
+            if self.hasActiveStroke, let baseImage = self.committedDrawingImage {
+                baseImage.draw(in: CGRect(origin: .zero, size: renderSize))
+                self.drawPaths.last?.drawPath()
+            } else {
+                for path in self.drawPaths {
+                    path.drawPath()
+                }
             }
         }
     }
@@ -397,6 +456,8 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     
     private weak var context: PTEditImageEngineContext?
     private var impactFeedback: UIImpactFeedbackGenerator?
+    private var committedMaskImage: UIImage?
+    private var hasActiveStroke = false
     public var onInteractStateChanged: ((Bool) -> Void)?
     
     public init(context: PTEditImageEngineContext) {
@@ -429,6 +490,8 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     }
     
     public func reloadRenderState() {
+        committedMaskImage = nil
+        hasActiveStroke = false
         drawMask()
     }
     
@@ -443,6 +506,8 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         if pan.state == .began {
             onInteractStateChanged?(true)
             impactFeedback?.prepare()
+            committedMaskImage = maskImageView.image
+            hasActiveStroke = true
             
             // 计算真实线宽 (橡皮擦模式 vs 马赛克画笔)
             let strokeWidth = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
@@ -478,8 +543,26 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         } else if pan.state == .cancelled || pan.state == .ended {
             onInteractStateChanged?(false)
             context.engineEraserCircleView.isHidden = true
-            
-            if let path = mosaicPaths.last {
+            guard let path = mosaicPaths.last else {
+                committedMaskImage = nil
+                hasActiveStroke = false
+                return
+            }
+            if pan.state == .cancelled {
+                mosaicPaths.removeLast()
+                committedMaskImage = nil
+                hasActiveStroke = false
+                drawMask()
+            } else if !path.hasMovement {
+                mosaicPaths.removeLast()
+                committedMaskImage = nil
+                hasActiveStroke = false
+                drawMask()
+            } else {
+                path.finish()
+                committedMaskImage = nil
+                hasActiveStroke = false
+                drawMask()
                 context.engineEditorManager.storeAction(.mosaic(path)) // 存入撤销栈
             }
         }
@@ -496,12 +579,19 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             height: metrics.renderSize.height * metrics.toImageScale
         )
         
+        guard renderSize.width > 0, renderSize.height > 0 else { return }
+
         // 将路径渲染为一张带透明度的图片，交给 maskImageView
         maskImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
             renderContext.setAllowsAntialiasing(true)
             renderContext.setShouldAntialias(true)
-            for path in self.mosaicPaths {
-                path.drawPath() // 会自动处理普通画笔(.normal)和橡皮擦(.clear)的混合模式
+            if self.hasActiveStroke, let baseImage = self.committedMaskImage {
+                baseImage.draw(in: CGRect(origin: .zero, size: renderSize))
+                self.mosaicPaths.last?.drawPath()
+            } else {
+                for path in self.mosaicPaths {
+                    path.drawPath() // 会自动处理普通画笔(.normal)和橡皮擦(.clear)的混合模式
+                }
             }
         }
     }
@@ -527,6 +617,8 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
     
     private weak var context: PTEditImageEngineContext?
     private var preStickerState: PTBaseStickertState?
+    private var backgroundRemovalTask: Task<Void, Never>?
+    private var backgroundRemovalToken = 0
     
     /// 交互状态回调 (用于隐藏/显示主工具栏)
     public var onInteractStateChanged: ((Bool) -> Void)?
@@ -544,12 +636,18 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         self.context = context
         super.init()
     }
+
+    deinit {
+        backgroundRemovalTask?.cancel()
+    }
     
     public func toolDidActivate() {
         // 贴纸工具其实是一个“触发器”，激活逻辑交由 VC 处理
     }
     
     public func toolDidDeactivate() {
+        backgroundRemovalTask?.cancel()
+        backgroundRemovalToken += 1
         // 工具失活时，取消所有贴纸的激活状态(隐藏白边框)
         stickersContainer.subviews.forEach { view in
             (view as? PTStickerViewAdditional)?.resetState()
@@ -582,6 +680,10 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         guard let id = id else { return }
         for sticker in stickersContainer.subviews.reversed() {
             guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
+            if currentSelectedSticker === stickerView {
+                backgroundRemovalTask?.cancel()
+                backgroundRemovalToken += 1
+            }
             stickerView.moveToAshbin()
             if currentSelectedSticker === stickerView {
                 currentSelectedSticker = nil
@@ -720,36 +822,52 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         context.engineEditorManager.storeAction(.imageSticker(oldState: nil, newState: imageSticker.state))
     }
 
+    @MainActor
     public func removeBackgroundForSelectedSticker() {
         guard let imageSticker = currentSelectedSticker as? PTImageStickerView else { return }
         let originalImage = imageSticker.image
         let oldState = imageSticker.state
+        guard let imageData = originalImage.pngData() else {
+            onProcessingStateChanged?(false)
+            return
+        }
+
+        backgroundRemovalTask?.cancel()
+        backgroundRemovalToken += 1
+        let token = backgroundRemovalToken
         
         onProcessingStateChanged?(true)
-        Task {
-            do {
-                if let cutoutImage = try await performForegroundMasking(on: originalImage) {
-                    await MainActor.run {
-                        UIView.transition(with: imageSticker, duration: 0.35, options: .transitionCrossDissolve) {
-                            imageSticker.image = cutoutImage
-                        }
-                        let maxLimitSize = CGSize(width: (self.context?.engineMainView.bounds.width ?? 0) * 0.5, height: (self.context?.engineMainView.bounds.height ?? 0) * 0.5)
-                        let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
-                        imageSticker.changeSize(to: newSize)
-                        self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
-                        self.onProcessingStateChanged?(false)
-                    }
-                } else {
-                    await MainActor.run { self.onProcessingStateChanged?(false) }
-                }
-            } catch {
-                await MainActor.run { self.onProcessingStateChanged?(false) }
+        backgroundRemovalTask = Task { @MainActor [weak self, weak imageSticker] in
+            let resultData = try? await Task.detached(priority: .userInitiated) {
+                try await Self.performForegroundMasking(data: imageData)
+            }.value
+
+            guard let self,
+                  let imageSticker,
+                  let resultData,
+                  let cutoutImage = UIImage(data: resultData),
+                  !Task.isCancelled,
+                  token == self.backgroundRemovalToken,
+                  self.currentSelectedSticker === imageSticker,
+                  imageSticker.superview != nil else {
+                self?.onProcessingStateChanged?(false)
+                return
             }
+
+            UIView.transition(with: imageSticker, duration: 0.35, options: .transitionCrossDissolve) {
+                imageSticker.image = cutoutImage
+            }
+            let maxLimitSize = CGSize(width: (self.context?.engineMainView.bounds.width ?? 0) * 0.5,
+                                      height: (self.context?.engineMainView.bounds.height ?? 0) * 0.5)
+            let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
+            imageSticker.changeSize(to: newSize)
+            self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
+            self.onProcessingStateChanged?(false)
         }
     }
 
-    private func performForegroundMasking(on inputImage: UIImage) async throws -> UIImage? {
-        guard let cgImage = inputImage.cgImage else { return nil }
+    private static func performForegroundMasking(data: Data) throws -> Data? {
+        guard let inputImage = UIImage(data: data), let cgImage = inputImage.cgImage else { return nil }
         let request = VNGenerateForegroundInstanceMaskRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         try handler.perform([request])
@@ -768,7 +886,7 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         guard let outputCIImage = filter.outputImage else { return nil }
         let context = CIContext(options: [.useSoftwareRenderer: false])
         guard let outputCGImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
-        return UIImage(cgImage: outputCGImage, scale: inputImage.scale, orientation: inputImage.imageOrientation)
+        return UIImage(cgImage: outputCGImage, scale: inputImage.scale, orientation: inputImage.imageOrientation).pngData()
     }
 
     // MARK: - Undo & Redo 引擎接口
@@ -1001,13 +1119,17 @@ extension PTStickerEngine: PTStickerViewDelegate {
     
     public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) {
         onRequestImageSelection? { [weak self, weak imageSticker] newImage in
-            guard let self = self, let imageSticker = imageSticker, let newImage = newImage else { return }
+            guard let self = self,
+                  let context = self.context,
+                  let imageSticker = imageSticker,
+                  let newImage = newImage else { return }
             imageSticker.startTimer()
             imageSticker.image = newImage
             
             let currentScale = max(1.0, imageSticker.gesScale)
-            let maxWidth = self.context?.engineMainView.bounds.width ?? UIScreen.main.bounds.width
-            let maxHeight = self.context?.engineMainView.bounds.height ?? UIScreen.main.bounds.height
+            let maxWidth = context.engineMainView.bounds.width
+            let maxHeight = context.engineMainView.bounds.height
+            guard maxWidth > 0, maxHeight > 0 else { return }
             
             let maxLimitSize = CGSize(width: (maxWidth * 0.5) / currentScale, height: (maxHeight * 0.4) / currentScale)
             let newSize = PTImageStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
@@ -1030,7 +1152,8 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 核心视图与状态
     
     /// Adjust 工具没有直接覆盖在图片上的 Canvas，它的 UI 是调节滑块
-    public var canvasView: UIView { UIView() } // 占位空视图即可
+    private let emptyCanvasView = UIView()
+    public var canvasView: UIView { emptyCanvasView }
     
     /// 核心调节滑块
     public lazy var adjustSlider: PTAdjustSliderView = {
@@ -1059,9 +1182,8 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     private func setupSliderCallbacks() {
         adjustSlider.beginAdjust = { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                self.preAdjustStatus = self.currentAdjustStatus
+            PTGCDManager.shared.runOnMain {
+                self?.preAdjustStatus = self?.currentAdjustStatus ?? PTAdjustStatus()
             }
         }
         
@@ -1070,8 +1192,11 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         }
         
         adjustSlider.endAdjust = { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self = self, let context = self.context else { return }
+            PTGCDManager.shared.runOnMain {
+                guard let self, let context = self.context else { return }
+                guard self.preAdjustStatus.brightness != self.currentAdjustStatus.brightness
+                        || self.preAdjustStatus.contrast != self.currentAdjustStatus.contrast
+                        || self.preAdjustStatus.saturation != self.currentAdjustStatus.saturation else { return }
                 context.engineEditorManager.storeAction(
                     .adjust(oldStatus: self.preAdjustStatus, newStatus: self.currentAdjustStatus)
                 )
@@ -1137,13 +1262,10 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     private func adjustStatusChanged() {
         guard let context = context else { return }
-        Task { @MainActor in
-            // 使用缓存的参考底图进行渲染，如果没有则降级使用未 adjustment 的图
-            let baseImage = editImageAdjustRef ?? context.engineImageWithoutAdjust
-            
-            if let image = adjustFilterValueSet(filterImage: baseImage) {
-                context.engineUpdateEditImage(image) // 把渲染好的结果还给 VC
-            }
+        // 使用缓存的参考底图进行渲染，如果没有则降级使用未 adjustment 的图。
+        let baseImage = editImageAdjustRef ?? context.engineImageWithoutAdjust
+        if let image = adjustFilterValueSet(filterImage: baseImage) {
+            context.engineUpdateEditImage(image)
         }
     }
     
@@ -1153,19 +1275,18 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         guard !currentAdjustStatus.allValueIsZero else { return filterImage }
         
         var filters = [C7FilterProtocol]()
-        let filterManager = PTHarBethFilter.share
-        filterManager.tools = PTImageEditorConfig.share.adjust_tools
-        
-        filterManager.getFilterResults().enumerated().forEach { index, value in
-            if value.filter is C7Luminance {
-                let filter = value.callback!(PTHarBethFilter.FiltersTool.brightness.filterValue(currentAdjustStatus.brightness))
-                filters.append(filter)
-            } else if value.filter is C7Contrast {
-                let filter = value.callback!(PTHarBethFilter.FiltersTool.contrast.filterValue(currentAdjustStatus.contrast))
-                filters.append(filter)
-            } else if value.filter is C7Saturation {
-                let filter = value.callback!(PTHarBethFilter.FiltersTool.saturation.filterValue(currentAdjustStatus.saturation))
-                filters.append(filter)
+        for tool in PTImageEditorConfig.share.adjust_tools {
+            let result = tool.getFilterResult(texture: nil)
+            guard let callback = result.callback else { continue }
+            switch tool {
+            case .brightness:
+                filters.append(callback(tool.filterValue(currentAdjustStatus.brightness)))
+            case .contrast:
+                filters.append(callback(tool.filterValue(currentAdjustStatus.contrast)))
+            case .saturation:
+                filters.append(callback(tool.filterValue(currentAdjustStatus.saturation)))
+            default:
+                break
             }
         }
         
@@ -1178,17 +1299,17 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     
     // MARK: - 核心状态
     
-    public var canvasView: UIView { UIView() } // 滤镜只有底部菜单，没有覆盖图层
-    
-    public var currentFilter: PTHarBethFilter = .cigaussian
+    private let emptyCanvasView = UIView()
+    public var canvasView: UIView { emptyCanvasView }
+
+    public var currentFilter: PTHarBethFilter = .none
     public var thumbnailFilterImages: [UIImage] = []
+    private var filterRenderTask: Task<Void, Never>?
     
     private lazy var filterCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
-        // 【关键配置】：限制最多在内存中保留 6 张滤镜大图。
-        // 假设一张千万像素的图解压后占 30MB，6张最多 180MB，完全在安全线内。
-        // 当存入第 7 张时，系统会自动把最旧的一张剔除。
         cache.countLimit = 6
+        cache.totalCostLimit = 96 * 1024 * 1024
         return cache
     }()
 
@@ -1207,6 +1328,10 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     
     public func toolDidDeactivate() { }
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) { }
+
+    deinit {
+        filterRenderTask?.cancel()
+    }
     
     public func reloadRenderState() {
         changeFilter(currentFilter)
@@ -1221,67 +1346,46 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
         
         let filters = PTImageEditorConfig.share.filters
         
-        // 1. Task.detached 将繁重任务踢到后台
-        let thumbnails = await Task.detached(priority: .userInitiated) {
-            
-            // 🚀 修复核心：使用 withTaskGroup 安全地管理并发任务并收集结果
-            // 声明返回类型为 (Int, UIImage?)，Int 用于记录初始索引以保证排序
-            return await withTaskGroup(of: (Int, UIImage?).self) { group in
-                
-                for (index, filter) in filters.enumerated() {
-                    group.addTask {
-                        // ⚠️ 注意：如果 PTHarBethFilter 单例必须在主线程修改，这里保留 MainActor.run。
-                        // 但如果你发现应用依然卡顿，说明图片处理并未真正放到后台，
-                        // 后续建议将 PTHarBethFilter 的设计改为支持非主线程实例调用。
-                        let image = await MainActor.run {
-                            PTHarBethFilter.share.texureSize = thumbnailImage.size
-                            return filter.getCurrentFilterImage(image: thumbnailImage)
-                        }
-                        return (index, image)
-                    }
-                }
-                
-                // 安全地收集所有子任务的结果
-                var unorderedResults: [(Int, UIImage)] = []
-                
-                // for await 会等待 group 中的任务一个个完成，并将结果安全地（无数据竞争）追加到数组中
-                for await (index, image) in group {
-                    if let img = image {
-                        unorderedResults.append((index, img))
-                    }
-                }
-                
-                // 按照初始的 filters 顺序对结果进行重排
-                unorderedResults.sort { $0.0 < $1.0 }
-                
-                // 剥离索引，只返回纯图片数组
-                return unorderedResults.map { $1 }
-            }
-        }.value
-        
-        // 2. 方法本身已经是 @MainActor，直接更新属性，UI 绝对安全
+        var thumbnails = [UIImage]()
+        thumbnails.reserveCapacity(filters.count)
+        PTHarBethFilter.share.texureSize = thumbnailImage.size
+
+        for filter in filters {
+            guard !Task.isCancelled else { return }
+            let image = filter.type == .none
+                ? thumbnailImage
+                : filter.getCurrentFilterImage(image: thumbnailImage)
+            thumbnails.append(image)
+            await Task.yield()
+        }
+
+        guard !Task.isCancelled else { return }
         self.thumbnailFilterImages = thumbnails
     }
     
     /// 切换滤镜
     public func changeFilter(_ filter: PTHarBethFilter) {
-        guard let context = context else { return }
-        Task { @MainActor in
-            currentFilter = filter
-            
+        filterRenderTask?.cancel()
+        currentFilter = filter
+        filterRenderTask = Task { @MainActor [weak self] in
+            await Task.yield()
+            guard let self, !Task.isCancelled, let context = self.context else { return }
+
+            let sourceImage = context.engineOriginalImage
+            let cacheKey = "\(filter.type.rawValue)-\(Int(sourceImage.size.width))-\(Int(sourceImage.size.height))-\(Int(sourceImage.scale))".nsString
             let resultImage: UIImage
-            let cacheKey = filter.name.nsString // 转换为 NSString 作为 Key
-            // 1. 优先从安全的 NSCache 中读取
-            if let cachedImage = filterCache.object(forKey: cacheKey) {
+            if filter.type == .none {
+                resultImage = sourceImage
+            } else if let cachedImage = self.filterCache.object(forKey: cacheKey) {
                 resultImage = cachedImage
             } else {
-                // 2. 缓存没命中，调用底层算法重新生成
-                resultImage = filter.getCurrentFilterImage(image: context.engineOriginalImage)
-                // 3. 存入 NSCache
-                filterCache.setObject(resultImage, forKey: cacheKey)
+                PTHarBethFilter.share.texureSize = sourceImage.size
+                resultImage = filter.getCurrentFilterImage(image: sourceImage)
+                let cost = max(1, Int(sourceImage.size.width * sourceImage.size.height * 4))
+                self.filterCache.setObject(resultImage, forKey: cacheKey, cost: cost)
             }
-            
-            // 把应用了滤镜的干净底图，交回给大堂经理 (VC) 去跑流水线！
+
+            guard !Task.isCancelled else { return }
             context.engineDidUpdateFilteredBaseImage(resultImage)
         }
     }

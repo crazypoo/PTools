@@ -36,7 +36,7 @@ class PTImageCutRatioCell: PTBaseNormalCell {
     
     var image: UIImage?
     
-    var ratio: PTImageClipRatio!
+    var ratio: PTImageClipRatio?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -98,4 +98,3 @@ class PTImageCutRatioCell: PTBaseNormalCell {
         setNeedsLayout()
     }
 }
-

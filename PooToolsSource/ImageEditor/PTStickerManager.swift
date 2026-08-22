@@ -191,7 +191,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var id: String
     
-    var borderWidth = 1 / UIScreen.main.scale
+    var borderWidth: CGFloat = 1
     
     var firstLayout = true
     
@@ -267,9 +267,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     private var startAngle: CGFloat = 0
     private var startGesRotation: CGFloat = 0
 
-    deinit { }
+    isolated deinit {
+        timer?.invalidate()
+    }
     
     public class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {
+        guard image.size.width > 0, image.size.height > 0 else { return .zero }
         // 1. 预留出边距空间，计算图片真正可以占据的极限大小
         let imageLimitWidth = maxLimitSize.width - (PTImageEditorConfig.share.staticEdgeInset * 2)
         let imageLimitHeight = maxLimitSize.height - (PTImageEditorConfig.share.staticEdgeInset * 2)
@@ -376,6 +379,10 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+
+        let displayScale = max(window?.screen.scale ?? traitCollection.displayScale, 1)
+        borderWidth = 1 / displayScale
+        borderView.layer.borderWidth = borderWidth
         
         // 🌟 布局 5 个点和连接线
         let handleSize: CGFloat = 44
@@ -577,8 +584,11 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         cleanTimer()
         borderView.layer.borderColor = UIColor.systemBlue.cgColor
         setHandlesHidden(false)
-        timer = Timer.scheduledTimer(timeInterval: 2, target: PTWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
-        RunLoop.current.add(timer!, forMode: .common)
+        let timer = Timer(timeInterval: 2, repeats: false) { [weak self] _ in
+            self?.hideBorder()
+        }
+        self.timer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     private func cleanTimer() {

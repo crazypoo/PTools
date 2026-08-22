@@ -18,6 +18,8 @@ public class PTDrawPath: NSObject {
     
     let index: Int
     var path: UIBezierPath
+
+    var hasMovement: Bool { points.count > 1 }
     
     // 🌟 1. 新增：标记这条路径是不是橡皮擦
     public var isEraser = false
@@ -34,15 +36,15 @@ public class PTDrawPath: NSObject {
     // 初始化方法中去掉了 defaultLinePath 参数，因为用不到 bgPath 了
     @MainActor init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
+        self.ratio = max(abs(ratio), CGFloat.ulpOfOne)
         
         path = UIBezierPath()
-        path.lineWidth = pathWidth / ratio
+        path.lineWidth = pathWidth / self.ratio
         path.lineCapStyle = .round
         path.lineJoinStyle = .round
-        path.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
+        path.move(to: CGPoint(x: startPoint.x / self.ratio, y: startPoint.y / self.ratio))
         
         points.append(startPoint)
-        self.ratio = ratio
         index = Self.pathIndex
         Self.pathIndex += 1
         
@@ -50,52 +52,30 @@ public class PTDrawPath: NSObject {
     }
     
     func addLine(to point: CGPoint) {
-        points.append(point)
-        
         func divRatio(_ point: CGPoint) -> CGPoint {
             return CGPoint(x: point.x / ratio, y: point.y / ratio)
         }
-        
-        guard points.count >= 4 else {
+
+        guard let previousPoint = points.last else {
+            points.append(point)
+            path.move(to: divRatio(point))
+            return
+        }
+
+        points.append(point)
+        if points.count == 2 {
             path.addLine(to: divRatio(point))
             return
         }
-        
-        path.removeAllPoints()
-        
-        path.move(to: divRatio(points[0]))
-        path.addLine(to: divRatio(points[1]))
-        
-        let granularity = 4
-        for i in 3..<points.count {
-            let p0 = points[i - 3]
-            let p1 = points[i - 2]
-            let p2 = points[i - 1]
-            let p3 = points[i]
-            
-            for i in 1..<granularity {
-                let t = CGFloat(i) * (1 / CGFloat(granularity))
-                let tt = t * t
-                let ttt = tt * t
 
-                var point = CGPoint.zero
-                point.x = 0.5 * (
-                    2 * p1.x + (p2.x - p0.x) * t +
-                    (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt +
-                    (3 * p1.x - p0.x - 3 * p2.x + p3.x) * ttt
-                )
-                point.y = 0.5 * (
-                    2 * p1.y + (p2.y - p0.y) * t +
-                    (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt +
-                    (3 * p1.y - p0.y - 3 * p2.y + p3.y) * ttt
-                )
-                path.addLine(to: divRatio(point))
-            }
-            
-            path.addLine(to: divRatio(p2))
-        }
-        
-        path.addLine(to: divRatio(points[points.count - 1]))
+        let midpoint = CGPoint(x: (previousPoint.x + point.x) * 0.5,
+                               y: (previousPoint.y + point.y) * 0.5)
+        path.addQuadCurve(to: divRatio(midpoint), controlPoint: divRatio(previousPoint))
+    }
+
+    func finish() {
+        guard let lastPoint = points.last else { return }
+        path.addLine(to: CGPoint(x: lastPoint.x / ratio, y: lastPoint.y / ratio))
     }
     
     // 🌟 2. 核心渲染魔法

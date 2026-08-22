@@ -9,7 +9,8 @@
 import UIKit
 import SnapKit
 
-public class PTEditImageToolModel:NSObject,@unchecked Sendable {
+@MainActor
+public final class PTEditImageToolModel: NSObject {
     public var normalImage:UIImage = UIImage()
     public var selectedImage:UIImage?
     public var currentType:PTImageEditorConfig.EditTool = .draw
@@ -20,8 +21,9 @@ public class PTEditImageToolModel:NSObject,@unchecked Sendable {
 class PTEditToolsCell: PTBaseNormalCell {
     static let ID = "PTEditToolsCell"
     
-    var toolModel:PTEditImageToolModel! {
+    var toolModel: PTEditImageToolModel? {
         didSet {
+            guard let toolModel else { return }
             imageView.setImage(toolModel.normalImage, state: .normal)
             imageView.setImage(toolModel.selectedImage, state: .selected)
             imageView.isSelected = toolModel.isSelected

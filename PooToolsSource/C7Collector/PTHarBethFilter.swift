@@ -50,8 +50,12 @@ public class PTHarBethFilter:NSObject {
     }
 
     public func getCurrentFilterImage(image:UIImage?) -> UIImage {
-        let dest = HarbethIO(element: image, filter: type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
-        return (try? dest.output() ?? image!)!
+        guard let image else { return UIImage() }
+        guard let filter = type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter else {
+            return image
+        }
+        let dest = HarbethIO(element: image, filter: filter)
+        return (try? dest.output()) ?? image
     }
     
     public func getFilterResults() -> [FilterResult] {
