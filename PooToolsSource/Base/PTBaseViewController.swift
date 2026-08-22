@@ -1358,7 +1358,7 @@ extension PTBaseViewController {
                     let lcm = LocalConsole.shared
                     if lcm.isVisiable {
                         if let maskView = lcm.maskView {
-                            PTUtils.fetchWindow()!.bringSubviewToFront(maskView)
+                            PTUtils.fetchWindow()?.bringSubviewToFront(maskView)
                         }
                         if let terminal = lcm.terminal {
                             PTUtils.fetchWindow()?.bringSubviewToFront(terminal)

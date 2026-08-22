@@ -27,6 +27,13 @@ public struct Exporter {
     
     let provider: Exporter.Provider
 
+    /// 保存当前导出会话，供编辑器退出时取消正在进行的导出。
+    private final class State {
+        var exportSession: AVAssetExportSession?
+    }
+
+    private let state: State
+
     /// Values copied from the public `[Option: Any]` input before the first
     /// suspension point. The raw dictionary must not cross the async/render
     /// boundary because its `Any` values are not concurrency-safe.
@@ -44,6 +51,13 @@ public struct Exporter {
     /// - Parameter provider: Configure export information.
     public init(provider: Exporter.Provider) {
         self.provider = provider
+        self.state = State()
+    }
+
+    /// 取消当前导出。该方法只影响当前 Exporter 实例。
+    @MainActor
+    func cancel() {
+        state.exportSession?.cancelExport()
     }
     
     /// Export the video after add the filter.
@@ -53,6 +67,11 @@ public struct Exporter {
     ///   - complete: The conversion is complete, including success or failure.
     @MainActor
     public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async {
+        guard !Task.isCancelled else {
+            complete(.failure(Exporter.Error.exportAsynchronously(.cancelled)))
+            return
+        }
+
         do {
             // Snapshot every supported option while still on the caller's
             // actor. No async helper or compositor instruction receives the
@@ -61,17 +80,28 @@ public struct Exporter {
             let provider = self.provider
             let assetBox = PTSystemAVAssetBox(asset: provider.asset)
             let (composition, videoComposition) = try await Self.setupComposition(assetBox: assetBox, settings: settings, filtering: filtering)
+            guard !Task.isCancelled else {
+                complete(.failure(Exporter.Error.exportAsynchronously(.cancelled)))
+                return
+            }
             
             let export = try Self.setupExportSession(composition: composition,
                                                      outputURL: provider.outputURL,
                                                      fileType: provider.fileType,
                                                      settings: settings)
             export.videoComposition = videoComposition
+
+            state.exportSession = export
+            defer { state.exportSession = nil }
             
             let targetURL = provider.outputURL
             
             do {
                 await export.export()
+                if Task.isCancelled || export.status == .cancelled {
+                    complete(.failure(Exporter.Error.exportAsynchronously(.cancelled)))
+                    return
+                }
                 switch export.status {
                 case .failed:
                     if let error = export.error {

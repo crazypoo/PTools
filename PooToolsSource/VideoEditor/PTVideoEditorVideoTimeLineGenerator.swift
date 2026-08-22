@@ -8,60 +8,7 @@
 
 import Foundation
 import AVFoundation
-import Combine
 import UIKit
-
-private final class PTTimelineGeneratorState: @unchecked Sendable {
-    private var images: [CGImage] = []
-    private let targetCount: Int
-    private let promise: (Result<[CGImage], Error>) -> Void
-    private let lock = NSLock()
-    private var hasFinished = false // 防御性机制，确保 Promise 只被调用一次
-    
-    init(targetCount: Int, promise: @escaping (Result<[CGImage], Error>) -> Void) {
-        self.targetCount = targetCount
-        self.promise = promise
-    }
-    
-    /// 安全地追加图片
-    func appendImage(_ image: CGImage) {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        guard !hasFinished else { return }
-        
-        images.append(image)
-        if images.count == targetCount {
-            hasFinished = true
-            promise(.success(images))
-        }
-    }
-    
-    /// 安全地处理失败情况
-    func fail(with error: Error) {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        guard !hasFinished else { return }
-        hasFinished = true
-        promise(.failure(error))
-    }
-}
-
-protocol PTVideoEditorVideoTimeLineGeneratorProtocol {
-    func videoTimeline(for asset: AVAsset,
-                       in bounds: CGRect,
-                       numberOfFrames: Int) async throws -> [CGImage]
-}
-
-final class PTVideoEditorVideoTimeLineGenerator: PTVideoEditorVideoTimeLineGeneratorProtocol {
-
-    func videoTimeline(for asset: AVAsset,
-                       in bounds: CGRect,
-                       numberOfFrames: Int) async throws -> [CGImage] {
-        return try await PTVideoTimelineService.generateVideoTimeline(for: asset, numberOfFrames: numberOfFrames, maximumSize: .zero)
-    }
-}
 
 public class PTVideoFrameTimeLineFunction {
     public static func frameTimes(for asset: AVAsset,
@@ -88,57 +35,6 @@ public class PTVideoFrameTimeLineFunction {
             PTNSLogConsole("⚠️ 获取视频时长失败: \(error.localizedDescription)")
             return []
         }
-    }
-}
-
-fileprivate extension PTVideoEditorVideoTimeLineGenerator {
-    func frameTimes(for asset: AVAsset,
-                    numberOfFrames: Int) async -> [CMTime] {
-        return await PTVideoFrameTimeLineFunction.frameTimes(for: asset, numberOfFrames: numberOfFrames)
-    }
-}
-
-private final class PTVideoTimelineState: @unchecked Sendable {
-    private var images: [CGImage?]
-    private var completedCount = 0
-    private var hasFailed = false
-    private let totalCount: Int
-    private let continuation: CheckedContinuation<[CGImage], Error>
-    private let lock = NSLock()
-    
-    init(totalCount: Int, continuation: CheckedContinuation<[CGImage], Error>) {
-        self.totalCount = totalCount
-        self.continuation = continuation
-        // 预先分配好空间，保证最后可以按顺序组装
-        self.images = [CGImage?](repeating: nil, count: totalCount)
-    }
-    
-    /// 成功获取一帧时的安全处理
-    func append(image: CGImage?, at index: Int) {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        guard !hasFailed else { return }
-        
-        // 按索引存入，确保最终时间线顺序正确
-        images[index] = image
-        completedCount += 1
-        
-        // 当所有帧都处理完毕时，返回结果
-        if completedCount == totalCount {
-            continuation.resume(returning: images.compactMap { $0 })
-        }
-    }
-    
-    /// 发生错误时的安全处理
-    func fail(with error: Error) {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        guard !hasFailed else { return }
-        
-        hasFailed = true
-        continuation.resume(throwing: error)
     }
 }
 

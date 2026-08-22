@@ -32,9 +32,8 @@ extension Exporter.Provider {
             self.fileType = MovieFileType.from(url: outputURL) ?? .mp4
         } else {
             let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let random = Int(arc4random_uniform(89999) + 10000)
-            let outputURL = documents.appendingPathComponent("condy_export_video_\(random).mp4")
-            // Check if the file already exists then remove the previous file
+            let outputURL = documents.appendingPathComponent("PTVideoEditor_\(UUID().uuidString).mp4")
+            // 默认输出路径使用唯一文件名，避免并发导出互相覆盖。
             if FileManager.default.fileExists(atPath: outputURL.path) {
                 try? FileManager.default.removeItem(at: outputURL)
             }

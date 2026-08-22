@@ -133,6 +133,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     // 记录当前的抽帧任务，以便快速拖动时随时取消旧任务
     private var scrubTask: Task<Void, Never>?
 
+    // 导出任务只允许同时存在一个，避免重复写入同一个编辑流程。
+    private var exportTask: Task<Void, Never>?
+    private var currentExporter: Exporter?
+    private var isClosingEditor = false
+
     var hudToHide: PTHudView? = nil
 
     public var onEditCompleteHandler:((URL)->Void)?
@@ -145,8 +150,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.addActionHandlers { [weak self] sender in
             guard let self = self else { return }
             self.c7Player?.pause()
-            self.videoConverter?.restore(cleanupDisk: true)
-            self.returnFrontVC()
+            self.cancelCurrentExport()
+            self.closeEditor()
         }
         buttonItem.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return buttonItem
@@ -159,59 +164,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.addActionHandlers { [weak self] sender in
             PTGCDManager.shared.runOnMain { [weak self] in
                 guard let self = self else { return }
-                self.c7Player?.pause()
-                
-                // 开启现代化的异步流水线！
-                Task {
-                    do {
-                        // 1. 准备和转换原视频/音频 (UI主线程操作)
-                        self.originImageView.clearProgressLayer()
-                        self.originFilterImageView.clearProgressLayer()
-
-                        // 等待转换完成...
-                        let convertedURL = try await self.setOutPutAsync()
-                        
-                        // 如果是纯音频，直接结束返回
-                        if self.isOnlyAudio {
-                            self.onEditCompleteHandler?(convertedURL)
-                            if let hud = self.hudToHide { hud.hide(completion: nil) }
-                            self.returnFrontVC()
-                            return
-                        }
-                        
-                        // 2. 视频滤镜渲染阶段
-                        
-                        let random = Int(arc4random_uniform(89999) + 10000)
-                        let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\( self.currentOutputType.name)")
-                        
-                        // 等待滤镜导出完成...
-                        let finalURL = try await self.harbethExportAsync(sourceURL: convertedURL, outputURL: URL(fileURLWithPath: outputURL))
-                        
-                        // 3. 收尾与相册保存阶段
-                        if self.onlyOutput {
-                            self.onEditCompleteHandler?(finalURL)
-                            if let hud = self.hudToHide { hud.hide(completion: nil) }
-                            self.returnFrontVC()
-                        } else {
-                            // 等待相册保存完成...
-                            try await self.saveToAlbumAsync(outputURL: finalURL, rewrite: self.rewrite, localIdentifier: self.videoAsset.localIdentifier)
-                            
-                            // 及时清理临时垃圾
-                            FileManager.pt.removefile(filePath: finalURL.path)
-                            
-                            PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
-                            if let hud = self.hudToHide { hud.hide(completion: nil) }
-                            self.returnFrontVC()
-                        }
-                        
-                    } catch {
-                        // 🚀 终极优势：统一集中处理所有可能发生的错误！
-                        if let hud = self.hudToHide { hud.hide(completion: nil) }
-                        self.originImageView.clearProgressLayer()
-                        self.originFilterImageView.clearProgressLayer()
-                        PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps, subtitle: error.localizedDescription.localized(), icon: .Error)
-                    }
-                }
+                self.beginExport()
             }
         }
         buttonItem.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
@@ -327,7 +280,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.timeObserverToken = nil
                 }
                 
-                let interval = CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
+                let interval = CMTime(seconds: 1.0 / 30.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
                 self.timeObserverToken = avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
                     guard let self = self else { return }
                     Task { @MainActor in
@@ -723,10 +676,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                     self.sheetPresent(vc: vc, size: 0.3)
                 case .rewrite:
-                    if let cell = collectionViews.cellForItem(at: indexPath) as? PTVideoEditorToolsCell {
-                        cell.buttonView.isSelected.toggle()
-                        self.rewrite.toggle()
-                    }
+                    // 当前模块只支持生成新资源，覆盖源文件入口保持禁用。
+                    break
                 }
             }
         }
@@ -871,21 +822,163 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     //MARK: 输出清晰度
     fileprivate var presets:String = AVAssetExportPresetHighestQuality
-    
-    //MARK: 覆蓋源文件
-    fileprivate var rewrite:Bool = false
-    
-    deinit {
-        Task { @MainActor [weak self] in
-            if let token = self?.timeObserverToken, let player = self?.avPlayer {
-                player.removeTimeObserver(token)
+
+    private struct ExportConfiguration {
+        let converterOption: ConverterOption
+        let outputType: PTConverterOptionOutputType
+        let isOnlyAudio: Bool
+        let onlyOutput: Bool
+        let filterType: PTHarBethFilter.FiltersTool
+    }
+
+    private func makeExportConfiguration() -> ExportConfiguration {
+        ExportConfiguration(converterOption: makeConverterOption(),
+                            outputType: currentOutputType,
+                            isOnlyAudio: isOnlyAudio,
+                            onlyOutput: onlyOutput,
+                            filterType: currentFilter.type)
+    }
+
+    private func showExportHUD() {
+        guard hudToHide == nil else { return }
+        let hudConfig = PTHudConfig.share
+        hudConfig.hudColors = [.gray, .gray]
+        hudConfig.lineWidth = 4
+        let hud = PTHudView()
+        hudToHide = hud
+        hud.hudShow()
+    }
+
+    private func hideExportHUD() {
+        hudToHide?.hide(completion: nil)
+        hudToHide = nil
+    }
+
+    private func beginExport() {
+        guard exportTask == nil, !isClosingEditor else { return }
+
+        c7Player?.pause()
+        removeTimeObserver()
+        originImageView.clearProgressLayer()
+        originFilterImageView.clearProgressLayer()
+        doneButtonItem.isUserInteractionEnabled = false
+        bottomContent.isUserInteractionEnabled = false
+        playContent.isUserInteractionEnabled = false
+        timeLineContent.isUserInteractionEnabled = false
+        showExportHUD()
+
+        let configuration = makeExportConfiguration()
+        exportTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            await self.performExport(configuration: configuration)
+        }
+    }
+
+    private func cancelCurrentExport() {
+        exportTask?.cancel()
+        currentExporter?.cancel()
+        videoConverter?.restore(cleanupDisk: true)
+        scrubTask?.cancel()
+    }
+
+    private func performExport(configuration: ExportConfiguration) async {
+        var cleanupURLs = Set<URL>()
+
+        defer {
+            currentExporter = nil
+            exportTask = nil
+            cleanupURLs.forEach { _ = FileManager.pt.removefile(filePath: $0.path) }
+            if !isClosingEditor {
+                doneButtonItem.isUserInteractionEnabled = true
+                bottomContent.isUserInteractionEnabled = true
+                playContent.isUserInteractionEnabled = true
+                timeLineContent.isUserInteractionEnabled = true
+                hideExportHUD()
             }
-            self?.scrubTask?.cancel()
-            // deinit 后 weak self 可能已经为空，直接使用现有 converter 完成清理。
-            self?.videoConverter?.restore(cleanupDisk: true)
         }
 
+        do {
+            let convertedURL = try await setOutPutAsync(options: configuration.converterOption)
+            cleanupURLs.insert(convertedURL)
+            try Task.checkCancellation()
+
+            var resultURL = convertedURL
+            if !configuration.isOnlyAudio, configuration.filterType != .none {
+                let outputPath = FileManager.pt.DocumnetsDirectory()
+                    .appendingPathComponent("PTVideoEditor_\(UUID().uuidString).\(configuration.outputType.name)")
+                let outputURL = URL(fileURLWithPath: outputPath)
+                cleanupURLs.insert(outputURL)
+                resultURL = try await harbethExportAsync(sourceURL: convertedURL,
+                                                         outputURL: outputURL,
+                                                         filterType: configuration.filterType)
+            }
+
+            if !configuration.isOnlyAudio {
+                try await validateExportedVideo(at: resultURL)
+            }
+            try Task.checkCancellation()
+
+            if configuration.isOnlyAudio || configuration.onlyOutput {
+                cleanupURLs.remove(resultURL)
+                hideExportHUD()
+                closeEditor { [weak self] in
+                    self?.onEditCompleteHandler?(resultURL)
+                }
+            } else {
+                try await saveToAlbumAsync(outputURL: resultURL)
+                hideExportHUD()
+                closeEditor {
+                    PTAlertTipsViewController.tipsAlertShow(title: "",
+                                                            subtitle: PTVideoEditorConfig.share.alertTitleSaveDone,
+                                                            icon: .Done)
+                }
+            }
+        } catch is CancellationError {
+            // 用户主动退出时不再显示错误提示。
+        } catch {
+            guard !isClosingEditor else { return }
+            hideExportHUD()
+            originImageView.clearProgressLayer()
+            originFilterImageView.clearProgressLayer()
+            PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,
+                                                    subtitle: error.localizedDescription.localized(),
+                                                    icon: .Error)
+        }
+    }
+
+    private func closeEditor(completion: (() -> Void)? = nil) {
+        guard !isClosingEditor else { return }
+        isClosingEditor = true
+        removeTimeObserver()
+        c7Player?.pause()
+
+        if let navigationController,
+           navigationController.presentingViewController != nil {
+            navigationController.dismiss(animated: true, completion: completion)
+        } else if presentingViewController != nil {
+            dismiss(animated: true, completion: completion)
+        } else if let navigationController {
+            navigationController.popViewController(animated: true, completion)
+        } else {
+            completion?()
+        }
+    }
+
+    private func removeTimeObserver() {
+        guard let token = timeObserverToken, let player = avPlayer else { return }
+        player.removeTimeObserver(token)
+        timeObserverToken = nil
+    }
+
+    deinit {
         PTNSLogConsole("🎬 PTVideoEditorToolsViewController 成功销毁并清理内存/磁盘", levelType: .info, loggerType: .media)
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        guard isBeingDismissed || isMovingFromParent || navigationController?.isBeingDismissed == true else { return }
+        cancelCurrentExport()
+        removeTimeObserver()
     }
 
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
@@ -1019,7 +1112,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let y = (self.timeLineContent.bounds.height - height) / 2
                 self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
                 
-                self.reloadAsset()
             } catch {
                 await MainActor.run {
                     PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
@@ -1110,8 +1202,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         vc.present(nav, animated: true)
     }
     
-    fileprivate func setOutPut(completion: @escaping (@Sendable (URL?, Error?) -> Void)) {
-
+    private func makeConverterOption() -> ConverterOption {
         var videoConverterCrop: ConverterCrop?
 
         if let dimFrame = dimFrame, let image = originImageView.image {
@@ -1144,7 +1235,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             }
         }
 
-        let options = ConverterOption(
+        return ConverterOption(
             trimRange: trimPositions,
             convertCrop: videoConverterCrop,
             rotate: CGFloat(.pi/2 * self.rotate),
@@ -1152,29 +1243,28 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: self.isMute,
             speed: speed,
             outputModel: currentOutputType)
+    }
 
-        Task {
-            await self.videoConverter = VideoConverter(asset: self.videoAVAsset)
-            videoConverter?.convert(options,progress: { progress in
-                Task { @MainActor in
-                    if progress ?? 0 >= 1 {
-                        if self.hudToHide == nil {
-                            let hudConfig = PTHudConfig.share
-                            hudConfig.hudColors = [.gray, .gray]
-                            hudConfig.lineWidth = 4
-                            self.hudToHide = PTHudView()
-                            self.hudToHide?.hudShow()
-                        }
-                    }
-                    
-                    if self.originFilterImageView.isHidden {
-                        self.originImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
-                    } else {
-                        self.originFilterImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
-                    }
+    fileprivate func setOutPut(options: ConverterOption,
+                                completion: @escaping @Sendable (URL?, Error?) -> Void) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.videoConverter = await VideoConverter(asset: self.videoAVAsset)
+            self.videoConverter?.convert(options, progress: { [weak self] progress in
+                Task { @MainActor [weak self] in
+                    guard let self, !self.isClosingEditor else { return }
+                    let value = progress ?? 0
+                    let targetView = self.originFilterImageView.isHidden
+                        ? self.originImageView
+                        : self.originFilterImageView
+                    targetView.layerProgress(value: value,
+                                             borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,
+                                             borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,
+                                             showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,
+                                             valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,
+                                             valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
                 }
-            },completion: completion)
-
+            }, completion: completion)
         }
     }
         
@@ -1217,7 +1307,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         // 此处的闭包可以保留（如果你封装了 getVideoFirstImage），但整个流程已经是干净的了。
-        playerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
+        playerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: 600, height: 600)) { image in
             PTGCDManager.shared.runOnMain {
                 self.originImageView.image = image
             }
@@ -1305,6 +1395,12 @@ extension PTVideoEditorToolsViewController:@MainActor C7CollectorImageDelegate {
 fileprivate extension PTVideoEditorToolsViewController {
     func numberOfFrames(within bounds: CGRect) async -> Int {
         let ratio = await self.assetAspectRatio
+        guard bounds.width > 0,
+              bounds.height > 0,
+              ratio.isFinite,
+              ratio > 0 else {
+            return 1
+        }
         let frameWidth = bounds.height * ratio
         return Int(bounds.width / frameWidth) + 1
     }
@@ -1313,6 +1409,7 @@ fileprivate extension PTVideoEditorToolsViewController {
 //MARK: ScrollView Delegate
 extension PTVideoEditorToolsViewController {
     func updateScrollViewContentOffset(fractionCompleted: Double) {
+        guard timeLineScroll.contentSize.width > 0 else { return }
         let x = timeLineScroll.contentSize.width * CGFloat(fractionCompleted) - (timeLineScroll.contentSize.width / 2)
         let point = CGPoint(x: x, y: 0)
         timeLineScroll.setContentOffset(point, animated: false)
@@ -1324,17 +1421,31 @@ extension PTVideoEditorToolsViewController {
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isSeeking = false
+        seekToCurrentTimelinePosition()
     }
 
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
         if !decelerate {
             isSeeking = false
+            seekToCurrentTimelinePosition()
         }
+    }
+
+    private func seekToCurrentTimelinePosition() {
+        guard timeLineScroll.contentSize.width > 0, videoTime > 0 else { return }
+        let fraction = (timeLineScroll.contentOffset.x + timeLineScroll.contentSize.width / 2)
+            / timeLineScroll.contentSize.width
+        let clampedFraction = max(0, min(1, fraction))
+        let time = CMTime(seconds: videoTime * Double(clampedFraction), preferredTimescale: 600)
+        avPlayer?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
+        scrubImageGenerator?.requestedTimeToleranceBefore = .zero
+        scrubImageGenerator?.requestedTimeToleranceAfter = .zero
     }
 
     public override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         super.scrollViewDidScroll(scrollView)
+        guard scrollView.contentSize.width > 0 else { return }
         let presentValue = Double((scrollView.contentOffset.x + (scrollView.contentSize.width / 2)) / scrollView.contentSize.width)
         let clampedValue = max(0.0, min(1.0, presentValue))
         let current = Float64(videoTime * clampedValue)
@@ -1346,22 +1457,25 @@ extension PTVideoEditorToolsViewController {
         self.currentTimeLabel.text = formattedCurrentTime
         // 实时让播放器画面精准跟随手指！
         if self.isSeeking {
-            // toleranceBefore 和 toleranceAfter 设为 .zero 保证帧级别的精准度
-            self.avPlayer?.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
-            
-            // 取消上一次还没来得及完成的抽帧任务（防抖）
+            // 拖动时合并请求，避免每个滚动事件都触发精确 seek 和抽帧。
             self.scrubTask?.cancel()
-            self.scrubTask = Task {
+            self.scrubTask = Task { @MainActor [weak self] in
                 do {
-                    // 异步提取画面
+                    try await Task.sleep(nanoseconds: 50_000_000)
+                    guard let self, self.isSeeking else { return }
+                    await self.avPlayer?.seek(to: cmTime,
+                                       toleranceBefore: CMTime(value: 1, timescale: 30),
+                                       toleranceAfter: CMTime(value: 1, timescale: 30))
+                    self.scrubImageGenerator?.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 30)
+                    self.scrubImageGenerator?.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 30)
                     let cgImage = try await self.generateImageAsync(at: cmTime)
-                    // 如果快速滑过被取消，立即丢弃旧帧
-                    guard !Task.isCancelled else { return }
+                    guard !Task.isCancelled, self.isSeeking else { return }
                     
                     let frameImage = UIImage(cgImage: cgImage)
                     
                     await MainActor.run {
                         // 1. 始终更新底层原始图
+                        guard self.isSeeking else { return }
                         self.originImageView.image = frameImage
                         
                         // 2. 如果有滤镜，实时渲染到静态滤镜层
@@ -1392,11 +1506,8 @@ fileprivate extension PTVideoEditorToolsViewController {
         Task {
             await reloadDebouncer.debounce { [weak self = self] in
                 guard let self = self else { return }
-                // 🌟 优化点 6：由于方法已经是 async，直接 await 等待即可，清爽无比！
                 await self.setVideoAsset()
-                Task { @MainActor in
-                    self.reloadAsset()
-                }
+                await self.reloadAsset()
             }
         }
     }
@@ -1409,10 +1520,10 @@ private struct PTC7SafeBox:@unchecked Sendable {
 // MARK: - Modern Async Wrappers (现代化异步包装器)
 fileprivate extension PTVideoEditorToolsViewController {
     
-    /// 包装原来的 setOutPut 为 async
-    func setOutPutAsync() async throws -> URL {
+    /// 将第一阶段视频转换包装为 async。
+    func setOutPutAsync(options: ConverterOption) async throws -> URL {
         return try await withCheckedThrowingContinuation { continuation in
-            self.setOutPut { url, error in
+            self.setOutPut(options: options) { url, error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else if let url = url {
@@ -1424,15 +1535,20 @@ fileprivate extension PTVideoEditorToolsViewController {
         }
     }
     
-    /// 包装 Harbeth 的 Exporter 滤镜渲染为 async
-    func harbethExportAsync(sourceURL: URL, outputURL: URL) async throws -> URL {
-        guard let c7Player = self.c7Player else {
-            throw NSError(domain: "PTVideoEditor", code: 405, userInfo: [NSLocalizedDescriptionKey: "播放器尚未初始化"])
+    /// 将滤镜导出包装为 async，并使用独立的滤镜实例避免和播放器共享可变状态。
+    func harbethExportAsync(sourceURL: URL,
+                            outputURL: URL,
+                            filterType: PTHarBethFilter.FiltersTool) async throws -> URL {
+        guard let texture = PTHarBethFilter.overTexture(),
+              let filter = filterType.getFilterResult(texture: texture).filter else {
+            throw NSError(domain: "PTVideoEditor", code: 405, userInfo: [NSLocalizedDescriptionKey: "视频滤镜初始化失败"])
         }
-        let safeBox = PTC7SafeBox(filters: c7Player.filters)
+        let safeBox = PTC7SafeBox(filters: [filter])
+        let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: outputURL))
+        currentExporter = exporter
+
         return try await withCheckedThrowingContinuation { continuation in
-            Task {
-                let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: URL(fileURLWithPath: outputURL.path)))
+            Task { @MainActor in
                 await exporter.export(options: [.OptimizeForNetworkUse: true], filtering: { buffer in
                     let dest = HarbethIO(element: buffer, filters: safeBox.filters)
                     return try? dest.output()
@@ -1448,44 +1564,33 @@ fileprivate extension PTVideoEditorToolsViewController {
         }
     }
     
-    /// 包装相册的保存和覆盖逻辑为 async
-    func saveToAlbumAsync(outputURL: URL, rewrite: Bool, localIdentifier: String) async throws {
+    /// 校验导出文件，避免将空文件或无视频轨道的文件交给 PhotoKit。
+    func validateExportedVideo(at outputURL: URL) async throws {
+        guard FileManager.default.fileExists(atPath: outputURL.path),
+              let attributes = try? FileManager.default.attributesOfItem(atPath: outputURL.path),
+              let fileSize = attributes[.size] as? NSNumber,
+              fileSize.int64Value > 0 else {
+            throw NSError(domain: "PTVideoEditor", code: 503, userInfo: [NSLocalizedDescriptionKey: "导出文件为空或不存在"])
+        }
+
+        let asset = AVURLAsset(url: outputURL)
+        let tracks = try await asset.loadTracks(withMediaType: .video)
+        guard !tracks.isEmpty else {
+            throw NSError(domain: "PTVideoEditor", code: 504, userInfo: [NSLocalizedDescriptionKey: "导出文件没有视频轨道"])
+        }
+    }
+
+    /// 使用统一媒体保存服务保存视频。
+    func saveToAlbumAsync(outputURL: URL) async throws {
         return try await withCheckedThrowingContinuation { continuation in
-            if rewrite {
-                PHPhotoLibrary.shared().performChanges({
-                    let fetchOptions = PHFetchOptions()
-                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
-                    let assets = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: fetchOptions)
-                    
-                    if let asset = assets.firstObject {
-                        let assetCollectionList = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
-                        if let assetCollection = assetCollectionList.firstObject {
-                            PTGCDManager.shared.runOnMain {
-                                let assetToDelete = [asset] as NSArray
-                                let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection)
-                                albumChangeRequest?.removeAssets(assetToDelete)
-                            }
-                        }
-                    }
-                    let _ = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
-                    
-                }) { success, error in
-                    if success {
-                        continuation.resume(returning: ())
-                    } else {
-                        continuation.resume(throwing: error ?? NSError(domain: "PTVideoEditor", code: 501, userInfo: [NSLocalizedDescriptionKey: "覆盖保存相册失败"]))
-                    }
-                }
-            } else {
-                PTMediaSaveService.save(videoURL: outputURL) { result in
-                    switch result {
-                    case .success:
-                        continuation.resume(returning: ())
-                    case .failure(let error):
-                        continuation.resume(throwing: NSError(domain: "PTVideoEditor",
-                                                              code: 502,
-                                                              userInfo: [NSLocalizedDescriptionKey: error.localizedDescription]))
-                    }
+            PTMediaSaveService.save(videoURL: outputURL) { result in
+                switch result {
+                case .success:
+                    continuation.resume(returning: ())
+                case .failure(let error):
+                    continuation.resume(throwing: NSError(domain: "PTVideoEditor",
+                                                          code: 502,
+                                                          userInfo: [NSLocalizedDescriptionKey: error.localizedDescription]))
                 }
             }
         }
