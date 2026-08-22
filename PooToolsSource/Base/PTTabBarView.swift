@@ -577,7 +577,38 @@ final public class PTTabBarView: UIView {
             }
         }
 
+        currentIndex = min(max(currentIndex, 0), max(items.count - 1, 0))
         select(currentIndex)
+    }
+
+    /// Updates the visual selection without invoking selection callbacks.
+    /// Used by PTBaseTabBarViewController when UIKit changes selectedIndex
+    /// programmatically.
+    @MainActor
+    func synchronizeSelection(to index: Int) {
+        guard index >= 0, index < items.count else { return }
+
+        let wasMinimized = minimizedCenterView.superview != nil
+        if wasMinimized, currentIndex >= 0, currentIndex < items.count {
+            let previousIcon = items[currentIndex].imageContent
+            items[currentIndex].addSubview(previousIcon)
+            items[currentIndex].restoreIconLayout()
+        }
+
+        currentIndex = index
+        for (itemIndex, item) in items.enumerated() {
+            item.isSelectedItem = itemIndex == index
+        }
+
+        if wasMinimized {
+            let selectedIcon = items[index].imageContent
+            minimizedCenterView.addSubview(selectedIcon)
+            selectedIcon.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.size.equalTo(PTTabBarItemView.itemImageSize())
+            }
+        }
+        updateSelectionMaskFrame(to: index, animated: false)
     }
     
     private func normalCaseStack(configs: [PTTabBarItemConfig]) {

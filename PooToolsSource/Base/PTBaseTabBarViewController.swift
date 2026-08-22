@@ -13,6 +13,7 @@ import SwifterSwift
 @MainActor private var kPTTabBarHiddenKey: Void?
 @MainActor private var kPTTabBarAccessoryViewKey: Void?
 
+@MainActor
 public protocol PTTabBarVisibilityProtocol {
     var pt_prefersTabBarHidden: Bool { get set }
     // 🌟 新增：允许控制器主动抛出需要监听的 ScrollView
@@ -74,7 +75,8 @@ public class PTAccessoryContainerView: UIView {
         }
         
         // 2. 只有当确实点击到了内部实际内容时，才进行响应
-        return view
+        // An empty container must not become a transparent touch shield.
+        return view === self ? nil : view
     }
 }
 
@@ -84,6 +86,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     public var centerRaisedSet:Bool = false {
         didSet {
+            guard accessoryContainerInstalled else { return }
             accessoryContainerView.snp.updateConstraints { make in
                 make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
             }
@@ -109,9 +112,26 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     /// 保存当前 KVO 监听对象，防止被释放
     private var scrollObservation: NSKeyValueObservation?
+    private var scrollBindingTask: Task<Void, Never>?
+    private var accessoryContainerInstalled = false
+    private var tabBarVisibilityGeneration = 0
+    private var accessoryTransitionGeneration = 0
+    private var isSynchronizingSelection = false
     
     /// 滑动状态回调：是否已经向下滑动、当前的 Y 轴偏移量
     public var didScrollStateChange: ((_ isScrolled: Bool, _ offsetY: CGFloat) -> Void)?
+
+    open override var selectedIndex: Int {
+        didSet {
+            synchronizeCustomSelection()
+        }
+    }
+
+    open override var selectedViewController: UIViewController? {
+        didSet {
+            synchronizeCustomSelection()
+        }
+    }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -157,14 +177,6 @@ open class PTBaseTabBarViewController: UITabBarController {
             self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
         }
                 
-        didScrollStateChange = { [weak self] isScrolled,offsetY in
-            guard let self = self else { return }
-            if PTAppBaseConfig.share.tabbarScrollEnabled {
-                // 增加一点偏移量阈值 (例如 20)，防止用户刚碰一下屏幕就触发
-                let shouldMinimize = isScrolled && offsetY > PTAppBaseConfig.share.tabbarScrollOffset
-                self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
-            }
-        }
     }
     
     open override func viewDidLayoutSubviews() {
@@ -201,7 +213,15 @@ open class PTBaseTabBarViewController: UITabBarController {
             $0.height.equalTo(CGFloat.kTabbarHeight_Total)
         }
         
-        ptCustomBar.didSelectInsideIndex =  { _ in
+        ptCustomBar.didSelectInsideIndex =  { [weak self] index in
+            guard let self,
+                  self.viewControllers?.indices.contains(index) == true else { return }
+
+            if self.selectedIndex != index {
+                self.isSynchronizingSelection = true
+                self.selectedIndex = index
+                self.isSynchronizingSelection = false
+            }
             self.syncInitialTabBarState()
         }
     }
@@ -234,9 +254,10 @@ open class PTBaseTabBarViewController: UITabBarController {
         // 3. 基础容器约束 (初始高度为 0)
         accessoryContainerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
-            make.bottom.equalTo(ptCustomBar.snp.top).offset(-PTAppBaseConfig.share.tabBarAccessoryBottomSpacing)
+            make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
             make.height.equalTo(0)
         }
+        accessoryContainerInstalled = true
     }
 
     open func configure(items: [PTTabBarItemConfig]) {
@@ -244,8 +265,8 @@ open class PTBaseTabBarViewController: UITabBarController {
             return item.viewController
         }
         viewControllers = vcs
-        DispatchQueue.main.async {
-            self.syncInitialTabBarState()
+        DispatchQueue.main.async { [weak self] in
+            self?.syncInitialTabBarState()
         }
     }
     
@@ -256,51 +277,68 @@ open class PTBaseTabBarViewController: UITabBarController {
         
         // 👉 fallback（无动画）
         guard let coordinator else {
-            updateTabBar(for: nav, to: viewController, animated: animated)
+            updateTabBar(to: viewController, animated: animated)
             return
         }
         
         // 👉 动画同步（push / pop）
         coordinator.animate(alongsideTransition: { _ in
-            self.updateTabBar(for: nav, to: viewController, animated: animated)
+            // The transition coordinator owns the animation. Starting a nested
+            // UIView animation here can leave the custom bar in a stale state.
+            self.updateTabBar(to: viewController, animated: false)
         }, completion: { context in
             
             // ❗取消手势
             if context.isCancelled {
                 if let fromVC = context.viewController(forKey: .from) {
-                    self.updateTabBar(for: nav, to: fromVC, animated: false)
+                    self.updateTabBar(to: fromVC, animated: false)
                 }
             } else {
                 // ✅ 最终状态（popToRoot 关键）
                 if let toVC = context.viewController(forKey: .to) {
-                    self.updateTabBar(for: nav, to: toVC, animated: false)
+                    self.updateTabBar(to: toVC, animated: false)
                 }
             }
         })
     }
     
     private func syncInitialTabBarState() {
-        guard let selectedVC = selectedViewController else { return }
-        
-        var targetVC: UIViewController = selectedVC
-        var targetNav: UINavigationController? = selectedVC.navigationController
-        
-        if let sideMenu = selectedVC as? PTSideMenuControl {
-            targetVC = sideMenu.contentViewController ?? sideMenu
-            targetNav = sideMenu.navigationController
-        }
-        
-        if let nav = targetVC as? UINavigationController {
-            targetNav = nav
-            if let topVC = nav.topViewController {
-                targetVC = topVC
-            }
-        }
-        
+        guard let target = currentContentViewController() else { return }
+        let targetVC = target
         // 🌟 核心补救：强制加载当前目标页面的 View，确保它的 viewDidLoad 立刻执行！
         targetVC.loadViewIfNeeded()
-        
-        updateTabBar(for: targetNav, to: targetVC, animated: false)
+
+        updateTabBar(to: targetVC, animated: false)
+    }
+
+    private func currentContentViewController() -> UIViewController? {
+        guard let selectedVC = selectedViewController else { return nil }
+
+        var targetVC: UIViewController = selectedVC
+
+        if let sideMenu = selectedVC as? PTSideMenuControl {
+            targetVC = sideMenu.contentViewController ?? sideMenu
+        }
+
+        if let nav = targetVC as? UINavigationController {
+            targetVC = nav.topViewController ?? nav
+        }
+
+        return targetVC
+    }
+
+    private func synchronizeCustomSelection() {
+        guard !isSynchronizingSelection,
+              selectedIndex >= 0,
+              selectedIndex < ptCustomBar.items.count else { return }
+
+        isSynchronizingSelection = true
+        ptCustomBar.synchronizeSelection(to: selectedIndex)
+        isSynchronizingSelection = false
+
+        if isViewLoaded {
+            syncInitialTabBarState()
+        }
     }
     
     // 🌟 新增：执行外层容器的形变动画
@@ -309,6 +347,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         if isTabBarGloballyHidden && !force { return }
         
         let stateChanged = (isTabBarMinimized != shouldMinimize)
+        guard force || stateChanged else { return }
         isTabBarMinimized = shouldMinimize
         
         if force || stateChanged {
@@ -388,6 +427,7 @@ extension PTBaseTabBarViewController {
             // 返回显示的UIViewController
             return self.configViewController(viewController: viewController, title: title)
         }
+        tabGroup.badgeValue = badgeValue
         // 可以添加多个Tab，siderBar时肯定会显示，tabBar时根据Tab的preferredPlacement取值决定
         tabGroup.children.append(contentsOf: tabs)
         return tabGroup
@@ -426,8 +466,7 @@ extension PTBaseTabBarViewController: UITabBarControllerDelegate {
 }
 
 extension PTBaseTabBarViewController {
-    private func updateTabBar(for navigationController: UINavigationController?,
-                              to viewController: UIViewController,
+    private func updateTabBar(to viewController: UIViewController,
                               animated: Bool) {
         let hidden = viewController.pt_prefersTabBarHidden
         // 🌟 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
@@ -440,8 +479,11 @@ extension PTBaseTabBarViewController {
             accessoryContainerView.isUserInteractionEnabled = true
         }
 
-        // 🌟 修复 1：每次切换页面或 Tab 时，强制重置为展开状态
-        updateTabBarMinimizeState(shouldMinimize: false,animated: false,force: true)
+        // Reset only when necessary. Rebuilding constraints for every page
+        // transition causes needless layout work and animation interruptions.
+        if isTabBarMinimized {
+            updateTabBarMinimizeState(shouldMinimize: false, animated: false, force: true)
+        }
         setTabBar(hidden: hidden, animated: animated)
         
         // 2. 🌟 切换 AccessoryView 逻辑
@@ -451,22 +493,22 @@ extension PTBaseTabBarViewController {
 
         // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
         if hidden {
-            scrollObservation?.invalidate()
-            scrollObservation = nil
+            cancelScrollObservation()
             PTNSLogConsole("拦截：TabBar 已隐藏，跳过 ScrollView 绑定")
         } else {
             // 只有 TabBar 需要显示时，才去绑定监听
             if PTAppBaseConfig.share.tabbarScrollEnabled {
                 observeScrollView(in: viewController)
             } else {
-                scrollObservation?.invalidate()
-                scrollObservation = nil
+                cancelScrollObservation()
                 PTNSLogConsole("拦截：TabBar 已隐藏，跳过 ScrollView 绑定")
             }
         }
     }
     
     public func setTabBar(hidden: Bool, animated: Bool) {
+        tabBarVisibilityGeneration &+= 1
+        let generation = tabBarVisibilityGeneration
         tabBar.isHidden = true
                 
         let height = CGFloat.kTabbarHeight_Total
@@ -494,8 +536,9 @@ extension PTBaseTabBarViewController {
                            options: [.curveEaseInOut, .beginFromCurrentState],
                            animations: {
                 updateState()
-            }, completion: { _ in
-                if hidden {
+            }, completion: { [weak self] _ in
+                guard let self, generation == self.tabBarVisibilityGeneration else { return }
+                if hidden && self.isTabBarGloballyHidden {
                     self.ptCustomBar.isHidden = true
                 }
             })
@@ -510,27 +553,28 @@ extension PTBaseTabBarViewController {
         guard newContentView !== currentAccessoryContentView else {
             if isTabBarGloballyHidden {
                 accessoryContainerView.isHidden = true
+            } else if newContentView != nil {
+                accessoryContainerView.isHidden = false
             }
             return
         }
+
+        accessoryTransitionGeneration &+= 1
+        let generation = accessoryTransitionGeneration
                 
         let oldView = currentAccessoryContentView
         currentAccessoryContentView = newContentView
         
-        let removeOldBlock = {
-            oldView?.removeFromSuperview()
-        }
-        
         // 1. 将新视图添加到卡槽顶层 (盖在 blurView 和 borderLine 上面)
         if let newView = newContentView {
-            // 确保业务视图自身背景透明，否则会遮挡毛玻璃！
-            newView.backgroundColor = .clear
-            
             accessoryContainerView.addSubview(newView)
             newView.snp.remakeConstraints { make in
                 // 顶部避开 0.5pt 的高光线
                 make.top.equalToSuperview().offset(0.5)
                 make.left.right.bottom.equalToSuperview()
+            }
+            if !isTabBarGloballyHidden {
+                accessoryContainerView.isHidden = false
             }
         }
         
@@ -552,12 +596,20 @@ extension PTBaseTabBarViewController {
             self.accessoryContainerView.layoutIfNeeded()
         }
 
-        let completionBlock = {
-            removeOldBlock()
-            oldView?.alpha = 1
+        let completionBlock = { [weak self] in
+            guard let self, generation == self.accessoryTransitionGeneration else { return }
+
+            // Remove every stale content view, not just the immediately
+            // previous one. This also covers rapid A -> B -> C switches.
+            self.accessoryContainerView.subviews
+                .filter { $0 !== self.accessoryBlurView && $0 !== self.topBorderLine && $0 !== newContentView }
+                .forEach { $0.removeFromSuperview() }
+
             // 🌟 闭环保护：如果收缩为 0，立刻彻底物理隐藏
             if targetHeight == 0 || self.isTabBarGloballyHidden {
                 self.accessoryContainerView.isHidden = true
+            } else {
+                self.accessoryContainerView.isHidden = false
             }
         }
         
@@ -581,10 +633,15 @@ extension PTBaseTabBarViewController {
         
     /// 在给定的 View 层级中递归寻找第一个 UIScrollView
     private func findScrollView(in view: UIView) -> UIScrollView? {
-        if let scrollView = view as? UIScrollView,
-           scrollView.isScrollEnabled,
-           scrollView.contentSize.height > 0 || scrollView.alwaysBounceVertical {
-            return scrollView
+        if let scrollView = view as? UIScrollView {
+            let verticalContentHeight = scrollView.contentSize.height
+                + scrollView.adjustedContentInset.top
+                + scrollView.adjustedContentInset.bottom
+            let canScrollVertically = scrollView.alwaysBounceVertical
+                || verticalContentHeight > scrollView.bounds.height + 1
+            if scrollView.isScrollEnabled && canScrollVertically {
+                return scrollView
+            }
         }
         
         for subview in view.subviews {
@@ -597,14 +654,19 @@ extension PTBaseTabBarViewController {
     
     /// 为指定的 ViewController 绑定滑动监听
     private func observeScrollView(in viewController: UIViewController) {
-        // 先清理旧的
-        scrollObservation?.invalidate()
-        scrollObservation = nil
+        cancelScrollObservation()
         
         viewController.loadViewIfNeeded()
-        // 🌟 延迟一点点，确保控制器的子视图都已经 addSubView 完毕
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
-            guard let self = self else { return }
+        // Delay briefly so a freshly loaded controller can finish building its
+        // hierarchy, while retaining cancellation when the page changes again.
+        scrollBindingTask = Task { @MainActor [weak self, weak viewController] in
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            guard !Task.isCancelled,
+                  let self,
+                  let viewController,
+                  !self.isTabBarGloballyHidden,
+                  self.currentContentViewController() === viewController else { return }
+
             // 1. 优先获取 VC 主动指定的 ScrollView
             let targetScrollView = viewController.pt_observedScrollView ?? self.findScrollView(in: viewController.view)
                         
@@ -619,31 +681,37 @@ extension PTBaseTabBarViewController {
             PTNSLogConsole("✅ 成功绑定 ScrollView 监听: \(viewController)")
 
             
-            self.scrollObservation = scrollView.observe(\.contentOffset, options: [.new]) { [weak self] scrollView, change in
-                guard let self = self, let offset = change.newValue else { return }
-                Task { @MainActor in
-                    let isScrolled = offset.y > -scrollView.adjustedContentInset.top
-                    self.didScrollStateChange?(isScrolled, offset.y)
+            let adjustedTopInset = scrollView.adjustedContentInset.top
+            self.scrollObservation = scrollView.observe(\.contentOffset, options: [.new]) { [weak self] _, change in
+                guard let offsetY = change.newValue?.y else { return }
+                let distanceFromTop = offsetY + adjustedTopInset
+                Task { @MainActor [weak self] in
+                    guard let self, !self.isTabBarGloballyHidden else { return }
+                    let shouldMinimize = distanceFromTop > PTAppBaseConfig.share.tabbarScrollOffset
+                    self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
+                    self.didScrollStateChange?(distanceFromTop > 0, offsetY)
                 }
             }
+
+            let initialOffsetY = scrollView.contentOffset.y
+            let initialDistanceFromTop = initialOffsetY + adjustedTopInset
+            self.updateTabBarMinimizeState(shouldMinimize: initialDistanceFromTop > PTAppBaseConfig.share.tabbarScrollOffset, animated: false)
+            self.didScrollStateChange?(initialDistanceFromTop > 0, initialOffsetY)
         }
+    }
+
+    private func cancelScrollObservation() {
+        scrollBindingTask?.cancel()
+        scrollBindingTask = nil
+        scrollObservation?.invalidate()
+        scrollObservation = nil
     }
 }
 
 extension PTBaseTabBarViewController {
     // 🌟 修复处 2：新增暴露给协议调用的即时刷新接口
     public func refreshCurrentAccessoryViewIfNeeded() {
-        // 重新推导当前顶层 VC
-        guard let selectedVC = selectedViewController else { return }
-        var targetVC: UIViewController = selectedVC
-        
-        if let sideMenu = selectedVC as? PTSideMenuControl {
-            targetVC = sideMenu.contentViewController ?? sideMenu
-        }
-        if let nav = targetVC as? UINavigationController, let topVC = nav.topViewController {
-            targetVC = topVC
-        }
-        
+        guard let targetVC = currentContentViewController() else { return }
         // 只有当全局没有隐藏 TabBar 时，才去主动切换卡槽内容
         if !isTabBarGloballyHidden {
             switchAccessoryView(to: targetVC.pt_tabBarAccessoryView, animated: true)
