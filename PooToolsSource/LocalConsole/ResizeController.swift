@@ -26,13 +26,10 @@ class ResizeController {
         let view = UIView()
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.randomColor.cgColor
-        view.layer.cornerRadius = (LocalConsole.shared.terminal?.layer.cornerRadius ?? 22) + 6
+        // 初始化阶段不能访问 LocalConsole.shared，避免单例初始化递归。
+        view.layer.cornerRadius = 28
         view.layer.cornerCurve = .continuous
         view.alpha = 0
-
-        if let terminal = LocalConsole.shared.terminal {
-            attachOutline(view, to: terminal)
-        }
         return view
     }()
     
@@ -115,12 +112,12 @@ class ResizeController {
 
             if isActive {
                 
-                // Initialize views outside of animation.
+                // 先建立视图层级，再创建依赖轮廓视图的约束。
                 _ = platterView
                 _ = consoleOutlineView
+                attachOutline(consoleOutlineView, to: termial)
                 _ = bottomGrabber
                 _ = rightGrabber
-                attachOutline(consoleOutlineView, to: termial)
                 
                 platterView.fontText.text = String(format: "%f", termial.fontSize)
                 // 🔴 修复闭包循环引用

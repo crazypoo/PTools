@@ -380,10 +380,10 @@ public class LocalConsole: NSObject {
                 createSystemLogView()
                 guard let terminal else { return }
                 terminal.transform = .init(scaleX: 0.9, y: 0.9)
-                UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.6) { [self] in
+                UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.6) {
                     terminal.transform = .init(scaleX: 1, y: 1)
                 }.startAnimation()
-                UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
+                UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
                     terminal.alpha = 1
                 }.startAnimation()
                 
@@ -562,7 +562,9 @@ public class LocalConsole: NSObject {
         stopMonitoringIfNeeded()
         removeKeyboardObservers()
         dynamicReportTimer = nil
-        ResizeController.shared.detachFromConsole()
+        if terminal != nil {
+            ResizeController.shared.detachFromConsole()
+        }
         terminal?.removeFromSuperview()
         terminal = nil
         closeAllFunction()
@@ -766,7 +768,7 @@ public class LocalConsole: NSObject {
                 
                 let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
                 let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
-                positionAnimator.addAnimations { [self] in
+                positionAnimator.addAnimations {
                     terminal.center = nearestTargetPosition
                 }
                 positionAnimator.startAnimation()
@@ -984,7 +986,9 @@ extension LocalConsole {
         StderrCapture.stopCapturing()
         PTDebugPerformanceToolKit.shared.floatingShow = false
         PTDebugPerformanceToolKit.shared.performanceClose()
-        ResizeController.shared.isActive = false
+        if terminal != nil {
+            ResizeController.shared.isActive = false
+        }
         PTCoreUserDefultsWrapper.shared.AppDebbugMark = false
         maskView?.removeFromSuperview()
         maskView = nil
