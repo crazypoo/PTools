@@ -25,7 +25,10 @@ public class PTAlertWindow: UIWindow {
 
         guard allowsEventPenetration else { return view }
 
-        autoHideWhenPenetrated ? (rootViewController as? (PTAlertController & PTAlertProtocol))?.dismissAnimation(completion: nil) : ()
+        if autoHideWhenPenetrated,
+           let controller = rootViewController as? PTAlertController {
+            controller.dismissSelf()
+        }
 
         return nil
     }

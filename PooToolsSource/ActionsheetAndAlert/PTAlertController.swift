@@ -8,11 +8,15 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 open class PTAlertController: PTBaseViewController {
 
     // MARK: - Config
     open var config = PTAlertConfig()
+    weak var preferredWindowScene: UIWindowScene?
+    private var sourceStatusBarHidden = false
+    private var sourceStatusBarStyle: UIStatusBarStyle = .default
 
     // MARK: - Identity（更安全）
     open lazy var key: String = UUID().uuidString
@@ -41,8 +45,6 @@ extension PTAlertController {
 
         view.backgroundColor = .clear
         view.isOpaque = false
-        view.layer.drawsAsynchronously = true
-
         syncSystemUI()
     }
 
@@ -56,16 +58,16 @@ extension PTAlertController {
 private extension PTAlertController {
 
     func syncSystemUI() {
-        guard let rootVC = UIApplication.shared
-            .connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .flatMap({ $0.windows })
-            .first(where: { $0.isKeyWindow })?
-            .rootViewController else { return }
+        guard let scene = viewIfLoaded?.window?.windowScene,
+              let rootVC = scene.windows
+                .first(where: {
+                    $0.windowLevel == .normal &&
+                    $0.rootViewController != nil
+                })?.rootViewController else { return }
 
-        StatusBarManager.shared.isHidden = rootVC.prefersStatusBarHidden
-        StatusBarManager.shared.style = rootVC.preferredStatusBarStyle
         config.supportedInterfaceOrientations = rootVC.supportedInterfaceOrientations
+        sourceStatusBarHidden = rootVC.prefersStatusBarHidden
+        sourceStatusBarStyle = rootVC.preferredStatusBarStyle
     }
 }
 
@@ -78,6 +80,14 @@ extension PTAlertController {
 
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         config.supportedInterfaceOrientations
+    }
+
+    override open var prefersStatusBarHidden: Bool {
+        sourceStatusBarHidden
+    }
+
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        sourceStatusBarStyle
     }
 }
 

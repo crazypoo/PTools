@@ -16,83 +16,115 @@ public extension String {
     @MainActor static let GoogleMap = "PT Map google".localized()
 }
 
+private enum PTMapOption: Hashable {
+    case baidu
+    case amap
+    case google
+    case qq
+}
+
 /*
- 须要在info.plist中的Queried URL Scheme中添加以下对应的scheme
+ 需要在 Info.plist 的 Queried URL Schemes 中添加对应的地图 scheme。
  */
 @objcMembers
 open class PTMapActionSheet: NSObject {
-    //MARK: 地图跳转ActionSheet
-    ///地图跳转ActionSheet
-    /// - Parameters:
-    ///   - currentAppScheme: 当前App的Scheme
-    ///   - currentAppName: 当前App的名字
-    ///   - qqKey: 腾讯地图的Key
-    ///   - formLocation:
-    ///   - location: 跳转坐标
-    ///   - dismissTask: 关闭回调
-    @MainActor open class func mapNavAlert(currentAppScheme:String,
-                                           currentAppName:String? = nil,
-                                           qqKey:String = "",
-                                           formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
-                                           location:CLLocationCoordinate2D,
-                                           sheetTitle:String? = nil,
-                                           cancelButtonName:String? = nil,
-                                           baiduName:String? = nil,
-                                           aMapName:String? = nil,
-                                           gMapName:String? = nil,
-                                           qMapName:String? = nil,
-                                           dismissTask:PTActionTask? = nil) {
+
+    @MainActor
+    open class func mapNavAlert(currentAppScheme: String,
+                                currentAppName: String? = nil,
+                                qqKey: String = "",
+                                formLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
+                                location: CLLocationCoordinate2D,
+                                sheetTitle: String? = nil,
+                                cancelButtonName: String? = nil,
+                                baiduName: String? = nil,
+                                aMapName: String? = nil,
+                                gMapName: String? = nil,
+                                qMapName: String? = nil,
+                                dismissTask: PTActionTask? = nil) {
+        guard CLLocationCoordinate2DIsValid(location) else {
+            dismissTask?()
+            return
+        }
+
         let title = sheetTitle ?? "PT Select nav".localized()
         let cancel = cancelButtonName ?? "PT Button cancel".localized()
+        let appName = currentAppName ?? kAppDisplayName ?? ""
+        let origin = formLocation ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
 
-        let baiduN = baiduName ?? String.BaiduMap
-        let aMapN = aMapName ?? String.AMap
-        let gMapN = gMapName ?? String.GoogleMap
-        let qMapN = qMapName ?? String.QQMap
+        let names: [PTMapOption: String] = [
+            .baidu: baiduName ?? String.BaiduMap,
+            .amap: aMapName ?? String.AMap,
+            .google: gMapName ?? String.GoogleMap,
+            .qq: qMapName ?? String.QQMap
+        ]
+        var options: [(option: PTMapOption, title: String)] = []
 
-        let appScheme = currentAppScheme
-        let locations = location
-        var navAppName = [String]()
-        let appName = currentAppName ?? kAppDisplayName!
-        if let baiduURL = URL(string: "baidumap://"),UIApplication.shared.canOpenURL(baiduURL) {
-            navAppName.append(baiduN)
+        if canOpen("baidumap://") {
+            options.append((.baidu, names[.baidu] ?? String.BaiduMap))
         }
-        
-        if let aMapURL = URL(string: "iosamap://"),UIApplication.shared.canOpenURL(aMapURL) {
-            navAppName.append(aMapN)
+        if canOpen("iosamap://") {
+            options.append((.amap, names[.amap] ?? String.AMap))
         }
-        
-        if let gMapURL = URL(string: "comgooglemaps://"),UIApplication.shared.canOpenURL(gMapURL) {
-            navAppName.append(gMapN)
+        if canOpen("comgooglemaps://") {
+            options.append((.google, names[.google] ?? String.GoogleMap))
         }
-        
-        if let qMapURL = URL(string: "qqmap://"),UIApplication.shared.canOpenURL(qMapURL) && !qqKey.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
-            navAppName.append(qMapN)
+        if canOpen("qqmap://"),
+           !qqKey.stringIsEmpty(),
+           origin.latitude != 0 || origin.longitude != 0 {
+            options.append((.qq, names[.qq] ?? String.QQMap))
         }
-        
-        UIAlertController.baseActionSheet(title: title,cancelButtonName:cancel, destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
+
+        let optionTitles = options.map(\.title)
+        UIAlertController.baseActionSheet(
+            title: title,
+            cancelButtonName: cancel,
+            destructiveButtons: ["Apple Map"],
+            titles: optionTitles
+        ) { _, _, _ in
             let currentLocation = MKMapItem.forCurrentLocation()
-            let toLocation = MKMapItem(placemark: MKPlacemark(coordinate: locations))
-            MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
-            
+            let destination = MKMapItem(placemark: MKPlacemark(coordinate: location))
+            MKMapItem.openMaps(
+                with: [currentLocation, destination],
+                launchOptions: [
+                    MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                    MKLaunchOptionsShowsTrafficKey: true
+                ]
+            )
+            dismissTask?()
         } cancelBlock: { _ in
             dismissTask?()
         } otherBlock: { _, index, _ in
-            var urlString :String = ""
-            if navAppName[index] == baiduName {
-                urlString = String(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == aMapName {
-                urlString = String(format: "iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == gMapName {
-                urlString = String(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == qMapName {
-                urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey).urlToUnicodeURLString() ?? ""
+            guard options.indices.contains(index) else {
+                dismissTask?()
+                return
             }
-            if let url = URL(string: urlString) {
+
+            let option = options[index].option
+            let urlString: String
+            switch option {
+            case .baidu:
+                urlString = String(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", location.latitude, location.longitude)
+            case .amap:
+                urlString = String(format: "iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2", appName, currentAppScheme, location.latitude, location.longitude)
+            case .google:
+                urlString = String(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName, currentAppScheme, location.latitude, location.longitude)
+            case .qq:
+                urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", origin.longitude, origin.latitude, location.longitude, location.latitude, qqKey)
+            }
+
+            if let url = URL(string: urlString.urlToUnicodeURLString() ?? urlString) {
                 PTAppStoreFunction.jumpLink(url: url)
             }
+            dismissTask?()
         } tapBackgroundBlock: { _ in
             dismissTask?()
         }
+    }
+
+    @MainActor
+    private class func canOpen(_ scheme: String) -> Bool {
+        guard let url = URL(string: scheme) else { return false }
+        return UIApplication.shared.canOpenURL(url)
     }
 }

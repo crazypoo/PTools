@@ -15,6 +15,10 @@ import pop
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void
 public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String) -> Void
 
+fileprivate struct PTAlertValueStructBox : @unchecked Sendable {
+    let value:String
+}
+
 public class PTActionCell:UIView {
         
     private lazy var blur:SSBlurView = {
@@ -32,8 +36,8 @@ public class PTActionCell:UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-            self.blurChange(style: previousTraitCollection.userInterfaceStyle)
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
+            self.blurChange(style: self.traitCollection.userInterfaceStyle)
         }
         addSubviews([blur,cellButton])
         blur.snp.makeConstraints { make in
@@ -41,7 +45,8 @@ public class PTActionCell:UIView {
         }
         cellButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }        
+        }
+        blurChange(style: traitCollection.userInterfaceStyle)
     }
     
     required init?(coder: NSCoder) {
@@ -51,20 +56,8 @@ public class PTActionCell:UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        if #available(iOS 18.0, *) {
-            blurChange(style: traitCollection.userInterfaceStyle)
-        }
     }
-    
-    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            // 适配代码
-            blurChange(style: UITraitCollection.current.userInterfaceStyle)
-        }
-    }
-    
+
     func blurChange(style:UIUserInterfaceStyle) {
         blur.style = style == .dark ? .extraLight : .dark
     }
@@ -75,7 +68,7 @@ public class PTActionCell:UIView {
 }
 
 @objcMembers
-public class PTActionSheetItem:NSObject,@unchecked Sendable {
+public class PTActionSheetItem: NSObject,@unchecked Sendable {
     public var title:String = ""
     public var titleColor:UIColor = .systemBlue
     public var titleFont:UIFont = .systemFont(ofSize: 20)
@@ -114,7 +107,7 @@ public class PTActionSheetItem:NSObject,@unchecked Sendable {
 }
 
 @objcMembers
-public class PTActionSheetTitleItem:PTActionSheetItem, @unchecked Sendable {
+public class PTActionSheetTitleItem: PTActionSheetItem, @unchecked Sendable {
     public var subTitle:String = ""
 
     public init(title: String = "",
@@ -137,7 +130,6 @@ public class PTActionSheetViewConfig:NSObject {
     fileprivate var separatorHeight:CGFloat = 0
     fileprivate var viewSpace:CGFloat = 0
     fileprivate var cornerRadii:CGFloat = 0
-    fileprivate var dismissWithTapBG:Bool = true
     
     public init(@PTClampedPropertyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
                 @PTClampedPropertyWrapper(range:44...74) rowHeight: CGFloat = 54,
@@ -145,12 +137,13 @@ public class PTActionSheetViewConfig:NSObject {
                 @PTClampedPropertyWrapper(range:10...50) viewSpace: CGFloat = 10,
                 @PTClampedPropertyWrapper(range:0...15) cornerRadii: CGFloat = 15,
                 dismissWithTapBG: Bool = true) {
+        // 兼容旧参数，实际行为由 controller 的 canTapBackground 统一控制。
+        _ = dismissWithTapBG
         self.lineHeight = lineHeight
         self.rowHeight = rowHeight
         self.separatorHeight = separatorHeight
         self.viewSpace = viewSpace
         self.cornerRadii = cornerRadii
-        self.dismissWithTapBG = dismissWithTapBG
     }
 }
 
@@ -170,11 +163,11 @@ public class PTActionSheetController: PTAlertController {
 
     private lazy var cancelBtn : PTActionCell = {
         let cell = createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                self?.dismissAnimation {
-                    PTGCDManager.shared.runOnMain { 
-                        guard let SELF = self else { return }
-                        self?.actionSheetCancelSelectBlock?(SELF)
+            PTGCDManager.shared.runOnMain {
+                self?.dismissSelf { [weak self] in
+                    guard let self else { return }
+                    PTGCDManager.shared.runOnMain {
+                        self.actionSheetCancelSelectBlock?(self)
                     }
                 }
             }
@@ -196,7 +189,8 @@ public class PTActionSheetController: PTAlertController {
     }()
     
     fileprivate lazy var titleLabel : PTActionCell? = {
-        guard let item = titleItem else { return nil }
+        guard let item = titleItem,
+              !item.title.stringIsEmpty() || !item.subTitle.stringIsEmpty() else { return nil }
         let view = createActionCell(for: item, withCorner: true, isTitle: true, action: nil)
         view.cellButton.isUserInteractionEnabled = false
         view.superGradient(topLeft: sheetConfig.cornerRadii,topRight: sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
@@ -207,12 +201,17 @@ public class PTActionSheetController: PTAlertController {
         let view = UIView()
         if canTapBackground {
             let tap = UITapGestureRecognizer { _ in
-                self.dismissAnimation {
-                    PTGCDManager.shared.runOnMain {
-                        self.tapBackgroundBlock?(self)
+                PTGCDManager.shared.runOnMain {
+                    self.dismissSelf { [weak self = self] in
+                        guard let self else { return }
+                        PTGCDManager.shared.runOnMain {
+                            self.tapBackgroundBlock?(self)
+                        }
                     }
                 }
             }
+            tap.cancelsTouchesInView = false
+            tap.delegate = self
             view.addGestureRecognizer(tap)
         }
         return view
@@ -268,11 +267,12 @@ public class PTActionSheetController: PTAlertController {
         
         for (index, destructiveItem) in destructiveItems.enumerated() {
             let destructiveView = createActionCell(for: destructiveItem,withCorner: true) { [weak self] in
-                PTGCDManager.shared.runOnMain { [weak self] in
-                    self?.dismissAnimation {
+                PTGCDManager.shared.runOnMain {
+                    self?.dismissSelf { [weak self] in
+                        guard let self else { return }
+                        let box = PTAlertValueStructBox(value: destructiveItem.title)
                         PTGCDManager.shared.runOnMain {
-                            guard let SELF = self else { return }
-                            SELF.actionSheetDestructiveSelectBlock?(SELF, index, destructiveItem.title)
+                            self.actionSheetDestructiveSelectBlock?(self, index, box.value)
                         }
                     }
                 }
@@ -294,6 +294,12 @@ public class PTActionSheetController: PTAlertController {
         let cell = PTActionCell()
         let btn = cell.cellButton
         btn.setTitle(item.title, state: .normal)
+        if let titleItem = item as? PTActionSheetTitleItem,
+           !titleItem.subTitle.stringIsEmpty() {
+            btn.setTitle("\(titleItem.title)\n\(titleItem.subTitle)", state: .normal)
+            btn.numbersOfLine = 2
+            btn.labelLineSpace = 2
+        }
         btn.setTitleFont(item.titleFont, state: .normal)
         btn.setTitleColor(item.titleColor, state: .normal)
         btn.setTitleFont(item.titleFont, state: .highlighted)
@@ -362,11 +368,14 @@ public class PTActionSheetController: PTAlertController {
         let contentItemsBottom = destructiveCount > 0 ? -destructivePadding : -destructiveSpacing
 
         // 最大可用內容高度
-        let contentItemsMaxHeight: CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + tabbarPadding + (destructiveHeight < 1 ? destructiveSpacing : destructivePadding) + statusBarHeight + 20 + sheetConfig.rowHeight)
+        let availableHeight = max(0, view.bounds.height)
+        let contentItemsMaxHeight: CGFloat = max(0, availableHeight - (sheetConfig.rowHeight + tabbarPadding + (destructiveHeight < 1 ? destructiveSpacing : destructivePadding) + statusBarHeight + 20 + sheetConfig.rowHeight))
 
         // 內容項高度計算
         let contentItemsCount = CGFloat(contentItems.count)
-        let currentContentHeight = contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
+        let currentContentHeight = contentItems.isEmpty
+            ? 0
+            : contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
 
         // 計算是否可以滾動
         let realContentSize = min(currentContentHeight, contentItemsMaxHeight)
@@ -376,7 +385,8 @@ public class PTActionSheetController: PTAlertController {
         totalHeight = realContentSize + destructiveHeight + titleHeight + (destructiveHeight < 1 ? destructiveSpacing : destructivePadding) + tabbarPadding
 
         // 設置 ScrollerView
-        contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2, height: currentContentHeight)
+        let contentWidth = max(0, view.bounds.width - sheetConfig.viewSpace * 2)
+        contentScrollerView.contentSize = CGSize(width: contentWidth, height: currentContentHeight)
         contentScrollerView.isScrollEnabled = contentItemCanScroll
 
         // 添加子視圖和佈局約束
@@ -402,7 +412,8 @@ public class PTActionSheetController: PTAlertController {
     }
 
     func dismissAndCallback(index:Int,title:String) {
-        self.dismissAnimation {
+        self.dismissSelf { [weak self] in
+            guard let self else { return }
             PTGCDManager.shared.runOnMain {
                 self.actionSheetSelectBlock?(self, index, title)
             }
@@ -412,6 +423,7 @@ public class PTActionSheetController: PTAlertController {
     func contentSubsSet() {
         var previousView: UIView?
         let lastIndex = contentItems.count - 1
+        let contentWidth = max(0, view.bounds.width - sheetConfig.viewSpace * 2)
 
         for index in contentItems.indices {
             let item = contentItems[index]
@@ -422,7 +434,7 @@ public class PTActionSheetController: PTAlertController {
                 line.backgroundColor = .lightGray
                 contentScrollerView.addSubview(line)
                 line.snp.makeConstraints { make in
-                    make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
+                    make.width.equalTo(contentWidth)
                     make.centerX.equalToSuperview()
                     make.height.equalTo(sheetConfig.lineHeight)
                     if let prev = previousView {
@@ -436,15 +448,16 @@ public class PTActionSheetController: PTAlertController {
             
             // --- 按钮部分 ---
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
-                PTGCDManager.shared.runOnMain { [weak self] in
-                    self?.dismissAndCallback(index: index, title: item.title)
+                let box = PTAlertValueStructBox(value: item.title)
+                PTGCDManager.shared.runOnMain {
+                    self?.dismissAndCallback(index: index, title: box.value)
                 }
             }
             contentScrollerView.addSubview(button)
             
             // --- 约束部分（修复坑3：为最后一个元素封底） ---
             button.snp.makeConstraints { make in
-                make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
+                make.width.equalTo(contentWidth)
                 make.centerX.equalToSuperview()
                 make.height.equalTo(sheetConfig.rowHeight)
                 make.top.equalTo(previousView?.snp.bottom ?? contentScrollerView.snp.top)
@@ -485,6 +498,13 @@ public class PTActionSheetController: PTAlertController {
 }
 
 extension PTActionSheetController {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                                  shouldReceive touch: UITouch) -> Bool {
+        touch.view === alertContent
+    }
+}
+
+extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
         // 1. 强制刷新布局，确保所有 bounds 已经就位
         view.layoutIfNeeded()
@@ -493,7 +513,7 @@ extension PTActionSheetController {
         alertContent.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
         
         // 3. 使用 Spring 动画 (阻尼回弹效果)
-        UIView.animate(withDuration: 0.45,
+        UIView.animate(withDuration: config.showAlertDuration,
                        delay: 0,
                        usingSpringWithDamping: 0.85, // 阻尼系数：越接近 1 越不弹，0.85 是一个很舒适的微弹效果
                        initialSpringVelocity: 0.8,   // 初始速度
@@ -508,14 +528,13 @@ extension PTActionSheetController {
     
     public override func dismissAnimation(completion: PTActionTask?) {
         // 收回动画不需要弹簧效果，要求干脆利落，时间更短
-        UIView.animate(withDuration: 0.25,
+        UIView.animate(withDuration: config.hideAlertDuration,
                        delay: 0,
                        options: .curveEaseIn, // 渐入加速退出
                        animations: {
             self.view.backgroundColor = .clear
             self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
         }, completion: { _ in
-            PTAlertManager.dismissAll()
             completion?()
         })
     }

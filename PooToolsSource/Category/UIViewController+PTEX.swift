@@ -169,25 +169,31 @@ public extension UIViewController {
     
     //MARK: Popover
     ///Popover
+    private func pt_presentPopover(_ popoverVC: UIViewController,
+                                   size: CGSize,
+                                   sender: UIView,
+                                   arrowDirections: UIPopoverArrowDirection,
+                                   backgroundColor: UIColor? = nil) {
+        guard sender.window != nil else { return }
+        popoverVC.preferredContentSize = size
+        popoverVC.modalPresentationStyle = .popover
+        let presentationController = popoverVC.popoverPresentationController
+        presentationController?.sourceView = sender
+        presentationController?.sourceRect = sender.bounds
+        presentationController?.permittedArrowDirections = arrowDirections
+        presentationController?.delegate = self
+        presentationController?.backgroundColor = backgroundColor
+        (navigationController ?? self).present(popoverVC, animated: true)
+    }
+
     @objc func popover(popoverVC:UIViewController,
                        popoverSize:CGSize,
                        sender:UIView,
                        arrowDirections:UIPopoverArrowDirection) {
-        PTGCDManager.shared.delayOnMain(time: 0.1) {
-            popoverVC.preferredContentSize = popoverSize
-            popoverVC.modalPresentationStyle = .popover
-            
-            let presentationCtr = popoverVC.popoverPresentationController
-            presentationCtr?.sourceView = sender
-            presentationCtr?.sourceRect = sender.bounds
-            presentationCtr?.permittedArrowDirections = arrowDirections
-            presentationCtr?.delegate = self
-            if (self.navigationController?.viewControllers.count ?? 0) > 0 {
-                self.navigationController?.present(popoverVC, animated: true)
-            } else {
-                self.present(popoverVC, animated: true)
-            }
-        }
+        pt_presentPopover(popoverVC,
+                          size: popoverSize,
+                          sender: sender,
+                          arrowDirections: arrowDirections)
     }
     
     @objc func listPopover(popoverConfig:PTPopoverConfig? = nil,
@@ -200,20 +206,11 @@ public extension UIViewController {
         let popoverVC = PTPopoverMenuContent(config:config,viewModel: items)
         popoverVC.didSelectedHandler = selectedHandler
         let popoverSize = CGSize(width: popoverWidth, height: CGFloat(items.count) * config.rowHeight)
-        popoverVC.preferredContentSize = popoverSize
-        popoverVC.modalPresentationStyle = .popover
-        // 在需要显示的地方使用 popoverPresentationController 来 present
-        let presentationCtr = popoverVC.popoverPresentationController
-        presentationCtr?.sourceView = sender
-        presentationCtr?.sourceRect = sender.bounds
-        presentationCtr?.permittedArrowDirections = arrowDirections
-        presentationCtr?.delegate = self
-        presentationCtr?.backgroundColor = config.backgroundColor
-        if (navigationController?.viewControllers.count ?? 0) > 0 {
-            navigationController?.present(popoverVC, animated: true)
-        } else {
-            present(popoverVC, animated: true)
-        }
+        pt_presentPopover(popoverVC,
+                          size: popoverSize,
+                          sender: sender,
+                          arrowDirections: arrowDirections,
+                          backgroundColor: config.backgroundColor)
     }
     
     /* .restricted     ---> 受限制，系统原因，无法访问
@@ -546,7 +543,7 @@ extension UIViewController: UIPopoverPresentationControllerDelegate {
 
 extension UIViewController {
     public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-        if let vc = PTUtils.getCurrentVC() as? PTPopoverMenuContent {
+        if let vc = popoverPresentationController.presentedViewController as? PTPopoverMenuContent {
             vc.arrowDirections = popoverPresentationController.arrowDirection
         }
     }

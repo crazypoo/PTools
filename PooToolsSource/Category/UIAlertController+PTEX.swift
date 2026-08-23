@@ -51,7 +51,9 @@ public extension UIAlertController {
                                      tapBackgroundBlock: PTActionSheetCallback? = nil) {
         let cancelString = cancelButtonName ?? "PT Button cancel".localized()
 
-        let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle)
+        let titleItem: PTActionSheetTitleItem? = title.stringIsEmpty() && subTitle.stringIsEmpty()
+            ? nil
+            : PTActionSheetTitleItem(title: title, subTitle: subTitle)
         let cancelItem = PTActionSheetItem(title: cancelString)
 
         let destructiveItems = destructiveButtons.map { value in
@@ -130,62 +132,59 @@ public extension UIAlertController {
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
         let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         let msgColorN = msgColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-        let current = showIn ?? PTUtils.getCurrentVC()
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        
-        if !cancelBtn.stringIsEmpty() {
-            let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
+        let hasCancel = !cancelBtn.stringIsEmpty()
+        let actionTitles = (hasCancel ? [cancelBtn] : []) + okBtns
+        let actionColors = (hasCancel ? [cancelBtnColor] : []) + okBtns.indices.map { index in
+            index < doneBtnColors.count ? doneBtnColors[index] : .systemBlue
+        }
+        let titles = actionTitles.isEmpty ? ["PT Button cancel".localized()] : actionTitles
+        let colors = actionColors.isEmpty ? [.systemBlue] : actionColors
+        let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingRect(
+            with: CGSize(width: max(1, CGFloat.kSCREEN_WIDTH - 100), height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: msgFont],
+            context: nil
+        ).height + 20)
+
+        let alert = PTCustomerAlertController(
+            title: title,
+            titleFont: titleFont,
+            titleColor: titleColorN,
+            customerViewHeight: messageHeight,
+            customerViewCallback: { customerView in
+                guard messageHeight > 0 else { return }
+                let messageLabel = UILabel()
+                messageLabel.text = msg
+                messageLabel.textColor = msgColorN
+                messageLabel.font = msgFont
+                messageLabel.numberOfLines = 0
+                messageLabel.textAlignment = .center
+                customerView.addSubview(messageLabel)
+                messageLabel.snp.makeConstraints { make in
+                    make.edges.equalToSuperview().inset(10)
+                }
+            },
+            buttons: titles,
+            buttonsColors: colors,
+            buttonsFont: UIFont.systemFont(ofSize: 15),
+            cornerSize: alertCornerRadius,
+            contentSpace: 25,
+            canTapBackground: false
+        )
+        alert.preferredWindowScene = showIn?.viewIfLoaded?.window?.windowScene
+        alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
+        alert.bottomButtonTapCallback = { title, index in
+            if hasCancel && index == 0 {
+                cancel?()
+            } else if !actionTitles.isEmpty {
+                let resultIndex = hasCancel ? index - 1 : index
+                guard okBtns.indices.contains(resultIndex) else { return }
+                moreBtn?(resultIndex, okBtns[resultIndex])
+            } else {
                 cancel?()
             }
-            cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
-            alert.addAction(cancelAction)
         }
-        
-        if okBtns.count > 0 {
-            var dontArrColor = [UIColor]()
-            if doneBtnColors.count == 0 || okBtns.count != doneBtnColors.count || okBtns.count > doneBtnColors.count {
-
-                let colorSource = doneBtnColors
-                let defaultColor: UIColor = .systemBlue
-
-                dontArrColor = (0..<okBtns.count).map { index in
-                    return index < colorSource.count ? colorSource[index] : defaultColor
-                }
-            } else {
-                dontArrColor = doneBtnColors
-            }
-            okBtns.enumerated().forEach({ (index,value) in
-                let callAction = UIAlertAction(title: value, style: .default) { (action) in
-                    moreBtn?(index,value)
-                }
-                callAction.setValue(dontArrColor[index], forKey: "titleTextColor")
-                alert.addAction(callAction)
-            })
-        }
-        
-        // KVC修改系统弹框文字颜色字号
-        if !title.stringIsEmpty() {
-            let alertStr = NSMutableAttributedString(string: title)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColorN, NSAttributedString.Key.font: titleFont]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
-            alert.setValue(alertStr, forKey: "attributedTitle")
-        }
-        
-        if !msg.stringIsEmpty() {
-            let alertMsgStr = NSMutableAttributedString(string: msg)
-            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColorN, NSAttributedString.Key.font: msgFont]
-            alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg.count))
-            alert.setValue(alertMsgStr, forKey: "attributedMessage")
-        }
-
-        let subview = alert.view.subviews.first! as UIView
-        let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white {
-            alertContentView.backgroundColor = alertBGColor
-        }
-        alertContentView.layer.cornerRadius = alertCornerRadius
-        
-        current?.present(alert, animated: true, completion: nil)
+        PTAlertManager.show(alert)
     }
     
     //MARK: ALERT輸入框基類
@@ -226,57 +225,63 @@ public extension UIAlertController {
                                       doneBtn:((_ result:[String:String]) -> Void)?) {
         let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         let cancelBtnColorN = cancelBtnColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-
-        let current = showIn ?? PTUtils.getCurrentVC()
-
-        let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-            cancel?()
+        let fields = placeHolders.enumerated().map { index, placeholder in
+            let textField = UITextField()
+            textField.placeholder = placeholder
+            textField.delegate = textFieldDelegate
+            textField.tag = index
+            textField.text = textFieldTexts.indices.contains(index) ? textFieldTexts[index] : ""
+            textField.tintColor = textTintColor
+            textField.keyboardType = keyboardType?.indices.contains(index) == true
+                ? keyboardType?[index] ?? .default
+                : .default
+            textField.clearButtonMode = .whileEditing
+            textField.borderStyle = .roundedRect
+            return textField
         }
-        cancelAction.setValue(cancelBtnColorN, forKey: "titleTextColor")
-        alert.addAction(cancelAction)
-
-        if placeHolders.count == textFieldTexts.count {
-            placeHolders.enumerated().forEach({ (index,value) in
-                alert.addTextField { (textField : UITextField) -> Void in
-                    textField.placeholder = value
-                    textField.delegate = textFieldDelegate
-                    textField.tag = index
-                    textField.text = textFieldTexts[index]
-                    textField.tintColor = textTintColor
-                    if keyboardType?.count == placeHolders.count {
-                        textField.keyboardType = keyboardType![index]
+        let fieldHeight = fields.isEmpty ? 0 : CGFloat(fields.count) * 50 + 10
+        let alert = PTCustomerAlertController(
+            title: title,
+            titleFont: titleFont,
+            titleColor: titleColorN,
+            customerViewHeight: fieldHeight,
+            customerViewCallback: { customerView in
+                guard !fields.isEmpty else { return }
+                let stackView = UIStackView(arrangedSubviews: fields)
+                stackView.axis = .vertical
+                stackView.spacing = 6
+                customerView.addSubview(stackView)
+                stackView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview().inset(10)
+                }
+                fields.forEach { field in
+                    field.snp.makeConstraints { make in
+                        make.height.equalTo(44)
                     }
                 }
-            })
-        }
-        
-        let doneAction = UIAlertAction(title: okBtn, style: .default) { (action) in
-            var resultDic = [String:String]()
-            alert.textFields?.forEach { value in
-                resultDic[value.placeholder!] = value.text
+            },
+            buttons: [cancelBtn, okBtn],
+            buttonsColors: [cancelBtnColorN, doneBtnColor],
+            buttonsFont: UIFont.systemFont(ofSize: 15),
+            cornerSize: alertCornerRadius,
+            contentSpace: 25,
+            canTapBackground: false
+        )
+        alert.preferredWindowScene = showIn?.viewIfLoaded?.window?.windowScene
+        alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
+        alert.bottomButtonTapCallback = { _, index in
+            if index == 0 {
+                cancel?()
+                return
             }
-            doneBtn?(resultDic)
+            var result = [String: String]()
+            fields.forEach { field in
+                let key = field.placeholder ?? "field_\(field.tag)"
+                result[key] = field.text ?? ""
+            }
+            doneBtn?(result)
         }
-        doneAction.setValue(doneBtnColor, forKey: "titleTextColor")
-        alert.addAction(doneAction)
-
-        // KVC修改系统弹框文字颜色字号
-        if !title.stringIsEmpty() {
-            let alertStr = NSMutableAttributedString(string: title)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColorN, NSAttributedString.Key.font: titleFont]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
-            alert.setValue(alertStr, forKey: "attributedTitle")
-        }
-
-        let subview = alert.view.subviews.first! as UIView
-        let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white {
-            alertContentView.backgroundColor = alertBGColor
-        }
-        alertContentView.layer.cornerRadius = alertCornerRadius
-        current?.present(alert, animated: true, completion: nil)
+        PTAlertManager.show(alert)
     }
     
     //MARK: 初始化創建Alert

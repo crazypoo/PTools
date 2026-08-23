@@ -20,6 +20,44 @@ public enum PTAlertTipsStyle {
     #endif
 }
 
+@MainActor
+final class PTAlertTipsAutoDismiss {
+    private var task: Task<Void, Never>?
+    private(set) var isDismissing = false
+
+    func beginPresentation() {
+        task?.cancel()
+        task = nil
+        isDismissing = false
+    }
+
+    func schedule(after duration: TimeInterval,
+                  action: @escaping @MainActor @Sendable () -> Void) {
+        task?.cancel()
+        guard duration.isFinite,
+              duration >= 0,
+              duration <= TimeInterval(UInt64.max) / 1_000_000_000 else { return }
+        let nanoseconds = UInt64(duration * 1_000_000_000)
+        task = Task { @MainActor in
+            do {
+                try await Task.sleep(nanoseconds: nanoseconds)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
+            action()
+        }
+    }
+
+    func beginDismiss() -> Bool {
+        guard !isDismissing else { return false }
+        isDismissing = true
+        task?.cancel()
+        task = nil
+        return true
+    }
+}
+
 public class PTAlertTipsLow: UIView {
     open var dismissByTap: Bool = true
     open var dismissInTime: Bool = true
@@ -40,6 +78,8 @@ public class PTAlertTipsLow: UIView {
     fileprivate weak var viewForPresent: UIView?
     fileprivate var presentDismissDuration: TimeInterval = 0.2
     fileprivate var presentDismissScale: CGFloat = 0.8
+    private let autoDismiss = PTAlertTipsAutoDismiss()
+    private var hasDismissGesture = false
     
     private lazy var backgroundView: UIVisualEffectView = {
         let result: UIVisualEffectView
@@ -137,20 +177,25 @@ public class PTAlertTipsLow: UIView {
     }
     
     open func present(on view: UIView, completion: PTActionTask? = nil) {
+        autoDismiss.beginPresentation()
         viewForPresent = view
-        viewForPresent?.addSubview(self)
+        if superview !== view {
+            removeFromSuperview()
+            view.addSubview(self)
+        }
         guard let viewForPresent = viewForPresent else { return }
-        
+
         alpha = 0
         sizeToFit()
-        center = .init(x: viewForPresent.frame.midX, y: viewForPresent.frame.midY)
-        transform = transform.scaledBy(x: presentDismissScale, y: presentDismissScale)
-        
-        if dismissByTap {
-            let tapGesterRecognizer = UITapGestureRecognizer { sender in
-                self.dismiss()
+        center = .init(x: viewForPresent.bounds.midX, y: viewForPresent.bounds.midY)
+        transform = CGAffineTransform(scaleX: presentDismissScale, y: presentDismissScale)
+
+        if dismissByTap && !hasDismissGesture {
+            let tapGesterRecognizer = UITapGestureRecognizer { [weak self] _ in
+                self?.dismiss()
             }
             addGestureRecognizer(tapGesterRecognizer)
+            hasDismissGesture = true
         }
         
         // Present
@@ -168,19 +213,23 @@ public class PTAlertTipsLow: UIView {
             }
             
             if self.dismissInTime {
-                PTGCDManager.shared.delayOnMain(time: self.duration) {
-                    if self.alpha != 0 {
-                        self.dismiss(completion: completion)
-                    }
+                self.autoDismiss.schedule(after: self.duration) { [weak self] in
+                    guard let self, self.alpha != 0 else { return }
+                    self.dismiss(completion: completion)
                 }
             }
         })
     }
-    
+
     @objc open func dismiss(completion: PTActionTask? = nil) {
+        guard autoDismiss.beginDismiss() else {
+            completion?()
+            return
+        }
         UIView.animate(withDuration: presentDismissDuration, animations: {
             self.alpha = 0
-            self.transform = self.transform.scaledBy(x: self.presentDismissScale, y: self.presentDismissScale)
+            self.transform = CGAffineTransform(scaleX: self.presentDismissScale,
+                                               y: self.presentDismissScale)
         }, completion: { [weak self] finished in
             self?.removeFromSuperview()
             completion?()
@@ -291,6 +340,8 @@ public class PTAlertTipsHight: UIView {
     fileprivate weak var viewForPresent: UIView?
     fileprivate var presentDismissDuration: TimeInterval = 0.2
     fileprivate var presentDismissScale: CGFloat = 0.8
+    private let autoDismiss = PTAlertTipsAutoDismiss()
+    private var hasDismissGesture = false
     
     private lazy var backgroundView: UIView = {
         #if os(visionOS)
@@ -389,26 +440,31 @@ public class PTAlertTipsHight: UIView {
     }
     
     open func present(on view: UIView, completion: PTActionTask? = nil) {
+        autoDismiss.beginPresentation()
         viewForPresent = view
-        viewForPresent?.addSubview(self)
+        if superview !== view {
+            removeFromSuperview()
+            view.addSubview(self)
+        }
         guard let viewForPresent = viewForPresent else { return }
         
         alpha = 0
         sizeToFit()
-        center.x = viewForPresent.frame.midX
+        center.x = viewForPresent.bounds.midX
         #if os(visionOS)
         frame.origin.y = viewForPresent.safeAreaInsets.top + 24
         #elseif os(iOS)
-        frame.origin.y = viewForPresent.frame.height - viewForPresent.safeAreaInsets.bottom - frame.height - 64
+        frame.origin.y = viewForPresent.bounds.height - viewForPresent.safeAreaInsets.bottom - frame.height - 64
         #endif
         
-        transform = transform.scaledBy(x: presentDismissScale, y: presentDismissScale)
+        transform = CGAffineTransform(scaleX: presentDismissScale, y: presentDismissScale)
         
-        if dismissByTap {
-            let tapGesterRecognizer = UITapGestureRecognizer { sender in
-                self.dismiss()
+        if dismissByTap && !hasDismissGesture {
+            let tapGesterRecognizer = UITapGestureRecognizer { [weak self] _ in
+                self?.dismiss()
             }
             addGestureRecognizer(tapGesterRecognizer)
+            hasDismissGesture = true
         }
         
         // Present
@@ -426,19 +482,23 @@ public class PTAlertTipsHight: UIView {
             }
             
             if self.dismissInTime {
-                PTGCDManager.shared.delayOnMain(time: self.duration) {
-                    if self.alpha != 0 {
-                        self.dismiss(completion: completion)
-                    }
+                self.autoDismiss.schedule(after: self.duration) { [weak self] in
+                    guard let self, self.alpha != 0 else { return }
+                    self.dismiss(completion: completion)
                 }
             }
         })
     }
-    
+
     @objc open func dismiss(completion: PTActionTask? = nil) {
+        guard autoDismiss.beginDismiss() else {
+            completion?()
+            return
+        }
         UIView.animate(withDuration: presentDismissDuration, animations: {
             self.alpha = 0
-            self.transform = self.transform.scaledBy(x: self.presentDismissScale, y: self.presentDismissScale)
+            self.transform = CGAffineTransform(scaleX: self.presentDismissScale,
+                                               y: self.presentDismissScale)
         }, completion: { [weak self] finished in
             self?.removeFromSuperview()
             completion?()

@@ -8,185 +8,192 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTAlertTipsViewController: PTAlertController {
 
     fileprivate var tipsViewLow: PTAlertTipsLow?
     fileprivate var tipsViewHight: PTAlertTipsHight?
-    
+
     private let presentDismissDuration: TimeInterval = 0.2
     private let presentDismissScale: CGFloat = 0.8
     private var style: PTAlertTipsStyle = .Normal
-    private var dismissByTap:Bool = true
-    
-    public var dismissCallback:PTActionTask? = nil
-    
+    private var dismissByTap = true
+    private let autoDismiss = PTAlertTipsAutoDismiss()
+    private var didCallDismissCallback = false
+
+    public var dismissCallback: PTActionTask?
+
     public static func tipsAlertShow(title: String? = nil,
                                      subtitle: String? = nil,
                                      icon: PTAlertTipsIcon?,
                                      style: PTAlertTipsStyle = .Normal,
                                      haptic: PTAlertTipsHaptic? = nil,
-                                     dismissByTap:Bool = true,
-                                     dismissInTime:Bool = true,
-                                     dismissDuration:TimeInterval = 1.5,
-                                     showCallback:PTActionTask? = nil
-                                     ,dismissCallback:PTActionTask? = nil) {
-        let alert = PTAlertTipsViewController(title: title, subtitle: subtitle, icon: icon,style: style,haptic: haptic,dismissByTap: dismissByTap,dismissInTime: dismissInTime,dismissDuration: dismissDuration)
+                                     dismissByTap: Bool = true,
+                                     dismissInTime: Bool = true,
+                                     dismissDuration: TimeInterval = 1.5,
+                                     showCallback: PTActionTask? = nil,
+                                     dismissCallback: PTActionTask? = nil) {
+        let alert = PTAlertTipsViewController(
+            title: title,
+            subtitle: subtitle,
+            icon: icon,
+            style: style,
+            haptic: haptic,
+            dismissByTap: dismissByTap,
+            dismissInTime: dismissInTime,
+            dismissDuration: dismissDuration
+        )
         alert.dismissCallback = dismissCallback
         PTAlertManager.show(alert, completion: showCallback)
     }
-    
-    public init(title: String? = nil, subtitle: String? = nil, icon: PTAlertTipsIcon?, style: PTAlertTipsStyle = .Normal,haptic: PTAlertTipsHaptic? = nil,dismissByTap:Bool = true,dismissInTime:Bool = true,dismissDuration:TimeInterval = 1.5) {
+
+    public init(title: String? = nil,
+                subtitle: String? = nil,
+                icon: PTAlertTipsIcon?,
+                style: PTAlertTipsStyle = .Normal,
+                haptic: PTAlertTipsHaptic? = nil,
+                dismissByTap: Bool = true,
+                dismissInTime: Bool = true,
+                dismissDuration: TimeInterval = 1.5) {
         self.style = style
         self.dismissByTap = dismissByTap
-        // 因为声明为了可选类型，未赋值的那个会自动变为 nil，满足 Swift 的初始化安全规则
         switch style {
         case .Normal:
-            self.tipsViewLow = PTAlertTipsLow(title: title, subtitle: subtitle, icon: icon)
-            self.tipsViewLow?.haptic = haptic
-            self.tipsViewLow?.dismissByTap = dismissByTap
-            self.tipsViewLow?.dismissInTime = dismissInTime
-            self.tipsViewLow?.duration = dismissDuration
+            let tipsView = PTAlertTipsLow(title: title, subtitle: subtitle, icon: icon)
+            tipsView.haptic = haptic
+            tipsView.dismissByTap = dismissByTap
+            tipsView.dismissInTime = dismissInTime
+            tipsView.duration = dismissDuration
+            tipsViewLow = tipsView
         case .SupportVisionOS:
-            self.tipsViewHight = PTAlertTipsHight(title: title, subtitle: subtitle, icon: icon)
-            self.tipsViewHight?.haptic = haptic
-            self.tipsViewHight?.dismissByTap = dismissByTap
-            self.tipsViewHight?.dismissInTime = dismissInTime
-            self.tipsViewHight?.duration = dismissDuration
+            let tipsView = PTAlertTipsHight(title: title, subtitle: subtitle, icon: icon)
+            tipsView.haptic = haptic
+            tipsView.dismissByTap = dismissByTap
+            tipsView.dismissInTime = dismissInTime
+            tipsView.duration = dismissDuration
+            tipsViewHight = tipsView
         }
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // 1. 将 tipsView 添加到控制器的 view 中
-        switch self.style {
-        case .Normal:
-            if let viewLow = tipsViewLow {
-                view.addSubview(viewLow)
-                viewLow.alpha = 0 // 初始状态隐藏
-            }
-        case .SupportVisionOS:
-            if let viewHight = tipsViewHight {
-                view.addSubview(viewHight)
-                viewHight.alpha = 0 // 初始状态隐藏
-            }
+        activeTipsView?.alpha = 0
+        if let activeTipsView, activeTipsView.superview !== view {
+            view.addSubview(activeTipsView)
         }
-        
+
         if dismissByTap {
-            let tapGesterRecognizer = UITapGestureRecognizer { sender in
-                self.dismissAnimation(completion: {
-                    PTGCDManager.shared.runOnMain {
-                        self.dismissCallback?()
-                    }
-                })
+            let tap = UITapGestureRecognizer { [weak self] _ in
+                self?.dismissSelf()
             }
-            view.addGestureRecognizer(tapGesterRecognizer)
+            tap.cancelsTouchesInView = false
+            view.addGestureRecognizer(tap)
         }
     }
-    
+
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        // 2. 居中布局
-        switch self.style {
+        guard let activeTipsView else { return }
+        activeTipsView.sizeToFit()
+
+        switch style {
         case .Normal:
-            tipsViewLow?.sizeToFit()
-            tipsViewLow?.center = view.center
+            let safeFrame = view.safeAreaLayoutGuide.layoutFrame
+            activeTipsView.center = CGPoint(x: safeFrame.midX, y: safeFrame.midY)
         case .SupportVisionOS:
-            tipsViewHight?.sizeToFit()
 #if os(visionOS)
-            tipsViewHight?.center = CGPointMake(view.frame.midX, CGFloat.kNavBarHeight_Total + 24)
-#elseif os(iOS)
-            tipsViewHight?.center = CGPointMake(view.frame.midX, CGFloat.kSCREEN_HEIGHT - (tipsViewHight?.height ?? 0) - CGFloat.kTabbarSaveAreaHeight - CGFloat.kTabbarHeight_Total)
+            activeTipsView.center = CGPoint(x: view.bounds.midX,
+                                            y: CGFloat.kNavBarHeight_Total + 24)
+#else
+            let y = view.bounds.height - view.safeAreaInsets.bottom - activeTipsView.bounds.height - 64
+            activeTipsView.center = CGPoint(x: view.bounds.midX,
+                                            y: y + activeTipsView.bounds.height / 2)
 #endif
         }
     }
-    
-    // MARK: - PTAlertProtocol 动画实现
-    
+
     public override func showAnimation(completion: PTActionTask? = nil) {
-        switch self.style {
+        autoDismiss.beginPresentation()
+        didCallDismissCallback = false
+        activeTipsView?.transform = CGAffineTransform(scaleX: presentDismissScale,
+                                                       y: presentDismissScale)
+        activeTipsView?.alpha = 0
+
+        switch style {
         case .Normal:
-            tipsViewLow?.transform = CGAffineTransform(scaleX: presentDismissScale, y: presentDismissScale)
-            tipsViewLow?.alpha = 0
             tipsViewLow?.haptic?.impact()
         case .SupportVisionOS:
-            tipsViewHight?.transform = CGAffineTransform(scaleX: presentDismissScale, y: presentDismissScale)
-            tipsViewHight?.alpha = 0
             tipsViewHight?.haptic?.impact()
         }
-        
-        UIView.animate(withDuration: presentDismissDuration, delay: 0, options: .curveEaseOut) {
-            switch self.style {
-            case .Normal:
-                self.tipsViewLow?.alpha = 1
-                self.tipsViewLow?.transform = .identity
-            case .SupportVisionOS:
-                self.tipsViewHight?.alpha = 1
-                self.tipsViewHight?.transform = .identity
+
+        UIView.animate(withDuration: presentDismissDuration,
+                       delay: 0,
+                       options: .curveEaseOut) {
+            self.activeTipsView?.alpha = 1
+            self.activeTipsView?.transform = .identity
+        } completion: { [weak self] _ in
+            guard let self else { return }
+            if let iconView = self.activeIconView as? PTAlertTipsAnimation {
+                iconView.animation()
             }
-        } completion: { [weak self] _ in // 🛠️ 修复2：添加 [weak self] 防止闭包引起内存泄漏
-            guard let self = self else { return }
-            
-            switch self.style {
-            case .Normal:
-                guard let viewLow = self.tipsViewLow else { break }
-                if let iconView = viewLow.iconView as? PTAlertTipsAnimation {
-                    iconView.animation()
-                }
-                
-                if viewLow.dismissInTime {
-                    // 🛠️ 修复3：定时器内部也需要 [weak self]
-                    PTGCDManager.shared.delayOnMain(time: viewLow.duration) { [weak self] in
-                        guard let self = self else { return }
-                        if self.tipsViewLow?.alpha != 0 {
-                            self.dismissAnimation(completion: {
-                                PTGCDManager.shared.runOnMain {
-                                    self.dismissCallback?()
-                                }
-                            })
-                        }
-                    }
-                }
-                
-            case .SupportVisionOS:
-                guard let viewHight = self.tipsViewHight else { break }
-                if let iconView = viewHight.iconView as? PTAlertTipsAnimation {
-                    iconView.animation()
-                }
-                
-                if viewHight.dismissInTime {
-                    // 🛠️ 修复3：定时器内部也需要 [weak self]
-                    PTGCDManager.shared.delayOnMain(time: viewHight.duration) { [weak self] in
-                        guard let self = self else { return }
-                        if self.tipsViewHight?.alpha != 0 {
-                            self.dismissAnimation(completion: {
-                                PTGCDManager.shared.runOnMain {
-                                    self.dismissCallback?()
-                                }
-                            })
-                        }
-                    }
+            if self.activeDismissInTime {
+                self.autoDismiss.schedule(after: self.activeDuration) { [weak self] in
+                    self?.dismissSelf()
                 }
             }
             completion?()
         }
     }
-    
+
     public override func dismissAnimation(completion: PTActionTask? = nil) {
-        UIView.animate(withDuration: presentDismissDuration, delay: 0, options: .curveEaseIn) {
-            switch self.style {
-            case .Normal:
-                self.tipsViewLow?.alpha = 0
-                self.tipsViewLow?.transform = CGAffineTransform(scaleX: self.presentDismissScale, y: self.presentDismissScale)
-            case .SupportVisionOS:
-                self.tipsViewHight?.alpha = 0
-                self.tipsViewHight?.transform = CGAffineTransform(scaleX: self.presentDismissScale, y: self.presentDismissScale)
-            }
-        } completion: { _ in
-            PTAlertManager.dismissAll()
+        let _ = autoDismiss.beginDismiss()
+        UIView.animate(withDuration: presentDismissDuration,
+                       delay: 0,
+                       options: .curveEaseIn) {
+            self.activeTipsView?.alpha = 0
+            self.activeTipsView?.transform = CGAffineTransform(
+                scaleX: self.presentDismissScale,
+                y: self.presentDismissScale
+            )
+        } completion: { [weak self] _ in
+            self?.callDismissCallback()
             completion?()
         }
+    }
+
+    private var activeTipsView: UIView? {
+        switch style {
+        case .Normal: tipsViewLow
+        case .SupportVisionOS: tipsViewHight
+        }
+    }
+
+    private var activeIconView: UIView? {
+        switch style {
+        case .Normal: tipsViewLow?.iconView
+        case .SupportVisionOS: tipsViewHight?.iconView
+        }
+    }
+
+    private var activeDismissInTime: Bool {
+        switch style {
+        case .Normal: tipsViewLow?.dismissInTime ?? false
+        case .SupportVisionOS: tipsViewHight?.dismissInTime ?? false
+        }
+    }
+
+    private var activeDuration: TimeInterval {
+        switch style {
+        case .Normal: tipsViewLow?.duration ?? 0
+        case .SupportVisionOS: tipsViewHight?.duration ?? 0
+        }
+    }
+
+    private func callDismissCallback() {
+        guard !didCallDismissCallback else { return }
+        didCallDismissCallback = true
+        dismissCallback?()
     }
 }

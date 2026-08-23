@@ -36,6 +36,7 @@ public enum PTAlertTipsIcon:Equatable {
     }
 }
 
+@MainActor
 public protocol PTAlertTipsAnimation {
     func animation()
 }
@@ -53,6 +54,9 @@ public class PTAlertTipsDone:UIView, @MainActor PTAlertTipsAnimation {
     }
     
     public func animation() {
+        layer.sublayers?.filter { $0.name == "PTAlertTipsIcon" }.forEach {
+            $0.removeFromSuperlayer()
+        }
         let length = frame.width
         let animatablePath = UIBezierPath()
         animatablePath.move(to: CGPoint(x: length * 0.196, y: length * 0.527))
@@ -60,6 +64,7 @@ public class PTAlertTipsDone:UIView, @MainActor PTAlertTipsAnimation {
         animatablePath.addLine(to: CGPoint(x: length * 0.99, y: length * 0.25))
         
         let animatableLayer = CAShapeLayer()
+        animatableLayer.name = "PTAlertTipsIcon"
         animatableLayer.path = animatablePath.cgPath
         animatableLayer.fillColor = UIColor.clear.cgColor
         animatableLayer.strokeColor = tintColor?.cgColor
@@ -75,6 +80,9 @@ public class PTAlertTipsDone:UIView, @MainActor PTAlertTipsAnimation {
         animation.toValue = 1
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         animatableLayer.strokeEnd = 1
+        if UIAccessibility.isReduceMotionEnabled {
+            return
+        }
         animatableLayer.add(animation, forKey: "animation")
     }
 }
@@ -92,6 +100,9 @@ public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
     }
     
     public func animation() {
+        layer.sublayers?.filter { $0.name == "PTAlertTipsIcon" }.forEach {
+            $0.removeFromSuperlayer()
+        }
         animateTopToBottomLine()
         animateBottomToTopLine()
     }
@@ -104,6 +115,7 @@ public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
         topToBottomLine.addLine(to: CGPoint(x: length * 1, y: length * 1))
         
         let animatableLayer = CAShapeLayer()
+        animatableLayer.name = "PTAlertTipsIcon"
         animatableLayer.path = topToBottomLine.cgPath
         animatableLayer.fillColor = UIColor.clear.cgColor
         animatableLayer.strokeColor = tintColor?.cgColor
@@ -120,6 +132,9 @@ public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
         animatableLayer.strokeEnd = 1
+        if UIAccessibility.isReduceMotionEnabled {
+            return
+        }
         animatableLayer.add(animation, forKey: "animation")
     }
         
@@ -131,6 +146,7 @@ public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
         bottomToTopLine.addLine(to: CGPoint(x: length * 1, y: length * 0))
         
         let animatableLayer = CAShapeLayer()
+        animatableLayer.name = "PTAlertTipsIcon"
         animatableLayer.path = bottomToTopLine.cgPath
         animatableLayer.fillColor = UIColor.clear.cgColor
         animatableLayer.strokeColor = tintColor?.cgColor
@@ -147,6 +163,9 @@ public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
         animatableLayer.strokeEnd = 1
+        if UIAccessibility.isReduceMotionEnabled {
+            return
+        }
         animatableLayer.add(animation, forKey: "animation")
     }
 }
@@ -170,7 +189,7 @@ public class PTAlertTipsHeart: UIView {
     class HeartDraw: NSObject {
         
         @objc dynamic public class func draw(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 510, height: 470), resizing: ResizingBehavior = .aspectFit, fillColor: UIColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)) {
-            let context = UIGraphicsGetCurrentContext()!
+            guard let context = UIGraphicsGetCurrentContext() else { return }
             context.saveGState()
             let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 510, height: 470), target: targetFrame)
             context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
@@ -255,4 +274,3 @@ public class PTAlertTipsSpinner: UIView {
         activityIndicatorView.center = .init(x: frame.width / 2, y: frame.height / 2)
     }
 }
-

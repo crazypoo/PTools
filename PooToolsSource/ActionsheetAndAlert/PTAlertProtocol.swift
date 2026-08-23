@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 public protocol PTAlertProtocol where Self: PTAlertController {
     /// 显示
     func showAnimation(completion: PTActionTask?)

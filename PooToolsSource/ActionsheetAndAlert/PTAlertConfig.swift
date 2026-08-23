@@ -97,6 +97,20 @@ public class PTAlertConfig: NSObject {
     /// 弹窗的唯一标识符，用于去重
     public var identifier: String?
     /// 弹框展示时间
-    public var showALertDuration: TimeInterval = 0.35
-    public var hideALertDuration: TimeInterval = 0.35
+    public var showAlertDuration: TimeInterval = 0.35
+    public var hideAlertDuration: TimeInterval = 0.35
+
+    /// 兼容旧拼写，新的代码请使用 showAlertDuration。
+    @available(*, deprecated, renamed: "showAlertDuration")
+    public var showALertDuration: TimeInterval {
+        get { showAlertDuration }
+        set { showAlertDuration = newValue }
+    }
+
+    /// 兼容旧拼写，新的代码请使用 hideAlertDuration。
+    @available(*, deprecated, renamed: "hideAlertDuration")
+    public var hideALertDuration: TimeInterval {
+        get { hideAlertDuration }
+        set { hideAlertDuration = newValue }
+    }
 }

@@ -27,46 +27,21 @@ public class PTPopoverConfig:NSObject {
 
 public typealias PTPopoverHandler = (String,Int) -> Void
 
+@MainActor
 class PTPopoverMenuContent: PTBaseViewController {
-    
-    var didSelectedHandler:PTPopoverHandler!
-    
-    var arrowDirections:UIPopoverArrowDirection! {
+
+    var didSelectedHandler: PTPopoverHandler?
+
+    var arrowDirections: UIPopoverArrowDirection = .any {
         didSet {
-            
-            let size = preferredContentSize
-            var newSize = CGSize.zero
-            if arrowDirections == .up || arrowDirections == .down {
-                newSize = CGSize(width: size.width, height: size.height + 16)
-            } else if arrowDirections == .right || arrowDirections == .left {
-                newSize = CGSize(width: size.width + 16, height: size.height)
-            } else {
-                newSize = size
-            }
-            preferredContentSize = newSize
-            
-            collectionView.snp.makeConstraints { make in
-                if arrowDirections == .up {
-                    make.left.right.bottom.equalToSuperview()
-                    make.top.equalToSuperview().inset(16)
-                } else if arrowDirections == .right {
-                    make.right.equalToSuperview().inset(16)
-                    make.top.bottom.left.equalToSuperview()
-                } else if arrowDirections == .left {
-                    make.left.equalToSuperview().inset(16)
-                    make.top.bottom.right.equalToSuperview()
-                } else if arrowDirections == .down {
-                    make.bottom.equalToSuperview().inset(16)
-                    make.top.left.right.equalToSuperview()
-                } else {
-                    make.edges.equalToSuperview()
-                }
-            }
+            updateArrowLayout()
         }
     }
+
+    private var basePreferredContentSize: CGSize?
     
     private var viewModel:[PTPopoverItem] = [PTPopoverItem]()
-    private var viewConfig:PTPopoverConfig!
+    private var viewConfig: PTPopoverConfig = PTPopoverConfig()
 
     lazy var collectionView:PTCollectionView = {
         let cConfig = PTCollectionViewConfig()
@@ -85,8 +60,8 @@ class PTPopoverMenuContent: PTBaseViewController {
         }
         view.collectionDidSelect = { _,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
-                self.dismiss(animated: true) {
-                    self.didSelectedHandler(cellModel.name,indexPath.row)
+                self.dismiss(animated: true) { [weak self = self] in
+                    self?.didSelectedHandler?(cellModel.name,indexPath.row)
                 }
             }
         }
@@ -113,6 +88,9 @@ class PTPopoverMenuContent: PTBaseViewController {
                 
         view.backgroundColor = .clear
         view.addSubviews([collectionView])
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         let rows = viewModel.map { value in
             let cellModel = PTFusionCellModel()
@@ -127,5 +105,43 @@ class PTPopoverMenuContent: PTBaseViewController {
         
         let sections = [PTSection(rows: rows)]
         collectionView.showCollectionDetail(collectionData: sections)
+        updateArrowLayout()
+    }
+
+    private func updateArrowLayout() {
+        let size = basePreferredContentSize ?? preferredContentSize
+        if basePreferredContentSize == nil {
+            basePreferredContentSize = size
+        }
+
+        guard isViewLoaded else { return }
+
+        switch arrowDirections {
+        case .up, .down:
+            preferredContentSize = CGSize(width: size.width, height: size.height + 16)
+        case .left, .right:
+            preferredContentSize = CGSize(width: size.width + 16, height: size.height)
+        default:
+            preferredContentSize = size
+        }
+
+        collectionView.snp.remakeConstraints { make in
+            switch arrowDirections {
+            case .up:
+                make.left.right.bottom.equalToSuperview()
+                make.top.equalToSuperview().inset(16)
+            case .right:
+                make.right.equalToSuperview().inset(16)
+                make.top.bottom.left.equalToSuperview()
+            case .left:
+                make.left.equalToSuperview().inset(16)
+                make.top.bottom.right.equalToSuperview()
+            case .down:
+                make.bottom.equalToSuperview().inset(16)
+                make.top.left.right.equalToSuperview()
+            default:
+                make.edges.equalToSuperview()
+            }
+        }
     }
 }
