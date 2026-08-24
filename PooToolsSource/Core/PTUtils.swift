@@ -7,10 +7,6 @@
 //
 
 import UIKit
-import AVFoundation
-import SwiftDate
-import SwifterSwift
-import DeviceKit
 
 /*
  ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
@@ -90,8 +86,6 @@ public func PTIVarList(_ className:String) -> [String] {
     var count : UInt32 = 0
     let list = class_copyIvarList(NSClassFromString(className), &count)
     
-    defer { free(list) }
-    
     if let safeList = list {
         for i in 0..<Int(count) {
             let ivar = safeList[i]
@@ -103,18 +97,19 @@ public func PTIVarList(_ className:String) -> [String] {
                 PTNSLogConsole("\(String(cString: findName) + "<---->" + String(cString: type))",loggerType: .utils)
             }
         }
-        free(list)
-        return listName
+        free(safeList)
     }
-    return []
+    return listName
 }
 
 public func PTPropertyList(_ classString: String) -> [String] {
     var propertyListName = [String]()
     var count : UInt32 = 0
     let list = class_copyPropertyList(NSClassFromString(classString), &count)
+    guard let safeList = list else { return propertyListName }
+
     for i in 0..<Int(count) {
-        let property: objc_property_t = list![i]
+        let property: objc_property_t = safeList[i]
         let name = property_getName(property)
         
         if let type = property_getAttributes(property) {
@@ -126,7 +121,7 @@ public func PTPropertyList(_ classString: String) -> [String] {
         }
         propertyListName.append(propertyName)
     }
-    free(list)
+    free(safeList)
     return propertyListName
 }
 
@@ -181,6 +176,12 @@ public class PTUtils: NSObject {
     public class func isValidAmountInput(text:NSString,
                                           range:NSRange,
                                           replacementString:NSString) -> Bool {
+        guard range.location >= 0,
+              range.length >= 0,
+              range.location <= text.length,
+              range.length <= text.length - range.location else {
+            return false
+        }
         let updatedLength = text.length - range.length + replacementString.length
         guard updatedLength <= 20 else { return false }
         let result = text.replacingCharacters(in: range, with: replacementString as String)
@@ -190,13 +191,16 @@ public class PTUtils: NSObject {
     // MARK: - 輸出 URL (影片)
     public class func outputURL() -> URL {
         let documentsDirectory = FileManager.pt.CachesDirectory()
-        let fileName = "\(Date().getTimeStamp()).mp4"
+        let fileName = "PTVideo_\(UUID().uuidString).mp4"
         let outputURL = documentsDirectory.appendingPathComponent(fileName)
         return URL(filePath: outputURL)
     }
     
     /// 字符串转类
     public class func classFromString(_ className:String) -> AnyClass? {
+        if let cls = NSClassFromString(className) {
+            return cls
+        }
         guard var name = Bundle.main.object(forInfoDictionaryKey: "CFBundleExecutable") as? String else {
             return nil
         }
@@ -220,66 +224,62 @@ public class PTUtils: NSObject {
 public extension PTUtils {
     // MARK: - 當前畫面 VC
     class func getCurrentVC(from rootVC:UIViewController) -> UIViewController {
-        switch rootVC {
-        case let tabBar as UITabBarController:
-            if let customTab = tabBar as? PTBaseTabBarViewController {
-                return getCurrentVC(from: customTab.viewControllers?[customTab.selectedIndex] ?? customTab)
-            } else {
-                return getCurrentVC(from: tabBar.selectedViewController ?? tabBar)
-            }
-        case let nav as UINavigationController:
-            return getCurrentVC(from: nav.visibleViewController ?? nav)
-        case let nav as PTBaseNavControl:
-            return getCurrentVC(from: nav.visibleViewController ?? nav)
-        case let presentedVC where presentedVC.presentedViewController != nil:
-            if let vc = presentedVC.presentedViewController as? PTSheetViewController {
-                if let currentVC = vc.contentViewController.childViewController as? UINavigationController,let findLastNav = currentVC.viewControllers.last {
-                    return findLastNav
-                } else {
-                    return vc
-                }
-            } else {
-                return getCurrentVC(from: presentedVC.presentedViewController!)
-            }
-        case let sheet as PTSheetViewController:
-            if let currentVC = sheet.contentViewController.childViewController as? UINavigationController,let findLastNav = currentVC.viewControllers.last {
-                return findLastNav
-            } else {
-                return sheet.contentViewController.childViewController
-            }
-        case let sideMenu as PTSideMenuControl:
-            if let presentedVC = sideMenu.contentViewController?.presentedViewController,let pSheet = presentedVC as? PTSheetViewController {
-                if let nav = pSheet.childViewController as? UINavigationController,let navRoot = nav.viewControllers.last {
-                    return navRoot
-                } else {
-                    return pSheet.childViewController
-                }
-            } else {
-                return getCurrentVC(from: sideMenu.contentViewController)
-            }
-        default:
-            return rootVC
+        var visited = Set<ObjectIdentifier>()
+        return resolveCurrentViewController(from: rootVC, visited: &visited)
+    }
+
+    /// 统一解析当前控制器，避免不同入口各自维护一套层级判断。
+    private class func resolveCurrentViewController(from viewController: UIViewController,
+                                                     visited: inout Set<ObjectIdentifier>) -> UIViewController {
+        guard visited.insert(ObjectIdentifier(viewController)).inserted else {
+            return viewController
         }
+
+        if let presented = viewController.presentedViewController,
+           !presented.isBeingDismissed {
+            return resolveCurrentViewController(from: presented, visited: &visited)
+        }
+
+        if let sheet = viewController as? PTSheetViewController {
+            return resolveCurrentViewController(from: sheet.childViewController, visited: &visited)
+        }
+
+        if let sideMenu = viewController as? PTSideMenuControl,
+           let content = sideMenu.contentViewController {
+            return resolveCurrentViewController(from: content, visited: &visited)
+        }
+
+        if let tabBar = viewController as? UITabBarController,
+           let selected = tabBar.selectedViewController {
+            return resolveCurrentViewController(from: selected, visited: &visited)
+        }
+
+        if let navigationController = viewController as? UINavigationController,
+           let visible = navigationController.visibleViewController {
+            return resolveCurrentViewController(from: visible, visited: &visited)
+        }
+
+        if let pageController = viewController as? UIPageViewController,
+           let visible = pageController.viewControllers?.first {
+            return resolveCurrentViewController(from: visible, visited: &visited)
+        }
+
+        return viewController
+    }
+
+    /// 按当前场景和窗口层级选择业务窗口，避免误选调试悬浮窗。
+    @MainActor private class func activeWindow() -> UIWindow? {
+        let windows = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+
+        return windows.first(where: { $0.isKeyWindow && $0.windowLevel == .normal && $0.rootViewController != nil })
+            ?? windows.first(where: { $0.windowLevel == .normal && $0.rootViewController != nil })
+            ?? AppWindows
     }
     
     @MainActor class func getCurrentVC() -> UIViewController? {
-        guard let root = AppWindows?.rootViewController else {
-            // 1. 获取所有 Scene 下的窗口
-            let windows = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-            
-            // 🌟 关键修复：避开悬浮窗！
-            // 寻找层级为 normal，并且确确实实挂载了 rootViewController 的主业务窗口
-            let mainWindow = windows.first { $0.isKeyWindow && $0.windowLevel == .normal && $0.rootViewController != nil }
-                ?? windows.first { $0.windowLevel == .normal && $0.rootViewController != nil }
-            
-            if let findMain = mainWindow?.rootViewController {
-                return findMain
-            } else {
-                return nil
-            }
-        }
+        guard let root = activeWindow()?.rootViewController else { return nil }
         return getCurrentVC(from: root)
     }
     
@@ -297,90 +297,40 @@ public extension PTUtils {
 
     // MARK: - 取得頂部控制器
     @MainActor class func getTopViewController(_ base: UIViewController? = nil) -> UIViewController? {
-        let baseVC = base ?? AppWindows?.rootViewController
-        guard let vc = baseVC else { return nil }
-
-        if let nav = vc as? UINavigationController {
-            return getTopViewController(nav.topViewController)
-        } else if let tab = vc as? UITabBarController {
-            return getTopViewController(tab.selectedViewController)
-        } else if let presented = vc.presentedViewController {
-            return getTopViewController(presented)
-        } else {
-            return vc
-        }
+        let root = base ?? activeWindow()?.rootViewController
+        guard let root else { return nil }
+        return getCurrentVC(from: root)
     }
     
     // MARK: - Root Controller
     @MainActor class func getRootViewController() -> UIViewController? {
-        return AppWindows?.rootViewController
+        return activeWindow()?.rootViewController
     }
     
     //MARK: - 需要注册的时候传入一个导航包含的控制器
     @MainActor class func setRootViewController(_ navController: UIViewController) {
-#if DEBUG
-        assert(navController is UINavigationController, "Root 必須是 UINavigationController")
-#endif
-        AppWindows?.rootViewController = navController
+        activeWindow()?.rootViewController = navController
     }
     
     // MARK: - 活躍 VC
     @MainActor class func getActivityViewController() -> UIViewController? {
-        guard let rootVC = AppWindows?.rootViewController else {
-            return nil
-        }
-        
-        var current = rootVC
-        while let presented = current.presentedViewController {
-            current = presented
-        }
-        return current
+        guard let rootVC = activeWindow()?.rootViewController else { return nil }
+        return getCurrentVC(from: rootVC)
     }
 
     @MainActor class func visibleVC() -> UIViewController? {
-        if let nav = getActivityViewController() as? UINavigationController {
-            return nav.visibleViewController
-        }
         return getActivityViewController()
     }
 
     // Configure console window.
-    class func fetchWindow() -> UIWindow? {
-        let windowScene = UIApplication.shared
-            .connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .first
-        
-        if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
-            return keyWindow
-        }
-        return nil
+    @MainActor class func fetchWindow() -> UIWindow? {
+        activeWindow()
     }
                         
     class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
-        // presented view controller
-        if let presentedViewController = viewController?.presentedViewController {
-            return topMost(of: presentedViewController)
-        }
-
-        // UITabBarController
-        if let tabBarController = viewController as? UITabBarController,
-            let selectedViewController = tabBarController.selectedViewController {
-            return topMost(of: selectedViewController)
-        }
-        
-        // UINavigationController
-        if let navigationController = viewController as? UINavigationController,
-            let visibleViewController = navigationController.visibleViewController {
-            return topMost(of: visibleViewController)
-        }
-        
-        // UIPageController
-        if let pageViewController = viewController as? UIPageViewController,
-           pageViewController.viewControllers?.count == 1 {
-            return topMost(of: pageViewController.viewControllers?.first)
-        }
-        return viewController
+        guard let viewController else { return nil }
+        var visited = Set<ObjectIdentifier>()
+        return resolveCurrentViewController(from: viewController, visited: &visited)
     }
 }
 
@@ -411,7 +361,10 @@ public extension PTUtils {
 public extension PTUtils {
     
     @MainActor class func push(_ vc: UIViewController) {
-        guard let current = PTUtils.getCurrentVC(),let nav = current.navigationController else { return }
+        guard let current = getCurrentVC(),
+              let nav = current.navigationController,
+              nav.transitionCoordinator == nil,
+              !nav.viewControllers.contains(where: { $0 === vc }) else { return }
         vc.hidesBottomBarWhenPushed = true
         nav.pushViewController(vc, animated: true)
     }
@@ -420,8 +373,9 @@ public extension PTUtils {
                      presentationStyle: UIModalPresentationStyle = .fullScreen,
                      transitionStyle: UIModalTransitionStyle = .coverVertical) {
         
-        guard let current = PTUtils.getCurrentVC() else { return }
-        guard vc.presentedViewController == nil else { return }
+        guard let current = getCurrentVC(),
+              current.presentedViewController == nil,
+              vc.presentingViewController == nil else { return }
 
         // 优先使用传递进来的样式
         vc.modalTransitionStyle = transitionStyle
@@ -445,11 +399,11 @@ public extension PTUtils {
     }
 
     @MainActor class func returnFrontVC() {
-        let vc = PTUtils.getCurrentVC()
-        if vc?.presentingViewController != nil {
-            vc?.dismiss(animated: true, completion: nil)
-        } else {
-            vc?.navigationController?.popViewController(animated: true, nil)
+        guard let vc = getCurrentVC() else { return }
+        if vc.presentingViewController != nil {
+            vc.dismiss(animated: true)
+        } else if let nav = vc.navigationController, nav.viewControllers.count > 1 {
+            nav.popViewController(animated: true)
         }
     }
 
@@ -472,10 +426,10 @@ public extension PTUtils {
             })
 
         } else {
-            PTUtils.getCurrentVC()?.navigationController?.pushViewController(vc)
+            push(vc)
         }
 #else
-        PTUtils.getCurrentVC()?.navigationController?.pushViewController(vc)
+        push(vc)
 #endif
     }
     
@@ -490,14 +444,12 @@ public extension PTUtils {
     }
     
     @MainActor class func pusbWindowNavRoot(_ vc: UIViewController) {
-        if let app = UIApplication.shared.delegate, let window = app.window {
-            if let rootVC = window?.rootViewController {
-                if let nav: UINavigationController = rootVC as? UINavigationController {
-                    nav.pushViewController(vc, animated: true)
-                } else {
-                    getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
-                }
-            }
+        guard let root = activeWindow()?.rootViewController else { return }
+        if let nav = root as? UINavigationController,
+           nav.transitionCoordinator == nil {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            push(vc)
         }
     }
 }

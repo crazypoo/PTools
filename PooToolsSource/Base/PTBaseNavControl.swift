@@ -16,35 +16,25 @@ open class PTBaseNavControl: UINavigationController {
         return mask
     }
     
-    open override var shouldAutorotate: Bool {
-        return true
-    }
-    
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTBaseNavControl.GobalNavControl(nav: self)
-    }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
-        }
+        PTNavigationBarManager.shared.bind(to: self)
+        PTNavigationBarManager.shared.installIfNeeded(in: self)
     }
     
     open override func viewDidLoad() {
         super.viewDidLoad()        
         pushStatusBars(for: viewControllers)
-        interactivePopGestureRecognizer?.delegate = self
-        delegate = self
+        PTNavigationBarManager.shared.bind(to: self)
+        PTNavigationBarManager.shared.installIfNeeded(in: self)
         // Do any additional setup after loading the view.
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-            StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-            self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
+            let style = self.traitCollection.userInterfaceStyle
+            StatusBarManager.shared.style = style == .dark ? .lightContent : .darkContent
+            self.baseTraitCollectionDidChange(style: style)
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
@@ -58,7 +48,7 @@ open class PTBaseNavControl: UINavigationController {
     }
     
     @objc open func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        .portrait
+        navigationController.visibleViewController?.supportedInterfaceOrientations ?? .portrait
     }
     
     /// 修改导航栏返回按钮
@@ -79,10 +69,10 @@ open class PTBaseNavControl: UINavigationController {
     }
     
     @objc public func back() {
-        if self.presentingViewController != nil {
+        if viewControllers.count > 1 {
+            popViewController(animated: true)
+        } else if self.presentingViewController != nil {
             self.dismiss(animated: true, completion: nil)
-        } else {
-            self.navigationController?.popViewController(animated: true, nil)
         }
     }
     
@@ -91,24 +81,14 @@ open class PTBaseNavControl: UINavigationController {
          自定义UINavigationController，需要重写childForStatusBarStyle。
          否则preferredStatusBarStyle不执行。
          */
-        topViewController
+        visibleViewController
     }
     
     open override var childForStatusBarHidden: UIViewController? {
-        topViewController
+        visibleViewController
     }
     
-    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.view.frame = CGRect(origin: .zero, size: size)
-            self.view.layoutIfNeeded()
-        }, completion: { (_) in
-        })
-    }
 }
-
-extension PTBaseNavControl: UINavigationControllerDelegate {}
 
 extension PTBaseNavControl {
     
@@ -122,15 +102,6 @@ extension PTBaseNavControl {
     
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         StatusBarManager.shared.animation
-    }
-    
-    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
-    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            baseTraitCollectionDidChange(style:UITraitCollection.current.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
-        }
     }
     
     public class func GobalNavControl(nav:UINavigationController,
@@ -151,8 +122,8 @@ extension PTBaseNavControl {
         nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         nav.navigationBar.standardAppearance = navigationBarAppearance
         nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
-        nav.navigationBar.tintColor = textColor
-        nav.navigationItem.leftBarButtonItem?.tintColor = textColors
+        nav.navigationBar.tintColor = textColors
+        nav.topViewController?.navigationItem.leftBarButtonItem?.tintColor = textColors
 
         let toolBarAppearance = UIToolbarAppearance()
         toolBarAppearance.backgroundColor = colors

@@ -53,9 +53,10 @@ extension UIViewController: @MainActor PTTabBarVisibilityProtocol {
             while let current = nextVC {
                 if let tabBarVC = current.tabBarController as? PTBaseTabBarViewController {
                     // 确保赋值的控制器属于当前选中的链路，防止后台 Tab 乱刷新当前界面
-                    // 延迟一帧等待关联对象彻底稳固
-                    DispatchQueue.main.async {
-                        tabBarVC.refreshCurrentAccessoryViewIfNeeded()
+                    // 延迟一帧，等待控制器层级和关联对象完成更新。
+                    Task { @MainActor [weak tabBarVC] in
+                        await Task.yield()
+                        tabBarVC?.refreshCurrentAccessoryViewIfNeeded()
                     }
                     break
                 }
@@ -113,6 +114,8 @@ open class PTBaseTabBarViewController: UITabBarController {
     /// 保存当前 KVO 监听对象，防止被释放
     private var scrollObservation: NSKeyValueObservation?
     private var scrollBindingTask: Task<Void, Never>?
+    private var scrollUpdateTask: Task<Void, Never>?
+    private var pendingScrollState: (distanceFromTop: CGFloat, offsetY: CGFloat)?
     private var accessoryContainerInstalled = false
     private var tabBarVisibilityGeneration = 0
     private var accessoryTransitionGeneration = 0
@@ -136,7 +139,12 @@ open class PTBaseTabBarViewController: UITabBarController {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         syncInitialTabBarState()
-        
+    }
+
+    deinit {
+        scrollBindingTask?.cancel()
+        scrollUpdateTask?.cancel()
+        scrollObservation?.invalidate()
     }
     
     open override func viewDidLoad() {
@@ -149,41 +157,24 @@ open class PTBaseTabBarViewController: UITabBarController {
         setupTabBar()
         setupAccessoryContainer() // 🌟 初始化容器
 
-        PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
-            guard let self = self else { return }
-            // 🌟 修复点 1：升级拦截逻辑，支持深度查找嵌套的 NavigationController
-            guard let vcs = self.viewControllers else { return }
-            
-            let isOurNav = vcs.contains { vc in
-                // 情况 A：Tab 的根控制器直接就是这个 nav
-                if vc === nav { return true }
-                
-                // 情况 B：Tab 的根控制器是侧边栏，nav 被包裹在里面
-                if let sideMenu = vc as? PTSideMenuControl {
-                    return sideMenu.contentViewController === nav || sideMenu.navigationController === nav
-                }
-                
-                return false
-            }
-            
-            // 双重保险：或者是原生系统层级判定属于我们
-            let belongsToUs = isOurNav || (nav.tabBarController === self)
-            
-            guard belongsToUs else {
-                PTNSLogConsole("拦截：外部的 nav 触发路由，不处理 TabBar")
-                return
-            }
-            
-            self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
-        }
-                
+        registerNavigationControllers(from: viewControllers)
+    }
+
+    open override func setViewControllers(_ viewControllers: [UIViewController]?, animated: Bool) {
+        super.setViewControllers(viewControllers, animated: animated)
+        registerNavigationControllers(from: viewControllers)
     }
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tabBar.isHidden = true   // ✅ 重新加回来（但只做隐藏，不参与动画）
-        tabBar.frame = .zero   // ❗彻底干掉系统 tabBar
+        // 系统 TabBar 只作为 UITabBarController 的承载对象，不参与绘制。
+        if !tabBar.isHidden {
+            tabBar.isHidden = true
+        }
+        if !tabBar.frame.equalTo(.zero) {
+            tabBar.frame = .zero
+        }
     }
     
     // MARK: 设置UIViewController
@@ -265,8 +256,54 @@ open class PTBaseTabBarViewController: UITabBarController {
             return item.viewController
         }
         viewControllers = vcs
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
+            await Task.yield()
             self?.syncInitialTabBarState()
+        }
+    }
+
+    private func registerNavigationControllers(from viewControllers: [UIViewController]?) {
+        guard let viewControllers else { return }
+
+        var registered = Set<ObjectIdentifier>()
+        for viewController in viewControllers {
+            for navigationController in navigationControllers(in: viewController) {
+                guard registered.insert(ObjectIdentifier(navigationController)).inserted else { continue }
+
+                let manager = PTNavigationBarManager.shared
+                manager.bind(to: navigationController)
+                manager.setTabBarHandler({ [weak self] nav, toVC, animated, coordinator in
+                    guard let self, self.ownsNavigationController(nav) else { return }
+                    self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
+                }, for: navigationController)
+            }
+        }
+    }
+
+    private func navigationControllers(in viewController: UIViewController) -> [UINavigationController] {
+        if let navigationController = viewController as? UINavigationController {
+            return [navigationController]
+        }
+
+        var result: [UINavigationController] = []
+        if let sideMenu = viewController as? PTSideMenuControl,
+           let contentViewController = sideMenu.contentViewController {
+            result.append(contentsOf: navigationControllers(in: contentViewController))
+        }
+
+        for child in viewController.children {
+            result.append(contentsOf: navigationControllers(in: child))
+        }
+        return result
+    }
+
+    private func ownsNavigationController(_ navigationController: UINavigationController) -> Bool {
+        if navigationController.tabBarController === self {
+            return true
+        }
+
+        return (viewControllers ?? []).contains { viewController in
+            navigationControllers(in: viewController).contains { $0 === navigationController }
         }
     }
     
@@ -314,17 +351,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     private func currentContentViewController() -> UIViewController? {
         guard let selectedVC = selectedViewController else { return nil }
 
-        var targetVC: UIViewController = selectedVC
-
-        if let sideMenu = selectedVC as? PTSideMenuControl {
-            targetVC = sideMenu.contentViewController ?? sideMenu
-        }
-
-        if let nav = targetVC as? UINavigationController {
-            targetVC = nav.topViewController ?? nav
-        }
-
-        return targetVC
+        return PTUtils.getCurrentVC(from: selectedVC)
     }
 
     private func synchronizeCustomSelection() {
@@ -657,10 +684,9 @@ extension PTBaseTabBarViewController {
         cancelScrollObservation()
         
         viewController.loadViewIfNeeded()
-        // Delay briefly so a freshly loaded controller can finish building its
-        // hierarchy, while retaining cancellation when the page changes again.
+        // 让新页面先完成一轮布局，同时保留页面切换时的取消能力。
         scrollBindingTask = Task { @MainActor [weak self, weak viewController] in
-            try? await Task.sleep(nanoseconds: 50_000_000)
+            await Task.yield()
             guard !Task.isCancelled,
                   let self,
                   let viewController,
@@ -686,10 +712,7 @@ extension PTBaseTabBarViewController {
                 guard let offsetY = change.newValue?.y else { return }
                 let distanceFromTop = offsetY + adjustedTopInset
                 Task { @MainActor [weak self] in
-                    guard let self, !self.isTabBarGloballyHidden else { return }
-                    let shouldMinimize = distanceFromTop > PTAppBaseConfig.share.tabbarScrollOffset
-                    self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
-                    self.didScrollStateChange?(distanceFromTop > 0, offsetY)
+                    self?.enqueueScrollUpdate(distanceFromTop: distanceFromTop, offsetY: offsetY)
                 }
             }
 
@@ -703,8 +726,33 @@ extension PTBaseTabBarViewController {
     private func cancelScrollObservation() {
         scrollBindingTask?.cancel()
         scrollBindingTask = nil
+        scrollUpdateTask?.cancel()
+        scrollUpdateTask = nil
+        pendingScrollState = nil
         scrollObservation?.invalidate()
         scrollObservation = nil
+    }
+
+    private func enqueueScrollUpdate(distanceFromTop: CGFloat, offsetY: CGFloat) {
+        guard !isTabBarGloballyHidden else { return }
+
+        pendingScrollState = (distanceFromTop: distanceFromTop, offsetY: offsetY)
+        guard scrollUpdateTask == nil else { return }
+
+        scrollUpdateTask = Task { @MainActor [weak self] in
+            await Task.yield()
+            guard let self, !Task.isCancelled else { return }
+
+            let state = self.pendingScrollState
+            self.pendingScrollState = nil
+            self.scrollUpdateTask = nil
+
+            guard let state, !self.isTabBarGloballyHidden else { return }
+
+            let shouldMinimize = state.distanceFromTop > PTAppBaseConfig.share.tabbarScrollOffset
+            self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
+            self.didScrollStateChange?(state.distanceFromTop > 0, state.offsetY)
+        }
     }
 }
 

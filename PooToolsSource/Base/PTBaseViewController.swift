@@ -330,13 +330,31 @@ public final class PTNavigationBarManager:NSObject {
     
     private override init() {}
     
-    private var lastStyle: PTNavigationBarStyle?
-    
     private var titleLabel:Bool = false
+
+    // 每个导航栈独立保存样式，避免多个导航控制器互相覆盖状态。
+    private final class NavigationStyleBox: NSObject {
+        let style: PTNavigationBarStyle
+
+        init(style: PTNavigationBarStyle) {
+            self.style = style
+        }
+    }
+
+    // 每个导航栈独立保存 TabBar 转场回调，兼容旧的全局回调入口。
+    private final class TabBarHandlerBox: NSObject {
+        let handler: (UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void
+
+        init(handler: @escaping (UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void) {
+            self.handler = handler
+        }
+    }
     
     // ❗ 核心：按 VC 存储
     private var itemCache = NSMapTable<UIViewController, PTNavBarItem>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var containerMap = NSMapTable<UINavigationController, PTNavigationBarContainer>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var styleCache = NSMapTable<UINavigationController, NavigationStyleBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var tabBarHandlerCache = NSMapTable<UINavigationController, TabBarHandlerBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
     fileprivate weak var currentNav: UINavigationController?
@@ -371,7 +389,7 @@ public final class PTNavigationBarManager:NSObject {
     public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
         currentNav = nav
-        lastStyle = style
+        styleCache.setObject(NavigationStyleBox(style: style), forKey: nav)
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
         
@@ -382,7 +400,7 @@ public final class PTNavigationBarManager:NSObject {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = nil   // ❗关键（去 blur）
-        switch lastStyle {
+        switch styleCache.object(forKey: nav)?.style {
         case .solid(let color):
             appearance.backgroundColor = color
             appearance.backgroundImage = UIImage()
@@ -431,7 +449,18 @@ public final class PTNavigationBarManager:NSObject {
     }
     
     public func bind(to nav: UINavigationController) {
-        nav.delegate = self
+        if nav.delegate !== self {
+            nav.delegate = self
+        }
+    }
+
+    func setTabBarHandler(_ handler: @escaping (UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void,
+                          for nav: UINavigationController) {
+        tabBarHandlerCache.setObject(TabBarHandlerBox(handler: handler), forKey: nav)
+    }
+
+    func removeTabBarHandler(for nav: UINavigationController) {
+        tabBarHandlerCache.removeObject(forKey: nav)
     }
     
     public func item(for vc: UIViewController) -> PTNavBarItem {
@@ -590,7 +619,11 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             }
         }
 
-        tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
+        if let handler = tabBarHandlerCache.object(forKey: navigationController)?.handler {
+            handler(navigationController, viewController, animated, navigationController.transitionCoordinator)
+        } else {
+            tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
+        }
 
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
@@ -878,7 +911,7 @@ extension PTNavigationBarManager {
 @MainActor
 open class PTBaseViewController: UIViewController {
 
-    private var statusBarUpdateTask: Task<Void, Never>?
+    private static var didConfigureScrollViewAppearance = false
     private var hidesBaseNavigationBarOnLoad = false
                    
     open func prefersLargeTitle() -> Bool {
@@ -898,7 +931,7 @@ open class PTBaseViewController: UIViewController {
     }
 
     deinit {
-        statusBarUpdateTask?.cancel()
+        NotificationCenter.default.removeObserver(self, name: .PTRotationOrientationDidChange, object: nil)
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .viewCycle)
     }
     
@@ -910,55 +943,17 @@ open class PTBaseViewController: UIViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
-        
-        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
-            PTNavigationBarManager.shared.restoreIfNeeded(for: findCurrent)
-        } else {
-            PTNavigationBarManager.shared.restoreIfNeeded(for: self)
-        }
-
-        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
-        if transitionCoordinator == nil {
-            if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
-                PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
-            } else {
-                if let nav = navigationController {
-                    PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
-                }
-            }
-        }
+        refreshNavigationBarIfNeeded()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
-        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
-        if transitionCoordinator == nil {
-            if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
-                PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
-            } else {
-                if let nav = self.navigationController {
-                    PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
-                }
-            }
-        }
-
-        statusBarUpdateTask?.cancel()
-        statusBarUpdateTask = Task { @MainActor [weak self] in
-            do {
-                try await Task.sleep(nanoseconds: 100_000_000)
-            } catch {
-                return
-            }
-            guard let self, !Task.isCancelled else { return }
-            self.updateStatusBar(self.preferredNavigationBarStyle())
-        }
+        refreshNavigationBarIfNeeded()
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
         super.viewWillDisappear(animated)
-        statusBarUpdateTask?.cancel()
-        statusBarUpdateTask = nil
         PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         if let presenting = presentingViewController {
             PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
@@ -984,32 +979,35 @@ open class PTBaseViewController: UIViewController {
             navigationController?.navigationBar.isHidden = true
         }
 
-        PTRotationManager.shared.orientationMaskDidChange = { [weak self] orientationMask in
-            guard let self = self else { return }
-            self.viewControllerOrientation(orientationMask)
-        }
-    }
-        
-    open override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            /*
-            该方式在以下方法中自动生效。
-            UIView：draw()、layoutSubviews()、updateConstraints()。
-            UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
-             */
-            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
-        }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRotationOrientationChange(_:)),
+            name: .PTRotationOrientationDidChange,
+            object: nil
+        )
     }
     
     open override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
-            PTNavigationBarManager.shared.restoreIfNeeded(for: findCurrent)
-        } else {
-            PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+    }
+
+    /// 只在页面没有转场时恢复一次导航栏状态，避免生命周期重复刷新。
+    private func refreshNavigationBarIfNeeded() {
+        guard transitionCoordinator == nil else { return }
+        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+
+        if let sheet = sheetViewController,
+           let nav = sheet.childViewController as? UINavigationController {
+            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+        } else if let nav = navigationController {
+            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
         }
+    }
+
+    @objc private func handleRotationOrientationChange(_ notification: Notification) {
+        guard let orientationMask = notification.object as? UIInterfaceOrientationMask else { return }
+        viewControllerOrientation(orientationMask)
     }
     
     @MainActor open func prepareDefaultNavigationBarItem() {
@@ -1119,7 +1117,10 @@ open class PTBaseViewController: UIViewController {
             }
         }
         backButton.viewCorner(radius: size.height / 2)
-        PTNavigationBarManager.shared.setLeftView([backButton])
+        let item = PTNavigationBarManager.shared.item(for: self)
+        item.leftView = [backButton]
+        item.leftItemSpacing = leftPadding
+        PTNavigationBarManager.shared.update(item: item, for: self)
     }
     
     // 新增：直接传入任意自定义 view
@@ -1157,7 +1158,9 @@ open class PTBaseViewController: UIViewController {
     
     open func setLeftButtons(views:[UIView], buttonSpacing: CGFloat = 10) {
         guard !views.isEmpty else {
-            navigationItem.rightBarButtonItem = nil
+            let item = PTNavigationBarManager.shared.item(for: self)
+            item.leftView = []
+            PTNavigationBarManager.shared.update(item: item, for: self)
             return
         }
         let item = PTNavigationBarManager.shared.item(for: self)
@@ -1169,7 +1172,9 @@ open class PTBaseViewController: UIViewController {
     //MARK: 需要设置按钮Bounds
     open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10) {
         guard !buttons.isEmpty else {
-            navigationItem.rightBarButtonItem = nil
+            let item = PTNavigationBarManager.shared.item(for: self)
+            item.rightViews = []
+            PTNavigationBarManager.shared.update(item: item, for: self)
             return
         }
         let item = PTNavigationBarManager.shared.item(for: self)
@@ -1200,14 +1205,17 @@ open class PTBaseViewController: UIViewController {
 
     // MARK: - 私有实现
     private func setupBaseConfigs() {
-        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        if !Self.didConfigureScrollViewAppearance {
+            UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+            Self.didConfigureScrollViewAppearance = true
+        }
         extendedLayoutIncludesOpaqueBars = true
         edgesForExtendedLayout = [.top, .left, .bottom, .right]
         definesPresentationContext = true
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-            self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
+            self.baseTraitCollectionDidChange(style:self.traitCollection.userInterfaceStyle)
             self.setNeedsStatusBarAppearanceUpdate()
         }
 
@@ -1327,7 +1335,9 @@ extension PTBaseViewController {
         PTAppWindowsDelegate.appDelegate()?.isFullScreen = isFullScreen
                 
         setNeedsUpdateOfPrefersPointerLocked()
-        guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        guard let scence = view.window?.windowScene
+                ?? PTUtils.fetchWindow()?.windowScene
+                ?? UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first else { return }
         let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
         let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
         scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
