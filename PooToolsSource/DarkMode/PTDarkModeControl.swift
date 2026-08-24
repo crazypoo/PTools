@@ -13,12 +13,18 @@ import SwifterSwift
 @objcMembers
 public class PTDarkModeControl: PTBaseViewController {
 
+    private enum CellID {
+        static let smart = "PTDarkModeControl.smart"
+        static let followSystem = "PTDarkModeControl.followSystem"
+    }
+
     private var darkTime: String = PTDarkModeOption.smartPeelingTimeIntervalValue
     
     open var themeSetBlock: PTActionTask?
 
     lazy var darkModeControlArr : [[PTFusionCellModel]] = {
         let smart = PTFusionCellModel()
+        smart.cellID = CellID.smart
         smart.name = PTDarkModeOption.smartCellName
         smart.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
         smart.switchTintColor = PTDarkModeOption.switchTintColor
@@ -28,6 +34,7 @@ public class PTDarkModeControl: PTBaseViewController {
         smart.cellFont = PTDarkModeOption.cellFont
         
         let followSystem = PTFusionCellModel()
+        followSystem.cellID = CellID.followSystem
         followSystem.name = PTDarkModeOption.followSystemCellName
         followSystem.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
         followSystem.switchTintColor = PTDarkModeOption.switchTintColor
@@ -55,16 +62,15 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: cellHeight,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace)
         }
-        view.headerInCollection = { kind,collectionView,model,index in
+        view.headerInCollection = { [weak self] kind,collectionView,model,index in
             if let headerID = model.headerReuseID {
                 let baseHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index)
                 switch baseHeader {
                 case let header as PTDarkModeHeader:
                     header.currentMode = PTDarkModeOption.isLight ? .light : .dark
-                    header.selectModeBlock = { mode in
+                    header.selectModeBlock = { [weak self] mode in
                         PTDarkModeOption.setDarkModeCustom(isLight: mode == .light ? true : false)
-                        self.showDetail()
-                        self.themeSetBlock?()
+                        self?.themeSetBlock?()
                     }
                     return header
                 default:
@@ -73,21 +79,23 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return nil
         }
-        view.footerInCollection = { kind,collectionView,itemSec,indexPath in
+        view.footerInCollection = { [weak self] kind,collectionView,itemSec,indexPath in
             if let footerID = itemSec.footerReuseID {
                 let baseFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerID, for: indexPath)
                 switch baseFooter {
                 case let footer as PTDarkSmartFooter:
-                    footer.themeTimeButton.normalTitle = self.darkTime
-                    footer.themeTimeButton.addActionHandlers { sender in
-                        let timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.separatedByString(with: "~")
-                        let darkModePickerView = PTDarkModePickerView(startTime: timeIntervalValue[0], endTime: timeIntervalValue[1]) { (startTime, endTime) in
+                    footer.themeTimeButton.normalTitle = self?.darkTime ?? PTDarkModeOption.smartPeelingTimeIntervalValue
+                    // Supplementary View 会复用，先移除旧回调，避免一次点击创建多个选择器。
+                    footer.themeTimeButton.removeTargerAndAction()
+                    footer.themeTimeButton.addActionHandlers { [weak self] _ in
+                        let timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.components(separatedBy: "~")
+                        guard timeIntervalValue.count == 2 else { return }
+                        let darkModePickerView = PTDarkModePickerView(startTime: timeIntervalValue[0], endTime: timeIntervalValue[1]) { [weak self] startTime, endTime in
                             if startTime == endTime {
                                 PTBaseViewController.gobal_drop(title: PTDarkModeOption.timeSetErrorMsg)
                             } else {
                                 PTDarkModeOption.setSmartPeelingTimeChange(startTime: startTime, endTime: endTime)
-                                self.darkTime = startTime + "~" + endTime
-                                self.showDetail()
+                                self?.themeSetBlock?()
                             }
                         }
                         darkModePickerView.showTime()
@@ -101,40 +109,35 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return nil
         }
-        view.cellInCollection = { collectionView ,dataModel,indexPath in
+        view.cellInCollection = { [weak self] collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
                 switch baseCell {
                 case let cell as PTFusionCell:
                     cell.cellModel = cellModel
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-                    if cellModel.name == PTDarkModeOption.smartCellName {
+                    if cellModel.cellID == CellID.smart {
                         cell.switchValue = PTDarkModeOption.isSmartPeeling
-                        Task { @MainActor in
-                            cell.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
-                        }
-                    } else if cellModel.name == PTDarkModeOption.followSystemCellName {
+                        cell.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
+                    } else if cellModel.cellID == CellID.followSystem {
                         cell.switchValue = PTDarkModeOption.isFollowSystem
-                        Task { @MainActor in
-                            cell.contentView.viewCornerRectCorner(bottomLeft: 5,bottomRight: 5, corner: [.bottomLeft,.bottomRight])
-                        }
+                        cell.contentView.viewCornerRectCorner(bottomLeft: 5,bottomRight: 5, corner: [.bottomLeft,.bottomRight])
                     }
-                    cell.switchValueChangeBlock = { title,sender in
-                        if cellModel.name == PTDarkModeOption.smartCellName {
+                    cell.switchValueChangeBlock = { [weak self] _, sender in
+                        if cellModel.cellID == CellID.smart {
                             if let ptSwitch = sender as? PTSwitch {
                                 PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: ptSwitch.isOn)
                             } else if let iosSwitch = sender as? UISwitch {
                                 PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: iosSwitch.isOn)
                             }
-                        } else if cellModel.name == PTDarkModeOption.followSystemCellName {
+                        } else if cellModel.cellID == CellID.followSystem {
                             if let ptSwitch = sender as? PTSwitch {
                                 PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: ptSwitch.isOn)
                             } else if let iosSwitch = sender as? UISwitch {
                                 PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: iosSwitch.isOn)
                             }
                         }
-                        self.showDetail()
-                        self.themeSetBlock?()
+                        self?.themeSetBlock?()
                     }
                     return cell
                 default:
@@ -149,8 +152,8 @@ public class PTDarkModeControl: PTBaseViewController {
     lazy var backButton:PTBaseButton = {
         let view = PTBaseButton(type: .custom)
         view.setImage(PTDarkModeOption.backImage, for: .normal)
-        view.addActionHandlers { sender in
-            self.returnFrontVC()
+        view.addActionHandlers { [weak self] _ in
+            self?.returnFrontVC()
         }
         view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
@@ -228,15 +231,12 @@ public class PTDarkModeControl: PTBaseViewController {
 
 extension PTDarkModeControl: @MainActor PTThemeable {
     public func apply() {
-        Task { @MainActor in
-            let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
-            self.changeStatusBar(type: type)
-            self.backButton.setImage(PTDarkModeOption.backImage, for: .normal)
-            self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-            self.newCollectionView.clearAllData(finishTask: { _ in
-                self.showDetail()
-            })
-        }
+        darkTime = PTDarkModeOption.smartPeelingTimeIntervalValue
+        let type: VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
+        changeStatusBar(type: type)
+        backButton.setImage(PTDarkModeOption.backImage, for: .normal)
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        showDetail()
     }
 }
 

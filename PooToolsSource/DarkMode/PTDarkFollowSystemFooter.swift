@@ -23,7 +23,8 @@ class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,@MainActor PTSupple
         view.font = PTDarkSmartFooter.footerDescFont
         view.numberOfLines = 0
         view.textAlignment = .left
-        view.textColor = .lightGray
+        // 使用动态系统颜色，跟随浅色和深色模式变化。
+        view.textColor = .secondaryLabel
         return view
     }()
     

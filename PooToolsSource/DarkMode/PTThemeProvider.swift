@@ -57,11 +57,9 @@ public class LegacyThemeProvider: @MainActor PTThemeProvider {
     // MARK: 通知监听对象更新theme
     /// 通知监听对象更新theme
     private func notifyObservers() {
-        Task { @MainActor in
-            self.observers.allObjects
-                .compactMap({ $0 as? PTThemeable })
-                .forEach({ $0.apply() })
-        }
+        // 当前类型已经隔离在主线程，直接通知可以避免嵌套任务造成的时序延迟。
+        observers.allObjects
+            .compactMap { $0 as? PTThemeable }
+            .forEach { $0.apply() }
     }
 }
-

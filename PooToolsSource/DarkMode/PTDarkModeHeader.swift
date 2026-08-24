@@ -79,13 +79,13 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.selectedTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.isSelected = false
-        view.addActionHandlers { sender in
+        view.addActionHandlers { [weak self] sender in
             if !sender.isSelected {
                 sender.isSelected = !sender.isSelected
                 if sender.isSelected {
-                    self.blackButton.isSelected = false
+                    self?.blackButton.isSelected = false
                 }
-                self.selectModeBlock?(.light)
+                self?.selectModeBlock?(.light)
             }
         }
         return view
@@ -103,13 +103,13 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.selectedTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.isSelected = false
-        view.addActionHandlers { sender in
+        view.addActionHandlers { [weak self] sender in
             if !sender.isSelected {
                 sender.isSelected = !sender.isSelected
                 if sender.isSelected {
-                    self.whiteButton.isSelected = false
+                    self?.whiteButton.isSelected = false
                 }
-                self.selectModeBlock?(.dark)
+                self?.selectModeBlock?(.dark)
             }
         }
         return view
@@ -127,9 +127,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(10)
         }
-        Task { @MainActor in
-            self.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
-        }
+        contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
         
         contentView.addSubviews([titlaLabel, whiteImageView, blackImageView, whiteButton, blackButton])
         titlaLabel.snp.makeConstraints { make in
@@ -157,8 +155,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
             make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
         }
         
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-            self.optionChange(style: previousTraitCollection.userInterfaceStyle)
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: Self, _: UITraitCollection) in
+            view.optionChange(style: view.traitCollection.userInterfaceStyle)
         }
     }
     
@@ -166,24 +164,10 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
         fatalError("init(coder:) has not been implemented")
     }
     
-    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            optionChange(style:UITraitCollection.current.userInterfaceStyle)
-        }
-    }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            optionChange(style: traitCollection.userInterfaceStyle)
-        }
-    }
-    
     func optionChange(style:UIUserInterfaceStyle) {
         if PTDarkModeOption.isFollowSystem {
-            if style == .light {
+            let resolvedStyle = style == .unspecified ? traitCollection.userInterfaceStyle : style
+            if resolvedStyle == .light {
                 whiteButton.isSelected = true
                 blackButton.isSelected = false
             } else {
