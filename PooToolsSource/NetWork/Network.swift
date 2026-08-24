@@ -612,6 +612,11 @@ public final class Network: @unchecked Sendable {
         return !hasProvision
 #endif
     }()
+
+    /// 测试包（Debug、TestFlight、AdHoc）允许输出响应调试信息，App Store 包不输出响应内容。
+    private static var shouldLogResponseDetails: Bool {
+        !isAppStoreEnvironment
+    }
     
     public var config: PTNetworkConfig {
         get {
@@ -719,13 +724,21 @@ public final class Network: @unchecked Sendable {
     }
     
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-        let paramsStr = isDebugEnvironment ? sanitizedParameters(parameters) : "<redacted>"
+        let paramsStr = requestParametersForLog(parameters)
         let safeHeaders = headers.dictionary.reduce(into: [String: String]()) { result, item in
             let key = item.key.lowercased()
             let isSensitive = key == "authorization" || key.contains("token") || key == "cookie" || key == "set-cookie"
-            result[item.key] = isSensitive ? "<redacted>" : item.value
+            result[item.key] = isSensitive ? "" : item.value
         }
         PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(safeHeaders)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
+    }
+
+    private static func requestParametersForLog(_ parameters: Parameters?) -> String {
+        guard let parameters, !parameters.isEmpty else { return "没有参数" }
+        guard isDebugEnvironment else {
+            return sanitizedParameters(parameters)
+        }
+        return "已隐藏（参数数量：\(parameters.count)）"
     }
 
     private static func sanitizedParameters(_ parameters: Parameters?) -> String {
@@ -733,13 +746,13 @@ public final class Network: @unchecked Sendable {
         let sanitized = parameters.reduce(into: [String: String]()) { result, item in
             let key = item.key.lowercased()
             let isSensitive = key == "authorization" || key.contains("token") || key == "cookie" || key == "set-cookie"
-            result[item.key] = isSensitive ? "<redacted>" : String(describing: item.value)
+            result[item.key] = isSensitive ? "" : String(describing: item.value)
         }
         return String(describing: sanitized)
     }
     
     private static func logRequestSuccess(url: String, jsonStr: String) {
-        let printStr = jsonStr.isEmpty ? "数据为空 (或非JSON格式/被非Debug环境拦截)" : jsonStr
+        let printStr = jsonStr.isEmpty ? "数据为空或响应内容不可解析" : jsonStr
         PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(printStr)🌐", levelType: PTLogMode, loggerType: .network)
     }
     
@@ -793,10 +806,10 @@ public final class Network: @unchecked Sendable {
                 throw error
             }
             var originalText = ""
-            if isDebugEnvironment {
+            if shouldLogResponseDetails {
                 originalText = String(decoding: data, as: UTF8.self)
+                logRequestSuccess(url: url, jsonStr: originalText)
             }
-            logRequestSuccess(url: url, jsonStr: originalText)
             result.originalString = originalText
             return (result, "")
         }
@@ -816,7 +829,7 @@ public final class Network: @unchecked Sendable {
             }
         }
         
-        if isDebugEnvironment {
+        if shouldLogResponseDetails {
             let maxLen = Int(Network.share.config.logMaxCount)
             // 大响应不进入完整 JSON 格式化，避免调试日志制造额外 CPU 和内存峰值。
             let prettyStr: String
@@ -871,6 +884,22 @@ public final class Network: @unchecked Sendable {
                                             jsonRequest: jsonRequest,
                                             cachePolicy: cachePolicy)
         return PTNetworkRequestContext(url: url, method: method, headers: headers)
+    }
+
+    /// 统一编码 Parameters，避免请求头声明为 JSON 时仍使用默认表单编码。
+    private class func encodeParameters(_ parameters: Parameters?,
+                                        into request: URLRequest,
+                                        encoder: ParameterEncoding,
+                                        jsonRequest: Bool) throws -> URLRequest {
+        guard let parameters, !parameters.isEmpty else { return request }
+
+        // 显式 JSON 标记或 JSON Content-Type 都表示参数必须进入 JSON body。
+        let contentType = request.value(forHTTPHeaderField: "Content-Type")?.lowercased() ?? ""
+        let shouldEncodeAsJSON = jsonRequest || contentType.contains("application/json")
+        let effectiveEncoder: ParameterEncoding = shouldEncodeAsJSON
+            ? JSONEncoding.default
+            : encoder
+        return try effectiveEncoder.encode(request, with: parameters)
     }
     
     private typealias ResponseParser<T> = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel<T>
@@ -977,7 +1006,10 @@ public final class Network: @unchecked Sendable {
         logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
 
         var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
-        urlRequest = try encoder.encode(urlRequest, with: parameters)
+        urlRequest = try encodeParameters(parameters,
+                                          into: urlRequest,
+                                          encoder: encoder,
+                                          jsonRequest: jsonRequest)
         return try await execute(url: context.url, request: urlRequest, parser: parser)
     }
     
@@ -1017,7 +1049,10 @@ public final class Network: @unchecked Sendable {
                                                    cachePolicy: cachePolicy)
         logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
         var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
-        urlRequest = try encoder.encode(urlRequest, with: parameters)
+        urlRequest = try encodeParameters(parameters,
+                                          into: urlRequest,
+                                          encoder: encoder,
+                                          jsonRequest: jsonRequest)
         return try await executeLegacy(url: context.url, request: urlRequest, parser: parser)
     }
 
