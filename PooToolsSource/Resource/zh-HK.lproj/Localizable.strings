@@ -259,3 +259,5 @@
 "PT Video editor get video error" = "獲取視頻失敗";
 "PT Video editor convetering" = "轉換中";
 "PT Video editor ouputing" = "導出中";
+"PT Sheet dismiss" = "關閉面板";
+"PT Sheet change size" = "切換面板尺寸";

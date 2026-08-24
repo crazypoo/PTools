@@ -431,28 +431,16 @@ public extension UIViewController {
         present(modalViewController, animated: true,completion: completion)
     }
     
+    @MainActor
     class func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
-        
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         sheet.overlayColor = overlayColor
-        // 设置 sheet 的 windowLevel 为低于调试窗口，确保它不会遮挡
-        sheet.view.window?.windowLevel = .normal
-        let currentVC = PTUtils.getCurrentVC()
-        switch currentVC {
-        case let currentVCs as PTSideMenuControl:
-            let currentVCc = currentVCs.contentViewController
-            if let presentedVC = currentVCc?.presentedViewController {
-                presentedVC.present(sheet, animated: true, completion: completion)
-            } else {
-                currentVCc?.present(sheet, animated: true,completion: completion)
-            }
-        default:
-            if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true,completion: completion)
-            } else {
-                currentVC?.present(sheet, animated: true,completion: completion)
-            }
+        guard let presenter = PTUtils.getCurrentVC(),
+              presenter.isBeingDismissed == false,
+              presenter.presentedViewController == nil else {
+            return
         }
+        presenter.present(sheet, animated: true, completion: completion)
     }
     
 #if POOTOOLS_DEBUG

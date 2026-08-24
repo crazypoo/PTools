@@ -9,6 +9,7 @@
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 
+@MainActor
 extension PTBaseViewController: UIGestureRecognizerDelegate {
     
     /// 决定当前手势识别器是否需要强制“另一个手势识别器”失败后，自己才能识别成功。

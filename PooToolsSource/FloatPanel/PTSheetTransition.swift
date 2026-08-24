@@ -8,171 +8,306 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
-import SnapKit
 
-/// 用于包装弱引用的 UIViewController，防止静态数组引发内存泄漏
-struct PTWeakPresenter {
+/// 保存 Presenter 在面板转场前的状态，关闭时按原值恢复。
+@MainActor
+private final class PTPresenterSnapshot {
     weak var controller: UIViewController?
+    let transform: CATransform3D
+    let cornerRadius: CGFloat
+    let masksToBounds: Bool
+
+    init(controller: UIViewController) {
+        self.controller = controller
+        self.transform = controller.view.layer.transform
+        self.cornerRadius = controller.view.layer.cornerRadius
+        self.masksToBounds = controller.view.layer.masksToBounds
+    }
 }
 
+@MainActor
 public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning {
-    
+
     var presenting = true
     weak var presenter: UIViewController?
-    var options: PTSheetOptions
-    
-    /// Cache of presenters so we can do the experimental shrinkingNestedPresentingViewControllers behavior
-    /// [优化] 改为弱引用数组，避免强持有 ViewController 导致内存泄漏
-    static var currentPresenters: [PTWeakPresenter] = []
-    
+    let options: PTSheetOptions
+    private var presenterSnapshot: PTPresenterSnapshot?
+
+    /// 嵌套面板只保存弱引用，避免转场缓存延长控制器生命周期。
+    private static var currentPresenters: [PTPresenterSnapshot] = []
+
     init(options: PTSheetOptions) {
-        self.options = options
+        self.options = options.normalized()
         super.init()
     }
 
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return self.options.transitionDuration
+        let duration = self.options.transitionDuration
+        if UIAccessibility.isReduceMotionEnabled {
+            return min(max(duration, 0), 0.15)
+        }
+        return min(max(duration, 0), 2)
     }
 
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let containerView = transitionContext.containerView
-        
         if self.presenting {
-            guard let presenter = transitionContext.viewController(forKey: .from),
-                  let sheet = transitionContext.viewController(forKey: .to) as? PTSheetViewController else {
-                transitionContext.completeTransition(true)
-                return
-            }
-            self.presenter = presenter
-            
-            if PTSheetOptions.shrinkingNestedPresentingViewControllers {
-                // 清理已经释放的 controller，并追加新的
-                PTSheetTransition.currentPresenters.removeAll { $0.controller == nil }
-                PTSheetTransition.currentPresenters.append(PTWeakPresenter(controller: presenter))
-            }
-            
-            sheet.contentViewController.view.transform = .identity
-            containerView.addSubview(sheet.view)
-            
-            sheet.view.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            // 强制刷新布局以获取正确的 bounds
-            UIView.performWithoutAnimation {
-                sheet.view.layoutIfNeeded()
-            }
-            
-            sheet.contentViewController.updatePreferredHeight()
-            sheet.resize(to: sheet.currentSize, animated: false)
-            
-            let contentView = sheet.contentViewController.contentView
-            contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
-            sheet.overlayView.alpha = 0
-            
-            // 安全限制：防止除以 0 的情况出现（极小概率）
-            let screenHeight = UIScreen.main.bounds.height
-            let heightPercent = screenHeight > 0 ? (contentView.bounds.height / screenHeight) : 0
-            
-            // [优化] 移除了一次多余的 sheet.view.layoutIfNeeded()
-            
-            // 1. 基础动画：处理阴影和背景 Overlay
-            UIView.animate(withDuration: self.options.transitionDuration * 0.6, delay: 0, options: [.curveEaseOut], animations: {
-                if self.options.shrinkPresentingViewController {
-                    self.setPresenter(percentComplete: 0)
-                }
-                sheet.overlayView.alpha = 1
-            }, completion: nil)
-
-            // 2. 弹簧动画：处理面板本身的上移
-            UIView.animate(withDuration: self.options.transitionDuration,
-                           delay: 0,
-                           usingSpringWithDamping: self.options.transitionDampening + ((heightPercent - 0.2) * 1.25 * 0.17),
-                           initialSpringVelocity: self.options.transitionVelocity * heightPercent,
-                           options: self.options.transitionAnimationOptions,
-                           animations: {
-                contentView.transform = .identity
-            }, completion: { _ in
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-            })
-            
+            self.animatePresentation(using: transitionContext)
         } else {
-            // Dismiss 逻辑
-            guard let presenter = transitionContext.viewController(forKey: .to),
-                  let sheet = transitionContext.viewController(forKey: .from) as? PTSheetViewController else {
-                transitionContext.completeTransition(true)
-                return
-            }
-
-            containerView.addSubview(sheet.view)
-            let contentView = sheet.contentViewController.contentView
-
-            self.restorePresenter(
-                presenter,
-                animations: {
-                    PTGCDManager.shared.runOnMain {
-                        contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
-                        sheet.overlayView.alpha = 0
-                    }
-                }, completion: { _ in
-                    PTGCDManager.shared.runOnMain {
-                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                    }
-                }
-            )
+            self.animateDismissal(using: transitionContext)
         }
     }
 
-    // MARK: - Helper Methods
-    
-    /// 恢复 Presenter 的视图状态
-    func restorePresenter(_ presenter: UIViewController, animated: Bool = true, animations: PTActionTask? = nil, completion: PTBoolTask? = nil) {
-        // [优化] 同时清理匹配的 presenter 和已经变为 nil 的悬空指针
-        PTSheetTransition.currentPresenters.removeAll(where: { $0.controller == presenter || $0.controller == nil })
-        
-        let topSafeArea = AppWindows?.compatibleSafeAreaInsets.top ?? 0
-        
+    private func animatePresentation(using transitionContext: UIViewControllerContextTransitioning) {
+        let containerView = transitionContext.containerView
+        guard let presenter = transitionContext.viewController(forKey: .from),
+              let sheet = transitionContext.viewController(forKey: .to) as? PTSheetViewController else {
+            transitionContext.completeTransition(false)
+            return
+        }
+
+        self.presenter = presenter
+        let snapshot = PTPresenterSnapshot(controller: presenter)
+        self.presenterSnapshot = snapshot
+
+        if PTSheetOptions.shrinkingNestedPresentingViewControllers {
+            Self.currentPresenters.removeAll { $0.controller == nil }
+            Self.currentPresenters.append(snapshot)
+        }
+
+        if sheet.view.superview !== containerView {
+            containerView.addSubview(sheet.view)
+        }
+        sheet.view.frame = containerView.bounds
+        sheet.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        sheet.view.layoutIfNeeded()
+        sheet.contentViewController.updatePreferredHeight()
+        sheet.resize(to: sheet.currentSize, animated: false)
+
+        let contentView = sheet.contentViewController.contentView
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        contentView.transform = reduceMotion ? .identity : CGAffineTransform(translationX: 0, y: contentView.bounds.height)
+        contentView.alpha = reduceMotion ? 0 : 1
+        sheet.overlayView.alpha = 0
+
+        let containerHeight = max(containerView.bounds.height, 1)
+        let heightPercent = min(max(contentView.bounds.height / containerHeight, 0), 1)
+        let duration = self.transitionDuration(using: transitionContext)
+        let damping = self.normalizedDamping(for: heightPercent)
+        let velocity = self.options.transitionVelocity * heightPercent
+
         UIView.animate(
-            withDuration: self.options.transitionDuration,
+            withDuration: duration * 0.6,
+            delay: 0,
+            options: [.curveEaseOut],
             animations: {
-                if self.options.shrinkPresentingViewController {
-                    presenter.view.layer.transform = CATransform3DMakeScale(1, 1, 1)
-                    presenter.view.layer.cornerRadius = 0
+                if self.options.shrinkPresentingViewController || PTSheetOptions.shrinkingNestedPresentingViewControllers {
+                    self.setPresenter(percentComplete: 0)
                 }
-                
-                if PTSheetOptions.shrinkingNestedPresentingViewControllers {
-                    var scale: CGFloat = 1.0
-                    // [优化] 解包弱引用
-                    let validPresenters = PTSheetTransition.currentPresenters.compactMap { $0.controller }.reversed()
-                    for lowerPresenter in validPresenters {
-                        scale *= 0.92
-                        lowerPresenter.view.layer.transform = CATransform3DConcat(CATransform3DMakeTranslation(0, topSafeArea/2, 0), CATransform3DMakeScale(scale, scale, 1))
-                    }
+                sheet.overlayView.alpha = 1
+            }
+        )
+
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            usingSpringWithDamping: damping,
+            initialSpringVelocity: velocity,
+            options: self.options.transitionAnimationOptions,
+            animations: {
+                if UIAccessibility.isReduceMotionEnabled {
+                    contentView.alpha = 1
+                } else {
+                    contentView.transform = .identity
                 }
-                animations?()
             },
-            completion: {
-                completion?($0)
+            completion: { _ in
+                let completed = !transitionContext.transitionWasCancelled
+                if !completed {
+                    contentView.transform = .identity
+                    contentView.alpha = 1
+                    sheet.overlayView.alpha = 1
+                    self.restorePresenterImmediately()
+                    if PTSheetOptions.shrinkingNestedPresentingViewControllers {
+                        self.setPresenter(percentComplete: 0)
+                    }
+                    self.removePresenterSnapshot(for: presenter)
+                }
+                transitionContext.completeTransition(completed)
+                if completed {
+                    UIAccessibility.post(notification: .screenChanged, argument: sheet.contentViewController.view)
+                }
             }
         )
     }
 
-    /// 设置 Presenter 缩放状态
-    func setPresenter(percentComplete: CGFloat) {
-        guard self.options.shrinkPresentingViewController, let presenter = self.presenter else { return }
-        
-        var scale: CGFloat = min(1, 0.92 + (0.08 * percentComplete))
-        let topSafeArea = AppWindows?.compatibleSafeAreaInsets.top ?? 0
+    private func animateDismissal(using transitionContext: UIViewControllerContextTransitioning) {
+        let containerView = transitionContext.containerView
+        guard let presenter = transitionContext.viewController(forKey: .to),
+              let sheet = transitionContext.viewController(forKey: .from) as? PTSheetViewController else {
+            transitionContext.completeTransition(false)
+            return
+        }
 
-        presenter.view.layer.transform = CATransform3DConcat(CATransform3DMakeTranslation(0, (1 - percentComplete) * topSafeArea/2, 0), CATransform3DMakeScale(scale, scale, 1))
-        presenter.view.layer.cornerRadius = self.options.presentingViewCornerRadius * (1 - percentComplete)
-        
+        let contentView = sheet.contentViewController.contentView
+        let animations: @MainActor () -> Void = {
+            if UIAccessibility.isReduceMotionEnabled {
+                contentView.alpha = 0
+            } else {
+                contentView.transform = CGAffineTransform(translationX: 0, y: max(contentView.bounds.height, containerView.bounds.height))
+            }
+            sheet.overlayView.alpha = 0
+        }
+
+        let finish: @MainActor (Bool) -> Void = { [weak self, weak presenter] animationCompleted in
+            guard let self = self else { return }
+            let completed = animationCompleted && !transitionContext.transitionWasCancelled
+            if completed {
+                self.removePresenterSnapshot(for: presenter)
+            } else {
+                contentView.transform = .identity
+                contentView.alpha = 1
+                sheet.overlayView.alpha = 1
+                self.setPresenter(percentComplete: 0)
+            }
+            transitionContext.completeTransition(completed)
+            sheet.transitionDidFinishDismissal(completed: completed)
+        }
+
+        if self.options.shrinkPresentingViewController || PTSheetOptions.shrinkingNestedPresentingViewControllers {
+            self.restorePresenter(presenter, animated: true, animations: animations, completion: finish)
+        } else {
+            UIView.animate(
+                withDuration: self.transitionDuration(using: transitionContext),
+                delay: 0,
+                options: self.options.transitionAnimationOptions,
+                animations: animations,
+                completion: finish
+            )
+        }
+    }
+
+    private func normalizedDamping(for heightPercent: CGFloat) -> CGFloat {
+        let adjustment = (heightPercent - 0.2) * 1.25 * 0.17
+        return min(max(self.options.transitionDampening + adjustment, 0.01), 1)
+    }
+
+    private func snapshot(for presenter: UIViewController) -> PTPresenterSnapshot? {
+        if let presenterSnapshot, presenterSnapshot.controller === presenter {
+            return presenterSnapshot
+        }
+        return Self.currentPresenters.first { $0.controller === presenter }
+    }
+
+    private func removePresenterSnapshot(for presenter: UIViewController?) {
+        guard let presenter else { return }
+        Self.currentPresenters.removeAll { $0.controller === presenter || $0.controller == nil }
+        if self.presenterSnapshot?.controller === presenter {
+            self.presenterSnapshot = nil
+        }
+    }
+
+    private func restorePresenterImmediately() {
+        guard let presenter = self.presenter,
+              let snapshot = self.snapshot(for: presenter) else { return }
+        presenter.view.layer.transform = snapshot.transform
+        presenter.view.layer.cornerRadius = snapshot.cornerRadius
+        presenter.view.layer.masksToBounds = snapshot.masksToBounds
+    }
+
+    /// 恢复 Presenter 的视图状态。
+    func restorePresenter(_ presenter: UIViewController, animated: Bool = true, animations: (@MainActor () -> Void)? = nil, completion: (@MainActor (Bool) -> Void)? = nil) {
+        let apply: @MainActor () -> Void = {
+            if let snapshot = self.snapshot(for: presenter) {
+                presenter.view.layer.transform = snapshot.transform
+                presenter.view.layer.cornerRadius = snapshot.cornerRadius
+                presenter.view.layer.masksToBounds = snapshot.masksToBounds
+            }
+
+            if PTSheetOptions.shrinkingNestedPresentingViewControllers {
+                let scene = presenter.view.window?.windowScene
+                var scale: CGFloat = 1
+                let lowerPresenters = Self.currentPresenters.reversed().compactMap { snapshot -> PTPresenterSnapshot? in
+                    guard let controller = snapshot.controller, controller !== presenter else { return nil }
+                    guard scene == nil || controller.view.window?.windowScene === scene else { return nil }
+                    return snapshot
+                }
+                for snapshot in lowerPresenters {
+                    guard let controller = snapshot.controller else { continue }
+                    scale *= 0.92
+                    let transform = CATransform3DConcat(
+                        snapshot.transform,
+                        CATransform3DConcat(
+                            CATransform3DMakeTranslation(0, controller.view.safeAreaInsets.top / 2, 0),
+                            CATransform3DMakeScale(scale, scale, 1)
+                        )
+                    )
+                    controller.view.layer.transform = transform
+                    controller.view.layer.cornerRadius = snapshot.cornerRadius
+                    controller.view.layer.masksToBounds = snapshot.masksToBounds
+                }
+            }
+            animations?()
+        }
+
+        if animated, self.transitionDuration(using: nil) > 0 {
+            UIView.animate(
+                withDuration: self.transitionDuration(using: nil),
+                animations: apply,
+                completion: { completed in
+                    if completed {
+                        self.removePresenterSnapshot(for: presenter)
+                    }
+                    completion?(completed)
+                }
+            )
+        } else {
+            apply()
+            self.removePresenterSnapshot(for: presenter)
+            completion?(true)
+        }
+    }
+
+    /// 设置 Presenter 缩放状态。
+    func setPresenter(percentComplete: CGFloat) {
+        guard self.options.shrinkPresentingViewController || PTSheetOptions.shrinkingNestedPresentingViewControllers,
+              let presenter = self.presenter,
+              let snapshot = self.snapshot(for: presenter) else { return }
+
+        let percent = min(max(percentComplete, 0), 1)
+        let topSafeArea = presenter.view.safeAreaInsets.top
+        let scale = 0.92 + (0.08 * percent)
+        let transform = CATransform3DConcat(
+            snapshot.transform,
+            CATransform3DConcat(
+                CATransform3DMakeTranslation(0, (1 - percent) * topSafeArea / 2, 0),
+                CATransform3DMakeScale(scale, scale, 1)
+            )
+        )
+        presenter.view.layer.transform = transform
+        presenter.view.layer.cornerRadius = max(snapshot.cornerRadius, self.options.presentingViewCornerRadius * (1 - percent))
+        presenter.view.layer.masksToBounds = true
+
         if PTSheetOptions.shrinkingNestedPresentingViewControllers {
-            // [优化] 解包弱引用并丢弃第一个
-            let validPresenters = PTSheetTransition.currentPresenters.compactMap { $0.controller }.reversed().dropFirst()
-            for lowerPresenter in validPresenters {
-                scale *= 0.92
-                lowerPresenter.view.layer.transform = CATransform3DConcat(CATransform3DMakeTranslation(0, (1 - percentComplete) * topSafeArea/2, 0), CATransform3DMakeScale(scale, scale, 1))
+            var nestedScale = scale
+            let scene = presenter.view.window?.windowScene
+            let lowerPresenters = Self.currentPresenters.reversed().compactMap { snapshot -> PTPresenterSnapshot? in
+                guard let controller = snapshot.controller, controller !== presenter else { return nil }
+                guard scene == nil || controller.view.window?.windowScene === scene else { return nil }
+                return snapshot
+            }
+            for snapshot in lowerPresenters {
+                guard let controller = snapshot.controller else { continue }
+                nestedScale *= 0.92
+                let transform = CATransform3DConcat(
+                    snapshot.transform,
+                    CATransform3DConcat(
+                        CATransform3DMakeTranslation(0, (1 - percent) * controller.view.safeAreaInsets.top / 2, 0),
+                        CATransform3DMakeScale(nestedScale, nestedScale, 1)
+                    )
+                )
+                controller.view.layer.transform = transform
+                controller.view.layer.cornerRadius = snapshot.cornerRadius
+                controller.view.layer.masksToBounds = snapshot.masksToBounds
             }
         }
     }

@@ -10,13 +10,18 @@
 import UIKit
 import SnapKit
 
+@MainActor
 public class PTSheetContentViewController: PTBaseViewController {
 
     public private(set) var childViewController: UIViewController
     
-    private var options: PTSheetOptions
+    private let options: PTSheetOptions
     private(set) var size: CGFloat = 0
     private(set) var preferredHeight: CGFloat
+    private var originalChildSafeAreaInsets: UIEdgeInsets = .zero
+    private var pullBarSafeAreaTop: CGFloat = 0
+    private var keyboardSafeAreaBottom: CGFloat = 0
+    private var lastLayoutBounds: CGSize = .zero
     
     public var contentBackgroundColor: UIColor? {
         get { self.childContainerView.backgroundColor }
@@ -39,10 +44,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     public var gripSize: CGSize = CGSize(width: 50, height: 6) {
         didSet {
-            self.gripView.snp.updateConstraints { make in
-                make.size.equalTo(self.gripSize)
-            }
-            self.gripView.layer.cornerRadius = self.gripSize.height / 2
+            self.updateGripConstraints()
         }
     }
     
@@ -83,22 +85,28 @@ public class PTSheetContentViewController: PTBaseViewController {
     }()
     
     private let overflowView = UIView()
+    private var contentTopConstraint: NSLayoutConstraint?
+    private var navigationHeightConstraint: NSLayoutConstraint?
+    private var gripWidthConstraint: NSLayoutConstraint?
+    private var gripHeightConstraint: NSLayoutConstraint?
     
     // MARK: - Initialization
     
     public init(childViewController: UIViewController, options: PTSheetOptions) {
-        self.options = options
+        self.options = options.normalized()
         self.childViewController = childViewController
         self.preferredHeight = 0
         super.init(nibName: nil, bundle: nil)
+        self.originalChildSafeAreaInsets = childViewController.additionalSafeAreaInsets
         
-        if options.setIntrinsicHeightOnNavigationControllers, let navigationController = self.childViewController as? UINavigationController {
+        if self.options.setIntrinsicHeightOnNavigationControllers, let navigationController = self.childViewController as? UINavigationController {
             navigationController.delegate = self
         }
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        // FloatPanel 只支持代码创建；从 storyboard 解码时安全返回失败，避免初始化阶段崩溃。
+        return nil
     }
     
     // MARK: - Lifecycle
@@ -136,6 +144,11 @@ public class PTSheetContentViewController: PTBaseViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.updateAfterLayout()
+
+        let boundsSize = self.view.bounds.size
+        guard boundsSize.width > 0, boundsSize.height > 0, boundsSize != self.lastLayoutBounds else { return }
+        self.lastLayoutBounds = boundsSize
+        self.updatePreferredHeight()
     }
     
     // MARK: - Methods
@@ -145,7 +158,8 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     func adjustForKeyboard(height: CGFloat) {
-        self.updateChildViewControllerBottomConstraint(adjustment: -height)
+        self.keyboardSafeAreaBottom = height.isFinite ? max(0, height) : 0
+        self.applyChildSafeAreaInsets()
     }
 
     private func updateCornerCurve() {
@@ -177,65 +191,104 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     private func updateNavigationControllerHeight() {
-        // [注意⚠️] 这里的逻辑是空的！原代码在 guard 之后直接结束了。
-        // UINavigationControllers don't set intrinsic size, this is a workaround to fix that
         guard self.options.setIntrinsicHeightOnNavigationControllers,
-              self.childViewController is UINavigationController else { return }
-        
-        // TODO: 这里缺少了针对 NavigationController 高度修复的具体逻辑，请检查是否遗漏！
+              let navigationController = self.childViewController as? UINavigationController,
+              self.isViewLoaded,
+              let visibleViewController = navigationController.visibleViewController,
+              let visibleView = visibleViewController.viewIfLoaded else { return }
+
+        let width = max(self.childContainerView.bounds.width, self.view.bounds.width)
+        guard width > 0 else { return }
+
+        self.navigationHeightConstraint?.isActive = false
+        self.contentTopConstraint?.isActive = false
+
+        var fittingSize = UIView.layoutFittingCompressedSize
+        fittingSize.width = width
+        let fittedHeight = visibleView.systemLayoutSizeFitting(
+            fittingSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .defaultLow
+        ).height
+        let navigationBarHeight = navigationController.navigationBar.isHidden ? 0 : navigationController.navigationBar.bounds.height
+        let toolbarHeight = navigationController.toolbar.isHidden ? 0 : navigationController.toolbar.bounds.height
+        let preferredHeight = navigationController.preferredContentSize.height
+        let measuredHeight = max(0, preferredHeight > 0 ? preferredHeight : fittedHeight + navigationBarHeight + toolbarHeight)
+
+        if let navigationHeightConstraint {
+            navigationHeightConstraint.constant = measuredHeight
+        } else {
+            let constraint = navigationController.view.heightAnchor.constraint(equalToConstant: measuredHeight)
+            constraint.isActive = true
+            self.navigationHeightConstraint = constraint
+        }
+
+        self.navigationHeightConstraint?.isActive = true
+        self.contentTopConstraint?.isActive = true
     }
     
     func updatePreferredHeight() {
+        guard self.isViewLoaded else { return }
         self.updateNavigationControllerHeight()
-        let width = self.view.bounds.width > 0 ? self.view.bounds.width : UIScreen.main.bounds.width
+        let width = max(self.view.bounds.width, self.contentView.bounds.width)
+        guard width > 0 else { return }
         let oldPreferredHeight = self.preferredHeight
         var fittingSize = UIView.layoutFittingCompressedSize
         fittingSize.width = width
-        
+
+        self.contentTopConstraint?.isActive = false
         UIView.performWithoutAnimation {
-            self.contentView.layoutSubviews()
+            self.view.layoutIfNeeded()
+            let measuredHeight = self.contentView.systemLayoutSizeFitting(
+                fittingSize,
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .defaultLow
+            ).height
+            self.preferredHeight = measuredHeight.isFinite ? max(0, measuredHeight) : 0
         }
-        
-        self.preferredHeight = self.contentView.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
-        
-        UIView.performWithoutAnimation {
-            self.contentView.layoutSubviews()
-        }
-        
-        sheetContentViewPreferredHeightChanged?(oldPreferredHeight, self.preferredHeight)
-    }
-    
-    private func updateChildViewControllerBottomConstraint(adjustment: CGFloat) {
-        self.childViewController.view.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().inset(adjustment)
+        self.contentTopConstraint?.isActive = true
+        self.view.layoutIfNeeded()
+
+        let scale = max(self.view.window?.screen.scale ?? self.traitCollection.displayScale, 1)
+        let tolerance = 1 / scale
+        if abs(oldPreferredHeight - self.preferredHeight) >= tolerance {
+            self.sheetContentViewPreferredHeightChanged?(oldPreferredHeight, self.preferredHeight)
         }
     }
     
     private func setupChildViewController() {
-        self.childViewController.willMove(toParent: self)
         self.addChild(self.childViewController)
         self.childContainerView.addSubview(self.childViewController.view)
-        
-        self.childViewController.view.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
-            make.bottom.equalToSuperview().inset(0)
-        }
-        
-        if self.options.shouldExtendBackground, self.options.pullBarHeight > 0 {
-            self.childViewController.compatibleAdditionalSafeAreaInsets = UIEdgeInsets(top: self.options.pullBarHeight, left: 0, bottom: 0, right: 0)
-        }
-        
+
+        let childView = self.childViewController.view
+        childView?.translatesAutoresizingMaskIntoConstraints = false
+        let childBottomConstraint = childView?.bottomAnchor.constraint(equalTo: self.childContainerView.bottomAnchor)
+        NSLayoutConstraint.activate([
+            childView?.leadingAnchor.constraint(equalTo: self.childContainerView.leadingAnchor),
+            childView?.trailingAnchor.constraint(equalTo: self.childContainerView.trailingAnchor),
+            childView?.topAnchor.constraint(equalTo: self.childContainerView.topAnchor),
+            childBottomConstraint
+        ] as! [NSLayoutConstraint])
+
+        self.pullBarSafeAreaTop = self.options.shouldExtendBackground ? self.options.pullBarHeight : 0
+        self.applyChildSafeAreaInsets()
         self.childViewController.didMove(toParent: self)
         
         self.childContainerView.layer.masksToBounds = true
-        self.childContainerView.layer.compatibleMaskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        self.childContainerView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
     private func setupContentView() {
         self.view.addSubview(self.contentView)
-        self.contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        let contentTopConstraint = self.contentView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        self.contentTopConstraint = contentTopConstraint
+        NSLayoutConstraint.activate([
+            contentTopConstraint,
+            self.contentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.contentView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
         
         self.contentView.addSubview(self.contentWrapperView)
         self.contentWrapperView.snp.makeConstraints { make in
@@ -243,7 +296,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         }
         
         self.contentWrapperView.layer.masksToBounds = true
-        self.contentWrapperView.layer.compatibleMaskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        self.contentWrapperView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
                 
         self.contentView.addSubview(overflowView)
         overflowView.snp.makeConstraints { make in
@@ -278,18 +331,25 @@ public class PTSheetContentViewController: PTBaseViewController {
         }
         
         self.gripView.backgroundColor = self.gripColor
-        self.gripView.layer.cornerRadius = self.gripSize.height / 2
+        self.gripView.layer.cornerRadius = max(0, self.gripSize.height) / 2
         self.gripView.layer.masksToBounds = true
         pullBarView.addSubview(self.gripView)
-        
-        self.gripView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(self.gripSize)
-        }
+
+        self.gripView.translatesAutoresizingMaskIntoConstraints = false
+        let gripWidthConstraint = self.gripView.widthAnchor.constraint(equalToConstant: max(0, self.gripSize.width))
+        let gripHeightConstraint = self.gripView.heightAnchor.constraint(equalToConstant: max(0, self.gripSize.height))
+        self.gripWidthConstraint = gripWidthConstraint
+        self.gripHeightConstraint = gripHeightConstraint
+        NSLayoutConstraint.activate([
+            self.gripView.centerXAnchor.constraint(equalTo: self.pullBarView.centerXAnchor),
+            self.gripView.centerYAnchor.constraint(equalTo: self.pullBarView.centerYAnchor),
+            gripWidthConstraint,
+            gripHeightConstraint
+        ])
         
         self.pullBarView.isAccessibilityElement = true
         self.pullBarView.accessibilityIdentifier = "pull-bar"
-        self.pullBarView.accessibilityLabel = "Tap to Dismiss Presentation."
+        self.pullBarView.accessibilityLabel = "PT Sheet dismiss".localized()
         self.pullBarView.accessibilityTraits = [.button]
         
         // [修复核心漏洞] 必须使用 [weak self] 防止强引用循环！
@@ -300,6 +360,25 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     @objc func contentSizeDidChange() {
+        self.updatePreferredHeight()
+    }
+
+    private func updateGripConstraints() {
+        guard self.isViewLoaded, self.gripView.superview != nil else { return }
+        self.gripWidthConstraint?.constant = max(0, self.gripSize.width)
+        self.gripHeightConstraint?.constant = max(0, self.gripSize.height)
+        self.gripView.layer.cornerRadius = max(0, self.gripSize.height) / 2
+    }
+
+    private func applyChildSafeAreaInsets() {
+        var insets = self.originalChildSafeAreaInsets
+        insets.top += self.pullBarSafeAreaTop
+        insets.bottom += self.keyboardSafeAreaBottom
+        self.childViewController.additionalSafeAreaInsets = insets
+    }
+
+    public override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+        super.preferredContentSizeDidChange(forChildContentContainer: container)
         self.updatePreferredHeight()
     }
 }

@@ -195,6 +195,29 @@ pod 'PooTools/SVG', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Share', :git => 'https://github.com/crazypoo/PTools.git'
 ### FloatPanel
 pod 'PooTools/FloatPanel', :git => 'https://github.com/crazypoo/PTools.git'
+
+FloatPanel 支持 intrinsic、固定高度、百分比、顶部间距和全屏尺寸。所有 UI 配置与回调都应在主线程使用：
+
+```swift
+let sheet = PTSheetViewController(
+    controller: contentViewController,
+    sizes: [.intrinsic, .percent(0.8), .fullscreen]
+)
+sheet.didDismiss = { _ in
+    // 面板完成关闭后只回调一次
+}
+present(sheet, animated: true)
+```
+
+如果内容控制器包含 `UIScrollView`，在内容控制器中注册它，让面板在滚动到顶部时接管上下拖动：
+
+```swift
+sheetViewController?.handleScrollView(tableView)
+```
+
+`PTSheetOptions.pullDismissThreshold` 是新的正确拼写；旧的
+`pullDismissThreshod` 继续保留并标记为 deprecated。键盘、旋转、动态字体和
+NavigationController intrinsic 高度由 FloatPanel 自动重新计算。
 ### 空数据
 pod 'PooTools/ListEmptyData', :git => 'https://github.com/crazypoo/PTools.git'
 ### DEBUG工具

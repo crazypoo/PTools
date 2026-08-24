@@ -9,7 +9,7 @@
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 
-@MainActor 
+@MainActor
 public struct PTSheetOptions {
     
     /// 默认的配置实例
@@ -61,7 +61,14 @@ public struct PTSheetOptions {
     /// 转场溢出类型
     public var transitionOverflowType: TransitionOverflowType = .automatic
     /// 下拉消失的阈值。默认值 500，值越大需要越大的速度才能滑动取消，反之亦然。
-    public var pullDismissThreshod: CGFloat = 500.0
+    public var pullDismissThreshold: CGFloat = 500.0
+
+    /// 兼容旧版本的拼写错误属性。
+    @available(*, deprecated, renamed: "pullDismissThreshold")
+    public var pullDismissThreshod: CGFloat {
+        get { self.pullDismissThreshold }
+        set { self.pullDismissThreshold = newValue }
+    }
     
     // MARK: - Experimental (实验性功能)
     
@@ -84,7 +91,13 @@ public struct PTSheetOptions {
                 useInlineMode: Bool = false,
                 horizontalPadding: CGFloat = 0,
                 maxWidth: CGFloat? = nil,
-                isRubberBandEnabled: Bool = false) {
+                isRubberBandEnabled: Bool = false,
+                transitionAnimationOptions: UIView.AnimationOptions = [.curveEaseOut],
+                transitionDampening: CGFloat = 0.7,
+                transitionDuration: TimeInterval = 0.4,
+                transitionVelocity: CGFloat = 0.8,
+                transitionOverflowType: TransitionOverflowType = .automatic,
+                pullDismissThreshold: CGFloat = 500.0) {
         
         self.pullBarHeight = pullBarHeight
         self.presentingViewCornerRadius = presentingViewCornerRadius
@@ -96,6 +109,35 @@ public struct PTSheetOptions {
         self.horizontalPadding = horizontalPadding
         self.maxWidth = maxWidth == 0 ? nil : maxWidth
         self.isRubberBandEnabled = isRubberBandEnabled
+        self.transitionAnimationOptions = transitionAnimationOptions
+        self.transitionDampening = transitionDampening
+        self.transitionDuration = transitionDuration
+        self.transitionVelocity = transitionVelocity
+        self.transitionOverflowType = transitionOverflowType
+        self.pullDismissThreshold = pullDismissThreshold
+    }
+
+    /// 返回适合当前面板使用的安全配置快照。
+    /// 所有 UI 配置都在主线程读取，因此不会把 UIKit 对象跨 actor 传递。
+    func normalized() -> PTSheetOptions {
+        var value = self
+
+        value.pullBarHeight = Self.nonNegative(value.pullBarHeight)
+        value.presentingViewCornerRadius = Self.nonNegative(value.presentingViewCornerRadius)
+        value.horizontalPadding = Self.nonNegative(value.horizontalPadding)
+        value.maxWidth = value.maxWidth.flatMap { width in
+            width.isFinite && width > 0 ? width : nil
+        }
+        value.transitionDampening = min(max(value.transitionDampening.isFinite ? value.transitionDampening : 0.7, 0.01), 1)
+        value.transitionDuration = value.transitionDuration.isFinite ? max(0, value.transitionDuration) : 0.4
+        value.transitionVelocity = Self.nonNegative(value.transitionVelocity)
+        value.pullDismissThreshold = Self.nonNegative(value.pullDismissThreshold, fallback: 500)
+
+        return value
+    }
+
+    private static func nonNegative(_ value: CGFloat, fallback: CGFloat = 0) -> CGFloat {
+        value.isFinite ? max(0, value) : fallback
     }
     
     // MARK: - Deprecated / Unavailable

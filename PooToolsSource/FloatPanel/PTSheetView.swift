@@ -9,7 +9,8 @@
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 
-class PTSheetView: UIView {
+@MainActor
+final class PTSheetView: UIView {
     
     /// 触摸事件拦截闭包。
     /// 返回 true 表示视图响应该触摸点，返回 false 表示透传给底层视图。

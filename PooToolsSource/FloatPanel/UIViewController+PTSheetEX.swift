@@ -9,6 +9,7 @@
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 
+@MainActor
 extension UIViewController {
     public var sheetViewController: PTSheetViewController? {
         var parent = self.parent

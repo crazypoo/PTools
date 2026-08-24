@@ -10,7 +10,8 @@
 import UIKit
 
 /// 自定义的拖拽手势识别器，用于记录手指初始触摸的位置
-class PTInitialTouchPanGestureRecognizer: UIPanGestureRecognizer {
+@MainActor
+final class PTInitialTouchPanGestureRecognizer: UIPanGestureRecognizer {
     
     /// 记录手势开始时的初始触摸点
     /// [优化] 使用 private(set) 保证外部只能读取，不能篡改，提升代码安全性
