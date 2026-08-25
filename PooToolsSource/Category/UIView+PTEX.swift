@@ -24,17 +24,163 @@ import AVFoundation
 extension UIView: PTProtocolCompatible {}
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
-private class PTCornerTrackerView: UIView {
-    var layoutActions: [String: (CGRect) -> Void] = [:]
+@MainActor
+private final class PTCornerTrackerView: UIView {
+    var cornerAction: ((CGRect) -> Void)?
+    var gradientAction: ((CGRect) -> Void)?
+    var progressAction: ((CGRect) -> Void)?
+
+    private var lastRenderedBounds: CGRect = .null
+    private var traitChangeRegistration: (any UITraitChangeRegistration)?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        isAccessibilityElement = false
+        accessibilityElementsHidden = true
+
+        // 中文：动态颜色变化时重新应用 Layer；Español: reaplica las capas cuando cambian los colores dinámicos.
+        traitChangeRegistration = registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (_: PTCornerTrackerView, _: UITraitCollection) in
+            self?.invalidateLayout()
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    func invalidateLayout() {
+        lastRenderedBounds = .null
+        setNeedsLayout()
+    }
+
+    func applyCurrentLayout() {
+        let currentBounds = CGRect(origin: .zero, size: bounds.size)
+        guard currentBounds.width > 0, currentBounds.height > 0 else { return }
+        guard currentBounds != lastRenderedBounds else { return }
+
+        lastRenderedBounds = currentBounds
+        gradientAction?(currentBounds)
+        cornerAction?(currentBounds)
+        progressAction?(currentBounds)
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        // 确保尺寸有效时才触发重绘
-        // 关键：当尺寸变化时，按顺序执行所有注册的任务
-        // 建议先执行背景任务，再执行上层覆盖任务
-        layoutActions["Gradient"]?(self.bounds)
-        layoutActions["Corner"]?(self.bounds)
-        layoutActions["Progress"]?(self.bounds)
+        applyCurrentLayout()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        invalidateLayout()
+    }
+}
+
+private struct PTCornerStyle {
+    let radius: CGFloat
+    let topLeft: CGFloat
+    let topRight: CGFloat
+    let bottomLeft: CGFloat
+    let bottomRight: CGFloat
+    let corner: UIRectCorner
+    let capsule: Bool
+
+    private func safeValue(_ value: CGFloat) -> CGFloat {
+        value.isFinite ? max(0, value) : 0
+    }
+
+    func radii(in bounds: CGRect) -> (topLeft: CGFloat, topRight: CGFloat, bottomLeft: CGFloat, bottomRight: CGFloat) {
+        let width = max(0, bounds.width)
+        let height = max(0, bounds.height)
+        let maximumRadius = min(width, height) / 2
+
+        if capsule {
+            return (maximumRadius, maximumRadius, maximumRadius, maximumRadius)
+        }
+
+        let baseRadius = safeValue(radius)
+        func selectedRadius(_ value: CGFloat) -> CGFloat {
+            let explicitRadius = safeValue(value)
+            return min(explicitRadius > 0 ? explicitRadius : baseRadius, maximumRadius)
+        }
+
+        guard corner != .allCorners else {
+            let value = min(baseRadius, maximumRadius)
+            return (value, value, value, value)
+        }
+
+        return (
+            corner.contains(.topLeft) ? selectedRadius(topLeft) : 0,
+            corner.contains(.topRight) ? selectedRadius(topRight) : 0,
+            corner.contains(.bottomLeft) ? selectedRadius(bottomLeft) : 0,
+            corner.contains(.bottomRight) ? selectedRadius(bottomRight) : 0
+        )
+    }
+
+    func path(in bounds: CGRect) -> UIBezierPath {
+        let values = radii(in: bounds)
+        let minX = bounds.minX
+        let minY = bounds.minY
+        let maxX = bounds.maxX
+        let maxY = bounds.maxY
+        let path = UIBezierPath()
+
+        path.move(to: CGPoint(x: minX + values.topLeft, y: minY))
+        path.addLine(to: CGPoint(x: maxX - values.topRight, y: minY))
+        if values.topRight > 0 {
+            path.addArc(withCenter: CGPoint(x: maxX - values.topRight, y: minY + values.topRight),
+                        radius: values.topRight,
+                        startAngle: -.pi / 2,
+                        endAngle: 0,
+                        clockwise: true)
+        }
+
+        path.addLine(to: CGPoint(x: maxX, y: maxY - values.bottomRight))
+        if values.bottomRight > 0 {
+            path.addArc(withCenter: CGPoint(x: maxX - values.bottomRight, y: maxY - values.bottomRight),
+                        radius: values.bottomRight,
+                        startAngle: 0,
+                        endAngle: .pi / 2,
+                        clockwise: true)
+        }
+
+        path.addLine(to: CGPoint(x: minX + values.bottomLeft, y: maxY))
+        if values.bottomLeft > 0 {
+            path.addArc(withCenter: CGPoint(x: minX + values.bottomLeft, y: maxY - values.bottomLeft),
+                        radius: values.bottomLeft,
+                        startAngle: .pi / 2,
+                        endAngle: .pi,
+                        clockwise: true)
+        }
+
+        path.addLine(to: CGPoint(x: minX, y: minY + values.topLeft))
+        if values.topLeft > 0 {
+            path.addArc(withCenter: CGPoint(x: minX + values.topLeft, y: minY + values.topLeft),
+                        radius: values.topLeft,
+                        startAngle: .pi,
+                        endAngle: -.pi / 2,
+                        clockwise: true)
+        }
+
+        path.close()
+        return path
+    }
+
+    var maskedCorners: CACornerMask {
+        var result: CACornerMask = []
+        if corner.contains(.topLeft) || corner == .allCorners { result.insert(.layerMinXMinYCorner) }
+        if corner.contains(.topRight) || corner == .allCorners { result.insert(.layerMaxXMinYCorner) }
+        if corner.contains(.bottomLeft) || corner == .allCorners { result.insert(.layerMinXMaxYCorner) }
+        if corner.contains(.bottomRight) || corner == .allCorners { result.insert(.layerMaxXMaxYCorner) }
+        return result
+    }
+
+    func usesNativeLayer(in bounds: CGRect) -> Bool {
+        let values = radii(in: bounds)
+        return values.topLeft == values.topRight
+            && values.topLeft == values.bottomLeft
+            && values.topLeft == values.bottomRight
     }
 }
 
@@ -138,16 +284,21 @@ public extension UIView {
     // MARK: - 辅助获取/创建 Tracker 的私有方法
     private func getOrCreateTracker() -> PTCornerTrackerView {
         if let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
+            tracker.frame = CGRect(origin: .zero, size: bounds.size)
             return tracker
         }
         let newTracker = PTCornerTrackerView()
-        newTracker.isUserInteractionEnabled = false
-        newTracker.backgroundColor = .clear
         newTracker.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        newTracker.frame = self.bounds
-        // 插入在最底层
+        newTracker.frame = CGRect(origin: .zero, size: bounds.size)
+        // 中文：监听器只负责布局，不参与交互；Español: el rastreador solo observa el diseño y no participa en la interacción.
         self.insertSubview(newTracker, at: 0)
         return newTracker
+    }
+
+    private func removeTrackerIfUnused() {
+        guard let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView else { return }
+        guard tracker.cornerAction == nil, tracker.gradientAction == nil, tracker.progressAction == nil else { return }
+        tracker.removeFromSuperview()
     }
 
     /// 私有辅助方法：生成支持独立圆角和胶囊形态的 UIBezierPath
@@ -169,37 +320,13 @@ public extension UIView {
                                      bottomRight: CGFloat,
                                      corner: UIRectCorner,
                                      capsule: Bool) -> UIBezierPath {
-        var finalTL = radius, finalTR = radius, finalBL = radius, finalBR = radius
-        if capsule {
-            let r = min(bounds.width, bounds.height) / 2.0
-            finalTL = r; finalTR = r; finalBL = r; finalBR = r
-        } else if corner != .allCorners {
-            finalTL = corner.contains(.topLeft) ? topLeft : 0
-            finalTR = corner.contains(.topRight) ? topRight : 0
-            finalBL = corner.contains(.bottomLeft) ? bottomLeft : 0
-            finalBR = corner.contains(.bottomRight) ? bottomRight : 0
-        }
-        
-        let path = UIBezierPath()
-        // 关键改动：使用 bounds.minX 和 bounds.minY
-        let minX = bounds.minX; let minY = bounds.minY
-        let maxX = bounds.maxX; let maxY = bounds.maxY
-        
-        path.move(to: CGPoint(x: minX + finalTL, y: minY))
-        path.addLine(to: CGPoint(x: maxX - finalTR, y: minY))
-        if finalTR > 0 { path.addArc(withCenter: CGPoint(x: maxX - finalTR, y: minY + finalTR), radius: finalTR, startAngle: -CGFloat.pi/2, endAngle: 0, clockwise: true) }
-        
-        path.addLine(to: CGPoint(x: maxX, y: maxY - finalBR))
-        if finalBR > 0 { path.addArc(withCenter: CGPoint(x: maxX - finalBR, y: maxY - finalBR), radius: finalBR, startAngle: 0, endAngle: CGFloat.pi/2, clockwise: true) }
-        
-        path.addLine(to: CGPoint(x: minX + finalBL, y: maxY))
-        if finalBL > 0 { path.addArc(withCenter: CGPoint(x: minX + finalBL, y: maxY - finalBL), radius: finalBL, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi, clockwise: true) }
-        
-        path.addLine(to: CGPoint(x: minX, y: minY + finalTL))
-        if finalTL > 0 { path.addArc(withCenter: CGPoint(x: minX + finalTL, y: minY + finalTL), radius: finalTL, startAngle: CGFloat.pi, endAngle: -CGFloat.pi/2, clockwise: true) }
-        
-        path.close()
-        return path
+        PTCornerStyle(radius: radius,
+                      topLeft: topLeft,
+                      topRight: topRight,
+                      bottomLeft: bottomLeft,
+                      bottomRight: bottomRight,
+                      corner: corner,
+                      capsule: capsule).path(in: bounds)
     }
     
     @objc func viewCorner(radius:CGFloat = 0,
@@ -210,72 +337,118 @@ public extension UIView {
     }
         
     @objc func viewCornerRectCorner(radius: CGFloat = 5, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, borderWidth: CGFloat = 0, borderColor: UIColor = UIColor.clear, corner: UIRectCorner = .allCorners, capsule: Bool = false) {
-        
-        Task { @MainActor in
-            let tracker = self.getOrCreateTracker() // 记得用你抽出来的统一获取 tracker 的方法
-            
-            tracker.layoutActions["PTCornerRectCorner"] = { [weak self = self] currentBounds in
-                guard let self = self else { return }
-                
-                if #available(iOS 26.0, *) {
-                    var finalTL: CGFloat = 0; var finalTR: CGFloat = 0
-                    var finalBL: CGFloat = 0; var finalBR: CGFloat = 0
-                    
-                    if capsule {
-                        let capsuleRadius = min(currentBounds.width, currentBounds.height) / 2.0
-                        finalTL = capsuleRadius; finalTR = capsuleRadius
-                        finalBL = capsuleRadius; finalBR = capsuleRadius
-                    } else if corner == .allCorners {
-                        finalTL = radius; finalTR = radius
-                        finalBL = radius; finalBR = radius
-                    } else {
-                        if corner.contains(.topLeft) { finalTL = topLeft }
-                        if corner.contains(.topRight) { finalTR = topRight }
-                        if corner.contains(.bottomLeft) { finalBL = bottomLeft }
-                        if corner.contains(.bottomRight) { finalBR = bottomRight }
-                    }
-                    
-                    let tL = (corner == .allCorners || corner.contains(.topLeft) || capsule) ? UICornerRadius(floatLiteral: finalTL) : nil
-                    let tR = (corner == .allCorners || corner.contains(.topRight) || capsule) ? UICornerRadius(floatLiteral: finalTR) : nil
-                    let bL = (corner == .allCorners || corner.contains(.bottomLeft) || capsule) ? UICornerRadius(floatLiteral: finalBL) : nil
-                    let bR = (corner == .allCorners || corner.contains(.bottomRight) || capsule) ? UICornerRadius(floatLiteral: finalBR) : nil
-                    
-                    self.corner26(tL: tL, tR: tR, bL: bL, bR: bR, capsule: capsule)
-                    self.layer.masksToBounds = true
-                    self.layer.borderWidth = borderWidth
-                    self.layer.borderColor = borderColor.cgColor
-                    
-                } else {
-                    let path = self.pt_customCornerPath(bounds: currentBounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
-                    
-                    let maskLayer = CAShapeLayer()
-                    maskLayer.frame = currentBounds
-                    maskLayer.path = path.cgPath
-                    self.layer.mask = maskLayer
-                    self.layer.masksToBounds = true
-                    self.layer.borderWidth = 0
-                    
-                    let borderLayerName = "PTCustomBorderLayer"
-                    var borderLayer = self.layer.sublayers?.first(where: { $0.name == borderLayerName }) as? CAShapeLayer
-                    
-                    if borderWidth > 0 && borderColor != .clear {
-                        if borderLayer == nil {
-                            borderLayer = CAShapeLayer()
-                            borderLayer?.name = borderLayerName
-                            self.layer.addSublayer(borderLayer!)
-                        }
-                        borderLayer?.frame = currentBounds
-                        borderLayer?.path = path.cgPath
-                        borderLayer?.fillColor = UIColor.clear.cgColor
-                        borderLayer?.strokeColor = borderColor.cgColor
-                        borderLayer?.lineWidth = borderWidth * 2
-                    } else {
-                        borderLayer?.removeFromSuperlayer()
-                    }
-                }
-            }
-            if self.bounds.width > 0 && self.bounds.height > 0 { tracker.layoutActions["PTCornerRectCorner"]?(self.bounds) }
+        let style = PTCornerStyle(radius: radius,
+                                  topLeft: topLeft,
+                                  topRight: topRight,
+                                  bottomLeft: bottomLeft,
+                                  bottomRight: bottomRight,
+                                  corner: corner,
+                                  capsule: capsule)
+        let tracker = getOrCreateTracker()
+        tracker.cornerAction = { [weak self] currentBounds in
+            self?.applyViewCorner(style: style,
+                                  borderWidth: borderWidth,
+                                  borderColor: borderColor,
+                                  bounds: currentBounds)
         }
+        tracker.invalidateLayout()
+        tracker.applyCurrentLayout()
+    }
+
+    private func applyViewCorner(style: PTCornerStyle,
+                                 borderWidth: CGFloat,
+                                 borderColor: UIColor,
+                                 bounds: CGRect) {
+        let values = style.radii(in: bounds)
+        let safeBorderWidth = borderWidth.isFinite ? max(0, borderWidth) : 0
+
+        if #available(iOS 26.0, *) {
+            let topLeft = style.corner.contains(.topLeft) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.topLeft) : nil
+            let topRight = style.corner.contains(.topRight) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.topRight) : nil
+            let bottomLeft = style.corner.contains(.bottomLeft) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.bottomLeft) : nil
+            let bottomRight = style.corner.contains(.bottomRight) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.bottomRight) : nil
+
+            corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: style.capsule)
+            layer.mask = nil
+            removeCustomCornerBorderLayer()
+            layer.masksToBounds = true
+            layer.borderWidth = safeBorderWidth
+            layer.borderColor = borderColor.cgColor
+            return
+        }
+
+        layer.masksToBounds = true
+        layer.borderColor = borderColor.cgColor
+
+        if style.usesNativeLayer(in: bounds) {
+            layer.mask = nil
+            removeCustomCornerBorderLayer()
+            layer.cornerRadius = values.topLeft
+            layer.maskedCorners = style.maskedCorners
+            layer.borderWidth = safeBorderWidth
+            return
+        }
+
+        layer.cornerRadius = 0
+        layer.maskedCorners = []
+        layer.borderWidth = 0
+
+        let maskLayer: CAShapeLayer
+        if let existing = layer.mask as? CAShapeLayer, existing.name == "PTCornerMaskLayer" {
+            maskLayer = existing
+        } else {
+            maskLayer = CAShapeLayer()
+            maskLayer.name = "PTCornerMaskLayer"
+            layer.mask = maskLayer
+        }
+        maskLayer.frame = CGRect(origin: .zero, size: bounds.size)
+        maskLayer.path = style.path(in: bounds).cgPath
+
+        guard safeBorderWidth > 0 else {
+            removeCustomCornerBorderLayer()
+            return
+        }
+
+        let halfBorder = min(safeBorderWidth / 2, min(bounds.width, bounds.height) / 2)
+        let borderBounds = bounds.insetBy(dx: halfBorder, dy: halfBorder)
+        let borderLayer = customCornerBorderLayer()
+        borderLayer.frame = CGRect(origin: .zero, size: bounds.size)
+        borderLayer.path = style.path(in: borderBounds).cgPath
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.lineWidth = safeBorderWidth
+    }
+
+    private func customCornerBorderLayer() -> CAShapeLayer {
+        if let layer = layer.sublayers?.first(where: { $0.name == "PTCustomBorderLayer" }) as? CAShapeLayer {
+            return layer
+        }
+        let layer = CAShapeLayer()
+        layer.name = "PTCustomBorderLayer"
+        self.layer.addSublayer(layer)
+        return layer
+    }
+
+    private func removeCustomCornerBorderLayer() {
+        layer.sublayers?.filter { $0.name == "PTCustomBorderLayer" }.forEach { $0.removeFromSuperlayer() }
+    }
+
+    @objc func removeViewCorner() {
+        if let tracker = subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
+            tracker.cornerAction = nil
+            tracker.invalidateLayout()
+        }
+        layer.mask = nil
+        layer.cornerRadius = 0
+        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
+        layer.masksToBounds = false
+        layer.borderWidth = 0
+        layer.borderColor = UIColor.clear.cgColor
+        removeCustomCornerBorderLayer()
+        if #available(iOS 26.0, *) {
+            cornerConfiguration = .corners(topLeftRadius: nil, topRightRadius: nil, bottomLeftRadius: nil, bottomRightRadius: nil)
+        }
+        removeTrackerIfUnused()
     }
 
     @available(iOS 26.0, *)
@@ -288,9 +461,9 @@ public extension UIView {
             self.cornerConfiguration = .capsule()
         } else {
             let values = [tL, tR, bL, bR]
-            let isUniform = values.dropFirst().allSatisfy { $0 == values.first }
-            if isUniform {
-                self.cornerConfiguration = .uniformCorners(radius: tL!)
+            if let first = values.first ?? nil,
+               values.dropFirst().allSatisfy({ $0 == first }) {
+                self.cornerConfiguration = .uniformCorners(radius: first)
             } else {
                 self.cornerConfiguration = .corners(topLeftRadius: tL, topRightRadius: tR, bottomLeftRadius: bL, bottomRightRadius: bR)
             }
@@ -369,66 +542,116 @@ public extension UIView {
                        bottomRight: CGFloat = 0,
                        corner: UIRectCorner = .allCorners,
                        capsule: Bool = false) {
-        
-        Task { @MainActor in
-            let tracker = self.getOrCreateTracker()
-            
-            tracker.layoutActions["Gradient"] = { [weak self = self] currentBounds in
-                guard let self = self, currentBounds.width > 0, currentBounds.height > 0 else { return }
-                let bgPath = self.pt_customCornerPath(bounds: currentBounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
-                
-                let bgName = "PTSuperBg"
-                var bgLayer = self.layer.sublayers?.first(where: { $0.name == bgName }) as? CAGradientLayer
-                if let bgColors = bgColors, let bgType = bgType {
-                    if bgLayer == nil {
-                        bgLayer = CAGradientLayer(); bgLayer?.name = bgName
-                        self.layer.insertSublayer(bgLayer!, at: 0)
-                    }
-                    bgLayer?.frame = currentBounds
-                    bgLayer?.colors = bgColors.map { $0.cgColor }
-                    self.applyGradientType(bgLayer!, type: bgType)
-                    let mask = CAShapeLayer(); mask.path = bgPath.cgPath // 背景用原路径
-                    bgLayer?.mask = mask
-                } else { bgLayer?.removeFromSuperlayer() }
-                
-                // --- 2. 处理边框层 (关键修复点) ---
-                let brdName = "PTSuperBorder"
-                var brdLayer = self.layer.sublayers?.first(where: { $0.name == brdName }) as? CAGradientLayer
-                if let brdColors = borderColors, let brdType = borderType, borderWidth > 0 {
-                    if brdLayer == nil {
-                        brdLayer = CAGradientLayer(); brdLayer?.name = brdName
-                        self.layer.insertSublayer(brdLayer!, at: (bgLayer != nil ? 1 : 0))
-                    }
-                    brdLayer?.frame = currentBounds
-                    brdLayer?.colors = brdColors.map { $0.cgColor }
-                    self.applyGradientType(brdLayer!, type: brdType)
-                    
-                    // 💡 修复核心：计算向内收缩的 Bounds 和 Radius
-                    let halfW = borderWidth / 2.0
-                    let insetBounds = currentBounds.insetBy(dx: halfW, dy: halfW)
-                    
-                    // 保证圆角减去边框宽度后不会变成负数
-                    let brdRadius = max(0, radius - halfW)
-                    let brdTL = max(0, topLeft - halfW)
-                    let brdTR = max(0, topRight - halfW)
-                    let brdBL = max(0, bottomLeft - halfW)
-                    let brdBR = max(0, bottomRight - halfW)
-                    
-                    // 用收缩后的数据生成边框专用路径
-                    let borderPath = self.pt_customCornerPath(bounds: insetBounds, radius: brdRadius, topLeft: brdTL, topRight: brdTR, bottomLeft: brdBL, bottomRight: brdBR, corner: corner, capsule: capsule)
-                    
-                    let brdMask = CAShapeLayer()
-                    brdMask.path = borderPath.cgPath
-                    brdMask.fillColor = UIColor.clear.cgColor
-                    brdMask.strokeColor = UIColor.black.cgColor
-                    brdMask.lineWidth = borderWidth // 这里不再乘 2，直接使用真实宽度！
-                    brdLayer?.mask = brdMask
-                } else { brdLayer?.removeFromSuperlayer() }
-                
-                self.backgroundColor = .clear
-            }
-            tracker.layoutActions["Gradient"]?(self.bounds)
+        let hasBackgroundGradient = bgType != nil && !(bgColors?.isEmpty ?? true)
+        let hasBorderGradient = borderType != nil
+            && !(borderColors?.isEmpty ?? true)
+            && borderWidth.isFinite
+            && borderWidth > 0
+
+        if (hasBackgroundGradient || hasBorderGradient) && !ptGradientBackgroundColorCaptured {
+            ptGradientOriginalBackgroundColor = backgroundColor
+            ptGradientBackgroundColorCaptured = true
         }
+
+        let tracker = getOrCreateTracker()
+        guard hasBackgroundGradient || hasBorderGradient else {
+            layer.sublayers?
+                .filter { $0.name == "PTSuperBg" || $0.name == "PTSuperBorder" }
+                .forEach { $0.removeFromSuperlayer() }
+            if ptGradientBackgroundColorCaptured {
+                backgroundColor = ptGradientOriginalBackgroundColor
+            }
+            ptGradientOriginalBackgroundColor = nil
+            ptGradientBackgroundColorCaptured = false
+            tracker.gradientAction = nil
+            tracker.invalidateLayout()
+            removeTrackerIfUnused()
+            return
+        }
+
+        tracker.gradientAction = { [weak self] currentBounds in
+            guard let self, currentBounds.width > 0, currentBounds.height > 0 else { return }
+
+            let bgPath = self.pt_customCornerPath(bounds: currentBounds,
+                                                  radius: radius,
+                                                  topLeft: topLeft,
+                                                  topRight: topRight,
+                                                  bottomLeft: bottomLeft,
+                                                  bottomRight: bottomRight,
+                                                  corner: corner,
+                                                  capsule: capsule)
+
+            let bgLayer = self.gradientLayer(named: "PTSuperBg", insertAt: 0)
+            if hasBackgroundGradient, let bgType, let bgColors {
+                bgLayer.frame = currentBounds
+                bgLayer.colors = bgColors.map(\.cgColor)
+                self.applyGradientType(bgLayer, type: bgType)
+                let mask = self.gradientMaskLayer(for: bgLayer, named: "PTSuperBgMask")
+                mask.frame = currentBounds
+                mask.path = bgPath.cgPath
+                mask.fillColor = UIColor.white.cgColor
+                bgLayer.mask = mask
+                self.backgroundColor = .clear
+            } else {
+                bgLayer.removeFromSuperlayer()
+            }
+
+            let borderLayer = self.gradientLayer(named: "PTSuperBorder", insertAt: hasBackgroundGradient ? 1 : 0)
+            if hasBorderGradient, let borderType, let borderColors {
+                let safeBorderWidth = max(0, borderWidth)
+                let halfBorder = min(safeBorderWidth / 2, min(currentBounds.width, currentBounds.height) / 2)
+                let insetBounds = currentBounds.insetBy(dx: halfBorder, dy: halfBorder)
+                let borderPath = self.pt_customCornerPath(bounds: insetBounds,
+                                                          radius: radius - halfBorder,
+                                                          topLeft: topLeft - halfBorder,
+                                                          topRight: topRight - halfBorder,
+                                                          bottomLeft: bottomLeft - halfBorder,
+                                                          bottomRight: bottomRight - halfBorder,
+                                                          corner: corner,
+                                                          capsule: capsule)
+
+                borderLayer.frame = currentBounds
+                borderLayer.colors = borderColors.map(\.cgColor)
+                self.applyGradientType(borderLayer, type: borderType)
+                let mask = self.gradientMaskLayer(for: borderLayer, named: "PTSuperBorderMask")
+                mask.frame = currentBounds
+                mask.path = borderPath.cgPath
+                mask.fillColor = UIColor.clear.cgColor
+                mask.strokeColor = UIColor.black.cgColor
+                mask.lineWidth = safeBorderWidth
+                borderLayer.mask = mask
+            } else {
+                borderLayer.removeFromSuperlayer()
+            }
+
+            if hasBackgroundGradient {
+                self.backgroundColor = .clear
+            } else if self.ptGradientBackgroundColorCaptured {
+                self.backgroundColor = self.ptGradientOriginalBackgroundColor
+            }
+        }
+        tracker.invalidateLayout()
+        tracker.applyCurrentLayout()
+    }
+
+    private func gradientLayer(named name: String, insertAt index: Int) -> CAGradientLayer {
+        if let existing = layer.sublayers?.first(where: { $0.name == name }) as? CAGradientLayer {
+            return existing
+        }
+        let newLayer = CAGradientLayer()
+        newLayer.name = name
+        layer.insertSublayer(newLayer, at: UInt32(max(0, index)))
+        return newLayer
+    }
+
+    private func gradientMaskLayer(for gradientLayer: CAGradientLayer, named name: String) -> CAShapeLayer {
+        if let existing = gradientLayer.mask as? CAShapeLayer, existing.name == name {
+            return existing
+        }
+        let newMask = CAShapeLayer()
+        newMask.name = name
+        gradientLayer.mask = newMask
+        return newMask
     }
 
     private func applyGradientType(_ layer: CAGradientLayer, type: Imagegradien) {
@@ -485,97 +708,108 @@ public extension UIView {
                        valueLabelFont: UIFont = .systemFont(ofSize: 16, weight: .bold),
                        valueLabelColor: UIColor = .white,
                        uniCount: Int = 0) {
-        Task { @MainActor in
-            let tracker = self.getOrCreateTracker() // 确保你保留了之前的 getOrCreateTracker 方法
-            
-            // 1. 初始化 Layer (如果还没有的话)
-            if self.viewShapeLayer == nil {
-                let shape = CAShapeLayer()
-                shape.fillColor = UIColor.clear.cgColor
-                shape.strokeColor = borderColor.cgColor
-                // 注意：因为我们做了向内收缩，这里的线宽就用真实传进来的 borderWidth 即可，不用乘 2
-                shape.lineWidth = borderWidth
-                shape.lineCap = .round
-                self.layer.addSublayer(shape)
-                self.viewShapeLayer = shape
-                
-                if showValueLabel && self.viewShapeLayerProgressLabel == nil {
-                    let label = UILabel()
-                    label.font = valueLabelFont
-                    label.textColor = valueLabelColor
-                    label.textAlignment = .center
-                    self.addSubview(label)
-                    label.snp.makeConstraints { $0.center.equalToSuperview() }
-                    self.viewShapeLayerProgressLabel = label
+        let safeValue = value.isFinite ? min(max(value, 0), 1) : 0
+        let safeBorderWidth = borderWidth.isFinite ? max(0, borderWidth) : 0
+        ptProgressCleanupTask?.cancel()
+        ptProgressCleanupTask = nil
+        let progressGeneration = UUID()
+        ptProgressGeneration = progressGeneration
+
+        let shape: CAShapeLayer
+        if let existing = viewShapeLayer {
+            shape = existing
+        } else {
+            shape = CAShapeLayer()
+            shape.name = "PTProgressLayer"
+            shape.fillColor = UIColor.clear.cgColor
+            shape.lineCap = .round
+            layer.addSublayer(shape)
+            viewShapeLayer = shape
+        }
+        shape.strokeColor = borderColor.cgColor
+        shape.lineWidth = safeBorderWidth
+        shape.opacity = 1
+        shape.removeAllAnimations()
+
+        if showValueLabel {
+            let label: UILabel
+            if let existing = viewShapeLayerProgressLabel {
+                label = existing
+            } else {
+                label = UILabel()
+                addSubview(label)
+                label.snp.makeConstraints { $0.center.equalToSuperview() }
+                viewShapeLayerProgressLabel = label
+            }
+            label.font = valueLabelFont
+            label.textColor = valueLabelColor
+            label.textAlignment = .center
+            label.alpha = 1
+            label.text = String(format: "%.\(uniCount)f%%", 100 * safeValue)
+        } else {
+            viewShapeLayerProgressLabel?.removeFromSuperview()
+            viewShapeLayerProgressLabel = nil
+        }
+
+        let tracker = getOrCreateTracker()
+        tracker.progressAction = { [weak self] currentBounds in
+            guard let self, let shape = self.viewShapeLayer,
+                  currentBounds.width > 0, currentBounds.height > 0 else { return }
+
+            let halfBorder = min(safeBorderWidth / 2, min(currentBounds.width, currentBounds.height) / 2)
+            let insetBounds = currentBounds.insetBy(dx: halfBorder, dy: halfBorder)
+            let path = self.pt_customCornerPath(bounds: insetBounds,
+                                                radius: radius - halfBorder,
+                                                topLeft: topLeft - halfBorder,
+                                                topRight: topRight - halfBorder,
+                                                bottomLeft: bottomLeft - halfBorder,
+                                                bottomRight: bottomRight - halfBorder,
+                                                corner: corner,
+                                                capsule: capsule)
+            shape.path = path.cgPath
+            self.layer.bringSublayerToFront(shape)
+        }
+        tracker.invalidateLayout()
+        tracker.applyCurrentLayout()
+        shape.strokeEnd = safeValue
+
+        if safeValue >= 0.999 {
+            ptProgressCleanupTask = Task { @MainActor [weak self] in
+                do {
+                    try await Task.sleep(nanoseconds: 200_000_000)
+                } catch {
+                    return
                 }
-            }
-            
-            // 2. 🌟 注册响应式任务：处理路径收缩
-            tracker.layoutActions["Progress"] = { [weak self = self] currentBounds in
-                guard let self = self, let shape = self.viewShapeLayer, currentBounds.width > 0, currentBounds.height > 0 else { return }
-                
-                // 💡 修复核心：计算向内收缩的 Bounds
-                let halfW = borderWidth / 2.0
-                let insetBounds = currentBounds.insetBy(dx: halfW, dy: halfW)
-                
-                // 💡 保证圆角减去边框宽度后不会变成负数
-                let prgRadius = max(0, radius - halfW)
-                let prgTL = max(0, topLeft - halfW)
-                let prgTR = max(0, topRight - halfW)
-                let prgBL = max(0, bottomLeft - halfW)
-                let prgBR = max(0, bottomRight - halfW)
-                
-                // 使用收缩后的尺寸和圆角，生成完美贴合在视图内部的路径
-                let path = self.pt_customCornerPath(bounds: insetBounds,
-                                                    radius: prgRadius,
-                                                    topLeft: prgTL,
-                                                    topRight: prgTR,
-                                                    bottomLeft: prgBL,
-                                                    bottomRight: prgBR,
-                                                    corner: corner,
-                                                    capsule: capsule)
-                
-                shape.path = path.cgPath
-                
-                // 确保进度条始终在最顶层，不被背景渐变盖住
-                self.layer.bringSublayerToFront(shape)
-            }
-            
-            // 3. 立即执行一次布局刷新
-            if self.bounds.width > 0 && self.bounds.height > 0 {
-                tracker.layoutActions["Progress"]?(self.bounds)
-            }
-            
-            // 4. 更新当前的进度值和文案
-            self.viewShapeLayer?.strokeEnd = value
-            self.viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount)f%%", (100 * value))
-            
-            // 5. 进度走完，清理现场
-            if value >= 0.999 {
-                // 延迟 0.2 秒再消失，让用户能看清 "100%"
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.viewShapeLayer?.opacity = 0
-                        self.viewShapeLayerProgressLabel?.alpha = 0
-                    }) { _ in
-                        self.clearProgressLayer()
-                    }
+                guard let self,
+                      self.ptProgressGeneration == progressGeneration,
+                      let shape = self.viewShapeLayer else { return }
+                UIView.animate(withDuration: 0.3, animations: {
+                    shape.opacity = 0
+                    self.viewShapeLayerProgressLabel?.alpha = 0
+                }) { [weak self] _ in
+                    guard let self, self.ptProgressGeneration == progressGeneration else { return }
+                    self.clearProgressLayer()
                 }
             }
         }
     }
     
     func clearProgressLayer() {
+        ptProgressCleanupTask?.cancel()
+        ptProgressCleanupTask = nil
+        ptProgressGeneration = nil
         viewShapeLayer?.removeFromSuperlayer()
         viewShapeLayer = nil
 
         viewShapeLayerProgressLabel?.removeFromSuperview()
         viewShapeLayerProgressLabel = nil
         
-        // 移除进度条的监听任务，避免后续尺寸变化时还瞎折腾
+        // 中文：移除进度条监听，避免清理后尺寸变化再次访问已释放的 Layer。
         if let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
-            tracker.layoutActions.removeValue(forKey: "Progress")
+            tracker.progressAction = nil
+            tracker.invalidateLayout()
         }
+        removeTrackerIfUnused()
     }
 }
 
@@ -591,6 +825,10 @@ public extension UIView {
         static var layoutSubviewsCallback: UInt8 = 0
         static var layoutShapeLayerCallback: UInt8 = 0
         static var layoutShapeLayerProgressLabelCallback: UInt8 = 0
+        static var gradientOriginalBackgroundColor: UInt8 = 0
+        static var gradientBackgroundColorCaptured: UInt8 = 0
+        static var progressCleanupTask: UInt8 = 0
+        static var progressGeneration: UInt8 = 0
         static var viewCapturing: UInt8 = 0
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
     }
@@ -610,6 +848,54 @@ public extension UIView {
     var ptLoadUUID: UUID? {
         get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID) as? UUID }
         set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    private var ptGradientOriginalBackgroundColor: UIColor? {
+        get {
+            objc_getAssociatedObject(self, &AssociatedKeys.gradientOriginalBackgroundColor) as? UIColor
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.gradientOriginalBackgroundColor,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    private var ptGradientBackgroundColorCaptured: Bool {
+        get {
+            (objc_getAssociatedObject(self, &AssociatedKeys.gradientBackgroundColorCaptured) as? Bool) ?? false
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.gradientBackgroundColorCaptured,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    private var ptProgressCleanupTask: Task<Void, Never>? {
+        get {
+            objc_getAssociatedObject(self, &AssociatedKeys.progressCleanupTask) as? Task<Void, Never>
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.progressCleanupTask,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    private var ptProgressGeneration: UUID? {
+        get {
+            objc_getAssociatedObject(self, &AssociatedKeys.progressGeneration) as? UUID
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.progressGeneration,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
     
     @MainActor @objc func swizzled_layoutSubviews() {
@@ -632,8 +918,7 @@ public extension UIView {
     }
         
     func isRolling() -> Bool {
-        if self is UIScrollView {
-            let scrollView = self as! UIScrollView
+        if let scrollView = self as? UIScrollView {
             if scrollView.isDragging || scrollView.isDecelerating {
                 return true
             }
@@ -662,9 +947,9 @@ public extension UIView {
     
     var viewController: UIViewController? {
         weak var parentResponder: UIResponder? = self
-        while parentResponder != nil {
-            parentResponder = parentResponder!.next
-            if let viewController = parentResponder as? UIViewController {
+        while let responder = parentResponder?.next {
+            parentResponder = responder
+            if let viewController = responder as? UIViewController {
                 return viewController
             }
         }
@@ -739,6 +1024,7 @@ public extension UIView {
      - parameter radius: Amount of radius.
      */
     func roundCorners(_ corners: CACornerMask = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner], curve: CornerCurve = .continuous, radius: CGFloat) {
+        removeViewCorner()
         layer.cornerRadius = radius
         layer.maskedCorners = corners
         layer.cornerCurve = curve.layerCornerCurve
@@ -748,7 +1034,8 @@ public extension UIView {
         Round side by minimum `height` or `width`.
      */
     func roundMinimumSide() {
-        roundCorners(radius: min(frame.width / 2, frame.height / 2))
+        // 中文：交给动态圆角路径等待 Auto Layout 完成，避免 SnapKit 尚未布局时读取到零尺寸。
+        viewCorner(capsule: true)
     }
     
     /**
@@ -821,11 +1108,11 @@ public extension UIView {
     ///查找当前View的XViewController
     func findController<T:UIViewController>(with class :T.Type) -> T? {
         var responder = next
-        while responder != nil {
-            if responder!.isKind(of: `class`) {
-                return responder as? T
+        while let currentResponder = responder {
+            if currentResponder.isKind(of: `class`) {
+                return currentResponder as? T
             }
-            responder = responder?.next
+            responder = currentResponder.next
         }
         return nil
     }
@@ -844,6 +1131,53 @@ public extension UIView {
 }
 
 public extension UIView {
+
+    /// 类型化图片加载入口，旧的 Any 入口继续作为兼容层保留。
+    @MainActor
+    func pt_loadCoreImage(source: PTImageSource,
+                          configuration: PTImageLoadConfiguration,
+                          progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                          setImageBlock: @escaping @MainActor @Sendable (UIImage?) -> Void,
+                          loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
+        switch source {
+        case .image(let image):
+            pt_loadCoreImage(contentData: image,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .data(let data):
+            pt_loadCoreImage(contentData: data,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .asset(let asset):
+            pt_loadCoreImage(contentData: asset,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .color(let color):
+            pt_loadCoreImage(contentData: color,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .url(let url):
+            pt_loadCoreImage(contentData: url,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .named(let name):
+            pt_loadCoreImage(contentData: name,
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        }
+    }
 
     @MainActor
     func pt_loadCoreImage(contentData: Any,
@@ -878,6 +1212,7 @@ public extension UIView {
     func cancelImageLoad() {
         ptLoadTask?.cancel()
         ptLoadTask = nil
+        ptLoadUUID = nil
     }
     
     // 3. 核心大一统方法
@@ -958,17 +1293,20 @@ public extension UIView {
 
             if images.count > 1 {
                 let loadTime = result.loadTime
-                Task { @MainActor in // 保护内部 Task
-                    let gif = await Task.detached {
-                        return UIImage.animatedImage(with: images, duration: loadTime)
-                    }.value
-                    
-                    guard isValid() == true else { return }
-                    setImageBlock(gif)
+                guard let gif = UIImage.animatedImage(with: images, duration: loadTime) else {
+                    setEmpty()
                     loadFinish?(result)
+                    return
                 }
+                showImage(gif)
+                loadFinish?(result)
             } else {
-                setImageBlock(result.firstImage)
+                guard let image = result.firstImage else {
+                    setEmpty()
+                    loadFinish?(result)
+                    return
+                }
+                showImage(image)
                 loadFinish?(result)
             }
         }
@@ -978,9 +1316,15 @@ public extension UIView {
                 Task { @MainActor in
                     guard self?.ptLoadUUID == loadID else { return }
                     if let image {
-                        showImage(image)
+                        finish(PTLoadImageResult(allImages: [image],
+                                                 firstImage: image,
+                                                 loadTime: 0,
+                                                 imageType: .other))
                     } else {
-                        setEmpty()
+                        finish(PTLoadImageResult(allImages: nil,
+                                                 firstImage: nil,
+                                                 loadTime: 0,
+                                                 imageType: .unknown))
                     }
                 }
             }
@@ -1015,8 +1359,11 @@ public extension UIView {
                         if let progressHandle {
                             progressHandle(received, total)
                         } else {
+                            let progress = total > 0
+                                ? min(max(CGFloat(received) / CGFloat(total), 0), 1)
+                                : 0
                             self.layerProgress(
-                                value: CGFloat(received) / CGFloat(total),
+                                value: progress,
                                 radius: radius,
                                 topLeft: topLeft,
                                 topRight: topRight,
@@ -1042,14 +1389,15 @@ public extension UIView {
 
         switch contentData {
         case let image as UIImage:
-            showImage(image)
+            finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
         case let color as UIColor:
-            showImage(color.createImageWithColor())
+            let image = color.createImageWithColor()
+            finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
         case let data as Data:
             if let image = UIImage(data: data) {
-                showImage(image)
+                finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
             } else {
-                setEmpty()
+                finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
             }
         case let asset as PHAsset:
             ptLoadTask = Task { @MainActor in
@@ -1065,9 +1413,15 @@ public extension UIView {
                     guard let self = self, self.ptLoadUUID == loadID else { return }
                     
                     if let image {
-                        showImage(image)
+                        finish(PTLoadImageResult(allImages: [image],
+                                                 firstImage: image,
+                                                 loadTime: 0,
+                                                 imageType: .other))
                     } else {
-                        setEmpty()
+                        finish(PTLoadImageResult(allImages: nil,
+                                                 firstImage: nil,
+                                                 loadTime: 0,
+                                                 imageType: .unknown))
                     }
                 }
             }
@@ -1076,21 +1430,21 @@ public extension UIView {
         case let string as String:
             if FileManager.default.fileExists(atPath: string) {
                 if let image = UIImage(contentsOfFile: string) {
-                    showImage(image)
+                    finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
                 } else {
-                    setEmpty()
+                    finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
                 }
                 return
             }
             if string.isURL(), let url = URL(string: string) {
                 loadFromURL(url)
             } else if let image = UIImage(named: string) {
-                showImage(image)
+                finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
             } else {
-                setEmpty()
+                finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
             }
         default:
-            setEmpty()
+            finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
         }
     }
 }
@@ -1148,6 +1502,7 @@ public extension UIView {
 //MARK: 視頻剪輯
 public extension UIView {
     var imageWithView: UIImage? {
+        guard !bounds.isEmpty else { return nil }
         let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
         return renderer.image { rendererContext in
             self.layer.render(in: rendererContext.cgContext)
@@ -1170,130 +1525,150 @@ public extension UIView {
         self.widthConstraint(constant: constant)
         self.heightConstraint(constant: constant)
     }
+
+    private func pt_commonAncestor(of first: UIView, and second: UIView?) -> UIView? {
+        guard let second else { return first }
+        var candidate: UIView? = first
+        while let current = candidate {
+            if current === second || second.isDescendant(of: current) {
+                return current
+            }
+            candidate = current.superview
+        }
+        return nil
+    }
+
+    private func pt_installConstraint(_ constraint: NSLayoutConstraint,
+                                      first: UIView,
+                                      second: UIView?) {
+        // 中文：约束必须安装到两个视图的最近公共祖先；无公共祖先时只返回未激活约束，避免 UIKit 直接抛异常。
+        guard let owner = pt_commonAncestor(of: first, and: second) else { return }
+        owner.addConstraint(constraint)
+    }
     
     @discardableResult
     func leadingConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .leading, relatedBy: relatedBy, toItem: subView, attribute: .leading, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func trailingConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: relatedBy, toItem: subView, attribute: .trailing, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func topConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .top, relatedBy: relatedBy, toItem: subView, attribute: .top, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func bottomConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: relatedBy, toItem: subView, attribute: .bottom, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func centerXConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .centerX, relatedBy: relatedBy, toItem: subView, attribute: .centerX, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func centerYConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .centerY, relatedBy: relatedBy, toItem: subView, attribute: .centerY, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func leadingConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .leading, relatedBy: relatedBy, toItem: subView, attribute: .leading, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func trailingConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .trailing, relatedBy: relatedBy, toItem: subView, attribute: .trailing, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func topConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .top, relatedBy: relatedBy, toItem: subView, attribute: .top, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func bottomConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .bottom, relatedBy: relatedBy, toItem: subView, attribute: .bottom, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func centerXConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .centerX, relatedBy: relatedBy, toItem: subView, attribute: .centerX, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func centerYConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .centerY, relatedBy: relatedBy, toItem: subView, attribute: .centerY, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func widthConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .width, relatedBy: relatedBy, toItem: subView, attribute: .width, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func heightConstraint(item: UIView, subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item, attribute: .height, relatedBy: relatedBy, toItem: subView, attribute: .height, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: item, second: subView)
         return constraint
     }
     
     @discardableResult
     func widthConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .width, relatedBy: relatedBy, toItem: subView, attribute: .width, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func heightConstraint(subView: UIView, constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: self, attribute: .height, relatedBy: relatedBy, toItem: subView, attribute: .height, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        pt_installConstraint(constraint, first: self, second: subView)
         return constraint
     }
     
     @discardableResult
     func widthConstraint(constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        let constraint = NSLayoutConstraint(item: self, attribute: .width, relatedBy: relatedBy, toItem: nil, attribute: .width, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        let constraint = NSLayoutConstraint(item: self, attribute: .width, relatedBy: relatedBy, toItem: nil, attribute: .width, multiplier: 1, constant: constant)
+        pt_installConstraint(constraint, first: self, second: nil)
         return constraint
     }
     
     @discardableResult
     func heightConstraint(constant: CGFloat = 0, multiplier: CGFloat = 1, relatedBy: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        let constraint = NSLayoutConstraint(item: self, attribute: .height, relatedBy: relatedBy, toItem: nil, attribute: .height, multiplier: multiplier, constant: constant)
-        self.addConstraint(constraint)
+        let constraint = NSLayoutConstraint(item: self, attribute: .height, relatedBy: relatedBy, toItem: nil, attribute: .height, multiplier: 1, constant: constant)
+        pt_installConstraint(constraint, first: self, second: nil)
         return constraint
     }
 }
@@ -1311,12 +1686,8 @@ public extension UIView {
     func isContainWKWebView() -> Bool {
         if self.isKind(of: WKWebView.self) {
             return true
-        } else {
-            for view in self.subviews {
-                return view.isContainWKWebView()
-            }
         }
-        return false
+        return subviews.contains { $0.isContainWKWebView() }
     }
     
     /** 快照回调*/
@@ -1327,6 +1698,12 @@ public extension UIView {
     /// - Parameter completion: 回调
     func captureCurrent(_ completion: captureCompletion) {
         self.isCapturing = true
+
+        guard !bounds.isEmpty else {
+            self.isCapturing = false
+            completion(nil)
+            return
+        }
         
         let format = UIGraphicsImageRendererFormat()
         format.opaque = false
@@ -1356,9 +1733,10 @@ public extension UIView {
     ///   - scale: 缩放清晰度
     /// - Returns: 截图
     func generateBoundsScreenshot(_ opaque: Bool = false, scale: CGFloat = 0) -> UIImage {
+        guard !bounds.isEmpty else { return UIImage() }
         let format = UIGraphicsImageRendererFormat()
         format.opaque = opaque
-        format.scale = scale == 0 ? UIScreen.main.scale : scale
+        format.scale = scale.isFinite && scale > 0 ? scale : UIScreen.main.scale
         
         let renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: format)
         return renderer.image { ctx in
@@ -1371,12 +1749,10 @@ public extension UIView {
     /// - Returns: 截图
     func generateFrameScreenshot() -> UIImage {
         let imageSize = self.frame.size
-        var orientation:UIInterfaceOrientation!
-        if let orientations = AppWindows?.windowScene?.interfaceOrientation {
-            orientation = orientations
-        } else {
-            orientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)
-        }
+        guard imageSize.width > 0, imageSize.height > 0 else { return UIImage() }
+        let orientation = AppWindows?.windowScene?.interfaceOrientation
+            ?? UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)
+            ?? .portrait
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
         if let context = UIGraphicsGetCurrentContext() {
             context.saveGState()
@@ -1406,6 +1782,7 @@ public extension UIView {
     }
     
     func toImage() -> UIImage {
+        guard !bounds.isEmpty else { return UIImage() }
         let renderer = UIGraphicsImageRenderer(size: self.bounds.size)
         return renderer.image { ctx in
             self.layer.render(in: ctx.cgContext)
@@ -1432,7 +1809,9 @@ extension UIFadeOut where Self: UIView {
                            work: @escaping @MainActor (Self) -> Void,
                            completion: (@MainActor @Sendable () -> Void)? = nil) {
         
-        let partDuration = (duration - delay) / 2
+        let safeDuration = max(0, duration.isFinite ? duration : 0)
+        let safeDelay = min(max(0, delay.isFinite ? delay : 0), safeDuration)
+        let partDuration = max(0, (safeDuration - safeDelay) / 2)
         let storedAlpha = self.alpha
         
         // 第一阶段：淡出
@@ -1446,7 +1825,7 @@ extension UIFadeOut where Self: UIView {
             work(self)
             
             // 第二阶段：淡入（嵌套动画）
-            UIView.animate(withDuration: partDuration, delay: delay, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
+            UIView.animate(withDuration: partDuration, delay: safeDelay, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
                 self?.alpha = storedAlpha
             }, completion: { finished in
                 // 🌟 修复 4：UIView.animate 的 completion 天然就在 MainActor 上，
