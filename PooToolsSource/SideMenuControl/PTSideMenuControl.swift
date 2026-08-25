@@ -8,198 +8,232 @@
 
 import UIKit
 
-public typealias PTSideMenuControlHandler = (_ sideMenuControl:PTSideMenuControl) -> Void
-public typealias PTSideMenuControlShowAndAnimationHandler = (_ sideMenuControl:PTSideMenuControl,_ show:UIViewController,_ animated:Bool) -> Void
-
-extension PTSideMenuControl.PTSideMenuPreferences: @unchecked Sendable {}
+public typealias PTSideMenuControlHandler = (_ sideMenuControl: PTSideMenuControl) -> Void
+public typealias PTSideMenuControlShowAndAnimationHandler = (_ sideMenuControl: PTSideMenuControl, _ show: UIViewController, _ animated: Bool) -> Void
 
 @objcMembers
+@MainActor
 open class PTSideMenuControl: PTBaseViewController {
-    
-    public var sideMenuControlGetMenuWidth:((_ sideMenuControl:PTSideMenuControl,_ forSize:CGSize)->CGFloat)?
-    public var sideMenuControlWillShow:PTSideMenuControlShowAndAnimationHandler?
-    public var sideMenuControlDidShow:PTSideMenuControlShowAndAnimationHandler?
-    public var sideMenuControlWillReveal:PTSideMenuControlHandler?
-    public var sideMenuControlWillHideReveal:PTSideMenuControlHandler?
-    public var sideMenuControlDidReveal:PTSideMenuControlHandler?
-    public var sideMenuControlDidHideMenu:PTSideMenuControlHandler?
-    public var sideMenuControlAnimationIn:((_ sideMenuControl:PTSideMenuControl,_ animationControllerFrom:UIViewController,_ toVC:UIViewController)->UIViewControllerAnimatedTransitioning)?
-    public var sideMenuControlShouldRevealMenu:((_ sideMenuControl:PTSideMenuControl)->Bool)?
 
+    public enum PTSideMenuError: Error, Equatable, Sendable {
+        case contentNotFound(identifier: String)
+        case invalidHierarchy
+        case transitionCancelled
+    }
+
+    public var sideMenuControlGetMenuWidth: ((_ sideMenuControl: PTSideMenuControl, _ forSize: CGSize) -> CGFloat)?
+    public var sideMenuControlWillShow: PTSideMenuControlShowAndAnimationHandler?
+    public var sideMenuControlDidShow: PTSideMenuControlShowAndAnimationHandler?
+    public var sideMenuControlWillReveal: PTSideMenuControlHandler?
+    public var sideMenuControlWillHideReveal: PTSideMenuControlHandler?
+    public var sideMenuControlDidReveal: PTSideMenuControlHandler?
+    public var sideMenuControlDidHideMenu: PTSideMenuControlHandler?
+    public var sideMenuControlAnimationIn: ((_ sideMenuControl: PTSideMenuControl, _ animationControllerFrom: UIViewController, _ toVC: UIViewController) -> UIViewControllerAnimatedTransitioning)?
+    public var sideMenuControlShouldRevealMenu: ((_ sideMenuControl: PTSideMenuControl) -> Bool)?
+
+    /// 兼容旧项目的全局默认配置。实例创建后使用自己的配置快照。
     @MainActor public static var preferences = PTSideMenuPreferences()
-    private var preferences:PTSideMenuPreferences {
-        return Self.preferences
-    }
-    
-    private lazy var adjustedDirection = PTSideMenuPreferences.MenuDirection.left
-    
-    private var isInitiatedFromStoryboard: Bool {
-        storyboard != nil
-    }
-    
-    private var menuWidth:CGFloat {
-        sideMenuControlGetMenuWidth?(self,view.frame.size) ?? preferences.basic.menuWidth
-    }
-    
-    @IBInspectable public var contentSegueID:String = PTSideMenuSegue.ContentType.content.rawValue
-    @IBInspectable public var menuSegueID:String = PTSideMenuSegue.ContentType.menu.rawValue
-    
-    private lazy var lazyCachedViewControllerGenerators: [String: () -> UIViewController?] = [:]
-    private lazy var lazyCachedViewControllers: [String: UIViewController] = [:]
+    public private(set) var configuration: PTSideMenuPreferences
 
-    private var shouldCallSwitchingDelegate = true
+    @IBInspectable public var contentSegueID: String = PTSideMenuSegue.ContentType.content.rawValue
+    @IBInspectable public var menuSegueID: String = PTSideMenuSegue.ContentType.menu.rawValue
 
-    private var menuAnimator: UIViewPropertyAnimator?
-    
-    open override var childForStatusBarStyle: UIViewController? {
-        return isMenuRevealed ? menuViewController : contentViewController
-    }
-
-    open override var childForStatusBarHidden: UIViewController? {
-        return isMenuRevealed ? menuViewController : contentViewController
-    }
-    
-    open var contentViewController: UIViewController! {
-        didSet {
-            guard contentViewController !== oldValue &&
-                isViewLoaded &&
-                !children.contains(contentViewController) else {
-                    return
-            }
-
-            if shouldCallSwitchingDelegate {
-                if sideMenuControlWillShow != nil {
-                    sideMenuControlWillShow!(self,contentViewController,false)
-                }
-            }
-
-            load(contentViewController, on: contentContainerView)
-            contentContainerView.sendSubviewToBack(contentViewController.view)
-            unload(oldValue)
-
-            if shouldCallSwitchingDelegate {
-                if sideMenuControlDidShow != nil {
-                    sideMenuControlDidShow!(self,contentViewController,false)
-                }
-            }
-
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
-    open var menuViewController: UIViewController! {
-        didSet {
-            guard menuViewController !== oldValue && isViewLoaded else {
-                return
-            }
-
-            load(menuViewController, on: menuContainerView)
-            unload(oldValue)
-        }
-    }
+    private var storedContentViewController: UIViewController?
+    private var storedMenuViewController: UIViewController?
+    private var isUpdatingChildController = false
 
     private let menuContainerView = UIView()
     private let contentContainerView = UIView()
-    private var statusBarScreenShotView: UIView?
-    
-    open var isMenuRevealed = false
+    private var contentContainerOverlay: UIView?
 
-    private var shouldShowShadowOnContent: Bool {
-        return preferences.animation.shouldAddShadowWhenRevealing && preferences.basic.position != .under
-    }
-    
-    private var isValidatePanningBegan = false
-    private var panningBeganPointX: CGFloat = 0
-
-    private var isContentOrMenuNotInitialized: Bool {
-        return menuViewController == nil || contentViewController == nil
-    }
-    
-    private weak var contentContainerOverlay: UIView?
+    private var settledMenuRevealed = false
+    private var activeVisibilityTarget: Bool?
+    private var activeTransitionInitialVisibility = false
+    private var activeShouldCallDelegate = true
+    private var activeCompletions: [PTBoolTask] = []
+    private var queuedVisibilityRequest: VisibilityRequest?
+    private var menuAnimator: UIViewPropertyAnimator?
 
     private weak var panGestureRecognizer: UIPanGestureRecognizer?
+    private weak var edgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    private var isValidatingPanGesture = false
 
-    var shouldReverseDirection: Bool {
-        if preferences.basic.forceRightToLeft { return true }
-        guard preferences.basic.shouldRespectLanguageDirection else {
+    private struct VisibilityRequest {
+        let target: Bool
+        let animated: Bool
+        let shouldCallDelegate: Bool
+        var completions: [PTBoolTask]
+    }
+
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        configuration = Self.preferences
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    public required init?(coder: NSCoder) {
+        configuration = Self.preferences
+        super.init(coder: coder)
+    }
+
+    public convenience init(contentViewController: UIViewController, menuViewController: UIViewController) {
+        self.init(contentViewController: contentViewController,
+                  menuViewController: menuViewController,
+                  preferences: Self.preferences)
+    }
+
+    public convenience init(contentViewController: UIViewController,
+                            menuViewController: UIViewController,
+                            preferences: PTSideMenuPreferences) {
+        self.init(nibName: nil, bundle: nil)
+        configuration = preferences
+        storedContentViewController = contentViewController
+        storedMenuViewController = menuViewController
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIScene.didEnterBackgroundNotification,
+                                                   object: nil)
+    }
+
+    open override var childForStatusBarStyle: UIViewController? {
+        (activeVisibilityTarget ?? settledMenuRevealed) ? storedMenuViewController : storedContentViewController
+    }
+
+    open override var childForStatusBarHidden: UIViewController? {
+        (activeVisibilityTarget ?? settledMenuRevealed) ? storedMenuViewController : storedContentViewController
+    }
+
+    /// 保留旧的可写属性，内部统一由安全的存储和容器方法处理。
+    open var contentViewController: UIViewController! {
+        get { storedContentViewController }
+        set { setContentController(newValue) }
+    }
+
+    /// 保留旧的可写属性，内部统一由安全的存储和容器方法处理。
+    open var menuViewController: UIViewController! {
+        get { storedMenuViewController }
+        set { setMenuController(newValue) }
+    }
+
+    /// 菜单当前是否已经稳定显示。
+    /// 直接赋值仍然兼容旧代码，但会转换为无动画状态请求。
+    open var isMenuRevealed: Bool {
+        get { settledMenuRevealed }
+        set {
+            guard newValue != settledMenuRevealed else { return }
+            guard isViewLoaded else {
+                settledMenuRevealed = newValue
+                return
+            }
+            changeMenuVisibility(reveal: newValue, animated: false)
+        }
+    }
+
+    private var shouldShowShadowOnContent: Bool {
+        configuration.animation.shouldAddShadowWhenRevealing && configuration.basic.position != .under
+    }
+
+    private var shouldReverseDirection: Bool {
+        if configuration.basic.forceRightToLeft {
+            return true
+        }
+        guard configuration.basic.shouldRespectLanguageDirection, isViewLoaded else {
             return false
         }
-        let attribute = view.semanticContentAttribute
-        let layoutDirection = UIView.userInterfaceLayoutDirection(for: attribute)
-        return layoutDirection == .rightToLeft
-    }
-    
-    public convenience init(contentViewController: UIViewController, menuViewController: UIViewController) {
-        self.init(nibName: nil, bundle: nil)
-
-        self.contentViewController = contentViewController
-        self.menuViewController = menuViewController
+        return view.effectiveUserInterfaceLayoutDirection == .rightToLeft
     }
 
-    deinit {}
+    private var effectiveDirection: PTSideMenuPreferences.MenuDirection {
+        guard shouldReverseDirection else { return configuration.basic.direction }
+        return configuration.basic.direction == .left ? .right : .left
+    }
+
+    private var directionSign: CGFloat {
+        effectiveDirection == .left ? 1 : -1
+    }
+
+    private var menuWidth: CGFloat {
+        safeMenuWidth(for: isViewLoaded ? view.bounds.size : .zero)
+    }
+
+    private func safeMenuWidth(for size: CGSize) -> CGFloat {
+        let configuredWidth = configuration.basic.menuWidth
+        let fallbackWidth = configuredWidth.isFinite && configuredWidth > 0 ? configuredWidth : 300
+        let requestedWidth = sideMenuControlGetMenuWidth?(self, size) ?? fallbackWidth
+        let validWidth = requestedWidth.isFinite && requestedWidth > 0 ? requestedWidth : fallbackWidth
+        let availableWidth = max(size.width, 0)
+
+        guard availableWidth > 0 else {
+            return max(1, validWidth)
+        }
+        return min(max(1, validWidth), availableWidth)
+    }
+
+    private func safeDuration(_ duration: TimeInterval) -> TimeInterval {
+        guard duration.isFinite else { return 0 }
+        return max(0, duration)
+    }
+
+    private func safeDampingRatio(_ value: CGFloat) -> CGFloat {
+        guard value.isFinite else { return 1 }
+        return min(max(value, 0.01), 1)
+    }
+
+    private func safeShadowAlpha(_ value: CGFloat) -> CGFloat {
+        guard value.isFinite else { return 0 }
+        return min(max(value, 0), 1)
+    }
 
     open override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
-        // 如果不在手势拖拽的动画期间，强行同步真实尺寸
-        if menuAnimator == nil {
-            contentContainerView.frame = contentFrame(visibility: isMenuRevealed)
-            menuContainerView.frame = sideMenuFrame(visibility: isMenuRevealed)
-            
-            // 🌟 致命 Bug 修复：必须强迫装在里面的业务 ViewController 也跟着撑满！
-            contentViewController?.view.frame = contentContainerView.bounds
-            menuViewController?.view.frame = menuContainerView.bounds
-            
-            contentContainerOverlay?.frame = contentContainerView.bounds
-        }
+        guard menuAnimator == nil, activeVisibilityTarget == nil else { return }
+        applyLayout(visibility: settledMenuRevealed, size: view.bounds.size)
     }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if isInitiatedFromStoryboard && isContentOrMenuNotInitialized {
-            performSegue(withIdentifier: contentSegueID, sender: self)
-            performSegue(withIdentifier: menuSegueID, sender: self)
+
+        if storyboard != nil {
+            if storedContentViewController == nil, !contentSegueID.isEmpty {
+                performSegue(withIdentifier: contentSegueID, sender: self)
+            }
+            if storedMenuViewController == nil, !menuSegueID.isEmpty {
+                performSegue(withIdentifier: menuSegueID, sender: self)
+            }
         }
 
-        if isContentOrMenuNotInitialized {
-            fatalError("[PTSideMenuSwift] `menuViewController` or `contentViewController` should not be nil.")
+        if storedContentViewController == nil || storedMenuViewController == nil {
+            PTNSLogConsole("[PTSideMenu] 内容或菜单控制器未配置，已禁用对应功能。", levelType: .error, loggerType: .sideMenu)
         }
 
-        contentContainerView.frame = view.bounds
+        contentContainerView.frame = contentFrame(visibility: settledMenuRevealed)
+        menuContainerView.frame = sideMenuFrame(visibility: settledMenuRevealed)
         view.addSubview(contentContainerView)
-
-        resolveDirection(with: contentContainerView)
-
-        menuContainerView.frame = sideMenuFrame(visibility: false)
         view.addSubview(menuContainerView)
 
-        load(contentViewController, on: contentContainerView)
-        load(menuViewController, on: menuContainerView)
+        if let contentViewController = storedContentViewController {
+            attach(contentViewController, to: contentContainerView)
+        }
+        if let menuViewController = storedMenuViewController {
+            attach(menuViewController, to: menuContainerView)
+        }
 
-        if preferences.basic.position == .under {
+        if configuration.basic.position == .under {
             view.bringSubviewToFront(contentContainerView)
         }
 
         setNeedsStatusBarAppearanceUpdate()
 
-        if let key = preferences.basic.defaultCacheKey {
+        if let key = configuration.basic.defaultCacheKey, let contentViewController = storedContentViewController {
             lazyCachedViewControllers[key] = contentViewController
         }
 
         configureGesturesRecognizer()
         setUpNotifications()
-    }
-    
-    private func resolveDirection(with view: UIView) {
-        if shouldReverseDirection {
-            adjustedDirection = (preferences.basic.direction == .left ? .right : .left)
-        } else {
-            adjustedDirection = preferences.basic.direction
-        }
+        updateAccessibilityState(isMenuVisible: settledMenuRevealed)
     }
 
-    // MARK: Storyboard
     open override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let segue = segue as? PTSideMenuSegue, let identifier = segue.identifier else {
             return
@@ -214,19 +248,91 @@ open class PTSideMenuControl: PTBaseViewController {
         }
     }
 
-    // MARK: 展示/隐藏
-    /// 展示Menu
-    /// - Parameters:
-    ///   - animated: 动画
-    ///   - completion: 完成回调
+    // MARK: - 子控制器容器
+
+    private func setContentController(_ newValue: UIViewController?) {
+        let oldValue = storedContentViewController
+        guard oldValue !== newValue else { return }
+
+        if newValue == nil, isViewLoaded {
+            PTNSLogConsole("[PTSideMenu] 不允许在已加载页面后将 contentViewController 设为 nil。", levelType: .error, loggerType: .sideMenu)
+            return
+        }
+        if newValue?.parent != nil {
+            PTNSLogConsole("[PTSideMenu] contentViewController 已属于其他容器。", levelType: .error, loggerType: .sideMenu)
+            return
+        }
+
+        storedContentViewController = newValue
+        guard isViewLoaded, let newValue else { return }
+        guard !isUpdatingChildController else { return }
+
+        isUpdatingChildController = true
+        defer { isUpdatingChildController = false }
+
+        sideMenuControlWillShow?(self, newValue, false)
+        attach(newValue, to: contentContainerView)
+        contentContainerView.sendSubviewToBack(newValue.view)
+        detach(oldValue)
+        sideMenuControlDidShow?(self, newValue, false)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
+    private func setMenuController(_ newValue: UIViewController?) {
+        let oldValue = storedMenuViewController
+        guard oldValue !== newValue else { return }
+
+        if newValue == nil, isViewLoaded {
+            PTNSLogConsole("[PTSideMenu] 不允许在已加载页面后将 menuViewController 设为 nil。", levelType: .error, loggerType: .sideMenu)
+            return
+        }
+        if newValue?.parent != nil {
+            PTNSLogConsole("[PTSideMenu] menuViewController 已属于其他容器。", levelType: .error, loggerType: .sideMenu)
+            return
+        }
+
+        storedMenuViewController = newValue
+        guard isViewLoaded, let newValue else { return }
+        attach(newValue, to: menuContainerView)
+        applyLayout(visibility: settledMenuRevealed, size: view.bounds.size)
+    }
+
+    private func attach(_ viewController: UIViewController, to container: UIView) {
+        let needsParent = viewController.parent !== self
+        if needsParent {
+            addChild(viewController)
+        }
+
+        if viewController.view.superview !== container {
+            viewController.view.removeFromSuperview()
+            container.addSubview(viewController.view)
+        }
+        viewController.view.frame = container.bounds
+        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        viewController.view.translatesAutoresizingMaskIntoConstraints = true
+
+        if needsParent {
+            viewController.didMove(toParent: self)
+        }
+    }
+
+    private func detach(_ viewController: UIViewController?) {
+        guard let viewController else { return }
+        if viewController.parent === self {
+            viewController.willMove(toParent: nil)
+            viewController.view.removeFromSuperview()
+            viewController.removeFromParent()
+        } else {
+            viewController.view.removeFromSuperview()
+        }
+    }
+
+    // MARK: - 菜单显示与隐藏
+
     open func revealMenu(animated: Bool = true, completion: PTBoolTask? = nil) {
         changeMenuVisibility(reveal: true, animated: animated, completion: completion)
     }
 
-    /// 隐藏Menu
-    /// - Parameters:
-    ///   - animated: 动画
-    ///   - completion: 完成回调
     open func hideMenu(animated: Bool = true, completion: PTBoolTask? = nil) {
         changeMenuVisibility(reveal: false, animated: animated, completion: completion)
     }
@@ -234,560 +340,733 @@ open class PTSideMenuControl: PTBaseViewController {
     private func changeMenuVisibility(reveal: Bool,
                                       animated: Bool = true,
                                       shouldCallDelegate: Bool = true,
-                                      shouldChangeStatusBar: Bool = true,
                                       completion: PTBoolTask? = nil) {
-        
-        // 如果已有正在运行的动画，先停止它
-        if let runningAnimator = menuAnimator, runningAnimator.isRunning {
-            runningAnimator.stopAnimation(true)
-        }
-
-        menuViewController.beginAppearanceTransition(reveal, animated: animated)
-
-        if shouldCallDelegate {
-            reveal ? sideMenuControlWillReveal?(self) : sideMenuControlWillHideReveal?(self)
-        }
-
-        if reveal {
-            addContentOverlayViewIfNeeded()
-        }
-
-        self.view.isUserInteractionEnabled = false
-        
-        // 1. 创建动画器
-        let animator = UIViewPropertyAnimator(duration: reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration, dampingRatio: preferences.animation.dampingRatio)
-        
-        // 2. 配置动画状态
-        animator.addAnimations {
-            self.menuContainerView.frame = self.sideMenuFrame(visibility: reveal)
-            self.contentContainerView.frame = self.contentFrame(visibility: reveal)
-            if self.shouldShowShadowOnContent {
-                self.contentContainerOverlay?.alpha = reveal ? self.preferences.animation.shadowAlpha : 0
-            }
-            
-            if shouldChangeStatusBar {
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
-        }
-        
-        // 3. 配置完成回调
-        animator.addCompletion { [weak self] position in
-            guard let self = self else { return }
-            
-            // 判断动画是否因为被反转而回到起点
-            let didReveal = position == .end ? reveal : !reveal
-            
-            self.menuViewController.endAppearanceTransition()
-
-            if shouldCallDelegate {
-                if didReveal {
-                    self.sideMenuControlDidReveal?(self)
-                } else {
-                    self.sideMenuControlDidHideMenu?(self)
-                }
-            }
-
-            if !didReveal {
-                self.contentContainerOverlay?.removeFromSuperview()
-                self.contentContainerOverlay = nil
-            }
-
-            completion?(true)
-            self.view.isUserInteractionEnabled = true
-            self.isMenuRevealed = didReveal
-            self.menuAnimator = nil
-            
-            // 菜单打开时，隐藏底层 Content 的 VoiceOver 焦点；菜单关闭时恢复。
-            self.contentViewController?.view.accessibilityElementsHidden = didReveal
-            
-            // 还可以加上 UIAccessibility.post 通知系统焦点改变，引导盲人焦点到 Menu 上
-            if didReveal {
-                UIAccessibility.post(notification: .screenChanged, argument: self.menuViewController?.view)
-            }
-        }
-
-        self.menuAnimator = animator
-
-        // 4. 执行动画
-        if animated {
-            animator.startAnimation()
-        } else {
-            // 无动画直接触发结束状态
-            animator.fractionComplete = 1.0
-            animator.stopAnimation(false)
-            animator.finishAnimation(at: .end)
-        }
-    }
-    
-    // MARK: Gesture Recognizer
-    private func configureGesturesRecognizer() {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(PTSideMenuControl.handlePanGesture(_:)))
-        panGesture.delegate = self
-        panGestureRecognizer = panGesture
-        view.addGestureRecognizer(panGesture)
+        let request = VisibilityRequest(target: reveal,
+                                        animated: animated,
+                                        shouldCallDelegate: shouldCallDelegate,
+                                        completions: completion.map { [$0] } ?? [])
+        enqueueVisibilityRequest(request)
     }
 
-    private func addContentOverlayViewIfNeeded() {
-        guard contentContainerOverlay == nil else {
+    private func enqueueVisibilityRequest(_ request: VisibilityRequest) {
+        guard isViewLoaded, storedContentViewController != nil, storedMenuViewController != nil else {
+            request.completions.forEach { $0(false) }
             return
         }
 
-        var overlay:UIView
-        if PTSideMenuControl.preferences.animation.shouldAddBlurWhenRevealing {
-            let blurEffect = UIBlurEffect(style: .light)
-            overlay = UIVisualEffectView(effect: blurEffect)
+        if let activeTarget = activeVisibilityTarget {
+            if activeTarget == request.target {
+                if let queuedVisibilityRequest {
+                    queuedVisibilityRequest.completions.forEach { $0(false) }
+                    self.queuedVisibilityRequest = nil
+                }
+                activeCompletions.append(contentsOf: request.completions)
+            } else if var queued = queuedVisibilityRequest {
+                if queued.target == request.target {
+                    queued.completions.append(contentsOf: request.completions)
+                    queuedVisibilityRequest = queued
+                } else {
+                    queued.completions.forEach { $0(false) }
+                    queuedVisibilityRequest = request
+                }
+            } else {
+                queuedVisibilityRequest = request
+            }
+            return
+        }
+
+        guard settledMenuRevealed != request.target else {
+            request.completions.forEach { $0(true) }
+            return
+        }
+
+        startMenuTransition(request)
+    }
+
+    private func startMenuTransition(_ request: VisibilityRequest, startPaused: Bool = false) {
+        guard let menuViewController = storedMenuViewController,
+              storedContentViewController != nil else {
+            request.completions.forEach { $0(false) }
+            return
+        }
+
+        activeVisibilityTarget = request.target
+        activeTransitionInitialVisibility = settledMenuRevealed
+        activeShouldCallDelegate = request.shouldCallDelegate
+        activeCompletions = request.completions
+
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        let duration = request.target
+            ? safeDuration(configuration.animation.revealDuration)
+            : safeDuration(configuration.animation.hideDuration)
+        let shouldAnimate = startPaused || (request.animated && !reduceMotion && duration > 0)
+
+        if request.shouldCallDelegate {
+            if request.target {
+                sideMenuControlWillReveal?(self)
+            } else {
+                sideMenuControlWillHideReveal?(self)
+            }
+        }
+        menuViewController.beginAppearanceTransition(request.target, animated: shouldAnimate)
+        if request.target {
+            addContentOverlayViewIfNeeded()
+        }
+        updateAccessibilityState(isMenuVisible: request.target)
+        setNeedsStatusBarAppearanceUpdate()
+
+        guard shouldAnimate else {
+            applyLayout(visibility: request.target, size: view.bounds.size)
+            finishMenuTransition(reachedTarget: true)
+            return
+        }
+
+        let animator = UIViewPropertyAnimator(duration: max(duration, 0.01), timingParameters: timingParameters())
+        animator.addAnimations { [weak self] in
+            guard let self else { return }
+            self.applyLayout(visibility: request.target, size: self.view.bounds.size)
+        }
+        animator.addCompletion { [weak self] position in
+            self?.finishMenuTransition(reachedTarget: position == .end)
+        }
+        menuAnimator = animator
+
+        if startPaused {
+            animator.startAnimation()
+            animator.pauseAnimation()
+        } else {
+            animator.startAnimation()
+        }
+    }
+
+    private func timingParameters() -> UITimingCurveProvider {
+        let damping = safeDampingRatio(configuration.animation.dampingRatio)
+        let velocity = configuration.animation.initialSpringVelocity.isFinite
+            ? max(0, configuration.animation.initialSpringVelocity)
+            : 0
+        if damping < 1 {
+            return UISpringTimingParameters(dampingRatio: damping,
+                                            initialVelocity: CGVector(dx: velocity, dy: 0))
+        }
+
+        let options = configuration.animation.options
+        if options.contains(.curveLinear) {
+            return UICubicTimingParameters(animationCurve: .linear)
+        }
+        if options.contains(.curveEaseIn) {
+            return UICubicTimingParameters(animationCurve: .easeIn)
+        }
+        if options.contains(.curveEaseOut) {
+            return UICubicTimingParameters(animationCurve: .easeOut)
+        }
+        return UICubicTimingParameters(animationCurve: .easeInOut)
+    }
+
+    private func finishMenuTransition(reachedTarget: Bool) {
+        guard let target = activeVisibilityTarget else { return }
+
+        let initialVisibility = activeTransitionInitialVisibility
+        let shouldCallDelegate = activeShouldCallDelegate
+        let completions = activeCompletions
+        let queuedRequest = queuedVisibilityRequest
+
+        menuAnimator = nil
+        activeVisibilityTarget = nil
+        activeCompletions = []
+        self.queuedVisibilityRequest = nil
+
+        let finalVisibility = reachedTarget ? target : !target
+        settledMenuRevealed = finalVisibility
+        applyLayout(visibility: finalVisibility, size: view.bounds.size)
+
+        if let menuViewController = storedMenuViewController {
+            menuViewController.endAppearanceTransition()
+            if !reachedTarget {
+                // 取消动画时补发相反方向的生命周期，保持 UIKit 生命周期成对。
+                menuViewController.beginAppearanceTransition(finalVisibility, animated: false)
+                menuViewController.endAppearanceTransition()
+            }
+        }
+
+        updateAccessibilityState(isMenuVisible: finalVisibility)
+        setNeedsStatusBarAppearanceUpdate()
+
+        if shouldCallDelegate, finalVisibility != initialVisibility {
+            if finalVisibility {
+                sideMenuControlDidReveal?(self)
+            } else {
+                sideMenuControlDidHideMenu?(self)
+            }
+        }
+
+        syncGestureAvailability()
+        completions.forEach { $0(reachedTarget) }
+
+        if let queuedRequest {
+            enqueueVisibilityRequest(queuedRequest)
+        }
+    }
+
+    // MARK: - 布局与遮罩
+
+    private func sideMenuFrame(visibility: Bool, targetSize: CGSize? = nil) -> CGRect {
+        let size = targetSize ?? view.bounds.size
+        let width = safeMenuWidth(for: size)
+
+        if configuration.basic.position == .under {
+            return CGRect(x: directionSign > 0 ? 0 : size.width - width,
+                          y: 0,
+                          width: width,
+                          height: size.height)
+        }
+
+        let shownX = directionSign > 0 ? 0 : size.width - width
+        let hiddenX = directionSign > 0 ? -width : size.width
+        return CGRect(x: visibility ? shownX : hiddenX,
+                      y: 0,
+                      width: width,
+                      height: size.height)
+    }
+
+    private func contentFrame(visibility: Bool, targetSize: CGSize? = nil) -> CGRect {
+        let size = targetSize ?? view.bounds.size
+        let width = safeMenuWidth(for: size)
+
+        switch configuration.basic.position {
+        case .above:
+            return CGRect(origin: .zero, size: size)
+        case .under, .sideBySide:
+            let x = visibility ? directionSign * width : 0
+            return CGRect(x: x, y: 0, width: size.width, height: size.height)
+        }
+    }
+
+    private func applyLayout(visibility: Bool, size: CGSize) {
+        contentContainerView.frame = contentFrame(visibility: visibility, targetSize: size)
+        menuContainerView.frame = sideMenuFrame(visibility: visibility, targetSize: size)
+        contentContainerOverlay?.frame = contentContainerView.bounds
+
+        if let overlay = contentContainerOverlay {
+            overlay.alpha = shouldShowShadowOnContent && visibility
+                ? safeShadowAlpha(configuration.animation.shadowAlpha)
+                : (visibility ? 1 : 0)
+            overlay.isHidden = !visibility
+        }
+    }
+
+    private func addContentOverlayViewIfNeeded() {
+        guard let contentViewController = storedContentViewController else { return }
+
+        if let overlay = contentContainerOverlay {
+            overlay.isHidden = false
+            contentContainerView.bringSubviewToFront(overlay)
+            return
+        }
+
+        let overlay: UIView
+        if configuration.animation.shouldAddBlurWhenRevealing {
+            overlay = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         } else {
             overlay = UIView(frame: contentContainerView.bounds)
         }
-        overlay.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
-        if !shouldShowShadowOnContent {
-            overlay.backgroundColor = .clear
-        } else {
-            overlay.backgroundColor = PTSideMenuControl.preferences.animation.shadowColor
-            overlay.alpha = 0
-        }
+        overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        overlay.backgroundColor = shouldShowShadowOnContent
+            ? configuration.animation.shadowColor
+            : .clear
+        overlay.alpha = 0
+        overlay.isAccessibilityElement = true
+        overlay.accessibilityTraits = .button
+        overlay.accessibilityLabel = "PT SideMenu close".localized()
+        overlay.accessibilityIdentifier = "ContentShadowOverlay"
 
-        let tapToHideGesture = UITapGestureRecognizer()
-        tapToHideGesture.addTarget(self, action: #selector(PTSideMenuControl.handleTapGesture(_:)))
+        let tapToHideGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         overlay.addGestureRecognizer(tapToHideGesture)
-
         contentContainerView.insertSubview(overlay, aboveSubview: contentViewController.view)
         contentContainerOverlay = overlay
-        contentContainerOverlay?.accessibilityIdentifier = "ContentShadowOverlay"
     }
 
     @objc private func handleTapGesture(_ tap: UITapGestureRecognizer) {
         hideMenu()
     }
 
+    private func updateAccessibilityState(isMenuVisible: Bool) {
+        storedContentViewController?.view.accessibilityElementsHidden = isMenuVisible
+        storedMenuViewController?.view.accessibilityViewIsModal = isMenuVisible
+
+        if let overlay = contentContainerOverlay {
+            overlay.isHidden = !isMenuVisible
+            overlay.accessibilityElementsHidden = !isMenuVisible
+        }
+
+        if isMenuVisible {
+            UIAccessibility.post(notification: .screenChanged, argument: storedMenuViewController?.view)
+        } else {
+            UIAccessibility.post(notification: .screenChanged, argument: storedContentViewController?.view)
+        }
+    }
+
+    // MARK: - 手势
+
+    private func configureGesturesRecognizer() {
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        panGesture.delegate = self
+        panGesture.cancelsTouchesInView = false
+        panGestureRecognizer = panGesture
+        view.addGestureRecognizer(panGesture)
+
+        if configuration.basic.revealFromScreenEdgeOnly {
+            let edgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+            edgeGesture.delegate = self
+            edgeGesture.edges = effectiveDirection == .left ? .left : .right
+            edgePanGestureRecognizer = edgeGesture
+            view.addGestureRecognizer(edgeGesture)
+        }
+        syncGestureAvailability()
+    }
+
+    private func syncGestureAvailability() {
+        let enabled = configuration.basic.enablePanGesture && activeVisibilityTarget == nil
+        panGestureRecognizer?.isEnabled = enabled && (!configuration.basic.revealFromScreenEdgeOnly || settledMenuRevealed)
+        edgePanGestureRecognizer?.isEnabled = enabled && configuration.basic.revealFromScreenEdgeOnly && !settledMenuRevealed
+    }
+
     @objc private func handlePanGesture(_ pan: UIPanGestureRecognizer) {
-        let isLeft = adjustedDirection == .left
-        let translation = pan.translation(in: view).x
-        let velocity = pan.velocity(in: view).x
-        
-        // 计算移动因数：处理左右方向以及 RTL 适配
-        var factor: CGFloat = isLeft ? 1 : -1
-        if shouldReverseDirection { factor *= -1 }
+        guard configuration.basic.enablePanGesture else { return }
 
         switch pan.state {
         case .began:
-            // 如果没有 Animator，说明是手势主动触发，我们需要创建它并暂停
-            if menuAnimator == nil {
-                let targetReveal = !isMenuRevealed
-                changeMenuVisibility(reveal: targetReveal, shouldCallDelegate: true, shouldChangeStatusBar: true)
-                // 立即暂停动画，交由手势控制进度
-                menuAnimator?.pauseAnimation()
-            } else {
-                // 如果动画正在运行（比如点击了按钮正在打开，此时用户用手指按住），直接暂停接管
-                menuAnimator?.pauseAnimation()
+            guard activeVisibilityTarget == nil,
+                  !UIAccessibility.isReduceMotionEnabled,
+                  storedMenuViewController != nil,
+                  storedContentViewController != nil else {
+                return
             }
-            isValidatePanningBegan = true
-            
-        case .changed:
-            guard isValidatePanningBegan, let animator = menuAnimator else { return }
-            
-            // 计算手势拖拽进度 (0.0 到 1.0)
-            var progress = (translation * factor) / menuWidth
-            
-            // 如果当前是打开状态，手势是反向的（用于关闭）
-            if isMenuRevealed {
-                progress = -progress
-            }
-            
-            // 实现简单的阻尼（橡皮筋）效果
-            if progress < 0 {
-                // 反向拖动（越界），给进度打个折扣
-                if preferences.basic.enableRubberEffectWhenPanning {
-                    progress = progress * 0.2
-                } else {
-                    progress = 0
-                }
-            }
-            
-            // 更新动画进度
-            animator.fractionComplete = min(max(0, progress), 1)
-            
-        case .ended, .cancelled, .failed:
+
+            let request = VisibilityRequest(target: !settledMenuRevealed,
+                                            animated: true,
+                                            shouldCallDelegate: true,
+                                            completions: [])
+            startMenuTransition(request, startPaused: true)
             guard let animator = menuAnimator else { return }
-            
-            var progress = (translation * factor) / menuWidth
-            if isMenuRevealed { progress = -progress }
-            
-            // 速度阈值：用来判断用户是否进行了“甩”的操作
-            let velocityThreshold: CGFloat = 300
-            
-            let isMovingInFavorableDirection = isMenuRevealed ? (velocity * factor < -velocityThreshold) : (velocity * factor > velocityThreshold)
-            let isMovingInOppositeDirection = isMenuRevealed ? (velocity * factor > velocityThreshold) : (velocity * factor < -velocityThreshold)
-            
+            animator.pauseAnimation()
+            isValidatingPanGesture = true
+
+        case .changed:
+            guard isValidatingPanGesture, let animator = menuAnimator else { return }
+            animator.fractionComplete = panProgress(for: pan)
+
+        case .ended, .cancelled, .failed:
+            guard isValidatingPanGesture, let animator = menuAnimator else {
+                isValidatingPanGesture = false
+                return
+            }
+
+            let progress = panProgress(for: pan)
+            let velocity = pan.velocity(in: view).x
+            let expectedSign = settledMenuRevealed ? -directionSign : directionSign
+            let projectedVelocity = velocity * expectedSign
             let shouldComplete: Bool
-            if isMovingInFavorableDirection {
-                // 速度够快且方向正确，判定完成
+
+            if pan.state != .ended {
+                shouldComplete = false
+            } else if projectedVelocity > 300 {
                 shouldComplete = true
-            } else if isMovingInOppositeDirection {
-                // 速度够快但方向相反（比如打开时反悔往回甩），判定取消
+            } else if projectedVelocity < -300 {
                 shouldComplete = false
             } else {
-                // 速度慢，按拖动距离过半来判定
                 shouldComplete = progress > 0.5
             }
-            
-            // 关键：如果不完成，就将动画反转，它会自动回到起点
+
             animator.isReversed = !shouldComplete
-            
-            // 继承手指离开屏幕时的速度，让松手后的回弹更加符合物理规律
-            let normalizedVelocity = CGVector(dx: abs(velocity) / menuWidth, dy: 0)
-            let springParameters = UISpringTimingParameters(dampingRatio: preferences.animation.dampingRatio, initialVelocity: normalizedVelocity)
-            
-            animator.continueAnimation(withTimingParameters: springParameters, durationFactor: 0)
-            isValidatePanningBegan = false
-            
+            let normalizedVelocity = min(abs(projectedVelocity) / max(menuWidth, 1), 10)
+            let spring = UISpringTimingParameters(dampingRatio: safeDampingRatio(configuration.animation.dampingRatio),
+                                                  initialVelocity: CGVector(dx: normalizedVelocity, dy: 0))
+            animator.continueAnimation(withTimingParameters: spring, durationFactor: 0)
+            isValidatingPanGesture = false
+
         default:
             break
         }
     }
-    
-    // MARK: Notification
+
+    private func panProgress(for pan: UIPanGestureRecognizer) -> CGFloat {
+        let translation = pan.translation(in: view).x * directionSign
+        var progress = (settledMenuRevealed ? -translation : translation) / max(menuWidth, 1)
+        if progress < 0 {
+            progress = configuration.basic.enableRubberEffectWhenPanning ? progress * 0.2 : 0
+        }
+        return min(max(progress, 0), 1)
+    }
+
+    // MARK: - 生命周期
+
     private func setUpNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(appDidEnteredBackground),
+                                               selector: #selector(appDidEnterBackground(_:)),
                                                name: UIScene.didEnterBackgroundNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(appDidEnteredBackground),
-                                               name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
     }
 
-    @objc private func appDidEnteredBackground() {
-        if preferences.basic.hideMenuWhenEnteringBackground {
+    @objc private func appDidEnterBackground(_ notification: Notification) {
+        guard let scene = notification.object as? UIScene,
+              scene === view.window?.windowScene else {
+            return
+        }
+        if configuration.basic.hideMenuWhenEnteringBackground {
             hideMenu(animated: false)
         }
     }
 
-    // MARK: Caching
-    /// 缓存生成带有标识符的视图控制器的闭包。
-    /// 当您想要配置缓存关系而不立即实例化视图控制器时，它很有用。
-    /// - Parameters:
-    ///   - viewControllerGenerator: 用到的时候才执行
-    ///   - identifier: ID
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        settleActiveTransitionForLayout()
+        let shouldCloseMenu = !configuration.basic.keepsMenuOpenAfterRotation && settledMenuRevealed
+        if shouldCloseMenu {
+            changeMenuVisibility(reveal: false, animated: false)
+        }
+
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self else { return }
+            self.applyLayout(visibility: self.settledMenuRevealed, size: size)
+        }, completion: { [weak self] _ in
+            guard let self else { return }
+            self.applyLayout(visibility: self.settledMenuRevealed, size: self.view.bounds.size)
+        })
+    }
+
+    private func settleActiveTransitionForLayout() {
+        guard let target = activeVisibilityTarget else { return }
+        let shouldReachTarget = (menuAnimator?.fractionComplete ?? 0) >= 0.5
+        let finalVisibility = shouldReachTarget ? target : !target
+        menuAnimator?.stopAnimation(true)
+        finishMenuTransition(reachedTarget: finalVisibility == target)
+    }
+
+    // MARK: - 缓存
+
+    private lazy var lazyCachedViewControllerGenerators: [String: () -> UIViewController?] = [:]
+    private lazy var lazyCachedViewControllers: [String: UIViewController] = [:]
+
     open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) {
         lazyCachedViewControllerGenerators[identifier] = viewControllerGenerator
     }
 
-    /// 根据ID缓存ViewController
-    /// - Parameters:
-    ///   - viewController: 被缓存的ViewController
-    ///   - identifier: ID
     open func cache(viewController: UIViewController, with identifier: String) {
         lazyCachedViewControllers[identifier] = viewController
     }
 
-    /// 将内容视图控制器更改为具有给定`identifier `的缓存控制器。
-    /// - Parameters:
-    ///   - identifier: 与缓存视图控制器或生成器关联的ID。
-    ///   - animated: 动画, 默认 `false`.
-    ///   - completion: 完成闭包将在转换完成时调用。注意，如果调用者是当前内容视图控制器，一旦转换完成，调用者将从父视图控制器中移除，并且它将无法通过`sideMenuController `访问侧菜单控制器
-    open func setContentViewController(with identifier: String,
-                                       animated: Bool = false,
-                                       completion: PTActionTask? = nil) {
+    open func selectContent(with identifier: String,
+                            animated: Bool = false,
+                            completion: @escaping @MainActor @Sendable (Result<Void, PTSideMenuError>) -> Void) {
         if let viewController = lazyCachedViewControllers[identifier] {
-            setContentViewController(to: viewController, animated: animated, completion: completion)
-        } else if let viewController = lazyCachedViewControllerGenerators[identifier]?() {
-            lazyCachedViewControllerGenerators[identifier] = nil
-            lazyCachedViewControllers[identifier] = viewController
-            setContentViewController(to: viewController, animated: animated, completion: completion)
-        } else {
-            fatalError("[SideMenu] View controller associated with \(identifier) not found!")
+            switchContent(to: viewController, animated: animated, completion: completion)
+            return
+        }
+
+        guard let viewController = lazyCachedViewControllerGenerators[identifier]?() else {
+            completion(.failure(.contentNotFound(identifier: identifier)))
+            return
+        }
+
+        lazyCachedViewControllerGenerators[identifier] = nil
+        lazyCachedViewControllers[identifier] = viewController
+        switchContent(to: viewController, animated: animated, completion: completion)
+    }
+
+    open func selectContent(with identifier: String, animated: Bool = false) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            selectContent(with: identifier, animated: animated) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 
-    /// 将Content view controler转到`viewController`
-    /// - Parameters:
-    ///   - viewController: 将要转到的ViewController
-    ///   - animated: 动画, 默认 `false`.
-    ///   - completion: 完成闭包将在转换完成时调用。注意，如果调用者是当前内容视图控制器，一旦转换完成，调用者将从父视图中移除
+    open func setContentViewController(with identifier: String,
+                                       animated: Bool = false,
+                                       completion: PTActionTask? = nil) {
+        selectContent(with: identifier, animated: animated) { result in
+            if case .failure(let error) = result {
+                PTNSLogConsole("[PTSideMenu] 内容切换失败：\(error)", levelType: .error, loggerType: .sideMenu)
+            }
+            completion?()
+        }
+    }
+
     open func setContentViewController(to viewController: UIViewController,
                                        animated: Bool = false,
                                        completion: PTActionTask? = nil) {
-        guard contentViewController !== viewController && isViewLoaded else {
+        guard contentViewController !== viewController else {
+            completion?()
+            return
+        }
+
+        guard let currentContent = storedContentViewController else {
+            setContentController(viewController)
+            completion?()
+            return
+        }
+
+        guard isViewLoaded else {
+            storedContentViewController = viewController
             completion?()
             return
         }
 
         if animated {
-            sideMenuControlWillShow?(self,viewController,animated)
-
-            addChild(viewController)
-
-            viewController.view.frame = view.bounds
-            viewController.view.translatesAutoresizingMaskIntoConstraints = true
-            viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            
-            let animatorFromDelegate = sideMenuControlAnimationIn?(self,contentViewController,viewController)
-
-            #if DEBUG
-            if animatorFromDelegate == nil {
-                PTNSLogConsole("[PTSideMenu] `setContentViewController` is called with animated while the delegate method return nil, fall back to the fade animation.",levelType: .error,loggerType: .sideMenu)
-            }
-            #endif
-
-            let animator = animatorFromDelegate ?? PTSideMenuBasicTransitionAnimator()
-
-            let transitionContext = PTSideMenuControl.TransitionContext(with: contentViewController,
-                                                                         toViewController: viewController)
-            transitionContext.isAnimated = true
-            transitionContext.isInteractive = false
-            transitionContext.completion = { finish in
-                PTGCDManager.shared.runOnMain {
-                    self.unload(self.contentViewController)
-
-                    self.shouldCallSwitchingDelegate = false
-                    self.contentViewController = viewController
-                    self.shouldCallSwitchingDelegate = true
-
-                    self.sideMenuControlDidShow?(self,viewController,animated)
-
-                    viewController.didMove(toParent: self)
-
-                    completion?()
+            switchContent(from: currentContent, to: viewController, animated: true) { result in
+                if case .failure(let error) = result {
+                    PTNSLogConsole("[PTSideMenu] 内容转场失败：\(error)", levelType: .error, loggerType: .sideMenu)
                 }
+                completion?()
             }
-            animator.animateTransition(using: transitionContext)
-
         } else {
-            contentViewController = viewController
+            setContentController(viewController)
             completion?()
         }
     }
 
-    /// 查找当前Content view controller的ID
-    /// - Returns: 如果找不到就nil
-    open func currentCacheIdentifier() -> String? {
-        guard let index = lazyCachedViewControllers.values.firstIndex(of: contentViewController) else {
-            return nil
+    private func switchContent(to viewController: UIViewController,
+                               animated: Bool,
+                               completion: @escaping @MainActor @Sendable (Result<Void, PTSideMenuError>) -> Void) {
+        guard let currentContent = storedContentViewController else {
+            setContentController(viewController)
+            completion(.success(()))
+            return
         }
-        return lazyCachedViewControllers.keys[index]
+        guard currentContent !== viewController else {
+            completion(.success(()))
+            return
+        }
+        guard isViewLoaded else {
+            storedContentViewController = viewController
+            completion(.success(()))
+            return
+        }
+        guard viewController.parent == nil else {
+            completion(.failure(.invalidHierarchy))
+            return
+        }
+
+        if animated {
+            switchContent(from: currentContent, to: viewController, animated: true, completion: completion)
+        } else {
+            setContentController(viewController)
+            completion(.success(()))
+        }
     }
 
-    /// 根据ID清理缓存
-    /// - Parameter identifier: 被清理的ID
+    private func switchContent(from currentContent: UIViewController,
+                               to newContent: UIViewController,
+                               animated: Bool,
+                               completion: @escaping @MainActor @Sendable (Result<Void, PTSideMenuError>) -> Void) {
+        guard currentContent.view.superview != nil else {
+            completion(.failure(.invalidHierarchy))
+            return
+        }
+
+        sideMenuControlWillShow?(self, newContent, animated)
+        addChild(newContent)
+        newContent.view.frame = contentContainerView.bounds
+        newContent.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        newContent.view.translatesAutoresizingMaskIntoConstraints = true
+        contentContainerView.addSubview(newContent.view)
+
+        guard let transitionContext = TransitionContext(fromViewController: currentContent,
+                                                         toViewController: newContent,
+                                                         containerView: contentContainerView) else {
+            newContent.willMove(toParent: nil)
+            newContent.view.removeFromSuperview()
+            newContent.removeFromParent()
+            completion(.failure(.invalidHierarchy))
+            return
+        }
+
+        let animator = sideMenuControlAnimationIn?(self, currentContent, newContent)
+            ?? PTSideMenuBasicTransitionAnimator(options: configuration.animation.options,
+                                                  duration: safeDuration(configuration.animation.revealDuration))
+        transitionContext.completion = { [weak self, weak currentContent, weak newContent] finished in
+            guard let self, let currentContent, let newContent else {
+                return
+            }
+            if finished {
+                self.detach(currentContent)
+                self.storedContentViewController = newContent
+                newContent.didMove(toParent: self)
+                self.sideMenuControlDidShow?(self, newContent, animated)
+                completion(.success(()))
+            } else {
+                newContent.willMove(toParent: nil)
+                newContent.view.removeFromSuperview()
+                newContent.removeFromParent()
+                completion(.failure(.transitionCancelled))
+            }
+        }
+        animator.animateTransition(using: transitionContext)
+    }
+
+    open func currentCacheIdentifier() -> String? {
+        lazyCachedViewControllers.first { $0.value === storedContentViewController }?.key
+    }
+
     open func clearCache(with identifier: String) {
         lazyCachedViewControllerGenerators[identifier] = nil
         lazyCachedViewControllers[identifier] = nil
     }
 
-    // MARK: - Helper Methods
-    private func sideMenuFrame(visibility: Bool, targetSize: CGSize? = nil) -> CGRect {
-        let position = preferences.basic.position
-        switch position {
-        case .above, .sideBySide:
-            // 🌟 修复：子视图的 frame 必须相对于父视图的 bounds (origin: .zero)
-            var baseFrame = CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
-            if visibility {
-                baseFrame.origin.x = menuWidth - baseFrame.width
-            } else {
-                baseFrame.origin.x = -baseFrame.width
-            }
-            let factor: CGFloat = adjustedDirection == .left ? 1 : -1
-            baseFrame.origin.x *= factor
-            return CGRect(origin: baseFrame.origin, size: targetSize ?? baseFrame.size)
-        case .under:
-            return CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
-        }
-    }
+    // MARK: - 旋转配置
 
-    private func contentFrame(visibility: Bool, targetSize: CGSize? = nil) -> CGRect {
-        let position = preferences.basic.position
-        switch position {
-        case .above:
-            // 🌟 修复
-            return CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
-        case .under, .sideBySide:
-            var baseFrame = CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
-            if visibility {
-                let factor: CGFloat = adjustedDirection == .left ? 1 : -1
-                baseFrame.origin.x = menuWidth * factor
-            } else {
-                baseFrame.origin.x = 0
-            }
-            return CGRect(origin: baseFrame.origin, size: targetSize ?? baseFrame.size)
-        }
-    }
-
-    // MARK: Orientation
     open override var shouldAutorotate: Bool {
-        if preferences.basic.shouldUseContentSupportedOrientations {
-            return contentViewController.shouldAutorotate
+        if configuration.basic.shouldUseContentSupportedOrientations {
+            return true
         }
-        return preferences.basic.shouldAutorotate
+        return configuration.basic.shouldAutorotate
     }
-    
+
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if preferences.basic.shouldUseContentSupportedOrientations {
-            return contentViewController.supportedInterfaceOrientations
+        if configuration.basic.shouldUseContentSupportedOrientations {
+            return storedContentViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }
-        return preferences.basic.supportedOrientations
+        return configuration.basic.supportedOrientations
     }
 
-    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        let shouldCloseMenu = !preferences.basic.keepsMenuOpenAfterRotation && isMenuRevealed
-        if shouldCloseMenu {
-            isMenuRevealed = false
-            sideMenuControlWillHideReveal?(self)
-        }
+    // MARK: - UIGestureRecognizerDelegate
 
-        coordinator.animate(alongsideTransition: { [weak self] _ in
-            guard let self = self else { return }
-
-            // 1. 让外层容器平滑过渡到横屏的 Size
-            self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
-            self.menuContainerView.frame = self.sideMenuFrame(visibility: self.isMenuRevealed, targetSize: size)
-            
-            // 🌟 2. 致命 Bug 修复：跟着动画一起，强行把里面的业务 View 拉开！绝对不让高度变 0！
-            self.contentViewController?.view.frame = self.contentContainerView.bounds
-            self.menuViewController?.view.frame = self.menuContainerView.bounds
-
-            // 3. 同步遮罩层
-            if let overlay = self.contentContainerOverlay {
-                overlay.frame = self.contentContainerView.bounds
-                overlay.alpha = self.isMenuRevealed ? self.preferences.animation.shadowAlpha : 0
-            }
-            
-            // 强迫视图立刻执行动画帧刷新
-            self.view.layoutIfNeeded()
-
-        }, completion: { [weak self] _ in
-            guard let self = self else { return }
-            
-            if !self.isMenuRevealed {
-                self.contentContainerOverlay?.removeFromSuperview()
-                self.contentContainerOverlay = nil
-                self.contentViewController?.view.accessibilityElementsHidden = false
-                
-                if shouldCloseMenu {
-                    self.sideMenuControlDidHideMenu?(self)
-                }
-            }
-        })
-    }
-}
-
-// MARK: UIGestureRecognizerDelegate
-extension PTSideMenuControl {
+    @objc(gestureRecognizer:shouldReceiveTouch:)
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        guard preferences.basic.enablePanGesture else {
+        guard configuration.basic.enablePanGesture, activeVisibilityTarget == nil else {
+            return false
+        }
+        if gestureRecognizer === edgePanGestureRecognizer, settledMenuRevealed {
+            return false
+        }
+        if gestureRecognizer === panGestureRecognizer,
+           configuration.basic.revealFromScreenEdgeOnly,
+           !settledMenuRevealed {
             return false
         }
 
-        if let shouldReveal = self.sideMenuControlShouldRevealMenu?(self) {
-            guard shouldReveal else {
-                return false
-            }
-        }
-
-        if isViewControllerInsideNavigationStack(for: touch.view) {
+        if !settledMenuRevealed, sideMenuControlShouldRevealMenu?(self) == false {
             return false
         }
-
+        if !settledMenuRevealed && isViewControllerInsideNavigationStack(for: touch.view) {
+            return false
+        }
         if touch.view is UISlider {
             return false
         }
-
-        // If the view is scrollable in horizon direction, don't receive the touch
-        if let scrollView = touch.view as? UIScrollView, scrollView.frame.width > scrollView.contentSize.width {
+        if !settledMenuRevealed,
+           let scrollView = nearestScrollView(from: touch.view),
+           scrollViewCanConsumeHorizontalPan(scrollView) {
             return false
         }
-
         return true
     }
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let velocity = panGestureRecognizer?.velocity(in: view) {
-            return isValidateHorizontalMovement(for: velocity)
+        guard activeVisibilityTarget == nil, !UIAccessibility.isReduceMotionEnabled else {
+            return false
         }
-        return true
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            return false
+        }
+        return isValidateHorizontalMovement(for: panGesture.velocity(in: view))
     }
 
     private func isViewControllerInsideNavigationStack(for view: UIView?) -> Bool {
-        guard let view = view,
-            let viewController = view.parentViewController else {
-                return false
-        }
-        
-        if let navigationController = viewController as? UINavigationController {
-            return navigationController.viewControllers.count > 1
-        } else if let navigationController = viewController.navigationController {
-            if let index = navigationController.viewControllers.firstIndex(of: viewController) {
+        var current = view?.parentViewController
+        while let viewController = current {
+            if let navigationController = viewController as? UINavigationController {
+                return navigationController.viewControllers.count > 1
+            }
+            if let navigationController = viewController.navigationController,
+               let index = navigationController.viewControllers.firstIndex(of: viewController) {
                 return index > 0
             }
-        } else {
-            var parent = viewController.parent
-            while parent != nil {
-                guard let navigationController = parent as? UINavigationController else {
-                    parent = parent?.parent
-                    continue
-                }
-                return navigationController.viewControllers.count > 0
-            }
+            current = viewController.parent
         }
         return false
     }
 
-    private func isValidateHorizontalMovement(for velocity: CGPoint) -> Bool {
-        if isMenuRevealed {
-            return true
+    private func nearestScrollView(from view: UIView?) -> UIScrollView? {
+        var current = view
+        while let candidate = current {
+            if let scrollView = candidate as? UIScrollView {
+                return scrollView
+            }
+            current = candidate.superview
         }
+        return nil
+    }
 
-        let direction = preferences.basic.direction
-        var factor: CGFloat = direction == .left ? 1 : -1
-        factor *= shouldReverseDirection ? -1 : 1
-        guard velocity.x * factor > 0 else {
-            return false
+    private func scrollViewCanConsumeHorizontalPan(_ scrollView: UIScrollView) -> Bool {
+        let minimumOffset = -scrollView.adjustedContentInset.left
+        let maximumOffset = max(minimumOffset,
+                                scrollView.contentSize.width
+                                - scrollView.bounds.width
+                                + scrollView.adjustedContentInset.right)
+        guard maximumOffset > minimumOffset else { return false }
+
+        let atLeadingEdge = scrollView.contentOffset.x <= minimumOffset + 0.5
+        let atTrailingEdge = scrollView.contentOffset.x >= maximumOffset - 0.5
+        if directionSign > 0 {
+            return !atLeadingEdge
         }
-        return abs(velocity.y / velocity.x) < preferences.basic.panGestureSensitivity
+        return !atTrailingEdge
+    }
+
+    private func isValidateHorizontalMovement(for velocity: CGPoint) -> Bool {
+        guard abs(velocity.x) > 0.01 else { return false }
+        let expectedSign = settledMenuRevealed ? -directionSign : directionSign
+        guard velocity.x * expectedSign > 0 else { return false }
+
+        let sensitivity = configuration.basic.panGestureSensitivity.isFinite
+            ? max(configuration.basic.panGestureSensitivity, 0.01)
+            : 0.25
+        return abs(velocity.y / velocity.x) < sensitivity
     }
 }
 
 extension PTSideMenuControl {
-    class TransitionContext: NSObject, UIViewControllerContextTransitioning {
+    @MainActor
+    final class TransitionContext: NSObject, UIViewControllerContextTransitioning {
+        let containerView: UIView
+        let presentationStyle: UIModalPresentationStyle = .custom
+        private let viewControllers: [UITransitionContextViewControllerKey: UIViewController]
         var isAnimated = true
         var targetTransform: CGAffineTransform = .identity
-
-        let containerView: UIView
-        let presentationStyle: UIModalPresentationStyle
-
-        private var viewControllers = [UITransitionContextViewControllerKey: UIViewController]()
-
         var isInteractive = false
+        var transitionWasCancelled = false
+        var completion: ((Bool) -> Void)?
+        private var didComplete = false
 
-        var transitionWasCancelled: Bool {
-            return false
-        }
-
-        var completion: PTBoolTask?
-
-        init(with fromViewController: UIViewController, toViewController: UIViewController) {
-            guard let superView = fromViewController.view.superview else {
-                fatalError("fromViewController's view should have a parent view")
-            }
-            presentationStyle = .custom
-            containerView = superView
-            viewControllers = [
+        init?(fromViewController: UIViewController,
+              toViewController: UIViewController,
+              containerView: UIView) {
+            guard fromViewController.view.superview != nil else { return nil }
+            self.containerView = containerView
+            self.viewControllers = [
                 .from: fromViewController,
                 .to: toViewController
             ]
-
             super.init()
         }
 
         func completeTransition(_ didComplete: Bool) {
+            guard !self.didComplete else { return }
+            self.didComplete = true
+            transitionWasCancelled = !didComplete
             completion?(didComplete)
         }
 
         func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {
-            return viewControllers[key]
+            viewControllers[key]
         }
 
         func view(forKey key: UITransitionContextViewKey) -> UIView? {
@@ -801,16 +1080,14 @@ extension PTSideMenuControl {
             }
         }
 
-        // swiftlint:disable identifier_name
         func initialFrame(for vc: UIViewController) -> CGRect {
-            return containerView.frame
+            containerView.bounds
         }
 
         func finalFrame(for vc: UIViewController) -> CGRect {
-            return containerView.frame
+            containerView.bounds
         }
 
-        // MARK: Interactive, not supported yet
         func updateInteractiveTransition(_ percentComplete: CGFloat) {}
         func finishInteractiveTransition() {}
         func cancelInteractiveTransition() {}
@@ -819,132 +1096,76 @@ extension PTSideMenuControl {
 }
 
 extension PTSideMenuControl {
-    /// 选项
     public struct PTSideMenuPreferences {
-
-        /// Menu出现方向
         public enum MenuDirection {
-            /// 从左到右
             case left
-            /// 从右到左
             case right
         }
 
-        /// Menu出现的位置
         public enum MenuPosition {
-            /// 在当前ViewController上面
             case above
-            /// 在当前ViewController下面
             case under
-            /// 与当前的ViewController相连
             case sideBySide
         }
 
         public struct PTSideMenuAnimation {
-            /// 出现的动画时间,默认`0.4`
             public var revealDuration: TimeInterval = 0.4
-
-            /// 小时的动画时间,默认`0.4`
             public var hideDuration: TimeInterval = 0.4
-
-            /// 动画. 默认 ``.curveEaseInOut``.
             public var options: UIView.AnimationOptions = .curveEaseInOut
-
-            /// 放大比例选项用于菜单的显示和隐藏动画. 默认 `1`.
             public var dampingRatio: CGFloat = 1
-
-            ///`initialSpringVelocit`(弹簧力度)选项用于显示和隐藏菜单的动画 . 默认 `1`.
             public var initialSpringVelocity: CGFloat = 1
-
-            /// 显示菜单时是否应该在内容视图上添加阴影效果。默认为true
-            /// 如果Config的`position`是`.under`,即使该值设置为`true`，阴影效果也不会被添加
             public var shouldAddShadowWhenRevealing = true
-
-            /// 在Content上的阴影值. 默认 `0.2`.
             public var shadowAlpha: CGFloat = 0.2
-
-            /// 阴影颜色. 默认 `black`.
             public var shadowColor: UIColor = .black
-
-            /// 是否开启毛玻璃效果.默认 `false`
             public var shouldAddBlurWhenRevealing = false
+
+            public init() {}
         }
 
         public struct PTSideMentConfiguration {
-            /// Side的Width. 默认 `300`.
-            /// 需要在SideMenu初始化之前调用
             public var menuWidth: CGFloat = 300
-
-            /// 展示位置. 默认 `.above`.
-            /// 需要在SideMenu初始化之前调用
             public var position: MenuPosition = .above
-
-            /// 当用户交互布局方向为RTL时，侧菜单方向是否需要反转。
-            /// 更具体地说，当应用程序使用从右向左(RTL)语言时，侧边菜单的方向将会颠倒
             public var shouldRespectLanguageDirection = true
-          
-            /// 侧菜单的方向是否要强行反转到RTL。如果我们在运行时更改应用程序语言，走runtime方法。
-            /// 侧边菜单的方向会被强行反转。默认为 `false`。
             public var forceRightToLeft = false
-
-            /// 展示方向.默认 `.left`.
-            /// 需要在SideMenu初始化之前调用
             public var direction: MenuDirection = .left
-
-            /// 开启触发手势 `.left`.
             public var enablePanGesture = true
-
-            /// 如果启用，当到达边界时，菜单视图将像橡皮筋一样起作用.默认为`true`.
+            public var revealFromScreenEdgeOnly = false
             public var enableRubberEffectWhenPanning = true
-
-            /// 如果启用，当应用程序进入后台时菜单视图将被隐藏.默认为`false`.
             public var hideMenuWhenEnteringBackground = false
-
-            /// 第一个内容视图控制器的缓存键。
             public var defaultCacheKey: String?
-
-            /// 侧边菜单应该使用内容支持的方向.默认为`false`.
-            public var shouldUseContentSupportedOrientations: Bool = false
-
-            /// 侧边菜单控制器支持的方向.默认为`. allbutupsidedown`.
+            public var shouldUseContentSupportedOrientations = false
             public var supportedOrientations: UIInterfaceOrientationMask = .allButUpsideDown
-            
-            /// 是否支持旋转. 默认`true`.
-            public var shouldAutorotate: Bool = true
-            
-            /// 平移手势识别器显示菜单视图控制器的灵敏度.默认`0.25`
+            public var shouldAutorotate = true
             public var panGestureSensitivity: CGFloat = 0.25
+            public var keepsMenuOpenAfterRotation = false
 
-            /// 如果旁边的菜单应该保持打开旋转.默认为`false`.
-            public var keepsMenuOpenAfterRotation: Bool = false
+            public init() {}
         }
 
-        /// 配置
-        public var basic = PTSideMentConfiguration()
+        /// 正确拼写的配置名称，旧名称继续保留以兼容已有调用方。
+        public typealias PTSideMenuConfiguration = PTSideMentConfiguration
 
-        /// 动画配置
+        public var basic = PTSideMentConfiguration()
         public var animation = PTSideMenuAnimation()
+
+        public init() {}
     }
 }
 
 extension PTSideMenuControl {
-    
-    /// 异步展示 Menu (iOS 15+)
     @MainActor
     open func revealMenuAsync(animated: Bool = true) async -> Bool {
         await withCheckedContinuation { continuation in
-            // 调用你写好的闭包版本
-            self.revealMenu(animated: animated) { result in
+            revealMenu(animated: animated) { result in
                 continuation.resume(returning: result)
             }
         }
     }
-    
-    /// 异步隐藏 Menu (iOS 15+)
+
     @MainActor
     open func hideMenuAsync(animated: Bool = true) async -> Bool {
         await withCheckedContinuation { continuation in
-            self.hideMenu(animated: animated) { result in
+            hideMenu(animated: animated) { result in
                 continuation.resume(returning: result)
             }
         }

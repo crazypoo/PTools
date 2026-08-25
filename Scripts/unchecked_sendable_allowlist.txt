@@ -58,6 +58,5 @@ PooToolsSource/Router/PTRouterServiceManager.swift
 PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift
 PooToolsSource/SegmentControl/PTMainSegmentModel.swift
 PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift
-PooToolsSource/SideMenuControl/PTSideMenuControl.swift
 PooToolsSource/SocketKit/PTSocketManager.swift
 PooToolsSource/TouchInspector/TouchInspectorWindow.swift

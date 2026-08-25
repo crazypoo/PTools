@@ -9,6 +9,7 @@
 import UIKit
 import SwifterSwift
 
+@MainActor
 public extension UIView {
 
     var parentNavigationController: UINavigationController? {

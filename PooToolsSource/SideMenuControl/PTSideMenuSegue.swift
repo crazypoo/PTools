@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 open class PTSideMenuSegue: UIStoryboardSegue {
 
     /// 路由类型

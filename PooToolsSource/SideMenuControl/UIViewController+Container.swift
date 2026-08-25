@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 public extension UIViewController {
 
     var sideMenuController: PTSideMenuControl? {

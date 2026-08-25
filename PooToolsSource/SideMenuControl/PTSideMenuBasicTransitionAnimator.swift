@@ -9,6 +9,7 @@
 import UIKit
 
 // 一个简单的过渡动画器可以配置动画选项。
+@MainActor
 public class PTSideMenuBasicTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let animationOptions: UIView.AnimationOptions
     let duration: TimeInterval
@@ -19,7 +20,7 @@ public class PTSideMenuBasicTransitionAnimator: NSObject, UIViewControllerAnimat
     ///   - duration: 动画持续时间
     public init(options: UIView.AnimationOptions = .transitionCrossDissolve, duration: TimeInterval = 0.4) {
         self.animationOptions = options
-        self.duration = duration
+        self.duration = duration.isFinite ? max(0, duration) : 0
     }
 
     // MARK: UIViewControllerAnimatedTransitioning
@@ -30,6 +31,7 @@ public class PTSideMenuBasicTransitionAnimator: NSObject, UIViewControllerAnimat
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromViewController = transitionContext.viewController(forKey: .from),
             let toViewController = transitionContext.viewController(forKey: .to) else {
+                transitionContext.completeTransition(false)
                 return
         }
 
