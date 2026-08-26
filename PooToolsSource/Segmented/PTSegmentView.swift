@@ -25,7 +25,7 @@ public class PTSegmentConfig: NSObject {
     ///未选中字体
     public var normalFont:UIFont = .boldSystemFont(ofSize: 14)
     ///显示类型
-    public var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
+    public var showType:PTSegmentSelectedType = .UnderLine
     ///选中颜色
     public var selectedColor:UIColor = .red
     ///普通颜色
@@ -43,7 +43,7 @@ public class PTSegmentConfig: NSObject {
     ///设置底线角
     public var underlineRadius:Bool = true
     ///文字图片位置
-    public var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
+    public var imagePosition:PTLayoutButtonStyle = .leftImageRightTitle
     ///文字图片间距
     public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
@@ -119,14 +119,14 @@ public class PTSegmentSubView:UIView {
             imageBtn.midSpacing = 0
             imageBtn.layoutStyle = .image
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
-            
-            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
+
+            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage)
         case .TitleImage:
             //MARK:两个都有
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             imageBtn.setTitle(subViewModels.titles, state: .normal)
             imageBtn.layoutStyle = .leftImageRightTitle
-            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
+            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage)
         }
         
         addSubview(imageBtn)
@@ -201,7 +201,7 @@ public class PTSegmentSubView:UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage) {
+    func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage?) {
         imageBtn.setImage(subViewModels.imageURL, state: .normal)
         imageBtn.setImage(subViewModels.selectedImageURL, state: .selected)
     }
@@ -237,7 +237,8 @@ public class PTSegmentView: UIView {
     ///选中某个index
     open var selectedIndex:Int? {
         didSet {
-            setSelectItem(indexs: selectedIndex!)
+            guard let selectedIndex else { return }
+            setSelectItem(indexs: selectedIndex)
         }
     }
     
@@ -257,13 +258,13 @@ public class PTSegmentView: UIView {
     ///初始化
     public init(config:PTSegmentConfig? = PTSegmentConfig()) {
         super.init(frame: .zero)
-        viewConfig = config!
+        viewConfig = config ?? PTSegmentConfig()
     }
     
     ///刷新items
     public func reloadViewData(block:((_ index:Int) -> Void)?) {
         subViewArr.forEach { (value) in
-            let subV = value as! PTSegmentSubView
+            guard let subV = value as? PTSegmentSubView else { return }
             subV.removeFromSuperview()
         }
         subViewArr.removeAll()
@@ -278,7 +279,7 @@ public class PTSegmentView: UIView {
         if datas.count > 0 {
             datas.enumerated().forEach { (index,value) in
                 var subContentW:CGFloat = 0
-                var subShowType:PTSegmentButtonShowType!
+                var subShowType: PTSegmentButtonShowType = .OnlyTitle
                 getCurrentSubWidthAndType(value: value) { currentWidth, showType in
                     subShowType = showType
                     subContentW = currentWidth
@@ -331,7 +332,7 @@ public class PTSegmentView: UIView {
     }
     
     func getCurrentSubWidthAndType(value:PTSegmentModel,handle: (CGFloat, PTSegmentButtonShowType) -> Void) {
-        var subShowType:PTSegmentButtonShowType!
+        var subShowType: PTSegmentButtonShowType = .OnlyTitle
         let normalW = UIView.sizeFor(string: value.titles, font: viewConfig.normalFont, height: frame.size.height).width
         let selectedW = UIView.sizeFor(string: value.titles, font: viewConfig.selectedFont, height: frame.size.height).width
         
@@ -413,7 +414,7 @@ public class PTSegmentView: UIView {
     
     ///选择某个item
     public func setSelectItem(indexs:Int) {
-        if indexs <= (subViewArr.count - 1) {
+        if subViewArr.indices.contains(indexs) {
             if let subV = subViewArr[indexs] as? PTSegmentSubView {
                 switch indexs {
                 case 0:
@@ -450,40 +451,52 @@ public class PTSegmentView: UIView {
                             badgeShowType:PTBadgeStyle = .redDot,
                             badgeAnimation:PTBadgeAnimType = .breathe,
                             badgeValue:Any = 1) {
-        Task { @MainActor in
-            guard indexView < self.subViewArr.count,
-                  let subView = self.subViewArr[indexView] as? PTSegmentSubView else { return }
+        let content = PTBadgeContentResolver.content(style: badgeShowType, value: badgeValue)
+        setSegBadge(indexView: indexView,
+                    badgePosition: badgePosition,
+                    badgeBGColor: badgeBGColor,
+                    content: content,
+                    badgeAnimation: badgeAnimation)
+    }
 
-            let width = subView.pt.jx_width
-            let height = subView.pt.jx_height
-            let badgePoint: CGPoint = {
-                switch badgePosition {
-                case .TopLeft:      return CGPoint(x: self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
-                case .TopMiddle:    return CGPoint(x: width / 2, y: self.viewConfig.bottomSquare)
-                case .TopRight:     return CGPoint(x: width - self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
-                case .MiddleLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height / 2)
-                case .MiddleRigh:   return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height / 2)
-                case .BottomLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height - 5)
-                case .BottomMiddle: return CGPoint(x: width / 2, y: height - self.viewConfig.bottomSquare)
-                case .BottomRight:  return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height - self.viewConfig.bottomSquare)
-                default:            return .zero
-                }
-            }()
+    /// 使用类型化内容设置角标，避免重复解析数字和文本。
+    public func setSegBadge(indexView: Int,
+                            badgePosition: PooSegmentBadgePosition? = .TopRight,
+                            badgeBGColor: UIColor = UIColor.red,
+                            content: PTBadgeContent,
+                            badgeAnimation: PTBadgeAnimType = .breathe) {
+        guard subViewArr.indices.contains(indexView),
+              let subView = subViewArr[indexView] as? PTSegmentSubView else { return }
 
-            var config = PTBadgeConfiguration()
-            config.centerOffset = badgePoint
-            config.borderWidth = PTAppBaseConfig.share.tabBadgeBorderHeight
-            config.borderColor = PTAppBaseConfig.share.tabBadgeBorderColor
-            config.font = PTAppBaseConfig.share.tabBadgeFont
-            config.bgColor = badgeBGColor
-            subView.badgeConfig = config
-            subView.showBadge(style: badgeShowType, value: badgeValue, aniType: badgeAnimation)
-        }
+        let width = subView.bounds.width
+        let height = subView.bounds.height
+        let badgePoint: CGPoint = {
+            switch badgePosition {
+            case .TopLeft:      return CGPoint(x: viewConfig.badgeXOffset, y: viewConfig.bottomSquare)
+            case .TopMiddle:    return CGPoint(x: width / 2, y: viewConfig.bottomSquare)
+            case .TopRight:     return CGPoint(x: width - viewConfig.badgeXOffset, y: viewConfig.bottomSquare)
+            case .MiddleLeft:   return CGPoint(x: viewConfig.badgeXOffset, y: height / 2)
+            case .MiddleRigh:   return CGPoint(x: width - viewConfig.badgeXOffset, y: height / 2)
+            case .BottomLeft:   return CGPoint(x: viewConfig.badgeXOffset, y: height - 5)
+            case .BottomMiddle: return CGPoint(x: width / 2, y: height - viewConfig.bottomSquare)
+            case .BottomRight:  return CGPoint(x: width - viewConfig.badgeXOffset, y: height - viewConfig.bottomSquare)
+            default:            return .zero
+            }
+        }()
+
+        var config = PTBadgeConfiguration()
+        config.centerOffset = badgePoint
+        config.borderWidth = PTAppBaseConfig.share.tabBadgeBorderHeight
+        config.borderColor = PTAppBaseConfig.share.tabBadgeBorderColor
+        config.font = PTAppBaseConfig.share.tabBadgeFont
+        config.bgColor = badgeBGColor
+        subView.badgeConfig = config
+        subView.showBadge(content, animation: badgeAnimation)
     }
     
     ///移除某个Badge
     public func removeBadgeAtIndex(indexView:Int) {
-        guard indexView < subViewArr.count,
+        guard subViewArr.indices.contains(indexView),
               let subView = subViewArr[indexView] as? PTSegmentSubView else { return }
 
         subView.clearBadge()

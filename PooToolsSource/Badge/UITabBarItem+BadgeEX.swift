@@ -8,61 +8,112 @@
 
 import UIKit
 
-extension UITabBarItem:@MainActor PTBadgeProtocol {
-    
-    // MARK: - Private View Finder
-    
-    /// 获取真正用于承载角标的底层 UIView
+extension UITabBarItem: @MainActor PTBadgeProtocol {
+
+    private var ptBadgeState: PTBadgeState {
+        PTBadgeItemBridge.state(for: self)
+    }
+
     private var actualBadgeSuperView: UIView? {
-        // 1. 通过 KVC 获取内部真实的 View (通常是 UITabBarButton)
-        guard let bottomView = self.value(forKey: "_view") as? UIView else {
-            return nil
-        }
-        
-        // 2. 寻找内部的图片视图 UITabBarSwappableImageView
-        if let swappableClass = NSClassFromString("UITabBarSwappableImageView") {
-            // 使用 Swift 高阶函数优雅地查找
-            let targetView = bottomView.subviews.first { $0.isKind(of: swappableClass) }
-            // 如果找到了就返回图片视图，找不到就退而求其次，返回整个 Item 的底层 View
-            return targetView ?? bottomView
-        }
-        
-        return bottomView
+        PTBadgeHostResolver.hostView(for: self)
     }
-    
-    // MARK: - Protocol Properties Forwarding
-    
+
     public var badge: UILabel? {
-        get { actualBadgeSuperView?.badge }
-        set { actualBadgeSuperView?.badge = newValue }
+        get { actualBadgeSuperView?.badge ?? ptBadgeState.label }
+        set {
+            let state = ptBadgeState
+            state.label = newValue
+            if newValue == nil {
+                state.hasContent = false
+                state.isVisible = false
+                state.operationID &+= 1
+            }
+            guard let host = actualBadgeSuperView else { return }
+            host.badgeConfig = state.configuration
+            host.badge = newValue
+            PTBadgeItemBridge.updateRemoveCallback(state, on: host)
+            if newValue == nil {
+                state.hasContent = false
+                state.isVisible = false
+                badgeValue = nil
+                host.clearBadge()
+            }
+        }
     }
-    
-    /// 直接转发整个配置对象！
+
     public var badgeConfig: PTBadgeConfiguration {
-        get { actualBadgeSuperView?.badgeConfig ?? PTBadgeConfiguration() }
-        set { actualBadgeSuperView?.badgeConfig = newValue }
+        get { ptBadgeState.configuration }
+        set {
+            let state = ptBadgeState
+            state.configuration = newValue
+            PTBadgeItemBridge.apply(state, to: actualBadgeSuperView)
+        }
     }
-    
+
     public var badgeRemoveCallback: (() -> Void)? {
-        get { actualBadgeSuperView?.badgeRemoveCallback }
-        set { actualBadgeSuperView?.badgeRemoveCallback = newValue }
+        get { ptBadgeState.removeCallback }
+        set {
+            let state = ptBadgeState
+            state.removeCallback = newValue
+            PTBadgeItemBridge.updateRemoveCallback(state, on: actualBadgeSuperView)
+        }
     }
-    
-    // MARK: - Protocol Methods Forwarding
-    
+
     public func showBadge() {
-        actualBadgeSuperView?.showBadge()
+        showBadge(.redDot, animation: .none)
     }
-    
+
     public func showBadge(style: PTBadgeStyle, value: Any, aniType: PTBadgeAnimType) {
-        actualBadgeSuperView?.showBadge(style: style, value: value, aniType: aniType)
+        showBadge(PTBadgeContentResolver.content(style: style, value: value), animation: aniType)
     }
-    
+
+    public func showBadge(_ content: PTBadgeContent, animation: PTBadgeAnimType = .none) {
+        let state = ptBadgeState
+        state.content = content
+        state.hasContent = true
+        state.isVisible = PTBadgeMetrics.size(for: content, configuration: state.configuration) != .zero
+        state.didNotifyRemoval = false
+        state.configuration.animType = animation
+
+        if let host = actualBadgeSuperView {
+            badgeValue = nil
+            PTBadgeItemBridge.apply(state, to: host)
+        } else {
+            badgeValue = PTBadgeItemBridge.nativeBadgeValue(for: content, configuration: state.configuration)
+        }
+    }
+
     public func clearBadge() {
+        let state = ptBadgeState
+        state.isVisible = false
+        state.operationID &+= 1
+        badgeValue = nil
         actualBadgeSuperView?.clearBadge()
     }
-    
+
     public func resumeBadge() {
-        actualBadgeSuperView?.resumeBadge()
+        let state = ptBadgeState
+        guard state.hasContent,
+              PTBadgeMetrics.size(for: state.content, configuration: state.configuration) != .zero else {
+            return
+        }
+
+        state.isVisible = true
+        if let host = actualBadgeSuperView {
+            badgeValue = nil
+            PTBadgeItemBridge.apply(state, to: host)
+        } else {
+            badgeValue = PTBadgeItemBridge.nativeBadgeValue(for: state.content, configuration: state.configuration)
+        }
+    }
+
+    /// 在 TabBar 完成布局或系统内部 View 重建后重新挂载角标。
+    public func refreshBadge() {
+        if let host = actualBadgeSuperView {
+            badgeValue = nil
+            PTBadgeItemBridge.apply(ptBadgeState, to: host)
+        } else if ptBadgeState.hasContent, ptBadgeState.isVisible {
+            badgeValue = PTBadgeItemBridge.nativeBadgeValue(for: ptBadgeState.content, configuration: ptBadgeState.configuration)
+        }
     }
 }

@@ -119,7 +119,7 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
 final public class PTTabBarItemView: UIControl {
     
     private let titleLabel = UILabel()
-    private var content: PTTabBarItemContent!
+    private var content: PTTabBarItemContent
         
     public class func itemImageSize() -> CGFloat {
         let tab26ModeBottomSpacing = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
@@ -144,9 +144,8 @@ final public class PTTabBarItemView: UIControl {
     }
     
     public init(content: PTTabBarItemContent, title: String) {
-        super.init(frame: .zero)
-        
         self.content = content
+        super.init(frame: .zero)
         setupUI(title: title)
     }
     
@@ -780,57 +779,44 @@ final public class PTTabBarView: UIView {
     }
 
     public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) {
+        let content = PTBadgeContentResolver.content(style: badgeStyle, value: badgeValue)
+        badge(index: index, content: content, animationType: anumationType, badgeCanDrag: badgeCanDrag)
+    }
+
+    /// 使用类型化内容设置角标，避免业务层在多个入口重复解析数字和文本。
+    public func badge(index: Int,
+                      content: PTBadgeContent,
+                      animationType: PTBadgeAnimType = .none,
+                      badgeCanDrag: Bool = false) {
+        guard items.indices.contains(index) else { return }
+
         let item = items[index]
         var config = PTBadgeConfiguration()
         config.canDragToDelete = badgeCanDrag
-        
-        var badgeWidth:CGFloat = 0
-        switch badgeStyle {
-        case .redDot:
-            badgeWidth = config.radius * 2
-        case .number:
-            switch badgeValue {
-            case let val as Int:
-                badgeWidth = UIView.sizeFor(string: "\(val)", font: config.font).width
-            case let val as String:
-                var value = 0
-                if let intVal = val.int {
-                    value = intVal
-                } else {
-                    value = 0
-                }
-                if value == 0 {
-                    badgeWidth = 0
-                } else {
-                    badgeWidth = UIView.sizeFor(string: "\(value)", font: config.font).width
-                }
-            default:
-                badgeWidth = 0
-            }
-        case .new:
-            let str = (badgeValue as? String) ?? "new"
-            badgeWidth = str.stringIsEmpty() ? 0 : UIView.sizeFor(string: "\(str)", font: config.font).width
-        }
-        var offX:CGFloat = 0
-        switch badgeStyle {
-        case .new:
+
+        let badgeWidth = PTBadgeMetrics.size(for: content, configuration: config).width
+        let offX: CGFloat
+        switch content {
+        case .text:
             offX = PTTabBarItemView.itemImageSize() - badgeWidth / 4
-        default:
+        case .redDot, .number:
             offX = PTTabBarItemView.itemImageSize() + badgeWidth / 2
         }
         config.centerOffset = CGPointMake(offX, 7)
         item.imageContent.badgeConfig = config
-        item.imageContent.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
+        item.imageContent.showBadge(content, animation: animationType)
         if !badgeCanDrag {
             item.imageContent.isUserInteractionEnabled = true
         }
-        item.imageContent.badgeRemoveCallback = {
+        item.imageContent.badgeRemoveCallback = { [weak self] in
+            guard let self, self.items.indices.contains(index) else { return }
             self.badgeDragRemoveIndex?(index)
         }
     }
     
     public func removeBadge(index:Int) {
-        items[index].clearBadge()
+        guard items.indices.contains(index) else { return }
+        items[index].imageContent.clearBadge()
     }
 
     // MARK: - HitTest (支持凸起点击)
