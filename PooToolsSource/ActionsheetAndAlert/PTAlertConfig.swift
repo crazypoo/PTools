@@ -92,8 +92,8 @@ public class PTAlertConfig: NSObject {
     public var shouldAutorotate = false
     /// 支持的界面方向
     public var supportedInterfaceOrientations = UIInterfaceOrientationMask.portrait
-    /// 用户界面样式，包括夜间模式
-    public var userInterfaceStyleOverride = PTUserInterfaceStyle.light
+    /// 用户界面样式；未指定时跟随系统的浅色或深色模式。
+    public var userInterfaceStyleOverride = PTUserInterfaceStyle.unspecified
     /// 弹窗的唯一标识符，用于去重
     public var identifier: String?
     /// 弹框展示时间

@@ -30,14 +30,15 @@ public class PTCustomerAlertController: PTAlertController {
 
     public var bottomButtonTapCallback:((_ title:String,_ index:Int) -> Void)? = nil
     public var backgroundTapCallback:((PTCustomerAlertController) -> Void)? = nil
-    public var contentBackgroundColor: UIColor?
+    public var contentBackgroundColor: UIColor? {
+        didSet {
+            updateContentBackgroundIfLoaded()
+        }
+    }
 
     fileprivate lazy var contentView:UIView = {
         let view = UIView()
-        view.backgroundColor = DynamicColor(hexString: "c3c3c8")
-        if let contentBackgroundColor {
-            view.backgroundColor = contentBackgroundColor
-        }
+        view.backgroundColor = contentBackgroundColor ?? .clear
         view.alpha = 0.0
         view.layer.cornerRadius = cornerSize
         view.clipsToBounds = true
@@ -77,7 +78,13 @@ public class PTCustomerAlertController: PTAlertController {
     
     fileprivate var customerViewCallback:PTCustomerCustomerBlock? = nil
     fileprivate var customerViewHeight:CGFloat = 100
-    fileprivate var blur:SSBlurView?
+    private lazy var blur:SSBlurView = {
+        let view = SSBlurView(frame: .zero)
+        view.style = .systemMaterial
+        view.animationDuration = 0.01
+        view.enable(animated: false)
+        return view
+    }()
     fileprivate var canTapBackground:Bool = false
     
     public init(title:String = "",
@@ -105,14 +112,6 @@ public class PTCustomerAlertController: PTAlertController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    open override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            baseTraitCollectionDidChange(style: traitCollection.userInterfaceStyle)
-        }
-    }
-
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -137,6 +136,7 @@ public class PTCustomerAlertController: PTAlertController {
         let buttonHeight: CGFloat = buttons.count <= 2 ? (buttons.isEmpty ? 0 : 44) : CGFloat(buttons.count) * 44
 
         view.addSubview(contentView)
+        contentView.backgroundColor = contentBackgroundColor ?? .clear
         contentView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(contentWidth)
@@ -159,22 +159,17 @@ public class PTCustomerAlertController: PTAlertController {
             view.addGestureRecognizer(tap)
         }
 
-        blur = SSBlurView(frame: .zero)
-        if let blur {
-            blur.style = .systemThinMaterial
-            blur.animationDuration = 0.01
-            blur.enable()
-            contentView.addSubview(blur)
-            blur.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+        contentView.addSubview(blur)
+        blur.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
 
         contentSubsSet()
-        
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
-            self.baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
-        }
+    }
+
+    private func updateContentBackgroundIfLoaded() {
+        guard isViewLoaded else { return }
+        contentView.backgroundColor = contentBackgroundColor ?? .clear
     }
     
     fileprivate func contentSubsSet() {
@@ -198,19 +193,22 @@ public class PTCustomerAlertController: PTAlertController {
         let isVertical = buttonModels.count > 2
         let buttonsWidth: CGFloat = isVertical ? contentWidth : contentWidth / CGFloat(buttonModels.count)
         self.buttonModels.enumerated().forEach { index,value in
+            let buttonTitle = value.titleName ?? ""
             let buttonsSet = UIButton(type: .custom)
             buttonsSet.titleLabel?.font = self.buttonsFont
             buttonsSet.setTitleColor(value.titleColor, for: .normal)
             buttonsSet.setTitle(value.titleName, for: .normal)
-            buttonsSet.setTitleColor(.lightGray, for: .highlighted)
+            buttonsSet.setTitleColor(.systemGray, for: .highlighted)
             buttonsSet.titleLabel?.textAlignment = .center
             buttonsSet.contentHorizontalAlignment = .center
             buttonsSet.tag = 100 + index
             buttonsSet.addActionHandlers { [weak self] _ in
                 self?.dismissSelf { [weak self] in
-                    guard let self else { return }
-                    self.bottomButtonTapCallback?(value.titleName ?? "", index)
-                    self.bottomButtonTapCallback = nil
+                    Task { @MainActor [weak self] in
+                        guard let self else { return }
+                        self.bottomButtonTapCallback?(buttonTitle, index)
+                        self.bottomButtonTapCallback = nil
+                    }
                 }
             }
             self.contentView.addSubview(buttonsSet)
@@ -234,11 +232,6 @@ public class PTCustomerAlertController: PTAlertController {
         }
     }
     
-    public override func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) {
-        super.baseTraitCollectionDidChange(style: style)
-        blur?.style = style == .dark ? .extraLight : .dark
-        self.setNeedsStatusBarAppearanceUpdate()
-    }
 }
 
 extension PTCustomerAlertController {

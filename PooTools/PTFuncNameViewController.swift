@@ -822,7 +822,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 } else if itemRow.title == .alert {
                     PTGCDManager.shared.runOnMain {
-                        UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet"], otherBlock: { sheet,index,title in
+                        UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet","Like system"], otherBlock: { sheet,index,title in
                             switch index {
                             case 0:
                                 let tips = PTAlertTipsViewController(title: "Job Done!", subtitle: "WOW", icon: .Done)
@@ -865,7 +865,7 @@ class PTFuncNameViewController: PTBaseViewController {
                                 PTAlertManager.show(actionSheet)
 
                             case 5:
-                                let newAlertController = PTCustomerAlertController(title: "",buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
+                                let newAlertController = PTCustomerAlertController(title: "",customerViewHeight:0,buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
                                 PTAlertManager.show(newAlertController)
                             case 6:
                                 let titleItem = PTActionSheetTitleItem(title: "Title",subTitle: "SubTitle")
@@ -885,7 +885,8 @@ class PTFuncNameViewController: PTBaseViewController {
                                 
                                 let newAlertController = PTActionSheetController(titleItem:titleItem,destructiveItems: destructiveItems,contentItems: contentItems)
                                 PTAlertManager.show(newAlertController)
-
+                            case 7:
+                                UIAlertController.base_alertVC(title:"1",msg:"1111111",cancelBtn:"33333")
                             default:
                                 break
                             }

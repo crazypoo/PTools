@@ -122,6 +122,7 @@ public extension UIAlertController {
                             msgColor:UIColor? = nil,
                             msgFont:UIFont = UIFont.systemFont(ofSize: 15),
                             okBtns:[String] = [String](),
+                            buttonsFont:UIFont = .appfont(size: 15),
                             cancelBtn:String = "",
                             showIn:UIViewController? = nil,
                             cancelBtnColor:UIColor = .systemBlue,
@@ -139,12 +140,11 @@ public extension UIAlertController {
         }
         let titles = actionTitles.isEmpty ? ["PT Button cancel".localized()] : actionTitles
         let colors = actionColors.isEmpty ? [.systemBlue] : actionColors
-        let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingRect(
-            with: CGSize(width: max(1, CGFloat.kSCREEN_WIDTH - 100), height: .greatestFiniteMagnitude),
-            options: [.usesLineFragmentOrigin, .usesFontLeading],
-            attributes: [.font: msgFont],
-            context: nil
-        ).height + 20)
+        
+        let contentSpacing:CGFloat = 25
+        let contentWidth = CGFloat.kSCREEN_WIDTH - contentSpacing * 2
+        
+        let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingSize(font: msgFont,width: contentWidth).height + 20)
 
         let alert = PTCustomerAlertController(
             title: title,
@@ -166,9 +166,9 @@ public extension UIAlertController {
             },
             buttons: titles,
             buttonsColors: colors,
-            buttonsFont: UIFont.systemFont(ofSize: 15),
+            buttonsFont: buttonsFont,
             cornerSize: alertCornerRadius,
-            contentSpace: 25,
+            contentSpace: contentSpacing,
             canTapBackground: false
         )
         alert.preferredWindowScene = showIn?.viewIfLoaded?.window?.windowScene
@@ -210,6 +210,7 @@ public extension UIAlertController {
                                       titleColor:UIColor? = nil,
                                       titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
+                                      buttonsFont:UIFont = .appfont(size: 15),
                                       cancelBtn:String,
                                       showIn:UIViewController? = nil,
                                       cancelBtnColor:UIColor? = nil,
@@ -262,7 +263,7 @@ public extension UIAlertController {
             },
             buttons: [cancelBtn, okBtn],
             buttonsColors: [cancelBtnColorN, doneBtnColor],
-            buttonsFont: UIFont.systemFont(ofSize: 15),
+            buttonsFont: buttonsFont,
             cornerSize: alertCornerRadius,
             contentSpace: 25,
             canTapBackground: false
@@ -309,6 +310,7 @@ public extension UIAlertController {
                                  feedBackContentIsSecureTextEntry:Bool = false,
                                  cancelString:String? = nil,
                                  sendString:String? = nil,
+                                 buttonsFont:UIFont = .appfont(size: 15),
                                  titleFont:UIFont = .appfont(size: 18),
                                  textInset:UIEdgeInsets? = .zero,
                                  titleTintColor:UIColor = .systemBlue,
@@ -364,7 +366,9 @@ public extension UIAlertController {
         feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry
         feedBackContent.tintColor = textTintColor
         
-        let customerAlert = PTCustomerAlertController(title: titleItem,customerViewHeight:250,customerViewCallback: { customerView in
+        let customerAlert = PTCustomerAlertController(title: titleItem,
+                                                      customerViewHeight:250,
+                                                      customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitleText,feedBackContent])
             feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -381,7 +385,11 @@ public extension UIAlertController {
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
             feedBackContent.pt_wordCountLabel?.font = feedBackWordCountFont
             feedBackContent.pt_maxWordCount = feedBackContentCount
-        },buttons: [cancelItem,sendItem], buttonsColors: [],contentSpace:60)
+        },
+                                                      buttons: [cancelItem,sendItem],
+                                                      buttonsColors: [],
+                                                      buttonsFont: buttonsFont,
+                                                      contentSpace:60)
         customerAlert.bottomButtonTapCallback = { title,index in
             if index == 1 {
                 done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")

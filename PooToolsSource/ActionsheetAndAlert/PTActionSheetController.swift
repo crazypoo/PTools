@@ -15,16 +15,13 @@ import pop
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void
 public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String) -> Void
 
-fileprivate struct PTAlertValueStructBox : @unchecked Sendable {
-    let value:String
-}
-
 public class PTActionCell:UIView {
         
     private lazy var blur:SSBlurView = {
         let blur = SSBlurView(frame: .zero)
         blur.animationDuration = 0.01
-        blur.enable(animated: true)
+        blur.style = .systemMaterial
+        blur.enable(animated: false)
         return blur
     }()
     
@@ -35,10 +32,7 @@ public class PTActionCell:UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
-            self.blurChange(style: self.traitCollection.userInterfaceStyle)
-        }
+
         addSubviews([blur,cellButton])
         blur.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -46,20 +40,10 @@ public class PTActionCell:UIView {
         cellButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        blurChange(style: traitCollection.userInterfaceStyle)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        
-    }
-
-    func blurChange(style:UIUserInterfaceStyle) {
-        blur.style = style == .dark ? .extraLight : .dark
     }
 }
 
@@ -75,7 +59,7 @@ public class PTActionSheetItem: NSObject,@unchecked Sendable {
     public var image:Any?
     public var imageSize:CGSize = CGSizeMake(34, 34)
     public var iCloudDocumentName:String = ""
-    public var heightlightColor:UIColor = .lightGray
+    public var heightlightColor:UIColor = .systemGray4
     public var itemAlignment:UIControl.ContentHorizontalAlignment = .center
     public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle
     public var contentEdgeValue:CGFloat = 20
@@ -87,7 +71,7 @@ public class PTActionSheetItem: NSObject,@unchecked Sendable {
                 image: Any? = nil,
                 imageSize:CGSize = CGSizeMake(34, 34),
                 iCloudDocumentName:String = "",
-                heightlightColor: UIColor = .lightGray,
+                heightlightColor: UIColor = .systemGray4,
                 itemAlignment: UIControl.ContentHorizontalAlignment = .center,
                 itemLayout:PTSheetButtonStyle = .leftImageRightTitle,
                 contentEdgeValue:CGFloat = 20,
@@ -266,13 +250,13 @@ public class PTActionSheetController: PTAlertController {
         guard destructiveCount > 0 else { return }
         
         for (index, destructiveItem) in destructiveItems.enumerated() {
+            let destructiveTitle = destructiveItem.title
             let destructiveView = createActionCell(for: destructiveItem,withCorner: true) { [weak self] in
                 PTGCDManager.shared.runOnMain {
                     self?.dismissSelf { [weak self] in
                         guard let self else { return }
-                        let box = PTAlertValueStructBox(value: destructiveItem.title)
                         PTGCDManager.shared.runOnMain {
-                            self.actionSheetDestructiveSelectBlock?(self, index, box.value)
+                            self.actionSheetDestructiveSelectBlock?(self, index, destructiveTitle)
                         }
                     }
                 }
@@ -427,6 +411,7 @@ public class PTActionSheetController: PTAlertController {
 
         for index in contentItems.indices {
             let item = contentItems[index]
+            let itemTitle = item.title
             
             // --- 分隔线部分保持你的原样 ---
             if index != 0 {
@@ -448,9 +433,8 @@ public class PTActionSheetController: PTAlertController {
             
             // --- 按钮部分 ---
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
-                let box = PTAlertValueStructBox(value: item.title)
                 PTGCDManager.shared.runOnMain {
-                    self?.dismissAndCallback(index: index, title: box.value)
+                    self?.dismissAndCallback(index: index, title: itemTitle)
                 }
             }
             contentScrollerView.addSubview(button)

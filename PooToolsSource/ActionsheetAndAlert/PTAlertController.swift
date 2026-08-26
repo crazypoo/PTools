@@ -96,9 +96,10 @@ extension PTAlertController {
     override open var overrideUserInterfaceStyle: UIUserInterfaceStyle {
         set {
             super.overrideUserInterfaceStyle = newValue
+            config.userInterfaceStyleOverride = PTAlertConfig.PTUserInterfaceStyle(rawValue: newValue.rawValue) ?? .unspecified
         }
         get {
-            .init(rawValue: config.userInterfaceStyleOverride.rawValue) ?? .light
+            .init(rawValue: config.userInterfaceStyleOverride.rawValue) ?? .unspecified
         }
     }
 }
