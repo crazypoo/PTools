@@ -313,6 +313,7 @@ public extension UIAlertController {
                                  textInset:UIEdgeInsets? = .zero,
                                  titleTintColor:UIColor = .systemBlue,
                                  textTintColor:UIColor = .systemBlue,
+                                 alertBGColor:UIColor = .white,
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
         let titleItem = alertTitle ?? "PT Screen feedback".localized()
@@ -388,6 +389,7 @@ public extension UIAlertController {
                 dismiss?()
             }
         }
+        customerAlert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         PTAlertManager.show(customerAlert)
     }
 }
