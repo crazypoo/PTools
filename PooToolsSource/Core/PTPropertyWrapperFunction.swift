@@ -92,9 +92,6 @@ import UIKit
         }
         set {
             UserDefaults.standard.set(newValue, forKey: key)
-            // 💡 编码助手小贴士：UserDefaults.standard.synchronize() 在 iOS 12 之后已经废弃且不再需要，
-            // 系统会自动高效地进行异步写入，你可以考虑安全地删除下面这行代码来提升性能。
-            UserDefaults.standard.synchronize()
         }
     }
 }

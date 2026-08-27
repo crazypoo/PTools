@@ -379,7 +379,7 @@ class PlatterView: UIView {
         addSubview(grabber)
         
         let titleLabel = UILabel()
-        titleLabel.text = "RPT Console title".localized()
+        titleLabel.text = "PT Console title".localized()
         titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
         titleLabel.sizeToFit()
         titleLabel.center.x = bounds.width / 2

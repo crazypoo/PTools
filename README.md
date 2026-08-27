@@ -53,6 +53,21 @@ pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :t
 
 完整发布和迁移清单见 [RELEASE.md](RELEASE.md)。
 
+### Language
+
+语言功能随 `PooTools/Core` 提供，没有独立的 `LanguageSetting` subspec。语言资源
+支持英文、西班牙文、简体中文、繁体中文和香港繁体中文：
+
+```swift
+PTLanguage.share.setLanguage(.zh_Hans)
+let cancelTitle = "PT Button cancel".localized()
+let formatted = "PT Photo picker video size less than".localizedFormat(10)
+```
+
+如果需要让界面在语言切换后刷新，可以使用 `pt_observerLanguage(didChanged:)`，页面
+销毁或不再需要监听时调用 `pt_removeObserverLanguage()`。旧的
+`PTLanguage.share.language = "zh-Hans"` 写法继续兼容。
+
 ## Quality and release
 
 项目统一要求 iOS 17.0+ 与 Swift 6.0。提交代码前运行：
@@ -97,8 +112,8 @@ pod 'PooTools/CustomerNumberKeyboard', :git => 'https://github.com/crazypoo/PToo
 pod 'PooTools/KeyChain', :git => 'https://github.com/crazypoo/PTools.git'
 ### Label
 pod 'PooTools/CustomerLabel', :git => 'https://github.com/crazypoo/PTools.git'
-### 语言设置
-pod 'PooTools/LanguageSetting', :git => 'https://github.com/crazypoo/PTools.git'
+### 语言设置（已包含在 Core）
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
 ### 线
 pod 'PooTools/Line', :git => 'https://github.com/crazypoo/PTools.git'
 ### 加载功能

@@ -23,7 +23,7 @@
 "PT Debug mode" = "Modo de depuración";
 "PT Normal mode" = "Modo normal";
 "PT Debug setting" = "Configuración de depuración";
-"PT Permission camera " = "Habitación";
+"PT Permission camera" = "Habitación";
 "PT Permission photoLibrary" = "Fototeca";
 "PT Permission microphone" = "Mic";
 "PT Permission calendar" = "Calendario";
@@ -262,3 +262,5 @@
 "PT Sheet dismiss" = "Cerrar la presentación";
 "PT Sheet change size" = "Cambiar el tamaño de la presentación";
 "PT SideMenu close" = "Cerrar menú lateral";
+"Error" = "Error";
+"network-details-title" = "Detalles";

@@ -23,7 +23,7 @@
 "PT Debug mode" = "測試模式";
 "PT Normal mode" = "正常模式";
 "PT Debug setting" = "調試模式";
-"PT Permission camera " = "相机";
+"PT Permission camera" = "相机";
 "PT Permission photoLibrary" = "相册";
 "PT Permission microphone" = "麦克风";
 "PT Permission calendar" = "日历";
@@ -262,3 +262,5 @@
 "PT Sheet dismiss" = "關閉面板";
 "PT Sheet change size" = "切換面板尺寸";
 "PT SideMenu close" = "關閉側邊選單";
+"Error" = "錯誤";
+"network-details-title" = "詳情";

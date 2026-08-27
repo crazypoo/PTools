@@ -12,7 +12,7 @@ enum PTPermissionText {
     @MainActor static func permission_name(for kind: PTPermission.Kind) -> String {
         switch kind {
         case .camera:
-            return "PT Permission camera ".localized()
+            return "PT Permission camera".localized()
         case .photoLibrary:
             return "PT Permission photoLibrary".localized()
         case .microphone:

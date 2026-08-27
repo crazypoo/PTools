@@ -23,7 +23,7 @@
 "PT Debug mode" = "Debug mode";
 "PT Normal mode" = "Normal mode";
 "PT Debug setting" = "Debug setting";
-"PT Permission camera " = "Camera";
+"PT Permission camera" = "Camera";
 "PT Permission photoLibrary" = "Photo Library";
 "PT Permission microphone" = "Mic";
 "PT Permission calendar" = "Calendar";
@@ -262,3 +262,5 @@
 "PT Sheet dismiss" = "Dismiss presentation";
 "PT Sheet change size" = "Change presentation size";
 "PT SideMenu close" = "Close side menu";
+"Error" = "Error";
+"network-details-title" = "Details";

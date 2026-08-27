@@ -28,6 +28,7 @@ if rg -n 'try!|as!' "${critical_files[@]}"; then
 fi
 
 bash Scripts/report_duplicate_entries.sh >/dev/null
+bash Scripts/validate_localizations.sh
 
 if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate PooToolsSource/Contact PooToolsSource/NFC PooToolsSource/NetWork PooToolsSource/PhotoPicker PooToolsSource/VideoEditor; then
   printf 'FAIL: business-level nonisolated(unsafe) remains in P0 modules\n' >&2

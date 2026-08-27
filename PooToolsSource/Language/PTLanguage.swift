@@ -6,6 +6,8 @@
 //Copyright © 2021 DO. All rights reserved.
 //
 
+import Foundation
+import os.lock
 import UIKit
 
 /**
@@ -24,11 +26,11 @@ import UIKit
  PTLanguage 的使用方法
 1、设置语言
  PTLanguage.share.language = "zh-Hans"
-2、根据key获取语言包中对应的文本
- "Home_follow".localize
+2、根据 key 获取语言包中对应的文本
+ "PT Button cancel".localized()
 3、监听语言切换
  1）、开发者可以监听 LanguageDidChangedKey，最后记得移除监听。
- 2）、本文件扩展了 UIViewController，开发者也可以使用 pt_observerLangauge 来监听，使用 pt_removeObserverLangauge 来移除监听。
+  2）、本文件扩展了 UIViewController，开发者也可以使用 pt_observerLanguage 来监听，使用 pt_removeObserverLanguage 来移除监听。
 */
 
 // MARK: - 1. 全局常量与配置
@@ -40,58 +42,59 @@ public let LanguageDidChangedKey = Notification.Name("LanguageDidChanged")
 public typealias ChangedBlock = () -> Void
 public let PTBaseBundle = "Base"
 
-public enum PTLocale: String {
-    
+public enum PTLocale: String, CaseIterable, Sendable {
+
     // MARK: - 亚洲语言
-    case zh_Hans = "zh-Hans"            // Chinese (Simplified) - 简体中文
-    case zh_Hant = "zh-Hant"            // Chinese (Traditional) - 繁体中文
-    case ja = "ja"                      // Japanese - 日语
-    case ko = "ko"                      // Korean - 韩语
-    case th = "th"                      // Thai - 泰语
-    case vi = "vi"                      // Vietnamese - 越南语
-    case id = "id"                      // Indonesian - 印尼语
-    case ms = "ms"                      // Malay - 马来语
-    case fil = "fil"                    // Filipino - 菲律宾语
-    case hi = "hi"                      // Hindi - 印地语
-    case bn = "bn"                      // Bengali - 孟加拉语
-    case pa = "pa"                      // Punjabi - 旁遮普语
-    case ur = "ur"                      // Urdu - 乌尔都语
+    case zh_Hans = "zh-Hans"            // 简体中文
+    case zh_Hant = "zh-Hant"            // 繁体中文
+    case zh_HK = "zh-HK"                // 香港繁体中文
+    case ja = "ja"                      // 日语
+    case ko = "ko"                      // 韩语
+    case th = "th"                      // 泰语
+    case vi = "vi"                      // 越南语
+    case id = "id"                      // 印尼语
+    case ms = "ms"                      // 马来语
+    case fil = "fil"                    // 菲律宾语
+    case hi = "hi"                      // 印地语
+    case bn = "bn"                      // 孟加拉语
+    case pa = "pa"                      // 旁遮普语
+    case ur = "ur"                      // 乌尔都语
     
     // MARK: - 欧洲语言 (西欧/北欧)
-    case en = "en"                      // English - 英语
-    case fr = "fr"                      // French - 法语
-    case de = "de"                      // German - 德语
-    case es = "es"                      // Spanish - 西班牙语
-    case pt = "pt"                      // Portuguese - 葡萄牙语
-    case it = "it"                      // Italian - 意大利语
-    case nl = "nl"                      // Dutch - 荷兰语
-    case sv = "sv"                      // Swedish - 瑞典语
-    case da = "da"                      // Danish - 丹麦语
-    case no = "no"                      // Norwegian - 挪威语
-    case fi = "fi"                      // Finnish - 芬兰语
-    case gsw = "gsw"                    // Swiss German - 瑞士德语
+    case en = "en"                      // 英语
+    case fr = "fr"                      // 法语
+    case de = "de"                      // 德语
+    case es = "es"                      // 西班牙语
+    case pt = "pt"                      // 葡萄牙语
+    case it = "it"                      // 意大利语
+    case nl = "nl"                      // 荷兰语
+    case sv = "sv"                      // 瑞典语
+    case da = "da"                      // 丹麦语
+    case no = "no"                      // 挪威语
+    case fi = "fi"                      // 芬兰语
+    case gsw = "gsw"                    // 瑞士德语
     
     // MARK: - 欧洲语言 (东欧/中欧/俄语区)
-    case ru = "ru"                      // Russian - 俄语
-    case uk = "uk"                      // Ukrainian - 乌克兰语
-    case be = "be"                      // Belarusian - 白俄罗斯语
-    case pl = "pl"                      // Polish - 波兰语
-    case cs = "cs"                      // Czech - 捷克语
-    case sk = "sk"                      // Slovak - 斯洛伐克语
-    case hu = "hu"                      // Hungarian - 匈牙利语
-    case ro = "ro"                      // Romanian - 罗马尼亚语
-    case bg = "bg"                      // Bulgarian - 保加利亚语
-    case sr = "sr"                      // Serbian - 塞尔维亚语
-    case hr = "hr"                      // Croatian - 克罗地亚语
-    case el = "el"                      // Greek - 希腊语
+    case ru = "ru"                      // 俄语
+    case uk = "uk"                      // 乌克兰语
+    case be = "be"                      // 白俄罗斯语
+    case pl = "pl"                      // 波兰语
+    case cs = "cs"                      // 捷克语
+    case sk = "sk"                      // 斯洛伐克语
+    case hu = "hu"                      // 匈牙利语
+    case ro = "ro"                      // 罗马尼亚语
+    case bg = "bg"                      // 保加利亚语
+    case sr = "sr"                      // 塞尔维亚语
+    case hr = "hr"                      // 克罗地亚语
+    case el = "el"                      // 希腊语
     
     // MARK: - 中东及非洲语言
-    case ar = "ar"                      // Arabic - 阿拉伯语
-    case fa = "fa"                      // Persian - 波斯语
-    case tr = "tr"                      // Turkish - 土耳其语
-    case he = "he"                      // Hebrew - 希伯来语
-    case hy = "hy"                      // Armenian - 亚美尼亚语
-    case sw = "sw"                      // Swahili - 斯瓦希里语
+    case ar = "ar"                      // 阿拉伯语
+    case fa = "fa"                      // 波斯语
+    case tr = "tr"                      // 土耳其语
+    case he = "he"                      // 希伯来语
+    case hy = "hy"                      // 亚美尼亚语
+    case sw = "sw"                      // 斯瓦希里语
 
     /// 唯一标识符
     public var identifier: String { rawValue }
@@ -101,126 +104,276 @@ public enum PTLocale: String {
     
     /// 获取当前 App 或系统的默认语言
     public static var current: PTLocale {
-        get {
-            // 获取系统偏好语言列表，例如 ["zh-Hans-CN", "en-US"]
-            guard let firstLang = Locale.preferredLanguages.first else {
-                return .en
-            }
-            
-            // 1. 尝试完全匹配
-            if let exactMatch = PTLocale(rawValue: firstLang) {
-                return exactMatch
-            }
-            
-            // 2. 尝试截取匹配 (处理带地区或脚本的代码)
-            let components = firstLang.components(separatedBy: "-")
-            
-            // 优先处理带脚本的语言 (例如 "zh-Hans-CN" 提取出 "zh-Hans")
-            if components.count >= 2 {
-                let langScript = "\(components[0])-\(components[1])"
-                if let scriptMatch = PTLocale(rawValue: langScript) {
-                    return scriptMatch
-                }
-            }
-            
-            // 最后处理基础语言代码 (例如 "en-US" 提取出 "en")
-            if let langMatch = PTLocale(rawValue: components[0]) {
-                return langMatch
-            }
-            
-            // 默认兜底语言
-            return .en
-        }
+        let available = allCases.map(\.rawValue)
+        let matchedLanguage = Bundle.preferredLocalizations(from: available,
+                                                             forPreferences: Locale.preferredLanguages).first
+        return matchedLanguage.flatMap(PTLocale.init(rawValue:)) ?? .en
     }
-    
+
     /// 获取该语言的本地化描述 (例如在当前环境下返回 "English" 或 "英语")
     @available(iOS 11.0, tvOS 11.0, macOS 10.11, *)
     public func description(in locale: PTLocale) -> String {
-        let locale = NSLocale(localeIdentifier: locale.languageCode)
-        let text = locale.displayName(forKey: NSLocale.Key.identifier, value: languageCode) ?? .empty
-        return text.capitalized
+        let displayLocale = Locale(identifier: locale.languageCode)
+        let text = displayLocale.localizedString(forIdentifier: languageCode) ?? languageCode
+        return text.localizedCapitalized
     }
 }
 
-// MARK: - 2. 核心语言管理类 (整合 PTLanguage 和 Localize)
-public class PTLanguage: NSObject,@unchecked Sendable {
+private final class PTLanguageBundleToken: NSObject {}
+
+// MARK: - 2. 本地化解析器
+private enum PTLocalizationResolver {
+    static let coreBundle: Bundle = {
+#if SWIFT_PACKAGE
+        return Bundle.module
+#else
+        let frameworkBundle = Bundle(for: PTLanguageBundleToken.self)
+        let candidateBundles = [frameworkBundle, Bundle.main]
+        for bundle in candidateBundles {
+            if let resourceURL = bundle.url(forResource: CorePodBundleName, withExtension: "bundle"),
+               let resourceBundle = Bundle(url: resourceURL) {
+                return resourceBundle
+            }
+        }
+        return frameworkBundle
+#endif
+    }()
+
+    static let coreLanguageBundles: [String: Bundle] = {
+        var result = [String: Bundle]()
+        for identifier in coreBundle.localizations {
+            guard let path = coreBundle.path(forResource: identifier, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else {
+                continue
+            }
+            result[normalized(identifier)] = bundle
+        }
+        return result
+    }()
+
+    static func availableLanguages(excludeBase: Bool) -> [String] {
+        var result = [String]()
+        var seen = Set<String>()
+        let bundles = [Bundle.main, coreBundle]
+
+        for bundle in bundles {
+            for identifier in bundle.localizations {
+                let normalizedIdentifier = normalized(identifier)
+                guard !normalizedIdentifier.isEmpty,
+                      !(excludeBase && isBase(normalizedIdentifier)),
+                      seen.insert(normalizedIdentifier).inserted else {
+                    continue
+                }
+                result.append(normalizedIdentifier)
+            }
+        }
+        return result
+    }
+
+    static func normalized(_ identifier: String) -> String {
+        identifier.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "_", with: "-")
+    }
+
+    static func matchingLanguage(_ requested: String, available: [String]) -> String? {
+        let normalizedRequested = normalized(requested)
+        guard !normalizedRequested.isEmpty else { return nil }
+
+        if let exactMatch = available.first(where: { normalized($0) == normalizedRequested }) {
+            return normalized(exactMatch)
+        }
+
+        guard let requestedLanguageCode = languageCode(for: normalizedRequested) else {
+            return nil
+        }
+
+        let preferred = Bundle.preferredLocalizations(from: available,
+                                                       forPreferences: [normalizedRequested])
+        return preferred.first(where: {
+            languageCode(for: normalized($0)) == requestedLanguageCode
+        }).map(normalized)
+    }
+
+    static func fallbackLanguage(available: [String]) -> String {
+        if let defaultLanguage = matchingLanguage(PTDefaultLanguage, available: available) {
+            return defaultLanguage
+        }
+        if let developmentLanguage = Bundle.main.developmentLocalization,
+           let matchedDevelopmentLanguage = matchingLanguage(developmentLanguage, available: available) {
+            return matchedDevelopmentLanguage
+        }
+        if let english = matchingLanguage("en", available: available) {
+            return english
+        }
+        return normalized(available.first ?? PTDefaultLanguage)
+    }
+
+    static func localized(key: String,
+                          tableName: String?,
+                          bundle: Bundle,
+                          language: String) -> String {
+        let localizedBundle = languageBundle(for: language, in: bundle)
+        return localizedBundle.localizedString(forKey: key,
+                                               value: key,
+                                               table: tableName)
+    }
+
+    private static func languageBundle(for language: String, in bundle: Bundle) -> Bundle {
+        let normalizedLanguage = normalized(language)
+        if bundle === coreBundle,
+           let cachedBundle = coreLanguageBundles[normalizedLanguage] {
+            return cachedBundle
+        }
+
+        let available = bundle.localizations
+        if let matchedLanguage = matchingLanguage(normalizedLanguage, available: available),
+           let matchedBundle = bundleForLocalization(matchedLanguage, in: bundle) {
+            return matchedBundle
+        }
+        if let baseBundle = bundleForLocalization(PTBaseBundle, in: bundle) {
+            return baseBundle
+        }
+        if let developmentLanguage = bundle.developmentLocalization,
+           let developmentBundle = bundleForLocalization(developmentLanguage, in: bundle) {
+            return developmentBundle
+        }
+        return bundle
+    }
+
+    private static func bundleForLocalization(_ identifier: String, in bundle: Bundle) -> Bundle? {
+        let resourceIdentifier = bundle.localizations.first {
+            normalized($0) == normalized(identifier)
+        } ?? identifier
+        guard let path = bundle.path(forResource: resourceIdentifier, ofType: "lproj") else {
+            return nil
+        }
+        return Bundle(path: path)
+    }
+
+    private static func languageCode(for identifier: String) -> String? {
+        Locale(identifier: identifier).language.languageCode?.identifier.lowercased()
+    }
+
+    private static func isBase(_ identifier: String) -> Bool {
+        normalized(identifier).caseInsensitiveCompare(PTBaseBundle) == .orderedSame
+    }
+}
+
+// MARK: - 3. 核心语言管理类
+public final class PTLanguage: NSObject, Sendable {
     public static let share = PTLanguage()
+    private static let languageLock = OSAllocatedUnfairLock<Void>(initialState: ())
+
     /// 当前App语言，修改此属性会自动触发全App的UI刷新
     public var language: String {
         get {
-            PTCoreUserDefultsWrapper.shared.AppLanguage
+            Self.languageLock.withLock {
+                let storedLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                let selectedLanguage = Self.resolvedLanguage(for: storedLanguage)
+                if storedLanguage != selectedLanguage {
+                    PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
+                }
+                return selectedLanguage
+            }
         } set {
-            let selectedLanguage = PTLanguage.availableLanguages().contains(newValue) ? newValue : PTLanguage.defaultLanguage()
-            guard selectedLanguage != language else { return } // 如果语言没变，不发通知
-            
-            PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
-            NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
+            let selectedLanguage = Self.resolvedLanguage(for: newValue)
+            let didChange = Self.languageLock.withLock {
+                let currentLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                guard selectedLanguage != currentLanguage else { return false }
+
+                PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
+                return true
+            }
+            if didChange {
+                Self.postLanguageDidChange()
+            }
         }
+    }
+
+    /// 当前选中语言对应的 Locale。
+    public var locale: Locale {
+        Locale(identifier: language)
+    }
+
+    /// 使用类型安全的语言枚举切换语言。
+    public func setLanguage(_ locale: PTLocale) {
+        language = locale.rawValue
     }
     
     /// 获取支持的语言列表
     public class func availableLanguages(_ excludeBase: Bool = false) -> [String] {
-        var availableLanguages = Bundle.main.localizations
-        if excludeBase, let indexOfBase = availableLanguages.firstIndex(of: "Base") {
-            availableLanguages.remove(at: indexOfBase)
-        }
-        return availableLanguages
+        PTLocalizationResolver.availableLanguages(excludeBase: excludeBase)
     }
     
     /// 获取默认语言
     public class func defaultLanguage() -> String {
-        guard let preferredLanguage = Bundle.main.preferredLocalizations.first else {
-            return PTDefaultLanguage
-        }
-        return availableLanguages().contains(preferredLanguage) ? preferredLanguage : PTDefaultLanguage
+        resolvedLanguage(for: PTDefaultLanguage)
     }
     
     /// 获取某种语言的本地化显示名称 (例如在英文环境下显示 "English", 中文环境下显示 "英语")
     public class func displayNameForLanguage(_ language: String) -> String {
         let locale = Locale(identifier: PTLanguage.share.language)
-        return locale.localizedString(forIdentifier: language) ?? ""
+        let identifier = PTLocalizationResolver.normalized(language)
+        return locale.localizedString(forIdentifier: identifier) ?? identifier
+    }
+
+    private class func resolvedLanguage(for identifier: String) -> String {
+        let availableLanguages = availableLanguages(true)
+        return PTLocalizationResolver.matchingLanguage(identifier,
+                                                        available: availableLanguages)
+            ?? PTLocalizationResolver.fallbackLanguage(available: availableLanguages)
+    }
+
+    private static func postLanguageDidChange() {
+        let post = {
+            NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
+        }
+        if Thread.isMainThread {
+            post()
+        } else {
+            Task { @MainActor in
+                post()
+            }
+        }
     }
 }
 
 public extension String {
     
-    /// 【补全】核心的底层翻译方法
+    /// 核心的底层翻译方法。
     func localized(tableName: String? = nil, bundle: Bundle?) -> String {
         let targetBundle = bundle ?? Bundle.main
-        // 根据当前语言获取对应的语言包路径（.lproj）
-        guard let path = targetBundle.path(forResource: PTLanguage.share.language, ofType: "lproj"),
-              let langBundle = Bundle(path: path) else {
-            // 找不到对应语言包则回退到原生翻译
-            return NSLocalizedString(self, tableName: tableName, bundle: targetBundle, value: self, comment: "")
-        }
-        return NSLocalizedString(self, tableName: tableName, bundle: langBundle, value: self, comment: "")
+        return PTLocalizationResolver.localized(key: self,
+                                                tableName: tableName,
+                                                bundle: targetBundle,
+                                                language: PTLanguage.share.language)
     }
 
     /// 基础本地化
-    @MainActor func localized() -> String {
-        return localized(tableName: nil, bundle: Bundle.podCoreBundle())
+    func localized() -> String {
+        localized(tableName: nil, bundle: PTLocalizationResolver.coreBundle)
     }
 
     /// 带格式化参数的本地化
-    @MainActor func localizedFormat(_ arguments: CVarArg...) -> String {
-        return String(format: localized(), arguments: arguments)
+    func localizedFormat(_ arguments: CVarArg...) -> String {
+        String(format: localized(), locale: PTLanguage.share.locale, arguments: arguments)
     }
     
     /// 复数形式的本地化
-    @MainActor func localizedPlural(_ argument: CVarArg) -> String {
+    func localizedPlural(_ argument: CVarArg) -> String {
         return String.localizedStringWithFormat(localized(), argument)
     }
 }
 
-@MainActor public func Localized(_ string: String) -> String {
+public func Localized(_ string: String) -> String {
     return string.localized()
 }
 
-@MainActor public func Localized(_ string: String, arguments: CVarArg...) -> String {
-    return String(format: string.localized(), arguments: arguments)
+public func Localized(_ string: String, arguments: CVarArg...) -> String {
+    return String(format: string.localized(), locale: PTLanguage.share.locale, arguments: arguments)
 }
 
-@MainActor public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
+public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
     return string.localizedPlural(argument)
 }
 
@@ -246,8 +399,10 @@ public extension UIViewController {
     
     /// 监听切换语言
     func pt_observerLanguage(didChanged block: ChangedBlock?) {
-        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
+        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
         self.block = block
+        guard block != nil else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
         // 建议：添加监听时立即执行一次，确保初始 UI 加载正确
         block?()
     }
@@ -256,6 +411,7 @@ public extension UIViewController {
     func pt_removeObserverLanguage() {
         // 【修复】将 object: self 改为 object: nil
         NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
+        self.block = nil
     }
 }
 
@@ -271,13 +427,158 @@ public extension UIView {
     
     /// 监听切换语言
     func pt_viewObserverLanguage(didChanged block: ChangedBlock?) {
-        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
+        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
         self.block = block
+        guard block != nil else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
         block?()
     }
     
     /// 移除监听
     func pt_removeObserverLanguage() {
         NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
+        self.block = nil
+    }
+}
+
+/**
+    Localized
+ */
+public extension String {
+    /**
+     Swift 2 friendly localization syntax, replaces NSLocalizedString.
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: The localized string.
+     */
+    func localized(in bundle: Bundle?) -> String {
+        localized(using: nil, in: bundle)
+    }
+    
+    /**
+     Swift 2 friendly localization syntax with format arguments, replaces String(format:NSLocalizedString).
+     
+     - parameter arguments: arguments values for temlpate (substituted according to the user’s default locale).
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: The formatted localized string with arguments.
+     */
+    func localizedFormat(arguments: CVarArg..., in bundle: Bundle?) -> String {
+        String(format: localized(in: bundle),
+               locale: PTLanguage.share.locale,
+               arguments: arguments)
+    }
+    
+    /**
+     Swift 2 friendly plural localization syntax with a format argument.
+     
+     - parameter argument: Argument to determine pluralisation.
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: Pluralized localized string.
+     */
+    func localizedPlural(argument: CVarArg, in bundle: Bundle?) -> String {
+        NSString.localizedStringWithFormat(localized(in: bundle) as NSString, argument) as String
+    }
+
+    //MARK: bundle & tableName friendly extension
+    /**
+     Swift 2 friendly localization syntax, replaces NSLocalizedString.
+     
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: The localized string.
+     */
+    func localized(using tableName: String?, in bundle: Bundle?) -> String {
+        localized(tableName: tableName, bundle: bundle)
+    }
+    
+    /**
+     Swift 2 friendly localization syntax with format arguments, replaces String(format:NSLocalizedString).
+     
+     - parameter arguments: arguments values for temlpate (substituted according to the user’s default locale).
+     
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: The formatted localized string with arguments.
+     */
+    func localizedFormat(arguments: CVarArg..., using tableName: String?, in bundle: Bundle?) -> String {
+        String(format: localized(using: tableName, in: bundle),
+               locale: PTLanguage.share.locale,
+               arguments: arguments)
+    }
+    
+    /**
+     Swift 2 friendly plural localization syntax with a format argument.
+     
+     - parameter argument: Argument to determine pluralisation.
+     
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
+     the method attempts to use main bundle.
+     
+     - returns: Pluralized localized string.
+     */
+    func localizedPlural(argument: CVarArg, using tableName: String?, in bundle: Bundle?) -> String {
+        NSString.localizedStringWithFormat(localized(using: tableName, in: bundle) as NSString, argument) as String
+    }
+
+    //MARK: tableName friendly extension
+    /**
+     Swift 2 friendly localization syntax, replaces NSLocalizedString.
+     
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - returns: The localized string.
+     */
+    func localized(using tableName: String?) -> String {
+        localized(using: tableName, in: .main)
+    }
+    
+    /**
+     Swift 2 friendly localization syntax with format arguments, replaces String(format:NSLocalizedString).
+     
+     - parameter arguments: arguments values for temlpate (substituted according to the user’s default locale).
+
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - returns: The formatted localized string with arguments.
+     */
+    func localizedFormat(arguments: CVarArg..., using tableName: String?) -> String {
+        String(format: localized(using: tableName),
+               locale: PTLanguage.share.locale,
+               arguments: arguments)
+    }
+    
+    /**
+     Swift 2 friendly plural localization syntax with a format argument.
+     
+     - parameter argument: Argument to determine pluralisation.
+
+     - parameter tableName: The receiver’s string table to search. If tableName is `nil`
+     or is an empty string, the method attempts to use `Localizable.strings`.
+     
+     - returns: Pluralized localized string.
+     */
+    func localizedPlural(argument: CVarArg, using tableName: String?) -> String {
+        NSString.localizedStringWithFormat(localized(using: tableName) as NSString, argument) as String
     }
 }
