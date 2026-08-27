@@ -101,10 +101,11 @@ extension UIView: @MainActor PTBadgeProtocol {
         set {
             let state = ptBadgeState
             state.configuration = newValue
-            updateBadgeAppearance()
-            updateBadgeGesture()
             if state.hasContent {
                 renderBadge()
+            } else {
+                updateBadgeAppearance()
+                updateBadgeGesture()
             }
         }
     }
@@ -209,7 +210,8 @@ extension UIView: @MainActor PTBadgeProtocol {
         label.backgroundColor = configuration.bgColor
         label.textColor = configuration.textColor
         label.font = configuration.font
-        label.layer.borderWidth = max(0, configuration.borderWidth)
+        let borderWidth = configuration.borderWidth.isFinite ? max(0, configuration.borderWidth) : 0
+        label.layer.borderWidth = borderWidth
         label.layer.borderColor = configuration.borderColor.cgColor
         if configuration.canDragToDelete {
             isUserInteractionEnabled = true
@@ -237,9 +239,6 @@ extension UIView: @MainActor PTBadgeProtocol {
         label.text = PTBadgeMetrics.displayText(for: state.content, configuration: configuration)
         label.tag = badgeStyle(for: state.content).rawValue
         label.numberOfLines = 1
-        let renderedSize = hasValidBadgeFrame(configuration.frame) ? configuration.frame.size : size
-        label.layer.cornerRadius = min(max(0, configuration.radius), min(renderedSize.width, renderedSize.height) / 2)
-        label.layer.masksToBounds = true
         label.isAccessibilityElement = label.text?.isEmpty == false
         label.accessibilityLabel = label.text
 
@@ -247,8 +246,12 @@ extension UIView: @MainActor PTBadgeProtocol {
             label.frame = configuration.frame
         } else {
             label.bounds.size = size
-            label.center = configuration.centerOffset
+            label.center = safeBadgeCenter(configuration.centerOffset)
         }
+
+        label.layer.cornerRadius = PTBadgeMetrics.cornerRadius(for: label.bounds.size,
+                                                               configuration: configuration)
+        label.layer.masksToBounds = true
 
         label.isHidden = !state.isVisible
         updateBadgeAppearance()
@@ -278,8 +281,13 @@ extension UIView: @MainActor PTBadgeProtocol {
         if hasValidBadgeFrame(configuration.frame) {
             label.frame = configuration.frame
         } else {
-            label.center = configuration.centerOffset
+            label.center = safeBadgeCenter(configuration.centerOffset)
         }
+    }
+
+    private func safeBadgeCenter(_ center: CGPoint) -> CGPoint {
+        guard center.x.isFinite, center.y.isFinite else { return .zero }
+        return center
     }
 
     // MARK: - 长按拖拽

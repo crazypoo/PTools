@@ -267,8 +267,10 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     private var startAngle: CGFloat = 0
     private var startGesRotation: CGFloat = 0
 
-    isolated deinit {
-        timer?.invalidate()
+    deinit {
+        MainActor.gcdRunUnsafely {
+            timer?.invalidate()
+        }
     }
     
     public class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {

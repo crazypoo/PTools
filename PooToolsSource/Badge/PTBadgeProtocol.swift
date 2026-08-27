@@ -56,14 +56,31 @@ public struct PTBadgeConfiguration {
     /// 兼容历史行为：这是宿主坐标系中的绝对中心点，而不是相对位移。
     public var centerOffset: CGPoint = .zero
     public var maximumNumber: Int = 99
-    public var radius: CGFloat = 4.0
+    /// 红点的默认半径；对数字和文本角标，只有显式赋值后才作为圆角覆盖值。
+    public var radius: CGFloat {
+        get { radiusOverride ?? 4.0 }
+        set { radiusOverride = newValue }
+    }
     public var borderColor: UIColor = PTAppBaseConfig.share.tabBadgeBorderColor
     public var borderWidth: CGFloat = PTAppBaseConfig.share.tabBadgeBorderHeight
     public var animType: PTBadgeAnimType = .none
     public var canDragToDelete: Bool = false
     public var longPressTime: TimeInterval = 0.5
 
-    public init() {}
+    private var radiusOverride: CGFloat?
+
+    public init() {
+        radiusOverride = nil
+    }
+
+    /// 清除自定义圆角，恢复为根据角标实际高度自动计算。
+    public mutating func useAutomaticCornerRadius() {
+        radiusOverride = nil
+    }
+
+    var explicitRadius: CGFloat? {
+        radiusOverride
+    }
 }
 
 // MARK: - 内部状态
@@ -118,6 +135,8 @@ internal enum PTBadgeContentResolver {
 
 @MainActor
 internal enum PTBadgeMetrics {
+    private static let defaultRedDotRadius: CGFloat = 4.0
+
     static func safeMaximum(_ value: Int) -> Int {
         max(1, value)
     }
@@ -139,17 +158,40 @@ internal enum PTBadgeMetrics {
     static func size(for content: PTBadgeContent, configuration: PTBadgeConfiguration) -> CGSize {
         switch content {
         case .redDot:
-            let diameter = max(0, configuration.radius) * 2
+            let radius = redDotRadius(for: configuration)
+            let diameter = radius * 2
             return CGSize(width: diameter, height: diameter)
         case .number, .text:
             guard let text = displayText(for: content, configuration: configuration) else {
                 return .zero
             }
-            let fontHeight = max(1, configuration.font.pointSize + 6)
+            let fontHeight = max(1, ceil(configuration.font.lineHeight) + 6)
             let textSize = (text as NSString).size(withAttributes: [.font: configuration.font])
-            let width = max(textSize.width + 8, fontHeight)
+            let width = max(ceil(textSize.width) + 8, fontHeight)
             return CGSize(width: width, height: fontHeight)
         }
+    }
+
+    static func cornerRadius(for size: CGSize, configuration: PTBadgeConfiguration) -> CGFloat {
+        let width = size.width.isFinite ? max(0, size.width) : 0
+        let height = size.height.isFinite ? max(0, size.height) : 0
+        let maximum = min(width, height) / 2
+
+        guard let explicitRadius = configuration.explicitRadius,
+              explicitRadius.isFinite else {
+            return maximum
+        }
+        return min(max(0, explicitRadius), maximum)
+    }
+
+    private static func redDotRadius(for configuration: PTBadgeConfiguration) -> CGFloat {
+        guard let explicitRadius = configuration.explicitRadius else {
+            return defaultRedDotRadius
+        }
+        guard explicitRadius.isFinite else {
+            return defaultRedDotRadius
+        }
+        return max(0, explicitRadius)
     }
 }
 
