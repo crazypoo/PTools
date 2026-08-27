@@ -27,6 +27,85 @@ internal func clip<T: Comparable>(_ v: T, _ minimum: T, _ maximum: T) -> T {
     return max(min(v, maximum), minimum)
 }
 
+/// 统一的归一化 RGBA 分量。
+/// Componentes RGBA normalizados y compartidos por todas las conversiones.
+internal struct PTRGBAComponents: Sendable, Equatable {
+    let red: CGFloat
+    let green: CGFloat
+    let blue: CGFloat
+    let alpha: CGFloat
+
+    init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        self.red = clip(red.isFinite ? red : 0, 0, 1)
+        self.green = clip(green.isFinite ? green : 0, 0, 1)
+        self.blue = clip(blue.isFinite ? blue : 0, 0, 1)
+        self.alpha = clip(alpha.isFinite ? alpha : 0, 0, 1)
+    }
+}
+
+/// Hex 解析后的值，保留是否包含透明度。
+/// Valor hexadecimal analizado, conservando si incluye alfa.
+internal struct PTHexColorValue: Sendable, Equatable {
+    let components: PTRGBAComponents
+    let includesAlpha: Bool
+}
+
+/// 所有颜色入口共用的 Hex 解析器。
+/// Analizador hexadecimal único para todas las entradas de color.
+internal enum PTHexColorParser {
+    static func parse(_ value: String,
+                      embeddedAlpha: Bool = true,
+                      overridingAlpha: CGFloat? = nil) -> PTHexColorValue? {
+        var normalized = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if normalized.hasPrefix("#") {
+            normalized.removeFirst()
+        } else if normalized.hasPrefix("0x") || normalized.hasPrefix("0X") {
+            normalized.removeFirst(2)
+        }
+
+        guard [3, 4, 6, 8].contains(normalized.count),
+              let number = UInt64(normalized, radix: 16) else {
+            return nil
+        }
+
+        let components: PTRGBAComponents
+        let includesAlpha = normalized.count == 4 || normalized.count == 8
+
+        switch normalized.count {
+        case 3:
+            let red = CGFloat((number >> 8) & 0xF) / 15
+            let green = CGFloat((number >> 4) & 0xF) / 15
+            let blue = CGFloat(number & 0xF) / 15
+            components = PTRGBAComponents(red: red, green: green, blue: blue,
+                                           alpha: overridingAlpha ?? 1)
+        case 4:
+            let red = CGFloat((number >> 12) & 0xF) / 15
+            let green = CGFloat((number >> 8) & 0xF) / 15
+            let blue = CGFloat((number >> 4) & 0xF) / 15
+            let alpha = CGFloat(number & 0xF) / 15
+            components = PTRGBAComponents(red: red, green: green, blue: blue,
+                                           alpha: overridingAlpha ?? (embeddedAlpha ? alpha : 1))
+        case 6:
+            let red = CGFloat((number >> 16) & 0xFF) / 255
+            let green = CGFloat((number >> 8) & 0xFF) / 255
+            let blue = CGFloat(number & 0xFF) / 255
+            components = PTRGBAComponents(red: red, green: green, blue: blue,
+                                           alpha: overridingAlpha ?? 1)
+        case 8:
+            let red = CGFloat((number >> 24) & 0xFF) / 255
+            let green = CGFloat((number >> 16) & 0xFF) / 255
+            let blue = CGFloat((number >> 8) & 0xFF) / 255
+            let alpha = CGFloat(number & 0xFF) / 255
+            components = PTRGBAComponents(red: red, green: green, blue: blue,
+                                           alpha: overridingAlpha ?? (embeddedAlpha ? alpha : 1))
+        default:
+            return nil
+        }
+
+        return PTHexColorValue(components: components, includesAlpha: includesAlpha)
+    }
+}
+
 /**
  Returns the absolute value of the modulo operation.
 
@@ -44,7 +123,8 @@ internal func moda(_ x: CGFloat, m: CGFloat) -> CGFloat {
  - Parameter m: The precision. Default to 10000.
  */
 internal func roundDecimal(_ x: CGFloat, precision: CGFloat = 10000.0) -> CGFloat {
-    return CGFloat(Int(round(x * precision))) / precision
+    guard x.isFinite, precision.isFinite, precision > 0 else { return 0 }
+    return (x * precision).rounded() / precision
 }
 
 internal func roundToHex(_ x: CGFloat) -> UInt32 {

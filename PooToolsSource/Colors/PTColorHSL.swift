@@ -36,11 +36,10 @@ internal struct HSL {
      - parameter a: The opacity component of the color object, specified as a value between 0.0 and 1.0.
      */
     public init(hue: CGFloat, saturation: CGFloat, lightness: CGFloat, alpha: CGFloat = 1.0) {
-        // 🚨 修复负数角度 Bug：使用绝对取模 moda，确保 hue 永远转换为正数角度
-        h = moda(hue, m: 360.0) / 360.0
-        s = clip(saturation, 0.0, 1.0)
-        l = clip(lightness, 0.0, 1.0)
-        a = clip(alpha, 0.0, 1.0)
+        h = moda(hue.isFinite ? hue : 0, m: 360.0) / 360.0
+        s = clip(saturation.isFinite ? saturation : 0, 0.0, 1.0)
+        l = clip(lightness.isFinite ? lightness : 0, 0.0, 1.0)
+        a = clip(alpha.isFinite ? alpha : 0, 0.0, 1.0)
     }
 
     /**

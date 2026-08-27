@@ -24,20 +24,23 @@ extension DynamicColor {
     ///   - k: Key/Black (黑色) 0.0 ~ 1.0
     ///   - alpha: 透明度，默认为 1.0
     convenience init(c: CGFloat, m: CGFloat, y: CGFloat, k: CGFloat, alpha: CGFloat = 1.0) {
-        // 直接使用标准转换公式，代码更清晰，且避免了 inout 闭包的开销
-        let r = (1.0 - c) * (1.0 - k)
-        let g = (1.0 - m) * (1.0 - k)
-        let b = (1.0 - y) * (1.0 - k)
-        
-        // 假设 self.init(r:g:b:a:) 是你在其他地方定义的便利构造器
-        // 如果是原生方法，应该是 self.init(red: r, green: g, blue: b, alpha: alpha)
-        self.init(r: r, g: g, b: b, a: alpha)
+        let cyan = clip(c.isFinite ? c : 0, 0, 1)
+        let magenta = clip(m.isFinite ? m : 0, 0, 1)
+        let yellow = clip(y.isFinite ? y : 0, 0, 1)
+        let key = clip(k.isFinite ? k : 0, 0, 1)
+        let components = PTRGBAComponents(red: (1.0 - cyan) * (1.0 - key),
+                                           green: (1.0 - magenta) * (1.0 - key),
+                                           blue: (1.0 - yellow) * (1.0 - key),
+                                           alpha: alpha)
+        self.init(red: components.red,
+                  green: components.green,
+                  blue: components.blue,
+                  alpha: components.alpha)
     }
     
-    // 如果你依然非常需要支持数组传入，可以保留一个包装方法，但内部调用上面的安全方法：
     convenience init(cmykData: [CGFloat]) {
         guard cmykData.count >= 4 else {
-            self.init(r: 0, g: 0, b: 0, a: 0) // 或者返回 .clear
+            self.init(red: 0, green: 0, blue: 0, alpha: 0)
             return
         }
         self.init(c: cmykData[0], m: cmykData[1], y: cmykData[2], k: cmykData[3])

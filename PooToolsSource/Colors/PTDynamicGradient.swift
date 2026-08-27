@@ -16,7 +16,7 @@ import AppKit
  Object representing a gradient object. It allows you to manipulate colors inside different gradients and color spaces.
  */
 // 🚀 优化 1：改为 public struct，利用值类型提升性能
-public struct PTDynamicGradient {
+public struct PTDynamicGradient: Sendable {
     public let colors: [DynamicColor]
 
     /**
@@ -32,14 +32,14 @@ public struct PTDynamicGradient {
      Returns the color palette of `amount` elements by grabbing equidistant colors.
      */
     public func colorPalette(@PTClampedPropertyWrapper(range: 2...UInt.max) amount: UInt = 2, inColorSpace colorspace: DynamicColorSpace = .rgb) -> [DynamicColor] {
-        // 🚀 优化 2：移除 amount > 0 的冗余判断，因为包装器保证了最小为 2
         guard !colors.isEmpty else { return [] }
+        let safeAmount = min(amount, 4_096)
         guard colors.count > 1 else {
-            return (0 ..< amount).map { _ in colors[0] }
+            return (0 ..< safeAmount).map { _ in colors[0] }
         }
 
-        let increment = 1.0 / CGFloat(amount - 1)
-        return (0 ..< amount).map { pickColorAt(scale: CGFloat($0) * increment, inColorSpace: colorspace) }
+        let increment = 1.0 / CGFloat(safeAmount - 1)
+        return (0 ..< safeAmount).map { pickColorAt(scale: CGFloat($0) * increment, inColorSpace: colorspace) }
     }
 
     /**
@@ -50,9 +50,8 @@ public struct PTDynamicGradient {
             return colors.first ?? .black
         }
 
-        // 极限值直接返回，提升速度
-        if scale <= 0.0 { return colors.first! }
-        if scale >= 1.0 { return colors.last! }
+        if scale <= 0.0 { return colors[0] }
+        if scale >= 1.0 { return colors[colors.count - 1] }
 
         // 🚀 优化 3：O(1) 纯数学映射，彻底取代原来的 map 创建数组 + for 循环
         // 1. 计算总的分段数
@@ -64,9 +63,8 @@ public struct PTDynamicGradient {
         // 3. 取整得到左边颜色的 index
         let leftIndex = Int(scaledIndex)
         
-        // 安全保护：防止浮点数精度导致的越界
         guard leftIndex < colors.count - 1 else {
-            return colors.last!
+            return colors[colors.count - 1]
         }
         
         let rightIndex = leftIndex + 1

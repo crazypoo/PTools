@@ -31,34 +31,49 @@ public extension DynamicColor {
                   blue: clip(b, 0, 255.0) / 255.0,
                   alpha: clip(a, 0, 1.0))
     }
-    
+
     // MARK: - color 转 RGBA
-    
-    /// color 转 RGBA
-    /// - Returns: 返回对应的 RGBA (范围 0.0 ... 1.0)
-    func colorToRGBA() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+
+    /// 尝试提取可表达为 RGBA 的颜色分量；不支持的 pattern color 返回 nil。
+    /// Extrae componentes RGBA cuando es posible; los pattern color no compatibles devuelven nil.
+    internal func ptRGBAComponents() -> PTRGBAComponents? {
+        #if os(iOS) || os(tvOS) || os(watchOS)
+        let resolvedColor = resolvedColor(with: UITraitCollection.current)
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
-        
-        #if os(iOS) || os(tvOS) || os(watchOS)
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            // 🚀 优化：移除 fatalError，遇到异常颜色返回安全值，防止 App 崩溃
-            return (0.0, 0.0, 0.0, self.alphaComponent)
+
+        if resolvedColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            return PTRGBAComponents(red: red, green: green, blue: blue, alpha: alpha)
         }
-        return (red, green, blue, alpha)
-        
+
+        var white: CGFloat = 0
+        if resolvedColor.getWhite(&white, alpha: &alpha) {
+            return PTRGBAComponents(red: white, green: white, blue: white, alpha: alpha)
+        }
+
+        return nil
         #elseif os(OSX)
-        guard let rgbaColor = self.usingColorSpace(.deviceRGB) else {
-            // 🚀 优化：移除 fatalError
-            return (0.0, 0.0, 0.0, self.alphaComponent)
-        }
-        rgbaColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return (red, green, blue, alpha)
+        guard let rgbaColor = self.usingColorSpace(.deviceRGB) else { return nil }
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard rgbaColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
+        return PTRGBAComponents(red: red, green: green, blue: blue, alpha: alpha)
         #endif
     }
     
+    /// color 转 RGBA
+    /// - Returns: 返回对应的 RGBA (范围 0.0 ... 1.0)
+    func colorToRGBA() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+        let alpha = cgColor.alpha
+        let components = ptRGBAComponents()
+            ?? PTRGBAComponents(red: 0, green: 0, blue: 0, alpha: alpha)
+        return (components.red, components.green, components.blue, components.alpha)
+    }
+
     #if os(iOS) || os(tvOS) || os(watchOS)
     /** The red component as CGFloat between 0.0 to 1.0. */
     var redComponent: CGFloat { return colorToRGBA().r }

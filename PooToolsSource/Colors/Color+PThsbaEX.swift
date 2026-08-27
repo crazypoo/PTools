@@ -23,27 +23,27 @@ public extension DynamicColor {
      - returns: The HSB components as a tuple (h, s, b, a).
      */
     func colorToHSBA() -> (h: CGFloat, s: CGFloat, b: CGFloat, a: CGFloat) {
-        var h: CGFloat = 0.0
-        var s: CGFloat = 0.0
-        var b: CGFloat = 0.0
-        var a: CGFloat = 0.0
+        let rgba = colorToRGBA()
+        let maximum = max(rgba.r, max(rgba.g, rgba.b))
+        let minimum = min(rgba.r, min(rgba.g, rgba.b))
+        let delta = maximum - minimum
+        let hue: CGFloat
 
-        #if os(iOS) || os(tvOS) || os(watchOS)
-        // iOS/tvOS 底层会自动处理色彩空间转换，直接调用即可
-        self.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        
-        #elseif os(OSX)
-        // 🚀 macOS 优化：将颜色安全地转换到 RGB 空间，彻底杜绝 Exception 崩溃
-        // 替代了原来的 isEqual(.black) 这种打补丁的做法
-        if let rgbColor = self.usingColorSpace(.deviceRGB) {
-            rgbColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        if delta == 0 {
+            hue = 0
+        } else if maximum == rgba.r {
+            hue = moda((rgba.g - rgba.b) / delta / 6, m: 1)
+        } else if maximum == rgba.g {
+            hue = ((rgba.b - rgba.r) / delta + 2) / 6
         } else {
-            // 如果存在极其特殊的颜色无法转换，返回安全的默认值
-            return (0.0, 0.0, 0.0, self.alphaComponent)
+            hue = ((rgba.r - rgba.g) / delta + 4) / 6
         }
-        #endif
 
-        return (h: h, s: s, b: b, a: a)
+        let saturation = maximum == 0 ? 0 : delta / maximum
+        return (h: moda(hue, m: 1),
+                s: clip(saturation, 0, 1),
+                b: clip(maximum, 0, 1),
+                a: clip(rgba.a, 0, 1))
     }
 
     #if os(iOS) || os(tvOS) || os(watchOS)

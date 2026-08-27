@@ -11,7 +11,7 @@ import SwiftUI
 /**
  Defines the supported color spaces.
  */
-public enum DynamicColorSpace {
+public enum DynamicColorSpace: Sendable {
   /// The RGB color space
   case rgb
   /// The HSL color space
@@ -59,17 +59,15 @@ public extension DynamicColor {
      - parameter hexString: A hexa-decimal color string representation.
      */
     convenience init?(hexString: String) {
-        let hexString                 = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
-        let scanner                   = Scanner(string: hexString)
-        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-
-        var color: UInt64 = 0
-
-        if scanner.scanHexInt64(&color) {
-            self.init(hex: color, useAlpha: hexString.count > 7)
-        } else {
+        guard let value = PTHexColorParser.parse(hexString) else {
             self.init(hex: 0x000000)
+            return
         }
+
+        self.init(red: value.components.red,
+                  green: value.components.green,
+                  blue: value.components.blue,
+                  alpha: value.components.alpha)
     }
 
     /**
@@ -137,7 +135,18 @@ public extension DynamicColor {
      - returns: true if the receiver and the string are equals, otherwise false.
      */
     func isEqual(toHexString hexString: String) -> Bool {
-        return self.toHexString == hexString
+        guard let value = PTHexColorParser.parse(hexString) else { return false }
+        let current = colorToRGBA()
+        let currentComponents = PTRGBAComponents(red: current.r,
+                                                  green: current.g,
+                                                  blue: current.b,
+                                                  alpha: current.a)
+        guard currentComponents.red == value.components.red,
+              currentComponents.green == value.components.green,
+              currentComponents.blue == value.components.blue else {
+            return false
+        }
+        return !value.includesAlpha || currentComponents.alpha == value.components.alpha
     }
 
     /**
@@ -173,14 +182,13 @@ public extension DynamicColor {
     */
     var luminance: CGFloat {
         let components = colorToRGBA()
-
-        let componentsArray = [components.r, components.g, components.b].map { (val) -> CGFloat in
-            guard val <= 0.03928 else { return pow((val + 0.055) / 1.055, 2.4) }
-
-            return val / 12.92
+        func linearize(_ value: CGFloat) -> CGFloat {
+            value <= 0.04045 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4)
         }
 
-        return (0.2126 * componentsArray[0]) + (0.7152 * componentsArray[1]) + (0.0722 * componentsArray[2])
+        return (0.2126 * linearize(components.r))
+            + (0.7152 * linearize(components.g))
+            + (0.0722 * linearize(components.b))
     }
 
     /**
@@ -215,7 +223,7 @@ public extension DynamicColor {
      - returns: true is the contrast ratio between 2 colors exceed the minimum acceptable ratio.
      */
     func isContrasting(with otherColor: DynamicColor, inContext context: ContrastDisplayContext = .standard) -> Bool {
-        return self.contrastRatio(with: otherColor) > context.minimumContrastRatio
+        return self.contrastRatio(with: otherColor) >= context.minimumContrastRatio
     }
     
     /**
@@ -249,8 +257,13 @@ public extension DynamicColor {
      Its color for empty areas and it usually downed of main background color.
      */
     static var systemDownedBackground: DynamicColor {
-        let lightColor = UIColor.secondarySystemBackground.mixed(withColor: .darkGray,weight: 0.09).mixed(withColor: .systemBlue, weight: 0.01)
-        let darkColor = UIColor.secondarySystemBackground
+        let lightTrait = UITraitCollection(userInterfaceStyle: .light)
+        let darkTrait = UITraitCollection(userInterfaceStyle: .dark)
+        let lightBackground = UIColor.secondarySystemBackground.resolvedColor(with: lightTrait)
+        let darkBackground = UIColor.secondarySystemBackground.resolvedColor(with: darkTrait)
+        let lightColor = lightBackground.mixed(withColor: .darkGray, weight: 0.09)
+            .mixed(withColor: .systemBlue, weight: 0.01)
+        let darkColor = darkBackground
         return DynamicColor(light: lightColor, dark: darkColor)
     }
 #endif
@@ -298,72 +311,18 @@ public extension DynamicColor {
 #endif
 
     func cielabColorArray() -> (l: CGFloat, a: CGFloat, b: CGFloat, alpha: CGFloat) {
-        var R = colorToRGBA().r
-        var G = colorToRGBA().g
-        var B = colorToRGBA().b
-        
-        let deltaRGB: (CGFloat) -> CGFloat = {
-            ($0 > 0.04045) ? pow(($0 + 0.055) / 1.055, 2.4) : ($0 / 12.92)
-        }
-        R = deltaRGB(R)
-        G = deltaRGB(G)
-        B = deltaRGB(B)
-
-        var X = R * 41.24 + G * 35.76 + B * 18.05
-        var Y = R * 21.26 + G * 71.52 + B * 7.22
-        var Z = R * 1.93 + G * 11.92 + B * 95.05
-        
-        X = X / 95.047
-        Y = Y / 100
-        Z = Z / 108.883
-        
-        
-        let sideA:CGFloat = (1.0 / 3.0)
-        let sideB:CGFloat = (4.0 / 29.0)
-        let deltaF: (CGFloat) -> CGFloat = {
-            ($0 > pow((6.0 / 29.0), 3.0)) ? pow($0, 1.0 / 3.0) : (sideA * pow((29.0 / 6.0), 2.0) * $0 + sideB)
-        }
-        X = deltaF(X)
-        Y = deltaF(Y)
-        Z = deltaF(Z)
-        
-        return (l: (116 * Y - 16), a: (500 * (X - Y)), b: (200 * (Y - Z)), alpha: colorAValue)
+        let lab = toLabComponents()
+        return (l: lab.L, a: lab.a, b: lab.b, alpha: lab.alpha)
     }
     
     //MARK: Color from LAB Array
     ///Color from LAB Array
     class func cielabColor(cielabData:[CGFloat])->DynamicColor {
-        if cielabData.count < 4 {
-            return .clear
-        }
-        
-        let L:CGFloat = cielabData[0]
-        let A:CGFloat = cielabData[1]
-        let B:CGFloat = cielabData[2]
-        var Y:CGFloat = (L + 16) / 116
-        var X:CGFloat = A / 500 + Y
-        var Z:CGFloat = Y - B / 200
-        
-        let deltaXYZ: (CGFloat) -> CGFloat = {
-            ($0 > 0.008856) ? pow($0, 3.0) : ($0 - 4 / 29.0) / 7.787
-        }
-        
-        X = deltaXYZ(X) * 0.95047
-        Y = deltaXYZ(Y) * 1.00000
-        Z = deltaXYZ(Z) * 1.08883
-        
-        var R:CGFloat = X * 3.2406 + Y * (-1.5372) + Z * (-0.4986)
-        var G:CGFloat = X * (-0.9689) + Y * 1.8758 + Z * 0.0415
-        var _B:CGFloat = X * 0.0557 + Y * (-0.2040) + Z * 1.0570
-        
-        let deltaRGB: (CGFloat) -> CGFloat = {
-            ($0 > 0.0031308) ? 1.055 * (pow($0, (1 / 2.4))) - 0.055 : $0 * 12.92
-        }
-        
-        R = deltaRGB(R)
-        G = deltaRGB(G)
-        _B = deltaRGB(_B)
-        return DynamicColor(r: R, g: G, b: B, a: cielabData[3])
+        guard cielabData.count >= 4 else { return .clear }
+        return DynamicColor(L: cielabData[0],
+                            a: cielabData[1],
+                            b: cielabData[2],
+                            alpha: cielabData[3])
     }
     
     /**
@@ -399,68 +358,111 @@ public extension DynamicColor {
     
     func colorDistance(color:UIColor,
                        type:ColorDistanceType) -> CGFloat {
-        let lab1 = cielabColorArray()
-        let lab2 = color.cielabColorArray()
-        
-        let L1:CGFloat = lab1.l
-        let A1:CGFloat = lab1.a
-        let B1:CGFloat = lab1.b
+        let lab1 = toLabComponents()
+        let lab2 = color.toLabComponents()
+        let L1 = lab1.L
+        let A1 = lab1.a
+        let B1 = lab1.b
+        let L2 = lab2.L
+        let A2 = lab2.a
+        let B2 = lab2.b
 
-        let L2:CGFloat = lab2.l
-        let A2:CGFloat = lab2.a
-        let B2:CGFloat = lab2.b
+        let deltaL = L1 - L2
+        let deltaA = A1 - A2
+        let deltaB = B1 - B2
+        let chroma1 = sqrt((A1 * A1) + (B1 * B1))
+        let chroma2 = sqrt((A2 * A2) + (B2 * B2))
+        let deltaChroma = chroma1 - chroma2
 
         if type == .CIE76 {
-            let distance:CGFloat = CGFloat(sqrtf(Float(pow((L1 - L2), 2.0) + pow((A1 - A2), 2.0) + pow((B1 - B2), 2.0))))
-            return distance
+            let squaredDistance = (deltaL * deltaL) + (deltaA * deltaA) + (deltaB * deltaB)
+            return sqrt(max(0, squaredDistance))
         }
-        
-        let kL:CGFloat = 1
-        let kC:CGFloat = 1
-        let kH:CGFloat = 1
-        let k1:CGFloat = 0.045
-        let k2:CGFloat = 0.015
-        let deltaL = L1 - L2
-        let C1 = sqrt((A1 * A1) + (B1 * B1))
-        let C2 = sqrt((A2 * A2) + (B2 * B2))
-        let deltaC = C1 - C2
-        let deltaH = sqrt(pow((A1 - A2), 2) + pow((B1 - B2), 2.0) - pow(deltaC, 2.0))
-        var sL:CGFloat = 1
-        var sC:CGFloat = 1 + k1 * C1
-        var sH:CGFloat = 1 + k2 * C1
-        
+
+        let deltaHueSquared = max(0, (deltaA * deltaA) + (deltaB * deltaB) - (deltaChroma * deltaChroma))
+        let deltaHue = sqrt(deltaHueSquared)
+        let lightnessWeight: CGFloat = 1
+        let chromaWeight: CGFloat = 1
+        let hueWeight: CGFloat = 1
+
         if type == .CIE94 {
-            let distance:CGFloat = sqrt(pow((deltaL / (kL * sL)), 2.0) + pow((deltaC / (kC * sC)), 2.0) + pow((deltaH / (kH * sH)), 2.0))
-            return distance
+            let lightnessScale: CGFloat = 1
+            let chromaScale = 1 + 0.045 * chroma1
+            let hueScale = 1 + 0.015 * chroma1
+            let squaredDistance = pow(deltaL / (lightnessWeight * lightnessScale), 2)
+                + pow(deltaChroma / (chromaWeight * chromaScale), 2)
+                + pow(deltaHue / (hueWeight * hueScale), 2)
+            return sqrt(max(0, squaredDistance))
         }
-        
-        let deltaLPrime:CGFloat = L2 - L1
-        let meanL:CGFloat = (L1 + L2) / 2
-        let meanC:CGFloat = (C1 + C2) / 2
-        let aPrime1:CGFloat = A1 + A1 / 2 * (1 - sqrt(pow(meanC, 7.0) / (pow(meanC, 7.0) + pow(25.0, 7.0))))
-        let aPrime2:CGFloat = A2 + A2 / 2 * (1 - sqrt(pow(meanC, 7.0) / (pow(meanC, 7.0) + pow(25.0, 7.0))))
-        let cPrime1:CGFloat = sqrt((aPrime1 * aPrime1) + (B1 * B1))
-        let cPrime2:CGFloat = sqrt((aPrime2 * aPrime2) + (B2 * B2))
-        let cMeanPrime:CGFloat = (cPrime1 + cPrime2) / 2
-        let deltaCPrime:CGFloat = (cPrime1 - cPrime2)
-        var hPrime1:CGFloat = atan2(B1, aPrime1)
-        var hPrime2:CGFloat = atan2(B2, aPrime2)
-        hPrime1 = CGFloat(fmodf(Float(hPrime1), Float(RAD(degree: 360))))
-        hPrime2 = CGFloat(fmodf(Float(hPrime2), Float(RAD(degree: 360))))
-        var deltahPrime:CGFloat = 0
-        if abs(hPrime1 - hPrime2) <= RAD(degree: 180) {
-            deltahPrime = hPrime2 - hPrime1
+
+        let twoPi = 2 * CGFloat.pi
+        let pi = CGFloat.pi
+        let meanChroma = (chroma1 + chroma2) / 2
+        let meanChromaPower = pow(meanChroma, 7)
+        let twentyFivePower = pow(CGFloat(25), 7)
+        let compensation = 0.5 * (1 - sqrt(meanChromaPower / (meanChromaPower + twentyFivePower)))
+        let aPrime1 = (1 + compensation) * A1
+        let aPrime2 = (1 + compensation) * A2
+        let chromaPrime1 = sqrt((aPrime1 * aPrime1) + (B1 * B1))
+        let chromaPrime2 = sqrt((aPrime2 * aPrime2) + (B2 * B2))
+
+        func hue(_ blue: CGFloat, _ redGreen: CGFloat) -> CGFloat {
+            let angle = atan2(blue, redGreen)
+            return angle >= 0 ? angle : angle + twoPi
+        }
+
+        let huePrime1 = chromaPrime1 == 0 ? 0 : hue(B1, aPrime1)
+        let huePrime2 = chromaPrime2 == 0 ? 0 : hue(B2, aPrime2)
+        let deltaHuePrime: CGFloat
+        if chromaPrime1 == 0 || chromaPrime2 == 0 {
+            deltaHuePrime = 0
+        } else if abs(huePrime2 - huePrime1) <= pi {
+            deltaHuePrime = huePrime2 - huePrime1
+        } else if huePrime2 <= huePrime1 {
+            deltaHuePrime = huePrime2 - huePrime1 + twoPi
         } else {
-            deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + RAD(degree: 360)) : (hPrime2 - hPrime1 - RAD(degree: 360))
+            deltaHuePrime = huePrime2 - huePrime1 - twoPi
         }
-        let deltaHPrime:CGFloat = 2 * sqrt(cPrime1 * cPrime2) * sin(deltahPrime / 2)
-        let meanHPrime = (abs(hPrime1 - hPrime2) <= RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : ((hPrime1 + hPrime2 + RAD(degree: 360)) / 2)
-        let T:CGFloat = 1 - 0.17 * cos(meanHPrime - RAD(degree: 30)) + 0.24 * cos(2 * meanHPrime) + 0.32 * cos(3 * meanHPrime + RAD(degree: 6)) - 0.2 * cos(4 * meanHPrime - RAD(degree: 63))
-        sL = 1 + 0.015 * pow(meanL - 50, 2) / sqrt(20 + pow(meanL - 50, 2))
-        sC = 1 + 0.045 * cMeanPrime
-        sH = 1 + 0.015 * cMeanPrime * T
-        let Rt = -2 * sqrt(pow(cMeanPrime, 7) / (pow(cMeanPrime, 7) + pow(25.0, 7))) * sin(RAD(degree:60.0) * exp(-1 * pow((meanHPrime - RAD(degree:275.0)) / RAD(degree:25.0), 2)))
-        return sqrt(pow((deltaLPrime / (kL * sL)), 2) + pow((deltaCPrime / (kC * sC)), 2) + pow((deltaHPrime / (kH * sH)), 2) + Rt * (deltaC / (kC * sC)) * (deltaHPrime / (kH * sH)))
+
+        let deltaLightnessPrime = L2 - L1
+        let deltaChromaPrime = chromaPrime2 - chromaPrime1
+        let deltaHueComponent = 2 * sqrt(chromaPrime1 * chromaPrime2) * sin(deltaHuePrime / 2)
+        let meanLightness = (L1 + L2) / 2
+        let meanChromaPrime = (chromaPrime1 + chromaPrime2) / 2
+        let meanHuePrime: CGFloat
+        if chromaPrime1 == 0 || chromaPrime2 == 0 {
+            meanHuePrime = huePrime1 + huePrime2
+        } else if abs(huePrime1 - huePrime2) <= pi {
+            meanHuePrime = (huePrime1 + huePrime2) / 2
+        } else if huePrime1 + huePrime2 < twoPi {
+            meanHuePrime = (huePrime1 + huePrime2 + twoPi) / 2
+        } else {
+            meanHuePrime = (huePrime1 + huePrime2 - twoPi) / 2
+        }
+
+        let meanHueDegrees = meanHuePrime * 180 / pi
+        let hueTerm = 1
+            - 0.17 * cos(meanHuePrime - RAD(degree: 30))
+            + 0.24 * cos(2 * meanHuePrime)
+            + 0.32 * cos(3 * meanHuePrime + RAD(degree: 6))
+            - 0.20 * cos(4 * meanHuePrime - RAD(degree: 63))
+        let lightnessScale = 1 + 0.015 * pow(meanLightness - 50, 2)
+            / sqrt(20 + pow(meanLightness - 50, 2))
+        let chromaScale = 1 + 0.045 * meanChromaPrime
+        let hueScale = 1 + 0.015 * meanChromaPrime * hueTerm
+        let deltaTheta = 30 * exp(-pow((meanHueDegrees - 275) / 25, 2))
+        let chromaRotation = 2 * sqrt(pow(meanChromaPrime, 7)
+            / (pow(meanChromaPrime, 7) + twentyFivePower))
+        let rotation = -chromaRotation * sin(RAD(degree: 2 * deltaTheta))
+
+        let lightnessTerm = deltaLightnessPrime / (lightnessWeight * lightnessScale)
+        let chromaTerm = deltaChromaPrime / (chromaWeight * chromaScale)
+        let hueTermValue = deltaHueComponent / (hueWeight * hueScale)
+        let squaredDistance = (lightnessTerm * lightnessTerm)
+            + (chromaTerm * chromaTerm)
+            + (hueTermValue * hueTermValue)
+            + rotation * chromaTerm * hueTermValue
+        return sqrt(max(0, squaredDistance))
     }
     
     //MARK: 返回随机颜色
@@ -488,14 +490,13 @@ public extension DynamicColor {
     ///顏色轉圖片
     @objc func createImageWithColor() -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
-        UIGraphicsBeginImageContext(rect.size)
-        defer { UIGraphicsEndImageContext() } // 确保无论如何都会关闭 Context
-        
-        guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
-        context.setFillColor(cgColor)
-        context.fill(rect)
-        
-        return UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        format.opaque = false
+        return UIGraphicsImageRenderer(size: rect.size, format: format).image { context in
+            context.cgContext.setFillColor(self.cgColor)
+            context.cgContext.fill(rect)
+        }
     }
 #endif
 }
@@ -537,18 +538,15 @@ public extension Color {
      - parameter hexString: A hexa-decimal color string representation.
      */
     init(hexString: String) {
-        let hexString                 = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
-        let scanner                   = Scanner(string: hexString)
-        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-
-        var color: UInt64 = 0
-
-        if scanner.scanHexInt64(&color) {
-            self.init(hex: color, useOpacity: hexString.count > 7)
+        guard let value = PTHexColorParser.parse(hexString) else {
+            self.init(red: 0, green: 0, blue: 0, opacity: 1)
+            return
         }
-        else {
-            self.init(hex: 0x000000)
-        }
+
+        self.init(red: Double(value.components.red),
+                  green: Double(value.components.green),
+                  blue: Double(value.components.blue),
+                  opacity: Double(value.components.alpha))
     }
 
     /**

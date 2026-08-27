@@ -82,12 +82,11 @@ public extension DynamicColor {
         let c2 = color.colorToHSBA()
 
         // 🚨 修复 Bug：HSB 的色相范围是 0...1.0，传入 1.0 作为最大值
-        let h = c1.h + (weight * mixedHue(source: c1.h, target: c2.h, maxValue: 1.0))
+        let h = moda(c1.h + (weight * mixedHue(source: c1.h, target: c2.h, maxValue: 1.0)), m: 1.0)
         let s = c1.s + (weight * (c2.s - c1.s))
         let b = c1.b + (weight * (c2.b - c1.b))
         let alpha = c1.a + (weight * (c2.a - c1.a))
 
-        // 注意：系统的 init(hue:saturation:brightness:alpha:) 接收的 hue 正好是 0...1.0
         return DynamicColor(hue: h, saturation: s, brightness: b, alpha: alpha)
     }
 

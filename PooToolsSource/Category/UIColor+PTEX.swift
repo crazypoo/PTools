@@ -16,59 +16,8 @@ public enum PTColorTone {
 }
 
 public extension UIColor {
-            
-    /**
-        Convert HEX to RGB channels.
-     
-     - parameter hex: HEX of color.
-     - parameter alpha: Opacity.
-     */
-    private static func parseHex(hex: String, alpha: CGFloat = 1) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
-        let hexString = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
-        let length = hexString.count
-        var hexValue: UInt64 = 0
-        
-        guard Scanner(string: hexString).scanHexInt64(&hexValue), [3, 4, 6, 8].contains(length) else {
-            PTNSLogConsole("UIColorExtension - Invalid RGB string or scan error", levelType: .error, loggerType: .color)
-            return (0, 0, 0, alpha)
-        }
-        
-        let divisor: CGFloat = length == 3 || length == 4 ? 15.0 : 255.0
-        
-        switch length {
-        case 3: // RGB (12-bit)
-            return (
-                red:   CGFloat((hexValue & 0xF00) >> 8) / divisor,
-                green: CGFloat((hexValue & 0x0F0) >> 4) / divisor,
-                blue:  CGFloat(hexValue & 0x00F) / divisor,
-                alpha: alpha
-            )
-        case 4: // RGBA (16-bit)
-            return (
-                red:   CGFloat((hexValue & 0xF000) >> 12) / divisor,
-                green: CGFloat((hexValue & 0x0F00) >> 8) / divisor,
-                blue:  CGFloat((hexValue & 0x00F0) >> 4) / divisor,
-                alpha: alpha / divisor
-            )
-        case 6: // RGB (24-bit)
-            return (
-                red:   CGFloat((hexValue & 0xFF0000) >> 16) / divisor,
-                green: CGFloat((hexValue & 0x00FF00) >> 8) / divisor,
-                blue:  CGFloat(hexValue & 0x0000FF) / divisor,
-                alpha: alpha
-            )
-        case 8: // RGBA (32-bit)
-            return (
-                red:   CGFloat((hexValue & 0xFF000000) >> 24) / divisor,
-                green: CGFloat((hexValue & 0x00FF0000) >> 16) / divisor,
-                blue:  CGFloat((hexValue & 0x0000FF00) >> 8) / divisor,
-                alpha: alpha / divisor
-            )
-        default:
-            PTNSLogConsole("UIColorExtension - Invalid RGB string length", levelType: .error, loggerType: .color)
-            return (0, 0, 0, alpha)
-        }
-    }
+
+    // 统一使用颜色模块的 Hex 解析器，避免同一颜色在不同入口产生不同结果。
 
     //MARK: hex 色值
     /// - Parameters:
@@ -77,110 +26,68 @@ public extension UIColor {
     /// - Returns: UIColor
     class func hex(_ hex: String, 
                    alpha: CGFloat = 1.0) -> UIColor {
-        let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        let hexint = intFromHexString_64(tempStr)
-        let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha)
-        return color
+        let components = PTHexColorParser.parse(hex,
+                                                embeddedAlpha: false,
+                                                overridingAlpha: alpha)?.components
+            ?? PTRGBAComponents(red: 0, green: 0, blue: 0, alpha: alpha)
+        return UIColor(red: components.red,
+                       green: components.green,
+                       blue: components.blue,
+                       alpha: components.alpha)
     }
             
     //MARK: 颜色转Hex字符串
     ///颜色转Hex字符串
     @objc var hex: String? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        let multiplier = CGFloat(255)
-        
-        guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-        
-        if alpha == 1.0 {
+        guard let components = ptRGBAComponents() else { return nil }
+        if components.alpha == 1.0 {
             return String(
                 format: "#%02lX%02lX%02lX",
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier)
+                Int(roundToHex(components.red)),
+                Int(roundToHex(components.green)),
+                Int(roundToHex(components.blue))
             )
         } else {
             return String(
                 format: "#%02lX%02lX%02lX%02lX",
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier),
-                Int(alpha * multiplier)
+                Int(roundToHex(components.red)),
+                Int(roundToHex(components.green)),
+                Int(roundToHex(components.blue)),
+                Int(roundToHex(components.alpha))
             )
         }
     }
     
     @objc var toHexString: String {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        
-        getRed(&r, green: &g, blue: &b, alpha: &a)
+        let components = colorToRGBA()
         
         return String(
             format: "%02X%02X%02X",
-            Int(r * 0xff),
-            Int(g * 0xff),
-            Int(b * 0xff)
+            Int(roundToHex(components.r)),
+            Int(roundToHex(components.g)),
+            Int(roundToHex(components.b))
         )
     }
 
-    //MARK: 从Hex装换int
-    ///从Hex装换int
-    @available(iOS, introduced: 2.0, deprecated: 13.0)
-    private class func intFromHexString(_ hexString:String) -> UInt32 {
-        let scanner = Scanner(string: hexString)
-        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-        var result : UInt32 = 0
-        scanner.scanHexInt32(&result)
-        return result
-    }
-    
-    private class func intFromHexString_64(_ hexString:String) -> UInt64 {
-        let scanner = Scanner(string: hexString)
-        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-        var result : UInt64 = 0
-        scanner.scanHexInt64(&result)
-        return result
-    }
-                
     internal func hsbaValueModel() -> PTColorHSBAModel {
-        var hueF:CGFloat = 0
-        var saturationF:CGFloat = 0
-        var brightnessF:CGFloat = 0
-        var alphaF:CGFloat = 0
-        guard getHue(&hueF, saturation: &saturationF, brightness: &brightnessF, alpha: &alphaF) else {
-            return PTColorHSBAModel()
-        }
+        let hsba = colorToHSBA()
         
         let colorModel = PTColorHSBAModel()
-        colorModel.hueFloat = hueF
-        colorModel.saturationFloat = saturationF
-        colorModel.brightnessFloat = brightnessF
-        colorModel.alphaFloat = alphaF
+        colorModel.hueFloat = hsba.h
+        colorModel.saturationFloat = hsba.s
+        colorModel.brightnessFloat = hsba.b
+        colorModel.alphaFloat = hsba.a
         return colorModel
     }
     
     internal func rgbaValueModel() -> PTColorRBGModel {
-        var redF:CGFloat = 0
-        var greenF:CGFloat = 0
-        var blueF:CGFloat = 0
-        var alphaF:CGFloat = 0
-        guard getRed(&redF, green: &greenF, blue: &blueF, alpha: &alphaF) else {
-            return PTColorRBGModel()
-        }
+        let rgba = colorToRGBA()
         
         let colorModel = PTColorRBGModel()
-        colorModel.redFloat = redF
-        colorModel.greenFloat = greenF
-        colorModel.blueFloat = blueF
-        colorModel.alphaFloat = alphaF
+        colorModel.redFloat = rgba.r
+        colorModel.greenFloat = rgba.g
+        colorModel.blueFloat = rgba.b
+        colorModel.alphaFloat = rgba.a
         return colorModel
     }
     
@@ -221,14 +128,11 @@ public extension UIColor {
     }
     
     func pt_colorTone(threshold: CGFloat = 0.8) -> PTColorTone {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        
-        guard self.getRed(&r, green: &g, blue: &b, alpha: &a) else {
-            return .normal
-        }
+        let rgba = colorToRGBA()
+        let r = rgba.r
+        let g = rgba.g
+        let b = rgba.b
+        let a = rgba.a
         
         // ✅ 先判断透明（优先级最高）
         if a <= 0.01 {
