@@ -38,6 +38,10 @@ PooToolsSource/Core/PTUtils.swift
 PooToolsSource/Core/ResponseModel.swift
 PooToolsSource/Debug/PTApplicationDirectories.swift
 PooToolsSource/Debug/DebugApplicationDirectories.swift
+# system notification callback boundary: Notification is consumed immediately on the MainActor.
+# límite de callback de notificación del sistema: Notification se consume inmediatamente en MainActor.
+# 系统通知回调边界：Notification 会立即在 MainActor 上消费。
+PooToolsSource/Debug/StdoutCapture.swift
 PooToolsSource/DebugCrash/PTCrashHandler.swift
 PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift
 PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift

@@ -173,13 +173,10 @@ public final class PTVideoFileCache: Sendable {
     }
 }
 
-/// 视频封面图缓存与生成工具
-/// 🌟 Swift 6 改进：改为 case-less enum，作为纯静态命名空间，天生具备线程安全性
+/// Video cover cache and thumbnail request coordinator.
+/// Caché de portadas de vídeo y coordinador de solicitudes de miniaturas.
+/// 视频封面缓存与缩略图请求协调器。
 public enum PTVideoCoverCache {
-
-    private static let workQueue = DispatchQueue(label: "com.pt.video.cover.cache", qos: .userInitiated)
-    
-    // MARK: - Memory Cache (NSCache 本身是线程安全的)
     @MainActor private static let memoryCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
         cache.countLimit = 100
@@ -187,7 +184,8 @@ public enum PTVideoCoverCache {
         return cache
     }()
 
-    // MARK: - Disk Cache Path
+    @MainActor private static var pendingTasks: [String: Task<UIImage?, Never>] = [:]
+
     private static let diskCacheURL: URL = {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("PTVideoCoverCache", isDirectory: true)
@@ -198,117 +196,156 @@ public enum PTVideoCoverCache {
         return url
     }()
 
-    // MARK: - Public API
-    
-    /// 获取视频第一帧图片（支持内存、磁盘缓存及异步生成）
-    @MainActor public static func getVideoFirstImage(videoUrl: String,
-                                          maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                                          closure: @escaping @MainActor (UIImage?) -> Void) {
-        let cacheKey = cacheKeyForVideo(videoUrl)
+    /// Loads a cached thumbnail or generates the requested one-based frame.
+    /// Carga una miniatura en caché o genera el fotograma solicitado, empezando en uno.
+    /// 读取缓存缩略图，或生成从 1 开始计数的指定帧。
+    @MainActor
+    public static func image(for videoURL: URL,
+                             frameNumber: Int = 10,
+                             maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
+                             appliesPreferredTrackTransform: Bool = true) async -> UIImage? {
+        let key = thumbnailCacheKey(for: videoURL,
+                                    frameNumber: frameNumber,
+                                    maximumSize: maximumSize,
+                                    appliesPreferredTrackTransform: appliesPreferredTrackTransform)
 
-        // 1️⃣ 内存缓存（直接返回）
-        if let image = memoryCache.object(forKey: cacheKey as NSString) {
-            closure(image)
+        if let image = memoryCache.object(forKey: key as NSString) {
+            return image
+        }
+
+        let task: Task<UIImage?, Never>
+        if let pendingTask = pendingTasks[key] {
+            task = pendingTask
+        } else {
+            task = Task.detached(priority: .userInitiated) {
+                let diskURL = diskCacheURL.appendingPathComponent(key)
+                if let image = readImage(from: diskURL) {
+                    return image
+                }
+
+                guard !Task.isCancelled else { return nil }
+                let image = await PTVideoThumbnailService.image(for: videoURL,
+                                                                frameNumber: frameNumber,
+                                                                maximumSize: maximumSize,
+                                                                appliesPreferredTrackTransform: appliesPreferredTrackTransform)
+                guard !Task.isCancelled, let image else { return nil }
+                writeImage(image, to: diskURL)
+                return image
+            }
+            pendingTasks[key] = task
+        }
+
+        let image = await task.value
+        pendingTasks[key] = nil
+
+        if let image {
+            memoryCache.setObject(image,
+                                  forKey: key as NSString,
+                                  cost: imageMemoryCost(image))
+        }
+        return image
+    }
+
+    /// Keeps the legacy first-frame callback API and delegates to the canonical service.
+    /// Mantiene la API heredada de callback del primer fotograma y delega en el servicio canónico.
+    /// 保留旧的首帧回调 API，并代理到统一服务。
+    @MainActor
+    public static func getVideoFirstImage(videoUrl: String,
+                                          maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
+                                          closure: @escaping @MainActor (UIImage?) -> Void) {
+        guard let url = URL(string: videoUrl) else {
+            closure(nil)
             return
         }
 
-        // 2️⃣ 后台队列处理磁盘 & 异步生成
-        workQueue.async {
-            let diskPath = diskCacheURL.appendingPathComponent(cacheKey)
-
-            // 2️⃣ 磁盘缓存读取与解码
-            if let data = try? Data(contentsOf: diskPath),
-               let image = UIImage(data: data)?.ptDecodedImage() {
-
-                Task { @MainActor in
-                    memoryCache.setObject(image, forKey: cacheKey as NSString)
-                }
-                closure(image)
-                return
-            }
-
-            // 3️⃣ 生成首帧
-            generateFirstFrame(videoUrl: videoUrl, maximumSize: maximumSize) { image in
-                guard let image else {
-                    closure(nil)
-                    return
-                }
-
-                Task { @MainActor in
-                    let decoded = image.ptDecodedImage()
-                    memoryCache.setObject(decoded, forKey: cacheKey as NSString)
-                    saveImageToDisk(decoded, key: cacheKey)
-                    closure(decoded)
-                }
-            }
+        Task { @MainActor in
+            let image = await image(for: url,
+                                    frameNumber: 1,
+                                    maximumSize: maximumSize)
+            closure(image)
         }
     }
-    
-    /// 异步生成视频首帧
-    @MainActor static func generateFirstFrame(videoUrl: String,
+
+    /// Keeps the legacy first-frame generation callback API.
+    /// Mantiene la API heredada de callback para generar el primer fotograma.
+    /// 保留旧的首帧生成回调 API。
+    @MainActor
+    static func generateFirstFrame(videoUrl: String,
                                    maximumSize: CGSize,
                                    completion: @escaping @MainActor (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
             completion(nil)
             return
         }
-
-        let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
-        let asset = AVURLAsset(url: url, options: opts)
-
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        generator.maximumSize = maximumSize
-
-        let time = CMTime(seconds: 0, preferredTimescale: 600)
-
-        generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { _, cgImage, _, result, _ in
-            if let cgImage, result == .succeeded {
-                completion(UIImage(cgImage: cgImage))
-            } else {
-                completion(nil)
-            }
-        }
+        PTVideoThumbnailService.image(for: url,
+                                     maximumSize: maximumSize,
+                                     completion: completion)
     }
-    
-    /// 基于 SHA256 的唯一 Key 生成
+
+    /// Preserves the URL-only key used by the video file cache.
+    /// Conserva la clave basada únicamente en URL utilizada por la caché de archivos de vídeo.
+    /// 保留视频文件缓存使用的 URL-only 键。
     static func cacheKeyForVideo(_ url: String) -> String {
         let data = Data(url.utf8)
         let hash = SHA256.hash(data: data)
         return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
 
-    /// 将图片原子性写入磁盘缓存
+    /// Writes a JPEG cache entry atomically on a utility task.
+    /// Escribe atómicamente una entrada JPEG de caché en una tarea de utilidad.
+    /// 在 utility 任务中以原子方式写入 JPEG 缓存项。
     static func saveImageToDisk(_ image: UIImage, key: String) {
-        DispatchQueue.global(qos: .utility).async {
-            let fileURL = diskCacheURL.appendingPathComponent(key)
-            guard let data = image.jpegData(compressionQuality: 0.8) else { return }
-            try? data.write(to: fileURL, options: .atomic)
+        let fileURL = diskCacheURL.appendingPathComponent(key)
+        Task.detached(priority: .utility) {
+            writeImage(image, to: fileURL)
         }
     }
 }
 
-// MARK: - 图片解压扩展
-private extension UIImage {
-    /// 在后台强制对图片进行位图解码，避免主线程渲染卡顿
-    func ptDecodedImage() -> UIImage {
-        guard let cgImage else { return self }
+private extension PTVideoCoverCache {
+    static func thumbnailCacheKey(for url: URL,
+                                  frameNumber: Int,
+                                  maximumSize: CGSize,
+                                  appliesPreferredTrackTransform: Bool) -> String {
+        let safeFrameNumber = max(frameNumber, 1)
+        // Keep invalid dimensions out of integer conversion and make the cache key deterministic.
+        // Evita convertir dimensiones inválidas a enteros y mantiene determinista la clave de caché.
+        // 避免将非法尺寸转换为整数，并保证缓存键稳定。
+        let size = "\(sizeComponent(maximumSize.width))x\(sizeComponent(maximumSize.height))"
+        let localVersion: String
+        if url.isFileURL,
+           let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {
+            let byteCount = (attributes[.size] as? NSNumber)?.int64Value ?? 0
+            let modified = (attributes[.modificationDate] as? Date)?.timeIntervalSince1970 ?? 0
+            localVersion = "|bytes:\(byteCount)|modified:\(modified)"
+        } else {
+            localVersion = ""
+        }
 
-        let width = cgImage.width
-        let height = cgImage.height
+        let rawKey = "pt-video-cover-v2|url:\(url.absoluteString)|frame:\(safeFrameNumber)|size:\(size)|transform:\(appliesPreferredTrackTransform)\(localVersion)"
+        return cacheKeyForVideo(rawKey)
+    }
 
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let context = CGContext(data: nil,
-                                width: width,
-                                height: height,
-                                bitsPerComponent: 8,
-                                bytesPerRow: 0,
-                                space: colorSpace,
-                                bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+    static func sizeComponent(_ value: CGFloat) -> String {
+        guard value.isFinite else { return "invalid" }
+        return String(describing: max(value, 0).rounded(.up))
+    }
 
-        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+    static func readImage(from url: URL) -> UIImage? {
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
+    }
 
-        guard let decoded = context?.makeImage() else { return self }
-        return UIImage(cgImage: decoded)
+    static func writeImage(_ image: UIImage, to url: URL) {
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
+        try? data.write(to: url, options: .atomic)
+    }
+
+    static func imageMemoryCost(_ image: UIImage) -> Int {
+        guard let cgImage = image.cgImage else { return 0 }
+        let (pixelCount, pixelOverflow) = cgImage.width.multipliedReportingOverflow(by: cgImage.height)
+        guard !pixelOverflow else { return Int.max }
+        let (byteCount, byteOverflow) = pixelCount.multipliedReportingOverflow(by: 4)
+        return byteOverflow ? Int.max : byteCount
     }
 }

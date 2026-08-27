@@ -1176,6 +1176,22 @@ public extension UIView {
                              progressHandle: progressHandle,
                              setImageBlock: setImageBlock,
                              loadFinish: loadFinish)
+        case .videoURL(let url, let frameNumber, let maximumSize):
+            pt_loadCoreImage(contentData: PTImageSource.videoURL(url,
+                                                                  frameNumber: frameNumber,
+                                                                  maximumSize: maximumSize),
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
+        case .avAsset(let asset, let frameNumber, let maximumSize):
+            pt_loadCoreImage(contentData: PTImageSource.avAsset(asset,
+                                                                 frameNumber: frameNumber,
+                                                                 maximumSize: maximumSize),
+                             configuration: configuration,
+                             progressHandle: progressHandle,
+                             setImageBlock: setImageBlock,
+                             loadFinish: loadFinish)
         }
     }
 
@@ -1312,48 +1328,28 @@ public extension UIView {
         }
 
         let loadVideo: @MainActor @Sendable (URL) -> Void = { [weak self] url in
-            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { [weak self] image in
-                Task { @MainActor in
-                    guard self?.ptLoadUUID == loadID else { return }
-                    if let image {
-                        finish(PTLoadImageResult(allImages: [image],
-                                                 firstImage: image,
-                                                 loadTime: 0,
-                                                 imageType: .other))
-                    } else {
-                        finish(PTLoadImageResult(allImages: nil,
-                                                 firstImage: nil,
-                                                 loadTime: 0,
-                                                 imageType: .unknown))
-                    }
-                }
+            guard let self else { return }
+            self.ptLoadTask = Task { @MainActor in
+                guard !Task.isCancelled else { return }
+                let result = await PTLoadImageFunction.loadImage(source: .videoURL(url))
+                guard !Task.isCancelled else { return }
+                finish(result)
             }
         }
 
         func loadFromURL(_ url: URL) {
-            let ext = url.pathExtension.lowercased()
-
-            // 视频
-            if GlobalVideoExts.contains(ext) {
+            if url.pt_isVideoResource {
                 loadVideo(url)
                 return
             }
 
-            // 🌟 将 Task 明确标记为继承 @MainActor，保护内部的 UI 操作
             ptLoadTask = Task { @MainActor in
                 if Task.isCancelled { return }
 
-                if let cache = await PTLoadImageFunction.cachedImage(from: url) {
-                    if Task.isCancelled { return }
-                    finish(cache)
-                    return
-                }
-
                 let result = await PTLoadImageFunction.loadImage(
-                    contentData: url,
+                    source: .url(url),
                     iCloudDocumentName: iCloudDocumentName
-                ) { @Sendable received, total in
-                    // 🌟 网络进度回调（可能是后台），切回主线程再操作 self
+                ) { @MainActor @Sendable received, total in
                     Task { @MainActor in
                         guard self.ptLoadUUID == loadID else { return }
                         if let progressHandle {
@@ -1388,16 +1384,26 @@ public extension UIView {
         }
 
         switch contentData {
+        case let source as PTImageSource:
+            ptLoadTask = Task { @MainActor in
+                guard !Task.isCancelled else { return }
+                let result = await PTLoadImageFunction.loadImage(source: source,
+                                                                 iCloudDocumentName: iCloudDocumentName,
+                                                                 progressHandle: progressHandle)
+                guard !Task.isCancelled else { return }
+                finish(result)
+            }
         case let image as UIImage:
             finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
         case let color as UIColor:
             let image = color.createImageWithColor()
             finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
         case let data as Data:
-            if let image = UIImage(data: data) {
-                finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
-            } else {
-                finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
+            ptLoadTask = Task { @MainActor in
+                guard !Task.isCancelled else { return }
+                let result = await PTLoadImageFunction.loadImage(source: .data(data))
+                guard !Task.isCancelled else { return }
+                finish(result)
             }
         case let asset as PHAsset:
             ptLoadTask = Task { @MainActor in
@@ -1407,38 +1413,30 @@ public extension UIView {
                 finish(result)
             }
         case let avasset as AVAsset:
-            avasset.getVideoFirstImage { [weak self] image in
-                Task { @MainActor in
-                    // 确保 UIView 还没有被销毁，并且本次加载任务没有被新任务覆盖
-                    guard let self = self, self.ptLoadUUID == loadID else { return }
-                    
-                    if let image {
-                        finish(PTLoadImageResult(allImages: [image],
-                                                 firstImage: image,
-                                                 loadTime: 0,
-                                                 imageType: .other))
-                    } else {
-                        finish(PTLoadImageResult(allImages: nil,
-                                                 firstImage: nil,
-                                                 loadTime: 0,
-                                                 imageType: .unknown))
-                    }
-                }
+            ptLoadTask = Task { @MainActor in
+                guard !Task.isCancelled else { return }
+                let result = await PTLoadImageFunction.loadImage(source: .avAsset(avasset))
+                guard !Task.isCancelled else { return }
+                finish(result)
             }
         case let url as URL:
             loadFromURL(url)
         case let string as String:
             if FileManager.default.fileExists(atPath: string) {
-                if let image = UIImage(contentsOfFile: string) {
-                    finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
-                } else {
-                    finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))
+                ptLoadTask = Task { @MainActor in
+                    guard !Task.isCancelled else { return }
+                    let result = await PTLoadImageFunction.loadImage(
+                        contentData: string,
+                        iCloudDocumentName: iCloudDocumentName
+                    )
+                    guard !Task.isCancelled else { return }
+                    finish(result)
                 }
                 return
             }
             if string.isURL(), let url = URL(string: string) {
                 loadFromURL(url)
-            } else if let image = UIImage(named: string) {
+            } else if let image = UIImage(named: string) ?? UIImage(systemName: string) {
                 finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
             } else {
                 finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))

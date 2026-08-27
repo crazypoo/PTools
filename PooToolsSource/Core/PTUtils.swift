@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 /*
  ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
@@ -49,6 +50,21 @@ public struct PTTimerBox: @unchecked Sendable {
 }
 
 let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
+
+// Fast URL media classification for local and remote resources.
+// Clasificación rápida del tipo multimedia de recursos locales y remotos.
+// 快速判断本地和远程资源的媒体类型。
+extension URL {
+    var pt_isVideoResource: Bool {
+        let pathExtension = pathExtension.lowercased()
+        if GlobalVideoExts.contains(pathExtension) {
+            return true
+        }
+
+        guard let type = UTType(filenameExtension: pathExtension) else { return false }
+        return type.conforms(to: .movie) || type.conforms(to: .video)
+    }
+}
 
 @objc public enum PTUrlStringVideoType:Int {
     case MP4

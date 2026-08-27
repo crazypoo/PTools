@@ -622,7 +622,7 @@ public extension PTPOP where Base: UIImage {
     ///   - maximumSize: 图片的最大尺寸
     ///   - closure:
     /// - Returns: 视频的第一帧
-static func getVideoFirstImage(videoUrl: String,
+    static func getVideoFirstImage(videoUrl: String,
                                    maximumSize: CGSize = CGSize(width: 1000, height: 1000),
                                    closure: @escaping @MainActor @Sendable (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
