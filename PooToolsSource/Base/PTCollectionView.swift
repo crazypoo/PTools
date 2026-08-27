@@ -253,7 +253,6 @@ private struct DiffThreshold {
 }
 
 private struct WaterfallCache {
-    var columnHeights: [CGFloat] = []
     var items: [NSCollectionLayoutGroupCustomItem] = []
     var contentHeight: CGFloat = 0
 }
@@ -2155,45 +2154,19 @@ extension PTCollectionView {
             return (cache.items, cache.contentHeight)
         }
         
-        let rowCount = max(1, config.rowCount)
-        let itemSpace = config.cellLeadingSpace
-        let itemTrailingSpace = config.cellTrailingSpace
-        
-        let cellWidth = (width - config.itemOriginalX * 2 - CGFloat(rowCount - 1) * itemSpace) / CGFloat(rowCount)
-        
-        var columnHeights = Array(repeating: config.contentTopSpace, count: rowCount)
-        
-        var columnX: [CGFloat] = []
-        for i in 0..<rowCount {
-            columnX.append(config.itemOriginalX + CGFloat(i) * (cellWidth + itemSpace))
-        }
-        
-        var items: [NSCollectionLayoutGroupCustomItem] = []
-        
-        for (index, model) in data.enumerated() {
-            let h = itemHeight(index, model)
-            let minColumn = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
-            
-            let frame = CGRect(
-                x: columnX[minColumn],
-                y: columnHeights[minColumn],
-                width: cellWidth,
-                height: h
-            )
-            
-            let item = NSCollectionLayoutGroupCustomItem(frame: frame)
-            items.append(item)
-            columnHeights[minColumn] = frame.maxY + itemTrailingSpace
-        }
-        
-        let maxHeight = (columnHeights.max() ?? 0) - itemTrailingSpace + config.contentBottomSpace
-                
-        waterfallCache[key] = WaterfallCache(
-            columnHeights: columnHeights,
-            items: items,
-            contentHeight: maxHeight
-        )
-        return (items, maxHeight)
+        let result = PTCollectionLayoutGeometry.waterfall(data: data,
+                                                          width: width,
+                                                          rowCount: config.rowCount,
+                                                          itemOriginalX: config.itemOriginalX,
+                                                          topContentSpace: config.contentTopSpace,
+                                                          bottomContentSpace: config.contentBottomSpace,
+                                                          itemSpace: config.cellLeadingSpace,
+                                                          itemTrailingSpace: config.cellTrailingSpace,
+                                                          itemHeight: itemHeight)
+        let items = result.frames.map { NSCollectionLayoutGroupCustomItem(frame: $0) }
+        waterfallCache[key] = WaterfallCache(items: items,
+                                             contentHeight: result.contentHeight)
+        return (items, result.contentHeight)
     }
     
     private func clearWaterfallCache(section: Int) {

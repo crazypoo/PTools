@@ -274,15 +274,52 @@ extension PTFusionCellModel: @MainActor PTDiffableModel {
     }
 }
 
+struct PTTagLayoutWidthCacheKey: Equatable {
+    let text: String
+    let fontName: String
+    let fontSize: CGFloat
+    let fontTraits: UInt32
+    let itemHeight: CGFloat
+    let maximumWidth: CGFloat
+    let itemContentSpace: CGFloat
+    let haveImage: Bool
+    let imageWidth: CGFloat
+    let contentSpace: CGFloat
+}
+
 @objcMembers
 open class PTTagLayoutModel:NSObject {
-    public var name:String = ""
-    public var haveImage:Bool = false
-    public var imageWidth:CGFloat = 16
-    public var contentSpace:CGFloat = 4
-    public var contentFont:UIFont = .appfont(size: 14)
+    public var name:String = "" {
+        didSet { invalidateCachedWidth() }
+    }
+    public var haveImage:Bool = false {
+        didSet { invalidateCachedWidth() }
+    }
+    public var imageWidth:CGFloat = 16 {
+        didSet { invalidateCachedWidth() }
+    }
+    public var contentSpace:CGFloat = 4 {
+        didSet { invalidateCachedWidth() }
+    }
+    public var contentFont:UIFont = .appfont(size: 14) {
+        didSet { invalidateCachedWidth() }
+    }
     public var contentTextColor:UIColor = .black
-    public var cachedWidth: CGFloat?
+    public var cachedWidth: CGFloat? {
+        didSet { cachedWidthKey = nil }
+    }
+
+    @nonobjc internal private(set) var cachedWidthKey: PTTagLayoutWidthCacheKey?
+
+    @nonobjc internal func storeCachedWidth(_ width: CGFloat, key: PTTagLayoutWidthCacheKey) {
+        cachedWidth = width
+        cachedWidthKey = key
+    }
+
+    private func invalidateCachedWidth() {
+        cachedWidth = nil
+        cachedWidthKey = nil
+    }
 }
 
 extension PTTagLayoutModel: PTDiffableModel {
