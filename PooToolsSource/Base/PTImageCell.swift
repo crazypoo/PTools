@@ -12,26 +12,21 @@ import SwifterSwift
 
 open class PTImageCell: PTBaseNormalCell {
     public static let ID = "PTImageCell"
-    
-    public var showAnimator:Bool = false
-    
-    public var imageData:Any! {
+
+    public var showAnimator: Bool = false {
         didSet {
-            if showAnimator {
-                Task { @MainActor in
-                    self.resetAnimator()
-                }
+            guard oldValue != showAnimator else { return }
+            if showAnimator, imageData != nil, !UIAccessibility.isReduceMotionEnabled {
+                resetAnimator()
             } else {
-                effectView.isHidden = true
+                removeAnimator()
             }
-            
-            imageView.loadImage(contentData: imageData as Any, loadFinish:  { _ in
-                if self.showAnimator {
-                    PTGCDManager.shared.delayOnMain(time: 0.1) {
-                        self.removeAnimator()
-                    }
-                }
-            })
+        }
+    }
+
+    public var imageData: Any? {
+        didSet {
+            configureImage(imageData)
         }
     }
     
@@ -46,6 +41,15 @@ open class PTImageCell: PTBaseNormalCell {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupUI()
+    }
+
+    private func setupUI() {
         contentView.addSubviews([imageView,effectView])
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -54,13 +58,38 @@ open class PTImageCell: PTBaseNormalCell {
         effectView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        effectView.isHidden = true
     }
-        
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    private func configureImage(_ value: Any?) {
+        imageView.cancelImageLoad()
+        imageView.image = nil
+
+        guard let value else {
+            removeAnimator()
+            return
+        }
+
+        if showAnimator, !UIAccessibility.isReduceMotionEnabled {
+            resetAnimator()
+        } else {
+            removeAnimator()
+        }
+
+        imageView.loadImage(contentData: value, loadFinish: { [weak self] _ in
+            guard let self, self.showAnimator else { return }
+            self.removeAnimator()
+        })
     }
-    
-    deinit {}
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.cancelImageLoad()
+        imageView.image = nil
+        imageData = nil
+        showAnimator = false
+        removeAnimator()
+    }
     
     public func removeAnimator() {
         guard let animator else { return }
@@ -75,6 +104,8 @@ open class PTImageCell: PTBaseNormalCell {
     
     public func resetAnimator() {
         removeAnimator()
+
+        guard !UIAccessibility.isReduceMotionEnabled else { return }
         
         effectView.effect = nil
         effectView.isHidden = false
@@ -84,7 +115,6 @@ open class PTImageCell: PTBaseNormalCell {
         animator.pausesOnCompletion = true
         animator.fractionComplete = 0.1
         self.animator = animator
-        
-        self.animator!.startAnimation()
+        animator.startAnimation()
     }
 }

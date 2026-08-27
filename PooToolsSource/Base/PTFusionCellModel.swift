@@ -9,13 +9,13 @@
 import UIKit
 import AttributedString
 
-public enum PTFusionShowAccessoryType:Equatable {
+public enum PTFusionShowAccessoryType: Equatable, Hashable {
     case Switch(type:SwitchType)
     case DisclosureIndicator
     case More
     case NoneAccessoryView
     
-    public enum SwitchType:Equatable {
+    public enum SwitchType: Equatable, Hashable {
         case System
         case Framework
     }
@@ -38,6 +38,20 @@ public struct PTFusionLayoutConfig:Equatable {
 @MainActor
 @objcMembers
 open class PTFusionCellModel: NSObject {
+    /// 独立于复用标识的稳定 Diffable 身份。
+    private let storedDiffIdentifier: String
+
+    public override init() {
+        storedDiffIdentifier = UUID().uuidString
+        super.init()
+    }
+
+    /// 使用外部身份时必须保证同一列表内唯一且稳定。
+    public init(diffIdentifier: String) {
+        storedDiffIdentifier = diffIdentifier.isEmpty ? UUID().uuidString : diffIdentifier
+        super.init()
+    }
+
     ///图片名
     public var leftImage:Any?
     ///图片上下间隔默认CGFloat.ScaleW(w: 5)
@@ -139,11 +153,11 @@ open class PTFusionCellModel: NSObject {
         
     @PTClampedPropertyWrapper(range:20...88) public var switchControlWidth: CGFloat = 51
     
-    // ✅ 缓存
-    public lazy var cachedTitleAttr: ASAttributedString = {
-        // 只算一次
-        return titleLabelAtt()
-    }()
+    /// 兼容旧名称，但每次读取都会根据当前模型重新生成，避免模型复用后显示旧文字。
+    public var cachedTitleAttr: ASAttributedString {
+        get { titleLabelAtt() }
+        set { nameAttr = newValue }
+    }
 
     public func titleLabelAtt() -> ASAttributedString {
         if let findModel = nameAttr {
@@ -181,9 +195,11 @@ open class PTFusionCellModel: NSObject {
         }
     }
     
-    public lazy var cachedContentAttr: ASAttributedString = {
-        return contentLabelAtt()
-    }()
+    /// 兼容旧名称，但每次读取都会根据当前模型重新生成，避免内容缓存失效。
+    public var cachedContentAttr: ASAttributedString {
+        get { contentLabelAtt() }
+        set { contentAttr = newValue }
+    }
 
     public  func contentLabelAtt() -> ASAttributedString {
         if let findModel = contentAttr {
@@ -202,10 +218,10 @@ open class PTFusionCellModel: NSObject {
         }
     }
     
-    lazy var cachedMoreWidth: CGFloat = {
-        // 只算一次
-        return calculateMoreWidth()
-    }()
+    /// 更多按钮宽度依赖多个可变属性，不能使用一次性缓存。
+    var cachedMoreWidth: CGFloat {
+        calculateMoreWidth()
+    }
     
     private func calculateMoreWidth() -> CGFloat {
         var moreWith:CGFloat = 0
@@ -228,21 +244,24 @@ open class PTFusionCellModel: NSObject {
         return moreWith
     }
     
-    lazy var layoutState: PTFusionLayoutConfig = {
-        return PTFusionLayoutConfig(
+    var layoutState: PTFusionLayoutConfig {
+        PTFusionLayoutConfig(
             showLeftIcon: leftImage != nil,
             showRightIcon: contentIcon != nil,
             showTitle: !name.isEmpty || nameAttr != nil,
             showContent: !content.isEmpty || contentAttr != nil,
             accessory: accessoryType
         )
-    }()
+    }
 }
 
 extension PTFusionCellModel: @MainActor PTDiffableModel {
 
     public var diffId: String {
-        return cellID ?? UUID().uuidString
+        if let cellID, !cellID.isEmpty {
+            return cellID
+        }
+        return storedDiffIdentifier
     }
 
     public var diffHash: Int {

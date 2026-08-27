@@ -21,14 +21,14 @@ public class PTFusionHeader: PTBaseCollectionReusableView,@MainActor PTSupplemen
     public var moreActionBlock:PTSectionMoreBlock?
     public var switchValue:Bool? {
         didSet {
-            if let findValue = switchValue {
-                switch dataContent.activeSwitch {
-                case let valueView as PTSwitch:
-                    valueView.isOn = findValue
-                case let valueView as UISwitch:
-                    valueView.isOn = findValue
-                default:break
-                }
+            let value = switchValue ?? false
+            switch dataContent.activeSwitch {
+            case let valueView as PTSwitch:
+                valueView.isOn = value
+            case let valueView as UISwitch:
+                valueView.isOn = value
+            default:
+                break
             }
         }
     }
@@ -37,34 +37,48 @@ public class PTFusionHeader: PTBaseCollectionReusableView,@MainActor PTSupplemen
         didSet {
             if let cellModel = sectionModel {
                 dataContent.configure(model: cellModel)
+            } else {
+                dataContent.resetForReuse()
             }
         }
     }
     
     fileprivate lazy var dataContent:PTFusionContentView = {
         let view = PTFusionContentView()
-        view.switchValueChangeBlock = { name,view in
-            self.switchValueChangeBlock?(name,view)
+        view.switchValueChangeBlock = { [weak self] name, view in
+            self?.switchValueChangeBlock?(name,view)
         }
-        view.moreButton.addActionHandlers { sender in
-            if let findCellModel = self.sectionModel {
-                self.moreActionBlock?(findCellModel.name,sender)
-            }
+        view.moreButton.addActionHandlers { [weak self] sender in
+            guard let self, let findCellModel = self.sectionModel else { return }
+            self.moreActionBlock?(findCellModel.name,sender)
         }
         return view
     }()
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        setupHeaderUI()
+    }
+
+    private func setupHeaderUI() {
         addSubview(dataContent)
         dataContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-    
+
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupHeaderUI()
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        switchValueChangeBlock = nil
+        moreActionBlock = nil
+        switchValue = nil
+        sectionModel = nil
+        dataContent.resetForReuse()
     }
 }
 
@@ -77,13 +91,17 @@ public class PTVersionFooter: PTBaseCollectionReusableView,@MainActor PTSuppleme
     lazy var verionLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
+        let appName = kAppDisplayName ?? ""
+        let version = kAppVersion ?? ""
+        let build = kAppBuildVersion ?? ""
         
         let att:ASAttributedString = """
         \(wrap: .embedding("""
-        \("\(kAppDisplayName! + " " + kAppVersion! + "(\(kAppBuildVersion!))")",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
+        \("\(appName) \(version)(\(build))",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
         \("PT Privacy".localized(),.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue),.action {
-                let url = URL(string: PTAppBaseConfig.share.privacyURL)!
-                PTAppStoreFunction.jumpLink(url: url)
+                if let url = URL(string: PTAppBaseConfig.share.privacyURL) {
+                    PTAppStoreFunction.jumpLink(url: url)
+                }
         })
         """))
         """
@@ -93,7 +111,10 @@ public class PTVersionFooter: PTBaseCollectionReusableView,@MainActor PTSuppleme
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        setupVersionFooterUI()
+    }
+
+    private func setupVersionFooterUI() {
         addSubview(verionLabel)
         verionLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -102,7 +123,7 @@ public class PTVersionFooter: PTBaseCollectionReusableView,@MainActor PTSuppleme
     }
     
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupVersionFooterUI()
     }
 }
-

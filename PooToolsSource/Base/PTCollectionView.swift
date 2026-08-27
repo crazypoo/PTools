@@ -16,6 +16,29 @@ private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
 
 public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 
+/// 列表数据更新失败时返回的结构化错误，避免 Diffable 在异常输入下直接触发断言。
+public enum PTCollectionViewUpdateError: Error, Equatable, LocalizedError, Sendable {
+    case emptySectionIdentifier
+    case duplicateSectionIdentifier(String)
+    case duplicateRowIdentifier(String)
+    case invalidSectionIndex(Int)
+
+    public var errorDescription: String? {
+        switch self {
+        case .emptySectionIdentifier:
+            return "Section 标识不能为空"
+        case .duplicateSectionIdentifier(let identifier):
+            return "Section 标识重复：\(identifier)"
+        case .duplicateRowIdentifier(let identifier):
+            return "Row 标识重复：\(identifier)"
+        case .invalidSectionIndex(let index):
+            return "Section 下标无效：\(index)"
+        }
+    }
+}
+
+public typealias PTCollectionViewUpdateErrorHandler = @MainActor (PTCollectionViewUpdateError) -> Void
+
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType: Int {
     case Normal,Gird,WaterFall,Custom,Horizontal,HorizontalLayoutSystem,Tag
@@ -456,7 +479,7 @@ public class PTCollectionView: UIView {
     fileprivate var layerTopSpacing: CGFloat {
         let count = CGFloat(viewConfig.sideIndexTitles?.count ?? 0)
         let floorValue = bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)
-        return floor(floorValue) / 2
+        return max(0, floor(floorValue) / 2)
     }
     
     fileprivate var isTouched: Bool = false
@@ -480,6 +503,8 @@ public class PTCollectionView: UIView {
     // 使用 NSKeyValueObservation 替代手动 KVO
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
+    private var lastPrefetchItemCount: Int?
+    private var indexPanGesture: UIPanGestureRecognizer?
     
     private var heightCache = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)
     private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
@@ -626,24 +651,40 @@ public class PTCollectionView: UIView {
     
     open var forceController: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?
     open var forceActions: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?
+    /// 数据输入无法用于创建合法快照时的错误回调。
+    open var collectionUpdateError: PTCollectionViewUpdateErrorHandler?
 
     public var viewConfig: PTCollectionViewConfig! {
         didSet {
-            // 🌟 修复提升：动态同步所有属性配置变化
-            collectionView.showsVerticalScrollIndicator = viewConfig.showsVerticalScrollIndicator
-            collectionView.showsHorizontalScrollIndicator = viewConfig.showsHorizontalScrollIndicator
-            collectionView.alwaysBounceHorizontal = viewConfig.alwaysBounceHorizontal
-            collectionView.alwaysBounceVertical = viewConfig.alwaysBounceVertical
-            
-            collectionView.dragInteractionEnabled = viewConfig.canMoveItem
-            if viewConfig.canMoveItem {
-                collectionView.allowsMoveItem()
+            guard let config = viewConfig else { return }
+            // 配置对象被替换后，滚动方向和交互能力必须同步到内部列表。
+            let view = collectionView
+            view.showsVerticalScrollIndicator = config.showsVerticalScrollIndicator
+            view.showsHorizontalScrollIndicator = config.showsHorizontalScrollIndicator
+            view.contentOffSetZero = config.contentOffSetZero
+            view.dragInteractionEnabled = config.canMoveItem
+            view.prefetchDataSource = config.viewForPhoto ? self : nil
+
+            switch config.viewType {
+            case .Normal, .Gird, .WaterFall, .Tag:
+                view.alwaysBounceHorizontal = false
+                view.alwaysBounceVertical = true
+            case .Custom:
+                view.alwaysBounceHorizontal = config.alwaysBounceHorizontal
+                view.alwaysBounceVertical = config.alwaysBounceVertical
+            case .Horizontal, .HorizontalLayoutSystem:
+                view.alwaysBounceHorizontal = true
+                view.alwaysBounceVertical = false
+            }
+
+            if config.canMoveItem {
+                view.allowsMoveItem()
             }
             
-            if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
-                if collectionView.superview == nil {
-                    addSubview(collectionView)
-                    collectionView.snp.makeConstraints { make in
+            if config.sideIndexTitles?.isEmpty == false && config.indexConfig != nil {
+                if view.superview == nil {
+                    addSubview(view)
+                    view.snp.makeConstraints { make in
                         make.edges.equalToSuperview()
                     }
                 }
@@ -653,8 +694,8 @@ public class PTCollectionView: UIView {
                 indexContainerView.removeFromSuperview()
             }
             
-            if collectionView.superview != nil {
-                collectionView.collectionViewLayout.invalidateLayout()
+            if view.superview != nil {
+                view.collectionViewLayout.invalidateLayout()
             }
 
             if isSkeletonVisible {
@@ -669,16 +710,27 @@ public class PTCollectionView: UIView {
     //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
         super.init(frame: .zero)
+        self.viewConfig = viewConfig ?? PTCollectionViewConfig()
+        setupCollectionView()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.viewConfig = PTCollectionViewConfig()
+        setupCollectionView()
+    }
+
+    private func setupCollectionView() {
         isUserInteractionEnabled = true
-        self.viewConfig = viewConfig
         self.registerClassCells(classs: ["CELL":UICollectionViewCell.self])
 
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        collectionView.allowsMoveItem()
-
+        if viewConfig.canMoveItem {
+            collectionView.allowsMoveItem()
+        }
         setIndexViews()
         
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
@@ -691,10 +743,6 @@ public class PTCollectionView: UIView {
         skeletonOverlayView.snp.makeConstraints { make in
             make.edges.equalTo(collectionView)
         }
-    }
-        
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
@@ -740,6 +788,45 @@ public class PTCollectionView: UIView {
 }
 
 private extension PTCollectionView {
+    func reportUpdateError(_ error: PTCollectionViewUpdateError) {
+        collectionUpdateError?(error)
+    }
+
+    func validateSections(_ sections: [PTSection], against snapshot: PTSnapshot? = nil) -> Bool {
+        var sectionIdentifiers = Set(snapshot?.sectionIdentifiers.map(\.identifier) ?? [])
+        var rowIdentifiers = Set(snapshot?.itemIdentifiers.map(\.diffId) ?? [])
+
+        for section in sections {
+            guard !section.identifier.isEmpty else {
+                reportUpdateError(.emptySectionIdentifier)
+                return false
+            }
+            guard sectionIdentifiers.insert(section.identifier).inserted else {
+                reportUpdateError(.duplicateSectionIdentifier(section.identifier))
+                return false
+            }
+
+            for row in section.rows ?? [] {
+                guard rowIdentifiers.insert(row.diffId).inserted else {
+                    reportUpdateError(.duplicateRowIdentifier(row.diffId))
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    func validateRows(_ rows: [PTRows], against snapshot: PTSnapshot) -> Bool {
+        var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.diffId))
+        for row in rows {
+            guard rowIdentifiers.insert(row.diffId).inserted else {
+                reportUpdateError(.duplicateRowIdentifier(row.diffId))
+                return false
+            }
+        }
+        return true
+    }
+
     func updateSkeletonLayout() {
         guard isSkeletonVisible else { return }
         bringSubviewToFront(skeletonOverlayView)
@@ -753,8 +840,8 @@ private extension PTCollectionView {
         let bounds = skeletonOverlayView.bounds
         guard bounds.width > 0, bounds.height > 0 else { return [] }
 
-        let leading = max(0, config.itemOriginalX + config.cellLeadingSpace)
-        let trailing = max(0, config.itemOriginalX + config.cellLeadingSpace)
+        let leading = max(0, config.itemOriginalX)
+        let trailing = max(0, config.itemOriginalX)
         let verticalSpacing = max(0, config.cellTrailingSpace)
         let contentTop = max(0, config.contentTopSpace)
         let contentBottom = max(0, config.contentBottomSpace)
@@ -839,24 +926,30 @@ extension PTCollectionView {
 
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
             
-            if let cell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
-                if let swipeCell = cell as? PTBaseSwipeCell {
-                    if let indexPathSwipe = self.indexPathSwipe {
-                        let swipe = indexPathSwipe(sectionModel, indexPath)
-                        swipeCell.cellCanSwipe = swipe
-                        if swipe {
-                            if let actions = self.swipeRightHandler?(collectionView, sectionModel, indexPath) {
-                                swipeCell.configureRightActions(actions)
-                            } else if let actions = self.swipeLeftHandler?(collectionView, sectionModel, indexPath) {
-                                swipeCell.configureLeftActions(actions)
-                            }
-                        }
-                    }
-                    return swipeCell
+            let cell: UICollectionViewCell
+            if let configuredCell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
+                cell = configuredCell
+            } else if let cellClass = rowModel.cellClass,
+                      !rowModel.reuseID.isEmpty {
+                self.registerCellIfNeeded(cellClass, reuseID: rowModel.reuseID)
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: rowModel.reuseID, for: indexPath)
+
+                if let fusionCell = cell as? PTFusionCellProtocol,
+                   let fusionModel = rowModel.dataModel as? PTFusionCellModel {
+                    fusionCell.cellModel = fusionModel
+                } else if let bindableCell = cell as? PTAnyCellBindable,
+                          let dataModel = rowModel.dataModel {
+                    bindableCell.pt_bindAny(dataModel)
                 }
-                return cell
+            } else {
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
             }
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+
+            self.configureSwipeCell(cell,
+                                    collectionView: collectionView,
+                                    sectionModel: sectionModel,
+                                    indexPath: indexPath)
+            return cell
         }
         
         // 2. 配置 Header 和 Footer
@@ -889,6 +982,25 @@ extension PTCollectionView {
         
         let initialSnapshot = PTSnapshot()
         diffableDataSource.apply(initialSnapshot, animatingDifferences: false)
+    }
+
+    private func configureSwipeCell(_ cell: UICollectionViewCell,
+                                    collectionView: UICollectionView,
+                                    sectionModel: PTSection,
+                                    indexPath: IndexPath) {
+        guard let swipeCell = cell as? PTBaseSwipeCell else { return }
+
+        let canSwipe = indexPathSwipe?(sectionModel, indexPath) ?? false
+        swipeCell.cellCanSwipe = canSwipe
+        swipeCell.resetSwipeActions()
+        guard canSwipe else { return }
+
+        if let actions = swipeRightHandler?(collectionView, sectionModel, indexPath) {
+            swipeCell.configureRightActions(actions)
+        }
+        if let actions = swipeLeftHandler?(collectionView, sectionModel, indexPath) {
+            swipeCell.configureLeftActions(actions)
+        }
     }
 }
 
@@ -968,12 +1080,15 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
         if viewConfig.enableSmartPrefetch, let collectionWillReachBottomTask = collectionWillReachBottomTask {
             let snapshot = diffableDataSource.snapshot()
             let totalItems = snapshot.numberOfItems
+            let threshold = max(0, viewConfig.prefetchThreshold)
             
-            guard totalItems > viewConfig.prefetchThreshold else { return }
-            
+            guard totalItems > threshold else { return }
+
             if let currentItem = diffableDataSource.itemIdentifier(for: indexPath),
                let currentIndex = snapshot.indexOfItem(currentItem) {
-                if (totalItems - 1) - currentIndex <= viewConfig.prefetchThreshold {
+                if (totalItems - 1) - currentIndex <= threshold {
+                    guard lastPrefetchItemCount != totalItems else { return }
+                    lastPrefetchItemCount = totalItems
                     collectionWillReachBottomTask()
                 }
             }
@@ -987,18 +1102,12 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
             decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
         case .Normal,.Corner:
             if let decorationView = view as? PTBaseDecorationView {
-                decorationView.bgView.backgroundColor = itemSec.decorationBackgroundColor
-                if viewConfig.decorationItemsType == .Normal {
-                    decorationView.bgView.layer.cornerRadius = 0
-                } else {
-                    decorationView.bgView.layer.cornerRadius = itemSec.decorationCornerRadius
-                }
-                decorationView.layer.shadowOpacity = itemSec.decorationShadowOpacity
-                
-                if let bgImage = itemSec.decorationBackgroundImage {
-                    decorationView.bgImageView.isHidden = false
-                    decorationView.bgImageView.image = bgImage
-                }
+                decorationView.configure(
+                    backgroundColor: itemSec.decorationBackgroundColor ?? PTAppBaseConfig.share.decorationBackgroundColor,
+                    cornerRadius: viewConfig.decorationItemsType == .Normal ? 0 : itemSec.decorationCornerRadius,
+                    shadowOpacity: itemSec.decorationShadowOpacity,
+                    backgroundImage: itemSec.decorationBackgroundImage
+                )
             }
         default:break
         }
@@ -1098,50 +1207,81 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
     }
     
     public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath,
+        guard viewConfig.canMoveItem,
               let item = coordinator.items.first,
               let sourceIndexPath = item.sourceIndexPath else { return }
-        
+
         var snapshot = diffableDataSource.snapshot()
-        
-        guard let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath),
-              let destItem = diffableDataSource.itemIdentifier(for: destinationIndexPath) else { return }
-        
+        guard sourceIndexPath.section >= 0,
+              sourceIndexPath.section < snapshot.sectionIdentifiers.count,
+              let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath) else { return }
+
+        let destinationSectionIndex = coordinator.destinationIndexPath?.section ?? sourceIndexPath.section
+        guard destinationSectionIndex >= 0,
+              destinationSectionIndex < snapshot.sectionIdentifiers.count else { return }
+
         let sourceSection = snapshot.sectionIdentifiers[sourceIndexPath.section]
-        let destSection = snapshot.sectionIdentifiers[destinationIndexPath.section]
-        
-        if let indexToRemove = sourceSection.rows?.firstIndex(of: sourceItem) {
-            sourceSection.rows?.remove(at: indexToRemove)
-        }
-        
-        if destSection.rows == nil { destSection.rows = [] }
-        let insertIndex = min(destinationIndexPath.item, destSection.rows?.count ?? 0)
-        destSection.rows?.insert(sourceItem, at: insertIndex)
-        
-        self.layoutCache.removeAll()
-        self.heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId, width: collectionView.bounds.width))
-        
-        sourceSection.layoutVersion += 1
-        destSection.layoutVersion += 1
-        
-        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-            self.clearWaterfallCache(section: sourceIndexPath.section)
-            self.clearWaterfallCache(section: destinationIndexPath.section)
-        }
-        
-        if destinationIndexPath >= sourceIndexPath {
-            snapshot.moveItem(sourceItem, afterItem: destItem)
+        let destinationSection = snapshot.sectionIdentifiers[destinationSectionIndex]
+        let sourceItems = snapshot.itemIdentifiers(inSection: sourceSection)
+        var destinationItems = snapshot.itemIdentifiers(inSection: destinationSection)
+        guard let sourceItemIndex = sourceItems.firstIndex(of: sourceItem) else { return }
+
+        let requestedDestinationIndex = coordinator.destinationIndexPath?.item ?? destinationItems.count
+        let destinationIndex = min(max(requestedDestinationIndex, 0), destinationItems.count)
+        let isSameSection = sourceSection.identifier == destinationSection.identifier
+        var insertionIndex = destinationIndex
+
+        if isSameSection {
+            destinationItems.remove(at: sourceItemIndex)
+            let adjustedIndex = min(max(destinationIndex - (sourceItemIndex < destinationIndex ? 1 : 0), 0), destinationItems.count)
+            guard adjustedIndex != sourceItemIndex else {
+                coordinator.drop(item.dragItem, toItemAt: sourceIndexPath)
+                return
+            }
+            insertionIndex = adjustedIndex
+
+            var updatedRows = sourceSection.rows ?? []
+            updatedRows.removeAll { $0.diffId == sourceItem.diffId }
+            updatedRows.insert(sourceItem, at: min(adjustedIndex, updatedRows.count))
+            sourceSection.rows = updatedRows
         } else {
-            snapshot.moveItem(sourceItem, beforeItem: destItem)
+            var sourceRows = sourceSection.rows ?? []
+            sourceRows.removeAll { $0.diffId == sourceItem.diffId }
+            sourceSection.rows = sourceRows
+
+            var destinationRows = destinationSection.rows ?? []
+            destinationRows.insert(sourceItem, at: min(destinationIndex, destinationRows.count))
+            destinationSection.rows = destinationRows
         }
-        
-        let animated = !self.viewConfig.refreshWithoutAnimation
+
+        snapshot.deleteItems([sourceItem])
+        let remainingItems = destinationItems
+        if let anchorItem = remainingItems[safe: insertionIndex] {
+            snapshot.insertItems([sourceItem], beforeItem: anchorItem)
+        } else {
+            snapshot.appendItems([sourceItem], toSection: destinationSection)
+        }
+
+        layoutCache.removeAll()
+        heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId, width: collectionView.bounds.width))
+        sourceSection.layoutVersion += 1
+        if !isSameSection {
+            destinationSection.layoutVersion += 1
+        }
+
+        if viewConfig.viewType == .WaterFall, waterFallLayout != nil {
+            clearWaterfallCache(section: sourceIndexPath.section)
+            clearWaterfallCache(section: destinationSectionIndex)
+        }
+
+        let finalIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: destinationIndex, section: destinationSectionIndex)
+        let animated = !viewConfig.refreshWithoutAnimation
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
-            guard let self = self else { return }
-            self.itemMoveTo?(collectionView, sourceIndexPath, destinationIndexPath)
+            guard let self else { return }
+            self.itemMoveTo?(collectionView, sourceIndexPath, finalIndexPath)
         }
-        
-        coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+
+        coordinator.drop(item.dragItem, toItemAt: finalIndexPath)
     }
 }
 
@@ -1173,9 +1313,18 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
 //MARK: 索引设置
 private extension PTCollectionView {
     func setIndexViews() {
+        if let indexPanGesture {
+            indexContainerView.removeGestureRecognizer(indexPanGesture)
+            self.indexPanGesture = nil
+        }
+        stackView.arrangedSubviews.forEach { view in
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
         indicator.removeFromSuperview()
         indexContainerView.removeFromSuperview()
-        guard (viewConfig.sideIndexTitles?.count ?? 0) > 0 else { return }
+        guard viewConfig.sideIndexTitles?.isEmpty == false,
+              viewConfig.indexConfig != nil else { return }
         
         addSubviews([indexContainerView,indicator])
         
@@ -1206,6 +1355,7 @@ private extension PTCollectionView {
                 self.hideIndicator()
             }
         }
+        indexPanGesture = pan
         indexContainerView.addGestureRecognizer(pan)
     }
         
@@ -1221,6 +1371,13 @@ private extension PTCollectionView {
     }
     
     private func scrollToSection(_ section: Int) {
+        let snapshot = diffableDataSource.snapshot()
+        guard section >= 0, section < snapshot.sectionIdentifiers.count else { return }
+        let sectionModel = snapshot.sectionIdentifiers[section]
+        guard !snapshot.itemIdentifiers(inSection: sectionModel).isEmpty else {
+            isTouched = false
+            return
+        }
         let indexPath = IndexPath(item: 0, section: section)
         collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
         isTouched = false
@@ -1395,27 +1552,29 @@ extension PTCollectionView  {
                 registerSupplementaryIfNeeded(footerClass)
             }
             section.rows?.forEach { row in
-                if let cellClass = row.cellClass as? PTCellRegisterable.Type {
-                    registerCellIfNeeded(cellClass)
+                if let cellClass = row.cellClass, !row.reuseID.isEmpty {
+                    registerCellIfNeeded(cellClass, reuseID: row.reuseID)
                 }
             }
         }
     }
     
-    private func registerCellIfNeeded(_ cellClass: PTCellRegisterable.Type) {
-        let reuseID = cellClass.reuseID
+    private func registerCellIfNeeded(_ cellClass: UICollectionViewCell.Type, reuseID: String) {
+        guard !reuseID.isEmpty else { return }
         guard !registeredCells.contains(reuseID) else { return }
-        collectionView.register(cellClass as? UICollectionViewCell.Type, forCellWithReuseIdentifier: reuseID)
+        collectionView.register(cellClass, forCellWithReuseIdentifier: reuseID)
         registeredCells.insert(reuseID)
     }
     
     private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type) {
         let reuseID = viewClass.reuseID
-        guard !registeredSupplementary.contains(reuseID) else { return }
-        collectionView.register(viewClass as? UICollectionReusableView.Type,
+        let registrationKey = "\(viewClass.kind)|\(reuseID)"
+        guard !reuseID.isEmpty, !registeredSupplementary.contains(registrationKey),
+              let reusableViewClass = viewClass as? UICollectionReusableView.Type else { return }
+        collectionView.register(reusableViewClass,
                                 forSupplementaryViewOfKind: viewClass.kind,
                                 withReuseIdentifier: reuseID)
-        registeredSupplementary.insert(reuseID)
+        registeredSupplementary.insert(registrationKey)
     }
 }
 
@@ -1432,7 +1591,13 @@ extension PTCollectionView {
                                                 animated: Bool = true,
                                                 animation: PTDiffAnimation = .default,
                                                 finishTask:PTCollectionCallback? = nil) {
+        guard validateSections(collectionData) else {
+            finishTask?(collectionView)
+            return
+        }
+
         self.autoRegisterIfNeeded(sections: collectionData)
+        lastPrefetchItemCount = nil
         
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
@@ -1460,6 +1625,7 @@ extension PTCollectionView {
     }
     
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
+        lastPrefetchItemCount = nil
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
         self.waterfallCache.removeAll()
@@ -1482,60 +1648,66 @@ extension PTCollectionView {
     ///   - indexPath: 目标位置 (会自动容错处理越界问题)
     ///   - completion: 动画完成后的回调
     public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
+        var snapshot = self.diffableDataSource.snapshot()
+
+        guard !rows.isEmpty, validateRows(rows, against: snapshot) else {
+            completion?()
+            return
+        }
             
-            // 1. 安全校验 Section 是否存在
-            guard indexPath.section >= 0, indexPath.section < snapshot.sectionIdentifiers.count else {
-                completion?()
-                return
-            }
+        // 1. 安全校验 Section 是否存在
+        guard indexPath.section >= 0, indexPath.section < snapshot.sectionIdentifiers.count else {
+            completion?()
+            return
+        }
             
-            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
-            if sectionModel.rows == nil { sectionModel.rows = [] }
+        let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+        if sectionModel.rows == nil { sectionModel.rows = [] }
             
-            let currentRowsCount = sectionModel.rows?.count ?? 0
+        let currentRowsCount = snapshot.itemIdentifiers(inSection: sectionModel).count
             
             // 2. 确定是要插入 (Insert) 还是追加 (Append)
-            let isAppend = indexPath.item >= currentRowsCount
+        let isAppend = indexPath.item >= currentRowsCount
             
             // 找到即将被顶到后面的那个“锚点” Item
-            var anchorItem: PTRows? = nil
-            if !isAppend {
-                anchorItem = sectionModel.rows?[indexPath.item]
-            }
+        let currentRows = snapshot.itemIdentifiers(inSection: sectionModel)
+        let anchorItem = isAppend ? nil : currentRows[indexPath.item]
             
             // 🌟 3. 同步更新底层真实数据源模型 (极度重要，自定义 Layout 全靠它)
-            let insertIndex = min(max(0, indexPath.item), currentRowsCount)
-            sectionModel.rows?.insert(contentsOf: rows, at: insertIndex)
+        let insertIndex = min(max(0, indexPath.item), sectionModel.rows?.count ?? 0)
+        sectionModel.rows?.insert(contentsOf: rows, at: insertIndex)
             
             // 4. 炸掉缓存，强制重新计算后续所有布局和高度
-            self.layoutCache.removeAll()
-            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                self.clearWaterfallCache(section: indexPath.section)
-            }
-            sectionModel.layoutVersion += 1
+        self.layoutCache.removeAll()
+        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+            self.clearWaterfallCache(section: indexPath.section)
+        }
+        sectionModel.layoutVersion += 1
             
             // 🌟 5. 更新 Diffable 引擎快照
-            if let anchor = anchorItem {
-                // 如果锚点存在，直接插入在锚点前面
-                snapshot.insertItems(rows, beforeItem: anchor)
-            } else {
-                // 如果是空 Section 或者给定的 item 索引超过了现有数量，直接追加到末尾
-                snapshot.appendItems(rows, toSection: sectionModel)
-            }
+        if let anchor = anchorItem {
+            // 如果锚点存在，直接插入在锚点前面。
+            snapshot.insertItems(rows, beforeItem: anchor)
+        } else {
+            // 如果是空 Section 或者给定的 item 索引超过了现有数量，直接追加到末尾。
+            snapshot.appendItems(rows, toSection: sectionModel)
+        }
             
             // 6. 提交动画
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                self.setiOS17EmptyDataView() // 刷新可能存在的空视图状态
-                completion?()
-            }
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self else { return }
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
 
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         var snapshot = self.diffableDataSource.snapshot()
+        guard !rows.isEmpty, validateRows(rows, against: snapshot) else {
+            completion?()
+            return
+        }
         guard section >= 0, section < snapshot.sectionIdentifiers.count else {
             completion?()
             return
@@ -1565,11 +1737,21 @@ extension PTCollectionView {
             completion?()
             return
         }
+
+        var snapshot = self.diffableDataSource.snapshot()
+        guard validateSections(sections, against: snapshot) else {
+            completion?()
+            return
+        }
+        if let index = afterIndex, index < 0 {
+            reportUpdateError(.invalidSectionIndex(index))
+            completion?()
+            return
+        }
         
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
-        
-        var snapshot = self.diffableDataSource.snapshot()
+
         var insertIndex = snapshot.sectionIdentifiers.count
 
         if let index = afterIndex, index < snapshot.sectionIdentifiers.count {
@@ -1612,10 +1794,16 @@ extension PTCollectionView {
         }
 
         let sectionModel = snapshot.sectionIdentifiers[section]
+        let sectionRowIDs = Set(snapshot.itemIdentifiers(inSection: sectionModel).map(\.diffId))
+        let existingRows = rows.filter { sectionRowIDs.contains($0.diffId) }
+        guard !existingRows.isEmpty else {
+            completion?()
+            return
+        }
         sectionModel.layoutVersion += 1
-        sectionModel.rows?.removeAll(where: { rows.contains($0) })
+        sectionModel.rows?.removeAll(where: { existingRows.contains($0) })
 
-        snapshot.deleteItems(rows)
+        snapshot.deleteItems(existingRows)
 
         if sectionModel.rows?.isEmpty ?? true {
             snapshot.deleteSections([sectionModel])
@@ -1646,8 +1834,10 @@ extension PTCollectionView {
             }
             sectionModel.layoutVersion += 1
             
-            sectionModel.rows?.removeAll(where: { rows.contains($0) })
-            allRowsToDelete.append(contentsOf: rows)
+            let sectionRowIDs = Set(snapshot.itemIdentifiers(inSection: sectionModel).map(\.diffId))
+            let existingRows = rows.filter { sectionRowIDs.contains($0.diffId) }
+            sectionModel.rows?.removeAll(where: { existingRows.contains($0) })
+            allRowsToDelete.append(contentsOf: existingRows)
             
             if sectionModel.rows?.isEmpty ?? true {
                 sectionsToDelete.append(sectionModel)
@@ -1659,7 +1849,8 @@ extension PTCollectionView {
             return
         }
 
-        snapshot.deleteItems(allRowsToDelete)
+        let uniqueRows = Dictionary(grouping: allRowsToDelete, by: \.diffId).compactMap { $0.value.first }
+        snapshot.deleteItems(uniqueRows)
         
         if !sectionsToDelete.isEmpty {
             snapshot.deleteSections(sectionsToDelete)
@@ -1677,8 +1868,13 @@ extension PTCollectionView {
     
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
         var snapshot = self.diffableDataSource.snapshot()
+        let existingSections = sections.filter { snapshot.indexOfSection($0) != nil }
+        guard !existingSections.isEmpty else {
+            completion?()
+            return
+        }
                     
-        for sectionModel in sections {
+        for sectionModel in existingSections {
             if let index = snapshot.indexOfSection(sectionModel) {
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.clearWaterfallCache(section: index)
@@ -1690,7 +1886,7 @@ extension PTCollectionView {
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
         
-        snapshot.deleteSections(sections)
+        snapshot.deleteSections(existingSections)
         
         let animated = !self.viewConfig.refreshWithoutAnimation
         self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
@@ -2136,167 +2332,159 @@ extension PTCollectionView {
 
 extension PTCollectionView {
     public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            
-            let validSections = indexes.compactMap { index -> PTSection? in
-                guard index >= 0 && index < snapshot.sectionIdentifiers.count else { return nil }
-                return snapshot.sectionIdentifiers[index]
+        var snapshot = diffableDataSource.snapshot()
+        var seenIndexes = Set<Int>()
+        let validIndexes = indexes.filter { index in
+            index >= 0 && index < snapshot.sectionIdentifiers.count && seenIndexes.insert(index).inserted
+        }
+        let validSections = validIndexes.map { snapshot.sectionIdentifiers[$0] }
+
+        guard !validSections.isEmpty else {
+            completion?()
+            return
+        }
+
+        for index in validIndexes {
+            if viewConfig.viewType == .WaterFall, waterFallLayout != nil {
+                clearWaterfallCache(section: index)
             }
-            
-            guard !validSections.isEmpty else {
-                completion?()
-                return
-            }
-            
-            for index in indexes {
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: index)
-                }
-                self.markSectionDirty(index)
-            }
-            
-            snapshot.reloadSections(validSections)
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                completion?()
-            }
+            markSectionDirty(index)
+        }
+
+        snapshot.reloadSections(validSections)
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            completion?()
         }
     }
     
     public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            guard section >= 0, section < snapshot.sectionIdentifiers.count else {
-                completion?()
-                return
-            }
-            
-            let width = self.collectionView.bounds.width
-            let sectionModel = snapshot.sectionIdentifiers[section]
-            for row in rows {
-                let key = HeightCacheKey(id: row.diffId, width: width)
-                self.heightCache.remove(forKey: key)
-            }
-            
-            let oldLayoutKey = LayoutCacheKey(section: section, width: width, version: sectionModel.layoutVersion)
-            self.layoutCache.remove(forKey: oldLayoutKey)
-            
-            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                self.clearWaterfallCache(section: section)
-            }
-            
-            self.markSectionDirty(section)
-            
-            let existingRows = rows.filter { snapshot.indexOfItem($0) != nil }
-            guard !existingRows.isEmpty else {
-                completion?()
-                return
-            }
-            
-            snapshot.reloadItems(existingRows)
-            
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                completion?()
-            }
+        var snapshot = diffableDataSource.snapshot()
+        guard section >= 0, section < snapshot.sectionIdentifiers.count else {
+            completion?()
+            return
+        }
+
+        let sectionModel = snapshot.sectionIdentifiers[section]
+        let sectionRowIDs = Set(snapshot.itemIdentifiers(inSection: sectionModel).map(\.diffId))
+        var seenRows = Set<String>()
+        let existingRows = rows.filter {
+            sectionRowIDs.contains($0.diffId) && seenRows.insert($0.diffId).inserted
+        }
+        guard !existingRows.isEmpty else {
+            completion?()
+            return
+        }
+
+        let width = collectionView.bounds.width
+        for row in existingRows {
+            heightCache.remove(forKey: HeightCacheKey(id: row.diffId, width: width))
+        }
+        layoutCache.remove(forKey: LayoutCacheKey(section: section, width: width, version: sectionModel.layoutVersion))
+        if viewConfig.viewType == .WaterFall, waterFallLayout != nil {
+            clearWaterfallCache(section: section)
+        }
+        markSectionDirty(section)
+
+        snapshot.reloadItems(existingRows)
+        let animated = !viewConfig.refreshWithoutAnimation
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            completion?()
         }
     }
     
     public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            let containerWidth = self.collectionView.bounds.width
-            
-            var allRowsToReload: [PTRows] = []
-            
-            for (sectionIndex, rows) in rowsMap {
-                guard sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count else { continue }
-                let sectionModel = snapshot.sectionIdentifiers[sectionIndex]
-                
-                for row in rows {
-                    let cacheKey = HeightCacheKey(id: row.diffId, width: containerWidth)
-                    self.heightCache.remove(forKey: cacheKey)
-                }
-                
-                let oldLayoutKey = LayoutCacheKey(section: sectionIndex, width: containerWidth, version: sectionModel.layoutVersion)
-                self.layoutCache.remove(forKey: oldLayoutKey)
-                
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: sectionIndex)
-                }
-                sectionModel.layoutVersion += 1
-                
-                allRowsToReload.append(contentsOf: rows)
+        var snapshot = diffableDataSource.snapshot()
+        let containerWidth = collectionView.bounds.width
+        var allRowsToReload: [PTRows] = []
+        var seenRows = Set<String>()
+
+        for (sectionIndex, rows) in rowsMap {
+            guard sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count else { continue }
+            let sectionModel = snapshot.sectionIdentifiers[sectionIndex]
+            let sectionRowIDs = Set(snapshot.itemIdentifiers(inSection: sectionModel).map(\.diffId))
+            let existingRows = rows.filter {
+                sectionRowIDs.contains($0.diffId) && seenRows.insert($0.diffId).inserted
             }
-            
-            let existingRows = allRowsToReload.filter { snapshot.indexOfItem($0) != nil }
-            guard !existingRows.isEmpty else {
+            guard !existingRows.isEmpty else { continue }
+
+            for row in existingRows {
+                heightCache.remove(forKey: HeightCacheKey(id: row.diffId, width: containerWidth))
+            }
+            layoutCache.remove(forKey: LayoutCacheKey(section: sectionIndex,
+                                                       width: containerWidth,
+                                                       version: sectionModel.layoutVersion))
+            if viewConfig.viewType == .WaterFall, waterFallLayout != nil {
+                clearWaterfallCache(section: sectionIndex)
+            }
+            sectionModel.layoutVersion += 1
+            allRowsToReload.append(contentsOf: existingRows)
+        }
+
+        guard !allRowsToReload.isEmpty else {
+            completion?()
+            return
+        }
+
+        snapshot.reloadItems(allRowsToReload)
+        let animated = !viewConfig.refreshWithoutAnimation
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self else {
                 completion?()
                 return
             }
-            
-            snapshot.reloadItems(existingRows)
-            
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-                completion?()
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.collectionView.collectionViewLayout.invalidateLayout()
             }
+            completion?()
         }
     }
     
     public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            self.waterfallCache.removeAll()
-            
-            var snapshot = self.diffableDataSource.snapshot()
-            let allSections = snapshot.sectionIdentifiers
-            
-            guard !allSections.isEmpty else {
+        layoutCache.removeAll()
+        heightCache.removeAll()
+        waterfallCache.removeAll()
+        fallbackLayouts.removeAll()
+
+        var snapshot = diffableDataSource.snapshot()
+        let allSections = snapshot.sectionIdentifiers
+        guard !allSections.isEmpty else {
+            completion?()
+            return
+        }
+
+        for section in allSections {
+            section.layoutVersion += 1
+        }
+        snapshot.reloadSections(allSections)
+
+        let allExistingItems = snapshot.itemIdentifiers
+        if !allExistingItems.isEmpty {
+            snapshot.reloadItems(allExistingItems)
+        }
+
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self else {
                 completion?()
                 return
             }
-            
-            for section in allSections {
-                section.layoutVersion += 1
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.collectionView.collectionViewLayout.invalidateLayout()
             }
-            
-            // 🌟 修复注入：重绘映射关联 Section 队列确保 Header/Footer 及布局完全迭代
-            snapshot.reloadSections(allSections)
-            
-            let allExistingItems = snapshot.itemIdentifiers
-            if !allExistingItems.isEmpty {
-                snapshot.reloadItems(allExistingItems)
-            }
-            
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-                completion?()
-            }
+            completion?()
         }
     }
     
     public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            let allItems = snapshot.itemIdentifiers
-            
-            guard !allItems.isEmpty else {
-                completion?()
-                return
-            }
-                        
-            snapshot.reconfigureItems(allItems)
+        var snapshot = diffableDataSource.snapshot()
+        let allItems = snapshot.itemIdentifiers
+        guard !allItems.isEmpty else {
+            completion?()
+            return
+        }
 
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                completion?()
-            }
+        snapshot.reconfigureItems(allItems)
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            completion?()
         }
     }
 }

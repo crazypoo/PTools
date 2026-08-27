@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-public protocol PTCellBindable {
+public protocol PTCellBindable: PTAnyCellBindable {
     associatedtype ModelType
     func bind(model: ModelType)
 }
@@ -19,13 +19,10 @@ public protocol PTAnyCellBindable {
     func pt_bindAny(_ model: Any)
 }
 
-extension PTCellBindable where Self: UICollectionViewCell {
+public extension PTCellBindable {
     
     func pt_bindAny(_ model: Any) {
-        guard let model = model as? ModelType else {
-            assertionFailure("❌ Model 类型不匹配: \(model)")
-            return
-        }
+        guard let model = model as? ModelType else { return }
         bind(model: model)
     }
 }
@@ -41,14 +38,19 @@ open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable 
     
     override public init(frame:CGRect) {
         super.init(frame: frame)
+        setupBaseCell()
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupBaseCell()
+    }
+
+    private func setupBaseCell() {
         isUserInteractionEnabled = true
         contentView.isOpaque = true
         layer.shouldRasterize = isStaticCell
         layer.rasterizationScale = UIScreen.main.scale
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     open class func cellSize() -> CGSize {
@@ -107,61 +109,14 @@ public class PTSwipeAction:NSObject {
 }
 
 open class PTBaseSwipeCell: PTBaseNormalCell {
-        
-    public var cellCanSwipe:Bool = false {
+    public var cellCanSwipe: Bool = false {
         didSet {
-            // 加手勢
+            guard oldValue != cellCanSwipe else { return }
             if cellCanSwipe {
-                panGesture = UIPanGestureRecognizer { sender in
-                    if let gesture = sender as? UIPanGestureRecognizer {
-                        let translation = gesture.translation(in: self.contentView)
-                        switch gesture.state {
-                        case .changed:
-                            var offsetX = translation.x
-                            if self.isOpen {
-                                if offsetX < 0 {
-                                    offsetX -= CGFloat(self.rightActionButtons.count) * self.actionWidth
-                                } else {
-                                    offsetX += CGFloat(self.leftActionButtons.count) * self.actionWidth
-                                }
-                            }
-                            let maxLeft = CGFloat(self.leftActionButtons.count) * self.actionWidth
-                            let maxRight = CGFloat(self.rightActionButtons.count) * self.actionWidth
-                            offsetX = max(-maxRight, min(offsetX, maxLeft))
-                            self.contentLeadingConstraint?.update(offset: offsetX)
-                            if self.tapGesture == nil {
-                                self.tapGesture = UITapGestureRecognizer { tapSender in
-                                    self.closeActions(animated: true)
-                                    self.contentView.removeGestureRecognizer(self.tapGesture!)
-                                    self.tapGesture = nil
-                                }
-                                self.contentView.addGestureRecognizer(self.tapGesture!)
-                            }
-                            self.layoutIfNeeded()   // 🔥 必須要這個才能看到移動效果
-                        case .ended, .cancelled:
-                            let threshold: CGFloat = 40
-                            if translation.x < -threshold {
-                                self.openRightActions()
-                            } else if translation.x > threshold {
-                                self.openLeftActions()
-                            } else {
-                                self.closeActions(animated: true)
-                                if let tapGes = self.tapGesture {
-                                    self.contentView.removeGestureRecognizer(tapGes)
-                                    self.tapGesture = nil
-                                }
-                            }
-                        default:
-                            break
-                        }
-                    }
-                }
-                panGesture.delegate = self
-                self.contentView.addGestureRecognizer(panGesture)
+                installSwipeGesture()
             } else {
-                self.closeActions(animated: true)
-                self.contentView.removeGestureRecognizers()
-                self.tapGesture = nil
+                closeActions(animated: false)
+                removeSwipeGestures()
             }
         }
     }
@@ -169,37 +124,39 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
     public let contentContainer = UIView()
     private let actionContainer = UIView()
     
-    private var panGesture: UIPanGestureRecognizer!
+    private lazy var panGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        gesture.delegate = self
+        return gesture
+    }()
     private var tapGesture: UITapGestureRecognizer?
-    
-    private var isOpen = false
+
+    private var contentOffsetX: CGFloat = 0
     private let actionWidth: CGFloat = 80
     private var leftActionButtons: [PTActionLayoutButton] = []
     private var rightActionButtons: [PTActionLayoutButton] = []
-    // SnapKit 的 leading 約束
-    private var contentLeadingConstraint: Constraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // Action container 在底層
+        setupSwipeUI()
+    }
+
+    private func setupSwipeUI() {
+        // 操作按钮放在内容视图下方，内容视图只负责平移显示。
         contentView.addSubview(actionContainer)
         actionContainer.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        // Content container 在上層
+
         contentContainer.backgroundColor = .white
         contentView.addSubview(contentContainer)
         contentContainer.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.width.equalToSuperview()
-            contentLeadingConstraint = make.leading.equalToSuperview().constraint
-            make.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
     public func configureLeftActions(_ actions: [PTSwipeAction]) {
+        closeActions(animated: false)
         leftActionButtons.forEach { $0.removeFromSuperview() }
         leftActionButtons.removeAll()
         addButtons(actions, isLeft: true)
@@ -207,15 +164,15 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
     }
 
     public func configureRightActions(_ actions: [PTSwipeAction]) {
+        closeActions(animated: false)
         rightActionButtons.forEach { $0.removeFromSuperview() }
         rightActionButtons.removeAll()
         addButtons(actions, isLeft: false)
         setNeedsLayout()
     }
 
-    /// 配置 Action 按鈕
-    public func addButtons(_ actions: [PTSwipeAction],isLeft: Bool) {
-        // 建立新按鈕
+    /// 添加一组滑动操作按钮。
+    public func addButtons(_ actions: [PTSwipeAction], isLeft: Bool) {
         for (index, action) in actions.enumerated() {
             let button = PTActionLayoutButton()
             button.layoutStyle = .upImageDownTitle
@@ -227,12 +184,11 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
             button.setImage(action.image, state: .normal)
             button.setTitleFont(action.nameFont, state: .normal)
             button.tag = index
-            button.addActionHandlers(handler: { sender in
+            button.addActionHandlers(handler: { [weak self] sender in
                 action.handler?(sender)
-                self.closeActions(animated: true)
+                self?.closeActions(animated: true)
             })
             actionContainer.addSubview(button)
-            // SnapKit 排列
             button.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.width.equalTo(actionWidth)
@@ -253,34 +209,142 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
     open override func layoutSubviews() {
         super.layoutSubviews()
     }
-            
-    private func openLeftActions() {
-        let totalWidth = CGFloat(leftActionButtons.count) * actionWidth
-        contentLeadingConstraint?.update(offset: totalWidth)
-        UIView.animate(withDuration: 0.25) {
-            self.layoutIfNeeded()
+
+    private var leftActionWidth: CGFloat {
+        CGFloat(leftActionButtons.count) * actionWidth
+    }
+
+    private var rightActionWidth: CGFloat {
+        CGFloat(rightActionButtons.count) * actionWidth
+    }
+
+    private func installSwipeGesture() {
+        guard panGesture.view == nil else { return }
+        contentView.addGestureRecognizer(panGesture)
+    }
+
+    private func removeSwipeGestures() {
+        if let tapGesture {
+            contentView.removeGestureRecognizer(tapGesture)
+            self.tapGesture = nil
         }
-        isOpen = true
+        contentView.removeGestureRecognizer(panGesture)
+    }
+
+    private func addCloseGestureIfNeeded() {
+        guard tapGesture == nil else { return }
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleCloseTap))
+        tapGesture = gesture
+        contentView.addGestureRecognizer(gesture)
+    }
+
+    private func removeCloseGesture() {
+        guard let tapGesture else { return }
+        contentView.removeGestureRecognizer(tapGesture)
+        self.tapGesture = nil
+    }
+
+    @objc private func handleCloseTap() {
+        closeActions(animated: true)
+    }
+
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: contentView)
+
+        switch gesture.state {
+        case .began:
+            UIView.performWithoutAnimation {
+                contentContainer.layer.removeAllAnimations()
+            }
+            panStartOffset = contentOffsetX
+            addCloseGestureIfNeeded()
+        case .changed:
+            setContentOffset(panStartOffset + translation.x, animated: false)
+        case .ended, .cancelled, .failed:
+            let proposedOffset = panStartOffset + translation.x
+            let velocity = gesture.velocity(in: contentView).x
+            finishPan(proposedOffset: proposedOffset, velocity: velocity)
+        default:
+            break
+        }
+    }
+
+    private var panStartOffset: CGFloat = 0
+
+    private func finishPan(proposedOffset: CGFloat, velocity: CGFloat) {
+        let velocityThreshold: CGFloat = 300
+        if velocity < -velocityThreshold, rightActionWidth > 0 {
+            openRightActions()
+        } else if velocity > velocityThreshold, leftActionWidth > 0 {
+            openLeftActions()
+        } else if proposedOffset > leftActionWidth / 2, leftActionWidth > 0 {
+            openLeftActions()
+        } else if proposedOffset < -rightActionWidth / 2, rightActionWidth > 0 {
+            openRightActions()
+        } else {
+            closeActions(animated: true)
+        }
+    }
+
+    private func setContentOffset(_ offset: CGFloat, animated: Bool) {
+        let safeOffset = offset.isFinite ? offset : 0
+        let clampedOffset = max(-rightActionWidth, min(safeOffset, leftActionWidth))
+        contentOffsetX = clampedOffset
+
+        let updates = {
+            self.contentContainer.transform = CGAffineTransform(translationX: clampedOffset, y: 0)
+        }
+        if animated {
+            UIView.animate(withDuration: 0.25, animations: updates)
+        } else {
+            UIView.performWithoutAnimation(updates)
+        }
+
+        if abs(clampedOffset) < 0.5 {
+            removeCloseGesture()
+        } else {
+            addCloseGestureIfNeeded()
+        }
+    }
+
+    private func openLeftActions() {
+        guard leftActionWidth > 0 else {
+            closeActions(animated: true)
+            return
+        }
+        setContentOffset(leftActionWidth, animated: true)
     }
 
     private func openRightActions() {
-        let totalWidth = CGFloat(rightActionButtons.count) * actionWidth
-        contentLeadingConstraint?.update(offset: -totalWidth)
-        UIView.animate(withDuration: 0.25) {
-            self.layoutIfNeeded()
+        guard rightActionWidth > 0 else {
+            closeActions(animated: true)
+            return
         }
-        isOpen = true
+        setContentOffset(-rightActionWidth, animated: true)
     }
-    
+
     public func closeActions(animated: Bool) {
-        contentLeadingConstraint?.update(offset: 0)
-        let animations = { self.layoutIfNeeded() }
-        animated ? UIView.animate(withDuration: 0.25, animations: animations) : animations()
-        isOpen = false
+        setContentOffset(0, animated: animated)
     }
-    
+
+    /// 清理两侧按钮，供复用和重新绑定时使用。
+    public func resetSwipeActions() {
+        closeActions(animated: false)
+        leftActionButtons.forEach { $0.removeFromSuperview() }
+        rightActionButtons.forEach { $0.removeFromSuperview() }
+        leftActionButtons.removeAll()
+        rightActionButtons.removeAll()
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        resetSwipeActions()
+        cellCanSwipe = false
+    }
+
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupSwipeUI()
     }
 }
 
@@ -288,13 +352,14 @@ extension PTBaseSwipeCell: UIGestureRecognizerDelegate {
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let pan = gestureRecognizer as? UIPanGestureRecognizer {
             let velocity = pan.velocity(in: contentView)
-            return abs(velocity.x) > abs(velocity.y) // 只有橫向才開始
+            return abs(velocity.x) > abs(velocity.y)
         }
         return true
     }
-    
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        guard gestureRecognizer === panGesture else { return false }
+        return !(otherGestureRecognizer.view is UICollectionView)
     }
 }

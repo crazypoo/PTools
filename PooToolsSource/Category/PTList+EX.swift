@@ -40,7 +40,7 @@ public final class PTSection: NSObject {
                 rows: [PTRows]? = nil,
                 headerDataModel: AnyObject? = nil,
                 footerDataModel: AnyObject? = nil) {
-        self.identifier = identifier
+        self.identifier = identifier.isEmpty ? UUID().uuidString : identifier
         self.headerTitle = headerTitle
         self.headerID = headerID
         self.footerID = footerID
@@ -132,12 +132,15 @@ public final class PTRows: NSObject {
         self.dataModel = dataModel
         self.nibName = nibName
         self.badge = badge
-        self.diffId = diffId
+        self.diffId = diffId.isEmpty ? UUID().uuidString : diffId
         self.diffHash = diffHash
         super.init()
     }
     
     public var reuseID: String {
+        if !ID.isEmpty {
+            return ID
+        }
         if let cls = cellClass as? PTCellRegisterable.Type {
             return cls.reuseID
         }
@@ -189,6 +192,11 @@ extension PTRows {
                       dataModel: model,
                       badge: badge)
         }
+
+        if let fusionModel = model as? PTFusionCellModel,
+           let fusionCellClass = fusionModel.cellClass as? UICollectionViewCell.Type {
+            cellClass = fusionCellClass
+        }
     }
 }
 
@@ -210,13 +218,13 @@ public protocol PTSupplementaryRegisterable {
 extension UICollectionView {
     
     public static func sectionRows(rowsModel:[PTFusionCellModel]) -> [PTRows] {
-        let rows = rowsModel.map { PTRows(title:$0.name,ID: $0.cellID ?? "",dataModel:$0) }
+        let rows = rowsModel.map { PTRows(model: $0, reuseID: $0.cellID ?? "", title: $0.name) }
         return rows
     }
     
     public func registerClassCells(classs:[String:AnyClass]) {
         classs.allKeys().forEach { key in
-            if let cellClass = classs[key] {
+            if !key.isEmpty, let cellClass = classs[key] as? UICollectionViewCell.Type {
                 self.register(cellClass, forCellWithReuseIdentifier: key)
             }
         }
@@ -224,7 +232,7 @@ extension UICollectionView {
     
     public func registerNibCells(nib:[String:String]) {
         nib.allKeys().forEach { value in
-            if let nibId = nib[value] {
+            if !value.isEmpty, let nibId = nib[value], !nibId.isEmpty {
                 self.register(UINib(nibName: value, bundle: nil), forCellWithReuseIdentifier: nibId)
             }
         }
@@ -233,14 +241,18 @@ extension UICollectionView {
     public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
         //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
         classs.allKeys().forEach { value in
-            self.register(classs[value].self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
+            guard !value.isEmpty,
+                  let viewClass = classs[value] as? UICollectionReusableView.Type else { return }
+            self.register(viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }
     
     public func registerSupplementaryView(ids:[String],viewClass:AnyClass,kind:String) {
         //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
         ids.forEach { value in
-            self.register(viewClass.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
+            guard !value.isEmpty,
+                  let reusableViewClass = viewClass as? UICollectionReusableView.Type else { return }
+            self.register(reusableViewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }
 }

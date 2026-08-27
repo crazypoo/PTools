@@ -30,7 +30,6 @@ public final class PTFusionContentView: UIView {
 
     // MARK: - View Pool（一次创建）
     private var cellModel = PTFusionCellModel()
-    private var currentLayoutState: PTFusionLayoutConfig?
     private let leftIcon = UIImageView()
     private let rightIcon = UIImageView()
     private let titleLabel = UILabel()
@@ -95,8 +94,6 @@ public final class PTFusionContentView: UIView {
     }()
 
     // MARK: - Constraints（缓存）
-    // ✅ Swift 6 优化：将隐式解包(!)改为可选型(?)，使用更加安全
-    private var rightAnchorConstraint: Constraint?
     private var titleLeftToIcon: Constraint?
     private var titleLeftToSpacing: Constraint?
 
@@ -104,8 +101,6 @@ public final class PTFusionContentView: UIView {
     private var moreTopConstraint: Constraint?
     private var moreBottomConstraint: Constraint?
     private var moreRightConstraint: Constraint?
-    
-    private var contentRightConstraint: Constraint?
     
     private var leftSpacingWidthConstraint: Constraint?
     private var rightSpacingWidthConstraint: Constraint?
@@ -116,9 +111,9 @@ public final class PTFusionContentView: UIView {
         setupUI()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
 }
 
@@ -169,7 +164,7 @@ private extension PTFusionContentView {
         }
         
         rightIcon.snp.makeConstraints { make in
-            rightAnchorConstraint = make.right.equalToSuperview().offset(-16).constraint
+            make.right.equalToSuperview().offset(-16)
             make.top.bottom.equalToSuperview()
             make.width.equalTo(rightIcon.snp.height)
         }
@@ -219,16 +214,36 @@ extension PTFusionContentView {
     
     public func configure(model: PTFusionCellModel) {
         cellModel = model
-        let newState = model.layoutState
-        
-        // 只有结构变化才更新 layout
-        if currentLayoutState != newState {
-            applyLayout(cellModel: model)
-            currentLayoutState = newState
-        }
-
+        // 模型属性可以在 Cell 复用后变化，布局和内容都必须按最新模型刷新。
+        applyLayout(cellModel: model)
         applySwitch(model)
         applyData(model)
+    }
+
+    /// 清理复用状态，但保留事件桥接，避免每次复用重复添加按钮事件。
+    func resetForReuse() {
+        cellModel = PTFusionCellModel()
+        titleLabel.attributed.text = nil
+        contentLabel.attributed.text = nil
+
+        [leftIcon, rightIcon, disclosure].forEach { imageView in
+            imageView.cancelImageLoad()
+            imageView.image = nil
+            imageView.isHidden = true
+        }
+
+        systemSwitch.isHidden = true
+        customSwitch.isHidden = true
+        systemSwitch.setOn(false, animated: false)
+        customSwitch.isOn = false
+        moreButton.isHidden = true
+        moreButton.setTitle("", state: .normal)
+        moreButton.setImage(nil, state: .normal)
+
+        topLineView.isHidden = true
+        bottomLineView.isHidden = true
+        topImaginaryLineView.isHidden = true
+        bottomImaginaryLineView.isHidden = true
     }
         
     private func applyLayout(cellModel: PTFusionCellModel) {
@@ -399,13 +414,22 @@ extension PTFusionContentView {
         contentLabel.attributed.text = model.cachedContentAttr
         
         leftIcon.contentMode = .scaleAspectFit
-        leftIcon.loadImage(contentData: model.leftImage as Any, iCloudDocumentName: model.iCloudDocument)
+        applyImage(model.leftImage, to: leftIcon, iCloudDocumentName: model.iCloudDocument)
         
         rightIcon.contentMode = .scaleAspectFit
-        rightIcon.loadImage(contentData: model.contentIcon as Any, iCloudDocumentName: model.iCloudDocument)
+        applyImage(model.contentIcon, to: rightIcon, iCloudDocumentName: model.iCloudDocument)
         
         disclosure.contentMode = .scaleAspectFit
-        disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any, iCloudDocumentName: model.iCloudDocument)
+        applyImage(model.disclosureIndicatorImage, to: disclosure, iCloudDocumentName: model.iCloudDocument)
+    }
+
+    private func applyImage(_ value: Any?, to imageView: UIImageView, iCloudDocumentName: String) {
+        imageView.cancelImageLoad()
+        guard let value else {
+            imageView.image = nil
+            return
+        }
+        imageView.loadImage(contentData: value, iCloudDocumentName: iCloudDocumentName)
     }
     
     private func applySwitch(_ model: PTFusionCellModel) {
@@ -479,8 +503,11 @@ extension PTFusionCellProtocol {
     }
     
     func updateModel(_ model: PTFusionCellModel?) {
-        guard let model else { return }
-        dataContent.configure(model: model)
+        if let model {
+            dataContent.configure(model: model)
+        } else {
+            dataContent.resetForReuse()
+        }
     }
 }
 
@@ -506,9 +533,17 @@ open class PTFusionCell: PTBaseNormalCell, PTFusionCellProtocol {
         setupFusionUI(in: contentView)
     }
     
-    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setupFusionUI(in: contentView)
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        switchValueChangeBlock = nil
+        moreActionBlock = nil
+        switchValue = nil
+        cellModel = nil
     }
 }
 
@@ -534,9 +569,17 @@ open class PTFusionSwipeCell: PTBaseSwipeCell, PTFusionCellProtocol {
         setupFusionUI(in: contentView)
     }
 
-    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setupFusionUI(in: contentView)
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        switchValueChangeBlock = nil
+        moreActionBlock = nil
+        switchValue = nil
+        cellModel = nil
     }
 }
 

@@ -37,7 +37,8 @@ open class PTBaseDecorationView: UICollectionReusableView {
     }
     
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
     
     private func setupUI() {
@@ -58,13 +59,34 @@ open class PTBaseDecorationView: UICollectionReusableView {
             make.edges.equalToSuperview()
         }
     }
+
+    /// 统一更新装饰视图状态，避免复用时遗留上一个分区的样式。
+    public func configure(backgroundColor: UIColor,
+                          cornerRadius: CGFloat,
+                          shadowOpacity: Float,
+                          backgroundImage: UIImage? = nil) {
+        bgView.backgroundColor = backgroundColor
+        bgView.layer.cornerRadius = max(0, cornerRadius)
+        layer.shadowOpacity = max(0, min(1, shadowOpacity))
+        bgImageView.image = backgroundImage
+        bgImageView.isHidden = backgroundImage == nil
+        setNeedsLayout()
+    }
     
     // 🌟 核心：每次被复用时重置状态
     open override func prepareForReuse() {
         super.prepareForReuse()
         bgView.backgroundColor = PTAppBaseConfig.share.decorationBackgroundColor
+        bgView.layer.cornerRadius = PTAppBaseConfig.share.decorationBackgroundCornerRadius
         bgImageView.isHidden = true
         bgImageView.image = nil
         layer.shadowOpacity = 0.08
+        layer.shadowPath = nil
+    }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(roundedRect: bounds,
+                                        cornerRadius: bgView.layer.cornerRadius).cgPath
     }
 }
