@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PTNetworkSpeedHistoriaModel: PTModelProtocol {
+public class PTNetworkSpeedHistoriaModel: PTCodableModelProtocol {
     public var date:String = ""
     public var networkType:String = ""
     public var download:String = ""

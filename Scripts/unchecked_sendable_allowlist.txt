@@ -20,12 +20,9 @@ PooToolsSource/VideoEditor/VideoConverter.swift
 PooToolsSource/Vision/PTVision.swift
 
 # compatibility-boundary: legacy framework, runtime and callback adapters
-PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift
-PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift
 PooToolsSource/Calendar/PTEventOnCalendar.swift
 PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
 PooToolsSource/Core/OSSVoice.swift
-PooToolsSource/Core/ResponseModel.swift
 PooToolsSource/Debug/PTApplicationDirectories.swift
 # system notification callback boundary: Notification is consumed immediately on the MainActor.
 # límite de callback de notificación del sistema: Notification se consume inmediatamente en MainActor.

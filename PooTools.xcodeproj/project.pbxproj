@@ -22,6 +22,7 @@
 		231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */; };
 		231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */; };
 		231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BD272CDEE9003D6F62 /* String+PTEX.swift */; };
+		55AA11112C00000100000001 /* String+PTEX+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA11102C00000100000001 /* String+PTEX+Crypto.swift */; };
 		231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C0272CDEE9003D6F62 /* PTCodeView.swift */; };
 		231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */; };
 		231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */; };
@@ -35,6 +36,7 @@
 		231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CD272CDEE9003D6F62 /* UIControl+PTEX.swift */; };
 		231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */; };
 		231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */; };
+		55AA10FB2C00000100000001 /* UIView+PTEX+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA10FA2C00000100000001 /* UIView+PTEX+Constraints.swift */; };
 		231D1685272CDEEA003D6F62 /* PTSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D0272CDEE9003D6F62 /* PTSegmentView.swift */; };
 		231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */; };
 		231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */; };
@@ -43,6 +45,7 @@
 		231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D6272CDEE9003D6F62 /* SSBlurView.swift */; };
 		231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D7272CDEE9003D6F62 /* BorderManager.swift */; };
 		231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */; };
+		55AA11012C00000100000001 /* UIImage+PTEX+GIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA11002C00000100000001 /* UIImage+PTEX+GIF.swift */; };
 		231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */; };
 		231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */; };
 		231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */; };
@@ -124,6 +127,9 @@
 		552660EB303741BA00582606 /* PTLogFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EA303741BA00582606 /* PTLogFileManager.swift */; };
 		552660ED303741C700582606 /* NetworkTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EC303741C700582606 /* NetworkTypes.swift */; };
 		552660EF3037544D00582606 /* PTBaseViewController+NavigationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */; };
+		55AA10F22C00000100000001 /* PTBaseViewController+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA10F12C00000100000001 /* PTBaseViewController+Navigation.swift */; };
+		55AA10F42C00000100000001 /* PTBaseTabBarViewController+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA10F32C00000100000001 /* PTBaseTabBarViewController+Support.swift */; };
+		55AA10F62C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA10F52C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift */; };
 		552660F13037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F03037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift */; };
 		552660F3303758BB00582606 /* PTCollectionViewTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F2303758BB00582606 /* PTCollectionViewTypes.swift */; };
 		552660F53037590000582606 /* PTMediaSaveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552660F43037590000582606 /* PTMediaSaveService.swift */; };
@@ -815,6 +821,7 @@
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
+		55AA10F92C00000100000001 /* PTUtils+SceneConcurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA10F82C00000100000001 /* PTUtils+SceneConcurrency.swift */; };
 		55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */; };
 		55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */; };
 		55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */; };
@@ -988,6 +995,7 @@
 		231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableArray+PTEX.swift"; sourceTree = "<group>"; };
 		231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPurchaseCarAnimationTool.swift; sourceTree = "<group>"; };
 		231D15BD272CDEE9003D6F62 /* String+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+PTEX.swift"; sourceTree = "<group>"; };
+		55AA11102C00000100000001 /* String+PTEX+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PTEX+Crypto.swift"; sourceTree = "<group>"; };
 		231D15C0272CDEE9003D6F62 /* PTCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCodeView.swift; sourceTree = "<group>"; };
 		231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTGuidePageHUD.swift; sourceTree = "<group>"; };
 		231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
@@ -1001,14 +1009,17 @@
 		231D15CD272CDEE9003D6F62 /* UIControl+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+PTEX.swift"; sourceTree = "<group>"; };
 		231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSecurityStrategy.swift; sourceTree = "<group>"; };
 		231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+PTEX.swift"; sourceTree = "<group>"; };
+		55AA10FA2C00000100000001 /* UIView+PTEX+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTEX+Constraints.swift"; sourceTree = "<group>"; };
 		231D15D0272CDEE9003D6F62 /* PTSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSegmentView.swift; sourceTree = "<group>"; };
 		231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+PTEX.swift"; sourceTree = "<group>"; };
 		231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTNumberKeyBoard.swift; sourceTree = "<group>"; };
 		231D15D4272CDEE9003D6F62 /* PTUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUtils.swift; sourceTree = "<group>"; };
+		55AA10F82C00000100000001 /* PTUtils+SceneConcurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTUtils+SceneConcurrency.swift"; sourceTree = "<group>"; };
 		231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTLaunchAdMonitor.swift; sourceTree = "<group>"; };
 		231D15D6272CDEE9003D6F62 /* SSBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSBlurView.swift; sourceTree = "<group>"; };
 		231D15D7272CDEE9003D6F62 /* BorderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderManager.swift; sourceTree = "<group>"; };
 		231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+PTEX.swift"; sourceTree = "<group>"; };
+		55AA11002C00000100000001 /* UIImage+PTEX+GIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+PTEX+GIF.swift"; sourceTree = "<group>"; };
 		231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+PTEX.swift"; sourceTree = "<group>"; };
 		231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMarcos_swift.swift; sourceTree = "<group>"; };
 		231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPhoneBlock.swift; sourceTree = "<group>"; };
@@ -1105,6 +1116,9 @@
 		552660EA303741BA00582606 /* PTLogFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogFileManager.swift; sourceTree = "<group>"; };
 		552660EC303741C700582606 /* NetworkTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTypes.swift; sourceTree = "<group>"; };
 		552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+NavigationTypes.swift"; sourceTree = "<group>"; };
+		55AA10F12C00000100000001 /* PTBaseViewController+Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+Navigation.swift"; sourceTree = "<group>"; };
+		55AA10F32C00000100000001 /* PTBaseTabBarViewController+Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseTabBarViewController+Support.swift"; sourceTree = "<group>"; };
+		55AA10F52C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseTabBarViewController+SystemTabs.swift"; sourceTree = "<group>"; };
 		552660F03037586700582606 /* PTVideoEditorToolsViewController+Lifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTVideoEditorToolsViewController+Lifecycle.swift"; sourceTree = "<group>"; };
 		552660F2303758BB00582606 /* PTCollectionViewTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionViewTypes.swift; sourceTree = "<group>"; };
 		552660F43037590000582606 /* PTMediaSaveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaSaveService.swift; sourceTree = "<group>"; };
@@ -2225,6 +2239,7 @@
 				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
 				B51700000000000000000003 /* PTVideoThumbnailService.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
+				55AA11102C00000100000001 /* String+PTEX+Crypto.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				5581E8552AB9046800491065 /* Timer+PTEX.swift */,
 				55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */,
@@ -2240,6 +2255,7 @@
 				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
 				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
+				55AA11002C00000100000001 /* UIImage+PTEX+GIF.swift */,
 				553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */,
 				554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */,
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
@@ -2262,6 +2278,7 @@
 				555818CF2AFA7E400051C0AA /* UIToolbar+PTEX.swift */,
 				554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */,
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
+				55AA10FA2C00000100000001 /* UIView+PTEX+Constraints.swift */,
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */,
@@ -3619,6 +3636,7 @@
 				550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
+				55AA10F82C00000100000001 /* PTUtils+SceneConcurrency.swift */,
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 			);
 			path = Core;
@@ -3721,6 +3739,7 @@
 			children = (
 				552660F2303758BB00582606 /* PTCollectionViewTypes.swift */,
 				552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */,
+				55AA10F12C00000100000001 /* PTBaseViewController+Navigation.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				552CCF4A2E82BA2200646943 /* PTBaseButton.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
@@ -3729,6 +3748,8 @@
 				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
 				55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */,
 				55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */,
+				55AA10F32C00000100000001 /* PTBaseTabBarViewController+Support.swift */,
+				55AA10F52C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
 				55D6FC5F2C9EA8BF006683F4 /* PTBaseWebViewController.swift */,
 				552F57502ADB86A500E0EB7C /* PTCollectionView.swift */,
@@ -4321,6 +4342,9 @@
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55557DC62F28568D008EB4B2 /* PTAudioCache.swift in Sources */,
 				552660EF3037544D00582606 /* PTBaseViewController+NavigationTypes.swift in Sources */,
+				55AA10F22C00000100000001 /* PTBaseViewController+Navigation.swift in Sources */,
+				55AA10F42C00000100000001 /* PTBaseTabBarViewController+Support.swift in Sources */,
+				55AA10F62C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift in Sources */,
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
@@ -4745,6 +4769,7 @@
 				55E1B6602DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift in Sources */,
 				552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
+				55AA10FB2C00000100000001 /* UIView+PTEX+Constraints.swift in Sources */,
 				55F0B97D2F95C37F00066311 /* PTEditImageToolEngine.swift in Sources */,
 				55F162FC2B1963F700320925 /* PTRouterDebugTool.swift in Sources */,
 				550CE4A42AF12F8B0052539D /* PTActiveBuilder.swift in Sources */,
@@ -4920,6 +4945,7 @@
 				55F3C27C2F7A0CC00062D864 /* PTBannerModel.swift in Sources */,
 				55F3C2822F7A105B0062D864 /* PTBannerView.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
+				55AA11112C00000100000001 /* String+PTEX+Crypto.swift in Sources */,
 				55DD93712B938C9B00F65872 /* UIView+Container.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				55F3C27E2F7A0EAA0062D864 /* PTBannerCell.swift in Sources */,
@@ -5064,6 +5090,7 @@
 				55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */,
 				558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
+				55AA10F92C00000100000001 /* PTUtils+SceneConcurrency.swift in Sources */,
 				557451282C09B12C0008FCAD /* PTMenuSheetButtonView.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
@@ -5090,6 +5117,7 @@
 				55DD937B2B94CE4800F65872 /* PTBaseSideController.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
+				55AA11012C00000100000001 /* UIImage+PTEX+GIF.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				557E3A8E2C044157002466A0 /* CwlDemangle.swift in Sources */,

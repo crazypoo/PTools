@@ -15,10 +15,49 @@ import SwifterSwift
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
-public class PTLaunchADModel: NSObject,@unchecked Sendable {
+public class PTLaunchADModel: NSObject {
     public var image: Any?
     public var time: TimeInterval = 0
     public var tapURL: [AnyHashable: Any]?
+}
+
+// Immutable launch-ad metadata for crossing an actor boundary.
+// Metadatos inmutables del anuncio de lanzamiento para cruzar un límite de actor.
+// 用于跨越 actor 边界的不可变启动广告元数据。
+public struct PTLaunchADSnapshot: Sendable {
+    public let time: TimeInterval
+    public let imageURL: URL?
+    public let imageData: Data?
+    public let imageIdentifier: String?
+    public let tapURL: [String: String]
+
+    @MainActor
+    public init(model: PTLaunchADModel) {
+        time = model.time
+        if let value = model.image as? URL {
+            imageURL = value
+            imageIdentifier = nil
+            imageData = nil
+        } else if let value = model.image as? String {
+            imageURL = URL(string: value)
+            imageIdentifier = imageURL == nil ? value : nil
+            imageData = nil
+        } else if let value = model.image as? UIImage {
+            imageURL = nil
+            imageIdentifier = nil
+            imageData = value.pngData()
+        } else {
+            imageURL = nil
+            imageIdentifier = nil
+            imageData = nil
+        }
+
+        tapURL = (model.tapURL ?? [:]).reduce(into: [String: String]()) { result, pair in
+            let key = String(describing: pair.key)
+            let value = String(describing: pair.value)
+            result[key] = value
+        }
+    }
 }
 
 public struct CountdownItem<T: Sendable> : Sendable{
@@ -251,7 +290,10 @@ public class PTLaunchAdMonitor: NSObject {
     // MARK: - 私有方法：启动广告序列
     @MainActor private func startAdSequence(adModels: [PTLaunchADModel]) {
         let totalTime: TimeInterval = adModels.reduce(0) { $0 + $1.time }
-        let result = buildCountdownTimeline(items: adModels.map { ($0.time, $0) })
+        // Capture indexes instead of mutable ad models in the sendable timer closure.
+        // Captura índices en lugar de modelos de anuncio mutables en el cierre sendable del temporizador.
+        // 在可 Sendable 的定时器闭包中只捕获索引，不捕获可变广告模型。
+        let result = buildCountdownTimeline(items: adModels.enumerated().map { ($0.element.time, $0.offset) })
         let timeline = result.timeline
         currentAdIndex = -1
                 
@@ -279,8 +321,9 @@ public class PTLaunchAdMonitor: NSObject {
                 
                 if newIndex != self.currentAdIndex {
                     self.currentAdIndex = newIndex
-                    let model = timeline[newIndex].value
-                    self.handleAdDisplay(model: model)
+                    let modelIndex = timeline[newIndex].value
+                    guard self.adLaunchModels.indices.contains(modelIndex) else { return }
+                    self.handleAdDisplay(model: self.adLaunchModels[modelIndex])
                 }
             }
         })

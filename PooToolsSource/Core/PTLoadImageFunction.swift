@@ -173,27 +173,34 @@ public class PTLoadImageFunction: NSObject {
         }
     }
 
+    /// Compatibility wrapper for dynamic callers; all supported values use the typed source pipeline.
+    /// Adaptador de compatibilidad para llamadas dinámicas; todos los valores admitidos usan el canal tipado.
+    /// 动态调用方的兼容包装器；所有支持的值统一进入类型化 source 管线。
     @MainActor public static func loadImage(contentData: Any,
-                                 iCloudDocumentName: String = "",
-                                 progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
+                                            iCloudDocumentName: String = "",
+                                            progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
+        let source: PTImageSource
         switch contentData {
         case let image as UIImage:
-            return imageResult(image)
+            source = .image(image)
         case let dataString as String:
-            return await handleStringContent(dataString, iCloudDocumentName, progressHandle)
+            source = .named(dataString)
         case let data as Data:
-            return await loadImageFromData(data)
+            source = .data(data)
         case let asset as PHAsset:
-            return await handleAssetContent(asset: asset)
+            source = .asset(asset)
         case let asset as AVAsset:
-            return await loadVideo(asset: asset, frameNumber: 10, maximumSize: PTVideoThumbnailService.defaultMaximumSize)
+            source = .avAsset(asset)
         case let color as UIColor:
-            return imageResult(color.createImageWithColor())
+            source = .color(color)
         case let url as URL:
-            return await handleURL(url, iCloudDocumentName, progressHandle)
+            source = .url(url)
         default:
             return emptyResult()
         }
+        return await loadImage(source: source,
+                               iCloudDocumentName: iCloudDocumentName,
+                               progressHandle: progressHandle)
     }
 
     public static func handleStringContent(_ dataUrlString: String,

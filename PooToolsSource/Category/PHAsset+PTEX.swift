@@ -233,6 +233,7 @@ public extension PHAsset {
     }
     
     // MARK: - PHAsset 转换为图片
+    @available(*, deprecated, message: "Use PTMediaLibManager.requestImage(for:targetSize:completion:) instead")
     func fetchImage(targetSize: CGSize = PHImageManagerMaximumSize,
                     contentMode: PHImageContentMode = .aspectFit,
                     deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat,
@@ -250,6 +251,7 @@ public extension PHAsset {
     }
     
     // MARK: - 获取 PHAsset 的视频第一帧
+    @available(*, deprecated, message: "Use PTVideoThumbnailService.image(for:frameNumber:maximumSize:) after obtaining the AVAsset")
     func fetchVideoFirstFrame(targetSize: CGSize = CGSize(width: 300, height: 300),
                               version: PHVideoRequestOptionsVersion = .current,
                               supportIcloud: Bool  = true,
@@ -308,8 +310,9 @@ public extension PHAsset {
 
     func asyncImage() async -> UIImage? {
         await withCheckedContinuation { continuation in
-            self.fetchImage { image in
-                continuation.resume(returning: image)
+            PTMediaLibManager.requestImage(for: self,
+                                           targetSize: PHImageManagerMaximumSize) { result in
+                continuation.resume(returning: result.image)
             }
         }
     }

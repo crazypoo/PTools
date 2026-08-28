@@ -56,7 +56,7 @@ public class PTActionCell:UIView {
 }
 
 @objcMembers
-public class PTActionSheetItem: NSObject,@unchecked Sendable {
+public class PTActionSheetItem: NSObject {
     public var title:String = ""
     public var titleColor:UIColor = .systemBlue
     public var titleFont:UIFont = .systemFont(ofSize: 20)
@@ -95,7 +95,7 @@ public class PTActionSheetItem: NSObject,@unchecked Sendable {
 }
 
 @objcMembers
-public class PTActionSheetTitleItem: PTActionSheetItem, @unchecked Sendable {
+public class PTActionSheetTitleItem: PTActionSheetItem {
     public var subTitle:String = ""
 
     public init(title: String = "",
@@ -109,6 +109,29 @@ public class PTActionSheetTitleItem: PTActionSheetItem, @unchecked Sendable {
                 contentImageSpace:CGFloat = 15) {
         self.subTitle = subTitle
         super.init(title: title,titleColor: titleColor,titleFont: titleFont,image: image,imageSize: imageSize,iCloudDocumentName: iCloudDocumentName,itemLayout: itemLayout,contentImageSpace: contentImageSpace)
+    }
+}
+
+// Immutable scalar configuration used after the UI actor boundary.
+// Configuración escalar inmutable usada después del límite del actor de UI.
+// 跨过 UI actor 边界后使用不可变标量配置。
+public struct PTActionSheetViewConfigSnapshot: Sendable {
+    public let lineHeight: CGFloat
+    public let rowHeight: CGFloat
+    public let separatorHeight: CGFloat
+    public let viewSpace: CGFloat
+    public let cornerRadii: CGFloat
+
+    public init(lineHeight: CGFloat,
+                rowHeight: CGFloat,
+                separatorHeight: CGFloat,
+                viewSpace: CGFloat,
+                cornerRadii: CGFloat) {
+        self.lineHeight = lineHeight
+        self.rowHeight = rowHeight
+        self.separatorHeight = separatorHeight
+        self.viewSpace = viewSpace
+        self.cornerRadii = cornerRadii
     }
 }
 
@@ -133,6 +156,14 @@ public class PTActionSheetViewConfig:NSObject {
         self.viewSpace = viewSpace
         self.cornerRadii = cornerRadii
     }
+
+    public func snapshot() -> PTActionSheetViewConfigSnapshot {
+        PTActionSheetViewConfigSnapshot(lineHeight: lineHeight,
+                                        rowHeight: rowHeight,
+                                        separatorHeight: separatorHeight,
+                                        viewSpace: viewSpace,
+                                        cornerRadii: cornerRadii)
+    }
 }
 
 public class PTActionSheetController: PTAlertController {
@@ -145,7 +176,7 @@ public class PTActionSheetController: PTAlertController {
     private var cancelSheetItem: PTActionSheetItem
     private var destructiveItems: [PTActionSheetItem]
     private var contentItems: [PTActionSheetItem]
-    private var sheetConfig: PTActionSheetViewConfig
+    private let sheetConfig: PTActionSheetViewConfigSnapshot
     private var titleItem: PTActionSheetTitleItem?
     private var canTapBackground: Bool
 
@@ -211,7 +242,7 @@ public class PTActionSheetController: PTAlertController {
                 destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
                 contentItems:[PTActionSheetItem]? = [PTActionSheetItem](),
                 canTapBackground:Bool = false) {
-        self.sheetConfig = viewConfig
+        self.sheetConfig = viewConfig.snapshot()
         self.titleItem = titleItem
         self.cancelSheetItem = cancelItem ?? PTActionSheetItem(title: "PT Button cancel".localized())
         self.destructiveItems = destructiveItems

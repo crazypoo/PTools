@@ -78,7 +78,12 @@ fi
 # Only immutable SDK type metadata and system object boxes may use this narrow compatibility exception.
 # Solo los metadatos de tipo inmutables del SDK y las cajas de objetos del sistema pueden usar esta excepción.
 # 仅不可变 SDK 类型元数据和系统对象包装器可以使用这个窄范围兼容例外。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox' || true)"
+# A protocol-only migration can add the new Codable protocol name to an existing
+# legacy SDK wrapper line without adding a new unchecked boundary.
+# Una migración de protocolo puede añadir el nuevo nombre de protocolo Codable a una línea
+# existente de un wrapper legado del SDK sin añadir un nuevo límite unchecked.
+# 仅协议迁移可能会把新的 Codable 协议名加入既有 SDK 兼容包装器行，这不代表新增 unchecked 边界。
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

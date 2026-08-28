@@ -760,10 +760,27 @@ public final class Network: @unchecked Sendable {
     }
     
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel? {
+        guard let snapshot = try await requestIPInfoSnapshot(ipAddress: ipAddress, lang: lang) else {
+            return nil
+        }
+        return await MainActor.run {
+            PTIPInfoModel(snapshot: snapshot)
+        }
+    }
+
+    // Typed IP responses cross the request boundary as immutable values.
+    // Las respuestas IP tipadas cruzan el límite de solicitudes como valores inmutables.
+    // 类型化 IP 响应以不可变值形式跨越请求边界。
+    public class func requestIPInfoSnapshot(ipAddress: String,
+                                            lang: OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoSnapshot? {
         let urlStr1 = try await createURLRequest(urlStr: "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)", needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let models = try await Network.requestCodableApi(needGobal: false, urlStr: urlStr1, method: .get, header: apiHeader, modelType: PTIPInfoModel.self)
-        return models.customerModel
+        let models = try await Network.requestCodableApi(needGobal: false,
+                                                         urlStr: urlStr1,
+                                                         method: .get,
+                                                         header: apiHeader,
+                                                         modelType: PTIPInfoPayload.self)
+        return models.customerModel.map(PTIPInfoSnapshot.init(payload:))
     }
     
     public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {

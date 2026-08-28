@@ -26,7 +26,10 @@ public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
 }
 
 @MainActor
-open class PTChatListModel: @preconcurrency PTModelProtocol {
+// SmartCodable's requirements are nonisolated in the legacy decoder; this UI model is only decoded and consumed on MainActor.
+// Los requisitos de SmartCodable no están aislados en el decodificador heredado; este modelo de UI solo se decodifica y consume en MainActor.
+// SmartCodable 的协议要求在旧解码器中是非隔离的；这个 UI 模型只在 MainActor 上解码和使用。
+open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
     ///消息时间戳
     public var messageTimeStamp:TimeInterval = 0
     ///消息ID

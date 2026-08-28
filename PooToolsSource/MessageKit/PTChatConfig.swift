@@ -19,7 +19,7 @@ public extension UIImage {
     }
 }
 
-public class PTMessageTextCustomAttTagModel:PTModelProtocol {
+public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol {
     ///Example: \\xxxxx\\b
     public var tag:String = ""
     @SmartAny public var tagColor:DynamicColor = .systemGray

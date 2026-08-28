@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.1.0 - 2026-08-29
+
+- 分离网络 Codable 模型协议与列表 Diffable 身份协议，保留 `PTModelProtocol` 兼容入口至 6.0.0。
+- 修复列表模型默认 `diffId` 每次读取生成随机值的问题，并为跨 actor 的 IP 信息、启动广告和 ActionSheet 配置增加不可变快照。
+- 统一图片加载、视频缩略图、媒体保存、场景上下文和 MainActor 调度的 canonical 入口，旧入口继续作为兼容包装器。
+- 按职责拆分 Base 高频组件、PTUtils、UIView、UIImage 和 String 扩展，保留原有公开符号和调用方式。
+- 增加重复入口与拆分文件归属报告，继续执行 Swift 6 并发安全和 iOS 17 构建契约检查。
+
 ## 5.0.1 - 2026-08-28
 
 - 修复 Core 数值适配器共享比例缓存的数据竞争，保留原有公开入口。

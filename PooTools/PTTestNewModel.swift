@@ -33,7 +33,7 @@ class LXHomePopoverMainModel:LXSiwftBaseModel {
 }
 
 //MARK: 首頁Banner
-class YDSBaseModelEX: PTModelProtocol {
+class YDSBaseModelEX: PTCodableModelProtocol {
     var code:String = ""
     var tips:String = ""
     var error:String = ""
@@ -43,7 +43,7 @@ class YDSBaseModelEX: PTModelProtocol {
     required init() {}
 }
 
-class YDSBaseResultModel: PTModelProtocol {
+class YDSBaseResultModel: PTCodableModelProtocol {
     var pages: Int = 0
     var startRow: String = ""
     var endRow: String = ""

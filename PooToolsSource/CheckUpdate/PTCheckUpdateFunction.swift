@@ -12,19 +12,19 @@ import SwiftJWT
 import Alamofire
 import SmartCodable
 
-struct IpadScreenshotUrls: PTModelProtocol, Sendable {
+struct IpadScreenshotUrls: PTCodableModelProtocol, Sendable {
     init() {}
 }
 
-struct AppletvScreenshotUrls: PTModelProtocol, Sendable {
+struct AppletvScreenshotUrls: PTCodableModelProtocol, Sendable {
     init() {}
 }
 
-struct Features: PTModelProtocol, Sendable {
+struct Features: PTCodableModelProtocol, Sendable {
     init() {}
 }
 
-struct Results: PTModelProtocol, Sendable {
+struct Results: PTCodableModelProtocol, Sendable {
     var primaryGenreName: String = ""
     var artworkUrl100: String = ""
     var currency: String = ""
@@ -72,7 +72,7 @@ struct Results: PTModelProtocol, Sendable {
     init() {}
 }
 
-struct PTCheckUpdateModel: PTModelProtocol, Sendable {
+struct PTCheckUpdateModel: PTCodableModelProtocol, Sendable {
     var results: [Results] = []
     var resultCount: Int = 0
     init() {}
@@ -86,23 +86,23 @@ struct PTCheckUpdateModel: PTModelProtocol, Sendable {
  unchecked conformance is an explicit compatibility allowlist until this
  public class-based decoder API can migrate to immutable snapshot structs.
  */
-public class PTTFPaging :PTModelProtocol,@unchecked Sendable {
+public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {
     public var total: Int = 0
     public var limit: Int = 0
     required public init() {}
 }
 
-public class PTTFMeta :PTModelProtocol,@unchecked Sendable {
+public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {
     @SmartAny public var paging: PTTFPaging?
     required public init() {}
 }
 
-public class PTTLinkMainModel:PTModelProtocol,@unchecked Sendable {
+public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {
     @SmartAny public var links: PTTFLinks?
     required public init() {}
 }
 
-public class PTTFRelationships :PTModelProtocol,@unchecked Sendable {
+public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {
     @SmartAny public var app: PTTLinkMainModel?
     @SmartAny public var builds: PTTLinkMainModel?
     @SmartAny public var betaAppReviewSubmission:PTTLinkMainModel?
@@ -119,7 +119,7 @@ public class PTTFRelationships :PTModelProtocol,@unchecked Sendable {
     required public init() {}
 }
 
-public class PTTFLinks :PTModelProtocol,@unchecked Sendable {
+public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
@@ -131,7 +131,7 @@ public class PTTFLinks :PTModelProtocol,@unchecked Sendable {
     }
 }
 
-public class PTTFIconAssetTokenModle:PTModelProtocol,@unchecked Sendable {
+public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {
     public var width:CGFloat = 0
     public var templateUrl:String = ""
     public var height:CGFloat = 0
@@ -139,7 +139,7 @@ public class PTTFIconAssetTokenModle:PTModelProtocol,@unchecked Sendable {
     required public init() {}
 }
 
-public class PTTFAttributes :PTModelProtocol,@unchecked Sendable {
+public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {
     public var version: String = ""
     public var platform: String = ""
     public var minOsVersion:String = ""
@@ -170,7 +170,7 @@ public class PTTFAttributes :PTModelProtocol,@unchecked Sendable {
     }
 }
 
-public class PTTFVersionData :PTModelProtocol,@unchecked Sendable {
+public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {
     public var id: String = ""
     @SmartAny public var relationships: PTTFRelationships?
     @SmartAny public var links: PTTFLinks?
@@ -180,7 +180,7 @@ public class PTTFVersionData :PTModelProtocol,@unchecked Sendable {
     required public init() {}
 }
 
-public class PTTFModelCollection :PTModelProtocol,@unchecked Sendable {
+public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {
     @SmartAny public var meta: PTTFMeta?
     @SmartAny public var links: PTTFLinks?
     @SmartAny public var data: [PTTFVersionData]?
@@ -188,7 +188,7 @@ public class PTTFModelCollection :PTModelProtocol,@unchecked Sendable {
     required public init() {}
 }
 
-public class PTTFNewerBuildVersionModel:PTModelProtocol,@unchecked Sendable {
+public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {
     @SmartAny public var links:PTTFLinks?
     @SmartAny public var data:PTTFVersionData?
     
@@ -202,7 +202,7 @@ public struct PTAppleClaims: Claims, Sendable {
     let aud: String
 }
 
-public class PTTFUpdateCustomModel:PTModelProtocol,@unchecked Sendable {
+public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {
     var version:String = ""
     var desc:String = ""
     var downloadURL:String = ""

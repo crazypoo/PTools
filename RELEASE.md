@@ -8,7 +8,7 @@
 - Git tag（格式：`<version>`，不带 `v` 前缀）
 - `CHANGELOG.md` 对应版本章节
 
-本轮发布目标为 `5.0.1`。`Package.swift` 和 Xcode 工程只维护平台与 Swift
+本轮发布目标为 `5.1.0`。`Package.swift` 和 Xcode 工程只维护平台与 Swift
 语言契约，不重复维护产品版本号。
 
 `Package.swift` 与 Xcode 工程不单独维护产品版本号，避免三套构建入口产生漂移。

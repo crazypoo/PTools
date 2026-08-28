@@ -35,17 +35,32 @@ extension PTBaseModel: PTDiffableModel {
     }
 }
 
+// Codable-only models do not carry list-diff identity.
+// Los modelos que solo codifican no transportan identidad para diffs de listas.
+// 仅用于 Codable 的模型不再携带列表 Diffable 身份。
+public protocol PTCodableModelProtocol: SmartCodableX {}
+
 // 🌟 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
-public struct PTDummyModel: PTModelProtocol, Sendable {
+public struct PTDummyModel: PTCodableModelProtocol, Sendable {
     public init() {}
 }
 
-// 🌟 要求遵守它的人必须同时遵守 SmartCodable 和 PTDiffableModel
-public protocol PTModelProtocol: SmartCodableX, PTDiffableModel {}
+// 🌟 兼容旧版同时承担解析和列表 Diffable 身份的协议。
+// Compatibilidad con el protocolo antiguo que mezclaba解析 y la identidad Diffable de listas.
+// 兼容旧版同时承担解析能力和列表 Diffable 身份的协议。
+@available(*, deprecated, message: "Use PTCodableModelProtocol for network models and PTDiffableModel with a stored diffId for list models")
+public protocol PTModelProtocol: PTCodableModelProtocol, PTDiffableModel {}
 
+@available(*, deprecated, message: "Use PTCodableModelProtocol for network models and PTDiffableModel with a stored diffId for list models")
 public extension PTModelProtocol {
     var diffId: String {
-        return "\(type(of: self))-\(UUID().uuidString)"
+        // Class instances have a stable identity; legacy value types use their reflected value.
+        // Las instancias de clase tienen una identidad estable; los valores heredados usan su reflejo.
+        // 类实例使用稳定对象身份；旧值类型使用反射值作为兼容回退。
+        if Mirror(reflecting: self).displayStyle == .class {
+            return "\(type(of: self))-\(ObjectIdentifier(self as AnyObject))"
+        }
+        return "\(type(of: self))-\(String(reflecting: self))"
     }
     
     var diffHash: Int {
