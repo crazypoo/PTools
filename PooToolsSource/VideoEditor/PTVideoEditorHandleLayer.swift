@@ -24,25 +24,26 @@ class PTVideoEditorHandleLayer: CALayer {
         super.init()
 
         backgroundColor = UIColor.border.cgColor
+        if imageLayer.superlayer == nil {
+            addSublayer(imageLayer)
+        }
     }
 
     override init(layer: Any) {
         side = .left
         
         super.init(layer: layer)
+        MainActor.assumeIsolated {
+            if imageLayer.superlayer == nil {
+                addSublayer(imageLayer)
+            }
+        }
     }
 
     override func layoutSublayers() {
         super.layoutSublayers()
-        self.addLayers()
     }
     
-    func addLayers() {
-        if self.imageLayer.superlayer == nil {
-            self.addSublayer(self.imageLayer)
-        }
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

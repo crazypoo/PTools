@@ -15,10 +15,11 @@ open class PTWindowSceneDelegate: UIResponder,UIWindowSceneDelegate {
 
     open func makeKeyAndVisible(in scene: UIWindowScene, createViewControllerHandler: () -> UIViewController, tint: UIColor) {
         let root = createViewControllerHandler()
-        window = UIWindow(windowScene:scene)
-        window!.tintColor = tint
-        window!.rootViewController = root
-        window!.makeKeyAndVisible()
+        let newWindow = UIWindow(windowScene: scene)
+        newWindow.tintColor = tint
+        newWindow.rootViewController = root
+        newWindow.makeKeyAndVisible()
+        window = newWindow
     }
 
     open func makeKeyAndVisible(in scene: UIWindowScene, viewController: UIViewController, tint: UIColor) {

@@ -125,16 +125,19 @@ private extension PTRotationManager {
         
         // 控制横竖屏
         let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
-        
-        let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-        
-        for windowScene in windowScenes {
-            for window in windowScene.windows {
-                window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-            }
 
-            windowScene.requestGeometryUpdate(geometryPreferences) { error in
-                PTNSLogConsole("❌ 屏幕旋转请求被系统拒绝: \(error.localizedDescription)")
+        // Rotate only the active scene; changing every connected scene can affect unrelated windows.
+        // Gira solo la escena activa; cambiar todas las escenas puede afectar ventanas no relacionadas.
+        // 只旋转当前活动场景，避免影响其他无关窗口。
+        guard let windowScene = PTSceneContext.activeWindow()?.windowScene else { return }
+        for window in windowScene.windows {
+            window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
+
+        windowScene.requestGeometryUpdate(geometryPreferences) { error in
+            let message = error.localizedDescription
+            Task { @MainActor in
+                PTNSLogConsole("❌ 屏幕旋转请求被系统拒绝: \(message)")
             }
         }
     }

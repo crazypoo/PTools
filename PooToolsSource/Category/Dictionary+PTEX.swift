@@ -69,13 +69,13 @@ public extension Dictionary {
     ///  - json: JSON字符串
     /// - Returns: 字典
     static func jsonToDictionary(json: String) -> Dictionary<String, Any>? {
-        if let data = (try? JSONSerialization.jsonObject(
-            with: json.data(using: String.Encoding.utf8,allowLossyConversion: true)!,
-            options: JSONSerialization.ReadingOptions.mutableContainers)) as? Dictionary<String, Any> {
-            return data
-        } else {
+        guard let jsonData = json.data(using: .utf8),
+              let data = (try? JSONSerialization.jsonObject(
+                with: jsonData,
+                options: .mutableContainers)) as? Dictionary<String, Any> else {
             return nil
         }
+        return data
     }
     
     //MARK: 字典转JSON字符串
@@ -132,17 +132,23 @@ public extension Dictionary {
     @discardableResult
     mutating func setValue(keys: [String], newValue: Any) -> Bool {
         guard keys.count > 1 else {
-            guard keys.count == 1, let key = keys[0] as? Dictionary<Key, Value>.Keys.Element else {
+            guard let keyString = keys.first,
+                  let key = keyString as? Key,
+                  let typedValue = newValue as? Value else {
                 return false
             }
-            self[key] = (newValue as! Value)
+            self[key] = typedValue
             return true
         }
-        guard let key = keys[0] as? Dictionary<Key, Value>.Keys.Element, self.keys.contains(key), var value1 = self[key] as? [String: Any] else {
+        guard let keyString = keys.first,
+              let key = keyString as? Key,
+              self.keys.contains(key),
+              var value1 = self[key] as? [String: Any] else {
             return false
         }
         let result = Dictionary<String, Any>.value(keys: Array(keys[1..<keys.count]), oldValue: &value1, newValue: newValue)
-        self[key] = (value1 as! Value)
+        guard let typedValue = value1 as? Value else { return false }
+        self[key] = typedValue
         return result
     }
     
@@ -202,12 +208,10 @@ public extension PTPOP where Base == Dictionary<String, Any> {
             return nil
         }
         if let data = try? JSONSerialization.data(withJSONObject: base) {
-            let JSONString = NSString(data:data,encoding: String.Encoding.utf8.rawValue)
-            return JSONString! as String
+            return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
         } else {
             PTNSLogConsole("无法解析出JSONString",levelType: .error,loggerType: .dictionary)
             return nil
         }
     }
 }
-

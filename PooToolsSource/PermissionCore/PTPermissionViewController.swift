@@ -24,14 +24,14 @@ public class PTPermissionStatic:NSObject {
 @objcMembers
 public class PTPermissionViewController: PTBaseViewController {
     
-    fileprivate var permissions:[PTPermissionModel]!
+    fileprivate var permissions:[PTPermissionModel] = []
     fileprivate var permissionStatic = PTPermissionStatic.share
     
     public var viewDismissBlock:PTActionTask?
     
-    fileprivate var trackingRequest:Bool? {
+    fileprivate var trackingRequest = false {
         didSet {
-            if trackingRequest! {
+            if trackingRequest {
                 showRequestFunction()
             }
         }
@@ -146,7 +146,6 @@ public class PTPermissionViewController: PTBaseViewController {
     #if POOTOOLS_PERMISSION_SIRI
                         PTPermission.siri.openSettingPage()
     #endif
-                    default:break
                     }
                 case .notDetermined:
                     self.permissionRequest(type: cellModel.type)
@@ -198,15 +197,15 @@ public class PTPermissionViewController: PTBaseViewController {
         
         showDetail()
         
-        var haveTracking:Bool? = false
-        for ( _ ,value) in permissions!.enumerated() {
+        var haveTracking = false
+        for value in permissions {
             if value.type.name == PTPermission.Kind.tracking.name {
                 haveTracking = true
                 break
             }
         }
         
-        if haveTracking! {
+        if haveTracking {
 #if POOTOOLS_PERMISSION_TRACKING
                 PTPermission.tracking.request {
                     self.trackingRequest = true
@@ -238,11 +237,11 @@ public class PTPermissionViewController: PTBaseViewController {
         newCollectionView.showCollectionDetail(collectionData: mSections)
     }
     
-    func permissionRequest(showTracking:Bool? = true,type:PTPermission.Kind) {
+    func permissionRequest(showTracking:Bool = true,type:PTPermission.Kind) {
         switch type {
         case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
-            if !showTracking! {
+            if !showTracking {
                 PTPermission.tracking.request {
                     Task { @MainActor in
                         self.showDetail()
@@ -316,9 +315,11 @@ public class PTPermissionViewController: PTBaseViewController {
 #endif
         case .health:
 #if POOTOOLS_PERMISSION_HEALTH
-            PTPermissionHealth.request(forReading: [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!],writing:Set<HKSampleType>()) {
-                Task { @MainActor in
-                    self.showDetail()
+            if let quantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) {
+                PTPermissionHealth.request(forReading: [quantityType], writing: Set<HKSampleType>()) {
+                    Task { @MainActor in
+                        self.showDetail()
+                    }
                 }
             }
 #endif

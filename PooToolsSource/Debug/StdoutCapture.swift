@@ -105,7 +105,9 @@ final class StdoutCapture {
         // listen in to the readHandle notification
         notificationToken = NotificationCenter.default.addObserver(forName: FileHandle.readCompletionNotification, object: pipeReadHandle, queue: .main) { [weak self] notification in
             let box = PTReadCompletionNotificationBox(value: notification)
-            self?.handlePipeNotification(notification: box.value)
+            PTMainActorBridge.perform { [weak self] in
+                self?.handlePipeNotification(notification: box.value)
+            }
         }
 
         // state that you want to be notified of any data coming across the pipe

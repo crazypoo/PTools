@@ -27,14 +27,14 @@ public class PTGroupBuyAvatarView: UIView {
     private var imageSpacingOffset: CGFloat = 10
     private var dotCount: Int = 4
     private var hasSetup = false
-    private var dotColor: DynamicColor = DynamicColor(hexString: "EAEEF1")!
+    private var dotColor: DynamicColor = DynamicColor(hexString: "EAEEF1") ?? .systemGray5
 
     public init(avatarImages: [Any],
                 showAvatarCount:Int = 4,
                 dotCount: Int = 4,
                 dotSize: CGFloat = 10,
                 dotSpacing: CGFloat = 5,
-                dotColor:DynamicColor = DynamicColor(hexString: "EAEEF1")!,
+                dotColor:DynamicColor = DynamicColor(hexString: "EAEEF1") ?? .systemGray5,
                 imageLastDotSpacing: CGFloat = 5,
                 imageSpacingOffset: CGFloat = 10) {
         super.init(frame: .zero)

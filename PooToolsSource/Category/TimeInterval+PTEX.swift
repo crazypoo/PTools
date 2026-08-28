@@ -27,7 +27,7 @@ public extension TimeInterval {
         dateFormatter.timeZone = timeZone
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: self))
-        return dateFormatter.date(from: dateString)!
+        return dateFormatter.date(from: dateString) ?? Date(timeIntervalSince1970: self)
     }
     
     //MARK: 時間戳轉換成Date
@@ -63,6 +63,7 @@ public extension TimeInterval {
     func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String) -> Void)?) {
         if self.isNaN{
             callBack?("00","00","00")
+            return
         }
         var Min = Int(self / 60)
         let Sec = Int(self.truncatingRemainder(dividingBy: 60))
@@ -71,6 +72,7 @@ public extension TimeInterval {
             Hour = Int(Min / 60)
             Min = Min - Hour*60
             callBack?(String(format: "%02d", Hour),String(format: "%02d", Min),String(format: "%02d", Sec))
+            return
         }
         callBack?("00",String(format: "%02d", Min),String(format: "%02d", Sec))
     }

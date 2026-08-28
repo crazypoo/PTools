@@ -104,7 +104,8 @@ public extension NSObject {
         if let nsDict = value as? NSDictionary {
             var result: [AnyHashable: Any] = [:]
             nsDict.forEach {
-                result[$0.key as! AnyHashable] = pt_convertValue($0.value)
+                guard let key = $0.key as? AnyHashable else { return }
+                result[key] = pt_convertValue($0.value)
             }
             return result
         }

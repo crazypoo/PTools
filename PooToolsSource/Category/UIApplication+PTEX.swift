@@ -36,7 +36,7 @@ public extension UIApplication {
         }
     }
     
-    var currentWindows:[UIWindow]? {
+    @MainActor var currentWindows:[UIWindow]? {
         return connectedScenes
             .compactMap { $0 as? UIWindowScene }
         // ❗ 不再只限制 foregroundActive
@@ -45,19 +45,8 @@ public extension UIApplication {
             .windows
     }
     
-    var currentWindow: UIWindow? {
-        // 1️⃣ 先按你原逻辑找 keyWindow
-        if let keyWindow = currentWindows?.first(where: { $0.isKeyWindow }) {
-            return keyWindow
-        }
-
-        // 2️⃣ 如果没有 keyWindow，取当前 scene 的第一个 window
-        if let firstWindow = currentWindows?.first {
-            return firstWindow
-        }
-
-        // 3️⃣ 最后 fallback 到你原来的 sceneDelegate 逻辑
-        return PTWindowSceneDelegate.sceneDelegate()?.window
+    @MainActor var currentWindow: UIWindow? {
+        PTSceneContext.activeWindow()
     }
         
     // MARK: - 内部缓存机制 (核心优化部分)

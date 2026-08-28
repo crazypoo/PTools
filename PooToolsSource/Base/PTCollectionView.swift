@@ -1904,7 +1904,10 @@ extension PTCollectionView {
         switch viewConfig.decorationItemsType {
         case .Custom:
             viewConfig.decorationModel?.forEach { value in
-                layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
+                guard let decorationClass = value.decorationClass,
+                      let decorationID = value.decorationID,
+                      !decorationID.isEmpty else { return }
+                layout.register(decorationClass, forDecorationViewOfKind: decorationID)
             }
         case .Normal,.Corner:
             layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: PTBaseDecorationView.ID)

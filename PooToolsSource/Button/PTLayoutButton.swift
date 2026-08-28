@@ -195,6 +195,17 @@ public class PTLayoutButton: UIButton {
             configuration = layoutConfig
         }
     }
+
+    private var highlightTitleStorage: String?
+    private var disabledTitleStorage: String?
+    private var selectedSubTitleStorage: String?
+    private var highlightSubTitleStorage: String?
+    private var disabledSubTitleStorage: String?
+    private var selectedSubTitleColorStorage: UIColor?
+    private var highlightSubTitleColorStorage: UIColor?
+    private var selectedSubTitleFontStorage: UIFont?
+    private var highlightSubTitleFontStorage: UIFont?
+    private var disabledSubTitleFontStorage: UIFont?
     
     open var selectedTitle: String! {
         didSet {
@@ -204,10 +215,10 @@ public class PTLayoutButton: UIButton {
     
     open var hightlightTitle: String {
         get {
-            normalTitle
+            highlightTitleStorage ?? normalTitle
         } set {
-            if hightlightTitle != newValue {
-                self.hightlightTitle = newValue
+            if highlightTitleStorage != newValue {
+                highlightTitleStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -215,10 +226,10 @@ public class PTLayoutButton: UIButton {
     
     open var disabledTitle: String {
         get {
-            normalTitle
+            disabledTitleStorage ?? normalTitle
         } set {
-            if disabledTitle != newValue {
-                self.disabledTitle = newValue
+            if disabledTitleStorage != newValue {
+                disabledTitleStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -280,10 +291,10 @@ public class PTLayoutButton: UIButton {
     
     open var selectedSubTitle: String {
         get {
-            normalSubTitle ?? ""
+            selectedSubTitleStorage ?? normalSubTitle ?? ""
         } set {
-            if selectedSubTitle != newValue {
-                self.selectedSubTitle = newValue
+            if selectedSubTitleStorage != newValue {
+                selectedSubTitleStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -291,10 +302,10 @@ public class PTLayoutButton: UIButton {
     
     open var hightlightSubTitle: String {
         get {
-            normalSubTitle ?? ""
+            highlightSubTitleStorage ?? normalSubTitle ?? ""
         } set {
-            if hightlightSubTitle != newValue {
-                self.hightlightSubTitle = newValue
+            if highlightSubTitleStorage != newValue {
+                highlightSubTitleStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -302,10 +313,10 @@ public class PTLayoutButton: UIButton {
     
     open var disabledSubTitle: String {
         get {
-            normalSubTitle ?? ""
+            disabledSubTitleStorage ?? normalSubTitle ?? ""
         } set {
-            if disabledSubTitle != newValue {
-                self.disabledSubTitle = newValue
+            if disabledSubTitleStorage != newValue {
+                disabledSubTitleStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -319,10 +330,10 @@ public class PTLayoutButton: UIButton {
     
     open var selectedSubTitleColor: UIColor {
         get {
-            normalSubTitleColor
+            selectedSubTitleColorStorage ?? normalSubTitleColor
         } set {
-            if selectedSubTitleColor != newValue {
-                self.selectedSubTitleColor = newValue
+            if selectedSubTitleColorStorage != newValue {
+                selectedSubTitleColorStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -330,10 +341,10 @@ public class PTLayoutButton: UIButton {
     
     open var hightlightSubTitleColor: UIColor {
         get {
-            normalSubTitleColor
+            highlightSubTitleColorStorage ?? normalSubTitleColor
         } set {
-            if hightlightSubTitleColor != newValue {
-                self.hightlightSubTitleColor = newValue
+            if highlightSubTitleColorStorage != newValue {
+                highlightSubTitleColorStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -353,10 +364,10 @@ public class PTLayoutButton: UIButton {
     
     open var selectedSubTitleFont: UIFont {
         get {
-            normalSubTitleFont
+            selectedSubTitleFontStorage ?? normalSubTitleFont
         } set {
-            if selectedSubTitleFont != newValue {
-                self.selectedSubTitleFont = newValue
+            if selectedSubTitleFontStorage != newValue {
+                selectedSubTitleFontStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -364,10 +375,10 @@ public class PTLayoutButton: UIButton {
     
     open var hightlightSubTitleFont: UIFont {
         get {
-            normalSubTitleFont
+            highlightSubTitleFontStorage ?? normalSubTitleFont
         } set {
-            if hightlightSubTitleFont != newValue {
-                self.hightlightSubTitleFont = newValue
+            if highlightSubTitleFontStorage != newValue {
+                highlightSubTitleFontStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -375,10 +386,10 @@ public class PTLayoutButton: UIButton {
     
     open var disabledSubTitleFont: UIFont {
         get {
-            normalSubTitleFont
+            disabledSubTitleFontStorage ?? normalSubTitleFont
         } set {
-            if disabledSubTitleFont != newValue {
-                self.disabledSubTitleFont = newValue
+            if disabledSubTitleFontStorage != newValue {
+                disabledSubTitleFontStorage = newValue
                 configuration = layoutConfig
             }
         }
@@ -412,8 +423,8 @@ public class PTLayoutButton: UIButton {
     fileprivate func switchLayoutStyle() {
         if CGSize.zero.equalTo(imageSize) {
             imageView?.sizeToFit()
-        } else {
-            imageView?.frame = CGRect(x: imageView!.x, y: imageView!.y, width: imageSize.width, height: imageSize.height)
+        } else if let imageView {
+            imageView.frame = CGRect(x: imageView.x, y: imageView.y, width: imageSize.width, height: imageSize.height)
         }
         titleLabel?.sizeToFit()
 
@@ -586,7 +597,7 @@ public class PTLayoutButton: UIButton {
                 }
 
                 if !(self.normalSubTitle ?? "").stringIsEmpty() {
-                    btnconfig.attributedSubtitle = AttributedString(self.normalSubTitle!)
+                    btnconfig.attributedSubtitle = AttributedString(self.normalSubTitle ?? "")
                     btnconfig.subtitleTextAttributesTransformer = .init { container in
                         container.merging(AttributeContainer.font(self.normalSubTitleFont).foregroundColor(self.normalSubTitleColor))
                     }
@@ -597,8 +608,8 @@ public class PTLayoutButton: UIButton {
                         self.activityColor
                     }
                 } else {
-                    if self.imageSize != .zero && self.normalImage != nil {
-                        btnconfig.image = self.normalImage!.transformImage(size: self.imageSize)
+                    if self.imageSize != .zero, let image = self.normalImage {
+                        btnconfig.image = image.transformImage(size: self.imageSize)
                     }
                 }
                 btnconfig.baseBackgroundColor = self.configBackgroundColor
@@ -621,8 +632,8 @@ public class PTLayoutButton: UIButton {
                 }
 
                 if !self.showHightlightActivity {
-                    if self.imageSize != .zero && self.hightlightImage != nil {
-                        btnconfig.image = self.hightlightImage!.transformImage(size: self.imageSize)
+                    if self.imageSize != .zero, let image = self.hightlightImage {
+                        btnconfig.image = image.transformImage(size: self.imageSize)
                     }
                 }
 
@@ -634,8 +645,8 @@ public class PTLayoutButton: UIButton {
             case .selected:
                 btnconfig.showsActivityIndicator = false
 
-                if !self.selectedTitle.stringIsEmpty() {
-                    btnconfig.attributedTitle = AttributedString(self.selectedTitle)
+                if let title = self.selectedTitle, !title.stringIsEmpty() {
+                    btnconfig.attributedTitle = AttributedString(title)
                     btnconfig.titleTextAttributesTransformer = .init { container in
                         container.merging(AttributeContainer.font(self.selectedTitleFont).foregroundColor(self.selectedTitleColor))
                     }
@@ -648,8 +659,8 @@ public class PTLayoutButton: UIButton {
                     }
                 }
 
-                if self.imageSize != .zero && self.selectedImage != nil {
-                    btnconfig.image = self.selectedImage!.transformImage(size: self.imageSize)
+                if self.imageSize != .zero, let image = self.selectedImage {
+                    btnconfig.image = image.transformImage(size: self.imageSize)
                 }
                 btnconfig.baseBackgroundColor = self.configBackgroundSelectedColor
                 sender.configuration = btnconfig
@@ -665,12 +676,12 @@ public class PTLayoutButton: UIButton {
                 if !self.disabledSubTitle.stringIsEmpty() {
                     btnconfig.attributedSubtitle = AttributedString(self.disabledSubTitle)
                     btnconfig.subtitleTextAttributesTransformer = .init { container in
-                        container.merging(AttributeContainer.font(self.disabledTitleFont).foregroundColor(self.disabledSubTitleColor))
+                        container.merging(AttributeContainer.font(self.disabledSubTitleFont).foregroundColor(self.disabledSubTitleColor))
                     }
                 }
 
-                if self.imageSize != .zero && self.disabledImage != nil {
-                    btnconfig.image = self.disabledImage!.transformImage(size: self.imageSize)
+                if self.imageSize != .zero, let image = self.disabledImage {
+                    btnconfig.image = image.transformImage(size: self.imageSize)
                 }
                 btnconfig.baseBackgroundColor = self.configBackgroundDisableColor
                 sender.configuration = btnconfig
@@ -684,9 +695,10 @@ public class PTLayoutButton: UIButton {
 
     @available(iOS 15, *)
     public func isLoading(value: Bool? = false) {
-        isButtonLoading = value!
+        let loading = value ?? false
+        isButtonLoading = loading
         configuration = layoutConfig
-        if value! {
+        if loading {
             isUserInteractionEnabled = loadingCanTap
         } else {
             isUserInteractionEnabled = true
@@ -790,11 +802,13 @@ extension PTLayoutButton {
         var buttonFont:UIFont = .appfont(size: 10)
         switch type {
         case .normal:
-            sizeString = (self.normalTitle.count > (self.normalSubTitle ?? "").count ? self.normalTitle : self.normalSubTitle)!
+            let subtitle = self.normalSubTitle ?? ""
+            sizeString = self.normalTitle.count > subtitle.count ? self.normalTitle : subtitle
             buttonFont = (self.normalTitle.count > (self.normalSubTitle ?? "").count ? self.normalTitleFont : self.normalSubTitleFont)
         case .selected:
-            sizeString = (self.selectedTitle.count > (self.selectedSubTitle).count ? self.selectedTitle : self.selectedSubTitle)!
-            buttonFont = (self.selectedTitle.count > self.selectedSubTitle.count ? self.selectedTitleFont : self.selectedSubTitleFont)
+            let title = self.selectedTitle ?? self.normalTitle
+            sizeString = title.count > self.selectedSubTitle.count ? title : self.selectedSubTitle
+            buttonFont = (title.count > self.selectedSubTitle.count ? self.selectedTitleFont : self.selectedSubTitleFont)
         default:
             sizeString = self.normalTitle
             buttonFont = self.normalTitleFont

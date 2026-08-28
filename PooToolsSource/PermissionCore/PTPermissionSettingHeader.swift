@@ -17,8 +17,12 @@ class PTPermissionSettingHeader: PTBaseCollectionReusableView,@MainActor PTSuppl
 
     static let headerHeight:CGFloat = 34
     
-    var headerModel:PTPermissionModel! {
+    var headerModel:PTPermissionModel? {
         didSet {
+            guard let headerModel else {
+                titleView.text = nil
+                return
+            }
             titleView.text = PTPermissionText.permission_name(for: headerModel.type)
         }
     }

@@ -10,6 +10,33 @@ import UIKit
 import AVFoundation
 import CryptoKit
 
+// Serializes thumbnail file I/O so image decoding and disk access never block MainActor.
+// Serializa el acceso a los archivos para que la decodificación y el disco no bloqueen MainActor.
+// 串行化缩略图文件 I/O，避免图片解码和磁盘访问阻塞 MainActor。
+private actor PTVideoCoverDiskStore {
+    private let directory: URL
+
+    init() {
+        let baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let directory = baseURL.appendingPathComponent("PTVideoCoverCache", isDirectory: true)
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        self.directory = directory
+    }
+
+    func readData(for key: String) -> Data? {
+        try? Data(contentsOf: fileURL(for: key), options: .mappedIfSafe)
+    }
+
+    func writeData(_ data: Data, for key: String) {
+        try? data.write(to: fileURL(for: key), options: .atomic)
+    }
+
+    private func fileURL(for key: String) -> URL {
+        directory.appendingPathComponent(key, isDirectory: false)
+    }
+}
+
 /// 统一的视频缓存数据对象
 /// 符合 Sendable 协议，确保可在多线程间安全传递
 @MainActor
@@ -46,8 +73,8 @@ public final class PTVideoManager: Sendable {
     @MainActor public func getVideoItem(for urlString: String,
                              autoCacheVideo: Bool = false,
                              progress: FileDownloadProgress? = nil,
-                             coverReady: @escaping @Sendable (PTVideoCacheItem) -> Void,
-                             videoReady: (@Sendable (PTVideoCacheItem) -> Void)? = nil) {
+                             coverReady: @escaping @MainActor @Sendable (PTVideoCacheItem) -> Void,
+                             videoReady: (@MainActor @Sendable (PTVideoCacheItem) -> Void)? = nil) {
         
         guard let url = URL(string: urlString) else { return }
         
@@ -68,9 +95,7 @@ public final class PTVideoManager: Sendable {
             let frozenItemAfterCover = currentItem
             
             // 现在捕获 frozenItemAfterCover 是绝对安全的
-            DispatchQueue.main.async {
-                coverReady(frozenItemAfterCover)
-            }
+            coverReady(frozenItemAfterCover)
             
             // 检查是否需要下载
             if autoCacheVideo && frozenItemAfterCover.localVideoURL == nil {
@@ -82,15 +107,11 @@ public final class PTVideoManager: Sendable {
                     }
                     
                     // 最后一次回调
-                    DispatchQueue.main.async {
-                        videoReady?(finalItem)
-                    }
+                    videoReady?(finalItem)
                 }
             } else {
                 // 如果不需要下载，直接返回冻结的状态
-                DispatchQueue.main.async {
-                    videoReady?(frozenItemAfterCover)
-                }
+                videoReady?(frozenItemAfterCover)
             }
         }
     }
@@ -107,7 +128,8 @@ public final class PTVideoFileCache: Sendable {
     private let cacheDirectory: URL
 
     private init() {
-        let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         let dir = base.appendingPathComponent(directoryName, isDirectory: true)
         if !FileManager.default.fileExists(atPath: dir.path) {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
@@ -155,18 +177,12 @@ public final class PTVideoFileCache: Sendable {
             }
 
             let localURL = cacheURL(for: url)
-            // 确保您的 urlToUnicodeURLString 方法是线程安全的扩展
-            let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
-
-            // 假定 Network.share.download 的成功和失败回调在 Swift 6 环境下也支持并发安全
-            Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
-                let size = (try? FileManager.default.attributesOfItem(atPath: localURL.path))?[.size] as? NSNumber
-                guard size?.int64Value ?? 0 > 0 else {
-                    completion(nil)
-                    return
-                }
+            do {
+                _ = try await PTCoreFileDownloadService.download(from: url,
+                                                                 to: localURL,
+                                                                 progress: progress)
                 completion(localURL)
-            } fail: { _ in
+            } catch {
                 completion(nil)
             }
         }
@@ -185,16 +201,7 @@ public enum PTVideoCoverCache {
     }()
 
     @MainActor private static var pendingTasks: [String: Task<UIImage?, Never>] = [:]
-
-    private static let diskCacheURL: URL = {
-        let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("PTVideoCoverCache", isDirectory: true)
-
-        if !FileManager.default.fileExists(atPath: url.path) {
-            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        }
-        return url
-    }()
+    private static let diskStore = PTVideoCoverDiskStore()
 
     /// Loads a cached thumbnail or generates the requested one-based frame.
     /// Carga una miniatura en caché o genera el fotograma solicitado, empezando en uno.
@@ -217,9 +224,9 @@ public enum PTVideoCoverCache {
         if let pendingTask = pendingTasks[key] {
             task = pendingTask
         } else {
-            task = Task.detached(priority: .userInitiated) {
-                let diskURL = diskCacheURL.appendingPathComponent(key)
-                if let image = readImage(from: diskURL) {
+            task = Task { @MainActor in
+                if let data = await diskStore.readData(for: key),
+                   let image = UIImage(data: data) {
                     return image
                 }
 
@@ -229,7 +236,8 @@ public enum PTVideoCoverCache {
                                                                 maximumSize: maximumSize,
                                                                 appliesPreferredTrackTransform: appliesPreferredTrackTransform)
                 guard !Task.isCancelled, let image else { return nil }
-                writeImage(image, to: diskURL)
+                guard let data = image.jpegData(compressionQuality: 0.8) else { return image }
+                await diskStore.writeData(data, for: key)
                 return image
             }
             pendingTasks[key] = task
@@ -294,10 +302,11 @@ public enum PTVideoCoverCache {
     /// Writes a JPEG cache entry atomically on a utility task.
     /// Escribe atómicamente una entrada JPEG de caché en una tarea de utilidad.
     /// 在 utility 任务中以原子方式写入 JPEG 缓存项。
+    @MainActor
     static func saveImageToDisk(_ image: UIImage, key: String) {
-        let fileURL = diskCacheURL.appendingPathComponent(key)
-        Task.detached(priority: .utility) {
-            writeImage(image, to: fileURL)
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
+        Task {
+            await diskStore.writeData(data, for: key)
         }
     }
 }
@@ -329,16 +338,6 @@ private extension PTVideoCoverCache {
     static func sizeComponent(_ value: CGFloat) -> String {
         guard value.isFinite else { return "invalid" }
         return String(describing: max(value, 0).rounded(.up))
-    }
-
-    static func readImage(from url: URL) -> UIImage? {
-        guard let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
-    }
-
-    static func writeImage(_ image: UIImage, to url: URL) {
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
-        try? data.write(to: url, options: .atomic)
     }
 
     static func imageMemoryCost(_ image: UIImage) -> Int {

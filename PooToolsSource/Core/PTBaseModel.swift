@@ -71,8 +71,51 @@ extension PTBaseStructModel: Sendable where T: Sendable {}
 // 向下兼容旧版单体擦除模型
 public typealias PTLegacyStructModel = PTBaseStructModel<Any>
 
-// 🌟 Swift 6 安全补丁：跨线程安全传递元类型的容器
+// Progress values are converted to immutable data before crossing an actor boundary.
+// Los valores de progreso se convierten en datos inmutables antes de cruzar un límite de actor.
+// 进度值在跨越 actor 边界前会先转换为不可变数据。
+public struct PTProgressSnapshot: Sendable {
+    public let completedUnitCount: Int64
+    public let totalUnitCount: Int64
+    public let fractionCompleted: Double
+
+    public init(completedUnitCount: Int64,
+                totalUnitCount: Int64,
+                fractionCompleted: Double) {
+        self.completedUnitCount = completedUnitCount
+        self.totalUnitCount = totalUnitCount
+        self.fractionCompleted = fractionCompleted
+    }
+}
+
+// Response metadata contains only value types and is safe to retain after a request callback returns.
+// Los metadatos de respuesta contienen únicamente tipos de valor y son seguros después del callback.
+// 响应元数据只包含值类型，可在请求回调结束后安全保留。
+public struct PTResponseMetadata: Sendable {
+    public let statusCode: Int?
+    public let headers: [String: String]
+    public let isDegraded: Bool
+    public let isCancelled: Bool
+
+    public init(statusCode: Int? = nil,
+                headers: [String: String] = [:],
+                isDegraded: Bool = false,
+                isCancelled: Bool = false) {
+        self.statusCode = statusCode
+        self.headers = headers
+        self.isDegraded = isDegraded
+        self.isCancelled = isCancelled
+    }
+}
+
+// Kept for source compatibility; new concurrency code does not use this box for metatypes.
+// Se conserva por compatibilidad de código; el código nuevo no lo usa para metatipos.
+// 为保持源码兼容而保留；新的并发代码不会用它包装元类型。
+@available(*, deprecated, message: "Use a concrete Sendable value instead of boxing a metatype")
 public struct PTSendableTypeBox<T: Sendable>: Sendable {
-    let type: T?
-    init(_ type: T?) { self.type = type }
+    public let type: T?
+
+    public init(_ type: T?) {
+        self.type = type
+    }
 }

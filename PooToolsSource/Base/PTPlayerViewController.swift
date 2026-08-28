@@ -157,9 +157,10 @@ open class PTPlayerViewController: PTBaseViewController {
     }
     
     func playerPlay(player:AVPlayer) {
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = .resizeAspect
-        view.layer.insertSublayer(playerLayer!, at: 0)
+        let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = .resizeAspect
+        playerLayer = layer
+        view.layer.insertSublayer(layer, at: 0)
         
         addPeriodicTimeObserver()
         addPlayerObservers()

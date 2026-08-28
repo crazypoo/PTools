@@ -16,7 +16,7 @@ public extension UILabel {
         static var fromValue: Double = 0
         static var toValue: Double = 0
         static var duration: Double = 0
-        static var displayLink: UnsafeRawPointer = UnsafeRawPointer(bitPattern: "displayLink".hashValue)!
+        static var displayLink: UInt8 = 0
         static var formatter = 998
         static var enableCopy:Int = 1
         static var copyTapDuration:Float = 0.5
@@ -76,6 +76,10 @@ public extension UILabel {
                      to: Double,
                      duration: Double,
                      formatter:String? = "%.2f") {
+        guard duration.isFinite, duration > 0 else {
+            text = String(format: formatter ?? "%.2f", to)
+            return
+        }
         startTime = CACurrentMediaTime()
         self.fromValue = fromValue
         toValue = to
@@ -89,14 +93,14 @@ public extension UILabel {
         let now = CACurrentMediaTime()
         let elapsedTime = now - startTime
         if elapsedTime > duration {
-            text = String(format: formatter! as String, toValue)
+            text = String(format: formatter ?? "%.2f", toValue)
             displayLink?.invalidate()
             return
         }
         let percentage = elapsedTime / duration
         let value = fromValue + percentage * (toValue - fromValue)
         
-        text = String(format: formatter! as String, value)
+        text = String(format: formatter ?? "%.2f", value)
     }
     
     //MARK: 計算文字的Size
@@ -132,7 +136,7 @@ public extension UILabel {
     ///设置字与字自荐的间隔
     var letterSpace: CGFloat {
         set {
-            let attributedString: NSMutableAttributedString!
+            let attributedString: NSMutableAttributedString
             if let currentAttrString = attributedText {
                 attributedString = NSMutableAttributedString(attributedString: currentAttrString)
             } else {
@@ -155,7 +159,7 @@ public extension UILabel {
     func getVisibleLine() -> Int {
         let labelWidth = self.frame.size.width
         let labelHeight = self.frame.size.height
-        let labelFont = self.font!
+        let labelFont = self.font ?? UIFont.systemFont(ofSize: UIFont.labelFontSize)
         let labelText = self.text ?? ""
 
         let maxSize = CGSize(width: labelWidth, height: CGFloat.infinity)
@@ -236,11 +240,10 @@ public extension UILabel {
     
     @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
                             height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        if let currentText = text,!currentText.stringIsEmpty() {
-            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
-        } else {
-            return .zero
-        }
+        guard let currentText = text,
+              !currentText.stringIsEmpty(),
+              let font else { return .zero }
+        return UIView.sizeFor(string: currentText, font: font, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat) -> CGFloat {
@@ -299,10 +302,16 @@ public extension PTPOP where Base: UILabel {
         /// 2.5 是经验误差值
         path.addRect(CGRect(x: 0, y: 0, width: accordWidth - 2.5, height: CGFloat(MAXFLOAT)))
         let framef = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
-        let lines = CTFrameGetLines(framef) as NSArray
+        let lines = CTFrameGetLines(framef)
+        let lineCount = CFArrayGetCount(lines)
         var lineArr = [String]()
-        for line in lines {
-            let lineRange = CTLineGetStringRange(line as! CTLine)
+        for index in 0..<lineCount {
+            guard let linePointer = CFArrayGetValueAtIndex(lines, index) else { continue }
+            // CoreText guarantees that every element returned here is a CTLine.
+            // CoreText garantiza que cada elemento devuelto aquí es un CTLine.
+            // CoreText 契约保证这里返回的每个元素都是 CTLine。
+            let ctLine = unsafeBitCast(linePointer, to: CTLine.self)
+            let lineRange = CTLineGetStringRange(ctLine)
             let lineString = t.sub(start: lineRange.location,length: lineRange.length)
             lineArr.append(lineString as String)
         }
@@ -475,10 +484,16 @@ public extension PTPOP where Base: UILabel {
         /// 2.5 是经验误差值
         path.addRect(CGRect(x: 0, y: 0, width: base.pt.jx_width, height: base.pt.jx_height > (fp * 1.5) ? base.pt.jx_height : fp * 1.5))
         let framef = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
-        let lines = CTFrameGetLines(framef) as NSArray
+        let lines = CTFrameGetLines(framef)
+        let lineCount = CFArrayGetCount(lines)
         var lineArr = [String]()
-        for line in lines {
-            let lineRange = CTLineGetStringRange(line as! CTLine)
+        for index in 0..<lineCount {
+            guard let linePointer = CFArrayGetValueAtIndex(lines, index) else { continue }
+            // CoreText guarantees that every element returned here is a CTLine.
+            // CoreText garantiza que cada elemento devuelto aquí es un CTLine.
+            // CoreText 契约保证这里返回的每个元素都是 CTLine。
+            let ctLine = unsafeBitCast(linePointer, to: CTLine.self)
+            let lineRange = CTLineGetStringRange(ctLine)
             let lineString = t.sub(start: lineRange.location, length: lineRange.length)
             lineArr.append(lineString as String)
         }
@@ -489,12 +504,15 @@ public extension PTPOP where Base: UILabel {
     ///获取字体的大小
     /// - Returns: 字体大小
     @MainActor func getFontSizeForLabel() -> CGFloat {
-        let text: NSMutableAttributedString = NSMutableAttributedString(attributedString: base.attributedText!)
-        text.setAttributes([NSAttributedString.Key.font: base.font as Any], range: NSMakeRange(0, text.length))
+        guard let attributedText = base.attributedText, let font = base.font else {
+            return base.font?.pointSize ?? UIFont.systemFontSize
+        }
+        let text = NSMutableAttributedString(attributedString: attributedText)
+        text.setAttributes([NSAttributedString.Key.font: font], range: NSMakeRange(0, text.length))
         let context: NSStringDrawingContext = NSStringDrawingContext()
         context.minimumScaleFactor = base.minimumScaleFactor
         text.boundingRect(with: base.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: context)
-        let adjustedFontSize: CGFloat = base.font.pointSize * context.actualScaleFactor
+        let adjustedFontSize: CGFloat = font.pointSize * context.actualScaleFactor
         return adjustedFontSize
     }
 }

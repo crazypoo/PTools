@@ -128,15 +128,8 @@ public extension UIViewController {
     //MARK: 檢查當前的ViewController是Push還是Pop
     ///檢查當前的ViewController是Push還是Pop
     func checkVCIsPresenting() -> Bool {
-        let vcs = navigationController?.viewControllers
-        if (vcs?.count ?? 0) > 1 {
-            if vcs![vcs!.count - 1] == self {
-                return false
-            }
-        } else {
-            return true
-        }
-        return false
+        guard let viewControllers = navigationController?.viewControllers else { return true }
+        return viewControllers.count <= 1
     }
     
     //MARK: ViewController退出

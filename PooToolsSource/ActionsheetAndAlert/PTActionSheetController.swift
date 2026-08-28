@@ -33,6 +33,11 @@ public class PTActionCell:UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
 
+        // English: Use a dynamic translucent fallback under the material blur in every interface style.
+        // Español: Usa un fondo translúcido y dinámico debajo del desenfoque material en cada estilo.
+        // 中文：在所有界面样式下，为系统磨砂层提供动态半透明底色。
+        backgroundColor = UIColor.systemBackground.withAlphaComponent(0.78)
+
         addSubviews([blur,cellButton])
         blur.snp.makeConstraints { make in
             make.edges.equalToSuperview()

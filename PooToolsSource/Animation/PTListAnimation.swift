@@ -53,7 +53,7 @@ public enum PTListAnimationDirection: Int, CaseIterable {
     }
     
     static func random() -> PTListAnimationDirection {
-        return allCases.randomElement()!
+        allCases.randomElement() ?? .top
     }
 }
 

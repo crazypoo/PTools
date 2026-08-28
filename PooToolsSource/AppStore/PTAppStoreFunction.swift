@@ -19,7 +19,8 @@ public class PTAppStoreFunction: NSObject {
     static public func rateApp(appid:String? = nil) {
         let aID = appid ?? PTAppBaseConfig.share.appID
         let openAppStore = "itms-apps://itunes.apple.com/app/id\(aID)?action=write-review"
-        PTAppStoreFunction.jumpLink(url: URL(string: openAppStore)!)
+        guard let url = URL(string: openAppStore) else { return }
+        PTAppStoreFunction.jumpLink(url: url)
     }
     
     //MARK: 跳转到AppStore
@@ -34,7 +35,8 @@ public class PTAppStoreFunction: NSObject {
     
     static public func jumpToAppStore(appid:String? = nil) {
         let aID = appid ?? PTAppBaseConfig.share.appID
-        PTAppStoreFunction.jumpLink(url: URL(string: PTAppStoreFunction.appStoreURL(appid: aID))!)
+        guard let url = URL(string: PTAppStoreFunction.appStoreURL(appid: aID)) else { return }
+        PTAppStoreFunction.jumpLink(url: url)
     }
 
     static public func jumpLink(url:URL) {

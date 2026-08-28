@@ -773,8 +773,7 @@ public class PTSheetViewController: PTBaseViewController {
 
         if animated, duration > 0 {
             let safeDuration = self.normalizedAnimationDuration(duration)
-            UIView.animate(withDuration: safeDuration, delay: 0, options: options, animations: { [weak self] in
-                guard let self = self else { return }
+            UIView.animate(withDuration: safeDuration, delay: 0, options: options, animations: {
                 updateHeight()
             }, completion: { [weak self] _ in
                 guard let self = self else { return }

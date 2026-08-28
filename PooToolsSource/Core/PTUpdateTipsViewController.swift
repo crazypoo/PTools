@@ -171,7 +171,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
     }()
     
     private var cancelTitle:String = ""
-    private var doneTitle:String!
+    private var doneTitle: String = ""
     private var titleString:String = ""
 
     public init(titleString:String = "",cancelTitle:String = "",doneTitle:String) {

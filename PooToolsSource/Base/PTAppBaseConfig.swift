@@ -37,7 +37,7 @@ public class PTAppBaseConfig: NSObject {
 
     //MARK: App的全局背景顏色
     ///App的全局背景顏色
-    public var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
+    public var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4") ?? UIColor(white: 0.933, alpha: 1), darkColor: .black)
     public var viewDefaultTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
 
     //MARK: App全局的导航栏返回按钮
@@ -51,7 +51,7 @@ public class PTAppBaseConfig: NSObject {
     public var navLargeTitleProgress:CGFloat = 120
     public var navLargeTitleBarHeight:CGFloat = 52
     public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-    public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
+    public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4") ?? UIColor(white: 0.933, alpha: 1), darkColor: .black)
     public var hidesBarsOnSwipe:Bool = false
     public var navGradientColors:[UIColor] = []
     public var bavTitleContainerHeight:CGFloat = 32

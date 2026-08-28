@@ -64,7 +64,7 @@ open class PTLoginDescButton: UIView {
         return view
     }()
     
-    fileprivate var viewConfig:PTLoginDescConfig!
+    private let viewConfig: PTLoginDescConfig
     
     public init(config:PTLoginDescConfig = PTLoginDescConfig()) {
         viewConfig = config

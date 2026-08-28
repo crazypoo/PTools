@@ -26,6 +26,7 @@ public class PTMenuSheetButtonView: UIView {
     private var separatorContainer: UIView!
     private var separatorView: UIView!
     private var itemsButtons: [UIButton] = []
+    private var itemByButtonID: [ObjectIdentifier: PTMenuSheetButtonItems] = [:]
     
     // MARK: - Public properties
     public private(set) var direction: Direction
@@ -244,6 +245,7 @@ public class PTMenuSheetButtonView: UIView {
             
             itemsStackView.addArrangedSubview(button)
             itemsButtons.append(button)
+            itemByButtonID[ObjectIdentifier(button)] = item
         }
     }
     
@@ -253,6 +255,9 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     @objc private func itemTapped(_ sender: UIButton) {
+        if let item = itemByButtonID[ObjectIdentifier(sender)] {
+            item.action(item)
+        }
         if closeOnAction { close() }
     }
 

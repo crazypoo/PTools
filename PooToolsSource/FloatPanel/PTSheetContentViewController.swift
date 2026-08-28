@@ -258,17 +258,16 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     private func setupChildViewController() {
         self.addChild(self.childViewController)
-        self.childContainerView.addSubview(self.childViewController.view)
+        guard let childView = self.childViewController.view else { return }
+        self.childContainerView.addSubview(childView)
 
-        let childView = self.childViewController.view
-        childView?.translatesAutoresizingMaskIntoConstraints = false
-        let childBottomConstraint = childView?.bottomAnchor.constraint(equalTo: self.childContainerView.bottomAnchor)
+        childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            childView?.leadingAnchor.constraint(equalTo: self.childContainerView.leadingAnchor),
-            childView?.trailingAnchor.constraint(equalTo: self.childContainerView.trailingAnchor),
-            childView?.topAnchor.constraint(equalTo: self.childContainerView.topAnchor),
-            childBottomConstraint
-        ] as! [NSLayoutConstraint])
+            childView.leadingAnchor.constraint(equalTo: self.childContainerView.leadingAnchor),
+            childView.trailingAnchor.constraint(equalTo: self.childContainerView.trailingAnchor),
+            childView.topAnchor.constraint(equalTo: self.childContainerView.topAnchor),
+            childView.bottomAnchor.constraint(equalTo: self.childContainerView.bottomAnchor)
+        ])
 
         self.pullBarSafeAreaTop = self.options.shouldExtendBackground ? self.options.pullBarHeight : 0
         self.applyChildSafeAreaInsets()

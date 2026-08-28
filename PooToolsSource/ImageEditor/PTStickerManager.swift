@@ -587,7 +587,9 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         borderView.layer.borderColor = UIColor.systemBlue.cgColor
         setHandlesHidden(false)
         let timer = Timer(timeInterval: 2, repeats: false) { [weak self] _ in
-            self?.hideBorder()
+            PTMainActorBridge.perform { [weak self] in
+                self?.hideBorder()
+            }
         }
         self.timer = timer
         RunLoop.main.add(timer, forMode: .common)

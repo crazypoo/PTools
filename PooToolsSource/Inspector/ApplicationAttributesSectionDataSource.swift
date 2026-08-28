@@ -18,6 +18,11 @@ extension DefaultElementAttributesLibrary {
             self.application = application
         }
 
+        // iOS 17 no longer exposes a synchronous badge getter; keep the value used by this inspector locally.
+        // iOS 17 ya no expone un getter síncrono del badge; este inspector conserva localmente el valor utilizado.
+        // iOS 17 不再提供同步读取角标的 API；此检查器在本地保存当前使用的值。
+        private var badgeNumber = 0
+
         private enum Property: String, Swift.CaseIterable {
             case alternateIconName = "Alternate Icon Name"
             case applicationIconBadgeNumber = "Icon Badge Number"
@@ -45,10 +50,13 @@ extension DefaultElementAttributesLibrary {
                 case .applicationIconBadgeNumber:
                     return .integerStepper(
                         title: property.rawValue,
-                        value: { self.application.applicationIconBadgeNumber },
+                        value: { self.badgeNumber },
                         range: { 0...1000 },
                         stepValue: { 1 },
-                        handler: { UNUserNotificationCenter.current().setBadgeCount($0) }
+                        handler: {
+                            self.badgeNumber = $0
+                            UNUserNotificationCenter.current().setBadgeCount($0)
+                        }
                     )
                 case .applicationSupportsShakeToEdit:
                     return .switch(

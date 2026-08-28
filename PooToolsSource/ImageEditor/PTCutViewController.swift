@@ -656,7 +656,9 @@ class PTCutViewController: PTBaseViewController {
     private func startTimer() {
         cleanTimer()
         let timer = Timer(timeInterval: 0.8, repeats: false) { [weak self] _ in
-            self?.endEditing()
+            PTMainActorBridge.perform { [weak self] in
+                self?.endEditing()
+            }
         }
         resetTimer = timer
         RunLoop.main.add(timer, forMode: .common)

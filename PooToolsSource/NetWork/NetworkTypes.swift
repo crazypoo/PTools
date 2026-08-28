@@ -55,7 +55,6 @@ public enum NetWorkEnvironment: Int, Sendable {
 
 public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void
 public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void
-public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void
 public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void
 public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void
 

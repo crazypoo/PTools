@@ -121,8 +121,10 @@ public extension Date {
     static func checkContractTimeType(begainTime:String,
                                       endTime:String,
                                       readyExpTime:Int) -> CheckContractTimeRelationships {
-        let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
-        let endTimeDate = endTime.toDate("yyyy-MM-dd")!
+        guard let begainTimeDate = begainTime.toDate("yyyy-MM-dd")?.date,
+              let endTimeDate = endTime.toDate("yyyy-MM-dd")?.date else {
+            return .Error
+        }
         let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
         let thirty = NSNumber(integerLiteral: readyExpTime).floatValue
         let result = timeDifference.float - thirty
@@ -154,7 +156,7 @@ public extension Date {
     ///   - dateFormat: 输出格式
     /// - Returns: 显示字符串（按设备时区显示；若设备不是柬埔寨会先按差值修正）
     static func formattedCambodiaTimestampSafe(_ timestamp: TimeInterval,
-                                               timeStamplocation:TimeZone = TimeZone(identifier: "Asia/Phnom_Penh")!,
+                                               timeStamplocation:TimeZone = TimeZone(identifier: "Asia/Phnom_Penh") ?? .current,
                                                timeStampOffset:TimeInterval = 0,
                                                dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> String {
         let khTZ = timeStamplocation
@@ -210,18 +212,16 @@ public extension PTPOP where Base == Date {
     /// - Returns: 返回 Date
     static func timestampToFormatterDate(timestamp: String) -> Date {
         guard timestamp.count == 10 ||  timestamp.count == 13 else {
-            #if DEBUG
-            fatalError("时间戳位数不是 10 也不是 13")
-            #else
+            PTNSLogConsole("时间戳位数不是 10 或 13：\(timestamp)",
+                           levelType: .error,
+                           loggerType: .other)
             return Date()
-            #endif
         }
         guard let timestampInt = timestamp.int else {
-            #if DEBUG
-            fatalError("时间戳位有问题")
-            #else
+            PTNSLogConsole("时间戳无法解析：\(timestamp)",
+                           levelType: .error,
+                           loggerType: .other)
             return Date()
-            #endif
         }
         let timestampValue = timestamp.count == 10 ? timestampInt : timestampInt / 1000
         // 时间戳转为Date
@@ -270,11 +270,10 @@ public extension PTPOP where Base == Date {
                                                timestampType: PTTimestampType = .second) -> String {
         jx_formatter.dateFormat = formatter
         guard let date = jx_formatter.date(from: timesString) else {
-            #if DEBUG
-            fatalError("时间有问题")
-            #else
+            PTNSLogConsole("时间字符串无法解析：\(timesString)",
+                           levelType: .error,
+                           loggerType: .other)
             return ""
-            #endif
         }
         if timestampType == .second {
             return "\(Int(date.timeIntervalSince1970))"

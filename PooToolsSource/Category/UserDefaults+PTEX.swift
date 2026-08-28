@@ -31,11 +31,10 @@ public extension PTPOP where Base: UserDefaults {
     @discardableResult
     static func userDefaultsSetValue(value: Any?,
                                      key: String?) -> Bool {
-        guard value != nil, key != nil else {
+        guard let value, let key, !key.isEmpty else {
             return false
         }
-        Base.standard.set(value, forKey: key!)
-        Base.standard.synchronize()
+        Base.standard.set(value, forKey: key)
         return true
     }
     
@@ -45,10 +44,10 @@ public extension PTPOP where Base: UserDefaults {
     ///  - key: 键
     /// - Returns: 返回值
     static func userDefaultsGetValue(key: String?) -> Any? {
-        guard key != nil, let result = Base.standard.value(forKey: key!) else {
+        guard let key, !key.isEmpty else {
             return nil
         }
-        return result
+        return Base.standard.object(forKey: key)
     }
     
     //MARK: 移除单个值

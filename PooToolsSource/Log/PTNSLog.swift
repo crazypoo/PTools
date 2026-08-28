@@ -267,7 +267,7 @@ public struct PTMems<T> {
                               alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofVal: &v)
         return _memStr(p, MemoryLayout.stride(ofValue: v),
-                       alignment != nil ? alignment!.rawValue : MemoryLayout.alignment(ofValue: v))
+                       alignment?.rawValue ?? MemoryLayout.alignment(ofValue: v))
     }
     
     /// 获得引用所指向的内存数据（字符串格式）
@@ -278,7 +278,7 @@ public struct PTMems<T> {
                               alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofRef: v)
         return _memStr(p, malloc_size(p),
-                       alignment != nil ? alignment!.rawValue : MemoryLayout.alignment(ofValue: v))
+                       alignment?.rawValue ?? MemoryLayout.alignment(ofValue: v))
     }
     
     /// 获得变量的内存地址

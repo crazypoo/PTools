@@ -137,7 +137,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     static var volumes : String {
-        String(format: "%d", Device.volumes!)
+        String(Device.volumeTotalCapacity ?? 0)
     }
     
     //MARK: 当前硬盘可用空间
@@ -168,13 +168,13 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 獲取可用的儲存用量(字節為單位)
     ///獲取可用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForImportantUsage : String {
-        String(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+        String(Device.volumeAvailableCapacityForImportantUsage ?? 0)
     }
     
     //MARK: 獲取不能用的儲存用量(字節為單位)
     ///獲取不能用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForOpportunisticUsage : String {
-        String(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+        String(Device.volumeAvailableCapacityForOpportunisticUsage ?? 0)
     }
 
     //MARK: 获取总内存大小
@@ -215,7 +215,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 当前系统更新时间
     ///当前系统更新时间
     static var systemUptime: String {
-        let time = ProcessInfo.processInfo.systemUptime.formattedString!
+        let time = ProcessInfo.processInfo.systemUptime.formattedString ?? "0"
         return time
     }
     
@@ -243,7 +243,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 获取手机的第一个语言
     ///获取手机的第一个语言
     static var currentDeviceLanguageInIos: String {
-        Bundle.main.preferredLocalizations.first!
+        Bundle.main.preferredLocalizations.first ?? Locale.current.language.languageCode?.identifier ?? "en"
     }
     
     //MARK: 获取手机的第一个语言字典
@@ -251,7 +251,7 @@ public extension PTPOP where Base: UIDevice {
     static var currentDeviceLanguageInIosWithDic: [String:String] {
         var dic:[String:String] = [String:String]()
         let arr = NSLocale.preferredLanguages
-        let language = arr.first!
+        let language = arr.first ?? Locale.current.identifier
         dic["LANGUAGEENGLISH"] = language
         dic["LANGUAGEANDCHINESE"] = NSLocale.canonicalLocaleIdentifier(from: language)
         dic["LANGUAGECHINESE"] = NSLocale(localeIdentifier: language).displayName(forKey: NSLocale.Key.identifier, value: language)

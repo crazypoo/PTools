@@ -27,6 +27,26 @@ if rg -n 'try!|as!' "${critical_files[@]}"; then
   exit 1
 fi
 
+# Report the complete Core surface without making the legacy inventory a false pass.
+# Informa de toda la superficie Core sin convertir el inventario heredado en un falso aprobado.
+# 扫描完整 Core 范围，但不把历史问题伪装成新问题或误报为通过。
+core_source_dirs=(
+  Core Blur ActionsheetAndAlert Base AppStore ApplicationFunction BlackMagic Button
+  Category Log StatusBar Protocol Animation PermissionCore PhotoLibraryPermission
+  AppDelegate Foundation Language DarkMode Line Badge Rotation Switch Colors Font
+  FloatPanel SideMenuControl iCloud
+)
+core_forceful_report="$(rg -n --glob '*.swift' 'try!|as!' "${core_source_dirs[@]/#/PooToolsSource/}" || true)"
+if [[ -n "$core_forceful_report" ]]; then
+  printf 'INFO: legacy forceful operations in the complete Core surface:\n' >&2
+  printf '%s\n' "$core_forceful_report" | head -120 >&2
+fi
+
+if rg -n --glob '*.swift' '(^|[[:space:]])(import Alamofire|Network\.share)' "${core_source_dirs[@]/#/PooToolsSource/}"; then
+  printf 'FAIL: Core source must not depend directly on the Network target\n' >&2
+  exit 1
+fi
+
 bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_localizations.sh
 
@@ -45,7 +65,10 @@ if [[ -n "$unlisted_unchecked" ]]; then
   exit 1
 fi
 
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox' || true)"
+# Only immutable SDK type metadata and system object boxes may use this narrow compatibility exception.
+# Solo los metadatos de tipo inmutables del SDK y las cajas de objetos del sistema pueden usar esta excepción.
+# 仅不可变 SDK 类型元数据和系统对象包装器可以使用这个窄范围兼容例外。
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

@@ -48,8 +48,10 @@ public extension Double {
     //MARK: 數字金額轉換成人民幣大寫金額
     /// - Parameter return: 人民幣大寫金額
     func cnySpellOut() -> String {
+        guard isFinite, self >= 0 else { return "" }
         let numString = String(format: "%.2f", self)
         let parts = numString.split(separator: ".")
+        guard parts.count == 2 else { return "" }
         let integerPart = parts[0]
         let fractionalPart = parts[1]
         let chineseNumerals = ["零", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖"]
@@ -59,7 +61,9 @@ public extension Double {
         var count = 0
         for i in (0..<integerPart.count).reversed() {
             let index = integerPart.index(integerPart.startIndex, offsetBy: i)
-            let ch = chineseNumerals[Int(String(integerPart[index]))!]
+            guard let digit = Int(String(integerPart[index])),
+                  chineseNumerals.indices.contains(digit) else { return "" }
+            let ch = chineseNumerals[digit]
             let unit = chineseUnits[count % chineseUnits.count]
             if ch != "零" {
                 integerString = ch + unit + integerString
@@ -72,7 +76,9 @@ public extension Double {
         count = 0
         for i in 0..<2 {
             let index = fractionalPart.index(fractionalPart.startIndex, offsetBy: i)
-            let ch = chineseNumerals[Int(String(fractionalPart[index]))!]
+            guard let digit = Int(String(fractionalPart[index])),
+                  chineseNumerals.indices.contains(digit) else { return "" }
+            let ch = chineseNumerals[digit]
             let unit = chineseFractionalUnits[count]
             if ch != "零" {
                 fractionalString += ch + unit

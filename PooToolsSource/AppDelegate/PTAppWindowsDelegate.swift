@@ -16,6 +16,7 @@ import SwifterSwift
 /// web跳转路由
 @MainActor public var webRouterUrl = "scheme://webview/home"
 
+@MainActor
 open class PTAppWindowsDelegate: PTAppDelegate {
     
     open var isFullScreen:Bool = false
@@ -24,18 +25,16 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
     public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
 #if POOTOOLS_DEBUG
-        Task {
-            let environment = UIApplication.shared.inferredEnvironment_PT
+        let environment = UIApplication.shared.inferredEnvironment_PT
 
-            switch environment {
-            case .appStore,.testFlight:
-                window = UIWindow(frame: UIScreen.main.bounds)
-            default:
-                window = TouchInspectorWindow(frame: UIScreen.main.bounds)
-                (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow
-                (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits
-                window?.tintColor = tint
-            }
+        switch environment {
+        case .appStore,.testFlight:
+            window = UIWindow(frame: UIScreen.main.bounds)
+        default:
+            let inspectorWindow = TouchInspectorWindow(frame: UIScreen.main.bounds)
+            inspectorWindow.showTouches = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow
+            inspectorWindow.showHitTesting = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits
+            window = inspectorWindow
         }
 #else
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -53,15 +52,13 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
 #if POOTOOLS_DEBUG
     public func createDevFunction() {
-        Task {
-            let environment = UIApplication.shared.inferredEnvironment_PT
-            switch environment {
-            case .appStore,.testFlight:
-                break
-            default:
-                let lcm = LocalConsole.shared
-                lcm.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
-            }
+        let environment = UIApplication.shared.inferredEnvironment_PT
+        switch environment {
+        case .appStore,.testFlight:
+            break
+        default:
+            let lcm = LocalConsole.shared
+            lcm.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
         }
     }
 #endif
@@ -109,16 +106,14 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
 
     public func createSettingBundle() {
-        Task {
-            let environment = UIApplication.shared.inferredEnvironment_PT
-            switch environment {
-            case .appStore,.testFlight:
-                break
-            default:
+        let environment = UIApplication.shared.inferredEnvironment_PT
+        switch environment {
+        case .appStore,.testFlight:
+            break
+        default:
     #if POOTOOLS_DEBUG
-                PTDebugFunction.registerDefaultsFromSettingsBundle()
+            PTDebugFunction.registerDefaultsFromSettingsBundle()
     #endif
-            }
         }
     }
     

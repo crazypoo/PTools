@@ -311,20 +311,22 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 進入相冊
     func enterPhotos() {
-        PTGCDManager.shared.delayOnMain(time: 0.1) {
-            if self.viewConfig.openAblumFollowSystem {
-                Task {
+        PTGCDManager.shared.delayOnMain(time: 0.1) { [weak self] in
+            guard self != nil else { return }
+            _ = Task { @MainActor [weak self] in
+                guard let self else { return }
+                if self.viewConfig.openAblumFollowSystem {
                     do {
-                        let object:UIImage = try await PTImagePicker.openAlbum()
-                        Task { @MainActor in
-                            self.findQR(inImage: object)
-                        }
+                        let object: UIImage = try await PTImagePicker.openAlbum()
+                        self.findQR(inImage: object)
                     } catch let pickerError as PTImagePicker.PickerError {
                         pickerError.outPutLog()
+                    } catch {
+                        PTNSLogConsole("打开相册失败: \(error)")
                     }
+                } else {
+                    self.ptAblum()
                 }
-            } else {
-                self.ptAblum()
             }
         }
     }

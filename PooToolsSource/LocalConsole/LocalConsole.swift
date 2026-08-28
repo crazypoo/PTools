@@ -364,10 +364,10 @@ public class LocalConsole: NSObject {
     @MainActor public var isVisiable:Bool = {
 #if POOTOOLS_DEBUG
         guard UIApplication.shared.inferredEnvironment_PT != .appStore else { return false }
+        return PTCoreUserDefultsWrapper.shared.AppDebugMode
 #else
         return false
 #endif
-        return PTCoreUserDefultsWrapper.shared.AppDebugMode
     }() {
         didSet {
             guard oldValue != isVisiable else { return }
@@ -741,7 +741,9 @@ public class LocalConsole: NSObject {
             },
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { [weak self] notification in
                 let box = PTReadCompletionNotificationBox(value: notification)
-                self?.keyboardWillShow(box.value)
+                PTMainActorBridge.perform { [weak self] in
+                    self?.keyboardWillShow(box.value)
+                }
             }
         ]
         flushUI()
@@ -1254,14 +1256,16 @@ extension LocalConsole {
         dynamicReportTimer = nil
         printStaticSystemInfo()
 
-        dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-            guard let self,
-                  let terminal = self.terminal?.systemText,
-                  !terminal.pt_fullText.stringIsEmpty() else {
-                timer.invalidate()
-                return
+        dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            PTMainActorBridge.perform { [weak self] in
+                guard let self,
+                      let terminal = self.terminal?.systemText,
+                      !terminal.pt_fullText.stringIsEmpty() else {
+                    self?.dynamicReportTimer?.invalidate()
+                    return
+                }
+                self.updateDynamicSystemInfo()
             }
-            self.updateDynamicSystemInfo()
         }
     }
     

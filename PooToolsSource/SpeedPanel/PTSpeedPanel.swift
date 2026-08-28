@@ -27,11 +27,16 @@ public class PTSpeedPanelConfig:NSObject {
     open var progressBackgroundColor:UIColor = .lightGray
 }
 
+@MainActor
 @objcMembers
 public class PTSpeedPanel: UIView {
     open var callBack:PTPanelDetailTask? = nil
 
     fileprivate var viewConfig : PTSpeedPanelConfig!
+    // The timer is owned by the main actor so callbacks never transfer Timer across isolation domains.
+    // El temporizador pertenece al actor principal para que los callbacks nunca transfieran Timer entre dominios de aislamiento.
+    // 定时器由主 actor 持有，避免回调在隔离域之间传递 Timer。
+    private var animationTimer: Timer?
     
     // 当前速度
     fileprivate var currentSpeed: CGFloat = 0
@@ -149,32 +154,38 @@ public class PTSpeedPanel: UIView {
     }
 
     fileprivate func animationStart() {
-        let timer = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { timer in
-            let safeTimer = PTTimerBox(timer: timer)
-            PTGCDManager.shared.runOnMain(block: {
+        animationTimer?.invalidate()
+        let timer = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
                 self.currentSpeed += 1
                 self.updateSpeed(speed: self.currentSpeed)
                 if self.currentSpeed >= self.viewConfig.maxValue {
-                    safeTimer.timer.invalidate()
+                    self.animationTimer?.invalidate()
+                    self.animationTimer = nil
                     self.animationEnd()
                 }
-            })
+            }
         }
+        animationTimer = timer
         timer.fire()
     }
     
     fileprivate func animationEnd() {
-        let time = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { timer in
-            let safeTimer = PTTimerBox(timer: timer)
-            PTGCDManager.shared.runOnMain(block: {
+        animationTimer?.invalidate()
+        let timer = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
                 self.currentSpeed -= 1
                 self.updateSpeed(speed: self.currentSpeed)
                 if self.currentSpeed <= 0 {
-                    safeTimer.timer.invalidate()
+                    self.animationTimer?.invalidate()
+                    self.animationTimer = nil
                 }
-            })
+            }
         }
-        time.fire()
+        animationTimer = timer
+        timer.fire()
     }
     
     // 更新速度

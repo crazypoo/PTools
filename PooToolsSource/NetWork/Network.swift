@@ -378,12 +378,21 @@ public actor NetworkCache {
         let now = Date().timeIntervalSince1970
         guard now - lastCleanTime > Network.share.config.cleanCachePreSec else { return }
         lastCleanTime = now
-        Task.detached(priority: .background) { self._cleanDisk() }
+        let path = diskPath
+        let maxDiskSize = Network.share.config.maxDiskSize
+        let cleanThreshold = Network.share.config.cleanThreshold
+        Task.detached(priority: .background) {
+            Self.cleanDisk(at: path,
+                           maxDiskSize: maxDiskSize,
+                           cleanThreshold: cleanThreshold)
+        }
     }
     
-    private nonisolated func _cleanDisk() {
+    private nonisolated static func cleanDisk(at path: String,
+                                              maxDiskSize: Int64,
+                                              cleanThreshold: Double) {
         let fm = FileManager.default
-        guard let files = try? fm.contentsOfDirectory(at: URL(fileURLWithPath: diskPath), includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey], options: .skipsHiddenFiles) else { return }
+        guard let files = try? fm.contentsOfDirectory(at: URL(fileURLWithPath: path), includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey], options: .skipsHiddenFiles) else { return }
 
         var totalSize: Int64 = 0
         var cacheFiles: [(url: URL, size: Int64, lastAccess: TimeInterval)] = []
@@ -402,9 +411,9 @@ public actor NetworkCache {
             }
         }
 
-        if totalSize <= Network.share.config.maxDiskSize { return }
+        guard maxDiskSize > 0, totalSize > maxDiskSize else { return }
         cacheFiles.sort { $0.lastAccess < $1.lastAccess }
-        let targetSize = Int64(Double(Network.share.config.maxDiskSize) * Network.share.config.cleanThreshold)
+        let targetSize = Int64(Double(maxDiskSize) * min(max(cleanThreshold, 0), 1))
 
         for file in cacheFiles {
             try? fm.removeItem(at: file.url)
@@ -542,6 +551,27 @@ public actor RequestDeduplicator {
             return try await newTask.value
         }
     }
+
+    fileprivate func executeRaw(
+        request: URLRequest,
+        policy: PTNetworkDedupPolicy,
+        task: @escaping @Sendable () async throws -> PTNetworkResponseSnapshot
+    ) async throws -> PTNetworkResponseSnapshot {
+        switch policy {
+        case .none:
+            return try await task()
+        default:
+            let key = RequestKey(request: request, responseType: PTNetworkResponseSnapshot.self)
+            if let existingTask = runningTasks[key] as? Task<PTNetworkResponseSnapshot, Error> {
+                return try await existingTask.value
+            }
+
+            let newTask = Task { try await task() }
+            runningTasks[key] = newTask
+            defer { runningTasks.removeValue(forKey: key) }
+            return try await newTask.value
+        }
+    }
 }
 
 public struct PTNetworkConfig: Sendable {
@@ -582,6 +612,23 @@ fileprivate struct PreparedImageResult: Sendable {
     let fileName: String
     let mimeType: String
     let data: Data
+}
+
+// A response snapshot keeps only Sendable values after Alamofire's callback returns.
+// Una instantánea conserva únicamente valores Sendable después del callback de Alamofire.
+// 响应快照只在 Alamofire 回调结束后保留 Sendable 值。
+fileprivate struct PTNetworkResponseSnapshot: Sendable {
+    let url: String
+    let data: Data?
+    let metadata: PTResponseMetadata
+}
+
+// Upload events cross the stream as immutable snapshots instead of Progress or UIKit objects.
+// Los eventos de carga cruzan el stream como instantáneas inmutables, no como Progress ni objetos UIKit.
+// 上传事件以不可变快照跨越流，不传递 Progress 或 UIKit 对象。
+private struct PTNetworkUploadEvent: Sendable {
+    let progress: PTProgressSnapshot
+    let response: PTNetworkResponseSnapshot?
 }
 
 public final class Network: @unchecked Sendable {
@@ -770,10 +817,23 @@ public final class Network: @unchecked Sendable {
         return headers
     }
     
-    private static func isJSONResponse(_ response: HTTPURLResponse?, data: Data?) -> Bool {
-        if response?.mimeType == "application/json" || response?.mimeType == "text/json" { return true }
-        if let contentType = response?.value(forHTTPHeaderField: "Content-Type")?.lowercased(), contentType.contains("application/json") { return true }
-        return false
+    private static func isJSONResponse(_ metadata: PTResponseMetadata) -> Bool {
+        let contentType = metadata.headers.first { key, _ in
+            key.caseInsensitiveCompare("Content-Type") == .orderedSame
+        }?.value.lowercased() ?? ""
+        return contentType.contains("application/json") || contentType.contains("text/json")
+    }
+
+    private static func responseSnapshot(url: String,
+                                         response: HTTPURLResponse?,
+                                         data: Data?) -> PTNetworkResponseSnapshot {
+        var headers = [String: String](minimumCapacity: response?.allHeaderFields.count ?? 0)
+        response?.allHeaderFields.forEach { key, value in
+            headers[String(describing: key)] = String(describing: value)
+        }
+        let metadata = PTResponseMetadata(statusCode: response?.statusCode,
+                                          headers: headers)
+        return PTNetworkResponseSnapshot(url: url, data: data, metadata: metadata)
     }
     
     /// 🌟 内部核心日志美化转换工具
@@ -788,27 +848,27 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 🌟 内部通用预处理：脱离外壳保护、Pretty 输出与截断盾
-    private static func validateAndPreprocessResponse<T>(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel<T>, String) {
+    private static func validateAndPreprocessResponse<T>(_ snapshot: PTNetworkResponseSnapshot) throws -> (PTBaseStructModel<T>, String) {
         var result = PTBaseStructModel<T>()
-        result.resultData = data
+        result.resultData = snapshot.data
         
-        guard let data = data, !data.isEmpty else {
+        guard let data = snapshot.data, !data.isEmpty else {
             let error = PTNetworkError.dataEmpty
-            logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
+            logRequestFailure(url: snapshot.url, error: AFError.createURLRequestFailed(error: error))
             throw error
         }
         
-        let isMockData = (response == nil)
-        if !isMockData && !isJSONResponse(response, data: data) {
+        let isMockData = snapshot.metadata.statusCode == nil
+        if !isMockData && !isJSONResponse(snapshot.metadata) {
             if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
                 let error = PTNetworkError.htmlResponse(html)
-                logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
+                logRequestFailure(url: snapshot.url, error: AFError.createURLRequestFailed(error: error))
                 throw error
             }
             var originalText = ""
             if shouldLogResponseDetails {
                 originalText = String(decoding: data, as: UTF8.self)
-                logRequestSuccess(url: url, jsonStr: originalText)
+                logRequestSuccess(url: snapshot.url, jsonStr: originalText)
             }
             result.originalString = originalText
             return (result, "")
@@ -839,7 +899,7 @@ public final class Network: @unchecked Sendable {
                 prettyStr = prettyPrintedJSONString(from: data)
             }
             let printStr = prettyStr.count > maxLen ? String(prettyStr.prefix(maxLen)) + "\n\n...[JSON过大，为保护控制台已截断]..." : prettyStr
-            logRequestSuccess(url: url, jsonStr: printStr)
+            logRequestSuccess(url: snapshot.url, jsonStr: printStr)
         }
         return (result, rawJsonString)
     }
@@ -909,10 +969,9 @@ public final class Network: @unchecked Sendable {
 
     /// 所有非上传请求共用的执行边界：插件、mock、取消、去重和错误日志
     /// 在这里完成，避免 URL 参数请求和 Body 请求各自维护一套生命周期。
-    private class func execute<T: Sendable>(url: String,
-                                  request: URLRequest,
-                                  uploadBody: Data? = nil,
-                                  parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    private class func execute(url: String,
+                               request: URLRequest,
+                               uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         var request = request
         for plugin in Network.share.plugins {
             await plugin.willSend(&request)
@@ -920,13 +979,13 @@ public final class Network: @unchecked Sendable {
 
         if request.isMock,
            let mockData = await NetworkCache.shared.read(request: request) {
-            return try parser(url, nil, mockData)
+            return responseSnapshot(url: url, response: nil, data: mockData)
         }
 
         let policy: PTNetworkDedupPolicy = request.cachePolicyType == .none ? .none : .identical
         let finalRequest = request
         let session = Network.share.session
-        let realRequest: @Sendable () async throws -> PTBaseStructModel<T> = {
+        let realRequest: @Sendable () async throws -> PTNetworkResponseSnapshot = {
             let dataTask = uploadBody.map {
                 session.upload($0, with: finalRequest).serializingData()
             } ?? session.request(finalRequest).serializingData()
@@ -943,24 +1002,24 @@ public final class Network: @unchecked Sendable {
 
             switch response.result {
             case .success(let data):
-                return try parser(url, response.response, data)
+                return responseSnapshot(url: url, response: response.response, data: data)
             case .failure(let error):
                 logRequestFailure(url: url, error: error)
                 throw error
             }
         }
-        return try await RequestDeduplicator.shared.execute(request: finalRequest, policy: policy) {
-            try await realRequest()
-        }
+        return try await RequestDeduplicator.shared.executeRaw(
+            request: finalRequest,
+            policy: policy,
+            task: realRequest)
     }
 
     /// Compatibility executor for the old KakaJSON/Any APIs. It deliberately
     /// does not enter the Sendable deduplication pool; raw `Any` stays inside
     /// this legacy boundary and cannot leak into the modern executor.
-    private class func executeLegacy<T>(url: String,
-                                        request: URLRequest,
-                                        uploadBody: Data? = nil,
-                                        parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    private class func executeLegacy(url: String,
+                                     request: URLRequest,
+                                     uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         var request = request
         for plugin in Network.share.plugins {
             await plugin.willSend(&request)
@@ -968,7 +1027,7 @@ public final class Network: @unchecked Sendable {
 
         if request.isMock,
            let mockData = await NetworkCache.shared.read(request: request) {
-            return try parser(url, nil, mockData)
+            return responseSnapshot(url: url, response: nil, data: mockData)
         }
 
         let finalRequest = request
@@ -989,14 +1048,21 @@ public final class Network: @unchecked Sendable {
 
         switch response.result {
         case .success(let data):
-            return try parser(url, response.response, data)
+            return responseSnapshot(url: url, response: response.response, data: data)
         case .failure(let error):
             logRequestFailure(url: url, error: error)
             throw error
         }
     }
 
-    private class func _internalRequestApi<T: Sendable>(needGobal: Bool, urlStr: URLConvertible, method: HTTPMethod, header: HTTPHeaders?, parameters: Parameters?, cachePolicy: PTNetworkCachePolicy?, encoder: ParameterEncoding, jsonRequest: Bool, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    private class func _internalRequestApi(needGobal: Bool,
+                                           urlStr: URLConvertible,
+                                           method: HTTPMethod,
+                                           header: HTTPHeaders?,
+                                           parameters: Parameters?,
+                                           cachePolicy: PTNetworkCachePolicy?,
+                                           encoder: ParameterEncoding,
+                                           jsonRequest: Bool) async throws -> PTNetworkResponseSnapshot {
         let context = try await makeRequestContext(urlStr: urlStr,
                                                    needGobal: needGobal,
                                                    method: method,
@@ -1010,10 +1076,15 @@ public final class Network: @unchecked Sendable {
                                           into: urlRequest,
                                           encoder: encoder,
                                           jsonRequest: jsonRequest)
-        return try await execute(url: context.url, request: urlRequest, parser: parser)
+        return try await execute(url: context.url, request: urlRequest)
     }
     
-    private class func _internalRequestBodyAPI<T: Sendable>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
+    private class func _internalRequestBodyAPI(needGobal: Bool,
+                                               urlStr: String,
+                                               body: Data,
+                                               header: HTTPHeaders?,
+                                               method: HTTPMethod,
+                                               cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkResponseSnapshot {
         let context = try await makeRequestContext(urlStr: urlStr,
                                                    needGobal: needGobal,
                                                    method: method,
@@ -1029,7 +1100,7 @@ public final class Network: @unchecked Sendable {
         
         var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
         urlRequest.httpBody = body
-        return try await execute(url: context.url, request: urlRequest, uploadBody: body, parser: parser)
+        return try await execute(url: context.url, request: urlRequest, uploadBody: body)
     }
 
     private class func _internalLegacyRequestApi(needGobal: Bool,
@@ -1039,8 +1110,7 @@ public final class Network: @unchecked Sendable {
                                                  parameters: Parameters?,
                                                  cachePolicy: PTNetworkCachePolicy?,
                                                  encoder: ParameterEncoding,
-                                                 jsonRequest: Bool,
-                                                 parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
+                                                 jsonRequest: Bool) async throws -> PTNetworkResponseSnapshot {
         let context = try await makeRequestContext(urlStr: urlStr,
                                                    needGobal: needGobal,
                                                    method: method,
@@ -1053,7 +1123,7 @@ public final class Network: @unchecked Sendable {
                                           into: urlRequest,
                                           encoder: encoder,
                                           jsonRequest: jsonRequest)
-        return try await executeLegacy(url: context.url, request: urlRequest, parser: parser)
+        return try await executeLegacy(url: context.url, request: urlRequest)
     }
 
     private class func _internalLegacyRequestBodyAPI(needGobal: Bool,
@@ -1061,8 +1131,7 @@ public final class Network: @unchecked Sendable {
                                                      body: Data,
                                                      header: HTTPHeaders?,
                                                      method: HTTPMethod,
-                                                     cachePolicy: PTNetworkCachePolicy?,
-                                                     parser: @escaping ResponseParser<Any>) async throws -> PTBaseStructModel<Any> {
+                                                     cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkResponseSnapshot {
         let context = try await makeRequestContext(urlStr: urlStr,
                                                    needGobal: needGobal,
                                                    method: method,
@@ -1076,7 +1145,7 @@ public final class Network: @unchecked Sendable {
         logRequestStart(url: context.url, parameters: dic, headers: newHeader, method: context.method)
         var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
         urlRequest.httpBody = body
-        return try await executeLegacy(url: context.url, request: urlRequest, uploadBody: body, parser: parser)
+        return try await executeLegacy(url: context.url, request: urlRequest, uploadBody: body)
     }
     
     private struct PTSafeUploadParamsBox: @unchecked Sendable {
@@ -1084,17 +1153,15 @@ public final class Network: @unchecked Sendable {
         let path: URLConvertible
     }
     
-    // 确保你的 parser 带有 @Sendable 标记
-    private class func _internalFileUpload<T>(needGobal: Bool,
-                                              media: Any,
-                                              path: URLConvertible,
-                                              method: HTTPMethod,
-                                              fileKey: String,
-                                              params: [String: String]?,
-                                              header: HTTPHeaders?,
-                                              jsonRequest: Bool,
-                                              parser: @escaping UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
-    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+    private class func _internalFileUpload(needGobal: Bool,
+                                            media: Any,
+                                            path: URLConvertible,
+                                            method: HTTPMethod,
+                                            fileKey: String,
+                                            params: [String: String]?,
+                                            header: HTTPHeaders?,
+                                            jsonRequest: Bool
+    ) -> AsyncThrowingStream<PTNetworkUploadEvent, Error> {
         let safeBox = PTSafeUploadParamsBox(media: media, path: path)
         
         return AsyncThrowingStream { continuation in
@@ -1126,24 +1193,26 @@ public final class Network: @unchecked Sendable {
                     
                     let session = Network.share.session
                     
-                    // 3️⃣ 发起请求，并在回调中显式声明 @Sendable
+                    // 3️⃣ 发起请求，并将进度和响应转换为值类型快照。
                     session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
-                        .uploadProgress { @Sendable progress in // 🌟 显式告诉编译器这是并发安全的闭包
-                            continuation.yield((progress, nil as PTBaseStructModel<T>?))
+                        .uploadProgress { @Sendable progress in
+                            let snapshot = PTProgressSnapshot(completedUnitCount: progress.completedUnitCount,
+                                                               totalUnitCount: progress.totalUnitCount,
+                                                               fractionCompleted: progress.fractionCompleted)
+                            continuation.yield(PTNetworkUploadEvent(progress: snapshot, response: nil))
                         }
-                        .response { @Sendable resp in           // 🌟 显式告诉编译器这是并发安全的闭包
+                        .response { @Sendable resp in
                             switch resp.result {
                             case .success(_):
-                                do {
-                                    // 确保 parser 和其他捕获的变量不会造成数据竞争
-                                    let parsed = try parser(pathUrl, resp.response, resp.data)
-                                    continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                    continuation.finish()
-                                } catch {
-                                    continuation.finish(throwing: error)
-                                }
+                                let response = responseSnapshot(url: pathUrl,
+                                                                 response: resp.response,
+                                                                 data: resp.data)
+                                let progress = PTProgressSnapshot(completedUnitCount: 1,
+                                                                   totalUnitCount: 1,
+                                                                   fractionCompleted: 1)
+                                continuation.yield(PTNetworkUploadEvent(progress: progress, response: response))
+                                continuation.finish()
                             case .failure(let error):
-                                // 假设 logRequestFailure 为全局函数或已在此上下文安全
                                 logRequestFailure(url: pathUrl, error: error)
                                 continuation.finish(throwing: error)
                             }
@@ -1234,10 +1303,10 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 核心：通用多图并发上传引擎 (TaskGroup 高性能版)
-    private class func _internalImageUpload<T>(
+    private class func _internalImageUpload(
         needGobal: Bool, images: [UIImage]?, path: URLConvertible, method: HTTPMethod, fileKey: [String], params: [String: String]?,
-        header: HTTPHeaders?, jsonRequest: Bool, pngData: Bool, parser: @escaping UploadResponseParser<T>
-    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+        header: HTTPHeaders?, jsonRequest: Bool, pngData: Bool
+    ) -> AsyncThrowingStream<PTNetworkUploadEvent, Error> {
         
         AsyncThrowingStream { continuation in
             Task {
@@ -1284,7 +1353,7 @@ public final class Network: @unchecked Sendable {
                         }
                     }
                     
-                    // 🚀 优化点 2：等所有图片都在并发池里处理完 Data 后，再安全地、同步地交给 Alamofire
+                    // 🚀 优化点 2：等所有图片都处理成 Data 后，再交给 Alamofire。
                     let session = Network.share.session
                     session.upload(multipartFormData: { multipartFormData in
                         
@@ -1301,15 +1370,23 @@ public final class Network: @unchecked Sendable {
                         }
                         
                     }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in continuation.yield((progress, nil)) }
+                    .uploadProgress { @Sendable progress in
+                        let snapshot = PTProgressSnapshot(completedUnitCount: progress.completedUnitCount,
+                                                           totalUnitCount: progress.totalUnitCount,
+                                                           fractionCompleted: progress.fractionCompleted)
+                        continuation.yield(PTNetworkUploadEvent(progress: snapshot, response: nil))
+                    }
                     .response { resp in
                         switch resp.result {
                         case .success(_):
-                            do {
-                                let parsed = try parser(pathUrl, resp.response, resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch { continuation.finish(throwing: error) }
+                            let response = responseSnapshot(url: pathUrl,
+                                                             response: resp.response,
+                                                             data: resp.data)
+                            let progress = PTProgressSnapshot(completedUnitCount: 1,
+                                                               totalUnitCount: 1,
+                                                               fractionCompleted: 1)
+                            continuation.yield(PTNetworkUploadEvent(progress: progress, response: response))
+                            continuation.finish()
                         case .failure(let error):
                             logRequestFailure(url: pathUrl, error: error)
                             continuation.finish(throwing: error)
@@ -1322,14 +1399,73 @@ public final class Network: @unchecked Sendable {
     
     // MARK: - ================= 6. 🌟 强类型解析层：SmartCodable 暴露接口 =================
     
-    private static func parseCodableResponse<T: SmartCodableX & Sendable>(url: String, response: HTTPURLResponse?, data: Data?, modelType: T.Type?) throws -> PTBaseStructModel<T> {
-        var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data) as (PTBaseStructModel<T>, String)
+    private static func parseCodableResponse<T: SmartCodableX & Sendable>(_ snapshot: PTNetworkResponseSnapshot,
+                                                                            modelType: T.Type?) throws -> PTBaseStructModel<T> {
+        var (result, jsonString) = try validateAndPreprocessResponse(snapshot) as (PTBaseStructModel<T>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             if let model = modelType.deserialize(from: jsonString) {
                 result.customerModel = model
             } else { throw PTNetworkError.modelExplainFail }
         }
         return result
+    }
+
+    private static func progressValue(from snapshot: PTProgressSnapshot) -> Progress {
+        let total = max(snapshot.totalUnitCount, 1)
+        let progress = Progress(totalUnitCount: total)
+        progress.completedUnitCount = min(max(snapshot.completedUnitCount, 0), total)
+        return progress
+    }
+
+    // KakaJSON metatypes are immutable lookup tokens kept only by the legacy adapter.
+    // Los metatipos de KakaJSON son tokens inmutables que conserva únicamente el adaptador heredado.
+    // KakaJSON 元类型是不可变查找标记，只由旧版兼容适配器持有。
+    private struct PTLegacyModelTypeBox: @unchecked Sendable {
+        let value: Convertible.Type?
+    }
+
+    private static func codableUploadStream<T: SmartCodableX & Sendable>(
+        source: AsyncThrowingStream<PTNetworkUploadEvent, Error>,
+        modelType: T.Type?
+    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    for try await event in source {
+                        let response = try event.response.map {
+                            try parseCodableResponse($0, modelType: modelType)
+                        }
+                        continuation.yield((progressValue(from: event.progress), response))
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
+    @preconcurrency
+    private static func legacyUploadStream(
+        source: AsyncThrowingStream<PTNetworkUploadEvent, Error>,
+        modelType: Convertible.Type?
+    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<Any>?), Error> {
+        let typeBox = PTLegacyModelTypeBox(value: modelType)
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    for try await event in source {
+                        let response = try event.response.map {
+                            try parseResponse($0, modelType: typeBox.value)
+                        }
+                        continuation.yield((progressValue(from: event.progress), response))
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
     }
     
     /// 🌟 便捷重载方法：当接口只返回成功/失败时使用，底层自动代劳传入占位模型
@@ -1339,39 +1475,59 @@ public final class Network: @unchecked Sendable {
     
     /// 核心项目调用总接口
     class public func requestCodableApi<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil, cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<T> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
-            try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let snapshot = try await _internalRequestApi(needGobal: needGobal,
+                                                     urlStr: urlStr,
+                                                     method: method,
+                                                     header: header,
+                                                     parameters: parameters,
+                                                     cachePolicy: cachePolicy,
+                                                     encoder: encoder,
+                                                     jsonRequest: jsonRequest)
+        return try parseCodableResponse(snapshot, modelType: modelType)
     }
     
     public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,
                                                                          cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil) async throws -> PTBaseStructModel<T> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
-            try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let snapshot = try await _internalRequestBodyAPI(needGobal: needGobal,
+                                                         urlStr: urlStr,
+                                                         body: body,
+                                                         header: header,
+                                                         method: method,
+                                                         cachePolicy: cachePolicy)
+        return try parseCodableResponse(snapshot, modelType: modelType)
     }
     
     class public func fileCodableUpload<T: SmartCodableX & Sendable>(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "",
                                                                      params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
-            return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let source = _internalFileUpload(needGobal: needGobal,
+                                         media: media,
+                                         path: path,
+                                         method: method,
+                                         fileKey: fileKey,
+                                         params: params,
+                                         header: header,
+                                         jsonRequest: jsonRequest)
+        return codableUploadStream(source: source, modelType: modelType)
     }
     
     class public func imageCodableUpload<T: SmartCodableX & Sendable>(needGobal: Bool = true, images: [UIImage]?, path: URLConvertible, method: HTTPMethod = .post, fileKey: [String] = ["images"], params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false, pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
-            return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let source = _internalImageUpload(needGobal: needGobal,
+                                          images: images,
+                                          path: path,
+                                          method: method,
+                                          fileKey: fileKey,
+                                          params: params,
+                                          header: header,
+                                          jsonRequest: jsonRequest,
+                                          pngData: pngData)
+        return codableUploadStream(source: source, modelType: modelType)
     }
     
     // MARK: - ================= 7. ⚠️ 动态兼容层：KakaJSON 旧版保留接口 =================
     
-    private static func parseResponse(url: String, response: HTTPURLResponse?, data: Data?, modelType: Convertible.Type?) throws -> PTBaseStructModel<Any> {
-        var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data) as (PTBaseStructModel<Any>, String)
+    private static func parseResponse(_ snapshot: PTNetworkResponseSnapshot,
+                                      modelType: Convertible.Type?) throws -> PTBaseStructModel<Any> {
+        var (result, jsonString) = try validateAndPreprocessResponse(snapshot) as (PTBaseStructModel<Any>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             if let model = jsonString.kj.model(modelType) {
                 result.customerModel = model
@@ -1382,35 +1538,54 @@ public final class Network: @unchecked Sendable {
     
     @available(*, deprecated, message: "Use requestCodableBodyAPI(_:body:modelType:) with a Sendable model instead")
     public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalLegacyRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
-            try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let snapshot = try await _internalLegacyRequestBodyAPI(needGobal: needGobal,
+                                                               urlStr: urlStr,
+                                                               body: body,
+                                                               header: header,
+                                                               method: method,
+                                                               cachePolicy: cachePolicy)
+        return try parseResponse(snapshot, modelType: modelType)
     }
     
     @available(*, deprecated, message: "Use requestCodableApi(_:modelType:) with a Sendable model instead")
     class public func requestApi(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil,
                                  cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<Any> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return try await _internalLegacyRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
-            try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let snapshot = try await _internalLegacyRequestApi(needGobal: needGobal,
+                                                            urlStr: urlStr,
+                                                            method: method,
+                                                            header: header,
+                                                            parameters: parameters,
+                                                            cachePolicy: cachePolicy,
+                                                            encoder: encoder,
+                                                            jsonRequest: jsonRequest)
+        return try parseResponse(snapshot, modelType: modelType)
     }
     
     @available(*, deprecated, message: "Use the Codable upload API with a Sendable model instead")
     class public func fileUpload(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "", params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: Convertible.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<Any>?), Error> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
-            return try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let source = _internalFileUpload(needGobal: needGobal,
+                                         media: media,
+                                         path: path,
+                                         method: method,
+                                         fileKey: fileKey,
+                                         params: params,
+                                         header: header,
+                                         jsonRequest: jsonRequest)
+        return legacyUploadStream(source: source, modelType: modelType)
     }
     
     @available(*, deprecated, message: "Use imageCodableUpload with a Sendable model instead")
     class public func imageUpload(needGobal: Bool = true, images: [UIImage]?, path: URLConvertible, method: HTTPMethod = .post, fileKey: [String] = ["images"], params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: Convertible.Type? = nil, jsonRequest: Bool = false, pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<Any>?), Error> {
-        let typeBox = PTSendableTypeBox(modelType)
-        return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
-            return try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
-        }
+        let source = _internalImageUpload(needGobal: needGobal,
+                                          images: images,
+                                          path: path,
+                                          method: method,
+                                          fileKey: fileKey,
+                                          params: params,
+                                          header: header,
+                                          jsonRequest: jsonRequest,
+                                          pngData: pngData)
+        return legacyUploadStream(source: source, modelType: modelType)
     }
     
     // MARK: - ================= 8. 下载引擎与流式控制 =================

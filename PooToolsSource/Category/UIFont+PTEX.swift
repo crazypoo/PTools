@@ -31,17 +31,12 @@ public extension UIFont {
                                    scale:Bool = false) -> UIFont {
         
         if customFont.stringIsEmpty() {
-            fatalError("自定義需要有字體名字")
-        } else {
-            if let setFont = UIFont(name: customFont, size: size) {
-                if scale {
-                    return setFont.adapter
-                }
-                return setFont
-            } else {
-                fatalError("無法讀取該字體")
-            }
+            return scale ? UIFont.systemFont(ofSize: size).adapter : UIFont.systemFont(ofSize: size)
         }
+        if let setFont = UIFont(name: customFont, size: size) {
+            return scale ? setFont.adapter : setFont
+        }
+        return scale ? UIFont.systemFont(ofSize: size).adapter : UIFont.systemFont(ofSize: size)
     }
         
     @objc class func systemFont(ofSize size: CGFloat,
@@ -50,7 +45,10 @@ public extension UIFont {
                                 scale:Bool = false) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
-        var setFont = UIFont(descriptor: descriptor!, size: size)
+        guard let descriptor else {
+            return UIFont.systemFont(ofSize: size, weight: weight)
+        }
+        var setFont = UIFont(descriptor: descriptor, size: size)
         setFont = scale ? setFont.adapter : setFont
         return setFont
     }

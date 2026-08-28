@@ -8,7 +8,87 @@
 
 import Foundation
 import AVFoundation
-import Alamofire
+
+// Progress callback shared by Core media caches.
+// Callback de progreso compartido por las cachés multimedia de Core.
+// Core 媒体缓存共用的进度回调类型。
+public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void
+
+// Native file downloader shared by Core media caches.
+// Descargador nativo de archivos compartido por las cachés multimedia de Core.
+// Core 媒体缓存共用的原生文件下载器。
+enum PTCoreFileDownloadService {
+    static func download(from url: URL,
+                         to destinationURL: URL,
+                         progress: FileDownloadProgress?) async throws -> URL {
+        // Give every transfer its own temporary file so concurrent requests cannot overwrite each other.
+        // Cada transferencia usa su propio archivo temporal para evitar sobrescrituras concurrentes.
+        // 每次传输使用独立临时文件，避免并发请求互相覆盖。
+        let directoryURL = destinationURL.deletingLastPathComponent()
+        let temporaryName = ".\(destinationURL.lastPathComponent).\(UUID().uuidString).pt-download"
+        let temporaryURL = directoryURL.appendingPathComponent(temporaryName, isDirectory: false)
+        try FileManager.default.createDirectory(at: directoryURL,
+                                                 withIntermediateDirectories: true)
+        guard FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) else {
+            throw CocoaError(.fileWriteUnknown)
+        }
+
+        defer {
+            try? FileManager.default.removeItem(at: temporaryURL)
+        }
+
+        let (bytes, response) = try await URLSession.shared.bytes(from: url)
+        if let httpResponse = response as? HTTPURLResponse,
+           !(200..<300).contains(httpResponse.statusCode) {
+            throw URLError(.badServerResponse)
+        }
+
+        let totalBytes = response.expectedContentLength > 0 ? response.expectedContentLength : 0
+        let fileHandle = try FileHandle(forWritingTo: temporaryURL)
+        var isClosed = false
+        defer {
+            if !isClosed {
+                try? fileHandle.close()
+            }
+        }
+
+        var buffer = Data()
+        buffer.reserveCapacity(64 * 1024)
+        var receivedBytes: Int64 = 0
+        var lastProgressTime = -Double.infinity
+
+        for try await byte in bytes {
+            try Task.checkCancellation()
+            buffer.append(byte)
+            if buffer.count >= 64 * 1024 {
+                try fileHandle.write(contentsOf: buffer)
+                receivedBytes += Int64(buffer.count)
+                buffer.removeAll(keepingCapacity: true)
+                let now = ProcessInfo.processInfo.systemUptime
+                if let progress, now - lastProgressTime >= 0.1 {
+                    let fraction = totalBytes > 0 ? Double(receivedBytes) / Double(totalBytes) : 0
+                    await progress(receivedBytes, totalBytes, fraction)
+                    lastProgressTime = now
+                }
+            }
+        }
+
+        if !buffer.isEmpty {
+            try fileHandle.write(contentsOf: buffer)
+            receivedBytes += Int64(buffer.count)
+        }
+        try fileHandle.close()
+        isClosed = true
+
+        guard receivedBytes > 0 else { throw URLError(.zeroByteResource) }
+        try? FileManager.default.removeItem(at: destinationURL)
+        try FileManager.default.moveItem(at: temporaryURL, to: destinationURL)
+        if let progress {
+            await progress(receivedBytes, totalBytes, 1)
+        }
+        return destinationURL
+    }
+}
 
 @MainActor
 public final class PTAudioCacheFileManager {
@@ -56,28 +136,24 @@ public final class PTAudioCacheFileManager {
             return
         }
 
-        let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
-        
-        Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
-            let fileSize = (try? FileManager.default.attributesOfItem(atPath: localURL.path))?[.size] as? NSNumber
-            guard fileSize?.int64Value ?? 0 > 0 else {
-                completion(nil)
-                return
-            }
+        Task { @MainActor in
+            do {
+                _ = try await PTCoreFileDownloadService.download(from: url,
+                                                                 to: localURL,
+                                                                 progress: progress)
 
-            guard PTAudioTranscoder.needTranscode(localURL) else {
-                completion(localURL)
-                return
-            }
+                guard PTAudioTranscoder.needTranscode(localURL) else {
+                    completion(localURL)
+                    return
+                }
 
-            Task { @MainActor in
                 try? FileManager.default.removeItem(at: finalM4AURL)
                 let resultURL = await PTAudioTranscoder.transcodeToM4A(from: localURL, to: finalM4AURL)
                 try? FileManager.default.removeItem(at: localURL)
                 completion(resultURL)
+            } catch {
+                completion(nil)
             }
-        } fail: { _ in
-            completion(nil)
         }
     }
 }

@@ -98,6 +98,8 @@ public class StatusBarManager {
         state.superState?.nextState = state.superState?.subStates.first
         
         stateKeys.removeValue(forKey: key)
+        state.superState = nil
+        state.nextState = nil
         
         if isCurrentStateContained {
             currentState = state.superState?.nextState ?? state.superState ?? rootState
@@ -156,10 +158,11 @@ public class StatusBarManager {
     }
     
     fileprivate func updateStatusBar() {
-        Task { @MainActor in
-            UIView.animate(withDuration: self.duration) {
-                AppWindows?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
-            }
+        // Update the active scene immediately to avoid stale asynchronous status-bar updates.
+        // Actualiza la escena activa inmediatamente para evitar actualizaciones asíncronas obsoletas.
+        // 立即更新当前场景，避免异步状态栏刷新使用过期状态。
+        UIView.animate(withDuration: duration) {
+            PTSceneContext.activeWindow()?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -175,8 +178,19 @@ public class StatusBarManager {
     }
     
     fileprivate func removeSubStatesInTree(_ state: StatusBarState) {
-        state.subStates.forEach { removeSubStatesInTree($0) }
+        let children = state.subStates
         state.subStates.removeAll()
+        state.nextState = nil
+
+        // Remove every descendant key, not only the direct child key.
+        // Elimina todas las claves descendientes, no solo la clave del hijo directo.
+        // 清理所有后代状态键，而不只是直接子节点的键。
+        children.forEach { child in
+            removeSubStatesInTree(child)
+            stateKeys.removeValue(forKey: child.key)
+            child.superState = nil
+            child.nextState = nil
+        }
     }
     
     fileprivate func findCurrentStateInTree(_ state: StatusBarState) -> StatusBarState? {

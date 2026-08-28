@@ -351,12 +351,9 @@ public class PTSortButton: UIView {
         titleLabel.text = buttonTitle
         
         let halfHeight = (frame.height - imageSpace) / 2
-        var realImageSize:CGSize!
-        if halfHeight < self.imageSize.height {
-            realImageSize = CGSize(width: self.imageSize.width, height: halfHeight)
-        } else {
-            realImageSize = self.imageSize
-        }
+        let realImageSize: CGSize = halfHeight < self.imageSize.height
+            ? CGSize(width: self.imageSize.width, height: halfHeight)
+            : self.imageSize
         
         let contentMax = frame.width - contentImageSpace - self.imageSize.width
         var titleWidth = titleLabel.sizeFor(height: frame.height).width + 5

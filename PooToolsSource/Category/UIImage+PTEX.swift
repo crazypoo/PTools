@@ -149,14 +149,24 @@ public extension UIImage {
         let sourceW = size.width
         let sourceH = size.height
         
-        let imageRef = cgImage
-        let bitmap:CGContext = CGContext(data: nil , width: Int(destW), height: Int(destH), bitsPerComponent: (imageRef?.bitsPerComponent)!, bytesPerRow: 4 * Int(destW), space: (imageRef?.colorSpace)!, bitmapInfo: (CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue))!
+        guard destW > 0, destH > 0,
+              sourceW > 0, sourceH > 0,
+              let imageRef = cgImage,
+              let colorSpace = imageRef.colorSpace,
+              let bitmap = CGContext(data: nil,
+                                      width: Int(destW),
+                                      height: Int(destH),
+                                      bitsPerComponent: imageRef.bitsPerComponent,
+                                      bytesPerRow: 4 * Int(destW),
+                                      space: colorSpace,
+                                      bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue) else {
+            return self
+        }
         
-        bitmap.draw(imageRef!, in: CGRect(x: 0, y: 0, width: sourceW, height: sourceH))
+        bitmap.draw(imageRef, in: CGRect(x: 0, y: 0, width: sourceW, height: sourceH))
         
-        let ref = bitmap.makeImage()
-        let resultImage = UIImage(cgImage: ref!)
-        return resultImage
+        guard let ref = bitmap.makeImage() else { return self }
+        return UIImage(cgImage: ref)
     }
     
     //MARK: 圖片高斯模糊
@@ -323,10 +333,11 @@ public extension UIImage {
                    attributed:NSDictionary) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
+        let attributes = attributed as? [NSAttributedString.Key: Any] ?? [:]
+        text.draw(at: point, withAttributes: attributes)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage!
+        return newImage ?? self
     }
     
     func imageMask(maskImage:UIImage,
@@ -336,7 +347,7 @@ public extension UIImage {
         maskImage.draw(in: maskRect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage!
+        return newImage ?? self
     }
     
     //MARK: 獲取圖片中大部分占有的顏色
@@ -369,9 +380,14 @@ public extension UIImage {
     //MARK: 獲取圖片中某個像素點的顏色
     ///獲取圖片中某個像素點的顏色
     func getImgePointColor(point:CGPoint) -> UIColor {
-        let context = getImageContext()
-        
-        let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
+        guard point.x >= 0, point.y >= 0,
+              point.x < size.width, point.y < size.height,
+              let context = getImageContext(),
+              let data = context.data else {
+            return .clear
+        }
+
+        let newImgData = data.assumingMemoryBound(to: UInt8.self)
         
         // 根据当前所选择的点计算出对应位图数据的index
         let offset = Int(point.y * size.width + point.x) * 4
@@ -386,18 +402,26 @@ public extension UIImage {
         return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha)/255.0)
     }
     
-    func getImageContext() -> CGContext {
-        let currentImage = cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
+    func getImageContext() -> CGContext? {
+        guard let currentImage = cgImage else { return nil }
         
         let bitmapInfo = CGBitmapInfo.byteOrderDefault.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
-        let thumbSize = CGSize(width: size.width, height: size.height)
+        let thumbSize = CGSize(width: max(size.width, 1), height: max(size.height, 1))
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
-        let context = CGContext(data: nil, width: Int(thumbSize.width), height: Int(thumbSize.height), bitsPerComponent: 8, bytesPerRow: Int(thumbSize.width) * 4, space: colorSpace, bitmapInfo: bitmapInfo)
+        guard let context = CGContext(data: nil,
+                                      width: Int(thumbSize.width),
+                                      height: Int(thumbSize.height),
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: Int(thumbSize.width) * 4,
+                                      space: colorSpace,
+                                      bitmapInfo: bitmapInfo) else {
+            return nil
+        }
         
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
-        context?.draw(currentImage, in: drawRect)
-        return context!
+        context.draw(currentImage, in: drawRect)
+        return context
     }
     
     //MARK: 把圖片換成圓形
@@ -647,7 +671,9 @@ public extension PTPOP where Base: UIImage {
         context?.translateBy(x: 0, y: -area.height)
         context?.setBlendMode(.multiply)
         context?.setAlpha(alpha)
-        context?.draw(base.cgImage!, in: area)
+        if let image = base.cgImage {
+            context?.draw(image, in: area)
+        }
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage ?? base
@@ -1254,7 +1280,10 @@ public extension PTPOP where Base: UIImage {
         for _ in 0..<6 {
             count = count + 1
             compression = (max + min) / 2
-            data = base.jpegData(compressionQuality: compression)!
+            guard let compressedData = base.jpegData(compressionQuality: compression) else {
+                return nil
+            }
+            data = compressedData
             if CGFloat(data.count) < CGFloat(maxSize) * 0.9 {
                 min = compression
             } else if data.count > maxSize {
@@ -1282,7 +1311,10 @@ public extension PTPOP where Base: UIImage {
         guard var data = base.jpegData(compressionQuality: compress) else { return nil }
         while data.count > maxSize && compress > 0.01 {
             compress -= 0.02
-            data = base.jpegData(compressionQuality: compress)!
+            guard let compressedData = base.jpegData(compressionQuality: compress) else {
+                return data
+            }
+            data = compressedData
         }
         return data
     }
@@ -1598,54 +1630,64 @@ public extension UIImage {
 
 // MARK: - Properties
 public extension UIImage {
+
+    @MainActor
+    private final class PTImageSourceBox {
+        let value: CGImageSource
+
+        init(_ value: CGImageSource) {
+            self.value = value
+        }
+    }
     
     @MainActor
     private struct AssociatedKeys {
-        static var UIImageGIFImageSourceKey = malloc(4)
-        static var UIImageGIFDisplayRefreshFactorKey = malloc(4)
-        static var UIImageGIFImageSizeKey = malloc(4)
-        static var UIImageGIFImageCountKey = malloc(4)
-        static var UIImageGIFDisplayOrderKey = malloc(4)
-        static var UIImageGIFImageDataKey = malloc(4)
+        static var imageSource: UInt8 = 0
+        static var displayRefreshFactor: UInt8 = 0
+        static var imageSize: UInt8 = 0
+        static var imageCount: UInt8 = 0
+        static var displayOrder: UInt8 = 0
+        static var imageData: UInt8 = 0
     }
 
     @MainActor var imageSource: CGImageSource? {
         get {
-            let result = objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageSourceKey!)
-            return result == nil ? nil : (result as! CGImageSource)
+            let result = objc_getAssociatedObject(self, &AssociatedKeys.imageSource)
+            return (result as? PTImageSourceBox)?.value
         }
         set {
-            objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageSourceKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            let boxedValue = newValue.map(PTImageSourceBox.init)
+            objc_setAssociatedObject(self, &AssociatedKeys.imageSource, boxedValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
     @MainActor var displayRefreshFactor: Int?{
-        get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayRefreshFactorKey!) as? Int }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayRefreshFactorKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.displayRefreshFactor) as? Int }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.displayRefreshFactor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     @MainActor var imageSize: Int?{
-        get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageSizeKey!) as? Int }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageSizeKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.imageSize) as? Int }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.imageSize, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     @MainActor var imageCount: Int?{
-        get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageCountKey!) as? Int }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageCountKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.imageCount) as? Int }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.imageCount, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     @MainActor var displayOrder: [Int]?{
-        get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayOrderKey!) as? [Int] }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayOrderKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.displayOrder) as? [Int] }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.displayOrder, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     @MainActor var imageData:Data? {
         get {
-            let result = objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageDataKey!)
+            let result = objc_getAssociatedObject(self, &AssociatedKeys.imageData)
             return result == nil ? nil : (result as? Data)
         }
         set {
-            objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageDataKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.imageData, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }

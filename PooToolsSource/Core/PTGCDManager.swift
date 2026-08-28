@@ -7,23 +7,22 @@
 //
 
 import UIKit
+import os.lock
 
 // 闭包类型定义：添加 @Sendable 以满足跨边界传递的安全要求
 public typealias PTActionTask = @Sendable () -> Void
 public typealias PTActionAsyncTask = @Sendable () async -> Void
 
-private final class PTGCDOnce: @unchecked Sendable {
-    private let lock = NSLock()
-    private var didRun = false
+private struct PTGCDOnce: Sendable {
+    private let didRun = OSAllocatedUnfairLock(initialState: false)
 
-    func run(_ action: () -> Void) {
-        lock.lock()
-        guard !didRun else {
-            lock.unlock()
-            return
+    func run(_ action: @Sendable () -> Void) {
+        let shouldRun = didRun.withLock { didRun in
+            guard !didRun else { return false }
+            didRun = true
+            return true
         }
-        didRun = true
-        lock.unlock()
+        guard shouldRun else { return }
         action()
     }
 }
@@ -155,16 +154,7 @@ public actor PTGCDManager {
     
     @discardableResult
     public nonisolated func delayOnMain(time: TimeInterval, block: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
-        Task { @MainActor in
-            guard time.isFinite, time >= 0 else { return }
-            do {
-                try await Task.sleep(nanoseconds: UInt64(time * 1_000_000_000))
-            } catch {
-                return
-            }
-            guard !Task.isCancelled else { return }
-            block()
-        }
+        PTMainActorBridge.cancellableAfter(time, operation: block)
     }
     
     /// 在后台执行任务，支持指定优先级 (等同于以前的 QoS)
@@ -187,10 +177,7 @@ public actor PTGCDManager {
     
     @discardableResult
     public nonisolated func runOnMain(block: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
-        Task { @MainActor in
-            guard !Task.isCancelled else { return }
-            block()
-        }
+        PTMainActorBridge.perform(block)
     }
     
     // MARK: - 倒计时任务

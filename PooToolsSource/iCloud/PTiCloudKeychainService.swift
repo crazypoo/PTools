@@ -26,7 +26,7 @@ public class PTiCloudKeychainService {
         var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrSynchronizable as String: kCFBooleanTrue! // ✅ 启用 iCloud Keychain 同步
+            kSecAttrSynchronizable as String: true // 启用 iCloud Keychain 同步 / Activa la sincronización de iCloud Keychain / Enable iCloud Keychain synchronization
         ]
         if let account = account {
             query[kSecAttrAccount as String] = account
@@ -76,7 +76,7 @@ public class PTiCloudKeychainService {
     /// 获取密码
     public static func get(service: String, account: String) throws -> String {
         var query = baseQuery(service: service, account: account)
-        query[kSecReturnData as String] = kCFBooleanTrue!
+        query[kSecReturnData as String] = true
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         
         var dataTypeRef: AnyObject?
@@ -114,7 +114,7 @@ public class PTiCloudKeychainService {
     public static func exists(service: String, account: String) -> Bool {
         var query = baseQuery(service: service, account: account)
         // 只需要知道是否存在，不需要返回数据，提高性能
-        query[kSecReturnData as String] = kCFBooleanFalse!
+        query[kSecReturnData as String] = false
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         
         let status = SecItemCopyMatching(query as CFDictionary, nil)

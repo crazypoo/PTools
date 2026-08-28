@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_PERMISSION_HEALTH
+import HealthKit
+#endif
 
 @MainActor
 open class PTPermission {
@@ -63,6 +66,125 @@ open class PTPermission {
     public nonisolated static func completeRequest(_ completion: @escaping PTActionTask) {
         Task { @MainActor in
             completion()
+        }
+    }
+
+    // 统一权限状态映射，避免列表 Cell 和业务入口各自维护一份系统权限判断。
+    // Unifica el mapeo de estados para que las celdas y las entradas de negocio no mantengan lógica duplicada.
+    // Centralize permission status mapping so cells and business entry points do not duplicate it.
+    public static func status(for kind: Kind) -> Status {
+        switch kind {
+        case .tracking:
+#if POOTOOLS_PERMISSION_TRACKING
+            return tracking.status
+#else
+            return .notSupported
+#endif
+        case .camera:
+#if POOTOOLS_PERMISSION_CAMERA
+            return camera.status
+#else
+            return .notSupported
+#endif
+        case .photoLibrary:
+#if POOTOOLS_PERMISSION_PHOTO
+            return photoLibrary.status
+#else
+            return .notSupported
+#endif
+        case .calendar(access: .full):
+#if POOTOOLS_PERMISSION_CALENDAR
+            return calendar(access: .full).status
+#else
+            return .notSupported
+#endif
+        case .calendar(access: .write):
+#if POOTOOLS_PERMISSION_CALENDAR
+            return calendar(access: .write).status
+#else
+            return .notSupported
+#endif
+        case .reminders:
+#if POOTOOLS_PERMISSION_REMINDERS
+            return reminders.status
+#else
+            return .notSupported
+#endif
+        case .notification:
+#if POOTOOLS_PERMISSION_NOTIFICATION
+            return notification.status
+#else
+            return .notSupported
+#endif
+        case .location(access: .whenInUse):
+#if POOTOOLS_PERMISSION_LOCATION
+            return location(access: .whenInUse).status
+#else
+            return .notSupported
+#endif
+        case .location(access: .always):
+#if POOTOOLS_PERMISSION_LOCATION
+            return location(access: .always).status
+#else
+            return .notSupported
+#endif
+        case .faceID:
+#if POOTOOLS_PERMISSION_FACEIDPERMISSION
+            return faceID.status
+#else
+            return .notSupported
+#endif
+        case .speech:
+#if POOTOOLS_PERMISSION_SPEECH
+            return speech.status
+#else
+            return .notSupported
+#endif
+        case .health:
+#if POOTOOLS_PERMISSION_HEALTH
+            guard let quantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else {
+                return .notSupported
+            }
+            return PTPermissionHealth.status(for: quantityType)
+#else
+            return .notSupported
+#endif
+        case .motion:
+#if POOTOOLS_PERMISSION_MOTION
+            return motion.status
+#else
+            return .notSupported
+#endif
+        case .contacts:
+#if POOTOOLS_PERMISSION_CONTACTS
+            return contacts.status
+#else
+            return .notSupported
+#endif
+        case .microphone:
+#if POOTOOLS_PERMISSION_MIC
+            return microphone.status
+#else
+            return .notSupported
+#endif
+        case .mediaLibrary:
+#if POOTOOLS_PERMISSION_MEDIA
+            return mediaLibrary.status
+#else
+            return .notSupported
+#endif
+        case .bluetooth:
+#if POOTOOLS_PERMISSION_BLUETOOTH
+            return bluetooth.status
+#else
+            return .notSupported
+#endif
+        case .siri:
+#if POOTOOLS_PERMISSION_SIRI
+            return siri.status
+#else
+            return .notSupported
+#endif
         }
     }
 

@@ -80,15 +80,17 @@ public extension NSString {
         let idCardY = [ "1", "0", "10", "9", "8", "7", "6", "5", "4", "3", "2" ] //这是除以11后，可能产生的11位余数、验证码，也保存成数组
         var idCardWiSum = 0
         for i in 0..<17 {
-            let subStringIndex = self.substring(with: NSMakeRange(i, 1)).int!
-            let idCardWithIndex = idCardWi[i].int!
+            guard let subStringIndex = self.substring(with: NSMakeRange(i, 1)).int,
+                  let idCardWithIndex = idCardWi[i].int else {
+                return false
+            }
             idCardWiSum += (subStringIndex * idCardWithIndex)
         }
         
         let idCardMod = idCardWiSum % 11
         let idCardLast:NSString = self.substring(with: NSMakeRange(17, 1)) as NSString
         if idCardMod == 2 {
-            if !idCardLast.isEqual(to: "X") || idCardLast.isEqual(to: "x") {
+            if !idCardLast.isEqual(to: "X") && !idCardLast.isEqual(to: "x") {
                 return false
             }
         } else {
@@ -129,8 +131,10 @@ public extension NSString {
             let formatterTow = DateFormatter()
             formatterTow.dateFormat = "yyyy-MM-dd"
             let birthday = birthdayFromIdentityCard()
-            let bsyDate = formatterTow.date(from: birthday as String)
-            let dateDiff = bsyDate!.timeIntervalSinceNow
+            guard let bsyDate = formatterTow.date(from: birthday as String) else {
+                return "99999"
+            }
+            let dateDiff = bsyDate.timeIntervalSinceNow
             let age = trunc(dateDiff / (60 * 60 * 24)) / 365
             return "\(-age)" as NSString
         } else {
@@ -206,7 +210,8 @@ public extension NSString {
     
     func setLink(url:NSURL,range:NSRange,onAttributedString:NSMutableAttributedString) {
         onAttributedString.removeAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), range: range)
-        onAttributedString.addAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), value: url.absoluteString!, range: range)
+        guard let absoluteString = url.absoluteString else { return }
+        onAttributedString.addAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), value: absoluteString, range: range)
     }
     
     func setFont(fontName:NSString,size:CGFloat,range:NSRange,onAttributedString:NSMutableAttributedString) {
@@ -221,7 +226,7 @@ public extension NSString {
     
     func setStyle(style:NSDictionary,range:NSRange,onAttributedString:NSMutableAttributedString) {
         for key in style.allKeys {
-            let newKey = NSString(format: "%@", key as! CVarArg)
+            let newKey = NSString(string: String(describing: key))
             if let value = style.value(forKey: newKey as String) {
                 setTextStyle(styleName:newKey, value: value, range: range, onAttributedString: onAttributedString)
             }
@@ -254,11 +259,13 @@ public extension NSString {
     }
     
     func attributedString(fontBook:NSDictionary) -> NSAttributedString {
-        let tags = [NSDictionary]()
-        let ms:NSMutableString = mutableCopy() as! NSMutableString
+        let tags = NSMutableArray()
+        guard let ms = mutableCopy() as? NSMutableString else {
+            return NSAttributedString(string: self as String)
+        }
         ms.replaceOccurrences(of: "<br>", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
         ms.replaceOccurrences(of: "<br />", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
-        ms.replaceAllTags(intoArray:tags as! NSMutableArray)
+        ms.replaceAllTags(intoArray: tags)
         
         let attributedString = NSMutableAttributedString(string: ms as String)
         attributedString.setAttributes([.underlineStyle:[NSNumber(integerLiteral: 0)]], range: NSMakeRange(0, attributedString.length))
@@ -268,6 +275,7 @@ public extension NSString {
         }
         
         for tag in tags {
+            guard let tag = tag as? NSDictionary else { continue }
             if let t = tag["tag"] as? NSString,let loc = tag["loc"] as? NSNumber,let endloc = tag["endloc"] as? NSNumber,let style = fontBook[t] {
                 let range = NSMakeRange(loc.intValue, endloc.intValue - loc.intValue)
                 self.style(attributedString: attributedString, range: range, style: style, styleBook: fontBook)

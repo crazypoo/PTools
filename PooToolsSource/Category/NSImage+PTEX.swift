@@ -269,7 +269,7 @@ public extension NSImage {
     var imageSource: CGImageSource? {
         get {
             let result = objc_getAssociatedObject(self, AssociatedKeys.NSImageGIFImageSourceKey!)
-            return result == nil ? nil : (result as! CGImageSource)
+            return result as? CGImageSource
         }
         set {
             objc_setAssociatedObject(self, AssociatedKeys.NSImageGIFImageSourceKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

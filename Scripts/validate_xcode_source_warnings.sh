@@ -59,8 +59,8 @@ run_build() {
   local source_warnings
   local dependency_warnings
   local project_warnings
-  source_errors="$(rg -n 'error:' "$build_log" | rg --fixed-strings "$repo_root/PooToolsSource/" || true)"
-  source_warnings="$(rg -n 'warning:' "$build_log" | rg --fixed-strings "$repo_root/PooToolsSource/" || true)"
+  source_errors="$(rg -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: error:" "$build_log" || true)"
+  source_warnings="$(rg -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: warning:" "$build_log" || true)"
   dependency_warnings="$(rg -n 'warning:' "$build_log" | rg --fixed-strings "$repo_root/Pods/" || true)"
   project_warnings="$(rg -n 'warning:' "$build_log" \
     | rg -v --fixed-strings "$repo_root/PooToolsSource/" \
@@ -79,9 +79,19 @@ run_build() {
   fi
 
   if [[ "$build_exit" -ne 0 ]]; then
-    local dependency_blockers='Unable to resolve module dependency|could not build module|SmartCodable-Swift.h|/(Pods|SourcePackages/checkouts)/[^:]+:[0-9]+:[0-9]+: error:'
+    local dependency_blockers='Unable to resolve module dependency|could not build module|SmartCodable-Swift.h|Failed to clone repository|failed to clone repository|unable to access .*(github.com|gitlab.com)|could not resolve package|SwiftSyntax.*(error|failed)|swift-syntax.*(error|failed)|/(Pods|SourcePackages/checkouts)/[^:]+:[0-9]+:[0-9]+: error:'
     local configuration_blockers='search path .* not found|linker command failed|xcodebuild: error:|The workspace named .* does not contain a scheme'
     if rg -q "$dependency_blockers" "$build_log"; then
+      local direct_source_errors
+      direct_source_errors="$(printf '%s\n' "$source_errors" \
+        | rg -v 'no such module|could not build module|failed to build module|SmartCodable-Swift.h' || true)"
+      if [[ -z "$direct_source_errors" ]]; then
+        printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
+        rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
+        return 2
+      fi
+    fi
+    if rg -q "$dependency_blockers" "$build_log" && [[ -z "$source_errors" ]]; then
       printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
       rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
       return 2

@@ -28,7 +28,9 @@ public extension UIGestureRecognizer {
     }
     
     @objc func actionTap(sender:AnyObject) {
-        let block:TapedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIGestureRecognizerBlockKey) as! TapedBlock
+        guard let block = objc_getAssociatedObject(self, &AssociatedKeys.UIGestureRecognizerBlockKey) as? TapedBlock else {
+            return
+        }
         block(sender)
     }
     

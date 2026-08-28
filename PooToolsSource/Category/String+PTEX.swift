@@ -168,7 +168,8 @@ public extension String {
             name = PTPermissionText.permission_name(for:type)
         }
         
-        return "\("PT Setting go to".localized())\"\("PT Setting".localized())-\(kAppName!)\"\(String(format: "PT Setting allow".localized(), name))"
+        let appName = kAppName ?? ""
+        return "\("PT Setting go to".localized())\"\("PT Setting".localized())-\(appName)\"\(String(format: "PT Setting allow".localized(), name))"
     }
 }
 
@@ -553,7 +554,7 @@ public extension String {
     //MARK: 暂时仅限英文换其他
     ///暂时仅限英文换其他
     func toOtherLanguage(otherLanguage:StringTransform) -> String {
-        stringIsEmpty() ? "" : applyingTransform(otherLanguage, reverse: false)!
+        stringIsEmpty() ? "" : applyingTransform(otherLanguage, reverse: false) ?? ""
     }
     
     //MARK: 時間與當前時間的對比狀態
@@ -585,7 +586,7 @@ public extension String {
     }
     
     func timeStringChange() -> String {
-        let ret = self.toDate("yyyy-MM-dd HH:mm:ss")!.date
+        guard let ret = self.toDate("yyyy-MM-dd HH:mm:ss")?.date else { return "" }
         if ret.compare(.isThisYear) {
             if ret.compare(.isThisWeek) {
                 if ret.compare(.isYesterday) {
@@ -605,7 +606,7 @@ public extension String {
     
     func timeStringChangeEX() -> String {
         let regions = Region(zone: Zones.asiaHongKong)
-        let ret = self.toDate("yyyy-MM-dd HH:mm:ss",region: regions)!.date
+        guard let ret = self.toDate("yyyy-MM-dd HH:mm:ss",region: regions)?.date else { return "" }
                 
         var timeInterval = ret.timeIntervalSinceNow
         timeInterval = -timeInterval
@@ -666,9 +667,13 @@ public extension String {
     func stringToUTF8String(type:UTF8StringType) -> NSString {
         switch type {
         case .UTF8StringTypeOC:
-            return NSString(cString: nsString.utf8String!, encoding: NSUnicodeStringEncoding)!
+            guard let utf8String = nsString.utf8String,
+                  let result = NSString(cString: utf8String, encoding: NSUnicodeStringEncoding) else {
+                return ""
+            }
+            return result
         case .UTF8StringTypeC:
-            return nsString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet(charactersIn: "`#%^{}\"[]|\\<> ").inverted)! as NSString
+            return (nsString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet(charactersIn: "`#%^{}\"[]|\\<> ").inverted) ?? "") as NSString
         }
     }
     
@@ -1101,9 +1106,7 @@ public extension String {
     }
     
     static func currencySymbol() -> String {
-        let locale:NSLocale = NSLocale.current as NSLocale
-        let currency = locale.object(forKey: NSLocale.Key.currencySymbol)
-        return currency as! String
+        NSLocale.current.currencySymbol ?? ""
     }
 
     /**
@@ -1143,7 +1146,7 @@ public extension String {
         formatter.locale = Locale.current
         formatter.numberStyle = numberStyle
         let money = formatter.string(from: NSNumber(value: str.double() ?? 0.00))
-        return money!
+        return money ?? ""
     }
     
     //MARK: 判斷字符串是否為空
@@ -1171,7 +1174,7 @@ public extension String {
         if decimal {
             outputValue = numberFormat.string(from: NSDecimalNumber(string: self)) ?? ""
         } else {
-            outputValue = numberFormat.string(from: NSNumber(value: int!)) ?? ""
+            outputValue = numberFormat.string(from: NSNumber(value: Int(self) ?? 0)) ?? ""
         }
         return outputValue
     }
@@ -1357,7 +1360,7 @@ public extension String {
     //MARK: 根據日期字符串獲取星座名稱
     ///根據日期字符串獲取星座名稱
     func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss") -> PTConstellationType {
-        let getDate = self.toDate(format)!.date
+        guard let getDate = self.toDate(format)?.date else { return .Unknown }
         let month = getDate.month
         let day = getDate.day
         
@@ -1441,9 +1444,9 @@ public extension String {
     //MARK: JavaUnicode转苹果可以用的String
     ///JavaUnicode转苹果可以用的String
     func javaUnicodeToString() -> String {
-        let string = nsString.mutableCopy()
-        CFStringTransform((string as! CFMutableString), nil, "Any-Hex/Java" as NSString, true)
-        return (string as! String)
+        let string = NSMutableString(string: self)
+        CFStringTransform(string, nil, "Any-Hex/Java" as NSString, true)
+        return string as String
     }
     
     /*
@@ -1549,22 +1552,22 @@ public extension String {
         let timeArry = self.replacingOccurrences(of: "：", with: ":").components(separatedBy: ":")
         var seconds:Int = 0
         if timeArry.count > 0 && timeArry[0].isNumberString() {
-            let hh = Int(timeArry[0])
-            if hh! > 0 {
-                seconds += hh!*60*60
+            let hh = Int(timeArry[0]) ?? 0
+            if hh > 0 {
+                seconds += hh * 60 * 60
             }
         }
         if timeArry.count > 1 && timeArry[1].isNumberString() {
-            let mm = Int(timeArry[1])
-            if mm! > 0 {
-                seconds += mm!*60
+            let mm = Int(timeArry[1]) ?? 0
+            if mm > 0 {
+                seconds += mm * 60
             }
         }
 
         if timeArry.count > 2 && timeArry[2].isNumberString() {
-            let ss = Int(timeArry[2])
-            if ss! > 0 {
-                seconds += ss!
+            let ss = Int(timeArry[2]) ?? 0
+            if ss > 0 {
+                seconds += ss
             }
         }
         return seconds
@@ -1634,10 +1637,14 @@ public extension String {
 }
 
 public extension PTPOP where Base: ExpressibleByStringLiteral {
+    private var ptStringValue: String {
+        String(describing: base)
+    }
+
     //MARK: 字符串的长度
     ///字符串的长度
     var length: Int {
-        let string = base as! String
+        let string = ptStringValue
         return string.count
     }
     
@@ -1647,13 +1654,13 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///  - find: 子串
     /// - Returns: Bool
     func contains(find: String) -> Bool {
-        (base as! String).range(of: find) != nil
+        ptStringValue.range(of: find) != nil
     }
     
     // MARK: 字符串取类型的长度
     /// 字符串取类型的长度
     func typeLengh(_ type: StringTypeLength) -> Int {
-        let string = base as! String
+        let string = ptStringValue
         if type == .utf8 {
             return string.utf8.count
         } else if type == .utf16 {
@@ -1674,13 +1681,13 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///  - find: 子串
     /// - Returns: Bool
     func containsIgnoringCase(find: String) -> Bool {
-        (base as! String).range(of: find, options: .caseInsensitive) != nil
+        ptStringValue.range(of: find, options: .caseInsensitive) != nil
     }
     
     //MARK: 字符串转Base64
     ///字符串转Base64编码
     var base64Encode: String? {
-        guard let codingData = (base as! String).data(using: .utf8) else {
+        guard let codingData = ptStringValue.data(using: .utf8) else {
             return nil
         }
         return codingData.base64EncodedString()
@@ -1689,7 +1696,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     //MARK: Base64转字符串转
     ///字符串转Base64编码
     var base64Decode: String? {
-        guard let decryptionData = Data(base64Encoded: base as! String, options: .ignoreUnknownCharacters) else {
+        guard let decryptionData = Data(base64Encoded: ptStringValue, options: .ignoreUnknownCharacters) else {
             return nil
         }
         return String(data: decryptionData, encoding: .utf8)
@@ -1698,14 +1705,14 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     // MARK: 将16进制字符串转为Int
     /// 将16进制字符串转为Int
     var hexInt: Int {
-        Int(base as! String, radix: 16) ?? 0
+        Int(ptStringValue, radix: 16) ?? 0
     }
     
     //MARK: 字符串转数组
     ///字符串转数组
     /// - Returns: 转化后的数组
     func toArray() -> Array<Any> {
-        let a = Array(base as! String)
+        let a = Array(ptStringValue)
         return a
     }
     
@@ -1713,7 +1720,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///JSON字符串转Dictionary
     /// - Returns: Dictionary
     func jsonStringToDictionary() -> Dictionary<String, Any>? {
-        let jsonString = base as! String
+        let jsonString = ptStringValue
         if let jsonData: Data = jsonString.data(using: .utf8),let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
             return (dict as? Dictionary<String, Any>)
         }
@@ -1724,7 +1731,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///JSON字符串转Array
     /// - Returns: Array
     func jsonStringToArray() -> Array<Any>? {
-        let jsonString = base as! String
+        let jsonString = ptStringValue
         if let jsonData:Data = jsonString.data(using: .utf8),let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
             return (array as? Array<Any>)
         } else {
@@ -1736,7 +1743,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///JSON字符串转urlencode
     /// - Returns: String
     func jsonStringToQueryString() -> String? {
-        let jsonString = base as! String
+        let jsonString = ptStringValue
         guard let jsonData = jsonString.data(using: .utf8) else {
             return nil
         }
@@ -1766,7 +1773,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///  - isTone: true：带声调，false：不带声调，默认 false
     /// - Returns: 拼音
     func toLetter(_ isTone: Bool = false) -> String {
-        let mutableString = NSMutableString(string: base as! String)
+        let mutableString = NSMutableString(string: ptStringValue)
         CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)
         if !isTone {
             // 不带声调
@@ -1782,7 +1789,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// - Returns: 字符串的首字母
     func letterInitials(_ isUpper: Bool = true) -> String {
         let pinyin = toLetter(false).components(separatedBy: " ")
-        let initials = pinyin.compactMap { String(format: "%c", $0.cString(using:.utf8)![0]) }
+        let initials = pinyin.compactMap { $0.first.map(String.init) }
         return isUpper ? initials.joined().uppercased() : initials.joined()
     }
 
@@ -1796,10 +1803,13 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
             return nil
         }
         // 匹配字符串，返回结果集
-        let res = dataDetector.matches(in: base as! String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, (base as! String).count))
+        let string = ptStringValue
+        let res = dataDetector.matches(in: string,
+                                       options: NSRegularExpression.MatchingOptions(rawValue: 0),
+                                       range: NSMakeRange(0, string.utf16.count))
         // 取出结果
         for checkingRes in res {
-            urls.append((base as! NSString).substring(with: checkingRes.range))
+            urls.append((string as NSString).substring(with: checkingRes.range))
         }
         return urls
     }
@@ -1808,17 +1818,9 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
     /// - Returns: 返回字符的个数
     func countOfChars() -> Int {
-        var count = 0
-        guard (base as! String).count > 0 else { return 0 }
-        for i in 0...(base as! String).count - 1 {
-            let c: unichar = ((base as! String) as NSString).character(at: i)
-            if (c >= 0x4E00) {
-                count += 2
-            } else {
-                count += 1
-            }
+        ptStringValue.unicodeScalars.reduce(into: 0) { result, scalar in
+            result += scalar.value >= 0x4E00 ? 2 : 1
         }
-        return count
     }
 
     //MARK: 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
@@ -1830,12 +1832,12 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         formatter.roundingMode = .floor
         formatter.maximumFractionDigits = 0
         formatter.minimumFractionDigits = 0
-        if (base as! String).contains(".") {
+        if ptStringValue.contains(".") {
             formatter.maximumFractionDigits = 2
             formatter.minimumFractionDigits = 2
             formatter.minimumIntegerDigits = 1
         }
-        var num = NSDecimalNumber(string: (base as! String))
+        var num = NSDecimalNumber(string: ptStringValue)
         if num.doubleValue.isNaN {
             num = NSDecimalNumber(string: "0")
         }
@@ -1847,17 +1849,9 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
     /// - Returns: 返回字符的个数
     func customCountOfChars() -> Int {
-        var count = 0
-        guard (base as! String).count > 0 else { return 0 }
-        for i in 0...(base as! String).count - 1 {
-            let c: unichar = ((base as! String) as NSString).character(at: i)
-            if (c >= 0x4E00) {
-                count += 2
-            } else {
-                count += 1
-            }
+        ptStringValue.unicodeScalars.reduce(into: 0) { result, scalar in
+            result += scalar.value >= 0x4E00 ? 2 : 1
         }
-        return count
     }
 }
 
@@ -1903,32 +1897,30 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
                   key: String?,
                   encode: Bool,
                   encryptIV: String = "1") -> String? {
-        
-        let strData = encode ? (base as! String).data(using: .utf8) : Data(base64Encoded: (base as! String))
+        let strData = encode ? ptStringValue.data(using: .utf8) : Data(base64Encoded: ptStringValue)
+        guard let strData,
+              let keyData = key?.data(using: .utf8),
+              let encryptIVData = encryptIV.data(using: .utf8),
+              let cryptData = NSMutableData(length: strData.count + cryptType.infoTuple.digLength) else {
+            return nil
+        }
         // 创建数据编码后的指针
-        let dataPointer = UnsafeRawPointer((strData! as NSData).bytes)
+        let dataPointer = UnsafeRawPointer((strData as NSData).bytes)
         // 获取转码后数据的长度
-        let dataLength = size_t(strData!.count)
+        let dataLength = size_t(strData.count)
         
         // 2、后台对应的加密key
         // 将加密或解密的密钥转化为Data数据
-        guard let keyData = key?.data(using: .utf8) else {
-            return nil
-        }
         // 创建密钥的指针
         let keyPointer = UnsafeRawPointer((keyData as NSData).bytes)
         // 设置密钥的长度
         let keyLength = cryptType.infoTuple.keyLength
         /// 3、后台对应的加密 IV，这个是跟后台商量的iv偏移量
-        let encryptIV = "1"
-        let encryptIVData = encryptIV.data(using: .utf8)!
         let encryptIVDataBytes = UnsafeRawPointer((encryptIVData as NSData).bytes)
-        // 创建加密或解密后的数据对象
-        let cryptData = NSMutableData(length: Int(dataLength) + cryptType.infoTuple.digLength)
         // 获取返回数据(cryptData)的指针
-        let cryptPointer = UnsafeMutableRawPointer(mutating: cryptData!.mutableBytes)
+        let cryptPointer = UnsafeMutableRawPointer(mutating: cryptData.mutableBytes)
         // 获取接收数据的长度
-        let cryptDataLength = size_t(cryptData!.length)
+        let cryptDataLength = size_t(cryptData.length)
         // 加密或则解密后的数据长度
         var cryptBytesLength:size_t = 0
         // 是解密或者加密操作(CCOperation 是32位的)
@@ -1943,11 +1935,11 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         var resultString: String?
         // 通过返回状态判断加密或者解密是否成功
         if CCStatus(cryptStatus) == CCStatus(kCCSuccess) {
-            cryptData!.length = cryptBytesLength
+            cryptData.length = cryptBytesLength
             if encode {
-                resultString = cryptData!.base64EncodedString(options: .lineLength64Characters)
+                resultString = cryptData.base64EncodedString(options: .lineLength64Characters)
             } else {
-                resultString = NSString(data:cryptData! as Data ,encoding:String.Encoding.utf8.rawValue) as String?
+                resultString = NSString(data: cryptData as Data, encoding: String.Encoding.utf8.rawValue) as String?
             }
         }
         return resultString
@@ -1992,7 +1984,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     func shaCrypt(cryptType: DDYSHAType = .SHA1,
                   key: String?,
                   lower: Bool = true) -> String? {
-        guard let cStr = (base as! String).cString(using: String.Encoding.utf8) else {
+        guard let cStr = ptStringValue.cString(using: String.Encoding.utf8) else {
             return nil
         }
         let strLen  = strlen(cStr)
@@ -2000,8 +1992,8 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         let buffer = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digLen)
         let hash = NSMutableString()
         
-        if let cKey = key?.cString(using: String.Encoding.utf8), key != "" {
-            let keyLen = Int(key!.lengthOfBytes(using: String.Encoding.utf8))
+        if let key, !key.isEmpty, let cKey = key.cString(using: String.Encoding.utf8) {
+            let keyLen = key.lengthOfBytes(using: String.Encoding.utf8)
             CCHmac(cryptType.infoTuple.algorithm, cKey, keyLen, cStr, strLen, buffer)
         } else {
             switch cryptType {
@@ -2019,7 +2011,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
                 hash.appendFormat("%02X", buffer[i])
             }
         }
-        free(buffer)
+        buffer.deallocate()
         return hash as String
     }
 }
@@ -2031,7 +2023,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 字符串 转 Float
     /// - Returns: CGFloat
     func toCGFloat() -> CGFloat? {
-        if let doubleValue = Double(base as! String) {
+        if let doubleValue = Double(ptStringValue) {
             return CGFloat(doubleValue)
         }
         return nil
@@ -2041,7 +2033,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 字符串转 Bool
     /// - Returns: Bool
     func toBool() -> Bool? {
-        switch (base as! String).lowercased() {
+        switch ptStringValue.lowercased() {
         case "true", "t", "yes", "y", "1":
             return true
         case "false", "f", "no", "n", "0":
@@ -2055,7 +2047,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 字符串转 Int
     /// - Returns: Int
     func toInt() -> Int? {
-        if let num = NumberFormatter().number(from: base as! String) {
+        if let num = NumberFormatter().number(from: ptStringValue) {
             return num.intValue
         } else {
             return nil
@@ -2066,7 +2058,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 字符串转 Double
     /// - Returns: Double
     func toDouble() -> Double? {
-        if let num = NumberFormatter().number(from: base as! String) {
+        if let num = NumberFormatter().number(from: ptStringValue) {
             return num.doubleValue
         } else {
             return nil
@@ -2077,7 +2069,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// 字符串转 Float
     /// - Returns: Float
     func toFloat() -> Float? {
-        if let num = NumberFormatter().number(from: base as! String) {
+        if let num = NumberFormatter().number(from: ptStringValue) {
             return num.floatValue
         } else {
             return nil
@@ -2087,13 +2079,13 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     // MARK: 字符串转 NSString
     /// 字符串转 NSString
     var toNSString: NSString {
-        (base as! String) as NSString
+        ptStringValue as NSString
     }
     
     // MARK: 字符串转 Int64
     /// 字符串转 Int64
     var toInt64Value: Int64? {
-        Int64(base as! String)
+        Int64(ptStringValue)
     }
     
     // MARK: 字符串转 NSNumber

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.lock
 
 // MARK: 此方法用于设定范围,且不会小于和多于相关数值
 // 🛠️ Swift 6 升级：约束 T 必须是 Sendable，并让结构体遵循 Sendable
@@ -38,16 +39,14 @@ import UIKit
 }
 
 // MARK: 此方法用于属性锁
-// 🛠️ Swift 6 升级：
-// 1. Class 必须声明为 final，防止子类化破坏安全性
-// 2. 约束 T 为 Sendable
-// 3. 使用 @unchecked Sendable 告诉编译器：“我已经用 NSLock 手动加锁了，请相信它是安全的，不要再报警告”
-@propertyWrapper public final class PTLockAtomic<T: Sendable>: @unchecked Sendable {
-    private var value: T
-    private let lock = NSLock()
+// Swift 6: immutable storage plus OSAllocatedUnfairLock protects the wrapped value.
+// Swift 6: el almacenamiento inmutable y OSAllocatedUnfairLock protegen el valor envuelto.
+// Swift 6：使用不可变存储和 OSAllocatedUnfairLock 保护被包装值。
+@propertyWrapper public final class PTLockAtomic<T: Sendable>: Sendable {
+    private let storage: OSAllocatedUnfairLock<T>
  
     public init(wrappedValue value: T) {
-        self.value = value
+        self.storage = OSAllocatedUnfairLock(initialState: value)
     }
  
     public var wrappedValue: T {
@@ -57,18 +56,12 @@ import UIKit
  
     // 加锁处理获取数据
     public func getValue() -> T {
-        lock.lock()
-        defer { lock.unlock() }
- 
-        return value
+        storage.withLock { $0 }
     }
  
     // 设置数据加锁
     public func setValue(newValue: T) {
-        lock.lock()
-        defer { lock.unlock() }
- 
-        value = newValue
+        storage.withLock { $0 = newValue }
     }
 }
 

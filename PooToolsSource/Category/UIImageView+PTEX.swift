@@ -19,7 +19,8 @@ public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     @objc func getImagePointColor(point:CGPoint) -> UIColor {
         if let currentImage = image {
-            let thumbSize = CGSize(width: image!.size.width, height: currentImage.size.height)
+            let thumbSize = currentImage.size
+            guard bounds.width > 0, bounds.height > 0 else { return .clear }
 
             // 当前点在图片中的相对位置 (优化：移除 CGPointMake，使用原生 CGPoint)
             let pInImage = CGPoint(x: point.x * thumbSize.width / self.bounds.width,

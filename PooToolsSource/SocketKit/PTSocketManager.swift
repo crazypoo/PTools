@@ -302,18 +302,19 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
             while !Task.isCancelled {
                 do {
                     // 每隔 interval 秒执行一次
-                    try await Task.sleep(nanoseconds: UInt64((self?.heartBeatInterval ?? 30) * 1_000_000_000))
+                    guard let manager = self else { break }
+                    try await Task.sleep(nanoseconds: UInt64(manager.heartBeatInterval * 1_000_000_000))
                     guard !Task.isCancelled else { break }
                     
-                    self?.socketQueue.async {
-                        PTGCDManager.shared.runOnMain { [weak self] in
-                            guard let self = self else { return }
-                            try? self.webSocket?.sendPing(nil)
+                    manager.socketQueue.async { [weak manager] in
+                        PTGCDManager.shared.runOnMain { [weak manager] in
+                            guard let manager = manager else { return }
+                            try? manager.webSocket?.sendPing(nil)
                             
                             let currentTime = Date().timeIntervalSince1970
-                            if currentTime - self.lastReceiveMessageTime > self.timeoutThreshold {
+                            if currentTime - manager.lastReceiveMessageTime > manager.timeoutThreshold {
                                 PTNSLogConsole("PTSocketManager: 心跳超时，判定为假死，准备重连")
-                                self.reConnect()
+                                manager.reConnect()
                             }
                         }
                     }

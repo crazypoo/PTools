@@ -10,7 +10,7 @@ import UIKit
 
 @IBDesignable
 open class PTCollectionAnimationButton: UIButton {
-    fileprivate var imageShape: CAShapeLayer!
+    fileprivate var imageShape = CAShapeLayer()
     @IBInspectable open var image: UIImage! {
         didSet {
             createLayers(image: image)
@@ -18,32 +18,32 @@ open class PTCollectionAnimationButton: UIButton {
     }
     @IBInspectable open var imageColorOn: UIColor! = UIColor(red: 255/255, green: 172/255, blue: 51/255, alpha: 1.0) {
         didSet {
-            if (isSelected) {
+            if isSelected, let imageColorOn {
                 imageShape.fillColor = imageColorOn.cgColor
             }
         }
     }
     @IBInspectable open var imageColorOff: UIColor! = UIColor(red: 136/255, green: 153/255, blue: 166/255, alpha: 1.0) {
         didSet {
-            if (!isSelected) {
+            if !isSelected, let imageColorOff {
                 imageShape.fillColor = imageColorOff.cgColor
             }
         }
     }
 
-    fileprivate var circleShape: CAShapeLayer!
-    fileprivate var circleMask: CAShapeLayer!
+    fileprivate var circleShape = CAShapeLayer()
+    fileprivate var circleMask = CAShapeLayer()
     @IBInspectable open var circleColor: UIColor! = UIColor(red: 255/255, green: 172/255, blue: 51/255, alpha: 1.0) {
         didSet {
-            circleShape.fillColor = circleColor.cgColor
+            circleShape.fillColor = circleColor?.cgColor
         }
     }
 
-    fileprivate var lines: [CAShapeLayer]!
+    fileprivate var lines: [CAShapeLayer] = []
     @IBInspectable open var lineColor: UIColor! = UIColor(red: 250/255, green: 120/255, blue: 68/255, alpha: 1.0) {
         didSet {
             for line in lines {
-                line.strokeColor = lineColor.cgColor
+                line.strokeColor = lineColor?.cgColor
             }
         }
     }
@@ -70,7 +70,7 @@ open class PTCollectionAnimationButton: UIButton {
         didSet {
             if (isSelected != oldValue) {
                 if isSelected {
-                    imageShape.fillColor = imageColorOn.cgColor
+                    imageShape.fillColor = imageColorOn?.cgColor
                 } else {
                     deselect()
                 }
@@ -94,12 +94,12 @@ open class PTCollectionAnimationButton: UIButton {
     }
 
     public required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)!
+        super.init(frame: .zero)
         createLayers(image: UIImage())
         addTargets()
     }
 
-    fileprivate func createLayers(image: UIImage!) {
+    fileprivate func createLayers(image: UIImage?) {
         self.layer.sublayers = nil
 
         let imageFrame = CGRect(x: frame.size.width / 2 - frame.size.width / 4, y: frame.size.height / 2 - frame.size.height / 4, width: frame.size.width / 2, height: frame.size.height / 2)
@@ -113,7 +113,7 @@ open class PTCollectionAnimationButton: UIButton {
         circleShape.bounds = imageFrame
         circleShape.position = imgCenterPoint
         circleShape.path = UIBezierPath(ovalIn: imageFrame).cgPath
-        circleShape.fillColor = circleColor.cgColor
+        circleShape.fillColor = circleColor?.cgColor
         circleShape.transform = CATransform3DMakeScale(0.0, 0.0, 1.0)
         self.layer.addSublayer(circleShape)
 
@@ -137,7 +137,7 @@ open class PTCollectionAnimationButton: UIButton {
             line.position = imgCenterPoint
             line.masksToBounds = true
             line.actions = ["strokeStart": NSNull(), "strokeEnd": NSNull()]
-            line.strokeColor = lineColor.cgColor
+            line.strokeColor = lineColor?.cgColor
             line.lineWidth = 1.25
             line.miterLimit = 1.25
             line.path = {
@@ -163,14 +163,15 @@ open class PTCollectionAnimationButton: UIButton {
         imageShape.bounds = imageFrame
         imageShape.position = imgCenterPoint
         imageShape.path = UIBezierPath(rect: imageFrame).cgPath
-        imageShape.fillColor = imageColorOff.cgColor
+        imageShape.fillColor = imageColorOff?.cgColor
         imageShape.actions = ["fillColor": NSNull()]
         self.layer.addSublayer(imageShape)
 
-        imageShape.mask = CALayer()
-        imageShape.mask!.contents = image.cgImage
-        imageShape.mask!.bounds = imageFrame
-        imageShape.mask!.position = imgCenterPoint
+        let imageMask = CALayer()
+        imageMask.contents = image?.cgImage
+        imageMask.bounds = imageFrame
+        imageMask.position = imgCenterPoint
+        imageShape.mask = imageMask
 
         //==============================
         // circle transform animation
@@ -359,7 +360,7 @@ open class PTCollectionAnimationButton: UIButton {
 
     open func select() {
         isSelected = true
-        imageShape.fillColor = imageColorOn.cgColor
+        imageShape.fillColor = imageColorOn?.cgColor
 
         CATransaction.begin()
 
@@ -367,10 +368,10 @@ open class PTCollectionAnimationButton: UIButton {
         circleMask.add(circleMaskTransform, forKey: "transform")
         imageShape.add(imageTransform, forKey: "transform")
 
-        for i in 0 ..< 5 {
-            lines[i].add(lineStrokeStart, forKey: "strokeStart")
-            lines[i].add(lineStrokeEnd, forKey: "strokeEnd")
-            lines[i].add(lineOpacity, forKey: "opacity")
+        for line in lines {
+            line.add(lineStrokeStart, forKey: "strokeStart")
+            line.add(lineStrokeEnd, forKey: "strokeEnd")
+            line.add(lineOpacity, forKey: "opacity")
         }
 
         CATransaction.commit()
@@ -378,16 +379,14 @@ open class PTCollectionAnimationButton: UIButton {
 
     open func deselect() {
         isSelected = false
-        imageShape.fillColor = imageColorOff.cgColor
+        imageShape.fillColor = imageColorOff?.cgColor
 
         // remove all animations
         circleShape.removeAllAnimations()
         circleMask.removeAllAnimations()
         imageShape.removeAllAnimations()
-        lines[0].removeAllAnimations()
-        lines[1].removeAllAnimations()
-        lines[2].removeAllAnimations()
-        lines[3].removeAllAnimations()
-        lines[4].removeAllAnimations()
+        for line in lines {
+            line.removeAllAnimations()
+        }
     }
 }

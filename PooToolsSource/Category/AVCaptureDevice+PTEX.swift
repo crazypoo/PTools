@@ -75,16 +75,19 @@ public extension AVCaptureDevice {
             do {
                 try lockForConfiguration()
             }
-            catch let error {
-                fatalError(error.localizedDescription)
+            catch {
+                PTNSLogConsole("无法锁定相机配置：\(error.localizedDescription)",
+                               levelType: .error,
+                               loggerType: .avCaptureDevice)
+                return
             }
             activeFormat = selectedFormat
             
             if let preferredFps = preferredSpec.fps {
                 activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: preferredFps)
                 activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: preferredFps)
-                unlockForConfiguration()
             }
+            unlockForConfiguration()
         }
     }
     

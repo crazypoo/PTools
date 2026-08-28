@@ -18,10 +18,14 @@ public class PTImaginaryLineView: UIView {
     
     //MARK: 虛線顏色
     ///虛線顏色
-    open var lineColor:UIColor = .lightGray
+    open var lineColor:UIColor = .lightGray {
+        didSet { setNeedsDisplay() }
+    }
     //MARK: 虛線方向
     ///虛線方向
-    open var lineType:PTImaginaryLineType = .Hor
+    open var lineType:PTImaginaryLineType = .Hor {
+        didSet { setNeedsDisplay() }
+    }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,7 +45,7 @@ public class PTImaginaryLineView: UIView {
         switch lineType {
         case .Hor:
             context?.move(to: CGPoint(x: 0, y: frame.size.height / 2))
-            context?.addLine(to: CGPoint(x: frame.size.width, y: 0))
+            context?.addLine(to: CGPoint(x: frame.size.width, y: frame.size.height / 2))
         default:
             context?.move(to: CGPoint(x: frame.size.width / 2, y: 0))
             context?.addLine(to: CGPoint(x: frame.size.width / 2, y: frame.size.height))

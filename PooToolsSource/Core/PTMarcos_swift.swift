@@ -17,7 +17,7 @@ public typealias PTBackgroundTask = @Sendable () -> Void
 public typealias PTBoolTask = (@Sendable (Bool) -> Void)
 
 @MainActor public var AppWindows: UIWindow? {
-    UIApplication.shared.currentWindow
+    PTSceneContext.activeWindow()
 }
 
 //MARK: 設備信息
@@ -60,22 +60,22 @@ public var isXModel: Bool {
 @MainActor public let infoDictionary            = Bundle.main.infoDictionary
 //MARK: App显示名称
 ///App显示名称
-@MainActor public let kAppDisplayName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
+@MainActor public let kAppDisplayName: String?         = infoDictionary?["CFBundleDisplayName"] as? String
 //MARK: App名称
 ///App名称
-@MainActor public let kAppName: String?         = infoDictionary!["CFBundleName"] as? String
+@MainActor public let kAppName: String?         = infoDictionary?["CFBundleName"] as? String
 //MARK: App版本号
 ///App版本号
-@MainActor public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
+@MainActor public let kAppVersion: String?      = infoDictionary?["CFBundleShortVersionString"] as? String
 //MARK: App Build版本号
 ///AppBuild版本号
-@MainActor public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
+@MainActor public let kAppBuildVersion: String? = infoDictionary?["CFBundleVersion"] as? String
 //MARK: App Bundle Id
 ///App BundleId
-@MainActor public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
+@MainActor public let kAppBundleId: String?     = infoDictionary?["CFBundleIdentifier"] as? String
 //MARK: 平台名称（iPhone Simulator 、 iPhone）
 ///平台名称（iPhone Simulator 、 iPhone）
-@MainActor public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
+@MainActor public let kPlatformName: String?    = infoDictionary?["DTPlatformName"] as? String
 //MARK: iOS系统版本
 ///iOS系统版本
 @MainActor public let kiOSVersion: String       = UIDevice.current.systemVersion

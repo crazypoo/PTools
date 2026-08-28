@@ -36,9 +36,16 @@ public class PTCustomerAlertController: PTAlertController {
         }
     }
 
+    // English: Keep the default alert surface dynamic and translucent so the system material remains visible.
+    // Español: Mantén la superficie predeterminada dinámica y translúcida para conservar el material del sistema.
+    // 中文：默认弹窗表面使用动态半透明颜色，确保系统磨砂材质始终可见。
+    private var resolvedContentBackgroundColor: UIColor {
+        contentBackgroundColor ?? UIColor.systemBackground.withAlphaComponent(0.78)
+    }
+
     fileprivate lazy var contentView:UIView = {
         let view = UIView()
-        view.backgroundColor = contentBackgroundColor ?? .clear
+        view.backgroundColor = resolvedContentBackgroundColor
         view.alpha = 0.0
         view.layer.cornerRadius = cornerSize
         view.clipsToBounds = true
@@ -136,7 +143,7 @@ public class PTCustomerAlertController: PTAlertController {
         let buttonHeight: CGFloat = buttons.count <= 2 ? (buttons.isEmpty ? 0 : 44) : CGFloat(buttons.count) * 44
 
         view.addSubview(contentView)
-        contentView.backgroundColor = contentBackgroundColor ?? .clear
+        contentView.backgroundColor = resolvedContentBackgroundColor
         contentView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(contentWidth)
@@ -169,7 +176,7 @@ public class PTCustomerAlertController: PTAlertController {
 
     private func updateContentBackgroundIfLoaded() {
         guard isViewLoaded else { return }
-        contentView.backgroundColor = contentBackgroundColor ?? .clear
+        contentView.backgroundColor = resolvedContentBackgroundColor
     }
     
     fileprivate func contentSubsSet() {

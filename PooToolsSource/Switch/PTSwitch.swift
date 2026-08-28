@@ -13,17 +13,11 @@ open class PTSwitch: UIControl {
     
     public var isOn = false {
         didSet {
-            if animation {
-                UIView.animate(withDuration: 0.3) {
-                    self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : self.switchTintColor
-                }
-            } else {
-                self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : self.switchTintColor
-            }
+            updateSwitchState(animated: animation)
         }
     }
     
-    public var switchTintColor:UIColor = UIColor(hexString: "c7c7c7")! {
+    public var switchTintColor:UIColor = UIColor(hexString: "c7c7c7") ?? .lightGray {
         didSet {
             self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : switchTintColor
         }
@@ -69,7 +63,7 @@ open class PTSwitch: UIControl {
         addSubview(switchBackgroundView)
 
         // 设置滑块视图
-        switchThumbView.backgroundColor = (thumbColor as! UIColor)
+        switchThumbView.backgroundColor = .white
         addSubview(switchThumbView)
 
         // 添加点击手势
@@ -82,37 +76,39 @@ open class PTSwitch: UIControl {
 
         // 设置背景视图的布局
         switchBackgroundView.frame = bounds
-        switchBackgroundView.layer.cornerRadius = frame.height / 2
+        switchBackgroundView.layer.cornerRadius = bounds.height / 2
 
         // 设置滑块视图的布局
-        let thumbSize = CGSize(width: frame.height - 4, height: frame.height - 4)
-        let thumbPosition = isOn ? frame.width - thumbSize.width - 2 : 2
+        let thumbSize = CGSize(width: max(0, bounds.height - 4), height: max(0, bounds.height - 4))
+        let thumbPosition = isOn ? bounds.width - thumbSize.width - 2 : 2
         switchThumbView.frame = CGRect(x: thumbPosition, y: 2, width: thumbSize.width, height: thumbSize.height)
-        switchThumbView.layer.cornerRadius = (frame.height - 4) / 2
+        switchThumbView.layer.cornerRadius = max(0, bounds.height - 4) / 2
     }
 
     @objc private func toggleSwitch() {
+        animation = true
         isOn.toggle()
         sendActions(for: .valueChanged)
-        updateSwitchState(animated: true)
         valueChangeCallBack?(isOn)
     }
 
     private func updateSwitchState(animated: Bool) {
-        animation = animated
-        let thumbSize = switchThumbView.frame.size
-        let thumbPosition = isOn ? frame.width - thumbSize.width - 2 : 2
+        let thumbSize = CGSize(width: max(0, bounds.height - 4), height: max(0, bounds.height - 4))
+        let thumbPosition = isOn ? bounds.width - thumbSize.width - 2 : 2
+        let update = {
+            self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : self.switchTintColor
+            self.switchThumbView.frame = CGRect(x: thumbPosition, y: 2, width: thumbSize.width, height: thumbSize.height)
+            self.switchThumbView.layer.cornerRadius = max(0, self.bounds.height - 4) / 2
+        }
         if animated {
-            UIView.animate(withDuration: 0.3) {
-                self.switchThumbView.frame.origin.x = thumbPosition
-            }
+            UIView.animate(withDuration: 0.3, animations: update)
         } else {
-            switchThumbView.frame.origin.x = thumbPosition
+            update()
         }
     }
 
     public func setOn(_ on: Bool, animated: Bool) {
+        animation = animated
         isOn = on
-        updateSwitchState(animated: animated)
     }
 }

@@ -27,11 +27,8 @@ public extension UIViewController {
     }
     
     class func swizzItWithTag(tag: String?) {
-        if (tag == nil) {
-            return
-        }
-        
-        logTag = tag!
+        guard let tag else { return }
+        logTag = tag
         swizzIt()
     }
     

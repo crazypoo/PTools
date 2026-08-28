@@ -9,7 +9,7 @@
 import UIKit
 
 public extension Bundle {
-    
+
     @MainActor class func podBundleImage(bundleName:String,
                                imageName:String) -> UIImage {
         let bundle = PTUtils.cgBaseBundle()
@@ -30,7 +30,10 @@ public extension Bundle {
     }
 
     @MainActor class func bundleResource(bundle:String,resourceName:String,type:String) -> String? {
-        let bundlePath = Bundle(path: PTUtils.cgBaseBundle().path(forResource: bundle, ofType: "bundle")!)
+        guard let path = PTUtils.cgBaseBundle().path(forResource: bundle, ofType: "bundle") else {
+            return nil
+        }
+        let bundlePath = Bundle(path: path)
         let filePath = bundlePath?.path(forResource: resourceName, ofType: type)
         return filePath
     }

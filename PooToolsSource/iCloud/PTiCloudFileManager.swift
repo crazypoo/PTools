@@ -102,7 +102,8 @@ extension PTiCloudFileManager {
     
     /// 获取本地沙盒的 Documents 目录路径
     public var localDocumentsURL: URL {
-        return fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     }
     
     /// 将本地的 FMDB 数据库备份到 iCloud

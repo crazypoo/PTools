@@ -1277,13 +1277,16 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: false,
             speed: speed)
 
-        await self.videoConverter = VideoConverter(asset: self.videoAVAsset)
-        
-        // 挂起等待外部处理完毕
-        let safePair = await withCheckedContinuation { continuation in
-            self.videoConverter?.convert(options) { resultAc, resultAvc in
-                continuation.resume(returning: (resultAc, resultAvc))
-            }
+        self.videoConverter = await VideoConverter(asset: self.videoAVAsset)
+        guard let videoConverter = self.videoConverter else { return }
+
+        let safePair: (AVMutableComposition, AVMutableVideoComposition)
+        do {
+            // 直接使用同一 MainActor 上的 async API，避免 AVFoundation 对象经过 Sendable continuation。
+            safePair = try await videoConverter.convert(options)
+        } catch {
+            PTNSLogConsole("视频资源重建失败：\(error.localizedDescription)", levelType: .error, loggerType: .media)
+            return
         }
         
         let playerItem = AVPlayerItem(asset: safePair.0)

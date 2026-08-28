@@ -16,87 +16,184 @@ public let ConsoleDebug = "UI_debug"
 public let TouchInspectorDebug = "TS_debug"
 public let TouchInspectorHitsDebug = "TS_Hit_debug"
 
-public final class PTCoreUserDefultsWrapper: @unchecked Sendable {
-    
-    public static let shared = PTCoreUserDefultsWrapper()    
+// UserDefaults is the single source of truth; the wrapper has no mutable instance state.
+// UserDefaults es la única fuente de verdad; el envoltorio no tiene estado mutable de instancia.
+// UserDefaults 是唯一数据源；这个包装器不持有可变实例状态。
+public final class PTCoreUserDefultsWrapper: Sendable {
+
+    public static let shared = PTCoreUserDefultsWrapper()
     private init() {}
+
+    private static func value<T>(_ key: String, default defaultValue: T) -> T {
+        UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+    }
+
+    private static func optionalValue<T>(_ key: String) -> T? {
+        UserDefaults.standard.object(forKey: key) as? T
+    }
+
+    private static func set(_ value: Any?, forKey key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
 
     //MARK: 是否再显示更新框(0继续显示1不再显示)
     ///是否再显示更新框(0继续显示1不再显示)
-    @PTUserDefault(withKey: "AppNoMoreShowUpdate", defaultValue: false) public var AppNoMoreShowUpdate:Bool
-        
-    /**
-        测试相关
-     */
+    public var AppNoMoreShowUpdate: Bool {
+        get { Self.value("AppNoMoreShowUpdate", default: false) }
+        set { Self.set(newValue, forKey: "AppNoMoreShowUpdate") }
+    }
+
     //MARK: App的全局URL环境配置设置(1生产2测试3自定义)
     ///App的全局URL环境配置设置(1生产2测试3自定义)
-    @PTUserDefault(withKey: "AppServiceIdentifier", defaultValue: nil) public var AppServiceIdentifier:String?
+    public var AppServiceIdentifier: String? {
+        get { Self.optionalValue("AppServiceIdentifier") }
+        set { Self.set(newValue, forKey: "AppServiceIdentifier") }
+    }
+
     ///App的全局URL环境配置设置(1生产2测试3自定义)
-    @PTUserDefault(withKey: "AppSocketServiceIdentifier", defaultValue: nil) public var AppSocketServiceIdentifier:String?
+    public var AppSocketServiceIdentifier: String? {
+        get { Self.optionalValue("AppSocketServiceIdentifier") }
+        set { Self.set(newValue, forKey: "AppSocketServiceIdentifier") }
+    }
+
     //MARK: App的自定义URL环境请求连接
     ///App的自定义SocketURL环境请求连接
-    @PTUserDefault(withKey: DevSocketKey, defaultValue: "") public var AppSocketUrl:String
+    public var AppSocketUrl: String {
+        get { Self.value(DevSocketKey, default: "") }
+        set { Self.set(newValue, forKey: DevSocketKey) }
+    }
+
     ///App的自定义URL环境请求连接
-    @PTUserDefault(withKey: DevNetWorkKey, defaultValue: "") public var AppRequestUrl:String
+    public var AppRequestUrl: String {
+        get { Self.value(DevNetWorkKey, default: "") }
+        set { Self.set(newValue, forKey: DevNetWorkKey) }
+    }
+
     //MARK: App测试环境(YES是)
     ///App测试环境(YES是)
-    @PTUserDefault(withKey: ConsoleDebug, defaultValue: false) public var AppDebugMode:Bool
+    public var AppDebugMode: Bool {
+        get { Self.value(ConsoleDebug, default: false) }
+        set { Self.set(newValue, forKey: ConsoleDebug) }
+    }
+
     //MARK: App测试环境图片选项(YES是)
     ///App测试环境图片选项(YES是)
-    @PTUserDefault(withKey: "WebImageOption", defaultValue: false) public var WebImageOption:Bool
+    public var WebImageOption: Bool {
+        get { Self.value("WebImageOption", default: false) }
+        set { Self.set(newValue, forKey: "WebImageOption") }
+    }
+
     //MARK: App测试环境点击泡泡(YES是)
     ///App测试环境点击泡泡(YES是)
-    @PTUserDefault(withKey: PTDevMaskTouchBubbleKey, defaultValue: true) public var AppDebbugTouchBubble:Bool
+    public var AppDebbugTouchBubble: Bool {
+        get { Self.value(PTDevMaskTouchBubbleKey, default: true) }
+        set { Self.set(newValue, forKey: PTDevMaskTouchBubbleKey) }
+    }
+
     //MARK: App测试环境标识(YES是)
     ///App测试环境标识(YES是)
-    @PTUserDefault(withKey: PTDevMaskKey, defaultValue: true) public var AppDebbugMark:Bool
+    public var AppDebbugMark: Bool {
+        get { Self.value(PTDevMaskKey, default: true) }
+        set { Self.set(newValue, forKey: PTDevMaskKey) }
+    }
+
     //MARK: App测试环境点击信息(YES是)
     ///App测试环境点击信息(YES是)
-    @PTUserDefault(withKey: TouchInspectorDebug, defaultValue: true) public var AppTouchInspectShow:Bool
+    public var AppTouchInspectShow: Bool {
+        get { Self.value(TouchInspectorDebug, default: true) }
+        set { Self.set(newValue, forKey: TouchInspectorDebug) }
+    }
+
     //MARK: App测试环境点击信息Hits(YES是)
     ///App测试环境点击信息Hits(YES是)
-    @PTUserDefault(withKey: TouchInspectorHitsDebug, defaultValue: true) public var AppTouchInspectShowHits:Bool
-    
-    @PTUserDefault(withKey: "LocalConsoleFontSize", defaultValue: 7.5) public var LocalConsoleCurrentFontSize:CGFloat
-    @PTUserDefault(withKey: "LocalConsoleFontColor", defaultValue: "#FFFFFF") public var LocalConsoleCurrentFontColor:String
-    /**
-        语言
-     */
+    public var AppTouchInspectShowHits: Bool {
+        get { Self.value(TouchInspectorHitsDebug, default: true) }
+        set { Self.set(newValue, forKey: TouchInspectorHitsDebug) }
+    }
+
+    public var LocalConsoleCurrentFontSize: CGFloat {
+        get { Self.value("LocalConsoleFontSize", default: 7.5) }
+        set { Self.set(newValue, forKey: "LocalConsoleFontSize") }
+    }
+
+    public var LocalConsoleCurrentFontColor: String {
+        get { Self.value("LocalConsoleFontColor", default: "#FFFFFF") }
+        set { Self.set(newValue, forKey: "LocalConsoleFontColor") }
+    }
+
     //MARK: App语言环境(默认中文zh-Hans)
     ///App语言环境(默认中文zh-Hans)
-    @PTUserDefault(withKey: "MyAppLanguage", defaultValue: PTDefaultLanguage) public var AppLanguage:String
-    
-    /**
-        测速
-     */
+    public var AppLanguage: String {
+        get { Self.value("MyAppLanguage", default: PTDefaultLanguage) }
+        set { Self.set(newValue, forKey: "MyAppLanguage") }
+    }
+
     //MARK: App网络测速记录
     ///App网络测速记录
-    @PTUserDefault(withKey: "AppNetworkSpeedTestFunctionHistoria", defaultValue: "") public var NetworkSpeedTestFunctionHistoria:String
-    
-    /**
-        权限检测
-     */
+    public var NetworkSpeedTestFunctionHistoria: String {
+        get { Self.value("AppNetworkSpeedTestFunctionHistoria", default: "") }
+        set { Self.set(newValue, forKey: "AppNetworkSpeedTestFunctionHistoria") }
+    }
+
     //MARK: App权限检测
     ///权限检测
-    @PTUserDefault(withKey: "AppFirstPermission", defaultValue: false) public var AppFirstPermissionShowed:Bool
-    
+    public var AppFirstPermissionShowed: Bool {
+        get { Self.value("AppFirstPermission", default: false) }
+        set { Self.set(newValue, forKey: "AppFirstPermission") }
+    }
+
     //MARK: PTWhatsNews记录版本
     ///PTWhatsNews记录版本
-    @PTUserDefault(withKey: "PTWhatNewsLatestAppVersionPresented", defaultValue: "") public var PTWhatNewsLatestAppVersionPresented:String
-    /*
-     LocalConsole
-     */
+    public var PTWhatNewsLatestAppVersionPresented: String {
+        get { Self.value("PTWhatNewsLatestAppVersionPresented", default: "") }
+        set { Self.set(newValue, forKey: "PTWhatNewsLatestAppVersionPresented") }
+    }
+
     //MARK: LocalConsole
-    @PTUserDefault(withKey: "LocalConsole.Width", defaultValue: nil) public var PTLocalConsoleWidth:CGFloat?
-    @PTUserDefault(withKey: "LocalConsole.Height", defaultValue: nil) public var PTLocalConsoleHeight:CGFloat?
-    @PTUserDefault(withKey: "LocalConsole.X", defaultValue: nil) public var PTLocalConsoleX:CGFloat?
-    @PTUserDefault(withKey: "LocalConsole.Y", defaultValue: nil) public var PTLocalConsoleY:CGFloat?
-    @PTUserDefault(withKey: "MockLocationLat", defaultValue: 0) public var PTMockLocationLat:CGFloat
-    @PTUserDefault(withKey: "MockLocationLng", defaultValue: 0) public var PTMockLocationLng:CGFloat
-    @PTUserDefault(withKey: "MockLocationOpen", defaultValue: false) public var PTMockLocationOpen:Bool
+    public var PTLocalConsoleWidth: CGFloat? {
+        get { Self.optionalValue("LocalConsole.Width") }
+        set { Self.set(newValue, forKey: "LocalConsole.Width") }
+    }
+
+    public var PTLocalConsoleHeight: CGFloat? {
+        get { Self.optionalValue("LocalConsole.Height") }
+        set { Self.set(newValue, forKey: "LocalConsole.Height") }
+    }
+
+    public var PTLocalConsoleX: CGFloat? {
+        get { Self.optionalValue("LocalConsole.X") }
+        set { Self.set(newValue, forKey: "LocalConsole.X") }
+    }
+
+    public var PTLocalConsoleY: CGFloat? {
+        get { Self.optionalValue("LocalConsole.Y") }
+        set { Self.set(newValue, forKey: "LocalConsole.Y") }
+    }
+
+    public var PTMockLocationLat: CGFloat {
+        get { Self.value("MockLocationLat", default: 0) }
+        set { Self.set(newValue, forKey: "MockLocationLat") }
+    }
+
+    public var PTMockLocationLng: CGFloat {
+        get { Self.value("MockLocationLng", default: 0) }
+        set { Self.set(newValue, forKey: "MockLocationLng") }
+    }
+
+    public var PTMockLocationOpen: Bool {
+        get { Self.value("MockLocationOpen", default: false) }
+        set { Self.set(newValue, forKey: "MockLocationOpen") }
+    }
+
 #if DEBUG
-    @PTUserDefault(withKey: "LogWriteToTextFile", defaultValue: true) public var PTLogWrite:Bool
+    public var PTLogWrite: Bool {
+        get { Self.value("LogWriteToTextFile", default: true) }
+        set { Self.set(newValue, forKey: "LogWriteToTextFile") }
+    }
 #else
-    @PTUserDefault(withKey: "LogWriteToTextFile", defaultValue: false) public var PTLogWrite:Bool
+    public var PTLogWrite: Bool {
+        get { Self.value("LogWriteToTextFile", default: false) }
+        set { Self.set(newValue, forKey: "LogWriteToTextFile") }
+    }
 #endif
 }

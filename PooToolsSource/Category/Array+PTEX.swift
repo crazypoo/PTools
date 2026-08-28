@@ -50,9 +50,10 @@ public extension Array {
     //MARK: 數組冒泡排序
     ///數組冒泡排序
     func bubbleSort(_ filterCall: (Element) -> Int) -> [Element] {
+        guard count > 1 else { return self }
         var temp: [Element] = self
-        for i in 0...self.count - 1 {
-            for j in (i...self.count - 1).reversed() {
+        for i in 0..<(count - 1) {
+            for j in (i + 1..<count).reversed() {
                 // rs 必须写到内循环里边
                 let rs = filterCall(temp[i])
                 let js = filterCall(temp[j])
@@ -128,9 +129,12 @@ public extension Array {
         把某个数据插入到某位置
      */
     func rearrange(fromIndex: Int, toIndex: Int) -> [Element] {
+        guard indices.contains(fromIndex), toIndex >= 0, toIndex <= count else {
+            return self
+        }
         var array = self
         let element = array.remove(at: fromIndex)
-        array.insert(element, at: toIndex)
+        array.insert(element, at: Swift.min(toIndex, array.count))
         return array
     }
     
@@ -143,7 +147,8 @@ public extension Array {
      - parameter chunkSize: 分多少组
      */
     func chunked(by chunkSize: Int) -> [[Element]] {
-        stride(from: 0, to: self.count, by: chunkSize).map {
+        guard chunkSize > 0 else { return [] }
+        return stride(from: 0, to: self.count, by: chunkSize).map {
             Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
         }
     }
@@ -154,16 +159,8 @@ public extension Array {
     
     /// 获取数组中的元素,增加了数组越界的判断
     func safeIndex(_ i:Int) -> Array.Iterator.Element? {
-        guard !isEmpty && self.count > abs(i) else {
-            return nil
-        }
-        
-        for item in self.enumerated() {
-            if item.offset == i {
-                return item.element
-            }
-        }
-        return nil
+        guard indices.contains(i) else { return nil }
+        return self[i]
     }
     
     /// 从前面取 N 个数组元素

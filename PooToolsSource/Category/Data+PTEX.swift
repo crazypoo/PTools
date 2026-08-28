@@ -48,7 +48,7 @@ public extension Data {
             return .TIFF
         case 0x00:
             if self.count >= 12 {
-                let heicHeader = self.subdata(in: Range(NSMakeRange(4, 8))!)
+                let heicHeader = Data(self.dropFirst(4).prefix(8))
                 if let heicString = String(data: heicHeader, encoding: .ascii) {
                     if heicString == "ftypheic" || heicString == "ftypheix" || heicString == "ftypmif1" || heicString == "ftypmsf1" {
                         return .HEIC
@@ -67,7 +67,7 @@ public extension Data {
         case 0x42:
             return .BMP
         case 0x52:
-            let subData = self.subdata(in: Range(NSMakeRange(0, 12))!)
+            let subData = Data(self.prefix(12))
             if let infoString = String(data: subData, encoding: .ascii) {
                 if infoString.hasPrefix("RIFF") && infoString.hasSuffix("WEBP") {
                     return .WEBP
@@ -145,7 +145,8 @@ public extension Data {
             var newDict: [String: Any] = [:]
             
             for key in sortedKeys {
-                newDict[key] = sortJSONObject(dict[key]!)
+                guard let value = dict[key] else { continue }
+                newDict[key] = sortJSONObject(value)
             }
             return newDict
             

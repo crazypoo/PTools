@@ -25,7 +25,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     
     public var hiddenNav = false {
         didSet {
-            navigationController?.navigationBar.isHidden = true
+            navigationController?.navigationBar.isHidden = hiddenNav
             webView.snp.updateConstraints { make in
                 make.top.equalTo(hiddenNav ? 0 : CGFloat.kNavBarHeight_Total)
             }
@@ -55,7 +55,7 @@ open class PTBaseWebViewController: PTBaseViewController {
         preferences.javaScriptCanOpenWindowsAutomatically = true
         config.preferences = preferences
         
-        let view = WKWebView()
+        let view = WKWebView(frame: .zero, configuration: config)
         view.navigationDelegate = self
         view.uiDelegate = self
         view.scrollView.delegate = self
@@ -101,9 +101,10 @@ open class PTBaseWebViewController: PTBaseViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.isHidden = hiddenNav
         var topSpace:CGFloat = 0
         navigationItem.largeTitleDisplayMode = .never
-        topSpace = (navigationController?.navigationBar.isHidden ?? false) ? -CGFloat.kNavBarHeight_Total : 0
+        topSpace = hiddenNav ? 0 : CGFloat.kNavBarHeight_Total
         view.addSubviews([webView])
         webView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
@@ -119,7 +120,7 @@ open class PTBaseWebViewController: PTBaseViewController {
         } else if !showString.stringIsEmpty(),showString.containsHTMLTags() {
             self.webView.loadHTMLString(self.showString.joinHtml(), baseURL: nil)
         } else {
-            fatalError("Not load url or html")
+            PTNSLogConsole("未提供可加载的 URL 或 HTML 内容", levelType: .error, loggerType: .web)
         }
     }
 }

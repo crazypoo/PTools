@@ -12,9 +12,10 @@ public extension UITableView {
     
     //MARK: 獲取Cell在Window的位置
     ///獲取Cell在Window的位置
-    @objc func cellInWindow(cellFrame:CGRect) -> CGRect {
+    @MainActor @objc func cellInWindow(cellFrame:CGRect) -> CGRect {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)
-        let cellRectInWindow = self.convert(cellInCollectionViewRect, to: AppWindows!)
+        guard let targetWindow = window ?? AppWindows else { return .zero }
+        let cellRectInWindow = self.convert(cellInCollectionViewRect, to: targetWindow)
         return cellRectInWindow
     }
     
@@ -44,4 +45,3 @@ public extension UITableView {
         return rowCount
     }
 }
-
