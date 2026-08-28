@@ -399,8 +399,9 @@ public class PTLoadImageFunction: NSObject {
     
     public static func cachedImage(from url:URL, options:KingfisherOptionsInfo = []) async -> PTLoadImageResult? {
         let cacheKey = url.cacheKey
+        let cacheOptions = isGIFURL(url) ? options + [.preloadAllAnimationData] : options
         do {
-            let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
+            let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: cacheOptions)
             guard let image = result.image else { return nil }
             if let frames = image.images, !frames.isEmpty {
                 return PTLoadImageResult(allImages: frames,
@@ -419,11 +420,13 @@ public class PTLoadImageFunction: NSObject {
         guard !Task.isCancelled else { return emptyResult() }
 
         do {
+            let shouldPreloadAnimation = isGIFURL(url)
             let value = try await retrieveRemoteImage(from: url,
+                                                      preloadAnimation: shouldPreloadAnimation,
                                                       progressHandle: progressHandle)
             try Task.checkCancellation()
             return await animatedResult(from: value,
-                                        allowDataFallback: value.cacheType == .none) ?? imageResult(value.image)
+                                        allowDataFallback: shouldPreloadAnimation || (value.image.kf.imageFrameCount ?? 0) > 1) ?? imageResult(value.image)
         } catch {
             return emptyResult()
         }
@@ -463,11 +466,17 @@ public class PTLoadImageFunction: NSObject {
                                  imageType: .gif)
     }
 
+    private nonisolated static func isGIFURL(_ url: URL) -> Bool {
+        url.pathExtension.caseInsensitiveCompare("gif") == .orderedSame
+    }
+
     private nonisolated static func retrieveRemoteImage(from url: URL,
+                                                        preloadAnimation: Bool,
                                                         progressHandle: PTLoadImageProgressBlock?) async throws -> RetrieveImageResult {
-        try await KingfisherManager.shared.retrieveImage(
+        let options: KingfisherOptionsInfo = preloadAnimation ? [.preloadAllAnimationData] : []
+        return try await KingfisherManager.shared.retrieveImage(
             with: url,
-            options: [],
+            options: options,
             progressBlock: { receivedSize, totalSize in
                 Task { @MainActor in
                     progressHandle?(receivedSize, totalSize)
@@ -526,15 +535,16 @@ public class PTLoadImageFunction: NSObject {
     }
 
     private nonisolated static func gifFrameDuration(source: CGImageSource, index: Int) -> TimeInterval {
-        guard let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) as? [CFString: Any],
-              let gifInfo = properties[kCGImagePropertyGIFDictionary] as? [CFString: Any] else {
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) as NSDictionary?,
+              let gifInfo = properties[kCGImagePropertyGIFDictionary] as? NSDictionary else {
             return 0.1
         }
 
-        let unclampedDelay = gifInfo[kCGImagePropertyGIFUnclampedDelayTime] as? TimeInterval
-        let clampedDelay = gifInfo[kCGImagePropertyGIFDelayTime] as? TimeInterval
+        let unclampedDelay = (gifInfo[kCGImagePropertyGIFUnclampedDelayTime] as? NSNumber)?.doubleValue
+        let clampedDelay = (gifInfo[kCGImagePropertyGIFDelayTime] as? NSNumber)?.doubleValue
 
         let delay = unclampedDelay ?? clampedDelay ?? 0.1
+        guard delay.isFinite, delay > 0 else { return 0.1 }
         return delay < 0.011 ? 0.1 : delay
     }
 

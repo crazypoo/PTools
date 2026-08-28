@@ -7,44 +7,47 @@
 //
 
 import UIKit
-import pop
 
 public let PTAnimationDuration = 0.35
+
+// Native completion callback for UIKit animations.
+// Callback de finalización nativo para las animaciones de UIKit.
+// UIKit 原生动画完成回调。
+public typealias PTNativeAnimationCompletion = @MainActor @Sendable (_ finished: Bool) -> Void
 
 public class PTAnimationFunction: NSObject {
     @MainActor public class func animationIn(animationView:UIView,
                                   animationType:PTAlertAnimationType,
                                   transformValue:CGFloat,
-                                  completion:((_ anim:POPAnimation?,_ finish:Bool) -> Void)? = nil) {
-        var propertyNamed = ""
-        var transform = CATransform3DMakeTranslation(0, 0, 0)
+                                  completion: PTNativeAnimationCompletion? = nil) {
+        var transform = CGAffineTransform.identity
         
         switch animationType {
         case .Top:
-            propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, -abs(transformValue), 0)
+            transform = CGAffineTransform(translationX: 0, y: -abs(transformValue))
         case .Bottom:
-            propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, transformValue, 0)
+            transform = CGAffineTransform(translationX: 0, y: transformValue)
         case .Left:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(-abs(transformValue), 0, 0)
+            transform = CGAffineTransform(translationX: -abs(transformValue), y: 0)
         case .Right:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(transformValue, 0, 0)
-        default:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(0, 0, 0)
+            transform = CGAffineTransform(translationX: transformValue, y: 0)
+        default: break
         }
-        
-        let animation = POPSpringAnimation(propertyNamed: propertyNamed)
-        animationView.layer.transform = transform
-        animation?.toValue = 0
-        animation?.springBounciness = 1
-        animation?.completionBlock = { anim,finish in
-            completion?(anim,finish)
-        }
-        animationView.layer.pop_add(animation, forKey: "AlertAnimation")
+
+        // Use one UIKit spring animation so transform state stays on the view and is easy to cancel.
+        // Usa una sola animación de resorte de UIKit para que el estado quede en la vista y sea fácil de cancelar.
+        // 使用单个 UIKit 弹簧动画，让位移状态保留在 View 上并便于取消。
+        animationView.transform = transform
+        UIView.animate(withDuration: PTAnimationDuration,
+                       delay: 0,
+                       usingSpringWithDamping: 0.85,
+                       initialSpringVelocity: 0.8,
+                       options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                       animations: {
+            animationView.transform = .identity
+        }, completion: { finished in
+            completion?(finished)
+        })
     }
     
     @MainActor public class func animationOut(animationView:UIView,
@@ -53,58 +56,43 @@ public class PTAnimationFunction: NSObject {
                                               duration:CGFloat = PTAnimationDuration,
                                               animation: @escaping PTActionTask,
                                               completion: @escaping PTBoolTask) {
-        var propertyNamed = ""
-        var offsetValue : CGFloat = 0
+        var offsetX: CGFloat = 0
+        var offsetY: CGFloat = 0
         
         switch animationType {
         case .Top:
-            propertyNamed = kPOPLayerTranslationY
-            if toValue > 0 {
-                offsetValue = toValue
-            } else {
-                offsetValue = -animationView.layer.position.y
-            }
+            offsetY = toValue > 0 ? toValue : -animationView.layer.position.y
         case .Bottom:
-            propertyNamed = kPOPLayerTranslationY
-            if toValue > 0 {
-                offsetValue = toValue
-            } else {
-                offsetValue = animationView.layer.position.y + animationView.frame.size.height
-            }
+            offsetY = toValue > 0 ? toValue : animationView.layer.position.y + animationView.frame.size.height
         case .Left:
-            propertyNamed = kPOPLayerTranslationX
-            if toValue > 0 {
-                offsetValue = toValue
-            } else {
-                offsetValue = -animationView.layer.position.x - animationView.frame.size.width / 2
-            }
+            offsetX = toValue > 0 ? toValue : -animationView.layer.position.x - animationView.frame.size.width / 2
         case .Right:
-            propertyNamed = kPOPLayerTranslationX
-            if toValue > 0 {
-                offsetValue = toValue
-            } else {
-                offsetValue = animationView.layer.position.x + animationView.frame.size.width / 2
-            }
+            offsetX = toValue > 0 ? toValue : animationView.layer.position.x + animationView.frame.size.width / 2
         default:
-            propertyNamed = kPOPLayerTranslationX
-            offsetValue = -animationView.layer.position.x
+            offsetX = -animationView.layer.position.x
         }
-        
-        let offscreenAnimation = POPBasicAnimation.easeOut()
-        guard let property = POPAnimatableProperty.property(withName: propertyNamed) as? POPAnimatableProperty else {
-            completion(false)
-            return
-        }
-        offscreenAnimation?.property = property
-        offscreenAnimation?.toValue = offsetValue
-        offscreenAnimation?.duration = duration
-        offscreenAnimation?.completionBlock = { _, _ in
-            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
+
+        let targetTransform = CGAffineTransform(translationX: offsetX, y: offsetY)
+
+        // Keep the two-stage behavior: move off-screen first, then run the caller's cleanup animation.
+        // Mantén el comportamiento en dos etapas: salir de pantalla y después ejecutar la limpieza del llamador.
+        // 保留两阶段行为：先移出屏幕，再执行调用方的清理动画。
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction, .layoutSubviews],
+                       animations: {
+            animationView.transform = targetTransform
+        }, completion: { _ in
+            UIView.animate(withDuration: duration,
+                           delay: 0,
+                           usingSpringWithDamping: 0.9,
+                           initialSpringVelocity: 0.7,
+                           options: [.curveEaseOut, .beginFromCurrentState, .layoutSubviews],
+                           animations: {
                 animation()
-            } completion: { ok in
-                completion(ok)
-            }
-        }
-        animationView.layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
+            }, completion: { finished in
+                completion(finished)
+            })
+        })
     }
 }

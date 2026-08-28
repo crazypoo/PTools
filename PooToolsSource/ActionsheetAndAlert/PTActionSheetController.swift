@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import AttributedString
-import pop
 
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void
 public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String) -> Void

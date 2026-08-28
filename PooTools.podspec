@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '4.5.36'
+    s.version     = '5.0.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -29,7 +29,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'AttributedString'
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
-        subspec.dependency 'pop'
         subspec.dependency 'Kingfisher'
         subspec.dependency 'SafeSFSymbols'
         subspec.dependency 'SmartCodable'
