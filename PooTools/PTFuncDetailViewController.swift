@@ -380,18 +380,24 @@ class PTFuncDetailViewController: PTBaseViewController {
             switch typeString {
             case String.movieCutOutput:
                 PTGCDManager.shared.delayOnMain(time: 1) {
-                    var value:CGFloat = 0
-                    let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
-                        layoutBtn.layerProgress(value: value,radius: 50,borderWidth: 4)
-                        value += 0.1
-                        if value >= 1 {
-                            timer.invalidate()
-//                            PTGCDManager.gcdAfter(time: 0.5, block: {
-//                                layoutBtn.clearProgressLayer()
-//                            })
+                    let startTime = CACurrentMediaTime()
+                    Task { @MainActor [weak layoutBtn] in
+                        // English: Keep the demo progress loop on MainActor without crossing Timer's nonisolated callback.
+                        // Español: Mantén el progreso de demostración en MainActor sin cruzar el callback no aislado de Timer.
+                        // 中文：将演示进度循环固定在 MainActor，避免跨越 Timer 的非隔离回调。
+                        while !Task.isCancelled {
+                            let value = min(CGFloat((CACurrentMediaTime() - startTime) / 5), 1)
+                            layoutBtn?.layerProgress(value: value,radius: 50,borderWidth: 4)
+                            if value >= 1 {
+                                break
+                            }
+                            do {
+                                try await Task.sleep(for: .milliseconds(500))
+                            } catch {
+                                break
+                            }
                         }
                     }
-                    timer.fire()
                 }
             default:
                 break
@@ -882,13 +888,16 @@ class PTFuncDetailViewController: PTBaseViewController {
                     if let imagePath = self.disassembleImageURL?.path {
                         if FileManager.pt.judgeFileOrFolderExists(filePath: imagePath) {
                             let imageURL = URL(fileURLWithPath: imagePath)
-                            PHPhotoLibrary.pt.saveImageUrlToAlbum(fileUrl: imageURL) { finish, error in
-                                if finish {
-                                    Task { @MainActor in
+                            Task { @MainActor in
+                                guard let image = UIImage(contentsOfFile: imageURL.path) else {
+                                    PTAlertTipsViewController.tipsAlertShow(title: "Photo Not Saved", icon: .Error)
+                                    return
+                                }
+                                PTMediaSaveService.save(image: image) { result in
+                                    switch result {
+                                    case .success:
                                         PTAlertTipsViewController.tipsAlertShow(title: "Photo Saved.The photo was successfully saved to Photos.", icon: .Done)
-                                    }
-                                } else {
-                                    Task { @MainActor in
+                                    case .failure:
                                         PTAlertTipsViewController.tipsAlertShow(title: "Photo Not Saved", icon: .Error)
                                     }
                                 }
@@ -910,13 +919,12 @@ class PTFuncDetailViewController: PTBaseViewController {
                     if let videoPath = self.pickedVideoURL?.path {
                         if FileManager.pt.judgeFileOrFolderExists(filePath: videoPath) {
                             let videoURL = URL(fileURLWithPath: videoPath)
-                            PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: videoURL) { finish, error in
-                                if finish {
-                                    Task { @MainActor in
+                            Task { @MainActor in
+                                PTMediaSaveService.save(videoURL: videoURL) { result in
+                                    switch result {
+                                    case .success:
                                         PTAlertTipsViewController.tipsAlertShow(title: "Video Saved.The Video was successfully saved to Video.", icon: .Done)
-                                    }
-                                } else {
-                                    Task { @MainActor in
+                                    case .failure:
                                         PTAlertTipsViewController.tipsAlertShow(title: "Video Not Saved", icon: .Error)
                                     }
                                 }
@@ -1000,25 +1008,29 @@ class PTFuncDetailViewController: PTBaseViewController {
                                     Task { @MainActor in
                                         livePhotoView.livePhoto = lPhoto
                                         livePhotoView.startPlayback(with: .hint)
-                                        Task {
-                                            let result = try await PTLivePhoto.extractResources(from: lPhoto)
-                                            self.disassembleImageURL = result.pairedImage
-                                            self.pickedVideoURL = result.pairedVideo
-                                            if let keyPhotoPath = self.disassembleImageURL {
-                                                if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
-                                                    guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
-                                                        return
-                                                    }
-                                                    showImageView.image = keyPhotoImage
-                                                }
-                                            }
-                                            if let pairedVideoPath = self.pickedVideoURL?.path  {
-                                                if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
-                                                    let fileURL = URL(fileURLWithPath: pairedVideoPath)
-                                                    UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in
-                                                        videoImageView.image = image
+                                        Task { @MainActor in
+                                            do {
+                                                let result = try await PTLivePhoto.extractResources(from: lPhoto)
+                                                self.disassembleImageURL = result.pairedImage
+                                                self.pickedVideoURL = result.pairedVideo
+                                                if let keyPhotoPath = self.disassembleImageURL {
+                                                    if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
+                                                        guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
+                                                            return
+                                                        }
+                                                        showImageView.image = keyPhotoImage
                                                     }
                                                 }
+                                                if let pairedVideoPath = self.pickedVideoURL?.path  {
+                                                    if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
+                                                        let fileURL = URL(fileURLWithPath: pairedVideoPath)
+                                                        UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in
+                                                            videoImageView.image = image
+                                                        }
+                                                    }
+                                                }
+                                            } catch {
+                                                PTNSLogConsole("Live Photo 资源提取失败：\(error)")
                                             }
                                         }
                                     }

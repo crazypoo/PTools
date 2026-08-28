@@ -445,10 +445,20 @@ public class PTLoadImageFunction: NSObject {
         }
 
         guard allowDataFallback else { return nil }
+        // Prefer Kingfisher's embedded original bytes before asking the cache serializer for data.
+        // Prefiere los bytes originales integrados de Kingfisher antes de pedir datos al serializador de caché.
+        // 优先使用 Kingfisher 内嵌的原始数据，再向缓存序列化器请求数据。
+        let embeddedData = value.image.kf.gifRepresentation()
         let dataProvider = value.data
-        guard let data = await Task.detached(priority: .userInitiated, operation: {
-            dataProvider()
-        }).value,
+        let data: Data?
+        if let embeddedData {
+            data = embeddedData
+        } else {
+            data = await Task.detached(priority: .userInitiated, operation: {
+                dataProvider()
+            }).value
+        }
+        guard let data,
               detectImageType(from: data) == .gif else {
             return nil
         }

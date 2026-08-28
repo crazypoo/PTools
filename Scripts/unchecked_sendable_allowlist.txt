@@ -4,8 +4,6 @@
 # system-framework-boundary: narrow wrappers around non-Sendable SDK objects
 PooToolsSource/Category/AVExport+PTEX.swift
 PooToolsSource/Category/PHAsset+PTEX.swift
-PooToolsSource/Category/PHPhotoLibrary+PTEX.swift
-PooToolsSource/Category/UIImage+PTEX.swift
 PooToolsSource/C7Collector/C7CollectorCamera.swift
 PooToolsSource/LivePhoto/PTLivePhoto.swift
 PooToolsSource/Motion/PTMotion.swift
@@ -18,24 +16,17 @@ PooToolsSource/VideoEditor/Compositor.swift
 PooToolsSource/VideoEditor/Exporter.swift
 PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift
 PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift
-PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift
 PooToolsSource/VideoEditor/VideoConverter.swift
 PooToolsSource/Vision/PTVision.swift
 
 # compatibility-boundary: legacy framework, runtime and callback adapters
 PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift
-PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift
-PooToolsSource/ActionsheetAndAlert/PTEditMenuKit.swift
 PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift
 PooToolsSource/Calendar/PTEventOnCalendar.swift
 PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
 PooToolsSource/Core/OSSVoice.swift
-PooToolsSource/Core/PTBaseModel.swift
-PooToolsSource/Core/PTGCDManager.swift
-PooToolsSource/Core/PTUtils.swift
 PooToolsSource/Core/ResponseModel.swift
 PooToolsSource/Debug/PTApplicationDirectories.swift
-PooToolsSource/Debug/DebugApplicationDirectories.swift
 # system notification callback boundary: Notification is consumed immediately on the MainActor.
 # límite de callback de notificación del sistema: Notification se consume inmediatamente en MainActor.
 # 系统通知回调边界：Notification 会立即在 MainActor 上消费。
@@ -43,22 +34,17 @@ PooToolsSource/Debug/StdoutCapture.swift
 # synchronous UIKit Objective-C forwarding returns an immediate system responder
 # el forwarding síncrono de Objective-C de UIKit devuelve un responder del sistema de inmediato
 # UIKit 的同步 Objective-C 转发会立即返回系统 responder
-PooToolsSource/Input/PTFloatingPlaseholderTextField.swift
 PooToolsSource/DebugCrash/PTCrashHandler.swift
 PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift
 PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift
-PooToolsSource/ImageEditor/PTEditToolsCell.swift
 PooToolsSource/ImageEditor/PTWeakProxy.swift
 PooToolsSource/ImagePicker/PTImagePicker.swift
 PooToolsSource/Inspector/KeyboardAnimatable.swift
 PooToolsSource/Inspector/MainThreadAsyncOperation.swift
 PooToolsSource/Inspector/MainThreadOperation.swift
-PooToolsSource/Language/PTLanguage.swift
 PooToolsSource/MXMetricKitManager/MetricsManager.swift
-PooToolsSource/NotificationPermission/PTPermissionNotification.swift
 PooToolsSource/OSSKit/OSSSpeech.swift
 PooToolsSource/OSSKit/OSSUtterance.swift
-PooToolsSource/Protocol/PTProtocol.swift
 PooToolsSource/Router/PTRouterManager.swift
 PooToolsSource/Router/PTRouterServiceManager.swift
 PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift

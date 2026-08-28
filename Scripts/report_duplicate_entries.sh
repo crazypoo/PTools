@@ -40,4 +40,13 @@ report_group 'network request' \
 report_group 'empty state' \
   'func (showEmptyView|showEmptyLoadingView|hideUnavailableView|render)'
 
+printf '\n%s\n' 'Canonical implementation map:'
+printf '%s\n' \
+  'media save      -> PooToolsSource/Core/PTMediaSaveService.swift' \
+  'image requests  -> PooToolsSource/PhotoPicker/PTMediaRequestCoordinator.swift + PTMediaLibManager.swift' \
+  'video thumbnails -> PooToolsSource/Category/PTVideoThumbnailService.swift' \
+  'image loading    -> PooToolsSource/Core/PTLoadImageFunction.swift' \
+  'network pipeline -> PooToolsSource/NetWork/Network.swift' \
+  'empty state      -> PooToolsSource/Base/PTUnavailableFunction.swift'
+
 printf '\n%s\n' 'Review each group for a canonical implementation, a compatibility wrapper, or an intentional semantic difference.'

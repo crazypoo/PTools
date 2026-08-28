@@ -78,6 +78,19 @@ run_build() {
     return 1
   fi
 
+  # Do not treat an Xcode log containing an error diagnostic as a successful build when xcodebuild reports zero.
+  # No trates como compilación correcta un registro de Xcode con errores aunque xcodebuild devuelva cero.
+  # 即使 xcodebuild 返回 0，只要日志含有错误诊断，也不能判定构建成功。
+  if [[ "$build_exit" -eq 0 ]]; then
+    non_source_errors="$(rg -n '(^|[^[:alnum:]_])error:' "$build_log" \
+      | rg -v --fixed-strings "$repo_root/PooToolsSource/" || true)"
+    if [[ -n "$non_source_errors" ]]; then
+      printf '%s\n' "$non_source_errors" | head -40 >&2
+      printf 'BLOCKED: Xcode emitted non-PooTools error diagnostics in %s despite exit code 0\n' "$configuration" >&2
+      return 4
+    fi
+  fi
+
   if [[ "$build_exit" -ne 0 ]]; then
     local dependency_blockers='Unable to resolve module dependency|could not build module|SmartCodable-Swift.h|Failed to clone repository|failed to clone repository|unable to access .*(github.com|gitlab.com)|could not resolve package|SwiftSyntax.*(error|failed)|swift-syntax.*(error|failed)|/(Pods|SourcePackages/checkouts)/[^:]+:[0-9]+:[0-9]+: error:'
     local configuration_blockers='search path .* not found|linker command failed|xcodebuild: error:|The workspace named .* does not contain a scheme'

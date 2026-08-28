@@ -271,7 +271,9 @@ public extension UICollectionView {
         register(nib, forCellWithReuseIdentifier: String(describing: cellType))
     }
     
-    /// 泛型复用 Cell，无需显式强转 (as!)
+    /// 泛型复用 Cell，并在类型不匹配时返回明确错误。
+    /// Generic Cell dequeue with an explicit failure when the registered type does not match.
+    /// Reutilización genérica de celdas con un fallo explícito cuando el tipo no coincide.
     func dequeueReusableCell<T: UICollectionViewCell>(with type: T.Type, for indexPath: IndexPath) -> T {
         let identifier = String(describing: type)
         guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? T else {

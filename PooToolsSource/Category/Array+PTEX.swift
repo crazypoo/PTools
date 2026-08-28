@@ -10,13 +10,9 @@ import Foundation
 import SwifterSwift
 
 /*
- var appCityModels = [MTCityModelsReset]()
- models.group(by: { $0?.firstLetter}).sorted(by: {($0.key)! < ($1.key)! }).enumerated().forEach { (index,value) in
-     let cityNewModel = MTCityModelsReset()
-     cityNewModel.key = value.key
-     cityNewModel.models = (value.value as! [MTCitysModel])
-     appCityModels.append(cityNewModel)
- }
+ 示例：分组排序后，请使用条件转换，避免异常数据造成崩溃。
+ Example: use conditional casts after grouping and sorting to avoid crashes from invalid data.
+ Ejemplo: usa conversiones condicionales después de agrupar y ordenar para evitar fallos por datos inválidos.
  */
 //MARK: 数据根据字段归组
 ///数据根据字段归组
@@ -68,12 +64,9 @@ public extension Array {
     }
     
 /*
-     排序,例子
-     threeLaterRows = threeLaterRows.sorted_oc { (item1, item2) -> Bool in
-         let obj1 = (item1 as! PTRows).dataModel as! MNNewFriendModel
-         let obj2 = (item2 as! PTRows).dataModel as! MNNewFriendModel
-         return (Int(obj1.addTime!) > Int(obj2.addTime!))
-     } as! [PTRows]
+     示例：排序时请使用条件转换和 compactMap，避免输入数据异常导致崩溃。
+     Example: use conditional casts and compactMap while sorting to avoid crashes from invalid input.
+     Ejemplo: usa conversiones condicionales y compactMap al ordenar para evitar fallos por datos inválidos.
 */
     func sorted_oc(by :(Any, Any) -> Bool) -> [Any] {
         guard count > 1 else {

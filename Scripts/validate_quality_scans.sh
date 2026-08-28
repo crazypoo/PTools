@@ -65,6 +65,16 @@ if [[ -n "$unlisted_unchecked" ]]; then
   exit 1
 fi
 
+# Stale allowlist entries hide drift and must be removed when a declaration disappears.
+# Las entradas obsoletas de la lista ocultan cambios y deben eliminarse cuando desaparece una declaración.
+# 过期白名单条目会掩盖代码漂移，声明消失后必须同步删除。
+stale_unchecked="$(comm -13 <(printf '%s\n' "$current_unchecked") <(printf '%s\n' "$allowed_unchecked") || true)"
+if [[ -n "$stale_unchecked" ]]; then
+  printf '%s\n' "$stale_unchecked" >&2
+  printf 'FAIL: @unchecked Sendable allowlist contains files without a declaration\n' >&2
+  exit 1
+fi
+
 # Only immutable SDK type metadata and system object boxes may use this narrow compatibility exception.
 # Solo los metadatos de tipo inmutables del SDK y las cajas de objetos del sistema pueden usar esta excepción.
 # 仅不可变 SDK 类型元数据和系统对象包装器可以使用这个窄范围兼容例外。

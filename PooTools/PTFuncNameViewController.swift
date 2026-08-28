@@ -1011,11 +1011,9 @@ class PTFuncNameViewController: PTBaseViewController {
                         
                         let vc = PTEditImageViewController(readyEditImage: image)
                         vc.editFinishBlock = { ei ,editImageModel in
-                            PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, asset in
-                                if !finish {
-                                    PTGCDManager.shared.runOnMain {
-                                        PTAlertTipsViewController.tipsAlertShow(title:"Opps",subtitle: "保存图片失败",icon: .Error)
-                                    }
+                            PTMediaSaveService.save(image: ei) { result in
+                                if case .failure = result {
+                                    PTAlertTipsViewController.tipsAlertShow(title:"Opps",subtitle: "保存图片失败",icon: .Error)
                                 }
                             }
                         }

@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import os.lock
 
 // 1. 定义包装器，并补全 public 访问控制
 public struct PTPOP<Base> {
@@ -56,95 +57,106 @@ internal protocol PTSwiftPropertyCompatible {
     var swiftCallBack: SwiftCallBack?  { get set }
 }
 
-public final class PTAdapterConfig: @unchecked Sendable {
-    public static let shared = PTAdapterConfig()
-    
-    // 用于缓存计算好的比例，默认值为 1.0
-    private var _cachedScale: Double = 1.0
-    private var isCalculated = false // 标记是否已经计算过
-    
-    // 任何线程都可以安全读取这个比例
-    public var scale: Double {
-        return _cachedScale
+// Thread-safe storage for the compatibility adapter configuration.
+// Almacenamiento seguro para la configuración del adaptador compatible.
+// 兼容适配器配置使用线程安全存储。
+private struct PTAdapterConfigState: Sendable {
+    var scale: Double = 1.0
+    var isCalculated = false
+}
+
+// Thread-safe storage for the shared scale value.
+// Almacenamiento seguro para el valor de escala compartido.
+// 共享比例值使用线程安全存储。
+private struct PTNumberAdapterState: Sendable {
+    var customScale: Double?
+    var calculatedScale: Double = 1.0
+    var isCalculated = false
+}
+
+// Calculate the legacy device scale only on MainActor because it reads UIKit state.
+// Calcula la escala heredada del dispositivo solo en MainActor porque lee estado de UIKit.
+// 旧版设备比例只在 MainActor 上计算，因为它读取 UIKit 状态。
+@MainActor
+private func ptDefaultAdapterScale() -> Double {
+    if UIDevice.current.userInterfaceIdiom == .pad {
+        return 1.5
     }
-    
-    // 2. 这个方法限制在主线程，专门用来做初始化计算
-    @MainActor
-    public func calculateScaleIfNeeded() {
-        // 如果已经计算过了，就不再重复计算
-        guard !isCalculated else { return }
-        
-        // 优先使用手动设置的比例
-        if let customScale = PTNumberValueAdapter.share.adapterScale {
-            _cachedScale = customScale
-        } else {
-            // 这里都在主线程执行，所以调用 UIDevice 和 kSCREEN_WIDTH 绝对安全
-            let isPad = UIDevice.current.userInterfaceIdiom == .pad
-            if isPad {
-                _cachedScale = 1.5
-            } else {
-                switch CGFloat.kSCREEN_WIDTH {
-                case 0...320:   _cachedScale = 0.85
-                case 321...375: _cachedScale = 1.0
-                case 376...414: _cachedScale = 1.15
-                case 415...:    _cachedScale = 1.3
-                default:        _cachedScale = 1.0
-                }
-            }
-        }
-        isCalculated = true
+
+    switch CGFloat.kSCREEN_WIDTH {
+    case 0...320:   return 0.85
+    case 321...375: return 1.0
+    case 376...414: return 1.15
+    case 415...:    return 1.3
+    default:        return 1.0
     }
 }
 
-public final class PTNumberValueAdapter: @unchecked Sendable {
-    // 使用 let 保证单例本身的引用不会被意外修改
-    public static let share = PTNumberValueAdapter()
-    
-    // 记录用户手动设置的适配比例
-    fileprivate var adapterScale: Double?
-    
-    // 内部缓存计算好的最终比例，默认是 1.0
-    private var _calculatedScale: Double = 1.0
-    private var isCalculated = false
-    
-    // 私有化初始化方法，确保单例的唯一性
-    private init() {}
-    
-    // 提供一个供外部在任意线程读取的属性
-    public var currentScale: Double {
-        return _calculatedScale
+public final class PTAdapterConfig: Sendable {
+    public static let shared = PTAdapterConfig()
+    private let state = OSAllocatedUnfairLock(initialState: PTAdapterConfigState())
+
+    // Reads are protected so legacy callers may access this value from any thread.
+    // Las lecturas están protegidas para que los llamadores heredados puedan acceder desde cualquier hilo.
+    // 读取受到保护，旧调用方可以从任意线程访问该值。
+    public var scale: Double {
+        state.withLock { $0.scale }
     }
-    
-    // 如果你需要手动设置比例，可以通过这个方法
-    public func setAdapterScale(_ scale: Double) {
-        self.adapterScale = scale
-        self._calculatedScale = scale
-        self.isCalculated = true
-    }
-    
-    // 2. 专门在主线程执行的计算方法（因为用到了 UIDevice 和 kSCREEN_WIDTH）
+
+    // Keep the public calculation entry point while making the shared state atomic.
+    // Mantiene la entrada pública de cálculo y hace atómico el estado compartido.
+    // 保留公开计算入口，同时让共享状态具备原子性。
     @MainActor
     public func calculateScaleIfNeeded() {
-        // 如果已经计算过，或者用户手动设置过，就不再重复计算
-        guard !isCalculated else { return }
-        
-        if let customScale = adapterScale {
-            _calculatedScale = customScale
-        } else {
-            let isPad = UIDevice.current.userInterfaceIdiom == .pad
-            if isPad {
-                _calculatedScale = 1.5
-            } else {
-                switch CGFloat.kSCREEN_WIDTH {
-                case 0...320:   _calculatedScale = 0.85
-                case 321...375: _calculatedScale = 1.0
-                case 376...414: _calculatedScale = 1.15
-                case 415...:    _calculatedScale = 1.3
-                default:        _calculatedScale = 1.0
-                }
-            }
+        PTNumberValueAdapter.share.calculateScaleIfNeeded()
+        let calculatedScale = PTNumberValueAdapter.share.currentScale
+        state.withLock { state in
+            guard !state.isCalculated else { return }
+            state.scale = calculatedScale
+            state.isCalculated = true
         }
-        isCalculated = true
+    }
+}
+
+public final class PTNumberValueAdapter: Sendable {
+    public static let share = PTNumberValueAdapter()
+    private let state = OSAllocatedUnfairLock(initialState: PTNumberAdapterState(customScale: nil))
+
+    // Kept fileprivate for the compatibility configuration adapter.
+    // Se mantiene fileprivate para el adaptador de configuración compatible.
+    // 为兼容配置适配器保留 fileprivate 访问级别。
+    fileprivate var adapterScale: Double? {
+        state.withLock { $0.customScale }
+    }
+
+    private init() {}
+
+    public var currentScale: Double {
+        state.withLock { $0.calculatedScale }
+    }
+
+    // A manual value wins over the automatically calculated value.
+    // Un valor manual tiene prioridad sobre el valor calculado automáticamente.
+    // 手动设置的比例优先于自动计算的比例。
+    public func setAdapterScale(_ scale: Double) {
+        state.withLock { state in
+            state.customScale = scale
+            state.calculatedScale = scale
+            state.isCalculated = true
+        }
+    }
+
+    // UIKit-dependent calculation stays on MainActor; the final write remains locked.
+    // El cálculo dependiente de UIKit permanece en MainActor; la escritura final sigue protegida.
+    // 依赖 UIKit 的计算保留在 MainActor，最终写入仍由锁保护。
+    @MainActor
+    public func calculateScaleIfNeeded() {
+        let calculatedScale = adapterScale ?? ptDefaultAdapterScale()
+        state.withLock { state in
+            guard !state.isCalculated else { return }
+            state.calculatedScale = calculatedScale
+            state.isCalculated = true
+        }
     }
 }
 

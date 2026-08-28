@@ -197,7 +197,7 @@ class AppDelegate: PTAppWindowsDelegate {
 //        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: token))")
         switch PTPermission.mediaLibrary.status {
         case .notDetermined:
-            PTPermission.mediaLibrary.request {
+            PTPermission.mediaLibrary.request { [weak self] in
                 Task { @MainActor [weak self] in
                     guard let self else { return }
                     switch PTPermission.mediaLibrary.status {

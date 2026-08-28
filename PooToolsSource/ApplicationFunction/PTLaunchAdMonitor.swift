@@ -34,7 +34,7 @@ public struct CountdownItem<T: Sendable> : Sendable{
  */
 @MainActor
 @objcMembers
-public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
+public class PTLaunchAdMonitor: NSObject {
     public static let share = PTLaunchAdMonitor()
     
     public var imageContentMode: UIView.ContentMode = .scaleAspectFill
@@ -81,11 +81,31 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     }()
     
     private var notifiData: [AnyHashable: Any]?
+
+    // Keep one cancellable media task and a generation token for the current ad.
+    // Mantiene una sola tarea de medios cancelable y un token de generación para el anuncio actual.
+    // 只保留一个可取消的媒体任务，并用 generation 标记当前广告。
+    private var mediaLoadTask: Task<Void, Never>?
+    private var mediaGeneration = 0
+    private var currentAdIndex = -1
+    private var hasInstalledActionHandlers = false
     
     private lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
         return view
+    }()
+
+    // Reuse the company label so repeated showAd calls do not duplicate views and constraints.
+    // Reutiliza la etiqueta de la empresa para que las llamadas repetidas a showAd no dupliquen vistas ni restricciones.
+    // 复用公司名称标签，避免重复调用 showAd 时重复创建视图和约束。
+    private lazy var companyLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.numberOfLines = 0
+        label.lineBreakMode = .byCharWrapping
+        label.textAlignment = .center
+        return label
     }()
     
     private var adLaunchModels: [PTLaunchADModel] = []
@@ -99,39 +119,63 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                                   comNameFont: UIFont = .appfont(size: 12),
                                   callBack: PTActionTask? = nil,
                                   timeUp: PTActionTask? = nil) {
-        
+        skipButton.cancelCountdown()
+        cancelMediaLoad()
+        resetMediaStates()
+        contentView.alpha = 1
+        contentView.isUserInteractionEnabled = true
         dismissCallBack = callBack
         timeUpCallBack = timeUp
         adLaunchModels = adModels
         
+        guard !adModels.isEmpty else { return }
         setupBaseUI(onView: onView, ltdString: ltdString, comNameFont: comNameFont, skipFont: skipFont)
         startAdSequence(adModels: adModels)
     }
     
     // MARK: - 私有方法：基础 UI 设置
     @MainActor private func setupBaseUI(onView: Any, ltdString: String, comNameFont: UIFont, skipFont: UIFont) {
-        if let onViews = onView as? UIView {
-            onViews.addSubview(contentView)
-            onViews.bringSubviewToFront(contentView)
-            contentView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        } else if let onWindow = onView as? UIWindow {
-            onWindow.addSubview(contentView)
+        let hostView: UIView?
+        if let onWindow = onView as? UIWindow {
+            hostView = onWindow
+            if contentView.superview !== onWindow {
+                contentView.removeFromSuperview()
+                onWindow.addSubview(contentView)
+            }
             onWindow.bringSubviewToFront(contentView)
-            contentView.snp.makeConstraints { $0.edges.equalToSuperview() }
-            
 #if POOTOOLS_DEBUG
             let share = LocalConsole.shared
             if share.isVisiable, let terminal = share.terminal {
                 onWindow.bringSubviewToFront(terminal)
             }
 #endif
+        } else if let onViews = onView as? UIView {
+            hostView = onViews
+            if contentView.superview !== onViews {
+                contentView.removeFromSuperview()
+                onViews.addSubview(contentView)
+            }
+            onViews.bringSubviewToFront(contentView)
+        } else {
+            hostView = nil
         }
+
+        guard hostView != nil else { return }
+        contentView.snp.remakeConstraints { $0.edges.equalToSuperview() }
         
         skipButton.setTitle(skipName, for: .normal)
         skipButton.titleLabel?.font = skipFont
-        // 💡 优化3：使用 [weak self] 防止闭包引起的单例内存泄漏
-        skipButton.addActionHandlers { [weak self] sender in
-            self?.hideView(sender: sender)
+        if !hasInstalledActionHandlers {
+            // Avoid stacking UIControl closures when the monitor is shown more than once.
+            // Evita acumular cierres de UIControl cuando el monitor se muestra más de una vez.
+            // 避免监控器多次显示时不断叠加 UIControl 闭包。
+            skipButton.addActionHandlers { [weak self] sender in
+                self?.hideView(sender: sender)
+            }
+            actionButton.addActionHandlers { [weak self] sender in
+                self?.showDetail(sender: sender)
+            }
+            hasInstalledActionHandlers = true
         }
         
         let comLabelExists = !ltdString.stringIsEmpty()
@@ -146,39 +190,42 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                 bottomViewHeight = 100
             }
             
-            let label = UILabel()
-            label.backgroundColor = .white
-            label.numberOfLines = 0
-            label.lineBreakMode = .byCharWrapping
-            label.font = comNameFont
-            label.textColor = .black
-            label.text = ltdString
-            label.textAlignment = .center
-            contentView.addSubview(label)
-            label.snp.makeConstraints { make in
+            if companyLabel.superview !== contentView {
+                contentView.addSubview(companyLabel)
+            }
+            companyLabel.isHidden = false
+            companyLabel.font = comNameFont
+            companyLabel.textColor = .black
+            companyLabel.text = ltdString
+            companyLabel.snp.remakeConstraints { make in
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(bottomViewHeight)
             }
+        } else {
+            companyLabel.removeFromSuperview()
         }
         
-        // 💡 优化4：一次性添加所有视图，后续仅通过数据更新和 isHidden 控制显示，大幅降低 CPU 开销
-        contentView.addSubviews([loadImageView, actionButton, skipButton])
-        contentView.layer.insertSublayer(playerLayer, below: loadImageView.layer)
+        // Attach reusable views and constraints exactly once per hierarchy.
+        // Añade las vistas reutilizables y las restricciones una sola vez por jerarquía.
+        // 在每个视图层级中只添加一次可复用视图和约束。
+        for view in [loadImageView, actionButton, skipButton] where view.superview !== contentView {
+            contentView.addSubview(view)
+        }
+        if playerLayer.superlayer !== contentView.layer {
+            playerLayer.removeFromSuperlayer()
+            contentView.layer.insertSublayer(playerLayer, below: loadImageView.layer)
+        }
         
-        loadImageView.snp.makeConstraints { make in
+        loadImageView.snp.remakeConstraints { make in
             make.left.top.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(bottomViewHeight)
         }
         
-        actionButton.snp.makeConstraints { make in
+        actionButton.snp.remakeConstraints { make in
             make.edges.equalTo(loadImageView)
         }
         
-        actionButton.addActionHandlers { [weak self] sender in
-            self?.showDetail(sender: sender)
-        }
-        
-        skipButton.snp.makeConstraints { make in
+        skipButton.snp.remakeConstraints { make in
             make.height.equalTo(self.baseSkipButtonSize)
             make.width.equalTo(self.baseSkipButtonSize)
             make.right.equalToSuperview().inset(10)
@@ -187,11 +234,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         
         self.skipButton.layoutIfNeeded()
         self.skipButton.viewCorner(radius: baseSkipButtonSize / 2,capsule: true)
-        self.playerLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - self.bottomViewHeight)
-    }
-    
-    private final class PTIndexBox: @unchecked Sendable {
-        var value: Int = -1
+        contentView.layoutIfNeeded()
+        self.playerLayer.frame = self.loadImageView.frame
     }
     
     private func resetSkipWidth() {
@@ -209,8 +253,7 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         let totalTime: TimeInterval = adModels.reduce(0) { $0 + $1.time }
         let result = buildCountdownTimeline(items: adModels.map { ($0.time, $0) })
         let timeline = result.timeline
-        
-        let indexBox = PTIndexBox()
+        currentAdIndex = -1
                 
         let totalString = String(format: "%.0f", totalTime)
         skipButton.setTitle(totalString, for: .normal)
@@ -234,8 +277,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                 
                 self.resetSkipWidth()
                 
-                if newIndex != indexBox.value {
-                    indexBox.value = newIndex
+                if newIndex != self.currentAdIndex {
+                    self.currentAdIndex = newIndex
                     let model = timeline[newIndex].value
                     self.handleAdDisplay(model: model)
                 }
@@ -244,37 +287,44 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     }
     
     private func handleAdDisplay(model: PTLaunchADModel) {
+        cancelMediaLoad()
+        resetMediaStates()
+        let generation = mediaGeneration
         let mediaHaveData: Bool = model.tapURL != nil
         notifiData = model.tapURL
         actionButton.isUserInteractionEnabled = mediaHaveData
         
-        loadImageAtPath(path: model.image as Any) { [weak self] type, media, gifTime in
-            guard let self = self else { return }
-            Task { @MainActor in
-                self.resetMediaStates()
-                
-                switch type {
-                case .Image:
-                    self.loadImageView.isHidden = false
-                    if let medias = media as? [UIImage] {
-                        if medias.count > 1 {
-                            self.loadImageView.animationImages = medias
-                            self.loadImageView.animationDuration = gifTime
-                            self.loadImageView.startAnimating()
-                        } else if let firstImage = medias.first {
-                            self.loadImageView.image = firstImage
-                            self.loadImageView.contentMode = self.imageContentMode
-                        }
-                    }
-                case .Video:
-                    if let videoUrl = media as? URL {
-                        self.playerLayer.isHidden = false
-                        self.player = AVPlayer(url: videoUrl)
-                        self.playerLayer.player = self.player
-                        self.player?.play()
-                    }
-                }
+        mediaLoadTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let (type, media, gifTime) = await self.loadImageAtPath(path: model.image)
+            guard !Task.isCancelled, self.mediaGeneration == generation else { return }
+            self.applyMedia(type: type, media: media, gifTime: gifTime)
+            self.mediaLoadTask = nil
+        }
+    }
+
+    // Apply a completed media snapshot only on MainActor.
+    // Aplica una instantánea de medios completada únicamente en MainActor.
+    // 只在 MainActor 上应用已经完成的媒体快照。
+    private func applyMedia(type: PTLaunchAdMediaType, media: Any?, gifTime: TimeInterval) {
+        switch type {
+        case .Image:
+            guard let medias = media as? [UIImage], !medias.isEmpty else { return }
+            loadImageView.isHidden = false
+            if medias.count > 1 {
+                loadImageView.animationImages = medias
+                loadImageView.animationDuration = gifTime
+                loadImageView.startAnimating()
+            } else if let firstImage = medias.first {
+                loadImageView.image = firstImage
+                loadImageView.contentMode = imageContentMode
             }
+        case .Video:
+            guard let videoUrl = media as? URL else { return }
+            playerLayer.isHidden = false
+            player = AVPlayer(url: videoUrl)
+            playerLayer.player = player
+            player?.play()
         }
     }
     
@@ -286,6 +336,7 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         loadImageView.isHidden = true
         
         player?.pause()
+        player = nil
         playerLayer.player = nil
         playerLayer.isHidden = true
     }
@@ -294,19 +345,37 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         case Image, Video
     }
     
-    private func loadImageAtPath(path: Any, completion: @escaping (PTLaunchAdMediaType, Any?, TimeInterval) -> Void) {
-        Task {
-            if let imagePath = path as? String, imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
-                let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath)
-                completion(.Video, videoUrl, 0)
+    private func loadImageAtPath(path: Any?) async -> (PTLaunchAdMediaType, Any?, TimeInterval) {
+        guard let path else { return (.Image, nil, 0) }
+
+        if let imagePath = path as? String {
+            let videoURL: URL?
+            if imagePath.hasPrefix("/") {
+                videoURL = URL(fileURLWithPath: imagePath)
             } else {
-                let result = await PTLoadImageFunction.loadImage(contentData: path)
-                completion(.Image, result.allImages, result.loadTime)
+                videoURL = URL(string: imagePath)
+            }
+            if let videoURL, videoURL.pt_isVideoResource {
+                return (.Video, videoURL, 0)
             }
         }
+
+        let result = await PTLoadImageFunction.loadImage(contentData: path)
+        return (.Image, result.allImages, result.loadTime)
+    }
+
+    // Cancel pending decoding and invalidate callbacks from the previous ad.
+    // Cancela la decodificación pendiente e invalida los callbacks del anuncio anterior.
+    // 取消待处理的解码任务，并使上一个广告的回调失效。
+    private func cancelMediaLoad() {
+        mediaGeneration &+= 1
+        mediaLoadTask?.cancel()
+        mediaLoadTask = nil
     }
     
     @MainActor fileprivate func hideView(sender: UIButton? = nil) {
+        cancelMediaLoad()
+        resetMediaStates()
         let targetView = sender?.superview ?? self.contentView
         targetView.isUserInteractionEnabled = false
         
@@ -328,6 +397,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     }
     
     @MainActor fileprivate func showDetail(sender: UIView) {
+        cancelMediaLoad()
+        resetMediaStates()
         let targetView = contentView
         targetView.isUserInteractionEnabled = false
         
@@ -337,7 +408,6 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
             guard let self = self else { return }
             self.adShowed = false
             targetView.removeFromSuperview()
-            self.player?.pause()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdDetailDisplayNotification), object: self.notifiData)
         }
     }

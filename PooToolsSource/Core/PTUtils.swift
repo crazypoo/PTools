@@ -305,8 +305,11 @@ public class PTUtils: NSObject {
     public class func outputURL() -> URL {
         let documentsDirectory = FileManager.pt.CachesDirectory()
         let fileName = "PTVideo_\(UUID().uuidString).mp4"
-        let outputURL = documentsDirectory.appendingPathComponent(fileName)
-        return URL(filePath: outputURL)
+        // Convert the legacy String path to URL before appending the file name.
+        // Convierte la ruta String heredada a URL antes de añadir el nombre del archivo.
+        // 先把旧版 String 路径转换成 URL，再追加文件名。
+        let cacheDirectoryURL = URL(fileURLWithPath: documentsDirectory, isDirectory: true)
+        return cacheDirectoryURL.appendingPathComponent(fileName, isDirectory: false)
     }
     
     /// 字符串转类
