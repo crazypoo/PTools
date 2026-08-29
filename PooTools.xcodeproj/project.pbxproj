@@ -23,6 +23,7 @@
 		231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */; };
 		231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BD272CDEE9003D6F62 /* String+PTEX.swift */; };
 		55AA11112C00000100000001 /* String+PTEX+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA11102C00000100000001 /* String+PTEX+Crypto.swift */; };
+		55AA11132C00000100000001 /* String+PTEX+Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA11142C00000100000001 /* String+PTEX+Password.swift */; };
 		231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C0272CDEE9003D6F62 /* PTCodeView.swift */; };
 		231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */; };
 		231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */; };
@@ -996,6 +997,7 @@
 		231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPurchaseCarAnimationTool.swift; sourceTree = "<group>"; };
 		231D15BD272CDEE9003D6F62 /* String+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+PTEX.swift"; sourceTree = "<group>"; };
 		55AA11102C00000100000001 /* String+PTEX+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PTEX+Crypto.swift"; sourceTree = "<group>"; };
+		55AA11142C00000100000001 /* String+PTEX+Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PTEX+Password.swift"; sourceTree = "<group>"; };
 		231D15C0272CDEE9003D6F62 /* PTCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCodeView.swift; sourceTree = "<group>"; };
 		231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTGuidePageHUD.swift; sourceTree = "<group>"; };
 		231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
@@ -2240,6 +2242,7 @@
 				B51700000000000000000003 /* PTVideoThumbnailService.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				55AA11102C00000100000001 /* String+PTEX+Crypto.swift */,
+				55AA11142C00000100000001 /* String+PTEX+Password.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				5581E8552AB9046800491065 /* Timer+PTEX.swift */,
 				55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */,
@@ -4946,6 +4949,7 @@
 				55F3C2822F7A105B0062D864 /* PTBannerView.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				55AA11112C00000100000001 /* String+PTEX+Crypto.swift in Sources */,
+				55AA11132C00000100000001 /* String+PTEX+Password.swift in Sources */,
 				55DD93712B938C9B00F65872 /* UIView+Container.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				55F3C27E2F7A0EAA0062D864 /* PTBannerCell.swift in Sources */,

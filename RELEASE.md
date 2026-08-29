@@ -8,19 +8,22 @@
 - Git tag（格式：`<version>`，不带 `v` 前缀）
 - `CHANGELOG.md` 对应版本章节
 
-本轮发布目标为 `5.1.0`。`Package.swift` 和 Xcode 工程只维护平台与 Swift
-语言契约，不重复维护产品版本号。
+当前仓库的已发布基线为 `5.5.0`，下一候选版本为 `5.6.0`。本轮 5.6.0 Core 治理
+完成前不创建版本标签；发布目标为 `5.5.0` 的既有元数据仍需保持可校验。`Package.swift`
+和 Xcode 工程只维护平台与 Swift 语言契约，不重复维护产品版本号。
 
 5.x Core 分阶段治理任务记录在 [ROADMAP_5X.md](ROADMAP_5X.md)。每项任务完成后才
 将对应条目标记为 `✅`；发布脚本会阻断当前版本章节中仍处于 `🚧`、`⬜` 或 `⛔`
 状态的任务。
 
 `Package.swift` 与 Xcode 工程不单独维护产品版本号，避免三套构建入口产生漂移。
+兼容入口、唯一实现和 6.0.0 删除条件见 [MIGRATION_5X.md](MIGRATION_5X.md)。
 
 ## 发布前检查
 
 ```bash
 bash Scripts/validate_build_entries.sh
+bash Scripts/validate_core_source_contract.sh
 bash Scripts/validate_release.sh
 bash Scripts/validate_quality_scans.sh
 git diff --check
@@ -39,3 +42,7 @@ xcodebuild -workspace PooTools.xcworkspace -scheme PooTools-Example -destination
 3. 创建并推送版本标签：`git tag -a <version> -m "Release <version>" && git push origin <version>`。
 4. 在 GitHub Release 中引用对应的 `CHANGELOG.md` 章节。
 5. 发布后验证 CocoaPods 与 Swift Package Manager 的安装入口。
+
+5.6.0 的发布还必须满足：Core 源文件契约无漂移、重复入口报告没有未处理的新增组、
+迁移文档已更新，并且 Xcode Debug/Release 不是由外部 Pods 或链接器问题阻断。未满足
+条件时只保留阻断记录，不创建 `5.6.0` 标签。

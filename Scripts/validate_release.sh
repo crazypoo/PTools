@@ -21,6 +21,11 @@ rg -q --fixed-strings "发布目标为 \`$version\`" RELEASE.md \
   || { printf 'FAIL: RELEASE.md target version mismatch: %s\n' "$version" >&2; exit 1; }
 rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
   || { printf 'FAIL: Podfile.lock is not synchronized to %s\n' "$version" >&2; exit 1; }
+[[ -f MIGRATION_5X.md ]] \
+  || { printf 'FAIL: MIGRATION_5X.md is missing\n' >&2; exit 1; }
+rg -q --fixed-strings "6.0.0 删除评估条件" MIGRATION_5X.md \
+  || { printf 'FAIL: MIGRATION_5X.md has no 6.0.0 removal criteria\n' >&2; exit 1; }
+bash Scripts/report_duplicate_entries.sh >/dev/null
 
 if [[ -f ROADMAP_5X.md ]]; then
   roadmap_section="$(awk -v version="$version" '

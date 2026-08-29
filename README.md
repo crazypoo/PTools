@@ -39,9 +39,9 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.1.0'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.1.0'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.1.0'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
 ```
 
 ### Swift 6 迁移要点
@@ -52,7 +52,8 @@ pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :t
 - Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。
 
 完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
-[ROADMAP_5X.md](ROADMAP_5X.md)。
+[ROADMAP_5X.md](ROADMAP_5X.md)，5.x 兼容入口和 6.0.0 删除条件见
+[MIGRATION_5X.md](MIGRATION_5X.md)。
 
 ### Language
 
@@ -81,7 +82,8 @@ git diff --check
 ```
 
 版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。5.x Core
-的阶段任务和完成状态见 [ROADMAP_5X.md](ROADMAP_5X.md)。
+的阶段任务和完成状态见 [ROADMAP_5X.md](ROADMAP_5X.md)，重复入口报告见
+`Scripts/report_duplicate_entries.sh`。
 
 其他模块根据项目需要选择：
 

@@ -1,6 +1,6 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.1.0`（2026-08-29）  
+> 基线：`5.5.0`（2026-08-29）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -118,14 +118,32 @@
 
 ## 5.6.0：依赖、源码契约与 6.0 准备
 
-- ⬜ 对比 CocoaPods Core、SwiftPM 和 Xcode source membership，消除源文件漂移。
-- ⬜ 继续拆分超大文件，降低跨模块耦合和内部可见性扩散。
-- ⬜ 完成兼容入口弃用周期、迁移文档、重复方法报告和发布门禁。
-- ⬜ 评估 6.0.0 删除 deprecated 动态入口和历史兼容层的必要条件。
+- ✅ `CORE-560-01`：新增 Core 源文件契约检查，逐项对比 CocoaPods、SwiftPM 和
+  `PooTools-Example` Xcode target 的 28 个 Core 目录与实际 261 个源文件。
+- ✅ `CORE-560-02`：完成 `String+PTEX.swift` 密码强度算法的职责拆分；保留原有
+  `passwordLevel` 符号和评分行为，不扩大原有公开 API。
+- ✅ `CORE-560-03`：重复入口报告改为带校验的分类清单；补齐 5.x 唯一实现入口、兼容
+  包装器、迁移 pending 和 6.0.0 删除门槛文档。
+- ✅ `CORE-560-04`：建立 6.0.0 删除 deprecated 动态入口和历史兼容层的必要条件；
+  5.x 继续保留 `PTAlertDebugView`、旧媒体保存回调和 Network 动态入口。
+- ⛔ `CORE-560-05`：Xcode Simulator Debug/Release 的完整构建仍被外部 Pods 的
+  `SmartCodable` 宏插件拉取 `swift-syntax` 失败阻断；在依赖恢复前不创建 `5.6.0` tag。
+
+### 5.6.0 实施与验证说明
+
+- ✅ `Scripts/validate_core_source_contract.sh` 使用现有 CocoaPods `xcodeproj` 工具链
+  读取 Xcode source membership；不新增运行时依赖，不修改 Pods 源码。
+- ✅ `Scripts/report_duplicate_entries.sh` 现在会校验每组 canonical、兼容包装器、语义差异、
+  pending 和 6.0.0 removal gate，质量扫描会自动执行该校验。
+- ✅ 新增 [MIGRATION_5X.md](MIGRATION_5X.md)，并将 README、RELEASE、CHANGELOG 的
+  版本和迁移入口补齐到当前 5.5.0 基线与 5.6.0 候选状态。
+- ⚠️ 质量扫描、源文件契约和 Package manifest 可执行；完整 Xcode 构建尚未通过，阻断来自
+  外部 `SmartCodable`/`swift-syntax`，不能据此宣称源码和发布验收完成。
 
 ## 发布前固定检查
 
 - `bash Scripts/validate_build_entries.sh`
+- `bash Scripts/validate_core_source_contract.sh`
 - `bash Scripts/validate_release.sh <version>`
 - `bash Scripts/validate_quality_scans.sh`
 - `git diff --check`

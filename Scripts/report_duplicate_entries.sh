@@ -5,6 +5,42 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+# English: Every repeated entry must name its canonical implementation and its migration state.
+# Español: Cada entrada repetida debe indicar su implementación canónica y su estado de migración.
+# 中文：每组重复入口都必须声明唯一实现和迁移状态。
+classification_rows=(
+  'media save|PTMediaSaveService|PHPhotoLibrary/UIImage/PTMediaLibManager|VideoEditor resource replacement|none|6.0.0'
+  'image request|PTMediaLibManager.requestImage/requestImageData|fetchImage/fetchOriginalImage/fetchOriginalImageData|PHAsset convenience adapter|coordinator adoption in remaining cells|6.0.0'
+  'video request|PTMediaLibManager.requestVideo|fetchVideo|fetchAVAsset returns AVAsset for editor/player integration|none|6.0.0'
+  'video thumbnail|PTVideoThumbnailService|UIImage/PHAsset first-frame conveniences|PTVideoCoverCache adds disk cache|none|6.0.0'
+  'image loading|PTLoadImageFunction.loadImage(source:)|dynamic Any adapters retained for source compatibility|UIView applies UI presentation configuration|migrate new callers to PTImageSource|6.0.0'
+  'network|Network internal executor|requestApi/requestBodyAPI/fileUpload/imageUpload|callback/stream signatures|typed progress stream adoption|6.0.0'
+  'empty state|PTUnavailableManager.render|UIView/UIViewController convenience entry points|none|none|6.0.0'
+  'scene/window|PTSceneContext|legacy PTUtils window helpers|none|remaining callers outside 5.2 Core scope|6.0.0'
+  'UI dispatch|PTMainActorBridge|PTGCDManager main-queue helpers|none|remaining legacy callers outside 5.2 Core scope|6.0.0'
+)
+
+valid_groups=(
+  'media save' 'image request' 'video request' 'video thumbnail' 'image loading'
+  'network' 'empty state' 'scene/window' 'UI dispatch'
+)
+
+for row in "${classification_rows[@]}"; do
+  IFS='|' read -r group canonical wrapper semantic_difference pending removal_gate <<< "$row"
+  if [[ -z "$group" || -z "$canonical" || -z "$wrapper" || -z "$semantic_difference" || -z "$pending" || -z "$removal_gate" ]]; then
+    printf 'FAIL: duplicate-entry classification has an empty field: %s\n' "$row" >&2
+    exit 1
+  fi
+  if [[ ! " ${valid_groups[*]} " == *" $group "* ]]; then
+    printf 'FAIL: duplicate-entry classification has an unknown group: %s\n' "$group" >&2
+    exit 1
+  fi
+  if [[ "$removal_gate" != "6.0.0" ]]; then
+    printf 'FAIL: duplicate-entry classification must define the 6.0.0 removal gate: %s\n' "$row" >&2
+    exit 1
+  fi
+done
+
 printf '%s\n' 'PTools duplicate-entry inventory (intentional wrappers are expected):'
 
 report_group() {
@@ -63,15 +99,10 @@ printf '%s\n' \
   'String crypto | canonical: PooToolsSource/Category/String+PTEX+Crypto.swift | status: complete'
 
 printf '\n%s\n' 'Status classification:'
-printf '%s\n' \
-  'media save      | canonical: PTMediaSaveService | deprecated wrapper: PHPhotoLibrary/UIImage/PTMediaLibManager | semantic difference: VideoEditor resource replacement | pending: none' \
-  'image request   | canonical: PTMediaLibManager.requestImage/requestImageData | deprecated wrapper: fetchImage/fetchOriginalImage/fetchOriginalImageData | semantic difference: PHAsset convenience adapter | pending: coordinator adoption in remaining cells' \
-  'video request   | canonical: PTMediaLibManager.requestVideo | deprecated wrapper: fetchVideo | semantic difference: fetchAVAsset returns AVAsset for editor/player integration | pending: none' \
-  'video thumbnail | canonical: PTVideoThumbnailService | deprecated wrapper: UIImage/PHAsset first-frame conveniences | semantic difference: PTVideoCoverCache adds disk cache | pending: none' \
-  'image loading    | canonical: PTLoadImageFunction.loadImage(source:) | deprecated wrapper: dynamic Any adapters retained for source compatibility | semantic difference: UIView applies UI presentation configuration | pending: migrate new callers to PTImageSource' \
-  'network         | canonical: Network internal executor | deprecated wrapper: requestApi/requestBodyAPI/fileUpload/imageUpload | semantic difference: callback/stream signatures | pending: typed progress stream adoption' \
-  'empty state     | canonical: PTUnavailableManager.render | deprecated wrapper: UIView/UIViewController convenience entry points | semantic difference: none | pending: none' \
-  'scene/window    | canonical: PTSceneContext | deprecated wrapper: legacy PTUtils window helpers | semantic difference: none | pending: remaining callers outside 5.2 Core scope' \
-  'UI dispatch     | canonical: PTMainActorBridge | deprecated wrapper: PTGCDManager main-queue helpers | semantic difference: none | pending: remaining legacy callers outside 5.2 Core scope'
+for row in "${classification_rows[@]}"; do
+  IFS='|' read -r group canonical wrapper semantic_difference pending removal_gate <<< "$row"
+  printf '%-16s | canonical: %s | deprecated wrapper: %s | semantic difference: %s | pending: %s | removal gate: %s\n' \
+    "$group" "$canonical" "$wrapper" "$semantic_difference" "$pending" "$removal_gate"
+done
 
 printf '\n%s\n' 'Each group is explicitly classified as canonical, deprecated wrapper, semantic difference, or pending work.'

@@ -1,5 +1,19 @@
 # Changelog
 
+## 5.6.0 - 2026-08-29 (Unreleased)
+
+- 增加 CocoaPods、SwiftPM 和 Xcode 的 Core 源文件逐文件契约检查，发现漂移时直接阻断。
+- 将 String 密码强度算法拆为独立职责扩展，保持 `passwordLevel` 公开入口和评分规则不变。
+- 完善重复入口报告、5.x 迁移说明和 6.0.0 兼容层删除评估条件。
+- Xcode Simulator Debug/Release 当前仍受外部 `SmartCodable` 宏插件获取 `swift-syntax`
+  失败阻断，未修改第三方依赖，也未创建 5.6.0 标签。
+
+## 5.5.0 - 2026-08-29
+
+- 统一 Alert、ActionSheet、FloatPanel、SideMenu、DarkMode、Colors、Font、Badge、Button、
+  Switch、Animation 和 Blur 的视觉与交互处理。
+- 补强动态背景、trait 变化、Reduce Motion、动画取消、布局安全值和可访问性。
+
 ## 5.0.0 - 2026-08-28
 
 - 完成 Core 大版本升级基线，替换动画依赖路径并保留现有公开调用入口。
