@@ -211,10 +211,10 @@ public extension UIView {
                 self.alpha = finalAlpha
             }
         }) { _ in
-            // 确保在主线程回调，移除 Task 包装，因为 UIView 动画回调天然在主线程
-            PTGCDManager.shared.runOnMain(block: {
-                completion?()
-            })
+            // UIKit invokes animation completions on the MainActor, so the extra dispatch is unnecessary.
+            // UIKit ejecuta las finalizaciones de animación en MainActor, por lo que el envío adicional no es necesario.
+            // UIKit 的动画完成回调在 MainActor 上执行，因此不需要额外调度。
+            completion?()
         }
     }
     

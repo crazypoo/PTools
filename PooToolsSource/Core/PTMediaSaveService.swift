@@ -54,17 +54,44 @@ public enum PTMediaSaveService {
             return
         }
 
-        let authorization = PHPhotoLibrary.authorizationStatus(for: .addOnly)
-        guard authorization != .denied, authorization != .restricted else {
-            completion(.failure(.permissionDenied))
-            return
-        }
-
         guard let changeRequest = prepareChangeRequest(image: image, videoURL: videoURL) else {
             completion(.failure(image != nil ? .imageEncodingFailed : .saveFailed("视频资源不可用")))
             return
         }
 
+        requestAuthorizationAndSave(changeRequest: changeRequest, completion: completion)
+    }
+
+    // Ask for permission before starting the Photos transaction, and finish on MainActor exactly once.
+    // Solicita permiso antes de iniciar la transacción de Photos y finaliza exactamente una vez en MainActor.
+    // 在开始 Photos 事务前先请求权限，并保证只在 MainActor 上完成一次回调。
+    private nonisolated static func requestAuthorizationAndSave(
+        changeRequest: ChangeRequest,
+        completion: @escaping @MainActor @Sendable (PTMediaSaveResult) -> Void
+    ) {
+        let authorization = PHPhotoLibrary.authorizationStatus(for: .addOnly)
+        switch authorization {
+        case .authorized, .limited:
+            performSave(changeRequest: changeRequest, completion: completion)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                guard status == .authorized || status == .limited else {
+                    completePermissionDenied(completion)
+                    return
+                }
+                performSave(changeRequest: changeRequest, completion: completion)
+            }
+        case .denied, .restricted:
+            completePermissionDenied(completion)
+        @unknown default:
+            completePermissionDenied(completion)
+        }
+    }
+
+    private nonisolated static func performSave(
+        changeRequest: ChangeRequest,
+        completion: @escaping @MainActor @Sendable (PTMediaSaveResult) -> Void
+    ) {
         let identifierStorage = OSAllocatedUnfairLock<String?>(initialState: nil)
         let changeBlock = makeChangeBlock(changeRequest: changeRequest,
                                           identifierStorage: identifierStorage)
@@ -72,6 +99,14 @@ public enum PTMediaSaveService {
                                                   completion: completion)
         PHPhotoLibrary.shared().performChanges(changeBlock,
                                                 completionHandler: completionBlock)
+    }
+
+    private nonisolated static func completePermissionDenied(
+        _ completion: @escaping @MainActor @Sendable (PTMediaSaveResult) -> Void
+    ) {
+        Task { @MainActor in
+            completion(.failure(.permissionDenied))
+        }
     }
 
     /// 在非隔离上下文创建 Photos 事务闭包，避免闭包继承 MainActor。

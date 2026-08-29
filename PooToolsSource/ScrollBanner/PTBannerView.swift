@@ -11,10 +11,15 @@ import SwifterSwift
 import SnapKit
 import AttributedString
 
+@MainActor
 public final class PTBannerScheduler {
 
-    nonisolated(unsafe) public static let shared = PTBannerScheduler()
-    public var autoScrollInterval: TimeInterval = 2
+    public static let shared = PTBannerScheduler()
+    public var autoScrollInterval: TimeInterval = 2 {
+        didSet {
+            restartTimerIfNeeded()
+        }
+    }
 
     private var banners = NSHashTable<PTBannerView>.weakObjects()
     private var timer: DispatchSourceTimer?
@@ -26,33 +31,54 @@ public final class PTBannerScheduler {
 
     func remove(_ banner: PTBannerView) {
         banners.remove(banner)
-        
-        // ✨ 新增：当没有 banner 存在时，销毁定时器节省资源
-        if banners.allObjects.isEmpty {
-            timer?.cancel()
-            timer = nil
-        }
+
+        if banners.allObjects.isEmpty { stopTimer() }
     }
 
     private func startIfNeeded() {
-        guard timer == nil else { return }
+        guard timer == nil, !banners.allObjects.isEmpty else { return }
 
         let t = DispatchSource.makeTimerSource(queue: .main)
-        t.schedule(deadline: .now() + PTBannerScheduler.shared.autoScrollInterval, repeating: 2)
+        let interval = DispatchTimeInterval.milliseconds(Int(effectiveInterval * 1_000))
+        t.schedule(deadline: .now() + interval, repeating: interval, leeway: .milliseconds(50))
 
         t.setEventHandler { [weak self] in
-            self?.tick()
+            Task { @MainActor [weak self] in
+                self?.tick()
+            }
         }
 
         t.resume()
         timer = t
     }
 
+    private var effectiveInterval: TimeInterval {
+        // Keep the timer interval finite and away from a busy loop.
+        // Mantiene el intervalo finito y evita un bucle de temporizador demasiado intenso.
+        // 保证计时间隔为有限值，避免形成高频空转。
+        let candidate = autoScrollInterval.isFinite ? autoScrollInterval : 2
+        return min(max(candidate, 0.1), 86_400)
+    }
+
+    private func restartTimerIfNeeded() {
+        guard timer != nil else { return }
+        stopTimer()
+        startIfNeeded()
+    }
+
+    private func stopTimer() {
+        timer?.cancel()
+        timer = nil
+    }
+
     private func tick() {
-        for banner in banners.allObjects {
-            PTGCDManager.shared.runOnMain {
-                banner.autoScrollTick()
-            }
+        let activeBanners = banners.allObjects
+        guard !activeBanners.isEmpty else {
+            stopTimer()
+            return
+        }
+        for banner in activeBanners {
+            banner.autoScrollTick()
         }
     }
 }

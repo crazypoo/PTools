@@ -30,17 +30,30 @@ public struct PTLaunchADSnapshot: Sendable {
     public let imageData: Data?
     public let imageIdentifier: String?
     public let tapURL: [String: String]
+    public let hasTapURL: Bool
 
     @MainActor
     public init(model: PTLaunchADModel) {
         time = model.time
-        if let value = model.image as? URL {
+        if let value = model.image as? Data {
+            imageURL = nil
+            imageIdentifier = nil
+            imageData = value
+        } else if let value = model.image as? URL {
             imageURL = value
             imageIdentifier = nil
             imageData = nil
         } else if let value = model.image as? String {
-            imageURL = URL(string: value)
-            imageIdentifier = imageURL == nil ? value : nil
+            if value.hasPrefix("/"), !value.isEmpty {
+                imageURL = URL(fileURLWithPath: value)
+                imageIdentifier = nil
+            } else if let url = URL(string: value), url.scheme != nil {
+                imageURL = url
+                imageIdentifier = nil
+            } else {
+                imageURL = nil
+                imageIdentifier = value
+            }
             imageData = nil
         } else if let value = model.image as? UIImage {
             imageURL = nil
@@ -52,6 +65,7 @@ public struct PTLaunchADSnapshot: Sendable {
             imageData = nil
         }
 
+        hasTapURL = model.tapURL != nil
         tapURL = (model.tapURL ?? [:]).reduce(into: [String: String]()) { result, pair in
             let key = String(describing: pair.key)
             let value = String(describing: pair.value)
@@ -147,7 +161,7 @@ public class PTLaunchAdMonitor: NSObject {
         return label
     }()
     
-    private var adLaunchModels: [PTLaunchADModel] = []
+    private var adLaunchSnapshots: [PTLaunchADSnapshot] = []
     private var bottomViewHeight: CGFloat = 0
     
     // MARK: 初始化广告界面
@@ -165,11 +179,11 @@ public class PTLaunchAdMonitor: NSObject {
         contentView.isUserInteractionEnabled = true
         dismissCallBack = callBack
         timeUpCallBack = timeUp
-        adLaunchModels = adModels
+        adLaunchSnapshots = adModels.map { PTLaunchADSnapshot(model: $0) }
         
-        guard !adModels.isEmpty else { return }
+        guard !adLaunchSnapshots.isEmpty else { return }
         setupBaseUI(onView: onView, ltdString: ltdString, comNameFont: comNameFont, skipFont: skipFont)
-        startAdSequence(adModels: adModels)
+        startAdSequence(snapshots: adLaunchSnapshots)
     }
     
     // MARK: - 私有方法：基础 UI 设置
@@ -288,13 +302,13 @@ public class PTLaunchAdMonitor: NSObject {
     }
     
     // MARK: - 私有方法：启动广告序列
-    @MainActor private func startAdSequence(adModels: [PTLaunchADModel]) {
-        let totalTime: TimeInterval = adModels.reduce(0) { $0 + $1.time }
-        // Capture indexes instead of mutable ad models in the sendable timer closure.
-        // Captura índices en lugar de modelos de anuncio mutables en el cierre sendable del temporizador.
-        // 在可 Sendable 的定时器闭包中只捕获索引，不捕获可变广告模型。
-        let result = buildCountdownTimeline(items: adModels.enumerated().map { ($0.element.time, $0.offset) })
+    @MainActor private func startAdSequence(snapshots: [PTLaunchADSnapshot]) {
+        let result = buildCountdownTimeline(items: snapshots.enumerated().map { index, snapshot in
+            let duration = snapshot.time.isFinite ? max(0, snapshot.time) : 0
+            return (duration, index)
+        })
         let timeline = result.timeline
+        let totalTime = result.totalTime
         currentAdIndex = -1
                 
         let totalString = String(format: "%.0f", totalTime)
@@ -322,24 +336,38 @@ public class PTLaunchAdMonitor: NSObject {
                 if newIndex != self.currentAdIndex {
                     self.currentAdIndex = newIndex
                     let modelIndex = timeline[newIndex].value
-                    guard self.adLaunchModels.indices.contains(modelIndex) else { return }
-                    self.handleAdDisplay(model: self.adLaunchModels[modelIndex])
+                    guard self.adLaunchSnapshots.indices.contains(modelIndex) else { return }
+                    self.handleAdDisplay(snapshot: self.adLaunchSnapshots[modelIndex])
                 }
             }
         })
     }
     
-    private func handleAdDisplay(model: PTLaunchADModel) {
+    // Keep media and tap metadata in immutable, Sendable values before starting asynchronous work.
+    // Mantiene los metadatos de medios y toque en valores inmutables y Sendable antes del trabajo asíncrono.
+    // 在开始异步工作前，将媒体和点击元数据冻结为不可变的 Sendable 值。
+    private func handleAdDisplay(snapshot: PTLaunchADSnapshot) {
         cancelMediaLoad()
         resetMediaStates()
         let generation = mediaGeneration
-        let mediaHaveData: Bool = model.tapURL != nil
-        notifiData = model.tapURL
-        actionButton.isUserInteractionEnabled = mediaHaveData
+        notifiData = snapshot.tapURL.reduce(into: [AnyHashable: Any]()) { result, pair in
+            result[pair.key] = pair.value
+        }
+        actionButton.isUserInteractionEnabled = snapshot.hasTapURL
+        let mediaSource: PTLaunchAdMediaSource?
+        if let imageURL = snapshot.imageURL {
+            mediaSource = .url(imageURL)
+        } else if let imageData = snapshot.imageData {
+            mediaSource = .data(imageData)
+        } else if let imageIdentifier = snapshot.imageIdentifier {
+            mediaSource = .named(imageIdentifier)
+        } else {
+            mediaSource = nil
+        }
         
         mediaLoadTask = Task { @MainActor [weak self] in
             guard let self else { return }
-            let (type, media, gifTime) = await self.loadImageAtPath(path: model.image)
+            let (type, media, gifTime) = await self.loadImage(source: mediaSource)
             guard !Task.isCancelled, self.mediaGeneration == generation else { return }
             self.applyMedia(type: type, media: media, gifTime: gifTime)
             self.mediaLoadTask = nil
@@ -387,23 +415,30 @@ public class PTLaunchAdMonitor: NSObject {
     enum PTLaunchAdMediaType {
         case Image, Video
     }
-    
-    private func loadImageAtPath(path: Any?) async -> (PTLaunchAdMediaType, Any?, TimeInterval) {
-        guard let path else { return (.Image, nil, 0) }
 
-        if let imagePath = path as? String {
-            let videoURL: URL?
-            if imagePath.hasPrefix("/") {
-                videoURL = URL(fileURLWithPath: imagePath)
-            } else {
-                videoURL = URL(string: imagePath)
-            }
-            if let videoURL, videoURL.pt_isVideoResource {
-                return (.Video, videoURL, 0)
-            }
+    private enum PTLaunchAdMediaSource: Sendable {
+        case url(URL)
+        case data(Data)
+        case named(String)
+    }
+
+    private func loadImage(source: PTLaunchAdMediaSource?) async -> (PTLaunchAdMediaType, Any?, TimeInterval) {
+        guard let source else { return (.Image, nil, 0) }
+
+        if case .url(let url) = source, url.pt_isVideoResource {
+            return (.Video, url, 0)
         }
 
-        let result = await PTLoadImageFunction.loadImage(contentData: path)
+        let imageSource: PTImageSource
+        switch source {
+        case .url(let url):
+            imageSource = .url(url)
+        case .data(let data):
+            imageSource = .data(data)
+        case .named(let name):
+            imageSource = .named(name)
+        }
+        let result = await PTLoadImageFunction.loadImage(source: imageSource)
         return (.Image, result.allImages, result.loadTime)
     }
 

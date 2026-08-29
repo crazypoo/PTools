@@ -25,7 +25,12 @@ final class PTMediaRequestCoordinator {
 
     func store(_ requestID: PHImageRequestID, for key: String, generation: UInt64) {
         guard states[key]?.generation == generation else {
-            cancel(String(format: "%d", requestID))
+            // Cancel the actual PhotoKit request when a stale generation finishes.
+            // Cancela la solicitud real de PhotoKit cuando termina una generación obsoleta.
+            // 旧 generation 完成时，直接取消真实的 PhotoKit 请求。
+            if requestID != PHInvalidImageRequestID {
+                PHImageManager.default().cancelImageRequest(requestID)
+            }
             return
         }
         states[key]?.requestID = requestID

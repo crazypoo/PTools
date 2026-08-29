@@ -51,7 +51,8 @@ pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :t
 - 媒体保存优先使用 `PTMediaSaveService.save(image:videoURL:completion:)`；旧保存入口保留并逐步弃用。
 - Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。
 
-完整发布和迁移清单见 [RELEASE.md](RELEASE.md)。
+完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
+[ROADMAP_5X.md](ROADMAP_5X.md)。
 
 ### Language
 
@@ -79,7 +80,8 @@ bash Scripts/validate_quality_scans.sh
 git diff --check
 ```
 
-版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。
+版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。5.x Core
+的阶段任务和完成状态见 [ROADMAP_5X.md](ROADMAP_5X.md)。
 
 其他模块根据项目需要选择：
 

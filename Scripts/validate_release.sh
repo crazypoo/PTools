@@ -22,4 +22,22 @@ rg -q --fixed-strings "发布目标为 \`$version\`" RELEASE.md \
 rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
   || { printf 'FAIL: Podfile.lock is not synchronized to %s\n' "$version" >&2; exit 1; }
 
+if [[ -f ROADMAP_5X.md ]]; then
+  roadmap_section="$(awk -v version="$version" '
+    $0 ~ "^## " version "([：: ].*)?$" { found = 1; next }
+    found && /^## / { exit }
+    found { print }
+  ' ROADMAP_5X.md)"
+  if [[ -z "$roadmap_section" ]]; then
+    printf 'FAIL: ROADMAP_5X.md has no section for %s\n' "$version" >&2
+    exit 1
+  fi
+  unresolved_tasks="$(printf '%s\n' "$roadmap_section" | rg '^[[:space:]]*-[[:space:]]*(🚧|⬜|⛔)' || true)"
+  if [[ -n "$unresolved_tasks" ]]; then
+    printf '%s\n' "$unresolved_tasks" >&2
+    printf 'FAIL: ROADMAP_5X.md still contains unresolved tasks for %s\n' "$version" >&2
+    exit 1
+  fi
+fi
+
 printf 'Release metadata OK: %s\n' "$version"

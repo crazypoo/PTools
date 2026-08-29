@@ -639,16 +639,9 @@ public final class Network: @unchecked Sendable {
     private let configLock = NSLock()
     private var _config = PTNetworkConfig()
     
-    // 1. 内部消化：利用编译宏判断是否是 Debug 环境，速度最快且绝对线程安全
-    private static let isDebugEnvironment: Bool = {
-#if DEBUG
-        return true
-#else
-        return false
-#endif
-    }()
-    
-    // 2. 内部消化：利用 Bundle 底层特征判断是否是 App Store 环境
+    // 通过 Bundle 底层特征判断是否是 App Store 环境。
+    // Determina si el paquete pertenece al entorno de App Store mediante una característica del Bundle.
+    // Use Bundle 的底层特征判断当前是否为 App Store 环境。
     private static let isAppStoreEnvironment: Bool = {
 #if DEBUG
         return false
@@ -799,10 +792,10 @@ public final class Network: @unchecked Sendable {
 
     private static func requestParametersForLog(_ parameters: Parameters?) -> String {
         guard let parameters, !parameters.isEmpty else { return "没有参数" }
-        guard isDebugEnvironment else {
-            return sanitizedParameters(parameters)
+        if isAppStoreEnvironment {
+            return "已隐藏（参数数量：\(parameters.count)）"
         }
-        return "已隐藏（参数数量：\(parameters.count)）"
+        return sanitizedParameters(parameters)
     }
 
     private static func sanitizedParameters(_ parameters: Parameters?) -> String {
