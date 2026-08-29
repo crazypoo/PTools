@@ -90,10 +90,17 @@
 
 ## 5.4.0：图片、媒体与 Category 性能
 
-- ⬜ 完善类型化图片加载管线，统一尺寸、缓存、取消、GIF、视频帧和错误结果。
-- ⬜ 优化 PhotoKit、GIF、视频导出和原图数据的峰值内存与生命周期。
-- ⬜ 统一 `UIView` 圆角/布局辅助和 `UIImage`、`String`、`Data`、`Date`、文件 URL 算法，避免重复实现。
-- ⬜ 对高频 Category 保留兼容包装器并补充 iOS 17 行为回归。
+- ✅ 完善类型化图片加载管线，统一尺寸、缓存、取消、GIF、视频帧和错误结果。
+- ✅ 优化 PhotoKit、GIF、视频导出和原图数据的峰值内存与生命周期。
+- ✅ 统一 `UIView` 圆角/布局辅助和 `UIImage`、`String`、`Data`、`Date`、文件 URL 算法，避免重复实现。
+- ✅ 对高频 Category 保留兼容包装器并补充 iOS 17 行为回归。
+
+### 5.4.0 实施与验证说明
+
+- ✅ `PTLoadImageFunction` 支持目标尺寸下采样、GIF 安全解码、视频第 10 帧入口、取消传播和 Live Photo 临时文件清理；旧入口保持兼容。
+- ✅ `PTVideoThumbnailService` 成为视频缩略图异步入口；`AVAsset` 导出使用真实 Documents URL，避免 URL 构造错误和重复临时文件。
+- ✅ 高频 Category 的图片、日期、数据、查询参数和视频首帧逻辑已收敛；日期格式化不再依赖共享可变 formatter，GIF 解码降低中间图像缓存峰值。
+- ✅ PooTools 源码已通过当前 Xcode Debug / Release 编译阶段；最终模拟器链接仍被外部真机版 `Pods/Bugly/Bugly.framework` 阻断，待提供 Simulator 或 XCFramework 产物后补齐最终链接验证。
 
 ## 5.5.0：视觉与交互组件
 

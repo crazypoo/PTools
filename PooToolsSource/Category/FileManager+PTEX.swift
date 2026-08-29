@@ -747,21 +747,34 @@ public extension PTPOP where Base: FileManager {
     static func getServerVideoImage(videoPath: String,
                                     videoImage: @escaping @MainActor @Sendable (UIImage?) -> Void,
                                     preferredTrackTransform: Bool = true) {
-        //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        Task {
-            let image = getVideoImage(videoUrlSouceType: .server, path: videoPath, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
-            await videoImage(image)
+        // English: Use the async thumbnail service so network video generation does not block a task thread.
+        // Español: Usa el servicio asíncrono para no bloquear un hilo de tareas al generar miniaturas de vídeo de red.
+        // 中文：使用异步缩略图服务，避免生成网络视频缩略图时阻塞任务线程。
+        guard let url = URL(string: videoPath) else {
+            Task { @MainActor in
+                videoImage(nil)
+            }
+            return
+        }
+
+        Task { @MainActor in
+            let image = await PTVideoThumbnailService.imageAsync(for: url,
+                                                                  at: 1,
+                                                                  preferredTimescale: 10,
+                                                                  maximumSize: nil,
+                                                                  appliesPreferredTrackTransform: preferredTrackTransform)
+            videoImage(image)
         }
     }
     
     // MARK: 异步获取网络视频截图 (async/await 扩展)
     static func getServerVideoImageAsync(videoPath: String, preferredTrackTransform: Bool = true) async -> UIImage? {
-        // 将旧的基于回调的方法包装为现代的 async/await 方法
-        return await withCheckedContinuation { continuation in
-            getServerVideoImage(videoPath: videoPath, videoImage: { image in
-                continuation.resume(returning: image)
-            }, preferredTrackTransform: preferredTrackTransform)
-        }
+        guard let url = URL(string: videoPath) else { return nil }
+        return await PTVideoThumbnailService.imageAsync(for: url,
+                                                        at: 1,
+                                                        preferredTimescale: 10,
+                                                        maximumSize: nil,
+                                                        appliesPreferredTrackTransform: preferredTrackTransform)
     }
 
     //MARK: 通过网络视频文件路径数组获取截图数组
@@ -774,16 +787,26 @@ public extension PTPOP where Base: FileManager {
     static func getServerVideoImages(videoPaths: [String],
                                      videoImages: @escaping @MainActor @Sendable ([UIImage]) -> Void,
                                      preferredTrackTransform: Bool = true) {
-        //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        Task {
-            //  获取截图
+        // English: Keep the input order while awaiting each canonical thumbnail request.
+        // Español: Conserva el orden de entrada mientras espera cada solicitud canónica de miniatura.
+        // 中文：按输入顺序等待统一缩略图请求，保证结果顺序稳定。
+        Task { @MainActor in
             var allImageArray: [UIImage] = []
             for path in videoPaths {
-                if let videoImage = getVideoImage(videoUrlSouceType: .server, path: path, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform) {
+                guard let url = URL(string: path),
+                      let videoImage = await PTVideoThumbnailService.imageAsync(for: url,
+                                                                                at: 1,
+                                                                                preferredTimescale: 10,
+                                                                                maximumSize: nil,
+                                                                                appliesPreferredTrackTransform: preferredTrackTransform) else {
+                    continue
+                }
+                if !Task.isCancelled {
                     allImageArray.append(videoImage)
                 }
             }
-            await videoImages(allImageArray)
+            guard !Task.isCancelled else { return }
+            videoImages(allImageArray)
         }
     }
     

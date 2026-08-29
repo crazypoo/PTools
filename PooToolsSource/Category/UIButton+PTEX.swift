@@ -147,7 +147,11 @@ public extension UIButton {
                    progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
         // 直接调用父类 UIView 封装好的核心逻辑
-        
+        // English: Use the laid-out image view size to avoid decoding larger button images than needed.
+        // Español: Usa el tamaño dispuesto de la imagen para evitar decodificar imágenes demasiado grandes.
+        // 中文：使用已布局的图片视图尺寸，避免按钮图片被解码成不必要的大图。
+        let imageBounds = imageView?.bounds.size ?? bounds.size
+        let targetSize = imageBounds.width > 0 && imageBounds.height > 0 ? imageBounds : nil
         let configuration = PTImageLoadConfiguration(iCloudDocumentName: iCloudDocumentName,
                                                      borderWidth: borderWidth,
                                                      borderColor: borderColor,
@@ -155,7 +159,8 @@ public extension UIButton {
                                                      valueLabelFont: valueLabelFont,
                                                      valueLabelColor: valueLabelColor,
                                                      uniCount: uniCount,
-                                                     emptyImage: emptyImage)
+                                                     emptyImage: emptyImage,
+                                                     targetSize: targetSize)
         pt_loadCoreImage(
             contentData: contentData,
             configuration: configuration,

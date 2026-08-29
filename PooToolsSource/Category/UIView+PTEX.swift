@@ -1217,6 +1217,7 @@ public extension UIView {
                          valueLabelColor: configuration.valueLabelColor,
                          uniCount: configuration.uniCount,
                          emptyImage: configuration.emptyImage,
+                         targetSize: configuration.targetSize,
                          progressHandle: progressHandle,
                          setImageBlock: setImageBlock,
                          loadFinish: loadFinish)
@@ -1249,6 +1250,10 @@ public extension UIView {
                           valueLabelColor: UIColor? = nil,
                           uniCount: Int? = nil,
                           emptyImage: UIImage? = nil,
+                          /// English: Optional maximum display size used for image downsampling.
+                          /// Español: Tamaño máximo opcional para reducir la imagen al decodificarla.
+                          /// 中文：可选的最大显示尺寸，用于图片解码时降采样。
+                          targetSize: CGSize? = nil,
                           progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                           setImageBlock: @escaping @MainActor @Sendable (UIImage?) -> Void,
                           loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
@@ -1331,7 +1336,11 @@ public extension UIView {
             guard let self else { return }
             self.ptLoadTask = Task { @MainActor in
                 guard !Task.isCancelled else { return }
-                let result = await PTLoadImageFunction.loadImage(source: .videoURL(url))
+                let result = await PTLoadImageFunction.loadImage(
+                    source: .videoURL(url,
+                                     frameNumber: 10,
+                                     maximumSize: targetSize ?? PTVideoThumbnailService.defaultMaximumSize)
+                )
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -1348,35 +1357,35 @@ public extension UIView {
 
                 let result = await PTLoadImageFunction.loadImage(
                     source: .url(url),
-                    iCloudDocumentName: iCloudDocumentName
-                ) { @MainActor @Sendable received, total in
-                    Task { @MainActor in
-                        guard self.ptLoadUUID == loadID else { return }
-                        if let progressHandle {
-                            progressHandle(received, total)
-                        } else {
-                            let progress = total > 0
-                                ? min(max(CGFloat(received) / CGFloat(total), 0), 1)
-                                : 0
-                            self.layerProgress(
-                                value: progress,
-                                radius: radius,
-                                topLeft: topLeft,
-                                topRight: topRight,
-                                bottomLeft: bottomLeft,
-                                bottomRight: bottomRight,
-                                corner: corner,
-                                capsule: capsule,
-                                borderWidth: borderW,
-                                borderColor: borderC,
-                                showValueLabel: showValueL,
-                                valueLabelFont: valueLabelF,
-                                valueLabelColor: valueLabelC,
-                                uniCount: uniC
-                            )
-                        }
+                    iCloudDocumentName: iCloudDocumentName,
+                    progressHandle: { @MainActor @Sendable received, total in
+                    guard self.ptLoadUUID == loadID else { return }
+                    if let progressHandle {
+                        progressHandle(received, total)
+                    } else {
+                        let progress = total > 0
+                            ? min(max(CGFloat(received) / CGFloat(total), 0), 1)
+                            : 0
+                        self.layerProgress(
+                            value: progress,
+                            radius: radius,
+                            topLeft: topLeft,
+                            topRight: topRight,
+                            bottomLeft: bottomLeft,
+                            bottomRight: bottomRight,
+                            corner: corner,
+                            capsule: capsule,
+                            borderWidth: borderW,
+                            borderColor: borderC,
+                            showValueLabel: showValueL,
+                            valueLabelFont: valueLabelF,
+                            valueLabelColor: valueLabelC,
+                            uniCount: uniC
+                        )
                     }
-                }
+                    },
+                    targetSize: targetSize
+                )
                 
                 if Task.isCancelled { return }
                 finish(result)
@@ -1389,7 +1398,8 @@ public extension UIView {
                 guard !Task.isCancelled else { return }
                 let result = await PTLoadImageFunction.loadImage(source: source,
                                                                  iCloudDocumentName: iCloudDocumentName,
-                                                                 progressHandle: progressHandle)
+                                                                 progressHandle: progressHandle,
+                                                                 targetSize: targetSize)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -1401,21 +1411,24 @@ public extension UIView {
         case let data as Data:
             ptLoadTask = Task { @MainActor in
                 guard !Task.isCancelled else { return }
-                let result = await PTLoadImageFunction.loadImage(source: .data(data))
+                let result = await PTLoadImageFunction.loadImage(source: .data(data),
+                                                                 targetSize: targetSize)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
         case let asset as PHAsset:
             ptLoadTask = Task { @MainActor in
                 if Task.isCancelled { return }
-                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
+                let result = await PTLoadImageFunction.handleAssetContent(asset: asset,
+                                                                           targetSize: targetSize)
                 if Task.isCancelled { return }
                 finish(result)
             }
         case let avasset as AVAsset:
             ptLoadTask = Task { @MainActor in
                 guard !Task.isCancelled else { return }
-                let result = await PTLoadImageFunction.loadImage(source: .avAsset(avasset))
+                let result = await PTLoadImageFunction.loadImage(source: .avAsset(avasset),
+                                                                 targetSize: targetSize)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -1427,7 +1440,8 @@ public extension UIView {
                     guard !Task.isCancelled else { return }
                     let result = await PTLoadImageFunction.loadImage(
                         contentData: string,
-                        iCloudDocumentName: iCloudDocumentName
+                        iCloudDocumentName: iCloudDocumentName,
+                        targetSize: targetSize
                     )
                     guard !Task.isCancelled else { return }
                     finish(result)

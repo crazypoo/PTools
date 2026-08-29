@@ -11,40 +11,11 @@ import AVFoundation
 
 public extension URL {
     var urlQueryParameters: [String: String]? {
-        var params: [String: String] = [:]
-        
-        if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-           let queryItems = components.queryItems,
-           !queryItems.isEmpty {
-            for item in queryItems {
-                if let value = item.value {
-                    params[item.name] = value
-                }
-            }
-        } else {
-            // 手动解析 scheme 里可能没有 "?" 的情况，如 scheme://key=value&key2=value2
-            let raw = self.absoluteString
-            if let range = raw.range(of: "://") {
-                let queryPart = String(raw[range.upperBound...])
-                let keyValuePairs = queryPart.components(separatedBy: "&")
-                for pair in keyValuePairs {
-                    let kv = pair.components(separatedBy: "=")
-                    if kv.count == 2 {
-                        params[kv[0]] = kv[1]
-                    }
-                }
-            }
-        }
-        
-        return params.isEmpty ? nil : params
+        ptQueryParameters(allowSchemeFallback: true)
     }
     
     var urlParameters: [String: String]? {
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: true),
-              let queryItems = components.queryItems else { return nil }
-        return queryItems.reduce(into: [String: String]()) { (result, item) in
-            result[item.name] = item.value
-        }
+        ptQueryParameters(allowSchemeFallback: false)
     }   
     
     func getFileSizeOnline(completion: @escaping @Sendable (UInt64) -> Void) {
@@ -110,5 +81,40 @@ public extension URL {
             return jsonString
         }
         return nil
+    }
+}
+
+private extension URL {
+    // English: Keep standard query parsing and custom scheme fallback in one implementation.
+    // Español: Mantiene el análisis de consultas estándar y el respaldo de esquemas personalizados en una implementación.
+    // 中文：将标准查询解析和自定义 scheme 兜底集中到一份实现中。
+    func ptQueryParameters(allowSchemeFallback: Bool) -> [String: String]? {
+        if let components = URLComponents(url: self, resolvingAgainstBaseURL: true),
+           let queryItems = components.queryItems {
+            let parameters = queryItems.reduce(into: [String: String]()) { result, item in
+                if let value = item.value {
+                    result[item.name] = value
+                }
+            }
+            if !parameters.isEmpty || !allowSchemeFallback {
+                return parameters.isEmpty ? nil : parameters
+            }
+        }
+
+        guard allowSchemeFallback,
+              let separator = absoluteString.range(of: "://") else {
+            return nil
+        }
+
+        var parameters: [String: String] = [:]
+        let queryPart = absoluteString[separator.upperBound...]
+        for pair in queryPart.split(separator: "&") {
+            guard let equalsIndex = pair.firstIndex(of: "=") else { continue }
+            let key = String(pair[..<equalsIndex])
+            let value = String(pair[pair.index(after: equalsIndex)...])
+            guard !key.isEmpty else { continue }
+            parameters[key] = value
+        }
+        return parameters.isEmpty ? nil : parameters
     }
 }

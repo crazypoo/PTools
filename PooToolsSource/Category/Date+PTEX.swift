@@ -239,11 +239,11 @@ public extension PTPOP where Base == Date {
                                                format: String = "yyyy-MM-dd HH:mm:ss") -> String {
         // 时间戳转为Date
         let date = timestampToFormatterDate(timestamp: timestamp)
-        // let dateFormatter = DateFormatter()
-        // 设置 dateFormat
-        jx_formatter.dateFormat = format
-        // 按照dateFormat把Date转化为String
-        return jx_formatter.string(from: date)
+        // English: Keep the legacy formatter public, but use a call-local formatter to avoid shared mutable state.
+        // Español: Conserva público el formateador heredado, pero usa uno local para evitar estado mutable compartido.
+        // 中文：保留旧的公开格式化器，但每次调用使用局部实例，避免共享可变状态。
+        let dateFormatter = DateFormatter(format: format)
+        return dateFormatter.string(from: date)
     }
 
     // MARK: Date 转换为相应格式的时间字符串，如 Date 转为 2020-10-28
@@ -251,10 +251,9 @@ public extension PTPOP where Base == Date {
     /// - Parameter format: 转换的格式
     /// - Returns: 返回具体的字符串
     func toformatterTimeString(formatter: String = "yyyy-MM-dd HH:mm:ss") -> String {
-        // let dateFormatter = DateFormatter()
-        jx_formatter.timeZone = TimeZone.autoupdatingCurrent
-        jx_formatter.dateFormat = formatter
-        return jx_formatter.string(from: base)
+        let dateFormatter = DateFormatter(format: formatter)
+        dateFormatter.timeZone = TimeZone.autoupdatingCurrent
+        return dateFormatter.string(from: base)
     }
     
     // MARK: 带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳，时间字符串和时间格式必须保持一致
@@ -268,8 +267,8 @@ public extension PTPOP where Base == Date {
     static func formatterTimeStringToTimestamp(timesString: String, 
                                                formatter: String,
                                                timestampType: PTTimestampType = .second) -> String {
-        jx_formatter.dateFormat = formatter
-        guard let date = jx_formatter.date(from: timesString) else {
+        let dateFormatter = DateFormatter(format: formatter)
+        guard let date = dateFormatter.date(from: timesString) else {
             PTNSLogConsole("时间字符串无法解析：\(timesString)",
                            levelType: .error,
                            loggerType: .other)

@@ -59,6 +59,34 @@ public enum PTVideoThumbnailService {
                            appliesPreferredTrackTransform: appliesPreferredTrackTransform)
     }
 
+    /// English: Generates a thumbnail at a time offset without blocking a cooperative task thread.
+    /// Español: Genera una miniatura en un instante concreto sin bloquear un hilo de tareas cooperativas.
+    /// 中文：按时间点异步生成缩略图，不阻塞协作式任务线程。
+    @MainActor
+    public static func imageAsync(for url: URL,
+                                  at seconds: Double = 1,
+                                  preferredTimescale: CMTimeScale = 10,
+                                  maximumSize: CGSize? = nil,
+                                  appliesPreferredTrackTransform: Bool = true) async -> UIImage? {
+        guard seconds.isFinite, seconds >= 0 else { return nil }
+
+        let safeTimescale = preferredTimescale > 0 ? preferredTimescale : 600
+        let time = CMTime(seconds: seconds, preferredTimescale: safeTimescale)
+        let asset = AVURLAsset(url: url,
+                               options: [AVURLAssetPreferPreciseDurationAndTimingKey: false])
+        do {
+            return try await generateImage(for: asset,
+                                           at: time,
+                                           maximumSize: maximumSize,
+                                           appliesPreferredTrackTransform: appliesPreferredTrackTransform,
+                                           requiresExactTime: false)
+        } catch is CancellationError {
+            return nil
+        } catch {
+            return nil
+        }
+    }
+
     /// Preserves the legacy synchronous seconds-based API for compatibility.
     /// Conserva la API síncrona heredada basada en segundos para mantener la compatibilidad.
     /// 保留旧的按秒同步 API 以维持兼容性。

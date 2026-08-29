@@ -111,9 +111,9 @@ open class PTNavigationBarContainer: UIView {
     public func apply(style: PTNavigationBarStyle) {
         backgroundView.alpha = 1.0
         largeTitleContainer.alpha = 1.0
-        fromStyle = style
-        toStyle = style
-        updateTransition(progress: 1)
+//        fromStyle = style
+//        toStyle = style
+//        updateTransition(progress: 1)
     }
     
     public override func layoutSubviews() {

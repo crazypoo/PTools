@@ -34,26 +34,23 @@ public extension Data {
         return ""
     }
     
+    // English: Inspect only the required header bytes so valid short image data is not rejected.
+    // Español: Inspecciona solo los bytes de cabecera necesarios para no rechazar imágenes válidas y cortas.
+    // 中文：只检查必要的文件头字节，避免误判有效的短图片数据。
     //MARK: 根據Data來獲取圖片的格式(底層方法)
     ///根據Data來獲取圖片的格式(底層方法)
     func detectImageType() -> PTAboutImageType {
-        if self.count < 16 { return .UNKNOW }
-        
-        var value = [UInt8](repeating:0, count:1)
-        
-        self.copyBytes(to: &value, count: 1)
-        
-        switch value[0] {
+        guard let firstByte = self.first else { return .UNKNOW }
+
+        switch firstByte {
         case 0x4D, 0x49:
             return .TIFF
         case 0x00:
-            if self.count >= 12 {
-                let heicHeader = Data(self.dropFirst(4).prefix(8))
-                if let heicString = String(data: heicHeader, encoding: .ascii) {
-                    if heicString == "ftypheic" || heicString == "ftypheix" || heicString == "ftypmif1" || heicString == "ftypmsf1" {
-                        return .HEIC
-                    }
-                }
+            guard self.count >= 12 else { return .UNKNOW }
+            let heicHeader = Data(self.dropFirst(4).prefix(8))
+            if let heicString = String(data: heicHeader, encoding: .ascii)?.lowercased(),
+               ["ftypheic", "ftypheix", "ftypmif1", "ftypmsf1"].contains(heicString) {
+                return .HEIC
             }
             return .ICO
         case 0x69:
@@ -67,15 +64,14 @@ public extension Data {
         case 0x42:
             return .BMP
         case 0x52:
+            guard self.count >= 12 else { return .UNKNOW }
             let subData = Data(self.prefix(12))
-            if let infoString = String(data: subData, encoding: .ascii) {
-                if infoString.hasPrefix("RIFF") && infoString.hasSuffix("WEBP") {
-                    return .WEBP
-                }
+            if let infoString = String(data: subData, encoding: .ascii),
+               infoString.hasPrefix("RIFF") && infoString.hasSuffix("WEBP") {
+                return .WEBP
             }
-            break
         default:
-            break
+            return .UNKNOW
         }
         return .UNKNOW
     }

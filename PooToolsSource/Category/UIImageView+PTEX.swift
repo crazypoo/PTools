@@ -66,7 +66,10 @@ public extension UIImageView {
                    emptyImage: UIImage? = nil,
                    progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
-        
+        // English: Reuse the current view bounds as a safe downsampling hint when layout is ready.
+        // Español: Usa los límites actuales de la vista como sugerencia segura cuando el diseño está listo.
+        // 中文：布局完成时使用当前视图尺寸作为安全的降采样提示。
+        let targetSize = bounds.size.width > 0 && bounds.size.height > 0 ? bounds.size : nil
         let configuration = PTImageLoadConfiguration(iCloudDocumentName: iCloudDocumentName,
                                                      radius: radius,
                                                      topLeft: topLeft,
@@ -81,7 +84,8 @@ public extension UIImageView {
                                                      valueLabelFont: valueLabelFont,
                                                      valueLabelColor: valueLabelColor,
                                                      uniCount: uniCount,
-                                                     emptyImage: emptyImage)
+                                                     emptyImage: emptyImage,
+                                                     targetSize: targetSize)
         pt_loadCoreImage(
             contentData: contentData,
             configuration: configuration,

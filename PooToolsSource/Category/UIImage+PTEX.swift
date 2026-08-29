@@ -1028,9 +1028,12 @@ public extension PTPOP where Base: UIImage {
 
     @MainActor
     static func animateGifImage(data: Data) -> UIImage? {
-        // Kingfisher
+        // English: Decode one frame at a time so ImageIO does not eagerly retain every decoded frame.
+        // Español: Decodifica un fotograma cada vez para que ImageIO no retenga todos los fotogramas de forma anticipada.
+        // 中文：逐帧解码，避免 ImageIO 提前长期持有所有已解码帧。
         let info: [String: Any] = [
-            kCGImageSourceShouldCache as String: true,
+            kCGImageSourceShouldCache as String: false,
+            kCGImageSourceShouldCacheImmediately as String: false,
             kCGImageSourceTypeIdentifierHint as String: UTType.gif
         ]
 
@@ -1057,16 +1060,27 @@ public extension PTPOP where Base: UIImage {
         for i in 0..<frameCount {
             let index = Int(floor(CGFloat(i) * ratio))
 
-            guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, index, info as CFDictionary) else {
-                return nil
+            let frameImage: UIImage? = autoreleasepool {
+                guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, index, info as CFDictionary) else {
+                    return nil
+                }
+
+                // Get current animated GIF frame duration
+                // Obtiene la duración actual del fotograma GIF animado.
+                // 获取当前 GIF 动画帧的显示时长。
+                let currFrameDuration = getFrameDuration(from: imageSource, at: index) * min(ratio, 3)
+                // Second to ms
+                // Convierte los segundos a milisegundos.
+                // 将秒转换为毫秒。
+                frameDuration.append(Int(currFrameDuration * 1000))
+
+                return UIImage(cgImage: imageRef, scale: 1, orientation: .up)
             }
 
-            // Get current animated GIF frame duration
-            let currFrameDuration = getFrameDuration(from: imageSource, at: index) * min(ratio, 3)
-            // Second to ms
-            frameDuration.append(Int(currFrameDuration * 1000))
-
-            images.append(UIImage(cgImage: imageRef, scale: 1, orientation: .up))
+            guard let frameImage else {
+                return nil
+            }
+            images.append(frameImage)
         }
         var sum = 0
         for val in frameDuration {
