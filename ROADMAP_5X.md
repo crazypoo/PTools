@@ -75,10 +75,18 @@
 
 ## 5.3.0：Base 与列表基础设施
 
-- ⬜ 治理 `PTBaseViewController`、`PTBaseNavControl`、`PTBaseTabBarViewController` 的导航、生命周期、状态栏、空状态和页面辅助职责。
-- ⬜ 治理 `PTCollectionView` 的 Diffable snapshot、布局、预取、分页、骨架和增量刷新，保证 stable ID。
-- ⬜ 统一 `PTFusionCell`、`PTFusionCellModel`、复用视图、Cell option、装饰视图和列表辅助入口。
-- ⬜ 在保持公开 API 的前提下拆分大文件，补充列表性能和复用回归。
+- ✅ 治理 `PTBaseViewController`、`PTBaseNavControl`、`PTBaseTabBarViewController` 的导航、生命周期、状态栏、空状态和页面辅助职责。
+- ✅ 治理 `PTCollectionView` 的 Diffable snapshot、布局、预取、分页、骨架和增量刷新，保证 stable ID。
+- ✅ 统一 `PTFusionCell`、`PTFusionCellModel`、复用视图、Cell option、装饰视图和列表辅助入口。
+- ✅ 在保持公开 API 的前提下收敛现有 extension 职责，补充列表性能和复用保护；未新增风险性 PBX 文件。
+
+### 5.3.0 实施与验证说明
+
+- ✅ 导航栏容器现在让紧凑导航栏和大标题区域共用同一套 solid、gradient、transparent 样式；`PTTestChatViewController` 的白色大标题背景不再透明。系统导航栏同步设置大标题字体和文字颜色。
+- ✅ `PTCollectionView` 统一 PhotoKit 预取与取消的资源映射，使用布局环境宽度适配 Tag 横竖屏变化，限制无效补充视图尺寸，并避免重复输出布局回退日志。
+- ✅ `PTFusionCellModel` 使用稳定存储的 Diffable 身份；Fusion Cell 复用清理、装饰视图 shadowPath 缓存和 `PTImageCell` 图片请求代际保护已统一，减少错误回写与重复布局。
+- ✅ 未删除或改名公开符号，未引入第三方依赖和测试 target；现有 Base extension 拆分继续复用，避免为拆分而扩大 `private` 状态可见性或修改工程文件。
+- ⛔ `PooTools-Example` Debug / Release 已执行完整 Xcode 构建，PooTools 源码均完成编译；最终模拟器链接被外部 `Pods/Bugly/Bugly.framework` 的真机产物阻断，因此不宣称完整 Xcode 验收通过，也不创建 5.3.0 tag。
 
 ## 5.4.0：图片、媒体与 Category 性能
 

@@ -12,6 +12,12 @@ import SnapKit
 @MainActor
 open class PTBaseDecorationView: UICollectionReusableView {
     public static let ID = "PTBaseDecorationView"
+
+    // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass.
+    // Español: Guarda la geometría de la sombra para no reconstruir la ruta en cada pasada de diseño.
+    // 中文：缓存阴影几何信息，避免每次布局都重复创建路径。
+    private var shadowPathBounds: CGRect?
+    private var shadowPathCornerRadius: CGFloat?
     
     // 背景容器，方便加圆角和裁切
     public lazy var bgView: UIView = {
@@ -82,11 +88,17 @@ open class PTBaseDecorationView: UICollectionReusableView {
         bgImageView.image = nil
         layer.shadowOpacity = 0.08
         layer.shadowPath = nil
+        shadowPathBounds = nil
+        shadowPathCornerRadius = nil
     }
 
     open override func layoutSubviews() {
         super.layoutSubviews()
-        layer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                        cornerRadius: bgView.layer.cornerRadius).cgPath
+        let cornerRadius = bgView.layer.cornerRadius
+        guard shadowPathBounds != bounds || shadowPathCornerRadius != cornerRadius else { return }
+
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
+        shadowPathBounds = bounds
+        shadowPathCornerRadius = cornerRadius
     }
 }

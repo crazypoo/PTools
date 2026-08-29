@@ -403,6 +403,16 @@ extension PTBaseTabBarViewController {
         // 🌟 修复点 2：双重保险的透明度
         let targetAlpha: CGFloat = hidden ? 0 : 1
 
+        // English: Skip a completed state transition to avoid redundant animations during repeated lifecycle callbacks.
+        // Español: Omite una transición ya completada para evitar animaciones redundantes durante callbacks repetidos del ciclo de vida.
+        // 中文：生命周期回调重复触发且状态已完成时，跳过多余动画。
+        let isAlreadyApplied = hidden
+            ? (ptCustomBar.isHidden && ptCustomBar.alpha <= 0.001)
+            : (!ptCustomBar.isHidden && ptCustomBar.alpha >= 0.999 && ptCustomBar.transform == .identity)
+        if isAlreadyApplied {
+            return
+        }
+
         let updateState = {
             self.ptCustomBar.transform = transform
             self.ptCustomBar.alpha = targetAlpha

@@ -111,17 +111,9 @@ open class PTNavigationBarContainer: UIView {
     public func apply(style: PTNavigationBarStyle) {
         backgroundView.alpha = 1.0
         largeTitleContainer.alpha = 1.0
-//        switch style {
-//        case .gradient(let type, let colors):
-//            backgroundView.backgroundGradient(type: type, colors: colors)
-//            largeTitleContainer.backgroundGradient(type: type, colors: colors)
-//        case .solid(let color):
-//            backgroundView.backgroundColor = color
-//            largeTitleContainer.backgroundColor = color
-//        case .transparent:
-//            backgroundView.backgroundColor = .clear
-//            largeTitleContainer.backgroundColor = .clear
-//        }
+        fromStyle = style
+        toStyle = style
+        updateTransition(progress: 1)
     }
     
     public override func layoutSubviews() {
@@ -131,12 +123,11 @@ open class PTNavigationBarContainer: UIView {
 
 extension PTNavigationBarContainer {
     func updateLargeTitle(progress: CGFloat) {
-        let p = min(1, max(0, progress))
         // 大标题高度收缩
         let maxHeight: CGFloat = largeTitleHeight
         // ===== 1. Stretch（下拉放大）=====
-        if p < 0 {
-            let stretch = abs(p)
+        if progress < 0 {
+            let stretch = abs(progress)
             let height = maxHeight + stretch * 40   // 拉伸幅度
             
             largeTitleContainer.snp.updateConstraints { make in
@@ -153,6 +144,8 @@ extension PTNavigationBarContainer {
             
             return
         }
+
+        let p = min(1, max(0, progress))
         
         // ===== 正常收缩 =====
         let height = maxHeight * (1 - p)
@@ -185,14 +178,18 @@ extension PTNavigationBarContainer {
         self.fromStyle = from
         self.toStyle = to
         
-        // 先应用 from
-        apply(style: from)
+        // English: Render the starting state without replacing the from/to pair.
+        // Español: Renderiza el estado inicial sin reemplazar el par from/to.
+        // 中文：渲染起始状态，但不要覆盖当前的 from/to 样式对。
+        updateTransition(progress: 0)
     }
 
     /// 核心：根据 progress 渐变
     func updateTransition(progress: CGFloat) {
-        guard let from = fromStyle, let to = toStyle,let nav = PTNavigationBarManager.shared.currentNav else { return }
+        guard let from = fromStyle, let to = toStyle else { return }
         let progress = min(max(progress, 0), 1)
+        let nav = PTNavigationBarManager.shared.currentNav
+        let navigationBarSize = nav?.navigationBar.bounds.size ?? bounds.size
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
@@ -212,7 +209,7 @@ extension PTNavigationBarContainer {
             appearance.backgroundColor = .clear
             appearance.backgroundImage = UIImage()
         case let (.gradient(type1, colors1),.gradient(type2, colors2)):// MARK: - Gradient -> Gradient
-            let image = makeTransitionGradientImage(fromType: type1, fromColors: colors1, toType: type2, toColors: colors2, boundsSize:nav.navigationBar.bounds.size, progress: progress)
+            let image = makeTransitionGradientImage(fromType: type1, fromColors: colors1, toType: type2, toColors: colors2, boundsSize: navigationBarSize, progress: progress)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.gradient(type, colors), .solid(color)):// MARK: - Gradient -> Solid
@@ -221,7 +218,7 @@ extension PTNavigationBarContainer {
                 $0.interpolate(to: color, progress: progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let ( .solid(color), .gradient(type, colors)):// MARK: - Solid -> Gradient
@@ -230,7 +227,7 @@ extension PTNavigationBarContainer {
                 color.interpolate(to: $0, progress: progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.gradient(type, colors), .transparent):// MARK: - Gradient -> Transparent
@@ -238,7 +235,7 @@ extension PTNavigationBarContainer {
                 $0.withAlphaComponent(1 - progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.transparent, .gradient(type, colors)):// MARK: - Transparent -> Gradient
@@ -246,10 +243,32 @@ extension PTNavigationBarContainer {
                 $0.withAlphaComponent(progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: nav.navigationBar.bounds.size, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         }
+
+        appearance.shadowColor = .clear
+        appearance.shadowImage = UIImage()
+        appearance.titleTextAttributes = [
+            .font: PTAppBaseConfig.share.navTitleFont,
+            .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
+        ]
+        appearance.largeTitleTextAttributes = [
+            .font: PTAppBaseConfig.share.navLargeTitleFont,
+            .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
+        ]
+
+        // English: Mirror the transition result on the custom navigation surfaces.
+        // Español: Refleja el resultado de la transición en las superficies de navegación personalizadas.
+        // 中文：将转场结果同步到自定义导航栏和大标题背景层。
+        [backgroundView, largeTitleContainer].forEach { surface in
+            surface.backgroundColor = appearance.backgroundColor
+            surface.layer.contentsGravity = .resize
+            surface.layer.contents = appearance.backgroundImage?.cgImage
+        }
+
+        guard let nav else { return }
         
         nav.navigationBar.compactScrollEdgeAppearance = appearance
         nav.navigationBar.standardAppearance = appearance

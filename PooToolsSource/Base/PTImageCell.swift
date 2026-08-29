@@ -33,6 +33,7 @@ open class PTImageCell: PTBaseNormalCell {
     private let effect = UIBlurEffect(style: .light)
     private let effectView = UIVisualEffectView(effect: nil)
     private var animator: UIViewPropertyAnimator?
+    private var imageLoadGeneration = 0
     
     public lazy var imageView:UIImageView = {
         let view = UIImageView()
@@ -59,9 +60,19 @@ open class PTImageCell: PTBaseNormalCell {
             make.edges.equalToSuperview()
         }
         effectView.isHidden = true
+
+        // English: Keep the loading animation synchronized with the accessibility motion setting.
+        // Español: Mantiene la animación de carga sincronizada con la configuración de movimiento de accesibilidad.
+        // 中文：让加载动画始终与辅助功能的减弱动态效果设置保持同步。
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reduceMotionStatusDidChange),
+                                               name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                               object: nil)
     }
 
     private func configureImage(_ value: Any?) {
+        imageLoadGeneration &+= 1
+        let generation = imageLoadGeneration
         imageView.cancelImageLoad()
         imageView.image = nil
 
@@ -77,9 +88,23 @@ open class PTImageCell: PTBaseNormalCell {
         }
 
         imageView.loadImage(contentData: value, loadFinish: { [weak self] _ in
-            guard let self, self.showAnimator else { return }
+            guard let self,
+                  self.showAnimator,
+                  self.imageLoadGeneration == generation else { return }
             self.removeAnimator()
         })
+    }
+
+    @objc private func reduceMotionStatusDidChange() {
+        if UIAccessibility.isReduceMotionEnabled {
+            removeAnimator()
+        } else if showAnimator, imageData != nil {
+            resetAnimator()
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     public override func prepareForReuse() {

@@ -139,6 +139,10 @@ public final class PTNavigationBarManager:NSObject {
             .font: PTAppBaseConfig.share.navTitleFont,
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
+        appearance.largeTitleTextAttributes = [
+            .font: PTAppBaseConfig.share.navLargeTitleFont,
+            .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
+        ]
         
         nav.navigationBar.compactScrollEdgeAppearance = appearance
         nav.navigationBar.standardAppearance = appearance

@@ -257,10 +257,10 @@ open class PTFusionCellModel: NSObject {
 
 extension PTFusionCellModel: @MainActor PTDiffableModel {
 
+    // English: Diffable identity must not change when the cell reuse identifier changes.
+    // Español: La identidad de Diffable no debe cambiar cuando cambia el identificador de reutilización.
+    // 中文：Diffable 身份不能因为 Cell 复用标识变化而变化。
     public var diffId: String {
-        if let cellID, !cellID.isEmpty {
-            return cellID
-        }
         return storedDiffIdentifier
     }
 

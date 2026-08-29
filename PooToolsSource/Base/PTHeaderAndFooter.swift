@@ -78,7 +78,6 @@ public class PTFusionHeader: PTBaseCollectionReusableView,@MainActor PTSupplemen
         moreActionBlock = nil
         switchValue = nil
         sectionModel = nil
-        dataContent.resetForReuse()
     }
 }
 

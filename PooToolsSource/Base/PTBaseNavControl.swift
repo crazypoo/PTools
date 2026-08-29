@@ -115,8 +115,17 @@ extension PTBaseNavControl {
         
         let images = UIColor.clear.createImageWithColor()
         let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        navigationBarAppearance.backgroundEffect = nil
         navigationBarAppearance.backgroundColor = colors
         navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
+        // English: Keep UIKit large-title text styling aligned with the custom navigation container.
+        // Español: Mantiene el estilo del título grande de UIKit alineado con el contenedor de navegación personalizado.
+        // 中文：让 UIKit 原生大标题文字样式与自定义导航容器保持一致。
+        navigationBarAppearance.largeTitleTextAttributes = [
+            .foregroundColor: textColors,
+            .font: PTAppBaseConfig.share.navLargeTitleFont
+        ]
         navigationBarAppearance.shadowImage = images
         navigationBarAppearance.setBackIndicatorImage(colors.createImageWithColor(), transitionMaskImage: colors.createImageWithColor())
         nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance

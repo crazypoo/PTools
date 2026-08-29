@@ -279,6 +279,7 @@ public class PTCollectionView: UIView {
     private var layoutCache =  PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection>(countLimit: 100)
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
+    private var didReportFallbackLayout = false
     
     fileprivate lazy var collectionView : PTBaseCollectionView = {
         var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
@@ -1056,24 +1057,46 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
 //MARK: For Photos
 extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        guard viewConfig.viewForPhoto, !photoAssets.isEmpty else { return }
-        let assets = indexPaths.compactMap { idx -> PHAsset? in
-            let item = idx.item
-            return (item >= 0 && item < photoAssets.count) ? photoAssets[item] : nil
-        }
+        let assets = photoAssets(for: indexPaths)
         if !assets.isEmpty {
-            imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+            imageManager.startCachingImages(for: assets, targetSize: viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
         }
     }
         
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        guard viewConfig.viewForPhoto, !photoAssets.isEmpty else { return }
-        let assets = indexPaths.compactMap { idx -> PHAsset? in
-            let item = idx.item
-            return (item >= 0 && item < photoAssets.count) ? photoAssets[item] : nil
-        }
+        let assets = photoAssets(for: indexPaths)
         if !assets.isEmpty {
-            imageManager.stopCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+            imageManager.stopCachingImages(for: assets, targetSize: viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        }
+    }
+}
+
+private extension PTCollectionView {
+    func photoAssets(for indexPaths: [IndexPath]) -> [PHAsset] {
+        guard let config = viewConfig,
+              config.viewForPhoto,
+              !photoAssets.isEmpty else { return [] }
+
+        let dataSource = diffableDataSource
+        let snapshot = dataSource?.snapshot()
+        var identifiers = Set<String>()
+
+        return indexPaths.compactMap { indexPath in
+            let fallbackIndex = indexPath.item
+            let snapshotIndex: Int?
+            if let dataSource,
+               let row = dataSource.itemIdentifier(for: indexPath) {
+                snapshotIndex = snapshot?.indexOfItem(row)
+            } else {
+                snapshotIndex = nil
+            }
+
+            let assetIndex = snapshotIndex ?? fallbackIndex
+            guard photoAssets.indices.contains(assetIndex) else { return nil }
+
+            let asset = photoAssets[assetIndex]
+            guard identifiers.insert(asset.localIdentifier).inserted else { return nil }
+            return asset
         }
     }
 }
@@ -1759,9 +1782,12 @@ extension PTCollectionView {
         case .Tag:
             let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
             if let tags = tagDatas as? [PTTagLayoutModel] {
+                // English: Use the layout environment width so tags recalculate after rotation or split view changes.
+                // Español: Usa el ancho del entorno de diseño para recalcular las etiquetas tras rotación o cambios de Split View.
+                // 中文：使用布局环境宽度，确保旋转或分屏尺寸变化后标签重新计算。
                 group = UICollectionView.tagShowLayout(
                     data: tags,
-                    screenWidth: self.frame.width,
+                    screenWidth: screenWidth,
                     itemOriginalX: viewConfig.itemOriginalX,
                     itemHeight: viewConfig.itemHeight,
                     topContentSpace: viewConfig.contentTopSpace,
@@ -1850,7 +1876,13 @@ extension PTCollectionView {
     }
     
     private func oneSquareGroup() -> NSCollectionLayoutGroup {
-        PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
+        if !didReportFallbackLayout {
+            didReportFallbackLayout = true
+            // English: Report the fallback once to avoid logging during every layout pass.
+            // Español: Informa del fallback una sola vez para evitar registros en cada pasada de diseño.
+            // 中文：只记录一次兜底布局，避免每次布局都重复输出日志。
+            PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
+        }
         let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
         return NSCollectionLayoutGroup(layoutSize: size)
     }
@@ -1859,8 +1891,9 @@ extension PTCollectionView {
         var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
         
         if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
+            let headerWidth = max(1, screenWidth - viewConfig.headerWidthOffset - sectionWidth)
             let headerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth),
+                widthDimension: .absolute(headerWidth),
                 heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
             )
             
@@ -1876,8 +1909,9 @@ extension PTCollectionView {
         }
         
         if !(sectionModel.footerReuseID ?? "").stringIsEmpty() {
+            let footerWidth = max(1, screenWidth - viewConfig.footerWidthOffset - sectionWidth)
             let footerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth),
+                widthDimension: .absolute(footerWidth),
                 heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
             )
 

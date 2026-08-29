@@ -509,6 +509,16 @@ extension PTFusionCellProtocol {
             dataContent.resetForReuse()
         }
     }
+
+    // English: Keep reuse cleanup identical for normal and swipe Fusion cells.
+    // Español: Mantiene idéntica la limpieza de reutilización para las celdas Fusion normales y deslizables.
+    // 中文：统一普通 Fusion Cell 与滑动 Fusion Cell 的复用清理逻辑。
+    func resetFusionStateForReuse() {
+        switchValueChangeBlock = nil
+        moreActionBlock = nil
+        switchValue = nil
+        cellModel = nil
+    }
 }
 
 @objcMembers
@@ -540,10 +550,7 @@ open class PTFusionCell: PTBaseNormalCell, PTFusionCellProtocol {
 
     public override func prepareForReuse() {
         super.prepareForReuse()
-        switchValueChangeBlock = nil
-        moreActionBlock = nil
-        switchValue = nil
-        cellModel = nil
+        resetFusionStateForReuse()
     }
 }
 
@@ -576,10 +583,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell, PTFusionCellProtocol {
 
     public override func prepareForReuse() {
         super.prepareForReuse()
-        switchValueChangeBlock = nil
-        moreActionBlock = nil
-        switchValue = nil
-        cellModel = nil
+        resetFusionStateForReuse()
     }
 }
 
