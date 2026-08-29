@@ -11,6 +11,7 @@ import UIKit
 public typealias FillPageControlBlock = (_ sender: PTFilledPageControl) -> Void
 
 @objcMembers
+@MainActor
 open class PTFilledPageControl: PTBasePageControl {
     
     // MARK: - Internal Visual State
@@ -26,7 +27,8 @@ open class PTFilledPageControl: PTBasePageControl {
     
     override open var tintColor: UIColor! {
         didSet {
-            inactiveLayers.forEach { $0.backgroundColor = tintColor.cgColor }
+            let color = tintColor ?? inactiveTint
+            inactiveLayers.forEach { $0.backgroundColor = color.cgColor }
         }
     }
     
@@ -38,17 +40,7 @@ open class PTFilledPageControl: PTBasePageControl {
     
     fileprivate var inactiveLayers = [CALayer]()
     
-    // MARK: - Animation Engine
-    private var displayLink: CADisplayLink?
-    private var startProgress: CGFloat = 0
-    private var targetProgress: CGFloat = 0
-    private var progressStartTime: CFTimeInterval = 0
-    private let animDuration: CFTimeInterval = 0.3 // 填充与镂空的过渡时间
-    private var isAnimating: Bool { return displayLink != nil }
-    
-    // MARK: - Deinit
-    
-    deinit { }
+    override open var progressAnimationDuration: CFTimeInterval { 0.3 }
     
     // MARK: - 重写基类的模板方法
     
@@ -67,6 +59,9 @@ open class PTFilledPageControl: PTBasePageControl {
         inactiveLayers = (0..<count).map { _ in
             let layer = CALayer()
             layer.backgroundColor = tintColor?.cgColor ?? UIColor.white.cgColor
+            let mask = CAShapeLayer()
+            mask.fillRule = .evenOdd
+            layer.mask = mask
             self.layer.addSublayer(layer)
             return layer
         }
@@ -76,15 +71,7 @@ open class PTFilledPageControl: PTBasePageControl {
     }
     
     override open func updateProgress(_ safeProgress: CGFloat) {
-        // 🚀 数据与视觉分离，防止外部强行打断动画时发生冲突
-        if isAnimating {
-            if safeProgress != targetProgress {
-                stopDisplayLink()
-                visualProgress = safeProgress
-            }
-        } else {
-            visualProgress = safeProgress
-        }
+        visualProgress = safeProgress
     }
     
     override open func updateLayout() {
@@ -98,7 +85,8 @@ open class PTFilledPageControl: PTBasePageControl {
         guard pageCount > 0 else { return }
         let safeProgress = max(0, min(currentProgress, CGFloat(pageCount - 1)))
         
-        let insetRect = CGRect(x: 0, y: 0, width: indicatorDiameter, height: indicatorDiameter).insetBy(dx: inactiveRingWidth, dy: inactiveRingWidth)
+        let ringWidth = max(0, min(inactiveRingWidth.isFinite ? inactiveRingWidth : 0, indicatorRadius))
+        let insetRect = CGRect(x: 0, y: 0, width: indicatorDiameter, height: indicatorDiameter).insetBy(dx: ringWidth, dy: ringWidth)
         let leftPageFloat = trunc(safeProgress)
         let leftPageInt = Int(safeProgress)
         
@@ -111,8 +99,7 @@ open class PTFilledPageControl: PTBasePageControl {
         let closestLeftInsetRect = insetRect.insetBy(dx: additionalSpaceToInsetLeft, dy: additionalSpaceToInsetLeft)
         
         for (idx, layer) in inactiveLayers.enumerated() {
-            let maskLayer = CAShapeLayer()
-            maskLayer.fillRule = .evenOdd
+            guard let maskLayer = layer.mask as? CAShapeLayer else { continue }
             
             let boundsPath = UIBezierPath(rect: layer.bounds)
             let circlePath: UIBezierPath
@@ -176,60 +163,6 @@ open class PTFilledPageControl: PTBasePageControl {
                height: indicatorDiameter)
     }
     
-    // MARK: - 🚀 Animation Engine Methods
-    
-    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
-        guard pageCount > 0 else { return }
-        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
-        
-        if animated {
-            startProgress = self.visualProgress
-            targetProgress = safeProgress
-            progressStartTime = CACurrentMediaTime()
-            
-            startDisplayLink()
-            
-            // 数据层瞬间更新，确保外部回调拿到的值完全正确
-            self.progress = safeProgress
-        } else {
-            stopDisplayLink()
-            self.progress = safeProgress
-        }
-    }
-    
-    private func startDisplayLink() {
-        stopDisplayLink()
-        let proxy = DisplayLinkProxy(target: self)
-        displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.update))
-        displayLink?.add(to: .main, forMode: .common)
-    }
-    
-    private func stopDisplayLink() {
-        displayLink?.invalidate()
-        displayLink = nil
-    }
-    
-    @objc fileprivate func updateDisplayLink() {
-        let elapsed = CACurrentMediaTime() - progressStartTime
-        var percent = CGFloat(elapsed / animDuration)
-        
-        if percent >= 1.0 {
-            percent = 1.0
-            stopDisplayLink()
-        }
-        
-        // Ease-In-Out 缓动算法，使呼吸感更加平滑自然
-        let easePercent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent
-        visualProgress = startProgress + (targetProgress - startProgress) * easePercent
-    }
-    
-    private class DisplayLinkProxy {
-        weak var target: PTFilledPageControl?
-        init(target: PTFilledPageControl) { self.target = target }
-        @MainActor @objc func update() {
-            self.target?.updateDisplayLink()
-        }
-    }
 }
 
 public extension PTFilledPageControl {

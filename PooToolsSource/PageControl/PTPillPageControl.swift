@@ -11,6 +11,7 @@ import UIKit
 public typealias PillPageControlBlock = (_ sender: PTPillPageControl) -> Void
 
 @objcMembers
+@MainActor
 open class PTPillPageControl: PTBasePageControl {
     
     // MARK: - Internal Visual State
@@ -26,6 +27,11 @@ open class PTPillPageControl: PTBasePageControl {
     
     open var pillSize: CGSize = CGSize(width: 20, height: 2.5) {
         didSet {
+            guard pillSize.width.isFinite, pillSize.height.isFinite,
+                  pillSize.width >= 0, pillSize.height >= 0 else {
+                pillSize = oldValue
+                return
+            }
             activeLayer.frame.size = pillSize
             activeLayer.cornerRadius = pillSize.height / 2
             updateLayout()
@@ -44,17 +50,7 @@ open class PTPillPageControl: PTBasePageControl {
         return layer
     }()
     
-    // MARK: - Animation Engine
-    private var displayLink: CADisplayLink?
-    private var startProgress: CGFloat = 0
-    private var targetProgress: CGFloat = 0
-    private var progressStartTime: CFTimeInterval = 0
-    private let animDuration: CFTimeInterval = 0.3 // 平滑滑动的时间
-    private var isAnimating: Bool { return displayLink != nil }
-    
-    // MARK: - Deinit
-    
-    deinit { }
+    override open var progressAnimationDuration: CFTimeInterval { 0.3 }
     
     // MARK: - 重写基类模板方法
     
@@ -89,15 +85,7 @@ open class PTPillPageControl: PTBasePageControl {
     }
     
     override open func updateProgress(_ safeProgress: CGFloat) {
-        // 🚀 数据与视觉分离：外部介入打断时停止内部定时器
-        if isAnimating {
-            if safeProgress != targetProgress {
-                stopDisplayLink()
-                visualProgress = safeProgress
-            }
-        } else {
-            visualProgress = safeProgress
-        }
+        visualProgress = safeProgress
     }
     
     override open func updateLayout() {
@@ -165,63 +153,6 @@ open class PTPillPageControl: PTBasePageControl {
         }
     }
     
-    // MARK: - 🚀 Animation Engine Methods
-    
-    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
-        guard pageCount > 0 else { return }
-        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
-        
-        if animated {
-            startProgress = self.visualProgress
-            targetProgress = safeProgress
-            progressStartTime = CACurrentMediaTime()
-            
-            startDisplayLink()
-            
-            // 对外数据瞬间到位，保证外部回调获取正确的值
-            self.progress = safeProgress
-        } else {
-            stopDisplayLink()
-            self.progress = safeProgress
-        }
-    }
-    
-    private func startDisplayLink() {
-        stopDisplayLink()
-        let proxy = DisplayLinkProxy(target: self)
-        displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.update))
-        displayLink?.add(to: .main, forMode: .common)
-    }
-    
-    private func stopDisplayLink() {
-        displayLink?.invalidate()
-        displayLink = nil
-    }
-    
-    @objc fileprivate func updateDisplayLink() {
-        let elapsed = CACurrentMediaTime() - progressStartTime
-        var percent = CGFloat(elapsed / animDuration)
-        
-        if percent >= 1.0 {
-            percent = 1.0
-            stopDisplayLink()
-        }
-        
-        // 缓动函数 (Ease-In-Out)
-        let easePercent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent
-        // 驱动视觉进度，产生平滑移动
-        visualProgress = startProgress + (targetProgress - startProgress) * easePercent
-    }
-    
-    private class DisplayLinkProxy {
-        weak var target: PTPillPageControl?
-        init(target: PTPillPageControl) {
-            self.target = target
-        }
-        @MainActor @objc func update() {
-            target?.updateDisplayLink()
-        }
-    }
 }
 
 public extension PTPillPageControl {

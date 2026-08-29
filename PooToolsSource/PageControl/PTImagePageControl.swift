@@ -12,21 +12,38 @@ import Foundation
 public typealias ImagePageControlBlock = (_ sender: PTImagePageControl) -> Void
 
 @objcMembers
+@MainActor
 open class PTImagePageControl: PTBasePageControl {
     
     private var previousPage: Int = 0
+    private var contentGeneration: UInt = 0
     
     // MARK: - Appearance (Dot 图片属性)
     
     public var currentPageImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive") {
-        didSet { updateDots() }
+        didSet {
+            contentGeneration &+= 1
+            updateDots(at: currentPage)
+        }
     }
     public var pageImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive") {
-        didSet { updateDots() }
+        didSet {
+            contentGeneration &+= 1
+            updateDots()
+        }
     }
-    
+
     public var dotBaseSize: CGSize = CGSize(width: 8, height: 4) {
-        didSet { updateLayout() }
+        didSet {
+            guard dotBaseSize.width.isFinite,
+                  dotBaseSize.height.isFinite,
+                  dotBaseSize.width >= 0,
+                  dotBaseSize.height >= 0 else {
+                dotBaseSize = oldValue
+                return
+            }
+            updateLayout()
+        }
     }
 
     private var dots: [UIImageView] = []
@@ -35,9 +52,12 @@ open class PTImagePageControl: PTBasePageControl {
     // MARK: - 重写基类模板方法
     
     override open func updateNumberOfPages(_ count: Int) {
+        contentGeneration &+= 1
+        let generation = contentGeneration
         dots.forEach { $0.removeFromSuperview() }
         dots.removeAll()
         dotSizes.removeAll()
+        previousPage = 0
 
         guard count > 0 else {
             updateLayout()
@@ -50,20 +70,26 @@ open class PTImagePageControl: PTBasePageControl {
             
             dotSizes.append(dotBaseSize)
             
-            dot.loadImage(contentData: pageImage, loadFinish: { [weak self] value in
-                guard let self = self else { return }
-                if let imageSize = value.firstImage?.size {
-                    self.dotSizes[i] = imageSize
-                    self.updateLayout()
-                }
-            })
-            
             if let image = pageImage as? UIImage {
                 dotSizes[i] = image.size
             }
             
             addSubview(dot)
             dots.append(dot)
+
+            dot.loadImage(contentData: pageImage, loadFinish: { [weak self] value in
+                guard let self = self else { return }
+                guard self.contentGeneration == generation,
+                      self.dots.indices.contains(i),
+                      self.dots[i] === dot,
+                      let imageSize = value.firstImage?.size,
+                      imageSize.width.isFinite,
+                      imageSize.height.isFinite,
+                      imageSize.width > 0,
+                      imageSize.height > 0 else { return }
+                self.dotSizes[i] = imageSize
+                self.updateLayout()
+            })
         }
 
         updateDots()
@@ -73,8 +99,10 @@ open class PTImagePageControl: PTBasePageControl {
         let newPage = Int(round(safeProgress))
         
         if newPage != previousPage {
+            let oldPage = previousPage
             previousPage = newPage
-            updateDots()
+            updateDots(at: oldPage)
+            updateDots(at: newPage)
         }
     }
     
@@ -95,29 +123,53 @@ open class PTImagePageControl: PTBasePageControl {
 
     // MARK: - 私有方法
     
-    private func updateDots() {
+    private func updateDots(at page: Int? = nil) {
         guard dots.count == pageCount else { return }
-        
-        for (index, dot) in dots.enumerated() {
-            let isCurrent = (index == currentPage)
-            let imgData = isCurrent ? currentPageImage : pageImage
-            
-            // 使用 UIView 原生过渡动画来实现图片的柔和交叉溶解（Cross Dissolve）
-            UIView.transition(with: dot, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(), loadFinish: { [weak self = self] value in
-                    guard let self = self else { return }
-                    if let imageSize = value.firstImage?.size {
-                        self.dotSizes[index] = imageSize
-                        self.updateLayout()
-                    }
-                })
-            }, completion: nil)
-            
-            if let imageData = imgData as? UIImage {
-                self.dotSizes[index] = imageData.size
+        if let page {
+            updateDot(at: page)
+        } else {
+            for index in dots.indices {
+                updateDot(at: index)
             }
         }
         updateLayout()
+    }
+
+    /// English: Update only the dot whose visual state changed and ignore stale image callbacks.
+    /// Español: Actualiza solo el punto cuyo estado visual cambió e ignora callbacks de imágenes obsoletos.
+    /// 中文：只更新视觉状态发生变化的圆点，并忽略过期的图片回调。
+    private func updateDot(at index: Int) {
+        guard dots.indices.contains(index) else { return }
+        let dot = dots[index]
+        let imageData = index == currentPage ? currentPageImage : pageImage
+        let generation = contentGeneration
+
+        if let image = imageData as? UIImage,
+           image.size.width.isFinite, image.size.height.isFinite,
+           image.size.width > 0, image.size.height > 0 {
+            dotSizes[index] = image.size
+        }
+
+        UIView.transition(with: dot,
+                          duration: UIAccessibility.isReduceMotionEnabled ? 0 : 0.25,
+                          options: [.transitionCrossDissolve, .beginFromCurrentState, .allowAnimatedContent]) {
+            dot.loadImage(contentData: imageData,
+                          emptyImage: UIColor.clear.createImageWithColor(),
+                          loadFinish: { [weak self = self, weak dot = dot] value in
+                guard let self,
+                      let dot,
+                      self.contentGeneration == generation,
+                      self.dots.indices.contains(index),
+                      self.dots[index] === dot,
+                      let imageSize = value.firstImage?.size,
+                      imageSize.width.isFinite,
+                      imageSize.height.isFinite,
+                      imageSize.width > 0,
+                      imageSize.height > 0 else { return }
+                self.dotSizes[index] = imageSize
+                self.updateLayout()
+            })
+        }
     }
 
     // MARK: - 🚀 独有的高级交互点击 (Tap to Page)
@@ -153,20 +205,9 @@ open class PTImagePageControl: PTBasePageControl {
     
     // MARK: - 🚀 适用于 UIView 的原生动画引擎
     
-    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
+    override open func setProgress(_ newProgress: CGFloat, animated: Bool) {
         guard pageCount > 0 else { return }
-        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
-        
-        if animated {
-            // 利用 iOS 底层最强大的 UIView.animate
-            // 它会自动捕捉 Frame 的变化，并将长宽的拉伸和平移用 0.3 秒平滑过渡过去
-            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
-                self.progress = safeProgress
-                self.layoutIfNeeded() // 强制触发布局动画
-            }, completion: nil)
-        } else {
-            self.progress = safeProgress
-        }
+        super.setProgress(newProgress, animated: animated)
     }
 }
 

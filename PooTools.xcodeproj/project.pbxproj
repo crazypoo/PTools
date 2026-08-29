@@ -943,7 +943,6 @@
 		9A14E98728616B4000D7E8EF /* PTImagePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */; };
 		9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */; };
 		9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */; };
-		9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */; };
 		9A14E98C28616B4100D7E8EF /* PTPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */; };
 		9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */; };
 		9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */; };
@@ -1948,7 +1947,6 @@
 		9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImagePageControl.swift; sourceTree = "<group>"; };
 		9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSnakePageControl.swift; sourceTree = "<group>"; };
 		9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFilledPageControl.swift; sourceTree = "<group>"; };
-		9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCycleScrollViewCell.swift; sourceTree = "<group>"; };
 		9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPillPageControl.swift; sourceTree = "<group>"; };
 		9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+PTEX.swift"; sourceTree = "<group>"; };
 		9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float+PTEX.swift"; sourceTree = "<group>"; };
@@ -3797,7 +3795,6 @@
 			isa = PBXGroup;
 			children = (
 				9A14E97F28616B4000D7E8EF /* PTCycleScrollView.swift */,
-				9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */,
 				55F3C27B2F7A0CC00062D864 /* PTBannerModel.swift */,
 				55F3C27D2F7A0EAA0062D864 /* PTBannerCell.swift */,
 				55F3C27F2F7A0EFC0062D864 /* PTBannerMediaManager.swift */,
@@ -5083,7 +5080,6 @@
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				55C409962C08AB0B009C0FB6 /* PTInputBoxView.swift in Sources */,
 				55F163032B197C2600320925 /* PTCameraFilterConfig.swift in Sources */,
-				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				556CA4AB2B28F66200A5B189 /* VideoConverter.swift in Sources */,
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,

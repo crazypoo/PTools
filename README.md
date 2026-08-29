@@ -39,14 +39,17 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.5.0'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
 ```
 
 ### Swift 6 迁移要点
 
 - UI 配置、空状态和媒体保存回调在 `MainActor` 上执行。
+- ScrollBanner 新代码使用 `PTBannerView`；`PTCycleScrollView` 仍可使用，但已作为 deprecated
+  兼容入口转发到统一实现。
+- PageControl 的系统和自定义样式继续保留，进度更新、无障碍和 Reduce Motion 由统一基类处理。
 - 图片请求统一使用 `PTMediaLibManager.requestImage`；旧 `fetchImage` 入口继续兼容。
 - 媒体保存优先使用 `PTMediaSaveService.save(image:videoURL:completion:)`；旧保存入口保留并逐步弃用。
 - Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。

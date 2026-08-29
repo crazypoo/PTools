@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import SwifterSwift
 import SnapKit
 import AttributedString
@@ -25,14 +26,25 @@ public final class PTBannerScheduler {
     private var timer: DispatchSourceTimer?
 
     func add(_ banner: PTBannerView) {
+        let alreadyRegistered = banners.allObjects.contains { $0 === banner }
         banners.add(banner)
-        startIfNeeded()
+        if timer == nil {
+            startIfNeeded()
+        } else if !alreadyRegistered {
+            restartTimerIfNeeded()
+        }
     }
 
     func remove(_ banner: PTBannerView) {
+        let wasRegistered = banners.allObjects.contains { $0 === banner }
         banners.remove(banner)
+        guard wasRegistered else { return }
 
-        if banners.allObjects.isEmpty { stopTimer() }
+        if banners.allObjects.isEmpty {
+            stopTimer()
+        } else {
+            restartTimerIfNeeded()
+        }
     }
 
     private func startIfNeeded() {
@@ -57,7 +69,11 @@ public final class PTBannerScheduler {
         // Mantiene el intervalo finito y evita un bucle de temporizador demasiado intenso.
         // 保证计时间隔为有限值，避免形成高频空转。
         let candidate = autoScrollInterval.isFinite ? autoScrollInterval : 2
-        return min(max(candidate, 0.1), 86_400)
+        let bannerInterval = banners.allObjects
+            .filter(\.canScheduleAutoScroll)
+            .map(\.autoScrollSchedulingInterval)
+            .min() ?? candidate
+        return min(max(min(candidate, bannerInterval), 0.1), 86_400)
     }
 
     private func restartTimerIfNeeded() {
@@ -120,40 +136,95 @@ public class PTBannerConfiguration:NSObject {
     public var autoScroll = true
     public var infiniteLoop = true
     public var autoPlayMedia: Bool = false
+    /// English: An optional per-banner interval; nil inherits the shared scheduler interval.
+    /// Español: Un intervalo opcional por banner; nil hereda el intervalo del programador compartido.
+    /// 中文：可选的单个 Banner 轮播间隔；nil 时继承共享调度器间隔。
+    public var autoScrollInterval: TimeInterval?
+    /// English: Image used while a media item is unavailable or still loading.
+    /// Español: Imagen mostrada mientras el contenido multimedia no está disponible o sigue cargando.
+    /// 中文：媒体不可用或仍在加载时显示的占位图。
+    public var placeholderImage: UIImage?
+    /// English: Optional native arrow controls for legacy arrow-based banners.
+    /// Español: Controles de flecha nativos opcionales para banners heredados con flechas.
+    /// 中文：为旧箭头轮播提供的可选原生箭头控件。
+    public var showsNavigationButtons = false
+    public var previousButtonImage: UIImage?
+    public var nextButtonImage: UIImage?
+    /// English: Legacy remote-arrow loading options retained for compatibility.
+    /// Español: Opciones heredadas de carga de flechas remotas conservadas por compatibilidad.
+    /// 中文：为兼容旧版远程箭头资源而保留的加载配置。
+    public var iCloudDocumentName = ""
+    public var loadingProgressWidth: CGFloat = 1.5
+    public var loadingProgressColor: DynamicColor = .purple
+    /// English: Optional background image for title-only banners.
+    /// Español: Imagen de fondo opcional para banners que solo contienen texto.
+    /// 中文：纯文本 Banner 使用的可选背景图。
+    public var backgroundImage: UIImage?
+    public var showPlayButton = true
+    public var collectionViewBackgroundColor: UIColor = .clear
     /// pagecontrol的左右间距
     public var pageControlLeadingOrTrialingContact: CGFloat = 28
 }
 
+@MainActor
 public class PTBannerView: UIView {
-    
+
     public var bannerModel: [PTBannerModel] = [] {
         didSet {
-            if !bannerModel.isEmpty {
-                reloadBanner()
-            }
+            reloadBanner()
         }
     }
     public var didSelectIndex:PTCycleIndexClosure? = nil
+    public var scrollViewDidScrollClosure: PTScrollViewDidScrollClosure?
+    public var scrollFromClosure: PTCycleIndexClosure?
+    public var scrollToClosure: PTCycleIndexClosure?
+    public var playEndCallback: PTActionTask?
         
     private var isUserDragging = false
     private var isDecelerating = false
     
-    fileprivate var viewConfig:PTBannerConfiguration = PTBannerConfiguration()
+    internal var viewConfig:PTBannerConfiguration = PTBannerConfiguration()
     
     // MARK: CustomPageControl
-    fileprivate var pageControlHeight: CGFloat = 0
+    internal var pageControlHeight: CGFloat = 0
                 
     // MARK: - Private
     private var totalItemsCount = 0
-    private var timer: DispatchSourceTimer?
+    private var resumeTask: Task<Void, Never>?
+    private var lastAutoScrollDate: Date?
+    private var lastReportedPage = -1
+    private var lastLayoutSize: CGSize = .zero
+    private var reloadGeneration: UInt = 0
+    private var navigationButtonsInstalled = false
+    private var navigationButtonImageGeneration: UInt = 0
+    private var appliedNavigationButtonImageGeneration: UInt = 0
+    private var navigationButtonSources: (previous: Any?, next: Any?) = (nil, nil)
+    private var navigationButtonFrames: [CGRect]?
+    private var appliedNavigationButtonFrames: [CGRect]?
     
     fileprivate lazy var customPageControl: UIView = {
         return UIView()
     }()
+
+    private lazy var previousButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.addActionHandlers { [weak self] _ in
+            self?.scrollToPrevious()
+        }
+        return button
+    }()
+
+    private lazy var nextButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.addActionHandlers { [weak self] _ in
+            self?.scrollNext()
+        }
+        return button
+    }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let l = UICollectionViewFlowLayout()
-        l.scrollDirection = .horizontal
+        l.scrollDirection = viewConfig.scrollDirection ?? .horizontal
         l.minimumLineSpacing = 0
         return l
     }()
@@ -180,41 +251,295 @@ public class PTBannerView: UIView {
         view.numberOfLines = viewConfig.numberOfLines
         return view
     }()
-    
-    public init(viewConfig:PTBannerConfiguration = PTBannerConfiguration()) {
-        self.viewConfig = viewConfig
-        super.init(frame: .zero)
+
+    private func setupViewHierarchy() {
         addSubviews([collectionView,titleBackgroundView])
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        switch self.viewConfig.customPageControlStyle {
-        case .none,.system,.image:
-            pageControlHeight = 10
-        case .scrolling:
-            pageControlHeight = 20
-        default:
-            pageControlHeight = 10
-        }
 
+        updatePageControlHeight()
         titleBackgroundView.snp.makeConstraints { make in
-            make.height.equalTo(self.pageControlHeight + self.viewConfig.pageControlBottom * 2)
+            make.height.equalTo(pageControlHeight + viewConfig.pageControlBottom * 2)
             make.bottom.left.right.equalToSuperview()
         }
+        collectionView.backgroundColor = viewConfig.collectionViewBackgroundColor
+        setupNavigationButtonsIfNeeded()
+    }
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViewHierarchy()
+    }
+
+    public init(viewConfig:PTBannerConfiguration = PTBannerConfiguration()) {
+        self.viewConfig = viewConfig
+        super.init(frame: .zero)
+        setupViewHierarchy()
+    }
+
+    /// English: Exposes the canonical configuration to the compatibility adapter without exposing private state.
+    /// Español: Expone la configuración canónica al adaptador de compatibilidad sin exponer el estado privado.
+    /// 中文：向兼容适配器提供统一配置，但不暴露私有状态。
+    internal var bannerConfiguration: PTBannerConfiguration {
+        viewConfig
+    }
+
+    /// English: Applies a complete configuration and refreshes only the affected UI layers.
+    /// Español: Aplica una configuración completa y actualiza solo las capas de UI afectadas.
+    /// 中文：应用完整配置，并只刷新受影响的 UI 层。
+    internal func applyBannerConfiguration(_ configuration: PTBannerConfiguration) {
+        viewConfig = configuration
+        refreshBannerConfiguration()
+        reloadBanner()
+    }
+
+    internal func refreshBannerConfiguration() {
+        updatePageControlHeight()
+        layout.scrollDirection = effectiveScrollDirection
+        titleBackgroundView.backgroundColor = viewConfig.titleBackgroundColor
+        descTitleView.numberOfLines = viewConfig.numberOfLines
+        collectionView.backgroundColor = viewConfig.collectionViewBackgroundColor
+        titleBackgroundView.snp.updateConstraints { make in
+            make.height.equalTo(pageControlHeight + viewConfig.pageControlBottom * 2)
+        }
+        setupNavigationButtonsIfNeeded()
+        if !bannerModel.isEmpty {
+            setupPageControl()
+        }
+    }
+
+    /// English: Applies legacy button sources without exposing dynamic values in the canonical public configuration.
+    /// Español: Aplica fuentes heredadas de botones sin exponer valores dinámicos en la configuración pública canónica.
+    /// 中文：应用旧版按钮资源，但不把动态值暴露到统一的公开配置中。
+    internal func setNavigationButtonSources(previous: Any?, next: Any?) {
+        navigationButtonSources = (previous, next)
+        navigationButtonImageGeneration &+= 1
+        updateNavigationButtonFrames()
+    }
+
+    /// English: Keeps legacy arrow frames while using constraints for the canonical button hierarchy.
+    /// Español: Conserva los marcos heredados de las flechas y usa restricciones en la jerarquía canónica.
+    /// 中文：保留旧版箭头 frame，同时在统一按钮层级中使用约束。
+    internal func setNavigationButtonFrames(_ frames: [CGRect]?) {
+        navigationButtonFrames = frames
+        appliedNavigationButtonFrames = nil
+        updateNavigationButtonConstraintsIfNeeded()
     }
         
     public override func didMoveToWindow() {
         super.didMoveToWindow()
         if window != nil {
-            PTBannerScheduler.shared.add(self)
+            if canScheduleAutoScroll {
+                PTBannerScheduler.shared.add(self)
+            } else {
+                PTBannerScheduler.shared.remove(self)
+            }
         } else {
             PTBannerScheduler.shared.remove(self)
+            resumeTask?.cancel()
+            resumeTask = nil
+            PTBannerPlayerManager.shared.stopIfContainerBelongs(to: self)
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required public init?(coder: NSCoder) {
+        self.viewConfig = PTBannerConfiguration()
+        super.init(coder: coder)
+        setupViewHierarchy()
+    }
+
+    deinit {
+        resumeTask?.cancel()
+    }
+
+    fileprivate var canScheduleAutoScroll: Bool {
+        viewConfig.autoScroll && bannerModel.count > 1
+    }
+
+    fileprivate var autoScrollSchedulingInterval: TimeInterval {
+        let interval = viewConfig.autoScrollInterval ?? PTBannerScheduler.shared.autoScrollInterval
+        guard interval.isFinite else { return 2 }
+        return max(interval, 0.1)
+    }
+
+    private var effectiveScrollDirection: UICollectionView.ScrollDirection {
+        viewConfig.scrollDirection ?? .horizontal
+    }
+
+    private var currentPageExtent: CGFloat {
+        switch effectiveScrollDirection {
+        case .vertical:
+            return collectionView.bounds.height
+        default:
+            return collectionView.bounds.width
+        }
+    }
+
+    private var pageScrollPosition: UICollectionView.ScrollPosition {
+        switch effectiveScrollDirection {
+        case .vertical:
+            return .centeredVertically
+        default:
+            return .centeredHorizontally
+        }
+    }
+
+    private func updatePageControlHeight() {
+        pageControlHeight = viewConfig.customPageControlStyle == .scrolling ? 20 : 10
+    }
+
+    private func setupNavigationButtonsIfNeeded() {
+        guard !navigationButtonsInstalled else {
+            updateNavigationButtonFrames()
+            return
+        }
+
+        insertSubview(previousButton, aboveSubview: collectionView)
+        insertSubview(nextButton, aboveSubview: collectionView)
+        navigationButtonsInstalled = true
+        updateNavigationButtonConstraintsIfNeeded()
+        updateNavigationButtonFrames()
+    }
+
+    private func updateNavigationButtonFrames() {
+        let previousImage = viewConfig.previousButtonImage ?? (navigationButtonSources.previous as? UIImage)
+        let nextImage = viewConfig.nextButtonImage ?? (navigationButtonSources.next as? UIImage)
+        let hasDynamicPreviousImage = navigationButtonSources.previous != nil && previousImage == nil
+        let hasDynamicNextImage = navigationButtonSources.next != nil && nextImage == nil
+        if !hasDynamicPreviousImage || appliedNavigationButtonImageGeneration != navigationButtonImageGeneration {
+            previousButton.setImage(previousImage, for: .normal)
+        }
+        if !hasDynamicNextImage || appliedNavigationButtonImageGeneration != navigationButtonImageGeneration {
+            nextButton.setImage(nextImage, for: .normal)
+        }
+        if appliedNavigationButtonImageGeneration != navigationButtonImageGeneration {
+            appliedNavigationButtonImageGeneration = navigationButtonImageGeneration
+            previousButton.cancelImageLoad()
+            nextButton.cancelImageLoad()
+            loadNavigationButtonImage(source: navigationButtonSources.previous,
+                                      button: previousButton)
+            loadNavigationButtonImage(source: navigationButtonSources.next,
+                                      button: nextButton)
+        }
+        let visible = viewConfig.showsNavigationButtons && bannerModel.count > 1
+        previousButton.isHidden = !visible || (previousImage == nil && navigationButtonSources.previous == nil)
+        nextButton.isHidden = !visible || (nextImage == nil && navigationButtonSources.next == nil)
+    }
+
+    private func updateNavigationButtonConstraintsIfNeeded() {
+        guard navigationButtonsInstalled,
+              appliedNavigationButtonFrames != navigationButtonFrames else { return }
+        appliedNavigationButtonFrames = navigationButtonFrames
+
+        let previousFrame = navigationButtonFrames?.first.flatMap(validNavigationButtonFrame)
+        let nextFrame = navigationButtonFrames?.dropFirst().first.flatMap(validNavigationButtonFrame)
+        previousButton.snp.remakeConstraints { make in
+            if let previousFrame {
+                make.leading.equalToSuperview().offset(previousFrame.minX)
+                make.top.equalToSuperview().offset(previousFrame.minY)
+                make.size.equalTo(previousFrame.size)
+            } else {
+                make.leading.equalToSuperview().offset(8)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(CGSize(width: 36, height: 36))
+            }
+        }
+        nextButton.snp.remakeConstraints { make in
+            if let nextFrame {
+                make.leading.equalToSuperview().offset(nextFrame.minX)
+                make.top.equalToSuperview().offset(nextFrame.minY)
+                make.size.equalTo(nextFrame.size)
+            } else {
+                make.trailing.equalToSuperview().inset(8)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(CGSize(width: 36, height: 36))
+            }
+        }
+    }
+
+    private func validNavigationButtonFrame(_ frame: CGRect) -> CGRect? {
+        guard frame.origin.x.isFinite,
+              frame.origin.y.isFinite,
+              frame.size.width.isFinite,
+              frame.size.height.isFinite,
+              frame.size.width > 0,
+              frame.size.height > 0 else { return nil }
+        return frame
+    }
+
+    private func loadNavigationButtonImage(source: Any?, button: UIButton) {
+        guard let source,
+              !(source is UIImage) else { return }
+        let generation = navigationButtonImageGeneration
+        button.setImage(viewConfig.placeholderImage, for: .normal)
+        button.loadImage(contentData: source,
+                         iCloudDocumentName: viewConfig.iCloudDocumentName,
+                         borderWidth: viewConfig.loadingProgressWidth,
+                         borderColor: viewConfig.loadingProgressColor,
+                         emptyImage: viewConfig.placeholderImage,
+                         loadFinish: { [weak self, weak button] _ in
+            guard let self,
+                  button != nil,
+                  self.navigationButtonImageGeneration == generation else { return }
+        })
+    }
+
+    public func reloadData() {
+        reloadBanner()
+    }
+
+    public func startAutoScroll() {
+        guard window != nil, canScheduleAutoScroll else { return }
+        PTBannerScheduler.shared.add(self)
+    }
+
+    public func stopAutoScroll() {
+        PTBannerScheduler.shared.remove(self)
+    }
+
+    public func setupTimer() {
+        startAutoScroll()
+    }
+
+    public func invalidateTimer() {
+        stopAutoScroll()
+    }
+
+    public func currentIndex() -> NSInteger {
+        guard let index = currentVirtualIndex() else { return 0 }
+        return realIndex(index)
+    }
+
+    public func scrollToPage(index: Int, animated: Bool = true) {
+        guard bannerModel.indices.contains(index), totalItemsCount > 0 else { return }
+        let current = currentVirtualIndex() ?? 0
+        let target: Int
+        if viewConfig.infiniteLoop {
+            let currentReal = realIndex(current)
+            let candidate = current + (index - currentReal)
+            if candidate >= 0, candidate < totalItemsCount {
+                target = candidate
+            } else {
+                let middleBase = totalItemsCount / 2
+                target = middleBase - (middleBase % bannerModel.count) + index
+            }
+        } else {
+            target = index
+        }
+        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
+                                     at: pageScrollPosition,
+                                     animated: animated)
+    }
+
+    public func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard gestureRecognizer.view?.tag != nil else { return }
+        PTBannerScheduler.shared.remove(self)
+        if gestureRecognizer.view?.tag == 0 {
+            scrollToPrevious()
+        } else {
+            scrollNext()
+        }
     }
     
     private func resumeAfterScroll() {
@@ -224,17 +549,37 @@ public class PTBannerView: UIView {
             // 播放当前可见视频
             playVisibleVideo()
         }
-        PTBannerScheduler.shared.add(self)
+        if canScheduleAutoScroll {
+            PTBannerScheduler.shared.add(self)
+        }
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
         
+        let sizeChanged = lastLayoutSize != bounds.size
+        lastLayoutSize = bounds.size
+        layout.scrollDirection = effectiveScrollDirection
         layout.itemSize = bounds.size
-        collectionView.frame = bounds
+        if sizeChanged {
+            bannerModel.forEach { $0.cachedDescHeight = nil }
+            layout.invalidateLayout()
+            if viewConfig.infiniteLoop {
+                scrollToMiddleIfNeeded(animated: false)
+            }
+            if let index = currentVirtualIndex() {
+                setDescViewHeight(index: realIndex(index))
+            }
+        }
+        updateNavigationButtonFrames()
     }
     
     func setDescViewHeight(index:Int) {
+        guard bannerModel.indices.contains(index) else {
+            updateTitleHeight(pageControlHeight + viewConfig.pageControlBottom * 2)
+            return
+        }
+
         var descTotalHeight:CGFloat = 0
         let cellModel = bannerModel[index]
         if let cached = cellModel.cachedDescHeight {
@@ -242,7 +587,7 @@ public class PTBannerView: UIView {
             return
         }
 
-        let titleMaxWidth = bounds.size.width - self.viewConfig.titleLeading * 2
+        let titleMaxWidth = max(0, bounds.size.width - self.viewConfig.titleLeading * 2)
         if let attModel = cellModel.att {
             descTotalHeight = attModel.value.sizeOfAttributedString(width: titleMaxWidth).height
         } else {
@@ -259,10 +604,18 @@ public class PTBannerView: UIView {
     }
 
     func setDescView(index:Int) {
+        guard bannerModel.indices.contains(index) else {
+            descTitleView.attributed.text = nil
+            descTitleView.text = nil
+            descTitleView.isHidden = true
+            return
+        }
+
         let cellModel = bannerModel[index]
 
         if let attModel = cellModel.att {
             descTitleView.attributed.text = attModel
+            descTitleView.isHidden = false
         } else {
             if !cellModel.title.stringIsEmpty() || !cellModel.desc.stringIsEmpty() {
                 if !cellModel.title.stringIsEmpty(),!cellModel.desc.stringIsEmpty() {
@@ -295,6 +648,11 @@ public class PTBannerView: UIView {
                     """
                     descTitleView.attributed.text = att
                 }
+                descTitleView.isHidden = false
+            } else {
+                descTitleView.attributed.text = nil
+                descTitleView.text = nil
+                descTitleView.isHidden = true
             }
         }
     }
@@ -304,14 +662,21 @@ public class PTBannerView: UIView {
         guard bannerModel.count > 1 else { return }
         guard !isUserDragging && !isDecelerating else { return }
 
+        let now = Date()
+        if let lastAutoScrollDate,
+           now.timeIntervalSince(lastAutoScrollDate) < autoScrollSchedulingInterval {
+            return
+        }
+        lastAutoScrollDate = now
+
         scrollNext()
     }
     
     private func updateTitleHeight(_ descHeight: CGFloat) {
-        let base = pageControlHeight + viewConfig.pageControlBottom * 2 + descHeight + viewConfig.titleNPageControlSpacing
+        let safeHeight = descHeight.isFinite ? max(0, descHeight) : pageControlHeight + viewConfig.pageControlBottom * 2
 
         titleBackgroundView.snp.updateConstraints {
-            $0.height.equalTo(base)
+            $0.height.equalTo(safeHeight)
         }
     }
 }
@@ -323,21 +688,26 @@ extension PTBannerView: UICollectionViewDataSource, UICollectionViewDelegate {
     }
 
     public func collectionView(_ cv: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = cv.dequeueReusableCell(withReuseIdentifier: PTBannerCell.ID, for: indexPath) as! PTBannerCell
+        guard let cell = cv.dequeueReusableCell(withReuseIdentifier: PTBannerCell.ID, for: indexPath) as? PTBannerCell,
+              bannerModel.indices.contains(realIndex(indexPath.item)) else {
+            return UICollectionViewCell()
+        }
 
         let item = bannerModel[realIndex(indexPath.item)]
-        cell.configure(item)
+        cell.configure(item,
+                       placeholder: viewConfig.backgroundImage ?? viewConfig.placeholderImage,
+                       showPlayButton: viewConfig.showPlayButton)
         cell.playButton.setImage(viewConfig.playButtonImage, for: .normal)
         cell.playButton.setImage(viewConfig.pauseButtonImage, for: .selected)
-        cell.playButton.addActionHandlers { sender in
-            if sender.isSelected {
+        cell.playAction = { [weak self, weak cell] in
+            guard let self, let cell else { return }
+            if cell.playButton.isSelected {
                 PTBannerScheduler.shared.add(self)
                 PTBannerPlayerManager.shared.pause()
             } else {
                 PTBannerScheduler.shared.remove(self)
                 self.playVisibleVideo()
             }
-            sender.isSelected.toggle()
         }
         return cell
     }
@@ -348,7 +718,8 @@ extension PTBannerView: UICollectionViewDataSource, UICollectionViewDelegate {
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isUserDragging = true
-        guard let index = currentIndex(),let cell = collectionView.cellForItem(at: IndexPath(row: index, section: 0)) as? PTBannerCell else {
+        scrollFromClosure?(currentIndex())
+        guard let index = currentVirtualIndex(),let cell = collectionView.cellForItem(at: IndexPath(row: index, section: 0)) as? PTBannerCell else {
             // 暂停视频（⚠️ 不要 stop！）
             PTBannerPlayerManager.shared.pause()
             return
@@ -365,6 +736,7 @@ extension PTBannerView: UICollectionViewDataSource, UICollectionViewDelegate {
         if !decelerate {
             // 没有减速，直接恢复
             resumeAfterScroll()
+            scrollToClosure?(currentIndex())
         } else {
             isDecelerating = true
         }
@@ -373,6 +745,7 @@ extension PTBannerView: UICollectionViewDataSource, UICollectionViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isDecelerating = false
         resumeAfterScroll()
+        scrollToClosure?(currentIndex())
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -381,22 +754,67 @@ extension PTBannerView: UICollectionViewDataSource, UICollectionViewDelegate {
                 playVisibleVideo()
             }
         }
+        if canScheduleAutoScroll {
+            PTBannerScheduler.shared.add(self)
+        }
+        scrollToClosure?(currentIndex())
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updatePageControl()
+        let index = currentIndex()
+        let extent = currentPageExtent
+        let offset = effectiveScrollDirection == .vertical ? scrollView.contentOffset.y : scrollView.contentOffset.x
+        let fraction = extent > 0 && offset.isFinite ? max(0, min(1, (offset / extent) - floor(offset / extent))) : 0
+        scrollViewDidScrollClosure?(index, fraction)
     }
 }
 
 extension PTBannerView {
     func reloadBanner() {
+        resumeTask?.cancel()
+        resumeTask = nil
         layoutIfNeeded()
+        reloadGeneration &+= 1
+        let generation = reloadGeneration
         self.totalItemsCount = viewConfig.infiniteLoop ? self.bannerModel.count * 100 : self.bannerModel.count
-        self.collectionView.reloadData {
-            self.scrollToMiddleIfNeeded()
+        lastReportedPage = -1
+        lastAutoScrollDate = nil
+        updateNavigationButtonFrames()
+        if bannerModel.isEmpty {
+            collectionView.reloadData()
+            customPageControl.removeFromSuperview()
+            descTitleView.removeFromSuperview()
+            customPageControl.isHidden = true
+            descTitleView.attributed.text = nil
+            descTitleView.text = nil
+            updateTitleHeight(pageControlHeight + viewConfig.pageControlBottom * 2)
+            PTBannerPlayerManager.shared.stopIfContainerBelongs(to: self)
+            PTBannerScheduler.shared.remove(self)
+            return
+        }
+        collectionView.reloadData()
+        collectionView.layoutIfNeeded()
+
+        if window != nil, canScheduleAutoScroll {
+            PTBannerScheduler.shared.add(self)
+        } else {
+            PTBannerScheduler.shared.remove(self)
+        }
+
+        // English: Defer post-reload work until UIKit has installed the new cells and ignore stale reloads.
+        // Español: Posponemos el trabajo posterior hasta que UIKit instale las celdas nuevas e ignoramos recargas obsoletas.
+        // 中文：等 UIKit 完成新 Cell 刷新后再处理后续工作，并忽略过期的刷新任务。
+        Task { @MainActor [weak self] in
+            guard let self, self.reloadGeneration == generation else { return }
+            self.scrollToMiddleIfNeeded(animated: false)
             self.setupPageControl()
-            self.setDescViewHeight(index: self.realIndex(self.currentIndex() ?? 0))
-            self.setDescView(index: self.realIndex(self.currentIndex() ?? 0))
+            let index = self.realIndex(self.currentVirtualIndex() ?? 0)
+            self.setDescViewHeight(index: index)
+            self.setDescView(index: index)
+            if self.viewConfig.autoPlayMedia {
+                self.playVisibleVideo()
+            }
         }
     }
 }
@@ -408,17 +826,39 @@ extension PTBannerView {
     }
     
     // MARK: - Infinite
-    private func scrollToMiddleIfNeeded() {
+    private func scrollToMiddleIfNeeded(animated: Bool) {
         guard viewConfig.infiniteLoop, totalItemsCount > 0 else { return }
-        let target = totalItemsCount / 2
-        collectionView.scrollToItem(at: IndexPath(item: target, section: 0), at: .centeredHorizontally, animated: true)
+        guard bannerModel.count > 0 else { return }
+        let middleBase = totalItemsCount / 2
+        let target = middleBase - (middleBase % bannerModel.count)
+        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
+                                     at: pageScrollPosition,
+                                     animated: animated)
     }
 }
 
 extension PTBannerView {
 
+    private func scrollToPrevious() {
+        guard bannerModel.count > 1,
+              let index = currentVirtualIndex() else { return }
+        let previous = index - 1
+        if previous >= 0 {
+            collectionView.scrollToItem(at: IndexPath(item: previous, section: 0),
+                                         at: pageScrollPosition,
+                                         animated: true)
+        } else if viewConfig.infiniteLoop {
+            scrollToMiddleIfNeeded(animated: false)
+            guard let middle = currentVirtualIndex(), middle > 0 else { return }
+            collectionView.scrollToItem(at: IndexPath(item: middle - 1, section: 0),
+                                         at: pageScrollPosition,
+                                         animated: true)
+        }
+    }
+
     private func scrollNext() {
-        guard let index = currentIndex() else { return }
+        guard bannerModel.count > 1,
+              let index = currentVirtualIndex() else { return }
         let next = index + 1
         
         // 🛡️ 越界保护检查
@@ -432,12 +872,16 @@ extension PTBannerView {
                 let resetIndex = middleBase - (middleBase % bannerModel.count) + realIdx
                 
                 // 3. 无动画静默跳回中间位置 (用户视觉上无感知)
-                collectionView.scrollToItem(at: IndexPath(item: resetIndex, section: 0), at: .centeredHorizontally, animated: false)
+                collectionView.scrollToItem(at: IndexPath(item: resetIndex, section: 0),
+                                             at: pageScrollPosition,
+                                             animated: false)
                 
                 // 4. 紧接着带动画滚动到下一页
                 let adjustedNext = resetIndex + 1
                 if adjustedNext < totalItemsCount { // 确保重置后加 1 不会越界（理论上肯定不会）
-                    collectionView.scrollToItem(at: IndexPath(item: adjustedNext, section: 0), at: .centeredHorizontally, animated: true)
+                    collectionView.scrollToItem(at: IndexPath(item: adjustedNext, section: 0),
+                                                 at: pageScrollPosition,
+                                                 animated: true)
                 }
             } else {
                 // 非无限循环模式：已经到底了，移除定时器停止滚动
@@ -447,12 +891,24 @@ extension PTBannerView {
         }
 
         // 正常情况：带动画滚向下一页
-        collectionView.scrollToItem(at: IndexPath(item: next, section: 0), at: .centeredHorizontally, animated: true)
+        guard next < totalItemsCount else { return }
+        collectionView.scrollToItem(at: IndexPath(item: next, section: 0),
+                                     at: pageScrollPosition,
+                                     animated: true)
     }
 
-    private func currentIndex() -> Int? {
-        let page = Int(collectionView.contentOffset.x / collectionView.bounds.width)
-        return page
+    private func currentVirtualIndex() -> Int? {
+        let extent = currentPageExtent
+        guard extent.isFinite, extent > 0 else { return nil }
+        let offset: CGFloat
+        switch effectiveScrollDirection {
+        case .vertical:
+            offset = collectionView.contentOffset.y
+        default:
+            offset = collectionView.contentOffset.x
+        }
+        guard offset.isFinite else { return nil }
+        return max(0, Int(round(offset / extent)))
     }
 }
 
@@ -467,7 +923,19 @@ extension PTBannerView {
             return
         }
 
+        PTBannerPlayerManager.shared.playEndCallback = playEndCallback
         PTBannerPlayerManager.shared.play(url: url, in: cell.playerContainer)
+    }
+
+    public func playCurrentCellVideo(playCallback: PTBoolTask? = nil) {
+        let before = PTBannerPlayerManager.shared.player != nil
+        playVisibleVideo()
+        playCallback?(PTBannerPlayerManager.shared.player != nil && !before)
+    }
+
+    public func pipStar(floatingCallback: @escaping ((AVPlayerLayer?) -> Void)) {
+        PTBannerPlayerManager.shared.startPiP()
+        floatingCallback(PTBannerPlayerManager.shared.playerLayer)
     }
 }
 
@@ -478,11 +946,6 @@ extension PTBannerView {
         customPageControl.removeFromSuperview()
         descTitleView.removeFromSuperview()
 
-        if bannerModel.count <= 1 {
-            customPageControl.isHidden = true
-            return
-        }
-        
         switch self.viewConfig.customPageControlStyle {
         case .none:
             customPageControl = UIView()
@@ -564,6 +1027,9 @@ extension PTBannerView {
             customPageControl.isHidden = false
         case .scrolling:
             let control = PTScrollingPageControl()
+            control.activeTint = self.viewConfig.customPageControlTintColor
+            control.inactiveTint = self.viewConfig.customPageControlInActiveTintColor
+            control.indicatorPadding = self.viewConfig.customPageControlIndicatorPadding
             control.pageCount = bannerModel.count
             control.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
@@ -574,6 +1040,8 @@ extension PTBannerView {
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
         }
+
+        customPageControl.isHidden = bannerModel.count <= 1 || viewConfig.customPageControlStyle == .none
         
         let trialingContact = viewConfig.pageControlLeadingOrTrialingContact * 0.5
 
@@ -635,30 +1103,59 @@ extension PTBannerView {
     }
     
     func pageControlTap(index:Int) {
+        guard bannerModel.indices.contains(index), bannerModel.count > 1 else { return }
         PTBannerScheduler.shared.remove(self)
-        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
+        resumeTask?.cancel()
+
+        let current = currentVirtualIndex() ?? 0
+        let currentReal = realIndex(current)
+        var target = current + (index - currentReal)
+        if viewConfig.infiniteLoop {
+            let middleBase = totalItemsCount / 2
+            if target < 0 || target >= totalItemsCount {
+                target = middleBase - (middleBase % bannerModel.count) + index
+            }
+        } else {
+            target = max(0, min(target, totalItemsCount - 1))
+        }
+
+        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
+                                     at: pageScrollPosition,
+                                     animated: true)
         self.setDescView(index: index)
         self.setDescViewHeight(index: index)
-        PTGCDManager.shared.delayOnMain(time: 1, block: {
+        resumeTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            guard let self, !Task.isCancelled, self.canScheduleAutoScroll else { return }
             PTBannerScheduler.shared.add(self)
-        })
+            self.resumeTask = nil
+        }
     }
 
     private func updatePageControl() {
-        let progress = currentIndex() ?? 0
-        let realIndex = realIndex(progress)
-        let realProgress = realIndex % bannerModel.count
+        guard !bannerModel.isEmpty else { return }
+        let virtualIndex = currentVirtualIndex() ?? 0
+        let page = realIndex(virtualIndex)
+        let extent = currentPageExtent
+        let offset: CGFloat = effectiveScrollDirection == .vertical
+            ? collectionView.contentOffset.y
+            : collectionView.contentOffset.x
+        let rawPage = extent > 0 && offset.isFinite ? max(0, offset / extent) : CGFloat(virtualIndex)
+        let fraction = rawPage - floor(rawPage)
+        let realProgress = min(CGFloat(bannerModel.count - 1), CGFloat(page) + max(0, min(1, fraction)))
         if let control = customPageControl as? UIPageControl {
-            control.currentPage = realProgress
+            control.currentPage = page
         }
 
-        // 如果是自定义（snake / pill）
-        if let control = customPageControl as? PTPageControllable {
-            control.setCurrentPage(index: realProgress)
+        if let control = customPageControl as? PTPageProgressControllable {
+            control.setProgress(realProgress, animated: false)
+        } else if let control = customPageControl as? PTPageControllable {
+            control.setCurrentPage(index: page)
         }
         
-        // ✨ 新增：滑动时实时更新对应的标题内容和容器高度
-        setDescView(index: realProgress)
-        setDescViewHeight(index: realProgress)
+        guard page != lastReportedPage else { return }
+        lastReportedPage = page
+        setDescView(index: page)
+        setDescViewHeight(index: page)
     }
 }

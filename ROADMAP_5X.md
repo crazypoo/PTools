@@ -1,6 +1,6 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.5.0`（2026-08-29）
+> 基线：`5.6.0`（2026-08-29）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -126,8 +126,8 @@
   包装器、迁移 pending 和 6.0.0 删除门槛文档。
 - ✅ `CORE-560-04`：建立 6.0.0 删除 deprecated 动态入口和历史兼容层的必要条件；
   5.x 继续保留 `PTAlertDebugView`、旧媒体保存回调和 Network 动态入口。
-- ⛔ `CORE-560-05`：Xcode Simulator Debug/Release 的完整构建仍被外部 Pods 的
-  `SmartCodable` 宏插件拉取 `swift-syntax` 失败阻断；在依赖恢复前不创建 `5.6.0` tag。
+- ✅ `CORE-560-05`：`5.6.0` tag 已存在，作为本轮 ScrollBanner 和 PageControl 的基线。
+  Xcode 完整构建仍可能被外部 Pods 的 Swift 6 诊断阻断，阻断记录不归因于 Core 源码。
 
 ### 5.6.0 实施与验证说明
 
@@ -136,9 +136,57 @@
 - ✅ `Scripts/report_duplicate_entries.sh` 现在会校验每组 canonical、兼容包装器、语义差异、
   pending 和 6.0.0 removal gate，质量扫描会自动执行该校验。
 - ✅ 新增 [MIGRATION_5X.md](MIGRATION_5X.md)，并将 README、RELEASE、CHANGELOG 的
-  版本和迁移入口补齐到当前 5.5.0 基线与 5.6.0 候选状态。
+  版本和迁移入口补齐到 5.6.0 已发布基线与 5.6.1 候选状态。
 - ⚠️ 质量扫描、源文件契约和 Package manifest 可执行；完整 Xcode 构建尚未通过，阻断来自
   外部 `SmartCodable`/`swift-syntax`，不能据此宣称源码和发布验收完成。
+
+## 5.6.1：ScrollBanner 与 PageControl 稳定性和功能统一
+
+### 第一批：PageControl 边界、动画和无障碍
+
+- ✅ `CORE-561-01`：统一自定义 PageControl 的进度动画为单个共享 `CADisplayLink`，移除各
+  子类重复的动画引擎，补充离屏停止和 Reduce Motion 处理。
+- ✅ `CORE-561-02`：校验页数、进度、半径、间距和尺寸输入，修复零页、非法尺寸和越界点击
+  的布局风险；`PTScrollingPageControl` 的宽度计算改为按真实圆点数量计算。
+- ✅ `CORE-561-03`：补齐调整型无障碍操作、页码值同步和图片指示器的 generation/实例校验，
+  避免异步图片回调写入已经复用的圆点。
+
+### 第二批：PTBannerView 唯一实现入口
+
+- ✅ `CORE-561-04`：空数据、非水平滚动、无限循环中间定位、索引计算、标题高度缓存、导航
+  箭头、自动轮播和媒体播放统一由 `PTBannerView` 处理。
+- ✅ `CORE-561-05`：Cell 复用时清理播放器、播放按钮和旧回调；视频封面通过
+  `PTVideoCoverCache`/`PTVideoThumbnailService` 生成，并用配置代际保护旧结果。
+- ✅ `CORE-561-06`：统一 `reloadData` 后处理流程，避免调用不存在的 UIKit completion API，并
+  以 generation 忽略过期刷新任务；空数据刷新不再残留分页器和标题视图。
+
+### 第三批：PTCycleScrollView 兼容迁移
+
+- ✅ `CORE-561-07`：将 `PTCycleScrollView` 改为 `PTBannerView` 的 deprecated 兼容适配器，保留
+  原有公开属性、工厂方法、回调和滚动入口，旧调用转发到统一实现。
+- ✅ `CORE-561-08`：兼容旧版任意箭头资源、自定义箭头 frame、纯标题背景图和旧 PageControl
+  配置；内部不再维护重复的 ScrollView/Cell 实例化逻辑。
+- ✅ `CORE-561-09`：确认仓库无 `PTCycleScrollViewCell` 调用后移除该内部 Cell 及其 Xcode source
+  membership，减少重复实现和无效播放器状态。
+
+### 第四批：验证、文档和版本元数据
+
+- ✅ `CORE-561-10`：更新路线图、迁移说明入口、README、RELEASE、CHANGELOG、podspec 和
+  Podfile.lock 到 `5.6.1` 候选版本；未修改第三方依赖版本或 Pods 源码。
+- ✅ `CORE-561-11`：完成修改文件语法解析、质量扫描、Core source contract、构建入口检查和
+  `git diff --check`。
+- ⛔ `CORE-561-12`：Xcode Debug/Release 完整构建仍被外部 Pods 的 `KituraContracts` Swift 6
+  并发错误阻断（`BodyFormat` 非 Sendable、共享 formatter），因此暂不创建 `5.6.1` tag。
+
+### 5.6.1 实施与验证说明
+
+- ✅ PageControl、ScrollBanner 源文件未新增 `as!`、`try!`、`nonisolated(unsafe)` 或
+  `@unchecked Sendable`；新增跨异步回调均有主线程和代际保护。
+- ✅ 4 批源码改动均使用临时 DerivedData 执行过 Xcode 构建；PooTools 源码未出现编译错误，
+  最终失败均发生在外部依赖 target。补充的 PooTools framework 构建同样在外部 `Appz` 的
+  Swift 6 主 actor conformance 错误处停止。
+- ⛔ 在 `KituraContracts`、`Appz` 等外部依赖恢复或提供兼容产物前，不能宣称完整 Xcode
+  Debug/Release 验收通过，也不能创建或推送 `5.6.1` 标签。
 
 ## 发布前固定检查
 

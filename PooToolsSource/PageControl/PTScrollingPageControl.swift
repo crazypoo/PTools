@@ -11,6 +11,7 @@ import UIKit
 public typealias ScrollingPageControlBlock = (_ sender: PTScrollingPageControl) -> Void
 
 @objcMembers
+@MainActor
 open class PTScrollingPageControl: PTBasePageControl {
         
     // MARK: - Internal Visual State
@@ -31,6 +32,10 @@ open class PTScrollingPageControl: PTBasePageControl {
     
     open var ringRadius: CGFloat = 10 {
         didSet {
+            guard ringRadius.isFinite, ringRadius >= 0 else {
+                ringRadius = oldValue
+                return
+            }
             updateLayout()
             invalidateIntrinsicContentSize()
         }
@@ -73,15 +78,7 @@ open class PTScrollingPageControl: PTBasePageControl {
         return layer
     }()
     
-    // MARK: - Animation Engine
-    private var displayLink: CADisplayLink?
-    private var startProgress: CGFloat = 0
-    private var targetProgress: CGFloat = 0
-    private var progressStartTime: CFTimeInterval = 0
-    private let animDuration: CFTimeInterval = 0.35 // 滚动的耗时，可以微调
-    private var isAnimating: Bool { return displayLink != nil }
-
-    deinit { }
+    override open var progressAnimationDuration: CFTimeInterval { 0.35 }
     
     // MARK: - 重写基类模板方法
     
@@ -128,15 +125,7 @@ open class PTScrollingPageControl: PTBasePageControl {
     }
     
     override open func updateProgress(_ safeProgress: CGFloat) {
-        // 🚀 数据与视觉分离，防止外部强行打断动画时发生冲突
-        if isAnimating {
-            if safeProgress != targetProgress {
-                stopDisplayLink()
-                visualProgress = safeProgress
-            }
-        } else {
-            visualProgress = safeProgress
-        }
+        visualProgress = safeProgress
     }
     
     override open func updateLayout() {
@@ -213,8 +202,9 @@ open class PTScrollingPageControl: PTBasePageControl {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        let pageCountWidth = pageCount + (pageCount - 1)
-        return CGSize(width: CGFloat(pageCountWidth) * indicatorDiameter + CGFloat(pageCountWidth - 1) * indicatorPadding,
+        let count = max(0, pageCount)
+        let width = CGFloat(count) * indicatorDiameter + CGFloat(max(0, count - 1)) * indicatorPadding
+        return CGSize(width: width,
                       height: ringDiameter)
     }
     
@@ -242,56 +232,6 @@ open class PTScrollingPageControl: PTBasePageControl {
         }
     }
     
-    // MARK: - 🚀 Animation Engine Methods
-    
-    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
-        guard pageCount > 0 else { return }
-        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
-        
-        if animated {
-            startProgress = self.visualProgress
-            targetProgress = safeProgress
-            progressStartTime = CACurrentMediaTime()
-            
-            startDisplayLink()
-            self.progress = safeProgress // 对外暴露的值立刻到位
-        } else {
-            stopDisplayLink()
-            self.progress = safeProgress
-        }
-    }
-    
-    private func startDisplayLink() {
-        stopDisplayLink()
-        let proxy = DisplayLinkProxy(target: self)
-        displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.update))
-        displayLink?.add(to: .main, forMode: .common)
-    }
-    
-    private func stopDisplayLink() {
-        displayLink?.invalidate()
-        displayLink = nil
-    }
-    
-    @objc fileprivate func updateDisplayLink() {
-        let elapsed = CACurrentMediaTime() - progressStartTime
-        var percent = CGFloat(elapsed / animDuration)
-        
-        if percent >= 1.0 {
-            percent = 1.0
-            stopDisplayLink()
-        }
-        
-        // Ease-In-Out 缓动公式，让滚动的起步和刹车都十分平滑
-        let easePercent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent
-        visualProgress = startProgress + (targetProgress - startProgress) * easePercent
-    }
-    
-    private class DisplayLinkProxy {
-        weak var target: PTScrollingPageControl?
-        init(target: PTScrollingPageControl) { self.target = target }
-        @MainActor @objc func update() { target?.updateDisplayLink() }
-    }
 }
 
 public extension PTScrollingPageControl {

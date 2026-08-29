@@ -15,25 +15,33 @@ class PTBannerVideoManager {
 
     static let shared = PTBannerVideoManager()
 
-    private var cache = NSCache<NSString, UIImage>()
-
-    public func loadCover(url: String, completion: @escaping @MainActor @Sendable (UIImage?) -> Void) {
-        if let img = cache.object(forKey: url as NSString) {
-            completion(img)
-            return
+    @discardableResult
+    public func loadCover(url: String,
+                          frameNumber: Int = 1,
+                          maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
+                          completion: @escaping @MainActor @Sendable (UIImage?) -> Void) -> Task<Void, Never>? {
+        guard let url = URL(string: url) else {
+            completion(nil)
+            return nil
         }
+        return loadCover(url: url,
+                         frameNumber: frameNumber,
+                         maximumSize: maximumSize,
+                         completion: completion)
+    }
 
-        // 🌟 修复 2：使用 [weak self] 弱捕获，防止在后台线程强持有 @MainActor 隔离的对象
-        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { [weak self] image in
-            // 回到主线程执行 UI 和缓存相关的操作
-            Task { @MainActor in
-                if let image = image {
-                    // 🌟 修复 3：通过可选链安全地访问 self，即使对象在等待期间释放也不会崩溃
-                    self?.cache.setObject(image, forKey: url as NSString)
-                }
-                // 安全地执行标记了 @MainActor 的闭包
-                completion(image)
-            }
+    @discardableResult
+    public func loadCover(url: URL,
+                          frameNumber: Int = 1,
+                          maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
+                          completion: @escaping @MainActor @Sendable (UIImage?) -> Void) -> Task<Void, Never> {
+        Task { @MainActor in
+            guard !Task.isCancelled else { return }
+            let image = await PTVideoCoverCache.image(for: url,
+                                                      frameNumber: frameNumber,
+                                                      maximumSize: maximumSize)
+            guard !Task.isCancelled else { return }
+            completion(image)
         }
     }
 }
@@ -46,6 +54,9 @@ public final class PTBannerPlayerManager {
     public var player: AVPlayer?
     public var playerLayer: AVPlayerLayer?
     private weak var currentContainer: UIView?
+    private var pipController: AVPictureInPictureController?
+    private var playbackEndObserver: NSObjectProtocol?
+    public var playEndCallback: PTActionTask?
 
     private var currentURL: String?
 
@@ -80,13 +91,17 @@ public final class PTBannerPlayerManager {
         player.play()
         player.isMuted = true
         // 播放结束
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(replay),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: player.currentItem)
+        playbackEndObserver = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                                      object: player.currentItem,
+                                                                      queue: .main) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.replay()
+            }
+        }
     }
 
     private func attach(layer: AVPlayerLayer, to view: UIView) {
+        layer.removeFromSuperlayer()
         currentContainer?.layer.sublayers?.removeAll(where: { $0 is AVPlayerLayer })
 
         layer.frame = view.bounds
@@ -97,16 +112,33 @@ public final class PTBannerPlayerManager {
 
     func stop() {
         // 移除播放结束的通知，防止单例导致的通知堆积
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        if let playbackEndObserver {
+            NotificationCenter.default.removeObserver(playbackEndObserver)
+            self.playbackEndObserver = nil
+        }
         
+        pipController?.stopPictureInPicture()
+        pipController = nil
         player?.pause()
         player = nil
         playerLayer?.removeFromSuperlayer()
         playerLayer = nil
         currentURL = nil
+        currentContainer = nil
+    }
+
+    func stopIfContainerBelongs(to owner: UIView) {
+        guard let currentContainer,
+              currentContainer === owner || currentContainer.isDescendant(of: owner) else { return }
+        stop()
+    }
+
+    func updateLayerFrame() {
+        playerLayer?.frame = currentContainer?.bounds ?? .zero
     }
 
     @objc private func replay() {
+        playEndCallback?()
         player?.seek(to: .zero)
         player?.play()
     }
@@ -118,8 +150,9 @@ extension PTBannerPlayerManager {
         guard let layer = playerLayer else { return }
 
         if AVPictureInPictureController.isPictureInPictureSupported() {
-            let pip = AVPictureInPictureController(playerLayer: layer)
-            pip?.startPictureInPicture()
+            pipController?.stopPictureInPicture()
+            pipController = AVPictureInPictureController(playerLayer: layer)
+            pipController?.startPictureInPicture()
         }
     }
     

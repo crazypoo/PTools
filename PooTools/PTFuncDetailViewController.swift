@@ -381,7 +381,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             case String.movieCutOutput:
                 PTGCDManager.shared.delayOnMain(time: 1) {
                     let startTime = CACurrentMediaTime()
-                    Task { @MainActor [weak layoutBtn] in
+                    Task { @MainActor [weak layoutBtn = layoutBtn] in
                         // English: Keep the demo progress loop on MainActor without crossing Timer's nonisolated callback.
                         // Español: Mantén el progreso de demostración en MainActor sin cruzar el callback no aislado de Timer.
                         // 中文：将演示进度循环固定在 MainActor，避免跨越 Timer 的非隔离回调。
@@ -612,51 +612,14 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalToSuperview().inset(20)
             }
         case String.CycleBanner:
-            let banner = PTCycleScrollView()
-            banner.autoScroll = false
-            // 滚动间隔时间(默认为2秒)
-            banner.autoScrollTimeInterval = 3.0
-            // 设置图片显示方式=UIImageView的ContentMode
-            banner.imageViewContentMode = .scaleAspectFill
-            banner.viewCorner(radius: 10)
-            // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
-            banner.customPageControlStyle = .snake
-            // 非.system的状态下，设置PageControl的tintColor
-            banner.customPageControlInActiveTintColor = UIColor.lightGray
-            // 设置.system系统的UIPageControl当前显示的颜色
-            banner.pageControlCurrentPageColor = UIColor.randomColor
-            // 非.system的状态下，设置PageControl的间距(默认为8.0)
-            banner.customPageControlIndicatorPadding = 5.0
-            // 设置PageControl的位置 (.left, .right 默认为.center)
-            banner.pageControlPosition = .center
-            banner.scrollDirection = .horizontal
-            // 圆角
-            banner.backgroundColor = .clear
-            banner.textColor = .random
-            banner.titleBackgroundColor = .brown
-            banner.pageControlActiveImage = DynamicColor.gray.createImageWithColor().transformImage(size: CGSize(width: 4, height: 4)).pt.isRoundCorner(radius: 2,imageSize: CGSize(width: 4, height: 4))
-            banner.pageControlInActiveImage = DynamicColor.white.createImageWithColor().transformImage(size: CGSize(width: 8, height: 4)).pt.isRoundCorner(radius: 2,imageSize: CGSize(width: 8, height: 4))
-            banner.didSelectItemAtIndexClosure = { index in
-                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
-            }
-            view.addSubviews([banner])
-            banner.snp.makeConstraints { make in
-                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(20)
-                make.height.equalTo(190)
-            }
-            
             let att1:ASAttributedString = """
                     \(wrap: .embedding("""
                     \("1112312312312312312312312312323",.foreground(.init(hexString: "de1e50")!),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))
                     \("112123123123123123",.foreground(.systemBlue),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))
                     """))
-                    """
-            banner.titles = [att1,att1,att1]
-            banner.imagePaths = ["https://cloud.video.taobao.com/play/u/2218025106300/p/1/e/6/t/1/475055174931.mp4","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg".urlToUnicodeURLString()!]
+                    """            
             
-            
-            let newBannerModel = banner.imagePaths.map { value in
+            let newBannerModel = ["https://cloud.video.taobao.com/play/u/2218025106300/p/1/e/6/t/1/475055174931.mp4","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg".urlToUnicodeURLString()!].map { value in
                 let model = PTBannerModel()
                 model.media = value
                 model.att = att1
@@ -667,8 +630,9 @@ class PTFuncDetailViewController: PTBaseViewController {
             let banner1 = PTBannerView(viewConfig: config)
             view.addSubviews([banner1])
             banner1.snp.makeConstraints { make in
-                make.left.right.height.equalTo(banner)
-                make.top.equalTo(banner.snp.bottom).offset(20)
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(20)
+                make.height.equalTo(190)
             }
             banner1.bannerModel = newBannerModel
             banner1.viewCorner(radius: 8)

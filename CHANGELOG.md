@@ -1,12 +1,22 @@
 # Changelog
 
-## 5.6.0 - 2026-08-29 (Unreleased)
+## 5.6.1 - 2026-08-29 (Unreleased)
+
+- 统一 `PTBannerView` 与 `PTCycleScrollView` 的轮播、分页、媒体播放、标题和箭头能力；旧
+  `PTCycleScrollView` 保留为 deprecated 兼容入口。
+- 自定义 PageControl 统一使用单一进度动画、Reduce Motion 和无障碍边界，修复零页、非法
+  尺寸、异步图片回调和越界点击问题。
+- 修复 Banner 空数据刷新、纵向分页、无限循环定位、标题高度缓存和 Cell 复用状态问题。
+- 删除无仓库调用的内部 `PTCycleScrollViewCell`，并保留旧接口的兼容映射。
+- 修改文件已通过静态质量检查；Xcode 完整构建当前被外部 `KituraContracts`/`Appz` 的
+  Swift 6 并发错误阻断，未创建 `5.6.1` 标签。
+
+## 5.6.0 - 2026-08-29
 
 - 增加 CocoaPods、SwiftPM 和 Xcode 的 Core 源文件逐文件契约检查，发现漂移时直接阻断。
 - 将 String 密码强度算法拆为独立职责扩展，保持 `passwordLevel` 公开入口和评分规则不变。
 - 完善重复入口报告、5.x 迁移说明和 6.0.0 兼容层删除评估条件。
-- Xcode Simulator Debug/Release 当前仍受外部 `SmartCodable` 宏插件获取 `swift-syntax`
-  失败阻断，未修改第三方依赖，也未创建 5.6.0 标签。
+- 已创建 `5.6.0` 标签，作为 `5.6.1` ScrollBanner 和 PageControl 治理基线。
 
 ## 5.5.0 - 2026-08-29
 
@@ -84,7 +94,3 @@
 - 统一 Swift 6 / iOS 17.0+ 构建契约。
 - 改进 PhotoPicker、VideoEditor 和网络层的并发边界与失败回调。
 - 增加构建入口质量校验和发布流程文档。
-
-## Unreleased
-
-记录下一版本的用户可见变化、兼容性变化和修复内容。

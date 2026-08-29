@@ -18,11 +18,13 @@ classification_rows=(
   'empty state|PTUnavailableManager.render|UIView/UIViewController convenience entry points|none|none|6.0.0'
   'scene/window|PTSceneContext|legacy PTUtils window helpers|none|remaining callers outside 5.2 Core scope|6.0.0'
   'UI dispatch|PTMainActorBridge|PTGCDManager main-queue helpers|none|remaining legacy callers outside 5.2 Core scope|6.0.0'
+  'scroll banner|PTBannerView|PTCycleScrollView|legacy properties and factory methods|none|6.0.0'
+  'page control|PTBasePageControl|individual visual PageControl subclasses|visual implementations differ|none|6.0.0'
 )
 
 valid_groups=(
   'media save' 'image request' 'video request' 'video thumbnail' 'image loading'
-  'network' 'empty state' 'scene/window' 'UI dispatch'
+  'network' 'empty state' 'scene/window' 'UI dispatch' 'scroll banner' 'page control'
 )
 
 for row in "${classification_rows[@]}"; do
@@ -76,6 +78,14 @@ report_group 'network request' \
 report_group 'empty state' \
   'func (showEmptyView|showEmptyLoadingView|hideUnavailableView|render)'
 
+report_group 'scroll banner' \
+  'class (PTBannerView|PTCycleScrollView)' \
+  'func (scrollToPage|scrollByDirection|automaticScroll|scollToIndex)'
+
+report_group 'page control' \
+  'class (PTBasePageControl|PTFilledPageControl|PTPillPageControl|PTSnakePageControl|PTScrollingPageControl|PTImagePageControl)' \
+  'func (setProgress|setCurrentPage|update|addPageControlAction)'
+
 printf '\n%s\n' 'Canonical implementation map:'
 printf '%s\n' \
   'media save      -> PooToolsSource/Core/PTMediaSaveService.swift' \
@@ -86,6 +96,8 @@ printf '%s\n' \
   'empty state      -> PooToolsSource/Base/PTUnavailableFunction.swift' \
   'scene/window     -> PooToolsSource/Core/PTUtils+SceneConcurrency.swift (PTSceneContext)' \
   'UI dispatch      -> PooToolsSource/Core/PTUtils+SceneConcurrency.swift (PTMainActorBridge)' \
+  'scroll banner    -> PooToolsSource/ScrollBanner/PTBannerView.swift' \
+  'page control     -> PooToolsSource/PageControl/PTPageControllable.swift + concrete controls' \
   'background work  -> PooToolsSource/Core/PTGCDManager.swift'
 
 printf '\n%s\n' 'Split-file ownership map:'
