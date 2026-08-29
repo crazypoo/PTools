@@ -43,6 +43,21 @@ internal struct PTRGBAComponents: Sendable, Equatable {
     }
 }
 
+// English: Keep presentation surfaces on the native dynamic system palette.
+// Español: Mantén las superficies de presentación en la paleta dinámica nativa del sistema.
+// 中文：展示类组件统一使用系统原生动态颜色，避免浅色和深色模式出现不一致。
+#if os(iOS) || os(tvOS) || os(watchOS)
+internal extension UIColor {
+    static var ptPresentationSurface: UIColor {
+        .systemBackground
+    }
+
+    static var ptPresentationMaterialSurface: UIColor {
+        UIColor.secondarySystemBackground.withAlphaComponent(0.82)
+    }
+}
+#endif
+
 /// Hex 解析后的值，保留是否包含透明度。
 /// Valor hexadecimal analizado, conservando si incluye alfa.
 internal struct PTHexColorValue: Sendable, Equatable {

@@ -207,6 +207,12 @@ open class PTSideMenuControl: PTBaseViewController {
             PTNSLogConsole("[PTSideMenu] 内容或菜单控制器未配置，已禁用对应功能。", levelType: .error, loggerType: .sideMenu)
         }
 
+        // English: Give both containers a dynamic fallback so transparent child views follow the current appearance.
+        // Español: Da a ambos contenedores un fondo dinámico para que las vistas hijas transparentes sigan la apariencia actual.
+        // 中文：为两个容器提供动态兜底背景，保证透明子视图跟随当前浅色或深色外观。
+        view.backgroundColor = .ptPresentationSurface
+        contentContainerView.backgroundColor = .ptPresentationSurface
+        menuContainerView.backgroundColor = .ptPresentationSurface
         contentContainerView.frame = contentFrame(visibility: settledMenuRevealed)
         menuContainerView.frame = sideMenuFrame(visibility: settledMenuRevealed)
         view.addSubview(contentContainerView)

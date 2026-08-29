@@ -10,6 +10,7 @@ import UIKit
 
 open class PTSwitch: UIControl {
     public var valueChangeCallBack:PTBoolTask?
+    private var thumbColorStorage: Any?
     
     public var isOn = false {
         didSet {
@@ -17,23 +18,24 @@ open class PTSwitch: UIControl {
         }
     }
     
-    public var switchTintColor:UIColor = UIColor(hexString: "c7c7c7") ?? .lightGray {
+    public var switchTintColor:UIColor = .systemGray4 {
         didSet {
-            self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : switchTintColor
+            updateSwitchAppearance()
         }
     }
 
     public var onTintColor:UIColor = .systemGreen {
         didSet {
-            self.switchBackgroundView.backgroundColor = self.isOn ? onTintColor : switchTintColor
+            updateSwitchAppearance()
         }
     }
     
     public var thumbColor:Any {
         get {
-            return UIColor.white
+            return thumbColorStorage ?? UIColor.white
         }
         set {
+            thumbColorStorage = newValue
             switchThumbView.loadImage(contentData: newValue)
         }
     }
@@ -69,6 +71,9 @@ open class PTSwitch: UIControl {
         // 添加点击手势
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleSwitch))
         addGestureRecognizer(tapGesture)
+        isAccessibilityElement = true
+        accessibilityTraits = [.button]
+        updateAccessibilityValue()
     }
 
     open override func layoutSubviews() {
@@ -76,16 +81,15 @@ open class PTSwitch: UIControl {
 
         // 设置背景视图的布局
         switchBackgroundView.frame = bounds
-        switchBackgroundView.layer.cornerRadius = bounds.height / 2
+        switchBackgroundView.layer.cornerRadius = max(0, bounds.height) / 2
 
         // 设置滑块视图的布局
-        let thumbSize = CGSize(width: max(0, bounds.height - 4), height: max(0, bounds.height - 4))
-        let thumbPosition = isOn ? bounds.width - thumbSize.width - 2 : 2
-        switchThumbView.frame = CGRect(x: thumbPosition, y: 2, width: thumbSize.width, height: thumbSize.height)
-        switchThumbView.layer.cornerRadius = max(0, bounds.height - 4) / 2
+        switchThumbView.frame = thumbFrame()
+        switchThumbView.layer.cornerRadius = switchThumbView.bounds.height / 2
     }
 
     @objc private func toggleSwitch() {
+        guard isEnabled else { return }
         animation = true
         isOn.toggle()
         sendActions(for: .valueChanged)
@@ -93,17 +97,55 @@ open class PTSwitch: UIControl {
     }
 
     private func updateSwitchState(animated: Bool) {
-        let thumbSize = CGSize(width: max(0, bounds.height - 4), height: max(0, bounds.height - 4))
-        let thumbPosition = isOn ? bounds.width - thumbSize.width - 2 : 2
-        let update = {
-            self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : self.switchTintColor
-            self.switchThumbView.frame = CGRect(x: thumbPosition, y: 2, width: thumbSize.width, height: thumbSize.height)
-            self.switchThumbView.layer.cornerRadius = max(0, self.bounds.height - 4) / 2
+        let targetFrame = thumbFrame()
+        let update = { [weak self] in
+            guard let self else { return }
+            self.updateSwitchAppearance()
+            self.switchThumbView.frame = targetFrame
+            self.switchThumbView.layer.cornerRadius = targetFrame.height / 2
         }
-        if animated {
+        switchThumbView.layer.removeAllAnimations()
+        let shouldAnimate = animated && !UIAccessibility.isReduceMotionEnabled && window != nil
+        if shouldAnimate {
             UIView.animate(withDuration: 0.3, animations: update)
         } else {
-            update()
+            UIView.performWithoutAnimation(update)
+        }
+        updateAccessibilityValue()
+    }
+
+    // English: Keep the thumb inside the control even when Auto Layout briefly reports a tiny or zero-sized bound.
+    // Español: Mantén el pulgar dentro del control aunque Auto Layout informe temporalmente un tamaño mínimo o cero.
+    // 中文：即使 Auto Layout 暂时产生极小或零尺寸，也要保证滑块不越出控件边界。
+    private func thumbFrame() -> CGRect {
+        let width = max(0, bounds.width)
+        let height = max(0, bounds.height)
+        let diameter = min(max(0, height - 4), max(0, width - 4))
+        let inset = min(2, max(0, (width - diameter) / 2))
+        let x = isOn ? width - inset - diameter : inset
+        let y = max(0, (height - diameter) / 2)
+        return CGRect(x: bounds.minX + x,
+                      y: bounds.minY + y,
+                      width: diameter,
+                      height: diameter)
+    }
+
+    private func updateSwitchAppearance() {
+        switchBackgroundView.backgroundColor = isOn ? onTintColor : switchTintColor
+    }
+
+    // English: Keep VoiceOver state synchronized with the visual switch state.
+    // Español: Mantén el estado de VoiceOver sincronizado con el estado visual del interruptor.
+    // 中文：让 VoiceOver 状态与开关的视觉状态保持同步。
+    private func updateAccessibilityValue() {
+        accessibilityTraits = isOn ? [.button, .selected] : [.button]
+        accessibilityValue = isOn ? "On" : "Off"
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil {
+            switchThumbView.layer.removeAllAnimations()
         }
     }
 

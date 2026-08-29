@@ -104,9 +104,17 @@
 
 ## 5.5.0：视觉与交互组件
 
-- ⬜ 统一 Alert、ActionSheet、FloatPanel、SideMenu 的内容布局、背景材质、生命周期和重复代码。
-- ⬜ 统一 DarkMode、Colors、Font 的动态颜色和 trait 变化处理。
-- ⬜ 治理 Badge、Button、Switch、Animation、Blur 的默认值、布局、动画取消和可访问性。
+- ✅ 统一 Alert、ActionSheet、FloatPanel、SideMenu 的内容布局、背景材质、生命周期和重复代码。
+- ✅ 统一 DarkMode、Colors、Font 的动态颜色和 trait 变化处理。
+- ✅ 治理 Badge、Button、Switch、Animation、Blur 的默认值、布局、动画取消和可访问性。
+
+### 5.5.0 实施与验证说明
+
+- ✅ Alert、ActionSheet、FloatPanel 和 SideMenu 统一使用场景感知的动态系统背景；Alert 场景解析复用 `PTSceneContext`，FloatPanel 移除通知监听，透明子控制器也有稳定的背景兜底。
+- ✅ DarkMode 优先读取活动窗口 trait；SSBlurView 和 PTFrostedGlassView 复用已创建的效果资源，支持 Reduce Motion、trait 变化和离屏动画清理。
+- ✅ Badge 动画参数、PTSwitch 尺寸与状态、PTLayoutButton 动态颜色和布局、字体输入参数统一做安全兜底；动画取消与 VoiceOver 状态同步得到补强。
+- ✅ 修改文件已完成 Swift 前端语法解析，`swift package dump-package`、质量扫描、三套构建契约检查和 `git diff --check` 通过。
+- ⚠️ 当前 Xcode Debug / Release 均已通过 PooTools 源码编译阶段，但最终模拟器链接仍被既有真机版 `Pods/Bugly/Bugly.framework` 阻断；本轮未修改 Pods 或第三方依赖，待提供 Simulator/XCFramework 产物后补齐最终链接验证。
 
 ## 5.6.0：依赖、源码契约与 6.0 准备
 

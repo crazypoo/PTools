@@ -10,6 +10,12 @@ import UIKit
 import CoreImage
 
 public class PTFrostedGlassView: UIView {
+    // English: Retain the effect views and layer so layout and trait updates do not create duplicate resources.
+    // Español: Conserva las vistas de efecto y la capa para que los cambios de layout y traits no creen recursos duplicados.
+    // 中文：保留效果视图和渐变层，避免布局与 trait 更新时重复创建资源。
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+    private let gradientLayer = CAGradientLayer()
+    private var traitChangeRegistration: (any UITraitChangeRegistration)?
     
     // 初始化方法
     override init(frame: CGRect) {
@@ -24,43 +30,38 @@ public class PTFrostedGlassView: UIView {
     
     // 配置视图，添加模糊和渐变层
     private func setupView() {
-        // 1. 添加模糊效果层
-        addBlurEffect()
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+        blurEffectView.frame = bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        addSubview(blurEffectView)
 
-        // 2. 添加渐变效果层
-        addGradientLayer()
-
-        // 3. 设置背景颜色为半透明
-        self.backgroundColor = .white.withAlphaComponent(0.01)
-    }
-    
-    // 添加模糊效果
-    private func addBlurEffect() {
-        // 使用 UIBlurEffect 来创建模糊效果
-        let blurEffect = UIBlurEffect(style: .regular)  // 你可以根据需求选择不同的样式 .extraLight, .dark 等
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        
-        // 设置模糊视图的大小与主视图相同
-        blurEffectView.frame = self.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]  // 支持自适应
-        
-        // 添加到主视图上
-        self.addSubview(blurEffectView)
-    }
-    
-    // 添加渐变效果层，模拟玻璃质感
-    private func addGradientLayer() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
+        gradientLayer.frame = bounds
         gradientLayer.colors = [
-            UIColor(white: 1.0, alpha: 0.15).cgColor,  // 渐变的起始颜色
-            UIColor(white: 1, alpha: 0).cgColor   // 渐变的结束颜色
+            UIColor.white.withAlphaComponent(0.15).cgColor,
+            UIColor.clear.cgColor
         ]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)  // 渐变起始点
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)    // 渐变结束点
-        gradientLayer.locations = [0, 1]                    // 渐变分布
-        
-        // 使用图层的方式添加渐变
-        self.layer.insertSublayer(gradientLayer, at: 0)
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.locations = [0, 1]
+        layer.insertSublayer(gradientLayer, at: 0)
+
+        traitChangeRegistration = registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (_: PTFrostedGlassView, _: UITraitCollection) in
+            self?.updateGradientColors()
+        }
+        updateGradientColors()
+    }
+
+    private func updateGradientColors() {
+        let highlightAlpha: CGFloat = traitCollection.userInterfaceStyle == .dark ? 0.10 : 0.15
+        let highlight = UIColor.white.withAlphaComponent(highlightAlpha).resolvedColor(with: traitCollection)
+        let clear = UIColor.clear.resolvedColor(with: traitCollection)
+        gradientLayer.colors = [highlight.cgColor, clear.cgColor]
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        blurEffectView.frame = bounds
+        gradientLayer.frame = bounds
     }
 }

@@ -10,14 +10,21 @@ import UIKit
 
 //MARK: 全局统一字体
 public extension UIFont {
+    // English: Prevent invalid font sizes from reaching UIKit font constructors.
+    // Español: Evita que tamaños de fuente inválidos lleguen a los constructores de UIKit.
+    // 中文：避免非法字体尺寸传入 UIKit 字体构造方法。
+    private static func ptSafeFontSize(_ size: CGFloat) -> CGFloat {
+        size.isFinite ? max(1, size) : 1
+    }
+
     @objc class func appfont(size:CGFloat,
                              bold:Bool = false,
                              scale:Bool = false) -> UIFont {
         var setFont:UIFont
         if !bold {
-            setFont = UIFont.systemFont(ofSize: size)
+            setFont = UIFont.systemFont(ofSize: ptSafeFontSize(size))
         } else {
-            setFont = UIFont.boldSystemFont(ofSize: size)
+            setFont = UIFont.boldSystemFont(ofSize: ptSafeFontSize(size))
         }
         
         if scale {
@@ -31,12 +38,14 @@ public extension UIFont {
                                    scale:Bool = false) -> UIFont {
         
         if customFont.stringIsEmpty() {
-            return scale ? UIFont.systemFont(ofSize: size).adapter : UIFont.systemFont(ofSize: size)
+            let safeSize = ptSafeFontSize(size)
+            return scale ? UIFont.systemFont(ofSize: safeSize).adapter : UIFont.systemFont(ofSize: safeSize)
         }
-        if let setFont = UIFont(name: customFont, size: size) {
+        if let setFont = UIFont(name: customFont, size: ptSafeFontSize(size)) {
             return scale ? setFont.adapter : setFont
         }
-        return scale ? UIFont.systemFont(ofSize: size).adapter : UIFont.systemFont(ofSize: size)
+        let safeSize = ptSafeFontSize(size)
+        return scale ? UIFont.systemFont(ofSize: safeSize).adapter : UIFont.systemFont(ofSize: safeSize)
     }
         
     @objc class func systemFont(ofSize size: CGFloat,
@@ -46,15 +55,15 @@ public extension UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
         guard let descriptor else {
-            return UIFont.systemFont(ofSize: size, weight: weight)
+            return UIFont.systemFont(ofSize: ptSafeFontSize(size), weight: weight)
         }
-        var setFont = UIFont(descriptor: descriptor, size: size)
+        var setFont = UIFont(descriptor: descriptor, size: ptSafeFontSize(size))
         setFont = scale ? setFont.adapter : setFont
         return setFont
     }
     
     fileprivate class func text(_ ofSize: CGFloat, W Weight: UIFont.Weight) -> UIFont {
-        UIFont.systemFont(ofSize: ofSize, weight: Weight)
+        UIFont.systemFont(ofSize: ptSafeFontSize(ofSize), weight: Weight)
     }
     
     //MARK: 常规字体
@@ -181,14 +190,14 @@ public extension UIFont {
     static func preferredFont(forTextStyle style: TextStyle, 
                               addPoints: CGFloat = .zero) -> UIFont {
         let referensFont = UIFont.preferredFont(forTextStyle: style)
-        return referensFont.withSize(referensFont.pointSize + addPoints)
+        return referensFont.withSize(ptSafeFontSize(referensFont.pointSize + addPoints))
     }
 
     static func preferredFont(forTextStyle style: TextStyle,
                               weight: Weight,
                               addPoints: CGFloat = .zero) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
-        let font = UIFont.systemFont(ofSize: descriptor.pointSize + addPoints, weight: weight)
+        let font = UIFont.systemFont(ofSize: ptSafeFontSize(descriptor.pointSize + addPoints), weight: weight)
         let metrics = UIFontMetrics(forTextStyle: style)
         return metrics.scaledFont(for: font)
     }

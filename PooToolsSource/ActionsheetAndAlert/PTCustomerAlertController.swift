@@ -40,7 +40,7 @@ public class PTCustomerAlertController: PTAlertController {
     // Español: Mantén la superficie predeterminada dinámica y translúcida para conservar el material del sistema.
     // 中文：默认弹窗表面使用动态半透明颜色，确保系统磨砂材质始终可见。
     private var resolvedContentBackgroundColor: UIColor {
-        contentBackgroundColor ?? UIColor.systemBackground.withAlphaComponent(0.78)
+        contentBackgroundColor ?? UIColor.ptPresentationMaterialSurface
     }
 
     fileprivate lazy var contentView:UIView = {

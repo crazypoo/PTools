@@ -201,7 +201,7 @@ public class PTSheetViewController: PTBaseViewController {
     public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil, dismissPanGes: Bool = true) {
         let options = (options ?? PTSheetOptions.default).normalized()
         self.contentViewController = PTSheetContentViewController(childViewController: controller, options: options)
-        self.contentViewController.contentBackgroundColor = UIColor.systemBackground
+        self.contentViewController.contentBackgroundColor = nil
         self.sizes = sizes.count > 0 ? sizes : [.intrinsic]
         self.options = options
         self.transition = PTSheetTransition(options: options)
@@ -218,6 +218,12 @@ public class PTSheetViewController: PTBaseViewController {
         self.updateOrderedSizes()
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIResponder.keyboardWillChangeFrameNotification,
+                                                   object: nil)
     }
     
     public required init?(coder: NSCoder) {

@@ -235,25 +235,25 @@ public class PTLayoutButton: UIButton {
         }
     }
 
-    open var normalTitleColor: UIColor = .black {
+    open var normalTitleColor: UIColor = .label {
         didSet {
             configuration = layoutConfig
         }
     }
     
-    open var selectedTitleColor: UIColor = .black {
+    open var selectedTitleColor: UIColor = .label {
         didSet {
             configuration = layoutConfig
         }
     }
     
-    open var hightlightTitleColor: UIColor = .black {
+    open var hightlightTitleColor: UIColor = .label {
         didSet {
             configuration = layoutConfig
         }
     }
     
-    open var disabledTitleColor: UIColor = .lightGray {
+    open var disabledTitleColor: UIColor = .secondaryLabel {
         didSet {
             configuration = layoutConfig
         }
@@ -322,7 +322,7 @@ public class PTLayoutButton: UIButton {
         }
     }
 
-    open var normalSubTitleColor: UIColor = .black {
+    open var normalSubTitleColor: UIColor = .secondaryLabel {
         didSet {
             configuration = layoutConfig
         }
@@ -350,7 +350,7 @@ public class PTLayoutButton: UIButton {
         }
     }
     
-    open var disabledSubTitleColor: UIColor = .lightGray {
+    open var disabledSubTitleColor: UIColor = .tertiaryLabel {
         didSet {
             configuration = layoutConfig
         }
@@ -464,10 +464,12 @@ public class PTLayoutButton: UIButton {
             leftOrighialX = (frame.width - totalWidth) / 2.0
             rightOrighialX = leftViewFrame.maxX + midSpacing
         case .leading:
-            leftOrighialX = (frame.width - totalWidth) / 2.0
+            let isRightToLeft = effectiveUserInterfaceLayoutDirection == .rightToLeft
+            leftOrighialX = isRightToLeft ? frame.width - totalWidth : 0
             rightOrighialX = leftViewFrame.maxX + midSpacing
         case .trailing:
-            leftOrighialX = (frame.width - totalWidth) / 2.0
+            let isRightToLeft = effectiveUserInterfaceLayoutDirection == .rightToLeft
+            leftOrighialX = isRightToLeft ? 0 : frame.width - totalWidth
             rightOrighialX = leftViewFrame.maxX + midSpacing
         default:
             leftOrighialX = (frame.width - totalWidth) / 2.0
@@ -698,6 +700,10 @@ public class PTLayoutButton: UIButton {
         let loading = value ?? false
         isButtonLoading = loading
         configuration = layoutConfig
+        // English: Expose loading state without changing the caller's enabled/tap contract.
+        // Español: Expón el estado de carga sin cambiar el contrato de interacción del llamador.
+        // 中文：只暴露加载状态，不改变调用方原有的可用性和点击约定。
+        accessibilityValue = loading ? "Loading" : nil
         if loading {
             isUserInteractionEnabled = loadingCanTap
         } else {

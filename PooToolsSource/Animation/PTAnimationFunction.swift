@@ -16,6 +16,14 @@ public let PTAnimationDuration = 0.35
 public typealias PTNativeAnimationCompletion = @MainActor @Sendable (_ finished: Bool) -> Void
 
 public class PTAnimationFunction: NSObject {
+    // English: Normalize caller-provided durations before handing them to UIKit.
+    // Español: Normaliza las duraciones recibidas antes de pasarlas a UIKit.
+    // 中文：在交给 UIKit 前统一规范调用方传入的动画时长。
+    @MainActor private class func safeDuration(_ value: CGFloat) -> TimeInterval {
+        guard value.isFinite else { return 0 }
+        return max(0, TimeInterval(value))
+    }
+
     @MainActor public class func animationIn(animationView:UIView,
                                   animationType:PTAlertAnimationType,
                                   transformValue:CGFloat,
@@ -32,6 +40,12 @@ public class PTAnimationFunction: NSObject {
         case .Right:
             transform = CGAffineTransform(translationX: transformValue, y: 0)
         default: break
+        }
+
+        if UIAccessibility.isReduceMotionEnabled {
+            animationView.transform = .identity
+            completion?(true)
+            return
         }
 
         // Use one UIKit spring animation so transform state stays on the view and is easy to cancel.
@@ -73,17 +87,29 @@ public class PTAnimationFunction: NSObject {
         }
 
         let targetTransform = CGAffineTransform(translationX: offsetX, y: offsetY)
+        let resolvedDuration = PTAnimationFunction.safeDuration(duration)
+
+        if UIAccessibility.isReduceMotionEnabled || resolvedDuration == 0 {
+            animationView.transform = targetTransform
+            animation()
+            completion(true)
+            return
+        }
 
         // Keep the two-stage behavior: move off-screen first, then run the caller's cleanup animation.
         // Mantén el comportamiento en dos etapas: salir de pantalla y después ejecutar la limpieza del llamador.
         // 保留两阶段行为：先移出屏幕，再执行调用方的清理动画。
-        UIView.animate(withDuration: duration,
+        UIView.animate(withDuration: resolvedDuration,
                        delay: 0,
                        options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction, .layoutSubviews],
                        animations: {
             animationView.transform = targetTransform
-        }, completion: { _ in
-            UIView.animate(withDuration: duration,
+                       }, completion: { finished in
+            guard finished else {
+                completion(false)
+                return
+            }
+            UIView.animate(withDuration: resolvedDuration,
                            delay: 0,
                            usingSpringWithDamping: 0.9,
                            initialSpringVelocity: 0.7,

@@ -27,6 +27,22 @@ public enum PTAxisType {
 // MARK: - CAAnimation Extension
 
 extension CAAnimation {
+    // English: Clamp animation inputs so invalid caller values cannot create undefined Core Animation state.
+    // Español: Limita las entradas para que valores inválidos no creen un estado indefinido de Core Animation.
+    // 中文：统一限制动画参数，避免调用方传入非法值后产生未定义的 Core Animation 状态。
+    private class func safeDuration(_ value: CFTimeInterval) -> CFTimeInterval {
+        guard value.isFinite else { return 1 }
+        return max(0.01, value)
+    }
+
+    private class func safeRepeatCount(_ value: Float) -> Float {
+        guard !value.isNaN else { return 0 }
+        return max(0, value)
+    }
+
+    private class func safeOffset(_ value: CGFloat) -> CGFloat {
+        value.isFinite ? value : 0
+    }
     
     /// 永久透明度动画 (呼吸/闪烁)
     public class func opacityForeverAnimation(time: CFTimeInterval) -> CABasicAnimation {
@@ -34,7 +50,7 @@ extension CAAnimation {
         animation.fromValue = 1.0
         animation.toValue = 0.1
         animation.autoreverses = true
-        animation.duration = time
+        animation.duration = safeDuration(time)
         animation.repeatCount = .infinity // 使用更语义化的 .infinity
         animation.isRemovedOnCompletion = false
         animation.timingFunction = CAMediaTimingFunction(name: .linear)
@@ -47,8 +63,8 @@ extension CAAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 1.0
         animation.toValue = 0.4
-        animation.repeatCount = repeatTimes
-        animation.duration = time
+        animation.repeatCount = safeRepeatCount(repeatTimes)
+        animation.duration = safeDuration(time)
         animation.isRemovedOnCompletion = false
         animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
         animation.fillMode = .forwards
@@ -61,26 +77,26 @@ extension CAAnimation {
         // 直接使用枚举的 keyPath
         let animation = CABasicAnimation(keyPath: direction.keyPath)
         animation.fromValue = 0
-        animation.toValue = degree
-        animation.duration = duration
+        animation.toValue = degree.isFinite ? degree : 0
+        animation.duration = safeDuration(duration)
         animation.autoreverses = false
         animation.isCumulative = true
         animation.isRemovedOnCompletion = false
         animation.fillMode = .forwards
-        animation.repeatCount = repeatCount
+        animation.repeatCount = safeRepeatCount(repeatCount)
         return animation
     }
     
     /// 缩放动画
     public class func scale(fromScale: Float, toScale: Float, duration: CFTimeInterval, repeatCount: Float) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        animation.fromValue = fromScale
-        animation.toValue = toScale
-        animation.duration = duration
+        animation.fromValue = fromScale.isFinite ? fromScale : 1
+        animation.toValue = toScale.isFinite ? toScale : 1
+        animation.duration = safeDuration(duration)
         animation.autoreverses = true
         animation.isRemovedOnCompletion = false
         animation.fillMode = .forwards
-        animation.repeatCount = repeatCount
+        animation.repeatCount = safeRepeatCount(repeatCount)
         return animation
     }
     
@@ -90,9 +106,10 @@ extension CAAnimation {
     public class func shakeAnimation(repeatTimes: Float, duration: CFTimeInterval, offset: CGFloat = 5.0) -> CAKeyframeAnimation {
         // 使用 transform.translation.x 进行相对位移，兼容 AutoLayout
         let anim = CAKeyframeAnimation(keyPath: "transform.translation.x")
-        anim.values = [0, -offset, 0, offset, 0]
-        anim.repeatCount = repeatTimes
-        anim.duration = duration
+        let safeOffset = safeOffset(offset)
+        anim.values = [0, -safeOffset, 0, safeOffset, 0]
+        anim.repeatCount = safeRepeatCount(repeatTimes)
+        anim.duration = safeDuration(duration)
         anim.isRemovedOnCompletion = false
         anim.fillMode = .forwards
         return anim
@@ -104,9 +121,10 @@ extension CAAnimation {
     public class func bounceAnimation(repeatTimes: Float, duration: CFTimeInterval, offset: CGFloat = 5.0) -> CAKeyframeAnimation {
         // 使用 transform.translation.y 进行相对位移，兼容 AutoLayout
         let anim = CAKeyframeAnimation(keyPath: "transform.translation.y")
-        anim.values = [0, -offset, 0, offset, 0]
-        anim.repeatCount = repeatTimes
-        anim.duration = duration
+        let safeOffset = safeOffset(offset)
+        anim.values = [0, -safeOffset, 0, safeOffset, 0]
+        anim.repeatCount = safeRepeatCount(repeatTimes)
+        anim.duration = safeDuration(duration)
         anim.isRemovedOnCompletion = false
         anim.fillMode = .forwards
         return anim

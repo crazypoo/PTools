@@ -146,6 +146,7 @@ private final class PTDarkModeScheduleMonitor: NSObject {
         let notifications: [Notification.Name] = [
             UIScene.didActivateNotification,
             UIApplication.didBecomeActiveNotification,
+            UIWindow.didBecomeKeyNotification,
             UIApplication.significantTimeChangeNotification,
             Notification.Name.NSCalendarDayChanged,
             Notification.Name("NSSystemClockDidChangeNotification"),
@@ -276,12 +277,11 @@ public class PTDarkModeOption {
     }
 
     private static var systemIsLight: Bool {
-        let sceneStyle = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first(where: { $0.activationState != .background })?
-            .traitCollection
-            .userInterfaceStyle
-        let style = sceneStyle.flatMap { $0 == .unspecified ? nil : $0 }
+        // English: Prefer the active window trait so multi-scene apps use the visible interface style.
+        // Español: Prefiere el trait de la ventana activa para que las aplicaciones multi-escena usen el estilo visible.
+        // 中文：优先读取活动窗口的 trait，确保多场景应用使用当前可见界面样式。
+        let activeWindowStyle = PTSceneContext.activeWindow()?.traitCollection.userInterfaceStyle
+        let style = activeWindowStyle.flatMap { $0 == .unspecified ? nil : $0 }
             ?? UITraitCollection.current.userInterfaceStyle
         return style != .dark
     }

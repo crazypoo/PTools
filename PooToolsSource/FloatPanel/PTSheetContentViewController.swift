@@ -22,10 +22,14 @@ public class PTSheetContentViewController: PTBaseViewController {
     private var pullBarSafeAreaTop: CGFloat = 0
     private var keyboardSafeAreaBottom: CGFloat = 0
     private var lastLayoutBounds: CGSize = .zero
+    private var configuredContentBackgroundColor: UIColor?
     
     public var contentBackgroundColor: UIColor? {
-        get { self.childContainerView.backgroundColor }
-        set { self.childContainerView.backgroundColor = newValue }
+        get { configuredContentBackgroundColor }
+        set {
+            configuredContentBackgroundColor = newValue
+            childContainerView.backgroundColor = newValue ?? .ptPresentationSurface
+        }
     }
 
     // iOS 13+ 引入的平滑圆角特性
@@ -108,6 +112,12 @@ public class PTSheetContentViewController: PTBaseViewController {
         // FloatPanel 只支持代码创建；从 storyboard 解码时安全返回失败，避免初始化阶段崩溃。
         return nil
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIContentSizeCategory.didChangeNotification,
+                                                   object: nil)
+    }
     
     // MARK: - Lifecycle
     
@@ -115,6 +125,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .clear
+        childContainerView.backgroundColor = configuredContentBackgroundColor ?? .ptPresentationSurface
         self.setupContentView()
         self.setupChildContainerView()
         self.setupPullBarView()

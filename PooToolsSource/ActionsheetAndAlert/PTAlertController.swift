@@ -58,12 +58,8 @@ extension PTAlertController {
 private extension PTAlertController {
 
     func syncSystemUI() {
-        guard let scene = viewIfLoaded?.window?.windowScene,
-              let rootVC = scene.windows
-                .first(where: {
-                    $0.windowLevel == .normal &&
-                    $0.rootViewController != nil
-                })?.rootViewController else { return }
+        let scene = preferredWindowScene ?? viewIfLoaded?.window?.windowScene
+        guard let rootVC = PTSceneContext.rootViewController(in: scene) else { return }
 
         config.supportedInterfaceOrientations = rootVC.supportedInterfaceOrientations
         sourceStatusBarHidden = rootVC.prefersStatusBarHidden

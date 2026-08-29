@@ -412,18 +412,7 @@ private extension PTAlertManager {
         if let scene = controller.viewIfLoaded?.window?.windowScene {
             return scene
         }
-
-        let scenes = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-
-        if let keyScene = scenes
-            .flatMap(\.windows)
-            .first(where: \.isKeyWindow)?
-            .windowScene {
-            return keyScene
-        }
-
-        return scenes.first(where: { $0.activationState == .foregroundActive })
+        return PTSceneContext.activeWindow()?.windowScene
     }
 
     func container(for scene: UIWindowScene) -> SceneContainer {
