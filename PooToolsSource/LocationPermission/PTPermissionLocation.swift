@@ -85,25 +85,25 @@ public class PTPermissionLocation: PTPermission {
         case .location(let access):
             switch access {
             case .whenInUse:
-                Task { @MainActor in
-                    PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
-                    PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
-                        PTGCDManager.shared.runOnMain {
-                            completion()
-                            PTPermissionLocationWhenInUseHandler.shared = nil
-                        }
+                PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
+                PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
+                    // English: The system callback may outlive the request call; keep cleanup on MainActor.
+                    // Español: El callback del sistema puede sobrevivir a la llamada; mantiene la limpieza en MainActor.
+                    // 中文：系统回调可能晚于请求调用返回，因此统一在 MainActor 上完成回收。
+                    PTMainActorBridge.perform {
+                        completion()
+                        PTPermissionLocationWhenInUseHandler.shared = nil
                     }
                 }
             case .always:
-                Task { @MainActor in
-                    PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
-                    Task { @MainActor in
-                        PTPermissionLocationAlwaysHandler.shared?.requestPermission {
-                            Task { @MainActor in
-                                completion()
-                                PTPermissionLocationAlwaysHandler.shared = nil
-                            }
-                        }
+                PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
+                PTPermissionLocationAlwaysHandler.shared?.requestPermission {
+                    // English: Use the same callback bridge for both location authorization modes.
+                    // Español: Usa el mismo puente de callback para los dos modos de autorización de ubicación.
+                    // 中文：两种定位授权模式统一使用同一个回调桥接入口。
+                    PTMainActorBridge.perform {
+                        completion()
+                        PTPermissionLocationAlwaysHandler.shared = nil
                     }
                 }
             }

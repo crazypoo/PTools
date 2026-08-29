@@ -71,7 +71,7 @@ printf '%s\n' \
   'image loading    | canonical: PTLoadImageFunction.loadImage(source:) | deprecated wrapper: dynamic Any adapters retained for source compatibility | semantic difference: UIView applies UI presentation configuration | pending: migrate new callers to PTImageSource' \
   'network         | canonical: Network internal executor | deprecated wrapper: requestApi/requestBodyAPI/fileUpload/imageUpload | semantic difference: callback/stream signatures | pending: typed progress stream adoption' \
   'empty state     | canonical: PTUnavailableManager.render | deprecated wrapper: UIView/UIViewController convenience entry points | semantic difference: none | pending: none' \
-  'scene/window    | canonical: PTSceneContext | deprecated wrapper: legacy PTUtils window helpers | semantic difference: none | pending: migrate remaining callers' \
-  'UI dispatch     | canonical: PTMainActorBridge | deprecated wrapper: PTGCDManager main-queue helpers | semantic difference: none | pending: remove nested dispatches'
+  'scene/window    | canonical: PTSceneContext | deprecated wrapper: legacy PTUtils window helpers | semantic difference: none | pending: remaining callers outside 5.2 Core scope' \
+  'UI dispatch     | canonical: PTMainActorBridge | deprecated wrapper: PTGCDManager main-queue helpers | semantic difference: none | pending: remaining legacy callers outside 5.2 Core scope'
 
 printf '\n%s\n' 'Each group is explicitly classified as canonical, deprecated wrapper, semantic difference, or pending work.'

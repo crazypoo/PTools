@@ -104,7 +104,7 @@ public enum PTMediaSaveService {
     private nonisolated static func completePermissionDenied(
         _ completion: @escaping @MainActor @Sendable (PTMediaSaveResult) -> Void
     ) {
-        Task { @MainActor in
+        PTMainActorBridge.perform {
             completion(.failure(.permissionDenied))
         }
     }
@@ -135,7 +135,7 @@ public enum PTMediaSaveService {
                                                failureMessage: String,
                                                localIdentifier: String?,
                                                completion: @escaping @MainActor @Sendable (PTMediaSaveResult) -> Void) {
-        Task { @MainActor in
+        PTMainActorBridge.perform {
             guard success else {
                 completion(.failure(.saveFailed(failureMessage)))
                 return

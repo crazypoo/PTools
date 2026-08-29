@@ -24,7 +24,7 @@ public enum PTPhoneFeedbackControl {
     /// 触发通知类型反馈 (成功/警告/失败)
     /// - Parameter type: 反馈类型，默认为 .success
     public static func triggerNotification(type: UINotificationFeedbackGenerator.FeedbackType = .success) {
-        DispatchQueue.main.async {
+        PTMainActorBridge.perform {
             let generator = UINotificationFeedbackGenerator()
             generator.prepare() // 唤醒 Taptic Engine 硬件
             generator.notificationOccurred(type)
@@ -38,7 +38,7 @@ public enum PTPhoneFeedbackControl {
     ///   - style: 震动反馈风格 (如 .light, .medium, .heavy, .rigid, .soft)
     ///   - intensity: 震动强度 (范围 0.0 ~ 1.0)。传 nil 则使用系统默认强度。仅支持 iOS 13.0+
     public static func triggerImpact(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium, intensity: CGFloat? = nil) {
-        DispatchQueue.main.async {
+        PTMainActorBridge.perform {
             let generator = UIImpactFeedbackGenerator(style: style)
             generator.prepare()
             
@@ -57,7 +57,7 @@ public enum PTPhoneFeedbackControl {
     
     /// 触发选择器变化反馈 (常用于滚轮、滑动列表、拨页等轻微段落感)
     public static func triggerSelection() {
-        DispatchQueue.main.async {
+        PTMainActorBridge.perform {
             let generator = UISelectionFeedbackGenerator()
             generator.prepare()
             generator.selectionChanged()

@@ -22,6 +22,14 @@ PooToolsSource/Vision/PTVision.swift
 # compatibility-boundary: legacy framework, runtime and callback adapters
 PooToolsSource/Calendar/PTEventOnCalendar.swift
 PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
+# Core/OSSVoice subclasses AVSpeechSynthesisVoice, an SDK reference type that cannot
+# declare native Sendable conformance. Its mutable compatibility properties are guarded
+# by an NSRecursiveLock; migrate callers to OSSVoiceInfo when the legacy class is retired.
+# Core/OSSVoice hereda de AVSpeechSynthesisVoice, un tipo de referencia del SDK que no puede
+# declarar Sendable nativo. Sus propiedades mutables están protegidas por NSRecursiveLock;
+# migra los llamadores a OSSVoiceInfo cuando se retire la clase heredada.
+# Core/OSSVoice 继承无法原生声明 Sendable 的 SDK 引用类型 AVSpeechSynthesisVoice；其可变兼容
+# 属性由 NSRecursiveLock 保护，待旧类淘汰后迁移调用方到 OSSVoiceInfo。
 PooToolsSource/Core/OSSVoice.swift
 PooToolsSource/Debug/PTApplicationDirectories.swift
 # system notification callback boundary: Notification is consumed immediately on the MainActor.

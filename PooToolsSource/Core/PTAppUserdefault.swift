@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.lock
 
 public let DevNetWorkKey = "UI_test_url"
 public let DevSocketKey = "UI_test_socket_url"
@@ -16,6 +17,31 @@ public let ConsoleDebug = "UI_debug"
 public let TouchInspectorDebug = "TS_debug"
 public let TouchInspectorHitsDebug = "TS_Hit_debug"
 
+// English: Serialize synchronous UserDefaults reads and writes without changing the public property API.
+// Español: Serializa las lecturas y escrituras síncronas de UserDefaults sin cambiar la API pública de propiedades.
+// 中文：在不改变公开属性 API 的前提下，串行化 UserDefaults 的同步读写。
+internal enum PTUserDefaultsStore {
+    private static let lock = OSAllocatedUnfairLock(initialState: ())
+
+    static func value<T: Sendable>(_ key: String, default defaultValue: T) -> T {
+        lock.withLock {
+            UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+        }
+    }
+
+    static func optionalValue<T: Sendable>(_ key: String) -> T? {
+        lock.withLock {
+            UserDefaults.standard.object(forKey: key) as? T
+        }
+    }
+
+    static func set<T: Sendable>(_ value: T, forKey key: String) {
+        lock.withLock {
+            UserDefaults.standard.set(value, forKey: key)
+        }
+    }
+}
+
 // UserDefaults is the single source of truth; the wrapper has no mutable instance state.
 // UserDefaults es la única fuente de verdad; el envoltorio no tiene estado mutable de instancia.
 // UserDefaults 是唯一数据源；这个包装器不持有可变实例状态。
@@ -24,16 +50,16 @@ public final class PTCoreUserDefultsWrapper: Sendable {
     public static let shared = PTCoreUserDefultsWrapper()
     private init() {}
 
-    private static func value<T>(_ key: String, default defaultValue: T) -> T {
-        UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+    private static func value<T: Sendable>(_ key: String, default defaultValue: T) -> T {
+        PTUserDefaultsStore.value(key, default: defaultValue)
     }
 
-    private static func optionalValue<T>(_ key: String) -> T? {
-        UserDefaults.standard.object(forKey: key) as? T
+    private static func optionalValue<T: Sendable>(_ key: String) -> T? {
+        PTUserDefaultsStore.optionalValue(key)
     }
 
-    private static func set(_ value: Any?, forKey key: String) {
-        UserDefaults.standard.set(value, forKey: key)
+    private static func set<T: Sendable>(_ value: T, forKey key: String) {
+        PTUserDefaultsStore.set(value, forKey: key)
     }
 
     //MARK: 是否再显示更新框(0继续显示1不再显示)

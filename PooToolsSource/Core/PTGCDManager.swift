@@ -34,6 +34,11 @@ public actor PTGCDManager {
     
     // 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer
     private var activeTimers: [String: Task<Void, Never>] = [:]
+
+    // English: A generation prevents an old one-shot task from removing a newer task with the same name.
+    // Español: Una generación evita que una tarea antigua elimine otra nueva con el mismo nombre.
+    // 中文：使用生成标识，避免旧的一次性任务误删同名的新任务。
+    private var timerGenerations: [String: UUID] = [:]
     
     // 内部的取消标志，无需 NSLock，actor 自动保证读写安全
     public var cancelFlag: Bool = false
@@ -50,10 +55,21 @@ public actor PTGCDManager {
         // 如果已存在同名任务，先取消，防止内存泄漏或重复执行
         cancelTimer(withName: name)
 
-        guard timeInterval.isFinite, timeInterval >= 0 else { return }
+        guard timeInterval.isFinite,
+              timeInterval >= 0,
+              !repeats || timeInterval > 0 else { return }
+
+        // English: Use an Int64-sized nanosecond ceiling so floating-point rounding cannot overflow UInt64.
+        // Español: Usa un límite de nanosegundos basado en Int64 para que el redondeo no desborde UInt64.
+        // 中文：使用 Int64 大小的纳秒上限，避免浮点舍入导致 UInt64 溢出。
+        let maxNanoseconds = UInt64(Int64.max)
+        let maxInterval = TimeInterval(Int64.max) / 1_000_000_000
+        let boundedInterval = min(timeInterval, maxInterval)
+        let generation = UUID()
+        timerGenerations[name] = generation
         
         let task = Task {
-            let nanoseconds = UInt64(timeInterval * 1_000_000_000)
+            let nanoseconds = min(UInt64((boundedInterval * 1_000_000_000).rounded(.down)), maxNanoseconds)
             
             repeat {
                 // 检查任务是否被取消，协作式退出
@@ -78,7 +94,7 @@ public actor PTGCDManager {
             
             // 执行完毕后清理字典中的自身引用
             if !repeats {
-                removeTimerRef(name: name)
+                removeTimerRef(name: name, generation: generation)
             }
         }
         
@@ -88,6 +104,7 @@ public actor PTGCDManager {
     public func cancelTimer(withName name: String) {
         activeTimers[name]?.cancel()
         activeTimers.removeValue(forKey: name)
+        timerGenerations.removeValue(forKey: name)
     }
     
     public func isExistTimer(withName name: String) -> Bool {
@@ -95,8 +112,10 @@ public actor PTGCDManager {
     }
     
     // 仅供内部清理使用
-    private func removeTimerRef(name: String) {
+    private func removeTimerRef(name: String, generation: UUID) {
+        guard timerGenerations[name] == generation else { return }
         activeTimers.removeValue(forKey: name)
+        timerGenerations.removeValue(forKey: name)
     }
     
     // MARK: - 结构化并发组 (替代 DispatchGroup & DispatchSemaphore)
@@ -154,7 +173,7 @@ public actor PTGCDManager {
     
     @discardableResult
     public nonisolated func delayOnMain(time: TimeInterval, block: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
-        PTMainActorBridge.cancellableAfter(time, operation: block)
+        PTMainActorBridge.after(time, operation: block)
     }
     
     /// 在后台执行任务，支持指定优先级 (等同于以前的 QoS)
@@ -172,7 +191,9 @@ public actor PTGCDManager {
     
     @discardableResult
     public nonisolated func runOnBackground(block: @escaping PTActionTask) -> Task<Void, Never> {
-        PTGCDManager.shared.runOnBackground(priority: .background, block: block)
+        Task.detached(priority: .background) {
+            block()
+        }
     }
     
     @discardableResult

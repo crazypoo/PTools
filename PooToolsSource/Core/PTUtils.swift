@@ -283,14 +283,8 @@ public extension PTUtils {
         return viewController
     }
 
-    /// 按当前场景和窗口层级选择业务窗口，避免误选调试悬浮窗。
-    @MainActor private class func activeWindow() -> UIWindow? {
-        PTSceneContext.activeWindow()
-    }
-    
     @MainActor class func getCurrentVC() -> UIViewController? {
-        guard let root = activeWindow()?.rootViewController else { return nil }
-        return getCurrentVC(from: root)
+        PTSceneContext.currentViewController()
     }
     
     // MARK: - Navigation Controller 查找
@@ -307,34 +301,33 @@ public extension PTUtils {
 
     // MARK: - 取得頂部控制器
     @MainActor class func getTopViewController(_ base: UIViewController? = nil) -> UIViewController? {
-        let root = base ?? activeWindow()?.rootViewController
+        let root = base ?? PTSceneContext.rootViewController()
         guard let root else { return nil }
         return getCurrentVC(from: root)
     }
     
     // MARK: - Root Controller
     @MainActor class func getRootViewController() -> UIViewController? {
-        return activeWindow()?.rootViewController
+        PTSceneContext.rootViewController()
     }
     
     //MARK: - 需要注册的时候传入一个导航包含的控制器
     @MainActor class func setRootViewController(_ navController: UIViewController) {
-        activeWindow()?.rootViewController = navController
+        PTSceneContext.activeWindow()?.rootViewController = navController
     }
     
     // MARK: - 活躍 VC
     @MainActor class func getActivityViewController() -> UIViewController? {
-        guard let rootVC = activeWindow()?.rootViewController else { return nil }
-        return getCurrentVC(from: rootVC)
+        PTSceneContext.currentViewController()
     }
 
     @MainActor class func visibleVC() -> UIViewController? {
-        return getActivityViewController()
+        PTSceneContext.currentViewController()
     }
 
     // Configure console window.
     @MainActor class func fetchWindow() -> UIWindow? {
-        activeWindow()
+        PTSceneContext.activeWindow()
     }
                         
     class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
@@ -427,7 +420,7 @@ public extension PTUtils {
                 completion?()
                 SwizzleTool.swizzleDidAddSubview {
                     // Configure console window.
-                    Task { @MainActor in
+                    PTMainActorBridge.perform {
                         if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
                             currentVC.view.window?.bringSubviewToFront(findMask)
                         }
@@ -454,7 +447,7 @@ public extension PTUtils {
     }
     
     @MainActor class func pusbWindowNavRoot(_ vc: UIViewController) {
-        guard let root = activeWindow()?.rootViewController else { return }
+        guard let root = PTSceneContext.rootViewController() else { return }
         if let nav = root as? UINavigationController,
            nav.transitionCoordinator == nil {
             nav.pushViewController(vc, animated: true)

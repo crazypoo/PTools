@@ -10,7 +10,7 @@
 import UIKit
 
 @MainActor public func deviceSafeAreaInsets() -> UIEdgeInsets {
-    AppWindows?.safeAreaInsets ?? .zero
+    PTSceneContext.activeWindow()?.safeAreaInsets ?? .zero
 }
 
 // English: Resolve an active application window without relying on a global key-window shortcut.
@@ -56,7 +56,8 @@ public enum PTSceneContext {
             return window
         }
         for windowScene in scenes {
-            if let sceneWindow = (windowScene.delegate as? PTWindowSceneDelegate)?.window {
+            if let sceneWindow = (windowScene.delegate as? PTWindowSceneDelegate)?.window,
+               sceneWindow.rootViewController != nil {
                 return sceneWindow
             }
         }
@@ -66,8 +67,15 @@ public enum PTSceneContext {
         return nil
     }
 
+    // English: Return the root controller from the same window selection used by every scene-aware lookup.
+    // Español: Devuelve el controlador raíz usando la misma selección de ventana que todas las búsquedas por escena.
+    // 中文：使用所有场景查询共用的窗口选择策略返回根控制器。
+    public static func rootViewController(in scene: UIWindowScene? = nil) -> UIViewController? {
+        activeWindow(in: scene)?.rootViewController
+    }
+
     public static func currentViewController(in scene: UIWindowScene? = nil) -> UIViewController? {
-        guard let rootViewController = activeWindow(in: scene)?.rootViewController else {
+        guard let rootViewController = rootViewController(in: scene) else {
             return nil
         }
         return PTUtils.getCurrentVC(from: rootViewController)
@@ -91,9 +99,15 @@ public enum PTMainActorBridge {
                              operation: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
         Task { @MainActor in
             guard delay.isFinite, delay >= 0 else { return }
-            let boundedDelay = min(delay, TimeInterval(UInt64.max) / 1_000_000_000)
+            // English: Keep the nanosecond conversion below UInt64.max even when a caller passes a huge finite delay.
+            // Español: Mantén la conversión de nanosegundos por debajo de UInt64.max aunque llegue un retraso finito enorme.
+            // 中文：即使调用方传入极大的有限延迟，也要保证纳秒转换不会超过 UInt64.max。
+            let maxNanoseconds = UInt64(Int64.max)
+            let maxDelay = TimeInterval(Int64.max) / 1_000_000_000
+            let boundedDelay = min(delay, maxDelay)
             do {
-                try await Task.sleep(nanoseconds: UInt64(boundedDelay * 1_000_000_000))
+                let nanoseconds = min(UInt64((boundedDelay * 1_000_000_000).rounded(.down)), maxNanoseconds)
+                try await Task.sleep(nanoseconds: nanoseconds)
             } catch {
                 return
             }
@@ -103,6 +117,7 @@ public enum PTMainActorBridge {
     }
 
     @discardableResult
+    @available(*, deprecated, message: "请使用 PTMainActorBridge.after(_:operation:)")
     public static func cancellableAfter(_ delay: TimeInterval,
                                         operation: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
         after(delay, operation: operation)

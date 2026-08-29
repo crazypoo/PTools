@@ -60,10 +60,18 @@
 
 ## 5.2.0：Core 并发与生命周期边界
 
-- ⬜ 统一 `PTMainActorBridge`、`PTGCDManager` 和可取消延迟，删除已确认的重复主线程跳转。
-- ⬜ 统一 `PTSceneContext` 的活动窗口、当前页面和多场景回退策略。
-- ⬜ 收敛权限、UserDefaults、配置和缓存的 actor/锁边界，建立 `@unchecked Sendable` allowlist。
-- ⬜ 将跨 actor 的动态字典和 Progress 替换为 Sendable 快照，保留兼容包装器。
+- ✅ 统一 `PTMainActorBridge`、`PTGCDManager` 和可取消延迟，删除已确认的重复主线程跳转。
+- ✅ 统一 `PTSceneContext` 的活动窗口、当前页面和多场景回退策略。
+- ✅ 收敛权限、UserDefaults、配置和缓存的 actor/锁边界，建立 `@unchecked Sendable` allowlist。
+- ✅ 将跨 actor 的动态字典和 Progress 替换为 Sendable 快照，保留兼容包装器。
+
+### 5.2.0 实施与验证说明
+
+- ✅ Core 调度入口已统一到 `PTMainActorBridge`；`PTGCDManager` 保留兼容方法，并增加定时器代际保护和安全纳秒上限。
+- ✅ 场景窗口、根控制器和当前页面已统一由 `PTSceneContext` 解析；无根控制器的 delegate window 不再作为有效回退。
+- ✅ UserDefaults 使用同步锁保护的泛型 Sendable 存储；权限回调统一经过 MainActor 桥接；配置和视频封面缓存沿用 MainActor/actor 边界。
+- ✅ Core 已使用 `PTProgressSnapshot`、`PTResponseMetadata` 等值类型；旧动态 API 继续保留在兼容层，不跨入并发核心执行器。
+- ⛔ Xcode Debug/Release 已完成 PooTools 源码编译，但模拟器最终链接被外部 `Pods/Bugly/Bugly.framework` 真机构建产物阻断；因此本轮不创建版本 tag，也不宣称完整构建验收通过。
 
 ## 5.3.0：Base 与列表基础设施
 
