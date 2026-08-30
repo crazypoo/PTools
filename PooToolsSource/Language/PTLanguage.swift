@@ -11,14 +11,15 @@ import os.lock
 import UIKit
 
 /**
- 工程配置
- 1、Xcode》选择你的项目》PROJECT》info 》Localizations 》 添加要支持的语言
- 2、新建Localizable.strings文件（Localizable固定值）
- 3、选择Localizable.strings 》在Xcode右边的 Inspectors（Xcode右上角的按钮）》找到 Localizations 》 勾选需要的语言，此时Xcode会在你的Localizable.strings里面生成对应的文件。
- 4、在对应的语言文件里添加
-    "Home_follow" = "关注";
-    ...
- 5、使用PTLanguage类，管理语言的切换。
+ English: Add languages in the target's Localization settings. Use either a legacy
+ Localizable.strings table or an Xcode String Catalog (Localizable.xcstrings), then
+ use PTLanguage to manage the runtime language selection.
+ Español: Añade los idiomas en la configuración de Localization del target. Puedes usar
+ una tabla Localizable.strings antigua o un catálogo de cadenas de Xcode
+ (Localizable.xcstrings), y después usar PTLanguage para seleccionar el idioma.
+ 中文：在 target 的 Localization 设置中添加语言。可以继续使用旧版
+ Localizable.strings，也可以使用 Xcode 的 String Catalog（Localizable.xcstrings），
+ 然后通过 PTLanguage 管理运行时语言切换。
  */
 
 
@@ -212,10 +213,45 @@ private enum PTLocalizationResolver {
                           tableName: String?,
                           bundle: Bundle,
                           language: String) -> String {
-        let localizedBundle = languageBundle(for: language, in: bundle)
-        return localizedBundle.localizedString(forKey: key,
-                                               value: key,
-                                               table: tableName)
+        let normalizedTableName = tableName.flatMap { tableName in
+            let trimmedTableName = tableName.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmedTableName.isEmpty ? nil : trimmedTableName
+        }
+
+        // English: A caller may still pass a concrete .lproj bundle. Keep that legacy path intact.
+        // Español: Un caller todavía puede pasar un bundle .lproj concreto; conserva esa ruta.
+        // 中文：调用方可能仍会传入具体的 .lproj bundle，这里保留旧路径。
+        if bundle.bundleURL.pathExtension.caseInsensitiveCompare("lproj") == .orderedSame {
+            return bundle.localizedString(forKey: key,
+                                          value: key,
+                                          table: normalizedTableName)
+        }
+
+        // English: Let Foundation resolve compiled String Catalogs and legacy string tables.
+        // Español: Deja que Foundation resuelva los catálogos compilados y las tablas antiguas.
+        // 中文：交给 Foundation 解析编译后的 String Catalog 和旧版字符串表。
+        let resource = LocalizedStringResource(
+            String.LocalizationValue(key),
+            table: normalizedTableName,
+            locale: Locale(identifier: language),
+            bundle: .atURL(bundle.bundleURL),
+            comment: ""
+        )
+        let catalogValue = String(localized: resource)
+
+        // English: Fall back only when a legacy table has the value but the catalog lookup does not.
+        // Español: Usa la tabla antigua solo cuando contiene el valor y el catálogo no lo encuentra.
+        // 中文：仅当旧字符串表存在值而 Catalog 没有解析到时，才回退到旧路径。
+        if catalogValue == key {
+            let localizedBundle = languageBundle(for: language, in: bundle)
+            let legacyValue = localizedBundle.localizedString(forKey: key,
+                                                              value: key,
+                                                              table: normalizedTableName)
+            if legacyValue != key {
+                return legacyValue
+            }
+        }
+        return catalogValue
     }
 
     private static func languageBundle(for language: String, in bundle: Bundle) -> Bundle {
@@ -278,7 +314,11 @@ public final class PTLanguage: NSObject, Sendable {
         } set {
             let selectedLanguage = Self.resolvedLanguage(for: newValue)
             let didChange = Self.languageLock.withLock {
-                let currentLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                let storedLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                let currentLanguage = Self.resolvedLanguage(for: storedLanguage)
+                if storedLanguage != currentLanguage {
+                    PTCoreUserDefultsWrapper.shared.AppLanguage = currentLanguage
+                }
                 guard selectedLanguage != currentLanguage else { return false }
 
                 PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
@@ -325,14 +365,12 @@ public final class PTLanguage: NSObject, Sendable {
     }
 
     private static func postLanguageDidChange() {
-        let post = {
-            NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
-        }
         if Thread.isMainThread {
-            post()
+            NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
         } else {
             Task { @MainActor in
-                post()
+                guard !Task.isCancelled else { return }
+                NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
             }
         }
     }
@@ -379,65 +417,101 @@ public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
 
 // MARK: - 5. UIViewController & UIView 扩展 (UI 监听优化)
 
-// 定义规范的 Runtime Keys
+// English: Keep language observation state independent from the observed UIKit object.
+// Español: Mantén el estado de observación del idioma independiente del objeto UIKit observado.
+// 中文：让语言监听状态独立于被监听的 UIKit 对象。
 @MainActor
-private struct AssociatedKeys {
-    static var vcBlockKey: UInt8 = 0
-    static var viewBlockKey: UInt8 = 0
+private enum AssociatedKeys {
+    static var vcLanguageObservationKey: UInt8 = 0
+    static var viewLanguageObservationKey: UInt8 = 0
+}
+
+// English: A block observer keeps its own token so unrelated removeObserver(self) calls cannot remove it.
+// Español: El observador de bloque conserva su propio token para que removeObserver(self) no lo elimine por accidente.
+// 中文：块观察者保存独立 token，避免无关的 removeObserver(self) 调用误删语言监听。
+@MainActor
+private final class PTLanguageChangeObservation: NSObject {
+    private let action: ChangedBlock
+    private var token: NSObjectProtocol?
+
+    init(action: @escaping ChangedBlock) {
+        self.action = action
+        super.init()
+    }
+
+    deinit {
+        MainActor.gcdRunUnsafely({
+            if let token {
+                NotificationCenter.default.removeObserver(token)
+            }
+        })
+    }
+
+    func start() {
+        guard token == nil else { return }
+        token = NotificationCenter.default.addObserver(forName: LanguageDidChangedKey,
+                                                       object: nil,
+                                                       queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.action()
+            }
+        }
+    }
+
+    func stop() {
+        guard let token else { return }
+        NotificationCenter.default.removeObserver(token)
+        self.token = nil
+    }
 }
 
 public extension UIViewController {
-    // 【修复】改用 as? 安全解包
-    private var block: ChangedBlock? {
-        get { objc_getAssociatedObject(self, &AssociatedKeys.vcBlockKey) as? ChangedBlock }
-        set { objc_setAssociatedObject(self, &AssociatedKeys.vcBlockKey, newValue, .OBJC_ASSOCIATION_COPY) }
+    private var languageChangeObservation: PTLanguageChangeObservation? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.vcLanguageObservationKey) as? PTLanguageChangeObservation }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.vcLanguageObservationKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    
-    @objc private func notiLanguageChange(_ noti: Notification) {
-        block?()
-    }
-    
+
     /// 监听切换语言
     func pt_observerLanguage(didChanged block: ChangedBlock?) {
-        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
-        self.block = block
-        guard block != nil else { return }
-        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
-        // 建议：添加监听时立即执行一次，确保初始 UI 加载正确
-        block?()
+        languageChangeObservation?.stop()
+        languageChangeObservation = nil
+        guard let block else { return }
+
+        let observation = PTLanguageChangeObservation(action: block)
+        languageChangeObservation = observation
+        observation.start()
+        block()
     }
-    
+
     /// 移除监听
     func pt_removeObserverLanguage() {
-        // 【修复】将 object: self 改为 object: nil
-        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
-        self.block = nil
+        languageChangeObservation?.stop()
+        languageChangeObservation = nil
     }
 }
 
 public extension UIView {
-    private var block: ChangedBlock? {
-        get { objc_getAssociatedObject(self, &AssociatedKeys.viewBlockKey) as? ChangedBlock }
-        set { objc_setAssociatedObject(self, &AssociatedKeys.viewBlockKey, newValue, .OBJC_ASSOCIATION_COPY) }
+    private var languageChangeObservation: PTLanguageChangeObservation? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.viewLanguageObservationKey) as? PTLanguageChangeObservation }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.viewLanguageObservationKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    
-    @objc private func notiLanguageChange(_ noti: Notification) {
-        block?()
-    }
-    
+
     /// 监听切换语言
     func pt_viewObserverLanguage(didChanged block: ChangedBlock?) {
-        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
-        self.block = block
-        guard block != nil else { return }
-        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
-        block?()
+        languageChangeObservation?.stop()
+        languageChangeObservation = nil
+        guard let block else { return }
+
+        let observation = PTLanguageChangeObservation(action: block)
+        languageChangeObservation = observation
+        observation.start()
+        block()
     }
-    
+
     /// 移除监听
     func pt_removeObserverLanguage() {
-        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: nil)
-        self.block = nil
+        languageChangeObservation?.stop()
+        languageChangeObservation = nil
     }
 }
 

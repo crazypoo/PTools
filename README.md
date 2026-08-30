@@ -39,9 +39,9 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.1'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.2'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.2'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.2'
 ```
 
 ### Swift 6 迁移要点
@@ -70,8 +70,26 @@ let formatted = "PT Photo picker video size less than".localizedFormat(10)
 ```
 
 如果需要让界面在语言切换后刷新，可以使用 `pt_observerLanguage(didChanged:)`，页面
-销毁或不再需要监听时调用 `pt_removeObserverLanguage()`。旧的
+销毁或不再需要监听时调用 `pt_removeObserverLanguage()`。监听器现在使用独立的通知 token，
+不会被宿主对象的其他 `removeObserver` 调用误删；同一有效语言重复赋值不会发送通知。旧的
 `PTLanguage.share.language = "zh-Hans"` 写法继续兼容。
+
+#### Xcode String Catalog 兼容
+
+新项目可以在 Xcode 的 Localization 设置中使用 `Localizable.xcstrings`，不需要再手动
+创建每个语言的 `.lproj` 目录。只要 String Catalog 已加入 App target 或资源 bundle 的
+Target Membership，并且 Catalog 中的 key 与调用方一致，以下现有入口就可以直接使用：
+
+```swift
+PTLanguage.share.language = "es"
+let title = "PT Upgrade".localized()
+let customTitle = "welcome_title".localized(using: "AppLocalizable", in: .main)
+```
+
+PooTools 不会在运行时解析 `.xcstrings` 源文件，而是使用 Foundation 的
+`LocalizedStringResource` 读取 Xcode 编译后的 Catalog；因此同时兼容旧的
+`Localizable.strings` 和新的 String Catalog。Catalog 语言标识符建议使用 Xcode 提供的
+标准语言代码，例如 `en`、`es`、`zh-Hans` 和 `zh-Hant`。
 
 ## Quality and release
 

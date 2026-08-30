@@ -3,7 +3,9 @@ import PackageDescription
 
 let package = Package(
     name: "ptools",
-    // 💡 修复错误 2：存在 .lproj 等多语言资源时，必须指定默认本地化语言
+    // English: Declare a default localization for legacy .lproj resources and Xcode String Catalogs.
+    // Español: Declara una localización predeterminada para recursos .lproj y catálogos de Xcode.
+    // 中文：旧版 .lproj 资源和 Xcode String Catalog 都需要声明默认本地化语言。
     defaultLocalization: "en",
     platforms: [
         .iOS(.v17)

@@ -17,6 +17,18 @@
 | UI 调度 | `PTMainActorBridge` | `PTGCDManager` 主线程入口保留兼容性 |
 | 网络请求 | `Network` 内部执行管线 | `Any`、KakaJSON 和 callback 入口保留在兼容层 |
 
+### 5.6.2 Language 通知修复
+
+- `PTLanguage.share.language` 现在比较解析后的有效语言；同一有效语言重复赋值不会发送通知，异常存储值会安全归一化。
+- `LanguageDidChangedKey` 在主线程投递。`pt_observerLanguage(didChanged:)` 和
+  `pt_viewObserverLanguage(didChanged:)` 的公开签名不变，监听状态改由独立通知 token 管理，
+  支持重复注册、显式移除和宿主对象销毁时自动清理。
+- 既有监听入口继续提供注册时立即回调；无需修改现有调用方。`PTLanguage.share.language = ...`
+  仍然兼容，推荐继续在不需要监听时调用对应的 `pt_removeObserverLanguage()`。
+- `.localized()` 现在优先通过 Foundation 的 `LocalizedStringResource` 解析 Xcode
+  String Catalog（`.xcstrings`）以及旧的 `.strings` 资源；手动语言选择和旧 `.lproj` bundle
+  调用方式继续兼容。新项目只需将 Catalog 加入对应 target 的 Target Membership。
+
 ### 5.6.1 ScrollBanner 与 PageControl
 
 - 新代码使用 `PTBannerView`，统一轮播、分页、标题、箭头、媒体播放和生命周期处理。

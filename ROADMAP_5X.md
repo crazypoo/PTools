@@ -1,6 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.0`（2026-08-29）
+> 基线：`5.6.1`（2026-08-29）
+> 当前候选：`5.6.2`（2026-08-30）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -187,6 +188,34 @@
   Swift 6 主 actor conformance 错误处停止。
 - ⛔ 在 `KituraContracts`、`Appz` 等外部依赖恢复或提供兼容产物前，不能宣称完整 Xcode
   Debug/Release 验收通过，也不能创建或推送 `5.6.1` 标签。
+
+## 5.6.2：Language 通知链路稳定性修复
+
+### 任务清单
+
+- ✅ `CORE-562-01`：修复 `PTLanguage.share.language` 的有效语言比较；同一有效语言重复赋值不通知，异常存储值在比较时安全归一化。
+- ✅ `CORE-562-02`：统一 `LanguageDidChangedKey` 的主线程投递；主线程保持同步通知，非主线程通过 `PTMainActorBridge` 回到主线程。
+- ✅ `CORE-562-03`：将 UIViewController 和 UIView 的语言监听改为独立通知 token，支持重复注册、显式移除、宿主对象销毁自动清理和注册时立即回调。
+- ✅ `CORE-562-04`：保持 `ChangedBlock`、`pt_observerLanguage`、`pt_viewObserverLanguage` 和 `PTLanguage.share.language` 等公开兼容入口不变；本轮未新增 `@unchecked Sendable`、`nonisolated(unsafe)`、`try!` 或 `as!`。
+- ✅ `CORE-562-05`：完成修改文件语法解析、Swift 6 安全扫描、Core source contract、构建入口检查、重复入口检查和 `git diff --check`。
+- ✅ `CORE-562-06`：同步 `PooTools.podspec`、`Podfile.lock`、`README.md`、`MIGRATION_5X.md`、`CHANGELOG.md` 和本路线图到 `5.6.2` 候选版本。
+- ✅ `CORE-562-08`：兼容 Xcode String Catalog；`.localized()` 使用 Foundation 的
+  `LocalizedStringResource` 解析 `.xcstrings`，并保留 `.strings/.lproj` 与自定义 tableName
+  的兼容回退。
+- ⛔ `CORE-562-07`：Xcode Debug/Release 完整构建未完成；Release 在外部
+  `KituraContracts` 的 Swift 6 并发诊断处阻断（`BodyFormat` 非 Sendable、共享
+  `_iso8601Formatter`，并伴随相关 Sendable 警告），Debug 停留在外部 Pods 依赖准备阶段。
+  该阻断不属于 PooTools 源码，未创建 `5.6.2` tag。
+
+### 5.6.2 实施与验证说明
+
+- ✅ `PTLanguage` 使用锁保护语言值和有效语言归一化；通知只在有效语言真正改变后发送。
+- ✅ 语言监听不再把 UIViewController/UIView 自身作为 selector observer，避免宿主侧移除其他通知时误删语言监听；独立 token 在显式移除和对象销毁时清理。
+- ✅ `.localized()` 通过 `LocalizedStringResource` 支持新 Xcode String Catalog；旧资源 bundle
+  和旧公开调用方式继续保留。
+- ✅ 修改文件新增注释均使用英语、西班牙语和中文；公开符号、默认行为和兼容调用方式保持不变。
+- ✅ 静态检查和 Swift 前端解析通过；Xcode Release 已执行到外部依赖编译阶段，最终被
+  `KituraContracts` 的 Swift 6 并发诊断阻断；Debug 在外部 Pods 依赖准备阶段未完成。
 
 ## 发布前固定检查
 

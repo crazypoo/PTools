@@ -1,5 +1,18 @@
 # Changelog
 
+## 5.6.2 - 2026-08-30 (Unreleased)
+
+- 修复 `PTLanguage.share.language` 在切换两个有效语言值时未稳定发送
+  `LanguageDidChangedKey` 通知的问题，并按解析后的有效语言比较新旧值。
+- 语言通知统一在主线程投递；UIViewController 和 UIView 监听入口改用独立、可取消且可重复注册的
+  通知 token，保留原有公开方法和立即回调行为。
+- 相同有效语言重复赋值不再发送无效通知；异常存储值会在比较时安全归一化。
+- `.localized()` 增加 Xcode String Catalog（`.xcstrings`）兼容，使用 Foundation 的
+  `LocalizedStringResource` 按 `PTLanguage.share.language` 解析，同时保留旧
+  `.strings/.lproj` 资源和自定义 tableName 入口。
+- 本轮静态质量检查通过；Xcode Release 在外部 `KituraContracts` 的 Swift 6 并发诊断处阻断，
+  Debug 仍停留在外部 Pods 依赖准备阶段，未创建 `5.6.2` 标签。
+
 ## 5.6.1 - 2026-08-29 (Unreleased)
 
 - 统一 `PTBannerView` 与 `PTCycleScrollView` 的轮播、分页、媒体播放、标题和箭头能力；旧

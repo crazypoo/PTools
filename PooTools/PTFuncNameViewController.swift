@@ -1436,6 +1436,10 @@ class PTFuncNameViewController: PTBaseViewController {
         PTGCDManager.shared.delayOnMain(time: 10, block: {
             PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: self.aaaaaaa.getSectionIndex(byHeaderID: "1111111")))")
         })
+        
+        pt_observerLanguage(didChanged: {
+            PTNSLogConsole("123123123123123123123123")
+        })
     }
     
     override func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {
