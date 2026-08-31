@@ -11,6 +11,7 @@ import SnapKit
 import Photos
 import SwifterSwift
 
+@MainActor
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"
 
@@ -21,9 +22,13 @@ public class PTChatMediaCell: PTChatBaseCell {
     public var mediaPlayButtonTapCallback:PTActionTask?
     public var mediaDownloadFinishCallback:PTActionTask?
 
+    private var loadGeneration = 0
+    private var thumbnailTask: Task<Void, Never>?
+
     public var cellModel: PTChatListModel! {
         didSet {
-            self.updateCellModel(cellModel: self.cellModel)
+            guard let cellModel else { return }
+            updateCellModel(cellModel: cellModel)
         }
     }
     
@@ -56,14 +61,26 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupSubviews()
     }
     
     public override func prepareForReuse() {
         super.prepareForReuse()
-        if isImage {
-            self.contentImageView.cancelImageLoad()
-        }
+        loadGeneration += 1
+        thumbnailTask?.cancel()
+        thumbnailTask = nil
+        contentImageView.cancelImageLoad()
+        contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
+        mediaPlayImageView.removeTargerAndAction()
+        mediaPlayImageView.isHidden = true
+        mediaPlayImageView.isUserInteractionEnabled = false
+        loadingView.removeFromSuperview()
+        videoCacheURL = nil
+        loadMediaURL = nil
+        needLoadVideo = false
+        mediaPlayButtonTapCallback = nil
+        mediaDownloadFinishCallback = nil
     }
     
     // 提前设置约束，避免每次都重新设置
@@ -116,13 +133,21 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
     
     private func updateCellModel(cellModel: PTChatListModel) {
-        // 避免每次调用时都重新设置视图属性，提前配置
-        Task { @MainActor in
-            self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
-            self.setBaseSubviews(cellModel: self.cellModel)
-            self.updateConstraintsForCellModel(cellModel)
-            self.checkAndLoadMediaContent(cellModel: cellModel)
-        }
+        loadGeneration += 1
+        thumbnailTask?.cancel()
+        thumbnailTask = nil
+        contentImageView.cancelImageLoad()
+        contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
+        mediaPlayImageView.removeTargerAndAction()
+        mediaPlayImageView.isHidden = true
+        mediaPlayImageView.isUserInteractionEnabled = false
+        loadingView.removeFromSuperview()
+        videoCacheURL = nil
+        loadMediaURL = nil
+        needLoadVideo = false
+        setBaseSubviews(cellModel: cellModel)
+        updateConstraintsForCellModel(cellModel)
+        checkAndLoadMediaContent(cellModel: cellModel, generation: loadGeneration)
     }
 
     private func updateConstraintsForCellModel(_ cellModel: PTChatListModel) {
@@ -170,25 +195,25 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
     }
 
-    private func checkAndLoadMediaContent(cellModel: PTChatListModel) {
+    private func checkAndLoadMediaContent(cellModel: PTChatListModel, generation: Int) {
         guard let msgContent = cellModel.msgContent else {
             self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
             return
         }
-        checkIsVideo(msgContent: msgContent)
+        checkIsVideo(msgContent: msgContent, generation: generation)
     }
 
-    private func checkIsVideo(msgContent: Any) {
+    private func checkIsVideo(msgContent: Any, generation: Int) {
         if let contentString = msgContent as? String,let contentURL = URL(string: contentString.urlToUnicodeURLString() ?? "") {
-            handleContentURL(contentURL)
+            handleContentURL(contentURL, generation: generation)
         } else if let contentURL = msgContent as? URL {
-            handleContentURL(contentURL)
+            handleContentURL(contentURL, generation: generation)
         } else if let avItem = msgContent as? AVPlayerItem {
             needLoadVideo = false
-            handleAVPlayerItem(avItem)
+            handleAVPlayerItem(avItem, generation: generation)
         } else if let avAsset = msgContent as? AVAsset {
             needLoadVideo = false
-            handleAVAsset(avAsset)
+            handleAVAsset(avAsset, generation: generation)
         } else if let asset = msgContent as? PHAsset {
             handlePHAsset(asset)
         } else {
@@ -196,35 +221,51 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
     }
 
-    private func handleContentURL(_ contentURL: URL) {
+    private func handleContentURL(_ contentURL: URL, generation: Int) {
         if isImage {
             needLoadVideo = false
             self.mediaPlayImageView.isHidden = true
             self.mediaPlayImageView.isUserInteractionEnabled = false
-            self.contentImageView.loadImage(contentData: contentURL)
+            self.contentImageView.loadImage(contentData: contentURL,
+                                             loadFinish: { [weak self] _ in
+                                                 guard let self, self.loadGeneration == generation else { return }
+                                             })
         } else {
             needLoadVideo = true
             self.mediaPlayImageView.isHidden = false
             self.mediaPlayImageView.isUserInteractionEnabled = true
-            videoUrlLoad(url: contentURL.absoluteString)
+            videoUrlLoad(url: contentURL.absoluteString, generation: generation)
         }
     }
 
-    private func handleAVPlayerItem(_ avItem: AVPlayerItem) {
+    private func handleAVPlayerItem(_ avItem: AVPlayerItem, generation: Int) {
         self.mediaPlayImageView.isHidden = false
         self.mediaPlayImageView.isUserInteractionEnabled = true
-        avItem.generateThumbnail { [weak self] image in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                self?.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+        avItem.generateThumbnail(maximumSize: CGSize(width: PTChatConfig.share.mediaMessageVideoWidth,
+                                                     height: PTChatConfig.share.mediaMessageVideoHeight)) { [weak self] image in
+            PTMainActorBridge.perform { [weak self] in
+                guard let self, self.loadGeneration == generation else { return }
+                self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         }
     }
 
-    private func handleAVAsset(_ avAsset: AVAsset) {
+    private func handleAVAsset(_ avAsset: AVAsset, generation: Int) {
         self.mediaPlayImageView.isHidden = false
         self.mediaPlayImageView.isUserInteractionEnabled = true
-        let avPlayerItem = AVPlayerItem(asset: avAsset)
-        handleAVPlayerItem(avPlayerItem)
+        thumbnailTask = Task { @MainActor [weak self] in
+            let image = await PTVideoThumbnailService.image(
+                for: avAsset,
+                frameNumber: 1,
+                maximumSize: CGSize(width: PTChatConfig.share.mediaMessageVideoWidth,
+                                    height: PTChatConfig.share.mediaMessageVideoHeight)
+            )
+            guard !Task.isCancelled,
+                  let self,
+                  self.loadGeneration == generation else { return }
+            self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+            self.thumbnailTask = nil
+        }
     }
 
     private func handlePHAsset(_ asset: PHAsset) {
@@ -233,52 +274,61 @@ public class PTChatMediaCell: PTChatBaseCell {
         self.contentImageView.loadImage(contentData: asset)
     }
 
-    private func videoUrlLoad(url: String) {
-        PTVideoManager.shared.getVideoItem(for: url,autoCacheVideo: true) { item in
-            Task { @MainActor in
-                self.contentImageView.image = item.coverImage ?? PTAppBaseConfig.share.defaultEmptyImage
-            }
-        } videoReady: { item in
-            Task { @MainActor in
-                if let urlSave = URL(string: url) {
-                    self.loadMediaURL = urlSave
-                }
-                self.videoCacheURL = item.localVideoURL
-            }
+    private func videoUrlLoad(url: String, generation: Int) {
+        guard let urlSave = URL(string: url) else {
+            contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
+            return
+        }
+
+        loadMediaURL = urlSave
+        PTVideoManager.shared.getVideoItem(for: url,
+                                           autoCacheVideo: false) { [weak self] item in
+            guard let self, self.loadGeneration == generation else { return }
+            self.contentImageView.image = item.coverImage ?? PTAppBaseConfig.share.defaultEmptyImage
+        } videoReady: { [weak self] item in
+            guard let self, self.loadGeneration == generation else { return }
+            self.videoCacheURL = item.localVideoURL
         }
                 
         mediaPlayButtonImageSet()
         
-        mediaPlayImageView.addActionHandlers { sender in
-            if let _ = self.videoCacheURL {
+        mediaPlayImageView.removeTargerAndAction()
+        mediaPlayImageView.addActionHandlers { [weak self] sender in
+            guard let self else { return }
+            if self.videoCacheURL != nil {
                 self.mediaPlayButtonTapCallback?()
             } else {
-                if let urlReal = URL(string: url) {
-                    self.mediaDownloadFunction(urlReal: urlReal)
-                }
+                self.mediaDownloadFunction(urlReal: urlSave)
             }
         }
     }
     
     public func mediaDownloadFunction(urlReal:URL) {
-        self.loadingView.hubTapCallback = {
-            Task { @MainActor in
+        let generation = loadGeneration
+        loadingView.removeFromSuperview()
+        self.loadingView.hubTapCallback = { [weak self] in
+            PTMainActorBridge.perform { [weak self] in
+                guard let self else { return }
                 self.loadingView.removeFromSuperview()
                 self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
                 Network.share.suspend(fileUrl: urlReal.absoluteString)
             }
         }
-        dataContent.addSubviews([loadingView])
-        loadingView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        if loadingView.superview == nil {
+            dataContent.addSubview(loadingView)
+            loadingView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
         }
         PTVideoFileCache.shared.prepareVideo(url: urlReal,progress: { _, _, progress in
+            guard self.loadGeneration == generation else { return }
             self.loadingView.progress = progress
         }, completion: { localURL in
-            Task { @MainActor in
-                self.loadingView.removeFromSuperview()
-                self.videoCacheURL = localURL
-                self.mediaPlayButtonImageSet()
+            guard self.loadGeneration == generation else { return }
+            self.loadingView.removeFromSuperview()
+            self.videoCacheURL = localURL
+            self.mediaPlayButtonImageSet()
+            if localURL != nil {
                 self.mediaDownloadFinishCallback?()
             }
         })

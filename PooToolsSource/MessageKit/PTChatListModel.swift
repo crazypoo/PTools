@@ -30,6 +30,9 @@ public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
 // Los requisitos de SmartCodable no están aislados en el decodificador heredado; este modelo de UI solo se decodifica y consume en MainActor.
 // SmartCodable 的协议要求在旧解码器中是非隔离的；这个 UI 模型只在 MainActor 上解码和使用。
 open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
+    private let storedDiffIdentifier: String
+    private var resolvedDiffIdentifier: String? = nil
+
     ///消息时间戳
     public var messageTimeStamp:TimeInterval = 0
     ///消息ID
@@ -58,5 +61,27 @@ open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
     ///额外扩展字段
     @SmartAny public var msgExten:Any?
     
-    public required init() {}
+    public required init() {
+        storedDiffIdentifier = UUID().uuidString
+    }
+
+    public init(diffIdentifier: String) {
+        storedDiffIdentifier = diffIdentifier.isEmpty ? UUID().uuidString : diffIdentifier
+    }
+}
+
+extension PTChatListModel: @MainActor PTDiffableModel {
+    public var diffId: String {
+        if let resolvedDiffIdentifier {
+            return resolvedDiffIdentifier
+        }
+        let identifier = msgId.trimmingCharacters(in: .whitespacesAndNewlines)
+        let resolvedIdentifier = identifier.isEmpty ? storedDiffIdentifier : identifier
+        resolvedDiffIdentifier = resolvedIdentifier
+        return resolvedIdentifier
+    }
+
+    public var diffHash: Int {
+        0
+    }
 }

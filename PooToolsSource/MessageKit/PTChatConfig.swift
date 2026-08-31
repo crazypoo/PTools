@@ -13,9 +13,18 @@ import SmartCodable
 
 public extension UIImage {
     @objc func resizeImage() -> UIImage {
-        let w = self.size.width * 0.7
-        let h = self.size.height * 0.7
-        return self.resizableImage(withCapInsets: UIEdgeInsets(top: h, left: w, bottom: h, right: w))
+        let width = size.width
+        let height = size.height
+        guard width.isFinite, height.isFinite, width > 1, height > 1 else {
+            return self
+        }
+
+        let horizontalInset = min(width * 0.35, (width - 1) / 2)
+        let verticalInset = min(height * 0.35, (height - 1) / 2)
+        return resizableImage(withCapInsets: UIEdgeInsets(top: verticalInset,
+                                                          left: horizontalInset,
+                                                          bottom: verticalInset,
+                                                          right: horizontalInset))
     }
 }
 
@@ -32,9 +41,13 @@ public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol {
 public class PTChatConfig: NSObject {
     public static let share = PTChatConfig()
     
-    //MARK: Base setting
+    // English: Base chat configuration shared by every message cell.
+    // Español: Configuración base del chat compartida por cada celda de mensaje.
+    // 中文：所有消息 Cell 共用的基础聊天配置。
     ///文本內容實際顯示最大的Width
-    @MainActor public static let ChatContentShowMaxWidth = CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset
+    @MainActor public static var ChatContentShowMaxWidth: CGFloat {
+        max(1, CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset)
+    }
     ///設置持有人ID
     public var imOwnerId:String = ""
     @PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60
@@ -58,15 +71,15 @@ public class PTChatConfig: NSObject {
     ///系統時間字體大小
     public var chatTimeFont:UIFont = .appfont(size: 13)
     ///系統時間字體顏色
-    public var chatTimeColor:UIColor = UIColor(hexString: "919191")!
+    public var chatTimeColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel
     ///系統时间的左右间距
     @PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5
     ///系統時間背景颜色
-    public var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca")!
+    public var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca") ?? .tertiarySystemFill
     ///系統內容字體大小
     public var chatSystemMessageFont:UIFont = .appfont(size: 13)
     ///系統內容字體顏色
-    public var chatSystemMessageColor:UIColor = UIColor(hexString: "919191")!
+    public var chatSystemMessageColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel
     ///系統時間文字間隔
     public var chatSystemTimeLineSpace:NSNumber = 2
     ///系統內容文字間隔
@@ -83,9 +96,9 @@ public class PTChatConfig: NSObject {
     ///用戶名字字體
     public var senderNameFont:UIFont = .appfont(size: 13)
     ///用戶名字顏色
-    public var senderNameColor:UIColor = UIColor(hexString: "919191")!
+    public var senderNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel
     public var senderNameBackgroundColor:UIColor = .clear
-    public var receiverNameColor:UIColor = UIColor(hexString: "919191")!
+    public var receiverNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel
     public var receiverNameBackgroundColor:UIColor = .clear
     public var userIconTopSpacing:CGFloat = 0
     ///頭像到邊的距離
@@ -107,7 +120,7 @@ public class PTChatConfig: NSObject {
     ///已讀未讀字體
     public var readStatusFont:UIFont = .appfont(size: 13)
     ///已讀未讀顏色
-    public var readStatusColor:UIColor = UIColor(hexString: "919191")!
+    public var readStatusColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel
     public var readStatusName:String = "Read"
     public var unreadStatusName:String = "unread"
     ///时间到顶的距离,默认5最大100

@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public class PTChatTypingBubble: UIView {
     
     public private(set) var isAnimating = false
@@ -80,9 +81,6 @@ public class PTChatTypingBubble: UIView {
         // In order to prevent NaN crash when assigning the frame of the contentBubble
         guard bounds.width > 0, bounds.height > 0 else { return }
 
-        let ratio = bounds.width / bounds.height
-        let extraRightInset = bounds.width - 1.65 / ratio * bounds.width
-
         let tinyBubbleRadius: CGFloat = bounds.height / 6
         tinyBubble.frame = CGRect( x: 0, y: bounds.height - tinyBubbleRadius, width: tinyBubbleRadius, height: tinyBubbleRadius)
 
@@ -90,7 +88,14 @@ public class PTChatTypingBubble: UIView {
         let offset: CGFloat = tinyBubbleRadius / 6
         cornerBubble.frame = CGRect( x: tinyBubbleRadius - offset, y: bounds.height - (1.5 * cornerBubbleRadius) + offset, width: cornerBubbleRadius, height: cornerBubbleRadius)
 
-        let contentBubbleFrame = CGRect( x: tinyBubbleRadius + offset, y: 0, width: bounds.width - (tinyBubbleRadius + offset) - extraRightInset, height: bounds.height - (tinyBubbleRadius + offset))
+        let contentOriginX = tinyBubbleRadius + offset
+        let contentHeight = max(0, bounds.height - contentOriginX)
+        let availableWidth = max(0, bounds.width - contentOriginX)
+        let contentWidth = min(availableWidth, contentHeight * 1.65)
+        let contentBubbleFrame = CGRect(x: contentOriginX,
+                                        y: 0,
+                                        width: contentWidth,
+                                        height: contentHeight)
         let contentBubbleFrameCornerRadius = contentBubbleFrame.height / 2
 
         contentBubble.frame = contentBubbleFrame

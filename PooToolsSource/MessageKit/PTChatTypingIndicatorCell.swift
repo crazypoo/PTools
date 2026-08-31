@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public class PTChatTypingIndicatorCell: PTBaseNormalCell {
     public static let ID = "PTChatTypingIndicatorCell"
     
@@ -25,13 +26,26 @@ public class PTChatTypingIndicatorCell: PTBaseNormalCell {
     }
     
     public func setupSubviews() {
-        contentView.addSubview(typingBubble)
-        typingBubble.startAnimating()
+        if typingBubble.superview == nil {
+            contentView.addSubview(typingBubble)
+        }
+        if window != nil {
+            typingBubble.startAnimating()
+        }
     }
 
     public override func prepareForReuse() {
         super.prepareForReuse()
         if typingBubble.isAnimating {
+            typingBubble.stopAnimating()
+        }
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            typingBubble.startAnimating()
+        } else {
             typingBubble.stopAnimating()
         }
     }

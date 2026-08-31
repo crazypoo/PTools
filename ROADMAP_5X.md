@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.1`（2026-08-29）
-> 当前候选：`5.6.2`（2026-08-30）
+> 基线：`5.6.2`（2026-08-30）
+> 当前候选：`5.6.3`（2026-08-31）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -216,6 +216,30 @@
 - ✅ 修改文件新增注释均使用英语、西班牙语和中文；公开符号、默认行为和兼容调用方式保持不变。
 - ✅ 静态检查和 Swift 前端解析通过；Xcode Release 已执行到外部依赖编译阶段，最终被
   `KituraContracts` 的 Swift 6 并发诊断阻断；Debug 在外部 Pods 依赖准备阶段未完成。
+
+## 5.6.3：ScreenShot 与 MessageKit 稳定性和性能治理
+
+### 任务清单
+
+- ✅ `CORE-563-01`：统一 UIView、UIScrollView、UITableView、UIWindow 和 WKWebView 的截图协议入口；保留原有公开方法和默认参数。
+- ✅ `CORE-563-02`：增加当前场景缩放、无效尺寸和最大像素数校验，避免 Core Graphics 因零尺寸、非法尺寸或超大位图产生崩溃和内存峰值。
+- ✅ `CORE-563-03`：重做滚动视图长截图的分页渲染；不修改 View frame，恢复原始 contentOffset，异步入口支持取消和 WebView 延迟渲染。
+- ✅ `CORE-563-04`：为 MessageKit 消息模型、聊天 Section 和 Row 建立稳定 Diffable 身份；公共列表刷新只重配置旧 Row，不随机重建整表。
+- ✅ `CORE-563-05`：治理文本、媒体、地图、文件、音频和 Typing Cell 的复用状态；清理旧手势、倒计时、播放器、快照、进度任务和动画。
+- ✅ `CORE-563-06`：为图片、视频、地图、文件和音频异步结果增加代次校验、取消传播或安全的 MainActor 回调，避免结果回写到错误 Cell。
+- ✅ `CORE-563-07`：补齐 MessageKit 的 Nib/Storyboard 初始化和空输入兜底，移除本模块新增路径中的强制崩溃风险。
+- ✅ `CORE-563-08`：完成修改文件语法解析、Swift 6 安全扫描、Core source contract、构建入口检查和 `git diff --check`。
+- ✅ `CORE-563-09`：同步 `PooTools.podspec`、`Podfile.lock`、`README.md`、`MIGRATION_5X.md`、`CHANGELOG.md` 和本路线图到 `5.6.3` 候选版本。
+- ⛔ `CORE-563-10`：Xcode Debug/Release 完整构建未完成；Debug 的 PooTools Swift 源码已完成编译，但最终链接被外部 `PooTools.framework` 缺失和 Metal 工具链搜索路径阻断，Release 则被外部 `KituraContracts` 的 Swift 6 并发错误阻断，因此不创建 `5.6.3` tag。
+
+### 5.6.3 实施与验证说明
+
+- ✅ ScreenShot 统一使用 `PTSnapshotRenderer` 做场景缩放、透明度、像素上限和渲染器配置；专用类型入口只做兼容转发。
+- ✅ ScrollView/TableView 长截图在分页渲染期间保留原层级和 frame；任务结束、取消和失败时恢复滚动位置。
+- ✅ MessageKit 列表改用稳定 Section/Row 身份，`PTCollectionView.showCollectionDetail` 对旧 Row 使用 `reconfigureItems`，兼顾内容刷新和增量更新。
+- ✅ Cell 异步回调均有复用代次保护；可取消的 AVAsset、地图和进度任务在复用时停止，不能取消的旧兼容回调只允许通过代次校验。
+- ✅ 修改文件均通过 Swift 前端语法解析，质量扫描、构建入口检查、Package manifest 和 `git diff --check` 通过。
+- ⛔ Xcode Debug 已完成 PooTools Swift 源码编译，但最终链接受外部 `PooTools.framework` 缺失和 Metal 搜索路径阻断；Release 在外部 `KituraContracts` 的 Swift 6 并发诊断处停止。未进行真机或运行时人工回归。
 
 ## 发布前固定检查
 

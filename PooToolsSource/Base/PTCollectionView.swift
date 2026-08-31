@@ -1395,13 +1395,20 @@ extension PTCollectionView {
         self.waterfallCache.removeAll()
         self.fallbackLayouts.removeAll()
         
+        let previousRowIdentifiers = Set(diffableDataSource.snapshot().itemIdentifiers.map(\.diffId))
         var snapshot = PTSnapshot()
         snapshot.appendSections(collectionData)
-        
+
+        var rowsToReconfigure: [PTRows] = []
         for section in collectionData {
             if let rows = section.rows, !rows.isEmpty {
                 snapshot.appendItems(rows, toSection: section)
+                rowsToReconfigure.append(contentsOf: rows.filter { previousRowIdentifiers.contains($0.diffId) })
             }
+        }
+
+        if !rowsToReconfigure.isEmpty {
+            snapshot.reconfigureItems(rowsToReconfigure)
         }
         
         if !collectionData.isEmpty {

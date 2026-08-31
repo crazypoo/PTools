@@ -9,6 +9,7 @@ import UIKit
 import AttributedString
 import SnapKit
 
+@MainActor
 public class PTChatFileCell: PTChatBaseCell {
     public static let ID = "PTChatFileCell"
     public static let FileCellHeight: CGFloat = 88
@@ -16,12 +17,14 @@ public class PTChatFileCell: PTChatBaseCell {
     public static let FileCellConentFixbel: CGFloat = 7.5
     public static let FileConentWidth: CGFloat = 250
 
+    private var fileInfoGeneration = 0
+
     public var cellModel: PTChatListModel! {
         didSet {
-            Task { @MainActor in
-                self.setBaseSubviews(cellModel: self.cellModel)
-                self.dataContentSets(cellModel: self.cellModel)
-            }
+            guard let cellModel else { return }
+            fileInfoGeneration += 1
+            setBaseSubviews(cellModel: cellModel)
+            dataContentSets(cellModel: cellModel)
         }
     }
     
@@ -45,6 +48,13 @@ public class PTChatFileCell: PTChatBaseCell {
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupSubviews()
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        fileInfoGeneration += 1
+        fileNameInfo.attributedText = nil
+        cellModel = nil
     }
 
     // 提前设置视图和约束，避免重复添加子视图
@@ -76,7 +86,21 @@ public class PTChatFileCell: PTChatBaseCell {
         }
 
         // 处理URL
-        guard let url = extractURL(from: cellModel.msgContent) else { return }
+        guard let url = extractURL(from: cellModel.msgContent) else {
+            fileNameInfo.attributedText = nil
+            dataContent.snp.remakeConstraints { make in
+                if cellModel.belongToMe {
+                    make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                } else {
+                    make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                }
+                make.top.equalTo(senderNameLabel.snp.bottom)
+                make.height.equalTo(PTChatFileCell.FileCellHeight)
+                make.width.equalTo(PTChatFileCell.FileConentWidth)
+            }
+            resetSubviewsFrame(cellModel: cellModel)
+            return
+        }
 
         // 计算动态高度
         var cellHeight: CGFloat = PTChatFileCell.FileCellHeight
@@ -119,14 +143,18 @@ public class PTChatFileCell: PTChatBaseCell {
 
     // 更新文件信息
     private func updateFileInfo(with url: URL) {
-        if FileManager.pt.judgeFileOrFolderExists(filePath: url.absoluteString) {
+        fileInfoGeneration += 1
+        let generation = fileInfoGeneration
+
+        if url.isFileURL, FileManager.default.fileExists(atPath: url.path) {
             // 本地文件
-            let fileSizeString = FileManager.pt.fileOrDirectorySize(path: url.absoluteString)
+            let fileSizeString = FileManager.pt.fileOrDirectorySize(path: url.path)
             setFileInfo(name: url.lastPathComponent, size: fileSizeString)
         } else {
             // 在线文件大小
-            url.getFileSizeOnline { fileSize in
-                Task { @MainActor in
+            url.getFileSizeOnline { [weak self] fileSize in
+                PTMainActorBridge.perform { [weak self] in
+                    guard let self, self.fileInfoGeneration == generation else { return }
                     let fileSizeString = FileManager.pt.covertUInt64ToString(with: fileSize)
                     self.setFileInfo(name: url.lastPathComponent, size: fileSizeString)
                 }

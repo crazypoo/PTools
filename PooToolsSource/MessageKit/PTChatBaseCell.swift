@@ -11,6 +11,7 @@ import SnapKit
 public typealias PTChatBaseCellHandler = (_ dataModel: PTChatListModel) -> Void
 
 @objcMembers
+@MainActor
 open class PTChatBaseCell: PTBaseNormalCell {
     
     // Constants
@@ -24,8 +25,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     public var sendExp: PTChatBaseCellHandler?
     public var sendMessageError: PTChatBaseCellHandler?
     
-    // Timer for message expiration
-    private var timer: Timer?
+    private var expirationTask: Task<Void, Never>?
     
     // Data model
     public var outputModel: PTChatListModel!
@@ -79,11 +79,25 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupSubviews()
     }
     
     deinit {
-//        timer?.invalidate()
+        expirationTask?.cancel()
+    }
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        expirationTask?.cancel()
+        expirationTask = nil
+        waitImageView.removeTargerAndAction()
+        waitImageView.layer.removeAllAnimations()
+        waitImageView.isHidden = true
+        waitImageView.isUserInteractionEnabled = false
+        outputModel = nil
+        sendExp = nil
+        sendMessageError = nil
     }
     
     // MARK: - UI Setup Methods
@@ -108,6 +122,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     open func resetSubviewsFrame(cellModel: PTChatListModel) {
         outputModel = cellModel
         setupUIWithModel(cellModel: cellModel)
+        waitImageView.removeTargerAndAction()
         waitImageView.addActionHandlers { [weak self] sender in
             self?.sendMessageError?(cellModel)
         }
@@ -138,9 +153,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
             make.top.equalToSuperview().inset(PTChatBaseCell.timeTopSpace)
             make.height.equalTo(timeLabelHeight)
         }
-        Task { @MainActor  [ weak self] in
-            self?.messageTimeLabel.viewCorner(radius: timeLabelHeight / 2)
-        }
+        messageTimeLabel.viewCorner(radius: timeLabelHeight / 2)
     }
     
     private func setupUserIconConstraints(cellModel: PTChatListModel) {
@@ -192,6 +205,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
         case .Arrived:
             stopWaitAnimation()
             waitImageView.isHidden = true
+            waitImageView.isUserInteractionEnabled = false
         case .Error:
             stopWaitAnimation()
             waitImageView.isHidden = false
@@ -203,14 +217,15 @@ open class PTChatBaseCell: PTBaseNormalCell {
     open func startWaitAnimation() {
         waitImageView.isHidden = false
         waitImageView.isUserInteractionEnabled = false
+        waitImageView.layer.removeAnimation(forKey: "rotationAnimation")
         waitImageView.layer.add(rotationAnimation(), forKey: "rotationAnimation")
     }
     
     open func stopWaitAnimation() {
         waitImageView.layer.removeAllAnimations()
         waitImageView.isHidden = true
-        timer?.invalidate()
-        timer = nil
+        expirationTask?.cancel()
+        expirationTask = nil
     }
     
     private func rotationAnimation() -> CABasicAnimation {
@@ -222,21 +237,28 @@ open class PTChatBaseCell: PTBaseNormalCell {
         return rotationAnimation
     }
     
-    // MARK: - Timer and Countdown Methods
+    // English: Use one cancellable task for message expiration instead of a repeating run-loop timer.
+    // Español: Usa una tarea cancelable para la caducidad del mensaje en lugar de un temporizador repetitivo del run loop.
+    // 中文：使用一个可取消任务处理消息过期，避免重复 RunLoop 定时器。
     
     private func startCountDown(from date: Date) {
+        expirationTask?.cancel()
+        expirationTask = nil
         updateCountDown(to: date)
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                self?.updateCountDown(to: date)
-            }
+        guard !PTChatConfig.timeExp(expTime: date) else { return }
+
+        let expirationDate = date.addingTimeInterval(TimeInterval(PTChatConfig.share.messageExpTime))
+        expirationTask = PTMainActorBridge.after(max(0, expirationDate.timeIntervalSinceNow)) { [weak self] in
+            self?.updateCountDown(to: date)
         }
     }
-    
+
     private func updateCountDown(to date: Date) {
         if PTChatConfig.timeExp(expTime: date) {
-            timer?.invalidate()
-            sendExp?(outputModel)
+            expirationTask = nil
+            if let outputModel {
+                sendExp?(outputModel)
+            }
         }
     }
     

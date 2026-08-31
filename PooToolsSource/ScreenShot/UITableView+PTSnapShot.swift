@@ -1,5 +1,5 @@
 //
-//  UITableView+PTSnapShot.swift.swift
+//  UITableView+PTSnapShot.swift
 //  PooTools_Example
 //
 //  Created by 邓杰豪 on 14/11/2025.
@@ -8,168 +8,44 @@
 
 import UIKit
 
+@MainActor
 extension UITableView {
-    
-    // MARK: - 私有辅助：逐个获取元素截图 (接入了 UIView 的最新接口)
-    
-    private func takeSnapshotOfTableHeaderView(with configuration: SnapshotConfiguration) -> UIImage? {
-        if let rect = self.tableHeaderView?.frame, rect.width > 0, rect.height > 0 {
-            self.scrollRectToVisible(rect, animated: false)
-            // 调用底层 UIView 刚刚优化过的带 configuration 参数的方法
-            return self.takeSnapshotOfFullContent(for: rect, with: configuration)
-        }
-        return nil
+
+    // English: Use the scroll-view renderer so table cells and headers share one capture path.
+    // Español: Usa el renderizador del scroll view para que las celdas y cabeceras compartan una ruta de captura.
+    // 中文：复用滚动视图渲染器，让表格 Cell 和表头统一走同一条截图路径。
+    internal func pt_tableVisibleSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        pt_scrollVisibleSnapshot(configuration: configuration)
     }
 
-    private func takeSnapshotOfTableFooterView(with configuration: SnapshotConfiguration) -> UIImage? {
-        if let rect = self.tableFooterView?.frame, rect.width > 0, rect.height > 0 {
-            self.scrollRectToVisible(rect, animated: false)
-            return self.takeSnapshotOfFullContent(for: rect, with: configuration)
-        }
-        return nil
+    internal func pt_tableFullSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        pt_scrollFullSnapshot(configuration: configuration)
     }
 
-    private func takeSnapshotOfSectionHeaderView(at section: Int, with configuration: SnapshotConfiguration) -> UIImage? {
-        let rect = self.rectForHeader(inSection: section)
-        if rect.width > 0, rect.height > 0 {
-            self.scrollRectToVisible(rect, animated: false)
-            return self.takeSnapshotOfFullContent(for: rect, with: configuration)
-        }
-        return nil
+    internal func pt_tableAsyncSnapshot(configuration: SnapshotConfiguration) async -> UIImage? {
+        await pt_scrollAsyncSnapshot(configuration: configuration)
     }
 
-    private func takeSnapshotOfSectionFooterView(at section: Int, with configuration: SnapshotConfiguration) -> UIImage? {
-        let rect = self.rectForFooter(inSection: section)
-        if rect.width > 0, rect.height > 0 {
-            self.scrollRectToVisible(rect, animated: false)
-            return self.takeSnapshotOfFullContent(for: rect, with: configuration)
-        }
-        return nil
-    }
+    // MARK: - Compatibility entry points / Entradas de compatibilidad / 兼容入口
 
-    private func takeSnapshotOfCell(at indexPath: IndexPath, with configuration: SnapshotConfiguration) -> UIImage? {
-        // 如果 Cell 不在可视范围内，先滚动到该位置触发渲染
-        if self.indexPathsForVisibleRows?.contains(indexPath) == false {
-            self.scrollToRow(at: indexPath, at: .top, animated: false)
-        }
-        let cell = self.cellForRow(at: indexPath)
-        // Cell 本身也是 UIView，直接调用遵循协议的方法
-        return cell?.takeSnapshotOfFullContent(with: configuration)
-    }
-
-    // MARK: - 内部图片采集与拼接逻辑
-    
-    // 拆分出专门用于主线程收集图片数组的方法
-    private func internalCollectImages(with configuration: SnapshotConfiguration) -> [UIImage] {
-        var shotImages: [UIImage] = []
-
-        if let image = takeSnapshotOfTableHeaderView(with: configuration) {
-            shotImages.append(image)
-        }
-
-        for section in 0..<self.numberOfSections {
-            if let image = takeSnapshotOfSectionHeaderView(at: section, with: configuration) {
-                shotImages.append(image)
-            }
-
-            let num = self.numberOfRows(inSection: section)
-            for row in 0..<num {
-                let indexPath = IndexPath(row: row, section: section)
-                if let image = takeSnapshotOfCell(at: indexPath, with: configuration) {
-                    shotImages.append(image)
-                }
-            }
-
-            if let image = takeSnapshotOfSectionFooterView(at: section, with: configuration) {
-                shotImages.append(image)
-            }
-        }
-
-        if let image = takeSnapshotOfTableFooterView(with: configuration) {
-            shotImages.append(image)
-        }
-
-        return shotImages
-    }
-
-    // MARK: - SnapshotKitProtocol 协议实现
-    
-    // 注意：如果在 UIView 扩展中已经加了 @objc 且不方便修改，这里的 override 请保留；
-    // 否则直接实现协议方法即可。
     public func tableTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        var visibleRect = self.bounds
-        visibleRect.origin = self.contentOffset
-        return self.takeSnapshotOfFullContent(for: visibleRect, with: configuration)
+        pt_tableVisibleSnapshot(configuration: configuration)
     }
 
     public func tableTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        let originalOffset = self.contentOffset
-        
-        // 1. 采集所有组件的截图
-        let shotImages = self.internalCollectImages(with: configuration)
-        self.setContentOffset(originalOffset, animated: false)
-        
-        guard !shotImages.isEmpty else { return nil }
-
-        // 2. 计算总尺寸
-        let totalHeight = shotImages.reduce(0) { $0 + $1.size.height }
-        let totalSize = CGSize(width: self.bounds.width, height: totalHeight)
-
-        // 3. 使用现代 API 同步拼接长图
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = configuration.scale
-        format.opaque = configuration.isOpaque
-        
-        let renderer = UIGraphicsImageRenderer(size: totalSize, format: format)
-        return renderer.image { context in
-            if let bgColor = self.backgroundColor {
-                bgColor.setFill()
-                context.fill(CGRect(origin: .zero, size: totalSize))
-            }
-            
-            var imageOffsetFactor: CGFloat = 0
-            for image in shotImages {
-                image.draw(at: CGPoint(x: 0, y: imageOffsetFactor))
-                imageOffsetFactor += image.size.height
-            }
-        }
+        pt_tableFullSnapshot(configuration: configuration)
     }
 
-    public func tableAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping @Sendable (UIImage?) -> Void) {
-        // 真正的异步：主线程采集，后台拼接
-        PTGCDManager.shared.delayOnMain(time: 0.1) {
-            PTGCDManager.shared.runOnMain {
-                let originalOffset = self.contentOffset
-                
-                // 步骤 1：在主线程采集团素图片
-                let images = self.internalCollectImages(with: configuration)
-                self.setContentOffset(originalOffset, animated: false)
-                
-                guard !images.isEmpty else {
-                    completion(nil)
-                    return
-                }
-                let totalHeight = images.reduce(0) { $0 + $1.size.height }
-                let totalSize = CGSize(width: self.bounds.width, height: totalHeight)
-                
-                let format = UIGraphicsImageRendererFormat()
-                format.scale = configuration.scale
-                format.opaque = configuration.isOpaque
-                
-                let renderer = UIGraphicsImageRenderer(size: totalSize, format: format)
-                let finalImage = renderer.image { context in
-                    if let bgColor = self.backgroundColor {
-                        bgColor.setFill()
-                        context.fill(CGRect(origin: .zero, size: totalSize))
-                    }
-                    var offset: CGFloat = 0
-                    for img in images {
-                        img.draw(at: CGPoint(x: 0, y: offset))
-                        offset += img.size.height
-                    }
-                }
-                completion(finalImage)
+    public func tableAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration,
+                                                     completion: @escaping @Sendable (UIImage?) -> Void) {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                completion(nil)
+                return
             }
+            let image = await self.pt_tableAsyncSnapshot(configuration: configuration)
+            guard !Task.isCancelled else { return }
+            completion(image)
         }
     }
 }

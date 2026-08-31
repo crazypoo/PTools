@@ -9,14 +9,20 @@ import UIKit
 import AttributedString
 import SnapKit
 
+@MainActor
 public class PTChatSystemMessageCell: PTBaseNormalCell {
     public static let ID = "PTChatSystemMessageCell"
     
     public var cellModel:PTChatListModel! {
         didSet {
+            guard let cellModel else {
+                timeLabel.attributedText = nil
+                return
+            }
+            let timeText = cellModel.messageTimeStamp.conversationTimeSet() ?? ""
             var timeAtt:ASAttributedString = """
                     \(wrap: .embedding("""
-                    \(cellModel.messageTimeStamp.conversationTimeSet()!,.foreground(PTChatConfig.share.chatTimeColor),.font(PTChatConfig.share.chatTimeFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemTimeLineSpace))))
+                    \(timeText,.foreground(PTChatConfig.share.chatTimeColor),.font(PTChatConfig.share.chatTimeFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemTimeLineSpace))))
                     """))
                     """
             if let msgContent = cellModel.msgContent as? String,!msgContent.stringIsEmpty() {
@@ -49,6 +55,10 @@ public class PTChatSystemMessageCell: PTBaseNormalCell {
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        contentView.addSubviews([timeLabel])
+        timeLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }

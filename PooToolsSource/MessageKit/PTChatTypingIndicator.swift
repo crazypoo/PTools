@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public class PTChatTypingIndicator: UIView {
 
     public override init(frame: CGRect) {
@@ -67,13 +68,16 @@ public class PTChatTypingIndicator: UIView {
     // MARK: - Animation API
     /// Sets the state of the `TypingIndicator` to animating and applies animation layers
     public func startAnimating() {
-        defer { isAnimating = true }
         guard !isAnimating else { return }
+        animationTasks.forEach { $0.cancel() }
+        animationTasks.removeAll()
+        isAnimating = true
         var delay: TimeInterval = 0
         for dot in dots {
             let currentDelay = delay // 捕获当前的 delay 值
-            PTGCDManager.shared.delayOnMain(time: delay) { [weak self] in
+            let task = PTGCDManager.shared.delayOnMain(time: delay) { [weak self, weak dot] in
                 guard let self = self else { return }
+                guard self.isAnimating, let dot else { return }
                 if self.isBounceEnabled {
                     dot.layer.add(self.initialOffsetAnimationLayer, forKey: AnimationKeys.offset)
                     let bounceLayer = self.bounceAnimationLayer
@@ -84,15 +88,19 @@ public class PTChatTypingIndicator: UIView {
                     dot.layer.add(self.opacityAnimationLayer, forKey: AnimationKeys.opacity)
                 }
             }
+            animationTasks.append(task)
             delay += 0.33
         }
     }
 
     /// Sets the state of the `TypingIndicator` to not animating and removes animation layers
     public func stopAnimating() {
-        defer { isAnimating = false }
+        animationTasks.forEach { $0.cancel() }
+        animationTasks.removeAll()
         guard isAnimating else { return }
+        isAnimating = false
         dots.forEach {
+            $0.layer.removeAnimation(forKey: AnimationKeys.offset)
             $0.layer.removeAnimation(forKey: AnimationKeys.bounce)
             $0.layer.removeAnimation(forKey: AnimationKeys.opacity)
         }
@@ -126,6 +134,8 @@ public class PTChatTypingIndicator: UIView {
         static let bounce = "typingIndicator.bounce"
         static let opacity = "typingIndicator.opacity"
     }
+
+    private var animationTasks: [Task<Void, Never>] = []
 
     /// Sets up the view
     private func setupView() {

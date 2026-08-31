@@ -9,22 +9,35 @@
 import Foundation
 import UIKit
 
-/// 截图配置选项，用于未来扩展（例如控制分辨率、背景透明度等）
-@MainActor public struct SnapshotConfiguration {
-    /// 屏幕缩放比例，0 表示设备主屏幕的缩放比例 (UIScreen.main.scale)
+/// English: Snapshot options for resolution, opacity, and safe bitmap size.
+/// Español: Opciones de captura para la resolución, la opacidad y el tamaño seguro del bitmap.
+/// 中文：截图配置选项，用于控制分辨率、透明度和安全的位图大小。
+public struct SnapshotConfiguration: Sendable {
+    /// English: Screen scale; zero uses the scale of the current scene.
+    /// Español: Escala de pantalla; cero usa la escala de la escena actual.
+    /// 中文：屏幕缩放比例，0 表示当前场景屏幕的缩放比例。
     public var scale: CGFloat
     /// 截图是否不透明（设置为 true 有助于提高性能，但如果 view 有透明区域会变成黑色）
     public var isOpaque: Bool
+
+    // English: Stop oversized snapshots before Core Graphics allocates an unsafe bitmap.
+    // Español: Detiene las capturas demasiado grandes antes de asignar un bitmap inseguro en Core Graphics.
+    // 中文：在 Core Graphics 分配高风险位图之前拦截过大的截图。
+    public var maximumPixelCount: Int
     
-    public init(scale: CGFloat = 0.0, isOpaque: Bool = false) {
+    public init(scale: CGFloat = 0.0,
+                isOpaque: Bool = false,
+                maximumPixelCount: Int = 20_000_000) {
         self.scale = scale
         self.isOpaque = isOpaque
+        self.maximumPixelCount = maximumPixelCount
     }
     
     /// 提供一个默认的配置
     public static let `default` = SnapshotConfiguration()
 }
 
+@MainActor
 public protocol SnapshotKitProtocol {
 
     /// 同步截取视图当前可见区域的内容
@@ -77,6 +90,72 @@ public extension SnapshotKitProtocol {
             self.asyncTakeSnapshotOfFullContent(with: configuration ?? .default) { image in
                 continuation.resume(returning: image)
             }
+        }
+    }
+}
+
+// English: Keep validation and renderer setup in one MainActor-owned implementation.
+// Español: Mantén la validación y la configuración del renderizador en una implementación única del MainActor.
+// 中文：将校验和渲染器配置集中到一个由 MainActor 管理的实现中。
+@MainActor
+internal enum PTSnapshotRenderer {
+    static func scale(for view: UIView, configuration: SnapshotConfiguration) -> CGFloat {
+        let requestedScale = configuration.scale
+        guard requestedScale.isFinite, requestedScale > 0 else {
+            let sceneScale = view.window?.windowScene?.screen.scale
+                ?? PTSceneContext.activeWindow()?.windowScene?.screen.scale
+                ?? view.traitCollection.displayScale
+            return max(sceneScale, 1)
+        }
+        return requestedScale
+    }
+
+    static func renderSize(_ size: CGSize,
+                           scale: CGFloat,
+                           configuration: SnapshotConfiguration) -> CGSize? {
+        let width = floor(size.width)
+        let height = floor(size.height)
+        guard width > 0, height > 0, width.isFinite, height.isFinite,
+              scale.isFinite, scale > 0 else {
+            return nil
+        }
+
+        let maximumPixelCount = max(configuration.maximumPixelCount, 1)
+        let pixelCount = width * scale * height * scale
+        guard pixelCount.isFinite, pixelCount <= CGFloat(maximumPixelCount) else {
+            return nil
+        }
+        return CGSize(width: width, height: height)
+    }
+
+    static func image(view: UIView,
+                      rect: CGRect,
+                      configuration: SnapshotConfiguration,
+                      usesHierarchy: Bool = false) -> UIImage? {
+        let scale = scale(for: view, configuration: configuration)
+        guard let size = renderSize(rect.size, scale: scale, configuration: configuration) else {
+            return nil
+        }
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        format.opaque = configuration.isOpaque
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+
+        return renderer.image { context in
+            if configuration.isOpaque {
+                (view.backgroundColor ?? UIColor.systemBackground).setFill()
+                context.fill(CGRect(origin: .zero, size: size))
+            }
+
+            context.cgContext.saveGState()
+            context.cgContext.translateBy(x: -rect.origin.x, y: -rect.origin.y)
+            if usesHierarchy {
+                view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+            } else {
+                view.layer.render(in: context.cgContext)
+            }
+            context.cgContext.restoreGState()
         }
     }
 }

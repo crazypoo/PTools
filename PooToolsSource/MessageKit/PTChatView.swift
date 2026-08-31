@@ -18,7 +18,10 @@ public typealias PTCellMenuItemsHandler = (_ cellId:String) -> [String]?
 public typealias PTCellMenuItemsTapCallBack = (_ indexPath:IndexPath,_ cellModel:PTChatListModel,_ itemName:String,_ itemIndex:Int) -> Void
 
 @objcMembers
+@MainActor
 public class PTChatView: UIView {
+
+    private let chatSectionIdentifier = "PTChatView.messages"
 
     ///消息数组
     public var chatDataArr:[PTChatListModel] = [PTChatListModel]()
@@ -70,9 +73,13 @@ public class PTChatView: UIView {
 
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
-        view.customerLayout = { sectionIndex,sectionModel in
+        view.customerLayout = { [weak self] sectionIndex, sectionModel in
+            let customerCellHeightHandler = self?.customerCellHeightHandler
             return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount:1,itemOriginalX: 0,topContentSpace:PTChatConfig.share.chatTopFixel, bottomContentSpace: PTChatConfig.share.chatBottomFixel,itemSpace: 0) { index, model in
-                let cellModel = self.chatDataArr[index]
+                guard let rowModel = model as? PTRows,
+                      let cellModel = rowModel.dataModel as? PTChatListModel else {
+                    return 44
+                }
                 var cellHeight:CGFloat = 0
                 
                 let timeHeight = (PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
@@ -170,126 +177,127 @@ public class PTChatView: UIView {
                 case .Typing:
                     cellHeight = 44
                 case .CustomerMessage:
-                    cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 44
+                    cellHeight = customerCellHeightHandler?(cellModel,index) ?? 44
                 }
                 return cellHeight
             }
         }
-        view.cellInCollection = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row],let _ = itemRow.dataModel as? PTChatListModel {
-                let cellModel = self.chatDataArr[indexPath.row]
-                let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
-                if itemRow.ID == PTChatSystemMessageCell.ID,let cell = baseCell as? PTChatSystemMessageCell {
-                    cell.cellModel = cellModel
-                    return cell
-                } else if itemRow.ID == PTChatTypingIndicatorCell.ID,let cell = baseCell as? PTChatTypingIndicatorCell {
-                    return cell
-                } else {
-                    switch cellModel.messageType {
-                    case .CustomerMessage:
-                        let cBaseCell = self.customerCellHandler?(collectionView,sectionModel,indexPath,baseCell)
-                        if let cell = cBaseCell {
-                            let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
-                            cell.dataContent.addGestureRecognizers([longTap])
-                        }
-                        return cBaseCell
-                    default:
-                        if let cell = baseCell as? PTChatBaseCell {
-                            if itemRow.ID == PTChatTextCell.ID,let textCell = cell as? PTChatTextCell {
-                                textCell.cellModel = cellModel
-                                textCell.chinaPhoneCallback = { text in
-                                    self.attCellChinaPhoneTapCallBack?(text,indexPath,cellModel)
-                                }
-                                textCell.mentionCallback = {  text in
-                                    self.attCellMentionTapCallBack?(text,indexPath,cellModel)
-                                }
-                                textCell.urlCallback = { text in
-                                    self.attCellUrlTapCallBack?(text,indexPath,cellModel)
-                                }
-                                textCell.hashtagCallback = { text in
-                                    self.attCellHashtagTapCallBack?(text,indexPath,cellModel)
-                                }
-                                textCell.customCallback = { text in
-                                    self.attCellCustomTapCallBack?(text,indexPath,cellModel)
-                                }
-                            } else if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
-                                mediaCell.cellModel = cellModel
-                                mediaCell.mediaPlayButtonTapCallback = {
-                                    Task { @MainActor in
-                                        self.tapMessageHandler?(cellModel,indexPath)
-                                    }
-                                }
-                                mediaCell.mediaDownloadFinishCallback = {
-                                    Task { @MainActor in
-                                        self.messageDownloadedHandler?(cellModel,indexPath)
-                                    }
-                                }
-                            } else if itemRow.ID == PTChatMapCell.ID,let mapCell = cell as? PTChatMapCell {
-                                mapCell.cellModel = cellModel
-                            } else if itemRow.ID == PTChatVoiceCell.ID,let voiceCell = cell as? PTChatVoiceCell {
-                                voiceCell.cellModel = cellModel
-                            } else if itemRow.ID == PTChatFileCell.ID,let fileCell = cell as? PTChatFileCell {
-                                fileCell.cellModel = cellModel
-                            }
-                            cell.sendMessageError = { errorModel in
-                                self.resendMessage(cellModel: errorModel, indexPath: indexPath)
-                            }
-                            
-                            var gess:[UIGestureRecognizer] = []
-                            let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
-                            if itemRow.ID != PTChatTextCell.ID {
-                                let tap = UITapGestureRecognizer { sender in
-                                    if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
-                                        if mediaCell.isImage {
-                                            self.tapMessageHandler?(cellModel,indexPath)
-                                        } else {
-                                            if let _ = mediaCell.videoCacheURL {
-                                                self.tapMessageHandler?(cellModel,indexPath)
-                                            } else {
-                                                if mediaCell.needLoadVideo,let needLoadURL = mediaCell.loadMediaURL {
-                                                    mediaCell.mediaDownloadFunction(urlReal: needLoadURL)
-                                                } else {
-                                                    self.tapMessageHandler?(cellModel,indexPath)
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        self.tapMessageHandler?(cellModel,indexPath)
-                                    }
-                                }
-                                gess = [tap,longTap]
-                            } else {
-                                gess = [longTap]
-                            }
-                            cell.dataContent.addGestureRecognizers(gess)
+        view.cellInCollection = { [weak self] collectionView, sectionModel, indexPath in
+            guard let self,
+                  let rows = sectionModel.rows,
+                  rows.indices.contains(indexPath.item) else {
+                return nil
+            }
 
-                            cell.sendExp = { expModel in
-                                self.chatDataArr[indexPath.row].messageStatus = .Error
-                                if itemRow.ID == PTChatTextCell.ID,let textCell = cell as? PTChatTextCell {
-                                    textCell.cellModel = self.chatDataArr[indexPath.row]
-                                } else if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
-                                    mediaCell.cellModel = self.chatDataArr[indexPath.row]
-                                } else if itemRow.ID == PTChatMapCell.ID,let mapCell = cell as? PTChatMapCell {
-                                    mapCell.cellModel = self.chatDataArr[indexPath.row]
-                                } else if itemRow.ID == PTChatVoiceCell.ID,let voiceCell = cell as? PTChatVoiceCell {
-                                    voiceCell.cellModel = self.chatDataArr[indexPath.row]
-                                } else if itemRow.ID == PTChatFileCell.ID,let fileCell = cell as? PTChatFileCell {
-                                    fileCell.cellModel = self.chatDataArr[indexPath.row]
-                                }
-                            }
-                            cell.userIcon.addActionHandlers { sender in
-                                self.userIconTapHandler?(cellModel,indexPath)
-                            }
-                            return cell
-                        }
+            let itemRow = rows[indexPath.item]
+            guard let cellModel = itemRow.dataModel as? PTChatListModel else {
+                return nil
+            }
+
+            let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
+            if itemRow.ID == PTChatSystemMessageCell.ID, let cell = baseCell as? PTChatSystemMessageCell {
+                cell.cellModel = cellModel
+                return cell
+            }
+            if itemRow.ID == PTChatTypingIndicatorCell.ID, let cell = baseCell as? PTChatTypingIndicatorCell {
+                return cell
+            }
+
+            if cellModel.messageType == .CustomerMessage {
+                guard let cell = self.customerCellHandler?(collectionView, sectionModel, indexPath, baseCell) else {
+                    return nil
+                }
+                cell.dataContent.gestureRecognizers?.forEach { cell.dataContent.removeGestureRecognizer($0) }
+                let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                cell.dataContent.addGestureRecognizers([longTap])
+                return cell
+            }
+
+            guard let cell = baseCell as? PTChatBaseCell else {
+                return nil
+            }
+
+            if itemRow.ID == PTChatTextCell.ID, let textCell = cell as? PTChatTextCell {
+                textCell.cellModel = cellModel
+                textCell.chinaPhoneCallback = { [weak self] text in
+                    self?.attCellChinaPhoneTapCallBack?(text, indexPath, cellModel)
+                }
+                textCell.mentionCallback = { [weak self] text in
+                    self?.attCellMentionTapCallBack?(text, indexPath, cellModel)
+                }
+                textCell.urlCallback = { [weak self] text in
+                    self?.attCellUrlTapCallBack?(text, indexPath, cellModel)
+                }
+                textCell.hashtagCallback = { [weak self] text in
+                    self?.attCellHashtagTapCallBack?(text, indexPath, cellModel)
+                }
+                textCell.customCallback = { [weak self] text in
+                    self?.attCellCustomTapCallBack?(text, indexPath, cellModel)
+                }
+            } else if itemRow.ID == PTChatMediaCell.ID, let mediaCell = cell as? PTChatMediaCell {
+                mediaCell.cellModel = cellModel
+                mediaCell.mediaPlayButtonTapCallback = { [weak self] in
+                    PTMainActorBridge.perform { [weak self] in
+                        self?.tapMessageHandler?(cellModel, indexPath)
                     }
                 }
+                mediaCell.mediaDownloadFinishCallback = { [weak self] in
+                    PTMainActorBridge.perform { [weak self] in
+                        self?.messageDownloadedHandler?(cellModel, indexPath)
+                    }
+                }
+            } else if itemRow.ID == PTChatMapCell.ID, let mapCell = cell as? PTChatMapCell {
+                mapCell.cellModel = cellModel
+            } else if itemRow.ID == PTChatVoiceCell.ID, let voiceCell = cell as? PTChatVoiceCell {
+                voiceCell.cellModel = cellModel
+            } else if itemRow.ID == PTChatFileCell.ID, let fileCell = cell as? PTChatFileCell {
+                fileCell.cellModel = cellModel
             }
-            return nil
+
+            cell.sendMessageError = { [weak self] errorModel in
+                self?.resendMessage(cellModel: errorModel, indexPath: indexPath)
+            }
+            cell.sendExp = { [weak cell] expModel in
+                expModel.messageStatus = .Error
+                cell?.checkCellSendStatus(cellModel: expModel)
+            }
+
+            // English: Remove interactions from the previous model before installing the current model's gestures.
+            // Español: Elimina las interacciones del modelo anterior antes de instalar los gestos del modelo actual.
+            // 中文：先移除上一个模型的交互，再安装当前模型的手势。
+            cell.dataContent.gestureRecognizers?.forEach { cell.dataContent.removeGestureRecognizer($0) }
+            var gestures: [UIGestureRecognizer] = []
+            let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+            if itemRow.ID != PTChatTextCell.ID {
+                let tap = UITapGestureRecognizer { [weak self, weak cell] _ in
+                    guard let self, let cell else { return }
+                    if itemRow.ID == PTChatMediaCell.ID, let mediaCell = cell as? PTChatMediaCell {
+                        if mediaCell.isImage || mediaCell.videoCacheURL != nil {
+                            self.tapMessageHandler?(cellModel, indexPath)
+                        } else if mediaCell.needLoadVideo, let needLoadURL = mediaCell.loadMediaURL {
+                            mediaCell.mediaDownloadFunction(urlReal: needLoadURL)
+                        } else {
+                            self.tapMessageHandler?(cellModel, indexPath)
+                        }
+                    } else {
+                        self.tapMessageHandler?(cellModel, indexPath)
+                    }
+                }
+                gestures = [tap, longTap]
+            } else {
+                gestures = [longTap]
+            }
+            cell.dataContent.addGestureRecognizers(gestures)
+
+            cell.userIcon.removeTargerAndAction()
+            cell.userIcon.addActionHandlers { [weak self] _ in
+                self?.userIconTapHandler?(cellModel, indexPath)
+            }
+            return cell
         }
-        view.headerRefreshTask = {
-            PTGCDManager.shared.runOnMain {
-                self.headerLoadReadyHandler?()
+        view.headerRefreshTask = { [weak self] in
+            PTMainActorBridge.perform { [weak self] in
+                self?.headerLoadReadyHandler?()
             }
         }
         return view
@@ -306,7 +314,13 @@ public class PTChatView: UIView {
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+
+        listContentInset()
+        addSubviews([listCollection])
+        listCollection.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     public func chatRegisterClass(classs:[String:PTChatBaseCell.Type]) {
@@ -314,8 +328,10 @@ public class PTChatView: UIView {
     }
     
     func cellLongTap(cell:PTChatBaseCell,itemId:String,cellModel:PTChatListModel,indexPath:IndexPath) ->UILongPressGestureRecognizer {
-        let longTap = UILongPressGestureRecognizer { sender in
-            if let longGes = sender as? UILongPressGestureRecognizer {
+        let longTap = UILongPressGestureRecognizer { [weak self, weak cell] sender in
+            if let longGes = sender as? UILongPressGestureRecognizer,
+               let self,
+               let cell {
                 switch longGes.state {
                 case .possible:break
                 case .began:
@@ -326,9 +342,9 @@ public class PTChatView: UIView {
                     if let menuTitles = self.cellMenuItemsHandler?(itemId), !menuTitles.isEmpty {
                         let items = menuTitles.enumerated().map { index, title in
                             
-                            let menuItem = PTEditMenuAction(title: title) {
-                                Task { @MainActor in
-                                    self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
+                            let menuItem = PTEditMenuAction(title: title) { [weak self] in
+                                Task { @MainActor [weak self] in
+                                    self?.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
                                 }
                             }
                             return menuItem
@@ -352,44 +368,49 @@ public class PTChatView: UIView {
         if !chatDataArr.isEmpty {
             var sections = [PTSection]()
             let rows:[PTRows] = chatDataArr.compactMap { value in
+                let diffIdentifier = value.diffId
                 switch value.messageType {
                 case .SystemMessage:
-                    return PTRows(ID: PTChatSystemMessageCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatSystemMessageCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .Text:
-                    return PTRows(ID: PTChatTextCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatTextCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .Media:
-                    return PTRows(ID: PTChatMediaCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatMediaCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .Map:
-                    return PTRows(ID: PTChatMapCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatMapCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .Voice:
-                    return PTRows(ID: PTChatVoiceCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatVoiceCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .Typing:
-                    return PTRows(ID: PTChatTypingIndicatorCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatTypingIndicatorCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .File:
-                    return PTRows(ID: PTChatFileCell.ID, dataModel: value)
+                    return PTRows(ID: PTChatFileCell.ID, diffId: diffIdentifier, dataModel: value)
                 case .CustomerMessage:
                     guard !value.customerCellId.stringIsEmpty() else { return nil }
-                    return PTRows(ID: value.customerCellId, dataModel: value)
+                    return PTRows(ID: value.customerCellId, diffId: diffIdentifier, dataModel: value)
                 }
             }
-            let section = PTSection(rows: rows)
+            let section = PTSection(identifier: chatSectionIdentifier, rows: rows)
             sections.append(section)
             listCollection.showCollectionDetail(collectionData: sections,finishTask: loadFinish)
         } else {
-            loadFinish?(listCollection.contentCollectionView)
+            listCollection.clearAllData(finishTask: loadFinish)
         }
     }
     
     fileprivate func resendMessage(cellModel:PTChatListModel,indexPath:IndexPath) {
+        guard let currentIndex = chatDataArr.firstIndex(where: { $0 === cellModel || $0.diffId == cellModel.diffId }) else {
+            return
+        }
+
         let timeStamp = Date().timeIntervalSince1970
-        let currentModel = cellModel
+        let currentModel = chatDataArr.remove(at: currentIndex)
         currentModel.messageStatus = .Sending
         currentModel.messageTimeStamp = timeStamp
-        self.chatDataArr.remove(at: indexPath.row)
         self.chatDataArr.append(currentModel)
+        let newIndexPath = IndexPath(item: chatDataArr.count - 1, section: 0)
         self.viewReloadData { cView in
             self.listCollection.contentCollectionView.scrollToBottom()
-            self.resendMessageHandler?(cellModel,indexPath)
+            self.resendMessageHandler?(currentModel, newIndexPath)
         }
     }
     

@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.6.3 - 2026-08-31 (Unreleased)
+
+- 统一 ScreenShot 的 UIView、UIScrollView、UITableView、UIWindow 和 WKWebView 截图入口，增加当前场景缩放、像素上限和无效尺寸保护。
+- 长截图不再修改滚动视图 frame；同步和异步截图都会恢复原始滚动位置，并支持取消过期任务。
+- MessageKit 的消息和列表 Row 使用稳定身份，列表刷新支持增量重配置，避免随机 Diffable ID 导致整表重建。
+- 修复聊天 Cell 复用时的旧手势、倒计时、播放器、地图快照、文件信息、音频进度和输入动画残留；异步结果增加代次校验。
+- 补齐 MessageKit 的 Nib/Storyboard 初始化路径，避免 `init(coder:)` 直接触发崩溃；补充图片、地图、音频和视频输入的安全兜底。
+- Debug 构建已完成 PooTools Swift 源码编译，但模拟器最终链接被外部 `PooTools.framework` 缺失和 Metal 工具链搜索路径阻断；Release 构建被外部 `KituraContracts` 的 Swift 6 并发错误阻断，未创建 `5.6.3` 标签。
+
 ## 5.6.2 - 2026-08-30 (Unreleased)
 
 - 修复 `PTLanguage.share.language` 在切换两个有效语言值时未稳定发送

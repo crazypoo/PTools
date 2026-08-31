@@ -8,116 +8,108 @@
 
 import UIKit
 
+@MainActor
 extension UIScrollView {
 
     // MARK: - SnapshotKitProtocol 实现 (覆盖 UIView 的默认实现)
 
-    public func scrollTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        // 获取当前可视区域的 rect
-        var visibleRect = self.bounds
-        visibleRect.origin = self.contentOffset
+    internal func pt_scrollVisibleSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        PTSnapshotRenderer.image(view: self,
+                                 rect: bounds,
+                                 configuration: configuration)
+    }
 
-        // 直接复用我们在 UIView 中写好的高精度局部截图逻辑
-        return self.takeSnapshotOfFullContent(for: visibleRect, with: configuration)
+    internal func pt_scrollFullSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        let contentWidth = max(contentSize.width, bounds.width)
+        let contentHeight = max(contentSize.height, bounds.height)
+        let totalSize = CGSize(width: contentWidth, height: contentHeight)
+        let scale = PTSnapshotRenderer.scale(for: self, configuration: configuration)
+        guard let renderSize = PTSnapshotRenderer.renderSize(totalSize,
+                                                             scale: scale,
+                                                             configuration: configuration) else {
+            return nil
+        }
+
+        let originalOffset = contentOffset
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        format.opaque = configuration.isOpaque
+        let renderer = UIGraphicsImageRenderer(size: renderSize, format: format)
+
+        defer {
+            setContentOffset(originalOffset, animated: false)
+        }
+
+        return renderer.image { context in
+            if configuration.isOpaque {
+                (backgroundColor ?? UIColor.systemBackground).setFill()
+                context.fill(CGRect(origin: .zero, size: renderSize))
+            }
+
+            let pageWidth = max(bounds.width, 1)
+            let pageHeight = max(bounds.height, 1)
+            let horizontalPages = max(Int(ceil(contentWidth / pageWidth)), 1)
+            let verticalPages = max(Int(ceil(contentHeight / pageHeight)), 1)
+
+            // English: Render each viewport into its final position without changing the view hierarchy.
+            // Español: Renderiza cada ventana en su posición final sin cambiar la jerarquía de vistas.
+            // 中文：将每个可视窗口渲染到最终位置，不修改视图层级。
+            UIView.performWithoutAnimation {
+                for row in 0..<verticalPages {
+                    for column in 0..<horizontalPages {
+                        guard !Task.isCancelled else { return }
+
+                        let origin = CGPoint(x: CGFloat(column) * pageWidth,
+                                             y: CGFloat(row) * pageHeight)
+                        setContentOffset(origin, animated: false)
+                        layoutIfNeeded()
+
+                        let tileWidth = min(pageWidth, contentWidth - origin.x)
+                        let tileHeight = min(pageHeight, contentHeight - origin.y)
+                        guard tileWidth > 0, tileHeight > 0 else { continue }
+
+                        context.cgContext.saveGState()
+                        context.cgContext.translateBy(x: origin.x, y: origin.y)
+                        context.cgContext.addRect(CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tileWidth,
+                                                         height: tileHeight))
+                        context.cgContext.clip()
+                        drawHierarchy(in: bounds, afterScreenUpdates: true)
+                        context.cgContext.restoreGState()
+                    }
+                }
+            }
+        }
+    }
+
+    internal func pt_scrollAsyncSnapshot(configuration: SnapshotConfiguration) async -> UIImage? {
+        guard !Task.isCancelled else { return nil }
+        await Task.yield()
+        guard !Task.isCancelled else { return nil }
+        return pt_scrollFullSnapshot(configuration: configuration)
+    }
+
+    // MARK: - Compatibility entry points / Entradas de compatibilidad / 兼容入口
+
+    public func scrollTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
+        pt_scrollVisibleSnapshot(configuration: configuration)
     }
 
     public func scrollTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        let originalFrame = self.frame
-        let originalOffset = self.contentOffset
-
-        // 展开 Frame 以显示完整内容
-        self.frame = CGRect(origin: originalFrame.origin, size: self.contentSize)
-        self.contentOffset = .zero
-
-        // 使用现代的 UIGraphicsImageRenderer API
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = configuration.scale
-        format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
-
-        let renderer = UIGraphicsImageRenderer(size: self.contentSize, format: format)
-        let backgroundColor = self.backgroundColor ?? UIColor.white
-
-        let image = renderer.image { context in
-            backgroundColor.setFill()
-            context.fill(CGRect(origin: .zero, size: self.contentSize))
-            // 绘制层次结构
-            self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-        }
-
-        // 恢复原始状态
-        self.frame = originalFrame
-        self.contentOffset = originalOffset
-
-        return image
+        pt_scrollFullSnapshot(configuration: configuration)
     }
 
-    public func scrollAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping @Sendable (UIImage?) -> Void) {
-        let originalOffset = self.contentOffset
-
-        // 【修复】使用 ceil 向上取整，保证剩余不足一页的内容也能被截取到
-        let pageNum = Int(ceil(self.contentSize.height / self.bounds.height))
-
-        guard pageNum > 0 else {
-            completion(nil)
-            return
-        }
-
-        // 开始递归采集每一页的截图图片
-        self.drawScreenshotOfPageContent(0, maxIndex: pageNum, configuration: configuration, collectedImages: []) { [weak self] images in
-            PTGCDManager.shared.runOnMain {
-                guard let self = self else { return }
-                // 恢复原始偏移量
-                self.contentOffset = originalOffset
-                // 将耗时的图片拼接操作放到后台线程执行
-                let totalSize = self.contentSize
-                let format = UIGraphicsImageRendererFormat()
-                format.scale = configuration.scale
-                format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
-
-                let renderer = UIGraphicsImageRenderer(size: totalSize, format: format)
-                let backgroundColor = self.backgroundColor ?? UIColor.white
-
-                let finalImage = renderer.image { context in
-                    backgroundColor.setFill()
-                    context.fill(CGRect(origin: .zero, size: totalSize))
-
-                    var currentY: CGFloat = 0
-                    for img in images {
-                        img.draw(at: CGPoint(x: 0, y: currentY))
-                        currentY += img.size.height
-                    }
-                }
-                // 切回主线程通过闭包返回最终生成的长图
-                completion(finalImage)
+    public func scrollAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration,
+                                                      completion: @escaping @Sendable (UIImage?) -> Void) {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                completion(nil)
+                return
             }
-        }
-    }
-
-    // MARK: - 私有辅助方法：递归截取单页并收集
-
-    private func drawScreenshotOfPageContent(_ index: Int, maxIndex: Int, configuration: SnapshotConfiguration, collectedImages: [UIImage], completion: @escaping ([UIImage]) -> Void) {
-        
-        // 结束条件：已截取完所有页
-        if index >= maxIndex {
-            completion(collectedImages)
-            return
-        }
-
-        // 滚动到当前需要截取的页
-        let yOffset = CGFloat(index) * self.bounds.size.height
-        self.setContentOffset(CGPoint(x: 0, y: yOffset), animated: false)
-
-        // 延迟 0.3 秒，等待渲染（特别是网络图片、动效等）完成
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            var currentImages = collectedImages
-            
-            // 直接利用我们在 UIView 中写好的 takeSnapshotOfFullContent(for:with:) 截取当前 bounds
-            if let pageImage = self.takeSnapshotOfFullContent(for: self.bounds, with: configuration) {
-                currentImages.append(pageImage)
-            }
-
-            // 递归截取下一页
-            self.drawScreenshotOfPageContent(index + 1, maxIndex: maxIndex, configuration: configuration, collectedImages: currentImages, completion: completion)
+            let image = await self.pt_scrollAsyncSnapshot(configuration: configuration)
+            guard !Task.isCancelled else { return }
+            completion(image)
         }
     }
 }

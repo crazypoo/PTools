@@ -11,6 +11,7 @@ import SnapKit
 
 public typealias PTAttLabelCallBack = (String) -> Void
 
+@MainActor
 public class PTChatTextCell: PTChatBaseCell {
     public static let ID = "PTChatTextCell"
     
@@ -22,10 +23,9 @@ public class PTChatTextCell: PTChatBaseCell {
 
     public var cellModel: PTChatListModel! {
         didSet {
-            Task { @MainActor in
-                self.setBaseSubviews(cellModel: self.cellModel)
-                self.dataContentSets(cellModel: self.cellModel)
-            }
+            guard let cellModel else { return }
+            setBaseSubviews(cellModel: cellModel)
+            dataContentSets(cellModel: cellModel)
         }
     }
     
@@ -41,7 +41,8 @@ public class PTChatTextCell: PTChatBaseCell {
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupView()
     }
 
     private func setupView() {
@@ -64,7 +65,7 @@ public class PTChatTextCell: PTChatBaseCell {
             }
         }
 
-        activeLabel.snp.makeConstraints { make in
+        activeLabel.snp.remakeConstraints { make in
             make.edges.equalTo(dataContent).inset(UIEdgeInsets(
                 top: 0,
                 left: cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left,
@@ -91,38 +92,34 @@ public class PTChatTextCell: PTChatBaseCell {
             label.chinaCellPhoneColor = PTChatConfig.share.chinaCellPhoneColor
             label.chinaCellPhoneSelectedColor = PTChatConfig.share.chinaCellPhoneSelectedColor
 
-            label.handleMentionTap { text in
-                self.mentionCallback?(text)
+            label.handleMentionTap { [weak self] text in
+                self?.mentionCallback?(text)
             }
-            label.handleHashtagTap { text in
-                self.hashtagCallback?(text)
+            label.handleHashtagTap { [weak self] text in
+                self?.hashtagCallback?(text)
             }
-            label.handleURLTap { url in
-                self.urlCallback?(url.absoluteString)
+            label.handleURLTap { [weak self] url in
+                self?.urlCallback?(url.absoluteString)
             }
-            label.handleChinaCellPhoneTap { phone in
-                self.chinaPhoneCallback?(phone)
+            label.handleChinaCellPhoneTap { [weak self] phone in
+                self?.chinaPhoneCallback?(phone)
             }
         }
     }
 
     private func handleCustomTags(for label: PTActiveLabel, with cellModel: PTChatListModel) {
-        var customAttTypes = [PTActiveType]()
-        if !PTChatConfig.share.customerTagModels.isEmpty {
-            PTChatConfig.share.customerTagModels.forEach { tagModel in
-                let type = PTActiveType.custom(pattern: tagModel.tag)
-                customAttTypes.append(type)
-                label.enabledTypes.append(type)
-                label.customColor[type] = tagModel.tagColor
-                label.customSelectedColor[type] = tagModel.tagSelectedColor
-            }
+        let customEntries = PTChatConfig.share.customerTagModels.compactMap { tagModel -> (PTMessageTextCustomAttTagModel, PTActiveType)? in
+            guard !tagModel.tag.isEmpty else { return nil }
+            return (tagModel, .custom(pattern: tagModel.tag))
         }
-        
-        if !customAttTypes.isEmpty {
-            customAttTypes.forEach { type in
-                label.handleCustomTap(for: type) { text in
-                    self.customCallback?(text)
-                }
+        label.enabledTypes = [.mention, .hashtag, .url, .chinaCellPhone, .snsId] + customEntries.map(\.1)
+        label.customColor = [:]
+        label.customSelectedColor = [:]
+        for (tagModel, type) in customEntries {
+            label.customColor[type] = tagModel.tagColor
+            label.customSelectedColor[type] = tagModel.tagSelectedColor
+            label.handleCustomTap(for: type) { [weak self] text in
+                self?.customCallback?(text)
             }
         }
     }

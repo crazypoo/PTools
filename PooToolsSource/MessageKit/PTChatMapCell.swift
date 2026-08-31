@@ -9,11 +9,16 @@ import UIKit
 import MapKit
 import SnapKit
 
+@MainActor
 public class PTChatMapCell: PTChatBaseCell {
     public static let ID = "PTChatMapCell"
 
+    private var mapGeneration = 0
+    private var snapshotter: MKMapSnapshotter?
+
     public var cellModel:PTChatListModel! {
         didSet {
+            guard let cellModel else { return }
             updateCellModel(cellModel: cellModel)
         }
     }
@@ -29,11 +34,21 @@ public class PTChatMapCell: PTChatBaseCell {
         super.init(frame: frame)
         setupSubviews()
     }
-    
+
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupSubviews()
     }
-    
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        mapGeneration += 1
+        snapshotter?.cancel()
+        snapshotter = nil
+        appleMap.image = PTAppBaseConfig.share.defaultEmptyImage
+        cellModel = nil
+    }
+
     // 提前设置视图和约束
     private func setupSubviews() {
         dataContent.addSubview(appleMap)
@@ -44,9 +59,13 @@ public class PTChatMapCell: PTChatBaseCell {
 
     // 更新 cellModel 时的逻辑
     private func updateCellModel(cellModel: PTChatListModel) {
+        mapGeneration += 1
+        snapshotter?.cancel()
+        snapshotter = nil
+        appleMap.image = PTAppBaseConfig.share.defaultEmptyImage
         setBaseSubviews(cellModel: cellModel)
         updateConstraintsForCellModel(cellModel)
-        configureMapContent(cellModel: cellModel)
+        configureMapContent(cellModel: cellModel, generation: mapGeneration)
     }
 
     private func updateConstraintsForCellModel(_ cellModel: PTChatListModel) {
@@ -63,38 +82,47 @@ public class PTChatMapCell: PTChatBaseCell {
         }
     }
     
-    private func configureMapContent(cellModel: PTChatListModel) {
-        guard let _ = cellModel.msgContent else { return }
-
-        func setDicTolocation(dic:NSDictionary) {
-            Task { @MainActor in
-                let lat = (dic["lat"] as? String) ?? "0"
-                let lng = (dic["lng"] as? String) ?? "0"
-            
-                let location2D = CLLocationCoordinate2D(latitude: lat.double() ?? 0, longitude: lng.double() ?? 0)
-                self.setBaseMapView(location2D: location2D)
+    private func configureMapContent(cellModel: PTChatListModel, generation: Int) {
+        let location: CLLocationCoordinate2D
+        switch cellModel.msgContent {
+        case let dictionary as NSDictionary:
+            location = coordinate(from: dictionary) ?? .init(latitude: 0, longitude: 0)
+        case let string as String:
+            if let coordinates = string.asCoordinates {
+                location = coordinates
+            } else if let dictionary = string.jsonStringToDic() {
+                location = coordinate(from: dictionary) ?? .init(latitude: 0, longitude: 0)
+            } else {
+                location = .init(latitude: 0, longitude: 0)
             }
+        default:
+            location = .init(latitude: 0, longitude: 0)
         }
-        
-        Task { @MainActor in
-            switch cellModel.msgContent {
-            case let dicContent as NSDictionary:
-                setDicTolocation(dic: dicContent)
-            case let dicString as String:
-                if let location = dicString.asCoordinates {
-                    self.setBaseMapView(location2D: location)
-                } else if let dic =  dicString.jsonStringToDic() {
-                    setDicTolocation(dic: dic)
-                } else {
-                    self.setBaseMapView(location2D: .init(latitude: 0, longitude: 0))
-                }
-            default:
-                self.setBaseMapView(location2D: .init(latitude: 0, longitude: 0))
-            }
-        }
+        setBaseMapView(location2D: location, generation: generation)
     }
-    
-    func setBaseMapView(location2D:CLLocationCoordinate2D) {
+
+    private func coordinate(from dictionary: NSDictionary) -> CLLocationCoordinate2D? {
+        func value(for key: String) -> Double? {
+            if let number = dictionary[key] as? NSNumber {
+                return number.doubleValue
+            }
+            if let string = dictionary[key] as? String {
+                return Double(string)
+            }
+            return nil
+        }
+
+        guard let latitude = value(for: "lat"),
+              let longitude = value(for: "lng"),
+              latitude.isFinite, longitude.isFinite,
+              (-90...90).contains(latitude),
+              (-180...180).contains(longitude) else {
+            return nil
+        }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+
+    private func setBaseMapView(location2D:CLLocationCoordinate2D, generation: Int) {
         let pinImage = PTChatConfig.share.mapCellPinImage
         let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
         annotationView.image = pinImage
@@ -104,28 +132,32 @@ public class PTChatMapCell: PTChatBaseCell {
         snapshotOptions.region = MKCoordinateRegion(center: location2D, span: PTChatConfig.share.span)
         snapshotOptions.showsBuildings = PTChatConfig.share.showBuilding
         snapshotOptions.pointOfInterestFilter = PTChatConfig.share.showsPointsOfInterest ? .includingAll : .excludingAll
+        snapshotOptions.size = CGSize(width: PTChatConfig.share.mapMessageImageWidth,
+                                      height: PTChatConfig.share.mapMessageImageHeight)
         let snapShotter = MKMapSnapshotter(options: snapshotOptions)
+        snapshotter = snapShotter
         snapShotter.start { [weak self] snapshot, error in
-            guard let self = self, let snapshot = snapshot, error == nil else {
-              // show an error image?
+            guard let self,
+                  self.mapGeneration == generation,
+                  let snapshot,
+                  error == nil else {
               return
             }
 
-            UIGraphicsBeginImageContextWithOptions(snapshotOptions.size, true, 0)
-
-            snapshot.image.draw(at: .zero)
-
             var point = snapshot.point(for: location2D)
-            // Move point to reflect annotation anchor
             point.x -= annotationView.bounds.size.width / 2
             point.y -= annotationView.bounds.size.height / 2
             point.x += annotationView.centerOffset.x
             point.y += annotationView.centerOffset.y
 
-            annotationView.image?.draw(at: point)
-            let composedImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            self.appleMap.image = composedImage
+            let renderer = UIGraphicsImageRenderer(size: snapshotOptions.size)
+            self.appleMap.image = renderer.image { _ in
+                snapshot.image.draw(at: .zero)
+                annotationView.image?.draw(at: point)
+            }
+            if self.snapshotter === snapShotter {
+                self.snapshotter = nil
+            }
         }
     }
 }

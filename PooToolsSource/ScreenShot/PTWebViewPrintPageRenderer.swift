@@ -8,9 +8,10 @@
 
 import UIKit
 
+@MainActor
 internal final class PTWebViewPrintPageRenderer: UIPrintPageRenderer {
-    private var formatter: UIPrintFormatter
-    private var contentSize: CGSize
+    private let formatter: UIPrintFormatter
+    private let contentSize: CGSize
 
     /// 生成 PrintPageRenderer 实例
     ///
@@ -34,6 +35,10 @@ internal final class PTWebViewPrintPageRenderer: UIPrintPageRenderer {
 
     // MARK: - 1. 生成单页 PDF
     private func printContentToPDFPage() -> CGPDFPage? {
+        guard contentSize.width > 0, contentSize.height > 0,
+              contentSize.width.isFinite, contentSize.height.isFinite else {
+            return nil
+        }
         // 使用现代的 UIGraphicsPDFRenderer 替代老旧的 UIGraphicsBeginPDFContextToData
         let format = UIGraphicsPDFRendererFormat()
         let renderer = UIGraphicsPDFRenderer(bounds: self.paperRect, format: format)
@@ -60,10 +65,18 @@ internal final class PTWebViewPrintPageRenderer: UIPrintPageRenderer {
         let pageRect = pdfPage.getBoxRect(.trimBox)
         // 使用 floor 防止精度问题
         let contentSize = CGSize(width: floor(pageRect.size.width), height: floor(pageRect.size.height))
+        let scale = configuration.scale.isFinite && configuration.scale > 0
+            ? configuration.scale
+            : max(PTSceneContext.activeWindow()?.windowScene?.screen.scale ?? 1, 1)
+        guard PTSnapshotRenderer.renderSize(contentSize,
+                                            scale: scale,
+                                            configuration: configuration) != nil else {
+            return nil
+        }
 
         // 使用现代的 UIGraphicsImageRenderer 替代 UIGraphicsBeginImageContextWithOptions
         let format = UIGraphicsImageRendererFormat()
-        format.scale = configuration.scale      // 动态接入外部配置的缩放比例 (不再硬编码 2.0)
+        format.scale = scale                     // 动态接入外部配置的缩放比例 (不再硬编码 2.0)
         format.opaque = configuration.isOpaque  // 动态接入外部配置的透明度
 
         let renderer = UIGraphicsImageRenderer(size: contentSize, format: format)

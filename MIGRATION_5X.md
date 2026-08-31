@@ -17,6 +17,12 @@
 | UI 调度 | `PTMainActorBridge` | `PTGCDManager` 主线程入口保留兼容性 |
 | 网络请求 | `Network` 内部执行管线 | `Any`、KakaJSON 和 callback 入口保留在兼容层 |
 
+### 5.6.3 ScreenShot 与 MessageKit
+
+- ScreenShot 的 UIView、UIScrollView、UITableView、UIWindow 和 WKWebView 继续保留原有公开入口；新的统一渲染器负责场景缩放、像素上限、长截图状态恢复和取消。
+- MessageKit 的消息模型和列表 Row 使用稳定 Diffable 身份；现有 `PTChatView`、Cell、媒体、地图、文件、音频和输入动画入口无需修改。
+- 复用 Cell 的异步资源会校验当前代次；外部无法取消的旧回调仍会安全忽略，不需要调用方增加取消代码。
+
 ### 5.6.2 Language 通知修复
 
 - `PTLanguage.share.language` 现在比较解析后的有效语言；同一有效语言重复赋值不会发送通知，异常存储值会安全归一化。

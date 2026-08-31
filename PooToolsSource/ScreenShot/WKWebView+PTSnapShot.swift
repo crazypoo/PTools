@@ -9,74 +9,68 @@
 import UIKit
 import WebKit
 
+@MainActor
 extension WKWebView {
     
     // MARK: - SnapshotKitProtocol 实现
     
-    public func wkTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        // WKWebView 的可见区域截图，必须使用 drawHierarchy，否则会出现白屏
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = configuration.scale
-        format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
+    internal func pt_wkVisibleSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        PTSnapshotRenderer.image(view: self,
+                                 rect: bounds,
+                                 configuration: configuration,
+                                 usesHierarchy: true)
+    }
 
-        let renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: format)
-        return renderer.image { context in
-            if let bgColor = self.backgroundColor {
-                bgColor.setFill()
-                context.fill(self.bounds)
-            }
-            self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    internal func pt_wkFullSnapshot(configuration: SnapshotConfiguration) -> UIImage? {
+        let renderer = PTWebViewPrintPageRenderer(formatter: viewPrintFormatter(),
+                                                   contentSize: scrollView.contentSize)
+        return renderer.printContentToImage(with: configuration)
+    }
+
+    internal func pt_wkAsyncSnapshot(configuration: SnapshotConfiguration) async -> UIImage? {
+        let originalOffset = scrollView.contentOffset
+        defer {
+            scrollView.setContentOffset(originalOffset, animated: false)
         }
+
+        let viewportHeight = max(scrollView.bounds.height, 1)
+        let pageCount = max(Int(ceil(max(scrollView.contentSize.height, viewportHeight) / viewportHeight)), 1)
+        for page in 0..<pageCount {
+            guard !Task.isCancelled else { return nil }
+            scrollView.setContentOffset(CGPoint(x: originalOffset.x,
+                                                y: CGFloat(page) * viewportHeight),
+                                        animated: false)
+            do {
+                try await Task.sleep(nanoseconds: 100_000_000)
+            } catch {
+                return nil
+            }
+        }
+
+        guard !Task.isCancelled else { return nil }
+        return pt_wkFullSnapshot(configuration: configuration)
+    }
+
+    // MARK: - Compatibility entry points / Entradas de compatibilidad / 兼容入口
+
+    public func wkTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
+        pt_wkVisibleSnapshot(configuration: configuration)
     }
 
     public func wkTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration) -> UIImage? {
-        // 实例化我们刚刚升级过的打印渲染器
-        let renderer = PTWebViewPrintPageRenderer(formatter: self.viewPrintFormatter(), contentSize: self.scrollView.contentSize)
-        // 传入配置参数，生成高清长图
-        let image = renderer.printContentToImage(with: configuration)
-        return image
-    }
-    
-    public func wkAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping ((UIImage?) -> Void)) {
-        let originalOffset = self.scrollView.contentOffset
-
-        // 【修复点】：将 floorf 替换为 ceil，确保如果存在半页内容也不会被漏掉
-        let pageNum = Int(ceil(self.scrollView.contentSize.height / self.scrollView.bounds.height))
-
-        // 预加载所有页面，触发前端的懒加载（Lazy Loading）策略
-        self.loadPageContent(0, maxIndex: pageNum, completion: { [weak self] in
-            guard let self = self else { return }
-            
-            self.scrollView.contentOffset = CGPoint.zero
-            
-            // 留出 0.5 秒时间给网页进行最终的 DOM 渲染和视图重排
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                // UIPrintFormatter 必须在主线程获取和渲染
-                let renderer = PTWebViewPrintPageRenderer(formatter: self.viewPrintFormatter(), contentSize: self.scrollView.contentSize)
-                let image = renderer.printContentToImage(with: configuration)
-                
-                // 恢复原有的滚动位置并回调
-                self.scrollView.contentOffset = originalOffset
-                completion(image)
-            }
-        })
+        pt_wkFullSnapshot(configuration: configuration)
     }
 
-    // MARK: - 私有辅助方法
-    
-    private func loadPageContent(_ index: Int, maxIndex: Int, completion: @escaping () -> Void) {
-        // 滚动到指定区域以触发网页内的懒加载事件
-        let yOffset = CGFloat(index) * self.scrollView.frame.size.height
-        self.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: false)
-        
-        // 延迟 1 秒，给网页内的 JS 懒加载脚本和网络图片请求留出时间
-        // 注意：如果实际使用中网页图片很多且网络慢，这个时间可能还需要加大
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if index < maxIndex {
-                self.loadPageContent(index + 1, maxIndex: maxIndex, completion: completion)
-            } else {
-                completion()
+    public func wkAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration,
+                                                  completion: @escaping @Sendable (UIImage?) -> Void) {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                completion(nil)
+                return
             }
+            let image = await self.pt_wkAsyncSnapshot(configuration: configuration)
+            guard !Task.isCancelled else { return }
+            completion(image)
         }
     }
 }
