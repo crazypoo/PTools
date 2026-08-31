@@ -8,6 +8,23 @@
 
 import UIKit
 
+#if SWIFT_PACKAGE
+// English: Import the shared Harbeth model for the editor's filter configuration.
+// Español: Importamos el modelo compartido de Harbeth para la configuración de filtros del editor.
+// 中文：显式导入共享 Harbeth 模型，供编辑器滤镜配置使用。
+import ptools
+import PooToolsHarbethKit
+#endif
+
+// English: Defines how the editor limits the size of rendered output images.
+// Español: Define cómo el editor limita el tamaño de las imágenes renderizadas.
+// 中文：定义编辑器如何限制最终渲染图片的尺寸。
+public enum PTImageEditorOutputPolicy: Sendable, Equatable {
+    case safe
+    case original
+    case custom(maximumPixelCount: Int, maximumDimension: Int)
+}
+
 /// Adjust slider type
 @objc public enum PTAdjustSliderType: Int {
     case vertical
@@ -17,6 +34,11 @@ import UIKit
 @MainActor
 public class PTImageEditorConfig: NSObject {
     public static let share = PTImageEditorConfig()
+
+    // English: Safe output is the default to prevent memory spikes when exporting large images.
+    // Español: La salida segura es el valor predeterminado para evitar picos de memoria al exportar imágenes grandes.
+    // 中文：默认使用安全输出，避免导出超大图片时出现内存峰值。
+    public var outputPolicy: PTImageEditorOutputPolicy = .safe
     
     /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
     public var maxFrameCountForGIF = 50

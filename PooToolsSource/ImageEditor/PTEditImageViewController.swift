@@ -13,9 +13,22 @@ import SwifterSwift
 import SafeSFSymbols
 import Harbeth
 
+#if SWIFT_PACKAGE
+// English: Import the direct module owners used by the standalone ImageEditor target.
+// Español: Importamos los módulos propietarios usados por el target independiente de ImageEditor.
+// 中文：显式导入独立 ImageEditor target 直接使用的模块所有者。
+import ptools
+import PooToolsHarbethKit
+import PooToolsPhotoPicker
+#endif
+
 public class PTEditImageViewController: PTBaseViewController {
 
     public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)?
+    // English: Optional typed completion for success, cancellation, and rendering failure.
+    // Español: Finalización tipada opcional para éxito, cancelación y fallo de renderizado.
+    // 中文：可选的类型化完成回调，用于区分成功、取消和渲染失败。
+    public var editResultBlock: (@MainActor @Sendable (PTImageEditorResult) -> Void)?
     public var backHandler:PTActionTask?
     
     let adjustCollectionViewHeight : CGFloat = 74
@@ -250,6 +263,7 @@ public class PTEditImageViewController: PTBaseViewController {
         let view = PTBaseButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
+            self.cancelEditingIfNeeded()
             self.returnFrontVC()
             self.backHandler?()
         }
@@ -281,8 +295,12 @@ public class PTEditImageViewController: PTBaseViewController {
     func doneAction() {
         guard !isFinishing else { return }
         isFinishing = true
+        hasDeliveredResult = false
+        finishTask?.cancel()
 
-        Task { @MainActor in
+        finishTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.finishTask = nil }
             var stickerStates: [PTBaseStickertState] = []
             for view in self.stickerEngine.canvasView.subviews {
                 guard let view = view as? PTBaseStickerView else { continue }
@@ -302,24 +320,43 @@ public class PTEditImageViewController: PTBaseViewController {
             
             guard hasEdit else {
                 self.editFinishBlock?(self.originalImage, nil)
-                self.dismiss(animated: self.animate) 
+                self.deliverResult(.success(image: self.originalImage, model: nil))
+                self.isFinishing = false
+                self.dismiss(animated: self.animate)
                 return
             }
 
-            // 2. 弹出提示框
+            // English: Show a lightweight progress notice while the edited image is rendered.
+            // Español: Muestra un aviso ligero mientras se renderiza la imagen editada.
+            // 中文：渲染编辑结果时显示轻量进度提示。
             PTAlertTipsViewController.tipsAlertShow(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart)
 
-            // 让出一次主线程执行机会，确保提示视图有机会完成布局。
+            // English: Yield once so the progress notice can complete its layout.
+            // Español: Cede una vez para que el aviso pueda terminar su diseño.
+            // 中文：主动让出一次主线程执行机会，确保提示视图完成布局。
             await Task.yield()
-            
-            // 开始合成大图 (buildImage 内部有图层渲染，必须在 MainActor 执行)
-            var resImage = self.buildImage()
-            resImage = resImage.pt.clipImage(
+
+            guard !Task.isCancelled else {
+                self.isFinishing = false
+                return
+            }
+
+            // English: Render and crop on the main actor because the editor owns UIKit layers.
+            // Español: Renderiza y recorta en el actor principal porque el editor posee capas de UIKit.
+            // 中文：编辑器持有 UIKit 图层，因此在主 actor 完成合成和裁剪。
+            let renderedImage = self.buildImage()
+            let clippedImage = renderedImage.pt.clipImage(
                 angle: self.currentClipStatus.angle,
                 editRect: self.currentClipStatus.editRect,
                 isCircle: self.currentClipStatus.ratio?.isCircle ?? false
             )
-            
+
+            guard let resImage = self.applyOutputPolicy(to: clippedImage) else {
+                self.deliverResult(.failure(.outputTooLarge))
+                self.isFinishing = false
+                return
+            }
+
             let editModel = PTEditModel(
                 drawPaths: self.drawEngine.drawPaths,
                 mosaicPaths: self.mosaicEngine.mosaicPaths,
@@ -329,11 +366,35 @@ public class PTEditImageViewController: PTBaseViewController {
                 stickers: stickerStates,
                 actions: self.editorManager.actions
             )
-            
-            // 合成完毕，直接 dismiss
+
+            // English: Preserve the legacy callback and additionally publish the typed result.
+            // Español: Conserva el callback heredado y publica también el resultado tipado.
+            // 中文：保留旧完成回调，同时发送新的类型化结果。
             self.editFinishBlock?(resImage, editModel)
+            self.deliverResult(.success(image: resImage, model: editModel))
+            self.isFinishing = false
             self.dismiss(animated: self.animate)
         }
+    }
+
+    // English: Deliver one terminal result per editing attempt to prevent duplicate callbacks.
+    // Español: Entrega un único resultado terminal por intento para evitar callbacks duplicados.
+    // 中文：每次编辑尝试只发送一次终态结果，避免完成回调重复触发。
+    private func deliverResult(_ result: PTImageEditorResult) {
+        guard !hasDeliveredResult else { return }
+        hasDeliveredResult = true
+        editResultBlock?(result)
+    }
+
+    // English: Cancel the in-flight export without affecting the legacy back callback.
+    // Español: Cancela la exportación activa sin afectar el callback de retroceso existente.
+    // 中文：取消正在进行的导出，同时保留原有返回回调行为。
+    private func cancelEditingIfNeeded() {
+        finishTask?.cancel()
+        finishTask = nil
+        guard isFinishing || !hasDeliveredResult else { return }
+        isFinishing = false
+        deliverResult(.cancelled)
     }
     
     private lazy var doneButton:PTBaseButton = {
@@ -462,6 +523,8 @@ public class PTEditImageViewController: PTBaseViewController {
     private var editorManager: PTMediaEditManager
 
     private var isFinishing = false
+    private var finishTask: Task<Void, Never>?
+    private var hasDeliveredResult = false
     
     /// 记录当前正在使用的工具引擎
     private var activeEngine: PTEditImageToolEngine?
@@ -516,11 +579,6 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
 
     private var imageReplacementCompletion: ((UIImage?) -> Void)?
-    private var mediaPickerConfigSnapshot: (allowSelectImage: Bool,
-                                             allowSelectVideo: Bool,
-                                             allowSelectGif: Bool,
-                                             maxSelectCount: Int,
-                                             allowEditImage: Bool)?
     
     private lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer { sender in
@@ -577,6 +635,7 @@ public class PTEditImageViewController: PTBaseViewController {
 
     deinit {
         filterThumbnailTask?.cancel()
+        finishTask?.cancel()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -592,7 +651,16 @@ public class PTEditImageViewController: PTBaseViewController {
         if shouldSwapSize {
             swap(&size.width, &size.height)
         }
-        
+
+        guard size.width.isFinite, size.height.isFinite,
+              size.width > 0, size.height > 0,
+              editImage.size.width.isFinite, editImage.size.height.isFinite,
+              editImage.size.width > 0, editImage.size.height > 0,
+              mainScrollView.zoomScale.isFinite, mainScrollView.zoomScale > 0 else {
+            defaultDrawPathWidth = PTImageEditorConfig.share.drawLineWidth
+            return
+        }
+
         var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
         if editImage.size.width / editImage.size.height > 1 {
             toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
@@ -609,6 +677,9 @@ public class PTEditImageViewController: PTBaseViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         filterThumbnailTask?.cancel()
+        if isFinishing {
+            cancelEditingIfNeeded()
+        }
         changeStatusBar(type: .Auto)
     }
     
@@ -629,7 +700,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.backgroundColor = .black
         
         redoButton.isEnabled = (editorManager.actions.count != editorManager.redoActions.count)
-        undoButton.isEnabled = editorManager.actions.isEmpty
+        undoButton.isEnabled = !editorManager.actions.isEmpty
 
         adjustEngine.adjustSlider.isHidden = true
         view.addSubviews([mainScrollView,toolCollectionView,ashbinView,adjustEngine.adjustSlider])
@@ -786,6 +857,50 @@ public class PTEditImageViewController: PTBaseViewController {
         imageView.transform = transform
     }
     
+    // English: Downsample only the final result so crop coordinates remain in the editor's source space.
+    // Español: Reduce la muestra solo del resultado final para conservar las coordenadas del recorte.
+    // 中文：只对最终结果降采样，确保裁剪坐标仍使用编辑器原始坐标系。
+    private func applyOutputPolicy(to image: UIImage) -> UIImage? {
+        guard let cgImage = image.cgImage,
+              cgImage.width > 0,
+              cgImage.height > 0 else {
+            return nil
+        }
+
+        let maximums: (pixelCount: Double, dimension: Double)?
+        switch PTImageEditorConfig.share.outputPolicy {
+        case .original:
+            return image
+        case .safe:
+            maximums = (24_000_000, 16_384)
+        case let .custom(maximumPixelCount, maximumDimension):
+            guard maximumPixelCount > 0, maximumDimension > 0 else { return nil }
+            maximums = (Double(maximumPixelCount), Double(maximumDimension))
+        }
+
+        let width = Double(cgImage.width)
+        let height = Double(cgImage.height)
+        let pixelCount = width * height
+        guard width.isFinite, height.isFinite,
+              pixelCount.isFinite, pixelCount > 0,
+              let maximums,
+              maximums.pixelCount.isFinite,
+              maximums.dimension.isFinite else {
+            return nil
+        }
+
+        let dimensionScale = maximums.dimension / max(width, height)
+        let pixelScale = sqrt(maximums.pixelCount / pixelCount)
+        let scale = min(1, dimensionScale, pixelScale)
+        guard scale.isFinite, scale > 0 else { return nil }
+        guard scale < 0.999 else { return image }
+
+        let targetSize = CGSize(width: CGFloat(max(1, floor(width * scale))),
+                                height: CGFloat(max(1, floor(height * scale))))
+        guard targetSize.width.isFinite, targetSize.height.isFinite else { return nil }
+        return image.pt.resize_vI(targetSize, scale: 1)
+    }
+
     private func buildImage() -> UIImage {
         let image = UIGraphicsImageRenderer.pt.renderImage(size: editImage.size) { format in
             format.scale = self.editImage.scale
@@ -816,15 +931,18 @@ public class PTEditImageViewController: PTBaseViewController {
 
                 if !stickerEngine.canvasView.subviews.isEmpty, stickerEngine.canvasView.frame.width > 0 {
                     let scale = imageSize.width / stickerEngine.canvasView.frame.width
-                    stickerEngine.canvasView.subviews.forEach { view in
-                        (view as? PTStickerViewAdditional)?.resetState()
+                    let stickerViews = stickerEngine.canvasView.subviews.compactMap { $0 as? PTBaseStickerView }
+                    let exportAppearances = stickerViews.map { $0.prepareForExport() }
+                    defer {
+                        zip(stickerViews, exportAppearances).forEach { sticker, appearance in
+                            sticker.restoreAfterExport(appearance)
+                        }
                     }
                     if scale.isFinite, scale > 0 {
                         context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
                         stickerEngine.canvasView.layer.render(in: context)
                         context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
                     }
-                    stickerEngine.currentSelectedSticker?.startTimer()
                 }
             }
         }
@@ -1032,28 +1150,14 @@ extension PTEditImageViewController {
     
     private func openImagePicker(forReplacement completion: ((UIImage?) -> Void)?) {
         self.imageReplacementCompletion = completion
-        
-        let config = PTMediaLibConfig.share
-        if mediaPickerConfigSnapshot == nil {
-            mediaPickerConfigSnapshot = (config.allowSelectImage,
-                                          config.allowSelectVideo,
-                                          config.allowSelectGif,
-                                          config.maxSelectCount,
-                                          config.allowEditImage)
-        }
-        config.allowSelectImage = true
-        config.allowSelectVideo = false
-        config.allowSelectGif = false
-        config.maxSelectCount = 1
-        config.allowEditImage = false
-        
+
         let vc = PTMediaLibViewController()
+        vc.selectionOptions = .singleImage
         vc.mediaLibShow()
         vc.selectImageBlock = { [weak self] item,isOriginal in
             guard let self else { return }
             defer {
                 self.imageReplacementCompletion = nil
-                self.restoreMediaPickerConfig()
             }
             if let completion = self.imageReplacementCompletion {
                 if let image = item.first?.image {
@@ -1067,17 +1171,6 @@ extension PTEditImageViewController {
                 }
             }
         }
-    }
-
-    private func restoreMediaPickerConfig() {
-        guard let snapshot = mediaPickerConfigSnapshot else { return }
-        let config = PTMediaLibConfig.share
-        config.allowSelectImage = snapshot.allowSelectImage
-        config.allowSelectVideo = snapshot.allowSelectVideo
-        config.allowSelectGif = snapshot.allowSelectGif
-        config.maxSelectCount = snapshot.maxSelectCount
-        config.allowEditImage = snapshot.allowEditImage
-        mediaPickerConfigSnapshot = nil
     }
 }
 

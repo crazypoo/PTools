@@ -11,12 +11,21 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for the shared controller and configuration APIs.
+// Español: Importamos Core explícitamente para los controladores y configuraciones compartidos.
+// 中文：显式导入 Core，使用共享控制器和配置 API。
+import ptools
+#endif
+
 public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigurable {
         
     private static let toolViewHeight: CGFloat = 70
     
     // 用于节流的高频绘制任务
     private var drawBgTask: Task<Void, Never>?
+    private var toolViewBottomConstraint: Constraint?
+    private var textViewHeightConstraint: Constraint?
     
     private let image: UIImage?
     
@@ -161,6 +170,10 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,13 +209,13 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         
         textView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(200)
+            textViewHeightConstraint = make.height.equalTo(200).constraint
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
         }
         
         toolView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            toolViewBottomConstraint = make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight).constraint
             make.height.equalTo(54)
         }
         toolView.addSubviews([textStyleBtn,drawColorButton])
@@ -362,38 +375,51 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     }
     
     @objc private func keyboardWillShow(_ notify: Notification) {
-        let rect = notify.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? CGRect
-        let keyboardH = rect?.height ?? 366
-        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
-        
-        let toolViewFrame = CGRect(x: 0, y: view.pt.jx_height - keyboardH - Self.toolViewHeight, width: view.pt.jx_width, height: Self.toolViewHeight)
-        
-        var textViewFrame = textView.frame
-        textViewFrame.size.height = toolViewFrame.minY - textViewFrame.minY - 20
-        
-        UIView.animate(withDuration: max(duration, 0.25)) {
-            self.toolView.frame = toolViewFrame
-            self.textView.frame = textViewFrame
-        }
+        let keyboardInset = keyboardBottomInset(from: notify)
+        updateKeyboardLayout(bottomInset: keyboardInset, duration: animationDuration(from: notify))
     }
     
     @objc private func keyboardWillHide(_ notify: Notification) {
-        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
-        
-        let toolViewFrame = CGRect(
-            x: 0,
-            y: view.pt.jx_height - deviceSafeAreaInsets().bottom - Self.toolViewHeight,
-            width: view.pt.jx_width,
-            height: Self.toolViewHeight
-        )
-        
-        var textViewFrame = textView.frame
-        textViewFrame.size.height = toolViewFrame.minY - textViewFrame.minY - 20
-        
-        UIView.animate(withDuration: max(duration, 0.25)) {
-            self.toolView.frame = toolViewFrame
-            self.textView.frame = textViewFrame
+        updateKeyboardLayout(bottomInset: CGFloat.kTabbarSaveAreaHeight,
+                             duration: animationDuration(from: notify))
+    }
+
+    // English: Convert the keyboard frame into this controller's coordinate space before updating constraints.
+    // Español: Convertimos el teclado al sistema de coordenadas de este controlador antes de actualizar las restricciones.
+    // 中文：先把键盘区域转换到当前控制器坐标系，再更新约束，避免直接修改受 SnapKit 管理的 frame。
+    private func keyboardBottomInset(from notification: Notification) -> CGFloat {
+        guard let value = notification.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return CGFloat.kTabbarSaveAreaHeight
         }
+        let keyboardFrame = view.convert(value.cgRectValue, from: nil)
+        guard keyboardFrame.isNull == false,
+              keyboardFrame.isInfinite == false,
+              keyboardFrame.intersects(view.bounds) else {
+            return CGFloat.kTabbarSaveAreaHeight
+        }
+        return max(CGFloat.kTabbarSaveAreaHeight, view.bounds.maxY - keyboardFrame.minY)
+    }
+
+    // English: Update the stored constraints instead of fighting Auto Layout with frame mutations.
+    // Español: Actualizamos las restricciones guardadas en lugar de competir con Auto Layout mediante frames.
+    // 中文：更新已保存的约束，而不是直接修改 frame 与 Auto Layout 发生冲突。
+    private func updateKeyboardLayout(bottomInset: CGFloat, duration: TimeInterval) {
+        guard view.bounds.width > 0, view.bounds.height > 0 else { return }
+        let safeInset = max(0, bottomInset.isFinite ? bottomInset : CGFloat.kTabbarSaveAreaHeight)
+        let textTop = textView.frame.minY
+        let targetToolMinY = view.bounds.maxY - safeInset - Self.toolViewHeight
+        let targetTextHeight = max(1, targetToolMinY - textTop - 20)
+
+        toolViewBottomConstraint?.update(offset: -safeInset)
+        textViewHeightConstraint?.update(offset: targetTextHeight)
+        UIView.animate(withDuration: max(duration.isFinite ? duration : 0.25, 0.25)) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func animationDuration(from notification: Notification) -> TimeInterval {
+        let duration = notification.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+        return duration.isFinite ? duration : 0.25
     }
     
     // MARK: - 富文本属性更新

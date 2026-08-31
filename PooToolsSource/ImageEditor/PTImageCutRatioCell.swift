@@ -10,6 +10,13 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for the shared collection cell base class.
+// Español: Importamos Core explícitamente para la clase base compartida de celdas.
+// 中文：显式导入 Core，使用共享的列表 Cell 基类。
+import ptools
+#endif
+
 //MARK: Cut Image
 class PTImageCutRatioCell: PTBaseNormalCell {
     static let ID = "PTImageCutRatioCell"

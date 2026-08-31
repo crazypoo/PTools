@@ -13,6 +13,14 @@ import CoreImage
 import AVFoundation
 import Vision
 
+#if SWIFT_PACKAGE
+// English: SwiftPM needs direct imports for Core and the shared Harbeth adapter.
+// Español: SwiftPM necesita importaciones directas para Core y el adaptador compartido de Harbeth.
+// 中文：SwiftPM 需要显式导入 Core 和共享的 Harbeth 适配模块。
+import ptools
+import PooToolsHarbethKit
+#endif
+
 /// 统一下发的画布计算参数
 public struct PTCanvasMetrics {
     public let ratio: CGFloat
@@ -70,12 +78,22 @@ public extension PTEditImageEngineContext {
     @MainActor func calculateCanvasMetrics(currentViewSize: CGSize, maxImageWidth: CGFloat = 600) -> PTCanvasMetrics {
         guard currentViewSize.width > 0,
               currentViewSize.height > 0,
+              currentViewSize.width.isFinite,
+              currentViewSize.height.isFinite,
+              maxImageWidth > 0,
+              maxImageWidth.isFinite,
               engineOriginalImageSize.width > 0,
               engineOriginalImageSize.height > 0,
+              engineOriginalImageSize.width.isFinite,
+              engineOriginalImageSize.height.isFinite,
               engineEditRect.width > 0,
               engineEditRect.height > 0,
+              engineEditRect.width.isFinite,
+              engineEditRect.height.isFinite,
               engineEditImageSize.width > 0,
-              engineEditImageSize.height > 0 else {
+              engineEditImageSize.height > 0,
+              engineEditImageSize.width.isFinite,
+              engineEditImageSize.height.isFinite else {
             return PTCanvasMetrics(ratio: 1,
                                    originalRatio: 1,
                                    toImageScale: 1,
@@ -86,6 +104,18 @@ public extension PTEditImageEngineContext {
         let originalRatio = min(engineScrollView.frame.width / engineOriginalImageSize.width, engineScrollView.frame.height / engineOriginalImageSize.height)
         let ratio = min(engineScrollView.frame.width / engineEditRect.width, engineScrollView.frame.height / engineEditRect.height)
         let scale = ratio / originalRatio
+
+        // English: Reject invalid geometry before it reaches a renderer.
+        // Español: Rechazamos una geometría inválida antes de enviarla al renderizador.
+        // 中文：在进入渲染器前拒绝无效的几何计算结果。
+        guard originalRatio.isFinite, originalRatio > 0,
+              ratio.isFinite, ratio > 0,
+              scale.isFinite, scale > 0 else {
+            return PTCanvasMetrics(ratio: 1,
+                                   originalRatio: 1,
+                                   toImageScale: 1,
+                                   renderSize: currentViewSize)
+        }
         
         var size = currentViewSize
         size.width /= scale
@@ -98,6 +128,15 @@ public extension PTEditImageEngineContext {
         var toImageScale = maxImageWidth / size.width
         if engineEditImageSize.width / engineEditImageSize.height > 1 {
             toImageScale = maxImageWidth / size.height
+        }
+
+        guard size.width.isFinite, size.height.isFinite,
+              size.width > 0, size.height > 0,
+              toImageScale.isFinite, toImageScale > 0 else {
+            return PTCanvasMetrics(ratio: 1,
+                                   originalRatio: 1,
+                                   toImageScale: 1,
+                                   renderSize: currentViewSize)
         }
         
         return PTCanvasMetrics(
@@ -325,6 +364,7 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
         let point = pan.location(in: drawingImageView)
+        guard point.x.isFinite, point.y.isFinite else { return }
         
         // 🌟 核心：一行代码拿到所有复杂的数学计算结果！
         let metrics = context.calculateCanvasMetrics(currentViewSize: drawingImageView.frame.size)
@@ -336,13 +376,22 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
             hasActiveStroke = true
             
             // 计算真实线宽 (橡皮擦模式 vs 普通画笔)
-            let strokeWidth = PTImageEditorConfig.share.drawLineWidth / context.engineScrollView.zoomScale
-            let actualWidth = isEraserMode ? (44.0 / context.engineScrollView.zoomScale) : strokeWidth
+            let zoomScale = context.engineScrollView.zoomScale
+            let configuredWidth = PTImageEditorConfig.share.drawLineWidth
+            let safeWidth = configuredWidth.isFinite && configuredWidth > 0 ? configuredWidth : 1
+            let safeZoomScale = zoomScale.isFinite && zoomScale > 0 ? zoomScale : 1
+            let actualWidth = isEraserMode ? (44.0 / safeZoomScale) : (safeWidth / safeZoomScale)
+            let pathRatio = metrics.ratio / metrics.originalRatio / metrics.toImageScale
+            guard actualWidth.isFinite, actualWidth > 0,
+                  pathRatio.isFinite, pathRatio > 0 else {
+                hasActiveStroke = false
+                return
+            }
             
             let path = PTDrawPath(
                 pathColor: isEraserMode ? .clear : drawColor,
                 pathWidth: actualWidth,
-                ratio: metrics.ratio / metrics.originalRatio / metrics.toImageScale,
+                ratio: pathRatio,
                 startPoint: point
             )
             path.isEraser = isEraserMode
@@ -406,7 +455,8 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
             height: metrics.renderSize.height * metrics.toImageScale
         )
         
-        guard renderSize.width > 0, renderSize.height > 0 else { return }
+        guard renderSize.width.isFinite, renderSize.height.isFinite,
+              renderSize.width > 0, renderSize.height > 0 else { return }
 
         drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
             renderContext.setAllowsAntialiasing(true)
@@ -458,6 +508,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     private var impactFeedback: UIImpactFeedbackGenerator?
     private var committedMaskImage: UIImage?
     private var hasActiveStroke = false
+    private var mosaicSourceImage: UIImage?
     public var onInteractStateChanged: ((Bool) -> Void)?
     
     public init(context: PTEditImageEngineContext) {
@@ -473,7 +524,11 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         
         // 1. 生成全屏马赛克底图 (只生成一次)
         let baseImage = context.engineCurrentEditImage
-        mosaicImageView.image = baseImage.pt.mosaicImage()
+        if mosaicSourceImage !== baseImage || mosaicImageView.image == nil {
+            let mosaicImage = baseImage.pt.mosaicImage()
+            mosaicImageView.image = mosaicImage
+            mosaicSourceImage = mosaicImage == nil ? nil : baseImage
+        }
         
         // 2. 绑定遮罩关系：maskImageView 画了黑线的地方（alpha=1）会透出马赛克，透明的地方（alpha=0）隐藏马赛克
         mosaicImageView.frame = mosaicContainerView.bounds
@@ -499,6 +554,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
         let point = pan.location(in: mosaicContainerView)
+        guard point.x.isFinite, point.y.isFinite else { return }
         
         // 🌟 核心：一行代码拿到所有复杂的数学计算结果！
         let metrics = context.calculateCanvasMetrics(currentViewSize: mosaicContainerView.frame.size)
@@ -510,13 +566,22 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             hasActiveStroke = true
             
             // 计算真实线宽 (橡皮擦模式 vs 马赛克画笔)
-            let strokeWidth = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
-            let actualWidth = isEraserMode ? (44.0 / context.engineScrollView.zoomScale) : strokeWidth
+            let zoomScale = context.engineScrollView.zoomScale
+            let configuredWidth = PTImageEditorConfig.share.mosaicLineWidth
+            let safeWidth = configuredWidth.isFinite && configuredWidth > 0 ? configuredWidth : 1
+            let safeZoomScale = zoomScale.isFinite && zoomScale > 0 ? zoomScale : 1
+            let actualWidth = isEraserMode ? (44.0 / safeZoomScale) : (safeWidth / safeZoomScale)
+            let pathRatio = metrics.ratio / metrics.originalRatio / metrics.toImageScale
+            guard actualWidth.isFinite, actualWidth > 0,
+                  pathRatio.isFinite, pathRatio > 0 else {
+                hasActiveStroke = false
+                return
+            }
             
             let path = PTDrawPath(
                 pathColor: .black, // Mask 中黑色代表不透明（显示马赛克）
                 pathWidth: actualWidth,
-                ratio: metrics.ratio / metrics.originalRatio / metrics.toImageScale,
+                ratio: pathRatio,
                 startPoint: point
             )
             path.isEraser = isEraserMode // 标记身份
@@ -579,7 +644,8 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             height: metrics.renderSize.height * metrics.toImageScale
         )
         
-        guard renderSize.width > 0, renderSize.height > 0 else { return }
+        guard renderSize.width.isFinite, renderSize.height.isFinite,
+              renderSize.width > 0, renderSize.height > 0 else { return }
 
         // 将路径渲染为一张带透明度的图片，交给 maskImageView
         maskImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: renderSize) { renderContext in
@@ -599,6 +665,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     public func updateBaseMosaicImage(_ newBaseImage: UIImage) {
         // 重新生成打好马赛克的全屏底图
         mosaicImageView.image = newBaseImage.pt.mosaicImage()
+        mosaicSourceImage = newBaseImage
     }
 }
 
@@ -738,8 +805,15 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         
         let maxLimitSize = CGSize(width: mainViewBounds.width * 0.5, height: mainViewBounds.height * 0.5)
         let scale = context.engineScrollView.zoomScale
+        guard scale.isFinite, scale > 0,
+              maxLimitSize.width.isFinite, maxLimitSize.height.isFinite,
+              maxLimitSize.width > 0, maxLimitSize.height > 0 else { return }
         let size = PTTextStickerView.calculateSize(image: image,maxLimitSize:maxLimitSize)
         let originFrame = PTBaseStickerView.getStickerOriginFrame(size, current: context, container: stickersContainer)
+        guard size.width > 0, size.height > 0,
+              originFrame.origin.x.isFinite, originFrame.origin.y.isFinite,
+              originFrame.width.isFinite, originFrame.height.isFinite,
+              originFrame.width > 0, originFrame.height > 0 else { return }
         
         let textSticker = PTTextStickerView(
             text: text, textColor: textColor, font: font, style: style, image: image,
@@ -754,11 +828,18 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         guard let context = context else { return }
         
         let scrollView = context.engineScrollView
+        let containerWidth = stickersContainer.frame.width
+        let zoomScale = scrollView.zoomScale
+        guard containerWidth.isFinite, containerWidth > 0,
+              context.engineOriginalImageSize.width.isFinite,
+              context.engineOriginalImageSize.width > 0,
+              zoomScale.isFinite, zoomScale > 0 else { return }
         var r = scrollView.convert(context.engineMainView.frame, to: stickersContainer)
-        r.origin.x += scrollView.contentOffset.x / scrollView.zoomScale
-        r.origin.y += scrollView.contentOffset.y / scrollView.zoomScale
+        r.origin.x += scrollView.contentOffset.x / zoomScale
+        r.origin.y += scrollView.contentOffset.y / zoomScale
         
-        let scale = context.engineOriginalImageSize.width / stickersContainer.frame.width
+        let scale = context.engineOriginalImageSize.width / containerWidth
+        guard scale.isFinite, scale > 0 else { return }
         r.origin.x *= scale
         r.origin.y *= scale
         r.size.width *= scale
@@ -809,7 +890,8 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         guard let context = context else { return }
         let mainViewBounds = context.engineMainView.bounds
         let currentZoomScale = context.engineScrollView.zoomScale
-        guard mainViewBounds.width > 0, mainViewBounds.height > 0 else { return }
+        guard mainViewBounds.width > 0, mainViewBounds.height > 0,
+              currentZoomScale.isFinite, currentZoomScale > 0 else { return }
         
         let maxLimitSize = CGSize(width: mainViewBounds.width * 0.5, height: mainViewBounds.height * 0.5)
         let targetSize = PTImageStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize)
@@ -838,19 +920,24 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         
         onProcessingStateChanged?(true)
         backgroundRemovalTask = Task { @MainActor [weak self, weak imageSticker] in
+            guard let self else { return }
+            defer {
+                if token == self.backgroundRemovalToken {
+                    self.onProcessingStateChanged?(false)
+                }
+            }
+
             let resultData = try? await Task.detached(priority: .userInitiated) {
-                try await Self.performForegroundMasking(data: imageData)
+                try Self.performForegroundMasking(data: imageData)
             }.value
 
-            guard let self,
-                  let imageSticker,
+            guard let imageSticker,
                   let resultData,
                   let cutoutImage = UIImage(data: resultData),
                   !Task.isCancelled,
                   token == self.backgroundRemovalToken,
                   self.currentSelectedSticker === imageSticker,
                   imageSticker.superview != nil else {
-                self?.onProcessingStateChanged?(false)
                 return
             }
 
@@ -862,11 +949,10 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
             let newSize = PTImageStickerView.calculateSize(image: cutoutImage, maxLimitSize: maxLimitSize)
             imageSticker.changeSize(to: newSize)
             self.context?.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
-            self.onProcessingStateChanged?(false)
         }
     }
 
-    private static func performForegroundMasking(data: Data) throws -> Data? {
+    nonisolated private static func performForegroundMasking(data: Data) throws -> Data? {
         guard let inputImage = UIImage(data: data), let cgImage = inputImage.cgImage else { return nil }
         let request = VNGenerateForegroundInstanceMaskRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
@@ -976,16 +1062,26 @@ extension PTStickerEngine {
         let baseHeightInMainView = sticker.bounds.height * context.engineScrollView.zoomScale
         
         let mainViewBounds = context.engineMainView.bounds
+
+        // English: Stop before calculating a scale from incomplete layout information.
+        // Español: Detenemos el cálculo si el layout aún no proporciona dimensiones válidas.
+        // 中文：如果布局尚未提供有效尺寸，则停止计算缩放比例。
+        guard baseWidthInMainView.isFinite, baseHeightInMainView.isFinite,
+              baseWidthInMainView > 0, baseHeightInMainView > 0,
+              mainViewBounds.width.isFinite, mainViewBounds.height.isFinite,
+              mainViewBounds.width > 0, mainViewBounds.height > 0 else { return }
         
         // 为了确保能“铺满”且不被裁剪（Aspect Fit 逻辑），取宽高比中较小的值作为目标缩放倍数。
         // 💡 如果你希望的是强制填满不留白边（Aspect Fill，可能会裁剪部分贴纸内容），请把 min 改成 max。
         let targetScaleX = mainViewBounds.width / baseWidthInMainView
         let targetScaleY = mainViewBounds.height / baseHeightInMainView
         let targetGesScale = min(targetScaleX, targetScaleY)
+        guard targetGesScale.isFinite, targetGesScale > 0 else { return }
         
         // 计算从当前缩放到目标缩放，还需要乘多少倍
         let currentScale = max(0.01, sticker.gesScale) // 限制下限，避免除以0
         let scaleMultiplier = targetGesScale / currentScale
+        guard scaleMultiplier.isFinite, scaleMultiplier > 0 else { return }
         
         // 3. 执行丝滑的动画
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
@@ -1171,6 +1267,7 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     private var hasAdjustedImage = false
     
     private weak var context: PTEditImageEngineContext?
+    private var adjustmentRenderTask: Task<Void, Never>?
     
     // MARK: - 生命周期
     
@@ -1179,10 +1276,14 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         super.init()
         setupSliderCallbacks()
     }
+
+    deinit {
+        adjustmentRenderTask?.cancel()
+    }
     
     private func setupSliderCallbacks() {
         adjustSlider.beginAdjust = { [weak self] in
-            PTGCDManager.shared.runOnMain {
+            PTMainActorBridge.perform { [weak self] in
                 self?.preAdjustStatus = self?.currentAdjustStatus ?? PTAdjustStatus()
             }
         }
@@ -1192,7 +1293,7 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         }
         
         adjustSlider.endAdjust = { [weak self] in
-            PTGCDManager.shared.runOnMain {
+            PTMainActorBridge.perform { [weak self] in
                 guard let self, let context = self.context else { return }
                 guard self.preAdjustStatus.brightness != self.currentAdjustStatus.brightness
                         || self.preAdjustStatus.contrast != self.currentAdjustStatus.contrast
@@ -1213,6 +1314,7 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     public func toolDidDeactivate() {
         adjustSlider.isHidden = true
+        adjustmentRenderTask?.cancel()
     }
     
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
@@ -1221,6 +1323,7 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     public func reloadRenderState() {
         // 触发 Undo/Redo 时，重新渲染图片
+        adjustmentRenderTask?.cancel()
         adjustStatusChanged()
     }
     
@@ -1257,7 +1360,15 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
             break
         }
         
-        adjustStatusChanged()
+        // English: Coalesce slider events into one main-actor render per run-loop turn.
+        // Español: Agrupamos los eventos del control en un renderizado del actor principal por ciclo.
+        // 中文：将滑块高频事件合并为每个运行循环只执行一次主线程渲染。
+        adjustmentRenderTask?.cancel()
+        adjustmentRenderTask = Task { @MainActor [weak self] in
+            await Task.yield()
+            guard let self, !Task.isCancelled else { return }
+            self.adjustStatusChanged()
+        }
     }
     
     private func adjustStatusChanged() {
@@ -1305,6 +1416,7 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     public var currentFilter: PTHarBethFilter = .none
     public var thumbnailFilterImages: [UIImage] = []
     private var filterRenderTask: Task<Void, Never>?
+    private var filterSourceIdentity: ObjectIdentifier?
     
     private lazy var filterCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
@@ -1326,7 +1438,9 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
         // 唤醒时不需要特殊操作，由 VC 去展示 CollectionView
     }
     
-    public func toolDidDeactivate() { }
+    public func toolDidDeactivate() {
+        filterRenderTask?.cancel()
+    }
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) { }
 
     deinit {
@@ -1348,7 +1462,6 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
         
         var thumbnails = [UIImage]()
         thumbnails.reserveCapacity(filters.count)
-        PTHarBethFilter.share.texureSize = thumbnailImage.size
 
         for filter in filters {
             guard !Task.isCancelled else { return }
@@ -1372,6 +1485,11 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
             guard let self, !Task.isCancelled, let context = self.context else { return }
 
             let sourceImage = context.engineOriginalImage
+            let sourceIdentity = ObjectIdentifier(sourceImage)
+            if self.filterSourceIdentity != sourceIdentity {
+                self.filterCache.removeAllObjects()
+                self.filterSourceIdentity = sourceIdentity
+            }
             let cacheKey = "\(filter.type.rawValue)-\(Int(sourceImage.size.width))-\(Int(sourceImage.size.height))-\(Int(sourceImage.scale))".nsString
             let resultImage: UIImage
             if filter.type == .none {
@@ -1379,7 +1497,6 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
             } else if let cachedImage = self.filterCache.object(forKey: cacheKey) {
                 resultImage = cachedImage
             } else {
-                PTHarBethFilter.share.texureSize = sourceImage.size
                 resultImage = filter.getCurrentFilterImage(image: sourceImage)
                 let cost = max(1, Int(sourceImage.size.width * sourceImage.size.height * 4))
                 self.filterCache.setObject(resultImage, forKey: cacheKey, cost: cost)

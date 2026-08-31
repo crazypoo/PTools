@@ -38,10 +38,18 @@ public class PTHarBethFilter:NSObject {
 
     var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)
     
-    static func overTexture() -> MTLTexture? {
+    static func overTexture(size: CGSize? = nil) -> MTLTexture? {
         let color = UIColor.green.withAlphaComponent(0.5)
+        let targetSize = size ?? PTHarBethFilter.share.texureSize
+        guard targetSize.width.isFinite, targetSize.height.isFinite,
+              targetSize.width > 0, targetSize.height > 0 else {
+            return nil
+        }
         
-        guard let texture = try? TextureLoader.makeTexture(width: Int(PTHarBethFilter.share.texureSize.width), height: Int(PTHarBethFilter.share.texureSize.height)) else {
+        let width = min(targetSize.width, CGFloat(Int.max))
+        let height = min(targetSize.height, CGFloat(Int.max))
+        guard width.isFinite, height.isFinite, width > 0, height > 0,
+              let texture = try? TextureLoader.makeTexture(width: max(1, Int(width)), height: max(1, Int(height))) else {
             return nil
         }
         let filter = C7SolidColor(color: color)
@@ -51,7 +59,10 @@ public class PTHarBethFilter:NSObject {
 
     public func getCurrentFilterImage(image:UIImage?) -> UIImage {
         guard let image else { return UIImage() }
-        guard let filter = type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter else {
+        // English: Build the blend texture from this image instead of shared mutable editor state.
+        // Español: Creamos la textura de mezcla a partir de esta imagen y no de un estado mutable compartido.
+        // 中文：根据当前图片创建混合纹理，避免依赖编辑器中的共享可变状态。
+        guard let filter = type.getFilterResult(texture: PTHarBethFilter.overTexture(size: image.size)).filter else {
             return image
         }
         let dest = HarbethIO(element: image, filter: filter)
@@ -61,7 +72,7 @@ public class PTHarBethFilter:NSObject {
     public func getFilterResults() -> [FilterResult] {
         var ssss = [FilterResult]()
         tools.enumerated().forEach { index,value in
-            ssss.append(value.getFilterResult(texture:PTHarBethFilter.overTexture()))
+            ssss.append(value.getFilterResult(texture: PTHarBethFilter.overTexture()))
         }
         return ssss
     }
@@ -99,7 +110,10 @@ public class PTHarBethFilter:NSObject {
         case sketch
         case storyboard
 
-        func getFilterResult(texture:MTLTexture?) -> FilterResult {
+        // English: Expose the filter factory to the standalone ImageEditor module.
+        // Español: Exponemos la fábrica de filtros al módulo independiente ImageEditor.
+        // 中文：向独立的 ImageEditor 模块公开滤镜工厂方法。
+        public func getFilterResult(texture: MTLTexture?) -> FilterResult {
             switch self {
             case .brightness:
                 var filter = C7Luminance()
@@ -286,7 +300,10 @@ public class PTHarBethFilter:NSObject {
             }
         }
         
-        func filterValue(_ value: Float) -> Float {
+        // English: Convert the editor's normalized value into the filter's native range.
+        // Español: Convierte el valor normalizado del editor al rango nativo del filtro.
+        // 中文：将编辑器的归一化数值转换为滤镜原生范围。
+        public func filterValue(_ value: Float) -> Float {
             switch self {
             case .brightness:
                 // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33

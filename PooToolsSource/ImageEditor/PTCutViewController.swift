@@ -10,6 +10,13 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for the editor host and shared UI utilities.
+// Español: Importamos Core explícitamente para el host del editor y las utilidades UI compartidas.
+// 中文：显式导入 Core，使用编辑器宿主和共享 UI 工具。
+import ptools
+#endif
+
 class PTCutViewController: PTBaseViewController {
     static let cutRatioHeight: CGFloat = 108
     
@@ -429,14 +436,20 @@ class PTCutViewController: PTBaseViewController {
     
     private func generateThumbnailImage() {
         let fixLength: CGFloat = 100
-        guard editImage.size.width > 0, editImage.size.height > 0 else {
+        guard editImage.size.width.isFinite, editImage.size.height.isFinite,
+              editImage.size.width > 0, editImage.size.height > 0 else {
             thumbnailImage = editImage
             return
         }
         let scale = min(fixLength / editImage.size.width, fixLength / editImage.size.height)
         let size = CGSize(width: max(1, editImage.size.width * scale),
                           height: max(1, editImage.size.height * scale))
-        thumbnailImage = editImage.pt.resize_vI(size)
+        guard scale.isFinite, scale > 0,
+              size.width.isFinite, size.height.isFinite else {
+            thumbnailImage = editImage
+            return
+        }
+        thumbnailImage = editImage.pt.resize_vI(size) ?? editImage
     }
     
     /// 计算最大裁剪范围
@@ -452,19 +465,41 @@ class PTCutViewController: PTBaseViewController {
     }
     
     private func calculateClipRect() {
-        if selectedRatio.whRatio == 0 {
+        guard editImage.size.width.isFinite, editImage.size.height.isFinite,
+              editImage.size.width > 0, editImage.size.height > 0 else {
+            editRect = .zero
+            return
+        }
+
+        let ratio = selectedRatio.whRatio
+        guard ratio.isFinite, ratio >= 0 else {
+            editRect = CGRect(origin: .zero, size: editImage.size)
+            return
+        }
+
+        if ratio == 0 {
             editRect = CGRect(origin: .zero, size: editImage.size)
         } else {
             let imageSize = editImage.size
             let imageWHRatio = imageSize.width / imageSize.height
             
             var w: CGFloat = 0, h: CGFloat = 0
-            if selectedRatio.whRatio >= imageWHRatio {
+            if ratio >= imageWHRatio {
                 w = imageSize.width
-                h = w / selectedRatio.whRatio
+                h = w / ratio
             } else {
                 h = imageSize.height
-                w = h * selectedRatio.whRatio
+                w = h * ratio
+            }
+
+            // English: Reject an extreme aspect ratio before it creates an invalid crop rectangle.
+            // Español: Rechazamos una proporción extrema antes de crear un rectángulo de recorte inválido.
+            // 中文：在生成裁剪区域前拒绝极端比例，避免得到无效的裁剪矩形。
+            guard w.isFinite, h.isFinite,
+                  w > 0, h > 0,
+                  w <= imageSize.width, h <= imageSize.height else {
+                editRect = CGRect(origin: .zero, size: imageSize)
+                return
             }
             
             editRect = CGRect(x: (imageSize.width - w) / 2, y: (imageSize.height - h) / 2, width: w, height: h)
@@ -479,6 +514,15 @@ class PTCutViewController: PTBaseViewController {
         let editSize = editRect.size
         mainScrollView.contentSize = editSize
         let maxClipRect = maxClipFrame
+
+        guard maxClipRect.width.isFinite, maxClipRect.height.isFinite,
+              maxClipRect.width > 0, maxClipRect.height > 0,
+              editSize.width.isFinite, editSize.height.isFinite,
+              editSize.width > 0, editSize.height > 0,
+              editImage.size.width.isFinite, editImage.size.height.isFinite,
+              editImage.size.width > 0, editImage.size.height > 0 else {
+            return
+        }
         
         containerView.frame = CGRect(origin: .zero, size: editImage.size)
         imageView.frame = containerView.bounds
@@ -486,6 +530,12 @@ class PTCutViewController: PTBaseViewController {
         // editRect比例，计算editRect所占frame
         let editScale = min(maxClipRect.width / editSize.width, maxClipRect.height / editSize.height)
         let scaledSize = CGSize(width: floor(editSize.width * editScale), height: floor(editSize.height * editScale))
+
+        guard editScale.isFinite, editScale > 0,
+              scaledSize.width.isFinite, scaledSize.height.isFinite,
+              scaledSize.width > 0, scaledSize.height > 0 else {
+            return
+        }
         
         var frame = CGRect.zero
         frame.size = scaledSize
@@ -498,13 +548,27 @@ class PTCutViewController: PTBaseViewController {
         let scaleEditSize = CGSize(width: editRect.width * originalScale, height: editRect.height * originalScale)
         // 计算缩放后的clip rect相对maxClipRect的比例
         let clipRectZoomScale = min(maxClipRect.width / scaleEditSize.width, maxClipRect.height / scaleEditSize.height)
+
+        guard originalScale.isFinite, originalScale > 0,
+              scaleEditSize.width.isFinite, scaleEditSize.height.isFinite,
+              scaleEditSize.width > 0, scaleEditSize.height > 0,
+              clipRectZoomScale.isFinite, clipRectZoomScale > 0 else {
+            return
+        }
         
         mainScrollView.minimumZoomScale = originalScale
         mainScrollView.maximumZoomScale = 10
         // 设置当前zoom scale
         let zoomScale = clipRectZoomScale * originalScale
+        let contentSize = CGSize(width: editImage.size.width * zoomScale,
+                                 height: editImage.size.height * zoomScale)
+        guard zoomScale.isFinite, zoomScale > 0,
+              contentSize.width.isFinite, contentSize.height.isFinite,
+              contentSize.width > 0, contentSize.height > 0 else {
+            return
+        }
         mainScrollView.zoomScale = zoomScale
-        mainScrollView.contentSize = CGSize(width: editImage.size.width * zoomScale, height: editImage.size.height * zoomScale)
+        mainScrollView.contentSize = contentSize
         
         changeClipBoxFrame(newFrame: frame)
         
@@ -524,6 +588,10 @@ class PTCutViewController: PTBaseViewController {
     private func changeClipBoxFrame(newFrame: CGRect) {
         // 1. 拦截重复相同的渲染
         guard clipBoxFrame != newFrame else { return }
+        guard newFrame.width.isFinite, newFrame.height.isFinite,
+              newFrame.width > 0, newFrame.height > 0,
+              editImage.size.width.isFinite, editImage.size.height.isFinite,
+              editImage.size.width > 0, editImage.size.height > 0 else { return }
         
         // 2. 将新值同步给引擎（触发计算属性的 setter）
         clipBoxFrame = newFrame
@@ -535,6 +603,7 @@ class PTCutViewController: PTBaseViewController {
         mainScrollView.contentInset = UIEdgeInsets(top: newFrame.minY, left: newFrame.minX, bottom: mainScrollView.frame.maxY - newFrame.maxY, right: mainScrollView.frame.maxX - newFrame.maxX)
         
         let scale = max(newFrame.height / editImage.size.height, newFrame.width / editImage.size.width)
+        guard scale.isFinite, scale > 0 else { return }
         mainScrollView.minimumZoomScale = scale
         mainScrollView.zoomScale = mainScrollView.zoomScale
     }
@@ -673,25 +742,33 @@ class PTCutViewController: PTBaseViewController {
         let maxClipRect = maxClipFrame
         var clipRect = clipBoxFrame
         
-        if clipRect.width < CGFloat.ulpOfOne || clipRect.height < CGFloat.ulpOfOne {
+        guard maxClipRect.width.isFinite, maxClipRect.height.isFinite,
+              maxClipRect.width > 0, maxClipRect.height > 0,
+              clipRect.width.isFinite, clipRect.height.isFinite,
+              clipRect.width >= CGFloat.ulpOfOne, clipRect.height >= CGFloat.ulpOfOne else {
             return
         }
         
         let scale = min(maxClipRect.width / clipRect.width, maxClipRect.height / clipRect.height)
+        guard scale.isFinite, scale > 0 else { return }
         
         let focusPoint = CGPoint(x: clipRect.midX, y: clipRect.midY)
         let midPoint = CGPoint(x: maxClipRect.midX, y: maxClipRect.midY)
         
         clipRect.size.width = ceil(clipRect.width * scale)
         clipRect.size.height = ceil(clipRect.height * scale)
+        guard clipRect.width.isFinite, clipRect.height.isFinite,
+              clipRect.width > 0, clipRect.height > 0 else { return }
         clipRect.origin.x = maxClipRect.minX + ceil((maxClipRect.width - clipRect.width) / 2)
         clipRect.origin.y = maxClipRect.minY + ceil((maxClipRect.height - clipRect.height) / 2)
         
         var contentTargetPoint = CGPoint.zero
         contentTargetPoint.x = (focusPoint.x + mainScrollView.contentOffset.x) * scale
         contentTargetPoint.y = (focusPoint.y + mainScrollView.contentOffset.y) * scale
+        guard contentTargetPoint.x.isFinite, contentTargetPoint.y.isFinite else { return }
         
         var offset = CGPoint(x: contentTargetPoint.x - midPoint.x, y: contentTargetPoint.y - midPoint.y)
+        guard offset.x.isFinite, offset.y.isFinite else { return }
         offset.x = max(-clipRect.minX, offset.x)
         offset.y = max(-clipRect.minY, offset.y)
         UIView.animate(withDuration: 0.3) {
@@ -701,8 +778,8 @@ class PTCutViewController: PTBaseViewController {
             }
 
             if self.mainScrollView.zoomScale < self.mainScrollView.maximumZoomScale - CGFloat.ulpOfOne {
-                offset.x = min(self.mainScrollView.contentSize.width - clipRect.maxX, offset.x)
-                offset.y = min(self.mainScrollView.contentSize.height - clipRect.maxY, offset.y)
+                offset.x = min(max(0, self.mainScrollView.contentSize.width - clipRect.maxX), offset.x)
+                offset.y = min(max(0, self.mainScrollView.contentSize.height - clipRect.maxY), offset.y)
                 self.mainScrollView.contentOffset = offset
             }
             self.rotateBtn.alpha = 1
@@ -725,19 +802,34 @@ class PTCutViewController: PTBaseViewController {
         let contentSize = mainScrollView.contentSize
         let offset = mainScrollView.contentOffset
         let insets = mainScrollView.contentInset
+
+        guard imageSize.width.isFinite, imageSize.height.isFinite,
+              imageSize.width > 0, imageSize.height > 0,
+              contentSize.width.isFinite, contentSize.height.isFinite,
+              contentSize.width > 0, contentSize.height > 0,
+              clipBoxFrame.width.isFinite, clipBoxFrame.height.isFinite,
+              clipBoxFrame.width > 0, clipBoxFrame.height > 0 else {
+            return .zero
+        }
+
+        // English: Keep the crop rectangle inside the image after every zoom and inset calculation.
+        // Español: Mantenemos el rectángulo de recorte dentro de la imagen después de cada cálculo de zoom e inserción.
+        // 中文：每次缩放和内边距计算后，都将裁剪区域限制在图片范围内。
+        let widthScale = imageSize.width / contentSize.width
+        let heightScale = imageSize.height / contentSize.height
+        guard widthScale.isFinite, heightScale.isFinite,
+              widthScale > 0, heightScale > 0 else { return .zero }
         
         var frame = CGRect.zero
-        frame.origin.x = floor((offset.x + insets.left) * (imageSize.width / contentSize.width))
-        frame.origin.x = max(0, frame.origin.x)
+        frame.origin.x = floor((offset.x + insets.left) * widthScale)
+        frame.origin.x = min(imageSize.width, max(0, frame.origin.x))
         
-        frame.origin.y = floor((offset.y + insets.top) * (imageSize.height / contentSize.height))
-        frame.origin.y = max(0, frame.origin.y)
+        frame.origin.y = floor((offset.y + insets.top) * heightScale)
+        frame.origin.y = min(imageSize.height, max(0, frame.origin.y))
         
-        frame.size.width = ceil(clipBoxFrame.width * (imageSize.width / contentSize.width))
-        frame.size.width = min(imageSize.width, frame.width)
+        frame.size.width = min(imageSize.width - frame.minX, max(0, ceil(clipBoxFrame.width * widthScale)))
         
-        frame.size.height = ceil(clipBoxFrame.height * (imageSize.height / contentSize.height))
-        frame.size.height = min(imageSize.height, frame.height)
+        frame.size.height = min(imageSize.height - frame.minY, max(0, ceil(clipBoxFrame.height * heightScale)))
         
         return frame
     }

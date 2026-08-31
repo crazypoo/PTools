@@ -28,6 +28,11 @@ class PTMediaLibCell: PTBaseNormalCell {
     private var imageIdentifier: String = ""
 
     var selectedBlock: (@Sendable (@escaping PTBoolTask) -> Void)?
+
+    // English: The presenter supplies a frozen selection policy so the cell does not read mutable global limits.
+    // Español: El presentador proporciona una política de selección congelada para que la celda no lea límites globales mutables.
+    // 中文：由展示控制器提供冻结的选择策略，Cell 不再读取可变的全局限制。
+    var selectionOptions: PTMediaLibSelectionOptions?
     
     var cellSelectedIndex = 0 {
         didSet {
@@ -63,6 +68,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     private func updateCellContent() {
         guard let cellModel else { return }
         let mediaLibConfig = PTMediaLibConfig.share
+        let selectionOptions = selectionOptions ?? .current()
         imageIdentifier = cellModel.ident
         
         // 1. 处理选中状态的大图预加载/缓存逻辑
@@ -80,8 +86,8 @@ class PTMediaLibCell: PTBaseNormalCell {
         }
         
         // 3. 选择按钮显示逻辑控制
-        let isSingleSelect = mediaLibConfig.maxSelectCount <= 1
-        let canShowBtn = isSingleSelect ? mediaLibConfig.showSelectBtnWhenSingleSelect : (mediaLibConfig.allowMixSelect || cellModel.type != .video)
+        let isSingleSelect = selectionOptions.maxSelectCount <= 1
+        let canShowBtn = isSingleSelect ? mediaLibConfig.showSelectBtnWhenSingleSelect : (selectionOptions.allowMixSelect || cellModel.type != .video)
         
         selectButton.isHidden = !canShowBtn
         selectButton.isUserInteractionEnabled = canShowBtn

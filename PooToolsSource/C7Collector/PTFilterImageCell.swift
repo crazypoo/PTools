@@ -11,10 +11,13 @@ import SnapKit
 import SwifterSwift
 
 // MARK: Filter cell
-class PTFilterImageCell: PTBaseNormalCell {
-    static let ID = "PTFilterImageCell"
+// English: Expose the shared filter cell so ImageEditor and other SPM targets use one implementation.
+// Español: Exponemos la celda de filtros compartida para que ImageEditor y otros targets SPM usen una sola implementación.
+// 中文：公开共享滤镜 Cell，让 ImageEditor 和其他 SPM target 复用唯一实现。
+public class PTFilterImageCell: PTBaseNormalCell {
+    public static let ID = "PTFilterImageCell"
 
-    lazy var nameLabel: UILabel = {
+    public lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = .appfont(size: 12)
         label.textColor = .white
@@ -26,14 +29,14 @@ class PTFilterImageCell: PTBaseNormalCell {
         return label
     }()
     
-    lazy var imageView: UIImageView = {
+    public lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.isUserInteractionEnabled = true
         return view
     }()
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.isUserInteractionEnabled = true
@@ -50,8 +53,7 @@ class PTFilterImageCell: PTBaseNormalCell {
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

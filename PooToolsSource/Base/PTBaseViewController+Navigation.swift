@@ -29,6 +29,11 @@ open class PTNavigationBarContainer: UIView {
     
     private var fromStyle: PTNavigationBarStyle?
     private var toStyle: PTNavigationBarStyle?
+    private weak var ownerNavigationController: UINavigationController?
+    private var backgroundAlpha: CGFloat = 1
+    private var largeTitleBackgroundVisible = false
+    private var largeTitleBackgroundHeight: CGFloat = 0
+    private var renderedProgress: CGFloat = 1
 
     let backgroundView = UIView()
     let contentView = UIView()
@@ -68,6 +73,11 @@ open class PTNavigationBarContainer: UIView {
         leftContainer.translatesAutoresizingMaskIntoConstraints = false
         rightContainer.translatesAutoresizingMaskIntoConstraints = false
         largeTitleContainer.addSubview(largeTitleLabel)
+        clipsToBounds = false
+        backgroundView.isUserInteractionEnabled = false
+        contentView.backgroundColor = .clear
+        topBarContainer.backgroundColor = .clear
+        largeTitleContainer.backgroundColor = .clear
         topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             if let findCurrent = PTUtils.getCurrentVC(),let sheet = findCurrent.sheetViewController {
@@ -107,21 +117,111 @@ open class PTNavigationBarContainer: UIView {
     }
     
     public required init?(coder: NSCoder) { fatalError() }
+
+    // English: Bind the container to its navigation stack so multiple stacks cannot share a render target.
+    // Español: Vincula el contenedor con su pila de navegación para que varias pilas no compartan el destino de renderizado.
+    // 中文：将容器绑定到所属导航栈，避免多个导航栈共用错误的渲染目标。
+    func bind(to navigationController: UINavigationController) {
+        ownerNavigationController = navigationController
+        navigationController.navigationBar.clipsToBounds = false
+        setNeedsLayout()
+    }
     
     public func apply(style: PTNavigationBarStyle) {
-        backgroundView.alpha = 1.0
-        largeTitleContainer.alpha = 1.0
-//        fromStyle = style
-//        toStyle = style
-//        updateTransition(progress: 1)
+        // English: Render a settled style without replacing an active transition pair.
+        // Español: Renderiza un estilo estable sin reemplazar un par de transición activo.
+        // 中文：直接渲染稳定样式，但不覆盖正在进行的转场样式对。
+        renderedProgress = 1
+        backgroundAlpha = 1
+        backgroundView.alpha = 1
+        largeTitleContainer.alpha = 1
+        render(from: style, to: style, progress: 1)
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        updateBackgroundFrame()
     }
 }
 
 extension PTNavigationBarContainer {
+    // English: Keep one background surface continuous through the status bar and navigation bar.
+    // Español: Mantiene una única superficie de fondo continua entre la barra de estado y la barra de navegación.
+    // 中文：让同一个背景层连续覆盖状态栏和导航栏，避免渐变重新起算。
+    private func updateBackgroundFrame() {
+        let topExtension = navigationBarTopExtension
+        let largeTitleBottom: CGFloat
+        if largeTitleBackgroundVisible {
+            let laidOutBottom = largeTitleContainer.frame.maxY
+            let expectedBottom = max(topBarContainer.frame.maxY, 0) + largeTitleBackgroundHeight
+            largeTitleBottom = max(laidOutBottom, expectedBottom)
+        } else {
+            largeTitleBottom = 0
+        }
+        let visibleContentHeight = max(bounds.height, largeTitleBottom)
+        backgroundView.frame = CGRect(
+            x: 0,
+            y: -topExtension,
+            width: bounds.width,
+            height: visibleContentHeight + topExtension
+        )
+        backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+
+    private var navigationBarTopExtension: CGFloat {
+        guard let navigationController = ownerNavigationController else {
+            return CGFloat.statusBarHeight()
+        }
+
+        let navigationBar = navigationController.navigationBar
+        let topInNavigationView = navigationBar.convert(.zero, to: navigationController.view).y
+        if topInNavigationView > 0 {
+            return topInNavigationView
+        }
+
+        let safeAreaTop = navigationController.view.safeAreaInsets.top
+        return safeAreaTop > 0 ? safeAreaTop : CGFloat.statusBarHeight()
+    }
+
+    private var backgroundRenderSize: CGSize {
+        updateBackgroundFrame()
+        return CGSize(width: max(backgroundView.bounds.width, 1),
+                      height: max(backgroundView.bounds.height, 1))
+    }
+
+    func setBackgroundAlpha(_ alpha: CGFloat) {
+        backgroundAlpha = min(max(alpha, 0), 1)
+        backgroundView.alpha = backgroundAlpha
+    }
+
+    // English: Keep the background extension synchronized with the large-title visibility state.
+    // Español: Mantiene la extensión del fondo sincronizada con el estado de visibilidad del título grande.
+    // 中文：让背景扩展区域与大标题的显示状态保持同步。
+    func setLargeTitleBackgroundVisible(_ visible: Bool) {
+        largeTitleBackgroundVisible = visible
+        largeTitleBackgroundHeight = visible ? largeTitleHeight : 0
+        largeTitleContainer.isHidden = !visible
+        updateBackgroundLayout()
+    }
+
+    // English: Re-layout the custom surface after a title constraint changes without rebuilding the data hierarchy.
+    // Español: Reorganiza la superficie personalizada después de cambiar las restricciones del título sin reconstruir la jerarquía de datos.
+    // 中文：大标题约束变化后只重新布局自定义背景，不重建数据层级。
+    func updateBackgroundLayout() {
+        setNeedsLayout()
+        layoutIfNeeded()
+        updateBackgroundFrame()
+    }
+
+    // English: Re-render the current style after the large-title area changes size.
+    // Español: Vuelve a renderizar el estilo actual después de cambiar el tamaño del área del título grande.
+    // 中文：大标题区域尺寸变化后，按当前样式重新渲染背景。
+    func rerenderCurrentStyle() {
+        updateBackgroundLayout()
+        guard let fromStyle, let toStyle else { return }
+        render(from: fromStyle, to: toStyle, progress: renderedProgress)
+    }
+
     func updateLargeTitle(progress: CGFloat) {
         // 大标题高度收缩
         let maxHeight: CGFloat = largeTitleHeight
@@ -133,6 +233,7 @@ extension PTNavigationBarContainer {
             largeTitleContainer.snp.updateConstraints { make in
                 make.height.equalTo(height)
             }
+            largeTitleBackgroundHeight = height
             
             // 字体轻微放大（系统类似效果）
             let scale = 1 + stretch * 0.08
@@ -141,6 +242,7 @@ extension PTNavigationBarContainer {
             // 始终显示大标题
             largeTitleLabel.alpha = 1
             titleContainer.alpha = 0
+            updateBackgroundLayout()
             
             return
         }
@@ -153,6 +255,7 @@ extension PTNavigationBarContainer {
         largeTitleContainer.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
+        largeTitleBackgroundHeight = height
         
         // ===== alpha 渐变 =====
         largeTitleLabel.alpha = 1 - p
@@ -169,6 +272,7 @@ extension PTNavigationBarContainer {
         let weight: UIFont.Weight = p > 0.5 ? .semibold : .bold
         
         largeTitleLabel.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+        updateBackgroundLayout()
 
     }
 }
@@ -187,9 +291,19 @@ extension PTNavigationBarContainer {
     /// 核心：根据 progress 渐变
     func updateTransition(progress: CGFloat) {
         guard let from = fromStyle, let to = toStyle else { return }
+        renderedProgress = min(max(progress, 0), 1)
+        render(from: from, to: to, progress: renderedProgress)
+    }
+
+    // English: Render both the custom surfaces and the UIKit appearance from one style pair.
+    // Español: Renderiza las superficies personalizadas y la apariencia de UIKit desde un único par de estilos.
+    // 中文：使用同一组样式同时渲染自定义背景和 UIKit 导航栏外观。
+    private func render(from: PTNavigationBarStyle,
+                       to: PTNavigationBarStyle,
+                       progress: CGFloat) {
         let progress = min(max(progress, 0), 1)
-        let nav = PTNavigationBarManager.shared.currentNav
-        let navigationBarSize = nav?.navigationBar.bounds.size ?? bounds.size
+        let nav = ownerNavigationController
+        let backgroundSize = backgroundRenderSize
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
@@ -209,7 +323,7 @@ extension PTNavigationBarContainer {
             appearance.backgroundColor = .clear
             appearance.backgroundImage = UIImage()
         case let (.gradient(type1, colors1),.gradient(type2, colors2)):// MARK: - Gradient -> Gradient
-            let image = makeTransitionGradientImage(fromType: type1, fromColors: colors1, toType: type2, toColors: colors2, boundsSize: navigationBarSize, progress: progress)
+            let image = makeTransitionGradientImage(fromType: type1, fromColors: colors1, toType: type2, toColors: colors2, boundsSize: backgroundSize, progress: progress)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.gradient(type, colors), .solid(color)):// MARK: - Gradient -> Solid
@@ -218,7 +332,7 @@ extension PTNavigationBarContainer {
                 $0.interpolate(to: color, progress: progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: backgroundSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let ( .solid(color), .gradient(type, colors)):// MARK: - Solid -> Gradient
@@ -227,7 +341,7 @@ extension PTNavigationBarContainer {
                 color.interpolate(to: $0, progress: progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: backgroundSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.gradient(type, colors), .transparent):// MARK: - Gradient -> Transparent
@@ -235,7 +349,7 @@ extension PTNavigationBarContainer {
                 $0.withAlphaComponent(1 - progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: backgroundSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         case let (.transparent, .gradient(type, colors)):// MARK: - Transparent -> Gradient
@@ -243,7 +357,7 @@ extension PTNavigationBarContainer {
                 $0.withAlphaComponent(progress)
             }
 
-            let image = UIImage.gradient(colors: transitionColors, size: navigationBarSize, direction: type)
+            let image = UIImage.gradient(colors: transitionColors, size: backgroundSize, direction: type)
             appearance.backgroundColor = .clear
             appearance.backgroundImage = image
         }
@@ -259,14 +373,18 @@ extension PTNavigationBarContainer {
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
 
-        // English: Mirror the transition result on the custom navigation surfaces.
-        // Español: Refleja el resultado de la transición en las superficies de navegación personalizadas.
-        // 中文：将转场结果同步到自定义导航栏和大标题背景层。
-        [backgroundView, largeTitleContainer].forEach { surface in
-            surface.backgroundColor = appearance.backgroundColor
-            surface.layer.contentsGravity = .resize
-            surface.layer.contents = appearance.backgroundImage?.cgImage
-        }
+        // English: The custom surface is the only color renderer; UIKit receives a transparent appearance.
+        // Español: La superficie personalizada es el único renderizador de color; UIKit recibe una apariencia transparente.
+        // 中文：自定义背景层作为唯一颜色渲染源，UIKit 外观保持透明，避免重复绘制。
+        backgroundView.backgroundColor = appearance.backgroundColor
+        backgroundView.layer.contentsGravity = .resize
+        backgroundView.layer.contents = appearance.backgroundImage?.cgImage
+        backgroundView.alpha = backgroundAlpha
+        largeTitleContainer.backgroundColor = .clear
+        largeTitleContainer.layer.contents = nil
+
+        appearance.backgroundColor = .clear
+        appearance.backgroundImage = UIImage()
 
         guard let nav else { return }
         

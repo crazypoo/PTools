@@ -12,6 +12,13 @@ import SafeSFSymbols
 import SnapKit
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for MainActor bridges and shared UI extensions.
+// Español: Importamos Core explícitamente para los puentes MainActor y las extensiones UI compartidas.
+// 中文：显式导入 Core，使用 MainActor 桥接和共享 UI 扩展。
+import ptools
+#endif
+
 public struct PTInputTextStyle: Equatable {
     // 保留你原来的背景状态枚举
     public enum BackgroundStyle: Int {
@@ -274,10 +281,15 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     public class func calculateSize(image: UIImage, maxLimitSize: CGSize) -> CGSize {
-        guard image.size.width > 0, image.size.height > 0 else { return .zero }
+        guard image.size.width.isFinite, image.size.height.isFinite,
+              image.size.width > 0, image.size.height > 0,
+              maxLimitSize.width.isFinite, maxLimitSize.height.isFinite,
+              maxLimitSize.width > 0, maxLimitSize.height > 0 else { return .zero }
         // 1. 预留出边距空间，计算图片真正可以占据的极限大小
-        let imageLimitWidth = maxLimitSize.width - (PTImageEditorConfig.share.staticEdgeInset * 2)
-        let imageLimitHeight = maxLimitSize.height - (PTImageEditorConfig.share.staticEdgeInset * 2)
+        let edgeInset = max(0, PTImageEditorConfig.share.staticEdgeInset)
+        guard edgeInset.isFinite else { return .zero }
+        let imageLimitWidth = maxLimitSize.width - (edgeInset * 2)
+        let imageLimitHeight = maxLimitSize.height - (edgeInset * 2)
         
         // 兜底：防止极限大小过小
         let safeMaxWidth = max(imageLimitWidth, 50)
@@ -298,14 +310,16 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         }
         
         // 2. 最终返回的 Sticker 整体尺寸必须把内边距加回来！
-        targetSize.width += PTImageEditorConfig.share.staticEdgeInset * 2
-        targetSize.height += PTImageEditorConfig.share.staticEdgeInset * 2
+        targetSize.width += edgeInset * 2
+        targetSize.height += edgeInset * 2
         
         return targetSize
     }
     
     public class func getStickerOriginFrame(_ size: CGSize,current: PTEditImageEngineContext?,container:PTPassthroughView) -> CGRect {
-        guard let context = current else { return .zero }
+        guard let context = current,
+              size.width.isFinite, size.height.isFinite,
+              size.width > 0, size.height > 0 else { return .zero }
         
         // 1. 直接获取 engineMainView 自身的中心点 (相对自身 bounds)
         let mainViewCenter = CGPoint(
@@ -344,15 +358,34 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
          totalTranslationPoint: CGPoint = .zero,
          showBorder: Bool = true) {
         self.id = id
-        self.originScale = originScale
-        self.originAngle = originAngle
-        self.originFrame = originFrame
-        maxGesScale = 4 / originScale
+        // English: Normalize invalid initial geometry so gestures never divide by zero.
+        // Español: Normalizamos la geometría inicial inválida para que los gestos nunca dividan por cero.
+        // 中文：规范化无效的初始几何参数，避免手势计算出现除零。
+        let safeOriginScale = originScale.isFinite && originScale > 0
+            ? max(0.001, min(originScale, 1_000))
+            : 1
+        let safeMaxGesScale = max(0.1, min(4 / safeOriginScale, 1_000))
+        let safeGesScale = gesScale.isFinite && gesScale > 0
+            ? max(0.1, min(gesScale, safeMaxGesScale))
+            : 1
+        let safeTranslation = totalTranslationPoint.x.isFinite && totalTranslationPoint.y.isFinite
+            ? totalTranslationPoint
+            : .zero
+        let safeFrame = originFrame.origin.x.isFinite && originFrame.origin.y.isFinite
+            && originFrame.width.isFinite && originFrame.height.isFinite
+            && originFrame.width >= 0 && originFrame.height >= 0
+            ? originFrame
+            : .zero
+
+        self.originScale = safeOriginScale
+        self.originAngle = originAngle.isFinite ? originAngle : 0
+        self.originFrame = safeFrame
+        maxGesScale = safeMaxGesScale
         super.init(frame: .zero)
         
-        self.gesScale = gesScale
-        self.gesRotation = gesRotation
-        self.totalTranslationPoint = totalTranslationPoint
+        self.gesScale = safeGesScale
+        self.gesRotation = gesRotation.isFinite ? gesRotation : 0
+        self.totalTranslationPoint = safeTranslation
         
         borderView.layer.borderWidth = borderWidth
         
@@ -437,7 +470,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     private func updateHandlesScale() {
         // 计算当前贴纸受到的总缩放力
         let totalScale = originScale * gesScale
-        guard totalScale > 0 else { return }
+        guard totalScale.isFinite, totalScale > 0 else { return }
         
         // 施加逆向倍数（比如贴纸放大了 2 倍，手柄就缩小 0.5 倍，视觉上就抵消了）
         let inverseScale = 1.0 / totalScale
@@ -456,9 +489,14 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     func setupUIFrameWhenFirstLayout() {}
     
     private func direction(for angle: CGFloat) -> PTBaseStickerView.Direction {
-        // 将角度转换为0~360，并对360取余
-        let angle = ((Int(angle) % 360) + 360) % 360
-        return PTBaseStickerView.Direction(rawValue: angle) ?? .up
+        // English: Normalize the angle without converting an unbounded CGFloat to Int.
+        // Español: Normalizamos el ángulo sin convertir un CGFloat ilimitado a Int.
+        // 中文：先归一化角度，避免将超大 CGFloat 转换为 Int 时触发崩溃。
+        guard angle.isFinite else { return .up }
+        let remainder = angle.truncatingRemainder(dividingBy: 360)
+        let normalized = remainder >= 0 ? remainder : remainder + 360
+        let value = Int(normalized)
+        return PTBaseStickerView.Direction(rawValue: value) ?? .up
     }
     
     @objc func tapAction(_ ges: UITapGestureRecognizer) {
@@ -471,8 +509,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
         guard gesIsEnabled else { return }
-        
-        let scale = min(maxGesScale, gesScale * ges.scale)
+        guard ges.scale.isFinite, ges.scale > 0,
+              gesScale.isFinite, gesScale > 0,
+              maxGesScale.isFinite, maxGesScale > 0 else { return }
+
+        let scale = min(maxGesScale, max(0.1, gesScale * ges.scale))
+        guard scale.isFinite, scale > 0 else { return }
         ges.scale = 1
         
         var scaleChanged = false
@@ -497,8 +539,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
         guard gesIsEnabled else { return }
-        
+        guard ges.rotation.isFinite else { return }
         gesRotation += ges.rotation
+        guard gesRotation.isFinite else {
+            gesRotation = 0
+            return
+        }
         ges.rotation = 0
         
         if ges.state == .began {
@@ -516,7 +562,10 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         guard gesIsEnabled else { return }
         
         let point = ges.translation(in: superview)
+        guard point.x.isFinite, point.y.isFinite,
+              originScale.isFinite, originScale > 0 else { return }
         gesTranslationPoint = CGPoint(x: point.x / originScale, y: point.y / originScale)
+        guard gesTranslationPoint.x.isFinite, gesTranslationPoint.y.isFinite else { return }
         
         if ges.state == .began {
             setOperation(true)
@@ -634,6 +683,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         guard gesIsEnabled, let superview = self.superview, let handle = ges.view else { return }
         
         let point = ges.location(in: superview)
+        guard point.x.isFinite, point.y.isFinite else { return }
         
         if ges.state == .began {
             setOperation(true)
@@ -651,13 +701,21 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             fixedPointAbs = self.convert(fixedHandle.center, to: superview) // 获取固定点在画布上的绝对坐标
             startDistance = hypot(point.x - fixedPointAbs.x, point.y - fixedPointAbs.y) // 获取手指到固定点的初始距离
             startGesScale = gesScale
+            guard fixedPointAbs.x.isFinite, fixedPointAbs.y.isFinite,
+                  startDistance.isFinite, startDistance > 0,
+                  startGesScale.isFinite, startGesScale > 0 else {
+                setOperation(false)
+                return
+            }
             
         } else if ges.state == .changed {
-            if startDistance == 0 { return }
+            guard startDistance.isFinite, startDistance > 0,
+                  startGesScale.isFinite, startGesScale > 0 else { return }
             
             // 3. 计算手指与固定点的当前距离
             let currentDistance = hypot(point.x - fixedPointAbs.x, point.y - fixedPointAbs.y)
             let ratio = currentDistance / startDistance // 距离变化率就是缩放率
+            guard currentDistance.isFinite, ratio.isFinite, ratio > 0 else { return }
             
             // 4. 计算并限制新的缩放倍数
             gesScale = max(0.1, min(maxGesScale, startGesScale * ratio))
@@ -676,12 +734,26 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             updateTransform()
             
         } else if ges.state == .ended || ges.state == .cancelled {
+            guard startGesScale.isFinite, startGesScale > 0,
+                  gesScale.isFinite, gesScale > 0,
+                  startDistance.isFinite, startDistance > 0 else {
+                gesTranslationPoint = .zero
+                setOperation(false)
+                startTimer()
+                return
+            }
             // 6. 拖拽结束时，将临时补偿位移固化到基础矩阵中
             let actualScaleRatio = gesScale / startGesScale
             let vX = fixedPointAbs.x - startCenter.x
             let vY = fixedPointAbs.y - startCenter.y
             let deltaCX = vX * (1 - actualScaleRatio)
             let deltaCY = vY * (1 - actualScaleRatio)
+            guard actualScaleRatio.isFinite, deltaCX.isFinite, deltaCY.isFinite else {
+                gesTranslationPoint = .zero
+                setOperation(false)
+                startTimer()
+                return
+            }
             
             let direction = direction(for: originAngle)
             if direction == .right {
@@ -756,6 +828,40 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
 }
 
 extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
+    // English: This snapshot keeps export rendering from changing the editing UI.
+    // Español: Esta instantánea evita que el renderizado de exportación cambie la interfaz de edición.
+    // 中文：这个快照用于避免导出渲染修改编辑中的界面状态。
+    struct PTStickerExportAppearance {
+        let handlesHidden: Bool
+        let hadActiveTimer: Bool
+        let wasOperating: Bool
+    }
+
+    // English: Temporarily hide interactive chrome while the sticker layer is rendered.
+    // Español: Ocultamos temporalmente los controles interactivos al renderizar la capa de pegatinas.
+    // 中文：渲染贴纸图层时临时隐藏交互控件。
+    func prepareForExport() -> PTStickerExportAppearance {
+        let appearance = PTStickerExportAppearance(handlesHidden: tlHandle.isHidden,
+                                                   hadActiveTimer: timer?.isValid == true,
+                                                   wasOperating: onOperation)
+        onOperation = false
+        cleanTimer()
+        hideBorder()
+        return appearance
+    }
+
+    // English: Restore the exact interactive state after export rendering completes.
+    // Español: Restauramos el estado interactivo exacto después de terminar el renderizado.
+    // 中文：导出渲染完成后恢复原有的交互状态。
+    func restoreAfterExport(_ appearance: PTStickerExportAppearance) {
+        onOperation = appearance.wasOperating
+        if appearance.hadActiveTimer {
+            startTimer()
+        } else {
+            setHandlesHidden(appearance.handlesHidden)
+        }
+    }
+
     public func resetState() {
         onOperation = false
         cleanTimer()
@@ -768,6 +874,9 @@ extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
     }
     
     public func addScale(_ scale: CGFloat) {
+        guard scale.isFinite, scale > 0,
+              originScale.isFinite, originScale > 0,
+              gesScale.isFinite, gesScale > 0 else { return }
         // Revert zoom scale.
         transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
         // Revert ges scale.

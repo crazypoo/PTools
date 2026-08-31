@@ -49,7 +49,13 @@ public class PTMediaLibView: UIView {
     }
     
     private var showCameraCell: Bool {
-        PTMediaLibConfig.share.allowTakePhotoInLibrary && (currentAlbum?.isCameraRoll ?? false)
+        PTMediaLibConfig.share.allowTakePhotoInLibrary
+            && activeSelectionOptions.allowSelectImage
+            && (currentAlbum?.isCameraRoll ?? false)
+    }
+
+    private var activeSelectionOptions: PTMediaLibSelectionOptions {
+        currentVc?.effectiveSelectionOptions ?? .current()
     }
 
     // MARK: - UI Components
@@ -134,6 +140,8 @@ private extension PTMediaLibView {
         let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
         
         if let cell = baseCell as? PTMediaLibCell, let cellModel = itemRow.dataModel as? PTMediaModel {
+            cell.selectionOptions = activeSelectionOptions
+
             // 配置选择回调
             cell.selectedBlock = { [weak self] isSelected in
                 Task { @MainActor in
@@ -247,7 +255,7 @@ extension PTMediaLibView {
             
             // 根据宏定义控制编辑按钮显隐
             #if POOTOOLS_IMAGEEDITOR
-            if model.type == .image { cell.editButton.isHidden = !config.allowEditImage }
+            if model.type == .image { cell.editButton.isHidden = !activeSelectionOptions.allowEditImage }
             #endif
             #if POOTOOLS_VIDEOEDITOR
             if model.type == .video { cell.editButton.isHidden = !config.allowEditVideo }
@@ -260,11 +268,11 @@ extension PTMediaLibView {
     
     private func handleInvalidMask(_ cell: PTMediaLibCell, model: PTMediaModel, config: PTMediaLibConfig, uiConfig: PTMediaLibUIConfig) {
         let selCount = selectedModel.count
-        if selCount >= config.maxSelectCount {
+        if selCount >= activeSelectionOptions.maxSelectCount {
             cell.coverView.backgroundColor = .DevMaskColor
             cell.coverView.isHidden = !uiConfig.showInvalidMask
             cell.enableSelect = false
-        } else if !config.allowMixSelect && selCount > 0 {
+        } else if !activeSelectionOptions.allowMixSelect && selCount > 0 {
             let hasVideo = selectedModel.any { $0.type == .video }
             let isTypeMismatch = hasVideo ? (model.type != .video) : (model.type == .video)
             if isTypeMismatch {
@@ -331,7 +339,11 @@ extension PTMediaLibView {
         
         // 尝试自动选中
         let config = PTMediaLibConfig.share
-        if canAddModel(newModel, currentSelectCount: selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
+        if canAddModel(newModel,
+                       currentSelectCount: selectedModel.count,
+                       sender: PTUtils.getCurrentVC(),
+                       showAlert: false,
+                       selectionOptions: activeSelectionOptions) {
             selectedModel.append(newModel)
             config.didSelectAsset?(asset)
         }
@@ -475,7 +487,10 @@ extension PTMediaLibView {
         if !cellModel.isSelected {
             // 1. 检查限制：是否达到最大选择数？是否允许混选？
             let currentCount = self.selectedModel.count
-            guard canAddModel(cellModel, currentSelectCount: currentCount, sender: PTUtils.getCurrentVC()) else {
+            guard canAddModel(cellModel,
+                              currentSelectCount: currentCount,
+                              sender: PTUtils.getCurrentVC(),
+                              selectionOptions: activeSelectionOptions) else {
                 // 如果不满足条件（如已达上限），重置 Cell 状态并返回
                 Task { @MainActor in
                     cell.editButton.isHidden = true
@@ -670,6 +685,19 @@ public class PTMediaLibViewController: PTBaseViewController {
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
 
+    // English: Optional instance configuration used instead of changing PTMediaLibConfig.share.
+    // Español: Configuración opcional por instancia que evita cambiar PTMediaLibConfig.share.
+    // 中文：可选的实例配置，不再修改 PTMediaLibConfig.share。
+    public var selectionOptions: PTMediaLibSelectionOptions?
+    private var resolvedSelectionOptions: PTMediaLibSelectionOptions?
+
+    // English: Use a frozen snapshot for the lifetime of this picker.
+    // Español: Usa una instantánea congelada durante toda la vida de este selector.
+    // 中文：在当前选择器整个生命周期内使用冻结后的配置快照。
+    fileprivate var effectiveSelectionOptions: PTMediaLibSelectionOptions {
+        resolvedSelectionOptions ?? selectionOptions ?? .current()
+    }
+
     // MARK: - Data
     var currentAlbum: PTMediaLibListModel?// 🌟 优化：将隐式解包(!)改为可选值(?)，防止生命周期异步加载时意外崩溃
     var totalModels: [PTMediaModel] = []
@@ -759,6 +787,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        resolvedSelectionOptions = selectionOptions ?? .current()
         setupUI()
         checkPermissionAndLoad()
     }
@@ -846,8 +875,9 @@ public class PTMediaLibViewController: PTBaseViewController {
         if let current = mediaListView.currentAlbum {
             pushAlbum(current)
         } else {
-            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage,
-                                                 allowSelectVideo: config.allowSelectVideo,
+            let options = effectiveSelectionOptions
+            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: options.allowSelectImage,
+                                                 allowSelectVideo: options.allowSelectVideo,
                                                  allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { model in
                 pushAlbum(model)
             }
@@ -934,8 +964,9 @@ public class PTMediaLibViewController: PTBaseViewController {
     func loadImageData() {
         let config = PTMediaLibConfig.share
 
-        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage,
-                                             allowSelectVideo: config.allowSelectVideo,
+        let options = effectiveSelectionOptions
+        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: options.allowSelectImage,
+                                             allowSelectVideo: options.allowSelectVideo,
                                              allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { [weak self] model in
             guard let self else { return }
 
@@ -1027,7 +1058,7 @@ extension PTMediaLibViewController {
         let config = PTMediaLibConfig.share
         let uiConfig = PTMediaLibUIConfig.share
         
-        if config.allowMixSelect {
+        if effectiveSelectionOptions.allowMixSelect {
             let videoCount = selectedModel.lazy.filter { $0.type == .video }.count
             
             if videoCount > config.maxVideoSelectCount {

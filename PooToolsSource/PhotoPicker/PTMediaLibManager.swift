@@ -193,20 +193,35 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
 }
 
 @MainActor
-func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
+func canAddModel(_ model: PTMediaModel,
+                 currentSelectCount: Int,
+                 sender: UIViewController?,
+                 showAlert: Bool = true,
+                 selectionOptions: PTMediaLibSelectionOptions? = nil) -> Bool {
     guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else {
         return false
     }
+
+    if let selectionOptions {
+        if model.type == .image, !selectionOptions.allowSelectImage {
+            return false
+        }
+        if model.type == .video, !selectionOptions.allowSelectVideo {
+            return false
+        }
+    }
+
+    let maximumSelectionCount = selectionOptions?.maxSelectCount ?? PTMediaLibConfig.share.maxSelectCount
         
-    if currentSelectCount >= PTMediaLibConfig.share.maxSelectCount {
+    if currentSelectCount >= maximumSelectionCount {
         if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(PTMediaLibConfig.share.maxSelectCount)"), icon: .Error)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(maximumSelectionCount)"), icon: .Error)
         }
         return false
     }
     
     if currentSelectCount > 0,
-       !PTMediaLibConfig.share.allowMixSelect,
+       !(selectionOptions?.allowMixSelect ?? PTMediaLibConfig.share.allowMixSelect),
        model.type == .video {
         return false
     }

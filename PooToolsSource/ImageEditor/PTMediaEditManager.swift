@@ -9,6 +9,13 @@
 import UIKit
 import Photos
 
+#if SWIFT_PACKAGE
+// English: Import the shared filter model used by undo and redo actions.
+// Español: Importamos el modelo de filtros compartido usado por las acciones de deshacer y rehacer.
+// 中文：显式导入撤销和重做操作使用的共享滤镜模型。
+import PooToolsHarbethKit
+#endif
+
 public enum PTMediaEditorAction {
     case draw(PTDrawPath)
     case clip(oldStatus: PTClipStatus, newStatus: PTClipStatus)
@@ -67,4 +74,3 @@ public class PTMediaEditManager:NSObject {
         delegate?.editorManager(self, didUpdateActions: actions, redoActions: redoActions)
     }
 }
-

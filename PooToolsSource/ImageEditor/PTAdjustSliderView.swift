@@ -9,6 +9,13 @@
 import UIKit
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+// English: Import the Core target explicitly when this file is built as a Swift package target.
+// Español: Importamos explícitamente el target Core cuando este archivo se compila como target de Swift Package.
+// 中文：作为 Swift Package target 编译时，显式导入 Core target。
+import ptools
+#endif
+
 public struct PTAdjustStatus {
     public var brightness: Float = 1
     public var contrast: Float = 0
@@ -137,6 +144,7 @@ public class PTAdjustSliderView: UIView {
     private func calculateTintFrame() -> CGRect {
         if isVertical {
             let totalH = pt.jx_height / 2
+            guard totalH.isFinite, totalH > 0 else { return .zero }
             let tintH = totalH * abs(CGFloat(value)) / CGFloat(PTAdjustSliderView.maximumValue)
             if value > 0 {
                 return CGRect(x: 0, y: totalH - tintH, width: sliderWidth, height: tintH)
@@ -145,6 +153,7 @@ public class PTAdjustSliderView: UIView {
             }
         } else {
             let totalW = pt.jx_width / 2
+            guard totalW.isFinite, totalW > 0 else { return .zero }
             let tintW = totalW * abs(CGFloat(value)) / CGFloat(PTAdjustSliderView.maximumValue)
             if value > 0 {
                 return CGRect(x: totalW, y: 0, width: tintW, height: sliderWidth)
@@ -164,6 +173,10 @@ public class PTAdjustSliderView: UIView {
         } else if pan.state == .changed {
             let transValue = isVertical ? -translation.y : translation.x
             let totalLength = isVertical ? pt.jx_height / 2 : pt.jx_width / 2
+            // English: Ignore gesture updates until the slider has a usable layout size.
+            // Español: Ignoramos el gesto hasta que el control tenga un tamaño de diseño válido.
+            // 中文：滑块尚未完成有效布局时，忽略手势更新。
+            guard totalLength.isFinite, totalLength > 0 else { return }
             var temp = valueForPanBegan + Float(transValue / totalLength)
             temp = max(PTAdjustSliderView.minimumValue, min(PTAdjustSliderView.maximumValue, temp))
             

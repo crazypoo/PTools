@@ -95,6 +95,7 @@ public final class PTNavigationBarManager:NSObject {
         let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: navBar.bounds.width, height: totalHeight))
         
         container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        container.bind(to: nav)
                 
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
@@ -111,27 +112,15 @@ public final class PTNavigationBarManager:NSObject {
         resetSystemNavBarAppearance(nav)
     }
     
-    private func resetSystemNavBarAppearance(_ nav: UINavigationController,alpha:CGFloat = 1) {
+    private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = nil   // ❗关键（去 blur）
-        switch styleCache.object(forKey: nav)?.style {
-        case .solid(let color):
-            appearance.backgroundColor = color
-            appearance.backgroundImage = UIImage()
-        case .transparent:
-            appearance.backgroundColor = .clear
-            appearance.backgroundImage = UIImage()
-        case .gradient(let type,let colors):
-            let map = colors.map { value in
-                value.withAlphaComponent(alpha)
-            }
-            appearance.backgroundColor = .clear
-            appearance.backgroundImage = UIImage.gradient(colors: map, size: nav.navigationBar.bounds.size, direction: type)
-        default:
-            appearance.backgroundColor = .clear
-            appearance.backgroundImage = UIImage()
-        }
+        // English: The custom container owns the full navigation background, including the status-bar area.
+        // Español: El contenedor personalizado controla todo el fondo de navegación, incluida el área de la barra de estado.
+        // 中文：自定义容器负责包含状态栏区域在内的完整导航背景。
+        appearance.backgroundColor = .clear
+        appearance.backgroundImage = UIImage()
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
         
@@ -163,8 +152,9 @@ public final class PTNavigationBarManager:NSObject {
     
     public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
-              let _ = containerMap.object(forKey: nav) else { return }
-        resetSystemNavBarAppearance(nav, alpha: alpha)
+              let container = containerMap.object(forKey: nav) else { return }
+        container.setBackgroundAlpha(alpha)
+        resetSystemNavBarAppearance(nav)
     }
     
     public func bind(to nav: UINavigationController) {
@@ -401,7 +391,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         let hasTitle = !item.navTitle.stringIsEmpty()
 
         if isLarge && hasTitle {
-            container.largeTitleContainer.isHidden = false
+            container.setLargeTitleBackgroundVisible(true)
             
             container.largeTitleContainer.snp.updateConstraints { make in
                 make.height.equalTo(container.largeTitleHeight)
@@ -417,7 +407,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 
         } else {
             // ❗关键：彻底关闭 largeTitle
-            container.largeTitleContainer.isHidden = true
+            container.setLargeTitleBackgroundVisible(false)
             
             container.largeTitleContainer.snp.updateConstraints { make in
                 make.height.equalTo(0)
@@ -430,6 +420,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             
             container.titleContainer.alpha = 1
         }
+
+        container.rerenderCurrentStyle()
     }
 
     private func clear() {

@@ -29,6 +29,57 @@ let PTMaxImageWidth: CGFloat = 500
     case externalAlbumList
 }
 
+// English: Per-presenter selection options prevent temporary global configuration mutations.
+// Español: Las opciones por presentador evitan mutaciones temporales de la configuración global.
+// 中文：按实例保存的选择配置，避免临时修改全局配置。
+public struct PTMediaLibSelectionOptions: Sendable, Equatable {
+    public var allowSelectImage: Bool
+    public var allowSelectVideo: Bool
+    public var allowSelectGif: Bool
+    public var maxSelectCount: Int
+    public var allowEditImage: Bool
+    public var allowMixSelect: Bool
+
+    public init(allowSelectImage: Bool = true,
+                allowSelectVideo: Bool = true,
+                allowSelectGif: Bool = true,
+                maxSelectCount: Int = 9,
+                allowEditImage: Bool = true,
+                allowMixSelect: Bool = true) {
+        self.allowSelectImage = allowSelectImage
+        self.allowSelectVideo = allowSelectVideo
+        self.allowSelectGif = allowSelectGif
+        self.maxSelectCount = max(1, maxSelectCount)
+        self.allowEditImage = allowEditImage
+        self.allowMixSelect = allowMixSelect
+    }
+
+    public static let singleImage = PTMediaLibSelectionOptions(
+        allowSelectImage: true,
+        allowSelectVideo: false,
+        allowSelectGif: false,
+        maxSelectCount: 1,
+        allowEditImage: false,
+        allowMixSelect: false
+    )
+
+    // English: Snapshot the legacy singleton only once when a picker is created.
+    // Español: Captura el singleton heredado una sola vez al crear el selector.
+    // 中文：创建选择器时只读取一次旧版全局单例配置。
+    @MainActor
+    public static func current() -> PTMediaLibSelectionOptions {
+        let config = PTMediaLibConfig.share
+        return PTMediaLibSelectionOptions(
+            allowSelectImage: config.allowSelectImage,
+            allowSelectVideo: config.allowSelectVideo,
+            allowSelectGif: config.allowSelectGif,
+            maxSelectCount: config.maxSelectCount,
+            allowEditImage: config.allowEditImage,
+            allowMixSelect: config.allowMixSelect
+        )
+    }
+}
+
 @MainActor
 @objcMembers
 public class PTMediaLibConfig:NSObject {

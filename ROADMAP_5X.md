@@ -301,3 +301,29 @@
 - `git diff --check`
 - Xcode `PooTools-Example` Debug / Release 完整构建。
 - 只有对应版本章节没有 `🚧`、`⬜` 或 `⛔` 时，才允许创建同名 tag。
+
+## 5.6.6：ImageEditor 稳定性、性能与导航栏样式治理
+
+### 任务清单
+
+- ✅ `CORE-566-01`：修复 `PTEditImageViewController` 自定义导航栏样式未生效的问题；导航栏容器绑定所属 `UINavigationController`，`apply(style:)` 与 `updateTransition(progress:)` 共用同一套渲染逻辑，保留 `.solid(.clear)` 和转场渐变效果。
+- ✅ `CORE-566-02`：完善编辑完成流程；增加可选的类型化结果回调，保留旧 `editFinishBlock`，对导出任务增加取消、生命周期和 exactly-once 保护，避免重复回调和页面离开后的旧任务回写。
+- ✅ `CORE-566-03`：增加图片输出策略和尺寸上限；默认对超大结果降采样，支持原尺寸和自定义上限，并对无效图片尺寸、像素数量和渲染失败提供明确错误类型。
+- ✅ `CORE-566-04`：修复绘制、马赛克、裁剪和贴纸的非法几何输入；校验零尺寸、非有限尺寸、非法缩放、路径比例、裁剪范围和贴纸边界，避免 Core Graphics 和 CGFloat 转换触发崩溃。
+- ✅ `CORE-566-05`：优化编辑渲染性能；缓存马赛克底图，合并调节滑块高频渲染任务，限制滤镜缓存成本，移除编辑器对共享滤镜纹理尺寸的依赖，并让前景分割只跨任务传递图片 `Data`。
+- ✅ `CORE-566-06`：修复导出期间贴纸交互状态被永久改变的问题；导出前临时隐藏操作控件和计时器，渲染结束后恢复原有选中、操作和定时器状态。
+- ✅ `CORE-566-07`：修复裁剪界面和文字输入界面的布局稳定性；键盘通知改为更新 SnapKit 约束，补充坐标转换、无效键盘 frame、裁剪缩放和内容偏移保护。
+- ✅ `CORE-566-08`：消除 ImageEditor 对全局 `PTMediaLibConfig.share` 的临时修改；新增实例级媒体选择策略，图片替换使用单图配置，避免编辑器和其他 PhotoPicker 实例互相污染。
+- ✅ `CORE-566-09`：补齐 ImageEditor 独立 SwiftPM/CocoaPods 模块边界；显式声明 `PooToolsHarbethKit`、`PooToolsPhotoPicker` 依赖，公开共享滤镜 Cell 所需 API，不修改第三方依赖和 Pods 源码。
+- ✅ `CORE-566-10`：完成修改文件的 Swift 6 安全扫描、Core source contract、构建入口检查、Package manifest 检查和 `git diff --check`。
+- ⛔ `CORE-566-11`：完整 Xcode Simulator 构建的 PooTools Swift 源码已编译通过，但最终链接仍被外部设备版 `Pods/Bugly/Bugly.framework` 和缺失 Metal 模拟器工具链搜索路径阻断；未创建 `5.6.6` 标签，也未宣称完整构建验收通过。
+- ✅ `CORE-566-12`：修复自定义导航栏渐变在状态栏与导航栏交界处重复起算造成的颜色断层；系统导航栏外观保持透明，由绑定的自定义容器使用 `updateTransition(progress:)` 的同一渲染结果连续覆盖状态栏和导航栏。
+
+### 5.6.6 实施与验证说明
+
+- ✅ `PTNavigationBarContainer` 不再读取全局当前导航控制器作为渲染目标；每个容器绑定自己的导航栈，页面级样式和交互式转场可以同时工作。
+- ✅ 编辑导出仍在 MainActor 使用 UIKit 图层完成，取消只会终止当前任务；新类型化结果区分成功、取消和失败，旧回调保持兼容。
+- ✅ 绘制、马赛克、裁剪、贴纸、滤镜和前景分割均增加边界校验；滤镜渲染使用当前图片尺寸生成纹理，减少共享可变状态造成的数据竞争。
+- ✅ PhotoPicker 的编辑器入口使用实例配置快照，未再覆盖全局配置；原有公开符号、默认参数和模块路径保持不变。
+- ✅ 新增代码注释遵循英语、西班牙语和中文三语约定；没有修改 Pods 源码、第三方依赖版本、Podfile.lock 或 Xcode 工程文件。
+- ⚠️ `validate_quality_scans.sh`、`validate_build_entries.sh`、`validate_core_source_contract.sh`、Package manifest 和差异检查通过；Xcode 源码编译结果通过，但外部链接环境修复前仍需补做 Debug/Release 完整链接和真机人工回归。

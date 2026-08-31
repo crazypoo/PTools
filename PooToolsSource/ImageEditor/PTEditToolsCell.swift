@@ -9,6 +9,13 @@
 import UIKit
 import SnapKit
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for the shared cell base class.
+// Español: Importamos Core explícitamente para la clase base compartida de celdas.
+// 中文：显式导入 Core，使用共享的 Cell 基类。
+import ptools
+#endif
+
 @MainActor
 public final class PTEditImageToolModel: NSObject {
     public var normalImage:UIImage = UIImage()

@@ -10,6 +10,13 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+// English: Import Core explicitly for the base controller and shared utilities.
+// Español: Importamos Core explícitamente para el controlador base y las utilidades compartidas.
+// 中文：显式导入 Core，使用基类控制器和共享工具。
+import ptools
+#endif
+
 public class PTFontPickerViewController: PTBaseViewController {
 
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
