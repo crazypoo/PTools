@@ -10,6 +10,10 @@ import UIKit
 
 @IBDesignable
 open class PTCollectionAnimationButton: UIButton {
+    private let animationContainer = CALayer()
+    private var hasCreatedLayers = false
+    private var lastLayoutBounds = CGRect.null
+
     fileprivate var imageShape = CAShapeLayer()
     @IBInspectable open var image: UIImage! {
         didSet {
@@ -57,23 +61,16 @@ open class PTCollectionAnimationButton: UIButton {
 
     @IBInspectable open var duration: Double = 1.0 {
         didSet {
-            circleTransform.duration = 0.333 * duration // 0.0333 * 10
-            circleMaskTransform.duration = 0.333 * duration // 0.0333 * 10
-            lineStrokeStart.duration = 0.6 * duration //0.0333 * 18
-            lineStrokeEnd.duration = 0.6 * duration //0.0333 * 18
-            lineOpacity.duration = 1.0 * duration //0.0333 * 30
-            imageTransform.duration = 1.0 * duration //0.0333 * 30
+            updateAnimationDurations()
         }
     }
 
     override open var isSelected : Bool {
         didSet {
-            if (isSelected != oldValue) {
-                if isSelected {
-                    imageShape.fillColor = imageColorOn?.cgColor
-                } else {
-                    deselect()
-                }
+            guard isSelected != oldValue else { return }
+            imageShape.fillColor = (isSelected ? imageColorOn : imageColorOff)?.cgColor
+            if !isSelected {
+                removeAnimationEffects()
             }
         }
     }
@@ -88,21 +85,38 @@ open class PTCollectionAnimationButton: UIButton {
 
     public init(frame: CGRect, image: UIImage!) {
         super.init(frame: frame)
+        registerTraitChanges()
         self.image = image
         createLayers(image: image)
         addTargets()
     }
 
-    public required init(coder aDecoder: NSCoder) {
-        super.init(frame: .zero)
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        registerTraitChanges()
         createLayers(image: UIImage())
         addTargets()
     }
 
-    fileprivate func createLayers(image: UIImage?) {
-        self.layer.sublayers = nil
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        guard bounds != lastLayoutBounds else { return }
+        lastLayoutBounds = bounds
+        createLayers(image: image)
+    }
 
-        let imageFrame = CGRect(x: frame.size.width / 2 - frame.size.width / 4, y: frame.size.height / 2 - frame.size.height / 4, width: frame.size.width / 2, height: frame.size.height / 2)
+    fileprivate func createLayers(image: UIImage?) {
+        if hasCreatedLayers {
+            updateLayerGeometry(image: image)
+            updateLayerColors()
+            return
+        }
+        hasCreatedLayers = true
+        animationContainer.frame = CGRect(origin: .zero, size: bounds.size)
+        layer.addSublayer(animationContainer)
+
+        let imageFrame = CGRect(x: bounds.size.width / 2 - bounds.size.width / 4, y: bounds.size.height / 2 - bounds.size.height / 4, width: bounds.size.width / 2, height: bounds.size.height / 2)
         let imgCenterPoint = CGPoint(x: imageFrame.midX, y: imageFrame.midY)
         let lineFrame = CGRect(x: imageFrame.origin.x - imageFrame.width / 4, y: imageFrame.origin.y - imageFrame.height / 4 , width: imageFrame.width * 1.5, height: imageFrame.height * 1.5)
 
@@ -115,7 +129,7 @@ open class PTCollectionAnimationButton: UIButton {
         circleShape.path = UIBezierPath(ovalIn: imageFrame).cgPath
         circleShape.fillColor = circleColor?.cgColor
         circleShape.transform = CATransform3DMakeScale(0.0, 0.0, 1.0)
-        self.layer.addSublayer(circleShape)
+        animationContainer.addSublayer(circleShape)
 
         circleMask = CAShapeLayer()
         circleMask.bounds = imageFrame
@@ -152,7 +166,7 @@ open class PTCollectionAnimationButton: UIButton {
             line.strokeEnd = 0.0
             line.opacity = 0.0
             line.transform = CATransform3DMakeRotation(CGFloat(Double.pi) / 5 * (CGFloat(i) * 2 + 1), 0.0, 0.0, 1.0)
-            self.layer.addSublayer(line)
+            animationContainer.addSublayer(line)
             lines.append(line)
         }
 
@@ -165,7 +179,7 @@ open class PTCollectionAnimationButton: UIButton {
         imageShape.path = UIBezierPath(rect: imageFrame).cgPath
         imageShape.fillColor = imageColorOff?.cgColor
         imageShape.actions = ["fillColor": NSNull()]
-        self.layer.addSublayer(imageShape)
+        animationContainer.addSublayer(imageShape)
 
         let imageMask = CALayer()
         imageMask.contents = image?.cgImage
@@ -329,6 +343,97 @@ open class PTCollectionAnimationButton: UIButton {
             0.967,  // 29/30
             1.0     // 30/30
         ]
+        updateAnimationDurations()
+        updateLayerGeometry(image: image)
+        updateLayerColors()
+    }
+
+    private func updateLayerGeometry(image: UIImage?) {
+        let size = bounds.size
+        animationContainer.frame = CGRect(origin: .zero, size: size)
+
+        let imageFrame = CGRect(x: size.width / 4,
+                                y: size.height / 4,
+                                width: size.width / 2,
+                                height: size.height / 2)
+        let imageCenter = CGPoint(x: imageFrame.midX, y: imageFrame.midY)
+        let lineFrame = CGRect(x: imageFrame.origin.x - imageFrame.width / 4,
+                               y: imageFrame.origin.y - imageFrame.height / 4,
+                               width: imageFrame.width * 1.5,
+                               height: imageFrame.height * 1.5)
+
+        circleShape.bounds = imageFrame
+        circleShape.position = imageCenter
+        circleShape.path = UIBezierPath(ovalIn: imageFrame).cgPath
+
+        circleMask.bounds = imageFrame
+        circleMask.position = imageCenter
+        let maskPath = UIBezierPath(rect: imageFrame)
+        maskPath.addArc(withCenter: imageCenter,
+                        radius: 0.1,
+                        startAngle: 0,
+                        endAngle: CGFloat(Double.pi * 2),
+                        clockwise: true)
+        circleMask.path = maskPath.cgPath
+
+        for (index, line) in lines.enumerated() {
+            line.bounds = lineFrame
+            line.position = imageCenter
+            let path = CGMutablePath()
+            path.move(to: CGPoint(x: lineFrame.midX, y: lineFrame.midY))
+            path.addLine(to: CGPoint(x: lineFrame.midX, y: lineFrame.minY))
+            line.path = path
+            line.transform = CATransform3DMakeRotation(CGFloat(Double.pi) / 5 * (CGFloat(index) * 2 + 1), 0, 0, 1)
+        }
+
+        imageShape.bounds = imageFrame
+        imageShape.position = imageCenter
+        imageShape.path = UIBezierPath(rect: imageFrame).cgPath
+        if let imageMask = imageShape.mask {
+            imageMask.contents = image?.cgImage
+            imageMask.bounds = imageFrame
+            imageMask.position = imageCenter
+        }
+
+        updateCircleMaskAnimation(for: imageFrame)
+    }
+
+    private func updateCircleMaskAnimation(for imageFrame: CGRect) {
+        circleMaskTransform.values = [
+            NSValue(caTransform3D: CATransform3DIdentity),
+            NSValue(caTransform3D: CATransform3DIdentity),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 1.25, imageFrame.height * 1.25, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 2.688, imageFrame.height * 2.688, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 3.923, imageFrame.height * 3.923, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 4.375, imageFrame.height * 4.375, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 4.731, imageFrame.height * 4.731, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 5, imageFrame.height * 5, 1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(imageFrame.width * 5, imageFrame.height * 5, 1))
+        ]
+    }
+
+    private func updateAnimationDurations() {
+        let safeDuration = max(0.01, duration)
+        circleTransform.duration = 0.333 * safeDuration
+        circleMaskTransform.duration = 0.333 * safeDuration
+        lineStrokeStart.duration = 0.6 * safeDuration
+        lineStrokeEnd.duration = 0.6 * safeDuration
+        lineOpacity.duration = safeDuration
+        imageTransform.duration = safeDuration
+    }
+
+    private func updateLayerColors() {
+        circleShape.fillColor = circleColor?.cgColor
+        imageShape.fillColor = (isSelected ? imageColorOn : imageColorOff)?.cgColor
+        for line in lines {
+            line.strokeColor = lineColor?.cgColor
+        }
+    }
+
+    private func registerTraitChanges() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (_: PTCollectionAnimationButton, _: UITraitCollection) in
+            self?.updateLayerColors()
+        }
     }
 
     fileprivate func addTargets() {
@@ -380,8 +485,13 @@ open class PTCollectionAnimationButton: UIButton {
     open func deselect() {
         isSelected = false
         imageShape.fillColor = imageColorOff?.cgColor
+        removeAnimationEffects()
+    }
 
-        // remove all animations
+    private func removeAnimationEffects() {
+        // Remove all transient animation effects.
+        // Eliminamos todos los efectos de animación transitorios.
+        // 移除所有临时动画效果。
         circleShape.removeAllAnimations()
         circleMask.removeAllAnimations()
         imageShape.removeAllAnimations()

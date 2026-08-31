@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.6.4 - 2026-08-31 (Unreleased)
+
+- `PTLoginDescButton` 支持使用 `AttributedString` 配置左右富文本，并保留纯文本和原有动作回调兼容入口。
+- 统一 `PTLayoutButton`、`PTActionLayoutButton` 和 `PTSortButton` 的状态渲染、异步图片取消、代次保护、布局安全值和可访问性。
+- 修复 `PTCollectionAnimationButton` 在 Auto Layout、coder 初始化、动态颜色和 Reduce Motion 场景下的图层与动画问题。
+- 修复 `PFloatingButton` 长按手势误删、轨迹计时器覆盖、移除回调重复触发和拖动状态残留；优化轨迹快照和归边动画。
+- 完善 `PTMenuSheetArrowButton` 与 `PTMenuSheetButtonView` 的尺寸变化、方向重绘、菜单项边距、高亮图文、无障碍和可逆动画。
+- 静态检查通过；当前干净 DerivedData 的 Xcode Debug/Release 构建在外部 `KituraContracts` 的 Swift 6 并发诊断处阻断。此前依赖缓存构建曾完成 PooTools 源码编译和类型检查，但 Simulator 最终链接仍被设备版 `Bugly.framework` 与 Metal 工具链搜索路径阻断，未创建 `5.6.4` 标签。
+
 ## 5.6.3 - 2026-08-31 (Unreleased)
 
 - 统一 ScreenShot 的 UIView、UIScrollView、UITableView、UIWindow 和 WKWebView 截图入口，增加当前场景缩放、像素上限和无效尺寸保护。

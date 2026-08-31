@@ -14,7 +14,9 @@ public class PTActionLayoutButton: UIControl {
 
     public var actionMargin:CGFloat = 10
     
-    // 🚀 性能优化：当布局属性发生改变时，标记需要重新更新约束并触发重新布局
+    // English: Mark layout changes and refresh constraints only when a value actually changes.
+    // Español: Marca los cambios de diseño y actualiza las restricciones solo cuando cambia un valor.
+    // 中文：只有属性真正变化时才标记布局并刷新约束。
     public var layoutStyle: PTLayoutButtonStyle = .leftImageRightTitle {
         didSet { if oldValue != layoutStyle { setNeedsConstraintUpdate() } }
     }
@@ -47,7 +49,9 @@ public class PTActionLayoutButton: UIControl {
         didSet { if oldValue != imageContentMode { updateAppearance() } }
     }
         
-    // 重写 `state` 属性
+    // English: Resolve overlapping control states with a stable priority.
+    // Español: Resuelve estados superpuestos del control con una prioridad estable.
+    // 中文：用稳定的优先级解析可能同时存在的控件状态。
     public override var state: UIControl.State {
         if !isEnabled {
             return .disabled
@@ -60,7 +64,9 @@ public class PTActionLayoutButton: UIControl {
         }
     }
 
-    // 🚀 性能优化：只有状态真正改变时，才去刷新外观，避免不必要的重绘
+    // English: Refresh the appearance only after a state transition.
+    // Español: Actualiza la apariencia solo después de una transición de estado.
+    // 中文：只在状态发生变化后刷新外观，避免不必要的重绘。
     public override var isEnabled: Bool {
         didSet { if oldValue != isEnabled { updateAppearance() } }
     }
@@ -91,9 +97,13 @@ public class PTActionLayoutButton: UIControl {
         return tap
     }()
     
-    // 🚀 性能优化：记录上一次布局的大小和是否需要更新约束的标志
+    // English: Cache the last layout size to avoid rebuilding identical constraints.
+    // Español: Guarda el último tamaño para evitar reconstruir restricciones idénticas.
+    // 中文：缓存上一次布局尺寸，避免重复创建相同约束。
     private var lastLayoutSize: CGSize = .zero
     private var needsConstraintUpdate: Bool = true
+    private var renderedImageToken: String?
+    private var isImageLoading = false
     
     public override var intrinsicContentSize: CGSize {
         let titleSize = getKitTitleSize(lineSpacing: labelLineSpace)
@@ -119,11 +129,19 @@ public class PTActionLayoutButton: UIControl {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubviews([imageView, titleLabel])
+        commonInit()
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        addSubviews([imageView, titleLabel])
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        updateAppearance()
     }
     
     private func setNeedsConstraintUpdate() {
@@ -133,11 +151,15 @@ public class PTActionLayoutButton: UIControl {
         updateAppearance()
     }
     
-    // 🚀 性能优化：拦截 layoutSubviews，避免高频触发 SnapKit 重建约束
+    // English: Rebuild SnapKit constraints only when the bounds or layout values change.
+    // Español: Reconstruye las restricciones de SnapKit solo cuando cambian los límites o el diseño.
+    // 中文：仅在尺寸或布局属性变化时重建 SnapKit 约束。
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        // 只有当尺寸真的改变了，或者主动标记了属性改变时，才重新计算约束
+        // English: Avoid repeated constraint work during ordinary layout passes.
+        // Español: Evita recalcular restricciones durante los ciclos de diseño normales.
+        // 中文：避免普通布局周期中重复计算约束。
         if bounds.size != lastLayoutSize || needsConstraintUpdate {
             lastLayoutSize = bounds.size
             needsConstraintUpdate = false
@@ -145,43 +167,44 @@ public class PTActionLayoutButton: UIControl {
         }
     }
     
-    // 将原本在 layoutSubviews 里的 SnapKit 逻辑抽离出来
+    // English: Keep the layout calculation in one place so every state uses the same rules.
+    // Español: Mantén el cálculo del diseño en un solo lugar para que todos los estados usen las mismas reglas.
+    // 中文：将布局计算集中到一个入口，保证所有状态使用相同规则。
     private func updateLayoutConstraints() {
+        let safeImageSize = CGSize(width: max(0, imageSize.width), height: max(0, imageSize.height))
+        let safeSpacing = max(0, midSpacing)
+        let availableWidth = max(0, bounds.width)
+        let availableHeight = max(0, bounds.height)
+
         switch layoutStyle {
         case .leftImageRightTitle:
             imageView.isHidden = false
             titleLabel.isHidden = false
 
-            let currentImageSize: CGFloat = imageSize.width
-            let maxWidth = frame.width - currentImageSize - midSpacing
-            var titleWidth = getKitTitleSize(lineSpacing: labelLineSpace, height: frame.height).width + 5
-            if titleWidth > maxWidth {
-                titleWidth = maxWidth
-            }
-            let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            let maxWidth = max(0, availableWidth - safeImageSize.width - safeSpacing)
+            let measuredTitleWidth = max(0, getKitTitleSize(lineSpacing: labelLineSpace, height: availableHeight).width + 5)
+            let titleWidth = min(measuredTitleWidth, maxWidth)
+            let labelX = max(0, (availableWidth - (safeImageSize.width + safeSpacing + titleWidth)) / 2)
             
             imageView.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(labelX)
-                make.size.equalTo(self.imageSize)
+                make.size.equalTo(safeImageSize)
                 make.centerY.equalToSuperview()
             }
             titleLabel.snp.remakeConstraints { make in
                 make.width.equalTo(titleWidth)
                 make.top.bottom.equalToSuperview()
-                make.left.equalTo(self.imageView.snp.right).offset(midSpacing)
+                make.left.equalTo(self.imageView.snp.right).offset(safeSpacing)
             }
             
         case .leftTitleRightImage:
             imageView.isHidden = false
             titleLabel.isHidden = false
 
-            let currentImageSize: CGFloat = imageSize.width
-            let maxWidth = frame.width - currentImageSize - midSpacing
-            var titleWidth = getKitTitleSize(lineSpacing: labelLineSpace, height: frame.height).width + 5
-            if titleWidth > maxWidth {
-                titleWidth = maxWidth
-            }
-            let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            let maxWidth = max(0, availableWidth - safeImageSize.width - safeSpacing)
+            let measuredTitleWidth = max(0, getKitTitleSize(lineSpacing: labelLineSpace, height: availableHeight).width + 5)
+            let titleWidth = min(measuredTitleWidth, maxWidth)
+            let labelX = max(0, (availableWidth - (safeImageSize.width + safeSpacing + titleWidth)) / 2)
             
             titleLabel.snp.remakeConstraints { make in
                 make.width.equalTo(titleWidth)
@@ -189,8 +212,8 @@ public class PTActionLayoutButton: UIControl {
                 make.left.equalToSuperview().inset(labelX)
             }
             imageView.snp.remakeConstraints { make in
-                make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
-                make.size.equalTo(self.imageSize)
+                make.left.equalTo(self.titleLabel.snp.right).offset(safeSpacing)
+                make.size.equalTo(safeImageSize)
                 make.centerY.equalToSuperview()
             }
             
@@ -198,39 +221,30 @@ public class PTActionLayoutButton: UIControl {
             imageView.isHidden = false
             titleLabel.isHidden = false
 
-            let maxHeight = frame.height - imageSize.height - midSpacing
-            let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace, width: frame.width).height + 5
-            
-            var offSet: CGFloat = 0
-            if titleHeight < maxHeight {
-                offSet = maxHeight - titleHeight
-                if offSet < 0 { offSet = 0 }
-            }
-            
-            let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
+            let maxHeight = max(0, availableHeight - safeImageSize.height - safeSpacing)
+            let measuredTitleHeight = max(0, getKitTitleSize(lineSpacing: labelLineSpace, width: availableWidth).height + 5)
+            let titleHeight = min(measuredTitleHeight, maxHeight)
+            let labelY = max(0, (availableHeight - (titleHeight + safeImageSize.height + safeSpacing)) / 2)
             imageView.snp.remakeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.size.equalTo(self.imageSize)
+                make.size.equalTo(safeImageSize)
                 make.top.equalToSuperview().inset(labelY)
             }
 
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalToSuperview()
-                make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
-                make.height.equalTo(maxHeight - offSet)
+                make.top.equalTo(self.imageView.snp.bottom).offset(safeSpacing)
+                make.height.equalTo(titleHeight)
             }
             
         case .upTitleDownImage:
             imageView.isHidden = false
             titleLabel.isHidden = false
             
-            let maxHeight = frame.height - imageSize.height - midSpacing
-            var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace, width: frame.width).height + 5
-            if titleHeight > maxHeight {
-                titleHeight = maxHeight
-            }
-            
-            let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
+            let maxHeight = max(0, availableHeight - safeImageSize.height - safeSpacing)
+            let measuredTitleHeight = max(0, getKitTitleSize(lineSpacing: labelLineSpace, width: availableWidth).height + 5)
+            let titleHeight = min(measuredTitleHeight, maxHeight)
+            let labelY = max(0, (availableHeight - (titleHeight + safeImageSize.height + safeSpacing)) / 2)
 
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -240,8 +254,8 @@ public class PTActionLayoutButton: UIControl {
             
             imageView.snp.remakeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.size.equalTo(self.imageSize)
-                make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
+                make.size.equalTo(safeImageSize)
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(safeSpacing)
             }
             
         case .title:
@@ -258,7 +272,7 @@ public class PTActionLayoutButton: UIControl {
 
             imageView.snp.remakeConstraints { make in
                 make.centerX.centerY.equalToSuperview()
-                make.size.equalTo(self.imageSize)
+                make.size.equalTo(safeImageSize)
                 make.edges.equalToSuperview().priority(.high)
             }
             
@@ -318,12 +332,25 @@ public class PTActionLayoutButton: UIControl {
     public var progressLayerValueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor
     public var progressLayerUniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount
     
-    // 更新状态时的外观
+    // English: Render the complete appearance for the current control state.
+    // Español: Renderiza la apariencia completa del estado actual del control.
+    // 中文：根据当前控件状态完整渲染外观。
     private func updateAppearance() {
-        switch state {
+        let currentState: UIControl.State
+        if state.contains(.disabled) {
+            currentState = .disabled
+        } else if state.contains(.highlighted) {
+            currentState = .highlighted
+        } else if state.contains(.selected) {
+            currentState = .selected
+        } else {
+            currentState = .normal
+        }
+
+        switch currentState {
         case .normal:
             currentString = normalString
-            currentImage = normalImage ?? currentImage
+            currentImage = normalImage
             currentTitleColor = normalTitleColor
             currentFont = normalFont
             currentBGColor = normalBGColor
@@ -350,7 +377,12 @@ public class PTActionLayoutButton: UIControl {
             currentBGColor = selectedBGColor
             currentAtt = selectedAtt
         default:
-            break
+            currentString = normalString
+            currentImage = normalImage
+            currentTitleColor = normalTitleColor
+            currentFont = normalFont
+            currentBGColor = normalBGColor
+            currentAtt = normalAtt
         }
         
         titleLabel.numberOfLines = numbersOfLine
@@ -358,7 +390,9 @@ public class PTActionLayoutButton: UIControl {
         if let att = currentAtt {
             titleLabel.attributed.text = att
             
-            // 🚀 Bug修复：优雅地管理手势，而不是每次刷新都添加新的
+            // English: Keep one fallback gesture and do not add duplicates on every refresh.
+            // Español: Conserva un solo gesto de respaldo y no añadas duplicados en cada actualización.
+            // 中文：只保留一个兜底手势，避免每次刷新重复添加。
             if !att.value.containsAction() {
                 if !(titleLabel.gestureRecognizers?.contains(labelTapGesture) ?? false) {
                     titleLabel.addGestureRecognizer(labelTapGesture)
@@ -367,10 +401,14 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.removeGestureRecognizer(labelTapGesture)
             }
         } else {
-            // 清理可能存在的手势
+            // English: Remove the fallback gesture when the attributed text owns the action.
+            // Español: Elimina el gesto de respaldo cuando el texto atribuido contiene la acción.
+            // 中文：富文本自身包含动作时移除兜底手势。
             titleLabel.removeGestureRecognizer(labelTapGesture)
             
-            // 🚀 内存泄漏修复：在 block 中使用 [weak self] 防止循环引用
+            // English: Capture the control weakly because the attributed text is retained by the label.
+            // Español: Captura el control débilmente porque la etiqueta conserva el texto atribuido.
+            // 中文：富文本会被标签持有，因此闭包弱引用控件以避免循环引用。
             let nameAtt: ASAttributedString = """
                         \(wrap: .embedding("""
                         \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace),.lineBreakMode(self.textLineBreakMode)))
@@ -385,7 +423,16 @@ public class PTActionLayoutButton: UIControl {
         backgroundColor = currentBGColor
         imageView.contentMode = self.imageContentMode
         
-        if let currentImage = currentImage {
+        let imageToken = imageSourceToken(currentImage)
+        if renderedImageToken != imageToken {
+            renderedImageToken = imageToken
+            imageView.cancelImageLoad()
+            imageView.image = nil
+            isImageLoading = false
+        }
+
+        if let currentImage, !isImageLoading {
+            isImageLoading = true
             imageView.loadImage(contentData: currentImage,
                                 radius: self.progressLayerRadius,
                                 topLeft: self.progressLayerTopLeft,
@@ -399,12 +446,35 @@ public class PTActionLayoutButton: UIControl {
                                 showValueLabel: self.progressLayerShowValueLabel,
                                 valueLabelFont: self.progressLayerValueLabelFont,
                                 valueLabelColor: self.progressLayerValueLabelColor,
-                                uniCount: self.progressLayerUniCount) // 你的自定义方法
-        } else {
-            imageView.image = nil
+                                uniCount: self.progressLayerUniCount,
+                                loadFinish: { [weak self] _ in
+                guard let self, self.renderedImageToken == imageToken else { return }
+                self.isImageLoading = false
+            })
+        } else if currentImage == nil {
+            isImageLoading = false
         }
         
-        setNeedsDisplay() // 使用 setNeedsDisplay 而不是 setNeedsLayout，除非约束确实需要变
+        accessibilityLabel = currentString
+        accessibilityValue = currentState == .disabled ? "Disabled" : nil
+        setNeedsLayout()
+    }
+
+    private func imageSourceToken(_ source: Any?) -> String {
+        guard let source else { return "none" }
+        if let image = source as? UIImage {
+            return "image:\(ObjectIdentifier(image)):\(image.size.width)x\(image.size.height)"
+        }
+        if let url = source as? URL {
+            return "url:\(url.absoluteString)"
+        }
+        if let string = source as? String {
+            return "string:\(string)"
+        }
+        if let data = source as? Data {
+            return "data:\(data.count):\(data.hashValue)"
+        }
+        return String(reflecting: source)
     }
     
     @objc private func handleLabelTap() {
@@ -577,15 +647,16 @@ public extension PTActionLayoutButton {
     @objc func addActionHandlers(handler:@escaping PTControlTouchedBlock) {
         self.addActionHandler(for: .touchUpInside) { [weak self] (sender:PTActionLayoutButton) in
             handler(sender)
-            
-            // 2. 将原本分散在各处的 0.1s 延迟刷新统一集中到这里
-            PTGCDManager.shared.delayOnMain(time: 0.1) {
-                self?.updateAppearance()
-            }
+            self?.updateAppearance()
         }
     }
-        
-    @objc func removeTargerAndAction() {
+
+    @objc func removeTargetAndAction() {
         removeTarget(nil, action: nil, for: .allEvents)
+    }
+
+    @available(*, deprecated, renamed: "removeTargetAndAction")
+    @objc func removeTargerAndAction() {
+        removeTargetAndAction()
     }
 }

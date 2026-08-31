@@ -39,9 +39,9 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.3'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.3'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.3'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
 ```
 
 ### Swift 6 迁移要点

@@ -22,11 +22,15 @@ open class PFloatingButton: UIButton {
     // MARK: - 回调闭包
     public var longPressBlock: PTFloatingButtonTask? {
         didSet {
-            // 清理旧的长按手势
-            gestureRecognizers?
-                .filter { $0 is UILongPressGestureRecognizer }
-                .forEach { removeGestureRecognizer($0) }
-            
+            // Keep only the gesture recognizer owned by this button.
+            // Conservamos únicamente el reconocedor de gestos propiedad de este botón.
+            // 只移除当前按钮自己创建的手势，避免破坏调用方添加的长按手势。
+            if let longPressGestureRecognizer {
+                removeGestureRecognizer(longPressGestureRecognizer)
+                self.longPressGestureRecognizer = nil
+                isLongPressActive = false
+            }
+
             guard longPressBlock != nil else { return }
             
             let longPressGestureRecognizer = UILongPressGestureRecognizer { [weak self] sender in
@@ -34,18 +38,23 @@ open class PFloatingButton: UIButton {
                 
                 switch gestureRecognizer.state {
                 case .began:
+                    guard !self.isLongPressActive else { return }
+                    self.isLongPressActive = true
                     self.longPressBlock?(self)
                     self.skipTapEventOnce = true
                     if self.draggableAfterLongPress {
                         self.draggable = true
                     }
-                case .cancelled, .ended, .failed: // 增加对 ended 和 failed 的处理
+                case .cancelled, .ended, .failed:
+                    guard self.isLongPressActive else { return }
+                    self.isLongPressActive = false
                     self.longPressEndedBlock?(self)
                 default: break
                 }
             }
             longPressGestureRecognizer.cancelsTouchesInView = false
             longPressGestureRecognizer.allowableMovement = 0
+            self.longPressGestureRecognizer = longPressGestureRecognizer
             addGestureRecognizer(longPressGestureRecognizer)
         }
     }
@@ -78,10 +87,15 @@ open class PFloatingButton: UIButton {
     private var willBeRemoved = false
     private var draggableAfterLongPress = false
     private var isRecordingDraggingPathEnabled = false
-    
-    // 优化：使用 Swift 原生数组，并且存储 UIView（因为只做视觉展示）
+    private var isLongPressActive = false
+    private var lastTraceCenter: CGPoint?
+    private var didInstallDefaultTarget = false
+    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
+
+    // Store only the lightweight trace views required for the visible trail.
+    // Guardamos únicamente las vistas ligeras necesarias para la estela visible.
+    // 只保留显示轨迹所需的轻量视图。
     private var traceViews = [UIView]()
-    private var autoAddTraceButtonTimer: Timer?
     
     private lazy var draggingPath: UIBezierPath = {
         return UIBezierPath()
@@ -105,17 +119,17 @@ open class PFloatingButton: UIButton {
         defaultSetting()
     }
     
-    deinit {
-//        autoAddTraceButtonTimer?.invalidate()
-    }
-    
     private func defaultSetting() {
+        guard !didInstallDefaultTarget else { return }
+        didInstallDefaultTarget = true
         addTarget(self, action: #selector(handleTap), for: .touchUpInside)
     }
     
     // MARK: - 触摸事件处理
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         isDragging = false
+        skipTapEventOnce = false
+        lastTraceCenter = nil
         super.touchesBegan(touches, with: event)
         guard let touch = touches.first else { return }
         
@@ -176,6 +190,8 @@ open class PFloatingButton: UIButton {
             }
         }
         isDragging = false
+        touchBeginPoint = nil
+        lastTraceCenter = nil
         dragEnd?()
     }
 
@@ -241,14 +257,15 @@ open class PFloatingButton: UIButton {
         
         autoDockingBlock?(self) // 触发归边开始回调
         
-        UIView.animate(withDuration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION, delay: 0, options: .curveEaseOut, animations: {
+        animateDocking(duration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION, animations: {
             if self.center.x >= middleX {
                 self.center.x = superviewWidth - self.bounds.size.width / 2
             } else {
                 self.center.x = self.bounds.size.width / 2
             }
             _ = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
-        }) { _ in
+        }) { [weak self] in
+            guard let self else { return }
             self.autoDockEndedBlock?(self)
         }
     }
@@ -258,18 +275,41 @@ open class PFloatingButton: UIButton {
         
         autoDockingBlock?(self)
         
-        UIView.animate(withDuration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION, delay: 0, options: .curveEaseOut, animations: {
+        animateDocking(duration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION, animations: {
             self.center = self.dockPoint
             _ = self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
             _ = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
-        }) { _ in
+        }) { [weak self] in
+            guard let self else { return }
             self.autoDockEndedBlock?(self)
+        }
+    }
+
+    private func animateDocking(duration: TimeInterval, animations: @escaping () -> Void, completion: @escaping () -> Void) {
+        let safeDuration = max(0, duration)
+        if UIAccessibility.isReduceMotionEnabled || safeDuration == 0 {
+            UIView.performWithoutAnimation(animations)
+            completion()
+            return
+        }
+
+        UIView.animate(withDuration: safeDuration,
+                       delay: 0,
+                       options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                       animations: animations) { _ in
+            completion()
         }
     }
     
     // 优化：使用 snapshot 替代复杂的 Archiver，极大提升性能
     private func addTraceView() {
         guard let superview = superview else { return }
+
+        let minimumTraceDistance: CGFloat = 8
+        if let lastTraceCenter, distance(from: lastTraceCenter, to: center) < minimumTraceDistance {
+            return
+        }
+        lastTraceCenter = center
         
         if traceViews.count >= PFloatingButton.RC_TRACES_NUMBER {
             let oldTrace = traceViews.removeFirst()
@@ -283,18 +323,18 @@ open class PFloatingButton: UIButton {
         
         traceViews.append(traceView)
         superview.insertSubview(traceView, belowSubview: self)
-        
-        autoAddTraceButtonTimer?.invalidate()
-        autoAddTraceButtonTimer = Timer.scheduledTimer(withTimeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, repeats: false) { [weak self, weak traceView] _ in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                guard let self = self, let viewToRemove = traceView else { return }
-                UIView.animate(withDuration: 0.2, animations: {
-                    viewToRemove.alpha = 0
-                }) { _ in
-                    viewToRemove.removeFromSuperview()
-                    self.traceViews.removeAll(where: { $0 == viewToRemove })
-                }
-            }
+
+        // Each trace owns its delayed fade, so rapid dragging does not replace one shared timer.
+        // Cada traza posee su propio desvanecimiento retrasado, sin reemplazar un temporizador compartido.
+        // 每条轨迹独立管理延迟淡出，快速拖动时不会互相覆盖计时器。
+        UIView.animate(withDuration: 0.2,
+                       delay: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL,
+                       options: [.beginFromCurrentState, .allowUserInteraction]) {
+            traceView.alpha = 0
+        } completion: { [weak self, weak traceView] _ in
+            guard let self, let traceView else { return }
+            traceView.removeFromSuperview()
+            self.traceViews.removeAll { $0 === traceView }
         }
     }
     
@@ -311,8 +351,12 @@ open class PFloatingButton: UIButton {
     }
     
     public func removeTraces() {
-        traceViews.forEach { $0.removeFromSuperview() }
+        traceViews.forEach {
+            $0.layer.removeAllAnimations()
+            $0.removeFromSuperview()
+        }
         traceViews.removeAll()
+        lastTraceCenter = nil
     }
     
     public func setDraggableAfterLongPress(_ enabled: Bool) {
@@ -320,6 +364,11 @@ open class PFloatingButton: UIButton {
     }
     
     public func triggerWillBeRemoved() {
+        notifyWillBeRemovedIfNeeded()
+    }
+
+    private func notifyWillBeRemovedIfNeeded() {
+        guard !willBeRemoved else { return }
         willBeRemoved = true
         willBeRemovedBlock?(self)
     }
@@ -332,11 +381,24 @@ open class PFloatingButton: UIButton {
         }
     }
     
-    public override func removeFromSuperview() { // 修正了拼写，复写系统的 removeFromSuperview
-        willBeRemovedBlock?(self)
+    public override func removeFromSuperview() {
+        // Notify once before removal and reset the state when the button is attached again.
+        // Notificamos una sola vez antes de retirar la vista y reiniciamos el estado al volver a insertarla.
+        // 移除前只通知一次，重新添加到层级后再重置状态。
+        notifyWillBeRemovedIfNeeded()
         removeTraces()
-        autoAddTraceButtonTimer?.invalidate()
         super.removeFromSuperview()
+    }
+
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if superview != nil {
+            willBeRemoved = false
+        }
+    }
+
+    private func distance(from firstPoint: CGPoint, to secondPoint: CGPoint) -> CGFloat {
+        hypot(firstPoint.x - secondPoint.x, firstPoint.y - secondPoint.y)
     }
 }
 

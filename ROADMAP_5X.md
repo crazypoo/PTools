@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.2`（2026-08-30）
-> 当前候选：`5.6.3`（2026-08-31）
+> 基线：`5.6.3`（2026-08-31，已有同名 tag）
+> 当前候选：`5.6.4`（2026-08-31）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -240,6 +240,29 @@
 - ✅ Cell 异步回调均有复用代次保护；可取消的 AVAsset、地图和进度任务在复用时停止，不能取消的旧兼容回调只允许通过代次校验。
 - ✅ 修改文件均通过 Swift 前端语法解析，质量扫描、构建入口检查、Package manifest 和 `git diff --check` 通过。
 - ⛔ Xcode Debug 已完成 PooTools Swift 源码编译，但最终链接受外部 `PooTools.framework` 缺失和 Metal 搜索路径阻断；Release 在外部 `KituraContracts` 的 Swift 6 并发诊断处停止。未进行真机或运行时人工回归。
+
+## 5.6.4：Button 模块稳定性、性能和功能统一
+
+### 任务清单
+
+- ✅ `CORE-564-01`：为 `PTLoginDescButton` 增加基于 `AttributedString` 的左右富文本入口；保留原有纯文本配置、动作回调和默认布局，并对富文本动作范围提供无障碍兼容。
+- ✅ `CORE-564-02`：统一 `PTLayoutButton` 的 normal、selected、highlighted 和 disabled 状态优先级；异步图片加载增加取消、代次校验、进度边界和状态重置。
+- ✅ `CORE-564-03`：修复 `PTActionLayoutButton` 的 coder 初始化、动态图片重复请求、旧状态残留、负尺寸约束和重复刷新；保留旧拼写入口并提供正确的兼容方法。
+- ✅ `CORE-564-04`：收敛 `PTSortButton` 的排序状态渲染、箭头图片、约束刷新、异步图片代次和可访问性，移除重复状态分支和不安全初始化路径。
+- ✅ `CORE-564-05`：修复 `PTCollectionAnimationButton` 在 Auto Layout 后使用零尺寸图层、清空宿主图层和重复创建动画资源的问题；补齐 coder、动态颜色和 Reduce Motion 边界。
+- ✅ `CORE-564-06`：修复 `PFloatingButton` 清理调用方长按手势、轨迹计时器互相覆盖、移除回调重复触发和拖动状态残留；降低轨迹快照频率并支持 Reduce Motion 归边。
+- ✅ `CORE-564-07`：完善 `PTMenuSheetArrowButton` 的尺寸变化、方向重绘、动态颜色和 Reduce Motion；`PTMenuSheetButtonView` 支持菜单项尺寸、边距、对齐、高亮图文、无障碍和可逆动画。
+- ✅ `CORE-564-08`：完成修改文件 Swift 前端解析、质量扫描和 `git diff --check`；本轮未新增 `try!`、`as!`、`nonisolated(unsafe)` 或未登记的 `@unchecked Sendable`。
+- ⛔ `CORE-564-09`：已执行 Xcode `PooTools` Debug 以及 `PooTools-Example` Simulator Debug/Release；当前使用干净 DerivedData 的构建在外部 `Pods/KituraContracts` 的 Swift 6 并发诊断处提前阻断。此前依赖缓存可用的一次构建曾完成 PooTools 源码编译和类型检查，但最终链接仍被设备版 `Pods/Bugly/Bugly.framework` 与缺失 Metal 工具链搜索路径阻断，因此不创建 `5.6.4` tag。
+
+### 5.6.4 实施与验证说明
+
+- ✅ `PTLoginDescButton` 的富文本由 `AttributedString` 解析为动作范围；无动作文本仍可使用整侧兼容回调，左右内容为空时不会留下空布局占位。
+- ✅ Layout、Action、Sort 按钮的状态渲染均以单一入口计算，异步图片结果不会覆盖新的状态或复用后的内容；负尺寸、空图片和 coder 场景都有安全兜底。
+- ✅ Collection Animation 的动画图层现在挂在私有容器中，布局尺寸变化只更新现有图层；浮动按钮轨迹不再通过共享 Timer 互相取消，移除通知保持幂等。
+- ✅ MenuSheet 菜单项改用私有原生内容布局，完整消费 `PTMenuSheetButtonItems` 的尺寸、边距、标题对齐、图片模式和高亮配置，不依赖 iOS 15 已弃用的 UIButton edge-inset API。
+- ✅ 代码注释遵循英语、西班牙语、中文三语约定；未修改第三方依赖和 Pods 源码。
+- ⚠️ 当前静态检查和此前依赖缓存构建均未发现 PooTools 本批新增 warning/error；最新干净 DerivedData 的 Debug/Release 构建被外部 `KituraContracts` Swift 6 诊断提前阻断，依赖恢复后还需继续验证 PooTools 源码和最终链接。已知最终链接还受设备版 Bugly 产物及缺失 Metal 工具链搜索路径影响，待提供兼容依赖产物后补齐 Debug/Release 完整链接验证和发布标签。
 
 ## 发布前固定检查
 

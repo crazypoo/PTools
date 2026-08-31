@@ -7,388 +7,363 @@
 //
 
 import UIKit
-import SwifterSwift
-import SnapKit
 
-@objc public enum PTSortButtonType:Int {
-    case Normal,Increase,Decrease
+@objc public enum PTSortButtonType: Int {
+    case Normal
+    case Increase
+    case Decrease
 }
 
-//界面元素屬性
-@objc public enum PTSortButtonShowType:Int {
-    case Tres,Dos
+// English: Selects whether the button displays one or two sort indicators.
+// Español: Selecciona si el botón muestra uno o dos indicadores de ordenación.
+// 中文：选择按钮显示一个还是两个排序指示图标。
+@objc public enum PTSortButtonShowType: Int {
+    case Tres
+    case Dos
 }
 
 @objcMembers
 public class PTSortButton: UIView {
-    
-    public var sortTypeHandler:((PTSortButtonType)->Void)?
-    
-    public var sortType:PTSortButtonType = .Normal {
+
+    public var sortTypeHandler: ((PTSortButtonType) -> Void)?
+
+    public var sortType: PTSortButtonType = .Normal {
         didSet {
-            switch showType {
-            case .Tres:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                        self.downImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleNormalColor
-                    titleLabel.font = buttonTitleFont
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                        self.downImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleSelectedColor
-                    titleLabel.font = buttonTitleSelectedFont
-                case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
-                        self.downImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleSelectedColor
-                    titleLabel.font = buttonTitleSelectedFont
-                }
-            case .Dos:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleNormalColor
-                    titleLabel.font = buttonTitleFont
-                case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleSelectedColor
-                    titleLabel.font = buttonTitleSelectedFont
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                    titleLabel.textColor = buttonTitleSelectedColor
-                    titleLabel.font = buttonTitleSelectedFont
-                }
+            if oldValue != sortType {
+                render()
             }
         }
     }
-    
-    public var buttonTitle:String = "" {
+
+    public var buttonTitle: String = "" {
         didSet {
-            titleLabel.text = buttonTitle
-            layoutSubviews()
-        }
-    }
-    
-    public var buttonTitleFont:UIFont = .appfont(size: 14) {
-        didSet {
-            titleLabel.font = buttonTitleFont
-            layoutSubviews()
-        }
-    }
-    
-    public var buttonTitleSelectedFont:UIFont = .appfont(size: 14) {
-        didSet {
-            switch sortType {
-            case .Increase,.Decrease:
-                titleLabel.font = buttonTitleSelectedFont
-                layoutSubviews()
-            default:
-                titleLabel.font = buttonTitleFont
-                layoutSubviews()
+            if oldValue != buttonTitle {
+                render()
+                invalidateIntrinsicContentSize()
             }
         }
     }
-    
-    public var buttonTitleSelectedColor:UIColor = .white {
+
+    public var buttonTitleFont: UIFont = .appfont(size: 14) {
         didSet {
-            switch sortType {
-            case .Increase,.Decrease:
-                titleLabel.textColor = buttonTitleSelectedColor
-            default:
-                titleLabel.textColor = buttonTitleNormalColor
+            if oldValue != buttonTitleFont {
+                render()
+                invalidateIntrinsicContentSize()
             }
         }
     }
-    
-    public var buttonTitleNormalColor:UIColor = .lightGray {
+
+    public var buttonTitleSelectedFont: UIFont = .appfont(size: 14) {
         didSet {
-            switch sortType {
-            case .Normal:
-                titleLabel.textColor = buttonTitleNormalColor
-            default:
-                titleLabel.textColor = buttonTitleSelectedColor
+            if oldValue != buttonTitleSelectedFont {
+                render()
+                invalidateIntrinsicContentSize()
             }
         }
     }
-    
-    public var upNormalImage:Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+
+    public var buttonTitleSelectedColor: UIColor = .white {
         didSet {
-            switch showType {
-            case .Tres:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                }
-            case .Dos:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                }
+            if oldValue != buttonTitleSelectedColor {
+                render()
             }
         }
     }
-    
-    public var upSelectedImage:Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+
+    public var buttonTitleNormalColor: UIColor = .lightGray {
         didSet {
-            switch showType {
-            case .Tres:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                }
-            case .Dos:
-                switch sortType {
-                case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                        self.upImage.image = value.firstImage
-                    })
-                }
+            if oldValue != buttonTitleNormalColor {
+                render()
             }
         }
     }
-    
-    public var dosDecreaseImage:Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+
+    public var upNormalImage: Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSize(width: 10, height: 10)) {
         didSet {
-            switch sortType {
-            case .Normal:
-                upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
-                    self.upImage.image = value.firstImage
-                })
-            case .Decrease:
-                upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
-                    self.upImage.image = value.firstImage
-                })
-            case .Increase:
-                upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
-                    self.upImage.image = value.firstImage
-                })
+            render()
+        }
+    }
+
+    public var upSelectedImage: Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSize(width: 10, height: 10)) {
+        didSet {
+            render()
+        }
+    }
+
+    public var dosDecreaseImage: Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSize(width: 10, height: 10)) {
+        didSet {
+            render()
+        }
+    }
+
+    public var dowmNormalImage: Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSize(width: 10, height: 10)) {
+        didSet {
+            render()
+        }
+    }
+
+    public var downSelectedImage: Any = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 10, height: 10)) {
+        didSet {
+            render()
+        }
+    }
+
+    public var contentImageSpace: CGFloat = 2 {
+        didSet {
+            if oldValue != contentImageSpace {
+                setNeedsLayout()
             }
         }
     }
-    
-    public var dowmNormalImage:Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+
+    public var imageSpace: CGFloat = 4 {
         didSet {
-            switch sortType {
-            case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
-            case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
-            case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
+            if oldValue != imageSpace {
+                setNeedsLayout()
             }
         }
     }
-    
-    public var downSelectedImage:Any = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+
+    public var imageSize: CGSize = CGSize(width: 6, height: 4) {
         didSet {
-            switch sortType {
-            case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
-            case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
-            case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
-                    self.downImage.image = value.firstImage
-                })
+            if oldValue != imageSize {
+                setNeedsLayout()
+                invalidateIntrinsicContentSize()
             }
         }
     }
-    
-    public var contentImageSpace:CGFloat = 2 {
-        didSet {
-            layoutSubviews()
-        }
-    }
-    
-    public var imageSpace:CGFloat = 4 {
-        didSet {
-            layoutSubviews()
-        }
-    }
-    
-    public var imageSize:CGSize = CGSize(width: 6, height: 4) {
-        didSet {
-            layoutSubviews()
-        }
-    }
-    
-    fileprivate lazy var titleLabel:UILabel = {
+
+    fileprivate lazy var titleLabel: UILabel = {
         let view = UILabel()
-        view.font = buttonTitleFont
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.textColor = buttonTitleNormalColor
-        view.text = buttonTitle
+        view.adjustsFontForContentSizeCategory = true
         return view
     }()
-    
-    fileprivate lazy var upImage:UIImageView = {
+
+    fileprivate lazy var upImage: UIImageView = {
         let view = UIImageView()
-        view.loadImage(contentData: upNormalImage)
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
         return view
     }()
-    
-    fileprivate lazy var downImage:UIImageView = {
+
+    fileprivate lazy var downImage: UIImageView = {
         let view = UIImageView()
-        view.loadImage(contentData: dowmNormalImage)
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
         return view
     }()
-    
-    fileprivate var showType:PTSortButtonShowType = .Tres
-    
-    public init(showType:PTSortButtonShowType = .Tres) {
+
+    fileprivate var showType: PTSortButtonShowType = .Tres
+    private var lastLayoutSize: CGSize = .zero
+    private var needsConstraintUpdate = true
+    private var upImageToken: String?
+    private var downImageToken: String?
+    private var hasInstalledSubviews = false
+
+    public init(showType: PTSortButtonShowType = .Tres) {
         self.showType = showType
         super.init(frame: .zero)
-        setUpViews()
-        layoutSubviews()
+        commonInit()
     }
-    
-    override init(frame: CGRect) {
+
+    override public init(frame: CGRect) {
         super.init(frame: frame)
-        setUpViews()
-        layoutSubviews()
+        commonInit()
     }
-    
+
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        setUpViews()
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        render()
+    }
+
     func setUpViews() {
-        var subViews = [UIView]()
+        guard !hasInstalledSubviews else { return }
+        hasInstalledSubviews = true
+
         switch showType {
         case .Tres:
-            subViews = [titleLabel,upImage,downImage]
-        default:
-            subViews = [titleLabel,upImage]
+            addSubview(titleLabel)
+            addSubview(upImage)
+            addSubview(downImage)
+        case .Dos:
+            addSubview(titleLabel)
+            addSubview(upImage)
+            downImage.isHidden = true
         }
-        addSubviews(subViews)
-        
-        let tap = UITapGestureRecognizer { sender in
-            switch self.sortType {
-            case .Normal:
-                self.sortType = .Increase
-            case .Increase:
-                self.sortType = .Decrease
-            case .Decrease:
-                self.sortType = .Normal
-            }
-            
-            self.sortTypeHandler?(self.sortType)
-        }
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tap)
     }
-        
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    private func render() {
+        guard hasInstalledSubviews else { return }
+
+        let isSelected = sortType != .Normal
+        titleLabel.text = buttonTitle
+        titleLabel.font = isSelected ? buttonTitleSelectedFont : buttonTitleFont
+        titleLabel.textColor = isSelected ? buttonTitleSelectedColor : buttonTitleNormalColor
+
+        let upSource: Any
+        let downSource: Any?
+        switch showType {
+        case .Tres:
+            switch sortType {
+            case .Normal:
+                upSource = upNormalImage
+                downSource = dowmNormalImage
+            case .Increase:
+                upSource = upSelectedImage
+                downSource = dowmNormalImage
+            case .Decrease:
+                upSource = upNormalImage
+                downSource = downSelectedImage
+            }
+        case .Dos:
+            switch sortType {
+            case .Normal:
+                upSource = upNormalImage
+            case .Increase:
+                upSource = upSelectedImage
+            case .Decrease:
+                upSource = dosDecreaseImage
+            }
+            downSource = nil
+        }
+
+        loadImage(upSource, into: upImage, token: &upImageToken)
+        if let downSource {
+            loadImage(downSource, into: downImage, token: &downImageToken)
+        } else if downImageToken != nil {
+            downImageToken = nil
+            downImage.cancelImageLoad()
+            downImage.image = nil
+        }
+
+        accessibilityLabel = buttonTitle
+        accessibilityValue = accessibilitySortValue
+        setNeedsLayout()
     }
-    
+
+    private var accessibilitySortValue: String {
+        switch sortType {
+        case .Normal: return "Normal"
+        case .Increase: return "Increase"
+        case .Decrease: return "Decrease"
+        }
+    }
+
+    private func loadImage(_ source: Any, into imageView: UIImageView, token: inout String?) {
+        let newToken = imageSourceToken(source)
+        guard token != newToken else { return }
+
+        token = newToken
+        imageView.cancelImageLoad()
+        imageView.image = nil
+        imageView.loadImage(contentData: source)
+    }
+
+    private func imageSourceToken(_ source: Any) -> String {
+        if let image = source as? UIImage {
+            return "image:\(ObjectIdentifier(image)):\(image.size.width)x\(image.size.height)"
+        }
+        if let url = source as? URL {
+            return "url:\(url.absoluteString)"
+        }
+        if let string = source as? String {
+            return "string:\(string)"
+        }
+        if let data = source as? Data {
+            return "data:\(data.count):\(data.hashValue)"
+        }
+        return String(reflecting: source)
+    }
+
+    @objc private func handleTap() {
+        switch sortType {
+        case .Normal:
+            sortType = .Increase
+        case .Increase:
+            sortType = .Decrease
+        case .Decrease:
+            sortType = .Normal
+        }
+        sortTypeHandler?(sortType)
+        accessibilityValue = accessibilitySortValue
+    }
+
     public override func layoutSubviews() {
         super.layoutSubviews()
-        titleLabel.text = buttonTitle
-        
-        let halfHeight = (frame.height - imageSpace) / 2
-        let realImageSize: CGSize = halfHeight < self.imageSize.height
-            ? CGSize(width: self.imageSize.width, height: halfHeight)
-            : self.imageSize
-        
-        let contentMax = frame.width - contentImageSpace - self.imageSize.width
-        var titleWidth = titleLabel.sizeFor(height: frame.height).width + 5
-        if titleWidth > contentMax {
-            titleWidth = contentMax
+        guard bounds.size != lastLayoutSize || needsConstraintUpdate else { return }
+
+        lastLayoutSize = bounds.size
+        needsConstraintUpdate = false
+
+        let safeImageSize = CGSize(width: max(0, imageSize.width), height: max(0, imageSize.height))
+        let safeContentSpace = max(0, contentImageSpace)
+        let safeImageSpace = max(0, imageSpace)
+        let width = max(0, bounds.width)
+        let height = max(0, bounds.height)
+        let maxTitleWidth = max(0, width - safeContentSpace - safeImageSize.width)
+        let measuredTitleWidth = min(maxTitleWidth,
+                                     max(0, titleLabel.sizeThatFits(CGSize(width: maxTitleWidth,
+                                                                            height: height)).width + 5))
+        let titleLeft = max(0, (width - measuredTitleWidth - safeContentSpace - safeImageSize.width) / 2)
+        let realImageSize: CGSize
+        if showType == .Tres {
+            let availableImageHeight = max(0, (height - safeImageSpace) / 2)
+            realImageSize = CGSize(width: safeImageSize.width,
+                                   height: min(safeImageSize.height, availableImageHeight))
+        } else {
+            realImageSize = CGSize(width: safeImageSize.width,
+                                   height: min(safeImageSize.height, height))
         }
-        var titleLeft = (frame.width - titleWidth - contentImageSpace - self.imageSize.width) / 2
-        if titleLeft < 0 {
-            titleLeft = 0
-        }
+
         titleLabel.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.equalToSuperview().inset(titleLeft)
-            make.width.equalTo(titleWidth)
+            make.width.equalTo(measuredTitleWidth)
         }
-        
+
         upImage.snp.remakeConstraints { make in
-            make.left.equalTo(self.titleLabel.snp.right).offset(contentImageSpace)
+            make.left.equalTo(titleLabel.snp.right).offset(safeContentSpace)
             make.size.equalTo(realImageSize)
-            switch showType {
-            case .Tres:
-                make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-(imageSpace / 2))
-            case .Dos:
+            if showType == .Tres {
+                make.bottom.equalTo(titleLabel.snp.centerY).offset(-(safeImageSpace / 2))
+            } else {
                 make.centerY.equalToSuperview()
             }
             make.right.lessThanOrEqualToSuperview()
         }
-        
-        switch showType {
-        case .Tres:
+
+        if showType == .Tres {
             downImage.snp.remakeConstraints { make in
-                make.left.size.right.equalTo(self.upImage)
-                make.top.equalTo(self.upImage.snp.bottom).offset(imageSpace)
+                make.left.right.equalTo(upImage)
+                make.top.equalTo(upImage.snp.bottom).offset(safeImageSpace)
+                make.height.equalTo(realImageSize.height)
             }
-        default:break
         }
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        let titleSize = titleLabel.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude,
+                                                        height: CGFloat.greatestFiniteMagnitude))
+        let safeImageSize = CGSize(width: max(0, imageSize.width), height: max(0, imageSize.height))
+        let width = titleSize.width + max(0, contentImageSpace) + safeImageSize.width
+        let height = max(titleSize.height, showType == .Tres ? safeImageSize.height * 2 + max(0, imageSpace) : safeImageSize.height)
+        return CGSize(width: width, height: height)
+    }
+
+    public override func accessibilityActivate() -> Bool {
+        handleTap()
+        return true
     }
 }

@@ -402,6 +402,8 @@ public class PTLayoutButton: UIButton {
     }
 
     private var isButtonLoading: Bool = false
+    private var imageLoadTask: Task<Void, Never>?
+    private var imageLoadGeneration = 0
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -418,6 +420,10 @@ public class PTLayoutButton: UIButton {
         if #unavailable(iOS 15.0) {
             switchLayoutStyle()
         }
+    }
+
+    deinit {
+        imageLoadTask?.cancel()
     }
 
     fileprivate func switchLayoutStyle() {
@@ -587,8 +593,25 @@ public class PTLayoutButton: UIButton {
         case .trailing:
             btnconfig.titleAlignment = .trailing
         }
-        configurationUpdateHandler = { sender in
-            switch sender.state {
+        let baseConfig = btnconfig
+        configurationUpdateHandler = { [weak self] sender in
+            guard let self else { return }
+            // English: Reset the state-specific values before applying the current state.
+            // Español: Restablece los valores específicos del estado antes de aplicar el estado actual.
+            // 中文：应用当前状态前先重置状态专属值，避免上一个状态残留。
+            btnconfig = baseConfig
+            let currentState: UIControl.State
+            if sender.state.contains(.disabled) {
+                currentState = .disabled
+            } else if sender.state.contains(.highlighted) {
+                currentState = .highlighted
+            } else if sender.state.contains(.selected) {
+                currentState = .selected
+            } else {
+                currentState = .normal
+            }
+
+            switch currentState {
             case .normal:
                 btnconfig.showsActivityIndicator = self.isButtonLoading
                 if !self.normalTitle.stringIsEmpty() {
@@ -634,7 +657,7 @@ public class PTLayoutButton: UIButton {
                 }
 
                 if !self.showHightlightActivity {
-                    if self.imageSize != .zero, let image = self.hightlightImage {
+                    if self.imageSize != .zero, let image = self.hightlightImage ?? self.normalImage {
                         btnconfig.image = image.transformImage(size: self.imageSize)
                     }
                 }
@@ -661,7 +684,7 @@ public class PTLayoutButton: UIButton {
                     }
                 }
 
-                if self.imageSize != .zero, let image = self.selectedImage {
+                if self.imageSize != .zero, let image = self.selectedImage ?? self.normalImage {
                     btnconfig.image = image.transformImage(size: self.imageSize)
                 }
                 btnconfig.baseBackgroundColor = self.configBackgroundSelectedColor
@@ -682,7 +705,7 @@ public class PTLayoutButton: UIButton {
                     }
                 }
 
-                if self.imageSize != .zero, let image = self.disabledImage {
+                if self.imageSize != .zero, let image = self.disabledImage ?? self.normalImage {
                     btnconfig.image = image.transformImage(size: self.imageSize)
                 }
                 btnconfig.baseBackgroundColor = self.configBackgroundDisableColor
@@ -746,6 +769,7 @@ public class PTLayoutButton: UIButton {
 }
 
 extension PTLayoutButton {
+    @MainActor
     func layoutLoadImage(contentData:Any,
                          iCloudDocumentName:String = "",
                          borderWidth:CGFloat? = nil,
@@ -756,7 +780,15 @@ extension PTLayoutButton {
                          uniCount:Int? = nil,
                          emptyImage:UIImage? = nil,
                          controlState:UIControl.State = .normal) {
-        Task {
+        imageLoadGeneration &+= 1
+        let generation = imageLoadGeneration
+        imageLoadTask?.cancel()
+
+        // English: Keep image loading tied to the button and ignore results from an older request.
+        // Español: Vincula la carga de imágenes al botón e ignora los resultados de solicitudes anteriores.
+        // 中文：让图片加载绑定到按钮，并忽略旧请求返回的结果。
+        imageLoadTask = Task { @MainActor [weak self] in
+            guard let self else { return }
             let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
             let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
             let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
@@ -766,10 +798,13 @@ extension PTLayoutButton {
             let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
 
             let result = await PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
-                Task { @MainActor in
-                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderW,borderColor: borderC,showValueLabel: showValueL,valueLabelFont:valueLabelF,valueLabelColor:valueLabelC,uniCount:uniC)
-                }
+                guard generation == self.imageLoadGeneration else { return }
+                let progress = totalSize > 0
+                    ? min(max(CGFloat(receivedSize) / CGFloat(totalSize), 0), 1)
+                    : 0
+                self.layerProgress(value: progress,borderWidth: borderW,borderColor: borderC,showValueLabel: showValueL,valueLabelFont:valueLabelF,valueLabelColor:valueLabelC,uniCount:uniC)
             }
+            guard !Task.isCancelled, generation == self.imageLoadGeneration else { return }
             if let findImage = result.firstImage {
                 switch controlState {
                 case .normal:

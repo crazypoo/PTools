@@ -45,6 +45,16 @@
 - `PTCycleScrollViewCell` 是无仓库调用的内部实现，已移除；外部只应依赖公开的 Banner 类型和
   `PTBannerCell` 入口。
 
+### 5.6.4 Button 模块
+
+- `PTLoginDescButton` 可通过 `PTLoginDescConfig.leftAttributedDesc` 和
+  `PTLoginDescConfig.rightAttributedDesc` 配置富文本；纯文本 `leftDesc`、`rightDesc` 和原有
+  `descHandler` 继续兼容。
+- Layout、Action 和 Sort 按钮继续保留原有状态、图片和初始化入口；新代码会自动处理异步图片
+  取消、状态代次和安全布局，不需要调用方增加取消代码。
+- `PTMenuSheetButtonItems` 的尺寸、边距、标题对齐、图片模式和 highlighted 图文现在都会生效；
+  `PTMenuSheetButtonView` 的 `open()`/`close()` 支持快速反向调用，并遵循 Reduce Motion。
+
 重复入口的当前状态由 [重复入口报告](Scripts/report_duplicate_entries.sh) 输出，并由质量
 检查执行时校验。每一组都必须明确 canonical、deprecated wrapper、semantic difference、
 pending 和 removal gate，避免将语义不同的功能机械合并。

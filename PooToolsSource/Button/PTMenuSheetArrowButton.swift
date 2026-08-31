@@ -11,16 +11,25 @@ import UIKit
 public class PTMenuSheetArrowButton: UIButton {
     
     private typealias ArrowPathPair = (top: CGPath, bottom: CGPath)
+    private enum ArrowDirection {
+        case up, down, left, right
+    }
     
     // MARK: - Public properties
     
     public var animationDuration: TimeInterval = 0.2
-    public var arrowInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+    public var arrowInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12) {
+        didSet {
+            needsPathRefresh = true
+            setNeedsLayout()
+        }
+    }
     
     public var arrowWidth: CGFloat = 1 {
         didSet {
-            topLineLayer.lineWidth = arrowWidth
-            bottomLineLayer.lineWidth = arrowWidth
+            let safeWidth = max(0, arrowWidth)
+            topLineLayer.lineWidth = safeWidth
+            bottomLineLayer.lineWidth = safeWidth
         }
     }
     
@@ -42,39 +51,73 @@ public class PTMenuSheetArrowButton: UIButton {
     
     private lazy var topLineLayer: CAShapeLayer = makeArrowLayer()
     private lazy var bottomLineLayer: CAShapeLayer = makeArrowLayer()
+    private var currentDirection: ArrowDirection = .down
+    private var needsPathRefresh = true
+    private var lastLayoutBounds = CGRect.null
     
     // MARK: - Lifecycle
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        registerTraitChanges()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        registerTraitChanges()
+    }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        // 初次繪製箭頭方向（可改為你預設想要的方向）
-        if topLineLayer.path == nil || bottomLineLayer.path == nil {
-            showDownArrow()
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        if needsPathRefresh || bounds != lastLayoutBounds || topLineLayer.path == nil || bottomLineLayer.path == nil {
+            lastLayoutBounds = bounds
+            updateArrow(direction: currentDirection, animated: false)
         }
     }
 
     // MARK: - Public API
     
-    public func showUpArrow()       { animateArrow(with: upArrowPaths()) }
-    public func showDownArrow()     { animateArrow(with: downArrowPaths()) }
-    public func showLeftArrow()     { animateArrow(with: leftArrowPaths()) }
-    public func showRightArrow()    { animateArrow(with: rightArrowPaths()) }
+    public func showUpArrow()       { updateArrow(direction: .up, animated: true) }
+    public func showDownArrow()     { updateArrow(direction: .down, animated: true) }
+    public func showLeftArrow()     { updateArrow(direction: .left, animated: true) }
+    public func showRightArrow()    { updateArrow(direction: .right, animated: true) }
   
     // MARK: - Private helpers
     
-    private func animateArrow(with paths: ArrowPathPair) {
+    private func updateArrow(direction: ArrowDirection, animated: Bool) {
+        currentDirection = direction
+        let paths: ArrowPathPair
+        switch direction {
+        case .up: paths = upArrowPaths()
+        case .down: paths = downArrowPaths()
+        case .left: paths = leftArrowPaths()
+        case .right: paths = rightArrowPaths()
+        }
+
         let keyPath = "path"
-        
-        topLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: topLineLayer.path, toValue: paths.top), forKey: keyPath)
-        bottomLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: bottomLineLayer.path, toValue: paths.bottom), forKey: keyPath)
+
+        let canAnimate = animated &&
+            topLineLayer.path != nil &&
+            bottomLineLayer.path != nil &&
+            animationDuration > 0 &&
+            !UIAccessibility.isReduceMotionEnabled
+        if canAnimate {
+            topLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: topLineLayer.path, toValue: paths.top), forKey: keyPath)
+            bottomLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: bottomLineLayer.path, toValue: paths.bottom), forKey: keyPath)
+        } else {
+            topLineLayer.removeAnimation(forKey: keyPath)
+            bottomLineLayer.removeAnimation(forKey: keyPath)
+        }
         
         topLineLayer.path = paths.top
         bottomLineLayer.path = paths.bottom
+        needsPathRefresh = false
     }
     
     private func makeAnimation(keyPath: String, fromValue: Any?, toValue: Any?) -> CAAnimation {
         let animation = CABasicAnimation(keyPath: keyPath)
-        animation.duration = animationDuration
+        animation.duration = max(0, animationDuration)
         animation.fromValue = fromValue
         animation.toValue = toValue
         return animation
@@ -88,6 +131,13 @@ public class PTMenuSheetArrowButton: UIButton {
         layer.lineCap = .round
         self.layer.addSublayer(layer)
         return layer
+    }
+
+    private func registerTraitChanges() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (button: PTMenuSheetArrowButton, _: UITraitCollection) in
+            button.topLineLayer.strokeColor = button.arrowColor.cgColor
+            button.bottomLineLayer.strokeColor = button.arrowColor.cgColor
+        }
     }
     
     // MARK: - Arrow path builders
