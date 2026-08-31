@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.3`（2026-08-31，已有同名 tag）
-> 当前候选：`5.6.4`（2026-08-31）
+> 基线：`5.6.4`（2026-08-31，当前工作区基线）
+> 当前候选：`5.6.5`（2026-08-31）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -263,6 +263,34 @@
 - ✅ MenuSheet 菜单项改用私有原生内容布局，完整消费 `PTMenuSheetButtonItems` 的尺寸、边距、标题对齐、图片模式和高亮配置，不依赖 iOS 15 已弃用的 UIButton edge-inset API。
 - ✅ 代码注释遵循英语、西班牙语、中文三语约定；未修改第三方依赖和 Pods 源码。
 - ⚠️ 当前静态检查和此前依赖缓存构建均未发现 PooTools 本批新增 warning/error；最新干净 DerivedData 的 Debug/Release 构建被外部 `KituraContracts` Swift 6 诊断提前阻断，依赖恢复后还需继续验证 PooTools 源码和最终链接。已知最终链接还受设备版 Bugly 产物及缺失 Metal 工具链搜索路径影响，待提供兼容依赖产物后补齐 Debug/Release 完整链接验证和发布标签。
+
+## 5.6.5：ImagePicker 与 PhotoPicker 共存、边界拆分和媒体入口统一
+
+### 任务清单
+
+- ✅ `CORE-565-01`：确认 ImagePicker 与 PhotoPicker 的职责边界；ImagePicker 负责轻量单媒体系统选择和相机，PhotoPicker 保留多选、编辑、原图、Live Photo 和自定义浏览能力，不删除任一公开模块。
+- ✅ `CORE-565-02`：为 ImagePicker 增加独立 CocoaPods subspec 与 SwiftPM product/target；PhotoPicker 改为依赖 ImagePicker，QRCodeScan 显式使用 ImagePicker 的类型化入口。
+- ✅ `CORE-565-03`：新增 `PTSystemMediaPicker`、`PTSystemMediaPickerKind`、`PTSystemMediaPickerResult` 和 `PTSystemMediaPickerError`；媒体结果只跨异步边界传递 Sendable 数据或调用方持有的临时视频 URL。
+- ✅ `CORE-565-04`：统一相机权限、相机 metadata 解析和 PhotoPicker 内嵌相机的完成路径；补充媒体类型校验、失败回调、取消处理和 exactly-once 防护。
+- ✅ `CORE-565-05`：图片库使用 PHPicker 单选，拍摄使用 UIImagePickerController；视频在 provider 回调结束前复制到唯一临时文件，GIF/图片保留原始数据，Live Photo 在轻量系统入口返回静态图片。
+- ✅ `CORE-565-06`：保留 `PTImagePicker` 泛型 Controller、旧 openAlbum/photograph 和 PhotoPicker 旧符号兼容入口；旧便利方法增加弃用迁移提示，迁移目标为 `PTSystemMediaPicker`，兼容层至少保留到 6.0.0。
+- ✅ `CORE-565-07`：扩展重复入口报告、质量扫描和三套构建契约检查，登记 picker strategy canonical、兼容包装器、语义差异和 6.0.0 删除门槛。
+- ✅ `CORE-565-08`：完成修改文件 Swift 前端解析、ImagePicker iOS 17 SDK 类型检查、质量扫描、Core source contract、构建入口检查和 `git diff --check`。
+- ⛔ `CORE-565-09`：Xcode `PooTools` Debug、`PooTools-Example` Debug/Release 均已重新执行但未完成；三次最新构建都在外部 `KituraContracts` Swift 6 并发错误处阻断，不能创建 `5.6.5` tag 或宣称完整构建验收通过。
+
+### 5.6.5 实施与验证说明
+
+- ✅ ImagePicker 与 PhotoPicker 已拆为可独立消费的边界：CocoaPods 使用 `PooTools/ImagePicker`，SwiftPM 使用 `PooToolsImagePicker`；PhotoPicker 仅保留自定义 PhotoKit UI 和其业务依赖。
+- ✅ `PTSystemMediaPicker` 将动态字典限制在 UIKit delegate 边界；`PTCameraCapturePayload` 统一解析图片、图片 URL 和视频 URL，异步 provider 回调通过 Sendable MainActor 投递闭包返回结果。
+- ✅ `PTMediaLibCameraContainerViewController` 继续使用自定义相机承载和统一 `PTMediaSaveUI` 保存服务；权限请求、取消、保存失败和重复 delegate 回调都有明确终态。
+- ✅ 修复当前 Xcode SDK 下动态 `UTType(identifier:)` 的兼容问题，改用 `NSItemProvider` 的公开类型符合性查询，不调用仅 iOS 27 可用的初始化器。
+- ✅ 当前静态门禁、构建契约、Package manifest、ImagePicker Simulator 类型检查和 diff 检查通过；完整 Xcode 构建的外部阻断已记录，不修改第三方 Pods 源码和依赖版本。
+
+### 5.6.5 当前阻断记录
+
+- ⛔ `PooTools` Debug 和 `PooTools-Example` Debug 在外部 `Pods/KituraContracts/Sources/KituraContracts/BodyFormat.swift` 的 Swift 6 并发诊断处停止，属于依赖 target 的非 Sendable 全局状态问题。
+- ⚠️ `PooTools-Example` Release 曾因本机磁盘空间耗尽（`No space left on device`）停止；本轮已清理临时 DerivedData，最新 Release 结果已推进到同一处外部 `KituraContracts` 并发错误。
+- ⛔ 在上述阻断解除、完整构建矩阵通过前，不同步 `PooTools.podspec`/`Podfile.lock` 到 5.6.5，不创建 `5.6.5` tag。
 
 ## 发布前固定检查
 

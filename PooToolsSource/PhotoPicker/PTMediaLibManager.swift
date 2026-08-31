@@ -10,6 +10,11 @@ import Foundation
 import Photos
 import UIKit
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 private struct PTSafeMediaBox<T>: @unchecked Sendable {
     let mediaItem: T
 }

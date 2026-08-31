@@ -10,6 +10,11 @@ import UIKit
 import Photos
 import Kingfisher
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 // 通过将 Operation 的执行逻辑约束在 @MainActor，
 // 或者确保闭包捕获是 Sendable 的，来满足并发安全。
 final class PTFetchImageOperation: Operation, @unchecked Sendable {

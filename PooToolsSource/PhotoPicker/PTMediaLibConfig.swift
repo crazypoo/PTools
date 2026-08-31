@@ -14,6 +14,11 @@ import MobileCoreServices
 import UIKit
 import SafeSFSymbols
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 let PTMaxImageWidth: CGFloat = 500
 
 @objc public enum PTPhotoBrowserStyle: Int {
@@ -315,4 +320,3 @@ public extension PTCameraConfig {
         return self
     }
 }
-

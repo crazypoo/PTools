@@ -11,9 +11,14 @@ import SwifterSwift
 import SnapKit
 import Photos
 import Combine
-import AVFoundation
 import SafeSFSymbols
 import AttributedString
+
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+import PTCameraPermission
+#endif
 
 public class PTMediaLibView: UIView {
     
@@ -274,23 +279,31 @@ extension PTMediaLibView {
 // MARK: - Camera & Saving Logic
 extension PTMediaLibView {
     
+    // English: Request permission once, then present the embedded camera with a typed result path.
+    // Español: Solicita el permiso una vez y presenta la cámara integrada con un resultado tipado.
+    // 中文：只请求一次权限，再通过类型化结果路径展示嵌入式相机。
     /// 调用系统相机
     func openCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.cameraError, icon: .Error)
             return
         }
-        
-        guard PTMediaLibView.hasCameraAuthority() else {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.takePhotoError, icon: .Error)
-            return
-        }
 
-        let picker = PTMediaLibCameraContainerViewController()
-        // 弹出相机界面
-        UIViewController.currentPresentToSheet(vc: picker, sizes: [.fullscreen], dismissPanGes: false)
-        picker.handleNewAssetCallback = { asset in
-            self.handleNewAsset(asset)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            guard await PTSystemMediaPicker.requestCameraAccess() else {
+                PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,
+                                                        subtitle: PTMediaLibUIConfig.share.takePhotoError,
+                                                        icon: .Error)
+                return
+            }
+
+            let picker = PTMediaLibCameraContainerViewController()
+            picker.handleNewAssetCallback = { [weak self] asset in
+                self?.handleNewAsset(asset)
+            }
+            // 弹出相机界面
+            UIViewController.currentPresentToSheet(vc: picker, sizes: [.fullscreen], dismissPanGes: false)
         }
     }
 
@@ -531,18 +544,16 @@ extension PTMediaLibView {
 
 // MARK: - Authority Check
 extension PTMediaLibView {
+    // English: Keep the legacy query as a compatibility wrapper around the shared permission source.
+    // Español: Mantén esta consulta heredada como un adaptador de compatibilidad sobre la fuente común de permisos.
+    // 中文：保留这个旧查询作为公共权限来源的兼容包装器。
     /// 检查并返回当前相机的访问权限状态
     /// - Returns: true 表示有权限或尚未请求，false 表示明确被拒绝
     public static func hasCameraAuthority() -> Bool {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        switch status {
-        case .restricted, .denied:
-            // 用户明确拒绝或受限（如家长控制）
-            return false
+        switch PTPermission.camera.status {
         case .authorized, .notDetermined:
-            // 已授权，或者尚未弹出请求框（UIImagePickerController 会自动处理请求）
             return true
-        @unknown default:
+        case .denied, .notSupported:
             return false
         }
     }
@@ -1112,14 +1123,20 @@ extension PTSheetContentViewController: UIImagePickerControllerDelegate {
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        // 🌟 优化：直接在 dismiss 回调前捕获安全的层级引用
-        let currentVC = PTUtils.getCurrentVC()
+        let currentVC = PTSceneContext.currentViewController()
+        // English: Parse metadata before dismissal so the callback does not read a mutable picker state.
+        // Español: Analiza los metadatos antes del cierre para que el callback no lea un estado mutable del picker.
+        // 中文：在关闭前解析 metadata，避免回调读取已经变化的 picker 状态。
+        let payload = try? PTCameraCapturePayload.parse(info)
         
         picker.dismiss(animated: true) {
-            if let mediaLib = currentVC as? PTMediaLibViewController {
-                let image = info[.originalImage] as? UIImage
-                let url = info[.mediaURL] as? URL
-                mediaLib.mediaListView.saveMediaToAlbum(image: image, videoUrl: url)
+            guard let mediaLib = currentVC as? PTMediaLibViewController,
+                  let payload else { return }
+            switch payload {
+            case .image(let image):
+                mediaLib.mediaListView.saveMediaToAlbum(image: image, videoUrl: nil)
+            case .video(let url):
+                mediaLib.mediaListView.saveMediaToAlbum(image: nil, videoUrl: url)
             }
         }
     }

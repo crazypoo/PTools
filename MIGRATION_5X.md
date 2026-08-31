@@ -55,6 +55,16 @@
 - `PTMenuSheetButtonItems` 的尺寸、边距、标题对齐、图片模式和 highlighted 图文现在都会生效；
   `PTMenuSheetButtonView` 的 `open()`/`close()` 支持快速反向调用，并遵循 Reduce Motion。
 
+### 5.6.5 ImagePicker 与 PhotoPicker
+
+- `PooToolsImagePicker` / `PooTools/ImagePicker` 是轻量系统媒体入口：图片库使用
+  `PHPickerViewController`，相机使用 `UIImagePickerController`，适合单张图片、单个视频、图片或视频的选择。
+- 推荐使用 `@MainActor` 的 `PTSystemMediaPicker.pick(_:from:)` 和
+  `PTSystemMediaPicker.capture(_:from:)`，结果为 `PTSystemMediaPickerResult`；视频 URL 已复制到独立临时文件，成功后由调用方负责后续生命周期。
+- `PooToolsPhotoPicker` / `PooTools/PhotoPicker` 继续保留自定义 PhotoKit 浏览器，负责多选、编辑、原图、Live Photo、自定义 Cell 和 iCloud 进度；它通过 ImagePicker 复用相机权限和 metadata 结果适配，不改为 PHPicker。
+- `PTImagePicker` 的泛型 `Controller`、旧 `openAlbum`、`photograph` 和闭包便利入口继续保留，但已标记 deprecated；5.x 不删除，迁移目标为 `PTSystemMediaPicker`，计划在 6.0.0 再评估移除。
+- 轻量系统入口中的 Live Photo 按静态图片返回；需要完整 Live Photo 资源时继续使用 PhotoPicker 的自定义 PhotoKit 路径。
+
 重复入口的当前状态由 [重复入口报告](Scripts/report_duplicate_entries.sh) 输出，并由质量
 检查执行时校验。每一组都必须明确 canonical、deprecated wrapper、semantic difference、
 pending 和 removal gate，避免将语义不同的功能机械合并。
@@ -79,5 +89,5 @@ pending 和 removal gate，避免将语义不同的功能机械合并。
 5. 迁移后不存在依赖 `PTAlertDebugView`、旧媒体保存回调或旧 Network 动态返回值的外部
    兼容承诺；必要时提供替代适配器，而不是直接删除符号。
 
-当前结论：5.x 继续保留上述兼容层；5.6.1 只完成 ScrollBanner/PageControl 治理和兼容迁移，
+当前结论：5.x 继续保留上述兼容层；5.6.5 只完成 ImagePicker/PhotoPicker 的边界拆分和入口统一，
 不提前删除公开 API。

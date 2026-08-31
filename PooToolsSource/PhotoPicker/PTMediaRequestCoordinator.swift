@@ -7,6 +7,11 @@
 
 import Photos
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 @MainActor
 final class PTMediaRequestCoordinator {
     private struct RequestState {

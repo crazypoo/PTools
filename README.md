@@ -33,7 +33,7 @@ PTools 当前支持 iOS 17.0+ 和 Swift 6.0。按需选择模块，避免无关�
 https://github.com/crazypoo/PTools.git
 ```
 
-常用产品：`ptools`、`PooToolsNetWork`、`PooToolsPhotoPicker`、
+常用产品：`ptools`、`PooToolsNetWork`、`PooToolsImagePicker`、`PooToolsPhotoPicker`、
 `PooToolsVideoEditor`、`PooToolsMediaViewer`、`PooToolsRouter`。
 
 ### CocoaPods

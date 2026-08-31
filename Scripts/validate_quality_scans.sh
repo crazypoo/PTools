@@ -15,6 +15,7 @@ critical_files=(
   PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
   PooToolsSource/Animation/PTAnimationFunction.swift
   PooToolsSource/QRCodeScan/PTScanQRController.swift
+  PooToolsSource/ImagePicker
   PooToolsSource/Category/UIScreen+PTEX.swift
   PooToolsSource/Category/UIViewController+Swizzled.swift
   PooToolsSource/LocalConsole/LocalConsole.swift

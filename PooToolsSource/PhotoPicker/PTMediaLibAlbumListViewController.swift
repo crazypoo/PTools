@@ -13,6 +13,12 @@ import SwifterSwift
 import AttributedString
 import SafeSFSymbols
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+import PTCameraPermission
+#endif
+
 class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     var albumList = [PTMediaLibListModel]()

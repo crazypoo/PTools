@@ -11,6 +11,12 @@ import SnapKit
 import Photos
 import SwifterSwift
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+import PooToolsPhotoPicker
+#endif
+
 @MainActor
 public class PTScanBarInfo: NSObject {
     
@@ -317,10 +323,14 @@ public class PTScanQRController: PTBaseViewController {
                 guard let self else { return }
                 if self.viewConfig.openAblumFollowSystem {
                     do {
-                        let object: UIImage = try await PTImagePicker.openAlbum()
-                        self.findQR(inImage: object)
-                    } catch let pickerError as PTImagePicker.PickerError {
-                        pickerError.outPutLog()
+                        let result = try await PTSystemMediaPicker.pick(.image)
+                        guard let data = result.imageData, let image = UIImage(data: data) else {
+                            PTNSLogConsole("系统相册返回的图片无法解码", levelType: .error, loggerType: .media)
+                            return
+                        }
+                        self.findQR(inImage: image)
+                    } catch let pickerError as PTSystemMediaPickerError {
+                        PTNSLogConsole("打开系统相册失败: \(pickerError.localizedDescription)", levelType: .error, loggerType: .media)
                     } catch {
                         PTNSLogConsole("打开相册失败: \(error)")
                     }

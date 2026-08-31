@@ -13,6 +13,11 @@ import Photos
 import AttributedString
 import SafeSFSymbols
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 // MARK: - 图片/视频展示 Cell
 @MainActor
 class PTMediaLibCell: PTBaseNormalCell {

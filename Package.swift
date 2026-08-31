@@ -59,6 +59,7 @@ let package = Package(
         // ==========================================
         // 高级业务模块
         // ==========================================
+        .library(name: "PooToolsImagePicker", targets: ["PooToolsImagePicker"]),
         .library(name: "PooToolsPhotoPicker", targets: ["PooToolsPhotoPicker"]),
         .library(name: "PooToolsHarbethKit", targets: ["PooToolsHarbethKit"]),
         .library(name: "PooToolsFilterCamera", targets: ["PooToolsFilterCamera"]),
@@ -133,7 +134,7 @@ let package = Package(
             "PTFaceIDPermission", "PTContactsPermission", "PTMicPermission", "PTMediaPermission",
             "PTBluetoothPermission", "PTSiriPermission", "PTNotificationPermission",
             "PooToolsNetWork", "PooToolsDataEncrypt", "PooToolsSearchBar",
-            "PooToolsMediaViewer", "PooToolsPhotoPicker", "PooToolsHarbethKit", "PooToolsFilterCamera",
+            "PooToolsMediaViewer", "PooToolsImagePicker", "PooToolsPhotoPicker", "PooToolsHarbethKit", "PooToolsFilterCamera",
             "PooToolsImageEditor", "PooToolsVideoEditor", "PooToolsCheckDirtyWord", "PooToolsStepper",
             "PooToolsBankCard", "PooToolsBioID", "PooToolsCalendar", "PooToolsTelephony", "PooToolsCheckBox",
             "PooToolsCodeView", "PooToolsCountry", "PooToolsGuide", "PooToolsInput", "PooToolsKeyboard",
@@ -293,7 +294,8 @@ let package = Package(
         // ==========================================
         // 高级业务模块
         // ==========================================
-        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PTCameraPermission", "PooToolsNetWork", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker", "ImagePicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PooToolsImagePicker", "PTCameraPermission", "PooToolsNetWork", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsFilterCamera", dependencies: ["ptools", "Harbeth", "PTCameraPermission", "PTMicPermission", "PooToolsHarbethKit", "PooToolsMediaViewer"], path: "PooToolsSource/FilterCamera", swiftSettings: [.define("POOTOOLS_FILTERCAMERA"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsImageEditor", dependencies: ["ptools", "Harbeth", "PooToolsFilterCamera"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
@@ -328,7 +330,7 @@ let package = Package(
         .target(name: "PooToolsLocation", dependencies: ["ptools", "PTLocationPermission"], path: "PooToolsSource/Location", swiftSettings: [.define("POOTOOLS_LOCATION"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSmartScreenshot", dependencies: ["ptools"], path: "PooToolsSource/ScreenShot", swiftSettings: [.define("POOTOOLS_SMARTSCREENSHOT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPagingControl", dependencies: ["ptools", .product(name: "JXPagingView", package: "JXPagingView"), "JXSegmentedView"], path: "PooToolsSource/SegmentControl", swiftSettings: [.define("POOTOOLS_PAGINGCONTROL"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsScanQRCode", dependencies: ["ptools", "PooToolsPhotoPicker", "PTCameraPermission"], path: "PooToolsSource/QRCodeScan", swiftSettings: [.define("POOTOOLS_SCANQRCODE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsScanQRCode", dependencies: ["ptools", "PooToolsImagePicker", "PooToolsPhotoPicker", "PTCameraPermission"], path: "PooToolsSource/QRCodeScan", swiftSettings: [.define("POOTOOLS_SCANQRCODE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsStepCount", dependencies: ["ptools", "PTHealthPermission"], path: "PooToolsSource/HealthKit", swiftSettings: [.define("POOTOOLS_STEPCOUNT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsContact", dependencies: ["ptools", "PTContactsPermission"], path: "PooToolsSource/Contact", swiftSettings: [.define("POOTOOLS_CONTACT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVision", dependencies: ["ptools"], path: "PooToolsSource/Vision", swiftSettings: [.define("POOTOOLS_VISION"), .define("POOTOOLS_COCOAPODS")]),

@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.6.5 - 2026-08-31 (Blocked candidate)
+
+- ImagePicker 与 PhotoPicker 共存：ImagePicker 提供独立的 PHPicker/UIImagePickerController 单媒体入口，PhotoPicker 继续提供多选、编辑、原图、Live Photo 和自定义 PhotoKit 浏览。
+- 新增 `PTSystemMediaPicker` 类型化入口、相机 metadata 结果解析、统一权限路径和视频临时文件复制；旧 `PTImagePicker` 入口继续保留并标记 deprecated。
+- CocoaPods 新增 `PooTools/ImagePicker` subspec，SwiftPM 新增 `PooToolsImagePicker` product；PhotoPicker 通过依赖复用公共相机能力。
+- PhotoPicker 相机保存增加失败/取消/重复回调终态保护，QRCodeScan 改用类型化图片选择结果。
+- 静态质量检查、构建契约和 ImagePicker iOS 17 SDK 类型检查通过；完整 Xcode Debug/Release 当前仍被外部 `KituraContracts` 并发诊断和环境阻断，未创建 `5.6.5` 标签。
+
 ## 5.6.4 - 2026-08-31 (Unreleased)
 
 - `PTLoginDescButton` 支持使用 `AttributedString` 配置左右富文本，并保留纯文本和原有动作回调兼容入口。

@@ -20,11 +20,12 @@ classification_rows=(
   'UI dispatch|PTMainActorBridge|PTGCDManager main-queue helpers|none|remaining legacy callers outside 5.2 Core scope|6.0.0'
   'scroll banner|PTBannerView|PTCycleScrollView|legacy properties and factory methods|none|6.0.0'
   'page control|PTBasePageControl|individual visual PageControl subclasses|visual implementations differ|none|6.0.0'
+  'picker strategy|PTSystemMediaPicker|deprecated PTImagePicker convenience wrappers|PhotoPicker remains the advanced PhotoKit browser|legacy generic Controller and custom configuration|6.0.0'
 )
 
 valid_groups=(
   'media save' 'image request' 'video request' 'video thumbnail' 'image loading'
-  'network' 'empty state' 'scene/window' 'UI dispatch' 'scroll banner' 'page control'
+  'network' 'empty state' 'scene/window' 'UI dispatch' 'scroll banner' 'page control' 'picker strategy'
 )
 
 for row in "${classification_rows[@]}"; do
@@ -86,6 +87,10 @@ report_group 'page control' \
   'class (PTBasePageControl|PTFilledPageControl|PTPillPageControl|PTSnakePageControl|PTScrollingPageControl|PTImagePageControl)' \
   'func (setProgress|setCurrentPage|update|addPageControlAction)'
 
+report_group 'picker strategy' \
+  'class (Controller|PTSystemMediaPickerCoordinator)' \
+  'func (openAlbum|photograph|pick|capture|openCamera)'
+
 printf '\n%s\n' 'Canonical implementation map:'
 printf '%s\n' \
   'media save      -> PooToolsSource/Core/PTMediaSaveService.swift' \
@@ -98,6 +103,7 @@ printf '%s\n' \
   'UI dispatch      -> PooToolsSource/Core/PTUtils+SceneConcurrency.swift (PTMainActorBridge)' \
   'scroll banner    -> PooToolsSource/ScrollBanner/PTBannerView.swift' \
   'page control     -> PooToolsSource/PageControl/PTPageControllable.swift + concrete controls' \
+  'picker strategy  -> PooToolsSource/ImagePicker/PTImagePicker.swift (PTSystemMediaPicker)' \
   'background work  -> PooToolsSource/Core/PTGCDManager.swift'
 
 printf '\n%s\n' 'Split-file ownership map:'

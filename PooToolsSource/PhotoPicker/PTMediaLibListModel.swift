@@ -9,6 +9,11 @@
 import UIKit
 import Photos
 
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsImagePicker
+#endif
+
 @MainActor
 public class PTMediaLibListModel: NSObject {
     public let title: String
