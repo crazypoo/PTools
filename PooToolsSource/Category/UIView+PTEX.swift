@@ -196,6 +196,9 @@ private struct PTCornerStyle {
         return result
     }
 
+    // English: Return a native radius only when every selected corner can share one value.
+    // Español: Devuelve un radio nativo solo cuando todas las esquinas seleccionadas comparten el mismo valor.
+    // 中文：只有所有选中圆角可以共用同一个半径时，才返回原生 Layer 半径。
     var nativeLayerRadius: CGFloat? {
         guard !capsule else { return nil }
         let values = unclampedRadii
@@ -399,6 +402,7 @@ public extension UIView {
                                   corner: corner,
                                   capsule: capsule)
         let safeBorderWidth = borderWidth.isFinite ? max(0, borderWidth) : 0
+        unregisterCornerTraitChanges()
         let state = PTCornerRenderState(style: style,
                                         borderWidth: safeBorderWidth,
                                         borderColor: borderColor)
@@ -549,8 +553,19 @@ public extension UIView {
         borderLayer.lineWidth = safeBorderWidth
     }
 
+    // English: Find the shared tracker without creating one during cleanup or fast-path rendering.
+    // Español: Busca el rastreador compartido sin crearlo durante la limpieza o la ruta rápida.
+    // 中文：查找共享 Tracker，清理或快速渲染时不额外创建 Tracker。
     private func cornerTracker() -> PTCornerTrackerView? {
         subviews.first { $0 is PTCornerTrackerView } as? PTCornerTrackerView
+    }
+
+    // English: Unregister the previous trait callback before a reusable view receives a new style.
+    // Español: Anula la devolución anterior del trait antes de aplicar un nuevo estilo a una vista reutilizable.
+    // 中文：复用 View 接收新样式前，注销上一次注册的 trait 回调。
+    private func unregisterCornerTraitChanges() {
+        guard let registration = ptCornerRenderState?.traitChangeRegistration else { return }
+        unregisterForTraitChanges(registration)
     }
 
     private func customCornerBorderLayer() -> CAShapeLayer {
@@ -572,6 +587,7 @@ public extension UIView {
     /// Español: Llámalo al configurar una celda reutilizable cuando el nuevo modelo no tenga estilo de esquinas.
     /// 中文：复用 Cell 配置为无圆角样式时调用此方法，清理圆角和边框状态，不影响其他 Layer。
     @objc func removeViewCorner() {
+        unregisterCornerTraitChanges()
         ptCornerRenderState = nil
         if let tracker = cornerTracker() {
             tracker.cornerAction = nil
@@ -979,6 +995,9 @@ public extension UIView {
         static var ptLoadUUID: UInt8 = 0
     }
 
+    // English: Store corner state without changing UIView's public API.
+    // Español: Guarda el estado de esquinas sin cambiar la API pública de UIView.
+    // 中文：保存圆角状态，不改变 UIView 的公开 API。
     private var ptCornerRenderState: PTCornerRenderState? {
         get {
             objc_getAssociatedObject(self, &AssociatedKeys.cornerRenderState) as? PTCornerRenderState

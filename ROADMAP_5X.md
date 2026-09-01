@@ -340,7 +340,7 @@
 - ✅ `CORE-569-06`：修复 `PTDarkModeControl` 和 `PTActionSheetController` 的复用样式残留，统一通过 `removeViewCorner()` 清理圆角状态。
 - ✅ `CORE-569-07`：在圆角公开入口补充英、西、中三语调用时机说明，明确 Auto Layout、Cell 复用和无样式状态的推荐用法。
 - ✅ `CORE-569-08`：完成修改文件解析、质量扫描、构建入口、Package manifest 和差异检查；PooTools Debug/Release 源码编译阶段未发现本批新增错误。
-- ⛔ `CORE-569-09`：完整 Simulator 链接仍被外部设备版 `Pods/Bugly/Bugly.framework`、缺失 Metal Simulator toolchain 和外部 `SmartCodable` 构建诊断阻断；未同步 5.6.9 发布元数据和 tag。
+- ⛔ `CORE-569-09`：完整 Simulator 链接仍被外部设备版 `Pods/Bugly/Bugly.framework`、缺失 Metal Simulator toolchain 和外部 `SmartCodable` 构建诊断阻断；外部流程已同步 `PooTools.podspec` 并创建 `5.6.9` tag，但该 tag 不能视为完整验收通过，`Podfile.lock`、README 和 RELEASE 仍待发布流程统一。
 
 ### 5.6.9 实施与验证说明
 
