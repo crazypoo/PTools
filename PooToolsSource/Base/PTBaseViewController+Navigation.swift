@@ -376,7 +376,7 @@ extension PTNavigationBarContainer {
         // English: The custom surface is the only color renderer; UIKit receives a transparent appearance.
         // Español: La superficie personalizada es el único renderizador de color; UIKit recibe una apariencia transparente.
         // 中文：自定义背景层作为唯一颜色渲染源，UIKit 外观保持透明，避免重复绘制。
-        backgroundView.backgroundColor = appearance.backgroundColor
+        backgroundView.backgroundColor = .clear
         backgroundView.layer.contentsGravity = .resize
         backgroundView.layer.contents = appearance.backgroundImage?.cgImage
         backgroundView.alpha = backgroundAlpha
