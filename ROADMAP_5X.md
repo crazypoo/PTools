@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.4`（2026-08-31，当前工作区基线）
-> 当前候选：`5.6.5`（2026-08-31）
+> 基线：`5.6.8`（2026-09-01，当前工作区基线）
+> 当前候选：`5.6.9`（2026-09-01）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -327,3 +327,25 @@
 - ✅ PhotoPicker 的编辑器入口使用实例配置快照，未再覆盖全局配置；原有公开符号、默认参数和模块路径保持不变。
 - ✅ 新增代码注释遵循英语、西班牙语和中文三语约定；没有修改 Pods 源码、第三方依赖版本、Podfile.lock 或 Xcode 工程文件。
 - ⚠️ `validate_quality_scans.sh`、`validate_build_entries.sh`、`validate_core_source_contract.sh`、Package manifest 和差异检查通过；Xcode 源码编译结果通过，但外部链接环境修复前仍需补做 Debug/Release 完整链接和真机人工回归。
+
+## 5.6.9：UIView 圆角与 Cell 复用稳定性强化
+
+### 任务清单
+
+- ✅ `CORE-569-01`：盘点 `viewCorner`、`viewCornerRectCorner` 和 `removeViewCorner` 的调用时机，确认 Cell 初始化、配置和复用阶段的状态覆盖规则。
+- ✅ `CORE-569-02`：统一半径和部分等半径圆角使用原生 `CALayer` 快速路径，不再因为 Auto Layout 尚未完成而依赖零尺寸 Tracker。
+- ✅ `CORE-569-03`：胶囊和不同圆角半径继续使用布局 Tracker，在首次有效 bounds、尺寸变化和窗口变化后更新路径，并限制重复路径生成。
+- ✅ `CORE-569-04`：保存圆角渲染状态，处理动态边框颜色的 trait 变化；清理圆角时不影响同一 Tracker 上的渐变和进度条能力。
+- ✅ `CORE-569-05`：修正自定义边框路径的半边框几何计算，校验非法半径、边框宽度和零尺寸输入。
+- ✅ `CORE-569-06`：修复 `PTDarkModeControl` 和 `PTActionSheetController` 的复用样式残留，统一通过 `removeViewCorner()` 清理圆角状态。
+- ✅ `CORE-569-07`：在圆角公开入口补充英、西、中三语调用时机说明，明确 Auto Layout、Cell 复用和无样式状态的推荐用法。
+- ✅ `CORE-569-08`：完成修改文件解析、质量扫描、构建入口、Package manifest 和差异检查；PooTools Debug/Release 源码编译阶段未发现本批新增错误。
+- ⛔ `CORE-569-09`：完整 Simulator 链接仍被外部设备版 `Pods/Bugly/Bugly.framework`、缺失 Metal Simulator toolchain 和外部 `SmartCodable` 构建诊断阻断；未同步 5.6.9 发布元数据和 tag。
+
+### 5.6.9 实施与验证说明
+
+- ✅ 常见 `viewCorner(radius:)` 调用可在创建 View 后、约束前执行；圆角半径和边框会立即写入 Layer，Cell 后续布局不会丢失样式。
+- ✅ 胶囊、不同半径和动态尺寸样式等待有效布局后渲染；Tracker 仅在圆角、渐变或进度能力仍被使用时保留。
+- ✅ `removeViewCorner()` 可安全用于复用配置，清除圆角、边框、mask 和 iOS 26 corner configuration，不会移除同一 View 的渐变或进度状态。
+- ✅ 未改变公开方法签名、模块路径或第三方依赖；未新增 `@unchecked Sendable`、`nonisolated(unsafe)`、`try!` 或 `as!`。
+- ⛔ Debug/Release 均已通过 Xcode 执行到 PooTools 源码编译阶段；完整链接和源码警告门禁仍受外部依赖/工具链阻断，待环境修复后补验。

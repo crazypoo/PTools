@@ -122,6 +122,11 @@ public class PTDarkModeControl: PTBaseViewController {
                     } else if cellModel.cellID == CellID.followSystem {
                         cell.switchValue = PTDarkModeOption.isFollowSystem
                         cell.contentView.viewCornerRectCorner(bottomLeft: 5,bottomRight: 5, corner: [.bottomLeft,.bottomRight])
+                    } else {
+                        // English: Clear rounded-corner state left by a reused cell.
+                        // Español: Limpia el estado de esquinas redondeadas que dejó una celda reutilizada.
+                        // 中文：清理复用 Cell 遗留的圆角状态。
+                        cell.contentView.removeViewCorner()
                     }
                     cell.switchValueChangeBlock = { [weak self] _, sender in
                         if cellModel.cellID == CellID.smart {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.6.9 - 2026-09-01 (Blocked candidate)
+
+- 修复 `UIView.viewCorner` 在 Auto Layout 和可复用 Cell 中因调用时 bounds 尚未确定而出现的延迟或样式失效问题；统一半径圆角使用原生 Layer 快速路径。
+- 胶囊和不同半径圆角在首次有效布局、尺寸变化和窗口变化后更新；动态边框颜色支持 trait 变化，重复布局不会无谓重建路径。
+- 完善 `removeViewCorner()` 的复用清理，并修复 DarkMode 和 ActionSheet 中间行的圆角状态残留；不影响同一 View 的渐变和进度状态。
+- 修改文件已通过 Swift 前端解析、质量扫描、构建入口检查、Package manifest 和差异检查；Xcode 完整 Simulator 链接仍被外部 Bugly/Metal/SmartCodable 环境阻断，未创建 `5.6.9` 标签。
+
 ## 5.6.5 - 2026-08-31 (Blocked candidate)
 
 - ImagePicker 与 PhotoPicker 共存：ImagePicker 提供独立的 PHPicker/UIImagePickerController 单媒体入口，PhotoPicker 继续提供多选、编辑、原图、Live Photo 和自定义 PhotoKit 浏览。

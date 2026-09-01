@@ -90,6 +90,32 @@ private struct PTCornerStyle {
         value.isFinite ? max(0, value) : 0
     }
 
+    private var baseRadius: CGFloat {
+        safeValue(radius)
+    }
+
+    private func selectedRadius(_ value: CGFloat) -> CGFloat {
+        let explicitRadius = safeValue(value)
+        return explicitRadius > 0 ? explicitRadius : baseRadius
+    }
+
+    var unclampedRadii: (topLeft: CGFloat, topRight: CGFloat, bottomLeft: CGFloat, bottomRight: CGFloat) {
+        if capsule {
+            return (0, 0, 0, 0)
+        }
+
+        guard corner != .allCorners else {
+            return (baseRadius, baseRadius, baseRadius, baseRadius)
+        }
+
+        return (
+            corner.contains(.topLeft) ? selectedRadius(topLeft) : 0,
+            corner.contains(.topRight) ? selectedRadius(topRight) : 0,
+            corner.contains(.bottomLeft) ? selectedRadius(bottomLeft) : 0,
+            corner.contains(.bottomRight) ? selectedRadius(bottomRight) : 0
+        )
+    }
+
     func radii(in bounds: CGRect) -> (topLeft: CGFloat, topRight: CGFloat, bottomLeft: CGFloat, bottomRight: CGFloat) {
         let width = max(0, bounds.width)
         let height = max(0, bounds.height)
@@ -99,22 +125,12 @@ private struct PTCornerStyle {
             return (maximumRadius, maximumRadius, maximumRadius, maximumRadius)
         }
 
-        let baseRadius = safeValue(radius)
-        func selectedRadius(_ value: CGFloat) -> CGFloat {
-            let explicitRadius = safeValue(value)
-            return min(explicitRadius > 0 ? explicitRadius : baseRadius, maximumRadius)
-        }
-
-        guard corner != .allCorners else {
-            let value = min(baseRadius, maximumRadius)
-            return (value, value, value, value)
-        }
-
+        let values = unclampedRadii
         return (
-            corner.contains(.topLeft) ? selectedRadius(topLeft) : 0,
-            corner.contains(.topRight) ? selectedRadius(topRight) : 0,
-            corner.contains(.bottomLeft) ? selectedRadius(bottomLeft) : 0,
-            corner.contains(.bottomRight) ? selectedRadius(bottomRight) : 0
+            min(values.topLeft, maximumRadius),
+            min(values.topRight, maximumRadius),
+            min(values.bottomLeft, maximumRadius),
+            min(values.bottomRight, maximumRadius)
         )
     }
 
@@ -168,6 +184,10 @@ private struct PTCornerStyle {
     }
 
     var maskedCorners: CACornerMask {
+        if capsule {
+            return [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
+
         var result: CACornerMask = []
         if corner.contains(.topLeft) || corner == .allCorners { result.insert(.layerMinXMinYCorner) }
         if corner.contains(.topRight) || corner == .allCorners { result.insert(.layerMaxXMinYCorner) }
@@ -176,11 +196,37 @@ private struct PTCornerStyle {
         return result
     }
 
-    func usesNativeLayer(in bounds: CGRect) -> Bool {
-        let values = radii(in: bounds)
-        return values.topLeft == values.topRight
-            && values.topLeft == values.bottomLeft
-            && values.topLeft == values.bottomRight
+    var nativeLayerRadius: CGFloat? {
+        guard !capsule else { return nil }
+        let values = unclampedRadii
+        let selectedValues = [
+            corner.contains(.topLeft) ? values.topLeft : nil,
+            corner.contains(.topRight) ? values.topRight : nil,
+            corner.contains(.bottomLeft) ? values.bottomLeft : nil,
+            corner.contains(.bottomRight) ? values.bottomRight : nil
+        ].compactMap { $0 }
+        guard let firstValue = selectedValues.first,
+              selectedValues.allSatisfy({ $0 == firstValue }) else {
+            return nil
+        }
+        return firstValue
+    }
+}
+
+// English: Keep the latest corner request so trait changes can re-render dynamic borders.
+// Español: Conserva la última solicitud de esquinas para redibujar bordes dinámicos al cambiar el trait.
+// 中文：保存最近一次圆角请求，trait 变化时重新渲染动态边框。
+@MainActor
+private final class PTCornerRenderState: NSObject {
+    var style: PTCornerStyle
+    var borderWidth: CGFloat
+    var borderColor: UIColor
+    var traitChangeRegistration: (any UITraitChangeRegistration)?
+
+    init(style: PTCornerStyle, borderWidth: CGFloat, borderColor: UIColor) {
+        self.style = style
+        self.borderWidth = borderWidth
+        self.borderColor = borderColor
     }
 }
 
@@ -329,13 +375,21 @@ public extension UIView {
                       capsule: capsule).path(in: bounds)
     }
     
+    /// Applies rounded corners without requiring a prior Auto Layout pass.
+    /// English: Fixed radii can be applied after view creation and before constraints; capsules and mixed radii update after the first valid layout.
+    /// Español: el radio fijo puede aplicarse después de crear la vista y antes de añadir restricciones; las cápsulas y radios distintos se actualizan tras el primer diseño válido.
+    /// 中文：固定半径可在创建 View 后、添加约束前调用；胶囊和不同半径会在首次有效布局后自动更新。
     @objc func viewCorner(radius:CGFloat = 0,
                           borderWidth:CGFloat = 0,
                           borderColor:UIColor = UIColor.clear,
                           capsule:Bool = false) {
         self.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
     }
-        
+
+    /// Applies uniform or per-corner rounding and remains safe for reusable cells.
+    /// English: Call during cell initialization or configuration; data-dependent styles must be overwritten for every configuration, and `removeViewCorner()` should be used when needed.
+    /// Español: puede llamarse durante la inicialización o configuración de la celda; los estilos dependientes de datos deben sobrescribirse en cada configuración y limpiarse cuando sea necesario.
+    /// 中文：可在 Cell 初始化或配置阶段调用；数据相关样式必须每次配置都覆盖，必要时调用 `removeViewCorner()`。
     @objc func viewCornerRectCorner(radius: CGFloat = 5, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, borderWidth: CGFloat = 0, borderColor: UIColor = UIColor.clear, corner: UIRectCorner = .allCorners, capsule: Bool = false) {
         let style = PTCornerStyle(radius: radius,
                                   topLeft: topLeft,
@@ -344,12 +398,62 @@ public extension UIView {
                                   bottomRight: bottomRight,
                                   corner: corner,
                                   capsule: capsule)
+        let safeBorderWidth = borderWidth.isFinite ? max(0, borderWidth) : 0
+        let state = PTCornerRenderState(style: style,
+                                        borderWidth: safeBorderWidth,
+                                        borderColor: borderColor)
+        ptCornerRenderState = state
+
+        if safeBorderWidth > 0 {
+            state.traitChangeRegistration = registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (_: UIView, _: UITraitCollection) in
+                guard let self, let state = self.ptCornerRenderState else { return }
+                if #available(iOS 26.0, *) {
+                    self.applyViewCorner(style: state.style,
+                                         borderWidth: state.borderWidth,
+                                         borderColor: state.borderColor,
+                                         bounds: self.bounds,
+                                         disablesActions: true)
+                } else if state.style.nativeLayerRadius != nil {
+                    self.applyViewCorner(style: state.style,
+                                         borderWidth: state.borderWidth,
+                                         borderColor: state.borderColor,
+                                         bounds: self.bounds,
+                                         disablesActions: true)
+                } else if let tracker = self.cornerTracker() {
+                    tracker.invalidateLayout()
+                    tracker.applyCurrentLayout()
+                }
+            }
+        }
+
+        let canApplyWithoutBounds: Bool
+        if #available(iOS 26.0, *) {
+            canApplyWithoutBounds = true
+        } else {
+            canApplyWithoutBounds = style.nativeLayerRadius != nil
+        }
+
+        if canApplyWithoutBounds {
+            if let tracker = cornerTracker() {
+                tracker.cornerAction = nil
+                tracker.invalidateLayout()
+            }
+            applyViewCorner(style: style,
+                            borderWidth: safeBorderWidth,
+                            borderColor: borderColor,
+                            bounds: bounds)
+            removeTrackerIfUnused()
+            return
+        }
+
         let tracker = getOrCreateTracker()
         tracker.cornerAction = { [weak self] currentBounds in
-            self?.applyViewCorner(style: style,
-                                  borderWidth: borderWidth,
-                                  borderColor: borderColor,
-                                  bounds: currentBounds)
+            guard let self else { return }
+            self.applyViewCorner(style: style,
+                                 borderWidth: safeBorderWidth,
+                                 borderColor: borderColor,
+                                 bounds: currentBounds,
+                                 disablesActions: true)
         }
         tracker.invalidateLayout()
         tracker.applyCurrentLayout()
@@ -358,37 +462,56 @@ public extension UIView {
     private func applyViewCorner(style: PTCornerStyle,
                                  borderWidth: CGFloat,
                                  borderColor: UIColor,
-                                 bounds: CGRect) {
-        let values = style.radii(in: bounds)
+                                 bounds: CGRect,
+                                 disablesActions: Bool = false) {
+        if disablesActions {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+        }
+        defer {
+            if disablesActions {
+                CATransaction.commit()
+            }
+        }
+
+        let renderBounds = CGRect(origin: .zero, size: bounds.size)
+        let resolvedBorderColor = borderColor.resolvedColor(with: traitCollection).cgColor
         let safeBorderWidth = borderWidth.isFinite ? max(0, borderWidth) : 0
 
         if #available(iOS 26.0, *) {
-            let topLeft = style.corner.contains(.topLeft) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.topLeft) : nil
-            let topRight = style.corner.contains(.topRight) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.topRight) : nil
-            let bottomLeft = style.corner.contains(.bottomLeft) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.bottomLeft) : nil
-            let bottomRight = style.corner.contains(.bottomRight) || style.corner == .allCorners || style.capsule ? UICornerRadius(floatLiteral: values.bottomRight) : nil
-
-            corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: style.capsule)
+            if style.capsule {
+                corner26(capsule: true)
+            } else {
+                let values = style.unclampedRadii
+                let topLeft = style.corner.contains(.topLeft) || style.corner == .allCorners ? UICornerRadius(floatLiteral: values.topLeft) : nil
+                let topRight = style.corner.contains(.topRight) || style.corner == .allCorners ? UICornerRadius(floatLiteral: values.topRight) : nil
+                let bottomLeft = style.corner.contains(.bottomLeft) || style.corner == .allCorners ? UICornerRadius(floatLiteral: values.bottomLeft) : nil
+                let bottomRight = style.corner.contains(.bottomRight) || style.corner == .allCorners ? UICornerRadius(floatLiteral: values.bottomRight) : nil
+                corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight)
+            }
             layer.mask = nil
             removeCustomCornerBorderLayer()
             layer.masksToBounds = true
             layer.borderWidth = safeBorderWidth
-            layer.borderColor = borderColor.cgColor
+            layer.borderColor = resolvedBorderColor
             return
         }
 
-        layer.masksToBounds = true
-        layer.borderColor = borderColor.cgColor
-
-        if style.usesNativeLayer(in: bounds) {
+        if let nativeRadius = style.nativeLayerRadius {
             layer.mask = nil
             removeCustomCornerBorderLayer()
-            layer.cornerRadius = values.topLeft
+            layer.masksToBounds = true
+            layer.cornerRadius = nativeRadius
             layer.maskedCorners = style.maskedCorners
             layer.borderWidth = safeBorderWidth
+            layer.borderColor = resolvedBorderColor
             return
         }
 
+        guard renderBounds.width > 0, renderBounds.height > 0 else { return }
+
+        layer.masksToBounds = true
+        layer.borderColor = resolvedBorderColor
         layer.cornerRadius = 0
         layer.maskedCorners = []
         layer.borderWidth = 0
@@ -401,22 +524,33 @@ public extension UIView {
             maskLayer.name = "PTCornerMaskLayer"
             layer.mask = maskLayer
         }
-        maskLayer.frame = CGRect(origin: .zero, size: bounds.size)
-        maskLayer.path = style.path(in: bounds).cgPath
+        maskLayer.frame = renderBounds
+        maskLayer.path = style.path(in: renderBounds).cgPath
 
         guard safeBorderWidth > 0 else {
             removeCustomCornerBorderLayer()
             return
         }
 
-        let halfBorder = min(safeBorderWidth / 2, min(bounds.width, bounds.height) / 2)
-        let borderBounds = bounds.insetBy(dx: halfBorder, dy: halfBorder)
+        let halfBorder = min(safeBorderWidth / 2, min(renderBounds.width, renderBounds.height) / 2)
+        let borderBounds = renderBounds.insetBy(dx: halfBorder, dy: halfBorder)
+        let borderStyle = PTCornerStyle(radius: style.radius - halfBorder,
+                                         topLeft: style.topLeft - halfBorder,
+                                         topRight: style.topRight - halfBorder,
+                                         bottomLeft: style.bottomLeft - halfBorder,
+                                         bottomRight: style.bottomRight - halfBorder,
+                                         corner: style.corner,
+                                         capsule: style.capsule)
         let borderLayer = customCornerBorderLayer()
-        borderLayer.frame = CGRect(origin: .zero, size: bounds.size)
-        borderLayer.path = style.path(in: borderBounds).cgPath
+        borderLayer.frame = renderBounds
+        borderLayer.path = borderStyle.path(in: borderBounds).cgPath
         borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.strokeColor = resolvedBorderColor
         borderLayer.lineWidth = safeBorderWidth
+    }
+
+    private func cornerTracker() -> PTCornerTrackerView? {
+        subviews.first { $0 is PTCornerTrackerView } as? PTCornerTrackerView
     }
 
     private func customCornerBorderLayer() -> CAShapeLayer {
@@ -433,8 +567,13 @@ public extension UIView {
         layer.sublayers?.filter { $0.name == "PTCustomBorderLayer" }.forEach { $0.removeFromSuperlayer() }
     }
 
+    /// Removes the rounded-corner and border state without touching unrelated layers.
+    /// English: Call this in reusable-cell configuration when the new model has no corner style.
+    /// Español: Llámalo al configurar una celda reutilizable cuando el nuevo modelo no tenga estilo de esquinas.
+    /// 中文：复用 Cell 配置为无圆角样式时调用此方法，清理圆角和边框状态，不影响其他 Layer。
     @objc func removeViewCorner() {
-        if let tracker = subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
+        ptCornerRenderState = nil
+        if let tracker = cornerTracker() {
             tracker.cornerAction = nil
             tracker.invalidateLayout()
         }
@@ -831,12 +970,25 @@ public extension UIView {
         static var progressGeneration: UInt8 = 0
         static var viewCapturing: UInt8 = 0
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
+        static var cornerRenderState: UInt8 = 0
     }
 
     @MainActor
     private struct PTImageLoadKeys {
         static var ptLoadTask: UInt8 = 0
         static var ptLoadUUID: UInt8 = 0
+    }
+
+    private var ptCornerRenderState: PTCornerRenderState? {
+        get {
+            objc_getAssociatedObject(self, &AssociatedKeys.cornerRenderState) as? PTCornerRenderState
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.cornerRenderState,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
 
     // 1. 统一的异步任务管理

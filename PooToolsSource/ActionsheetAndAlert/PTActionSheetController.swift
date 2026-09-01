@@ -507,8 +507,10 @@ public class PTActionSheetController: PTAlertController {
                                             bottomRight: sheetConfig.cornerRadii,
                                             corner: [.bottomLeft, .bottomRight])
             } else {
-                // 中间的 Item：无圆角，清理一下避免复用问题
-                button.layer.mask = nil
+                // English: Clear every corner-related layer state for the middle row.
+                // Español: Limpia todo el estado de capas de esquinas para la fila intermedia.
+                // 中文：中间行清理全部圆角相关 Layer 状态，避免样式残留。
+                button.removeViewCorner()
             }
             
             previousView = button
