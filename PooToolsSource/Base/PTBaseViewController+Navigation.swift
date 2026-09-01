@@ -384,7 +384,7 @@ extension PTNavigationBarContainer {
         largeTitleContainer.layer.contents = nil
 
         appearance.backgroundColor = .clear
-        appearance.backgroundImage = UIImage()
+        appearance.backgroundImage = nil
 
         guard let nav else { return }
         
@@ -392,6 +392,11 @@ extension PTNavigationBarContainer {
         nav.navigationBar.standardAppearance = appearance
         nav.navigationBar.scrollEdgeAppearance = appearance
         nav.navigationBar.compactAppearance = appearance
+        // English: Clear legacy UIKit colors as well as appearances so `.solid(.clear)` stays transparent.
+        // Español: Limpia también los colores UIKit heredados para que `.solid(.clear)` permanezca transparente.
+        // 中文：同时清理 UIKit 旧式颜色，确保 `.solid(.clear)` 始终保持透明。
+        nav.navigationBar.backgroundColor = .clear
+        nav.navigationBar.barTintColor = .clear
         nav.navigationBar.isTranslucent = true
         nav.navigationBar.subviews.forEach {
             if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {

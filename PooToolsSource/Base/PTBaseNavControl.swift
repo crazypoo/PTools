@@ -28,8 +28,10 @@ open class PTBaseNavControl: UINavigationController {
         pushStatusBars(for: viewControllers)
         PTNavigationBarManager.shared.bind(to: self)
         PTNavigationBarManager.shared.installIfNeeded(in: self)
-        // Do any additional setup after loading the view.
-        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        // English: Keep the navigation-controller backing transparent; the child controller owns the content surface.
+        // Español: Mantiene transparente el fondo del controlador de navegación; el controlador hijo posee la superficie de contenido.
+        // 中文：保持导航控制器底层背景透明，由子控制器负责内容背景。
+        view.backgroundColor = .clear
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _: UITraitCollection) in
             let style = self.traitCollection.userInterfaceStyle
@@ -131,6 +133,13 @@ extension PTBaseNavControl {
         nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         nav.navigationBar.standardAppearance = navigationBarAppearance
         nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
+        nav.navigationBar.compactAppearance = navigationBarAppearance
+        // English: Keep the legacy UIKit properties aligned with the transparent appearance.
+        // Español: Mantiene las propiedades UIKit heredadas alineadas con la apariencia transparente.
+        // 中文：让 UIKit 旧式属性与透明外观保持一致。
+        nav.navigationBar.backgroundColor = colors
+        nav.navigationBar.barTintColor = colors
+        nav.navigationBar.isTranslucent = true
         nav.navigationBar.tintColor = textColors
         nav.topViewController?.navigationItem.leftBarButtonItem?.tintColor = textColors
 

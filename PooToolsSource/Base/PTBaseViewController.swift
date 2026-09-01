@@ -120,7 +120,7 @@ public final class PTNavigationBarManager:NSObject {
         // Español: El contenedor personalizado controla todo el fondo de navegación, incluida el área de la barra de estado.
         // 中文：自定义容器负责包含状态栏区域在内的完整导航背景。
         appearance.backgroundColor = .clear
-        appearance.backgroundImage = UIImage()
+        appearance.backgroundImage = nil
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
         
@@ -139,6 +139,11 @@ public final class PTNavigationBarManager:NSObject {
         nav.navigationBar.compactAppearance = appearance
         
         // 🔥 关键：关闭系统 blur
+        // English: Clear both legacy and appearance-based UIKit surfaces so a clear style reveals the page below.
+        // Español: Limpia las superficies UIKit antiguas y basadas en apariencia para que el estilo transparente muestre la página inferior.
+        // 中文：同时清理 UIKit 旧式和 Appearance 背景，确保透明样式能够显示页面内容。
+        nav.navigationBar.backgroundColor = .clear
+        nav.navigationBar.barTintColor = .clear
         nav.navigationBar.isTranslucent = true
         
         nav.navigationBar.subviews.forEach {
@@ -148,6 +153,11 @@ public final class PTNavigationBarManager:NSObject {
                 $0.alpha = 0
             }
         }
+
+        // English: Keep the navigation-controller backing transparent so a clear style reveals the child view.
+        // Español: Mantiene transparente el fondo del controlador de navegación para que un estilo claro muestre la vista hija.
+        // 中文：保持导航控制器的底层背景透明，让 clear 样式能够显示子控制器内容。
+        nav.view.backgroundColor = .clear
     }
     
     public func setAlpha(_ alpha: CGFloat) {
