@@ -17,6 +17,36 @@
 | UI 调度 | `PTMainActorBridge` | `PTGCDManager` 主线程入口保留兼容性 |
 | 网络请求 | `Network` 内部执行管线 | `Any`、KakaJSON 和 callback 入口保留在兼容层 |
 
+### 5.7.0 PTListViewController
+
+`PTListViewController` 是 Core 的列表页面基类。它只承载一个 `PTCollectionView`：`.Normal`
+用于类表格的纵向列表，Grid、Waterfall、Tag、Horizontal 和 Custom 继续使用
+`PTCollectionView` 的集合布局能力。它不引入第二套 `UITableView` 数据源，也不改变现有
+`PTCollectionView` 的 Diffable、Cell 或公开回调入口。
+
+```swift
+@MainActor
+final class ExampleListController: PTListViewController {
+    override func makeListViewConfiguration() -> PTCollectionViewConfig {
+        let configuration = PTCollectionViewConfig()
+        configuration.viewType = .Normal
+        return configuration
+    }
+
+    override func configureListView(_ listView: PTCollectionView) {
+        listView.collectionDidSelect = { _, _, _ in
+            // Configure the page-specific selection behavior here.
+            // Configura aquí el comportamiento de selección específico de la página.
+            // 在这里配置页面专属的选择行为。
+        }
+    }
+}
+```
+
+默认列表使用安全区约束；需要全屏列表或额外头部时，覆盖
+`prepareListViewLayout(_:)` 和 `installListViewConstraints(_:)`。控制器不会接管
+`PTCollectionView` 的 delegate，基类的大标题滚动过渡与原有业务滚动回调会同时保留。
+
 ### 5.6.3 ScreenShot 与 MessageKit
 
 - ScreenShot 的 UIView、UIScrollView、UITableView、UIWindow 和 WKWebView 继续保留原有公开入口；新的统一渲染器负责场景缩放、像素上限、长截图状态恢复和取消。

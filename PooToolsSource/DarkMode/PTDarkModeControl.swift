@@ -10,8 +10,9 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+@MainActor
 @objcMembers
-public class PTDarkModeControl: PTBaseViewController {
+public class PTDarkModeControl: PTListViewController {
 
     private enum CellID {
         static let smart = "PTDarkModeControl.smart"
@@ -48,12 +49,15 @@ public class PTDarkModeControl: PTBaseViewController {
     
     var mSections = [PTSection]()
     
-    lazy var newCollectionView : PTCollectionView = {
+    public override func makeListViewConfiguration() -> PTCollectionViewConfig {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
         cConfig.topRefresh = false
-        let view = PTCollectionView(viewConfig: cConfig)
-        view.customerLayout = { sectionIndex,sectionModel in
+        return cConfig
+    }
+
+    public override func configureListView(_ listView: PTCollectionView) {
+        listView.customerLayout = { sectionIndex,sectionModel in
             var cellHeight:CGFloat = 0
             if Gobal_device_info.isPad {
                 cellHeight = 64
@@ -62,7 +66,7 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: cellHeight,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace)
         }
-        view.headerInCollection = { [weak self] kind,collectionView,model,index in
+        listView.headerInCollection = { [weak self] kind,collectionView,model,index in
             if let headerID = model.headerReuseID {
                 let baseHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index)
                 switch baseHeader {
@@ -79,7 +83,7 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return nil
         }
-        view.footerInCollection = { [weak self] kind,collectionView,itemSec,indexPath in
+        listView.footerInCollection = { [weak self] kind,collectionView,itemSec,indexPath in
             if let footerID = itemSec.footerReuseID {
                 let baseFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerID, for: indexPath)
                 switch baseFooter {
@@ -109,7 +113,7 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return nil
         }
-        view.cellInCollection = { [weak self] collectionView ,dataModel,indexPath in
+        listView.cellInCollection = { [weak self] collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
                 switch baseCell {
@@ -151,8 +155,14 @@ public class PTDarkModeControl: PTBaseViewController {
             }
             return nil
         }
-        return view
-    }()
+    }
+
+    public override func installListViewConstraints(_ listView: PTCollectionView) {
+        listView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+    }
     
     lazy var backButton:PTBaseButton = {
         let view = PTBaseButton(type: .custom)
@@ -182,16 +192,11 @@ public class PTDarkModeControl: PTBaseViewController {
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
-        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
-        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+        listView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        listView.contentCollectionView.contentInset.top = collectionInset_Top
+        listView.contentCollectionView.contentInset.bottom = collectionInset
+        listView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView])
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
-        }
         themeProvider.register(observer: self)
         apply()
     }
@@ -230,7 +235,7 @@ public class PTDarkModeControl: PTBaseViewController {
             }
         }
         
-        newCollectionView.showCollectionDetail(collectionData: mSections)
+        listView.showCollectionDetail(collectionData: mSections)
     }
 }
 

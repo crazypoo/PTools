@@ -373,6 +373,12 @@ public class PTCollectionView: UIView {
     open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?
     open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
+
+    // English: Internal controller observers keep PTCollectionView's delegate ownership intact.
+    // Español: Los observadores internos conservan la propiedad del delegate de PTCollectionView.
+    // 中文：内部控制器观察通道保留 PTCollectionView 对 delegate 的所有权。
+    var listControllerDidScroll: PTCollectionViewScrollHandler?
+    var listControllerDidEndDragging: (@MainActor (UICollectionView, Bool) -> Void)?
     
     //MARK: Orthogonal Scroll handler (正交滚动专用)
     /// 正交滚动 (横向滑动) 的实时偏移量回调: (SectionIndex, CGPoint)
@@ -907,6 +913,7 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let cv = scrollView as? UICollectionView else { return }
+        listControllerDidScroll?(cv)
         collectionViewDidScroll?(cv)
         throttleScrollUpdate()
     }
@@ -918,6 +925,7 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard let cv = scrollView as? UICollectionView else { return }
+        listControllerDidEndDragging?(cv, decelerate)
         collectionDidEndDragging?(cv,decelerate)
     }
     

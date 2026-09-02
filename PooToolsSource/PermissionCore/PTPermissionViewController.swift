@@ -21,8 +21,9 @@ public class PTPermissionStatic:NSObject {
     public var permissionSettingFont:UIFont = .appfont(size: 16)
 }
 
+@MainActor
 @objcMembers
-public class PTPermissionViewController: PTBaseViewController {
+public class PTPermissionViewController: PTListViewController {
     
     fileprivate var permissions:[PTPermissionModel] = []
     fileprivate var permissionStatic = PTPermissionStatic.share
@@ -37,7 +38,21 @@ public class PTPermissionViewController: PTBaseViewController {
         }
     }
     
-    private lazy var newCollectionView:PTCollectionView = {
+    private lazy var closeButton: PTBaseButton = {
+        let button = PTBaseButton(type: .close)
+        button.bounds = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
+        button.addActionHandlers { [weak self] _ in
+            guard let self else { return }
+            self.returnFrontVC { [weak self] in
+                PTGCDManager.shared.runOnMain { [weak self] in
+                    self?.viewDismissBlock?()
+                }
+            }
+        }
+        return button
+    }()
+
+    public override func makeListViewConfiguration() -> PTCollectionViewConfig {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Normal
         cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
@@ -45,29 +60,32 @@ public class PTPermissionViewController: PTBaseViewController {
         cConfig.headerWidthOffset = PTAppBaseConfig.share.defaultViewSpace
         cConfig.decorationItemsType = .Corner
         cConfig.decorationItemsEdges = NSDirectionalEdgeInsets(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
-        
-        let view = PTCollectionView(viewConfig: cConfig)
-        view.decorationViewReset = { collection,view,kind,indexPath,sectionModel in
-            if Gobal_device_info.isPad {
-                view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
-            }
+        return cConfig
+    }
+
+    public override func configureListView(_ listView: PTCollectionView) {
+        let decorationEdges = listView.viewConfig.decorationItemsEdges
+        listView.decorationViewReset = { [weak self] collection,decorationView,kind,indexPath,sectionModel in
+            guard let self, Gobal_device_info.isPad else { return }
+            decorationView.frame = CGRectMake(decorationEdges.leading, 0, self.view.frame.size.width - decorationEdges.leading - decorationEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
         }
-        
-        view.headerInCollection = { kind,collectionView,model,indexPath in
+
+        listView.headerInCollection = { kind,collectionView,model,indexPath in
             if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerReuseID ?? "", for: indexPath) as? PTPermissionHeader {
                 return header
             }
             return nil
         }
-        view.cellInCollection = { collectionView ,dataModel,indexPath in
+        listView.cellInCollection = { collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTPermissionCell,let cellModel = itemRow.dataModel as? PTPermissionModel {
                 cell.cellModel  = cellModel
                 return cell
             }
             return nil
         }
-        
-        view.collectionDidSelect = { collectionView, sectionModel, indexPath in
+
+        listView.collectionDidSelect = { [weak self] collectionView, sectionModel, indexPath in
+            guard let self else { return }
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTPermissionModel, let cell = collectionView.cellForItem(at: indexPath) as? PTPermissionCell {
                 switch cell.cellStatus {
                 case .authorized:
@@ -156,8 +174,23 @@ public class PTPermissionViewController: PTBaseViewController {
                 }
             }
         }
-        return view
-    }()
+    }
+
+    public override func prepareListViewLayout(_ listView: PTCollectionView) {
+        view.addSubview(closeButton)
+        closeButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
+            make.top.equalToSuperview().inset(5)
+        }
+    }
+
+    public override func installListViewConstraints(_ listView: PTCollectionView) {
+        listView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(closeButton.snp.bottom).offset(10)
+        }
+    }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -173,28 +206,7 @@ public class PTPermissionViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         permissions = permissionStatic.permissionModels
-        
-        let closeButton = PTBaseButton(type: .close)
-        view?.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
-            make.top.equalToSuperview().inset(5)
-        }
-        closeButton.addActionHandlers(handler: { sender in
-            self.returnFrontVC {
-                PTGCDManager.shared.runOnMain {
-                    self.viewDismissBlock?()
-                }
-            }
-        })
-        
-        view.addSubview(newCollectionView)
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(closeButton.snp.bottom).offset(10)
-        }
-        
+
         showDetail()
         
         var haveTracking = false
@@ -233,8 +245,8 @@ public class PTPermissionViewController: PTBaseViewController {
         section.headerClass = PTPermissionHeader.self
         mSections.append(section)
         
-        newCollectionView.layoutIfNeeded()
-        newCollectionView.showCollectionDetail(collectionData: mSections)
+        listView.layoutIfNeeded()
+        listView.showCollectionDetail(collectionData: mSections)
     }
     
     func permissionRequest(showTracking:Bool = true,type:PTPermission.Kind) {

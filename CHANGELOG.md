@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.7.0 - 2026-09-02 (Blocked candidate)
+
+- 新增 `PTListViewController`，以单一 `PTCollectionView` 统一类表格和类集合列表页面；默认使用安全区布局，并提供配置、辅助视图和约束扩展点。
+- 通过内部滚动桥接保留 `PTCollectionView` 的 delegate ownership，同时复用 `PTBaseViewController` 的大标题 inset、进度和回弹逻辑。
+- 迁移 `PTPermissionViewController` 与 `PTDarkModeControl`，保留关闭按钮、装饰视图、特殊 inset、深色模式页眉页脚和原有业务回调。
+- 新增 Base 文件已加入 CocoaPods、SwiftPM 和 Xcode Core 源文件契约；未删除公开 API 或修改第三方依赖。
+- Xcode 完整构建当前被外部 `KituraContracts` Swift 6 并发诊断阻断，尚未同步版本号或创建 `5.7.0` 标签。
+
 ## 5.6.9 - 2026-09-01 (Blocked candidate)
 
 - 修复 `UIView.viewCorner` 在 Auto Layout 和可复用 Cell 中因调用时 bounds 尚未确定而出现的延迟或样式失效问题；统一半径圆角使用原生 Layer 快速路径。

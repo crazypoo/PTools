@@ -958,43 +958,60 @@ open class PTBaseViewController: UIViewController {
 
 extension PTBaseViewController: UIScrollViewDelegate {
     open func bindScrollView(_ scrollView: UIScrollView) {
-        
-        self.view.layoutIfNeeded()
-        scrollView.delegate = self
-        if prefersLargeTitle() {
-            let topHeight = scrollView.frame.origin.y + PTAppBaseConfig.share.navLargeTitleBarHeight
-            
-            scrollView.contentInset.top = topHeight
-            scrollView.verticalScrollIndicatorInsets.top = topHeight
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        }
+        pt_prepareScrollViewForLargeTitle(scrollView, assignsDelegate: true)
     }
     
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if prefersLargeTitle() {
-            let offset = scrollView.contentOffset.y
-            let insetTop = scrollView.contentInset.top
-            
-            let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
-            PTNavigationBarManager.shared.updateScrollProgress(progress)
-        }
+        pt_updateLargeTitleTransition(for: scrollView)
     }
     
     open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if prefersLargeTitle() {
-            guard scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
-            
-            UIView.animate(withDuration: 0.25,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 0.5,
-                           options: [.curveEaseOut]) {
-                
-                scrollView.setContentOffset(
-                    CGPoint(x: 0, y: -scrollView.contentInset.top),
-                    animated: false
-                )
-            }
+        pt_finishLargeTitleDrag(for: scrollView)
+    }
+
+    // English: Prepare large-title insets without changing the delegate when a wrapper owns it.
+    // Español: Prepara los insets del título grande sin cambiar el delegate cuando un wrapper lo posee.
+    // 中文：当包装器拥有 delegate 时，只准备大标题 inset，不改变 delegate 归属。
+    func pt_prepareScrollViewForLargeTitle(_ scrollView: UIScrollView, assignsDelegate: Bool) {
+        view.layoutIfNeeded()
+        if assignsDelegate {
+            scrollView.delegate = self
+        }
+        guard prefersLargeTitle() else { return }
+
+        let topHeight = scrollView.frame.origin.y + PTAppBaseConfig.share.navLargeTitleBarHeight
+        scrollView.contentInset.top = topHeight
+        scrollView.verticalScrollIndicatorInsets.top = topHeight
+        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+    }
+
+    // English: Reuse the same progress calculation for direct and wrapped scroll views.
+    // Español: Reutiliza el mismo cálculo de progreso para scroll views directos y envueltos.
+    // 中文：直接绑定和包装后的滚动视图统一使用同一套进度计算。
+    func pt_updateLargeTitleTransition(for scrollView: UIScrollView) {
+        guard prefersLargeTitle() else { return }
+
+        let offset = scrollView.contentOffset.y
+        let insetTop = scrollView.contentInset.top
+        let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
+        PTNavigationBarManager.shared.updateScrollProgress(progress)
+    }
+
+    // English: Preserve the existing overscroll snap behavior for wrapped lists.
+    // Español: Conserva el ajuste existente del sobre desplazamiento para listas envueltas.
+    // 中文：为包装后的列表保留原有的过度下拉回弹行为。
+    func pt_finishLargeTitleDrag(for scrollView: UIScrollView) {
+        guard prefersLargeTitle(), scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
+
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.5,
+                       options: [.curveEaseOut]) {
+            scrollView.setContentOffset(
+                CGPoint(x: 0, y: -scrollView.contentInset.top),
+                animated: false
+            )
         }
     }
 }

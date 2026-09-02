@@ -39,9 +39,9 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.4'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.10'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.10'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.6.10'
 ```
 
 ### Swift 6 迁移要点
@@ -53,6 +53,14 @@ pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :t
 - 图片请求统一使用 `PTMediaLibManager.requestImage`；旧 `fetchImage` 入口继续兼容。
 - 媒体保存优先使用 `PTMediaSaveService.save(image:videoURL:completion:)`；旧保存入口保留并逐步弃用。
 - Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。
+
+### PTListViewController
+
+Core 提供 `PTListViewController` 作为高频列表页面基类。它只承载一个
+`PTCollectionView`：`.Normal` 适合类表格的纵向列表，其他 `viewType` 继续提供 Grid、
+Waterfall、Tag、Horizontal 和 Custom 集合布局。页面通过
+`makeListViewConfiguration()`、`configureListView(_:)` 和约束扩展点配置列表，不需要维护
+第二套 `UITableView` 数据源；现有 `PTCollectionView` delegate 和大标题滚动逻辑保持兼容。
 
 完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
 [ROADMAP_5X.md](ROADMAP_5X.md)，5.x 兼容入口和 6.0.0 删除条件见

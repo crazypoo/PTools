@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.8`（2026-09-01，当前工作区基线）
-> 当前候选：`5.6.9`（2026-09-01）
+> 基线：`5.6.10`（2026-09-02，当前工作区基线）
+> 当前候选：`5.7.0`（2026-09-02）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -349,3 +349,30 @@
 - ✅ `removeViewCorner()` 可安全用于复用配置，清除圆角、边框、mask 和 iOS 26 corner configuration，不会移除同一 View 的渐变或进度状态。
 - ✅ 未改变公开方法签名、模块路径或第三方依赖；未新增 `@unchecked Sendable`、`nonisolated(unsafe)`、`try!` 或 `as!`。
 - ⛔ Debug/Release 均已通过 Xcode 执行到 PooTools 源码编译阶段；完整链接和源码警告门禁仍受外部依赖/工具链阻断，待环境修复后补验。
+
+## 5.7.0：PTListViewController 列表容器与滚动边界统一
+
+### 任务清单
+
+- ✅ `CORE-570-01`：新增 `PTListViewController`，以一个 `PTCollectionView` 同时承载类表格和类集合列表；`.Normal` 保持纵向列表语义，其余布局类型继续由 `PTCollectionView` 负责，不引入第二套 `UITableView` 数据源。
+- ✅ `CORE-570-02`：提供 `makeListViewConfiguration()`、`configureListView(_:)`、`prepareListViewLayout(_:)` 和 `installListViewConstraints(_:)` 扩展点；默认列表约束使用安全区，特殊页面可以保留全屏布局。
+- ✅ `CORE-570-03`：保持 `PTCollectionView` 对内部 `UICollectionViewDelegate` 的所有权，通过内部滚动观察通道复用 `PTBaseViewController` 的大标题 inset、进度和回弹逻辑，不覆盖业务 delegate。
+- ✅ `CORE-570-04`：迁移 `PTPermissionViewController` 和 `PTDarkModeControl` 两个样板页面；保留权限关闭按钮、装饰视图、深色模式页眉页脚、特殊 inset 和原有数据回调行为。
+- ✅ `CORE-570-05`：将新 Base 源文件加入 CocoaPods、SwiftPM 和 Xcode 的 Core 源文件契约；不修改公开类名、原有入口和第三方依赖。
+- ✅ `CORE-570-06`：补齐 5.7.0 迁移文档、重复入口记录和注释规范；新代码注释使用英语、西班牙语和中文。
+- ⛔ `CORE-570-07`：Xcode `PooTools-Example` Debug/Release 和 `PooTools` Debug 已执行，但被外部 `KituraContracts` 的 Swift 6 并发诊断阻断；在依赖修复前不得创建 `5.7.0` tag 或宣称完整构建验收通过。
+
+### 5.7.0 实施与验证说明
+
+- ✅ `PTListViewController` 不伪造 section/row，不修改 Diffable snapshot，不触发额外 Cell 注册或业务回调；子类只需配置继承的 `listView`。
+- ✅ 默认安全区布局与 `PTPermissionViewController` 的关闭按钮布局、`PTDarkModeControl` 的全屏布局均通过 override 分离，避免基类为特例增加条件分支。
+- ✅ 列表控制器的滚动回调通过 `PTCollectionView` 内部桥接执行，既保留 `collectionViewDidScroll`/`collectionDidEndDragging` 公开回调，也避免把 delegate ownership 转移给控制器。
+- ✅ 公开的 `bindScrollView` 继续使用原有入口；大标题计算被抽为基类内部辅助方法，直接绑定和包装列表使用同一套进度计算。
+- ⛔ 当前完整 Xcode 构建失败原因位于 `Pods/KituraContracts` 的外部 Swift 6 并发诊断，不属于本次新增或修改的 PooTools 源码；源码解析、工程列表检查和修改文件的编译路径需要在依赖修复后补验。
+
+### 5.7.0 发布门槛
+
+- ⬜ 外部 Pods 阻断解除后重新执行 PooTools-Example Debug/Release 和 PooTools Debug 完整构建。
+- ⬜ 通过 `validate_quality_scans.sh`、`validate_build_entries.sh`、`validate_core_source_contract.sh`、Package manifest、CocoaPods lint 和 `git diff --check`。
+- ⬜ 完成 Normal、Custom/Grid、空状态、大标题滚动、列表 delegate 回调和两个迁移页面的人工回归。
+- ⬜ 将 `PooTools.podspec`、`Podfile.lock`、`README.md`、`RELEASE.md` 和 `CHANGELOG.md` 同步到 5.7.0 后，创建不带 `v` 前缀的 `5.7.0` tag。
