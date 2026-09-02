@@ -376,3 +376,21 @@
 - ⬜ 通过 `validate_quality_scans.sh`、`validate_build_entries.sh`、`validate_core_source_contract.sh`、Package manifest、CocoaPods lint 和 `git diff --check`。
 - ⬜ 完成 Normal、Custom/Grid、空状态、大标题滚动、列表 delegate 回调和两个迁移页面的人工回归。
 - ⬜ 将 `PooTools.podspec`、`Podfile.lock`、`README.md`、`RELEASE.md` 和 `CHANGELOG.md` 同步到 5.7.0 后，创建不带 `v` 前缀的 `5.7.0` tag。
+
+## 5.7.1：PTCustomerAlertController 多按钮自适应布局（修复重做）
+
+### 任务清单
+
+- ✅ `CORE-571-01`：保留 `UIAlertController.base_alertVC` 和 `PTCustomerAlertController` 公开接口，使用展示场景的实际窗口宽度计算正文尺寸，兼容旋转和分屏。
+- ✅ `CORE-571-02`：多按钮弹窗改为自适应布局；一到两个按钮保持横向布局，三个及以上按钮使用纵向布局，并在内容过高时启用按钮区域或整体内容滚动。
+- ✅ `CORE-571-03`：限制弹窗宽高在安全区域内，保护零尺寸、超大内容和旋转后的重新布局；重复布局只更新约束常量，不重复创建按钮和视图层级。
+- ✅ `CORE-571-04`：修复约束激活顺序；标题和自定义内容视图在建立约束前加入 `bodyContentView`，确保所有约束两端存在共同父视图，避免 `NSGenericException` 闪退。
+- ✅ `CORE-571-05`：按钮点击和背景关闭保持一次性回调，保留旧索引语义；默认背景颜色继续使用动态系统磨砂颜色。
+- ✅ `CORE-571-06`：完成修改文件 Swift 前端解析、质量扫描、构建入口检查、Core source contract、`git diff --check` 和 Xcode PooTools Debug/Release 构建。
+- ⚠️ `CORE-571-07`：示例工程 Simulator Debug 仍被仓库现有真机版 `Pods/Bugly/Bugly.framework` 阻断；通用 iOS 真机目标 Release 已构建成功，待提供兼容 Simulator 的 Bugly 产物后补做模拟器运行回归。
+
+### 5.7.1 修复说明
+
+- ✅ 本次闪退根因是 `configureContentHierarchy()` 在 `titleMessage` 和 `customView` 尚未加入 `bodyContentView` 时，提前激活了它们与 `bodyContentView` 的约束；现已调整为先建立完整视图层级，再激活约束。
+- ✅ 初始化宽高约束不再使用强制解包；弹窗宽度和高度均有最小值保护，并优先遵循展示窗口的安全区域。
+- ✅ 不修改 `5.7.1` 既有 tag，不覆盖用户提交历史；当前修复保留在工作区，确认人工回归后再由发布流程决定是否创建后续修复 tag。

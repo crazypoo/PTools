@@ -201,13 +201,15 @@ public class PTCustomerAlertController: PTAlertController {
         view.addSubview(contentView)
         contentView.backgroundColor = resolvedContentBackgroundColor
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentWidth)
-        contentHeightConstraint = contentView.heightAnchor.constraint(equalToConstant: 1)
+        let initialWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentWidth)
+        let initialHeightConstraint = contentView.heightAnchor.constraint(equalToConstant: 1)
+        contentWidthConstraint = initialWidthConstraint
+        contentHeightConstraint = initialHeightConstraint
         NSLayoutConstraint.activate([
             contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            contentWidthConstraint!,
-            contentHeightConstraint!
+            initialWidthConstraint,
+            initialHeightConstraint
         ])
         
         if canTapBackground {
@@ -254,6 +256,11 @@ public class PTCustomerAlertController: PTAlertController {
 
         contentView.addSubview(bodyScrollView)
         bodyScrollView.addSubview(bodyContentView)
+        // English: Add every view before activating constraints so both anchors share the same hierarchy.
+        // Español: Añade cada vista antes de activar las restricciones para que ambos anclajes compartan la misma jerarquía.
+        // 中文：先将所有视图加入同一层级，再激活约束，确保约束两端拥有共同父视图。
+        bodyContentView.addSubview(titleMessage)
+        bodyContentView.addSubview(customView)
 
         var bodyBottomConstraint: NSLayoutConstraint
         NSLayoutConstraint.activate([
@@ -405,8 +412,11 @@ public class PTCustomerAlertController: PTAlertController {
     private func updateAlertLayout() {
         guard contentWidthConstraint != nil, contentHeightConstraint != nil else { return }
 
-        let width = max(1, view.bounds.width - contentSpace * 2)
-        let safeHeight = max(view.safeAreaLayoutGuide.layoutFrame.height, view.bounds.height)
+        let safeAreaFrame = view.safeAreaLayoutGuide.layoutFrame
+        let widthWithoutMargins = max(1, view.bounds.width - contentSpace * 2)
+        let availableWidth = safeAreaFrame.width > 0 ? safeAreaFrame.width : view.bounds.width
+        let width = min(widthWithoutMargins, max(1, availableWidth))
+        let safeHeight = safeAreaFrame.height > 0 ? safeAreaFrame.height : view.bounds.height
         guard safeHeight > 0 else { return }
 
         let maximumHeight = max(1, safeHeight - minimumAlertVerticalMargin * 2)
@@ -436,7 +446,7 @@ public class PTCustomerAlertController: PTAlertController {
             }
         } else {
             mode = .fitted
-            contentHeight = min(fixedContentHeight + compactButtonsHeight, maximumHeight)
+            contentHeight = max(1, min(fixedContentHeight + compactButtonsHeight, maximumHeight))
             actionViewportHeight = 0
         }
 
