@@ -128,9 +128,11 @@ open class PTNavigationBarContainer: UIView {
     }
     
     public func apply(style: PTNavigationBarStyle) {
-        // English: Render a settled style without replacing an active transition pair.
-        // Español: Renderiza un estilo estable sin reemplazar un par de transición activo.
-        // 中文：直接渲染稳定样式，但不覆盖正在进行的转场样式对。
+        // English: Commit the settled style so later layout updates do not reuse an old transition pair.
+        // Español: Confirma el estilo estable para que las actualizaciones posteriores no reutilicen un par de transición antiguo.
+        // 中文：提交当前稳定样式，避免后续布局更新继续使用旧的转场样式对。
+        fromStyle = style
+        toStyle = style
         renderedProgress = 1
         backgroundAlpha = 1
         backgroundView.alpha = 1
@@ -376,7 +378,7 @@ extension PTNavigationBarContainer {
         // English: The custom surface is the only color renderer; UIKit receives a transparent appearance.
         // Español: La superficie personalizada es el único renderizador de color; UIKit recibe una apariencia transparente.
         // 中文：自定义背景层作为唯一颜色渲染源，UIKit 外观保持透明，避免重复绘制。
-        backgroundView.backgroundColor = .clear
+        backgroundView.backgroundColor = appearance.backgroundColor ?? .clear
         backgroundView.layer.contentsGravity = .resize
         backgroundView.layer.contents = appearance.backgroundImage?.cgImage
         backgroundView.alpha = backgroundAlpha
