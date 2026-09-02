@@ -142,7 +142,17 @@ public extension UIAlertController {
         let colors = actionColors.isEmpty ? [.systemBlue] : actionColors
         
         let contentSpacing:CGFloat = 25
-        let contentWidth = CGFloat.kSCREEN_WIDTH - contentSpacing * 2
+
+        // English: Measure the message in the presenting window so split-screen and rotation use the real width.
+        // Español: Mide el mensaje usando la ventana presentadora para que la pantalla dividida y la rotación usen el ancho real.
+        // 中文：使用实际展示窗口测量正文，确保分屏和旋转时采用正确宽度。
+        let availableWidths = [
+            showIn?.viewIfLoaded?.bounds.width,
+            showIn?.viewIfLoaded?.window?.bounds.width,
+            PTSceneContext.activeWindow()?.bounds.width,
+            CGFloat.kSCREEN_WIDTH
+        ].compactMap { $0 }.filter { $0 > 0 }
+        let contentWidth = max(1, (availableWidths.first ?? CGFloat.kSCREEN_WIDTH) - contentSpacing * 2)
         
         let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingSize(font: msgFont,width: contentWidth).height + 20)
 

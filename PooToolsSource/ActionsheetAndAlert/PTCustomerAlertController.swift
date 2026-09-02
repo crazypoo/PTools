@@ -28,6 +28,26 @@ public class PTCustomBottomButtonModel: NSObject {
 
 public class PTCustomerAlertController: PTAlertController {
 
+    // English: Use one active scroll region at a time so adaptive layouts remain easy to reason about.
+    // Español: Usa una sola región de desplazamiento activa para que los diseños adaptativos sean fáciles de mantener.
+    // 中文：同一时间只启用一个滚动区域，保证自适应布局逻辑清晰且不产生嵌套滚动冲突。
+    private enum ActionLayoutMode: Equatable {
+        case fitted
+        case scrollingActions
+        case scrollingAll
+    }
+
+    // English: Cache only geometry inputs so repeated layout passes do not recreate constraints or controls.
+    // Español: Guarda solo las entradas geométricas para que los pases de diseño repetidos no reconstruyan restricciones ni controles.
+    // 中文：只缓存几何输入，避免重复布局时重新创建约束和控件。
+    private struct AlertLayoutSignature: Equatable {
+        let width: CGFloat
+        let safeHeight: CGFloat
+        let titleHeight: CGFloat
+        let customerViewHeight: CGFloat
+        let buttonCount: Int
+    }
+
     public var bottomButtonTapCallback:((_ title:String,_ index:Int) -> Void)? = nil
     public var backgroundTapCallback:((PTCustomerAlertController) -> Void)? = nil
     public var contentBackgroundColor: UIColor? {
@@ -93,6 +113,49 @@ public class PTCustomerAlertController: PTAlertController {
         return view
     }()
     fileprivate var canTapBackground:Bool = false
+
+    private let bodyScrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .clear
+        view.contentInsetAdjustmentBehavior = .never
+        view.showsVerticalScrollIndicator = false
+        view.alwaysBounceVertical = false
+        return view
+    }()
+
+    private let bodyContentView = UIView()
+
+    private let actionScrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .clear
+        view.contentInsetAdjustmentBehavior = .never
+        view.showsVerticalScrollIndicator = true
+        view.alwaysBounceVertical = false
+        return view
+    }()
+
+    private let actionStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .fill
+        view.distribution = .fill
+        view.spacing = 0
+        return view
+    }()
+
+    private let compactActionView = UIView()
+    private var actionButtons = [UIButton]()
+    private var contentWidthConstraint: NSLayoutConstraint?
+    private var contentHeightConstraint: NSLayoutConstraint?
+    private var titleHeightConstraint: NSLayoutConstraint?
+    private var customerViewHeightConstraint: NSLayoutConstraint?
+    private var actionViewportHeightConstraint: NSLayoutConstraint?
+    private var layoutSignature: AlertLayoutSignature?
+    private var actionLayoutMode: ActionLayoutMode = .fitted
+    private var isHandlingAction = false
+
+    private let buttonRowHeight: CGFloat = 44
+    private let minimumAlertVerticalMargin: CGFloat = 16
     
     public init(title:String = "",
                 titleFont:UIFont = .appfont(size: 15),
@@ -113,7 +176,7 @@ public class PTCustomerAlertController: PTAlertController {
         self.buttonsFont = buttonsFont
         self.cornerSize = cornerSize
         self.contentSpace = contentSpace
-        self.customerViewHeight = customerViewHeight
+        self.customerViewHeight = max(0, customerViewHeight)
         self.customerViewCallback = customerViewCallback
         self.canTapBackground = canTapBackground
         super.init(nibName: nil, bundle: nil)
@@ -122,15 +185,9 @@ public class PTCustomerAlertController: PTAlertController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        contentWidth = max(0, view.bounds.width - contentSpace * 2)
-        
+        contentWidth = max(1, view.bounds.width - contentSpace * 2)
         let haveTitle = !alertTitle.isEmpty
-        titleHeight = haveTitle ? (self.titleMessage.sizeFor(width: contentWidth - titleSpace * 2).height + 10) : 0
-        if haveTitle {
-            if titleHeight < 44 {
-                titleHeight = 44
-            }
-        }
+        titleHeight = haveTitle ? resolvedTitleHeight(for: contentWidth) : 0
         
         buttonModels = buttons.enumerated().map { index, title in
             let model = PTCustomBottomButtonModel()
@@ -140,15 +197,18 @@ public class PTCustomerAlertController: PTAlertController {
         }
         
         view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
-        let buttonHeight: CGFloat = buttons.count <= 2 ? (buttons.isEmpty ? 0 : 44) : CGFloat(buttons.count) * 44
 
         view.addSubview(contentView)
         contentView.backgroundColor = resolvedContentBackgroundColor
-        contentView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalTo(contentWidth)
-            make.height.equalTo((haveTitle ? titleHeight : 0) + customerViewHeight + buttonHeight)
-        }
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentWidth)
+        contentHeightConstraint = contentView.heightAnchor.constraint(equalToConstant: 1)
+        NSLayoutConstraint.activate([
+            contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            contentWidthConstraint!,
+            contentHeightConstraint!
+        ])
         
         if canTapBackground {
             let tap = UITapGestureRecognizer { _ in
@@ -167,11 +227,15 @@ public class PTCustomerAlertController: PTAlertController {
         }
 
         contentView.addSubview(blur)
-        blur.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        blur.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            blur.topAnchor.constraint(equalTo: contentView.topAnchor),
+            blur.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            blur.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            blur.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
 
-        contentSubsSet()
+        configureContentHierarchy()
     }
 
     private func updateContentBackgroundIfLoaded() {
@@ -179,64 +243,236 @@ public class PTCustomerAlertController: PTAlertController {
         contentView.backgroundColor = resolvedContentBackgroundColor
     }
     
-    fileprivate func contentSubsSet() {
-        contentView.addSubviews([titleMessage,customView])
-        titleMessage.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview().inset(self.titleSpace)
-            make.height.equalTo(self.titleHeight)
-        }
-        
-        let buttonHeight: CGFloat = buttons.count <= 2 ? (buttons.isEmpty ? 0 : 44) : CGFloat(buttons.count) * 44
-        customView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.titleMessage.snp.bottom)
-            make.bottom.equalToSuperview().inset(buttonHeight)
-        }
-        self.customerViewCallback?(customView)
+    // English: Build the hierarchy once; later size changes only update constants and scroll modes.
+    // Español: Construye la jerarquía una sola vez; los cambios de tamaño posteriores solo actualizan constantes y modos de desplazamiento.
+    // 中文：只创建一次视图层级，后续尺寸变化仅更新约束常量和滚动模式。
+    private func configureContentHierarchy() {
+        bodyScrollView.translatesAutoresizingMaskIntoConstraints = false
+        bodyContentView.translatesAutoresizingMaskIntoConstraints = false
+        titleMessage.translatesAutoresizingMaskIntoConstraints = false
+        customView.translatesAutoresizingMaskIntoConstraints = false
 
-        guard !buttonModels.isEmpty else { return }
+        contentView.addSubview(bodyScrollView)
+        bodyScrollView.addSubview(bodyContentView)
 
-        let isVertical = buttonModels.count > 2
-        let buttonsWidth: CGFloat = isVertical ? contentWidth : contentWidth / CGFloat(buttonModels.count)
-        self.buttonModels.enumerated().forEach { index,value in
-            let buttonTitle = value.titleName ?? ""
-            let buttonsSet = UIButton(type: .custom)
-            buttonsSet.titleLabel?.font = self.buttonsFont
-            buttonsSet.setTitleColor(value.titleColor, for: .normal)
-            buttonsSet.setTitle(value.titleName, for: .normal)
-            buttonsSet.setTitleColor(.systemGray, for: .highlighted)
-            buttonsSet.titleLabel?.textAlignment = .center
-            buttonsSet.contentHorizontalAlignment = .center
-            buttonsSet.tag = 100 + index
-            buttonsSet.addActionHandlers { [weak self] _ in
-                self?.dismissSelf { [weak self] in
-                    Task { @MainActor [weak self] in
-                        guard let self else { return }
-                        self.bottomButtonTapCallback?(buttonTitle, index)
-                        self.bottomButtonTapCallback = nil
-                    }
-                }
+        var bodyBottomConstraint: NSLayoutConstraint
+        NSLayoutConstraint.activate([
+            bodyScrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            bodyScrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            bodyScrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+
+        if buttons.count <= 2, !buttons.isEmpty {
+            compactActionView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(compactActionView)
+            bodyBottomConstraint = bodyScrollView.bottomAnchor.constraint(equalTo: compactActionView.topAnchor)
+            NSLayoutConstraint.activate([
+                compactActionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                compactActionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                compactActionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                compactActionView.heightAnchor.constraint(equalToConstant: buttonRowHeight),
+                bodyBottomConstraint
+            ])
+        } else {
+            bodyBottomConstraint = bodyScrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            bodyBottomConstraint.isActive = true
+        }
+
+        NSLayoutConstraint.activate([
+            bodyContentView.topAnchor.constraint(equalTo: bodyScrollView.contentLayoutGuide.topAnchor),
+            bodyContentView.leadingAnchor.constraint(equalTo: bodyScrollView.contentLayoutGuide.leadingAnchor),
+            bodyContentView.trailingAnchor.constraint(equalTo: bodyScrollView.contentLayoutGuide.trailingAnchor),
+            bodyContentView.bottomAnchor.constraint(equalTo: bodyScrollView.contentLayoutGuide.bottomAnchor),
+            bodyContentView.widthAnchor.constraint(equalTo: bodyScrollView.frameLayoutGuide.widthAnchor),
+            titleMessage.topAnchor.constraint(equalTo: bodyContentView.topAnchor),
+            titleMessage.leadingAnchor.constraint(equalTo: bodyContentView.leadingAnchor, constant: titleSpace),
+            titleMessage.trailingAnchor.constraint(equalTo: bodyContentView.trailingAnchor, constant: -titleSpace),
+            customView.topAnchor.constraint(equalTo: titleMessage.bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: bodyContentView.leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: bodyContentView.trailingAnchor)
+        ])
+
+        titleHeightConstraint = titleMessage.heightAnchor.constraint(equalToConstant: titleHeight)
+        titleHeightConstraint?.isActive = true
+        customerViewHeightConstraint = customView.heightAnchor.constraint(equalToConstant: customerViewHeight)
+        customerViewHeightConstraint?.isActive = true
+
+        if buttons.count > 2 {
+            actionScrollView.translatesAutoresizingMaskIntoConstraints = false
+            actionStackView.translatesAutoresizingMaskIntoConstraints = false
+            bodyContentView.addSubview(actionScrollView)
+            actionScrollView.addSubview(actionStackView)
+
+            NSLayoutConstraint.activate([
+                actionScrollView.topAnchor.constraint(equalTo: customView.bottomAnchor),
+                actionScrollView.leadingAnchor.constraint(equalTo: bodyContentView.leadingAnchor),
+                actionScrollView.trailingAnchor.constraint(equalTo: bodyContentView.trailingAnchor),
+                actionScrollView.bottomAnchor.constraint(equalTo: bodyContentView.bottomAnchor),
+                actionStackView.topAnchor.constraint(equalTo: actionScrollView.contentLayoutGuide.topAnchor),
+                actionStackView.leadingAnchor.constraint(equalTo: actionScrollView.contentLayoutGuide.leadingAnchor),
+                actionStackView.trailingAnchor.constraint(equalTo: actionScrollView.contentLayoutGuide.trailingAnchor),
+                actionStackView.bottomAnchor.constraint(equalTo: actionScrollView.contentLayoutGuide.bottomAnchor),
+                actionStackView.widthAnchor.constraint(equalTo: actionScrollView.frameLayoutGuide.widthAnchor)
+            ])
+
+            actionViewportHeightConstraint = actionScrollView.heightAnchor.constraint(equalToConstant: 1)
+            actionViewportHeightConstraint?.isActive = true
+            buttonModels.enumerated().forEach { index, model in
+                let button = makeActionButton(model: model, index: index)
+                actionButtons.append(button)
+                actionStackView.addArrangedSubview(button)
+                button.heightAnchor.constraint(equalToConstant: buttonRowHeight).isActive = true
             }
-            self.contentView.addSubview(buttonsSet)
-            buttonsSet.snp.makeConstraints { make in
-                if isVertical {
-                    make.left.right.equalToSuperview()
-                    make.top.equalTo(self.customView.snp.bottom).offset(CGFloat(index) * 44)
+        } else {
+            let customBottomConstraint = customView.bottomAnchor.constraint(equalTo: bodyContentView.bottomAnchor)
+            customBottomConstraint.isActive = true
+            buttonModels.enumerated().forEach { index, model in
+                let button = makeActionButton(model: model, index: index)
+                actionButtons.append(button)
+                compactActionView.addSubview(button)
+                button.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    button.topAnchor.constraint(equalTo: compactActionView.topAnchor),
+                    button.bottomAnchor.constraint(equalTo: compactActionView.bottomAnchor)
+                ])
+                if index == 0 {
+                    button.leadingAnchor.constraint(equalTo: compactActionView.leadingAnchor).isActive = true
                 } else {
-                    make.left.equalToSuperview().inset(CGFloat(index) * buttonsWidth)
-                    make.width.equalTo(buttonsWidth)
+                    button.leadingAnchor.constraint(equalTo: actionButtons[index - 1].trailingAnchor).isActive = true
                 }
-                make.height.equalTo(44)
-                if isVertical {
-                    if index == self.buttonModels.count - 1 {
-                        make.bottom.equalToSuperview()
-                    }
-                } else {
-                    make.bottom.equalToSuperview()
+                if index == buttonModels.count - 1 {
+                    button.trailingAnchor.constraint(equalTo: compactActionView.trailingAnchor).isActive = true
                 }
+                button.widthAnchor.constraint(equalTo: compactActionView.widthAnchor,
+                                              multiplier: 1 / CGFloat(buttonModels.count)).isActive = true
             }
         }
+
+        customerViewCallback?(customView)
+    }
+
+    // English: Create every action with the same one-shot dismissal path and preserve the public index contract.
+    // Español: Crea cada acción con la misma ruta de cierre de una sola ejecución y conserva el contrato público de índices.
+    // 中文：所有按钮共用一次性关闭流程，同时保持公开回调的索引契约不变。
+    private func makeActionButton(model: PTCustomBottomButtonModel, index: Int) -> UIButton {
+        let title = model.titleName ?? ""
+        let button = UIButton(type: .custom)
+        button.titleLabel?.font = buttonsFont
+        button.setTitleColor(model.titleColor, for: .normal)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.systemGray, for: .highlighted)
+        button.titleLabel?.textAlignment = .center
+        button.contentHorizontalAlignment = .center
+        button.tag = 100 + index
+        button.addAction(UIAction { [weak self] _ in
+            self?.handleAction(title: title, index: index)
+        }, for: .touchUpInside)
+        return button
+    }
+
+    private func handleAction(title: String, index: Int) {
+        guard !isHandlingAction else { return }
+        isHandlingAction = true
+        actionButtons.forEach { $0.isEnabled = false }
+        dismissSelf { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.bottomButtonTapCallback?(title, index)
+                self.bottomButtonTapCallback = nil
+            }
+        }
+    }
+
+    private func resolvedTitleHeight(for width: CGFloat) -> CGFloat {
+        guard !alertTitle.isEmpty else { return 0 }
+        let textWidth = max(1, width - titleSpace * 2)
+        return max(44, titleMessage.sizeFor(width: textWidth).height + 10)
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateAlertLayout()
+    }
+
+    public override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        updateAlertLayout()
+    }
+
+    // English: Cap the surface to the safe area and select the smallest scrollable region that fits the content.
+    // Español: Limita la superficie al área segura y selecciona la región desplazable más pequeña que acomoda el contenido.
+    // 中文：将弹窗限制在安全区内，并选择能够容纳内容的最小滚动区域。
+    private func updateAlertLayout() {
+        guard contentWidthConstraint != nil, contentHeightConstraint != nil else { return }
+
+        let width = max(1, view.bounds.width - contentSpace * 2)
+        let safeHeight = max(view.safeAreaLayoutGuide.layoutFrame.height, view.bounds.height)
+        guard safeHeight > 0 else { return }
+
+        let maximumHeight = max(1, safeHeight - minimumAlertVerticalMargin * 2)
+        let resolvedTitleHeight = resolvedTitleHeight(for: width)
+        let fixedContentHeight = resolvedTitleHeight + customerViewHeight
+        let verticalButtonsHeight = CGFloat(buttons.count) * buttonRowHeight
+        let compactButtonsHeight = buttons.isEmpty ? 0 : buttonRowHeight
+
+        let mode: ActionLayoutMode
+        let contentHeight: CGFloat
+        let actionViewportHeight: CGFloat
+
+        if buttons.count > 2 {
+            let requiredHeight = fixedContentHeight + verticalButtonsHeight
+            if requiredHeight <= maximumHeight {
+                mode = .fitted
+                contentHeight = requiredHeight
+                actionViewportHeight = verticalButtonsHeight
+            } else if fixedContentHeight + min(verticalButtonsHeight, buttonRowHeight * 2) <= maximumHeight {
+                mode = .scrollingActions
+                contentHeight = maximumHeight
+                actionViewportHeight = max(buttonRowHeight, maximumHeight - fixedContentHeight)
+            } else {
+                mode = .scrollingAll
+                contentHeight = maximumHeight
+                actionViewportHeight = verticalButtonsHeight
+            }
+        } else {
+            mode = .fitted
+            contentHeight = min(fixedContentHeight + compactButtonsHeight, maximumHeight)
+            actionViewportHeight = 0
+        }
+
+        let signature = AlertLayoutSignature(width: width,
+                                             safeHeight: safeHeight,
+                                             titleHeight: resolvedTitleHeight,
+                                             customerViewHeight: customerViewHeight,
+                                             buttonCount: buttons.count)
+        guard signature != layoutSignature || mode != actionLayoutMode else { return }
+
+        let modeChanged = mode != actionLayoutMode
+        contentWidth = width
+        titleHeight = resolvedTitleHeight
+        contentWidthConstraint?.constant = width
+        contentHeightConstraint?.constant = contentHeight
+        titleHeightConstraint?.constant = resolvedTitleHeight
+        customerViewHeightConstraint?.constant = customerViewHeight
+        actionViewportHeightConstraint?.constant = actionViewportHeight
+
+        if buttons.count > 2 {
+            bodyScrollView.isScrollEnabled = mode == .scrollingAll
+            bodyScrollView.showsVerticalScrollIndicator = bodyScrollView.isScrollEnabled
+            actionScrollView.isScrollEnabled = mode == .scrollingActions
+            actionScrollView.showsVerticalScrollIndicator = actionScrollView.isScrollEnabled
+        } else {
+            let bodyViewportHeight = max(0, contentHeight - compactButtonsHeight)
+            bodyScrollView.isScrollEnabled = fixedContentHeight > bodyViewportHeight + 0.5
+            bodyScrollView.showsVerticalScrollIndicator = bodyScrollView.isScrollEnabled
+        }
+
+        if modeChanged {
+            bodyScrollView.setContentOffset(.zero, animated: false)
+            actionScrollView.setContentOffset(.zero, animated: false)
+        }
+        actionLayoutMode = mode
+        layoutSignature = signature
     }
     
 }
