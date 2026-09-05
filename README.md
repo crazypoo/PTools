@@ -66,6 +66,25 @@ Waterfall、Tag、Horizontal 和 Custom 集合布局。页面通过
 [ROADMAP_5X.md](ROADMAP_5X.md)，5.x 兼容入口和 6.0.0 删除条件见
 [MIGRATION_5X.md](MIGRATION_5X.md)。
 
+### Picker 嵌入页面
+
+`PooTools/Picker` 的滚轮选择器支持先配置、后布局，不必通过 `show()` 才能使用：
+
+```swift
+let picker = PTStringPickerView()
+picker.configure(title: "选择城市", data: ["北京", "上海", "广州"])
+view.addSubview(picker)
+picker.snp.makeConstraints { make in
+    make.leading.trailing.equalToSuperview()
+    make.bottom.equalTo(view.safeAreaLayoutGuide)
+    make.height.equalTo(300)
+}
+```
+
+如果需要覆盖层展示，继续调用兼容的 `picker.show()`；也可以使用
+`picker.show(in: hostView)` 指定宿主 View。直接嵌入时默认隐藏工具栏，设置
+`showsToolbarWhenEmbedded = true` 可以显示标题、取消和确定按钮。
+
 ### Language
 
 语言功能随 `PooTools/Core` 提供，没有独立的 `LanguageSetting` subspec。语言资源

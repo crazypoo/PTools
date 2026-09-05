@@ -7,7 +7,7 @@ cd "$repo_root"
 
 critical_files=(
   PooToolsSource/Router/PTRouter.swift
-  PooToolsSource/Picker/PTBasePickerView.swift
+  PooToolsSource/Picker
   PooToolsSource/Share/PTActivityViewController.swift
   PooToolsSource/Category/UIApplication+PTEX.swift
   PooToolsSource/Contact/PTContact.swift

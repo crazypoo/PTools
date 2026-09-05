@@ -10,6 +10,9 @@ import UIKit
 import SwifterSwift
 import SnapKit
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public protocol PTPickerStringModel: Sendable {
     /// 告訴選擇器，滾輪上應該顯示什麼文字
@@ -75,6 +78,14 @@ public enum PTDatePickerMode: Sendable {
     case yw
 }
 
+/// EN: Describes an invalid date-picker configuration.
+/// ES: Describe una configuración no válida del selector de fechas.
+/// 中文：描述日期 Picker 的无效配置。
+public enum PTDatePickerConfigurationError: Error, Sendable, Equatable {
+    case reversedRange
+    case noRepresentableDate
+}
+
 @MainActor
 public struct PTPickerStyle: Sendable {
     
@@ -103,7 +114,7 @@ public struct PTPickerStyle: Sendable {
     public var pickerTextFont: UIFont = .systemFont(ofSize: 16, weight: .medium)
     public var pickerRowHeight: CGFloat = 44.0
     
-    public var pickerBackgroundColor:UIColor = .white
+    public var pickerBackgroundColor: UIColor = .systemBackground
     
     public var toolBarTopBottomSpacing:CGFloat = 2.5
     
@@ -136,72 +147,98 @@ open class PTBasePickerView: UIView {
     // MARK: - Properties
     private let containerHeight: CGFloat = 300.0
     private let toolbarHeight: CGFloat = 50.0
-    
-    public var pickerStyle: PTPickerStyle = PTPickerStyle.shared
+    private enum PresentationMode {
+        case embedded
+        case presented
+        case dismissing
+    }
+
+    private var presentationMode: PresentationMode = .embedded
+    private var presentationGeneration = 0
+    private var isUIConfigured = false
+
+    /// EN: Shows the toolbar when the picker is embedded in another view.
+    /// ES: Muestra la barra cuando el selector está incrustado en otra vista.
+    /// 中文：Picker 直接嵌入其他 View 时是否显示工具栏。
+    public var showsToolbarWhenEmbedded = false {
+        didSet {
+            guard oldValue != showsToolbarWhenEmbedded else { return }
+            updateToolbarVisibility()
+            invalidateIntrinsicContentSize()
+        }
+    }
+
+    /// EN: Reports whether the picker is currently presented as an overlay.
+    /// ES: Indica si el selector está presentado actualmente como superposición.
+    /// 中文：返回 Picker 当前是否以弹窗覆盖层方式展示。
+    public private(set) var isPresented = false
+
+    /// EN: Called when the user cancels the picker.
+    /// ES: Se llama cuando el usuario cancela el selector.
+    /// 中文：用户取消 Picker 时回调。
+    public var onCancel: (@MainActor @Sendable () -> Void)?
+
+    public var pickerStyle: PTPickerStyle = PTPickerStyle.shared {
+        didSet {
+            applyPickerStyle()
+        }
+    }
     
     public init(style: PTPickerStyle? = nil) {
         self.pickerStyle = style ?? PTPickerStyle.shared
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: .zero)
         setupUI()
     }
 
     // MARK: - Initialization
     public override init(frame: CGRect) {
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: frame)
         setupUI()
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
     
     // MARK: - Setup UI
     private func setupUI() {
-        // 设置半透明背景
-        containerView.backgroundColor = pickerStyle.containerBackgroundColor
-        if #available(iOS 26.0, *) {
-            toolbarView.backgroundColor = .clear
-        } else {
-            toolbarView.backgroundColor = pickerStyle.toolbarBackgroundColor
-        }
-
+        // EN: Build the hierarchy before activating constraints.
+        // ES: Construye la jerarquía antes de activar las restricciones.
+        // 中文：先完成视图层级，再激活约束，避免跨层级约束崩溃。
         backgroundView.alpha = 0
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismiss))
+        backgroundView.isHidden = true
+        backgroundView.isUserInteractionEnabled = false
+        backgroundView.accessibilityElementsHidden = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cancelAction))
         backgroundView.addGestureRecognizer(tapGesture)
-        addSubviews([backgroundView,containerView])
+        addSubviews([backgroundView, containerView])
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        // 设置容器视图 (初始位置在屏幕下方，为了做动画)
-        // 切圆角
-        containerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(self.containerHeight)
-            make.height.equalTo(self.containerHeight)
-        }
-        
-        containerView.viewCornerRectCorner(topLeft: pickerStyle.containerCornerRaidus,topRight: pickerStyle.containerCornerRaidus,corner: [.topLeft,.topRight])
+
+        containerView.viewCornerRectCorner(topLeft: pickerStyle.containerCornerRaidus,
+                                           topRight: pickerStyle.containerCornerRaidus,
+                                           corner: [.topLeft, .topRight])
         
         // 设置工具栏
-        containerView.addSubviews([toolbarView,pickerContainer])
+        containerView.addSubviews([toolbarView, pickerContainer])
         toolbarView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalTo(self.toolbarHeight)
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(0)
         }
-        
+
         pickerContainer.snp.makeConstraints { make in
-            make.top.equalTo(self.toolbarView.snp.bottom)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalTo(toolbarView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
         }
-        
-        pickerContainer.viewCornerRectCorner(topLeft: pickerStyle.pickerContainerCornerRaidus,topRight: pickerStyle.pickerContainerCornerRaidus,corner: [.topLeft,.topRight])
-        
+
+        pickerContainer.viewCornerRectCorner(topLeft: pickerStyle.pickerContainerCornerRaidus,
+                                             topRight: pickerStyle.pickerContainerCornerRaidus,
+                                             corner: [.topLeft, .topRight])
+
         var buttonClearGlassOffset:CGFloat = 5
         if #available(iOS 26.0, *) {
-            
             pickerMaskGlassView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
             pickerMaskGlassView.backgroundColor = pickerStyle.pickerBackgroundColor
             pickerContainer.addSubview(pickerMaskGlassView)
@@ -222,7 +259,7 @@ open class PTBasePickerView: UIView {
         cancelButton.titleLabel?.numberOfLines = 1
         cancelButton.setTitle(pickerStyle.cancelText, for: .normal)
         cancelButton.setTitleColor(pickerStyle.cancelTextColor, for: .normal)
-        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
         let cancelW = self.cancelButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
         
         confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
@@ -234,10 +271,11 @@ open class PTBasePickerView: UIView {
         
         titleLabel.isUserInteractionEnabled = false
         titleLabel.isHidden = true
+        titleLabel.titleLabel?.adjustsFontSizeToFitWidth = true
         titleLabel.setTitleColor(pickerStyle.titleTextColor, for: .normal)
         titleLabel.titleLabel?.font = pickerStyle.titleTextFont
         titleLabel.titleLabel?.textAlignment = .center
-        toolbarView.addSubviews([cancelButton,confirmButton,titleLabel])
+        toolbarView.addSubviews([cancelButton, confirmButton, titleLabel])
         cancelButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.equalTo(cancelW)
@@ -253,227 +291,368 @@ open class PTBasePickerView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
-            make.width.equalTo(0)
+            make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).offset(8)
+            make.trailing.lessThanOrEqualTo(confirmButton.snp.leading).offset(-8)
         }
+
+        isUIConfigured = true
+        applyPickerStyle()
+        applyContainerLayout(for: .embedded)
     }
     
     public func resetTitleLabelwidth() {
-        var buttonClearGlassOffset:CGFloat = 5
-        if #available(iOS 26.0, *) {
-            buttonClearGlassOffset += 25
-        }
-        let cancelW = self.cancelButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
-        let confirmW = self.confirmButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
-
-        let titleMax = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - cancelW - confirmW
-        var titleW = self.titleLabel.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
-        if titleW > titleMax {
-            titleW = titleMax
-        }
-        titleLabel.snp.updateConstraints { make in
-            make.width.equalTo(titleW)
-        }
-        
         titleLabel.isHidden = (titleLabel.currentTitle ?? "").stringIsEmpty()
+        setNeedsLayout()
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric,
+               height: showsToolbarWhenEmbedded ? containerHeight : containerHeight - toolbarHeight)
+    }
+
+    private func applyPickerStyle() {
+        guard isUIConfigured else { return }
+
+        containerView.backgroundColor = pickerStyle.containerBackgroundColor
+        if #available(iOS 26.0, *) {
+            toolbarView.backgroundColor = .clear
+            pickerMaskGlassView.backgroundColor = pickerStyle.pickerBackgroundColor
+        } else {
+            toolbarView.backgroundColor = pickerStyle.toolbarBackgroundColor
+            pickerContainer.backgroundColor = pickerStyle.pickerBackgroundColor
+        }
+
+        cancelButton.titleLabel?.font = pickerStyle.cancelTextFont
+        cancelButton.setTitle(pickerStyle.cancelText, for: .normal)
+        cancelButton.setTitleColor(pickerStyle.cancelTextColor, for: .normal)
+        confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
+        confirmButton.setTitle(pickerStyle.confirmText, for: .normal)
+        confirmButton.setTitleColor(pickerStyle.confirmTextColor, for: .normal)
+        titleLabel.setTitleColor(pickerStyle.titleTextColor, for: .normal)
+        titleLabel.titleLabel?.font = pickerStyle.titleTextFont
+        resetTitleLabelwidth()
+    }
+
+    private func updateToolbarVisibility() {
+        guard isUIConfigured else { return }
+        let shouldShow = presentationMode != .embedded || showsToolbarWhenEmbedded
+        toolbarView.isHidden = !shouldShow
+        toolbarView.snp.updateConstraints { make in
+            make.height.equalTo(shouldShow ? toolbarHeight : 0)
+        }
+    }
+
+    private func applyContainerLayout(for mode: PresentationMode) {
+        guard isUIConfigured else { return }
+        presentationMode = mode
+        updateToolbarVisibility()
+
+        switch mode {
+        case .embedded:
+            containerView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        case .presented, .dismissing:
+            containerView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(containerHeight)
+                make.bottom.equalToSuperview().offset(mode == .dismissing ? containerHeight : 0)
+            }
+        }
+    }
+
+    private func animate(_ animated: Bool, animations: @escaping () -> Void, completion: (() -> Void)? = nil) {
+        if !animated || UIAccessibility.isReduceMotionEnabled {
+            UIView.performWithoutAnimation {
+                animations()
+                layoutIfNeeded()
+            }
+            completion?()
+            return
+        }
+
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: [.beginFromCurrentState, .allowUserInteraction],
+                       animations: {
+                           animations()
+                           self.layoutIfNeeded()
+                       },
+                       completion: { _ in completion?() })
+    }
+
+    /// EN: Reuses one label style for every wheel picker.
+    /// ES: Reutiliza un único estilo de etiqueta para todos los selectores.
+    /// 中文：统一复用三个滚轮 Picker 的文本 Label 样式。
+    fileprivate func pickerLabel(reusing view: UIView?, text: String?) -> UILabel {
+        let label = (view as? UILabel) ?? UILabel()
+        label.textAlignment = .center
+        label.textColor = pickerStyle.pickerTextColor
+        label.font = pickerStyle.pickerTextFont
+        label.backgroundColor = .clear
+        label.text = text
+        return label
     }
     
     // MARK: - Actions
+    /// EN: Subclasses override this when the current selection is invalid.
+    /// ES: Las subclases lo redefinen cuando la selección actual no es válida.
+    /// 中文：子类在当前选择无效时重写此属性。
+    open var canConfirm: Bool { true }
+
     /// 子类需重写此方法以处理确定逻辑
     @objc open func confirmAction() {
+        guard canConfirm else { return }
         dismiss()
     }
     
     // MARK: - Animations
     public func show() {
-        // 寻找当前活跃的 Window 添加视图
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
-        
-        window.addSubview(self)
-        self.snp.makeConstraints { make in
+        guard let window = PTSceneContext.activeWindow() else { return }
+        _ = show(in: window)
+    }
+
+    /// EN: Presents the picker over an explicit host view.
+    /// ES: Presenta el selector sobre una vista anfitriona explícita.
+    /// 中文：在指定的宿主 View 上以覆盖层方式展示 Picker。
+    @discardableResult
+    public func show(in hostView: UIView, animated: Bool = true) -> Bool {
+        guard hostView !== self,
+              (superview == nil || superview === hostView) else { return false }
+
+        if superview == nil {
+            hostView.addSubview(self)
+        }
+        snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        // 强制立即刷新初始布局，确保起始位置正确
-        self.layoutIfNeeded()
-        
-        // 更新为目标位置的约束
-        self.containerView.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(0)
+
+        presentationGeneration += 1
+        let generation = presentationGeneration
+        isPresented = true
+        backgroundView.isHidden = false
+        backgroundView.isUserInteractionEnabled = true
+        backgroundView.alpha = 0
+        confirmButton.isEnabled = canConfirm
+        accessibilityViewIsModal = true
+        applyContainerLayout(for: .presented)
+        // EN: Start below the host before animating into place.
+        // ES: Comienza debajo del anfitrión antes de animarse a su posición.
+        // 中文：动画开始前先将容器放到宿主视图底部之外。
+        containerView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(containerHeight)
         }
-        
-        // 执行动画
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+        layoutIfNeeded()
+        animate(animated, animations: {
             self.backgroundView.alpha = 1
-            // 在动画闭包内调用 layoutIfNeeded() 来触发约束改变的平滑动画
-            self.layoutIfNeeded()
-        }, completion: nil)
+            self.containerView.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().offset(0)
+            }
+        })
+        if generation != presentationGeneration { return false }
+        return true
     }
-    
+
     @objc public func dismiss() {
-        // 更新为隐藏位置的约束
-        self.containerView.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(self.containerHeight)
-        }
-        
-        // 执行动画
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+        dismiss(animated: true)
+    }
+
+    /// EN: Dismisses only an overlay presentation; embedded pickers remain owned by their host.
+    /// ES: Solo cierra una presentación superpuesta; los selectores incrustados siguen siendo del anfitrión.
+    /// 中文：只关闭弹窗覆盖层；直接嵌入的 Picker 仍由宿主负责移除。
+    public func dismiss(animated: Bool) {
+        guard presentationMode == .presented, isPresented else { return }
+
+        presentationGeneration += 1
+        let generation = presentationGeneration
+        presentationMode = .dismissing
+        backgroundView.isUserInteractionEnabled = false
+        animate(animated, animations: {
             self.backgroundView.alpha = 0
-            // 在动画闭包内调用 layoutIfNeeded()
-            self.layoutIfNeeded()
-        }) { _ in
+            self.containerView.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().offset(self.containerHeight)
+            }
+        }) { [weak self] in
+            guard let self,
+                  self.presentationGeneration == generation,
+                  self.presentationMode == .dismissing else { return }
+            self.isPresented = false
+            self.backgroundView.isHidden = true
+            self.accessibilityViewIsModal = false
+            self.presentationMode = .embedded
             self.removeFromSuperview()
+            self.applyContainerLayout(for: .embedded)
         }
+    }
+
+    @objc private func cancelAction() {
+        onCancel?()
+        dismiss()
     }
 }
 
 @MainActor
 public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    // MARK: - Properties
     private let pickerView = UIPickerView()
-    
-    // 底层数据源统一升级为二维数组
     private var dataSource: [[PTPickerStringModel]] = []
-    
-    // MARK: - Current Selection Properties
-    /// 获取当前选中的索引（单列场景使用）
-    public var selectedIndex: Int {
-        return pickerView.selectedRow(inComponent: 0)
-    }
-    
-    /// 获取当前选中的索引数组（多列场景使用）
-    public var selectedIndices: [Int] {
-        var indices: [Int] = []
-        for component in 0..<dataSource.count {
-            indices.append(pickerView.selectedRow(inComponent: component))
-        }
-        return indices
-    }
-    
-    /// 直接获取当前选中的完整结果数组（附带 Model）
-    public var currentResults: [PTPickerResult] {
-        var results: [PTPickerResult] = []
-        for component in 0..<dataSource.count {
-            let row = pickerView.selectedRow(inComponent: component)
-            if row >= 0 && row < dataSource[component].count {
-                let model = dataSource[component][row]
-                results.append(PTPickerResult(index: row, value: model.pickerDisplayText, originalModel: model))
-            }
-        }
-        return results
-    }
+    private var selectedRows: [Int] = []
 
-    // 区分单列和多列的回调
+    /// EN: Emits a stable snapshot after a user or programmatic selection change.
+    /// ES: Emite una instantánea estable después de cambiar la selección.
+    /// 中文：用户或程序修改选择后，回调稳定的结果快照。
+    public var onSelectionChanged: (@MainActor @Sendable ([PTPickerResult]) -> Void)?
+
     public var singleResultBlock: ((_ result: PTPickerResult) -> Void)?
     public var multiResultBlock: ((_ results: [PTPickerResult]) -> Void)?
 
+    public override var canConfirm: Bool {
+        !dataSource.isEmpty &&
+        dataSource.allSatisfy { !$0.isEmpty } &&
+        selectedRows.count == dataSource.count &&
+        selectedRows.enumerated().allSatisfy { component, row in
+            dataSource.indices.contains(component) && dataSource[component].indices.contains(row)
+        }
+    }
+
+    public var selectedIndex: Int { selectedRows.first ?? -1 }
+
+    public var selectedIndices: [Int] { selectedRows }
+
+    public var currentResults: [PTPickerResult] {
+        selectedRows.enumerated().compactMap { component, row in
+            guard dataSource.indices.contains(component),
+                  dataSource[component].indices.contains(row) else { return nil }
+            let model = dataSource[component][row]
+            return PTPickerResult(index: row, value: model.pickerDisplayText, originalModel: model)
+        }
+    }
+
     public override init(style: PTPickerStyle? = nil) {
         super.init(style: style)
-        self.setupPicker()
+        setupPicker()
     }
-        
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupPicker()
+    }
+
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupPicker()
     }
-    
+
     private func setupPicker() {
         pickerView.delegate = self
         pickerView.dataSource = self
-        
         pickerContainer.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-    
-    // MARK: - Public Methods (方法重载)
-    /// 配置并显示【单列】数据
+
+    /// EN: Configures data without presenting the picker.
+    /// ES: Configura los datos sin presentar el selector.
+    /// 中文：只配置数据，不展示 Picker。
+    public func configure(title: String, data: [PTPickerStringModel], defaultIndex: Int = 0) {
+        configure(title: title, multiData: [data], defaultIndices: [defaultIndex])
+    }
+
+    /// EN: Configures multiple columns without presenting the picker.
+    /// ES: Configura varias columnas sin presentar el selector.
+    /// 中文：只配置多列数据，不展示 Picker。
+    public func configure(title: String, multiData: [[PTPickerStringModel]], defaultIndices: [Int]? = nil) {
+        titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
+        dataSource = multiData
+        selectedRows = multiData.indices.map { component in
+            let preferredRow = defaultIndices.flatMap { $0.indices.contains(component) ? $0[component] : nil } ?? 0
+            return normalizedRow(preferredRow, component: component)
+        }
+        singleResultBlock = nil
+        multiResultBlock = nil
+        reloadPickerAndRestoreSelection()
+        updateConfirmButtonState()
+    }
+
     public func show(title: String, data: [PTPickerStringModel], defaultIndex: Int = 0, completion: @escaping (PTPickerResult) -> Void) {
-        self.titleLabel.setTitle(title, for: .normal)
-        resetTitleLabelwidth()
-        self.dataSource = [data]
-        self.singleResultBlock = completion
-        self.multiResultBlock = nil
-        
-        pickerView.reloadAllComponents()
-        
-        if defaultIndex < data.count && defaultIndex >= 0 {
-            pickerView.selectRow(defaultIndex, inComponent: 0, animated: false)
-        }
-        
-        self.show()
+        configure(title: title, data: data, defaultIndex: defaultIndex)
+        singleResultBlock = completion
+        show()
     }
 
-    /// 配置并显示【多列】数据
     public func show(title: String, multiData: [[PTPickerStringModel]], defaultIndices: [Int]? = nil, completion: @escaping ([PTPickerResult]) -> Void) {
-        self.titleLabel.setTitle(title, for: .normal)
-        resetTitleLabelwidth()
-        self.dataSource = multiData
-        self.multiResultBlock = completion
-        self.singleResultBlock = nil
-        
-        pickerView.reloadAllComponents()
-        
-        if let indices = defaultIndices, indices.count == multiData.count {
-            for (component, index) in indices.enumerated() {
-                if index >= 0 && index < multiData[component].count {
-                    pickerView.selectRow(index, inComponent: component, animated: false)
-                }
-            }
-        }
-        
-        self.show()
+        configure(title: title, multiData: multiData, defaultIndices: defaultIndices)
+        multiResultBlock = completion
+        show()
     }
 
-    // MARK: - Override Base
+    /// EN: Selects a valid row and optionally emits the live-selection callback.
+    /// ES: Selecciona una fila válida y puede emitir el callback de selección.
+    /// 中文：选择有效行，并可选择是否触发实时选择回调。
+    public func selectRow(_ row: Int, inComponent component: Int, animated: Bool = false, notifySelectionChanged: Bool = true) {
+        guard dataSource.indices.contains(component) else { return }
+        let safeRow = normalizedRow(row, component: component)
+        guard safeRow >= 0 else { return }
+        selectedRows[component] = safeRow
+        pickerView.selectRow(safeRow, inComponent: component, animated: animated)
+        updateConfirmButtonState()
+        if notifySelectionChanged { onSelectionChanged?(currentResults) }
+    }
+
     public override func confirmAction() {
-        var results: [PTPickerResult] = []
-        
-        for component in 0..<dataSource.count {
-            let row = pickerView.selectedRow(inComponent: component)
-            if row >= 0 && row < dataSource[component].count {
-                // 【修改 3】取出 Model，構建強大的 Result
-                let model = dataSource[component][row]
-                let result = PTPickerResult(index: row, value: model.pickerDisplayText, originalModel: model)
-                results.append(result)
-            }
+        guard canConfirm else { return }
+        let results = currentResults
+        if let singleResultBlock, let firstResult = results.first {
+            singleResultBlock(firstResult)
+        } else if let multiResultBlock {
+            multiResultBlock(results)
         }
-        
-        if let singleBlock = singleResultBlock, let firstResult = results.first {
-            singleBlock(firstResult)
-        } else if let multiBlock = multiResultBlock {
-            multiBlock(results)
-        }
-        
         super.confirmAction()
     }
 
-    // MARK: - UIPickerView DataSource & Delegate
-    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return dataSource.count // 动态返回列数
+    private func normalizedRow(_ row: Int, component: Int) -> Int {
+        guard dataSource.indices.contains(component), !dataSource[component].isEmpty else { return -1 }
+        return min(max(row, 0), dataSource[component].count - 1)
     }
-    
+
+    private func reloadPickerAndRestoreSelection() {
+        pickerView.reloadAllComponents()
+        for component in dataSource.indices {
+            let row = selectedRows[component]
+            guard row >= 0 else { continue }
+            pickerView.selectRow(row, inComponent: component, animated: false)
+        }
+    }
+
+    private func updateConfirmButtonState() {
+        confirmButton.isEnabled = canConfirm
+    }
+
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int { dataSource.count }
+
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return dataSource[component].count // 动态返回对应列的行数
+        dataSource.indices.contains(component) ? dataSource[component].count : 0
     }
-    
+
     public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return pickerStyle.pickerRowHeight
+        pickerStyle.pickerRowHeight
     }
-    
+
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-            
-        let label = (view as? UILabel) ?? UILabel()
-        
-        label.textAlignment = .center
-        label.textColor = pickerStyle.pickerTextColor
-        label.font = pickerStyle.pickerTextFont
-        label.backgroundColor = .clear
-        
-        // 取出对应列、对应行的数据
-        label.text = dataSource[component][row].pickerDisplayText
-        return label
+        let text = dataSource.indices.contains(component) && dataSource[component].indices.contains(row)
+            ? dataSource[component][row].pickerDisplayText
+            : nil
+        return pickerLabel(reusing: view, text: text)
+    }
+
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        guard dataSource.indices.contains(component) else { return }
+        let safeRow = normalizedRow(row, component: component)
+        guard safeRow >= 0 else { return }
+        selectedRows[component] = safeRow
+        updateConfirmButtonState()
+        onSelectionChanged?(currentResults)
     }
 }
 
@@ -483,6 +662,9 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     // MARK: - Properties
     private let pickerView = UIPickerView()
     private var pickerMode: PTDatePickerMode = .ymd
+    private var calendar = Calendar.current
+    private var referenceDate = Date()
+    private var dateIsConfigured = false
     
     // 【新增】邊界日期
     private var minDate: Date?
@@ -507,47 +689,25 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     private var selectedSecond: Int = 0
     private var selectedQuarter: Int = 1
     private var selectedWeek: Int = 1
+
+    /// EN: Reports why the current date selection cannot be confirmed.
+    /// ES: Indica por qué no se puede confirmar la selección de fecha actual.
+    /// 中文：返回当前日期选择不能确认的原因。
+    public private(set) var configurationError: PTDatePickerConfigurationError?
+
+    /// EN: Emits the validated date snapshot after a user selection.
+    /// ES: Emite una instantánea de fecha validada después de una selección.
+    /// 中文：用户选择后回调经过校验的日期快照。
+    public var onSelectionChanged: (@MainActor @Sendable (Date, String) -> Void)?
+
+    public override var canConfirm: Bool {
+        dateIsConfigured && configurationError == nil && currentSelectedDate != nil
+    }
     
     // MARK: - Current Selection Properties
     /// 实时获取当前选中的日期对象
     public var currentSelectedDate: Date? {
-        var components = DateComponents()
-        // 设置默认兜底值
-        components.year = Calendar.current.component(.year, from: Date())
-        components.month = 1; components.day = 1; components.hour = 0; components.minute = 0; components.second = 0
-        
-        switch pickerMode {
-        case .ymd:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay
-        case .ymdhm:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute
-        case .hm:
-            components.hour = selectedHour; components.minute = selectedMinute
-        case .ymdhms:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
-        case .ymdh:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour
-        case .mdhm:
-            components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute
-        case .ym:
-            components.year = selectedYear; components.month = selectedMonth
-        case .y:
-            components.year = selectedYear
-        case .md:
-            components.month = selectedMonth; components.day = selectedDay
-        case .hms:
-            components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
-        case .ms:
-            components.minute = selectedMinute; components.second = selectedSecond
-        case .yq:
-            components.year = selectedYear; components.quarter = selectedQuarter
-        case .ymw:
-            components.year = selectedYear; components.month = selectedMonth; components.weekOfMonth = selectedWeek
-        case .yw:
-            components.year = selectedYear; components.weekOfYear = selectedWeek
-        }
-        
-        return Calendar.current.date(from: components)
+        resolvedSelectedDate()
     }
 
     public var resultBlock: ((_ date: Date, _ dateString: String) -> Void)?
@@ -564,7 +724,8 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     }
     
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupPicker()
     }
     
     private func setupPicker() {
@@ -598,129 +759,267 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     }
     
     // MARK: - Public Methods
-    /// 【修改】支援傳入 minDate 和 maxDate
+    /// EN: Configures the date picker without presenting it.
+    /// ES: Configura el selector de fechas sin presentarlo.
+    /// 中文：只配置日期 Picker，不展示界面。
+    public func configure(title: String,
+                          mode: PTDatePickerMode = .ymd,
+                          defaultDate: Date = Date(),
+                          minDate: Date? = nil,
+                          maxDate: Date? = nil) {
+        titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
+        pickerMode = mode
+        referenceDate = defaultDate
+        calendar = Calendar.current
+        self.minDate = minDate
+        self.maxDate = maxDate
+        resultBlock = nil
+        if let minDate, let maxDate, minDate > maxDate {
+            configurationError = .reversedRange
+        } else {
+            configurationError = nil
+        }
+        dateIsConfigured = true
+
+        buildYearArray()
+        updateSelectedValues(from: defaultDate)
+        updateDynamicArrays()
+        validateBoundary()
+        pickerView.reloadAllComponents()
+        scrollToDefaultPosition(animated: false)
+        updateConfirmButtonState()
+    }
+
     public func show(title: String,
                      mode: PTDatePickerMode = .ymd,
                      defaultDate: Date = Date(),
                      minDate: Date? = nil,
                      maxDate: Date? = nil,
                      completion: @escaping (Date, String) -> Void) {
-        
-        self.titleLabel.setTitle(title, for: .normal)
-        resetTitleLabelwidth()
-        self.pickerMode = mode
-        self.minDate = minDate
-        self.maxDate = maxDate
-        self.resultBlock = completion
-        
-        let calendar = Calendar.current
-        
-        // 1. 動態構建年份數據源 (根據邊界自動縮放)
-        let defaultMinYear = 1900
-        let defaultMaxYear = calendar.component(.year, from: Date()) + 50
-        let startYear = minDate.map { calendar.component(.year, from: $0) } ?? defaultMinYear
-        let endYear = maxDate.map { calendar.component(.year, from: $0) } ?? defaultMaxYear
-        self.yearArray = Array(startYear...max(startYear, endYear))
-        
-        // 2. 解析默認日期 (提取到專門的函數)
-        updateSelectedValues(from: defaultDate)
-        
-        // 3. 校驗默認日期是否越界
-        validateBoundary()
-        
-        // 4. 初始化天數/周數
-        updateDynamicArrays()
-        
-        // 5. 刷新並展示
-        pickerView.reloadAllComponents()
-        scrollToDefaultPosition(animated: false)
-        
-        self.show()
+        configure(title: title, mode: mode, defaultDate: defaultDate, minDate: minDate, maxDate: maxDate)
+        resultBlock = completion
+        show()
     }
     
     // MARK: - Date Logic
+
+    private func buildYearArray() {
+        guard componentLayout.contains(.year) else {
+            yearArray = []
+            return
+        }
+
+        let currentYear = yearValue(for: referenceDate)
+        var startYear = 1900
+        var endYear = currentYear + 50
+        if let minDate {
+            startYear = min(startYear, yearValue(for: minDate))
+            endYear = max(endYear, yearValue(for: minDate))
+        }
+        if let maxDate {
+            startYear = min(startYear, yearValue(for: maxDate))
+            endYear = max(endYear, yearValue(for: maxDate))
+        }
+        startYear = min(startYear, yearValue(for: referenceDate))
+        endYear = max(endYear, yearValue(for: referenceDate))
+        yearArray = Array(startYear...max(startYear, endYear))
+    }
+
+    private func yearValue(for date: Date) -> Int {
+        pickerMode == .yw
+            ? calendar.component(.yearForWeekOfYear, from: date)
+            : calendar.component(.year, from: date)
+    }
     
     /// 將 Date 對象拆解為內部選中屬性
     private func updateSelectedValues(from date: Date) {
-        let calendar = Calendar.current
-        self.selectedYear = calendar.component(.year, from: date)
+        self.selectedYear = pickerMode == .yw
+            ? calendar.component(.yearForWeekOfYear, from: date)
+            : calendar.component(.year, from: date)
         self.selectedMonth = calendar.component(.month, from: date)
         self.selectedDay = calendar.component(.day, from: date)
         self.selectedHour = calendar.component(.hour, from: date)
         self.selectedMinute = calendar.component(.minute, from: date)
         self.selectedSecond = calendar.component(.second, from: date)
         self.selectedQuarter = calendar.component(.quarter, from: date)
-        self.selectedWeek = (pickerMode == .ymw) ? calendar.component(.weekOfMonth, from: date) : calendar.component(.weekOfYear, from: date)
+        self.selectedWeek = pickerMode == .ymw
+            ? calendar.component(.weekOfMonth, from: date)
+            : calendar.component(.weekOfYear, from: date)
     }
     
     /// 更新動態天數和周數
     private func updateDynamicArrays() {
-        let calendar = Calendar.current
         var components = DateComponents()
-        components.year = (pickerMode == .md || pickerMode == .mdhm) ? 2000 : selectedYear
-        components.month = selectedMonth
+        components.year = componentLayout.contains(.year)
+            ? selectedYear
+            : calendar.component(.year, from: referenceDate)
+        components.month = componentLayout.contains(.month)
+            ? selectedMonth
+            : calendar.component(.month, from: referenceDate)
+        components.day = 1
         
         guard let date = calendar.date(from: components) else { return }
         
         if componentLayout.contains(.day) {
             if let range = calendar.range(of: .day, in: .month, for: date) {
                 dayArray = Array(range)
-                if selectedDay > dayArray.count { selectedDay = dayArray.count }
+                selectedDay = min(max(selectedDay, range.lowerBound), range.upperBound)
             }
         }
         
         if componentLayout.contains(.weekOfMonth) {
             if let range = calendar.range(of: .weekOfMonth, in: .month, for: date) {
                 weekArray = Array(range)
-                if selectedWeek > weekArray.count { selectedWeek = weekArray.count }
+                selectedWeek = min(max(selectedWeek, range.lowerBound), range.upperBound)
             }
         }
         
         if componentLayout.contains(.weekOfYear) {
-            if let range = calendar.range(of: .weekOfYear, in: .year, for: date) {
+            if let range = calendar.range(of: .weekOfYear, in: .yearForWeekOfYear, for: date) {
                 weekArray = Array(range)
-                if selectedWeek > weekArray.count { selectedWeek = weekArray.count }
+                selectedWeek = min(max(selectedWeek, range.lowerBound), range.upperBound)
             }
         }
     }
     
-    /// 【核心新增】越界校驗與回彈引擎
+    private func selectionDate() -> Date? {
+        guard dateIsConfigured, configurationError != .reversedRange else { return nil }
+
+        let hasYear = componentLayout.contains(.year)
+        let hasMonth = componentLayout.contains(.month)
+        let hasDay = componentLayout.contains(.day)
+        let hasHour = componentLayout.contains(.hour)
+        let hasMinute = componentLayout.contains(.minute)
+        let hasSecond = componentLayout.contains(.second)
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: referenceDate)
+
+        if hasYear { components.year = selectedYear }
+        if hasMonth { components.month = selectedMonth }
+        if hasDay { components.day = selectedDay }
+        else if hasMonth || hasYear { components.day = 1 }
+        if hasHour { components.hour = selectedHour }
+        else if pickerMode != .ms { components.hour = 0 }
+        if hasMinute { components.minute = selectedMinute }
+        else { components.minute = 0 }
+        if hasSecond { components.second = selectedSecond }
+        else { components.second = 0 }
+
+        switch pickerMode {
+        case .yq:
+            let monthRange = calendar.range(of: .month, in: .year, for: referenceDate)
+            let firstMonth = (selectedQuarter - 1) * 3 + 1
+            guard let monthRange, monthRange.contains(firstMonth) else { return nil }
+            components.month = firstMonth
+            components.day = 1
+            return calendar.date(from: components)
+        case .ymw:
+            return firstDate(inMonth: selectedMonth, weekOfMonth: selectedWeek, year: selectedYear)
+        case .yw:
+            var weekComponents = DateComponents()
+            weekComponents.calendar = calendar
+            weekComponents.timeZone = calendar.timeZone
+            weekComponents.yearForWeekOfYear = selectedYear
+            weekComponents.weekOfYear = selectedWeek
+            weekComponents.weekday = calendar.firstWeekday
+            weekComponents.hour = 0
+            weekComponents.minute = 0
+            weekComponents.second = 0
+            return calendar.date(from: weekComponents)
+        default:
+            return calendar.date(from: components)
+        }
+    }
+
+    private func firstDate(inMonth month: Int, weekOfMonth week: Int, year: Int) -> Date? {
+        var monthComponents = DateComponents()
+        monthComponents.year = year
+        monthComponents.month = month
+        monthComponents.day = 1
+        guard let firstDay = calendar.date(from: monthComponents),
+              let dayRange = calendar.range(of: .day, in: .month, for: firstDay) else { return nil }
+
+        for day in dayRange {
+            var dayComponents = DateComponents()
+            dayComponents.year = year
+            dayComponents.month = month
+            dayComponents.day = day
+            guard let date = calendar.date(from: dayComponents) else { continue }
+            if calendar.component(.weekOfMonth, from: date) == week { return date }
+        }
+        return nil
+    }
+
+    private func selectionInterval(for date: Date) -> DateInterval? {
+        switch pickerMode {
+        case .y: return calendar.dateInterval(of: .year, for: date)
+        case .ym: return calendar.dateInterval(of: .month, for: date)
+        case .yq: return calendar.dateInterval(of: .quarter, for: date)
+        case .ymw, .yw: return calendar.dateInterval(of: .weekOfYear, for: date)
+        case .ymdh: return calendar.dateInterval(of: .hour, for: date)
+        case .ymdhm, .mdhm, .hm: return calendar.dateInterval(of: .minute, for: date)
+        case .ymdhms, .hms, .ms: return calendar.dateInterval(of: .second, for: date)
+        case .md, .ymd: return calendar.dateInterval(of: .day, for: date)
+        }
+    }
+
+    private func resolvedSelectedDate() -> Date? {
+        guard let candidate = selectionDate() else { return nil }
+        guard let minDate, let maxDate else {
+            if let minDate, candidate < minDate,
+               let interval = selectionInterval(for: candidate), interval.end > minDate { return minDate }
+            if let maxDate, candidate > maxDate,
+               let interval = selectionInterval(for: candidate), interval.start <= maxDate { return maxDate }
+            return candidate
+        }
+        guard minDate <= maxDate else { return nil }
+        if candidate < minDate {
+            guard let interval = selectionInterval(for: candidate), interval.end > minDate else { return nil }
+            return minDate
+        }
+        if candidate > maxDate {
+            guard let interval = selectionInterval(for: candidate), interval.start <= maxDate else { return nil }
+            return maxDate
+        }
+        return candidate
+    }
+
     private func validateBoundary() {
-        guard minDate != nil || maxDate != nil else { return }
-        
-        var components = DateComponents()
-        let calendar = Calendar.current
-        
-        // 構造用戶當前選擇的 Date（缺少的組件用安全默認值填補）
-        components.year = componentLayout.contains(.year) ? selectedYear : calendar.component(.year, from: Date())
-        components.month = componentLayout.contains(.month) ? selectedMonth : 1
-        components.day = componentLayout.contains(.day) ? selectedDay : 1
-        components.hour = componentLayout.contains(.hour) ? selectedHour : 0
-        components.minute = componentLayout.contains(.minute) ? selectedMinute : 0
-        components.second = componentLayout.contains(.second) ? selectedSecond : 0
-        
-        guard let currentSelectedDate = calendar.date(from: components) else { return }
-        
-        var needSnapBack = false
-        
-        // 校驗最小日期
-        if let min = minDate, currentSelectedDate < min {
-            updateSelectedValues(from: min)
-            needSnapBack = true
+        guard dateIsConfigured else { return }
+        if let minDate, let maxDate, minDate > maxDate {
+            configurationError = .reversedRange
+            updateConfirmButtonState()
+            return
         }
-        // 校驗最大日期
-        else if let max = maxDate, currentSelectedDate > max {
-            updateSelectedValues(from: max)
-            needSnapBack = true
+
+        guard let candidate = selectionDate() else {
+            configurationError = .noRepresentableDate
+            updateConfirmButtonState()
+            return
         }
-        
-        // 如果越界，觸發自動回彈修復
-        if needSnapBack {
+
+        var boundaryDate: Date?
+        if let minDate, candidate < minDate,
+           let interval = selectionInterval(for: candidate), interval.end <= minDate {
+            boundaryDate = minDate
+        } else if let maxDate, candidate > maxDate,
+                  let interval = selectionInterval(for: candidate), interval.start > maxDate {
+            boundaryDate = maxDate
+        }
+
+        if let boundaryDate {
+            updateSelectedValues(from: boundaryDate)
             updateDynamicArrays()
             pickerView.reloadAllComponents()
-            // 帶動畫滾動回邊界
             scrollToDefaultPosition(animated: true)
         }
+
+        configurationError = resolvedSelectedDate() == nil ? .noRepresentableDate : nil
+        updateConfirmButtonState()
+    }
+
+    private func updateConfirmButtonState() {
+        confirmButton.isEnabled = canConfirm
     }
     
     /// 【修改】支援帶動畫的滾動
@@ -744,72 +1043,40 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         }
     }
     
-    // MARK: - Override Base (結果構造保持不變)
-    public override func confirmAction() {
-        var components = DateComponents()
-        components.year = Calendar.current.component(.year, from: Date())
-        components.month = 1; components.day = 1; components.hour = 0; components.minute = 0; components.second = 0
-        var formatString = ""
-        
+    private func formattedSelection() -> String {
         switch pickerMode {
-        case .ymd:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay
-            formatString = String(format: "%04d-%02d-%02d", selectedYear, selectedMonth, selectedDay)
-        case .ymdhm:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay
-            components.hour = selectedHour; components.minute = selectedMinute
-            formatString = String(format: "%04d-%02d-%02d %02d:%02d", selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute)
-        case .hm:
-            components.hour = selectedHour; components.minute = selectedMinute
-            formatString = String(format: "%02d:%02d", selectedHour, selectedMinute)
-        case .ymdhms:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay
-            components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
-            formatString = String(format: "%04d-%02d-%02d %02d:%02d:%02d", selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute, selectedSecond)
-        case .ymdh:
-            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour
-            formatString = String(format: "%04d-%02d-%02d %02d", selectedYear, selectedMonth, selectedDay, selectedHour)
-        case .mdhm:
-            components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute
-            formatString = String(format: "%02d-%02d %02d:%02d", selectedMonth, selectedDay, selectedHour, selectedMinute)
-        case .ym:
-            components.year = selectedYear; components.month = selectedMonth
-            formatString = String(format: "%04d-%02d", selectedYear, selectedMonth)
-        case .y:
-            components.year = selectedYear
-            formatString = String(format: "%04d", selectedYear)
-        case .md:
-            components.month = selectedMonth; components.day = selectedDay
-            formatString = String(format: "%02d-%02d", selectedMonth, selectedDay)
-        case .hms:
-            components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
-            formatString = String(format: "%02d:%02d:%02d", selectedHour, selectedMinute, selectedSecond)
-        case .ms:
-            components.minute = selectedMinute; components.second = selectedSecond
-            formatString = String(format: "%02d:%02d", selectedMinute, selectedSecond)
-        case .yq:
-            components.year = selectedYear; components.quarter = selectedQuarter
-            formatString = String(format: "%04d-Q%d", selectedYear, selectedQuarter)
-        case .ymw:
-            components.year = selectedYear; components.month = selectedMonth; components.weekOfMonth = selectedWeek
-            formatString = String(format: "%04d-%02d-W%d", selectedYear, selectedMonth, selectedWeek)
-        case .yw:
-            components.year = selectedYear; components.weekOfYear = selectedWeek
-            formatString = String(format: "%04d-W%d", selectedYear, selectedWeek)
+        case .ymd: return String(format: "%04d-%02d-%02d", selectedYear, selectedMonth, selectedDay)
+        case .ymdhm: return String(format: "%04d-%02d-%02d %02d:%02d", selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute)
+        case .hm: return String(format: "%02d:%02d", selectedHour, selectedMinute)
+        case .ymdhms: return String(format: "%04d-%02d-%02d %02d:%02d:%02d", selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute, selectedSecond)
+        case .ymdh: return String(format: "%04d-%02d-%02d %02d", selectedYear, selectedMonth, selectedDay, selectedHour)
+        case .mdhm: return String(format: "%02d-%02d %02d:%02d", selectedMonth, selectedDay, selectedHour, selectedMinute)
+        case .ym: return String(format: "%04d-%02d", selectedYear, selectedMonth)
+        case .y: return String(format: "%04d", selectedYear)
+        case .md: return String(format: "%02d-%02d", selectedMonth, selectedDay)
+        case .hms: return String(format: "%02d:%02d:%02d", selectedHour, selectedMinute, selectedSecond)
+        case .ms: return String(format: "%02d:%02d", selectedMinute, selectedSecond)
+        case .yq: return String(format: "%04d-Q%d", selectedYear, selectedQuarter)
+        case .ymw: return String(format: "%04d-%02d-W%d", selectedYear, selectedMonth, selectedWeek)
+        case .yw: return String(format: "%04d-W%d", selectedYear, selectedWeek)
         }
-        
-        if let selectedDate = Calendar.current.date(from: components) {
-            resultBlock?(selectedDate, formatString)
-        }
+    }
+
+    // MARK: - Override Base
+    public override func confirmAction() {
+        guard canConfirm, let selectedDate = currentSelectedDate else { return }
+        let formatString = formattedSelection()
+        resultBlock?(selectedDate, formatString)
         super.confirmAction()
     }
     
     // MARK: - UIPickerView DataSource & Delegate
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return componentLayout.count
+        componentLayout.count
     }
     
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        guard componentLayout.indices.contains(component) else { return 0 }
         let type = componentLayout[component]
         switch type {
         case .year: return yearArray.count
@@ -828,39 +1095,55 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     }
     
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = (view as? UILabel) ?? UILabel()
-        label.textAlignment = .center
-        label.textColor = pickerStyle.pickerTextColor
-        label.font = pickerStyle.pickerTextFont
-        label.backgroundColor = .clear
-        
-        let type = componentLayout[component]
-        switch type {
-        case .year: label.text = "\(yearArray[row])"
-        case .month: label.text = String(format: "%02d", monthArray[row])
-        case .day: label.text = String(format: "%02d", dayArray[row])
-        case .hour: label.text = String(format: "%02d", hourArray[row])
-        case .minute: label.text = String(format: "%02d", minuteArray[row])
-        case .second: label.text = String(format: "%02d", secondArray[row])
-        case .quarter: label.text = "Q\(quarterArray[row])"
-        case .weekOfYear, .weekOfMonth: label.text = "\(weekArray[row])"
+        guard componentLayout.indices.contains(component) else {
+            return pickerLabel(reusing: view, text: nil)
         }
-        return label
+
+        let type = componentLayout[component]
+        let text: String?
+        switch type {
+        case .year: text = yearArray.indices.contains(row) ? "\(yearArray[row])" : nil
+        case .month: text = monthArray.indices.contains(row) ? String(format: "%02d", monthArray[row]) : nil
+        case .day: text = dayArray.indices.contains(row) ? String(format: "%02d", dayArray[row]) : nil
+        case .hour: text = hourArray.indices.contains(row) ? String(format: "%02d", hourArray[row]) : nil
+        case .minute: text = minuteArray.indices.contains(row) ? String(format: "%02d", minuteArray[row]) : nil
+        case .second: text = secondArray.indices.contains(row) ? String(format: "%02d", secondArray[row]) : nil
+        case .quarter: text = quarterArray.indices.contains(row) ? "Q\(quarterArray[row])" : nil
+        case .weekOfYear, .weekOfMonth: text = weekArray.indices.contains(row) ? "\(weekArray[row])" : nil
+        }
+        return pickerLabel(reusing: view, text: text)
     }
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        guard componentLayout.indices.contains(component) else { return }
         let type = componentLayout[component]
         
         // 更新內部選中狀態
         switch type {
-        case .year: selectedYear = yearArray[row]
-        case .month: selectedMonth = monthArray[row]
-        case .day: selectedDay = dayArray[row]
-        case .hour: selectedHour = hourArray[row]
-        case .minute: selectedMinute = minuteArray[row]
-        case .second: selectedSecond = secondArray[row]
-        case .quarter: selectedQuarter = quarterArray[row]
-        case .weekOfYear, .weekOfMonth: selectedWeek = weekArray[row]
+        case .year:
+            guard yearArray.indices.contains(row) else { return }
+            selectedYear = yearArray[row]
+        case .month:
+            guard monthArray.indices.contains(row) else { return }
+            selectedMonth = monthArray[row]
+        case .day:
+            guard dayArray.indices.contains(row) else { return }
+            selectedDay = dayArray[row]
+        case .hour:
+            guard hourArray.indices.contains(row) else { return }
+            selectedHour = hourArray[row]
+        case .minute:
+            guard minuteArray.indices.contains(row) else { return }
+            selectedMinute = minuteArray[row]
+        case .second:
+            guard secondArray.indices.contains(row) else { return }
+            selectedSecond = secondArray[row]
+        case .quarter:
+            guard quarterArray.indices.contains(row) else { return }
+            selectedQuarter = quarterArray[row]
+        case .weekOfYear, .weekOfMonth:
+            guard weekArray.indices.contains(row) else { return }
+            selectedWeek = weekArray[row]
         }
         
         // 聯動刷新天數和周數
@@ -873,6 +1156,10 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         
         // 最後校驗邊界，如果越界會自動動畫回彈！
         validateBoundary()
+        updateConfirmButtonState()
+        if let selectedDate = currentSelectedDate {
+            onSelectionChanged?(selectedDate, formattedSelection())
+        }
     }
 }
 
@@ -884,42 +1171,52 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     
     /// 動態維護的列數據：二維數組，每一項代表目前 UI 上顯示的一列數據
     private var currentColumns: [[PTTreePickerModel]] = []
+    private var selectedRows: [Int] = []
     
     // MARK: - Current Selection Properties
     /// 获取当前各层级选中的索引数组
-    public var selectedIndices: [Int] {
-        var indices: [Int] = []
-        for component in 0..<currentColumns.count {
-            indices.append(pickerView.selectedRow(inComponent: component))
-        }
-        return indices
-    }
+    public var selectedIndices: [Int] { selectedRows }
     
     /// 直接获取当前选中的层级结果数组
     public var currentResults: [PTPickerResult] {
-        var results: [PTPickerResult] = []
-        for col in 0..<currentColumns.count {
-            let row = pickerView.selectedRow(inComponent: col)
-            let levelData = currentColumns[col]
-            let safeRow = max(0, min(row, levelData.count - 1))
-            
-            let model = levelData[safeRow]
-            results.append(PTPickerResult(index: safeRow, value: model.pickerDisplayText, originalModel: model))
+        selectedRows.enumerated().compactMap { component, row in
+            guard currentColumns.indices.contains(component),
+                  currentColumns[component].indices.contains(row) else { return nil }
+            let model = currentColumns[component][row]
+            return PTPickerResult(index: row, value: model.pickerDisplayText, originalModel: model)
         }
-        return results
     }
 
     /// 選擇完成後的回調：返回所有選中的層級結果
     public var resultBlock: ((_ results: [PTPickerResult]) -> Void)?
+
+    /// EN: Emits a stable snapshot after a valid tree selection.
+    /// ES: Emite una instantánea estable después de una selección válida.
+    /// 中文：树形选择有效后回调稳定的结果快照。
+    public var onSelectionChanged: (@MainActor @Sendable ([PTPickerResult]) -> Void)?
+
+    public override var canConfirm: Bool {
+        !currentColumns.isEmpty &&
+        currentColumns.count == selectedRows.count &&
+        currentColumns.enumerated().allSatisfy { component, rows in
+            rows.indices.contains(selectedRows[component])
+        }
+    }
     
     // MARK: - Initialization
     public override init(style: PTPickerStyle? = nil) {
         super.init(style: style)
         self.setupPicker()
     }
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupPicker()
+    }
         
     public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupPicker()
     }
     
     private func setupPicker() {
@@ -934,77 +1231,102 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     
     // MARK: - Public Methods
     
-    /// 顯示樹狀聯動選擇器
-    /// - Parameters:
-    ///   - title: 標題
-    ///   - data: 根節點數據數組
-    ///   - defaultIndices: 各層級的默認選中索引，例如 [0, 1, 0]
-    ///   - completion: 完成回調
-    public func show(title: String, treeData: [PTTreePickerModel], defaultIndices: [Int]? = nil, completion: @escaping ([PTPickerResult]) -> Void) {
-        self.titleLabel.setTitle(title, for: .normal)
+    /// EN: Configures the tree without presenting the picker.
+    /// ES: Configura el árbol sin presentar el selector.
+    /// 中文：只配置树形数据，不展示 Picker。
+    public func configure(title: String, treeData: [PTTreePickerModel], defaultIndices: [Int]? = nil) {
+        titleLabel.setTitle(title, for: .normal)
         resetTitleLabelwidth()
-        self.resultBlock = completion
-        
-        // 1. 根據傳入的數據和默認索引，計算出初始需要展示的所有列
+        resultBlock = nil
         buildInitialColumns(from: treeData, defaultIndices: defaultIndices)
-        
-        // 2. 刷新選擇器
         pickerView.reloadAllComponents()
-        
-        // 3. 將滾輪撥動到對應的位置
-        for (col, levelData) in currentColumns.enumerated() {
-            let defaultRow = defaultIndices.flatMap { col < $0.count ? $0[col] : nil } ?? 0
-            let safeRow = max(0, min(defaultRow, levelData.count - 1))
-            pickerView.selectRow(safeRow, inComponent: col, animated: false)
-        }
-        
-        self.show()
+        restorePickerSelection()
+        updateConfirmButtonState()
+    }
+
+    public func show(title: String, treeData: [PTTreePickerModel], defaultIndices: [Int]? = nil, completion: @escaping ([PTPickerResult]) -> Void) {
+        configure(title: title, treeData: treeData, defaultIndices: defaultIndices)
+        resultBlock = completion
+        show()
+    }
+
+    /// EN: Selects a row and rebuilds only the affected descendant path.
+    /// ES: Selecciona una fila y reconstruye solo la ruta descendiente afectada.
+    /// 中文：选择一行，只重建受影响的子级路径。
+    public func selectRow(_ row: Int, inComponent component: Int, animated: Bool = false, notifySelectionChanged: Bool = true) {
+        guard currentColumns.indices.contains(component), !currentColumns[component].isEmpty else { return }
+        let safeRow = min(max(row, 0), currentColumns[component].count - 1)
+        pickerView.selectRow(safeRow, inComponent: component, animated: animated)
+        updateSelection(safeRow, inComponent: component, notifySelectionChanged: notifySelectionChanged)
     }
     
     // MARK: - Tree Logic (核心樹狀算法)
     
     /// 構建初始的列數據
     private func buildInitialColumns(from rootData: [PTTreePickerModel], defaultIndices: [Int]?) {
-        currentColumns = [rootData]
+        currentColumns = []
+        selectedRows = []
         var currentLevel = rootData
         var colIndex = 0
-        
-        // 遞迴向下尋找子節點，直到葉子節點為止
+
         while !currentLevel.isEmpty {
-            // 獲取當前層應該選中的 index
-            let defaultRow = defaultIndices.flatMap { colIndex < $0.count ? $0[colIndex] : nil } ?? 0
-            let safeRow = max(0, min(defaultRow, currentLevel.count - 1))
-            
-            // 如果安全，則取出它的子節點
-            if safeRow < currentLevel.count {
-                let children = currentLevel[safeRow].pickerChildren
-                if !children.isEmpty {
-                    currentColumns.append(children)
-                }
-                currentLevel = children
-            } else {
-                break
-            }
+            currentColumns.append(currentLevel)
+            let requestedRow = defaultIndices.flatMap { $0.indices.contains(colIndex) ? $0[colIndex] : nil } ?? 0
+            let safeRow = min(max(requestedRow, 0), currentLevel.count - 1)
+            selectedRows.append(safeRow)
+            currentLevel = currentLevel[safeRow].pickerChildren
             colIndex += 1
         }
     }
     
+    private func restorePickerSelection() {
+        for component in currentColumns.indices {
+            pickerView.selectRow(selectedRows[component], inComponent: component, animated: false)
+        }
+    }
+
+    private func updateSelection(_ row: Int, inComponent component: Int, notifySelectionChanged: Bool) {
+        guard currentColumns.indices.contains(component),
+              currentColumns[component].indices.contains(row) else { return }
+
+        let oldComponentCount = currentColumns.count
+        selectedRows[component] = row
+        if currentColumns.count > component + 1 {
+            currentColumns.removeSubrange((component + 1)..<currentColumns.count)
+            selectedRows.removeSubrange((component + 1)..<selectedRows.count)
+        }
+
+        var nextChildren = currentColumns[component][row].pickerChildren
+        while !nextChildren.isEmpty {
+            currentColumns.append(nextChildren)
+            selectedRows.append(0)
+            nextChildren = nextChildren[0].pickerChildren
+        }
+
+        if oldComponentCount != currentColumns.count {
+            pickerView.reloadAllComponents()
+            restorePickerSelection()
+        } else if component + 1 < currentColumns.count {
+            for affectedComponent in (component + 1)..<currentColumns.count {
+                pickerView.reloadComponent(affectedComponent)
+                pickerView.selectRow(selectedRows[affectedComponent],
+                                     inComponent: affectedComponent,
+                                     animated: true)
+            }
+        }
+
+        updateConfirmButtonState()
+        if notifySelectionChanged { onSelectionChanged?(currentResults) }
+    }
+
+    private func updateConfirmButtonState() {
+        confirmButton.isEnabled = canConfirm
+    }
+
     // MARK: - Override Base
     public override func confirmAction() {
-        var results: [PTPickerResult] = []
-        
-        // 遍歷當前渲染出的每一列，收集結果
-        for col in 0..<currentColumns.count {
-            let row = pickerView.selectedRow(inComponent: col)
-            let levelData = currentColumns[col]
-            let safeRow = max(0, min(row, levelData.count - 1))
-            
-            let model = levelData[safeRow]
-            let result = PTPickerResult(index: safeRow, value: model.pickerDisplayText, originalModel: model)
-            results.append(result)
-        }
-        
-        resultBlock?(results)
+        guard canConfirm else { return }
+        resultBlock?(currentResults)
         super.confirmAction()
     }
     
@@ -1014,7 +1336,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     }
     
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return currentColumns[component].count
+        currentColumns.indices.contains(component) ? currentColumns[component].count : 0
     }
     
     public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -1022,44 +1344,13 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     }
     
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = (view as? UILabel) ?? UILabel()
-        label.textAlignment = .center
-        label.textColor = pickerStyle.pickerTextColor
-        label.font = pickerStyle.pickerTextFont
-        label.backgroundColor = .clear
-        
-        label.text = currentColumns[component][row].pickerDisplayText
-        return label
+        let text = currentColumns.indices.contains(component) && currentColumns[component].indices.contains(row)
+            ? currentColumns[component][row].pickerDisplayText
+            : nil
+        return pickerLabel(reusing: view, text: text)
     }
     
-    // 【核心動態聯動邏輯】
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let oldComponentCount = currentColumns.count
-        
-        // 截斷：刪除當前撥動列「之後」的所有舊數據
-        currentColumns.removeSubrange((component + 1)...)
-        
-        // 獲取當前剛選中的模型
-        let currentLevel = currentColumns[component]
-        let safeRow = max(0, min(row, currentLevel.count - 1))
-        var nextChildren = currentLevel[safeRow].pickerChildren
-        
-        // 遞迴構建：根據新選中的模型，一路往下尋找默認的第一個子節點，重構右側列
-        while !nextChildren.isEmpty {
-            currentColumns.append(nextChildren)
-            nextChildren = nextChildren[0].pickerChildren // 聯動時，子列默認選中第 0 項
-        }
-        
-        // UI 刷新優化
-        if oldComponentCount != currentColumns.count {
-            // 如果深度改變了（例如從3級聯動變成了2級），必須刷新整個選擇器以重建列
-            pickerView.reloadAllComponents()
-        } else {
-            // 深度沒變，只需要刷新被影響的右側列，並用動畫將它們滾回到頂部
-            for c in (component + 1)..<currentColumns.count {
-                pickerView.reloadComponent(c)
-                pickerView.selectRow(0, inComponent: c, animated: true)
-            }
-        }
+        updateSelection(row, inComponent: component, notifySelectionChanged: true)
     }
 }

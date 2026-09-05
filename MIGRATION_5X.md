@@ -95,6 +95,36 @@ final class ExampleListController: PTListViewController {
 - `PTImagePicker` 的泛型 `Controller`、旧 `openAlbum`、`photograph` 和闭包便利入口继续保留，但已标记 deprecated；5.x 不删除，迁移目标为 `PTSystemMediaPicker`，计划在 6.0.0 再评估移除。
 - 轻量系统入口中的 Live Photo 按静态图片返回；需要完整 Live Photo 资源时继续使用 PhotoPicker 的自定义 PhotoKit 路径。
 
+### 5.7.5 Picker 嵌入入口
+
+滚轮 Picker 现在把“配置数据”和“展示方式”分开。需要把选择器放进页面布局时，先调用
+`configure(...)`，再把实例加入任意 `UIView`；需要底部覆盖层时继续使用兼容的 `show()`，或
+使用新的 `show(in:animated:)` 指定宿主 View。直接嵌入时默认不显示工具栏，如需标题、取消和
+确定按钮可设置 `showsToolbarWhenEmbedded = true`。
+
+```swift
+@MainActor
+final class ExampleViewController: UIViewController {
+    private let picker = PTStringPickerView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        picker.showsToolbarWhenEmbedded = true
+        picker.configure(title: "选择城市", data: ["北京", "上海", "广州"])
+        view.addSubview(picker)
+        picker.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(300)
+        }
+    }
+}
+```
+
+`PTDatePickerView` 和 `PTTreePickerView` 分别使用自己的 `configure(...)` 重载。旧的
+`show(title:...)` 入口仍然可用，并且内部先配置再展示；新页面推荐显式区分配置和宿主布局，
+避免把当前 Window 当成唯一展示位置。
+
 重复入口的当前状态由 [重复入口报告](Scripts/report_duplicate_entries.sh) 输出，并由质量
 检查执行时校验。每一组都必须明确 canonical、deprecated wrapper、semantic difference、
 pending 和 removal gate，避免将语义不同的功能机械合并。

@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.6.10`（2026-09-02，当前工作区基线）
-> 当前候选：`5.7.0`（2026-09-02）
+> 基线：`5.7.4`（2026-09-05，当前工作区基线）
+> 当前候选：`5.7.5`（2026-09-05，待完整构建验收）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -394,3 +394,30 @@
 - ✅ 本次闪退根因是 `configureContentHierarchy()` 在 `titleMessage` 和 `customView` 尚未加入 `bodyContentView` 时，提前激活了它们与 `bodyContentView` 的约束；现已调整为先建立完整视图层级，再激活约束。
 - ✅ 初始化宽高约束不再使用强制解包；弹窗宽度和高度均有最小值保护，并优先遵循展示窗口的安全区域。
 - ✅ 不修改 `5.7.1` 既有 tag，不覆盖用户提交历史；当前修复保留在工作区，确认人工回归后再由发布流程决定是否创建后续修复 tag。
+
+## 5.7.5：Picker 嵌入能力、选择状态与安全布局治理
+
+### 任务清单
+
+- ✅ `CORE-575-01`：以 `PTBasePickerView` 为唯一展示容器，保留原有 `show()` 与三个具体 Picker 的公开入口；不删除公开类型，不引入第二套滚轮实现。
+- ✅ `CORE-575-02`：新增显式宿主入口 `show(in:animated:)`，支持把 Picker 添加到任意 `UIView`；嵌入模式不依赖当前 Window，弹出模式继续复用 `PTSceneContext.activeWindow()`。
+- ✅ `CORE-575-03`：为 String、Date、Tree Picker 增加只配置不展示的 `configure(...)`，并用稳定的内部选中状态替代直接读取 `UIPickerView` 的临时行号；空数据、越界索引和动态列变化均安全处理。
+- ✅ `CORE-575-04`：统一 `canConfirm`、取消、展示代次和幂等 dismiss；嵌入模式不被 `dismiss()` 擅自移除，弹出模式的动画完成回调不会清理新一轮展示。
+- ✅ `CORE-575-05`：修复日期 Picker 的季度、年周、月周和不完整时间模式的日期构造；补充反向范围、不可表示日期和边界日期的明确状态，不使用 `try!`、`as!` 或强制解包。
+- ✅ `CORE-575-06`：统一三个滚轮 Picker 的 Label 样式和动态系统背景色；标题宽度改为基于按钮锚点的安全约束，避免长标题越界和跨层级约束异常。
+- ✅ `CORE-575-07`：修正 SwiftPM Picker target 的直接依赖声明，扩展重复入口报告和质量扫描范围；新公开 API 注释遵循英语、西班牙语和中文三语约定。
+- ✅ `CORE-575-08`：完成修改文件 Swift 6 前端解析、Package manifest、构建入口、重复入口、质量扫描和 `git diff --check`；PooTools target 的 Xcode Simulator 源码编译通过。
+- ⛔ `CORE-575-09`：PooTools-Example 的完整 Debug/Release 链接和 Picker 人工运行回归仍需在外部 Pods、模拟器版依赖和工具链可用后完成；未同步 5.7.5 版本元数据或创建 tag。
+
+### 5.7.5 实施与验证说明
+
+- ✅ `PTStringPickerView`、`PTDatePickerView` 和 `PTTreePickerView` 现在都可以先 `configure(...)`，再由调用方使用 Auto Layout 添加到普通页面；需要覆盖层时才调用 `show(in:)` 或兼容的 `show()`。
+- ✅ `show(in:)` 会校验宿主层级、先建立完整视图树再激活约束，并从宿主底部之外开始动画；重复 show/dismiss 不会让旧动画回调移除新实例。
+- ✅ 日期和树形数据的内部数组均使用安全下标和空值保护；日期 Picker 对默认日期、范围和周历语义使用同一套构造与校验路径。
+- ✅ Picker 依赖边界与 `Core` 一致，没有引入 DarkMode、PhotoPicker 或其他高层模块依赖；没有修改第三方依赖、Pods 源码、Podfile.lock 或 Xcode 工程文件。
+
+### 5.7.5 发布门槛
+
+- ⬜ 外部依赖阻断解除后重新执行 PooTools-Example Debug/Release 完整构建和 Picker 人工回归。
+- ⬜ 验证普通、Grid 不适用的滚轮嵌入页面、弹出展示、长标题、空数据、日期范围、树形联动、旋转、深色模式和 Reduce Motion。
+- ⬜ 通过 `validate_release.sh 5.7.5` 后，再同步 podspec、Podfile.lock、README、RELEASE、CHANGELOG 并创建不带 `v` 前缀的 `5.7.5` tag。
