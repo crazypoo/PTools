@@ -690,6 +690,11 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     private var selectedQuarter: Int = 1
     private var selectedWeek: Int = 1
 
+    /// EN: Stores the last valid date snapshot so reads do not observe a transient picker state.
+    /// ES: Guarda la última fecha válida para que las lecturas no observen un estado transitorio.
+    /// 中文：保存最近一次有效日期快照，避免读取到 Picker 联动期间的临时状态。
+    private var selectedDateSnapshot: Date?
+
     /// EN: Reports why the current date selection cannot be confirmed.
     /// ES: Indica por qué no se puede confirmar la selección de fecha actual.
     /// 中文：返回当前日期选择不能确认的原因。
@@ -707,7 +712,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     // MARK: - Current Selection Properties
     /// 实时获取当前选中的日期对象
     public var currentSelectedDate: Date? {
-        resolvedSelectedDate()
+        selectedDateSnapshot ?? resolvedSelectedDate()
     }
 
     public var resultBlock: ((_ date: Date, _ dateString: String) -> Void)?
@@ -775,6 +780,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         self.minDate = minDate
         self.maxDate = maxDate
         resultBlock = nil
+        selectedDateSnapshot = nil
         if let minDate, let maxDate, minDate > maxDate {
             configurationError = .reversedRange
         } else {
@@ -788,6 +794,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         validateBoundary()
         pickerView.reloadAllComponents()
         scrollToDefaultPosition(animated: false)
+        updateDateSnapshot()
         updateConfirmButtonState()
     }
 
@@ -811,19 +818,13 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         }
 
         let currentYear = yearValue(for: referenceDate)
-        var startYear = 1900
-        var endYear = currentYear + 50
-        if let minDate {
-            startYear = min(startYear, yearValue(for: minDate))
-            endYear = max(endYear, yearValue(for: minDate))
-        }
-        if let maxDate {
-            startYear = min(startYear, yearValue(for: maxDate))
-            endYear = max(endYear, yearValue(for: maxDate))
-        }
-        startYear = min(startYear, yearValue(for: referenceDate))
-        endYear = max(endYear, yearValue(for: referenceDate))
-        yearArray = Array(startYear...max(startYear, endYear))
+        let defaultStartYear = 1900
+        let defaultEndYear = currentYear + 50
+        let startYear = minDate.map(yearValue) ?? defaultStartYear
+        let endYear = maxDate.map(yearValue) ?? defaultEndYear
+        let lowerYear = min(startYear, endYear)
+        let upperYear = max(startYear, endYear)
+        yearArray = Array(lowerYear...upperYear)
     }
 
     private func yearValue(for date: Date) -> Int {
@@ -950,42 +951,24 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         return nil
     }
 
-    private func selectionInterval(for date: Date) -> DateInterval? {
-        switch pickerMode {
-        case .y: return calendar.dateInterval(of: .year, for: date)
-        case .ym: return calendar.dateInterval(of: .month, for: date)
-        case .yq: return calendar.dateInterval(of: .quarter, for: date)
-        case .ymw, .yw: return calendar.dateInterval(of: .weekOfYear, for: date)
-        case .ymdh: return calendar.dateInterval(of: .hour, for: date)
-        case .ymdhm, .mdhm, .hm: return calendar.dateInterval(of: .minute, for: date)
-        case .ymdhms, .hms, .ms: return calendar.dateInterval(of: .second, for: date)
-        case .md, .ymd: return calendar.dateInterval(of: .day, for: date)
-        }
+    private func resolvedSelectedDate() -> Date? {
+        if let minDate, let maxDate, minDate > maxDate { return nil }
+        guard let candidate = selectionDate() else { return nil }
+        if let minDate, candidate < minDate { return minDate }
+        if let maxDate, candidate > maxDate { return maxDate }
+        return candidate
     }
 
-    private func resolvedSelectedDate() -> Date? {
-        guard let candidate = selectionDate() else { return nil }
-        guard let minDate, let maxDate else {
-            if let minDate, candidate < minDate,
-               let interval = selectionInterval(for: candidate), interval.end > minDate { return minDate }
-            if let maxDate, candidate > maxDate,
-               let interval = selectionInterval(for: candidate), interval.start <= maxDate { return maxDate }
-            return candidate
-        }
-        guard minDate <= maxDate else { return nil }
-        if candidate < minDate {
-            guard let interval = selectionInterval(for: candidate), interval.end > minDate else { return nil }
-            return minDate
-        }
-        if candidate > maxDate {
-            guard let interval = selectionInterval(for: candidate), interval.start <= maxDate else { return nil }
-            return maxDate
-        }
-        return candidate
+    /// EN: Commits one valid date snapshot for the property and callback paths.
+    /// ES: Confirma una única instantánea válida para la propiedad y los callbacks.
+    /// 中文：为属性读取和回调路径提交同一份有效日期快照。
+    private func updateDateSnapshot() {
+        selectedDateSnapshot = resolvedSelectedDate()
     }
 
     private func validateBoundary() {
         guard dateIsConfigured else { return }
+        selectedDateSnapshot = nil
         if let minDate, let maxDate, minDate > maxDate {
             configurationError = .reversedRange
             updateConfirmButtonState()
@@ -998,13 +981,13 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
             return
         }
 
-        var boundaryDate: Date?
-        if let minDate, candidate < minDate,
-           let interval = selectionInterval(for: candidate), interval.end <= minDate {
+        let boundaryDate: Date?
+        if let minDate, candidate < minDate {
             boundaryDate = minDate
-        } else if let maxDate, candidate > maxDate,
-                  let interval = selectionInterval(for: candidate), interval.start > maxDate {
+        } else if let maxDate, candidate > maxDate {
             boundaryDate = maxDate
+        } else {
+            boundaryDate = nil
         }
 
         if let boundaryDate {
@@ -1015,6 +998,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         }
 
         configurationError = resolvedSelectedDate() == nil ? .noRepresentableDate : nil
+        updateDateSnapshot()
         updateConfirmButtonState()
     }
 
@@ -1157,9 +1141,8 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         // 最後校驗邊界，如果越界會自動動畫回彈！
         validateBoundary()
         updateConfirmButtonState()
-        if let selectedDate = currentSelectedDate {
-            onSelectionChanged?(selectedDate, formattedSelection())
-        }
+        guard let selectedDate = currentSelectedDate else { return }
+        onSelectionChanged?(selectedDate, formattedSelection())
     }
 }
 
