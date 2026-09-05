@@ -20,6 +20,10 @@ import PooToolsImagePicker
 final class PTFetchImageOperation: Operation, @unchecked Sendable {
     private let model: PTMediaModel
     private let isOriginal: Bool
+    // English: Keep media behavior as a value snapshot for this operation.
+    // Español: Mantiene el comportamiento multimedia como una instantánea de valor para esta operación.
+    // 中文：将媒体行为作为当前 Operation 的值快照保存。
+    private let selectionOptions: PTMediaLibSelectionOptions
     private let progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)?
     private let completion: @Sendable (UIImage?, PHAsset?) -> Void
 
@@ -54,10 +58,12 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
     // MARK: - Init
     init(model: PTMediaModel,
          isOriginal: Bool,
+         selectionOptions: PTMediaLibSelectionOptions,
          progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
          completion: @escaping @Sendable (UIImage?, PHAsset?) -> Void) {
         self.model = model
         self.isOriginal = isOriginal
+        self.selectionOptions = selectionOptions
         self.progress = progress
         self.completion = completion
         super.init()
@@ -67,7 +73,12 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
     override func start() {
         // 1. 检查取消状态
         if isCancelled {
-            fetchFinish()
+            let model = self.model
+            Task { @MainActor [weak self, model] in
+                guard let self else { return }
+                self.deliver(image: nil, asset: model.asset)
+                self.fetchFinish()
+            }
             return
         }
 
@@ -78,7 +89,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
         // 💡 映射到 MainActor 以便安全访问 model 属性
         Task { @MainActor in
             if let editImage = model.editImage {
-                if PTMediaLibConfig.share.saveNewImageAfterEdit {
+                if self.selectionOptions.saveNewImageAfterEdit {
                     PTMediaSaveService.save(image: editImage) { [weak self = self] result in
                         guard let self else { return }
                         switch result {
@@ -97,13 +108,18 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             }
 
             // 3. 处理 GIF
-            if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
+            if self.selectionOptions.allowSelectGif, model.type == .gif {
                 let id = PTMediaLibManager.requestImageData(for: model.asset) { [weak self = self] result in
-                    if !result.isCancelled, !result.isDegraded, let data = result.data {
-                        let image = UIImage.pt.animateGifImage(data: data)
-                        self?.deliver(image: image, asset: nil)
-                        self?.fetchFinish()
+                    guard let self else { return }
+                    guard !result.isCancelled, result.error == nil else {
+                        self.deliver(image: nil, asset: model.asset)
+                        self.fetchFinish()
+                        return
                     }
+                    guard !result.isDegraded else { return }
+                    let image = result.data.flatMap { UIImage.pt.animateGifImage(data: $0) }
+                    self.deliver(image: image, asset: image == nil ? model.asset : nil)
+                    self.fetchFinish()
                 }
                 self.updateRequestID(id)
                 return
@@ -114,13 +130,19 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             let asset = model.asset
             
             let resultHandler: @MainActor @Sendable (PTMediaImageRequestResult) -> Void = { [weak self = self] result in
-                guard let self = self, !result.isCancelled, !result.isDegraded else { return }
+                guard let self else { return }
+                guard !result.isCancelled, result.error == nil else {
+                    self.deliver(image: nil, asset: asset)
+                    self.fetchFinish()
+                    return
+                }
+                guard !result.isDegraded else { return }
                 
                 let fixedImage = result.image?.pt.fixOrientation()
                 let finalImage = self.isOriginal ? fixedImage : self.scaleImage(fixedImage)
                 
                 PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .media)
-                self.deliver(image: finalImage, asset: nil)
+                self.deliver(image: finalImage, asset: finalImage == nil ? asset : nil)
                 self.fetchFinish()
             }
 

@@ -24,6 +24,10 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     }
 
     public let picker = UIImagePickerController()
+    // English: Optional camera policy; nil preserves the legacy singleton fallback for direct callers.
+    // Español: Política de cámara opcional; nil conserva el respaldo del singleton heredado para llamadas directas.
+    // 中文：可选的相机策略；为 nil 时保留直接调用者的旧单例兼容行为。
+    public var cameraOptions: PTMediaLibCameraOptions?
     public var handleNewAssetCallback:((_ asset: PHAsset) -> Void)?
     public var handleCameraFailureCallback: (@MainActor @Sendable (PTSystemMediaPickerError) -> Void)?
 
@@ -60,7 +64,8 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
         picker.sourceType = .camera
         picker.videoQuality = .typeHigh
         picker.mediaTypes = mediaTypes
-        picker.videoMaximumDuration = TimeInterval(PTMediaLibConfig.share.maxRecordDuration)
+        let options = cameraOptions ?? PTMediaLibSelectionOptions.current().cameraOptions
+        picker.videoMaximumDuration = TimeInterval(options.maxRecordDuration)
 
         addChild(picker)
         view.addSubview(picker.view)
@@ -72,9 +77,10 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     }
     
     private func calculateMediaTypes() -> [String] {
+        let options = cameraOptions ?? PTMediaLibSelectionOptions.current().cameraOptions
         var types: [String] = []
-        if PTMediaLibConfig.share.cameraConfiguration.allowTakePhoto { types.append(UTType.image.identifier) }
-        if PTMediaLibConfig.share.cameraConfiguration.allowRecordVideo { types.append(UTType.movie.identifier) }
+        if options.allowTakePhoto { types.append(UTType.image.identifier) }
+        if options.allowRecordVideo { types.append(UTType.movie.identifier) }
         return types
     }
 

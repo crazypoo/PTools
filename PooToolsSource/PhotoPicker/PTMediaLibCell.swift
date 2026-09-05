@@ -67,8 +67,7 @@ class PTMediaLibCell: PTBaseNormalCell {
 
     private func updateCellContent() {
         guard let cellModel else { return }
-        let mediaLibConfig = PTMediaLibConfig.share
-        let selectionOptions = selectionOptions ?? .current()
+        let options = self.selectionOptions ?? .current()
         imageIdentifier = cellModel.ident
         
         // 1. 处理选中状态的大图预加载/缓存逻辑
@@ -86,8 +85,8 @@ class PTMediaLibCell: PTBaseNormalCell {
         }
         
         // 3. 选择按钮显示逻辑控制
-        let isSingleSelect = selectionOptions.maxSelectCount <= 1
-        let canShowBtn = isSingleSelect ? mediaLibConfig.showSelectBtnWhenSingleSelect : (selectionOptions.allowMixSelect || cellModel.type != .video)
+        let isSingleSelect = options.maxSelectCount <= 1
+        let canShowBtn = isSingleSelect ? options.showSelectBtnWhenSingleSelect : (options.allowMixSelect || cellModel.type != .video)
         
         selectButton.isHidden = !canShowBtn
         selectButton.isUserInteractionEnabled = canShowBtn

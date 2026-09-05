@@ -49,13 +49,29 @@ public class PTMediaLibView: UIView {
     }
     
     private var showCameraCell: Bool {
-        PTMediaLibConfig.share.allowTakePhotoInLibrary
-            && activeSelectionOptions.allowSelectImage
+        let options = effectiveCameraOptions
+        return activeSelectionOptions.allowTakePhotoInLibrary
+            && (options.allowTakePhoto || options.allowRecordVideo)
             && (currentAlbum?.isCameraRoll ?? false)
     }
 
+    // English: Keep the first load independent from the controller back-reference setup order.
+    // Español: Mantiene la primera carga independiente del orden de configuración de la referencia al controlador.
+    // 中文：让首次加载不受控制器反向引用设置顺序影响。
+    private let selectionOptionsSnapshot: PTMediaLibSelectionOptions
+
     private var activeSelectionOptions: PTMediaLibSelectionOptions {
-        currentVc?.effectiveSelectionOptions ?? .current()
+        currentVc?.effectiveSelectionOptions ?? selectionOptionsSnapshot
+    }
+
+    // English: Restrict camera media kinds to the picker policy before presenting the camera.
+    // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
+    // 中文：展示相机前，先用当前选择器策略限制可拍摄的媒体类型。
+    private var effectiveCameraOptions: PTMediaLibCameraOptions {
+        var options = activeSelectionOptions.cameraOptions
+        options.allowTakePhoto = options.allowTakePhoto && activeSelectionOptions.allowSelectImage
+        options.allowRecordVideo = options.allowRecordVideo && activeSelectionOptions.allowSelectVideo
+        return options
     }
 
     // MARK: - UI Components
@@ -87,7 +103,8 @@ public class PTMediaLibView: UIView {
     }()
 
     // MARK: - Init
-    init(currentModels: PTMediaLibListModel?) {
+    init(currentModels: PTMediaLibListModel?, selectionOptions: PTMediaLibSelectionOptions? = nil) {
+        self.selectionOptionsSnapshot = selectionOptions ?? currentModels?.selectionOptions ?? .current()
         super.init(frame: .zero)
         setupUI()
         self.currentAlbum = currentModels
@@ -116,7 +133,7 @@ extension PTMediaLibView {
             var rows = self.totalModels.map { PTRows(ID: PTMediaLibCell.ID, dataModel: $0) }
             
             if self.showCameraCell {
-                let insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 0 : rows.count
+                let insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : rows.count
                 rows.insert(PTRows(ID: PTCameraCell.ID), at: insertIndex)
             }
             
@@ -220,7 +237,7 @@ extension PTMediaLibView {
             for indexPath in visibleIndexPaths {
                 guard let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell else { continue }
                 
-                let indexOffset = self.showCameraCell ? (PTMediaLibUIConfig.share.shortIsTop ? 1 : 0) : 0
+                let indexOffset = self.showCameraCell ? (self.activeSelectionOptions.cameraCellAtTop ? 1 : 0) : 0
                 let dataIndex = indexPath.row - indexOffset
                 
                 guard dataIndex >= 0, dataIndex < self.totalModels.count else { continue }
@@ -257,9 +274,9 @@ extension PTMediaLibView {
             #if POOTOOLS_IMAGEEDITOR
             if model.type == .image { cell.editButton.isHidden = !activeSelectionOptions.allowEditImage }
             #endif
-            #if POOTOOLS_VIDEOEDITOR
-            if model.type == .video { cell.editButton.isHidden = !config.allowEditVideo }
-            #endif
+#if POOTOOLS_VIDEOEDITOR
+            if model.type == .video { cell.editButton.isHidden = !activeSelectionOptions.allowEditVideo }
+#endif
         } else {
             cell.editButton.isHidden = true
             handleInvalidMask(cell, model: model, config: config, uiConfig: uiConfig)
@@ -307,6 +324,7 @@ extension PTMediaLibView {
             }
 
             let picker = PTMediaLibCameraContainerViewController()
+            picker.cameraOptions = self.effectiveCameraOptions
             picker.handleNewAssetCallback = { [weak self] asset in
                 self?.handleNewAsset(asset)
             }
@@ -331,21 +349,20 @@ extension PTMediaLibView {
         currentAlbum?.refreshResult()
         
         // 根据排序规则插入数据
-        if PTMediaLibUIConfig.share.sortAscending {
+        if activeSelectionOptions.sortAscending {
             totalModels.append(newModel)
         } else {
             totalModels.insert(newModel, at: 0)
         }
         
         // 尝试自动选中
-        let config = PTMediaLibConfig.share
         if canAddModel(newModel,
                        currentSelectCount: selectedModel.count,
                        sender: PTUtils.getCurrentVC(),
                        showAlert: false,
                        selectionOptions: activeSelectionOptions) {
             selectedModel.append(newModel)
-            config.didSelectAsset?(asset)
+            PTMediaLibConfig.share.didSelectAsset?(asset)
         }
 
         let insertRow = PTRows(ID: PTMediaLibCell.ID, dataModel: newModel)
@@ -355,9 +372,9 @@ extension PTMediaLibView {
             let totalCount = self.totalModels.count
             var insertIndex = 0
             if self.showCameraCell {
-                insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 1 : (totalCount - 1)
+                insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 1 : (totalCount - 1)
             } else {
-                insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 0 : totalCount
+                insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : totalCount
             }
             self.collectionView.insertRows([insertRow], at: IndexPath(row: insertIndex, section: 0), completion: nil)
         }
@@ -445,14 +462,9 @@ extension PTMediaLibView: @MainActor PHPhotoLibraryChangeObserver {
         
         Task { @MainActor [weak self] in
             guard let self = self else { return }
-            let config = PTMediaLibConfig.share
-            
             // 重新获取最新的相机胶卷
-            PTMediaLibManager.getCameraRollAlbum(
-                allowSelectImage: config.allowSelectImage,
-                allowSelectVideo: config.allowSelectVideo,
-                allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto
-            ) { [weak self] newAlbum in
+            let options = self.activeSelectionOptions
+            PTMediaLibManager.getCameraRollAlbum(options: options) { [weak self] newAlbum in
                 guard let self = self else { return }
                 self.currentAlbum = newAlbum
                 
@@ -462,7 +474,7 @@ extension PTMediaLibView: @MainActor PHPhotoLibraryChangeObserver {
                 }
                 
                 // 自动滚动到底部（如果需要）
-                if !PTMediaLibUIConfig.share.shortIsTop {
+                if !options.cameraCellAtTop {
                     PTGCDManager.shared.delayOnMain(time: 0.1) {
                         self.collectionView.contentCollectionView.scrollToBottom(animated: true)
                     }
@@ -501,7 +513,9 @@ extension PTMediaLibView {
             }
             
             // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
-            downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) { [weak self] in
+            downloadAssetIfNeed(model: cellModel,
+                                sender: PTUtils.getCurrentVC(),
+                                selectionOptions: activeSelectionOptions) { [weak self] in
                 // 4. 更新 UI 表现
                 Task { @MainActor [weak self] in
                     guard let self = self else { return }
@@ -757,7 +771,8 @@ public class PTMediaLibViewController: PTBaseViewController {
     }()
 
     fileprivate lazy var mediaListView: PTMediaLibView = {
-        let view = PTMediaLibView(currentModels: self.currentAlbum)
+        let view = PTMediaLibView(currentModels: self.currentAlbum,
+                                  selectionOptions: self.effectiveSelectionOptions)
         view.currentVc = self
 
         view.selectedCount = { [weak self] count in
@@ -846,8 +861,6 @@ public class PTMediaLibViewController: PTBaseViewController {
     private func handleAlbumClick() {
         guard PTPermission.photoLibrary.status == .authorized else { return }
 
-        let config = PTMediaLibConfig.share
-
         let pushAlbum: (PTMediaLibListModel) -> Void = { [weak self] album in
             guard let self else { return }
 
@@ -864,7 +877,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                 self.mediaListView.currentAlbum = model
                 self.scheduleTitleUpdate() // 🌟 优化：复用 scheduleTitleUpdate 进行安全更新
 
-                if !PTMediaLibUIConfig.share.shortIsTop {
+                if !model.selectionOptions.cameraCellAtTop {
                     PTGCDManager.shared.delayOnMain(time: 0.05, block: {
                         self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
                     })
@@ -876,9 +889,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             pushAlbum(current)
         } else {
             let options = effectiveSelectionOptions
-            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: options.allowSelectImage,
-                                                 allowSelectVideo: options.allowSelectVideo,
-                                                 allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { model in
+            PTMediaLibManager.getCameraRollAlbum(options: options) { model in
                 pushAlbum(model)
             }
         }
@@ -962,12 +973,8 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
 
     func loadImageData() {
-        let config = PTMediaLibConfig.share
-
         let options = effectiveSelectionOptions
-        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: options.allowSelectImage,
-                                             allowSelectVideo: options.allowSelectVideo,
-                                             allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { [weak self] model in
+        PTMediaLibManager.getCameraRollAlbum(options: options) { [weak self] model in
             guard let self else { return }
 
             self.currentAlbum = model
@@ -997,11 +1004,14 @@ extension PTMediaLibViewController {
         
     // 🌟 2. 桥接方法：把基于回调的 Operation 变成可以直接 await 的 Swift 6 方法
     private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
+        let selectionOptions = effectiveSelectionOptions
         return await withCheckedContinuation { continuation in
-            let operation = PTFetchImageOperation(model: model, isOriginal: isOriginal) { image, asset in
+            let operation = PTFetchImageOperation(model: model,
+                                                  isOriginal: isOriginal,
+                                                  selectionOptions: selectionOptions) { image, asset in
                 Task { @MainActor in
                     if let image = image {
-                        let isEdited = model.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
+                        let isEdited = model.editImage != nil && !selectionOptions.saveNewImageAfterEdit
                         
     #if POOTOOLS_IMAGEEDITOR
                         let resultModel = PTResultModel(
@@ -1055,24 +1065,25 @@ extension PTMediaLibViewController {
         }
         
         // 2. 混合校验
-        let config = PTMediaLibConfig.share
+        let options = effectiveSelectionOptions
         let uiConfig = PTMediaLibUIConfig.share
         
-        if effectiveSelectionOptions.allowMixSelect {
+        if options.allowMixSelect {
             let videoCount = selectedModel.lazy.filter { $0.type == .video }.count
+            let maxVideoCount = options.maxVideoSelectCount > 0 ? options.maxVideoSelectCount : options.maxSelectCount
             
-            if videoCount > config.maxVideoSelectCount {
-                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"), icon: .Error)
+            if videoCount > maxVideoCount {
+                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMax, "\(maxVideoCount)"), icon: .Error)
                 return
             }
             
-            if videoCount < config.minVideoSelectCount {
-                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"), icon: .Error)
+            if videoCount < options.minVideoSelectCount {
+                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMin, "\(options.minVideoSelectCount)"), icon: .Error)
                 return
             }
         }
         
-        let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
+        let isOriginal = options.allowSelectOriginal ? isSelectOriginal : options.alwaysRequestOriginal
         selectedHudStatusBlock?(true)
         
         // 🌟 4. 极简版 TaskGroup

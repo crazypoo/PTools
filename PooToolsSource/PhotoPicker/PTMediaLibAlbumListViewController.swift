@@ -61,7 +61,6 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
         let view = PTCollectionView(viewConfig: config)
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell {
                 cell.albumModel = cellModel
                 cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum?.title)
@@ -163,8 +162,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     }
     
     func loadAlbumList() {
-        
-        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo,allowSelectLivePhotoOnly: PTMediaLibConfig.share.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: PTMediaLibConfig.share.allowOnlySelectRegularImage) { models in
+        let options = selectedAlbum?.selectionOptions ?? .current()
+        PTMediaLibManager.getPhotoAlbumList(options: options) { models in
             self.albumList.removeAll()
             self.albumList.append(contentsOf: models)
             

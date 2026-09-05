@@ -29,6 +29,32 @@ let PTMaxImageWidth: CGFloat = 500
     case externalAlbumList
 }
 
+// English: Image filters describe the supported PhotoKit image subtypes for one picker instance.
+// Español: Los filtros de imagen describen los subtipos de PhotoKit admitidos por una instancia del selector.
+// 中文：图片过滤器描述当前选择器实例支持的 PhotoKit 图片子类型。
+public enum PTMediaLibImageFilter: Sendable, Equatable {
+    case all
+    case livePhotoOnly
+    case regularImageOnly
+}
+
+// English: Camera options are value types so a picker never reads another screen's mutable camera settings.
+// Español: Las opciones de cámara son tipos valor para que un selector nunca lea ajustes mutables de otra pantalla.
+// 中文：相机配置使用值类型，避免选择器读取其他页面可变的相机设置。
+public struct PTMediaLibCameraOptions: Sendable, Equatable {
+    public var allowTakePhoto: Bool
+    public var allowRecordVideo: Bool
+    public var maxRecordDuration: Int
+
+    public init(allowTakePhoto: Bool = true,
+                allowRecordVideo: Bool = true,
+                maxRecordDuration: Int = 20) {
+        self.allowTakePhoto = allowTakePhoto
+        self.allowRecordVideo = allowRecordVideo
+        self.maxRecordDuration = max(1, maxRecordDuration)
+    }
+}
+
 // English: Per-presenter selection options prevent temporary global configuration mutations.
 // Español: Las opciones por presentador evitan mutaciones temporales de la configuración global.
 // 中文：按实例保存的选择配置，避免临时修改全局配置。
@@ -39,19 +65,70 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
     public var maxSelectCount: Int
     public var allowEditImage: Bool
     public var allowMixSelect: Bool
+    public var allowTakePhotoInLibrary: Bool
+    public var cameraOptions: PTMediaLibCameraOptions
+    public var imageFilter: PTMediaLibImageFilter
+    public var minVideoSelectCount: Int
+    public var maxVideoSelectCount: Int
+    public var minSelectVideoDuration: Int
+    public var maxSelectVideoDuration: Int
+    public var minSelectVideoDataSize: CGFloat
+    public var maxSelectVideoDataSize: CGFloat
+    public var downloadVideoBeforeSelecting: Bool
+    public var allowEditVideo: Bool
+    public var saveNewImageAfterEdit: Bool
+    public var allowSelectOriginal: Bool
+    public var alwaysRequestOriginal: Bool
+    public var showSelectBtnWhenSingleSelect: Bool
+    public var sortAscending: Bool
+    public var cameraCellAtTop: Bool
 
     public init(allowSelectImage: Bool = true,
                 allowSelectVideo: Bool = true,
                 allowSelectGif: Bool = true,
                 maxSelectCount: Int = 9,
                 allowEditImage: Bool = true,
-                allowMixSelect: Bool = true) {
+                allowMixSelect: Bool = true,
+                allowTakePhotoInLibrary: Bool = true,
+                cameraOptions: PTMediaLibCameraOptions = PTMediaLibCameraOptions(),
+                imageFilter: PTMediaLibImageFilter = .all,
+                minVideoSelectCount: Int = 0,
+                maxVideoSelectCount: Int = 0,
+                minSelectVideoDuration: Int = 0,
+                maxSelectVideoDuration: Int = 120,
+                minSelectVideoDataSize: CGFloat = 0,
+                maxSelectVideoDataSize: CGFloat = .greatestFiniteMagnitude,
+                downloadVideoBeforeSelecting: Bool = false,
+                allowEditVideo: Bool = false,
+                saveNewImageAfterEdit: Bool = true,
+                allowSelectOriginal: Bool = true,
+                alwaysRequestOriginal: Bool = false,
+                showSelectBtnWhenSingleSelect: Bool = false,
+                sortAscending: Bool = false,
+                cameraCellAtTop: Bool = true) {
         self.allowSelectImage = allowSelectImage
         self.allowSelectVideo = allowSelectVideo
         self.allowSelectGif = allowSelectGif
         self.maxSelectCount = max(1, maxSelectCount)
         self.allowEditImage = allowEditImage
         self.allowMixSelect = allowMixSelect
+        self.allowTakePhotoInLibrary = allowTakePhotoInLibrary
+        self.cameraOptions = cameraOptions
+        self.imageFilter = imageFilter
+        self.minVideoSelectCount = min(self.maxSelectCount, max(0, minVideoSelectCount))
+        self.maxVideoSelectCount = max(0, min(self.maxSelectCount, maxVideoSelectCount))
+        self.minSelectVideoDuration = max(0, minSelectVideoDuration)
+        self.maxSelectVideoDuration = max(0, maxSelectVideoDuration)
+        self.minSelectVideoDataSize = max(0, minSelectVideoDataSize)
+        self.maxSelectVideoDataSize = max(0, maxSelectVideoDataSize)
+        self.downloadVideoBeforeSelecting = downloadVideoBeforeSelecting
+        self.allowEditVideo = allowEditVideo
+        self.saveNewImageAfterEdit = saveNewImageAfterEdit
+        self.allowSelectOriginal = allowSelectOriginal
+        self.alwaysRequestOriginal = alwaysRequestOriginal
+        self.showSelectBtnWhenSingleSelect = showSelectBtnWhenSingleSelect
+        self.sortAscending = sortAscending
+        self.cameraCellAtTop = cameraCellAtTop
     }
 
     public static let singleImage = PTMediaLibSelectionOptions(
@@ -60,7 +137,10 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
         allowSelectGif: false,
         maxSelectCount: 1,
         allowEditImage: false,
-        allowMixSelect: false
+        allowMixSelect: false,
+        allowTakePhotoInLibrary: false,
+        cameraOptions: PTMediaLibCameraOptions(allowTakePhoto: false, allowRecordVideo: false),
+        allowEditVideo: false
     )
 
     // English: Snapshot the legacy singleton only once when a picker is created.
@@ -69,13 +149,44 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
     @MainActor
     public static func current() -> PTMediaLibSelectionOptions {
         let config = PTMediaLibConfig.share
+        let imageFilter: PTMediaLibImageFilter
+        if config.allowOnlySelectLivePhoto {
+            imageFilter = .livePhotoOnly
+        } else if config.allowOnlySelectRegularImage {
+            imageFilter = .regularImageOnly
+        } else {
+            imageFilter = .all
+        }
+
+        let allowsImage = config.allowSelectImage || config.allowOnlySelectLivePhoto || config.allowOnlySelectRegularImage
         return PTMediaLibSelectionOptions(
-            allowSelectImage: config.allowSelectImage,
+            allowSelectImage: allowsImage,
             allowSelectVideo: config.allowSelectVideo,
             allowSelectGif: config.allowSelectGif,
             maxSelectCount: config.maxSelectCount,
             allowEditImage: config.allowEditImage,
-            allowMixSelect: config.allowMixSelect
+            allowMixSelect: config.allowMixSelect,
+            allowTakePhotoInLibrary: config.allowTakePhotoInLibrary,
+            cameraOptions: PTMediaLibCameraOptions(
+                allowTakePhoto: config.cameraConfiguration.allowTakePhoto,
+                allowRecordVideo: config.cameraConfiguration.allowRecordVideo,
+                maxRecordDuration: config.maxRecordDuration
+            ),
+            imageFilter: imageFilter,
+            minVideoSelectCount: config.minVideoSelectCount,
+            maxVideoSelectCount: config.maxVideoSelectCount,
+            minSelectVideoDuration: config.minSelectVideoDuration,
+            maxSelectVideoDuration: config.maxSelectVideoDuration,
+            minSelectVideoDataSize: config.minSelectVideoDataSize,
+            maxSelectVideoDataSize: config.maxSelectVideoDataSize,
+            downloadVideoBeforeSelecting: config.downloadVideoBeforeSelecting,
+            allowEditVideo: config.allowEditVideo,
+            saveNewImageAfterEdit: config.saveNewImageAfterEdit,
+            allowSelectOriginal: config.allowSelectOriginal,
+            alwaysRequestOriginal: config.alwaysRequestOriginal,
+            showSelectBtnWhenSingleSelect: config.showSelectBtnWhenSingleSelect,
+            sortAscending: PTMediaLibUIConfig.share.sortAscending,
+            cameraCellAtTop: PTMediaLibUIConfig.share.shortIsTop
         )
     }
 }

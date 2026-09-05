@@ -29,6 +29,11 @@ public class PTMediaLibListModel: NSObject {
     public let option: PHFetchOptions
     
     public let isCameraRoll: Bool
+
+    // English: Store the picker behavior with the album so refetches never read mutable global settings.
+    // Español: Guarda el comportamiento del selector con el álbum para que las recargas nunca lean ajustes globales mutables.
+    // 中文：将选择器行为和相册一起保存，重新获取时不再读取可变的全局配置。
+    public let selectionOptions: PTMediaLibSelectionOptions
     
     public var headImageAsset: PHAsset? {
         result.lastObject
@@ -46,21 +51,22 @@ public class PTMediaLibListModel: NSObject {
                 result: PHFetchResult<PHAsset>,
                 collection: PHAssetCollection,
                 option: PHFetchOptions,
-                isCameraRoll: Bool) {
+                isCameraRoll: Bool,
+                selectionOptions: PTMediaLibSelectionOptions? = nil) {
         self.title = title
         self.result = result
         self.collection = collection
         self.option = option
         self.isCameraRoll = isCameraRoll
+        self.selectionOptions = selectionOptions ?? .current()
     }
     
     @MainActor
     public func refetchPhotos() {
         let models = PTMediaLibManager.fetchPhoto(
             in: result,
-            ascending: PTMediaLibUIConfig.share.sortAscending,
-            allowSelectImage: PTMediaLibConfig.share.allowSelectImage,
-            allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo
+            ascending: selectionOptions.sortAscending,
+            selectionOptions: selectionOptions
         )
         self.models.removeAll()
         self.models.append(contentsOf: models)

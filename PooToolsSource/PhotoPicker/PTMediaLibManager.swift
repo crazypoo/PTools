@@ -198,20 +198,30 @@ func canAddModel(_ model: PTMediaModel,
                  sender: UIViewController?,
                  showAlert: Bool = true,
                  selectionOptions: PTMediaLibSelectionOptions? = nil) -> Bool {
+    let options = selectionOptions ?? .current()
+
     guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else {
         return false
     }
 
-    if let selectionOptions {
-        if model.type == .image, !selectionOptions.allowSelectImage {
-            return false
+    switch model.type {
+    case .video:
+        guard options.allowSelectVideo else { return false }
+    case .image, .gif, .livePhoto:
+        guard options.allowSelectImage else { return false }
+        switch options.imageFilter {
+        case .all:
+            break
+        case .livePhotoOnly:
+            guard model.type == .livePhoto else { return false }
+        case .regularImageOnly:
+            guard model.type == .image || model.type == .gif else { return false }
         }
-        if model.type == .video, !selectionOptions.allowSelectVideo {
-            return false
-        }
+    case .unknown:
+        return false
     }
 
-    let maximumSelectionCount = selectionOptions?.maxSelectCount ?? PTMediaLibConfig.share.maxSelectCount
+    let maximumSelectionCount = options.maxSelectCount
         
     if currentSelectCount >= maximumSelectionCount {
         if showAlert {
@@ -221,7 +231,7 @@ func canAddModel(_ model: PTMediaModel,
     }
     
     if currentSelectCount > 0,
-       !(selectionOptions?.allowMixSelect ?? PTMediaLibConfig.share.allowMixSelect),
+       !options.allowMixSelect,
        model.type == .video {
         return false
     }
@@ -230,36 +240,36 @@ func canAddModel(_ model: PTMediaModel,
         return true
     }
     
-    if model.second > PTMediaLibConfig.share.maxSelectVideoDuration {
+    if options.maxSelectVideoDuration > 0, model.second > options.maxSelectVideoDuration {
         if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(PTMediaLibConfig.share.maxSelectVideoDuration)"), icon: .Error)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(options.maxSelectVideoDuration)"), icon: .Error)
         }
         return false
     }
     
-    if model.second < PTMediaLibConfig.share.minSelectVideoDuration {
+    if model.second < options.minSelectVideoDuration {
         if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(PTMediaLibConfig.share.minSelectVideoDuration)"), icon: .Error)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(options.minSelectVideoDuration)"), icon: .Error)
         }
         return false
     }
     
-    guard PTMediaLibConfig.share.minSelectVideoDataSize > 0 || PTMediaLibConfig.share.maxSelectVideoDataSize != .greatestFiniteMagnitude,
+    guard options.minSelectVideoDataSize > 0 || options.maxSelectVideoDataSize != .greatestFiniteMagnitude,
           let size = model.dataSize else {
         return true
     }
     
-    if size > PTMediaLibConfig.share.maxSelectVideoDataSize {
+    if size > options.maxSelectVideoDataSize {
         if showAlert {
-            let value = Int(round(PTMediaLibConfig.share.maxSelectVideoDataSize / 1024))
+            let value = Int(round(options.maxSelectVideoDataSize / 1024))
             PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"), icon: .Error)
         }
         return false
     }
     
-    if size < PTMediaLibConfig.share.minSelectVideoDataSize {
+    if size < options.minSelectVideoDataSize {
         if showAlert {
-            let value = Int(round(PTMediaLibConfig.share.minSelectVideoDataSize / 1024))
+            let value = Int(round(options.minSelectVideoDataSize / 1024))
             PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"), icon: .Error)
         }
         return false
@@ -268,15 +278,21 @@ func canAddModel(_ model: PTMediaModel,
     return true
 }
 
-@MainActor func downloadAssetIfNeed(alertTitle: String? = nil, subTitle: String? = nil, model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
+@MainActor
+func downloadAssetIfNeed(alertTitle: String? = nil,
+                         subTitle: String? = nil,
+                         model: PTMediaModel,
+                         sender: UIViewController?,
+                         selectionOptions: PTMediaLibSelectionOptions? = nil,
+                         completion: @escaping PTActionTask) {
     
     let alertTitle_new = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
     let subTitle_new = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
 
-    let config = PTMediaLibConfig.share
+    let options = selectionOptions ?? .current()
     guard model.type == .video,
           model.asset.pt.isInCloud,
-          config.downloadVideoBeforeSelecting else {
+          options.downloadVideoBeforeSelecting else {
         completion()
         return
     }
@@ -457,137 +473,243 @@ public class PTMediaLibManager: NSObject {
         }
     }
     
+    // English: Build one immutable behavior snapshot for legacy boolean entry points.
+    // Español: Construye una instantánea inmutable de comportamiento para las entradas booleanas heredadas.
+    // 中文：为旧版布尔参数入口构建一次不可变的行为快照。
+    @MainActor
+    private class func legacySelectionOptions(allowSelectImage: Bool,
+                                              allowSelectVideo: Bool,
+                                              allowSelectLivePhotoOnly: Bool,
+                                              allowSelectRegularImageOnly: Bool = false) -> PTMediaLibSelectionOptions {
+        var options = PTMediaLibSelectionOptions.current()
+        options.allowSelectImage = allowSelectImage || allowSelectLivePhotoOnly || allowSelectRegularImageOnly
+        options.allowSelectVideo = allowSelectVideo
+        if allowSelectLivePhotoOnly {
+            options.imageFilter = .livePhotoOnly
+        } else if allowSelectRegularImageOnly {
+            options.imageFilter = .regularImageOnly
+        } else {
+            options.imageFilter = .all
+        }
+        return options
+    }
+
+    // English: Configure mutable PhotoKit options on MainActor and make an empty media selection truly empty.
+    // Español: Configura las opciones mutables de PhotoKit en MainActor y hace que una selección vacía sea realmente vacía.
+    // 中文：在 MainActor 上配置可变的 PhotoKit 选项，并确保不允许任何媒体时结果确实为空。
+    @MainActor
+    private class func makeFetchOptions(for selectionOptions: PTMediaLibSelectionOptions) -> PHFetchOptions {
+        let option = PHFetchOptions()
+        let predicates = predicatesGet(selectionOptions: selectionOptions)
+        if predicates.count == 1 {
+            option.predicate = predicates[0]
+        } else if !predicates.isEmpty {
+            option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        }
+        return option
+    }
+
+    // English: Keep the model filter in sync with the PhotoKit predicate for refetches and compatibility callers.
+    // Español: Mantiene el filtro del modelo sincronizado con el predicado de PhotoKit para recargas y adaptadores.
+    // 中文：让模型过滤规则与 PhotoKit 谓词保持一致，覆盖重新获取和兼容入口。
+    @MainActor
+    private class func canDisplay(_ model: PTMediaModel, with selectionOptions: PTMediaLibSelectionOptions) -> Bool {
+        switch model.type {
+        case .video:
+            return selectionOptions.allowSelectVideo
+        case .image, .gif, .livePhoto:
+            guard selectionOptions.allowSelectImage else { return false }
+            switch selectionOptions.imageFilter {
+            case .all:
+                return true
+            case .livePhotoOnly:
+                return model.type == .livePhoto
+            case .regularImageOnly:
+                return model.type == .image || model.type == .gif
+            }
+        case .unknown:
+            return false
+        }
+    }
+
     /// Fetch photos from result.
     @MainActor
-    public class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [PTMediaModel] {
+    public class func fetchPhoto(in result: PHFetchResult<PHAsset>,
+                                 ascending: Bool,
+                                 selectionOptions: PTMediaLibSelectionOptions,
+                                 limitCount: Int = .max) -> [PTMediaModel] {
+        guard limitCount > 0 else { return [] }
+
         var models: [PTMediaModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
-        var count = 1
-        
+
         result.enumerateObjects(options: option) { asset, _, stop in
-            // 💡 优化：包裹 autoreleasepool，控制遍历时的内存峰值
             autoreleasepool {
-                let m = PTMediaModel(asset: asset)
-                
-                var shouldAdd = true
-                if m.type == .image && !allowSelectImage {
-                    shouldAdd = false
-                }
-                if m.type == .video && !allowSelectVideo {
-                    shouldAdd = false
-                }
-                
-                if shouldAdd {
-                    models.append(m)
-                    if count == limitCount {
-                        stop.pointee = true
-                    }
-                    count += 1
+                let model = PTMediaModel(asset: asset)
+                guard canDisplay(model, with: selectionOptions) else { return }
+                models.append(model)
+                if models.count >= limitCount {
+                    stop.pointee = true
                 }
             }
         }
-        
+
         return models
     }
-    
-    // 💡 修复：补齐被注释掉的仅选择普通照片功能
-    class func predicatesGet(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false) -> [NSPredicate] {
+
+    @MainActor
+    @available(*, deprecated, message: "Use fetchPhoto(in:ascending:selectionOptions:limitCount:) instead")
+    public class func fetchPhoto(in result: PHFetchResult<PHAsset>,
+                                 ascending: Bool,
+                                 allowSelectImage: Bool,
+                                 allowSelectVideo: Bool,
+                                 limitCount: Int = .max) -> [PTMediaModel] {
+        var options = PTMediaLibSelectionOptions.current()
+        options.allowSelectImage = allowSelectImage
+        options.allowSelectVideo = allowSelectVideo
+        options.imageFilter = .all
+        options.sortAscending = ascending
+        return fetchPhoto(in: result,
+                          ascending: ascending,
+                          selectionOptions: options,
+                          limitCount: limitCount)
+    }
+
+    // English: Convert legacy subtype flags to the canonical value-type predicate builder.
+    // Español: Convierte las banderas heredadas de subtipo al generador canónico de predicados basado en valores.
+    // 中文：将旧版子类型标志转换到统一的值类型谓词构建器。
+    @MainActor
+    class func predicatesGet(allowSelectImage: Bool,
+                             allowSelectVideo: Bool,
+                             allowSelectLivePhotoOnly: Bool,
+                             allowSelectRegularImageOnly: Bool = false) -> [NSPredicate] {
+        predicatesGet(selectionOptions: legacySelectionOptions(
+            allowSelectImage: allowSelectImage,
+            allowSelectVideo: allowSelectVideo,
+            allowSelectLivePhotoOnly: allowSelectLivePhotoOnly,
+            allowSelectRegularImageOnly: allowSelectRegularImageOnly
+        ))
+    }
+
+    @MainActor
+    private class func predicatesGet(selectionOptions: PTMediaLibSelectionOptions) -> [NSPredicate] {
         var predicates: [NSPredicate] = []
-        
-        // 如果允许选择视频
-        if allowSelectVideo {
+
+        if selectionOptions.allowSelectVideo {
             predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
         }
-        
-        if allowSelectImage {
-            // 如果允许选择图片，不排除 Live Photo
-            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
-        } else {
-            if allowSelectLivePhotoOnly {
-                // 如果只允许选择 Live Photo
+
+        if selectionOptions.allowSelectImage {
+            switch selectionOptions.imageFilter {
+            case .all:
+                predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
+            case .livePhotoOnly:
                 predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
-            } else if allowSelectRegularImageOnly {
-                // 如果只允许选择普通图片，不包括 Live Photo
+            case .regularImageOnly:
                 let imagePredicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
                 let nonLivePhotoPredicate = NSPredicate(format: "(mediaSubtypes & %ld) == 0", PHAssetMediaSubtype.photoLive.rawValue)
-                let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, nonLivePhotoPredicate])
-                predicates.append(compoundPredicate)
+                predicates.append(NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, nonLivePhotoPredicate]))
             }
+        }
+
+        if predicates.isEmpty {
+            return [NSPredicate(value: false)]
         }
         return predicates
     }
-    
+
+    // English: Canonical camera-roll lookup captures selection behavior in the list model.
+    // Español: La búsqueda canónica del carrete captura el comportamiento de selección en el modelo de lista.
+    // 中文：统一的相机胶卷查询会把选择行为一并保存到列表模型。
     @MainActor
-    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping @MainActor @Sendable (PTMediaLibListModel) -> Void) {
-        // PHFetchOptions is mutable and PhotoKit does not make it Sendable.
-        // Create, configure, consume, and retain it on the same actor so the
-        // model never captures an option that was mutated on a background queue.
-        let option = PHFetchOptions()
-        let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
-
-        if !predicates.isEmpty {
-            option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
-        }
-
+    public class func getCameraRollAlbum(options: PTMediaLibSelectionOptions,
+                                         handler: @escaping @MainActor @Sendable (PTMediaLibListModel) -> Void) {
+        let option = makeFetchOptions(for: options)
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
         for index in 0..<smartAlbums.count {
             let collection = smartAlbums.object(at: index)
             guard collection.assetCollectionSubtype == .smartAlbumUserLibrary else { continue }
             let result = PHAsset.fetchAssets(in: collection, options: option)
-            let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
+            let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection),
+                                                 result: result,
+                                                 collection: collection,
+                                                 option: option,
+                                                 isCameraRoll: true,
+                                                 selectionOptions: options)
             handler(albumModel)
             break
         }
     }
-    
-    /// Fetch all album list.
-    @MainActor
-    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, completion: @escaping @MainActor @Sendable ([PTMediaLibListModel]) -> Void) {
-        let option = PHFetchOptions()
-        let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
-        // 组合多个条件（如果有）
-        if !predicates.isEmpty {
-            option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
-        }
-        
-        // 💡 修复：使用条件转换，避免非法类型导致崩溃。
+    @MainActor
+    @available(*, deprecated, message: "Use getCameraRollAlbum(options:handler:) instead")
+    public class func getCameraRollAlbum(allowSelectImage: Bool,
+                                         allowSelectVideo: Bool,
+                                         allowSelectLivePhotoOnly: Bool,
+                                         allowSelectRegularImageOnly: Bool = false,
+                                         handler: @escaping @MainActor @Sendable (PTMediaLibListModel) -> Void) {
+        let options = legacySelectionOptions(allowSelectImage: allowSelectImage,
+                                              allowSelectVideo: allowSelectVideo,
+                                              allowSelectLivePhotoOnly: allowSelectLivePhotoOnly,
+                                              allowSelectRegularImageOnly: allowSelectRegularImageOnly)
+        getCameraRollAlbum(options: options, handler: handler)
+    }
+
+    // English: Canonical album lookup retains the same selection snapshot for every album.
+    // Español: La búsqueda canónica de álbumes conserva la misma instantánea de selección para cada álbum.
+    // 中文：统一的相册查询会让所有相册复用同一份选择快照。
+    @MainActor
+    public class func getPhotoAlbumList(options: PTMediaLibSelectionOptions,
+                                        completion: @escaping @MainActor @Sendable ([PTMediaLibListModel]) -> Void) {
+        let option = makeFetchOptions(for: options)
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as? PHFetchResult<PHCollection>
         let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as? PHFetchResult<PHCollection>
         let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as? PHFetchResult<PHCollection>
         let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as? PHFetchResult<PHCollection>
         let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as? PHFetchResult<PHCollection>
-        
-        let arr: [PHFetchResult<PHCollection>] = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums].compactMap { $0 }
-        
+
+        let collections: [PHFetchResult<PHCollection>] = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums].compactMap { $0 }
         var albumList: [PTMediaLibListModel] = []
-        arr.forEach { album in
+        collections.forEach { album in
             album.enumerateObjects { collection, _, _ in
                 guard let collection = collection as? PHAssetCollection else { return }
-                if collection.assetCollectionSubtype == .smartAlbumAllHidden {
-                    return
-                }
-                if collection.assetCollectionSubtype.rawValue > PHAssetCollectionSubtype.smartAlbumLongExposures.rawValue {
+                guard collection.assetCollectionSubtype != .smartAlbumAllHidden,
+                      collection.assetCollectionSubtype.rawValue <= PHAssetCollectionSubtype.smartAlbumLongExposures.rawValue else {
                     return
                 }
                 let result = PHAsset.fetchAssets(in: collection, options: option)
-                if result.count == 0 {
-                    return
-                }
+                guard result.count > 0 else { return }
                 let title = getCollectionTitle(collection)
-                
-                if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                    // Album of all photos.
-                    let m = PTMediaLibListModel(title: title, result: result, collection: collection, option: option, isCameraRoll: true)
-                    albumList.insert(m, at: 0)
+                let model = PTMediaLibListModel(title: title,
+                                                result: result,
+                                                collection: collection,
+                                                option: option,
+                                                isCameraRoll: collection.assetCollectionSubtype == .smartAlbumUserLibrary,
+                                                selectionOptions: options)
+                if model.isCameraRoll {
+                    albumList.insert(model, at: 0)
                 } else {
-                    let m = PTMediaLibListModel(title: title, result: result, collection: collection, option: option, isCameraRoll: false)
-                    albumList.append(m)
+                    albumList.append(model)
                 }
             }
         }
-        
         completion(albumList)
+    }
+
+    @MainActor
+    @available(*, deprecated, message: "Use getPhotoAlbumList(options:completion:) instead")
+    public class func getPhotoAlbumList(ascending: Bool,
+                                        allowSelectImage: Bool,
+                                        allowSelectVideo: Bool,
+                                        allowSelectLivePhotoOnly: Bool,
+                                        allowSelectRegularImageOnly: Bool = false,
+                                        completion: @escaping @MainActor @Sendable ([PTMediaLibListModel]) -> Void) {
+        var options = legacySelectionOptions(allowSelectImage: allowSelectImage,
+                                              allowSelectVideo: allowSelectVideo,
+                                              allowSelectLivePhotoOnly: allowSelectLivePhotoOnly,
+                                              allowSelectRegularImageOnly: allowSelectRegularImageOnly)
+        options.sortAscending = ascending
+        getPhotoAlbumList(options: options, completion: completion)
     }
 
     public class func fetchAssetSize(for asset: PHAsset) -> PTMediaLibConfig.KBUnit? {
