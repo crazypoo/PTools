@@ -28,7 +28,7 @@ public class PTPermissionPhotoLibrary: PTPermission {
     }
     
     public override var status: PTPermission.Status {
-        switch PHPhotoLibrary.authorizationStatus() {
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
         case .authorized: return .authorized
         case .denied: return .denied
         case .notDetermined: return .notDetermined
@@ -39,9 +39,12 @@ public class PTPermissionPhotoLibrary: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
-        PHPhotoLibrary.requestAuthorization({
-            _ in
-            PTPermission.completeRequest(completion)
-        })
+        // English: Use PhotoKit's async authorization API so Photos never invokes a MainActor callback on its own queue.
+        // Español: Usa la API async de autorización de PhotoKit para que Photos nunca invoque un callback de MainActor en su propia cola.
+        // 中文：使用 PhotoKit 的异步授权 API，避免 Photos 队列直接调用 MainActor 回调闭包。
+        Task { @MainActor in
+            _ = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
+            completion()
+        }
     }
 }
