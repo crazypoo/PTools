@@ -421,3 +421,24 @@
 - ⬜ 外部依赖阻断解除后重新执行 PooTools-Example Debug/Release 完整构建和 Picker 人工回归。
 - ⬜ 验证普通、Grid 不适用的滚轮嵌入页面、弹出展示、长标题、空数据、日期范围、树形联动、旋转、深色模式和 Reduce Motion。
 - ⬜ 通过 `validate_release.sh 5.7.5` 后，再同步 podspec、Podfile.lock、README、RELEASE、CHANGELOG 并创建不带 `v` 前缀的 `5.7.5` tag。
+
+## 5.7.8：Alert 自适应系统材质与稳定性优化
+
+### 任务清单
+
+- ✅ `CORE-578-01`：`PTCustomerAlertController` 默认背景改为自适应系统材质；iOS 26+ 使用 `UIGlassEffect(.regular)`，iOS 17–25 使用 `UIBlurEffect(.systemMaterial)`，开启“减弱透明度”时使用动态不透明系统背景；显式 `contentBackgroundColor` 继续优先。
+- ✅ `CORE-578-02`：新增 `maximumContentWidth` 和共享宽度计算入口；`UIAlertController+PTEX` 的旧包装器与控制器使用相同的安全区、分屏和旋转测量逻辑，默认宽度上限为 340pt。
+- ✅ `CORE-578-03`：重做一到两个按钮的自适应布局；标题过长或辅助功能大字体时自动切换纵向按钮，普通短标题保持横向按钮；三个及以上按钮使用带分隔线的纵向滚动区域。
+- ✅ `CORE-578-04`：修正内容视图和效果视图的层级顺序，所有约束在加入共同父视图后再激活；统一按钮禁用、点击回调和背景关闭路径，避免重复回调与约束层级异常。
+- ✅ `CORE-578-05`：补充动态颜色、Dynamic Type、Reduce Motion、Reduce Transparency 和无障碍焦点处理；圆角使用连续曲线，材质视图只创建一份，减少重复渲染成本。
+- ✅ `CORE-578-06`：保留现有公开 API、旧 `UIAlertController+PTEX` 入口、`PTAlertManager` 队列和场景选择逻辑；未修改第三方依赖、Pods 源码、版本号或 tag。
+- ✅ `CORE-578-07`：完成修改文件 iOS 17 Simulator 语法解析、PooTools Debug/Release Xcode 构建、质量扫描、构建入口、Core source contract、Package manifest 和 `git diff --check`。
+- ⛔ `CORE-578-08`：`PooTools-Example` Simulator 完整链接仍被仓库现有设备版 `Pods/Bugly/Bugly.framework` 阻断；Xcode 源码警告脚本另被 `Pods/SmartCodable` 的 SwiftSyntax/Macro 依赖准备阻断，均不属于本批 PooTools 源码错误。
+
+### 5.7.8 实施与验证说明
+
+- ✅ `contentBackgroundColor == nil` 时不会再出现黑色背景：材质正常显示，深色模式由系统动态适配；用户显式传入颜色时不覆盖调用方意图。
+- ✅ 长按钮标题、辅助功能字体和窄窗口会自动改用纵向布局；按钮区域高度会预留分隔线厚度，避免 Auto Layout 约束冲突。
+- ✅ `UIAlertController+PTEX` 不再重复设置场景或维护另一套尺寸逻辑；保留原有取消按钮索引和回调行为。
+- ✅ 新增代码注释遵循英语、西班牙语和中文三语约定；当前仓库版本仍为 `5.7.7`，本轮不创建 `5.7.8` tag。
+- ⬜ 尚未执行真实设备和人工视觉回归；待依赖产物可链接后，补验浅色/深色、iOS 17/26、长文案、多按钮、输入框、旋转、分屏、Reduce Motion 和 Reduce Transparency。

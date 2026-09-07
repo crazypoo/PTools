@@ -131,8 +131,8 @@ public extension UIAlertController {
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
-        let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-        let msgColorN = msgColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+        let titleColorN = titleColor ?? .label
+        let msgColorN = msgColor ?? .secondaryLabel
         let hasCancel = !cancelBtn.stringIsEmpty()
         let actionTitles = (hasCancel ? [cancelBtn] : []) + okBtns
         let actionColors = (hasCancel ? [cancelBtnColor] : []) + okBtns.indices.map { index in
@@ -143,16 +143,10 @@ public extension UIAlertController {
         
         let contentSpacing:CGFloat = 25
 
-        // English: Measure the message in the presenting window so split-screen and rotation use the real width.
-        // Español: Mide el mensaje usando la ventana presentadora para que la pantalla dividida y la rotación usen el ancho real.
-        // 中文：使用实际展示窗口测量正文，确保分屏和旋转时采用正确宽度。
-        let availableWidths = [
-            showIn?.viewIfLoaded?.bounds.width,
-            showIn?.viewIfLoaded?.window?.bounds.width,
-            PTSceneContext.activeWindow()?.bounds.width,
-            CGFloat.kSCREEN_WIDTH
-        ].compactMap { $0 }.filter { $0 > 0 }
-        let contentWidth = max(1, (availableWidths.first ?? CGFloat.kSCREEN_WIDTH) - contentSpacing * 2)
+        // English: Measure the message with the same capped width used by the customer alert surface.
+        // Español: Mide el mensaje con el mismo ancho máximo que usa la superficie de la alerta personalizada.
+        // 中文：正文测量使用与自定义弹窗表面相同的宽度上限。
+        let contentWidth = resolvedCustomerAlertContentWidth(for: showIn, contentSpace: contentSpacing)
         
         let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingSize(font: msgFont,width: contentWidth).height + 20)
 
@@ -169,6 +163,7 @@ public extension UIAlertController {
                 messageLabel.font = msgFont
                 messageLabel.numberOfLines = 0
                 messageLabel.textAlignment = .center
+                messageLabel.adjustsFontForContentSizeCategory = true
                 customerView.addSubview(messageLabel)
                 messageLabel.snp.makeConstraints { make in
                     make.edges.equalToSuperview().inset(10)
@@ -181,7 +176,6 @@ public extension UIAlertController {
             contentSpace: contentSpacing,
             canTapBackground: false
         )
-        alert.preferredWindowScene = showIn?.viewIfLoaded?.window?.windowScene
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         alert.bottomButtonTapCallback = { title, index in
             if hasCancel && index == 0 {
@@ -194,7 +188,7 @@ public extension UIAlertController {
                 cancel?()
             }
         }
-        PTAlertManager.show(alert)
+        presentCustomerAlert(alert, from: showIn)
     }
     
     //MARK: ALERT輸入框基類
@@ -234,8 +228,8 @@ public extension UIAlertController {
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String]) -> Void)?) {
-        let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-        let cancelBtnColorN = cancelBtnColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+        let titleColorN = titleColor ?? .label
+        let cancelBtnColorN = cancelBtnColor ?? .label
         let fields = placeHolders.enumerated().map { index, placeholder in
             let textField = UITextField()
             textField.placeholder = placeholder
@@ -278,7 +272,6 @@ public extension UIAlertController {
             contentSpace: 25,
             canTapBackground: false
         )
-        alert.preferredWindowScene = showIn?.viewIfLoaded?.window?.windowScene
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         alert.bottomButtonTapCallback = { _, index in
             if index == 0 {
@@ -292,7 +285,7 @@ public extension UIAlertController {
             }
             doneBtn?(result)
         }
-        PTAlertManager.show(alert)
+        presentCustomerAlert(alert, from: showIn)
     }
     
     //MARK: 初始化創建Alert
@@ -408,6 +401,29 @@ public extension UIAlertController {
             }
         }
         customerAlert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
-        PTAlertManager.show(customerAlert)
+        presentCustomerAlert(customerAlert, from: nil)
+    }
+}
+
+// English: Keep legacy alert wrappers on the same sizing and scene-presentation path.
+// Español: Mantén los wrappers heredados de alerta en la misma ruta de tamaño y presentación por escena.
+// 中文：让旧版 Alert 包装器统一使用同一套尺寸计算和场景展示路径。
+private extension UIAlertController {
+    static func resolvedCustomerAlertContentWidth(for presenter: UIViewController?, contentSpace: CGFloat) -> CGFloat {
+        let availableWidths = [
+            presenter?.viewIfLoaded?.bounds.width,
+            presenter?.viewIfLoaded?.window?.bounds.width,
+            PTSceneContext.activeWindow()?.bounds.width,
+            CGFloat.kSCREEN_WIDTH
+        ].compactMap { $0 }.filter { $0.isFinite && $0 > 0 }
+        return PTCustomerAlertController.resolvedContentWidth(
+            containerWidth: availableWidths.first ?? CGFloat.kSCREEN_WIDTH,
+            contentSpace: contentSpace
+        )
+    }
+
+    static func presentCustomerAlert(_ alert: PTCustomerAlertController, from presenter: UIViewController?) {
+        alert.preferredWindowScene = presenter?.viewIfLoaded?.window?.windowScene
+        PTAlertManager.show(alert)
     }
 }
