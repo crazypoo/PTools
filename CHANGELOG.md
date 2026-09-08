@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.7.9 - 2026-09-09 (Blocked candidate)
+
+- 统一 5.7.9 发布元数据：Podspec、Podfile.lock、README、RELEASE、迁移说明和 5.x 路线图现在使用同一版本基线。
+- 收口 `PTCustomerAlertController` 最新回归：普通、输入框和反馈 Alert 的取消操作统一放在最后，保留旧业务回调索引。
+- 补充 iOS 17 / Swift 6 架构重构前基线报告，记录 SPM、Core 依赖、单例、并发声明、大文件和弃用入口现状。
+- 本版本不移动 Core 文件、不删除公开 API、不升级第三方依赖；5.8.x 架构拆分以该基线为起点。
+- Xcode Debug/Release 构建矩阵当前被外部 `KituraContracts` Swift 6 并发诊断阻断，已记录独立报告，暂不创建 `5.7.9` 标签。
+
 ## 5.7.0 - 2026-09-02 (Blocked candidate)
 
 - 新增 `PTListViewController`，以单一 `PTCollectionView` 统一类表格和类集合列表页面；默认使用安全区布局，并提供配置、辅助视图和约束扩展点。

@@ -4,6 +4,13 @@
 6.0.0 删除条件。5.x 不删除现有公开符号；旧入口只在确认调用方完成迁移后，才允许
 在 6.0.0 评估中移除。
 
+### 5.7.9 稳定收尾
+
+- 5.7.9 是 5.8.x 架构拆分前的稳定基线；本版本不移动 Core 文件、不删除公开符号，也不升级第三方依赖。
+- `PooTools.podspec`、`Podfile.lock`、README、RELEASE、CHANGELOG 和本迁移文档统一使用 `5.7.9` 发布入口。
+- `PTCustomerAlertController` 的标准包装器现在按“确认/提交在前、取消在后”传递按钮；直接初始化控制器时仍由 `buttons` 数组顺序决定视觉顺序。
+- 5.8.x 的依赖图、Core 分层、Permission、Network 和大对象拆分均以 `report/architecture_baseline_5_7_9.md` 的现状为准。
+
 ## 唯一实现入口
 
 | 能力 | 5.x 推荐入口 | 旧入口处理 |

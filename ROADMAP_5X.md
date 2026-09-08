@@ -1,7 +1,7 @@
 # PTools 5.x Core 治理路线图
 
-> 基线：`5.7.4`（2026-09-05，当前工作区基线）
-> 当前候选：`5.7.5`（2026-09-05，待完整构建验收）
+> 基线：`5.7.8`（2026-09-09，当前工作区基线）
+> 当前候选：`5.7.9`（2026-09-09，稳定收尾）
 > 目标范围：`PooTools.podspec` 的 `default_subspec = "Core"` 及其声明的全部子目录。  
 > 版本策略：5.1.x 以稳定性和兼容性修复为主，5.2.x 以后按职责分阶段演进。
 
@@ -442,3 +442,19 @@
 - ✅ `UIAlertController+PTEX` 不再重复设置场景或维护另一套尺寸逻辑；保留原有取消按钮索引和回调行为。
 - ✅ 新增代码注释遵循英语、西班牙语和中文三语约定；当前仓库版本仍为 `5.7.7`，本轮不创建 `5.7.8` tag。
 - ⬜ 尚未执行真实设备和人工视觉回归；待依赖产物可链接后，补验浅色/深色、iOS 17/26、长文案、多按钮、输入框、旋转、分屏、Reduce Motion 和 Reduce Transparency。
+
+## 5.7.9：稳定基线与 Alert 回归收尾
+
+### 任务清单
+
+- ✅ `REL-579-01`：同步 `PooTools.podspec`、`Podfile.lock`、README、CHANGELOG、RELEASE、MIGRATION_5X 和本路线图到 `5.7.9`；Package.swift 与 Xcode 工程继续只维护 iOS 17 / Swift 6 契约。
+- ✅ `REL-579-02`：收口 Alert 标准包装器的取消按钮顺序；普通、输入框和反馈入口均保持旧回调索引，取消按钮在纵向布局中位于底部。
+- ✅ `REL-579-03`：生成 `report/architecture_baseline_5_7_9.md`，记录 SPM 产品/Target、Core 目录和依赖、umbrella 依赖、并发声明、单例、大文件、弃用入口和 branch 依赖数量。
+- ⛔ `REL-579-04`：已执行 PooTools 与 PooTools-Example 的 Xcode Debug/Release 验证，但均在外部 `Pods/KituraContracts` 的 Swift 6 并发诊断处阻断；阻断详情已记录在 `report/architecture_baseline_5_7_9.md`，未伪装为源码通过。
+
+### 5.7.9 实施与验证说明
+
+- ✅ 本版本不进行 Core 大规模拆分，不删除公开 API，不升级第三方依赖，不修改 Pods 源码。
+- ✅ CocoaPods 使用 `pod install --no-repo-update` 重新生成 `Podfile.lock`，仅同步本地 PooTools 版本和 checksum。
+- ✅ Alert 入口的取消动作放在按钮数组末尾；`PTCustomerAlertController` 仍保持通用数组顺序，不猜测调用方语义。
+- ✅ 架构基线报告使用当前 `master` 提交和 `swift package dump-package` 结果生成，后续 5.8.x 不复用旧统计数字。
