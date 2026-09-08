@@ -134,10 +134,13 @@ public extension UIAlertController {
         let titleColorN = titleColor ?? .label
         let msgColorN = msgColor ?? .secondaryLabel
         let hasCancel = !cancelBtn.stringIsEmpty()
-        let actionTitles = (hasCancel ? [cancelBtn] : []) + okBtns
-        let actionColors = (hasCancel ? [cancelBtnColor] : []) + okBtns.indices.map { index in
+        // English: Keep the cancel action last, matching the native alert hierarchy.
+        // Español: Mantén la acción de cancelar al final, como en la jerarquía nativa de las alertas.
+        // 中文：取消操作放在最后，符合系统 Alert 的按钮层级和视觉顺序。
+        let actionTitles = okBtns + (hasCancel ? [cancelBtn] : [])
+        let actionColors = okBtns.indices.map { index in
             index < doneBtnColors.count ? doneBtnColors[index] : .systemBlue
-        }
+        } + (hasCancel ? [cancelBtnColor] : [])
         let titles = actionTitles.isEmpty ? ["PT Button cancel".localized()] : actionTitles
         let colors = actionColors.isEmpty ? [.systemBlue] : actionColors
         
@@ -177,16 +180,17 @@ public extension UIAlertController {
             canTapBackground: false
         )
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
-        alert.bottomButtonTapCallback = { title, index in
-            if hasCancel && index == 0 {
+        alert.bottomButtonTapCallback = { _, index in
+            if hasCancel && index == titles.count - 1 {
                 cancel?()
-            } else if !actionTitles.isEmpty {
-                let resultIndex = hasCancel ? index - 1 : index
-                guard okBtns.indices.contains(resultIndex) else { return }
-                moreBtn?(resultIndex, okBtns[resultIndex])
-            } else {
-                cancel?()
+                return
             }
+            guard !okBtns.isEmpty else {
+                cancel?()
+                return
+            }
+            guard okBtns.indices.contains(index) else { return }
+            moreBtn?(index, okBtns[index])
         }
         presentCustomerAlert(alert, from: showIn)
     }
@@ -265,8 +269,11 @@ public extension UIAlertController {
                     }
                 }
             },
-            buttons: [cancelBtn, okBtn],
-            buttonsColors: [cancelBtnColorN, doneBtnColor],
+            // English: Keep cancel as the trailing action so vertical layouts place it at the bottom.
+            // Español: Mantén cancelar como la acción final para que los diseños verticales lo sitúen abajo.
+            // 中文：取消按钮作为最后一个操作，使纵向布局时自然位于底部。
+            buttons: [okBtn, cancelBtn],
+            buttonsColors: [doneBtnColor, cancelBtnColorN],
             buttonsFont: buttonsFont,
             cornerSize: alertCornerRadius,
             contentSpace: 25,
@@ -274,10 +281,11 @@ public extension UIAlertController {
         )
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         alert.bottomButtonTapCallback = { _, index in
-            if index == 0 {
+            if index == 1 {
                 cancel?()
                 return
             }
+            guard index == 0 else { return }
             var result = [String: String]()
             fields.forEach { field in
                 let key = field.placeholder ?? "field_\(field.tag)"
@@ -306,6 +314,7 @@ public extension UIAlertController {
     class func alertSendFeedBack(alertTitle:String? = nil,
                                  feedBackTitlePlaceholder:String? = nil,
                                  feedBackTitleFont:UIFont = .appfont(size: 16),
+                                 feedBackTitleHeight:CGFloat = 44,
                                  feedBackContentPlaceholder:String? = nil,
                                  feedBackContentFont:UIFont = .appfont(size: 16),
                                  feedBackContentCount:NSNumber = 100,
@@ -328,18 +337,15 @@ public extension UIAlertController {
         let feedBackContentPlaceholderItem = feedBackContentPlaceholder ?? "PT Feedback input content".localized()
 
         let feedBackTitleText:UITextField
+        let leftSpacing = textInset?.left ?? 10
         #if POOTOOLS_INPUT
         let feedBackTitle = PTTextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholderItem
         feedBackTitle.setPlaceHolderTextColor(.lightGray)
         feedBackTitle.clearButtonMode = .whileEditing
         feedBackTitle.font = feedBackTitleFont
-        feedBackTitle.addPaddingLeft(5)
         feedBackTitle.backgroundColor = .clear
-        if let textInsets = textInset {
-            feedBackTitle.leftSpace = textInsets.left
-        }
-        
+        feedBackTitle.leftSpace = leftSpacing
         feedBackTitleText = feedBackTitle
         feedBackTitleText.tintColor = titleTintColor
         #else
@@ -348,12 +354,8 @@ public extension UIAlertController {
         feedBackTitleText.setPlaceHolderTextColor(.lightGray)
         feedBackTitleText.clearButtonMode = .whileEditing
         feedBackTitleText.font = feedBackTitleFont
-        feedBackTitleText.addPaddingLeft(5)
         feedBackTitleText.backgroundColor = .clear
-        if let textInsets = textInset {
-            let lView = UIView(frame: CGRectMake(0, 0, textInsets.left, 44))
-            feedBackTitleText.leftView = lView
-        }
+        feedBackTitleText.addPaddingLeft(leftSpacing + 5)
         feedBackTitleText.tintColor = titleTintColor
         #endif
         
@@ -376,7 +378,7 @@ public extension UIAlertController {
             feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview()
-                make.height.equalTo(44)
+                make.height.equalTo(feedBackTitleHeight)
             }
             
             feedBackContent.snp.makeConstraints { make in
@@ -389,14 +391,17 @@ public extension UIAlertController {
             feedBackContent.pt_wordCountLabel?.font = feedBackWordCountFont
             feedBackContent.pt_maxWordCount = feedBackContentCount
         },
-                                                      buttons: [cancelItem,sendItem],
+                                                      // English: Submit first and cancel last for native action ordering.
+                                                      // Español: Coloca enviar primero y cancelar al final para respetar el orden nativo.
+                                                      // 中文：发送按钮放在前面，取消按钮放在最后，符合系统操作顺序。
+                                                      buttons: [sendItem,cancelItem],
                                                       buttonsColors: [],
                                                       buttonsFont: buttonsFont,
                                                       contentSpace:60)
-        customerAlert.bottomButtonTapCallback = { title,index in
-            if index == 1 {
+        customerAlert.bottomButtonTapCallback = { _, index in
+            if index == 0 {
                 done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")
-            } else {
+            } else if index == 1 {
                 dismiss?()
             }
         }
