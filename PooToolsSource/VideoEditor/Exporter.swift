@@ -50,6 +50,7 @@ public struct Exporter {
     
     /// Craate exporter.
     /// - Parameter provider: Configure export information.
+    @MainActor
     public init(provider: Exporter.Provider) {
         self.provider = provider
         self.state = State()

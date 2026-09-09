@@ -250,25 +250,25 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 93,
+      "line": 92,
       "declaration": "public static let shared = NetworkReachability()",
       "scope": "service or shared resource"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 140,
+      "line": 139,
       "declaration": "public static let shared = PTNetWorkStatus()",
       "scope": "service or shared resource"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 317,
+      "line": 316,
       "declaration": "static let shared = NetworkCache()",
       "scope": "service or shared resource"
     },
     {
-      "path": "PooToolsSource/NetWork/NetworkConcurrency.swift",
-      "line": 9,
+      "path": "PooToolsSource/NetWork/NetworkTypes.swift",
+      "line": 82,
       "declaration": "public static let shared = RequestDeduplicator()",
       "scope": "service or shared resource"
     },

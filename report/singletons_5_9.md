@@ -48,10 +48,10 @@
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:15 | legacy/global state | public static let shared = MetricsManager() |
 | PooToolsSource/Motion/PTMotion.swift:83 | legacy/global state | public static let shared = PTMotion() |
 | PooToolsSource/NFC/PTNFCToolKit.swift:51 | legacy/global state | public static let shared = PTNFCToolKit() |
-| PooToolsSource/NetWork/Network.swift:93 | service or shared resource | public static let shared = NetworkReachability() |
-| PooToolsSource/NetWork/Network.swift:140 | service or shared resource | public static let shared = PTNetWorkStatus() |
-| PooToolsSource/NetWork/Network.swift:317 | service or shared resource | static let shared = NetworkCache() |
-| PooToolsSource/NetWork/NetworkConcurrency.swift:9 | service or shared resource | public static let shared = RequestDeduplicator() |
+| PooToolsSource/NetWork/Network.swift:92 | service or shared resource | public static let shared = NetworkReachability() |
+| PooToolsSource/NetWork/Network.swift:139 | service or shared resource | public static let shared = PTNetWorkStatus() |
+| PooToolsSource/NetWork/Network.swift:316 | service or shared resource | static let shared = NetworkCache() |
+| PooToolsSource/NetWork/NetworkTypes.swift:82 | service or shared resource | public static let shared = RequestDeduplicator() |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:27 | service or shared resource | public static let shared = PTNetworkSpeedTestFunction() |
 | PooToolsSource/OSSKit/OSSSpeech.swift:198 | legacy/global state | public static let shared = OSSSpeech() |
 | PooToolsSource/Picker/PTBasePickerView.swift:125 | UI or lifecycle state | public static var shared = PTPickerStyle() |

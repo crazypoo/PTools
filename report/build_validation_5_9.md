@@ -47,8 +47,9 @@ Pods 的弃用、Metal 工具链和脚本输出单独保留在原始日志中。
 本轮并发改动的静态门禁、变更文件解析、SwiftPM manifest、构建入口契约和 `git diff --check`
 均已通过。`PooToolsSource` 过滤后的 Xcode 日志没有新增源码错误或警告。
 
-本轮实际修改并解析通过 19 个已纳入版本控制的 Swift 文件，以及 1 个新增的
-`PooToolsSource/NetWork/NetworkConcurrency.swift`。
+本轮实际修改并解析通过 19 个已纳入版本控制的 Swift 文件；并发支撑类型已归并到已有的
+`PooToolsSource/NetWork/NetworkTypes.swift`，避免旧的 CocoaPods 工程因新增源文件未刷新而出现
+`cannot find in scope`。
 
 | 配置 | 结果 | 阻断位置 |
 | --- | --- | --- |
@@ -57,7 +58,7 @@ Pods 的弃用、Metal 工具链和脚本输出单独保留在原始日志中。
 
 原始日志：
 
-- `/tmp/PTools-5.9.1-final-release-2.log`
+- `/tmp/PTools-5.9.1-final-release-3.log`
 
 本轮没有修改 Pods 源码、第三方依赖版本或产品版本号，也没有创建 5.9.1 标签。
 

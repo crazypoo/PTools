@@ -16,7 +16,6 @@ import CoreTelephony
 import Photos
 import SmartCodable
 import KakaJSON
-
 private let PTNetworkLocalizationBundle: Bundle = {
     let mainBundle = Bundle.main
     guard let path = mainBundle.path(forResource: CorePodBundleName, ofType: "bundle"),
@@ -1863,8 +1862,11 @@ public final class Network: @unchecked Sendable {
     
     @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
         let cancellationBridge = PTDownloadCancellationBridge()
-        try await withTaskCancellationHandler(operation: {
-            try await withCheckedThrowingContinuation { continuation in
+        // English: Keep cancellation outside the MainActor so the compiler and runtime use one clear boundary.
+        // Español: Mantiene la cancelación fuera de MainActor para que el compilador y el tiempo de ejecución usen un límite claro.
+        // 中文：让取消逻辑保持在 MainActor 之外，使编译器和运行时都只有一个清晰边界。
+        return try await withTaskCancellationHandler(operation: {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
                 cancellationBridge.install(resumeCancellation: {
                     continuation.resume(throwing: CancellationError())
                 })
@@ -1881,9 +1883,7 @@ public final class Network: @unchecked Sendable {
                 })
             }
         }, onCancel: {
-            Task { @MainActor in
-                cancellationBridge.cancel()
-            }
+            cancellationBridge.cancel()
         })
     }
     

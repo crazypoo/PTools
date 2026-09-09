@@ -557,49 +557,49 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 91,
+      "line": 90,
       "text": "public final class NetworkReachability: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 139,
+      "line": 138,
       "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 351,
+      "line": 350,
       "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 373,
+      "line": 372,
       "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 402,
+      "line": 401,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 639,
+      "line": 638,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1230,
+      "line": 1229,
       "text": "private struct PTSafeUploadParamsBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1524,
+      "line": 1523,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {

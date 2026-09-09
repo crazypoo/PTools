@@ -3545,91 +3545,91 @@
 | PooToolsSource/NFC/PTNFCToolKit.swift:86 | func | public | public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void, |
 | PooToolsSource/NFC/PTNFCToolKit.swift:102 | func | public | public func startWriting(message: NFCNDEFMessage, |
 | PooToolsSource/NFC/PTNFCToolKit.swift:121 | func | public | public func sendAPDU(command: NFCISO7816APDU, |
-| PooToolsSource/NetWork/Network.swift:29 | enum | public | public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable { |
-| PooToolsSource/NetWork/Network.swift:50 | var | public | public var errorDescription: String? { |
-| PooToolsSource/NetWork/Network.swift:68 | var | public | public var errorCode: Int { |
-| PooToolsSource/NetWork/Network.swift:106 | var | public | public var isReachable: Bool { |
-| PooToolsSource/NetWork/Network.swift:112 | var | public | public var isExpensive: Bool { |
-| PooToolsSource/NetWork/Network.swift:170 | var | public | public var statusStream: AsyncStream<NetWorkStatus> { |
-| PooToolsSource/NetWork/Network.swift:239 | func | public | public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) { |
-| PooToolsSource/NetWork/Network.swift:276 | enum | public | public enum MimeTypeHelper { |
-| PooToolsSource/NetWork/Network.swift:297 | protocol | public | public protocol NetworkPlugin: Sendable { |
-| PooToolsSource/NetWork/Network.swift:302 | struct | public | public struct CacheObject: Codable { |
-| PooToolsSource/NetWork/Network.swift:308 | enum | public | public enum PTNetworkCachePolicy:String, Sendable { |
-| PooToolsSource/NetWork/Network.swift:316 | actor | public | public actor NetworkCache { |
-| PooToolsSource/NetWork/Network.swift:380 | func | public | public func clearAll() { |
-| PooToolsSource/NetWork/Network.swift:385 | func | public | public func cleanIfNeeded() { |
-| PooToolsSource/NetWork/Network.swift:486 | init | public | public init() {} |
-| PooToolsSource/NetWork/Network.swift:488 | func | public | public func willSend(_ request: inout URLRequest) async { |
-| PooToolsSource/NetWork/Network.swift:499 | func | public | public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async { |
-| PooToolsSource/NetWork/Network.swift:511 | enum | public | public enum PTNetworkDedupPolicy : Sendable { |
-| PooToolsSource/NetWork/Network.swift:525 | struct | public | public struct RequestKey: Hashable, Sendable { |
-| PooToolsSource/NetWork/Network.swift:542 | struct | public | public struct PTNetworkConfig: Sendable { |
-| PooToolsSource/NetWork/Network.swift:543 | var | public | public var requestTimeout: TimeInterval = 20 |
-| PooToolsSource/NetWork/Network.swift:544 | var | public | public var downloadRequestTimeout: TimeInterval = 5 |
-| PooToolsSource/NetWork/Network.swift:545 | var | public | public var resourceTimeout: TimeInterval = 3600 |
-| PooToolsSource/NetWork/Network.swift:547 | var | public | public var serverAddress: String = "" |
-| PooToolsSource/NetWork/Network.swift:548 | var | public | public var serverAddress_dev: String = "" |
-| PooToolsSource/NetWork/Network.swift:549 | var | public | public var socketAddress: String = "" |
-| PooToolsSource/NetWork/Network.swift:550 | var | public | public var socketAddress_dev: String = "" |
-| PooToolsSource/NetWork/Network.swift:552 | var | public | public var userToken: String = "" |
-| PooToolsSource/NetWork/Network.swift:553 | var | public | public var retryTimes: Int = 3 |
-| PooToolsSource/NetWork/Network.swift:554 | var | public | public var retryDelay: TimeInterval = 1.5 |
-| PooToolsSource/NetWork/Network.swift:555 | var | public | public var retryAPIStatusCode: Int = 502 |
-| PooToolsSource/NetWork/Network.swift:557 | var | public | public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork |
-| PooToolsSource/NetWork/Network.swift:558 | var | public | public var networkCacheExpiration: String = "600" |
-| PooToolsSource/NetWork/Network.swift:559 | var | public | public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto") |
-| PooToolsSource/NetWork/Network.swift:561 | var | public | public var maxDiskSize: Int64 = 100 * 1024 * 1024 |
-| PooToolsSource/NetWork/Network.swift:562 | var | public | public var cleanThreshold: Double = 0.7 |
-| PooToolsSource/NetWork/Network.swift:563 | var | public | public var cleanCachePreSec: TimeInterval = 60 |
-| PooToolsSource/NetWork/Network.swift:564 | var | public | public var logMaxCount: Double = 3000 |
-| PooToolsSource/NetWork/Network.swift:570 | var | public | public var netRequsetTime: TimeInterval { |
-| PooToolsSource/NetWork/Network.swift:576 | var | public | public var downloadRequsetTime: TimeInterval { |
-| PooToolsSource/NetWork/Network.swift:582 | var | public | public var downloadEndTime: TimeInterval { |
-| PooToolsSource/NetWork/Network.swift:588 | var | public | public var networkCacheEXPTime: String { |
-| PooToolsSource/NetWork/Network.swift:594 | var | public | public var networkDudupOption: PTNetworkDedupPolicy { |
-| PooToolsSource/NetWork/Network.swift:599 | var | public | public var waitsForConnectivity: Bool = true |
-| PooToolsSource/NetWork/Network.swift:601 | init | public | public init() {} |
-| PooToolsSource/NetWork/Network.swift:607 | typealias | public | public typealias PTNetworkConfiguration = PTNetworkConfig |
-| PooToolsSource/NetWork/Network.swift:655 | init | public | public init(configuration: PTNetworkConfig = PTNetworkConfig(), |
-| PooToolsSource/NetWork/Network.swift:661 | var | public | public var plugins: [NetworkPlugin] { |
-| PooToolsSource/NetWork/Network.swift:673 | func | public | public func register(plugin: NetworkPlugin) { |
-| PooToolsSource/NetWork/Network.swift:703 | var | public | public var config: PTNetworkConfig { |
-| PooToolsSource/NetWork/Network.swift:740 | var | public | public var hud:PTHudView? |
-| PooToolsSource/NetWork/Network.swift:741 | var | public | @MainActor public var hudConfig : PTHudConfig { |
-| PooToolsSource/NetWork/Network.swift:748 | func | public | public func hudShow() { |
-| PooToolsSource/NetWork/Network.swift:758 | func | public | @MainActor public func hudHide(completion:PTActionTask? = nil) { |
-| PooToolsSource/NetWork/Network.swift:772 | class | public | @MainActor public class func globalURL() async -> String { |
-| PooToolsSource/NetWork/Network.swift:791 | class | public | @MainActor public class func socketGlobalURL() async -> String { |
-| PooToolsSource/NetWork/Network.swift:808 | class | public | @MainActor public class func gobalUrl() async -> String { |
-| PooToolsSource/NetWork/Network.swift:813 | class | public | @MainActor public class func socketGobalUrl() async -> String { |
-| PooToolsSource/NetWork/Network.swift:836 | class | public | public class func requestIPInfoSnapshot(ipAddress: String, |
-| PooToolsSource/NetWork/Network.swift:848 | class | public | public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) { |
-| PooToolsSource/NetWork/Network.swift:1045 | typealias | public | public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T> |
-| PooToolsSource/NetWork/Network.swift:1590 | class | public | public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, |
-| PooToolsSource/NetWork/Network.swift:1641 | class | public | public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> { |
-| PooToolsSource/NetWork/Network.swift:1719 | func | public | public func get(_ url: String) -> DownloadTask? { tasks[url] } |
-| PooToolsSource/NetWork/Network.swift:1842 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) { |
-| PooToolsSource/NetWork/Network.swift:1864 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL { |
+| PooToolsSource/NetWork/Network.swift:28 | enum | public | public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable { |
+| PooToolsSource/NetWork/Network.swift:49 | var | public | public var errorDescription: String? { |
+| PooToolsSource/NetWork/Network.swift:67 | var | public | public var errorCode: Int { |
+| PooToolsSource/NetWork/Network.swift:105 | var | public | public var isReachable: Bool { |
+| PooToolsSource/NetWork/Network.swift:111 | var | public | public var isExpensive: Bool { |
+| PooToolsSource/NetWork/Network.swift:169 | var | public | public var statusStream: AsyncStream<NetWorkStatus> { |
+| PooToolsSource/NetWork/Network.swift:238 | func | public | public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) { |
+| PooToolsSource/NetWork/Network.swift:275 | enum | public | public enum MimeTypeHelper { |
+| PooToolsSource/NetWork/Network.swift:296 | protocol | public | public protocol NetworkPlugin: Sendable { |
+| PooToolsSource/NetWork/Network.swift:301 | struct | public | public struct CacheObject: Codable { |
+| PooToolsSource/NetWork/Network.swift:307 | enum | public | public enum PTNetworkCachePolicy:String, Sendable { |
+| PooToolsSource/NetWork/Network.swift:315 | actor | public | public actor NetworkCache { |
+| PooToolsSource/NetWork/Network.swift:379 | func | public | public func clearAll() { |
+| PooToolsSource/NetWork/Network.swift:384 | func | public | public func cleanIfNeeded() { |
+| PooToolsSource/NetWork/Network.swift:485 | init | public | public init() {} |
+| PooToolsSource/NetWork/Network.swift:487 | func | public | public func willSend(_ request: inout URLRequest) async { |
+| PooToolsSource/NetWork/Network.swift:498 | func | public | public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async { |
+| PooToolsSource/NetWork/Network.swift:510 | enum | public | public enum PTNetworkDedupPolicy : Sendable { |
+| PooToolsSource/NetWork/Network.swift:524 | struct | public | public struct RequestKey: Hashable, Sendable { |
+| PooToolsSource/NetWork/Network.swift:541 | struct | public | public struct PTNetworkConfig: Sendable { |
+| PooToolsSource/NetWork/Network.swift:542 | var | public | public var requestTimeout: TimeInterval = 20 |
+| PooToolsSource/NetWork/Network.swift:543 | var | public | public var downloadRequestTimeout: TimeInterval = 5 |
+| PooToolsSource/NetWork/Network.swift:544 | var | public | public var resourceTimeout: TimeInterval = 3600 |
+| PooToolsSource/NetWork/Network.swift:546 | var | public | public var serverAddress: String = "" |
+| PooToolsSource/NetWork/Network.swift:547 | var | public | public var serverAddress_dev: String = "" |
+| PooToolsSource/NetWork/Network.swift:548 | var | public | public var socketAddress: String = "" |
+| PooToolsSource/NetWork/Network.swift:549 | var | public | public var socketAddress_dev: String = "" |
+| PooToolsSource/NetWork/Network.swift:551 | var | public | public var userToken: String = "" |
+| PooToolsSource/NetWork/Network.swift:552 | var | public | public var retryTimes: Int = 3 |
+| PooToolsSource/NetWork/Network.swift:553 | var | public | public var retryDelay: TimeInterval = 1.5 |
+| PooToolsSource/NetWork/Network.swift:554 | var | public | public var retryAPIStatusCode: Int = 502 |
+| PooToolsSource/NetWork/Network.swift:556 | var | public | public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork |
+| PooToolsSource/NetWork/Network.swift:557 | var | public | public var networkCacheExpiration: String = "600" |
+| PooToolsSource/NetWork/Network.swift:558 | var | public | public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto") |
+| PooToolsSource/NetWork/Network.swift:560 | var | public | public var maxDiskSize: Int64 = 100 * 1024 * 1024 |
+| PooToolsSource/NetWork/Network.swift:561 | var | public | public var cleanThreshold: Double = 0.7 |
+| PooToolsSource/NetWork/Network.swift:562 | var | public | public var cleanCachePreSec: TimeInterval = 60 |
+| PooToolsSource/NetWork/Network.swift:563 | var | public | public var logMaxCount: Double = 3000 |
+| PooToolsSource/NetWork/Network.swift:569 | var | public | public var netRequsetTime: TimeInterval { |
+| PooToolsSource/NetWork/Network.swift:575 | var | public | public var downloadRequsetTime: TimeInterval { |
+| PooToolsSource/NetWork/Network.swift:581 | var | public | public var downloadEndTime: TimeInterval { |
+| PooToolsSource/NetWork/Network.swift:587 | var | public | public var networkCacheEXPTime: String { |
+| PooToolsSource/NetWork/Network.swift:593 | var | public | public var networkDudupOption: PTNetworkDedupPolicy { |
+| PooToolsSource/NetWork/Network.swift:598 | var | public | public var waitsForConnectivity: Bool = true |
+| PooToolsSource/NetWork/Network.swift:600 | init | public | public init() {} |
+| PooToolsSource/NetWork/Network.swift:606 | typealias | public | public typealias PTNetworkConfiguration = PTNetworkConfig |
+| PooToolsSource/NetWork/Network.swift:654 | init | public | public init(configuration: PTNetworkConfig = PTNetworkConfig(), |
+| PooToolsSource/NetWork/Network.swift:660 | var | public | public var plugins: [NetworkPlugin] { |
+| PooToolsSource/NetWork/Network.swift:672 | func | public | public func register(plugin: NetworkPlugin) { |
+| PooToolsSource/NetWork/Network.swift:702 | var | public | public var config: PTNetworkConfig { |
+| PooToolsSource/NetWork/Network.swift:739 | var | public | public var hud:PTHudView? |
+| PooToolsSource/NetWork/Network.swift:740 | var | public | @MainActor public var hudConfig : PTHudConfig { |
+| PooToolsSource/NetWork/Network.swift:747 | func | public | public func hudShow() { |
+| PooToolsSource/NetWork/Network.swift:757 | func | public | @MainActor public func hudHide(completion:PTActionTask? = nil) { |
+| PooToolsSource/NetWork/Network.swift:771 | class | public | @MainActor public class func globalURL() async -> String { |
+| PooToolsSource/NetWork/Network.swift:790 | class | public | @MainActor public class func socketGlobalURL() async -> String { |
+| PooToolsSource/NetWork/Network.swift:807 | class | public | @MainActor public class func gobalUrl() async -> String { |
+| PooToolsSource/NetWork/Network.swift:812 | class | public | @MainActor public class func socketGobalUrl() async -> String { |
+| PooToolsSource/NetWork/Network.swift:835 | class | public | public class func requestIPInfoSnapshot(ipAddress: String, |
+| PooToolsSource/NetWork/Network.swift:847 | class | public | public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) { |
+| PooToolsSource/NetWork/Network.swift:1044 | typealias | public | public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T> |
+| PooToolsSource/NetWork/Network.swift:1589 | class | public | public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, |
+| PooToolsSource/NetWork/Network.swift:1640 | class | public | public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> { |
+| PooToolsSource/NetWork/Network.swift:1718 | func | public | public func get(_ url: String) -> DownloadTask? { tasks[url] } |
+| PooToolsSource/NetWork/Network.swift:1841 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) { |
+| PooToolsSource/NetWork/Network.swift:1863 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL { |
 | PooToolsSource/NetWork/Network.swift:1890 | func | public | public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } } |
 | PooToolsSource/NetWork/Network.swift:1891 | func | public | public func resume(fileUrl: String) { Task { await store.get(fileUrl)?.start(session: downloadSession) } } |
 | PooToolsSource/NetWork/Network.swift:1892 | func | public | public func cancel(fileUrl: String) { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } } |
 | PooToolsSource/NetWork/Network.swift:1895 | func | public | public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> { |
 | PooToolsSource/NetWork/Network.swift:1917 | func | public | public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics) { |
-| PooToolsSource/NetWork/NetworkConcurrency.swift:8 | actor | public | public actor RequestDeduplicator { |
-| PooToolsSource/NetWork/NetworkConcurrency.swift:24 | func | public | public func execute<T: Sendable>( |
-| PooToolsSource/NetWork/NetworkTypes.swift:4 | let | public | @MainActor public let AppTestMode = "PT App network environment test".localized() |
-| PooToolsSource/NetWork/NetworkTypes.swift:5 | let | public | @MainActor public let AppCustomMode = "PT App network environment custom".localized() |
-| PooToolsSource/NetWork/NetworkTypes.swift:6 | let | public | @MainActor public let AppDisMode = "PT App network environment distribution".localized() |
-| PooToolsSource/NetWork/NetworkTypes.swift:8 | enum | public | public enum NetworkCellularType: String, Sendable { |
-| PooToolsSource/NetWork/NetworkTypes.swift:16 | enum | public | public enum NetWorkStatus: Sendable { |
-| PooToolsSource/NetWork/NetworkTypes.swift:42 | enum | public | public enum NetWorkEnvironment: Int, Sendable { |
-| PooToolsSource/NetWork/NetworkTypes.swift:56 | typealias | public | public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void |
-| PooToolsSource/NetWork/NetworkTypes.swift:57 | typealias | public | public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void |
-| PooToolsSource/NetWork/NetworkTypes.swift:58 | typealias | public | public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void |
-| PooToolsSource/NetWork/NetworkTypes.swift:59 | typealias | public | public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void |
-| PooToolsSource/NetWork/NetworkTypes.swift:61 | var | public | public var PTBaseURLMode: NetWorkEnvironment { |
-| PooToolsSource/NetWork/NetworkTypes.swift:69 | var | public | public var PTSocketURLMode: NetWorkEnvironment { |
+| PooToolsSource/NetWork/NetworkTypes.swift:5 | let | public | @MainActor public let AppTestMode = "PT App network environment test".localized() |
+| PooToolsSource/NetWork/NetworkTypes.swift:6 | let | public | @MainActor public let AppCustomMode = "PT App network environment custom".localized() |
+| PooToolsSource/NetWork/NetworkTypes.swift:7 | let | public | @MainActor public let AppDisMode = "PT App network environment distribution".localized() |
+| PooToolsSource/NetWork/NetworkTypes.swift:9 | enum | public | public enum NetworkCellularType: String, Sendable { |
+| PooToolsSource/NetWork/NetworkTypes.swift:17 | enum | public | public enum NetWorkStatus: Sendable { |
+| PooToolsSource/NetWork/NetworkTypes.swift:43 | enum | public | public enum NetWorkEnvironment: Int, Sendable { |
+| PooToolsSource/NetWork/NetworkTypes.swift:57 | typealias | public | public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void |
+| PooToolsSource/NetWork/NetworkTypes.swift:58 | typealias | public | public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void |
+| PooToolsSource/NetWork/NetworkTypes.swift:59 | typealias | public | public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void |
+| PooToolsSource/NetWork/NetworkTypes.swift:60 | typealias | public | public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void |
+| PooToolsSource/NetWork/NetworkTypes.swift:62 | var | public | public var PTBaseURLMode: NetWorkEnvironment { |
+| PooToolsSource/NetWork/NetworkTypes.swift:70 | var | public | public var PTSocketURLMode: NetWorkEnvironment { |
+| PooToolsSource/NetWork/NetworkTypes.swift:81 | actor | public | public actor RequestDeduplicator { |
+| PooToolsSource/NetWork/NetworkTypes.swift:97 | func | public | public func execute<T: Sendable>( |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:11 | class | public | public class PTNetworkSpeedHistoriaModel: PTCodableModelProtocol { |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:12 | var | public | public var date:String = "" |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:13 | var | public | public var networkType:String = "" |
@@ -5053,8 +5053,8 @@
 | PooToolsSource/VideoEditor/Exporter.swift:23 | struct | public | public struct Exporter { |
 | PooToolsSource/VideoEditor/Exporter.swift:25 | typealias | public | public typealias PixelBufferCallback = @Sendable (_ buffer: ExporterBuffer) -> ExporterBuffer? |
 | PooToolsSource/VideoEditor/Exporter.swift:26 | typealias | public | public typealias ExportComplete = @Sendable (Result<URL, Exporter.Error>) -> Void |
-| PooToolsSource/VideoEditor/Exporter.swift:53 | init | public | public init(provider: Exporter.Provider) { |
-| PooToolsSource/VideoEditor/Exporter.swift:70 | func | public | public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async { |
+| PooToolsSource/VideoEditor/Exporter.swift:54 | init | public | public init(provider: Exporter.Provider) { |
+| PooToolsSource/VideoEditor/Exporter.swift:71 | func | public | public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async { |
 | PooToolsSource/VideoEditor/Options.swift:16 | struct | public | public struct Option : Hashable, Equatable, RawRepresentable, Sendable { |
 | PooToolsSource/VideoEditor/Options.swift:17 | let | public | public let rawValue: UInt16 |
 | PooToolsSource/VideoEditor/Options.swift:18 | init | public | public init(rawValue: UInt16) { |

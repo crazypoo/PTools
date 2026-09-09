@@ -28335,7 +28335,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|enum|public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 29,
+      "line": 28,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {"
@@ -28343,7 +28343,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var errorDescription: String?",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 50,
+      "line": 49,
       "access": "public",
       "kind": "var",
       "declaration": "public var errorDescription: String? {"
@@ -28351,7 +28351,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var errorCode: Int",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 68,
+      "line": 67,
       "access": "public",
       "kind": "var",
       "declaration": "public var errorCode: Int {"
@@ -28359,7 +28359,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var isReachable: Bool",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 106,
+      "line": 105,
       "access": "public",
       "kind": "var",
       "declaration": "public var isReachable: Bool {"
@@ -28367,7 +28367,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var isExpensive: Bool",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 112,
+      "line": 111,
       "access": "public",
       "kind": "var",
       "declaration": "public var isExpensive: Bool {"
@@ -28375,7 +28375,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var statusStream: AsyncStream<NetWorkStatus>",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 170,
+      "line": 169,
       "access": "public",
       "kind": "var",
       "declaration": "public var statusStream: AsyncStream<NetWorkStatus> {"
@@ -28383,7 +28383,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 239,
+      "line": 238,
       "access": "public",
       "kind": "func",
       "declaration": "public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {"
@@ -28391,7 +28391,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|enum|public enum MimeTypeHelper",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 276,
+      "line": 275,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum MimeTypeHelper {"
@@ -28399,7 +28399,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|protocol|public protocol NetworkPlugin: Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 297,
+      "line": 296,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol NetworkPlugin: Sendable {"
@@ -28407,7 +28407,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|struct|public struct CacheObject: Codable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 302,
+      "line": 301,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct CacheObject: Codable {"
@@ -28415,7 +28415,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|enum|public enum PTNetworkCachePolicy:String, Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 308,
+      "line": 307,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTNetworkCachePolicy:String, Sendable {"
@@ -28423,7 +28423,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|actor|public actor NetworkCache",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 316,
+      "line": 315,
       "access": "public",
       "kind": "actor",
       "declaration": "public actor NetworkCache {"
@@ -28431,7 +28431,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func clearAll()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 380,
+      "line": 379,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearAll() {"
@@ -28439,7 +28439,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func cleanIfNeeded()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 385,
+      "line": 384,
       "access": "public",
       "kind": "func",
       "declaration": "public func cleanIfNeeded() {"
@@ -28447,7 +28447,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|init|public init()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 486,
+      "line": 485,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -28455,7 +28455,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func willSend(_ request: inout URLRequest) async",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 488,
+      "line": 487,
       "access": "public",
       "kind": "func",
       "declaration": "public func willSend(_ request: inout URLRequest) async {"
@@ -28463,7 +28463,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 499,
+      "line": 498,
       "access": "public",
       "kind": "func",
       "declaration": "public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async {"
@@ -28471,7 +28471,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|enum|public enum PTNetworkDedupPolicy : Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 511,
+      "line": 510,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTNetworkDedupPolicy : Sendable {"
@@ -28479,7 +28479,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|struct|public struct RequestKey: Hashable, Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 525,
+      "line": 524,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct RequestKey: Hashable, Sendable {"
@@ -28487,7 +28487,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|struct|public struct PTNetworkConfig: Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 542,
+      "line": 541,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTNetworkConfig: Sendable {"
@@ -28495,7 +28495,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var requestTimeout: TimeInterval = 20",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 543,
+      "line": 542,
       "access": "public",
       "kind": "var",
       "declaration": "public var requestTimeout: TimeInterval = 20"
@@ -28503,7 +28503,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var downloadRequestTimeout: TimeInterval = 5",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 544,
+      "line": 543,
       "access": "public",
       "kind": "var",
       "declaration": "public var downloadRequestTimeout: TimeInterval = 5"
@@ -28511,7 +28511,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var resourceTimeout: TimeInterval = 3600",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 545,
+      "line": 544,
       "access": "public",
       "kind": "var",
       "declaration": "public var resourceTimeout: TimeInterval = 3600"
@@ -28519,7 +28519,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var serverAddress: String = \"\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 547,
+      "line": 546,
       "access": "public",
       "kind": "var",
       "declaration": "public var serverAddress: String = \"\""
@@ -28527,7 +28527,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var serverAddress_dev: String = \"\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 548,
+      "line": 547,
       "access": "public",
       "kind": "var",
       "declaration": "public var serverAddress_dev: String = \"\""
@@ -28535,7 +28535,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var socketAddress: String = \"\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 549,
+      "line": 548,
       "access": "public",
       "kind": "var",
       "declaration": "public var socketAddress: String = \"\""
@@ -28543,7 +28543,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var socketAddress_dev: String = \"\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 550,
+      "line": 549,
       "access": "public",
       "kind": "var",
       "declaration": "public var socketAddress_dev: String = \"\""
@@ -28551,7 +28551,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var userToken: String = \"\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 552,
+      "line": 551,
       "access": "public",
       "kind": "var",
       "declaration": "public var userToken: String = \"\""
@@ -28559,7 +28559,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var retryTimes: Int = 3",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 553,
+      "line": 552,
       "access": "public",
       "kind": "var",
       "declaration": "public var retryTimes: Int = 3"
@@ -28567,7 +28567,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var retryDelay: TimeInterval = 1.5",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 554,
+      "line": 553,
       "access": "public",
       "kind": "var",
       "declaration": "public var retryDelay: TimeInterval = 1.5"
@@ -28575,7 +28575,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var retryAPIStatusCode: Int = 502",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 555,
+      "line": 554,
       "access": "public",
       "kind": "var",
       "declaration": "public var retryAPIStatusCode: Int = 502"
@@ -28583,7 +28583,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 557,
+      "line": 556,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork"
@@ -28591,7 +28591,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var networkCacheExpiration: String = \"600\"",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 558,
+      "line": 557,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkCacheExpiration: String = \"600\""
@@ -28599,7 +28599,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var networkDedupOption: PTNetworkDedupPolicy = .custom(\"auto\")",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 559,
+      "line": 558,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkDedupOption: PTNetworkDedupPolicy = .custom(\"auto\")"
@@ -28607,7 +28607,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var maxDiskSize: Int64 = 100 * 1024 * 1024",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 561,
+      "line": 560,
       "access": "public",
       "kind": "var",
       "declaration": "public var maxDiskSize: Int64 = 100 * 1024 * 1024"
@@ -28615,7 +28615,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var cleanThreshold: Double = 0.7",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 562,
+      "line": 561,
       "access": "public",
       "kind": "var",
       "declaration": "public var cleanThreshold: Double = 0.7"
@@ -28623,7 +28623,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var cleanCachePreSec: TimeInterval = 60",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 563,
+      "line": 562,
       "access": "public",
       "kind": "var",
       "declaration": "public var cleanCachePreSec: TimeInterval = 60"
@@ -28631,7 +28631,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var logMaxCount: Double = 3000",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 564,
+      "line": 563,
       "access": "public",
       "kind": "var",
       "declaration": "public var logMaxCount: Double = 3000"
@@ -28639,7 +28639,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var netRequsetTime: TimeInterval",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 570,
+      "line": 569,
       "access": "public",
       "kind": "var",
       "declaration": "public var netRequsetTime: TimeInterval {"
@@ -28647,7 +28647,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var downloadRequsetTime: TimeInterval",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 576,
+      "line": 575,
       "access": "public",
       "kind": "var",
       "declaration": "public var downloadRequsetTime: TimeInterval {"
@@ -28655,7 +28655,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var downloadEndTime: TimeInterval",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 582,
+      "line": 581,
       "access": "public",
       "kind": "var",
       "declaration": "public var downloadEndTime: TimeInterval {"
@@ -28663,7 +28663,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var networkCacheEXPTime: String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 588,
+      "line": 587,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkCacheEXPTime: String {"
@@ -28671,7 +28671,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var networkDudupOption: PTNetworkDedupPolicy",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 594,
+      "line": 593,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkDudupOption: PTNetworkDedupPolicy {"
@@ -28679,7 +28679,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var waitsForConnectivity: Bool = true",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 599,
+      "line": 598,
       "access": "public",
       "kind": "var",
       "declaration": "public var waitsForConnectivity: Bool = true"
@@ -28687,7 +28687,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|init|public init()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 601,
+      "line": 600,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -28695,7 +28695,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|typealias|public typealias PTNetworkConfiguration = PTNetworkConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 607,
+      "line": 606,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTNetworkConfiguration = PTNetworkConfig"
@@ -28703,7 +28703,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|init|public init(configuration: PTNetworkConfig = PTNetworkConfig(),",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 655,
+      "line": 654,
       "access": "public",
       "kind": "init",
       "declaration": "public init(configuration: PTNetworkConfig = PTNetworkConfig(),"
@@ -28711,7 +28711,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var plugins: [NetworkPlugin]",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 661,
+      "line": 660,
       "access": "public",
       "kind": "var",
       "declaration": "public var plugins: [NetworkPlugin] {"
@@ -28719,7 +28719,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func register(plugin: NetworkPlugin)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 673,
+      "line": 672,
       "access": "public",
       "kind": "func",
       "declaration": "public func register(plugin: NetworkPlugin) {"
@@ -28727,7 +28727,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var config: PTNetworkConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 703,
+      "line": 702,
       "access": "public",
       "kind": "var",
       "declaration": "public var config: PTNetworkConfig {"
@@ -28735,7 +28735,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var hud:PTHudView?",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 740,
+      "line": 739,
       "access": "public",
       "kind": "var",
       "declaration": "public var hud:PTHudView?"
@@ -28743,7 +28743,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|@MainActor public var hudConfig : PTHudConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 741,
+      "line": 740,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var hudConfig : PTHudConfig {"
@@ -28751,7 +28751,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func hudShow()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 748,
+      "line": 747,
       "access": "public",
       "kind": "func",
       "declaration": "public func hudShow() {"
@@ -28759,7 +28759,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func hudHide(completion:PTActionTask? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 758,
+      "line": 757,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func hudHide(completion:PTActionTask? = nil) {"
@@ -28767,7 +28767,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func globalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 772,
+      "line": 771,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func globalURL() async -> String {"
@@ -28775,7 +28775,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGlobalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 791,
+      "line": 790,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGlobalURL() async -> String {"
@@ -28783,7 +28783,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func gobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 808,
+      "line": 807,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func gobalUrl() async -> String {"
@@ -28791,7 +28791,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 813,
+      "line": 812,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGobalUrl() async -> String {"
@@ -28799,7 +28799,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestIPInfoSnapshot(ipAddress: String,",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 836,
+      "line": 835,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestIPInfoSnapshot(ipAddress: String,"
@@ -28807,7 +28807,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 848,
+      "line": 847,
       "access": "public",
       "kind": "class",
       "declaration": "public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {"
@@ -28815,7 +28815,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|typealias|public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1045,
+      "line": 1044,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>"
@@ -28823,7 +28823,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1590,
+      "line": 1589,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,"
@@ -28831,7 +28831,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any>",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1641,
+      "line": 1640,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {"
@@ -28839,7 +28839,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func get(_ url: String) -> DownloadTask?",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1719,
+      "line": 1718,
       "access": "public",
       "kind": "func",
       "declaration": "public func get(_ url: String) -> DownloadTask? { tasks[url] }"
@@ -28847,7 +28847,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1842,
+      "line": 1841,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {"
@@ -28855,7 +28855,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1864,
+      "line": 1863,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {"
@@ -28901,25 +28901,9 @@
       "declaration": "public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics) {"
     },
     {
-      "key": "PooToolsSource/NetWork/NetworkConcurrency.swift|public|actor|public actor RequestDeduplicator",
-      "path": "PooToolsSource/NetWork/NetworkConcurrency.swift",
-      "line": 8,
-      "access": "public",
-      "kind": "actor",
-      "declaration": "public actor RequestDeduplicator {"
-    },
-    {
-      "key": "PooToolsSource/NetWork/NetworkConcurrency.swift|public|func|public func execute<T: Sendable>(",
-      "path": "PooToolsSource/NetWork/NetworkConcurrency.swift",
-      "line": 24,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func execute<T: Sendable>("
-    },
-    {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|let|@MainActor public let AppTestMode = \"PT App network environment test\".localized()",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 4,
+      "line": 5,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let AppTestMode = \"PT App network environment test\".localized()"
@@ -28927,7 +28911,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|let|@MainActor public let AppCustomMode = \"PT App network environment custom\".localized()",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 5,
+      "line": 6,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let AppCustomMode = \"PT App network environment custom\".localized()"
@@ -28935,7 +28919,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|let|@MainActor public let AppDisMode = \"PT App network environment distribution\".localized()",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 6,
+      "line": 7,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let AppDisMode = \"PT App network environment distribution\".localized()"
@@ -28943,7 +28927,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|enum|public enum NetworkCellularType: String, Sendable",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 8,
+      "line": 9,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum NetworkCellularType: String, Sendable {"
@@ -28951,7 +28935,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|enum|public enum NetWorkStatus: Sendable",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 16,
+      "line": 17,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum NetWorkStatus: Sendable {"
@@ -28959,7 +28943,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|enum|public enum NetWorkEnvironment: Int, Sendable",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 42,
+      "line": 43,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum NetWorkEnvironment: Int, Sendable {"
@@ -28967,7 +28951,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|typealias|public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 56,
+      "line": 57,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void"
@@ -28975,7 +28959,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|typealias|public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 57,
+      "line": 58,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void"
@@ -28983,7 +28967,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|typealias|public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 58,
+      "line": 59,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void"
@@ -28991,7 +28975,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|typealias|public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 59,
+      "line": 60,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void"
@@ -28999,7 +28983,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|var|public var PTBaseURLMode: NetWorkEnvironment",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 61,
+      "line": 62,
       "access": "public",
       "kind": "var",
       "declaration": "public var PTBaseURLMode: NetWorkEnvironment {"
@@ -29007,10 +28991,26 @@
     {
       "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|var|public var PTSocketURLMode: NetWorkEnvironment",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 69,
+      "line": 70,
       "access": "public",
       "kind": "var",
       "declaration": "public var PTSocketURLMode: NetWorkEnvironment {"
+    },
+    {
+      "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|actor|public actor RequestDeduplicator",
+      "path": "PooToolsSource/NetWork/NetworkTypes.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor RequestDeduplicator {"
+    },
+    {
+      "key": "PooToolsSource/NetWork/NetworkTypes.swift|public|func|public func execute<T: Sendable>(",
+      "path": "PooToolsSource/NetWork/NetworkTypes.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func execute<T: Sendable>("
     },
     {
       "key": "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift|public|class|public class PTNetworkSpeedHistoriaModel: PTCodableModelProtocol",
@@ -40399,7 +40399,7 @@
     {
       "key": "PooToolsSource/VideoEditor/Exporter.swift|public|init|public init(provider: Exporter.Provider)",
       "path": "PooToolsSource/VideoEditor/Exporter.swift",
-      "line": 53,
+      "line": 54,
       "access": "public",
       "kind": "init",
       "declaration": "public init(provider: Exporter.Provider) {"
@@ -40407,7 +40407,7 @@
     {
       "key": "PooToolsSource/VideoEditor/Exporter.swift|public|func|public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async",
       "path": "PooToolsSource/VideoEditor/Exporter.swift",
-      "line": 70,
+      "line": 71,
       "access": "public",
       "kind": "func",
       "declaration": "public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async {"
