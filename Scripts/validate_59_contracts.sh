@@ -18,6 +18,7 @@ bash Scripts/validate_deprecated_inventory.sh
 ruby Scripts/compare_public_api.rb PUBLIC_API_5_8.json PUBLIC_API_5_9.json
 bash Scripts/validate_build_entries.sh
 bash Scripts/validate_quality_scans.sh
+bash Scripts/validate_592_quality.sh
 swift package dump-package >/dev/null
 git diff --check
 

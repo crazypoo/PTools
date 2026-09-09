@@ -4,7 +4,7 @@
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `82`
+- Target count: `88`
 - Core direct third-party dependencies: `18` (baseline `18`)
 
 ## Products
@@ -114,6 +114,12 @@
 | `PTSpeechPermission` | `PooToolsSource/SpeechPremission` | ptools | — | 0 source entries / 0 resources |
 | `PTTrackingPermission` | `PooToolsSource/TrackingPermission` | ptools | — | 0 source entries / 0 resources |
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsListTests` | `Tests/PToolsListTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |
+| `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBioID` | `PooToolsSource/BioID` | PTFaceIDPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsCalendar` | `PooToolsSource/Calendar` | PTCalendarPermission, PTRemindersPermission, ptools | — | 0 source entries / 0 resources |

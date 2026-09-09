@@ -26,4 +26,15 @@ final class PTCoreContractTests: XCTestCase {
         XCTAssertFalse(metadata.isDegraded)
         XCTAssertFalse(metadata.isCancelled)
     }
+
+    func testBaseStructModelKeepsTypedPayload() {
+        var model = PTBaseStructModel<String>()
+        model.originalString = "ok"
+        model.customerModel = "payload"
+        model.resultData = Data("{}".utf8)
+
+        XCTAssertEqual(model.originalString, "ok")
+        XCTAssertEqual(model.customerModel, "payload")
+        XCTAssertEqual(model.resultData, Data("{}".utf8))
+    }
 }

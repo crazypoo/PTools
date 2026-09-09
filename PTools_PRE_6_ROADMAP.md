@@ -3593,11 +3593,11 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.2 Quality
 
-- [ ] TEST-592-01 Test targets
-- [ ] TEST-592-02 Collection benchmark
-- [ ] TEST-592-03 Network benchmark
-- [ ] TEST-592-04 Media benchmark
-- [ ] TEST-592-05 Navigation harness
+- [x] TEST-592-01 Test targets
+- [x] TEST-592-02 Collection benchmark
+- [x] TEST-592-03 Network benchmark
+- [x] TEST-592-04 Media benchmark
+- [x] TEST-592-05 Navigation harness
 
 ## Milestone: 5.9.3 Lifecycle
 
@@ -3678,6 +3678,12 @@ PooToolsSource/MediaViewer/
 - [x] CONC-591-05：Task 取消已桥接到 GCD continuation、Alamofire 下载/上传请求、PhotoKit 请求、
   AVAsset 导出和视频缩略图生成；共享请求采用等待者计数，避免单个调用方取消误伤其他调用方。
 - [x] TEST-592-01：增加 SwiftPM PToolsCoreTests 契约测试目标，移除 Xcode scheme 中不存在的旧测试引用。
+- [x] TEST-592-01：扩展为 7 个 iOS-only SwiftPM 测试目标，覆盖 Core、UI、Network、List、Navigation、Media 和 Permission。
+- [x] TEST-592-02：增加 1k/10k 全量快照、增量追加、稳定 ID 快速更新和 Collection 场景清单基准夹具。
+- [x] TEST-592-03：增加稳定请求键、100 并发相同请求去重和请求键构造基准；真实网络 cache/retry/下载/取消保留宿主回归。
+- [x] TEST-592-04：增加视频帧请求、封面键、无效视频和 4K 缩略图准备基准夹具。
+- [x] TEST-592-05：增加 push/pop、多导航容器、interactive-pop 入口、宿主 delegate 和 TabBar 标记回归 harness。
+- [x] 生成 `report/quality_5_9_2.md`，并将 5.9.2 的静态建立状态与 Xcode/真机待验证状态分开记录。
 - [x] LIFE-593-04：增加 PTSceneContextProviding 和默认场景解析提供器。
 - [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache 设置数量与成本上限。
 - [x] UI-595-01 / UI-595-02 / UI-595-03：生成 UI 适配扫描报告，保留人工回归门槛。
@@ -3690,7 +3696,7 @@ PooToolsSource/MediaViewer/
 
 - [ ] 5.9.1 Xcode Debug / Release 完整构建和真实宿主回归：当前被外部 KituraContracts、
   swift-syntax 网络获取和工具链环境阻断；需解除阻断后再完成最终验收。
-- [ ] TEST-592-02 至 TEST-592-05：CollectionView、Network、媒体性能基准和导航 harness。
+- [ ] TEST-592-02 至 TEST-592-05：Xcode iOS Simulator、真实宿主、真机和 Instruments 的实际执行结果；静态夹具已建立但不等于性能验收。
 - [ ] LIFE-593-01 至 LIFE-593-03：全量窗口查询迁移、单例分类落地和场景状态回归。
 - [ ] PERF-594-02 至 PERF-594-04：Instruments、真机性能和内存警告实测。
 - [ ] DEP-596-02 至 DEP-596-04：Kitura、SmartCodable 和 Bugly XCFramework 最终决策。

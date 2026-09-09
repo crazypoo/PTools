@@ -12,6 +12,17 @@
 | PTCollectionView 骨架 | 路径签名缓存、单一 shimmer | 减少布局和动画重复 |
 | PhotoKit 请求 | canonical 请求/取消/generation | 避免复用 Cell 回写旧资源 |
 
+## 5.9.2 基准夹具
+
+| 模块 | 已建立夹具 | 尚需实测 |
+| --- | --- | --- |
+| Collection | 1k/10k 全量快照、增量追加、快速稳定 ID 更新 | 主线程耗时、布局旋转、瀑布流、Photo 预取、分配次数 |
+| Network | 100 并发相同请求的去重、稳定请求键构造 | cache hit/miss、retry、大下载、取消、真实吞吐 |
+| Media | 4K 图片缩略图准备、视频帧请求和缓存键 | 冷热缓存、快速复用、视频 prepare、内存警告 |
+| Navigation | 多容器栈操作和 interactive-pop 入口 | 交互取消、转场耗时、TabBar 隐藏/恢复 |
+
+基准测试使用 XCTest `measure` 记录相对变化，不在代码中写死跨机器阈值。最终的主线程时长、内存峰值和 allocations 必须从 iOS Simulator/真机及 Instruments 记录，不能用 macOS 主机结果替代。
+
 ## 盘点报告
 
 - report/cache_inventory_5_9.md：缓存位置、类型和代码行。

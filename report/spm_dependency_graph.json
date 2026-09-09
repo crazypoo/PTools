@@ -2631,6 +2631,144 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsListTests",
+      "type": "test",
+      "path": "Tests/PToolsListTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsMediaTests",
+      "type": "test",
+      "path": "Tests/PToolsMediaTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsNavigationTests",
+      "type": "test",
+      "path": "Tests/PToolsNavigationTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsNetworkTests",
+      "type": "test",
+      "path": "Tests/PToolsNetworkTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsPermissionTests",
+      "type": "test",
+      "path": "Tests/PToolsPermissionTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsUIFoundationTests",
+      "type": "test",
+      "path": "Tests/PToolsUIFoundationTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
       "name": "PooToolsBankCard",
       "type": "regular",
       "path": "PooToolsSource/BankCard",

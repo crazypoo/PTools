@@ -375,13 +375,43 @@ let package = Package(
             swiftSettings: [.define("POOTOOLS_LAUNCHTIMEPROFILER"), .define("POOTOOLS_COCOAPODS")]
         ),
 
-        // English: Keep a small iOS-only contract target for Core value and API regression checks.
-        // Español: Mantiene un objetivo pequeño y exclusivo de iOS para comprobar contratos de valores y API de Core.
-        // 中文：保留一个仅面向 iOS 的轻量 Core 契约测试目标，用于回归值类型和 API。
+        // English: Keep iOS-only quality targets for Core, UI, Network, list, navigation, media, and permission regression checks.
+        // Español: Mantiene objetivos de calidad exclusivos de iOS para las regresiones de Core, UI, Network, listas, navegación, medios y permisos.
+        // 中文：保留仅面向 iOS 的质量测试目标，覆盖 Core、UI、Network、列表、导航、媒体和权限回归。
         .testTarget(
             name: "PToolsCoreTests",
             dependencies: ["ptools"],
             path: "Tests/PooToolsCoreTests"
+        ),
+        .testTarget(
+            name: "PToolsUIFoundationTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsUIFoundationTests"
+        ),
+        .testTarget(
+            name: "PToolsNetworkTests",
+            dependencies: ["PooToolsNetWork"],
+            path: "Tests/PToolsNetworkTests"
+        ),
+        .testTarget(
+            name: "PToolsListTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsListTests"
+        ),
+        .testTarget(
+            name: "PToolsNavigationTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsNavigationTests"
+        ),
+        .testTarget(
+            name: "PToolsMediaTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsMediaTests"
+        ),
+        .testTarget(
+            name: "PToolsPermissionTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsPermissionTests"
         )
     ],
     swiftLanguageModes: [.v6]
