@@ -1,0 +1,2181 @@
+{
+  "schema_version": 1,
+  "generator": "Scripts/report_cocoapods_subspec_graph.rb",
+  "name": "PooTools",
+  "version": "5.7.9",
+  "platforms": {
+    "ios": "17.0"
+  },
+  "swift_versions": [
+    "6.0"
+  ],
+  "default_subspec": "Core",
+  "subspec_count": 96,
+  "subspecs": [
+    {
+      "name": "PooTools/Appz",
+      "short_name": "Appz",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "Appz"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/BankCard",
+      "short_name": "BankCard",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/BankCard/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "BankCard"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BANKCARD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/BilogyID",
+      "short_name": "BilogyID",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/FaceIDPermission",
+        "PooTools/KeyChain"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/BioID/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "BioID"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "LocalAuthentication",
+        "Security"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/BluetoothPermission",
+      "short_name": "BluetoothPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/BluetoothPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "BluetoothPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_BLUETOOTH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Calendar",
+      "short_name": "Calendar",
+      "local_dependencies": [
+        "PooTools/CalendarPermission",
+        "PooTools/Core",
+        "PooTools/RemindersPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Calendar/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Calendar"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "EventKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CALENDAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CalendarPermission",
+      "short_name": "CalendarPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CalendarPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CalendarPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CALENDAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CameraPermission",
+      "short_name": "CameraPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CameraPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CameraPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CAMERA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CheckBox",
+      "short_name": "CheckBox",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CheckBox/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CheckBox"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKBOX POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CheckDirtyWord",
+      "short_name": "CheckDirtyWord",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CheckDirtyWord/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CheckDirtyWord"
+      ],
+      "resource_bundles": {
+        "PooToolsCheckDirtyWordResource": [
+          "PooToolsSource/CheckDirtyWord/Resource/**/*"
+        ]
+      },
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKDIRTYWORD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CheckUpdate",
+      "short_name": "CheckUpdate",
+      "local_dependencies": [
+        "PooTools/NetWork"
+      ],
+      "third_party_dependencies": [
+        "SwiftJWT"
+      ],
+      "source_files": [
+        "PooToolsSource/CheckUpdate/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CheckUpdate"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ChinesePinyin",
+      "short_name": "ChinesePinyin",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Pinyin/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Pinyin"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHINESEPINYIN POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Circle",
+      "short_name": "Circle",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Circle/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Circle"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CIRCLE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CodeView",
+      "short_name": "CodeView",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CodeView/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CodeView"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CODEVIEW POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Contact",
+      "short_name": "Contact",
+      "local_dependencies": [
+        "PooTools/ContactsPermission",
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Contact/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Contact"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CONTACT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ContactsPermission",
+      "short_name": "ContactsPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ContactsPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ContactsPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CONTACTS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Core",
+      "short_name": "Core",
+      "local_dependencies": [],
+      "third_party_dependencies": [
+        "AttributedString",
+        "CocoaLumberjack/Swift",
+        "DeviceKit",
+        "IQKeyboardManagerSwift",
+        "IQKeyboardToolbarManager",
+        "KakaJSON",
+        "Kingfisher",
+        "SafeSFSymbols",
+        "SmartCodable",
+        "SmartCodable/Inherit",
+        "SnapKit",
+        "SwiftDate",
+        "SwifterSwift",
+        "lottie-ios"
+      ],
+      "source_files": [
+        "PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}",
+        "PooToolsSource/Animation/*.{h,m,swift}",
+        "PooToolsSource/AppDelegate/*.{h,m,swift}",
+        "PooToolsSource/AppStore/*.{h,m,swift}",
+        "PooToolsSource/ApplicationFunction/*.{h,m,swift}",
+        "PooToolsSource/Badge/*.{h,m,swift}",
+        "PooToolsSource/Base/*.{h,m,swift}",
+        "PooToolsSource/BlackMagic/*.{h,m,swift}",
+        "PooToolsSource/Blur/*.{h,m,swift}",
+        "PooToolsSource/Button/*.{h,m,swift}",
+        "PooToolsSource/Category/*.{h,m,swift}",
+        "PooToolsSource/Colors/*.{h,m,swift}",
+        "PooToolsSource/Core/*.{h,m,swift,S}",
+        "PooToolsSource/DarkMode/*.{h,m,swift}",
+        "PooToolsSource/FloatPanel/*.{h,m,swift}",
+        "PooToolsSource/Font/*.{h,m,swift}",
+        "PooToolsSource/Foundation/*.{h,m,swift}",
+        "PooToolsSource/Language/*.{h,m,swift}",
+        "PooToolsSource/Line/*.{h,m,swift}",
+        "PooToolsSource/Log/*.{h,m,swift}",
+        "PooToolsSource/PermissionCore/*.{h,m,swift}",
+        "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}",
+        "PooToolsSource/Protocol/*.{h,m,swift}",
+        "PooToolsSource/Rotation/*.{h,m,swift}",
+        "PooToolsSource/SideMenuControl/*.{h,m,swift}",
+        "PooToolsSource/StatusBar/*.{h,m,swift}",
+        "PooToolsSource/Switch/*.{h,m,swift}",
+        "PooToolsSource/iCloud/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ActionsheetAndAlert",
+        "Animation",
+        "AppDelegate",
+        "AppStore",
+        "ApplicationFunction",
+        "Badge",
+        "Base",
+        "BlackMagic",
+        "Blur",
+        "Button",
+        "Category",
+        "Colors",
+        "Core",
+        "DarkMode",
+        "FloatPanel",
+        "Font",
+        "Foundation",
+        "Language",
+        "Line",
+        "Log",
+        "PermissionCore",
+        "PhotoLibraryPermission",
+        "Protocol",
+        "Rotation",
+        "SideMenuControl",
+        "StatusBar",
+        "Switch",
+        "iCloud"
+      ],
+      "resource_bundles": {
+        "PooToolsResource": [
+          "PooToolsSource/Resource/**/*",
+          "PooToolsSource/Resource/PrivacyInfo.xcprivacy",
+          "PooToolsSource/Resources/*.lproj"
+        ]
+      },
+      "resources": [],
+      "frameworks": [
+        "AVFoundation",
+        "AVKit",
+        "AudioToolbox",
+        "CoreFoundation",
+        "CoreText",
+        "Foundation",
+        "Photos",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Country",
+      "short_name": "Country",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Country/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Country"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COUNTRY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CustomerLabel",
+      "short_name": "CustomerLabel",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Label/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Label"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "QuartzCore"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERLABEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/CustomerNumberKeyboard",
+      "short_name": "CustomerNumberKeyboard",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Keyboard/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Keyboard"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERNUMBERKEYWORD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/DEBUG",
+      "short_name": "DEBUG",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/NetWork",
+        "PooTools/PDF",
+        "PooTools/SearchBar",
+        "PooTools/Share"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/DEBUGLocation/*.{h,m,swift}",
+        "PooToolsSource/Debug/*.{h,m,swift}",
+        "PooToolsSource/DebugCategory/*.{h,m,swift}",
+        "PooToolsSource/DebugColor/*.{h,m,swift}",
+        "PooToolsSource/DebugCrash/*.{h,m,swift}",
+        "PooToolsSource/DebugFile/*.{h,m,swift}",
+        "PooToolsSource/DebugLibs/*.{h,m,swift}",
+        "PooToolsSource/DebugNetwork/*.{h,m,swift}",
+        "PooToolsSource/DebugPerformance/*.{h,m,swift}",
+        "PooToolsSource/DebugRuler/*.{h,m,swift}",
+        "PooToolsSource/DebugUserDefault/*.{h,m,swift}",
+        "PooToolsSource/DevMask/*.{h,m,swift}",
+        "PooToolsSource/Inspector/*.{h,m,swift}",
+        "PooToolsSource/LocalConsole/*.{h,m,swift}",
+        "PooToolsSource/TouchInspector/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "DEBUGLocation",
+        "Debug",
+        "DebugCategory",
+        "DebugColor",
+        "DebugCrash",
+        "DebugFile",
+        "DebugLibs",
+        "DebugNetwork",
+        "DebugPerformance",
+        "DebugRuler",
+        "DebugUserDefault",
+        "DevMask",
+        "Inspector",
+        "LocalConsole",
+        "TouchInspector"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/DEBUG_TrackingEyes",
+      "short_name": "DEBUG_TrackingEyes",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core",
+        "PooTools/DEBUG"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/WhereIsMyEye/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "WhereIsMyEye"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUGTRACKINGEYES POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/DataEncrypt",
+      "short_name": "DataEncrypt",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "CryptoSwift"
+      ],
+      "source_files": [
+        "PooToolsSource/AESAndDES/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "AESAndDES"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/FaceIDPermission",
+      "short_name": "FaceIDPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/FaceIDPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "FaceIDPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_FACEIDPERMISSION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/FilterCamera",
+      "short_name": "FilterCamera",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core",
+        "PooTools/HarbethKit",
+        "PooTools/MediaViewer",
+        "PooTools/MicPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/FilterCamera/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "FilterCamera"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Flag",
+      "short_name": "Flag",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "FlagKit"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FLAG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/GCDWebServer",
+      "short_name": "GCDWebServer",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "GCDWebServer",
+        "GCDWebServer/WebUploader"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Guide",
+      "short_name": "Guide",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/PageControl"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Guide/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Guide"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_GUIDE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/HandSign",
+      "short_name": "HandSign",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SignView/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SignView"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HANDSIGN POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/HarbethKit",
+      "short_name": "HarbethKit",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "Harbeth"
+      ],
+      "source_files": [
+        "PooToolsSource/C7Collector/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "C7Collector"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HARBETHKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/HealthPermission",
+      "short_name": "HealthPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/HealthPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "HealthPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_HEALTH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/HeartRate",
+      "short_name": "HeartRate",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "lottie-ios"
+      ],
+      "source_files": [
+        "PooToolsSource/HeartRate/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "HeartRate"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HEARTRATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Hud",
+      "short_name": "Hud",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/ProgressBar"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Hud/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Hud"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HUD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/IAP",
+      "short_name": "IAP",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/IAP/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "IAP"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IAP POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ImageEditor",
+      "short_name": "ImageEditor",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/HarbethKit",
+        "PooTools/PhotoPicker"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ImageEditor/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ImageEditor"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGEEDITOR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ImagePicker",
+      "short_name": "ImagePicker",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ImagePicker/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ImagePicker"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Input",
+      "short_name": "Input",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "PhoneNumberKit"
+      ],
+      "source_files": [
+        "PooToolsSource/Input/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Input"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/InputAll",
+      "short_name": "InputAll",
+      "local_dependencies": [
+        "PooTools/Appz",
+        "PooTools/BankCard",
+        "PooTools/BilogyID",
+        "PooTools/Calendar",
+        "PooTools/CheckBox",
+        "PooTools/CheckDirtyWord",
+        "PooTools/CheckUpdate",
+        "PooTools/ChinesePinyin",
+        "PooTools/Circle",
+        "PooTools/CodeView",
+        "PooTools/Core",
+        "PooTools/Country",
+        "PooTools/CustomerLabel",
+        "PooTools/CustomerNumberKeyboard",
+        "PooTools/DEBUG",
+        "PooTools/DEBUG_TrackingEyes",
+        "PooTools/DataEncrypt",
+        "PooTools/Flag",
+        "PooTools/GCDWebServer",
+        "PooTools/Guide",
+        "PooTools/HarbethKit",
+        "PooTools/HeartRate",
+        "PooTools/Hud",
+        "PooTools/IAP",
+        "PooTools/ImageEditor",
+        "PooTools/Input",
+        "PooTools/Instructions",
+        "PooTools/KeyChain",
+        "PooTools/LaunchTimeProfiler",
+        "PooTools/Layout",
+        "PooTools/LivePhoto",
+        "PooTools/Loading",
+        "PooTools/Location",
+        "PooTools/MediaViewer",
+        "PooTools/MessageKit",
+        "PooTools/Motion",
+        "PooTools/NetWork",
+        "PooTools/NotificationBanner",
+        "PooTools/OSSKitSpeech",
+        "PooTools/PDF",
+        "PooTools/PageControl",
+        "PooTools/PagingControl",
+        "PooTools/PhoneInfo",
+        "PooTools/PhotoPicker",
+        "PooTools/Picker",
+        "PooTools/Ping",
+        "PooTools/PopoverKit",
+        "PooTools/ProgressBar",
+        "PooTools/RateView",
+        "PooTools/Router",
+        "PooTools/SVG",
+        "PooTools/ScanQRCode",
+        "PooTools/ScrollBanner",
+        "PooTools/SearchBar",
+        "PooTools/SecuritySuite",
+        "PooTools/Segmented",
+        "PooTools/Share",
+        "PooTools/Slider",
+        "PooTools/SmartScreenshot",
+        "PooTools/SocketKit",
+        "PooTools/Stepper",
+        "PooTools/Tabbar",
+        "PooTools/Telephony",
+        "PooTools/VideoEditor",
+        "PooTools/Vision",
+        "PooTools/WhatsNewsKit",
+        "PooTools/ZipArchive",
+        "PooTools/iOS17Tips"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Instructions",
+      "short_name": "Instructions",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "Instructions"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INSTRUCTIONS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/KeyChain",
+      "short_name": "KeyChain",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/KeyChain/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "KeyChain"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_KEYCHAIN POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/LaunchTimeProfiler",
+      "short_name": "LaunchTimeProfiler",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/LaunchTimeProfiler/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "LaunchTimeProfiler"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LAUNCHTIMEPROFILER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Layout",
+      "short_name": "Layout",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "CollectionViewPagingLayout"
+      ],
+      "source_files": [
+        "PooToolsSource/Layout/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Layout"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LAYOUT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/LivePhoto",
+      "short_name": "LivePhoto",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/LivePhoto/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "LivePhoto"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LIVEPHOTO POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Loading",
+      "short_name": "Loading",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Loading/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Loading"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOADING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Location",
+      "short_name": "Location",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/LocationPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Location/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Location"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "CoreLocation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOCATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/LocationPermission",
+      "short_name": "LocationPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/LocationPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "LocationPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MXMetricManagerKit",
+      "short_name": "MXMetricManagerKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MXMetricKitManager/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MXMetricKitManager"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MXMERRICKITMANAGER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MediaViewer",
+      "short_name": "MediaViewer",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/LivePhoto",
+        "PooTools/NetWork",
+        "PooTools/PageControl",
+        "PooTools/ProgressBar"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MediaViewer/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MediaViewer"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Photos"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MEDIAVIEWER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MeidaPermission",
+      "short_name": "MeidaPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MeidaLibraryPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MeidaLibraryPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MEDIA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MessageKit",
+      "short_name": "MessageKit",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/CustomerLabel"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MessageKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MessageKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MESSAGEKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MicPermission",
+      "short_name": "MicPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MicPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MicPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MIC POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Motion",
+      "short_name": "Motion",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/MotionPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Motion/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Motion"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "CoreMotion"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MOTION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/MotionPermission",
+      "short_name": "MotionPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MotionPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MotionPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MOTION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/NFCKit",
+      "short_name": "NFCKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/NFC/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "NFC"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NFC POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/NetWork",
+      "short_name": "NetWork",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/Loading"
+      ],
+      "third_party_dependencies": [
+        "Alamofire"
+      ],
+      "source_files": [
+        "PooToolsSource/NetWork/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "NetWork"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/NetworkSpeedTest",
+      "short_name": "NetworkSpeedTest",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/NetworkSpeedTest/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "NetworkSpeedTest"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORKSPEEDTEST POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/NotificationBanner",
+      "short_name": "NotificationBanner",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "NotificationBannerSwift"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/NotificationPermission",
+      "short_name": "NotificationPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/NotificationPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "NotificationPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_NOTIFICATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/OSSKitSpeech",
+      "short_name": "OSSKitSpeech",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/SpeechRecognizerPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/OSSKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "OSSKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Speech"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PDF",
+      "short_name": "PDF",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PDF/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PDF"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PDF POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PageControl",
+      "short_name": "PageControl",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PageControl/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PageControl"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PAGECONTROL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PagingControl",
+      "short_name": "PagingControl",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "JXPagingView/Paging",
+        "JXSegmentedView"
+      ],
+      "source_files": [
+        "PooToolsSource/SegmentControl/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SegmentControl"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PhoneInfo",
+      "short_name": "PhoneInfo",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PhoneInfo/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PhoneInfo"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Security"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PHONEINFO POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PhotoPicker",
+      "short_name": "PhotoPicker",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/ImagePicker",
+        "PooTools/Loading",
+        "PooTools/NetWork"
+      ],
+      "third_party_dependencies": [
+        "Kakapos"
+      ],
+      "source_files": [
+        "PooToolsSource/PhotoPicker/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PhotoPicker"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Picker",
+      "short_name": "Picker",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Picker/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Picker"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Ping",
+      "short_name": "Ping",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Ping/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Ping"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/PopoverKit",
+      "short_name": "PopoverKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "Popovers"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ProgressBar",
+      "short_name": "ProgressBar",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ProgressBar/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ProgressBar"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PROGRESSBAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/RateView",
+      "short_name": "RateView",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/RateView/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "RateView"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_RATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/RemindersPermission",
+      "short_name": "RemindersPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/RemindersPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "RemindersPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_REMINDERS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Router",
+      "short_name": "Router",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Router/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Router"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ROUTER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SVG",
+      "short_name": "SVG",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "PocketSVG",
+        "Protobuf",
+        "SVGAPlayer"
+      ],
+      "source_files": [
+        "PooToolsSource/KingfisherSVG/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "KingfisherSVG"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SVG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ScanQRCode",
+      "short_name": "ScanQRCode",
+      "local_dependencies": [
+        "PooTools/CameraPermission",
+        "PooTools/Core",
+        "PooTools/PhotoPicker"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/QRCodeScan/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "QRCodeScan"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCANQRCODE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ScrollBanner",
+      "short_name": "ScrollBanner",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/PageControl"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ScrollBanner/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ScrollBanner"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCROLLBANNER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SearchBar",
+      "short_name": "SearchBar",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SearchBar/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SearchBar"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEARCHBAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SecuritySuite",
+      "short_name": "SecuritySuite",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "IOSSecuritySuite"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SECURITYSUITE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Segmented",
+      "short_name": "Segmented",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Segmented/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Segmented"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEGMENT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Share",
+      "short_name": "Share",
+      "local_dependencies": [
+        "PooTools/CustomerLabel"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Share/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Share"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SiriPermission",
+      "short_name": "SiriPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SiriPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SiriPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SIRI POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Slider",
+      "short_name": "Slider",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Slider/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Slider"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SmartScreenshot",
+      "short_name": "SmartScreenshot",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/ScreenShot/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "ScreenShot"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SocketKit",
+      "short_name": "SocketKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "SocketRocket"
+      ],
+      "source_files": [
+        "PooToolsSource/SocketKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SocketKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SOCKETKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SpeechRecognizerPermission",
+      "short_name": "SpeechRecognizerPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SpeechPremission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SpeechPremission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SpeedPanel",
+      "short_name": "SpeedPanel",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SpeedPanel/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SpeedPanel"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPEEDPANEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/StepCount",
+      "short_name": "StepCount",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/HealthPermission"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/HealthKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "HealthKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "HealthKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Stepper",
+      "short_name": "Stepper",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Stepper/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Stepper"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPPER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Tabbar",
+      "short_name": "Tabbar",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TABBAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Telephony",
+      "short_name": "Telephony",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/CallMessageMail/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "CallMessageMail"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "CoreTelephony",
+        "MessageUI",
+        "WebKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/TipsView",
+      "short_name": "TipsView",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/TipsView/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "TipsView"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TIPSVIEW POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/TrackingPermission",
+      "short_name": "TrackingPermission",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/TrackingPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "TrackingPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_TRACKING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/VideoCache",
+      "short_name": "VideoCache",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "KTVHTTPCache"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VIDEOCACHE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/VideoEditor",
+      "short_name": "VideoEditor",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/HarbethKit",
+        "PooTools/Loading",
+        "PooTools/ProgressBar"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/VideoEditor/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "VideoEditor"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VIDEOEDITOR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Vision",
+      "short_name": "Vision",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Vision/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Vision"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VISION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/WebKit",
+      "short_name": "WebKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/WebKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "WebKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_WEBKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/WhatsNewsKit",
+      "short_name": "WhatsNewsKit",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/WhatsNewsKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "WhatsNewsKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_WHATSNEWSKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ZipArchive",
+      "short_name": "ZipArchive",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [
+        "SSZipArchive"
+      ],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/iOS17Tips",
+      "short_name": "iOS17Tips",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/iOS17Tips/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "iOS17Tips"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_iOS17TIPS POOTOOLS_COCOAPODS"
+      }
+    }
+  ]
+}

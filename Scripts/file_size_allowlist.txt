@@ -1,0 +1,6 @@
+# English: Legacy files above the hard limit remain temporarily allowed with an owner and a migration reason.
+# Español: Los archivos heredados que superan el límite duro se permiten temporalmente con responsable y motivo.
+# 中文：超过硬限制的历史文件暂时保留，但必须登记负责人和迁移原因。
+PooToolsSource/Debug/CwlDemangle.swift|DEBUG-588-03|third-party demangler compatibility surface; isolate with diagnostics target after the 5.8 line
+PooToolsSource/Inspector/IconKit.swift|DEBUG-588-03|third-party icon compatibility surface; isolate with diagnostics target after the 5.8 line
+PooToolsSource/Base/PTCollectionView.swift|LIST-584-10|legacy facade; coordinator extraction is incremental and must preserve the public API

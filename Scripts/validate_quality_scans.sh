@@ -50,6 +50,13 @@ fi
 
 bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_localizations.sh
+bash Scripts/validate_file_size_gate.sh >/dev/null
+
+# English: Keep the SPM/CocoaPods parity and dependency-direction baselines in the regular quality gate.
+# Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
+# 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
+bash Scripts/validate_module_parity.sh --check
+bash Scripts/validate_dependency_direction.sh
 
 if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate PooToolsSource/Contact PooToolsSource/NFC PooToolsSource/NetWork PooToolsSource/PhotoPicker PooToolsSource/VideoEditor; then
   printf 'FAIL: business-level nonisolated(unsafe) remains in P0 modules\n' >&2

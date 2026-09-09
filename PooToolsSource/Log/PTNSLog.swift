@@ -12,6 +12,56 @@ import CocoaLumberjack
 import SwifterSwift
 import OSLog
 
+// English: Core logging contracts carry immutable values; diagnostic backends remain replaceable adapters.
+// Español: Los contratos de logging del núcleo transportan valores inmutables; los backends de diagnóstico siguen siendo adaptadores reemplazables.
+// 中文：核心日志契约只传递不可变值，诊断后端保持为可替换适配器。
+public enum PTLogSeverity: String, Sendable {
+    case debug
+    case info
+    case warning
+    case error
+}
+
+public struct PTLogEvent: Sendable {
+    public let message: String
+    public let severity: PTLogSeverity
+    public let category: String
+
+    public init(message: String,
+                severity: PTLogSeverity = .info,
+                category: String = "general") {
+        self.message = message
+        self.severity = severity
+        self.category = category
+    }
+}
+
+public protocol PTLogging: Sendable {
+    func log(_ event: PTLogEvent)
+}
+
+public struct PTOSLogger: PTLogging {
+    private let logger: Logger
+
+    public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools",
+                category: String = "PooTools") {
+        logger = Logger(subsystem: subsystem, category: category)
+    }
+
+    public func log(_ event: PTLogEvent) {
+        switch event.severity {
+        case .debug:
+            logger.debug("\(event.message, privacy: .public)")
+        case .info:
+            logger.info("\(event.message, privacy: .public)")
+        case .warning:
+            logger.warning("\(event.message, privacy: .public)")
+        case .error:
+            logger.error("\(event.message, privacy: .public)")
+        }
+    }
+}
+
 // 🚀 优化点 2：使用 Bundle 底层状态判断环境，彻底摆脱对 UIApplication 的 @MainActor 依赖。
 // 这样一来，这段代码在任何线程初始化都不会触发 Swift 6 的严格并发警告。
 private let currentAppEnvironment: String = {

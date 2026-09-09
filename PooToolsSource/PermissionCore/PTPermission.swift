@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.lock
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
 #endif
@@ -44,6 +45,21 @@ open class PTPermission {
         Task { @MainActor in
             PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
         }
+    }
+
+    // English: Provide the canonical plural spelling while preserving the historical settings method.
+    // Español: Proporciona la grafía plural canónica y conserva el método histórico de ajustes.
+    // 中文：提供统一的复数命名，同时保留历史设置入口。
+    @available(iOSApplicationExtension, unavailable)
+    open func openSettings() {
+        openSettingPage()
+    }
+
+    // English: Read the current normalized permission state without duplicating status access in callers.
+    // Español: Lee el estado de permiso normalizado sin duplicar el acceso al estado en los llamadores.
+    // 中文：读取统一的当前权限状态，避免调用方重复访问和映射。
+    public func currentStatus() -> Status {
+        status
     }
     
     // MARK: Must Ovveride
@@ -188,13 +204,35 @@ open class PTPermission {
         }
     }
 
-    /// Async bridge for permission requests while preserving the callback API.
-    public func request() async {
-        await withCheckedContinuation { continuation in
-            request {
-                continuation.resume()
+    // English: Convert callback-based system permission APIs into an exactly-once MainActor result.
+    // Español: Convierte las APIs de permisos basadas en callbacks en un resultado exactly-once en MainActor.
+    // 中文：将基于回调的系统权限 API 转换为只完成一次的 MainActor 结果。
+    public func requestStatus() async -> Status {
+        await withCheckedContinuation { [weak self] continuation in
+            let completionLock = OSAllocatedUnfairLock(initialState: false)
+            guard let self else {
+                continuation.resume(returning: .notSupported)
+                return
+            }
+            self.request { [weak self] in
+                let shouldResume = completionLock.withLock { didResume in
+                    guard !didResume else { return false }
+                    didResume = true
+                    return true
+                }
+                guard shouldResume else { return }
+                Task { @MainActor [weak self] in
+                    continuation.resume(returning: self?.status ?? .notSupported)
+                }
             }
         }
+    }
+
+    /// English: Preserve the old async API while routing it through the typed status result.
+    /// Español: Conserva la API async antigua y la enruta mediante el resultado tipado de estado.
+    /// 中文：保留旧 async API，并统一转发到类型化状态结果。
+    public func request() async {
+        _ = await requestStatus()
     }
     
     open var canBePresentWithCustomInterface: Bool {

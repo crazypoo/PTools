@@ -32,43 +32,6 @@ private struct WaterfallCacheKey: Hashable {
     let version: Int
 }
 
-// 1. 定义一个基于 NSCache 的强类型缓存
-@MainActor
-public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> {
-    private let cache = NSCache<WrappedKey, Value>()
-    
-    public init(countLimit: Int = 1000) {
-        cache.countLimit = countLimit // 超过限制时自动淘汰最旧数据
-    }
-    
-    public func set(_ value: Value, forKey key: Key) {
-        cache.setObject(value, forKey: WrappedKey(key))
-    }
-    
-    public func get(forKey key: Key) -> Value? {
-        return cache.object(forKey: WrappedKey(key))
-    }
-    
-    public func removeAll() {
-        cache.removeAllObjects()
-    }
-    
-    // 用于包装 Hashable 的 Key 以适配 NSCache
-    private class WrappedKey: NSObject {
-        let key: Key
-        init(_ key: Key) { self.key = key }
-        override var hash: Int { return key.hashValue }
-        override func isEqual(_ object: Any?) -> Bool {
-            guard let other = object as? WrappedKey else { return false }
-            return key == other.key
-        }
-    }
-    
-    public func remove(forKey key: Key) {
-        cache.removeObject(forKey: WrappedKey(key))
-    }
-}
-
 // 写在文件顶部或合适的扩展中
 public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>
 public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
@@ -277,6 +240,10 @@ public class PTCollectionView: UIView {
     private var heightCache = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)
     private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
     private var layoutCache =  PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection>(countLimit: 100)
+    // English: Centralize snapshot validation without changing PTCollectionView's public facade.
+    // Español: Centraliza la validación del snapshot sin cambiar la fachada pública de PTCollectionView.
+    // 中文：集中快照校验，同时不改变 PTCollectionView 的公开门面。
+    private let dataCoordinator = PTCollectionDataCoordinator()
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     private var didReportFallbackLayout = false
@@ -568,36 +535,17 @@ private extension PTCollectionView {
     }
 
     func validateSections(_ sections: [PTSection], against snapshot: PTSnapshot? = nil) -> Bool {
-        var sectionIdentifiers = Set(snapshot?.sectionIdentifiers.map(\.identifier) ?? [])
-        var rowIdentifiers = Set(snapshot?.itemIdentifiers.map(\.diffId) ?? [])
-
-        for section in sections {
-            guard !section.identifier.isEmpty else {
-                reportUpdateError(.emptySectionIdentifier)
-                return false
-            }
-            guard sectionIdentifiers.insert(section.identifier).inserted else {
-                reportUpdateError(.duplicateSectionIdentifier(section.identifier))
-                return false
-            }
-
-            for row in section.rows ?? [] {
-                guard rowIdentifiers.insert(row.diffId).inserted else {
-                    reportUpdateError(.duplicateRowIdentifier(row.diffId))
-                    return false
-                }
-            }
+        if let error = dataCoordinator.validationError(for: sections, against: snapshot) {
+            reportUpdateError(error)
+            return false
         }
         return true
     }
 
     func validateRows(_ rows: [PTRows], against snapshot: PTSnapshot) -> Bool {
-        var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.diffId))
-        for row in rows {
-            guard rowIdentifiers.insert(row.diffId).inserted else {
-                reportUpdateError(.duplicateRowIdentifier(row.diffId))
-                return false
-            }
+        if let error = dataCoordinator.validationError(for: rows, against: snapshot) {
+            reportUpdateError(error)
+            return false
         }
         return true
     }
@@ -829,10 +777,7 @@ extension PTCollectionView {
 extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     private func getSafeSectionModel(at index: Int) -> PTSection? {
         let snapshot = self.diffableDataSource.snapshot()
-        guard index >= 0, index < snapshot.sectionIdentifiers.count else {
-            return nil
-        }
-        return snapshot.sectionIdentifiers[index]
+        return dataCoordinator.section(at: index, in: snapshot)
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

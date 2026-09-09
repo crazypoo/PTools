@@ -38,6 +38,100 @@ public final class PTNavBarItem {
     public var barColorStyle:PTNavigationBarStyle = .transparent
 }
 
+// English: Multiplex navigation callbacks so the framework does not replace a host application's delegate.
+// Español: Multiplexa los callbacks de navegación para que el framework no reemplace el delegate de la aplicación anfitriona.
+// 中文：复用导航回调，避免框架覆盖宿主应用自己的 delegate。
+private final class PTNavigationDelegateProxy: NSObject, UINavigationControllerDelegate {
+    weak var manager: PTNavigationBarManager?
+    weak var hostDelegate: UINavigationControllerDelegate?
+
+    init(manager: PTNavigationBarManager,
+         hostDelegate: UINavigationControllerDelegate?) {
+        self.manager = manager
+        self.hostDelegate = hostDelegate
+        super.init()
+    }
+
+    @MainActor
+    func navigationController(_ navigationController: UINavigationController,
+                              willShow viewController: UIViewController,
+                              animated: Bool) {
+        manager?.navigationController(navigationController,
+                                      willShow: viewController,
+                                      animated: animated)
+        hostDelegate?.navigationController?(navigationController,
+                                             willShow: viewController,
+                                             animated: animated)
+    }
+
+    @MainActor
+    func navigationController(_ navigationController: UINavigationController,
+                              didShow viewController: UIViewController,
+                              animated: Bool) {
+        hostDelegate?.navigationController?(navigationController,
+                                             didShow: viewController,
+                                             animated: animated)
+    }
+
+    @MainActor
+    func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
+        hostDelegate?.navigationControllerSupportedInterfaceOrientations?(navigationController) ?? .all
+    }
+
+    @MainActor
+    func navigationControllerPreferredInterfaceOrientationForPresentation(_ navigationController: UINavigationController) -> UIInterfaceOrientation {
+        hostDelegate?.navigationControllerPreferredInterfaceOrientationForPresentation?(navigationController) ?? .portrait
+    }
+
+    @MainActor
+    func navigationController(_ navigationController: UINavigationController,
+                              interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        hostDelegate?.navigationController?(navigationController,
+                                             interactionControllerFor: animationController)
+    }
+
+    @MainActor
+    func navigationController(_ navigationController: UINavigationController,
+                              animationControllerFor operation: UINavigationController.Operation,
+                              from fromVC: UIViewController,
+                              to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        hostDelegate?.navigationController?(navigationController,
+                                             animationControllerFor: operation,
+                                             from: fromVC,
+                                             to: toVC)
+    }
+
+    // English: Forward the remaining UIKit delegate callbacks explicitly to keep actor isolation type-safe.
+    // Español: Reenvía explícitamente los demás callbacks del delegate de UIKit para mantener segura la aislación del actor.
+    // 中文：显式转发其余 UIKit delegate 回调，避免破坏 actor 隔离。
+    nonisolated override func responds(to aSelector: Selector) -> Bool {
+        let selectorName = NSStringFromSelector(aSelector)
+        if selectorName == "navigationController:willShowViewController:animated:" {
+            return true
+        }
+
+        let isForwardedNavigationSelector: Bool
+        switch selectorName {
+        case "navigationController:didShowViewController:animated:",
+             "navigationControllerSupportedInterfaceOrientations:",
+             "navigationControllerPreferredInterfaceOrientationForPresentation:",
+             "navigationController:interactionControllerForAnimationController:",
+             "navigationController:animationControllerForOperation:fromViewController:toViewController:":
+            isForwardedNavigationSelector = true
+        default:
+            isForwardedNavigationSelector = false
+        }
+
+        guard isForwardedNavigationSelector else {
+            return super.responds(to: aSelector)
+        }
+        guard Thread.isMainThread else { return false }
+        return MainActor.assumeIsolated { [weak self] in
+            self?.hostDelegate?.responds(to: aSelector) ?? false
+        }
+    }
+}
+
 @MainActor
 public final class PTNavigationBarManager:NSObject {
     
@@ -70,6 +164,7 @@ public final class PTNavigationBarManager:NSObject {
     private var containerMap = NSMapTable<UINavigationController, PTNavigationBarContainer>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var styleCache = NSMapTable<UINavigationController, NavigationStyleBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var tabBarHandlerCache = NSMapTable<UINavigationController, TabBarHandlerBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var delegateProxyMap = NSMapTable<UINavigationController, PTNavigationDelegateProxy>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
     weak var currentNav: UINavigationController?
@@ -168,9 +263,20 @@ public final class PTNavigationBarManager:NSObject {
     }
     
     public func bind(to nav: UINavigationController) {
-        if nav.delegate !== self {
-            nav.delegate = self
+        if let proxy = delegateProxyMap.object(forKey: nav) {
+            if nav.delegate !== proxy {
+                if nav.delegate !== self {
+                    proxy.hostDelegate = nav.delegate
+                }
+                nav.delegate = proxy
+            }
+            return
         }
+
+        let hostDelegate = nav.delegate === self ? nil : nav.delegate
+        let proxy = PTNavigationDelegateProxy(manager: self, hostDelegate: hostDelegate)
+        delegateProxyMap.setObject(proxy, forKey: nav)
+        nav.delegate = proxy
     }
 
     func setTabBarHandler(_ handler: @escaping (UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void,
@@ -632,7 +738,6 @@ extension PTNavigationBarManager {
 @MainActor
 open class PTBaseViewController: UIViewController {
 
-    private static var didConfigureScrollViewAppearance = false
     private var hidesBaseNavigationBarOnLoad = false
                    
     open func prefersLargeTitle() -> Bool {
@@ -803,20 +908,12 @@ open class PTBaseViewController: UIViewController {
 
     open func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {}
     
-    // 定義一個函數來解析URL中的鍵值對
+    // English: Keep this deprecated wrapper for source compatibility; URL parsing belongs to the Foundation core.
+    // Español: Conserva este wrapper obsoleto por compatibilidad; el análisis URL pertenece al núcleo Foundation.
+    // 中文：保留此弃用包装器以兼容旧代码；URL 解析统一归属 Foundation 核心。
+    @available(*, deprecated, message: "Use URL.pt_queryParameters or PTURLParser.queryParameters(from:)")
     public func parseURLParameters(url: URL) -> [String: String]? {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-              let queryItems = components.queryItems else {
-            return nil
-        }
-        
-        var parameters = [String: String]()
-        
-        for queryItem in queryItems {
-            parameters[queryItem.name] = queryItem.value
-        }
-        
-        return parameters
+        PTURLParser.queryParameters(from: url)
     }
         
     // MARK: - 公共 API（子类/外部可调用）
@@ -926,10 +1023,9 @@ open class PTBaseViewController: UIViewController {
 
     // MARK: - 私有实现
     private func setupBaseConfigs() {
-        if !Self.didConfigureScrollViewAppearance {
-            UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
-            Self.didConfigureScrollViewAppearance = true
-        }
+        // English: Configure scroll views locally; a base controller must not mutate UIKit's global appearance proxy.
+        // Español: Configura los scroll views localmente; el controlador base no debe mutar el proxy global de apariencia de UIKit.
+        // 中文：仅在具体列表上配置滚动视图，基类不再修改 UIKit 全局 appearance 代理。
         extendedLayoutIncludesOpaqueBars = true
         edgesForExtendedLayout = [.top, .left, .bottom, .right]
         definesPresentationContext = true

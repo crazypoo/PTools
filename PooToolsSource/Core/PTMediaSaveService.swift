@@ -74,7 +74,11 @@ public enum PTMediaSaveService {
         case .authorized, .limited:
             performSave(changeRequest: changeRequest, completion: completion)
         case .notDetermined:
-            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            // English: Start the Photos authorization bridge on MainActor; Photos may invoke its legacy callback elsewhere.
+            // Español: Inicia el puente de autorización de Photos en MainActor; Photos puede ejecutar el callback antiguo en otra cola.
+            // 中文：在 MainActor 启动 Photos 授权桥接，避免 Photos 的旧式回调队列不确定。
+            Task { @MainActor in
+                let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
                 guard status == .authorized || status == .limited else {
                     completePermissionDenied(completion)
                     return

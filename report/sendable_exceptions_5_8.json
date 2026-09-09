@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "generated_from": "PooToolsSource/**/*.swift",
+  "allowlist": [
+    "PooToolsSource/Category/AVExport+PTEX.swift",
+    "PooToolsSource/Category/PHAsset+PTEX.swift",
+    "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+    "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+    "PooToolsSource/Motion/PTMotion.swift",
+    "PooToolsSource/NFC/PTNFCToolKit.swift",
+    "PooToolsSource/NetWork/Network.swift",
+    "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+    "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+    "PooToolsSource/VideoEditor/CompositionInstruction.swift",
+    "PooToolsSource/VideoEditor/Compositor.swift",
+    "PooToolsSource/VideoEditor/Exporter.swift",
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
+    "PooToolsSource/VideoEditor/VideoConverter.swift",
+    "PooToolsSource/Vision/PTVision.swift",
+    "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+    "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+    "PooToolsSource/Core/OSSVoice.swift",
+    "PooToolsSource/Debug/PTApplicationDirectories.swift",
+    "PooToolsSource/Debug/StdoutCapture.swift",
+    "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+    "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
+    "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+    "PooToolsSource/ImageEditor/PTWeakProxy.swift",
+    "PooToolsSource/ImagePicker/PTImagePicker.swift",
+    "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+    "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
+    "PooToolsSource/Inspector/MainThreadOperation.swift",
+    "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+    "PooToolsSource/OSSKit/OSSSpeech.swift",
+    "PooToolsSource/OSSKit/OSSUtterance.swift",
+    "PooToolsSource/Router/PTRouterManager.swift",
+    "PooToolsSource/Router/PTRouterServiceManager.swift",
+    "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+    "PooToolsSource/SegmentControl/PTMainSegmentModel.swift",
+    "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
+    "PooToolsSource/SocketKit/PTSocketManager.swift",
+    "PooToolsSource/TouchInspector/TouchInspectorWindow.swift"
+  ],
+  "declarations": [
+    {
+      "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+      "line": 18,
+      "declaration": "private struct PTSystemPixelBufferBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 13,
+      "declaration": "private struct PTSendableEventStoreBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 17,
+      "declaration": "public struct PTSendableEventArrayBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 25,
+      "declaration": "public struct PTSendableReminderArrayBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Category/AVExport+PTEX.swift",
+      "line": 13,
+      "declaration": "public struct PTAssetExportResult: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 26,
+      "declaration": "private struct PTSendableExportSession: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 56,
+      "declaration": "struct PTSendableAVAsset: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 89,
+      "declaration": "public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 95,
+      "declaration": "public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 100,
+      "declaration": "public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 105,
+      "declaration": "public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 122,
+      "declaration": "public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 134,
+      "declaration": "public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 142,
+      "declaration": "public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 173,
+      "declaration": "public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 183,
+      "declaration": "public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 191,
+      "declaration": "public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 205,
+      "declaration": "public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 214,
+      "declaration": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Core/OSSVoice.swift",
+      "line": 162,
+      "declaration": "public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Debug/PTApplicationDirectories.swift",
+      "line": 11,
+      "declaration": "final class PTApplicationDirectories: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Debug/StdoutCapture.swift",
+      "line": 11,
+      "declaration": "struct PTReadCompletionNotificationBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+      "line": 14,
+      "declaration": "private struct PTSafeExceptionBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+      "line": 18,
+      "declaration": "private struct PTSafeSignalPointerBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
+      "line": 30,
+      "declaration": "final class PTLoadedLibrariesViewModel: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+      "line": 22,
+      "declaration": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+      "line": 25,
+      "declaration": "struct UncheckedSendableBox<T>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+      "line": 75,
+      "declaration": "// 状态属性（由于声明了 @unchecked Sendable，我们需要确保对其修改都在 threadOperator 内）",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
+      "line": 11,
+      "declaration": "public final class PTWeakProxy: NSObject, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/ImagePicker/PTImagePicker.swift",
+      "line": 589,
+      "declaration": "private struct SendableBox<T>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 11,
+      "declaration": "private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 17,
+      "declaration": "private final class PTNotificationBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 23,
+      "declaration": "private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
+      "line": 9,
+      "declaration": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
+      "line": 9,
+      "declaration": "class MainThreadOperation: Operation, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 17,
+      "declaration": "private final class AVContext: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 37,
+      "declaration": "private struct PTAVSendableBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 44,
+      "declaration": "private final class ProgressState: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+      "line": 13,
+      "declaration": "public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 81,
+      "declaration": "public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 14,
+      "declaration": "private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 19,
+      "declaration": "private struct PTNFCSessionSendableBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 23,
+      "declaration": "private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 89,
+      "declaration": "/// 🌟 步骤 1：标记为 @unchecked Sendable。",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 91,
+      "declaration": "public final class NetworkReachability: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 139,
+      "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 672,
+      "declaration": "public final class Network: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 1230,
+      "declaration": "private struct PTSafeUploadParamsBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 1502,
+      "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 125,
+      "declaration": "/// 使用 @unchecked Sendable 搭配内部状态锁机制，完全适配 Swift 6 并发模型。",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 126,
+      "declaration": "public class OSSSpeech: NSObject, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 380,
+      "declaration": "// 【Swift 6 规范】定义一个内部引用类型容器来持有状态，并标记为 @unchecked Sendable",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 382,
+      "declaration": "final class ConverterState: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
+      "line": 27,
+      "declaration": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+      "line": 20,
+      "declaration": "final class PTFetchImageOperation: Operation, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+      "line": 18,
+      "declaration": "private struct PTSafeMediaBox<T>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+      "line": 26,
+      "declaration": "public struct PTSendableDictionaryBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Router/PTRouterManager.swift",
+      "line": 23,
+      "declaration": "private struct PTServiceTypeBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
+      "line": 13,
+      "declaration": "public final class PTLegacyRouterServiceBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+      "line": 12,
+      "declaration": "// 🚀 核心终极修复：增加 @unchecked Sendable 协议。",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+      "line": 16,
+      "declaration": "public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentModel.swift",
+      "line": 23,
+      "declaration": "public class PTMainSegmentModel: JXSegmentedTitleItemModel,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
+      "line": 11,
+      "declaration": "public final class PTSegmentControlBaseModel: NSObject,@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 40,
+      "declaration": "// 4. 声明 @unchecked Sendable。我们通过内部的 socketQueue 串行队列手动保证了线程安全",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 42,
+      "declaration": "public final class PTSocketManager: NSObject, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
+      "line": 15,
+      "declaration": "private struct PTTouchValueBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",
+      "line": 11,
+      "declaration": "class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/Compositor.swift",
+      "line": 12,
+      "declaration": "// ⭐️ 核心改进 1：声明为 @unchecked Sendable。",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/Compositor.swift",
+      "line": 15,
+      "declaration": "public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/Exporter.swift",
+      "line": 19,
+      "declaration": "struct PTSystemAVAssetBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
+      "line": 14,
+      "declaration": "private struct PTSafeMediaBox<T>: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+      "line": 1519,
+      "declaration": "private struct PTC7SafeBox:@unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
+      "line": 30,
+      "declaration": "private struct PTSafeAudioExportBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 24,
+      "declaration": "private struct PTObservationBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 29,
+      "declaration": "public final class PTVision: NSObject, @unchecked Sendable {",
+      "allowlisted": true
+    }
+  ]
+}

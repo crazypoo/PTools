@@ -1,0 +1,6 @@
+# English: Each exception is a temporary legacy edge with an explicit migration reason.
+# Español: Cada excepción es un enlace heredado temporal con una razón de migración explícita.
+# 中文：每条例外都是带有明确迁移原因的临时历史依赖边。
+# Format / Formato / 格式: source_target|destination_target|reason
+PooToolsMediaViewer|PooToolsNetWork|Legacy media viewer still uses the callback Network facade; migrate to MediaCore provider in 5.8.7.
+PooToolsPhotoPicker|PooToolsNetWork|Legacy PhotoPicker upload/cache path still uses Network; migrate to a media provider in 5.8.7.

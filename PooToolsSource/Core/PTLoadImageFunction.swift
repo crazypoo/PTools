@@ -42,6 +42,71 @@ public enum PTImageSource {
     case avAsset(AVAsset, frameNumber: Int = 10, maximumSize: CGSize? = PTVideoThumbnailService.defaultMaximumSize)
 }
 
+// English: Sendable media descriptors cross actor boundaries without carrying UIKit, PhotoKit, or AVFoundation instances.
+// Español: Los descriptores Sendable cruzan límites de actor sin transportar instancias de UIKit, PhotoKit o AVFoundation.
+// 中文：Sendable 媒体描述符跨 actor 传递时不携带 UIKit、PhotoKit 或 AVFoundation 实例。
+public enum PTImageSourceDescriptor: Sendable {
+    case data(Data)
+    case url(URL)
+    case named(String)
+    case photoAsset(identifier: String)
+}
+
+// English: Sendable media descriptors keep PhotoKit identity separate from UI-bound asset instances.
+// Español: Los descriptores multimedia Sendable separan la identidad de PhotoKit de las instancias ligadas a UI.
+// 中文：Sendable 媒体描述符将 PhotoKit 资源标识与 UI 绑定对象分离。
+public enum PTMediaResourceDescriptor: Sendable {
+    case imageData(Data)
+    case localURL(URL)
+    case remoteURL(URL)
+    case photoAsset(identifier: String)
+}
+
+public enum PTImageLoadingError: Error, LocalizedError, Sendable {
+    case unsupportedSource
+    case invalidResponse
+
+    public var errorDescription: String? {
+        switch self {
+        case .unsupportedSource: return "不支持的图片来源"
+        case .invalidResponse: return "图片响应无效"
+        }
+    }
+}
+
+// English: Typed image loading contract for adapters such as URLSession, Kingfisher, and PhotoKit.
+// Español: Contrato tipado de carga de imágenes para adaptadores como URLSession, Kingfisher y PhotoKit.
+// 中文：为 URLSession、Kingfisher 和 PhotoKit 等适配器提供类型化图片加载契约。
+public protocol PTImageLoading: Sendable {
+    func load(_ source: PTImageSourceDescriptor) async throws -> Data
+}
+
+// English: The URLSession adapter is dependency-light and can be replaced by a Kingfisher or PhotoKit adapter.
+// Español: El adaptador URLSession tiene pocas dependencias y puede sustituirse por uno de Kingfisher o PhotoKit.
+// 中文：URLSession 适配器依赖最少，可以按需替换为 Kingfisher 或 PhotoKit 适配器。
+public struct PTURLSessionImageLoader: PTImageLoading {
+    public init() {}
+
+    public func load(_ source: PTImageSourceDescriptor) async throws -> Data {
+        switch source {
+        case .data(let data):
+            return data
+        case .url(let url):
+            if url.isFileURL {
+                return try Data(contentsOf: url, options: .mappedIfSafe)
+            }
+            let (data, response) = try await URLSession.shared.data(from: url)
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200..<400).contains(httpResponse.statusCode) else {
+                throw PTImageLoadingError.invalidResponse
+            }
+            return data
+        case .named, .photoAsset:
+            throw PTImageLoadingError.unsupportedSource
+        }
+    }
+}
+
 /// Shared rendering options used by image views and the image-loading core.
 /// Opciones compartidas de renderizado para vistas de imagen y el núcleo de carga.
 /// 图片视图和图片加载核心共用的渲染配置。

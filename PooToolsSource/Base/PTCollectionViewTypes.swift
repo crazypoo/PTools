@@ -7,6 +7,51 @@
 
 import UIKit
 
+// English: Keep the reusable cache type separate from PTCollectionView's facade and layout code.
+// Español: Mantiene el tipo de caché reutilizable separado de la fachada y el layout de PTCollectionView.
+// 中文：将可复用缓存类型从 PTCollectionView 门面和布局代码中独立出来。
+@MainActor
+public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> {
+    private let cache = NSCache<WrappedKey, Value>()
+
+    public init(countLimit: Int = 1000) {
+        cache.countLimit = max(0, countLimit)
+    }
+
+    public func set(_ value: Value, forKey key: Key) {
+        cache.setObject(value, forKey: WrappedKey(key))
+    }
+
+    public func get(forKey key: Key) -> Value? {
+        cache.object(forKey: WrappedKey(key))
+    }
+
+    public func remove(forKey key: Key) {
+        cache.removeObject(forKey: WrappedKey(key))
+    }
+
+    public func removeAll() {
+        cache.removeAllObjects()
+    }
+
+    private final class WrappedKey: NSObject {
+        let key: Key
+
+        init(_ key: Key) {
+            self.key = key
+        }
+
+        override var hash: Int {
+            key.hashValue
+        }
+
+        override func isEqual(_ object: Any?) -> Bool {
+            guard let other = object as? WrappedKey else { return false }
+            return key == other.key
+        }
+    }
+}
+
 public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 
 /// 列表数据更新失败时返回的结构化错误，避免 Diffable 在异常输入下直接触发断言。
@@ -31,6 +76,59 @@ public enum PTCollectionViewUpdateError: Error, Equatable, LocalizedError, Senda
 }
 
 public typealias PTCollectionViewUpdateErrorHandler = @MainActor (PTCollectionViewUpdateError) -> Void
+
+// English: Keep Diffable identity validation and snapshot lookup in one small coordinator.
+// Español: Mantiene la validación de identidades Diffable y la búsqueda del snapshot en un coordinador pequeño.
+// 中文：将 Diffable 身份校验和快照查找集中到轻量协调器中。
+@MainActor
+public final class PTCollectionDataCoordinator {
+    public init() {}
+
+    public func validationError(for sections: [PTSection],
+                                against snapshot: PTSnapshot? = nil) -> PTCollectionViewUpdateError? {
+        var sectionIdentifiers = Set(snapshot?.sectionIdentifiers.map(\.identifier) ?? [])
+        var rowIdentifiers = Set(snapshot?.itemIdentifiers.map(\.diffId) ?? [])
+
+        for section in sections {
+            guard !section.identifier.isEmpty else {
+                return .emptySectionIdentifier
+            }
+            guard sectionIdentifiers.insert(section.identifier).inserted else {
+                return .duplicateSectionIdentifier(section.identifier)
+            }
+
+            for row in section.rows ?? [] {
+                guard rowIdentifiers.insert(row.diffId).inserted else {
+                    return .duplicateRowIdentifier(row.diffId)
+                }
+            }
+        }
+        return nil
+    }
+
+    public func validationError(for rows: [PTRows],
+                                against snapshot: PTSnapshot) -> PTCollectionViewUpdateError? {
+        var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.diffId))
+        for row in rows {
+            guard rowIdentifiers.insert(row.diffId).inserted else {
+                return .duplicateRowIdentifier(row.diffId)
+            }
+        }
+        return nil
+    }
+
+    public func section(at index: Int, in snapshot: PTSnapshot) -> PTSection? {
+        guard snapshot.sectionIdentifiers.indices.contains(index) else { return nil }
+        return snapshot.sectionIdentifiers[index]
+    }
+
+    public func row(at indexPath: IndexPath, in snapshot: PTSnapshot) -> PTRows? {
+        guard let section = section(at: indexPath.section, in: snapshot) else { return nil }
+        let rows = snapshot.itemIdentifiers(inSection: section)
+        guard rows.indices.contains(indexPath.item) else { return nil }
+        return rows[indexPath.item]
+    }
+}
 
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType: Int {

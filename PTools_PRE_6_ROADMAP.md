@@ -3,9 +3,9 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 审查基线：`master` @ `d044b65`（2026-09-08）
-> 当前 Podspec 候选版本：`5.7.9`
-> 当前最新正式 Tag：`5.7.8`（2026-09-07）
+> 审查基线：`master` @ `67c94b3a`（2026-09-09）
+> 当前 Podspec 版本：`5.7.9`
+> 当前最新 Git Tag：`5.7.9`（2026-09-09）
 > 最低平台：iOS 17.0
 > Swift：Swift 6.0 / Strict Concurrency
 > 核心原则：**5.x 完成内部重构、解耦、兼容迁移和门禁建设；6.0 只做已经准备好的破坏性删除与正式模块边界切换。**
@@ -59,19 +59,19 @@ ROADMAP_5X.md 顶部基线   = 5.7.4 / 5.7.5 candidate
 master 最新提交          = d044b65
 ```
 
-5.7.9 实施后的状态：
+5.7.9 当前仓库状态：
 
 ```text
 PooTools.podspec        = 5.7.9
-README CocoaPods 示例    = 5.7.9（候选版本，尚未创建 tag）
+README CocoaPods 示例    = 5.7.9
 RELEASE.md 当前基线      = 5.7.9 candidate
 ROADMAP_5X.md 顶部基线   = 5.7.8 / 5.7.9 candidate
 MIGRATION_5X.md          = 5.7.9
 Podfile.lock             = 5.7.9
-最新正式 Git tag         = 5.7.8
+最新 Git tag             = 5.7.9
 ```
 
-由于 Xcode 构建矩阵被外部 `Pods/KituraContracts` Swift 6 并发诊断阻断，5.7.9 仍是候选版本，尚未创建 tag。因此 **5.7.9 首先应该是“基线统一与稳定收尾版本”**，不要立刻开始大拆模块。
+由于 Xcode 构建矩阵仍被外部 `Pods/KituraContracts` Swift 6 并发诊断阻断，5.7.9 的发布验证记录仍需补齐；本路线图将其作为当前事实基线，并将 5.8.x 的架构改造继续置于独立门禁之后。
 
 ---
 
@@ -700,11 +700,98 @@ MediaCore -> Network concrete implementation
 
 ## 5.8.0 验收
 
-- [ ] dependency graph 可自动生成。
-- [ ] SPM / CocoaPods parity 可自动校验。
-- [ ] 新 target 必须通过 dependency direction gate。
-- [ ] 不改业务行为。
-- [ ] 不改公开 API。
+- [x] dependency graph 可自动生成。
+- [x] SPM / CocoaPods parity 可自动校验。
+- [x] 新 target 必须通过 dependency direction gate。
+- [x] 不改业务行为。
+- [x] 不改公开 API。
+
+## 5.8.0 当前实施状态（2026-09-09）
+
+- [x] `DEP-580-01`：新增 `report_spm_dependency_graph.rb`，生成可重复的 SPM target、源码、资源、编译设置和依赖图。
+- [x] `DEP-580-02`：新增 `report_cocoapods_subspec_graph.rb`，解析当前 96 个 CocoaPods subspec 及其本地/第三方依赖。
+- [x] `DEP-580-03`：新增 `validate_module_parity.sh`，记录当前 81 个可比模块、15 个 CocoaPods-only 模块、依赖差异和编译宏差异；默认检查稳定指纹，只有显式 `--update` 才能更新基线。
+- [x] `DEP-580-04`：记录 `ptools` 当前 18 个直接第三方依赖的 5.8 baseline；本批不为了数字删除依赖。
+- [x] `DEP-580-05`：新增 `validate_dependency_direction.sh` 和临时历史依赖白名单；当前 118 条内部依赖边中 2 条为已登记迁移边，无未登记违规。
+- [x] 5.8.0 契约门禁已接入 `validate_quality_scans.sh`，并提供 `validate_58_contracts.sh` 统一执行入口。
+- [x] 本批只新增检查脚本、报告和路线图状态，没有改变业务实现、公开 API、第三方依赖或 Pods 源码。
+
+### 5.8.0 本批证据
+
+- `report/spm_dependency_graph.md` / `.json`
+- `report/cocoapods_subspec_graph.md` / `.json`
+- `report/module_parity_5_8.md` / `.json`
+- `report/dependency_direction_5_8.md` / `.json`
+- `report/build_validation_5_8_0.md`
+
+## 5.8.1–5.8.9 当前实施状态（2026-09-09）
+
+本批按“可独立回滚、可验证、保持兼容”的原则落地了安全切片。以下勾选仅表示对应切片已经实现，不代表尚未完成的独立 Target 拆分或真实设备回归已经完成。
+
+### 5.8.1 Core / UIFoundation
+
+- [x] `CORE-581-03`：完成 URL 解析的 Foundation-only 实现，Base 控制器保留兼容转发。
+- [ ] `CORE-581-01` / `CORE-581-02` / `CORE-581-05`：真正的 PToolsCore、PToolsUIFoundation 和 umbrella Target 拆分待独立 Xcode target 与模块成员验证。
+
+### 5.8.2 Permission
+
+- [x] `PERM-582-04`：补充 `currentStatus()`、`requestStatus()`、`openSettings()`，并用 exactly-once 桥接保证回调只恢复一次。
+- [ ] `PERM-582-01` / `PERM-582-02` / `PERM-582-03` / `PERM-582-05`：权限核心、权限 UI、最小依赖 Target 和系统服务彻底分离待后续垂直切片。
+
+### 5.8.3 Network
+
+- [x] `NET-583-07`：重试配置改为所属 Network 实例快照。
+- [x] `NET-583-08`：下载 Session 使用实例配置快照，不再从共享单例读取超时配置。
+- [x] `NET-583-09`：生成 Sendable 例外报告并接入质量门禁。
+- [ ] `NET-583-01`–`NET-583-06` / `NET-583-10`：完整请求执行器、HUD 插件、callback/stream 兼容迁移和测试待后续批次；本批不重写既有公开请求路径。
+
+### 5.8.4 List
+
+- [x] `LIST-584-01`：新增轻量 `PTCollectionDataCoordinator`，统一 Diffable 校验和 snapshot 查找。
+- [x] `LIST-584-09`：将 `PTLRUCache` 从 CollectionView 主文件移出并保持原公开类型名。
+- [x] `LIST-584-10`：新增文件大小门禁和例外清单。
+- [ ] `LIST-584-02`–`LIST-584-08`：布局、预取、骨架、交互、刷新、侧索引和滚动协调器待逐个迁移。
+
+### 5.8.5 Navigation
+
+- [x] `NAV-585-01` / `NAV-585-03`：导航管理器改用代理转发宿主 delegate，不再无条件覆盖宿主回调。
+- [x] `NAV-585-06`：移除基类对 `UIScrollView.appearance()` 的全局副作用。
+- [ ] `NAV-585-02` / `NAV-585-04` / `NAV-585-05` / `NAV-585-07`：完整 observer、栈隔离、BaseVC 拆分和转场矩阵回归待后续批次。
+
+### 5.8.6 Theme / TabBar
+
+- [x] `THEME-586-01` / `THEME-586-02` / `TAB-586-07`：新增外观值快照、`PTTheme` 和统一 TabBar visual style 枚举。
+- [ ] `THEME-586-03` / `THEME-586-04` / `TAB-586-05` / `TAB-586-06`：旧配置全面接入、快照生命周期和 TabBar/Lottie 适配待后续验证。
+
+### 5.8.7 Media
+
+- [x] `MEDIA-587-01` / `MEDIA-587-02` / `MEDIA-587-05`：新增 Sendable 资源描述符、图片加载协议和类型化视频缩略图请求。
+- [ ] `MEDIA-587-03` / `MEDIA-587-04` / `MEDIA-587-06` / `MEDIA-587-07`：Network 反转依赖、缓存协议、任务生命周期和编辑器协议注入待后续迁移。
+
+### 5.8.8 Debug / Logging
+
+- [x] `DEBUG-588-01` / `DEBUG-588-04`：新增 Core 日志契约、OSLog 适配器和集中 swizzle 注册表。
+- [ ] `DEBUG-588-02` / `DEBUG-588-03` / `DEBUG-588-05`：CocoaLumberjack 诊断 Target、调试代码隔离和 scene-scoped 调试窗口待后续迁移。
+
+### 5.8.9 验证与发布
+
+- [x] 生成架构、依赖、公开 API、Sendable 例外和性能基线报告。
+- [x] 静态契约门禁、质量扫描、Package manifest 和 `git diff --check` 通过。
+- [ ] Xcode Debug / Release 完整构建：被外部 `Pods/KituraContracts` 的 Swift 6 并发错误阻断，详见 `report/build_validation_5_8_9.md`。
+- [ ] 真实设备、宿主项目人工回归和版本 Tag：等待外部依赖阻断解除后执行，本批不创建 `5.8.9` Tag。
+
+### 本批证据
+
+- `ARCHITECTURE_5_8.md`
+- `DEPENDENCY_GRAPH_5_8.md`
+- `PUBLIC_API_5_8.json`
+- `SENDABLE_EXCEPTIONS_5_8.md`
+- `PERFORMANCE_BASELINE_5_8.md`
+- `report/build_validation_5_8_9.md`
+
+### 当前阻断
+
+Xcode 27.0 下 Debug / Release 均在外部 `Pods/KituraContracts` 编译阶段失败：`BodyFormat.json` 的非 Sendable 静态值和 `_iso8601Formatter` 的共享可变状态触发 Swift 6 并发诊断。本批不修改 Pods 源码、依赖版本或兼容编译参数，因此不把该结果计入 PooTools 源码错误，也不宣称完整构建通过。
 
 ---
 
@@ -3395,18 +3482,18 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.8.0 Dependency Contract
 
-- [ ] DEP-580-01 SPM graph
-- [ ] DEP-580-02 Pod graph
-- [ ] DEP-580-03 Parity gate
-- [ ] DEP-580-04 Dependency budget
-- [ ] DEP-580-05 Direction gate
+- [x] DEP-580-01 SPM graph
+- [x] DEP-580-02 Pod graph
+- [x] DEP-580-03 Parity gate
+- [x] DEP-580-04 Dependency budget
+- [x] DEP-580-05 Direction gate
 
 ## Milestone: 5.8.1 Core Split
 
 - [ ] CORE-581-01 PToolsCore
 - [ ] CORE-581-02 UIFoundation
-- [ ] CORE-581-03 Core file classification
-- [ ] CORE-581-04 Legacy forwarding
+- [x] CORE-581-03 Core file classification
+- [x] CORE-581-04 Legacy forwarding
 - [ ] CORE-581-05 Umbrella compatibility
 
 ## Milestone: 5.8.2 Permission
@@ -3414,7 +3501,7 @@ PooToolsSource/MediaViewer/
 - [ ] PERM-582-01 PermissionCore
 - [ ] PERM-582-02 PermissionUI
 - [ ] PERM-582-03 Minimal targets
-- [ ] PERM-582-04 Async API
+- [x] PERM-582-04 Async API
 - [ ] PERM-582-05 System service separation
 
 ## Milestone: 5.8.3 Network
@@ -3425,14 +3512,14 @@ PooToolsSource/MediaViewer/
 - [ ] NET-583-04 Instance network
 - [ ] NET-583-05 Unified pipeline
 - [ ] NET-583-06 HUD plugin
-- [ ] NET-583-07 Retry snapshot
-- [ ] NET-583-08 Download instance isolation
-- [ ] NET-583-09 Sendable audit
+- [x] NET-583-07 Retry snapshot
+- [x] NET-583-08 Download instance isolation
+- [x] NET-583-09 Sendable audit
 - [ ] NET-583-10 Tests
 
 ## Milestone: 5.8.4 List
 
-- [ ] LIST-584-01 Data coordinator
+- [x] LIST-584-01 Data coordinator
 - [ ] LIST-584-02 Layout provider
 - [ ] LIST-584-03 Photo prefetch
 - [ ] LIST-584-04 Skeleton
@@ -3440,53 +3527,53 @@ PooToolsSource/MediaViewer/
 - [ ] LIST-584-06 Refresh
 - [ ] LIST-584-07 Side index
 - [ ] LIST-584-08 Scroll observer
-- [ ] LIST-584-09 LRU cache extraction
-- [ ] LIST-584-10 LOC gate
+- [x] LIST-584-09 LRU cache extraction
+- [x] LIST-584-10 LOC gate
 
 ## Milestone: 5.8.5 Navigation
 
-- [ ] NAV-585-01 Delegate proxy
+- [x] NAV-585-01 Delegate proxy
 - [ ] NAV-585-02 Manager observer
-- [ ] NAV-585-03 Host forwarding
+- [x] NAV-585-03 Host forwarding
 - [ ] NAV-585-04 Stack isolation
 - [ ] NAV-585-05 BaseVC slimming
-- [ ] NAV-585-06 UIScrollView appearance
+- [x] NAV-585-06 UIScrollView appearance
 - [ ] NAV-585-07 Transition matrix
 
 ## Milestone: 5.8.6 Theme
 
-- [ ] THEME-586-01 Appearance structs
-- [ ] THEME-586-02 PTTheme
+- [x] THEME-586-01 Appearance structs
+- [x] THEME-586-02 PTTheme
 - [ ] THEME-586-03 BaseConfig compatibility
 - [ ] THEME-586-04 Snapshot semantics
 - [ ] TAB-586-05 TabBar internals
 - [ ] TAB-586-06 Lottie adapter
-- [ ] TAB-586-07 Visual style enum
+- [x] TAB-586-07 Visual style enum
 
 ## Milestone: 5.8.7 Media
 
-- [ ] MEDIA-587-01 Resource model
-- [ ] MEDIA-587-02 Image loader
+- [x] MEDIA-587-01 Resource model
+- [x] MEDIA-587-02 Image loader
 - [ ] MEDIA-587-03 MediaViewer decouple
 - [ ] MEDIA-587-04 PhotoPicker decouple
-- [ ] MEDIA-587-05 Video provider/cache
+- [x] MEDIA-587-05 Video provider/cache
 - [ ] MEDIA-587-06 Lifecycle
 - [ ] MEDIA-587-07 Editor dependencies
 
 ## Milestone: 5.8.8 Diagnostics
 
-- [ ] DEBUG-588-01 Logging protocol
+- [x] DEBUG-588-01 Logging protocol
 - [ ] DEBUG-588-02 Logger adapter
 - [ ] DEBUG-588-03 Production isolation
-- [ ] DEBUG-588-04 Swizzle registry
+- [x] DEBUG-588-04 Swizzle registry
 - [ ] DEBUG-588-05 Scene scope
 
 ## Milestone: 5.8.9 Stabilization
 
-- [ ] Architecture report
-- [ ] Dependency report
-- [ ] API report
-- [ ] Performance report
+- [x] Architecture report
+- [x] Dependency report
+- [x] API report
+- [x] Performance report
 - [ ] Real app regression
 
 ## Milestone: 5.9.0 API Freeze

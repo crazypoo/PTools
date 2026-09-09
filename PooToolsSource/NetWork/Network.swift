@@ -218,10 +218,13 @@ fileprivate final class RetryHandler: Sendable, RequestInterceptor {
     private let maxDelay: TimeInterval = 8.0
     private let jitter: TimeInterval = 0.4
     
-    init() {
-        retryLimitSnapshot = Network.share.config.retryTimes
-        baseDelaySnapshot = Network.share.config.retryDelay
-        statusCodeToRetry = Network.share.config.retryAPIStatusCode
+    // English: Snapshot retry settings from the owning Network instance.
+    // Español: Captura la configuración de reintentos de la instancia Network propietaria.
+    // 中文：从所属 Network 实例快照重试配置。
+    init(configuration: PTNetworkConfig) {
+        retryLimitSnapshot = configuration.retryTimes
+        baseDelaySnapshot = configuration.retryDelay
+        statusCodeToRetry = configuration.retryAPIStatusCode
     }
     
     private func shouldRetry(statusCode: Int?) -> Bool {
@@ -375,12 +378,22 @@ public actor NetworkCache {
     }
     
     public func cleanIfNeeded() {
+        // English: Keep the legacy entry point bound to the shared configuration; new code should pass an instance snapshot.
+        // Español: Mantiene la entrada heredada vinculada a la configuración compartida; el código nuevo debe pasar una instantánea de instancia.
+        // 中文：旧入口继续使用共享配置；新代码应显式传入实例配置快照。
+        cleanIfNeeded(configuration: Network.share.config)
+    }
+
+    // English: Accept a caller-owned configuration so cache maintenance does not read Network.share.
+    // Español: Acepta una configuración del llamador para que el mantenimiento de caché no lea Network.share.
+    // 中文：使用调用方传入的配置，缓存维护不再读取 Network.share。
+    func cleanIfNeeded(configuration: PTNetworkConfig) {
         let now = Date().timeIntervalSince1970
-        guard now - lastCleanTime > Network.share.config.cleanCachePreSec else { return }
+        guard now - lastCleanTime > configuration.cleanCachePreSec else { return }
         lastCleanTime = now
         let path = diskPath
-        let maxDiskSize = Network.share.config.maxDiskSize
-        let cleanThreshold = Network.share.config.cleanThreshold
+        let maxDiskSize = configuration.maxDiskSize
+        let cleanThreshold = configuration.cleanThreshold
         Task.detached(priority: .background) {
             Self.cleanDisk(at: path,
                            maxDiskSize: maxDiskSize,
@@ -462,6 +475,11 @@ extension URLRequest {
 }
 
 public final class PTNetworkCachePlugin: NetworkPlugin {
+    // English: Expose the default cache adapter so the public Network initializer can use it safely.
+    // Español: Expone el adaptador de caché predeterminado para que el inicializador público de Network pueda usarlo de forma segura.
+    // 中文：公开默认缓存适配器初始化方法，确保 Network 的公开初始化器可以安全使用。
+    public init() {}
+
     public func willSend(_ request: inout URLRequest) async {
         guard request.httpMethod == "GET" else { return }
         let policy = request.cachePolicyType
@@ -598,8 +616,28 @@ public struct PTNetworkConfig: Sendable {
     public var cleanCachePreSec: TimeInterval = 60
     public var logMaxCount: Double = 3000
 
+    // English: Modern names map to the established fields without breaking existing callers.
+    // Español: Los nombres modernos se asignan a los campos existentes sin romper a los llamadores actuales.
+    // 中文：现代命名映射到现有字段，不破坏已有调用方。
+    public var requestTimeout: TimeInterval {
+        get { netRequsetTime }
+        set { netRequsetTime = newValue }
+    }
+
+    public var resourceTimeout: TimeInterval {
+        get { downloadEndTime }
+        set { downloadEndTime = newValue }
+    }
+
+    public var waitsForConnectivity: Bool = true
+
     public init() {}
 }
+
+// English: Canonical value-type name for new Network integrations; PTNetworkConfig remains source-compatible.
+// Español: Nombre canónico basado en valor para nuevas integraciones; PTNetworkConfig conserva la compatibilidad.
+// 中文：为新的 Network 集成提供统一值类型名称，同时保留 PTNetworkConfig 兼容性。
+public typealias PTNetworkConfiguration = PTNetworkConfig
 
 private enum PreparedUploadMedia {
     case data(Data, mimeType: String, fileName: String)
@@ -633,7 +671,36 @@ private struct PTNetworkUploadEvent: Sendable {
 
 public final class Network: @unchecked Sendable {
     static public let share = Network()
-    public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
+    private let pluginsLock = NSLock()
+    private var _plugins: [NetworkPlugin]
+
+    // English: New instances snapshot their configuration and plugins; the legacy singleton remains available.
+    // Español: Las nuevas instancias capturan su configuración y plugins; el singleton heredado sigue disponible.
+    // 中文：新实例会固定初始配置和插件；旧单例入口继续可用。
+    public init(configuration: PTNetworkConfig = PTNetworkConfig(),
+                plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]) {
+        _config = configuration
+        _plugins = plugins
+    }
+
+    public var plugins: [NetworkPlugin] {
+        get {
+            pluginsLock.withLock { _plugins }
+        }
+        set {
+            pluginsLock.withLock { _plugins = newValue }
+        }
+    }
+
+    // English: Add a plugin atomically while preserving the mutable legacy property.
+    // Español: Añade un plugin atómicamente y conserva la propiedad heredada mutable.
+    // 中文：以原子方式添加插件，同时保留旧的可变属性。
+    public func register(plugin: NetworkPlugin) {
+        pluginsLock.withLock {
+            _plugins.append(plugin)
+        }
+    }
+
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
     
     private let configLock = NSLock()
@@ -673,15 +740,17 @@ public final class Network: @unchecked Sendable {
     
     private lazy var session: Session = {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = config.netRequsetTime
-        configuration.waitsForConnectivity = true
+        let configurationSnapshot = config
+        configuration.timeoutIntervalForRequest = configurationSnapshot.requestTimeout
+        configuration.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
+        configuration.waitsForConnectivity = configurationSnapshot.waitsForConnectivity
         configuration.requestCachePolicy = .useProtocolCachePolicy
         var protocols = configuration.protocolClasses ?? []
         protocols.insert(PTCustomHTTPProtocol.self, at: 0)
         configuration.protocolClasses = protocols
         
         configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)
-        return Session(configuration: configuration, interceptor: RetryHandler())
+        return Session(configuration: configuration, interceptor: RetryHandler(configuration: configurationSnapshot))
     }()
     
     public var hud:PTHudView?
@@ -1601,9 +1670,10 @@ public final class Network: @unchecked Sendable {
     // MARK: - ================= 8. 下载引擎与流式控制 =================
     
     private lazy var downloadSession: Session = {
+        let configurationSnapshot = config
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = Network.share.config.downloadRequsetTime
-        config.timeoutIntervalForResource = Network.share.config.downloadEndTime
+        config.timeoutIntervalForRequest = configurationSnapshot.downloadRequsetTime
+        config.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
         config.httpMaximumConnectionsPerHost = 6
         var protocols = config.protocolClasses ?? []
         protocols.insert(PTCustomHTTPProtocol.self, at: 0)

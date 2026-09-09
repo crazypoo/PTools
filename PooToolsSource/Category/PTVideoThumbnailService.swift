@@ -11,6 +11,49 @@ import AVFoundation
 import UIKit
 import os
 
+// English: A value request lets media adapters share thumbnail policy without transporting AVAsset instances.
+// Español: Una solicitud de valor permite compartir la política de miniaturas sin transportar instancias AVAsset.
+// 中文：值类型请求让媒体适配器共享缩略图策略，同时不跨边界传递 AVAsset 实例。
+public struct PTVideoThumbnailRequest: Sendable {
+    public let url: URL
+    public let frameNumber: Int
+    public let maximumSize: CGSize
+    public let appliesPreferredTrackTransform: Bool
+
+    public init(url: URL,
+                frameNumber: Int = 1,
+                maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
+                appliesPreferredTrackTransform: Bool = true) {
+        self.url = url
+        self.frameNumber = max(frameNumber, 1)
+        self.maximumSize = maximumSize
+        self.appliesPreferredTrackTransform = appliesPreferredTrackTransform
+    }
+}
+
+// English: UI-bound thumbnail providers return UIImage without crossing a nonisolated actor boundary.
+// Español: Los proveedores ligados a UI devuelven UIImage sin cruzar un límite de actor no aislado.
+// 中文：UI 绑定的缩略图提供者直接返回 UIImage，不跨越非隔离 actor 边界。
+@MainActor
+public protocol PTVideoThumbnailProviding {
+    func image(for request: PTVideoThumbnailRequest) async -> UIImage?
+}
+
+// English: Default adapter keeps the existing thumbnail service as the single implementation.
+// Español: El adaptador predeterminado conserva el servicio existente como única implementación.
+// 中文：默认适配器继续复用现有缩略图服务，确保只有一个实现入口。
+@MainActor
+public struct PTDefaultVideoThumbnailProvider: PTVideoThumbnailProviding {
+    public init() {}
+
+    public func image(for request: PTVideoThumbnailRequest) async -> UIImage? {
+        await PTVideoThumbnailService.image(for: request.url,
+                                            frameNumber: request.frameNumber,
+                                            maximumSize: request.maximumSize,
+                                            appliesPreferredTrackTransform: request.appliesPreferredTrackTransform)
+    }
+}
+
 public enum PTVideoThumbnailService {
     public static let defaultMaximumSize = CGSize(width: 1000, height: 1000)
 

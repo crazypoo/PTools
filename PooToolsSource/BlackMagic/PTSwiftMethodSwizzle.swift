@@ -7,6 +7,27 @@
 //
 
 import Foundation
+import os.lock
+
+// English: The registry prevents the same swizzle from being applied twice by independent debug features.
+// Español: El registro evita aplicar dos veces el mismo swizzle desde funciones de depuración independientes.
+// 中文：注册表防止不同调试功能重复执行同一个方法交换。
+public enum PTSwizzleRegistry {
+    private static let lock = OSAllocatedUnfairLock(initialState: Set<String>())
+
+    @discardableResult
+    public static func claim(target: AnyClass,
+                             original: Selector,
+                             swizzled: Selector,
+                             isClassMethod: Bool) -> Bool {
+        let key = "\(ObjectIdentifier(target))|\(original)|\(swizzled)|\(isClassMethod)"
+        return lock.withLock { keys in
+            guard !keys.contains(key) else { return false }
+            keys.insert(key)
+            return true
+        }
+    }
+}
 
 //MARK: 自定義運算符號
 infix operator <->
@@ -63,6 +84,15 @@ public struct Swizzle {
             guard let originalMethod = class_getInstanceMethod(cls, pair.original),
                   let swizzledMethod = class_getInstanceMethod(cls, pair.swizzled) else {
                 PTNSLogConsole("⚠️ Swizzle 失败: 找不到方法 \(pair.original) 或 \(pair.swizzled)")
+                continue
+            }
+            // English: Claim only after both selectors exist, so a later registration can retry an incomplete setup.
+            // Español: Reclama el registro solo después de comprobar ambos selectores para permitir reintentos.
+            // 中文：确认两个方法都存在后再登记，避免不完整的交换阻塞后续重试。
+            guard PTSwizzleRegistry.claim(target: targetClass,
+                                          original: pair.original,
+                                          swizzled: pair.swizzled,
+                                          isClassMethod: isClassMethod) else {
                 continue
             }
             

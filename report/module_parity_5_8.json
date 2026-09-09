@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "generator": "Scripts/validate_module_parity.sh",
+  "spm_products": [
+    "PTBluetoothPermission",
+    "PTCalendarPermission",
+    "PTCameraPermission",
+    "PTContactsPermission",
+    "PTFaceIDPermission",
+    "PTHealthPermission",
+    "PTLocationPermission",
+    "PTMediaPermission",
+    "PTMicPermission",
+    "PTMotionPermission",
+    "PTNotificationPermission",
+    "PTRemindersPermission",
+    "PTSiriPermission",
+    "PTSpeechPermission",
+    "PTTrackingPermission",
+    "PooToolsAll",
+    "PooToolsBankCard",
+    "PooToolsBioID",
+    "PooToolsCalendar",
+    "PooToolsCheckBox",
+    "PooToolsCheckDirtyWord",
+    "PooToolsCheckUpdate",
+    "PooToolsChinesePinyin",
+    "PooToolsCircle",
+    "PooToolsCodeView",
+    "PooToolsContact",
+    "PooToolsCountry",
+    "PooToolsCustomerLabel",
+    "PooToolsDEBUG",
+    "PooToolsDEBUGTrackingEyes",
+    "PooToolsDataEncrypt",
+    "PooToolsGuide",
+    "PooToolsHandSign",
+    "PooToolsHarbethKit",
+    "PooToolsHeartRate",
+    "PooToolsHud",
+    "PooToolsIAP",
+    "PooToolsImageEditor",
+    "PooToolsImagePicker",
+    "PooToolsInput",
+    "PooToolsKeyChain",
+    "PooToolsKeyboard",
+    "PooToolsLaunchTimeProfiler",
+    "PooToolsLayout",
+    "PooToolsLivePhoto",
+    "PooToolsLoading",
+    "PooToolsLocation",
+    "PooToolsMediaViewer",
+    "PooToolsMessageKit",
+    "PooToolsMotion",
+    "PooToolsNetWork",
+    "PooToolsNetworkSpeedTest",
+    "PooToolsOSSKitSpeech",
+    "PooToolsPDF",
+    "PooToolsPageControl",
+    "PooToolsPagingControl",
+    "PooToolsPhoneInfo",
+    "PooToolsPhotoPicker",
+    "PooToolsPicker",
+    "PooToolsPing",
+    "PooToolsProgressBar",
+    "PooToolsRateView",
+    "PooToolsRouter",
+    "PooToolsSVG",
+    "PooToolsScanQRCode",
+    "PooToolsScrollBanner",
+    "PooToolsSearchBar",
+    "PooToolsSegmented",
+    "PooToolsShare",
+    "PooToolsSlider",
+    "PooToolsSmartScreenshot",
+    "PooToolsSocketKit",
+    "PooToolsSpeedPanel",
+    "PooToolsStepCount",
+    "PooToolsStepper",
+    "PooToolsTelephony",
+    "PooToolsTipsView",
+    "PooToolsVideoEditor",
+    "PooToolsVision",
+    "PooToolsWhatsNewsKit",
+    "PooToolsiOS17Tips",
+    "ptools"
+  ],
+  "aggregate_products": {
+    "spm": [
+      "PooToolsAll"
+    ],
+    "cocoapods": [
+      "InputAll"
+    ]
+  },
+  "matched": [
+    "BankCard",
+    "BilogyID",
+    "BluetoothPermission",
+    "Calendar",
+    "CalendarPermission",
+    "CameraPermission",
+    "CheckBox",
+    "CheckDirtyWord",
+    "CheckUpdate",
+    "ChinesePinyin",
+    "Circle",
+    "CodeView",
+    "Contact",
+    "ContactsPermission",
+    "Core",
+    "Country",
+    "CustomerLabel",
+    "CustomerNumberKeyboard",
+    "DEBUG",
+    "DEBUG_TrackingEyes",
+    "DataEncrypt",
+    "FaceIDPermission",
+    "Guide",
+    "HandSign",
+    "HarbethKit",
+    "HealthPermission",
+    "HeartRate",
+    "Hud",
+    "IAP",
+    "ImageEditor",
+    "ImagePicker",
+    "Input",
+    "KeyChain",
+    "LaunchTimeProfiler",
+    "Layout",
+    "LivePhoto",
+    "Loading",
+    "Location",
+    "LocationPermission",
+    "MediaViewer",
+    "MeidaPermission",
+    "MessageKit",
+    "MicPermission",
+    "Motion",
+    "MotionPermission",
+    "NetWork",
+    "NetworkSpeedTest",
+    "NotificationPermission",
+    "OSSKitSpeech",
+    "PDF",
+    "PageControl",
+    "PagingControl",
+    "PhoneInfo",
+    "PhotoPicker",
+    "Picker",
+    "Ping",
+    "ProgressBar",
+    "RateView",
+    "RemindersPermission",
+    "Router",
+    "SVG",
+    "ScanQRCode",
+    "ScrollBanner",
+    "SearchBar",
+    "Segmented",
+    "Share",
+    "SiriPermission",
+    "Slider",
+    "SmartScreenshot",
+    "SocketKit",
+    "SpeechRecognizerPermission",
+    "SpeedPanel",
+    "StepCount",
+    "Stepper",
+    "Telephony",
+    "TipsView",
+    "TrackingPermission",
+    "VideoEditor",
+    "Vision",
+    "WhatsNewsKit",
+    "iOS17Tips"
+  ],
+  "spm_only": [],
+  "pod_only": [
+    "Appz",
+    "FilterCamera",
+    "Flag",
+    "GCDWebServer",
+    "InputAll",
+    "Instructions",
+    "MXMetricManagerKit",
+    "NFCKit",
+    "NotificationBanner",
+    "PopoverKit",
+    "SecuritySuite",
+    "Tabbar",
+    "VideoCache",
+    "WebKit",
+    "ZipArchive"
+  ],
+  "source_drift": [],
+  "dependency_drift": [
+    {
+      "module": "BilogyID",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "FaceIDPermission"
+      ],
+      "cocoapods": [
+        "Core",
+        "FaceIDPermission",
+        "KeyChain"
+      ]
+    },
+    {
+      "module": "CheckUpdate",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Swift-JWT"
+      ],
+      "cocoapods": [
+        "SwiftJWT"
+      ]
+    },
+    {
+      "module": "Core",
+      "field": "third_party_dependencies",
+      "spm": [
+        "AttributedString",
+        "CocoaLumberjack",
+        "DeviceKit",
+        "FlagKit",
+        "IOSSecuritySuite",
+        "IQKeyboardManager",
+        "Instructions",
+        "KakaJSON",
+        "Kingfisher",
+        "NotificationBanner",
+        "Popovers",
+        "SafeSFSymbols",
+        "SmartCodable",
+        "SnapKit",
+        "SwiftDate",
+        "SwifterSwift",
+        "ZipArchive",
+        "lottie-ios"
+      ],
+      "cocoapods": [
+        "AttributedString",
+        "CocoaLumberjack/Swift",
+        "DeviceKit",
+        "IQKeyboardManagerSwift",
+        "IQKeyboardToolbarManager",
+        "KakaJSON",
+        "Kingfisher",
+        "SafeSFSymbols",
+        "SmartCodable",
+        "SmartCodable/Inherit",
+        "SnapKit",
+        "SwiftDate",
+        "SwifterSwift",
+        "lottie-ios"
+      ]
+    },
+    {
+      "module": "ImageEditor",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Harbeth"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "PagingControl",
+      "field": "third_party_dependencies",
+      "spm": [
+        "JXPagingView",
+        "JXSegmentedView"
+      ],
+      "cocoapods": [
+        "JXPagingView/Paging",
+        "JXSegmentedView"
+      ]
+    },
+    {
+      "module": "PhotoPicker",
+      "field": "internal_dependencies",
+      "spm": [
+        "CameraPermission",
+        "Core",
+        "ImagePicker",
+        "Loading",
+        "NetWork"
+      ],
+      "cocoapods": [
+        "Core",
+        "ImagePicker",
+        "Loading",
+        "NetWork"
+      ]
+    },
+    {
+      "module": "Picker",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit",
+        "SwifterSwift"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "SVG",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Kingfisher",
+        "PocketSVG"
+      ],
+      "cocoapods": [
+        "PocketSVG",
+        "Protobuf",
+        "SVGAPlayer"
+      ]
+    },
+    {
+      "module": "ScanQRCode",
+      "field": "internal_dependencies",
+      "spm": [
+        "CameraPermission",
+        "Core",
+        "ImagePicker",
+        "PhotoPicker"
+      ],
+      "cocoapods": [
+        "CameraPermission",
+        "Core",
+        "PhotoPicker"
+      ]
+    },
+    {
+      "module": "VideoEditor",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Harbeth"
+      ],
+      "cocoapods": []
+    }
+  ],
+  "settings_drift": [
+    {
+      "module": "Core",
+      "spm": {
+        "defines": [
+          "POOTOOLS_APPZ",
+          "POOTOOLS_CGDWEBSERVER",
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_FLAG",
+          "POOTOOLS_INSTRUCTIONS",
+          "POOTOOLS_LAUNCHTIMEPROFILER",
+          "POOTOOLS_NOTIFICATIONBANNER",
+          "POOTOOLS_PICKER",
+          "POOTOOLS_POPOVERKIT",
+          "POOTOOLS_SECURITYSUITE",
+          "POOTOOLS_TABBAR",
+          "POOTOOLS_VIDEOCACHE",
+          "POOTOOLS_ZIPARCHINE"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    }
+  ],
+  "status": "baseline",
+  "fingerprint": "ec77784cb33174c7b6bf327ca6370a3ab8c41de59732d69ddeea2474929a7357"
+}

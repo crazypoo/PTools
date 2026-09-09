@@ -1,0 +1,6236 @@
+{
+  "schema_version": 1,
+  "generator": "Scripts/report_spm_dependency_graph.rb",
+  "package": "ptools",
+  "tools_version": {
+    "_version": "6.0.0"
+  },
+  "swift_language_versions": [
+    "6"
+  ],
+  "platforms": [
+    {
+      "options": [],
+      "platformName": "ios",
+      "version": "17.0"
+    }
+  ],
+  "products": [
+    {
+      "name": "PTBluetoothPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTBluetoothPermission"
+      ]
+    },
+    {
+      "name": "PTCalendarPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTCalendarPermission"
+      ]
+    },
+    {
+      "name": "PTCameraPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTCameraPermission"
+      ]
+    },
+    {
+      "name": "PTContactsPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTContactsPermission"
+      ]
+    },
+    {
+      "name": "PTFaceIDPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTFaceIDPermission"
+      ]
+    },
+    {
+      "name": "PTHealthPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTHealthPermission"
+      ]
+    },
+    {
+      "name": "PTLocationPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTLocationPermission"
+      ]
+    },
+    {
+      "name": "PTMediaPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTMediaPermission"
+      ]
+    },
+    {
+      "name": "PTMicPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTMicPermission"
+      ]
+    },
+    {
+      "name": "PTMotionPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTMotionPermission"
+      ]
+    },
+    {
+      "name": "PTNotificationPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTNotificationPermission"
+      ]
+    },
+    {
+      "name": "PTRemindersPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTRemindersPermission"
+      ]
+    },
+    {
+      "name": "PTSiriPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTSiriPermission"
+      ]
+    },
+    {
+      "name": "PTSpeechPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTSpeechPermission"
+      ]
+    },
+    {
+      "name": "PTTrackingPermission",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTTrackingPermission"
+      ]
+    },
+    {
+      "name": "PooToolsAll",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PTBluetoothPermission",
+        "PTCalendarPermission",
+        "PTCameraPermission",
+        "PTContactsPermission",
+        "PTFaceIDPermission",
+        "PTHealthPermission",
+        "PTLocationPermission",
+        "PTMediaPermission",
+        "PTMicPermission",
+        "PTMotionPermission",
+        "PTNotificationPermission",
+        "PTRemindersPermission",
+        "PTSiriPermission",
+        "PTSpeechPermission",
+        "PTTrackingPermission",
+        "PooToolsBankCard",
+        "PooToolsBioID",
+        "PooToolsCalendar",
+        "PooToolsCheckBox",
+        "PooToolsCheckDirtyWord",
+        "PooToolsCheckUpdate",
+        "PooToolsChinesePinyin",
+        "PooToolsCircle",
+        "PooToolsCodeView",
+        "PooToolsContact",
+        "PooToolsCountry",
+        "PooToolsCustomerLabel",
+        "PooToolsDEBUG",
+        "PooToolsDEBUGTrackingEyes",
+        "PooToolsDataEncrypt",
+        "PooToolsGuide",
+        "PooToolsHandSign",
+        "PooToolsHarbethKit",
+        "PooToolsHeartRate",
+        "PooToolsHud",
+        "PooToolsIAP",
+        "PooToolsImageEditor",
+        "PooToolsImagePicker",
+        "PooToolsInput",
+        "PooToolsKeyChain",
+        "PooToolsKeyboard",
+        "PooToolsLaunchTimeProfiler",
+        "PooToolsLayout",
+        "PooToolsLivePhoto",
+        "PooToolsLoading",
+        "PooToolsLocation",
+        "PooToolsMediaViewer",
+        "PooToolsMessageKit",
+        "PooToolsMotion",
+        "PooToolsNetWork",
+        "PooToolsNetworkSpeedTest",
+        "PooToolsOSSKitSpeech",
+        "PooToolsPDF",
+        "PooToolsPageControl",
+        "PooToolsPagingControl",
+        "PooToolsPhoneInfo",
+        "PooToolsPhotoPicker",
+        "PooToolsPicker",
+        "PooToolsPing",
+        "PooToolsProgressBar",
+        "PooToolsRateView",
+        "PooToolsRouter",
+        "PooToolsSVG",
+        "PooToolsScanQRCode",
+        "PooToolsScrollBanner",
+        "PooToolsSearchBar",
+        "PooToolsSegmented",
+        "PooToolsShare",
+        "PooToolsSlider",
+        "PooToolsSmartScreenshot",
+        "PooToolsSocketKit",
+        "PooToolsSpeedPanel",
+        "PooToolsStepCount",
+        "PooToolsStepper",
+        "PooToolsTelephony",
+        "PooToolsTipsView",
+        "PooToolsVideoEditor",
+        "PooToolsVision",
+        "PooToolsWhatsNewsKit",
+        "PooToolsiOS17Tips",
+        "ptools"
+      ]
+    },
+    {
+      "name": "PooToolsBankCard",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsBankCard"
+      ]
+    },
+    {
+      "name": "PooToolsBioID",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsBioID"
+      ]
+    },
+    {
+      "name": "PooToolsCalendar",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCalendar"
+      ]
+    },
+    {
+      "name": "PooToolsCheckBox",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCheckBox"
+      ]
+    },
+    {
+      "name": "PooToolsCheckDirtyWord",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCheckDirtyWord"
+      ]
+    },
+    {
+      "name": "PooToolsCheckUpdate",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCheckUpdate"
+      ]
+    },
+    {
+      "name": "PooToolsChinesePinyin",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsChinesePinyin"
+      ]
+    },
+    {
+      "name": "PooToolsCircle",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCircle"
+      ]
+    },
+    {
+      "name": "PooToolsCodeView",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCodeView"
+      ]
+    },
+    {
+      "name": "PooToolsContact",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsContact"
+      ]
+    },
+    {
+      "name": "PooToolsCountry",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCountry"
+      ]
+    },
+    {
+      "name": "PooToolsCustomerLabel",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsCustomerLabel"
+      ]
+    },
+    {
+      "name": "PooToolsDEBUG",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsDEBUG"
+      ]
+    },
+    {
+      "name": "PooToolsDEBUGTrackingEyes",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsDEBUGTrackingEyes"
+      ]
+    },
+    {
+      "name": "PooToolsDataEncrypt",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsDataEncrypt"
+      ]
+    },
+    {
+      "name": "PooToolsGuide",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsGuide"
+      ]
+    },
+    {
+      "name": "PooToolsHandSign",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsHandSign"
+      ]
+    },
+    {
+      "name": "PooToolsHarbethKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsHarbethKit"
+      ]
+    },
+    {
+      "name": "PooToolsHeartRate",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsHeartRate"
+      ]
+    },
+    {
+      "name": "PooToolsHud",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsHud"
+      ]
+    },
+    {
+      "name": "PooToolsIAP",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsIAP"
+      ]
+    },
+    {
+      "name": "PooToolsImageEditor",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsImageEditor"
+      ]
+    },
+    {
+      "name": "PooToolsImagePicker",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsImagePicker"
+      ]
+    },
+    {
+      "name": "PooToolsInput",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsInput"
+      ]
+    },
+    {
+      "name": "PooToolsKeyChain",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsKeyChain"
+      ]
+    },
+    {
+      "name": "PooToolsKeyboard",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsKeyboard"
+      ]
+    },
+    {
+      "name": "PooToolsLaunchTimeProfiler",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsLaunchTimeProfiler"
+      ]
+    },
+    {
+      "name": "PooToolsLayout",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsLayout"
+      ]
+    },
+    {
+      "name": "PooToolsLivePhoto",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsLivePhoto"
+      ]
+    },
+    {
+      "name": "PooToolsLoading",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsLoading"
+      ]
+    },
+    {
+      "name": "PooToolsLocation",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsLocation"
+      ]
+    },
+    {
+      "name": "PooToolsMediaViewer",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsMediaViewer"
+      ]
+    },
+    {
+      "name": "PooToolsMessageKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsMessageKit"
+      ]
+    },
+    {
+      "name": "PooToolsMotion",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsMotion"
+      ]
+    },
+    {
+      "name": "PooToolsNetWork",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsNetWork"
+      ]
+    },
+    {
+      "name": "PooToolsNetworkSpeedTest",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsNetworkSpeedTest"
+      ]
+    },
+    {
+      "name": "PooToolsOSSKitSpeech",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsOSSKitSpeech"
+      ]
+    },
+    {
+      "name": "PooToolsPDF",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPDF"
+      ]
+    },
+    {
+      "name": "PooToolsPageControl",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPageControl"
+      ]
+    },
+    {
+      "name": "PooToolsPagingControl",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPagingControl"
+      ]
+    },
+    {
+      "name": "PooToolsPhoneInfo",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPhoneInfo"
+      ]
+    },
+    {
+      "name": "PooToolsPhotoPicker",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPhotoPicker"
+      ]
+    },
+    {
+      "name": "PooToolsPicker",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPicker"
+      ]
+    },
+    {
+      "name": "PooToolsPing",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPing"
+      ]
+    },
+    {
+      "name": "PooToolsProgressBar",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsProgressBar"
+      ]
+    },
+    {
+      "name": "PooToolsRateView",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsRateView"
+      ]
+    },
+    {
+      "name": "PooToolsRouter",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsRouter"
+      ]
+    },
+    {
+      "name": "PooToolsSVG",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSVG"
+      ]
+    },
+    {
+      "name": "PooToolsScanQRCode",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsScanQRCode"
+      ]
+    },
+    {
+      "name": "PooToolsScrollBanner",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsScrollBanner"
+      ]
+    },
+    {
+      "name": "PooToolsSearchBar",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSearchBar"
+      ]
+    },
+    {
+      "name": "PooToolsSegmented",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSegmented"
+      ]
+    },
+    {
+      "name": "PooToolsShare",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsShare"
+      ]
+    },
+    {
+      "name": "PooToolsSlider",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSlider"
+      ]
+    },
+    {
+      "name": "PooToolsSmartScreenshot",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSmartScreenshot"
+      ]
+    },
+    {
+      "name": "PooToolsSocketKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSocketKit"
+      ]
+    },
+    {
+      "name": "PooToolsSpeedPanel",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSpeedPanel"
+      ]
+    },
+    {
+      "name": "PooToolsStepCount",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsStepCount"
+      ]
+    },
+    {
+      "name": "PooToolsStepper",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsStepper"
+      ]
+    },
+    {
+      "name": "PooToolsTelephony",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsTelephony"
+      ]
+    },
+    {
+      "name": "PooToolsTipsView",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsTipsView"
+      ]
+    },
+    {
+      "name": "PooToolsVideoEditor",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsVideoEditor"
+      ]
+    },
+    {
+      "name": "PooToolsVision",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsVision"
+      ]
+    },
+    {
+      "name": "PooToolsWhatsNewsKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsWhatsNewsKit"
+      ]
+    },
+    {
+      "name": "PooToolsiOS17Tips",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsiOS17Tips"
+      ]
+    },
+    {
+      "name": "ptools",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "ptools"
+      ]
+    }
+  ],
+  "package_dependencies": [
+    {
+      "sourceControl": [
+        {
+          "identity": "alamofire",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Alamofire/Alamofire.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "5.8.0",
+                "upperBound": "6.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "attributedstring",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/lixiang1994/AttributedString.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "branch": [
+              "master"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "bluecryptor",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/BlueCryptor.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.0.1",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "blueecc",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/BlueECC.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.2.200",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "bluersa",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/BlueRSA.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.0.200",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "cocoalumberjack",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/CocoaLumberjack/CocoaLumberjack.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "3.8.0",
+                "upperBound": "4.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "collectionviewpaginglayout",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/amirdew/CollectionViewPagingLayout.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "1.1.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "cryptoswift",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/krzyzanowskim/CryptoSwift.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.8.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "devicekit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/devicekit/DeviceKit.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "5.8.0",
+                "upperBound": "6.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "flagkit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/madebybowtie/FlagKit.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "2.4.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "harbeth",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/yangKJ/Harbeth.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.1.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "instructions",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/ephread/Instructions.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.2.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "iossecuritysuite",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/securing/IOSSecuritySuite.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.9.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "iqkeyboardmanager",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/hackiftekhar/IQKeyboardManager.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "8.0.3"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "jxpagingview",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/pujiaxin33/JXPagingView.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.1.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "jxsegmentedview",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/pujiaxin33/JXSegmentedView.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.3.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "kakajson",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/kakaopensource/KakaJSON.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "1.1.2"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "kakapos",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/yangKJ/Kakapos.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "1.1.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "kingfisher",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/onevcat/Kingfisher.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "8.9.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "kituracontracts",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/KituraContracts.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.0.1",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "loggerapi",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/LoggerAPI.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.0.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "lottie-ios",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/airbnb/lottie-ios.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "4.4.0",
+                "upperBound": "5.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "marqueelabel",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/cbpowell/MarqueeLabel.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "4.5.3",
+                "upperBound": "5.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "notificationbanner",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Daltron/NotificationBanner.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "3.2.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "phonenumberkit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/PhoneNumberKit/PhoneNumberKit.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "5.0.0",
+                "upperBound": "6.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "pocketsvg",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/pocketsvg/PocketSVG.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.7.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "popovers",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/aheze/Popovers.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.3.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "safesfsymbols",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/sparrowcode/SafeSFSymbols.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.0.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "smartcodable",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/iAmMccc/SmartCodable.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "4.0.0",
+                "upperBound": "5.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "snapkit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/SnapKit/SnapKit.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "5.7.1"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "socketrocket",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/robnadin/SocketRocket.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "branch": [
+              "spm-support"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-jwt",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/Kitura/Swift-JWT.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "4.0.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-log",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-log.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.0.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-protobuf",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-protobuf.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "1.37.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swiftdate",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/malcommac/SwiftDate.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "exact": [
+              "7.0.0"
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swifterswift",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/SwifterSwift/SwifterSwift.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "8.0.0",
+                "upperBound": "9.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "ziparchive",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/ZipArchive/ZipArchive.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "2.6.0",
+                "upperBound": "3.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "core_dependency_budget": {
+    "target": "ptools",
+    "direct_third_party_count": 18,
+    "baseline_5_8": 18,
+    "target_end_5_8": 6,
+    "target_end_5_9": 3,
+    "target_6_0_range": "0-2"
+  },
+  "targets": [
+    {
+      "name": "PTBluetoothPermission",
+      "type": "regular",
+      "path": "PooToolsSource/BluetoothPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_BLUETOOTH"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTCalendarPermission",
+      "type": "regular",
+      "path": "PooToolsSource/CalendarPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_CALENDAR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTCameraPermission",
+      "type": "regular",
+      "path": "PooToolsSource/CameraPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_CAMERA"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTContactsPermission",
+      "type": "regular",
+      "path": "PooToolsSource/ContactsPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_CONTACTS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTFaceIDPermission",
+      "type": "regular",
+      "path": "PooToolsSource/FaceIDPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_FACEIDPERMISSION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTHealthPermission",
+      "type": "regular",
+      "path": "PooToolsSource/HealthPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_HEALTH"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTLocationPermission",
+      "type": "regular",
+      "path": "PooToolsSource/LocationPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_LOCATION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTMediaPermission",
+      "type": "regular",
+      "path": "PooToolsSource/MeidaLibraryPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_MEDIA"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTMicPermission",
+      "type": "regular",
+      "path": "PooToolsSource/MicPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_MIC"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTMotionPermission",
+      "type": "regular",
+      "path": "PooToolsSource/MotionPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_MOTION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTNotificationPermission",
+      "type": "regular",
+      "path": "PooToolsSource/NotificationPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_NOTIFICATION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTRemindersPermission",
+      "type": "regular",
+      "path": "PooToolsSource/RemindersPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_REMINDERS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTSiriPermission",
+      "type": "regular",
+      "path": "PooToolsSource/SiriPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_SIRI"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTSpeechPermission",
+      "type": "regular",
+      "path": "PooToolsSource/SpeechPremission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_SPEECH"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTTrackingPermission",
+      "type": "regular",
+      "path": "PooToolsSource/TrackingPermission",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PERMISSION_TRACKING"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsBankCard",
+      "type": "regular",
+      "path": "PooToolsSource/BankCard",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_BANKCARD"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsBioID",
+      "type": "regular",
+      "path": "PooToolsSource/BioID",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTFaceIDPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTFaceIDPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_BILOGYID"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCalendar",
+      "type": "regular",
+      "path": "PooToolsSource/Calendar",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCalendarPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCalendarPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PTRemindersPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTRemindersPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CALENDAR"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCheckBox",
+      "type": "regular",
+      "path": "PooToolsSource/CheckBox",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CHECKBOX"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCheckDirtyWord",
+      "type": "regular",
+      "path": "PooToolsSource/CheckDirtyWord",
+      "sources": [],
+      "resources": [
+        {
+          "path": "Resource",
+          "rule": {
+            "process": {}
+          }
+        }
+      ],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CHECKDIRTYWORD"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCheckUpdate",
+      "type": "regular",
+      "path": "PooToolsSource/CheckUpdate",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SwiftJWT",
+          "kind": "third_party",
+          "package": "Swift-JWT",
+          "declaration": {
+            "product": [
+              "SwiftJWT",
+              "Swift-JWT",
+              null,
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CHECKUPDATE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsChinesePinyin",
+      "type": "regular",
+      "path": "PooToolsSource/Pinyin",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CHINESEPINYIN"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCircle",
+      "type": "regular",
+      "path": "PooToolsSource/Circle",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CIRCLE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCodeView",
+      "type": "regular",
+      "path": "PooToolsSource/CodeView",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CODEVIEW"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsContact",
+      "type": "regular",
+      "path": "PooToolsSource/Contact",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTContactsPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTContactsPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CONTACT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCountry",
+      "type": "regular",
+      "path": "PooToolsSource/Country",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COUNTRY"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsCustomerLabel",
+      "type": "regular",
+      "path": "PooToolsSource/Label",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CUSTOMERLABEL"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsDEBUG",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "DEBUGLocation",
+        "Debug",
+        "DebugCategory",
+        "DebugColor",
+        "DebugCrash",
+        "DebugFile",
+        "DebugLibs",
+        "DebugNetwork",
+        "DebugPerformance",
+        "DebugRuler",
+        "DebugUserDefault",
+        "DevMask",
+        "Inspector",
+        "LocalConsole",
+        "TouchInspector"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsPDF",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPDF",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsSearchBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSearchBar",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsShare",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsShare",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsDEBUGTrackingEyes",
+      "type": "regular",
+      "path": "PooToolsSource/WhereIsMyEye",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsDEBUG",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsDEBUG",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUGTRACKINGEYES"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsDataEncrypt",
+      "type": "regular",
+      "path": "PooToolsSource/AESAndDES",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "CryptoSwift",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "CryptoSwift",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DATAENCRYPT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsGuide",
+      "type": "regular",
+      "path": "PooToolsSource/Guide",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsPageControl",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPageControl",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_GUIDE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsHandSign",
+      "type": "regular",
+      "path": "PooToolsSource/SignView",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_HANDSIGN"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsHarbethKit",
+      "type": "regular",
+      "path": "PooToolsSource/C7Collector",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Harbeth",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Harbeth",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_HARBETHKIT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsHeartRate",
+      "type": "regular",
+      "path": "PooToolsSource/HeartRate",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Lottie",
+          "kind": "third_party",
+          "package": "lottie-ios",
+          "declaration": {
+            "product": [
+              "Lottie",
+              "lottie-ios",
+              null,
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_HEARTRATE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsHud",
+      "type": "regular",
+      "path": "PooToolsSource/Hud",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsProgressBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsProgressBar",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_HUD"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsIAP",
+      "type": "regular",
+      "path": "PooToolsSource/IAP",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_IAP"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsImageEditor",
+      "type": "regular",
+      "path": "PooToolsSource/ImageEditor",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsHarbethKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsHarbethKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsPhotoPicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPhotoPicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Harbeth",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Harbeth",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_IMAGEEDITOR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsImagePicker",
+      "type": "regular",
+      "path": "PooToolsSource/ImagePicker",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_IMAGEPICKER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsInput",
+      "type": "regular",
+      "path": "PooToolsSource/Input",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "PhoneNumberKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PhoneNumberKit",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_INPUT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsKeyChain",
+      "type": "regular",
+      "path": "PooToolsSource/KeyChain",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_KEYCHAIN"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsKeyboard",
+      "type": "regular",
+      "path": "PooToolsSource/Keyboard",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CUSTOMERNUMBERKEYWORD"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsLaunchTimeProfiler",
+      "type": "regular",
+      "path": "PooToolsSource/LaunchTimeProfiler",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LAUNCHTIMEPROFILER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsLayout",
+      "type": "regular",
+      "path": "PooToolsSource/Layout",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "CollectionViewPagingLayout",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "CollectionViewPagingLayout",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LAYOUT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsLivePhoto",
+      "type": "regular",
+      "path": "PooToolsSource/LivePhoto",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LIVEPHOTO"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsLoading",
+      "type": "regular",
+      "path": "PooToolsSource/Loading",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LOADING"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsLocation",
+      "type": "regular",
+      "path": "PooToolsSource/Location",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTLocationPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTLocationPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LOCATION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsMediaViewer",
+      "type": "regular",
+      "path": "PooToolsSource/MediaViewer",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsLivePhoto",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLivePhoto",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsPageControl",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPageControl",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsProgressBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsProgressBar",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_MEDIAVIEWER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsMessageKit",
+      "type": "regular",
+      "path": "PooToolsSource/MessageKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsCustomerLabel",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsCustomerLabel",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_MESSAGEKIT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsMotion",
+      "type": "regular",
+      "path": "PooToolsSource/Motion",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTMotionPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTMotionPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_MOTION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsNetWork",
+      "type": "regular",
+      "path": "PooToolsSource/NetWork",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsLoading",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLoading",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Alamofire",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Alamofire",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_NETWORK"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsNetworkSpeedTest",
+      "type": "regular",
+      "path": "PooToolsSource/NetworkSpeedTest",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_NETWORKSPEEDTEST"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsOSSKitSpeech",
+      "type": "regular",
+      "path": "PooToolsSource/OSSKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTSpeechPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTSpeechPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_OSSKITSPEECH"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPDF",
+      "type": "regular",
+      "path": "PooToolsSource/PDF",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PDF"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPageControl",
+      "type": "regular",
+      "path": "PooToolsSource/PageControl",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PAGECONTROL"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPagingControl",
+      "type": "regular",
+      "path": "PooToolsSource/SegmentControl",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "JXPagingView",
+          "kind": "third_party",
+          "package": "JXPagingView",
+          "declaration": {
+            "product": [
+              "JXPagingView",
+              "JXPagingView",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "JXSegmentedView",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "JXSegmentedView",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PAGINGCONTROL"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPhoneInfo",
+      "type": "regular",
+      "path": "PooToolsSource/PhoneInfo",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PHONEINFO"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPhotoPicker",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "PhotoPicker"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsImagePicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsImagePicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsLoading",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLoading",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Kakapos",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Kakapos",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PHOTOPICKER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPicker",
+      "type": "regular",
+      "path": "PooToolsSource/Picker",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwifterSwift",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SwifterSwift",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PICKER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsPing",
+      "type": "regular",
+      "path": "PooToolsSource/Ping",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PING"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsProgressBar",
+      "type": "regular",
+      "path": "PooToolsSource/ProgressBar",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PROGRESSBAR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsRateView",
+      "type": "regular",
+      "path": "PooToolsSource/RateView",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_RATE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsRouter",
+      "type": "regular",
+      "path": "PooToolsSource/Router",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_ROUTER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSVG",
+      "type": "regular",
+      "path": "PooToolsSource/KingfisherSVG",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Kingfisher",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Kingfisher",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PocketSVG",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PocketSVG",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SVG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsScanQRCode",
+      "type": "regular",
+      "path": "PooToolsSource/QRCodeScan",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsImagePicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsImagePicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsPhotoPicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPhotoPicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SCANQRCODE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsScrollBanner",
+      "type": "regular",
+      "path": "PooToolsSource/ScrollBanner",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsPageControl",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPageControl",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SCROLLBANNER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSearchBar",
+      "type": "regular",
+      "path": "PooToolsSource/SearchBar",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SEARCHBAR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSegmented",
+      "type": "regular",
+      "path": "PooToolsSource/Segmented",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SEGMENT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsShare",
+      "type": "regular",
+      "path": "PooToolsSource/Share",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsCustomerLabel",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsCustomerLabel",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SHARE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSlider",
+      "type": "regular",
+      "path": "PooToolsSource/Slider",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SLIDER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSmartScreenshot",
+      "type": "regular",
+      "path": "PooToolsSource/ScreenShot",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SMARTSCREENSHOT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSocketKit",
+      "type": "regular",
+      "path": "PooToolsSource/SocketKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SocketRocket",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SocketRocket",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SOCKETKIT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSpeedPanel",
+      "type": "regular",
+      "path": "PooToolsSource/SpeedPanel",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPEEDPANEL"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsStepCount",
+      "type": "regular",
+      "path": "PooToolsSource/HealthKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PTHealthPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTHealthPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_STEPCOUNT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsStepper",
+      "type": "regular",
+      "path": "PooToolsSource/Stepper",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_STEPPER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsTelephony",
+      "type": "regular",
+      "path": "PooToolsSource/CallMessageMail",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_TELEPHONY"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsTipsView",
+      "type": "regular",
+      "path": "PooToolsSource/TipsView",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_TIPSVIEW"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsVideoEditor",
+      "type": "regular",
+      "path": "PooToolsSource/VideoEditor",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsHarbethKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsHarbethKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsLoading",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLoading",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsProgressBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsProgressBar",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "Harbeth",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Harbeth",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_VIDEOEDITOR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsVision",
+      "type": "regular",
+      "path": "PooToolsSource/Vision",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_VISION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsWhatsNewsKit",
+      "type": "regular",
+      "path": "PooToolsSource/WhatsNewsKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_WHATSNEWSKIT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsiOS17Tips",
+      "type": "regular",
+      "path": "PooToolsSource/iOS17Tips",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_iOS17TIPS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "ptools",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "ActionsheetAndAlert",
+        "Animation",
+        "AppDelegate",
+        "AppStore",
+        "ApplicationFunction",
+        "Badge",
+        "Base",
+        "BlackMagic",
+        "Blur",
+        "Button",
+        "Category",
+        "Colors",
+        "Core",
+        "DarkMode",
+        "FloatPanel",
+        "Font",
+        "Foundation",
+        "Language",
+        "Line",
+        "Log",
+        "PermissionCore",
+        "PhotoLibraryPermission",
+        "Protocol",
+        "Rotation",
+        "SideMenuControl",
+        "StatusBar",
+        "Switch",
+        "iCloud"
+      ],
+      "resources": [
+        {
+          "path": "Resource",
+          "rule": {
+            "process": {}
+          }
+        }
+      ],
+      "internal_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "AttributedString",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "AttributedString",
+              null
+            ]
+          }
+        },
+        {
+          "name": "CocoaLumberjackSwift",
+          "kind": "third_party",
+          "package": "CocoaLumberjack",
+          "declaration": {
+            "product": [
+              "CocoaLumberjackSwift",
+              "CocoaLumberjack",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "DeviceKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "DeviceKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "FlagKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "FlagKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "IOSSecuritySuite",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "IOSSecuritySuite",
+              null
+            ]
+          }
+        },
+        {
+          "name": "IQKeyboardManagerSwift",
+          "kind": "third_party",
+          "package": "IQKeyboardManager",
+          "declaration": {
+            "product": [
+              "IQKeyboardManagerSwift",
+              "IQKeyboardManager",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "Instructions",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Instructions",
+              null
+            ]
+          }
+        },
+        {
+          "name": "KakaJSON",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "KakaJSON",
+              null
+            ]
+          }
+        },
+        {
+          "name": "Kingfisher",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Kingfisher",
+              null
+            ]
+          }
+        },
+        {
+          "name": "Lottie",
+          "kind": "third_party",
+          "package": "lottie-ios",
+          "declaration": {
+            "product": [
+              "Lottie",
+              "lottie-ios",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "NotificationBannerSwift",
+          "kind": "third_party",
+          "package": "NotificationBanner",
+          "declaration": {
+            "product": [
+              "NotificationBannerSwift",
+              "NotificationBanner",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "Popovers",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "Popovers",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SafeSFSymbols",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SafeSFSymbols",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SmartCodable",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SmartCodable",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwiftDate",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SwiftDate",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwifterSwift",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SwifterSwift",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ZipArchive",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ZipArchive",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_APPZ"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_CGDWEBSERVER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_FLAG"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_INSTRUCTIONS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_LAUNCHTIMEPROFILER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_NOTIFICATIONBANNER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_PICKER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_POPOVERKIT"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SECURITYSUITE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_TABBAR"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_VIDEOCACHE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_ZIPARCHINE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    }
+  ]
+}
