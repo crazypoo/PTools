@@ -28,6 +28,10 @@ public extension PTCellBindable {
 }
 
 @objcMembers
+// English: Cell registration and UIKit state are isolated to MainActor.
+// Español: El registro de celdas y el estado de UIKit están aislados en MainActor.
+// 中文：Cell 注册和 UIKit 状态统一隔离到 MainActor。
+@MainActor
 open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable {
     
     public var isStaticCell:Bool = false {

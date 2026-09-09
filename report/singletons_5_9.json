@@ -28,7 +28,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 138,
+      "line": 139,
       "declaration": "public static let shared = PTNavigationBarManager()",
       "scope": "UI or lifecycle state"
     },
@@ -76,7 +76,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 33,
+      "line": 39,
       "declaration": "public static let shared = PTGCDManager()",
       "scope": "legacy/global state"
     },
@@ -267,8 +267,8 @@
       "scope": "service or shared resource"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 544,
+      "path": "PooToolsSource/NetWork/NetworkConcurrency.swift",
+      "line": 9,
       "declaration": "public static let shared = RequestDeduplicator()",
       "scope": "service or shared resource"
     },

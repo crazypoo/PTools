@@ -9,6 +9,7 @@
 import UIKit
 
 @objcMembers
+@MainActor
 open class PTBaseNavControl: UINavigationController {
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

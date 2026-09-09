@@ -10,8 +10,18 @@ import Photos
 import MobileCoreServices
 import UIKit
 import PhotosUI
+import os.lock
 
 extension PHAsset: PTProtocolCompatible {}
+
+// English: This lock protects the PhotoKit request ID and continuation until either result or cancellation wins.
+// Español: Este bloqueo protege el ID de PhotoKit y la continuación hasta que gane el resultado o la cancelación.
+// 中文：这个锁保护 PhotoKit 请求 ID 和 continuation，确保结果与取消只有一个能够完成请求。
+private struct PTAsyncImageRequestState: Sendable {
+    var requestID = PHInvalidImageRequestID
+    var continuation: CheckedContinuation<UIImage?, Never>?
+    var didFinish = false
+}
 
 public extension PHAsset {
     // 使用 objc_Association 来存储状态
@@ -308,13 +318,66 @@ public extension PHAsset {
         }
     }
 
+    // English: Keep the PhotoKit request ID in a locked state so Task cancellation reaches PhotoKit.
+    // Español: Mantiene el ID de solicitud de PhotoKit en un estado protegido para propagar la cancelación.
+    // 中文：将 PhotoKit 请求 ID 保存在受锁保护的状态中，让 Task 取消能够传递到 PhotoKit。
+    @MainActor
     func asyncImage() async -> UIImage? {
-        await withCheckedContinuation { continuation in
-            PTMediaLibManager.requestImage(for: self,
-                                           targetSize: PHImageManagerMaximumSize) { result in
-                continuation.resume(returning: result.image)
+        let state = OSAllocatedUnfairLock(initialState: PTAsyncImageRequestState())
+
+        return await withTaskCancellationHandler(operation: {
+            await withCheckedContinuation { continuation in
+                let shouldResumeImmediately = state.withLock { state -> Bool in
+                    guard !state.didFinish else { return true }
+                    state.continuation = continuation
+                    return false
+                }
+                guard !shouldResumeImmediately else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+
+                let requestID = PTMediaLibManager.requestImage(for: self,
+                                                               targetSize: PHImageManagerMaximumSize) { result in
+                    let continuation = state.withLock { state -> CheckedContinuation<UIImage?, Never>? in
+                        guard !state.didFinish else { return nil }
+                        state.didFinish = true
+                        state.requestID = PHInvalidImageRequestID
+                        let continuation = state.continuation
+                        state.continuation = nil
+                        return continuation
+                    }
+                    continuation?.resume(returning: result.isCancelled || result.error != nil ? nil : result.image)
+                }
+
+                let shouldCancelImmediately = state.withLock { state -> Bool in
+                    guard !state.didFinish else { return true }
+                    state.requestID = requestID
+                    return false
+                }
+                if shouldCancelImmediately, requestID != PHInvalidImageRequestID {
+                    PHImageManager.default().cancelImageRequest(requestID)
+                }
             }
-        }
+        }, onCancel: {
+            Task { @MainActor in
+                let cancellation = state.withLock { state -> (PHImageRequestID, CheckedContinuation<UIImage?, Never>?) in
+                    guard !state.didFinish else {
+                        return (PHInvalidImageRequestID, nil)
+                    }
+                    state.didFinish = true
+                    let requestID = state.requestID
+                    state.requestID = PHInvalidImageRequestID
+                    let continuation = state.continuation
+                    state.continuation = nil
+                    return (requestID, continuation)
+                }
+                if cancellation.0 != PHInvalidImageRequestID {
+                    PHImageManager.default().cancelImageRequest(cancellation.0)
+                }
+                cancellation.1?.resume(returning: nil)
+            }
+        })
     }
 }
 

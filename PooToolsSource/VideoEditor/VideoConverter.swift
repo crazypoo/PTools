@@ -12,6 +12,23 @@ import AVKit
 private struct PTVideoExportBox: Sendable {
     let isCancelledState: Bool
 }
+
+// English: This MainActor box isolates AVAssetExportSession cancellation from task callbacks.
+// Español: Esta caja MainActor aísla la cancelación de AVAssetExportSession de los callbacks de tareas.
+// 中文：这个 MainActor 包装器将 AVAssetExportSession 的取消操作与任务回调隔离。
+@MainActor
+private final class PTVideoExportCancellationBox {
+    weak var session: AVAssetExportSession?
+
+    init(session: AVAssetExportSession) {
+        self.session = session
+    }
+
+    func cancel() {
+        session?.cancelExport()
+    }
+}
+
 // 新增：引入 @MainActor 保证外部调用的安全，解决绝大部分 Sendable 捕获警告
 @MainActor
 open class VideoConverter {
@@ -392,6 +409,7 @@ open class VideoConverter {
 
         // 🚀 终极改动：废弃丑陋的回调盒子，使用纯净的 Async/Await + 并发轮询
         Task { @MainActor in
+            let cancellationBox = PTVideoExportCancellationBox(session: exportSession)
             // 开启一个轮询子任务，专门向外播报进度
             let progressTask = Task { @MainActor in
                 while exportSession.status == .exporting || exportSession.status == .waiting {
@@ -401,7 +419,13 @@ open class VideoConverter {
             }
             
             // 核心原生异步导出方法
-            await exportSession.export()
+            await withTaskCancellationHandler(operation: {
+                await exportSession.export()
+            }, onCancel: {
+                Task { @MainActor in
+                    cancellationBox.cancel()
+                }
+            })
             
             // 导出结束，取消轮询
             progressTask.cancel()

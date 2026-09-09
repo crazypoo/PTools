@@ -539,64 +539,6 @@ public struct RequestKey: Hashable, Sendable {
     }
 }
 
-// 🌟 泛型去重管理池：完美闭环跨线程并发与擦除提取
-public actor RequestDeduplicator {
-    public static let shared = RequestDeduplicator()
-    
-    // 使用 Any 存储不同泛型类型的 Task
-    private var runningTasks: [RequestKey: Any] = [:]
-    
-    private init() {}
-    
-    public func execute<T: Sendable>(
-        request: URLRequest,
-        policy: PTNetworkDedupPolicy,
-        task: @escaping @Sendable () async throws -> PTBaseStructModel<T>
-    ) async throws -> PTBaseStructModel<T> {
-        
-        switch policy {
-        case .none: return try await task()
-        default:
-            let key = RequestKey(request: request, responseType: T.self)
-            
-            // 1. 检查是否存在同类型同参数的正在运行任务
-            if let existingTask = runningTasks[key] as? Task<PTBaseStructModel<T>, Error> {
-                return try await existingTask.value
-            }
-            
-            // 2. 创建新任务
-            let newTask = Task { try await task() }
-            runningTasks[key] = newTask
-            
-            // 3. 任务结束后清理现场
-            defer { runningTasks.removeValue(forKey: key) }
-            
-            return try await newTask.value
-        }
-    }
-
-    fileprivate func executeRaw(
-        request: URLRequest,
-        policy: PTNetworkDedupPolicy,
-        task: @escaping @Sendable () async throws -> PTNetworkResponseSnapshot
-    ) async throws -> PTNetworkResponseSnapshot {
-        switch policy {
-        case .none:
-            return try await task()
-        default:
-            let key = RequestKey(request: request, responseType: PTNetworkResponseSnapshot.self)
-            if let existingTask = runningTasks[key] as? Task<PTNetworkResponseSnapshot, Error> {
-                return try await existingTask.value
-            }
-
-            let newTask = Task { try await task() }
-            runningTasks[key] = newTask
-            defer { runningTasks.removeValue(forKey: key) }
-            return try await newTask.value
-        }
-    }
-}
-
 public struct PTNetworkConfig: Sendable {
     public var requestTimeout: TimeInterval = 20
     public var downloadRequestTimeout: TimeInterval = 5
@@ -680,7 +622,7 @@ fileprivate struct PreparedImageResult: Sendable {
 // A response snapshot keeps only Sendable values after Alamofire's callback returns.
 // Una instantánea conserva únicamente valores Sendable después del callback de Alamofire.
 // 响应快照只在 Alamofire 回调结束后保留 Sendable 值。
-fileprivate struct PTNetworkResponseSnapshot: Sendable {
+struct PTNetworkResponseSnapshot: Sendable {
     let url: String
     let data: Data?
     let metadata: PTResponseMetadata
@@ -698,6 +640,14 @@ public final class Network: @unchecked Sendable {
     static public let share = Network()
     private let pluginsLock = NSLock()
     private var _plugins: [NetworkPlugin]
+
+    // English: Session creation is protected so the legacy lazy configuration behavior remains race-free.
+    // Español: La creación de sesiones está protegida para conservar sin carreras el comportamiento perezoso heredado.
+    // 中文：为 Session 创建加锁，在保证无竞争的同时保留旧的懒加载配置行为。
+    private let sessionLock = NSLock()
+    private var storedSession: Session?
+    private let downloadSessionLock = NSLock()
+    private var storedDownloadSession: Session?
 
     // English: New instances snapshot their configuration and plugins; the legacy singleton remains available.
     // Español: Las nuevas instancias capturan su configuración y plugins; el singleton heredado sigue disponible.
@@ -762,21 +712,30 @@ public final class Network: @unchecked Sendable {
             configLock.unlock()
         }
     }
-    
-    private lazy var session: Session = {
-        let configuration = URLSessionConfiguration.default
-        let configurationSnapshot = config
-        configuration.timeoutIntervalForRequest = configurationSnapshot.requestTimeout
-        configuration.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
-        configuration.waitsForConnectivity = configurationSnapshot.waitsForConnectivity
-        configuration.requestCachePolicy = .useProtocolCachePolicy
-        var protocols = configuration.protocolClasses ?? []
+    // English: Build the request session from an immutable configuration snapshot.
+    // Español: Construye la sesión de solicitudes a partir de una instantánea inmutable de configuración.
+    // 中文：使用不可变配置快照创建请求 Session。
+    private static func makeSession(configuration configurationSnapshot: PTNetworkConfig) -> Session {
+        let urlConfiguration = URLSessionConfiguration.default
+        urlConfiguration.timeoutIntervalForRequest = configurationSnapshot.requestTimeout
+        urlConfiguration.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
+        urlConfiguration.waitsForConnectivity = configurationSnapshot.waitsForConnectivity
+        urlConfiguration.requestCachePolicy = .useProtocolCachePolicy
+        var protocols = urlConfiguration.protocolClasses ?? []
         protocols.insert(PTCustomHTTPProtocol.self, at: 0)
-        configuration.protocolClasses = protocols
-        
-        configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)
-        return Session(configuration: configuration, interceptor: RetryHandler(configuration: configurationSnapshot))
-    }()
+        urlConfiguration.protocolClasses = protocols
+        urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)
+        return Session(configuration: urlConfiguration, interceptor: RetryHandler(configuration: configurationSnapshot))
+    }
+
+    private var session: Session {
+        sessionLock.lock()
+        defer { sessionLock.unlock() }
+        if let storedSession { return storedSession }
+        let newSession = Self.makeSession(configuration: config)
+        storedSession = newSession
+        return newSession
+    }
     
     public var hud:PTHudView?
     @MainActor public var hudConfig : PTHudConfig {
@@ -1285,7 +1244,8 @@ public final class Network: @unchecked Sendable {
         let safeBox = PTSafeUploadParamsBox(media: media, path: path)
         
         return AsyncThrowingStream { continuation in
-            Task {
+            let cancellation = PTNetworkUploadCancellation()
+            let preparationTask = Task {
                 do {
                     // 1️⃣ 数据准备阶段
                     let preparedMedia = try await prepareMediaResource(media: safeBox.media)
@@ -1314,7 +1274,12 @@ public final class Network: @unchecked Sendable {
                     let session = Network.share.session
                     
                     // 3️⃣ 发起请求，并将进度和响应转换为值类型快照。
-                    session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
+                    guard !Task.isCancelled else {
+                        continuation.finish(throwing: CancellationError())
+                        return
+                    }
+
+                    let uploadRequest = session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
                         .uploadProgress { @Sendable progress in
                             let snapshot = PTProgressSnapshot(completedUnitCount: progress.completedUnitCount,
                                                                totalUnitCount: progress.totalUnitCount,
@@ -1337,9 +1302,14 @@ public final class Network: @unchecked Sendable {
                                 continuation.finish(throwing: error)
                             }
                         }
+                    cancellation.install(request: uploadRequest)
                 } catch {
                     continuation.finish(throwing: error)
                 }
+            }
+            cancellation.install(preparationTask: preparationTask)
+            continuation.onTermination = { @Sendable _ in
+                cancellation.cancel()
             }
         }
     }
@@ -1429,7 +1399,8 @@ public final class Network: @unchecked Sendable {
     ) -> AsyncThrowingStream<PTNetworkUploadEvent, Error> {
         
         AsyncThrowingStream { continuation in
-            Task {
+            let cancellation = PTNetworkUploadCancellation()
+            let preparationTask = Task {
                 do {
                     let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
@@ -1475,7 +1446,12 @@ public final class Network: @unchecked Sendable {
                     
                     // 🚀 优化点 2：等所有图片都处理成 Data 后，再交给 Alamofire。
                     let session = Network.share.session
-                    session.upload(multipartFormData: { multipartFormData in
+                    guard !Task.isCancelled else {
+                        continuation.finish(throwing: CancellationError())
+                        return
+                    }
+
+                    let uploadRequest = session.upload(multipartFormData: { multipartFormData in
                         
                         // 1. 追加已处理好的图片数据
                         for img in processedImages {
@@ -1512,7 +1488,12 @@ public final class Network: @unchecked Sendable {
                             continuation.finish(throwing: error)
                         }
                     }
+                    cancellation.install(request: uploadRequest)
                 } catch { continuation.finish(throwing: error) }
+            }
+            cancellation.install(preparationTask: preparationTask)
+            continuation.onTermination = { @Sendable _ in
+                cancellation.cancel()
             }
         }
     }
@@ -1710,17 +1691,28 @@ public final class Network: @unchecked Sendable {
     
     // MARK: - ================= 8. 下载引擎与流式控制 =================
     
-    private lazy var downloadSession: Session = {
-        let configurationSnapshot = config
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = configurationSnapshot.downloadRequestTimeout
-        config.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
-        config.httpMaximumConnectionsPerHost = 6
-        var protocols = config.protocolClasses ?? []
+    // English: Build the download session once from the same initialization snapshot.
+    // Español: Construye una sola sesión de descarga usando la misma instantánea inicial.
+    // 中文：使用同一份初始化快照只创建一次下载 Session。
+    private static func makeDownloadSession(configuration configurationSnapshot: PTNetworkConfig) -> Session {
+        let urlConfiguration = URLSessionConfiguration.default
+        urlConfiguration.timeoutIntervalForRequest = configurationSnapshot.downloadRequestTimeout
+        urlConfiguration.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
+        urlConfiguration.httpMaximumConnectionsPerHost = 6
+        var protocols = urlConfiguration.protocolClasses ?? []
         protocols.insert(PTCustomHTTPProtocol.self, at: 0)
-        config.protocolClasses = protocols
-        return Session(configuration: config)
-    }()
+        urlConfiguration.protocolClasses = protocols
+        return Session(configuration: urlConfiguration)
+    }
+
+    private var downloadSession: Session {
+        downloadSessionLock.lock()
+        defer { downloadSessionLock.unlock() }
+        if let storedDownloadSession { return storedDownloadSession }
+        let newSession = Self.makeDownloadSession(configuration: config)
+        storedDownloadSession = newSession
+        return newSession
+    }
     
     actor DownloadStore {
         var tasks: [String: DownloadTask] = [:]
@@ -1767,10 +1759,15 @@ public final class Network: @unchecked Sendable {
             if let data = resumeData { request = session.download(resumingWith: data, to: destination) }
             else { request = session.download(url, to: destination) }
             
-            // 💡 闭包跳回 actor 上下文：通过 Task { await ... } 安全跨域
+            // English: Capture Sendable progress values before entering the actor.
+            // Español: Captura valores de progreso Sendable antes de entrar en el actor.
+            // 中文：在进入 actor 前先捕获 Sendable 进度值。
             request?.downloadProgress(queue: .global()) { [weak self] p in
                 guard let self = self else { return }
-                Task { await self.handleProgress(p) }
+                let snapshot = PTProgressSnapshot(completedUnitCount: p.completedUnitCount,
+                                                   totalUnitCount: p.totalUnitCount,
+                                                   fractionCompleted: p.fractionCompleted)
+                Task { await self.handleProgress(snapshot) }
             }
             
             request?.response { [weak self] resp in
@@ -1779,15 +1776,25 @@ public final class Network: @unchecked Sendable {
             }
         }
         
-        // 🌟 专门处理进度的内部方法，运行在 actor 隔离区内
-        private func handleProgress(_ p: Progress) {
+        // English: Process an immutable progress snapshot inside the actor.
+        // Español: Procesa una instantánea de progreso inmutable dentro del actor.
+        // 中文：在 actor 内处理不可变的进度快照。
+        private func handleProgress(_ snapshot: PTProgressSnapshot) {
             let now = CACurrentMediaTime()
-            if now - lastProgressTime > 0.1 || p.isFinished {
+            let isFinished = snapshot.totalUnitCount > 0
+                && snapshot.completedUnitCount >= snapshot.totalUnitCount
+            if now - lastProgressTime > 0.1 || isFinished {
                 lastProgressTime = now
                 let handlers = progressHandlers
-                // 派发到主线程更新 UI
+                // English: Rebuild only the legacy scalar callback values on MainActor.
+                // Español: Reconstruye solo los valores escalares del callback heredado en MainActor.
+                // 中文：只在 MainActor 上重建旧回调需要的标量值。
                 for cb in handlers {
-                    Task { @MainActor in cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted) }
+                    Task { @MainActor in
+                        cb(snapshot.completedUnitCount,
+                           snapshot.totalUnitCount,
+                           snapshot.fractionCompleted)
+                    }
                 }
             }
         }
@@ -1855,15 +1862,28 @@ public final class Network: @unchecked Sendable {
     }
     
     @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
+        let cancellationBridge = PTDownloadCancellationBridge()
         try await withTaskCancellationHandler(operation: {
             try await withCheckedThrowingContinuation { continuation in
+                cancellationBridge.install(resumeCancellation: {
+                    continuation.resume(throwing: CancellationError())
+                })
                 self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
+                    guard cancellationBridge.finish() else { return }
                     if let fileURL = response.fileURL { continuation.resume(returning: fileURL) }
                     else { continuation.resume(throwing: PTNetworkError.downloadFail) }
-                }, fail: { error in continuation.resume(throwing: error ?? PTNetworkError.downloadFail) })
+                }, fail: { error in
+                    guard cancellationBridge.finish() else { return }
+                    continuation.resume(throwing: error ?? PTNetworkError.downloadFail)
+                })
+                cancellationBridge.install(cancelUnderlying: { [weak self] in
+                    self?.cancel(fileUrl: fileUrl)
+                })
             }
         }, onCancel: {
-            self.cancel(fileUrl: fileUrl)
+            Task { @MainActor in
+                cancellationBridge.cancel()
+            }
         })
     }
     

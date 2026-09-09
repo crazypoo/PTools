@@ -117,49 +117,49 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 196,
+      "line": 287,
       "kind": "NSCache",
       "text": "@MainActor private static let memoryCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 197,
+      "line": 288,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 198,
+      "line": 289,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 100"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 199,
+      "line": 290,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 50 * 1024 * 1024"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 200,
+      "line": 291,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 293,
+      "line": 393,
       "kind": "disk or custom cache",
       "text": "/// Preserves the URL-only key used by the video file cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 302,
+      "line": 402,
       "kind": "disk or custom cache",
       "text": "/// Writes a JPEG cache entry atomically on a utility task."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 320,
+      "line": 420,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
@@ -345,7 +345,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 35,
+      "line": 41,
       "kind": "NSCache",
       "text": "// 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer"
     },
@@ -627,9 +627,9 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 777,
+      "line": 727,
       "kind": "URLCache",
-      "text": "configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)"
+      "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",

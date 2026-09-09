@@ -28,6 +28,7 @@ public struct Exporter {
     let provider: Exporter.Provider
 
     /// 保存当前导出会话，供编辑器退出时取消正在进行的导出。
+    @MainActor
     private final class State {
         var exportSession: AVAssetExportSession?
     }
@@ -97,7 +98,16 @@ public struct Exporter {
             let targetURL = provider.outputURL
             
             do {
-                await export.export()
+                // English: Propagate Task cancellation to the active AVFoundation export session.
+                // Español: Propaga la cancelación de Task a la sesión de exportación activa de AVFoundation.
+                // 中文：将 Task 取消传递给正在执行的 AVFoundation 导出 Session。
+                await withTaskCancellationHandler(operation: {
+                    await export.export()
+                }, onCancel: { [weak state] in
+                    Task { @MainActor in
+                        state?.exportSession?.cancelExport()
+                    }
+                })
                 if Task.isCancelled || export.status == .cancelled {
                     complete(.failure(Exporter.Error.exportAsynchronously(.cancelled)))
                     return

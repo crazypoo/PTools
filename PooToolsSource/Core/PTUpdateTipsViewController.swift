@@ -11,6 +11,10 @@ import SnapKit
 import SwifterSwift
 import AttributedString
 
+// English: This content view builds UIKit hierarchy and constraints, so it is MainActor isolated.
+// Español: Esta vista construye la jerarquía y las restricciones de UIKit, por eso está aislada en MainActor.
+// 中文：该内容视图负责创建 UIKit 层级和约束，因此隔离到 MainActor。
+@MainActor
 public class PTUpdateTipsContentView : UIView {
     public init(oV:String,nV:String,descriptionString:String) {
         super.init(frame: .zero)

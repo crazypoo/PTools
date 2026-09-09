@@ -11,7 +11,7 @@
 | PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift:148 | UI or lifecycle state | public static let shared = PTAlertManager() |
 | PooToolsSource/Base/PTAudioCache.swift:96 | UI or lifecycle state | public static let shared = PTAudioCacheFileManager() |
 | PooToolsSource/Base/PTAudioCache.swift:164 | UI or lifecycle state | public static let shared = PTAudioService() |
-| PooToolsSource/Base/PTBaseViewController.swift:138 | UI or lifecycle state | public static let shared = PTNavigationBarManager() |
+| PooToolsSource/Base/PTBaseViewController.swift:139 | UI or lifecycle state | public static let shared = PTNavigationBarManager() |
 | PooToolsSource/Base/PTVideoCoverCache.swift:63 | UI or lifecycle state | public static let shared = PTVideoManager() |
 | PooToolsSource/Base/PTVideoCoverCache.swift:123 | UI or lifecycle state | public static let shared = PTVideoFileCache() |
 | PooToolsSource/BioID/PTBiologyID.swift:23 | legacy/global state | public static let shared = PTBiometricsManager() |
@@ -19,7 +19,7 @@
 | PooToolsSource/CallMessageMail/PTPhoneBlock.swift:18 | legacy/global state | public static let shared = PTPhoneBlock() |
 | PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:50 | legacy/global state | public static let shared = PTRefreshConfig() |
 | PooToolsSource/Core/PTAppUserdefault.swift:50 | legacy/global state | public static let shared = PTCoreUserDefultsWrapper() |
-| PooToolsSource/Core/PTGCDManager.swift:33 | legacy/global state | public static let shared = PTGCDManager() |
+| PooToolsSource/Core/PTGCDManager.swift:39 | legacy/global state | public static let shared = PTGCDManager() |
 | PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift:14 | legacy/global state | static let shared = PTDebugLocationKit() |
 | PooToolsSource/DarkMode/PTDrakModeOption.swift:107 | legacy/global state | static let shared = PTDarkModeScheduleMonitor() |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:205 | legacy/global state | static let shared = LegacyThemeProvider() |
@@ -51,7 +51,7 @@
 | PooToolsSource/NetWork/Network.swift:93 | service or shared resource | public static let shared = NetworkReachability() |
 | PooToolsSource/NetWork/Network.swift:140 | service or shared resource | public static let shared = PTNetWorkStatus() |
 | PooToolsSource/NetWork/Network.swift:317 | service or shared resource | static let shared = NetworkCache() |
-| PooToolsSource/NetWork/Network.swift:544 | service or shared resource | public static let shared = RequestDeduplicator() |
+| PooToolsSource/NetWork/NetworkConcurrency.swift:9 | service or shared resource | public static let shared = RequestDeduplicator() |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:27 | service or shared resource | public static let shared = PTNetworkSpeedTestFunction() |
 | PooToolsSource/OSSKit/OSSSpeech.swift:198 | legacy/global state | public static let shared = OSSSpeech() |
 | PooToolsSource/Picker/PTBasePickerView.swift:125 | UI or lifecycle state | public static var shared = PTPickerStyle() |

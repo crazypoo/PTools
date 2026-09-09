@@ -42,6 +42,25 @@ Pods 的弃用、Metal 工具链和脚本输出单独保留在原始日志中。
 - `/tmp/PTools-5.9-final-poo-tools-scheme.log`
 - `/tmp/PTools-5.9-PooTools-Target-Debug.log`（历史直接 target 路径）
 
+## 5.9.1 Concurrency follow-up（2026-09-09）
+
+本轮并发改动的静态门禁、变更文件解析、SwiftPM manifest、构建入口契约和 `git diff --check`
+均已通过。`PooToolsSource` 过滤后的 Xcode 日志没有新增源码错误或警告。
+
+本轮实际修改并解析通过 19 个已纳入版本控制的 Swift 文件，以及 1 个新增的
+`PooToolsSource/NetWork/NetworkConcurrency.swift`。
+
+| 配置 | 结果 | 阻断位置 |
+| --- | --- | --- |
+| `PooTools-Example` Debug | 未通过 | 外部 `KituraContracts` Swift 6 并发诊断；同时出现 `swift-syntax` 更新获取失败 |
+| `PooTools-Example` Release | 未通过 | 外部 `KituraContracts` Swift 6 并发诊断 |
+
+原始日志：
+
+- `/tmp/PTools-5.9.1-final-release-2.log`
+
+本轮没有修改 Pods 源码、第三方依赖版本或产品版本号，也没有创建 5.9.1 标签。
+
 ## 发布结论
 
 5.9.x 目前不能标记为完整 Xcode 验收通过，也不能创建 5.9.x 发布标签。需要先由依赖

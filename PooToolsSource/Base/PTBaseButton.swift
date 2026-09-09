@@ -8,6 +8,10 @@
 
 import UIKit
 
+// English: Button configuration and loading state are UI mutations owned by MainActor.
+// Español: La configuración y el estado de carga del botón son mutaciones de UI propiedad de MainActor.
+// 中文：按钮配置和加载状态属于 UI 修改，由 MainActor 统一持有。
+@MainActor
 open class PTBaseButton: UIButton {
     
     // MARK: - 私有 UI 组件

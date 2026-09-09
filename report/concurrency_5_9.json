@@ -47,7 +47,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 901,
+      "line": 906,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -101,31 +101,31 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 26,
+      "line": 36,
       "text": "private struct PTSendableExportSession: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 56,
+      "line": 66,
       "text": "struct PTSendableAVAsset: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 132,
+      "line": 142,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 279,
+      "line": 289,
       "text": "DispatchQueue.main.async { completion(nil) }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 294,
+      "line": 304,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -275,13 +275,13 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 187,
+      "line": 224,
       "text": "Task.detached(priority: priority) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 194,
+      "line": 231,
       "text": "Task.detached(priority: .background) {"
     },
     {
@@ -587,19 +587,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 697,
+      "line": 639,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1271,
+      "line": 1230,
       "text": "private struct PTSafeUploadParamsBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1543,
+      "line": 1524,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
@@ -761,13 +761,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 30,
+      "line": 47,
       "text": "private struct PTSafeAudioExportBox: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 195,
+      "line": 212,
       "text": "Task.detached(priority: .background) {"
     },
     {

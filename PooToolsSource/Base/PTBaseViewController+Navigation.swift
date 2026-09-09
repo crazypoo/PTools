@@ -11,6 +11,10 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+// English: The title container participates in navigation-bar layout on MainActor.
+// Español: El contenedor del título participa en el layout de navegación dentro de MainActor.
+// 中文：标题容器参与导航栏布局，固定在 MainActor 上执行。
+@MainActor
 open class PTNavTitleContainer: UIView {
 
     public override init(frame: CGRect) {

@@ -192,6 +192,97 @@ public final class PTVideoFileCache: Sendable {
 /// Video cover cache and thumbnail request coordinator.
 /// Caché de portadas de vídeo y coordinador de solicitudes de miniaturas.
 /// 视频封面缓存与缩略图请求协调器。
+@MainActor
+private final class PTVideoCoverPendingTask {
+    private let task: Task<UIImage?, Never>
+    // English: Remove the entry only after the shared generation task really finishes.
+    // Español: Elimina la entrada solo cuando termina realmente la tarea compartida.
+    // 中文：只有共享生成任务真正结束后才移除字典中的记录。
+    private let onFinish: @MainActor (PTVideoCoverPendingTask) -> Void
+    private var waiters: [UUID: CheckedContinuation<UIImage?, Never>] = [:]
+    private var cancelledBeforeRegistration = Set<UUID>()
+    private var didFinish = false
+    private var result: UIImage?
+
+    init(operation: @escaping @MainActor @Sendable () async -> UIImage?,
+         onFinish: @escaping @MainActor (PTVideoCoverPendingTask) -> Void) {
+        self.onFinish = onFinish
+        let task = Task { @MainActor in
+            await operation()
+        }
+        self.task = task
+
+        Task { @MainActor [weak self] in
+            let image = await task.value
+            self?.finish(with: image)
+            if let self {
+                self.onFinish(self)
+            }
+        }
+    }
+
+    func wait() async -> UIImage? {
+        let waiterID = UUID()
+        return await withTaskCancellationHandler(operation: {
+            await withCheckedContinuation { continuation in
+                register(waiterID: waiterID, continuation: continuation)
+            }
+        }, onCancel: {
+            Task { @MainActor [weak self] in
+                self?.cancel(waiterID: waiterID)
+            }
+        })
+    }
+
+    var isFinished: Bool {
+        didFinish
+    }
+
+    private func register(waiterID: UUID,
+                          continuation: CheckedContinuation<UIImage?, Never>) {
+        guard !didFinish else {
+            continuation.resume(returning: result)
+            return
+        }
+
+        if cancelledBeforeRegistration.remove(waiterID) != nil {
+            continuation.resume(returning: nil)
+            cancelTaskIfUnobserved()
+            return
+        }
+
+        waiters[waiterID] = continuation
+    }
+
+    private func cancel(waiterID: UUID) {
+        guard !didFinish else { return }
+
+        if let continuation = waiters.removeValue(forKey: waiterID) {
+            continuation.resume(returning: nil)
+        } else {
+            cancelledBeforeRegistration.insert(waiterID)
+        }
+        cancelTaskIfUnobserved()
+    }
+
+    private func cancelTaskIfUnobserved() {
+        guard !didFinish, waiters.isEmpty else { return }
+        task.cancel()
+    }
+
+    private func finish(with image: UIImage?) {
+        guard !didFinish else { return }
+        didFinish = true
+        result = image
+        let continuations = Array(waiters.values)
+        waiters.removeAll(keepingCapacity: false)
+        cancelledBeforeRegistration.removeAll(keepingCapacity: false)
+        for continuation in continuations {
+            continuation.resume(returning: image)
+        }
+    }
+}
+
 public enum PTVideoCoverCache {
     @MainActor private static let memoryCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
@@ -200,7 +291,7 @@ public enum PTVideoCoverCache {
         return cache
     }()
 
-    @MainActor private static var pendingTasks: [String: Task<UIImage?, Never>] = [:]
+    @MainActor private static var pendingTasks: [String: PTVideoCoverPendingTask] = [:]
     private static let diskStore = PTVideoCoverDiskStore()
 
     /// Loads a cached thumbnail or generates the requested one-based frame.
@@ -220,31 +311,40 @@ public enum PTVideoCoverCache {
             return image
         }
 
-        let task: Task<UIImage?, Never>
-        if let pendingTask = pendingTasks[key] {
-            task = pendingTask
+        let pendingTask: PTVideoCoverPendingTask
+        if let existingTask = pendingTasks[key] {
+            pendingTask = existingTask
         } else {
-            task = Task { @MainActor in
-                if let data = await diskStore.readData(for: key),
-                   let image = UIImage(data: data) {
-                    return image
-                }
+            pendingTask = PTVideoCoverPendingTask(
+                operation: { @MainActor in
+                    if let data = await diskStore.readData(for: key),
+                       let image = UIImage(data: data) {
+                        return image
+                    }
 
-                guard !Task.isCancelled else { return nil }
-                let image = await PTVideoThumbnailService.image(for: videoURL,
-                                                                frameNumber: frameNumber,
-                                                                maximumSize: maximumSize,
-                                                                appliesPreferredTrackTransform: appliesPreferredTrackTransform)
-                guard !Task.isCancelled, let image else { return nil }
-                guard let data = image.jpegData(compressionQuality: 0.8) else { return image }
-                await diskStore.writeData(data, for: key)
-                return image
-            }
-            pendingTasks[key] = task
+                    guard !Task.isCancelled else { return nil }
+                    let image = await PTVideoThumbnailService.image(for: videoURL,
+                                                                    frameNumber: frameNumber,
+                                                                    maximumSize: maximumSize,
+                                                                    appliesPreferredTrackTransform: appliesPreferredTrackTransform)
+                    guard !Task.isCancelled, let image else { return nil }
+                    guard let data = image.jpegData(compressionQuality: 0.8) else { return image }
+                    await diskStore.writeData(data, for: key)
+                    return image
+                },
+                onFinish: { finishedTask in
+                    if pendingTasks[key] === finishedTask {
+                        pendingTasks[key] = nil
+                    }
+                }
+            )
+            pendingTasks[key] = pendingTask
         }
 
-        let image = await task.value
-        pendingTasks[key] = nil
+        let image = await pendingTask.wait()
+        if pendingTask.isFinished, pendingTasks[key] === pendingTask {
+            pendingTasks[key] = nil
+        }
 
         if let image {
             memoryCache.setObject(image,

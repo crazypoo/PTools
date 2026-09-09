@@ -198,17 +198,17 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseButton.swift",
-      "lines": 91,
+      "lines": 95,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseCellOption.swift",
-      "lines": 365,
+      "lines": 369,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseCollectionReusableView.swift",
-      "lines": 43,
+      "lines": 47,
       "classification": "ok"
     },
     {
@@ -218,17 +218,17 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseMaskView.swift",
-      "lines": 29,
+      "lines": 33,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseNavControl.swift",
-      "lines": 163,
+      "lines": 164,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseTabBarViewController+Support.swift",
-      "lines": 92,
+      "lines": 93,
       "classification": "ok"
     },
     {
@@ -238,12 +238,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "lines": 635,
+      "lines": 636,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
-      "lines": 442,
+      "lines": 446,
       "classification": "ok"
     },
     {
@@ -253,7 +253,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1510,
+      "lines": 1511,
       "classification": "architecture_exception"
     },
     {
@@ -353,7 +353,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 934,
+      "lines": 939,
       "classification": "ok"
     },
     {
@@ -368,7 +368,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 350,
+      "lines": 450,
       "classification": "ok"
     },
     {
@@ -748,7 +748,7 @@
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "lines": 370,
+      "lines": 433,
       "classification": "ok"
     },
     {
@@ -1163,7 +1163,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "lines": 245,
+      "lines": 282,
       "classification": "ok"
     },
     {
@@ -1203,7 +1203,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUpdateTipsViewController.swift",
-      "lines": 248,
+      "lines": 252,
       "classification": "ok"
     },
     {
@@ -3728,8 +3728,13 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1980,
+      "lines": 2000,
       "classification": "architecture_exception"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkConcurrency.swift",
+      "lines": 266,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
@@ -4348,7 +4353,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/Exporter.swift",
-      "lines": 212,
+      "lines": 222,
       "classification": "ok"
     },
     {
@@ -4453,7 +4458,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "lines": 527,
+      "lines": 551,
       "classification": "ok"
     },
     {

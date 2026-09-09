@@ -8,6 +8,10 @@
 
 import UIKit
 
+// English: The mask view owns UIKit hit-testing state and is MainActor isolated.
+// Español: La vista de máscara posee estado de hit-testing de UIKit y está aislada en MainActor.
+// 中文：遮罩视图持有 UIKit 命中测试状态，因此隔离到 MainActor。
+@MainActor
 @objcMembers
 open class PTBaseMaskView: UIView {
 

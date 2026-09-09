@@ -25,6 +25,7 @@ public enum PTScreenShotActionType {
 }
 
 
+@MainActor
 public final class PTNavBarItem {
     public var isConfigured = false   // ✅ 新增
     public var leftView: [UIView] = []

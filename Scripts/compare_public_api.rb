@@ -22,7 +22,10 @@ def entries(path)
                 else
                   declaration.sub(/[\{;].*$/, "").strip
                 end
-    [entry["path"], entry["access"], entry["kind"], signature].join("|")
+    # English: A public symbol keeps its API identity when its implementation moves to another source file.
+    # Español: Un símbolo público conserva su identidad de API aunque su implementación cambie de archivo fuente.
+    # 中文：公开符号移动到其他源码文件时，API 身份仍由访问级别、类型和签名决定。
+    [entry["access"], entry["kind"], signature].join("|")
   end.to_set
 end
 

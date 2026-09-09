@@ -12,16 +12,19 @@ import SnapKit
 import SwifterSwift
 import DeviceKit
 
+@MainActor
 public enum PTTabBarLayoutStyle {
     case normal
     case centerRaised
 }
 
+@MainActor
 public protocol PTTabBarItemContent {
     var view: UIView { get }
     func setSelected(_ selected: Bool, animated: Bool)
 }
 
+@MainActor
 public struct PTTabBarItemConfig {
     let title: String
     let content: PTTabBarItemContent
@@ -116,6 +119,7 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
     }
 }
 
+@MainActor
 final public class PTTabBarItemView: UIControl {
     
     private let titleLabel = UILabel()
@@ -257,6 +261,7 @@ final public class PTTabBarItemView: UIControl {
     }
 }
 
+@MainActor
 final public class PTTabBarView: UIView {
 
     /// 是否允许选中（可拦截）

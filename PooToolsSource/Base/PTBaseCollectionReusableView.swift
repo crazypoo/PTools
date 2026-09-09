@@ -8,6 +8,10 @@
 
 import UIKit
 
+// English: Reusable collection views are UI state and must stay on MainActor.
+// Español: Las vistas reutilizables de colección son estado de UI y deben permanecer en MainActor.
+// 中文：可复用集合视图属于 UI 状态，必须固定在 MainActor 上。
+@MainActor
 @objcMembers
 open class PTBaseCollectionReusableView: UICollectionReusableView {
     

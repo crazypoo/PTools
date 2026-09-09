@@ -27,6 +27,12 @@ private struct PTGCDOnce: Sendable {
     }
 }
 
+private struct PTGCDContinuationState: Sendable {
+    var continuation: CheckedContinuation<Void, Never>?
+    var isCancelled = false
+    var isFinished = false
+}
+
 // 使用 actor 来保证内部状态的绝对线程安全，完美契合 Swift 6
 public actor PTGCDManager {
     
@@ -143,19 +149,50 @@ public actor PTGCDManager {
                 }
                 
                 group.addTask {
-                    // 技能培训：withCheckedContinuation 是连接旧时代回调和新时代 async 的桥梁
-                    // 它会挂起当前 Task，直到 continuation.resume() 被调用
-                    await withCheckedContinuation { continuation in
-                        let finishGate = PTGCDOnce()
-                        
-                        // 派发任务给外部，并提供一个 finishTask 闭包给外部调用
-                        doSomeThing(i) {
-                            // 当外部调用 finishTask() 时，我们恢复协程，系统此时才知道任务真正完成
-                            finishGate.run {
+                    // English: Resume the bridge on either completion or cancellation, never both.
+                    // Español: Reanuda el puente al completar o cancelar, pero nunca en ambos casos.
+                    // 中文：在完成或取消时恢复桥接，但绝不会重复恢复。
+                    let state = OSAllocatedUnfairLock(initialState: PTGCDContinuationState(continuation: nil))
+
+                    await withTaskCancellationHandler(operation: {
+                        await withCheckedContinuation { continuation in
+                            let finishImmediately = state.withLock { state -> Bool in
+                                guard !state.isFinished else { return true }
+                                guard !state.isCancelled else {
+                                    state.isFinished = true
+                                    return true
+                                }
+                                state.continuation = continuation
+                                return false
+                            }
+
+                            if finishImmediately {
                                 continuation.resume()
+                                return
+                            }
+
+                            doSomeThing(i) {
+                                let continuation = state.withLock { state -> CheckedContinuation<Void, Never>? in
+                                    guard !state.isFinished else { return nil }
+                                    state.isFinished = true
+                                    let continuation = state.continuation
+                                    state.continuation = nil
+                                    return continuation
+                                }
+                                continuation?.resume()
                             }
                         }
-                    }
+                    }, onCancel: {
+                        let continuation = state.withLock { state -> CheckedContinuation<Void, Never>? in
+                            state.isCancelled = true
+                            guard !state.isFinished else { return nil }
+                            state.isFinished = true
+                            let continuation = state.continuation
+                            state.continuation = nil
+                            return continuation
+                        }
+                        continuation?.resume()
+                    })
                 }
                 activeTasks += 1
             }

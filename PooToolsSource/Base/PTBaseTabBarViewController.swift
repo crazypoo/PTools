@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+@MainActor
 open class PTBaseTabBarViewController: UITabBarController {
     
     public var ptCustomBar = PTTabBarView()

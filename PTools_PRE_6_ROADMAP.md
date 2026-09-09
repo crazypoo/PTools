@@ -3585,11 +3585,11 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.1 Concurrency
 
-- [ ] CONC-591-01 Global scan
-- [ ] CONC-591-02 UI MainActor
-- [ ] CONC-591-03 Service isolation
-- [ ] CONC-591-04 Sendable snapshots
-- [ ] CONC-591-05 Cancellation
+- [x] CONC-591-01 Global scan
+- [x] CONC-591-02 UI MainActor（Core 高频 UIKit 边界）
+- [x] CONC-591-03 Service isolation（Network、请求去重、媒体缓存）
+- [x] CONC-591-04 Sendable snapshots
+- [x] CONC-591-05 Cancellation（底层取消桥接已落地，真实宿主回归待验证）
 
 ## Milestone: 5.9.2 Quality
 
@@ -3668,7 +3668,15 @@ PooToolsSource/MediaViewer/
   highlightColor 和 PTNetworkConfig 正确命名入口。
 - [x] API-590-04：生成 PUBLIC_API_5_9.json，并提供与 5.8 基线的删除差异检查。
 - [x] CONC-591-01：生成全仓 Swift 6 并发敏感操作报告；未新增 nonisolated(unsafe)。
-- [x] CONC-591-04：PTProgressSnapshot 与 PTResponseMetadata 增加 Equatable 契约。
+- [x] CONC-591-02：为 PTBaseViewController、PTBaseNavControl、PTBaseTabBarViewController、
+  PTTabBarView、Cell/Mask/Button/Navigation 容器和 PTUpdateTipsContentView 建立 MainActor 边界。
+- [x] CONC-591-03：RequestDeduplicator 改为 actor；Network Session 初始化、插件和配置访问加锁；
+  NetworkCache、PTVideoCoverDiskStore 使用 actor/不可变状态；视频封面共享任务只在最后一个等待者取消时停止。
+- [x] CONC-591-04：PTProgressSnapshot、PTResponseMetadata 和网络响应快照只传递 Sendable 值；
+  PhotoKit 请求状态使用锁保护，UIImage 留在 MainActor；PTTimeUtils 移除共享可变 DateFormatter，
+  PTProgressSnapshot 与 PTResponseMetadata 保持 Equatable 契约。
+- [x] CONC-591-05：Task 取消已桥接到 GCD continuation、Alamofire 下载/上传请求、PhotoKit 请求、
+  AVAsset 导出和视频缩略图生成；共享请求采用等待者计数，避免单个调用方取消误伤其他调用方。
 - [x] TEST-592-01：增加 SwiftPM PToolsCoreTests 契约测试目标，移除 Xcode scheme 中不存在的旧测试引用。
 - [x] LIFE-593-04：增加 PTSceneContextProviding 和默认场景解析提供器。
 - [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache 设置数量与成本上限。
@@ -3680,7 +3688,8 @@ PooToolsSource/MediaViewer/
 
 ### 待验证或阻断
 
-- [ ] CONC-591-02 / CONC-591-03 / CONC-591-05：剩余模块的完整 MainActor、服务隔离和取消回归。
+- [ ] 5.9.1 Xcode Debug / Release 完整构建和真实宿主回归：当前被外部 KituraContracts、
+  swift-syntax 网络获取和工具链环境阻断；需解除阻断后再完成最终验收。
 - [ ] TEST-592-02 至 TEST-592-05：CollectionView、Network、媒体性能基准和导航 harness。
 - [ ] LIFE-593-01 至 LIFE-593-03：全量窗口查询迁移、单例分类落地和场景状态回归。
 - [ ] PERF-594-02 至 PERF-594-04：Instruments、真机性能和内存警告实测。
