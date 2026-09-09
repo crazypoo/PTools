@@ -130,7 +130,7 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
     // 5. 闭包参数增加 @Sendable 约束
     public func socketSet(completion: @escaping @Sendable (Bool) -> Void) {
         Task {
-            let urlString = await Network.socketGobalUrl()
+            let urlString = await Network.socketGlobalURL()
             guard let url = URL(string: urlString) else {
                 Task { @MainActor in completion(false) }
                 return

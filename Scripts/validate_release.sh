@@ -27,7 +27,16 @@ rg -q --fixed-strings "6.0.0 删除评估条件" MIGRATION_5X.md \
   || { printf 'FAIL: MIGRATION_5X.md has no 6.0.0 removal criteria\n' >&2; exit 1; }
 bash Scripts/report_duplicate_entries.sh >/dev/null
 
-if [[ -f ROADMAP_5X.md ]]; then
+if [[ -f PTools_PRE_6_ROADMAP.md ]]; then
+  # English: The pre-6 roadmap owns the current 5.x baseline and migration gate.
+  # Español: La hoja de ruta previa a 6.0 mantiene la línea base y la migración actual de 5.x.
+  # 中文：6.0 前路线图负责当前 5.x 基线和迁移门禁。
+  roadmap_section="$(rg -n -m 1 --fixed-strings "当前 Podspec 版本：\`$version\`" PTools_PRE_6_ROADMAP.md || true)"
+  if [[ -z "$roadmap_section" ]]; then
+    printf 'FAIL: PTools_PRE_6_ROADMAP.md has no current baseline for %s\n' "$version" >&2
+    exit 1
+  fi
+elif [[ -f ROADMAP_5X.md ]]; then
   roadmap_section="$(awk -v version="$version" '
     $0 ~ "^## " version "([：: ].*)?$" { found = 1; next }
     found && /^## / { exit }
@@ -37,10 +46,12 @@ if [[ -f ROADMAP_5X.md ]]; then
     printf 'FAIL: ROADMAP_5X.md has no section for %s\n' "$version" >&2
     exit 1
   fi
+fi
+if [[ -n "${roadmap_section:-}" ]]; then
   unresolved_tasks="$(printf '%s\n' "$roadmap_section" | rg '^[[:space:]]*-[[:space:]]*(🚧|⬜|⛔)' || true)"
   if [[ -n "$unresolved_tasks" ]]; then
     printf '%s\n' "$unresolved_tasks" >&2
-    printf 'FAIL: ROADMAP_5X.md still contains unresolved tasks for %s\n' "$version" >&2
+    printf 'FAIL: roadmap still contains unresolved tasks for %s\n' "$version" >&2
     exit 1
   fi
 fi

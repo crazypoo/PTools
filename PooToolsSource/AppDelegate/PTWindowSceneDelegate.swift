@@ -31,10 +31,7 @@ open class PTWindowSceneDelegate: UIResponder,UIWindowSceneDelegate {
 
 public extension PTWindowSceneDelegate {
     @objc class func sceneDelegate() -> PTWindowSceneDelegate? {
-        return UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .first { $0.activationState != .background }?
-                .delegate as? PTWindowSceneDelegate
+        PTSceneContext.activeWindow()?.windowScene?.delegate as? PTWindowSceneDelegate
     }
 }
 

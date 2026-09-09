@@ -117,7 +117,10 @@ def pod_signature(subspec)
   }
 end
 
-spm_targets = spm.fetch("targets", []).each_with_object({}) do |target, result|
+# English: Test targets are validation-only and must not change the shipped module contract.
+# Español: Los targets de prueba solo validan el código y no deben cambiar el contrato publicado.
+# 中文：测试 target 仅用于验证，不应改变发布模块契约。
+spm_targets = spm.fetch("targets", []).reject { |target| target["type"] == "test" }.each_with_object({}) do |target, result|
   key = canonical_name(target.fetch("name"))
   result[key] = { "original_name" => target.fetch("name"), "signature" => spm_signature(target) }
 end

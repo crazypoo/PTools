@@ -63,7 +63,13 @@ public class PTActionSheetItem: NSObject {
     public var image:Any?
     public var imageSize:CGSize = CGSizeMake(34, 34)
     public var iCloudDocumentName:String = ""
-    public var heightlightColor:UIColor = .systemGray4
+    public var highlightColor:UIColor = .systemGray4
+
+    @available(*, deprecated, message: "Use highlightColor instead")
+    public var heightlightColor:UIColor {
+        get { highlightColor }
+        set { highlightColor = newValue }
+    }
     public var itemAlignment:UIControl.ContentHorizontalAlignment = .center
     public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle
     public var contentEdgeValue:CGFloat = 20
@@ -85,7 +91,7 @@ public class PTActionSheetItem: NSObject {
         self.titleFont = titleFont
         self.image = image
         self.imageSize = imageSize
-        self.heightlightColor = heightlightColor
+        self.highlightColor = heightlightColor
         self.itemAlignment = itemAlignment
         self.itemLayout = itemLayout
         self.iCloudDocumentName = iCloudDocumentName
@@ -323,7 +329,7 @@ public class PTActionSheetController: PTAlertController {
         btn.setTitleColor(item.titleColor, state: .normal)
         btn.setTitleFont(item.titleFont, state: .highlighted)
         btn.setTitleColor(item.titleColor, state: .highlighted)
-        btn.setBackgroundColor(item.heightlightColor, state: .highlighted)
+        btn.setBackgroundColor(item.highlightColor, state: .highlighted)
 
         let edge = item.contentEdgeValue
         btn.snp.remakeConstraints { make in

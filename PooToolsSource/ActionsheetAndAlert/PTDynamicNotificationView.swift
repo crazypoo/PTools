@@ -122,12 +122,6 @@ public class PTDynamicNotificationView: UIView {
     }
 
     private var activeWindow: UIWindow? {
-        let scenes = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-        return scenes
-            .flatMap(\.windows)
-            .first(where: \.isKeyWindow)
-            ?? scenes.first(where: { $0.activationState == .foregroundActive })?.windows
-                .first(where: { !$0.isHidden })
+        PTSceneContext.activeWindow()
     }
 }

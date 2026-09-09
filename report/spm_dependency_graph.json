@@ -1041,8 +1041,8 @@
           },
           "productFilter": null,
           "requirement": {
-            "branch": [
-              "master"
+            "revision": [
+              "d8a72a7e29e8699979b052b59659720087bc2ea0"
             ]
           },
           "traits": [
@@ -1826,8 +1826,8 @@
           },
           "productFilter": null,
           "requirement": {
-            "branch": [
-              "spm-support"
+            "revision": [
+              "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"
             ]
           },
           "traits": [
@@ -2606,6 +2606,29 @@
           "tool": "swift"
         }
       ]
+    },
+    {
+      "name": "PToolsCoreTests",
+      "type": "test",
+      "path": "Tests/PooToolsCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PooToolsBankCard",

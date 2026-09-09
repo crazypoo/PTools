@@ -147,7 +147,13 @@ public final class PTAlertManager: NSObject {
 
     public static let shared = PTAlertManager()
 
-    private override init() {
+    private let sceneContextProvider: any PTSceneContextProviding
+
+    // English: Inject scene lookup so alert presentation can be tested and scoped without a global window search.
+    // Español: Inyecta la búsqueda de escenas para probar y limitar las alertas sin buscar una ventana global.
+    // 中文：注入场景查询，使弹窗展示可测试、可按场景隔离，并避免全局窗口搜索。
+    public init(sceneContextProvider: any PTSceneContextProviding = PTDefaultSceneContextProvider()) {
+        self.sceneContextProvider = sceneContextProvider
         super.init()
         observeSceneDestroy()
     }
@@ -412,7 +418,7 @@ private extension PTAlertManager {
         if let scene = controller.viewIfLoaded?.window?.windowScene {
             return scene
         }
-        return PTSceneContext.activeWindow()?.windowScene
+        return sceneContextProvider.activeWindow(in: nil)?.windowScene
     }
 
     func container(for scene: UIWindowScene) -> SceneContainer {

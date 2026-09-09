@@ -37,12 +37,7 @@ public extension UIApplication {
     }
     
     @MainActor var currentWindows:[UIWindow]? {
-        return connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-        // ❗ 不再只限制 foregroundActive
-            .filter { $0.activationState != .background }
-            .first?
-            .windows
+        PTSceneContext.activeWindow()?.windowScene?.windows
     }
     
     @MainActor var currentWindow: UIWindow? {

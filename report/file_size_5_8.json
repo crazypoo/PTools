@@ -13,7 +13,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift",
-      "lines": 562,
+      "lines": 568,
       "classification": "ok"
     },
     {
@@ -28,7 +28,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "lines": 530,
+      "lines": 536,
       "classification": "ok"
     },
     {
@@ -68,7 +68,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift",
-      "lines": 133,
+      "lines": 127,
       "classification": "ok"
     },
     {
@@ -133,7 +133,7 @@
     },
     {
       "path": "PooToolsSource/AppDelegate/PTWindowSceneDelegate.swift",
-      "lines": 41,
+      "lines": 38,
       "classification": "ok"
     },
     {
@@ -188,7 +188,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "lines": 158,
+      "lines": 168,
       "classification": "ok"
     },
     {
@@ -223,7 +223,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseNavControl.swift",
-      "lines": 153,
+      "lines": 163,
       "classification": "ok"
     },
     {
@@ -253,7 +253,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1511,
+      "lines": 1510,
       "classification": "architecture_exception"
     },
     {
@@ -633,7 +633,7 @@
     },
     {
       "path": "PooToolsSource/Category/Device+PTEX.swift",
-      "lines": 397,
+      "lines": 396,
       "classification": "ok"
     },
     {
@@ -813,7 +813,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIApplication+PTEX.swift",
-      "lines": 172,
+      "lines": 167,
       "classification": "ok"
     },
     {
@@ -918,7 +918,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIScreen+PTEX.swift",
-      "lines": 66,
+      "lines": 63,
       "classification": "ok"
     },
     {
@@ -1143,7 +1143,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTAppUserdefault.swift",
-      "lines": 225,
+      "lines": 230,
       "classification": "ok"
     },
     {
@@ -1213,7 +1213,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "lines": 125,
+      "lines": 155,
       "classification": "ok"
     },
     {
@@ -1273,7 +1273,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTDarkModePickerView.swift",
-      "lines": 333,
+      "lines": 329,
       "classification": "ok"
     },
     {
@@ -1323,7 +1323,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDevFunction.swift",
-      "lines": 31,
+      "lines": 37,
       "classification": "ok"
     },
     {
@@ -3728,7 +3728,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1939,
+      "lines": 1980,
       "classification": "architecture_exception"
     },
     {
@@ -4128,7 +4128,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "lines": 160,
+      "lines": 159,
       "classification": "ok"
     },
     {

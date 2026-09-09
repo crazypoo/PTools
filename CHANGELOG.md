@@ -1,5 +1,22 @@
 # Changelog
 
+## 5.9.x - Unreleased
+
+- 建立 5.9.x 的 Core API、并发、单例、缓存、无障碍和回归报告，所有报告均基于当前源码生成。
+- 增加 MIGRATION_6.md、DEPENDENCIES.md、ARCHITECTURE_5_9.md、PERFORMANCE_BASELINE_5_9.md
+  和 REGRESSION_MATRIX_5_9.md，明确 6.0.0 删除门槛与外部依赖阻断。
+- 为网络 URL、网络配置、导航栏、图片加载和 ActionSheet 高亮色增加正确命名的 canonical
+  入口，旧拼写入口保留为 deprecated 兼容转发。
+- 为 NetworkCache 增加内存数量和成本上限；新增 PToolsCoreTests 契约测试目标。
+- 固定 AttributedString 和 SocketRocket 的 SwiftPM revision，移除 Package.swift 中的浮动分支依赖。
+- 5.9.x 尚未完成 Xcode Debug/Release、CocoaPods lint、真机、真实宿主项目和性能验证，不创建
+  5.9.x 标签。
+
+## 5.8.9 - 2026-09-09
+
+- 作为 5.9.x Core 治理的稳定起点，统一记录 iOS 17+、Swift 6 和当前模块依赖基线。
+- 保留现有公开 API、模块路径和兼容包装器，不修改第三方源码。
+
 ## 5.7.9 - 2026-09-09 (Blocked candidate)
 
 - 统一 5.7.9 发布元数据：Podspec、Podfile.lock、README、RELEASE、迁移说明和 5.x 路线图现在使用同一版本基线。

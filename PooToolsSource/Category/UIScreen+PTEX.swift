@@ -32,10 +32,7 @@ public extension UIScreen {
     
     @MainActor
     static var hasRoundedCorners: Bool {
-        let activeWindow = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap(\.windows)
-            .first(where: \.isKeyWindow)
+        let activeWindow = PTSceneContext.activeWindow()
         guard let safeAreaInsets = activeWindow?.safeAreaInsets else { return false }
         return safeAreaInsets.bottom > 0 || safeAreaInsets.left > 0 || safeAreaInsets.right > 0
     }

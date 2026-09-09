@@ -38,7 +38,7 @@ public class PTDebugViewController: PTBaseViewController {
         cell_input.name = .addressInput
         let url_debug: String = PTCoreUserDefultsWrapper.shared.AppRequestUrl
         if url_debug.isEmpty {
-            cell_input.content = await Network.gobalUrl() // 使用 await
+            cell_input.content = await Network.globalURL() // 使用 await
         } else {
             cell_input.content = url_debug
         }
@@ -65,7 +65,7 @@ public class PTDebugViewController: PTBaseViewController {
         cell_input_socket.name = .socketAddressInput
         let url_debug_socket: String = PTCoreUserDefultsWrapper.shared.AppSocketUrl
         if url_debug_socket.isEmpty {
-            cell_input_socket.content = await Network.socketGobalUrl() // 使用 await
+            cell_input_socket.content = await Network.socketGlobalURL() // 使用 await
         } else {
             cell_input_socket.content = url_debug
         }

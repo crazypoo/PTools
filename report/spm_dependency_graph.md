@@ -4,7 +4,7 @@
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `81`
+- Target count: `82`
 - Core direct third-party dependencies: `18` (baseline `18`)
 
 ## Products
@@ -113,6 +113,7 @@
 | `PTSiriPermission` | `PooToolsSource/SiriPermission` | ptools | — | 0 source entries / 0 resources |
 | `PTSpeechPermission` | `PooToolsSource/SpeechPremission` | ptools | — | 0 source entries / 0 resources |
 | `PTTrackingPermission` | `PooToolsSource/TrackingPermission` | ptools | — | 0 source entries / 0 resources |
+| `PToolsCoreTests` | `Tests/PooToolsCoreTests` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBioID` | `PooToolsSource/BioID` | PTFaceIDPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsCalendar` | `PooToolsSource/Calendar` | PTCalendarPermission, PTRemindersPermission, ptools | — | 0 source entries / 0 resources |

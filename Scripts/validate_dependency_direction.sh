@@ -27,7 +27,10 @@ File.readlines(allowlist_path, chomp: true).each do |line|
   allowlist[[source, destination]] = reason
 end
 
-edges = graph.fetch("targets", []).flat_map do |target|
+# English: Test targets validate the package but are not shipped dependency edges.
+# Español: Los targets de prueba validan el paquete, pero no son dependencias publicadas.
+# 中文：测试 target 只用于验证包，不属于发布依赖边。
+edges = graph.fetch("targets", []).reject { |target| target["type"] == "test" }.flat_map do |target|
   target.fetch("internal_dependencies", []).map do |dependency|
     {
       "source" => target.fetch("name"),

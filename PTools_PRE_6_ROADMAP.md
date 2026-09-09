@@ -3,9 +3,9 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 审查基线：`master` @ `67c94b3a`（2026-09-09）
-> 当前 Podspec 版本：`5.7.9`
-> 当前最新 Git Tag：`5.7.9`（2026-09-09）
+> 审查基线：`master` @ `56edb60b`（2026-09-09）
+> 当前 Podspec 版本：`5.8.9`
+> 当前最新 Git Tag：`5.8.9`（2026-09-09）
 > 最低平台：iOS 17.0
 > Swift：Swift 6.0 / Strict Concurrency
 > 核心原则：**5.x 完成内部重构、解耦、兼容迁移和门禁建设；6.0 只做已经准备好的破坏性删除与正式模块边界切换。**
@@ -3578,10 +3578,10 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.0 API Freeze
 
-- [ ] API-590-01 Canonical inventory
-- [ ] API-590-02 Typo aliases
-- [ ] API-590-03 Thin wrappers
-- [ ] API-590-04 Public API baseline
+- [x] API-590-01 Canonical inventory
+- [x] API-590-02 Typo aliases
+- [x] API-590-03 Thin wrappers
+- [x] API-590-04 Public API baseline
 
 ## Milestone: 5.9.1 Concurrency
 
@@ -3653,3 +3653,40 @@ PooToolsSource/MediaViewer/
 - [ ] Freeze deletion list
 - [ ] Freeze migration guide
 - [ ] Tag 5.9.9
+
+---
+
+## 5.9.x 当前实施记录（2026-09-09）
+
+以下状态只反映本次工作树已经落地的内容；“已建立”不等于 Xcode、真机或真实宿主项目
+已经通过。所有未完成项保留为待验证或外部阻断，不提前标记完成。
+
+### 已落地
+
+- [x] API-590-01 / API-590-03：新增 MIGRATION_6.md，并将正确命名入口与旧兼容转发登记。
+- [x] API-590-02：完成 globalURL、socketGlobalURL、globalNavControl、webImageLoadOptions、
+  highlightColor 和 PTNetworkConfig 正确命名入口。
+- [x] API-590-04：生成 PUBLIC_API_5_9.json，并提供与 5.8 基线的删除差异检查。
+- [x] CONC-591-01：生成全仓 Swift 6 并发敏感操作报告；未新增 nonisolated(unsafe)。
+- [x] CONC-591-04：PTProgressSnapshot 与 PTResponseMetadata 增加 Equatable 契约。
+- [x] TEST-592-01：增加 SwiftPM PToolsCoreTests 契约测试目标，移除 Xcode scheme 中不存在的旧测试引用。
+- [x] LIFE-593-04：增加 PTSceneContextProviding 和默认场景解析提供器。
+- [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache 设置数量与成本上限。
+- [x] UI-595-01 / UI-595-02 / UI-595-03：生成 UI 适配扫描报告，保留人工回归门槛。
+- [x] DEP-596-01 / DEP-596-05：固定 AttributedString、SocketRocket revision，并增加依赖所有权文档。
+- [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
+- [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。
+- [x] 记录当前 Xcode Debug / Release 和直接 PooTools scheme 构建结果：`report/build_validation_5_9.md`。
+
+### 待验证或阻断
+
+- [ ] CONC-591-02 / CONC-591-03 / CONC-591-05：剩余模块的完整 MainActor、服务隔离和取消回归。
+- [ ] TEST-592-02 至 TEST-592-05：CollectionView、Network、媒体性能基准和导航 harness。
+- [ ] LIFE-593-01 至 LIFE-593-03：全量窗口查询迁移、单例分类落地和场景状态回归。
+- [ ] PERF-594-02 至 PERF-594-04：Instruments、真机性能和内存警告实测。
+- [ ] DEP-596-02 至 DEP-596-04：Kitura、SmartCodable 和 Bugly XCFramework 最终决策。
+- [ ] DOC-597-03：Example 页面和真实宿主项目迁移。
+- [ ] 5.9.8 / 5.9.9：6.0 rehearsal、完整 Xcode 矩阵、真机/宿主回归和最终 tag。
+
+已知外部阻断：Bugly 模拟器架构、Metal 工具链和部分 Kitura/Pods Swift 6 诊断。阻断
+解除前不得宣称 5.9.x 完整验收通过或创建发布标签。

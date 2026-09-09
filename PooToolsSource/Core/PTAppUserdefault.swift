@@ -223,3 +223,8 @@ public final class PTCoreUserDefultsWrapper: Sendable {
     }
 #endif
 }
+
+// English: Correctly spelled type alias for new integrations; the legacy symbol remains source-compatible.
+// Español: Alias con la ortografía correcta para nuevas integraciones; el símbolo heredado conserva la compatibilidad.
+// 中文：为新集成提供正确拼写的类型别名，同时保留旧符号兼容现有代码。
+public typealias PTCoreUserDefaultsWrapper = PTCoreUserDefultsWrapper

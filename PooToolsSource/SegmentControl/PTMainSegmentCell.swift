@@ -124,7 +124,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         switch cellItemModel!.onlyShowTitle! {
         case .ImageTitle:
-            ImageDownloader.default.downloadImage(with: URL(string: myItemModel.imageURL)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+            ImageDownloader.default.downloadImage(with: URL(string: myItemModel.imageURL)!, options: PTAppBaseConfig.share.webImageLoadOptions()) { result in
                 switch result {
                 case .success(let value):
                     let imageAtt:ASAttributedString = """
@@ -157,4 +157,3 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
         layoutSubviews()
     }
 }
-

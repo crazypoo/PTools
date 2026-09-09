@@ -39,9 +39,9 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.7.9'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.7.9'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.7.9'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
 ```
 
 ### Swift 6 迁移要点
@@ -63,8 +63,9 @@ Waterfall、Tag、Horizontal 和 Custom 集合布局。页面通过
 第二套 `UITableView` 数据源；现有 `PTCollectionView` delegate 和大标题滚动逻辑保持兼容。
 
 完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
-[ROADMAP_5X.md](ROADMAP_5X.md)，5.x 兼容入口和 6.0.0 删除条件见
-[MIGRATION_5X.md](MIGRATION_5X.md)。
+[PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)，5.x 兼容入口和 6.0.0 删除条件见
+[MIGRATION_6.md](MIGRATION_6.md)。依赖和回归记录见 [DEPENDENCIES.md](DEPENDENCIES.md)
+与 [REGRESSION_MATRIX_5_9.md](REGRESSION_MATRIX_5_9.md)。
 
 ### Picker 嵌入页面
 
@@ -130,7 +131,7 @@ git diff --check
 ```
 
 版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。5.x Core
-的阶段任务和完成状态见 [ROADMAP_5X.md](ROADMAP_5X.md)，重复入口报告见
+的阶段任务和完成状态见 [PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)，重复入口报告见
 `Scripts/report_duplicate_entries.sh`。
 
 其他模块根据项目需要选择：

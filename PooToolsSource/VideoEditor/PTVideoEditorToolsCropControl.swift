@@ -65,7 +65,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         super.viewWillAppear(animated)
 
         guard let nav = navigationController else { return }
-        PTBaseNavControl.GobalNavControl(nav: nav,textColor: .white,navColor: .black)
+        PTBaseNavControl.globalNavControl(nav: nav,textColor: .white,navColor: .black)
         dismissButtonItem.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         doneButtonItem.frame = CGRect(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
         setCustomBackButtonView(dismissButtonItem)

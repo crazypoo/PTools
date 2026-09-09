@@ -191,8 +191,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     @MainActor private static var activeScreen: UIScreen? {
-        return (UIApplication.shared.connectedScenes
-            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene)?.screen
+        PTSceneContext.activeWindow()?.windowScene?.screen
     }
     //MARK: 获取屏幕亮度
     ///获取屏幕亮度比例

@@ -37,7 +37,7 @@ public extension UIImageView {
                              placeholder:UIImage? = nil,
                              loadedHandler:PTImageLoadHandler? = nil) {
         let empty = placeholder ?? PTAppBaseConfig.share.defaultPlaceholderImage
-        kf.setImage(with: URL(string: imageString),placeholder: empty,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+        kf.setImage(with: URL(string: imageString),placeholder: empty,options: PTAppBaseConfig.share.webImageLoadOptions()) { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)

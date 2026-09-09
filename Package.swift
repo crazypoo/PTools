@@ -154,7 +154,7 @@ let package = Package(
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "8.0.0"),
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.0"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
-        .package(url: "https://github.com/lixiang1994/AttributedString.git", branch: "master"),
+        .package(url: "https://github.com/lixiang1994/AttributedString.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.9.0"),
         .package(url: "https://github.com/sparrowcode/SafeSFSymbols.git", from: "2.0.0"),
@@ -189,7 +189,7 @@ let package = Package(
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
         .package(url: "https://github.com/madebybowtie/FlagKit.git", exact: "2.4.0"),
-        .package(url: "https://github.com/robnadin/SocketRocket.git", branch: "spm-support"),
+        .package(url: "https://github.com/robnadin/SocketRocket.git", revision: "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0")
 
     ],
@@ -373,6 +373,15 @@ let package = Package(
             dependencies: ["ptools"],
             path: "PooToolsSource/LaunchTimeProfiler",
             swiftSettings: [.define("POOTOOLS_LAUNCHTIMEPROFILER"), .define("POOTOOLS_COCOAPODS")]
+        ),
+
+        // English: Keep a small iOS-only contract target for Core value and API regression checks.
+        // Español: Mantiene un objetivo pequeño y exclusivo de iOS para comprobar contratos de valores y API de Core.
+        // 中文：保留一个仅面向 iOS 的轻量 Core 契约测试目标，用于回归值类型和 API。
+        .testTarget(
+            name: "PToolsCoreTests",
+            dependencies: ["ptools"],
+            path: "Tests/PooToolsCoreTests"
         )
     ],
     swiftLanguageModes: [.v6]

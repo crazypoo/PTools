@@ -1170,8 +1170,7 @@ extension PTBaseViewController {
                 
         setNeedsUpdateOfPrefersPointerLocked()
         guard let scence = view.window?.windowScene
-                ?? PTUtils.fetchWindow()?.windowScene
-                ?? UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first else { return }
+                ?? PTSceneContext.activeWindow()?.windowScene else { return }
         let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
         let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
         scence.requestGeometryUpdate(geometryPreferencesIOS) { error in

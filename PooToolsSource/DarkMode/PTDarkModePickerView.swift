@@ -223,11 +223,7 @@ class PTDarkModePickerView: UIView {
     }
 
     private func activeWindow() -> UIWindow? {
-        PTUtils.fetchWindow() ?? UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first(where: { $0.activationState != .background })?
-            .windows
-            .first(where: { $0.isKeyWindow })
+        PTSceneContext.activeWindow()
     }
 
     // MARK: - 弹出时间

@@ -14,9 +14,10 @@ import Kingfisher
 public class PTDevFunction: NSObject {
     public static let share = PTDevFunction()
     
-    //MARK: SDWebImage的加载失误图片方式(全局控制)
-    ///SDWebImage的加载失误图片方式(全局控制)
-    public class func gobalWebImageLoadOption() -> KingfisherOptionsInfo {
+    // English: Return the shared Kingfisher options for web-image loading.
+    // Español: Devuelve las opciones compartidas de Kingfisher para cargar imágenes web.
+    // 中文：返回网络图片加载共用的 Kingfisher 配置。
+    public class func webImageLoadOptions() -> KingfisherOptionsInfo {
 //        #if DEBUG
 //        let devServer:Bool = PTCoreUserDefultsWrapper.shared.WebImageOption
 //        if devServer {
@@ -27,5 +28,10 @@ public class PTDevFunction: NSObject {
 //        #else
         return [KingfisherOptionsInfoItem.cacheOriginalImage]
 //        #endif
+    }
+
+    @available(*, deprecated, message: "Use webImageLoadOptions() instead")
+    public class func gobalWebImageLoadOption() -> KingfisherOptionsInfo {
+        webImageLoadOptions()
     }
 }

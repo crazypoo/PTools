@@ -15,7 +15,6 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/lixiang1994/AttributedString.git",
       "state" : {
-        "branch" : "master",
         "revision" : "d8a72a7e29e8699979b052b59659720087bc2ea0"
       }
     },
@@ -339,7 +338,6 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/robnadin/SocketRocket.git",
       "state" : {
-        "branch" : "spm-support",
         "revision" : "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"
       }
     },

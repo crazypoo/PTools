@@ -2,7 +2,7 @@
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
   "name": "PooTools",
-  "version": "5.7.9",
+  "version": "5.8.9",
   "platforms": {
     "ios": "17.0"
   },

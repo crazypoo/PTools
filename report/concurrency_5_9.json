@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "baseline": "5.9.x working-tree scan",
+  "counts": {
+    "main_queue_async": 28,
+    "task_detached": 21,
+    "unchecked_sendable": 68,
+    "as_bang": 14
+  },
+  "locations": [
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Animation/PTListAnimation.swift",
+      "line": 296,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ApplicationFunction/PCleanCache.swift",
+      "line": 28,
+      "text": "async let sdSizeTask = Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ApplicationFunction/PCleanCache.swift",
+      "line": 36,
+      "text": "async let kfSizeTask = Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ApplicationFunction/PCleanCache.swift",
+      "line": 89,
+      "text": "return await Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ApplicationFunction/PCleanCache.swift",
+      "line": 129,
+      "text": "return await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Base/PTPlayerViewController.swift",
+      "line": 142,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 901,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/BioID/PTBiologyID.swift",
+      "line": 137,
+      "text": "return await Task.detached {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/BioID/PTBiologyID.swift",
+      "line": 152,
+      "text": "return await Task.detached {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+      "line": 18,
+      "text": "private struct PTSystemPixelBufferBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
+      "line": 372,
+      "text": "let tap = sender as! UITapGestureRecognizer"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 13,
+      "text": "private struct PTSendableEventStoreBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 17,
+      "text": "public struct PTSendableEventArrayBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+      "line": 25,
+      "text": "public struct PTSendableReminderArrayBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Category/AVExport+PTEX.swift",
+      "line": 13,
+      "text": "public struct PTAssetExportResult: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 26,
+      "text": "private struct PTSendableExportSession: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 56,
+      "text": "struct PTSendableAVAsset: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 132,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 279,
+      "text": "DispatchQueue.main.async { completion(nil) }"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 294,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
+      "line": 293,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Category/UIControl+PTEX.swift",
+      "line": 84,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + self.clickInterval) { [weak self] in"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 51,
+      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 59,
+      "text": "var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 68,
+      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 72,
+      "text": "let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 87,
+      "text": "let result:NSMutableString = str.mutableCopy() as! NSMutableString"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 90,
+      "text": "var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 99,
+      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 103,
+      "text": "let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 89,
+      "text": "public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 95,
+      "text": "public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 100,
+      "text": "public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 105,
+      "text": "public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 122,
+      "text": "public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 134,
+      "text": "public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 142,
+      "text": "public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 173,
+      "text": "public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 183,
+      "text": "public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 191,
+      "text": "public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 205,
+      "text": "public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 214,
+      "text": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Colors/UIImage+PTColorEX.swift",
+      "line": 151,
+      "text": "Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Core/OSSVoice.swift",
+      "line": 162,
+      "text": "public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTGCDManager.swift",
+      "line": 187,
+      "text": "Task.detached(priority: priority) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTGCDManager.swift",
+      "line": 194,
+      "text": "Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 389,
+      "text": "let gifResult = await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 401,
+      "text": "let image = await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 411,
+      "text": "let image = await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 559,
+      "text": "data = await Task.detached(priority: .userInitiated, operation: {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 568,
+      "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Debug/PTApplicationDirectories.swift",
+      "line": 11,
+      "text": "final class PTApplicationDirectories: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Debug/StdoutCapture.swift",
+      "line": 11,
+      "text": "struct PTReadCompletionNotificationBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+      "line": 14,
+      "text": "private struct PTSafeExceptionBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+      "line": 18,
+      "text": "private struct PTSafeSignalPointerBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
+      "line": 123,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
+      "line": 248,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
+      "line": 30,
+      "text": "final class PTLoadedLibrariesViewModel: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
+      "line": 78,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+      "line": 22,
+      "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+      "line": 25,
+      "text": "struct UncheckedSendableBox<T>: @unchecked Sendable {"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
+      "line": 128,
+      "text": "let pans = sender as! UIPanGestureRecognizer"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/DebugUserDefault/PTUserDefaultKeysAndValues.swift",
+      "line": 30,
+      "text": "let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys as! [String]"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
+      "line": 96,
+      "text": "model.desc = String(format: \"%@\", value.values.first as! CVarArg)"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Hud/PTProgressHUD.swift",
+      "line": 291,
+      "text": "DispatchQueue.main.async { self.updateIndicators() }"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Hud/PTProgressHUD.swift",
+      "line": 457,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
+      "line": 930,
+      "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
+      "line": 11,
+      "text": "public final class PTWeakProxy: NSObject, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/ImagePicker/PTImagePicker.swift",
+      "line": 589,
+      "text": "private struct SendableBox<T>: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Input/PTGrowingText.swift",
+      "line": 117,
+      "text": "DispatchQueue.main.async { [weak self] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Input/PTGrowingText.swift",
+      "line": 167,
+      "text": "DispatchQueue.main.async { [weak self] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Input/PTInputBoxView.swift",
+      "line": 182,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Input/PTInputBoxView.swift",
+      "line": 199,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Inspector/InspectorElementSectionViewController.swift",
+      "line": 143,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(30)) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 11,
+      "text": "private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 17,
+      "text": "private final class PTNotificationBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
+      "line": 23,
+      "text": "private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
+      "line": 9,
+      "text": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
+      "line": 9,
+      "text": "class MainThreadOperation: Operation, @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Inspector/Manager.swift",
+      "line": 35,
+      "text": "DispatchQueue.main.async(execute: closure)"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+      "line": 418,
+      "text": "let cell = tableView.dequeueReusableCell(withIdentifier: \"Cell\", for: indexPath) as! MilestoneCell"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 17,
+      "text": "private final class AVContext: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 37,
+      "text": "private struct PTAVSendableBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+      "line": 44,
+      "text": "private final class ProgressState: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+      "line": 13,
+      "text": "public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 81,
+      "text": "public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 211,
+      "text": "DispatchQueue.main.async { [weak self] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 353,
+      "text": "DispatchQueue.main.async { [weak self] in"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 14,
+      "text": "private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 19,
+      "text": "private struct PTNFCSessionSendableBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 23,
+      "text": "private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 91,
+      "text": "public final class NetworkReachability: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 139,
+      "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 351,
+      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 373,
+      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 402,
+      "text": "Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 697,
+      "text": "public final class Network: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 1271,
+      "text": "private struct PTSafeUploadParamsBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 1543,
+      "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 126,
+      "text": "public class OSSSpeech: NSObject, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+      "line": 382,
+      "text": "final class ConverterState: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
+      "line": 27,
+      "text": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+      "line": 20,
+      "text": "final class PTFetchImageOperation: Operation, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+      "line": 18,
+      "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+      "line": 26,
+      "text": "public struct PTSendableDictionaryBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+      "line": 910,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+      "line": 987,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/ProgressBar/PTCircularProgressView.swift",
+      "line": 34,
+      "text": "DispatchQueue.main.async { self.setNeedsDisplay() }"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/Router/PTRouter.swift",
+      "line": 812,
+      "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Router/PTRouterManager.swift",
+      "line": 23,
+      "text": "private struct PTServiceTypeBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
+      "line": 13,
+      "text": "public final class PTLegacyRouterServiceBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/ScreenShot/UIView+PTSnapShot.swift",
+      "line": 53,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/ScreenShot/UIWindow+PTSnapShot.swift",
+      "line": 34,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+      "line": 16,
+      "text": "public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {"
+    },
+    {
+      "rule": "as_bang",
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+      "line": 60,
+      "text": "for (index, model) in (self.dataSource as! [PTMainSegmentModel]).enumerated() {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentModel.swift",
+      "line": 23,
+      "text": "public class PTMainSegmentModel: JXSegmentedTitleItemModel,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
+      "line": 11,
+      "text": "public final class PTSegmentControlBaseModel: NSObject,@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 42,
+      "text": "public final class PTSocketManager: NSObject, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
+      "line": 15,
+      "text": "private struct PTTouchValueBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",
+      "line": 11,
+      "text": "class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/Compositor.swift",
+      "line": 15,
+      "text": "public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable {"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/VideoEditor/CropPickerView.swift",
+      "line": 532,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/Exporter.swift",
+      "line": 19,
+      "text": "struct PTSystemAVAssetBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
+      "line": 14,
+      "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+      "line": 1519,
+      "text": "private struct PTC7SafeBox:@unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
+      "line": 30,
+      "text": "private struct PTSafeAudioExportBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
+      "line": 195,
+      "text": "Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 24,
+      "text": "private struct PTObservationBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 29,
+      "text": "public final class PTVision: NSObject, @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 50,
+      "text": "Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 107,
+      "text": "Task.detached(priority: .userInitiated) {"
+    }
+  ]
+}

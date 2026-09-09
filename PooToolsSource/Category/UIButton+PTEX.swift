@@ -46,7 +46,7 @@ public extension UIButton {
             loadedHandler?(nil, nil, nil)
             return
         }
-        kf.setImage(with: URL(string: imageString), for: forState,placeholder: empty,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
+        kf.setImage(with: URL(string: imageString), for: forState,placeholder: empty,options: PTAppBaseConfig.share.webImageLoadOptions(),completionHandler: { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)

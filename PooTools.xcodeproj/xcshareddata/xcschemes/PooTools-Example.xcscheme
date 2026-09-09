@@ -36,18 +36,6 @@
             ReferencedContainer = "container:PooTools.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6003F5AD195388D20070C39A"
-               BuildableName = "PooTools_Tests.xctest"
-               BlueprintName = "PooTools_Tests"
-               ReferencedContainer = "container:PooTools.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

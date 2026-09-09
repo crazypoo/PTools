@@ -89,7 +89,7 @@ public typealias PTLegacyStructModel = PTBaseStructModel<Any>
 // Progress values are converted to immutable data before crossing an actor boundary.
 // Los valores de progreso se convierten en datos inmutables antes de cruzar un límite de actor.
 // 进度值在跨越 actor 边界前会先转换为不可变数据。
-public struct PTProgressSnapshot: Sendable {
+public struct PTProgressSnapshot: Sendable, Equatable {
     public let completedUnitCount: Int64
     public let totalUnitCount: Int64
     public let fractionCompleted: Double
@@ -106,7 +106,7 @@ public struct PTProgressSnapshot: Sendable {
 // Response metadata contains only value types and is safe to retain after a request callback returns.
 // Los metadatos de respuesta contienen únicamente tipos de valor y son seguros después del callback.
 // 响应元数据只包含值类型，可在请求回调结束后安全保留。
-public struct PTResponseMetadata: Sendable {
+public struct PTResponseMetadata: Sendable, Equatable {
     public let statusCode: Int?
     public let headers: [String: String]
     public let isDegraded: Bool

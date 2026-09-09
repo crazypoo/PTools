@@ -82,6 +82,36 @@ public enum PTSceneContext {
     }
 }
 
+// English: Inject scene resolution without forcing new code to depend on global lookup.
+// Español: Inyecta la resolución de escenas sin obligar al código nuevo a depender de una búsqueda global.
+// 中文：提供场景解析注入能力，避免新代码强依赖全局查询。
+@MainActor
+public protocol PTSceneContextProviding {
+    func activeWindow(in scene: UIWindowScene?) -> UIWindow?
+    func rootViewController(in scene: UIWindowScene?) -> UIViewController?
+    func currentViewController(in scene: UIWindowScene?) -> UIViewController?
+}
+
+// English: The default provider preserves the existing PTSceneContext behavior for compatibility.
+// Español: El proveedor predeterminado conserva el comportamiento existente de PTSceneContext para compatibilidad.
+// 中文：默认提供器保留 PTSceneContext 的现有行为，确保兼容性。
+@MainActor
+public struct PTDefaultSceneContextProvider: PTSceneContextProviding {
+    public init() {}
+
+    public func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? {
+        PTSceneContext.activeWindow(in: scene)
+    }
+
+    public func rootViewController(in scene: UIWindowScene? = nil) -> UIViewController? {
+        PTSceneContext.rootViewController(in: scene)
+    }
+
+    public func currentViewController(in scene: UIWindowScene? = nil) -> UIViewController? {
+        PTSceneContext.currentViewController(in: scene)
+    }
+}
+
 // English: Schedule UI work with cancellation checks at the MainActor boundary.
 // Español: Programa trabajo de UI con comprobaciones de cancelación en el límite de MainActor.
 // 中文：在 MainActor 边界调度 UI 工作，并在执行前检查取消状态。

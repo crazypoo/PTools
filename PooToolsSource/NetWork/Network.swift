@@ -324,6 +324,11 @@ public actor NetworkCache {
             ?? FileManager.default.temporaryDirectory.path
         diskPath = path.nsString.appendingPathComponent("PTNetworkCache")
         try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)
+        // English: Bound the in-memory cache so a large response cannot grow without limit.
+        // Español: Limita la caché en memoria para que una respuesta grande no crezca sin límite.
+        // 中文：限制内存缓存，避免大响应导致缓存无限增长。
+        memoryCache.countLimit = 200
+        memoryCache.totalCostLimit = 50 * 1024 * 1024
     }
     
     private func cacheKey(_ request: URLRequest) -> String {
@@ -340,7 +345,7 @@ public actor NetworkCache {
         let obj = CacheObject(data: data, expireTime: now + expire, lastAccessTime: now)
         
         guard let encoded = try? JSONEncoder().encode(obj) else { return }
-        memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+        memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
         
         let path = self.diskPath.nsString.appendingPathComponent(key)
         Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }
@@ -354,7 +359,7 @@ public actor NetworkCache {
            var obj = try? JSONDecoder().decode(CacheObject.self, from: data), obj.expireTime > now {
             obj.lastAccessTime = now
             if let encoded = try? JSONEncoder().encode(obj) {
-                memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+                memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
             }
             return obj.data
         }
@@ -364,7 +369,7 @@ public actor NetworkCache {
            var obj = try? JSONDecoder().decode(CacheObject.self, from: data), obj.expireTime > now {
             obj.lastAccessTime = now
             if let encoded = try? JSONEncoder().encode(obj) {
-                memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+                memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
                 Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }
             }
             return obj.data
@@ -593,9 +598,9 @@ public actor RequestDeduplicator {
 }
 
 public struct PTNetworkConfig: Sendable {
-    public var netRequsetTime: TimeInterval = 20
-    public var downloadRequsetTime: TimeInterval = 5
-    public var downloadEndTime: TimeInterval = 3600
+    public var requestTimeout: TimeInterval = 20
+    public var downloadRequestTimeout: TimeInterval = 5
+    public var resourceTimeout: TimeInterval = 3600
     
     public var serverAddress: String = ""
     public var serverAddress_dev: String = ""
@@ -608,25 +613,45 @@ public struct PTNetworkConfig: Sendable {
     public var retryAPIStatusCode: Int = 502
     
     public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork
-    public var networkCacheEXPTime: String = "600"
-    public var networkDudupOption: PTNetworkDedupPolicy = .custom("auto")
+    public var networkCacheExpiration: String = "600"
+    public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto")
     
     public var maxDiskSize: Int64 = 100 * 1024 * 1024
     public var cleanThreshold: Double = 0.7
     public var cleanCachePreSec: TimeInterval = 60
     public var logMaxCount: Double = 3000
 
-    // English: Modern names map to the established fields without breaking existing callers.
-    // Español: Los nombres modernos se asignan a los campos existentes sin romper a los llamadores actuales.
-    // 中文：现代命名映射到现有字段，不破坏已有调用方。
-    public var requestTimeout: TimeInterval {
-        get { netRequsetTime }
-        set { netRequsetTime = newValue }
+    // English: Deprecated spellings remain as computed adapters while canonical names own the storage.
+    // Español: Las grafías obsoletas permanecen como adaptadores calculados y los nombres canónicos poseen el almacenamiento.
+    // 中文：旧拼写保留为计算属性适配器，存储统一由正确命名的属性持有。
+    @available(*, deprecated, message: "Use requestTimeout instead")
+    public var netRequsetTime: TimeInterval {
+        get { requestTimeout }
+        set { requestTimeout = newValue }
     }
 
-    public var resourceTimeout: TimeInterval {
-        get { downloadEndTime }
-        set { downloadEndTime = newValue }
+    @available(*, deprecated, message: "Use downloadRequestTimeout instead")
+    public var downloadRequsetTime: TimeInterval {
+        get { downloadRequestTimeout }
+        set { downloadRequestTimeout = newValue }
+    }
+
+    @available(*, deprecated, message: "Use resourceTimeout instead")
+    public var downloadEndTime: TimeInterval {
+        get { resourceTimeout }
+        set { resourceTimeout = newValue }
+    }
+
+    @available(*, deprecated, message: "Use networkCacheExpiration instead")
+    public var networkCacheEXPTime: String {
+        get { networkCacheExpiration }
+        set { networkCacheExpiration = newValue }
+    }
+
+    @available(*, deprecated, message: "Use networkDedupOption instead")
+    public var networkDudupOption: PTNetworkDedupPolicy {
+        get { networkDedupOption }
+        set { networkDedupOption = newValue }
     }
 
     public var waitsForConnectivity: Bool = true
@@ -782,7 +807,10 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    @MainActor public class func gobalUrl() async -> String {
+    // English: Resolve the request base URL from the active environment and configuration.
+    // Español: Resuelve la URL base de las solicitudes a partir del entorno y la configuración activos.
+    // 中文：根据当前环境和配置解析请求基础 URL。
+    @MainActor public class func globalURL() async -> String {
         let environment = UIApplication.shared.inferredEnvironment_PT
         if environment != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .network)
@@ -798,7 +826,10 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    @MainActor public class func socketGobalUrl() async -> String {
+    // English: Resolve the socket base URL from the active environment and configuration.
+    // Español: Resuelve la URL base del socket a partir del entorno y la configuración activos.
+    // 中文：根据当前环境和配置解析 Socket 基础 URL。
+    @MainActor public class func socketGlobalURL() async -> String {
         let environment = UIApplication.shared.inferredEnvironment_PT
         if environment != .appStore {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .network)
@@ -814,6 +845,16 @@ public final class Network: @unchecked Sendable {
         }
     }
     
+    @available(*, deprecated, message: "Use globalURL() instead")
+    @MainActor public class func gobalUrl() async -> String {
+        await globalURL()
+    }
+
+    @available(*, deprecated, message: "Use socketGlobalURL() instead")
+    @MainActor public class func socketGobalUrl() async -> String {
+        await socketGlobalURL()
+    }
+
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
         let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
@@ -991,16 +1032,16 @@ public final class Network: @unchecked Sendable {
         }
         let finalCachePolicy = cachePolicy ?? Network.share.config.networkCacheOption
         apiHeader["cachePolicy"] = finalCachePolicy.rawValue
-        apiHeader["cacheExpire"] = Network.share.config.networkCacheEXPTime
-        apiHeader["dedupPolicy"] = Network.share.config.networkDudupOption.getOptionName()
+        apiHeader["cacheExpire"] = Network.share.config.networkCacheExpiration
+        apiHeader["dedupPolicy"] = Network.share.config.networkDedupOption.getOptionName()
         return addToken(to: apiHeader)
     }
     
     private static func createURLRequest(urlStr: URLConvertible, needGobal: Bool) async throws -> String {
         let original = try urlStr.asURL().absoluteString
         if original.hasPrefix("http") { return original }
-        let gobalUrl = needGobal ? await Network.gobalUrl() : ""
-        return gobalUrl + original
+        let globalURL = needGobal ? await Network.globalURL() : ""
+        return globalURL + original
     }
 
     /// Shared value for all request-shaped entry points. The legacy KakaJSON
@@ -1672,7 +1713,7 @@ public final class Network: @unchecked Sendable {
     private lazy var downloadSession: Session = {
         let configurationSnapshot = config
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = configurationSnapshot.downloadRequsetTime
+        config.timeoutIntervalForRequest = configurationSnapshot.downloadRequestTimeout
         config.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
         config.httpMaximumConnectionsPerHost = 6
         var protocols = config.protocolClasses ?? []

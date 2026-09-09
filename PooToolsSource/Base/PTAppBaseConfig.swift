@@ -84,19 +84,29 @@ public class PTAppBaseConfig: NSObject {
     public var privacyURL:String = "https://www.qq.com"
     public var privacyNameFont:UIFont = .appfont(size: 13)
 
-    //MARK: SDWebImage的加载失误图片方式(全局控制)
-    ///SDWebImage的加载失误图片方式(全局控制)
+    // English: Web-image loading options are shared by the Core image helpers.
+    // Español: Las opciones de carga de imágenes web se comparten entre los auxiliares de imágenes de Core.
+    // 中文：Core 图片辅助能力共用网络图片加载配置。
     public var loadImageRetryMaxCount:Int = 3
     public var loadImageRetryInerval:TimeInterval = 2
-    public func gobalWebImageLoadOption(maxCount:Int? = nil,
-                                        retryInterval:TimeInterval? = nil) -> KingfisherOptionsInfo {
+    // English: Build web-image options from the current app configuration.
+    // Español: Construye las opciones de imágenes web a partir de la configuración actual de la aplicación.
+    // 中文：根据当前应用配置构建网络图片加载选项。
+    public func webImageLoadOptions(maxCount:Int? = nil,
+                                    retryInterval:TimeInterval? = nil) -> KingfisherOptionsInfo {
 #if POOTOOLS_DEBUG
-        PTDevFunction.gobalWebImageLoadOption()
+        PTDevFunction.webImageLoadOptions()
 #else
         let maxC = maxCount ?? PTAppBaseConfig.share.loadImageRetryMaxCount
         let retry = retryInterval ?? PTAppBaseConfig.share.loadImageRetryInerval
         return [KingfisherOptionsInfoItem.cacheOriginalImage,KingfisherOptionsInfoItem.backgroundDecode,KingfisherOptionsInfoItem.retryStrategy(DelayRetryStrategy(maxRetryCount: maxC, retryInterval: .seconds(retry)))]
 #endif
+    }
+
+    @available(*, deprecated, message: "Use webImageLoadOptions(maxCount:retryInterval:) instead")
+    public func gobalWebImageLoadOption(maxCount:Int? = nil,
+                                        retryInterval:TimeInterval? = nil) -> KingfisherOptionsInfo {
+        webImageLoadOptions(maxCount: maxCount, retryInterval: retryInterval)
     }
     
     //MARK: 在AppStore上用来检测更新的AppID

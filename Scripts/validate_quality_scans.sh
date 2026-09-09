@@ -52,6 +52,11 @@ bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_localizations.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 
+# English: Refresh the 5.9.x concurrency inventory as part of every quality run.
+# Español: Actualiza el inventario de concurrencia de 5.9.x en cada ejecución de calidad.
+# 中文：每次质量扫描都刷新 5.9.x 并发清单。
+ruby Scripts/report_concurrency_5_9.rb >/dev/null
+
 # English: Keep the SPM/CocoaPods parity and dependency-direction baselines in the regular quality gate.
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。

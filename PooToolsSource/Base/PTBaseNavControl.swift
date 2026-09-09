@@ -18,7 +18,7 @@ open class PTBaseNavControl: UINavigationController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PTBaseNavControl.GobalNavControl(nav: self)
+        PTBaseNavControl.globalNavControl(nav: self)
         PTNavigationBarManager.shared.bind(to: self)
         PTNavigationBarManager.shared.installIfNeeded(in: self)
     }
@@ -106,7 +106,10 @@ extension PTBaseNavControl {
         StatusBarManager.shared.animation
     }
     
-    public class func GobalNavControl(nav:UINavigationController,
+    // English: Apply the shared navigation-bar appearance used by Core base controllers.
+    // Español: Aplica la apariencia compartida de la barra de navegación usada por los controladores base de Core.
+    // 中文：应用 Core 基类控制器共用的导航栏外观。
+    public class func globalNavControl(nav:UINavigationController,
                                       textColor:UIColor? = nil,
                                       navColor:UIColor = .clear) {
         let colors:UIColor = navColor
@@ -149,5 +152,12 @@ extension PTBaseNavControl {
         nav.toolbar.standardAppearance = toolBarAppearance
         nav.toolbar.compactScrollEdgeAppearance = toolBarAppearance
         nav.toolbar.isTranslucent = false
+    }
+
+    @available(*, deprecated, message: "Use globalNavControl(nav:textColor:navColor:) instead")
+    public class func GobalNavControl(nav:UINavigationController,
+                                      textColor:UIColor? = nil,
+                                      navColor:UIColor = .clear) {
+        globalNavControl(nav: nav, textColor: textColor, navColor: navColor)
     }
 }
