@@ -134,29 +134,83 @@ extension UIImage {
     }
 }
 
+@MainActor
 final class PTConsoleWindow: UIWindow {
 
+    // Keep the old shared entry point for source compatibility; active UI is resolved per scene.
+    // Conserva la entrada compartida anterior por compatibilidad de código; la UI activa se resuelve por escena.
+    // 保留旧的 shared 入口以兼容现有代码；实际显示的 UI 在下面按场景解析。
     static let shared = PTConsoleWindow()
+
+    private static var windowsBySceneID: [String: PTConsoleWindow] = [:]
+    private static var sceneDisconnectObserver: NSObjectProtocol?
 
     static let debugWindowLevel:UIWindow.Level = .alert + 200
     
     private weak var debugView: UIView?
 
     private init() {
-        if let scene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first {
-
-            super.init(windowScene: scene)
-        } else {
-            super.init(frame: UIScreen.main.bounds)
-        }
-
+        super.init(frame: .zero)
         windowLevel = PTConsoleWindow.debugWindowLevel
         backgroundColor = .clear
     }
 
     required init?(coder: NSCoder) { fatalError() }
+
+    // English: Return the console window owned by the requested scene without selecting a random connected scene.
+    // Español: Devuelve la ventana de consola de la escena solicitada sin elegir una escena conectada al azar.
+    // 中文：返回指定场景所属的控制台窗口，不再随机选择已连接场景。
+    static func window(for scene: UIWindowScene?) -> PTConsoleWindow {
+        guard let scene else { return shared }
+        installSceneDisconnectObserverIfNeeded()
+        windowsBySceneID = windowsBySceneID.filter { $0.value.windowScene != nil }
+        let sceneID = scene.session.persistentIdentifier
+        if let window = windowsBySceneID[sceneID] {
+            window.attach(to: scene)
+            return window
+        }
+
+        let window = PTConsoleWindow()
+        window.attach(to: scene)
+        windowsBySceneID[sceneID] = window
+        return window
+    }
+
+    // English: Release scene-owned console windows as soon as UIKit disconnects their scene.
+    // Español: Libera las ventanas de consola de la escena en cuanto UIKit desconecta esa escena.
+    // 中文：UIKit 断开场景后立即释放该场景所属的控制台窗口。
+    private static func installSceneDisconnectObserverIfNeeded() {
+        guard sceneDisconnectObserver == nil else { return }
+        sceneDisconnectObserver = NotificationCenter.default.addObserver(
+            forName: UIScene.didDisconnectNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            guard let scene = notification.object as? UIWindowScene else { return }
+            Task { @MainActor in
+                PTConsoleWindow.removeWindow(for: scene)
+            }
+        }
+    }
+
+    // English: Remove the scene association when UIKit disconnects a scene.
+    // Español: Elimina la asociación de la escena cuando UIKit desconecta una escena.
+    // 中文：UIKit 断开场景时清理该场景的窗口关联。
+    static func removeWindow(for scene: UIWindowScene) {
+        let window = windowsBySceneID.removeValue(forKey: scene.session.persistentIdentifier)
+        window?.isHidden = true
+        window?.rootViewController = nil
+    }
+
+    // English: Attach the reusable window before it becomes visible.
+    // Español: Conecta la ventana reutilizable antes de hacerla visible.
+    // 中文：在窗口显示前，将可复用窗口挂载到目标场景。
+    func attach(to scene: UIWindowScene) {
+        if windowScene !== scene {
+            windowScene = scene
+        }
+        frame = scene.coordinateSpace.bounds
+    }
         
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let rootView = rootViewController?.view else { return nil }
@@ -323,6 +377,31 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
 
+    private final class SceneConsoleBox {
+        weak var console: LocalConsole?
+
+        init(console: LocalConsole) {
+            self.console = console
+        }
+    }
+
+    private static var consolesBySceneID: [String: SceneConsoleBox] = [:]
+    private weak var preferredWindowScene: UIWindowScene?
+
+    // English: Create an isolated console instance for a scene while keeping LocalConsole.shared as the compatibility facade.
+    // Español: Crea una consola aislada para una escena y conserva LocalConsole.shared como fachada compatible.
+    // 中文：为指定场景创建独立控制台，同时保留 LocalConsole.shared 作为兼容入口。
+    public static func console(for scene: UIWindowScene) -> LocalConsole {
+        let sceneID = scene.session.persistentIdentifier
+        if let console = consolesBySceneID[sceneID]?.console {
+            return console
+        }
+
+        let console = LocalConsole(preferredWindowScene: scene)
+        consolesBySceneID[sceneID] = SceneConsoleBox(console: console)
+        return console
+    }
+
     /// 注册一个调试插件。插件会按分组和优先级显示在控制台菜单中。
     public func registerDebugPlugin(_ plugin: PTDebugPlugin) {
         PTDebugPluginManager.shared.register(plugin)
@@ -429,6 +508,11 @@ public class LocalConsole: NSObject {
     public var terminal:PTTerminal?
     public var maskView:PTDevMaskView?
 
+    // English: Keep the active console window with this console instance so helpers do not cross scene boundaries.
+    // Español: Mantén la ventana de consola activa en esta instancia para que los helpers no crucen límites de escena.
+    // 中文：由当前控制台实例持有活动窗口，避免辅助功能跨越场景边界。
+    var consoleOverlayWindow: PTConsoleWindow?
+
     @MainActor fileprivate let userdefaultShares = PTUserDefaultKeysAndValues.shares
     public var showAllUserDefaultsKeys = false {
         didSet {
@@ -486,7 +570,8 @@ public class LocalConsole: NSObject {
         }
     }
 
-    @MainActor private override init() {
+    @MainActor private init(preferredWindowScene: UIWindowScene? = nil) {
+        self.preferredWindowScene = preferredWindowScene
         super.init()
         
         if isVisiable {
@@ -567,6 +652,9 @@ public class LocalConsole: NSObject {
         }
         terminal?.removeFromSuperview()
         terminal = nil
+        consoleOverlayWindow?.isHidden = true
+        consoleOverlayWindow?.rootViewController = nil
+        consoleOverlayWindow = nil
         closeAllFunction()
     }
             
@@ -711,9 +799,16 @@ public class LocalConsole: NSObject {
 
         guard terminal == nil else { return }
 
-        let window = PTConsoleWindow.shared
+        guard let scene = preferredWindowScene
+            ?? PTSceneContext.windowScene(for: consoleWindow)
+            ?? PTSceneContext.activeWindow()?.windowScene else {
+            PTNSLogConsole("❌ 没有找到可用的控制台窗口场景")
+            return
+        }
+        let window = PTConsoleWindow.window(for: scene)
         window.rootViewController = consoleWindow
         window.isHidden = false
+        consoleOverlayWindow = window
         let terminal = PTTerminal(inView: consoleWindow.view ,
                                   frame: CGRect(x: 0,
                                                 y: CGFloat.kNavBarHeight_Total,
@@ -877,8 +972,9 @@ extension LocalConsole {
         Task { @MainActor in
             if PTViewRulerPlugin.share.showed {
                 PTViewRulerPlugin.share.hide()
-            } else {
-                PTViewRulerPlugin.share.show()
+            } else if let scene = consoleOverlayWindow?.windowScene
+                        ?? PTSceneContext.activeWindow()?.windowScene {
+                PTViewRulerPlugin.share.show(in: scene)
             }
         }
     }
@@ -887,8 +983,9 @@ extension LocalConsole {
         Task { @MainActor in
             if PTColorPickPlugin.share.showed {
                 PTColorPickPlugin.share.close()
-            } else {
-                PTColorPickPlugin.share.show()
+            } else if let scene = consoleOverlayWindow?.windowScene
+                        ?? PTSceneContext.activeWindow()?.windowScene {
+                PTColorPickPlugin.share.show(in: scene)
             }
         }
     }

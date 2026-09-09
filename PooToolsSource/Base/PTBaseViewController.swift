@@ -138,7 +138,19 @@ public final class PTNavigationBarManager:NSObject {
     
     public static let shared = PTNavigationBarManager()
     
-    private override init() {}
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(sceneDidDisconnect(_:)),
+                                               name: UIScene.didDisconnectNotification,
+                                               object: nil)
+    }
+
+    @objc private func sceneDidDisconnect(_ notification: Notification) {
+        guard let scene = notification.object as? UIWindowScene else { return }
+        let sceneID = scene.session.persistentIdentifier
+        navigationContextsBySceneID.removeValue(forKey: sceneID)
+    }
     
     private var titleLabel:Bool = false
 
@@ -159,6 +171,34 @@ public final class PTNavigationBarManager:NSObject {
             self.handler = handler
         }
     }
+
+    // English: Keep transition progress with its navigation stack so simultaneous scenes cannot overwrite each other.
+    // Español: Conserva el progreso de la transición con su pila de navegación para que escenas simultáneas no se sobrescriban.
+    // 中文：将转场进度绑定到对应导航栈，避免多个场景同时转场时互相覆盖。
+    private final class NavigationTransitionState: NSObject {
+        weak var coordinator: UIViewControllerTransitionCoordinator?
+        weak var container: PTNavigationBarContainer?
+
+        init(coordinator: UIViewControllerTransitionCoordinator,
+             container: PTNavigationBarContainer) {
+            self.coordinator = coordinator
+            self.container = container
+        }
+    }
+
+    // English: Keep the currently visible controller per scene while retaining the legacy active-stack pointers.
+    // Español: Conserva el controlador visible por escena y mantiene los punteros heredados de la pila activa.
+    // 中文：按场景保存当前可见控制器，同时保留旧的活动导航栈指针。
+    private final class NavigationContextBox: NSObject {
+        weak var navigationController: UINavigationController?
+        weak var viewController: UIViewController?
+
+        init(navigationController: UINavigationController,
+             viewController: UIViewController?) {
+            self.navigationController = navigationController
+            self.viewController = viewController
+        }
+    }
     
     // ❗ 核心：按 VC 存储
     private var itemCache = NSMapTable<UIViewController, PTNavBarItem>(keyOptions: .weakMemory, valueOptions: .strongMemory)
@@ -171,11 +211,8 @@ public final class PTNavigationBarManager:NSObject {
     weak var currentNav: UINavigationController?
     
     private var displayLink: CADisplayLink?
-    private weak var transitionCoordinatorRef: UIViewControllerTransitionCoordinator?
-    private weak var transitionContainer: PTNavigationBarContainer?
-
-    private var fromStyle: PTNavigationBarStyle = .transparent
-    private var toStyle: PTNavigationBarStyle = .transparent
+    private var transitionStates = NSMapTable<UINavigationController, NavigationTransitionState>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var navigationContextsBySceneID: [String: NavigationContextBox] = [:]
     
     public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?
     
@@ -200,12 +237,49 @@ public final class PTNavigationBarManager:NSObject {
     
     public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
-        currentNav = nav
+        rememberCurrent(nav, viewController: nav.topViewController)
         styleCache.setObject(NavigationStyleBox(style: style), forKey: nav)
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
         
         resetSystemNavBarAppearance(nav)
+    }
+
+    // English: Remember the active navigation stack for its scene without retaining either UIKit object.
+    // Español: Recuerda la pila de navegación activa de su escena sin retener los objetos de UIKit.
+    // 中文：按场景记录当前导航栈，且不强引用 UIKit 对象。
+    private func rememberCurrent(_ navigationController: UINavigationController,
+                                 viewController: UIViewController?) {
+        currentNav = navigationController
+        currentVC = viewController
+        guard let scene = PTSceneContext.windowScene(for: navigationController)
+                ?? PTSceneContext.windowScene(for: viewController) else { return }
+        let sceneID = scene.session.persistentIdentifier
+        navigationContextsBySceneID[sceneID] = NavigationContextBox(navigationController: navigationController,
+                                                                       viewController: viewController)
+    }
+
+    // English: Expose a scene-scoped lookup for new callers while preserving existing global convenience APIs.
+    // Español: Expone una búsqueda por escena para los nuevos llamadores y conserva las APIs globales existentes.
+    // 中文：为新调用方提供按场景查询，同时保留现有全局便捷 API。
+    public func currentNavigationController(in scene: UIWindowScene) -> UINavigationController? {
+        let sceneID = scene.session.persistentIdentifier
+        guard let context = navigationContextsBySceneID[sceneID],
+              let navigationController = context.navigationController else {
+            navigationContextsBySceneID.removeValue(forKey: sceneID)
+            return nil
+        }
+        return navigationController
+    }
+
+    public func currentViewController(in scene: UIWindowScene) -> UIViewController? {
+        let sceneID = scene.session.persistentIdentifier
+        guard let context = navigationContextsBySceneID[sceneID],
+              let viewController = context.viewController else {
+            navigationContextsBySceneID.removeValue(forKey: sceneID)
+            return nil
+        }
+        return viewController
     }
     
     private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
@@ -343,8 +417,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
         
         installIfNeeded(in: navigationController)
-        currentNav = navigationController
-        currentVC = viewController
+        rememberCurrent(navigationController, viewController: viewController)
         resetSystemNavBarAppearance(navigationController)
         
         // 安全准备默认返回按钮数据（来自我们上一步的优化）
@@ -368,10 +441,6 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
         let fromStyle = (fromVC as? PTBaseViewController)?.preferredNavigationBarStyle() ?? .transparent
 
-        self.fromStyle = fromStyle
-        self.toStyle = toStyle
-        self.transitionContainer = container
-
         // 预设起点，准备动画
         container.prepareTransition(from: fromStyle, to: toStyle)
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
@@ -387,18 +456,21 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             if let vc = viewController as? PTBaseViewController {
                 vc.setNeedsStatusBarAppearanceUpdate()
             }
+            stopTransition(for: navigationController)
         } else {
             // 💡 这是 Push / Pop 动作，正常执行我们完美的过渡动画
             let activeCoordinator = navigationController.transitionCoordinator ?? viewController.transitionCoordinator
             
             if let coordinator = activeCoordinator {
-                self.transitionCoordinatorRef = coordinator
+                setTransitionState(for: navigationController,
+                                   coordinator: coordinator,
+                                   container: container)
                 
                 if coordinator.isInteractive {
                     startDisplayLink()
                     coordinator.animate(alongsideTransition: { _ in
                     }, completion: { context in
-                        self.stopDisplayLink()
+                        self.stopTransition(for: navigationController)
                         self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
                     })
                 } else {
@@ -411,6 +483,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                             self.apply(item: item)
                         }, completion: nil)
                     }, completion: { context in
+                        self.stopTransition(for: navigationController)
                         self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
                     })
                 }
@@ -423,6 +496,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                     }
                 }
             } else {
+                stopTransition(for: navigationController)
                 // 兜底无动画情况
                 if animated {
                     UIView.animate(withDuration: 0.25) {
@@ -551,7 +625,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         // ❗关键：只处理有 navigationController 的 VC
         let realVC = PTUtils.getCurrentVC(from: vc)
         guard let nav = realVC.navigationController else { return }
-        currentVC = realVC
+        rememberCurrent(nav, viewController: realVC)
         guard let item = itemCache.object(forKey: realVC),
                   item.isConfigured else {
             return
@@ -578,8 +652,30 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 }
 
 extension PTNavigationBarManager {
+    // English: Store transition state by navigation controller so one scene cannot cancel another scene's display link.
+    // Español: Guarda el estado de transición por controlador de navegación para que una escena no cancele el display link de otra.
+    // 中文：按导航控制器保存转场状态，避免一个场景停止另一个场景的 display link。
+    private func setTransitionState(for navigationController: UINavigationController,
+                                    coordinator: UIViewControllerTransitionCoordinator,
+                                    container: PTNavigationBarContainer) {
+        transitionStates.setObject(NavigationTransitionState(coordinator: coordinator,
+                                                              container: container),
+                                               forKey: navigationController)
+    }
+
+    // English: Remove only the completed stack transition and stop the shared display link when no stack remains.
+    // Español: Elimina solo la transición completada y detiene el display link compartido cuando no queda ninguna pila.
+    // 中文：只移除已完成导航栈的转场，所有转场结束后才停止共享 display link。
+    private func stopTransition(for navigationController: UINavigationController) {
+        transitionStates.removeObject(forKey: navigationController)
+        let hasRemainingTransitions = transitionStates.keyEnumerator().nextObject() != nil
+        if !hasRemainingTransitions {
+            stopDisplayLink()
+        }
+    }
+
     private func startDisplayLink() {
-        stopDisplayLink()
+        guard displayLink == nil else { return }
         displayLink = CADisplayLink(target: self, selector: #selector(handleDisplayLink))
         displayLink?.add(to: .main, forMode: .common)
     }
@@ -590,12 +686,25 @@ extension PTNavigationBarManager {
     }
     
     @MainActor @objc private func handleDisplayLink() {
-        guard let coordinator = transitionCoordinatorRef,
-              let container = transitionContainer else { return }
-        
-        let progress = coordinator.percentComplete
-        
-        container.updateTransition(progress: progress)
+        var navigationControllers = [UINavigationController]()
+        let keyEnumerator = transitionStates.keyEnumerator()
+        while let navigationController = keyEnumerator.nextObject() as? UINavigationController {
+            navigationControllers.append(navigationController)
+        }
+
+        for navigationController in navigationControllers {
+            guard let state = transitionStates.object(forKey: navigationController),
+                  let coordinator = state.coordinator,
+                  let container = state.container else {
+                transitionStates.removeObject(forKey: navigationController)
+                continue
+            }
+            container.updateTransition(progress: coordinator.percentComplete)
+        }
+
+        if transitionStates.keyEnumerator().nextObject() == nil {
+            stopDisplayLink()
+        }
     }
 }
 

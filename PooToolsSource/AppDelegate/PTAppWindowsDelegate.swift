@@ -23,25 +23,60 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
 #if POOTOOLS_DEBUG
 #endif
-    public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
+    // English: Create the application window in the scene supplied by UIKit.
+    // Español: Crea la ventana de la aplicación en la escena proporcionada por UIKit.
+    // 中文：在 UIKit 提供的场景中创建应用窗口。
+    public func makeKeyAndVisible(in scene: UIWindowScene,
+                                  createViewControllerHandler: () -> UIViewController,
+                                  tint: UIColor) {
 #if POOTOOLS_DEBUG
         let environment = UIApplication.shared.inferredEnvironment_PT
 
         switch environment {
-        case .appStore,.testFlight:
-            window = UIWindow(frame: UIScreen.main.bounds)
+        case .appStore, .testFlight:
+            window = UIWindow(windowScene: scene)
         default:
-            let inspectorWindow = TouchInspectorWindow(frame: UIScreen.main.bounds)
+            let inspectorWindow = TouchInspectorWindow(windowScene: scene)
             inspectorWindow.showTouches = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow
             inspectorWindow.showHitTesting = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits
             window = inspectorWindow
         }
 #else
-        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(windowScene: scene)
 #endif
         window?.tintColor = tint
         window?.rootViewController = createViewControllerHandler()
         window?.makeKeyAndVisible()
+    }
+
+    // English: Keep the view-controller convenience overload tied to the same explicit scene path.
+    // Español: Mantén la sobrecarga conveniente del controlador ligada a la misma ruta de escena explícita.
+    // 中文：让控制器便捷重载同样走明确场景的创建路径。
+    public func makeKeyAndVisible(in scene: UIWindowScene,
+                                  viewController: UIViewController,
+                                  tint: UIColor) {
+        makeKeyAndVisible(in: scene, createViewControllerHandler: {
+            viewController
+        }, tint: tint)
+    }
+
+    public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
+        if let scene = PTSceneContext.activeWindow()?.windowScene
+            ?? PTSceneContext.connectedWindowScenes().first(where: {
+                $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive
+            }) {
+            makeKeyAndVisible(in: scene,
+                              createViewControllerHandler: createViewControllerHandler,
+                              tint: tint)
+            return
+        }
+
+        // English: A window without a connected scene cannot be presented yet; keep a compatibility placeholder.
+        // Español: Una ventana sin escena conectada aún no puede presentarse; conserva un marcador compatible.
+        // 中文：没有已连接场景的窗口暂时无法显示，保留兼容占位窗口。
+        window = UIWindow(frame: .zero)
+        window?.tintColor = tint
+        window?.rootViewController = createViewControllerHandler()
     }
 
     public func makeKeyAndVisible(viewController: UIViewController, tint: UIColor) {
@@ -136,7 +171,7 @@ extension PTAppWindowsDelegate {
 //MARK: 旋转
 extension PTAppWindowsDelegate {
     open func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return  PTRotationManager.shared.orientationMask
+        return PTRotationManager.shared.orientationMask(for: window?.windowScene)
     }
 }
 #endif

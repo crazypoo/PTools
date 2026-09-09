@@ -194,7 +194,11 @@ public final class LaunchVisualizer {
     
     /// 显示可视化入口（通常在首屏渲染完成后调用）
     public func showEntry() {
-        EntryWindow.share.show()
+        guard let scene = PTSceneContext.activeWindow()?.windowScene else {
+            PTNSLogConsole("⚠️ [ptools] 无法找到可用窗口场景，启动看板入口未显示")
+            return
+        }
+        EntryWindow.share.show(in: scene)
         EntryWindow.share.onTap = { [weak self] in
             self?.presentDashboard()
         }
@@ -202,7 +206,7 @@ public final class LaunchVisualizer {
     
     /// 弹出详情数据看板
     private func presentDashboard() {
-        guard let topVC = PTUtils.getCurrentVC() else {
+        guard let topVC = PTSceneContext.currentViewController(in: EntryWindow.share.windowScene) else {
             PTNSLogConsole("⚠️ [ptools] 无法找到顶层 ViewController，看板弹出失败")
             return
         }
@@ -219,17 +223,7 @@ public final class LaunchVisualizer {
         if let baseVC = base {
             currentBase = baseVC
         } else {
-            // 1. 获取所有 Scene 下的窗口
-            let windows = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-            
-            // 🌟 关键修复：避开悬浮窗！
-            // 寻找层级为 normal，并且确确实实挂载了 rootViewController 的主业务窗口
-            let mainWindow = windows.first { $0.isKeyWindow && $0.windowLevel == .normal && $0.rootViewController != nil }
-                ?? windows.first { $0.windowLevel == .normal && $0.rootViewController != nil }
-            
-            currentBase = mainWindow?.rootViewController
+            currentBase = PTSceneContext.rootViewController(in: EntryWindow.share.windowScene)
         }
         
         guard let baseToSearch = currentBase else { return nil }
@@ -256,7 +250,8 @@ public final class LaunchVisualizer {
 
 // MARK: - 内部组件: 悬浮窗入口
 
-private class EntryWindow: UIWindow {
+@MainActor
+private final class EntryWindow: UIWindow {
     static let share = EntryWindow()
 
     var onTap: (() -> Void)?
@@ -272,13 +267,7 @@ private class EntryWindow: UIWindow {
     }()
     
     init() {
-        if let scene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first {
-            super.init(windowScene: scene)
-        } else {
-            super.init(frame: UIScreen.main.bounds)
-        }
+        super.init(frame: .zero)
         
         windowLevel = .alert + 208
         backgroundColor = .clear
@@ -301,8 +290,17 @@ private class EntryWindow: UIWindow {
         hide()
     }
     
-    func show() {
+    func show(in scene: UIWindowScene) {
+        if windowScene !== scene {
+            windowScene = scene
+        }
+        frame = scene.coordinateSpace.bounds
         isHidden = false
+    }
+
+    func show() {
+        guard let scene = PTSceneContext.activeWindow()?.windowScene else { return }
+        show(in: scene)
     }
     
     func hide() {

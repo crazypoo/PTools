@@ -41,6 +41,11 @@ public final class PTRotationManager {
             publishOrientationMaskDidChange()
         }
     }
+
+    // English: Keep the requested orientation per scene while preserving the legacy global value.
+    // Español: Conserva la orientación solicitada por escena y mantiene el valor global heredado.
+    // 中文：按场景保存方向请求，同时保留旧的全局方向值。
+    private var orientationMasksBySceneID: [String: UIInterfaceOrientationMask] = [:]
     
     /// 是否锁定屏幕方向
     public var isLockOrientationWhenDeviceOrientationDidChange = true {
@@ -94,6 +99,8 @@ public final class PTRotationManager {
                                                name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange),
                                                name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sceneDidDisconnect(_:)),
+                                               name: UIScene.didDisconnectNotification, object: nil)
     }
 }
 
@@ -117,19 +124,24 @@ private extension PTRotationManager {
         }
     }
     
-    func rotation(to orientationMask: UIInterfaceOrientationMask) {
-        guard isEnabled, self.orientationMask != orientationMask else { return }
+    func rotation(to orientationMask: UIInterfaceOrientationMask,
+                  in scene: UIWindowScene? = nil) {
+        guard isEnabled else { return }
+
+        guard let windowScene = scene ?? PTSceneContext.activeWindow()?.windowScene else { return }
+        orientationMasksBySceneID[windowScene.session.persistentIdentifier] = orientationMask
+
+        guard self.orientationMask != orientationMask else { return }
         
         // 更新并广播屏幕方向
         self.orientationMask = orientationMask
-        
+
         // 控制横竖屏
         let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
 
         // Rotate only the active scene; changing every connected scene can affect unrelated windows.
         // Gira solo la escena activa; cambiar todas las escenas puede afectar ventanas no relacionadas.
         // 只旋转当前活动场景，避免影响其他无关窗口。
-        guard let windowScene = PTSceneContext.activeWindow()?.windowScene else { return }
         for window in windowScene.windows {
             window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
         }
@@ -148,6 +160,11 @@ private extension PTRotationManager {
     @objc func willResignActive() { isEnabled = false }
     
     @objc func didBecomeActive() { isEnabled = true }
+
+    @objc func sceneDidDisconnect(_ notification: Notification) {
+        guard let scene = notification.object as? UIWindowScene else { return }
+        orientationMasksBySceneID.removeValue(forKey: scene.session.persistentIdentifier)
+    }
     
     @objc func deviceOrientationDidChange() {
         guard isEnabled, !isLockOrientationWhenDeviceOrientationDidChange else { return }
@@ -208,6 +225,14 @@ public extension PTRotationManager {
         guard isEnabled else { return }
         let targetMask: UIInterfaceOrientationMask = orientationMask == .portrait ? .landscapeRight : .portrait
         rotation(to: targetMask)
+    }
+
+    // English: Return the scene-specific mask for UIKit orientation callbacks.
+    // Español: Devuelve la máscara específica de la escena para los callbacks de orientación de UIKit.
+    // 中文：为 UIKit 方向回调返回指定场景的方向掩码。
+    func orientationMask(for scene: UIWindowScene?) -> UIInterfaceOrientationMask {
+        guard let scene else { return orientationMask }
+        return orientationMasksBySceneID[scene.session.persistentIdentifier] ?? orientationMask
     }
 }
 

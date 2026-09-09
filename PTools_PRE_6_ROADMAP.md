@@ -3,9 +3,9 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 审查基线：`master` @ `56edb60b`（2026-09-09）
-> 当前 Podspec 版本：`5.8.9`
-> 当前最新 Git Tag：`5.8.9`（2026-09-09）
+> 审查基线：`master` @ `9e01e16e`（2026-09-09）
+> 当前 Podspec 版本：`5.9.2`
+> 当前最新 Git Tag：`5.9.2`（2026-09-09）
 > 最低平台：iOS 17.0
 > Swift：Swift 6.0 / Strict Concurrency
 > 核心原则：**5.x 完成内部重构、解耦、兼容迁移和门禁建设；6.0 只做已经准备好的破坏性删除与正式模块边界切换。**
@@ -3601,10 +3601,10 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.3 Lifecycle
 
-- [ ] LIFE-593-01 Window API cleanup
-- [ ] LIFE-593-02 Scene UI state
-- [ ] LIFE-593-03 Singleton classification
-- [ ] LIFE-593-04 DI entry points
+- [x] LIFE-593-01 Window API cleanup
+- [x] LIFE-593-02 Scene UI state
+- [x] LIFE-593-03 Singleton classification
+- [x] LIFE-593-04 DI entry points
 
 ## Milestone: 5.9.4 Performance
 
@@ -3685,6 +3685,17 @@ PooToolsSource/MediaViewer/
 - [x] TEST-592-05：增加 push/pop、多导航容器、interactive-pop 入口、宿主 delegate 和 TabBar 标记回归 harness。
 - [x] 生成 `report/quality_5_9_2.md`，并将 5.9.2 的静态建立状态与 Xcode/真机待验证状态分开记录。
 - [x] LIFE-593-04：增加 PTSceneContextProviding 和默认场景解析提供器。
+- [x] LIFE-593-01：统一 PTSceneContext 的场景、窗口和当前控制器解析；移除生产路径中的
+  `connectedScenes.first`、`delegate.window` 和直接全局窗口查询。保留 `UIApplication.override(_:)`
+  对所有已连接场景逐一应用样式的兼容行为。
+- [x] LIFE-593-02：Alert 状态改用持久化场景标识保存，控制台支持按场景创建窗口和控制台实例，
+  调试标尺、取色器、启动看板、HUD、旋转回调和导航转场进度都优先使用宿主场景或导航栈。
+- [x] LIFE-593-03：升级 `report_singletons_5_9.rb`，同时盘点 `.shared` / `.share`，按 A/B/C/D
+  输出分类、作用和迁移建议，并增加生命周期门禁校验所有声明都已分类。
+- [x] LIFE-593-04：保留现有 `PTSceneContextProviding` 注入入口，并增加 `LocalConsole.console(for:)`
+  和调试组件的显式场景入口，兼容旧的 shared/share 调用。
+- [x] LIFE-593：生成 `report/build_validation_5_9_3.md`，记录静态门禁结果、Xcode Debug / Release
+  外部 KituraContracts 阻断，以及仍需真实宿主执行的多 Scene 生命周期回归。
 - [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache 设置数量与成本上限。
 - [x] UI-595-01 / UI-595-02 / UI-595-03：生成 UI 适配扫描报告，保留人工回归门槛。
 - [x] DEP-596-01 / DEP-596-05：固定 AttributedString、SocketRocket revision，并增加依赖所有权文档。
@@ -3697,7 +3708,7 @@ PooToolsSource/MediaViewer/
 - [ ] 5.9.1 Xcode Debug / Release 完整构建和真实宿主回归：当前被外部 KituraContracts、
   swift-syntax 网络获取和工具链环境阻断；需解除阻断后再完成最终验收。
 - [ ] TEST-592-02 至 TEST-592-05：Xcode iOS Simulator、真实宿主、真机和 Instruments 的实际执行结果；静态夹具已建立但不等于性能验收。
-- [ ] LIFE-593-01 至 LIFE-593-03：全量窗口查询迁移、单例分类落地和场景状态回归。
+- [ ] LIFE-593-01 至 LIFE-593-03：多窗口、多 Scene、Scene 断开重连和并行转场的真实宿主回归；静态门禁已完成。
 - [ ] PERF-594-02 至 PERF-594-04：Instruments、真机性能和内存警告实测。
 - [ ] DEP-596-02 至 DEP-596-04：Kitura、SmartCodable 和 Bugly XCFramework 最终决策。
 - [ ] DOC-597-03：Example 页面和真实宿主项目迁移。

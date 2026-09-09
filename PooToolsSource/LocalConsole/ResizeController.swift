@@ -19,8 +19,11 @@ class ResizeController {
     
     lazy var platterView = PlatterView(frame: .zero)
     
-    lazy var consoleCenterPoint = CGPoint(x: PTConsoleWindow.shared.bounds.midX,
-                                          y: PTConsoleWindow.shared.bounds.midY)
+    var consoleCenterPoint: CGPoint {
+        let window = LocalConsole.shared.consoleOverlayWindow ?? PTSceneContext.activeWindow()
+        return CGPoint(x: window?.bounds.midX ?? 0,
+                       y: window?.bounds.midY ?? 0)
+    }
         
     @MainActor lazy var consoleOutlineView: UIView = {
         let view = UIView()

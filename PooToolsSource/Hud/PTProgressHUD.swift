@@ -209,11 +209,7 @@ public class PTProgressHUD: UIView {
     
     /// 安全获取当前的 Key Window (兼容 iOS 13+ SceneDelegate 机制)
     private static var currentKeyWindow: UIWindow? {
-        return UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive } // 筛选当前处于活跃状态的场景
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }
+        PTSceneContext.activeWindow()
     }
 
     // MARK: - 初始化
@@ -357,6 +353,19 @@ public class PTProgressHUD: UIView {
             return nil
         }
         // 复用之前的 show 方法
+        return show(addedTo: window, animated: animated)
+    }
+
+    // English: Show the HUD in an explicit scene so multi-window apps do not cover another scene.
+    // Español: Muestra el HUD en una escena explícita para que las apps con varias ventanas no cubran otra escena.
+    // 中文：在明确场景中显示 HUD，避免多窗口应用遮挡其他场景。
+    @discardableResult
+    public static func showOnWindow(in scene: UIWindowScene,
+                                   animated: Bool = true) -> PTProgressHUD? {
+        guard let window = PTSceneContext.activeWindow(in: scene) else {
+            PTNSLogConsole("PTProgressHUD Error: 无法获取指定场景的窗口")
+            return nil
+        }
         return show(addedTo: window, animated: animated)
     }
 

@@ -67,8 +67,9 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
                     let frameWidth = bounds.height * ratio
                     let count = Int(bounds.width / frameWidth) + 1
                     
-                    let scale: CGFloat = (UIApplication.shared.connectedScenes
-                        .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene)?.screen.scale ?? 2.0
+                    let scale = max(self.viewIfLoaded?.window?.windowScene?.screen.scale
+                                    ?? self.traitCollection.displayScale,
+                                    1)
                     let maxSize = CGSize(width: bounds.width * scale, height: bounds.height * scale)
                     let newAsset = PTSafeMediaBox(mediaItem: self.asset)
                     

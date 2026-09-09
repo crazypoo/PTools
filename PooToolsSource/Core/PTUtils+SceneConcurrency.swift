@@ -18,53 +18,101 @@ import UIKit
 // 中文：解析活动应用窗口，不依赖全局 key window 取值捷径。
 @MainActor
 public enum PTSceneContext {
-    public static func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? {
-        let scenes: [UIWindowScene]
-        if let scene {
-            scenes = [scene]
-        } else {
-            var foregroundActiveScenes = [UIWindowScene]()
-            var foregroundInactiveScenes = [UIWindowScene]()
-            for connectedScene in UIApplication.shared.connectedScenes {
-                guard let windowScene = connectedScene as? UIWindowScene else { continue }
-                switch windowScene.activationState {
-                case .foregroundActive:
-                    foregroundActiveScenes.append(windowScene)
-                case .foregroundInactive:
-                    foregroundInactiveScenes.append(windowScene)
-                case .background, .unattached:
-                    continue
-                @unknown default:
-                    foregroundInactiveScenes.append(windowScene)
+    // English: Keep scene discovery in one place so UI modules do not choose an arbitrary connected scene.
+    // Español: Mantén el descubrimiento de escenas en un solo lugar para que los módulos UI no elijan una escena arbitraria.
+    // 中文：将场景发现集中到一个入口，避免 UI 模块随意选择某个已连接场景。
+    public static func connectedWindowScenes() -> [UIWindowScene] {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .sorted { lhs, rhs in
+                let lhsPriority = sceneActivationPriority(lhs.activationState)
+                let rhsPriority = sceneActivationPriority(rhs.activationState)
+                if lhsPriority != rhsPriority {
+                    return lhsPriority < rhsPriority
                 }
+                return lhs.session.persistentIdentifier < rhs.session.persistentIdentifier
             }
-            scenes = foregroundActiveScenes + foregroundInactiveScenes
-        }
+    }
 
-        var windows = [UIWindow]()
-        for windowScene in scenes {
-            windows.append(contentsOf: windowScene.windows)
-        }
+    // English: Return windows owned by an explicit scene; callers should use this for scene-scoped UI state.
+    // Español: Devuelve las ventanas de una escena explícita; los llamadores deben usarlo para el estado UI por escena.
+    // 中文：返回明确场景拥有的窗口；按场景保存 UI 状态时应优先使用此方法。
+    public static func windows(in scene: UIWindowScene) -> [UIWindow] {
+        scene.windows
+    }
 
-        for window in windows where window.isKeyWindow && window.windowLevel == .normal && window.rootViewController != nil {
-            return window
+    public static func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? {
+        let scenes = scene.map { [$0] } ?? connectedWindowScenes().filter {
+            $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive
         }
-        for window in windows where window.windowLevel == .normal && window.rootViewController != nil {
-            return window
-        }
-        for window in windows where window.isKeyWindow && window.rootViewController != nil {
-            return window
-        }
-        for windowScene in scenes {
-            if let sceneWindow = (windowScene.delegate as? PTWindowSceneDelegate)?.window,
-               sceneWindow.rootViewController != nil {
-                return sceneWindow
+        return scenes
+            .lazy
+            .flatMap { windows(in: $0) }
+            .sorted { lhs, rhs in
+                if lhs.isKeyWindow != rhs.isKeyWindow {
+                    return lhs.isKeyWindow
+                }
+                if lhs.windowLevel != rhs.windowLevel {
+                    return lhs.windowLevel.rawValue < rhs.windowLevel.rawValue
+                }
+                return lhs.rootViewController != nil && rhs.rootViewController == nil
             }
+            .first { window in
+                !window.isHidden && window.alpha > 0.01 && window.rootViewController != nil
+            }
+    }
+
+    // English: Resolve the scene already hosting a view instead of falling back to another scene.
+    // Español: Resuelve la escena que ya aloja una vista en lugar de cambiar a otra escena.
+    // 中文：优先解析已经承载视图的场景，不回退到其他场景。
+    public static func windowScene(for view: UIView?) -> UIWindowScene? {
+        view?.window?.windowScene
+    }
+
+    // English: Resolve a controller's existing scene through its loaded hierarchy.
+    // Español: Resuelve la escena existente de un controlador a través de su jerarquía cargada.
+    // 中文：通过控制器已加载的层级解析其当前所属场景。
+    public static func windowScene(for viewController: UIViewController?) -> UIWindowScene? {
+        var current = viewController
+        var visited = Set<ObjectIdentifier>()
+        while let viewController = current,
+              visited.insert(ObjectIdentifier(viewController)).inserted {
+            if let scene = viewController.viewIfLoaded?.window?.windowScene {
+                return scene
+            }
+            current = viewController.parent ?? viewController.presentingViewController
         }
-        // English: Do not call the public AppWindows adapter here; it would recurse.
-        // Español: No llames aquí al adaptador público AppWindows; provocaría una recursión.
-        // 中文：这里不能调用公共 AppWindows 适配器，否则会形成递归。
         return nil
+    }
+
+    // English: Resolve a window from an existing view first and use the canonical fallback only when needed.
+    // Español: Resuelve primero la ventana existente de la vista y usa el respaldo canónico solo cuando es necesario.
+    // 中文：先返回视图现有的窗口，仅在必要时使用统一的兜底窗口。
+    public static func window(for view: UIView?) -> UIWindow? {
+        if let window = view?.window {
+            return window
+        }
+        return activeWindow()
+    }
+
+    // English: Keep presentation tied to the controller's scene whenever UIKit has already attached it.
+    // Español: Mantén la presentación ligada a la escena del controlador cuando UIKit ya lo haya conectado.
+    // 中文：当 UIKit 已经挂载控制器时，让展示行为始终绑定到该控制器所在场景。
+    public static func window(for viewController: UIViewController?) -> UIWindow? {
+        if let window = viewController?.viewIfLoaded?.window {
+            return window
+        }
+        return activeWindow(in: windowScene(for: viewController))
+    }
+
+    private static func sceneActivationPriority(_ state: UIScene.ActivationState) -> Int {
+        switch state {
+        case .foregroundActive: return 0
+        case .foregroundInactive: return 1
+        case .background: return 2
+        case .unattached: return 3
+        @unknown default: return 4
+        }
     }
 
     // English: Return the root controller from the same window selection used by every scene-aware lookup.

@@ -28,7 +28,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "lines": 536,
+      "lines": 565,
       "classification": "ok"
     },
     {
@@ -128,12 +128,12 @@
     },
     {
       "path": "PooToolsSource/AppDelegate/PTAppWindowsDelegate.swift",
-      "lines": 142,
+      "lines": 177,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/AppDelegate/PTWindowSceneDelegate.swift",
-      "lines": 38,
+      "lines": 47,
       "classification": "ok"
     },
     {
@@ -253,7 +253,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1511,
+      "lines": 1620,
       "classification": "architecture_exception"
     },
     {
@@ -1213,7 +1213,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "lines": 155,
+      "lines": 203,
       "classification": "ok"
     },
     {
@@ -1283,7 +1283,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTDrakModeOption.swift",
-      "lines": 455,
+      "lines": 453,
       "classification": "ok"
     },
     {
@@ -1383,7 +1383,7 @@
     },
     {
       "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
-      "lines": 409,
+      "lines": 428,
       "classification": "ok"
     },
     {
@@ -1498,7 +1498,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkHelper.swift",
-      "lines": 86,
+      "lines": 87,
       "classification": "ok"
     },
     {
@@ -1528,7 +1528,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
-      "lines": 240,
+      "lines": 241,
       "classification": "ok"
     },
     {
@@ -1568,7 +1568,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTPerformanceLeakDetector.swift",
-      "lines": 700,
+      "lines": 690,
       "classification": "ok"
     },
     {
@@ -1578,7 +1578,7 @@
     },
     {
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "lines": 309,
+      "lines": 376,
       "classification": "ok"
     },
     {
@@ -1718,7 +1718,7 @@
     },
     {
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "lines": 485,
+      "lines": 494,
       "classification": "ok"
     },
     {
@@ -3488,7 +3488,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "lines": 469,
+      "lines": 467,
       "classification": "ok"
     },
     {
@@ -3523,7 +3523,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1571,
+      "lines": 1649,
       "classification": "architecture_exception"
     },
     {
@@ -3543,7 +3543,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "lines": 714,
+      "lines": 717,
       "classification": "ok"
     },
     {
@@ -3988,7 +3988,7 @@
     },
     {
       "path": "PooToolsSource/Rotation/PTRotationManager.swift",
-      "lines": 261,
+      "lines": 286,
       "classification": "ok"
     },
     {
@@ -4413,7 +4413,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "lines": 109,
+      "lines": 110,
       "classification": "ok"
     },
     {

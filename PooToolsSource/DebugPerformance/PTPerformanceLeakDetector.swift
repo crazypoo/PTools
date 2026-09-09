@@ -641,16 +641,7 @@ extension UIResponder {
 @MainActor
 extension UIApplication {
     private var lvcdActiveMainKeyWindow: UIWindow? {
-        if #available(iOS 13, tvOS 13, *) {
-            let activeScenes = connectedScenes.filter {
-                $0.activationState == UIScene.ActivationState.foregroundActive
-            }
-            return (activeScenes.count > 0 ? activeScenes : connectedScenes).flatMap {
-                ($0 as? UIWindowScene)?.windows ?? []
-            }.first { $0.isKeyWindow }
-        } else {
-            return keyWindow
-        }
+        PTSceneContext.activeWindow()
     }
 
     private class func lvcdTopViewController(controller: UIViewController? = nil) -> UIViewController? {
@@ -666,8 +657,7 @@ extension UIApplication {
 
     @available(iOS 13.0, tvOS 13, *)
     private var lvcdFirstActiveWindowScene: UIWindowScene? {
-        let activeScenes = UIApplication.shared.connectedScenes.filter { $0.activationState == UIScene.ActivationState.foregroundActive && $0 is UIWindowScene }
-        return (activeScenes.count > 0 ? activeScenes : UIApplication.shared.connectedScenes).first(where: { $0 is UIWindowScene }) as? UIWindowScene
+        PTSceneContext.activeWindow()?.windowScene
     }
 }
 

@@ -1,366 +1,834 @@
 {
-  "schema_version": 1,
-  "shared_call_count": 658,
+  "schema_version": 2,
+  "shared_call_count": 1566,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
       "line": 15,
       "declaration": "public static let shared = PTAlertConfig()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
       "line": 148,
       "declaration": "public static let shared = PTAlertManager()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
+      "line": 91,
+      "declaration": "public static let share = PTLaunchAdMonitor()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
+      "line": 16,
+      "declaration": "public static let share = PTAppBaseConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
       "line": 96,
       "declaration": "public static let shared = PTAudioCacheFileManager()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
       "line": 164,
       "declaration": "public static let shared = PTAudioService()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
       "line": 139,
       "declaration": "public static let shared = PTNavigationBarManager()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 63,
       "declaration": "public static let shared = PTVideoManager()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 123,
       "declaration": "public static let shared = PTVideoFileCache()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/BioID/PTBiologyID.swift",
       "line": 23,
       "declaration": "public static let shared = PTBiometricsManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift",
       "line": 18,
       "declaration": "@MainActor static let shared: PTPermissionBluetoothHandler = .init()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/C7Collector/C7CameraConfig.swift",
+      "line": 14,
+      "declaration": "public static let share = C7CameraConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
+      "line": 35,
+      "declaration": "public static let share = PTCameraFilterConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
+      "line": 21,
+      "declaration": "public static let share = PTHarBethFilter(name: \"\", type: .cigaussian)",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/CallMessageMail/PTCallMessageMailFunction.swift",
+      "line": 19,
+      "declaration": "public static let share = PTCallMessageMailFunction()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/CallMessageMail/PTPhoneBlock.swift",
       "line": 18,
       "declaration": "public static let shared = PTPhoneBlock()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
       "line": 50,
       "declaration": "public static let shared = PTRefreshConfig()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
+      "line": 17,
+      "declaration": "@MainActor public static let share = PTCheckFWords()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+      "line": 215,
+      "declaration": "@MainActor public static let share = PTCheckUpdateFunction()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Contact/PTContact.swift",
+      "line": 48,
+      "declaration": "public static let share = PTContact()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Core/PTAppUserdefault.swift",
       "line": 50,
       "declaration": "public static let shared = PTCoreUserDefultsWrapper()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
       "line": 39,
       "declaration": "public static let shared = PTGCDManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Core/PTUtils.swift",
+      "line": 173,
+      "declaration": "public static let share = PTUtils()",
+      "name": "share",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
+    },
+    {
+      "path": "PooToolsSource/Country/PTCountryCodes.swift",
+      "line": 19,
+      "declaration": "@MainActor public static let share = PTCountryCodes()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift",
       "line": 14,
       "declaration": "static let shared = PTDebugLocationKit()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DarkMode/PTDrakModeOption.swift",
       "line": 107,
       "declaration": "static let shared = PTDarkModeScheduleMonitor()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
       "line": 205,
       "declaration": "static let shared = LegacyThemeProvider()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Debug/PTApplicationDirectories.swift",
       "line": 12,
       "declaration": "static let shared = PTApplicationDirectories()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
+    },
+    {
+      "path": "PooToolsSource/Debug/PTDevFunction.swift",
+      "line": 15,
+      "declaration": "public static let share = PTDevFunction()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Debug/StdoutCapture.swift",
       "line": 18,
       "declaration": "private static let shared = StdoutCapture()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+      "line": 26,
+      "declaration": "public static let share = PTColorPickPlugin()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+      "line": 275,
+      "declaration": "static let share = PTColorPickWindow()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
       "line": 206,
       "declaration": "@MainActor public static let shared = PTCrashHandler()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DebugFile/PTFileBrowser.swift",
       "line": 15,
       "declaration": "public static let shared = PTFileBrowser()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
       "line": 400,
       "declaration": "public static let shared = PTNetworkSpeedMonitor()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTHttpDatasource.swift",
       "line": 13,
       "declaration": "static let shared = PTHttpDatasource()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkHelper.swift",
       "line": 17,
       "declaration": "static let shared = PTNetworkHelper()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
       "line": 14,
       "declaration": "static let shared = PTDebugPerformanceToolKit.init()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTFPSTool.swift",
       "line": 14,
       "declaration": "public static let shared = PTFPSTool.init()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
+      "line": 16,
+      "declaration": "public static let share = PTViewRulerPlugin.init()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
+      "line": 17,
+      "declaration": "public static let share = PTHealthKit()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
       "line": 20,
       "declaration": "public static let shared = PTIAPManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/ImageEditor/PTImageEditorConfig.swift",
+      "line": 36,
+      "declaration": "public static let share = PTImageEditorConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Inspector/ViewHierarchy.swift",
       "line": 11,
       "declaration": "static let shared = ViewHierarchy(application: .shared)",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Language/PTLanguage.swift",
+      "line": 300,
+      "declaration": "public static let share = PTLanguage()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
       "line": 19,
       "declaration": "public static let shared = PTLaunchProfiler()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
       "line": 191,
       "declaration": "public static let shared = LaunchVisualizer()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+      "line": 255,
+      "declaration": "static let share = EntryWindow()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
       "line": 86,
       "declaration": "public static let shared = PTLivePhoto()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Loading/PTHudView.swift",
+      "line": 38,
+      "declaration": "public static let share = PTHudConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 139,
+      "line": 143,
       "declaration": "static let shared = PTConsoleWindow()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 283,
+      "line": 337,
       "declaration": "static let shared = PTDebugPluginManager()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 324,
+      "line": 378,
       "declaration": "public static let shared = LocalConsole()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
       "line": 18,
       "declaration": "public static let shared = ResizeController()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/LocalConsole/SystemReport.swift",
       "line": 12,
       "declaration": "@MainActor public static let shared = SystemReport()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Location/PTGetGPSData.swift",
+      "line": 15,
+      "declaration": "public static let share = PTGetGPSData()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift",
       "line": 56,
       "declaration": "static var shared: PTPermissionLocationAlwaysHandler?",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift",
       "line": 66,
       "declaration": "@MainActor static var shared: PTPermissionLocationWhenInUseHandler?",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Log/PTLogFileManager.swift",
       "line": 5,
       "declaration": "public static let shared = PTLogFileManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
       "line": 15,
       "declaration": "public static let shared = MetricsManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift",
+      "line": 36,
+      "declaration": "public static let share = PTMediaBrowserConfig()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
+      "line": 42,
+      "declaration": "public static let share = PTChatConfig()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Motion/PTMotion.swift",
       "line": 83,
       "declaration": "public static let shared = PTMotion()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
       "line": 51,
       "declaration": "public static let shared = PTNFCToolKit()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
       "line": 92,
       "declaration": "public static let shared = NetworkReachability()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
       "line": 139,
       "declaration": "public static let shared = PTNetWorkStatus()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
       "line": 316,
       "declaration": "static let shared = NetworkCache()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
       "line": 82,
       "declaration": "public static let shared = RequestDeduplicator()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift",
       "line": 27,
       "declaration": "public static let shared = PTNetworkSpeedTestFunction()",
-      "scope": "service or shared resource"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
       "line": 198,
       "declaration": "public static let shared = OSSSpeech()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
+      "line": 19,
+      "declaration": "public static let share = PTPermissionStatic()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
+      "line": 197,
+      "declaration": "public static let share = PTMediaLibConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
+      "line": 352,
+      "declaration": "public static let share = PTMediaLibUIConfig()",
+      "name": "share",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
       "line": 125,
       "declaration": "public static var shared = PTPickerStyle()",
-      "scope": "UI or lifecycle state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Ping/PTPingActivityIndicator.swift",
       "line": 13,
       "declaration": "static let shared = PTPingActivityIndicator()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Protocol/PTProtocol.swift",
       "line": 96,
       "declaration": "public static let shared = PTAdapterConfig()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
+    },
+    {
+      "path": "PooToolsSource/Protocol/PTProtocol.swift",
+      "line": 122,
+      "declaration": "public static let share = PTNumberValueAdapter()",
+      "name": "share",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
     },
     {
       "path": "PooToolsSource/Rotation/PTRotationManager.swift",
       "line": 32,
       "declaration": "public static let shared = PTRotationManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
     },
     {
       "path": "PooToolsSource/Router/PTRouterDynamicParamsMapping.swift",
       "line": 23,
       "declaration": "static let shared: PTRouterDynamicParamsMapping = {",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
       "line": 30,
       "declaration": "public static let shared = PTRouterServiceManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
       "line": 176,
       "declaration": "public static let shared = PTServiceActionMapper()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
       "line": 16,
       "declaration": "static let shared = PTBannerVideoManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
       "line": 52,
       "declaration": "public static let shared = PTBannerPlayerManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
       "line": 18,
       "declaration": "public static let shared = PTBannerScheduler()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 45,
+      "declaration": "public static let share = PTSocketManager()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Speech/PTSpeech.swift",
+      "line": 25,
+      "declaration": "public static let share = PTSpeech()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/StatusBar/StatusBarManager.swift",
       "line": 35,
       "declaration": "public static let shared = StatusBarManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "D",
+      "scope": "Shared mutable UI or scene state",
+      "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
+      "line": 15,
+      "declaration": "public static let share = PTVideoEditorConfig()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Vision/PTVision.swift",
+      "line": 31,
+      "declaration": "public static let share = PTVision()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/WhereIsMyEye/PTFaceEye.swift",
+      "line": 15,
+      "declaration": "public static let share = PTFaceEye()",
+      "name": "share",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/iCloud/PTiCloudFileManager.swift",
       "line": 16,
       "declaration": "public static let shared = PTiCloudFileManager()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
       "line": 96,
       "declaration": "public static let shared = PTTip()",
-      "scope": "legacy/global state"
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     }
   ]
 }

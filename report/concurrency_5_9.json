@@ -377,7 +377,7 @@
     {
       "rule": "as_bang",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 128,
+      "line": 140,
       "text": "let pans = sender as! UIPanGestureRecognizer"
     },
     {
@@ -395,13 +395,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 291,
+      "line": 287,
       "text": "DispatchQueue.main.async { self.updateIndicators() }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 457,
+      "line": 466,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) {"
     },
     {
@@ -491,7 +491,7 @@
     {
       "rule": "as_bang",
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 418,
+      "line": 416,
       "text": "let cell = tableView.dequeueReusableCell(withIdentifier: \"Cell\", for: indexPath) as! MilestoneCell"
     },
     {

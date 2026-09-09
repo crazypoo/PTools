@@ -32,7 +32,15 @@ open class PTColorPickPlugin: NSObject {
     }
     
     public func show() {
-        PTColorPickWindow.share.show()
+        guard let scene = PTSceneContext.activeWindow()?.windowScene else { return }
+        show(in: scene)
+    }
+
+    // English: Show the color picker in the scene that owns the requesting UI.
+    // Español: Muestra el selector de color en la escena que posee la UI solicitante.
+    // 中文：在发起调用的 UI 所属场景中显示取色器。
+    public func show(in scene: UIWindowScene) {
+        PTColorPickWindow.share.show(in: scene)
         showed = true
     }
     
@@ -262,6 +270,7 @@ fileprivate class PTColorPickInfoView: UIView {
 }
 
 // MARK: - 吸管窗口界面
+@MainActor
 public class PTColorPickWindow: UIWindow {
     static let share = PTColorPickWindow()
     
@@ -291,13 +300,7 @@ public class PTColorPickWindow: UIWindow {
     }()
     
     init() {
-        if let scene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first {
-            super.init(windowScene: scene)
-        } else {
-            super.init(frame: UIScreen.main.bounds)
-        }
+        super.init(frame: .zero)
         
         windowLevel = .alert + 202
         backgroundColor = .clear
@@ -309,9 +312,8 @@ public class PTColorPickWindow: UIWindow {
         addSubview(pickInfoView)
         let bottomInset: CGFloat = 34
         pickInfoView.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(CGFloat.SizeFrom750(x: 30))
+            make.left.right.equalToSuperview().inset(CGFloat.SizeFrom750(x: 30))
             make.bottom.equalToSuperview().inset(bottomInset + CGFloat.SizeFrom750(x: 30))
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30))
             make.height.equalTo(CGFloat.SizeFrom750(x: 100))
         }
         bringSubviewToFront(pickInfoView)
@@ -327,6 +329,17 @@ public class PTColorPickWindow: UIWindow {
 
 // MARK: - 核心逻辑处理
 private extension PTColorPickWindow {
+
+    // English: Attach the picker window to the scene that owns the debug action.
+    // Español: Conecta la ventana del selector a la escena propietaria de la acción de depuración.
+    // 中文：将取色窗口挂载到触发调试操作的场景。
+    func attach(to scene: UIWindowScene) {
+        if windowScene !== scene {
+            windowScene = scene
+        }
+        frame = scene.coordinateSpace.bounds
+        magnifyLayer.contentsScale = scene.screen.scale
+    }
     
     @objc func handlePan(_ pan: UIPanGestureRecognizer) {
         let point = pan.location(in: self)
@@ -344,7 +357,7 @@ private extension PTColorPickWindow {
         CATransaction.setDisableActions(true)
         magnifyLayer.position = point
         magnifyLayer.image = screenShotImage.cgImage
-        magnifyLayer.update(targetPoint: point, screenScale: UIScreen.main.scale)
+        magnifyLayer.update(targetPoint: point, screenScale: windowScene?.screen.scale ?? 1)
         CATransaction.commit()
         
         // 实时更新颜色信息
@@ -352,7 +365,7 @@ private extension PTColorPickWindow {
     }
     
     private func updateColorAt(point: CGPoint) {
-        let scale = UIScreen.main.scale
+        let scale = windowScene?.screen.scale ?? 1
         let pixelPoint = CGPoint(x: point.x * scale, y: point.y * scale)
         let hex = pixelBuffer.color(at: pixelPoint)
         
@@ -364,9 +377,9 @@ private extension PTColorPickWindow {
     private func capture() {
         guard let scene = windowScene else { return }
         
-        let bounds = UIScreen.main.bounds
+        let bounds = windowScene?.coordinateSpace.bounds ?? self.bounds
         let format = UIGraphicsImageRendererFormat()
-        format.scale = UIScreen.main.scale
+        format.scale = windowScene?.screen.scale ?? 1
         
         let renderer = UIGraphicsImageRenderer(bounds: bounds, format: format)
         
@@ -382,9 +395,15 @@ private extension PTColorPickWindow {
 
 // MARK: - 生命周期
 extension PTColorPickWindow {
-    func show() {
+    func show(in scene: UIWindowScene) {
+        attach(to: scene)
         isHidden = false
         capture() // 弹出时主动截图一次
+    }
+
+    func show() {
+        guard let scene = PTSceneContext.activeWindow()?.windowScene else { return }
+        show(in: scene)
     }
     
     func hide() {

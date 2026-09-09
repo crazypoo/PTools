@@ -227,7 +227,8 @@ final class PTDebugPerformanceToolKit {
     
     @MainActor private func floatingButtonCreate() {
         if floatingView == nil {
-            floatingView = PFloatingButton(inView: PTConsoleWindow.shared, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))
+            guard let hostView = LocalConsole.shared.consoleOverlayWindow ?? PTSceneContext.activeWindow() else { return }
+            floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))
             floatingView?.tag = 9999
             floatingView?.autoDocking = false
             floatingView?.addSubview(fpsLabel)

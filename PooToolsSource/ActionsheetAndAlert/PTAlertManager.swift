@@ -170,7 +170,20 @@ public final class PTAlertManager: NSObject {
         var dismissingKeys: Set<String> = []
     }
 
-    private var sceneContainers: [UIWindowScene: SceneContainer] = [:]
+    // English: Keep the scene weak and use its persistent identifier as the storage key to avoid retaining disconnected scenes.
+    // Español: Mantén débil la escena y usa su identificador persistente como clave para no retener escenas desconectadas.
+    // 中文：弱引用场景并使用持久化标识作为键，避免状态容器持有已断开的场景。
+    private final class SceneContainerBox {
+        weak var scene: UIWindowScene?
+        var value: SceneContainer
+
+        init(scene: UIWindowScene, value: SceneContainer = SceneContainer()) {
+            self.scene = scene
+            self.value = value
+        }
+    }
+
+    private var sceneContainers: [String: SceneContainerBox] = [:]
 
     // MARK: - Public API
 
@@ -202,8 +215,10 @@ public final class PTAlertManager: NSObject {
     }
 
     public func debugSnapshot() -> PTAlertDebugSnapshot {
-        let scenes = sceneContainers.map { scene, container in
-            PTAlertDebugSnapshot.SceneInfo(
+        let scenes = sceneContainers.compactMap { _, box -> PTAlertDebugSnapshot.SceneInfo? in
+            guard let scene = box.scene else { return nil }
+            let container = box.value
+            return PTAlertDebugSnapshot.SceneInfo(
                 id: scene.session.persistentIdentifier,
                 showingKeys: container.showingControllers.keys.sorted(),
                 queueKeys: container.waitQueue.map { $0.controller.key }
@@ -282,8 +297,9 @@ private extension PTAlertManager {
 
     func dismissOnMainActor(_ key: String,
                             completion: PTActionTask?) {
-        for scene in Array(sceneContainers.keys) {
-            if sceneContainers[scene]?.showingControllers[key] != nil {
+        for box in Array(sceneContainers.values) {
+            guard let scene = box.scene else { continue }
+            if box.value.showingControllers[key] != nil {
                 dismiss(key, in: scene, advanceQueue: true, completion: completion)
                 return
             }
@@ -295,7 +311,7 @@ private extension PTAlertManager {
                  in scene: UIWindowScene,
                  advanceQueue: Bool,
                  completion: PTActionTask?) {
-        guard var container = sceneContainers[scene],
+        guard var container = existingContainer(for: scene),
               let controller = container.showingControllers[key] else {
             completion?()
             return
@@ -328,7 +344,7 @@ private extension PTAlertManager {
                             advanceQueue: Bool,
                             completion: @escaping PTActionTask) {
         let validKeys = keys.filter {
-            sceneContainers[scene]?.showingControllers[$0] != nil
+            existingContainer(for: scene)?.showingControllers[$0] != nil
         }
         guard !validKeys.isEmpty else {
             completion()
@@ -350,7 +366,7 @@ private extension PTAlertManager {
                        in scene: UIWindowScene,
                        advanceQueue: Bool,
                        completion: PTActionTask?) {
-        guard var container = sceneContainers[scene] else {
+        guard var container = existingContainer(for: scene) else {
             completion?()
             return
         }
@@ -373,11 +389,11 @@ private extension PTAlertManager {
     }
 
     func dismissAllOnMainActor(completion: PTActionTask?) {
-        let scenes = Array(sceneContainers.keys)
+        let scenes = sceneContainers.values.compactMap(\.scene)
         var total = 0
 
         for scene in scenes {
-            guard var container = sceneContainers[scene] else { continue }
+            guard var container = existingContainer(for: scene) else { continue }
 
             let pending = container.waitQueue
             container.waitQueue.removeAll()
@@ -394,7 +410,7 @@ private extension PTAlertManager {
 
         let group = PTAlertDismissGroup(remaining: total, completion: completion)
         for scene in scenes {
-            let keys = sceneContainers[scene].map {
+            let keys = existingContainer(for: scene).map {
                 Array($0.showingControllers.keys)
             } ?? []
             for key in keys {
@@ -422,11 +438,26 @@ private extension PTAlertManager {
     }
 
     func container(for scene: UIWindowScene) -> SceneContainer {
-        sceneContainers[scene] ?? SceneContainer()
+        sceneContainers[scene.session.persistentIdentifier]?.value ?? SceneContainer()
     }
 
     func updateContainer(_ container: SceneContainer, for scene: UIWindowScene) {
-        sceneContainers[scene] = container
+        let sceneID = scene.session.persistentIdentifier
+        if container.showingWindows.isEmpty && container.showingControllers.isEmpty && container.waitQueue.isEmpty {
+            sceneContainers.removeValue(forKey: sceneID)
+            return
+        }
+
+        if let box = sceneContainers[sceneID] {
+            box.scene = scene
+            box.value = container
+        } else {
+            sceneContainers[sceneID] = SceneContainerBox(scene: scene, value: container)
+        }
+    }
+
+    func existingContainer(for scene: UIWindowScene) -> SceneContainer? {
+        sceneContainers[scene.session.persistentIdentifier]?.value
     }
 
     func isDuplicate(_ controller: PTAlertProtocol,
@@ -457,13 +488,16 @@ private extension PTAlertManager {
     }
 
     func showNextIfNeeded(in scene: UIWindowScene) {
-        guard var container = sceneContainers[scene],
+        guard var container = existingContainer(for: scene),
               container.showingWindows.isEmpty,
               let next = container.waitQueue.first else { return }
 
         container.waitQueue.removeFirst()
         updateContainer(container, for: scene)
-        showOnMainActor(next.controller, completion: next.completion)
+        // English: Continue the queue in the same scene; resolving the active scene again could present the next alert elsewhere.
+        // Español: Continúa la cola en la misma escena; volver a resolver la escena activa podría mostrar la alerta en otro lugar.
+        // 中文：在原场景继续处理队列，避免重新解析活动场景后把下一个弹窗展示到其他场景。
+        showNow(next.controller, completion: next.completion, in: scene)
     }
 
     func cleanInvalidWindows(_ container: inout SceneContainer) {
@@ -499,7 +533,7 @@ private extension PTAlertManager {
     }
 
     func restoreKeyWindow(in scene: UIWindowScene) {
-        if let values = sceneContainers[scene]?.showingWindows.values {
+        if let values = existingContainer(for: scene)?.showingWindows.values {
             let mapValue = values.map({ $0 })
             if let alertWindow = mapValue.last(where: { !$0.isHidden }) {
                 alertWindow.makeKey()
@@ -523,14 +557,7 @@ private extension PTAlertManager {
             queue: .main
         ) { [weak self] notification in
             guard let scene = notification.object as? UIWindowScene else { return }
-            let sceneID = ObjectIdentifier(scene)
-            Task { @MainActor [weak self] in
-                guard let self,
-                      let disconnectedScene = self.sceneContainers.keys.first(where: {
-                          ObjectIdentifier($0) == sceneID
-                      }) else { return }
-                self.sceneContainers.removeValue(forKey: disconnectedScene)
-            }
+            self?.sceneContainers.removeValue(forKey: scene.session.persistentIdentifier)
         }
     }
 }

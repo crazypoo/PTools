@@ -327,9 +327,7 @@ public class PTDarkModeOption {
     }
 
     private static func windows() -> [UIWindow] {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap(\.windows)
+        PTSceneContext.connectedWindowScenes().flatMap { PTSceneContext.windows(in: $0) }
     }
 
     private static func interfaceStyle(for mode: Mode, isLight: Bool) -> UIUserInterfaceStyle {

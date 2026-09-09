@@ -33,8 +33,18 @@ open class PTViewRulerPlugin: NSObject {
     }
     
     public func show() {
+        guard let scene = PTSceneContext.activeWindow()?.windowScene else { return }
+        show(in: scene)
+    }
+
+    // English: Present the ruler in the caller's scene instead of the process-wide fallback window.
+    // Español: Presenta la regla en la escena del llamador en lugar de usar la ventana global del proceso.
+    // 中文：在调用方所在场景显示标尺，不再依赖进程级兜底窗口。
+    public func show(in scene: UIWindowScene) {
+        guard let window = PTSceneContext.activeWindow(in: scene) else { return }
         rulerView.hide()
-        AppWindows?.addSubview(rulerView)
+        window.addSubview(rulerView)
+        rulerView.attach(to: window)
         rulerView.show()
         showed = true
     }
@@ -110,6 +120,8 @@ fileprivate class PTVisualInfoController:UIView {
 }
 
 fileprivate class PTRulerInfoView:UIView {
+
+    private weak var hostWindow: UIWindow?
     
     let viewPointSize:CGFloat = 62
     
@@ -229,7 +241,12 @@ fileprivate class PTRulerInfoView:UIView {
     }()
         
     fileprivate lazy var visualController:PTVisualInfoController = {
-        let infoWindowFrame:CGRect = CGRect(x: CGFloat.SizeFrom750(x: 30), y: CGFloat.kSCREEN_HEIGHT - CGFloat.SizeFrom750(x: 100) - CGFloat.SizeFrom750(x: 30), width: CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30), height: CGFloat.SizeFrom750(x: 100))
+        let inset = CGFloat.SizeFrom750(x: 30)
+        let height = CGFloat.SizeFrom750(x: 100)
+        let infoWindowFrame = CGRect(x: inset,
+                                     y: max(0, bounds.height - height - inset),
+                                     width: max(1, bounds.width - 2 * inset),
+                                     height: height)
 
         let view = PTVisualInfoController(frame: infoWindowFrame)
         view.closeBlock = { sender , pickerInfo in
@@ -243,26 +260,15 @@ fileprivate class PTRulerInfoView:UIView {
         backgroundColor = .clear
         layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
         
-        imageView.frame = CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - viewPointSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - viewPointSize / 2, viewPointSize, viewPointSize)
-        self.horizontalLine.frame = CGRectMake(0, imageView.frame.origin.y + imageView.frame.size.height / 2 - 0.25, frame.size.width, 0.5)
-        self.verticalLine.frame = CGRectMake(imageView.frame.origin.x + imageView.frame.size.width / 2 - 0.25, 0, 0.5, frame.size.height)
+        imageView.frame = CGRect.zero
+        self.horizontalLine.frame = .zero
+        self.verticalLine.frame = .zero
         addSubviews([imageView, horizontalLine, verticalLine])
         bringSubviewToFront(imageView)
         
         addSubviews([leftLabel, topLabel, rightLabel, bottomLabel])
-        leftLabel.sizeToFit()
-        topLabel.sizeToFit()
-        rightLabel.sizeToFit()
-        bottomLabel.sizeToFit()
-        self.leftLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) / 2, imageView.frame.origin.y + imageView.frame.size.height / 2 - leftLabel.frame.size.height, leftLabel.frame.size.width, leftLabel.frame.size.height)
-        self.topLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - topLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) / 2, topLabel.frame.size.width, topLabel.frame.size.height)
-        self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
-        self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
-        
-        
-        AppWindows?.addSubviews([visualController])
-        configInfoLabelText()
-        visualController.isHidden = false
+        updateGeometry()
+        visualController.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
@@ -270,18 +276,76 @@ fileprivate class PTRulerInfoView:UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // English: Attach both ruler surfaces to the same scene-owned window before showing them.
+    // Español: Conecta ambas superficies de la regla a la ventana de la escena antes de mostrarlas.
+    // 中文：显示前将标尺的两个界面都挂载到同一个场景窗口。
+    func attach(to window: UIWindow) {
+        hostWindow = window
+        frame = window.bounds
+        autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        updateGeometry()
+
+        if visualController.superview !== window {
+            visualController.removeFromSuperview()
+            window.addSubview(visualController)
+        }
+        configInfoLabelText()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateGeometry()
+    }
+
+    // English: Recalculate frame-based ruler geometry after a scene or window size changes.
+    // Español: Recalcula la geometría basada en frames cuando cambia el tamaño de la escena o la ventana.
+    // 中文：场景或窗口尺寸变化后重新计算基于 frame 的标尺布局。
+    private func updateGeometry() {
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        imageView.frame = CGRect(x: centerX - viewPointSize / 2,
+                                 y: centerY - viewPointSize / 2,
+                                 width: viewPointSize,
+                                 height: viewPointSize)
+        horizontalLine.frame = CGRect(x: 0, y: centerY - 0.25, width: bounds.width, height: 0.5)
+        verticalLine.frame = CGRect(x: centerX - 0.25, y: 0, width: 0.5, height: bounds.height)
+
+        leftLabel.sizeToFit()
+        topLabel.sizeToFit()
+        rightLabel.sizeToFit()
+        bottomLabel.sizeToFit()
+        leftLabel.frame = CGRect(x: centerX / 2,
+                                 y: centerY - leftLabel.frame.height,
+                                 width: leftLabel.frame.width,
+                                 height: leftLabel.frame.height)
+        topLabel.frame = CGRect(x: centerX - topLabel.frame.width,
+                                y: centerY / 2,
+                                width: topLabel.frame.width,
+                                height: topLabel.frame.height)
+        rightLabel.frame = CGRect(x: centerX + (bounds.width - centerX) / 2,
+                                  y: centerY - rightLabel.frame.height,
+                                  width: rightLabel.frame.width,
+                                  height: rightLabel.frame.height)
+        bottomLabel.frame = CGRect(x: centerX - bottomLabel.frame.width,
+                                   y: centerY + (bounds.height - centerY) / 2,
+                                   width: bottomLabel.frame.width,
+                                   height: bottomLabel.frame.height)
+    }
     
     func configInfoLabelText() {
         let stringInfo = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
-        let height = UIView.sizeFor(string: stringInfo, font: .appfont(size: 16),width: CGFloat.kSCREEN_WIDTH - 60 - CGFloat.SizeFrom750(x: 44) - 20 - 5).height
+        let textWidth = max(1, bounds.width - 60 - CGFloat.SizeFrom750(x: 44) - 20 - 5)
+        let height = UIView.sizeFor(string: stringInfo, font: .appfont(size: 16), width: textWidth).height
         var base = CGFloat.SizeFrom750(x: 100)
         if height > base {
             base = height
         }
         visualController.infoLabel.text = stringInfo
+        let bottomInset = hostWindow?.safeAreaInsets.bottom ?? 0
         visualController.snp.remakeConstraints { make in
             make.left.right.equalToSuperview().inset(30)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.bottom.equalToSuperview().inset(bottomInset)
             make.height.equalTo(base)
         }
     }
