@@ -1,17 +1,17 @@
 //
-//  PTUrlChange.swift
-//  Diou
+//  PTURLParser.swift
+//  PToolsCore
 //
-//  Created by ken lam on 2021/10/16.
-//  Copyright © 2021 DO. All rights reserved.
+//  Foundation-only URL query parsing.
+//  Análisis de consultas URL basado únicamente en Foundation.
+//  仅使用 Foundation 的 URL 查询解析。
 //
 
 import Foundation
 
-#if !POOTOOLS_SPLIT_CORE
-// English: Keep URL query parsing in the Foundation-only core so UI modules do not own this utility.
-// Español: Mantiene el análisis de consultas URL en el núcleo basado solo en Foundation para que los módulos UI no sean propietarios de esta utilidad.
-// 中文：将 URL 查询解析放在仅依赖 Foundation 的核心中，避免由 UI 模块重复维护。
+// English: Keep URL parsing independent from UIKit and feature modules.
+// Español: Mantiene el análisis URL independiente de UIKit y de los módulos de funciones.
+// 中文：让 URL 解析独立于 UIKit 和具体功能模块。
 public enum PTURLParser {
     public static func queryParameters(from url: URL,
                                        allowSchemeFallback: Bool = true) -> [String: String]? {
@@ -47,35 +47,10 @@ public enum PTURLParser {
 }
 
 public extension URL {
-    // English: Expose the canonical query parser without changing the legacy URL category API.
-    // Español: Expone el analizador canónico sin cambiar la API heredada de la categoría URL.
-    // 中文：暴露统一查询解析器，同时不改变旧 URL 分类 API。
+    // English: Expose the canonical parser without introducing a UIKit dependency.
+    // Español: Expone el analizador canónico sin introducir una dependencia de UIKit.
+    // 中文：暴露统一解析器，同时不引入 UIKit 依赖。
     var pt_queryParameters: [String: String]? {
         PTURLParser.queryParameters(from: self)
     }
 }
-#endif
-
-@objcMembers
-public class PTUrlChange: NSObject {
-
-    public class func getRange(text: String, findText: String) -> [Int] {
-        // 如果 text 是空字符串，直接返回空数组
-        if text.stringIsEmpty() {
-            return []
-        }
-
-        var arrayRanges: [Int] = []
-        var searchRange = text.startIndex..<text.endIndex
-        
-        while let range = text.range(of: findText, options: .caseInsensitive, range: searchRange) {
-            // 获取匹配文本的起始位置
-            let location = text.distance(from: text.startIndex, to: range.lowerBound)
-            arrayRanges.append(location)
-
-            // 更新搜索范围，继续查找后续的匹配项
-            searchRange = range.upperBound..<text.endIndex
-        }
-
-        return arrayRanges
-    }}

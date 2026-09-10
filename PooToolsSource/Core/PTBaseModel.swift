@@ -9,6 +9,9 @@
 import UIKit
 import SmartCodable
 import KakaJSON
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 open class PTBaseModel: Convertible {
     required public init() {}
@@ -70,6 +73,7 @@ public extension PTModelProtocol {
     func didFinishMapping() {}
 }
 
+#if !POOTOOLS_SPLIT_CORE
 // Modern network responses are Sendable only when their payload is Sendable.
 // The legacy KakaJSON/Any APIs keep the unconstrained specialization below;
 // they do not gain a false Sendable guarantee from this value type.
@@ -134,3 +138,4 @@ public struct PTSendableTypeBox<T: Sendable>: Sendable {
         self.type = type
     }
 }
+#endif

@@ -48,9 +48,9 @@ edges.each do |edge|
   forbidden = false
   rule = nil
 
-  if source == "ptools"
+  if source == "ptools" && !%w[PToolsCore PToolsUIFoundation].include?(destination)
     forbidden = true
-    rule = "Core target must not depend on a local feature target"
+    rule = "Core target may depend only on PToolsCore and PToolsUIFoundation local layers"
   elsif source.match?(/^PT.*Permission$/) && destination != "ptools"
     forbidden = true
     rule = "Permission target may depend only on ptools until PermissionCore is split"
@@ -75,7 +75,7 @@ result = {
   "schema_version" => 1,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
-    "ptools -> local target is forbidden",
+    "ptools -> local target is forbidden except PToolsCore and PToolsUIFoundation",
     "PT*Permission -> non-ptools target is forbidden",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"

@@ -182,6 +182,28 @@
       ]
     },
     {
+      "name": "PToolsCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsCore"
+      ]
+    },
+    {
+      "name": "PToolsUIFoundation",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsUIFoundation"
+      ]
+    },
+    {
       "name": "PooToolsAll",
       "type": {
         "library": [
@@ -2440,6 +2462,34 @@
       ]
     },
     {
+      "name": "PToolsCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsCoreTests",
       "type": "test",
       "path": "Tests/PooToolsCoreTests",
@@ -2447,12 +2497,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsCore",
               null
             ]
           }
@@ -2576,6 +2626,46 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsUIFoundation",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsUIFoundation",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsUIFoundationTests",
@@ -4343,6 +4433,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsLoading",
           "kind": "internal",
           "package": null,
@@ -5892,7 +5993,30 @@
           }
         }
       ],
-      "internal_dependencies": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
       "third_party_dependencies": [
         {
           "name": "AttributedString",
@@ -6179,6 +6303,22 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SECURITYSUITE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_CORE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_UIFOUNDATION"
             }
           },
           "tool": "swift"

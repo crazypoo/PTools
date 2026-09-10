@@ -1,15 +1,17 @@
 //
 //  PTSnapKitEX.swift
-//  PooTools_Example
+//  PToolsUIFoundation
 //
-//  Created by 邓杰豪 on 4/1/25.
+//  Created by PTools contributors.
 //  Copyright © 2025 crazypoo. All rights reserved.
 //
+// English: Provide reusable SnapKit layout primitives for the UI foundation layer.
+// Español: Proporciona primitivas reutilizables de diseño con SnapKit para la capa UI foundation.
+// 中文：为 UIFoundation 层提供可复用的 SnapKit 布局基础能力。
 
 import Foundation
 import SnapKit
 
-#if !POOTOOLS_SPLIT_UIFOUNDATION
 #if os(iOS) || os(tvOS)
 import UIKit
 public typealias ConstraintView = UIView
@@ -303,4 +305,3 @@ public extension Array where Element: ConstraintView {
         return ConstraintGroup(array: self)
     }
 }
-#endif

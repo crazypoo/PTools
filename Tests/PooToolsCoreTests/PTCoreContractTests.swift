@@ -1,5 +1,5 @@
 import XCTest
-@testable import ptools
+@testable import PToolsCore
 
 final class PTCoreContractTests: XCTestCase {
     func testProgressSnapshotKeepsImmutableValues() {

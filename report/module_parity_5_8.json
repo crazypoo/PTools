@@ -17,6 +17,8 @@
     "PTSiriPermission",
     "PTSpeechPermission",
     "PTTrackingPermission",
+    "PToolsCore",
+    "PToolsUIFoundation",
     "PooToolsAll",
     "PooToolsBankCard",
     "PooToolsBioID",
@@ -176,7 +178,10 @@
     "WhatsNewsKit",
     "iOS17Tips"
   ],
-  "spm_only": [],
+  "spm_only": [
+    "PToolsCore",
+    "PToolsUIFoundation"
+  ],
   "pod_only": [
     "Appz",
     "FilterCamera",
@@ -218,6 +223,15 @@
       "cocoapods": [
         "SwiftJWT"
       ]
+    },
+    {
+      "module": "Core",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsCore",
+        "PToolsUIFoundation"
+      ],
+      "cocoapods": []
     },
     {
       "module": "Core",
@@ -266,6 +280,19 @@
         "Harbeth"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "NetWork",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "Loading",
+        "PToolsCore"
+      ],
+      "cocoapods": [
+        "Core",
+        "Loading"
+      ]
     },
     {
       "module": "PagingControl",
@@ -357,6 +384,8 @@
           "POOTOOLS_PICKER",
           "POOTOOLS_POPOVERKIT",
           "POOTOOLS_SECURITYSUITE",
+          "POOTOOLS_SPLIT_CORE",
+          "POOTOOLS_SPLIT_UIFOUNDATION",
           "POOTOOLS_TABBAR",
           "POOTOOLS_VIDEOCACHE",
           "POOTOOLS_ZIPARCHINE"
@@ -375,5 +404,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "ec77784cb33174c7b6bf327ca6370a3ab8c41de59732d69ddeea2474929a7357"
+  "fingerprint": "29b162d293199c26c55ab0edef3bf95c0ba8acba49fe96fa15e9ad721539d338"
 }

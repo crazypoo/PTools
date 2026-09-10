@@ -4,7 +4,7 @@
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `88`
+- Target count: `90`
 - Core direct third-party dependencies: `18` (baseline `18`)
 
 ## Products
@@ -26,6 +26,8 @@
 | `PTSiriPermission` | `PTSiriPermission` |
 | `PTSpeechPermission` | `PTSpeechPermission` |
 | `PTTrackingPermission` | `PTTrackingPermission` |
+| `PToolsCore` | `PToolsCore` |
+| `PToolsUIFoundation` | `PToolsUIFoundation` |
 | `PooToolsAll` | `PTBluetoothPermission`, `PTCalendarPermission`, `PTCameraPermission`, `PTContactsPermission`, `PTFaceIDPermission`, `PTHealthPermission`, `PTLocationPermission`, `PTMediaPermission`, `PTMicPermission`, `PTMotionPermission`, `PTNotificationPermission`, `PTRemindersPermission`, `PTSiriPermission`, `PTSpeechPermission`, `PTTrackingPermission`, `PooToolsBankCard`, `PooToolsBioID`, `PooToolsCalendar`, `PooToolsCheckBox`, `PooToolsCheckDirtyWord`, `PooToolsCheckUpdate`, `PooToolsChinesePinyin`, `PooToolsCircle`, `PooToolsCodeView`, `PooToolsContact`, `PooToolsCountry`, `PooToolsCustomerLabel`, `PooToolsDEBUG`, `PooToolsDEBUGTrackingEyes`, `PooToolsDataEncrypt`, `PooToolsGuide`, `PooToolsHandSign`, `PooToolsHarbethKit`, `PooToolsHeartRate`, `PooToolsHud`, `PooToolsIAP`, `PooToolsImageEditor`, `PooToolsImagePicker`, `PooToolsInput`, `PooToolsKeyChain`, `PooToolsKeyboard`, `PooToolsLaunchTimeProfiler`, `PooToolsLayout`, `PooToolsLivePhoto`, `PooToolsLoading`, `PooToolsLocation`, `PooToolsMediaViewer`, `PooToolsMessageKit`, `PooToolsMotion`, `PooToolsNetWork`, `PooToolsNetworkSpeedTest`, `PooToolsOSSKitSpeech`, `PooToolsPDF`, `PooToolsPageControl`, `PooToolsPagingControl`, `PooToolsPhoneInfo`, `PooToolsPhotoPicker`, `PooToolsPicker`, `PooToolsPing`, `PooToolsProgressBar`, `PooToolsRateView`, `PooToolsRouter`, `PooToolsSVG`, `PooToolsScanQRCode`, `PooToolsScrollBanner`, `PooToolsSearchBar`, `PooToolsSegmented`, `PooToolsShare`, `PooToolsSlider`, `PooToolsSmartScreenshot`, `PooToolsSocketKit`, `PooToolsSpeedPanel`, `PooToolsStepCount`, `PooToolsStepper`, `PooToolsTelephony`, `PooToolsTipsView`, `PooToolsVideoEditor`, `PooToolsVision`, `PooToolsWhatsNewsKit`, `PooToolsiOS17Tips`, `ptools` |
 | `PooToolsBankCard` | `PooToolsBankCard` |
 | `PooToolsBioID` | `PooToolsBioID` |
@@ -113,12 +115,14 @@
 | `PTSiriPermission` | `PooToolsSource/SiriPermission` | ptools | — | 0 source entries / 0 resources |
 | `PTSpeechPermission` | `PooToolsSource/SpeechPremission` | ptools | — | 0 source entries / 0 resources |
 | `PTTrackingPermission` | `PooToolsSource/TrackingPermission` | ptools | — | 0 source entries / 0 resources |
-| `PToolsCoreTests` | `Tests/PooToolsCoreTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsCore` | `PooToolsSource/PToolsCore` | — | — | 0 source entries / 0 resources |
+| `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsListTests` | `Tests/PToolsListTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | — | SnapKit | 0 source entries / 0 resources |
 | `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBioID` | `PooToolsSource/BioID` | PTFaceIDPermission, ptools | — | 0 source entries / 0 resources |
@@ -154,7 +158,7 @@
 | `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PooToolsLivePhoto, PooToolsNetWork, PooToolsPageControl, PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PooToolsCustomerLabel, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsNetWork` | `PooToolsSource/NetWork` | PooToolsLoading, ptools | Alamofire | 0 source entries / 0 resources |
+| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsCore, PooToolsLoading, ptools | Alamofire | 0 source entries / 0 resources |
 | `PooToolsNetworkSpeedTest` | `PooToolsSource/NetworkSpeedTest` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsPDF` | `PooToolsSource/PDF` | ptools | — | 0 source entries / 0 resources |
@@ -185,7 +189,7 @@
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | — | AttributedString, CocoaLumberjackSwift, DeviceKit, FlagKit, IOSSecuritySuite, IQKeyboardManagerSwift, Instructions, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, Popovers, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate, SwifterSwift, ZipArchive | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsUIFoundation | AttributedString, CocoaLumberjackSwift, DeviceKit, FlagKit, IOSSecuritySuite, IQKeyboardManagerSwift, Instructions, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, Popovers, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate, SwifterSwift, ZipArchive | 28 source entries / 1 resources |
 
 ## Notes
 

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden",
+    "ptools -> local target is forbidden except PToolsCore and PToolsUIFoundation",
     "PT*Permission -> non-ptools target is forbidden",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -302,6 +302,10 @@
     },
     {
       "source": "PooToolsNetWork",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PooToolsNetWork",
       "destination": "PooToolsLoading"
     },
     {
@@ -479,6 +483,14 @@
     {
       "source": "PooToolsiOS17Tips",
       "destination": "ptools"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsUIFoundation"
     }
   ],
   "allowed_legacy_edges": [

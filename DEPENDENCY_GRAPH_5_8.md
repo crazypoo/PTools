@@ -2,7 +2,7 @@
 
 ## 当前事实
 
-当前 SwiftPM 有 81 个 target，`ptools` 有 18 个直接第三方依赖；CocoaPods 有 96 个 subspec，默认 subspec 为 `Core`。完整图由以下报告自动生成：
+当前 SwiftPM 已增加独立的 `PToolsCore` 和 `PToolsUIFoundation` target；`ptools` 仍有 18 个直接第三方依赖，两个新分层分别不依赖第三方和仅依赖 SnapKit。CocoaPods 有 96 个 subspec，默认 subspec 为 `Core`。完整图由以下报告自动生成：
 
 - `report/spm_dependency_graph.json`
 - `report/cocoapods_subspec_graph.json`
@@ -16,6 +16,7 @@
 - MediaViewer、PhotoPicker 不新增对具体 Network 实现的依赖；现有历史边由白名单登记。
 - Navigation / Router 不依赖 PhotoPicker。
 - UIFoundation 不依赖 PhotoKit、AVFoundation、Network 或具体调试实现。
+- `ptools` 可以依赖 `PToolsCore` 和 `PToolsUIFoundation`；这两个依赖是基础分层，不属于 feature target。
 
 ## 当前例外
 

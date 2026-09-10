@@ -16,6 +16,9 @@ import CoreTelephony
 import Photos
 import SmartCodable
 import KakaJSON
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 private let PTNetworkLocalizationBundle: Bundle = {
     let mainBundle = Bundle.main
     guard let path = mainBundle.path(forResource: CorePodBundleName, ofType: "bundle"),

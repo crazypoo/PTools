@@ -60,6 +60,51 @@ package = File.read(File.join(repo_root, "Package.swift"))
 package_target = package.match(/\.target\(\s*name: "ptools".*?sources: \s*\[(.*?)\]/m)
 package_dirs = package_target ? package_target[1].scan(/"([^"]+)"/).flatten.to_set : Set.new
 
+# English: Verify the new SwiftPM layer targets without forcing legacy Xcode/CocoaPods sources to import them.
+# Español: Verifica los nuevos targets de capa SwiftPM sin obligar a las fuentes heredadas de Xcode/CocoaPods a importarlos.
+# 中文：校验新的 SwiftPM 分层 target，同时不强制旧版 Xcode/CocoaPods 源码导入这些模块。
+foundation_targets = {
+  "PToolsCore" => [
+    'path: "PooToolsSource/PToolsCore"'
+  ],
+  "PToolsUIFoundation" => [
+    'path: "PooToolsSource/PToolsUIFoundation"'
+  ]
+}
+
+foundation_targets.each do |target_name, required_fragments|
+  unless package.include?('name: "' + target_name + '"')
+    failures << "SwiftPM layer target is missing: #{target_name}"
+    next
+  end
+  required_fragments.each do |fragment|
+    failures << "SwiftPM #{target_name} contract is missing: #{fragment}" unless package.include?(fragment)
+  end
+end
+
+foundation_files = {
+  "PToolsCore" => %w[
+    PooToolsSource/PToolsCore/PTURLParser.swift
+    PooToolsSource/PToolsCore/PTCoreValueTypes.swift
+    PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift
+  ],
+  "PToolsUIFoundation" => %w[
+    PooToolsSource/PToolsUIFoundation/PTSnapKitEX.swift
+  ]
+}
+
+foundation_files.each do |target_name, files|
+  files.each do |file|
+    failures << "SwiftPM #{target_name} source is missing: #{file}" unless File.file?(File.join(repo_root, file))
+  end
+end
+
+%w[PToolsCore PToolsUIFoundation].each do |target_name|
+  unless package.include?('"' + target_name + '"')
+    failures << "ptools does not depend on #{target_name}"
+  end
+end
+
 expected_dirs = core_dirs.to_set
 unless pod_dirs == expected_dirs
   missing = (expected_dirs - pod_dirs).to_a.sort
@@ -77,6 +122,10 @@ else
   puts "PASS: SwiftPM Core directories"
 end
 
+if foundation_targets.keys.all? { |target_name| package.include?('name: "' + target_name + '"') }
+  puts "PASS: SwiftPM Core / UIFoundation layer targets"
+end
+
 project = Xcodeproj::Project.open(File.join(repo_root, "PooTools.xcodeproj"))
 target = project.targets.find { |item| item.name == "PooTools_Example" }
 unless target
@@ -90,8 +139,13 @@ else
     end
   end.to_set
 
-  missing = (actual_paths - xcode_core_paths).to_a.sort
-  extra = (xcode_core_paths - actual_paths).to_a.sort
+# English: This adapter is SwiftPM-only; legacy Xcode/CocoaPods builds use their local compatibility definitions.
+# Español: Este adaptador solo pertenece a SwiftPM; Xcode/CocoaPods usan sus definiciones locales compatibles.
+# 中文：该适配器仅用于 SwiftPM；旧版 Xcode/CocoaPods 使用各自的兼容定义。
+  xcode_excluded_paths = ["PooToolsSource/Core/PTLayerExports.swift"].to_set
+  xcode_expected_paths = actual_paths - xcode_excluded_paths
+  missing = (xcode_expected_paths - xcode_core_paths).to_a.sort
+  extra = (xcode_core_paths - xcode_expected_paths).to_a.sort
   unless missing.empty? && extra.empty?
     failures << "Xcode Core source membership drifted; missing=#{missing.join(",")} extra=#{extra.join(",")}"
   else

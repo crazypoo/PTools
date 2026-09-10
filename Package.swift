@@ -15,6 +15,11 @@ let package = Package(
         // 核心基座
         // ==========================================
         .library(name: "ptools", targets: ["ptools"]),
+        // English: Publish the Foundation-only layers so clients can depend on the smallest stable module.
+        // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
+        // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
+        .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
 
         // ==========================================
         // 基础 UI 与细分组件模块
@@ -195,12 +200,37 @@ let package = Package(
 
     ],
     targets: [
+        // English: PToolsCore contains only value types, URL parsing, and Foundation/Objective-C compatibility helpers.
+        // Español: PToolsCore solo contiene tipos de valor, análisis URL y compatibilidad de Foundation/Objective-C.
+        // 中文：PToolsCore 只包含值类型、URL 解析以及 Foundation/Objective-C 兼容辅助能力。
+        .target(
+            name: "PToolsCore",
+            path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: PToolsUIFoundation owns the standalone SnapKit UI helper without changing legacy source paths.
+        // Español: PToolsUIFoundation posee el auxiliar UI independiente de SnapKit sin cambiar las rutas heredadas.
+        // 中文：PToolsUIFoundation 独立承载 SnapKit UI 辅助能力，同时不改变旧源码路径。
+        .target(
+            name: "PToolsUIFoundation",
+            dependencies: ["SnapKit"],
+            path: "PooToolsSource/PToolsUIFoundation",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
         .target(
             name: "ptools",
             dependencies: [
+                "PToolsCore",
+                "PToolsUIFoundation",
                 "SwiftDate",
                 "SnapKit",
                 "SwifterSwift",
@@ -247,6 +277,8 @@ let package = Package(
                 .define("POOTOOLS_VIDEOCACHE"),
                 .define("POOTOOLS_POPOVERKIT"),
                 .define("POOTOOLS_CGDWEBSERVER"),
+                .define("POOTOOLS_SPLIT_CORE"),
+                .define("POOTOOLS_SPLIT_UIFOUNDATION"),
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
@@ -286,7 +318,7 @@ let package = Package(
         // ==========================================
         // 核心中上层依赖模块
         // ==========================================
-        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsProgressBar", "PooToolsNetWork", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
@@ -381,7 +413,7 @@ let package = Package(
         // 中文：保留仅面向 iOS 的质量测试目标，覆盖 Core、UI、Network、列表、导航、媒体和权限回归。
         .testTarget(
             name: "PToolsCoreTests",
-            dependencies: ["ptools"],
+            dependencies: ["PToolsCore"],
             path: "Tests/PooToolsCoreTests"
         ),
         .testTarget(

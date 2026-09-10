@@ -19,6 +19,13 @@
 - 5.9.x 尚未完成 Xcode Debug/Release、CocoaPods lint、真机、真实宿主项目和性能验证，不创建
   5.9.x 标签。
 
+## 5.8.1 - Architecture slice
+
+- 新增可独立编译的 `PToolsCore` SwiftPM target，承载 Foundation-only URL 解析、并发值类型和关联对象存储。
+- 新增 `PToolsUIFoundation` SwiftPM target，独立承载 SnapKit 布局辅助；`ptools` 通过 re-export 保持旧 `import ptools` 入口。
+- SwiftPM 使用分层实现，Xcode/CocoaPods 保留兼容源集，未删除公开 API、未升级第三方依赖。
+- `PToolsCore` 与 `PToolsUIFoundation` 独立编译验证通过；Example Xcode Debug/Release 仍需通过外部 Pods 阻断后完成最终构建验收。
+
 ## 5.8.9 - 2026-09-09
 
 - 作为 5.9.x Core 治理的稳定起点，统一记录 iOS 17+、Swift 6 和当前模块依赖基线。

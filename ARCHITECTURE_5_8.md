@@ -2,7 +2,7 @@
 
 ## 范围
 
-本文件记录 5.8.1–5.8.9 的当前实现边界。`ptools` 仍是兼容 umbrella；本轮先落地可验证的边界、协调器和适配器，暂不在没有独立 Xcode target 的情况下批量移动源码。
+本文件记录 5.8.1–5.8.9 的当前实现边界。`ptools` 仍是兼容 umbrella；5.8.1 已先落地可独立编译的 SwiftPM Core / UIFoundation 分层，并保留 Xcode/CocoaPods 的兼容源集。
 
 PTools 面向 iOS 17+ / Swift 6。所有架构结论都以当前工作区源码和生成报告为准，不把静态扫描当作真实设备或生产验证。
 
@@ -18,12 +18,14 @@ PTools 面向 iOS 17+ / Swift 6。所有架构结论都以当前工作区源码�
 - TabBar 外观新增值快照和 `PTTabBarVisualStyle`，旧 `PTAppBaseConfig.share` 继续兼容。
 - Core 日志新增 `PTLogging`/`PTOSLogger` 值类型契约；CocoaLumberjack、LocalConsole 和运行时调试能力仍属于兼容诊断边界。
 - swizzle 使用集中注册表，避免同一交换被重复执行。
+- `PToolsCore` 已提供 Foundation-only 的 URL 解析、并发值类型和关联对象存储；`PToolsUIFoundation` 独立承载 SnapKit 布局辅助，`ptools` 通过 re-export 保持旧导入方式。
 
 ## 暂缓项
 
 以下项目需要独立 target、完整 Xcode 工程成员和人工回归，不能用同文件声明伪装完成：
 
-- PToolsCore / PToolsUIFoundation / PToolsPermissionCore / PToolsPermissionUI 的真正 target 拆分。
+- PToolsPermissionCore / PToolsPermissionUI 的真正 target 拆分。
+- CocoaPods/Xcode 仍使用兼容源集；Core/UIFoundation 在这些入口中的独立 framework module membership 需要后续单独迁移。
 - 每个权限模块从 monolithic `ptools` 中移除依赖。
 - Network 全量 instance pipeline、HUD plugin 和 callback/stream API 迁移。
 - CollectionView 的 layout、prefetch、skeleton、interaction、refresh、side-index coordinator 全量迁移。

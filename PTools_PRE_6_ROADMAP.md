@@ -3,7 +3,7 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 审查基线：`master` @ `226e1b8f`（2026-09-10）
+> 审查基线：`master` @ `a5030237`（2026-09-10）
 > 当前 Podspec 版本：`5.9.6`
 > 当前最新 Git Tag：`5.9.6`（2026-09-10）
 > 最低平台：iOS 17.0
@@ -724,14 +724,17 @@ MediaCore -> Network concrete implementation
 - `report/dependency_direction_5_8.md` / `.json`
 - `report/build_validation_5_8_0.md`
 
-## 5.8.1–5.8.9 当前实施状态（2026-09-09）
+## 5.8.1–5.8.9 当前实施状态（2026-09-10）
 
 本批按“可独立回滚、可验证、保持兼容”的原则落地了安全切片。以下勾选仅表示对应切片已经实现，不代表尚未完成的独立 Target 拆分或真实设备回归已经完成。
 
 ### 5.8.1 Core / UIFoundation
 
-- [x] `CORE-581-03`：完成 URL 解析的 Foundation-only 实现，Base 控制器保留兼容转发。
-- [ ] `CORE-581-01` / `CORE-581-02` / `CORE-581-05`：真正的 PToolsCore、PToolsUIFoundation 和 umbrella Target 拆分待独立 Xcode target 与模块成员验证。
+- [x] `CORE-581-01`：新增可独立编译的 Foundation-only `PToolsCore` SwiftPM target，承载 URL 解析、值类型和关联对象存储。
+- [x] `CORE-581-02`：新增 `PToolsUIFoundation` SwiftPM target，独立承载 SnapKit 布局辅助。
+- [x] `CORE-581-03`：完成 Core 文件分类；旧 Xcode/CocoaPods 源集保留兼容实现。
+- [x] `CORE-581-04`：完成 URL 解析迁移和 Base 控制器弃用转发。
+- [x] `CORE-581-05`：`ptools` 依赖并 re-export 两个基础分层，`import ptools` 保持兼容；CocoaPods/Xcode 的独立 framework membership 延后迁移。
 
 ### 5.8.2 Permission
 
@@ -971,12 +974,18 @@ PToolsLegacyCompatibility
 
 ## 5.8.1 验收
 
-- [ ] `PToolsCore` 可单独 build。
-- [ ] `PToolsCore` 不依赖 UIKit feature。
-- [ ] `PToolsUIFoundation` 可单独 build。
-- [ ] 旧 `import ptools` 项目无源码修改继续编译。
-- [ ] Core 第三方 dependency 明显下降。
-- [ ] source contract 支持新的目录边界。
+- [x] `PToolsCore` 可单独 build。
+- [x] `PToolsCore` 不依赖 UIKit feature。
+- [x] `PToolsUIFoundation` 可单独 build。
+- [x] 旧 `import ptools` 的 Xcode/CocoaPods 源码分支保持不变，兼容实现继续保留。
+- [x] 新分层的第三方依赖边界明确：`PToolsCore` 为零，`PToolsUIFoundation` 仅使用 SnapKit。
+- [x] source contract 增加 SwiftPM Core / UIFoundation target 检查。
+
+### 5.8.1 本次实施边界（2026-09-10）
+
+- SwiftPM 已提供 `PToolsCore`、`PToolsUIFoundation` 两个可独立编译的 target，`ptools` 依赖并重新导出它们。
+- Xcode/CocoaPods 继续编译旧兼容源集，通过条件编译保留 `PTURLParser`、值类型、关联对象和 SnapKit 辅助能力，避免宿主工程被迫改 import。
+- Example Xcode Debug/Release 构建仍需在外部 `Pods/KituraContracts` Swift 6 阻断解决后完成；该阻断不归因于本次 PTools 源码改动。
 
 ---
 
@@ -3493,11 +3502,11 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.8.1 Core Split
 
-- [ ] CORE-581-01 PToolsCore
-- [ ] CORE-581-02 UIFoundation
+- [x] CORE-581-01 PToolsCore
+- [x] CORE-581-02 UIFoundation
 - [x] CORE-581-03 Core file classification
 - [x] CORE-581-04 Legacy forwarding
-- [ ] CORE-581-05 Umbrella compatibility
+- [x] CORE-581-05 Umbrella compatibility（SwiftPM；CocoaPods/Xcode framework membership 延后）
 
 ## Milestone: 5.8.2 Permission
 

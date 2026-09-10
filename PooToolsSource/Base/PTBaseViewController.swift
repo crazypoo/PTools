@@ -12,6 +12,9 @@ import AttributedString
 import Photos
 import SnapKit
 import SafeSFSymbols
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 public typealias PTScreenShotImageHandle = (PTScreenShotActionType,UIImage) -> Void
 public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void

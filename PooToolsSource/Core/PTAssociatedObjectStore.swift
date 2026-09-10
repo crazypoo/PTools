@@ -9,6 +9,7 @@
 import Foundation
 import ObjectiveC
 
+#if !POOTOOLS_SPLIT_CORE
 /// 一个用于为 Swift 扩展和协议提供“关联对象（Associated Objects）”能力的协议。
 /// 遵循此协议的类型可以轻松地动态添加存储属性。
 public protocol PTAssociatedObjectStore { }
@@ -60,3 +61,4 @@ public extension PTAssociatedObjectStore {
 class PTWeakWrapper: NSObject {
     weak var obj: NSObject?
 }
+#endif

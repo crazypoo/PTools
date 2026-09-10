@@ -253,7 +253,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1669,
+      "lines": 1709,
       "classification": "architecture_exception"
     },
     {
@@ -348,7 +348,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "lines": 304,
+      "lines": 306,
       "classification": "ok"
     },
     {
@@ -1148,12 +1148,12 @@
     },
     {
       "path": "PooToolsSource/Core/PTAssociatedObjectStore.swift",
-      "lines": 62,
+      "lines": 64,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Core/PTBaseModel.swift",
-      "lines": 136,
+      "lines": 141,
       "classification": "ok"
     },
     {
@@ -1169,6 +1169,11 @@
     {
       "path": "PooToolsSource/Core/PTGifManager.swift",
       "lines": 220,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Core/PTLayerExports.swift",
+      "lines": 19,
       "classification": "ok"
     },
     {
@@ -1208,7 +1213,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUrlChange.swift",
-      "lines": 79,
+      "lines": 81,
       "classification": "ok"
     },
     {
@@ -3728,7 +3733,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1996,
+      "lines": 1999,
       "classification": "architecture_exception"
     },
     {
@@ -3774,6 +3779,26 @@
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
       "lines": 259,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift",
+      "lines": 43,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreValueTypes.swift",
+      "lines": 74,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTURLParser.swift",
+      "lines": 56,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTSnapKitEX.swift",
+      "lines": 307,
       "classification": "ok"
     },
     {
