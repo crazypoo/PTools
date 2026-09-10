@@ -2,19 +2,21 @@
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：10
+- Warning：12
 - Architecture exception：11
 - Hard-limit allowlisted：3
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
-| `PooToolsSource/Base/PTBaseViewController.swift` | 1620 | architecture_exception |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2286 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTBaseViewController.swift` | 1669 | architecture_exception |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2294 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1021 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1743 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1396 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1426 | warning |
 | `PooToolsSource/Category/UIView+PTEX.swift` | 1850 | architecture_exception |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
+| `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |
 | `PooToolsSource/ImageEditor/PTCutViewController.swift` | 1101 | warning |
 | `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1702 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1552 | architecture_exception |
@@ -23,9 +25,9 @@
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1668 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1999 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1185 | warning |
-| `PooToolsSource/Picker/PTBasePickerView.swift` | 1339 | warning |
+| `PooToolsSource/Picker/PTBasePickerView.swift` | 1390 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |
-| `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1161 | warning |
+| `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1171 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
 | `PooToolsSource/TipsView/PTTipsView.swift` | 1227 | warning |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1623 | architecture_exception |

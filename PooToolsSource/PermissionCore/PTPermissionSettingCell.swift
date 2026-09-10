@@ -61,7 +61,7 @@ class PTPermissionSettingCell: PTBaseNormalCell {
     lazy var infoLabel : UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.font = PTPermissionStatic.share.permissionSettingFont
+        PTUIAccessibility.applyDynamicType(to: view, font: PTPermissionStatic.share.permissionSettingFont)
         view.textAlignment = .left
         view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
@@ -93,7 +93,7 @@ class PTPermissionSettingCell: PTBaseNormalCell {
     lazy var settingLabel:UILabel = {
         let view = UILabel()
         view.textColor = .systemBlue
-        view.font = PTPermissionStatic.share.permissionSettingFont
+        PTUIAccessibility.applyDynamicType(to: view, font: PTPermissionStatic.share.permissionSettingFont)
         view.textAlignment = .left
         view.text = "PT Permission Go setting".localized()
         return view

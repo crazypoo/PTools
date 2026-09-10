@@ -30,7 +30,7 @@ class PTPermissionSettingHeader: PTBaseCollectionReusableView,@MainActor PTSuppl
     lazy var titleView : UILabel = {
         let view = UILabel()
         view.textAlignment = .left
-        view.font = PTPermissionStatic.share.permissionSettingFont
+        PTUIAccessibility.applyDynamicType(to: view, font: PTPermissionStatic.share.permissionSettingFont)
         view.textColor = .lightGray
         return view
     }()

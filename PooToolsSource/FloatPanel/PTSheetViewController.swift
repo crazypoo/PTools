@@ -79,8 +79,16 @@ public class PTSheetViewController: PTBaseViewController {
     public static var hasBlurBackground = false
     public var hasBlurBackground = PTSheetViewController.hasBlurBackground {
         didSet {
-            blurView.isHidden = !hasBlurBackground
-            overlayView.backgroundColor = hasBlurBackground ? .clear : self.overlayColor
+            updateBlurAppearance()
+        }
+    }
+
+    // English: Selects the shared material policy for the sheet backdrop.
+    // Español: Selecciona la política de material compartida para el fondo de la hoja.
+    // 中文：选择 Sheet 背景使用的统一材质策略。
+    public var visualStyle: PTVisualStyle = .automatic {
+        didSet {
+            updateBlurAppearance()
         }
     }
     
@@ -97,15 +105,15 @@ public class PTSheetViewController: PTBaseViewController {
     public static var overlayColor = UIColor(white: 0, alpha: 0.25)
     /// The color of the overlay background
     public var overlayColor = PTSheetViewController.overlayColor {
-        didSet {
-            self.overlayView.backgroundColor = self.hasBlurBackground ? .clear : self.overlayColor
-        }
+       didSet {
+            self.updateBlurAppearance()
+       }
     }
     
     public static var blurEffect: UIBlurEffect = UIBlurEffect(style: .prominent)
     
     public var blurEffect = PTSheetViewController.blurEffect {
-        didSet { self.blurView.effect = blurEffect }
+        didSet { updateBlurAppearance() }
     }
     
     public static var allowGestureThroughOverlay: Bool = false
@@ -224,6 +232,9 @@ public class PTSheetViewController: PTBaseViewController {
         NotificationCenter.default.removeObserver(self,
                                                    name: UIResponder.keyboardWillChangeFrameNotification,
                                                    object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                                   object: nil)
     }
     
     public required init?(coder: NSCoder) {
@@ -273,6 +284,10 @@ public class PTSheetViewController: PTBaseViewController {
         
         self.addOverlay()
         self.addBlurBackground()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
         self.addContentView()
         self.addOverlayTapView()
         self.registerKeyboardObservers()
@@ -300,6 +315,33 @@ public class PTSheetViewController: PTBaseViewController {
     }
     
     // MARK: - Setup & Configuration
+
+    // English: Reconciles the sheet backdrop with the selected material and accessibility settings.
+    // Español: Sincroniza el fondo de la hoja con el material elegido y la configuración de accesibilidad.
+    // 中文：根据所选材质和辅助功能设置统一更新 Sheet 背景。
+    @objc private func accessibilityAppearanceDidChange() {
+        updateBlurAppearance()
+    }
+
+    private func updateBlurAppearance() {
+        guard isViewLoaded else { return }
+        let effect: UIVisualEffect?
+        if !hasBlurBackground || visualStyle == .classic || PTUIAccessibility.reduceTransparencyEnabled {
+            effect = nil
+        } else if #available(iOS 26.0, *), (visualStyle == .automatic || visualStyle == .glass) {
+            effect = PTVisualStyleResolver.makeEffect(for: visualStyle,
+                                                      blurStyle: .prominent,
+                                                      interactive: false)
+        } else {
+            effect = blurEffect
+        }
+        blurView.effect = effect
+        blurView.backgroundColor = effect == nil && hasBlurBackground ? .secondarySystemBackground : .clear
+        blurView.isHidden = !hasBlurBackground
+        overlayView.backgroundColor = hasBlurBackground
+            ? (effect == nil ? .secondarySystemBackground : .clear)
+            : overlayColor
+    }
     
     public func handleScrollView(_ scrollView: UIScrollView) {
         self.childScrollView = scrollView
@@ -491,12 +533,12 @@ public class PTSheetViewController: PTBaseViewController {
             make.edges.equalToSuperview()
         }
         self.overlayView.isUserInteractionEnabled = false
-        self.overlayView.backgroundColor = self.hasBlurBackground ? .clear : self.overlayColor
+        self.updateBlurAppearance()
     }
     
     private func addBlurBackground() {
         self.overlayView.addSubview(self.blurView)
-        blurView.effect = blurEffect
+        self.updateBlurAppearance()
         self.blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

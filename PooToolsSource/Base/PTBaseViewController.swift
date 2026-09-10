@@ -144,12 +144,31 @@ public final class PTNavigationBarManager:NSObject {
                                                selector: #selector(sceneDidDisconnect(_:)),
                                                name: UIScene.didDisconnectNotification,
                                                object: nil)
+        // English: Re-render custom navigation surfaces when Reduce Transparency changes.
+        // Español: Vuelve a renderizar las superficies de navegación cuando cambia Reducir transparencia.
+        // 中文：当“降低透明度”设置变化时重新渲染自定义导航栏表面。
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     @objc private func sceneDidDisconnect(_ notification: Notification) {
         guard let scene = notification.object as? UIWindowScene else { return }
         let sceneID = scene.session.persistentIdentifier
         navigationContextsBySceneID.removeValue(forKey: sceneID)
+    }
+
+    @objc private func accessibilityAppearanceDidChange() {
+        let keyEnumerator = containerMap.keyEnumerator()
+        while let navigationController = keyEnumerator.nextObject() as? UINavigationController,
+              let container = containerMap.object(forKey: navigationController) {
+            container.rerenderCurrentStyle()
+        }
     }
     
     private var titleLabel:Bool = false
@@ -477,7 +496,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                     coordinator.animate(alongsideTransition: { context in
                         container.updateTransition(progress: 1)
                         UIView.transition(with: container.topBarContainer,
-                                          duration: context.transitionDuration,
+                                          duration: PTUIAccessibility.animationDuration(context.transitionDuration),
                                           options: .transitionCrossDissolve,
                                           animations: {
                             self.apply(item: item)
@@ -499,10 +518,13 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                 stopTransition(for: navigationController)
                 // 兜底无动画情况
                 if animated {
-                    UIView.animate(withDuration: 0.25) {
+                    UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.25)) {
                         container.apply(style: toStyle)
                     }
-                    UIView.transition(with: container.topBarContainer, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                    UIView.transition(with: container.topBarContainer,
+                                      duration: PTUIAccessibility.animationDuration(0.25),
+                                      options: .transitionCrossDissolve,
+                                      animations: {
                         self.apply(item: item)
                     }, completion: { _ in
                         if let vc = viewController as? PTBaseViewController {
@@ -560,7 +582,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         } else if !item.navTitle.stringIsEmpty() {
             titleLabel = true
             let titleLabel = UILabel()
-            titleLabel.font = PTAppBaseConfig.share.navTitleFont
+            PTUIAccessibility.applyDynamicType(to: titleLabel,
+                                               font: PTAppBaseConfig.share.navTitleFont)
             titleLabel.textColor = PTAppBaseConfig.share.navTitleTextColor
             titleLabel.numberOfLines = 1
             titleLabel.lineBreakMode = .byTruncatingTail // 👈 增加这句，确保过长显示为 ...
@@ -676,6 +699,15 @@ extension PTNavigationBarManager {
 
     private func startDisplayLink() {
         guard displayLink == nil else { return }
+
+        if PTUIAccessibility.reduceMotionEnabled {
+            // English: Complete interactive navigation styling immediately when motion is reduced.
+            // Español: Completa de inmediato el estilo de navegación interactivo cuando se reduce el movimiento.
+            // 中文：开启减弱动态效果时，立即完成交互式导航栏样式更新。
+            completeReducedMotionTransitions()
+            return
+        }
+
         displayLink = CADisplayLink(target: self, selector: #selector(handleDisplayLink))
         displayLink?.add(to: .main, forMode: .common)
     }
@@ -686,6 +718,11 @@ extension PTNavigationBarManager {
     }
     
     @MainActor @objc private func handleDisplayLink() {
+        if PTUIAccessibility.reduceMotionEnabled {
+            completeReducedMotionTransitions()
+            return
+        }
+
         var navigationControllers = [UINavigationController]()
         let keyEnumerator = transitionStates.keyEnumerator()
         while let navigationController = keyEnumerator.nextObject() as? UINavigationController {
@@ -705,6 +742,18 @@ extension PTNavigationBarManager {
         if transitionStates.keyEnumerator().nextObject() == nil {
             stopDisplayLink()
         }
+    }
+
+    private func completeReducedMotionTransitions() {
+        let keyEnumerator = transitionStates.keyEnumerator()
+        while let navigationController = keyEnumerator.nextObject() as? UINavigationController {
+            guard let state = transitionStates.object(forKey: navigationController),
+                  let container = state.container else {
+                continue
+            }
+            container.updateTransition(progress: 1)
+        }
+        stopDisplayLink()
     }
 }
 
@@ -1209,7 +1258,7 @@ extension PTBaseViewController: UIScrollViewDelegate {
     func pt_finishLargeTitleDrag(for scrollView: UIScrollView) {
         guard prefersLargeTitle(), scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
 
-        UIView.animate(withDuration: 0.25,
+        UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.25),
                        delay: 0,
                        usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0.5,

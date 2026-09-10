@@ -76,6 +76,10 @@ public class PTWaterWaveView: UIView {
         self.endColor = endColor
         backgroundColor = UIColor.hex("0xedf0f4",alpha: 0.1)
         layer.masksToBounds = true
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reduceMotionStatusDidChange),
+                                               name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                               object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -86,6 +90,30 @@ public class PTWaterWaveView: UIView {
         super.layoutSubviews()
         configParam()
         starWave()
+    }
+
+    // English: Keeps the decorative wave static when Reduce Motion is enabled.
+    // Español: Mantiene la ola decorativa estática cuando Reducir movimiento está activado.
+    // 中文：开启“减弱动态效果”时让装饰波浪保持静态。
+    @objc private func reduceMotionStatusDidChange() {
+        updateWaveMotion()
+    }
+
+    private func updateWaveMotion() {
+        ensureWaveLayers()
+        displayLink.invalidate()
+        if UIAccessibility.isReduceMotionEnabled {
+            changeFirstWaveLayerPath()
+            changeSecondWaveLayerPath()
+            return
+        }
+        guard window != nil else { return }
+        displayLink.add(to: .main, forMode: .common)
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateWaveMotion()
     }
     
     func configParam() {
@@ -141,8 +169,26 @@ public class PTWaterWaveView: UIView {
     }
     
     func starWave() {
-        layer.addSublayer(shapeLayer1)
-        layer.addSublayer(shapeLayer2)
-        displayLink.add(to: .main, forMode: .common)
+        ensureWaveLayers()
+        updateWaveMotion()
+    }
+
+    // English: Installs each wave layer once before changing paths or display-link state.
+    // Español: Instala cada capa de onda una sola vez antes de cambiar rutas o el estado del display link.
+    // 中文：在修改路径或 DisplayLink 状态前，确保每个波浪图层只安装一次。
+    private func ensureWaveLayers() {
+        if shapeLayer1.superlayer !== layer {
+            layer.addSublayer(shapeLayer1)
+        }
+        if shapeLayer2.superlayer !== layer {
+            layer.addSublayer(shapeLayer2)
+        }
+    }
+
+    deinit {
+        displayLink.invalidate()
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                                   object: nil)
     }
 }

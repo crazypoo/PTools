@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 /// 高斯模糊视图 (重构为标准的 UIView 子类)
+@MainActor
 @objcMembers
 public class SSBlurView: UIView {
 
@@ -16,6 +17,13 @@ public class SSBlurView: UIView {
     private let vibrancyView = UIVisualEffectView(effect: nil)
     private var isBlurEnabled = false
     private var animationDurationStorage: TimeInterval = 0.2
+
+    // English: Selects the shared visual policy and falls back to an opaque surface when required.
+    // Español: Selecciona la política visual compartida y usa una superficie opaca cuando es necesario.
+    // 中文：选择共享的视觉策略，并在需要时回退到不透明表面。
+    public var visualStyle: PTVisualStyle = .automatic {
+        didSet { updateBlurEffect() }
+    }
     
     public var animationDuration: TimeInterval {
         get { animationDurationStorage }
@@ -58,6 +66,10 @@ public class SSBlurView: UIView {
                                                selector: #selector(reduceMotionStatusDidChange),
                                                name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
     }
     
     /// 开启模糊效果 (带动画)
@@ -78,8 +90,10 @@ public class SSBlurView: UIView {
     }
 
     private func setBlurEffect(enabled: Bool, animated: Bool) {
-        let targetEffect = enabled ? UIBlurEffect(style: style) : nil
-        let shouldAnimate = animated && animationDurationStorage > 0 && !UIAccessibility.isReduceMotionEnabled
+        let targetEffect = enabled
+            ? PTVisualStyleResolver.makeEffect(for: visualStyle, blurStyle: style)
+            : nil
+        let shouldAnimate = animated && animationDurationStorage > 0 && !PTUIAccessibility.reduceMotionEnabled
 
         // English: Remove the previous transition before starting a new one to avoid stacked visual-effect animations.
         // Español: Elimina la transición anterior antes de iniciar otra para evitar animaciones acumuladas del efecto visual.
@@ -88,15 +102,20 @@ public class SSBlurView: UIView {
         vibrancyView.layer.removeAllAnimations()
 
         if enabled {
-            guard let targetEffect else { return }
-            vibrancyView.effect = UIVibrancyEffect(blurEffect: targetEffect)
+            if let blurEffect = targetEffect as? UIBlurEffect {
+                vibrancyView.effect = UIVibrancyEffect(blurEffect: blurEffect)
+            } else {
+                vibrancyView.effect = nil
+            }
+        } else {
+            vibrancyView.effect = nil
         }
 
         guard shouldAnimate else {
             blurEffectView.effect = targetEffect
-            if !enabled {
-                vibrancyView.effect = nil
-            }
+            blurEffectView.backgroundColor = enabled && targetEffect == nil
+                ? UIColor.secondarySystemBackground.resolvedColor(with: traitCollection)
+                : .clear
             return
         }
 
@@ -104,15 +123,21 @@ public class SSBlurView: UIView {
                        delay: 0,
                        options: [.curveEaseInOut, .beginFromCurrentState, .allowUserInteraction]) {
             self.blurEffectView.effect = targetEffect
-            if !enabled {
-                self.vibrancyView.effect = nil
-            }
+            self.blurEffectView.backgroundColor = enabled && targetEffect == nil
+                ? UIColor.secondarySystemBackground.resolvedColor(with: self.traitCollection)
+                : .clear
         }
     }
 
     @objc private func reduceMotionStatusDidChange() {
-        guard isBlurEnabled else { return }
-        setBlurEffect(enabled: true, animated: false)
+        setBlurEffect(enabled: isBlurEnabled, animated: false)
+    }
+
+    // English: Re-applies the effect immediately when Reduce Transparency changes.
+    // Español: Vuelve a aplicar el efecto inmediatamente cuando cambia Reducir transparencia.
+    // 中文：当“降低透明度”设置变化时立即重新应用效果。
+    @objc private func accessibilityAppearanceDidChange() {
+        setBlurEffect(enabled: isBlurEnabled, animated: false)
     }
 
     public override func didMoveToWindow() {
@@ -128,6 +153,9 @@ public class SSBlurView: UIView {
     deinit {
         NotificationCenter.default.removeObserver(self,
                                                    name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                                   object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                                    object: nil)
     }
 }

@@ -36,7 +36,7 @@ public class PTAdjustSliderView: UIView {
     
     lazy var valueLabel: UILabel = {
         let label = UILabel()
-        label.font = PTImageEditorConfig.share.adjustSliderFont
+        PTUIAccessibility.applyDynamicType(to: label, font: PTImageEditorConfig.share.adjustSliderFont)
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
         label.layer.shadowOffset = .zero
         label.layer.shadowOpacity = 1

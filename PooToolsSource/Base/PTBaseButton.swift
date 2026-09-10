@@ -66,7 +66,7 @@ open class PTBaseButton: UIButton {
         activityIndicator.startAnimating()
         
         // 柔和地隐藏原有内容，避免与菊花重叠重影
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.2)) {
             self.titleLabel?.alpha = 0
             self.imageView?.alpha = 0
         }
@@ -87,7 +87,7 @@ open class PTBaseButton: UIButton {
         // 3. 传统方案：停止动画并恢复原有文字和图片的透明度
         activityIndicator.stopAnimating()
         
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.2)) {
             self.titleLabel?.alpha = 1
             self.imageView?.alpha = 1
         }

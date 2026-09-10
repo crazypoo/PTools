@@ -117,7 +117,8 @@ extension PTBaseNavControl {
         let textColors:UIColor = textColor ?? PTAppBaseConfig.share.navTitleTextColor
         
         //修改导航栏文字颜色字号
-        let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
+        let attrs = [NSAttributedString.Key.foregroundColor: textColors,
+                     NSAttributedString.Key.font: PTUIAccessibility.scaledFont(PTAppBaseConfig.share.navTitleFont)]
         
         let images = UIColor.clear.createImageWithColor()
         let navigationBarAppearance = UINavigationBarAppearance()
@@ -130,7 +131,7 @@ extension PTBaseNavControl {
         // 中文：让 UIKit 原生大标题文字样式与自定义导航容器保持一致。
         navigationBarAppearance.largeTitleTextAttributes = [
             .foregroundColor: textColors,
-            .font: PTAppBaseConfig.share.navLargeTitleFont
+            .font: PTUIAccessibility.scaledFont(PTAppBaseConfig.share.navLargeTitleFont)
         ]
         navigationBarAppearance.shadowImage = images
         navigationBarAppearance.setBackIndicatorImage(colors.createImageWithColor(), transitionMaskImage: colors.createImageWithColor())

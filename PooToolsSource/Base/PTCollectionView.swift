@@ -199,7 +199,9 @@ public class PTCollectionView: UIView {
         let label = UILabel()
         label.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 2, height: indicatorRadius * 2)
         label.backgroundColor = viewConfig.indexConfig?.indicatorBackgroundColor ?? .clear
-        label.font = UIFont.appCustomFont(size: ceil(indicatorRadius * 1.414),customFont: viewConfig.indexConfig?.indexViewHudFont.fontName ?? UIFont.appfont(size: 18).fontName)
+        PTUIAccessibility.applyDynamicType(to: label,
+                                           font: UIFont.appCustomFont(size: ceil(indicatorRadius * 1.414),
+                                                                      customFont: viewConfig.indexConfig?.indexViewHudFont.fontName ?? UIFont.appfont(size: 18).fontName))
         label.textAlignment = .center
         label.layer.cornerRadius = indicatorRadius
         label.layer.masksToBounds = true
@@ -754,11 +756,15 @@ extension PTCollectionView {
 //MARK: MoveItem
 extension PTCollectionView {
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
-        collectionView.scrollToItem(at: indexPath, at: position, animated: true)
+        collectionView.scrollToItem(at: indexPath,
+                                    at: position,
+                                    animated: !PTUIAccessibility.reduceMotionEnabled)
     }
     
     public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition) {
-        collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
+        collectionView.selectItem(at: indexPath,
+                                  animated: animated && !PTUIAccessibility.reduceMotionEnabled,
+                                  scrollPosition: scrollPosition)
     }
 }
 
@@ -771,7 +777,7 @@ extension PTCollectionView {
     }
     
     public func hideIndicator() {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.2)) {
             self.indicator.alpha = 0
         }
     }
@@ -1154,7 +1160,7 @@ private extension PTCollectionView {
                 let centerY = targetFrame.midY
                 let indicatorX = bounds.width - indicator.bounds.width / 2 - (config.itemSize.width)
                 
-                UIView.animate(withDuration: 0.15) {
+                UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.15)) {
                     self.indicator.center = CGPoint(x: indicatorX, y: centerY)
                 }
                 
@@ -1192,7 +1198,7 @@ private extension PTCollectionView {
             label.index = i
             label.text = title
             label.textAlignment = .center
-            label.font = config.indexViewFont
+            PTUIAccessibility.applyDynamicType(to: label, font: config.indexViewFont)
             label.layer.cornerRadius = config.itemSize.height / 2
             label.clipsToBounds = true
             label.isUserInteractionEnabled = true

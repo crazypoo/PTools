@@ -134,6 +134,10 @@ public class PTAppBaseConfig: NSObject {
     public var tab26BottomSpacing:CGFloat = 15
     public var tab26Mode:Bool = false
     public var tabSelectedMetail:Bool = false
+    // English: Selects the shared TabBar surface policy; automatic follows the current system appearance.
+    // Español: Selecciona la política de superficie compartida del TabBar; automático sigue la apariencia del sistema.
+    // 中文：选择统一的 TabBar 表面策略；automatic 会跟随当前系统外观。
+    @nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic
     public var tabSelectedMetailColor:UIColor = .lightGray
     public var tabSelectedMetailLRSpacing:CGFloat = 5
     public var tabbarMetailMode:Bool = false

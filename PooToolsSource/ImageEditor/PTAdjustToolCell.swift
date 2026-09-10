@@ -23,7 +23,7 @@ class PTAdjustToolCell: PTBaseNormalCell {
 
     lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = PTImageEditorConfig.share.adjustSliderCellFont
+        PTUIAccessibility.applyDynamicType(to: label, font: PTImageEditorConfig.share.adjustSliderCellFont)
         label.textColor = .white
         label.textAlignment = .center
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor

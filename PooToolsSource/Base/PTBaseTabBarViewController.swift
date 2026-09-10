@@ -75,6 +75,9 @@ open class PTBaseTabBarViewController: UITabBarController {
         scrollBindingTask?.cancel()
         scrollUpdateTask?.cancel()
         scrollObservation?.invalidate()
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                                   object: nil)
     }
     
     open override func viewDidLoad() {
@@ -154,11 +157,10 @@ open class PTBaseTabBarViewController: UITabBarController {
         accessoryContainerView.backgroundColor = .clear
         
         // 1. 配置毛玻璃材质 (与你的 CustomBar 保持视觉统一)
-        if PTAppBaseConfig.share.tab26Mode {
-            accessoryBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        } else {
-            accessoryBlurView.effect = UIBlurEffect(style: .systemMaterial)
-        }
+        PTVisualStyleResolver.apply(to: accessoryBlurView,
+                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                    fallbackColor: .secondarySystemBackground)
         accessoryContainerView.addSubview(accessoryBlurView)
         accessoryBlurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -179,6 +181,20 @@ open class PTBaseTabBarViewController: UITabBarController {
             make.height.equalTo(0)
         }
         accessoryContainerInstalled = true
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
+    }
+
+    // English: Re-applies the accessory surface when Reduce Transparency changes.
+    // Español: Vuelve a aplicar la superficie accessory cuando cambia Reducir transparencia.
+    // 中文：当“降低透明度”设置变化时重新应用 Accessory 表面效果。
+    @objc private func accessibilityAppearanceDidChange() {
+        PTVisualStyleResolver.apply(to: accessoryBlurView,
+                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                    fallbackColor: .secondarySystemBackground)
     }
 
     open func configure(items: [PTTabBarItemConfig]) {
@@ -332,7 +348,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             if animated {
                 // 有滑动动画时，先更新约束，再在动画块里强刷布局
                 updateConstraints()
-                UIView.animate(withDuration: 0.4,
+                UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.4),
                                delay: 0,
                                usingSpringWithDamping: 0.8,
                                initialSpringVelocity: 0.5,
@@ -426,7 +442,7 @@ extension PTBaseTabBarViewController {
         }
 
         if animated {
-            UIView.animate(withDuration: 0.25,
+            UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.25),
                            delay: 0,
                            options: [.curveEaseInOut, .beginFromCurrentState],
                            animations: {
@@ -511,7 +527,10 @@ extension PTBaseTabBarViewController {
         // 3. 执行丝滑转场动画
         if animated {
             newContentView?.alpha = 0
-            UIView.animate(withDuration: 0.25,delay: 0, options: [.curveEaseInOut], animations: {
+            UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.25),
+                          delay: 0,
+                          options: [.curveEaseInOut],
+                          animations: {
                 updateUIBlock()
             }) { _ in
                 completionBlock()

@@ -80,6 +80,15 @@ public class PTCustomerAlertController: PTAlertController {
         }
     }
 
+    // English: Selects the shared visual policy while keeping custom colors authoritative.
+    // Español: Selecciona la política visual compartida y mantiene prioritarios los colores personalizados.
+    // 中文：选择统一视觉策略，同时保留自定义背景颜色的最高优先级。
+    public var visualStyle: PTVisualStyle = .automatic {
+        didSet {
+            updateContentBackgroundIfLoaded()
+        }
+    }
+
     static let defaultMaximumContentWidth: CGFloat = 340
 
     // English: Use one width calculation for the controller and legacy convenience wrappers.
@@ -104,7 +113,8 @@ public class PTCustomerAlertController: PTAlertController {
         if let contentBackgroundColor {
             return contentBackgroundColor
         }
-        return UIAccessibility.isReduceTransparencyEnabled ? .secondarySystemBackground : .clear
+        let effect = PTVisualStyleResolver.makeEffect(for: visualStyle, blurStyle: .systemMaterial)
+        return effect == nil ? .secondarySystemBackground : .clear
     }
 
     fileprivate lazy var contentView:UIView = {
@@ -123,7 +133,7 @@ public class PTCustomerAlertController: PTAlertController {
         let view = UILabel()
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.font = titleFont
+        PTUIAccessibility.applyDynamicType(to: view, font: titleFont)
         view.textColor = titleColor
         view.text = alertTitle
         view.adjustsFontForContentSizeCategory = true
@@ -312,24 +322,17 @@ public class PTCustomerAlertController: PTAlertController {
     private func updateSurfaceAppearance() {
         guard isViewLoaded else { return }
 
-        let reduceTransparency = UIAccessibility.isReduceTransparencyEnabled
         contentView.backgroundColor = resolvedContentBackgroundColor
 
-        guard contentBackgroundColor == nil, !reduceTransparency else {
+        guard contentBackgroundColor == nil else {
             surfaceEffectView.effect = nil
+            surfaceEffectView.backgroundColor = .clear
             return
         }
-
-        #if compiler(>=6.2)
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect(style: .regular)
-            glassEffect.isInteractive = false
-            surfaceEffectView.effect = glassEffect
-            return
-        }
-        #endif
-
-        surfaceEffectView.effect = UIBlurEffect(style: .systemMaterial)
+        PTVisualStyleResolver.apply(to: surfaceEffectView,
+                                    style: visualStyle,
+                                    blurStyle: .systemMaterial,
+                                    fallbackColor: .secondarySystemBackground)
     }
 
     private func installSurfaceAppearanceObservers() {
@@ -501,7 +504,7 @@ public class PTCustomerAlertController: PTAlertController {
     private func makeActionButton(model: PTCustomBottomButtonModel, index: Int) -> UIButton {
         let title = model.titleName ?? ""
         let button = UIButton(type: .custom)
-        button.titleLabel?.font = buttonsFont
+        PTUIAccessibility.applyDynamicType(to: button, font: buttonsFont)
         button.setTitleColor(model.titleColor, for: .normal)
         button.setTitle(title, for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)

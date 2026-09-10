@@ -67,3 +67,50 @@ Pods 的弃用、Metal 工具链和脚本输出单独保留在原始日志中。
 5.9.x 目前不能标记为完整 Xcode 验收通过，也不能创建 5.9.x 发布标签。需要先由依赖
 维护方提供可链接 Simulator 的 Bugly 产物、Swift 6 可用的 KituraContracts/Appz 版本或完成替代方案，
 再重新执行完整矩阵。
+
+## 5.9.5 UI Quality follow-up（2026-09-10）
+
+本轮新增视觉策略和无障碍适配已完成静态解析；变更后的完整 Xcode Debug / Release 构建均实际执行，
+但仍在进入 PooTools 源码前被外部 `Pods/KituraContracts` 的 Swift 6 并发诊断阻断。
+
+| 配置 | 结果 | 阻断位置 |
+| --- | --- | --- |
+| `PooTools-Example` Debug | 未通过 | 外部 `KituraContracts/BodyFormat.swift` 和 `CodableQuery/Extensions.swift` 的非 Sendable 共享状态 |
+| `PooTools-Example` Release | 未通过 | 外部 `KituraContracts/BodyFormat.swift` 和 `CodableQuery/Extensions.swift` 的非 Sendable 共享状态 |
+
+本轮日志中没有命中 `PooToolsSource` 的编译错误或警告；没有修改 Pods、第三方依赖版本或工程配置。
+完整人工回归（动态字体、减弱动态效果、降低透明度、iOS 26 系统效果和深色模式）仍需在可运行宿主中执行。
+
+原始日志：
+
+- `build/xcode-5.9.5-final-debug.log`
+- `build/xcode-5.9.5-final-release.log`
+- `build/xcode-5.9.5-final3-debug.log`
+- `build/xcode-5.9.5-final3-release.log`
+
+最终收口构建（2026-09-10）再次实际执行：
+
+- `build/xcode-5.9.5-final4-debug.log`
+- `build/xcode-5.9.5-final4-release.log`
+
+源文件收口后再次执行的最终构建（2026-09-10）：
+
+- `build/xcode-5.9.5-final5-debug.log`
+- `build/xcode-5.9.5-final5-release.log`
+
+两种配置仍在外部 `KituraContracts` 的 Swift 6 并发诊断处阻断；这次视觉策略已经并入
+现有 `PooToolsSource/Core/PTUtils.swift`，因此无需依赖未登记的新 CocoaPods 源文件。
+最终日志没有命中 `PooToolsSource` 的编译错误或警告。
+
+两种配置均在外部 `KituraContracts` 的 Swift 6 并发诊断处终止；最终日志没有命中
+`PooToolsSource` 的编译错误或警告。Release 额外出现的诊断同样来自 Pods，未修改任何
+Pods 源码或依赖配置。
+
+导航栏 UI 收口后再次执行完整构建（2026-09-10）：
+
+- `build/xcode-5.9.5-final6-debug.log`
+- `build/xcode-5.9.5-final6-release.log`
+
+Debug 与 Release 均实际执行到依赖编译阶段，并在外部 `KituraContracts` 的
+`BodyFormat.swift` 非 Sendable 静态属性和 `CodableQuery/Extensions.swift` 共享 formatter
+诊断处阻断；两份日志均没有 `PooToolsSource` 编译错误或警告。

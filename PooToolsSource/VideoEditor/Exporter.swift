@@ -105,7 +105,7 @@ public struct Exporter {
                 await withTaskCancellationHandler(operation: {
                     await export.export()
                 }, onCancel: { [weak state] in
-                    Task { @MainActor in
+                    Task { @MainActor [weak state] in
                         state?.exportSession?.cancelExport()
                     }
                 })

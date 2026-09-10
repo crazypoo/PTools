@@ -265,6 +265,10 @@ public class PTBannerView: UIView {
         }
         collectionView.backgroundColor = viewConfig.collectionViewBackgroundColor
         setupNavigationButtonsIfNeeded()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reduceMotionStatusDidChange),
+                                               name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                               object: nil)
     }
 
     public override init(frame: CGRect) {
@@ -351,10 +355,13 @@ public class PTBannerView: UIView {
 
     deinit {
         resumeTask?.cancel()
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                                   object: nil)
     }
 
     fileprivate var canScheduleAutoScroll: Bool {
-        viewConfig.autoScroll && bannerModel.count > 1
+        viewConfig.autoScroll && bannerModel.count > 1 && !UIAccessibility.isReduceMotionEnabled
     }
 
     fileprivate var autoScrollSchedulingInterval: TimeInterval {
@@ -382,6 +389,25 @@ public class PTBannerView: UIView {
             return .centeredVertically
         default:
             return .centeredHorizontally
+        }
+    }
+
+    // English: Centralizes banner scrolling so Reduce Motion never receives an animated transition.
+    // Español: Centraliza el desplazamiento del banner para que Reducir movimiento nunca reciba una transición animada.
+    // 中文：统一 Banner 滚动入口，开启“减弱动态效果”时始终使用无动画切换。
+    private func scrollToItem(at index: Int, animated: Bool) {
+        collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
+                                     at: pageScrollPosition,
+                                     animated: animated && !UIAccessibility.isReduceMotionEnabled)
+    }
+
+    @objc private func reduceMotionStatusDidChange() {
+        if UIAccessibility.isReduceMotionEnabled {
+            stopAutoScroll()
+            resumeTask?.cancel()
+            resumeTask = nil
+        } else if window != nil {
+            startAutoScroll()
         }
     }
 
@@ -527,9 +553,7 @@ public class PTBannerView: UIView {
         } else {
             target = index
         }
-        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
-                                     at: pageScrollPosition,
-                                     animated: animated)
+        scrollToItem(at: target, animated: animated)
     }
 
     public func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -658,7 +682,7 @@ public class PTBannerView: UIView {
     }
     
     func autoScrollTick() {
-        guard viewConfig.autoScroll else { return }
+        guard viewConfig.autoScroll, !UIAccessibility.isReduceMotionEnabled else { return }
         guard bannerModel.count > 1 else { return }
         guard !isUserDragging && !isDecelerating else { return }
 
@@ -831,9 +855,7 @@ extension PTBannerView {
         guard bannerModel.count > 0 else { return }
         let middleBase = totalItemsCount / 2
         let target = middleBase - (middleBase % bannerModel.count)
-        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
-                                     at: pageScrollPosition,
-                                     animated: animated)
+        scrollToItem(at: target, animated: animated)
     }
 }
 
@@ -844,15 +866,11 @@ extension PTBannerView {
               let index = currentVirtualIndex() else { return }
         let previous = index - 1
         if previous >= 0 {
-            collectionView.scrollToItem(at: IndexPath(item: previous, section: 0),
-                                         at: pageScrollPosition,
-                                         animated: true)
+            scrollToItem(at: previous, animated: true)
         } else if viewConfig.infiniteLoop {
             scrollToMiddleIfNeeded(animated: false)
             guard let middle = currentVirtualIndex(), middle > 0 else { return }
-            collectionView.scrollToItem(at: IndexPath(item: middle - 1, section: 0),
-                                         at: pageScrollPosition,
-                                         animated: true)
+            scrollToItem(at: middle - 1, animated: true)
         }
     }
 
@@ -872,16 +890,12 @@ extension PTBannerView {
                 let resetIndex = middleBase - (middleBase % bannerModel.count) + realIdx
                 
                 // 3. 无动画静默跳回中间位置 (用户视觉上无感知)
-                collectionView.scrollToItem(at: IndexPath(item: resetIndex, section: 0),
-                                             at: pageScrollPosition,
-                                             animated: false)
+                scrollToItem(at: resetIndex, animated: false)
                 
                 // 4. 紧接着带动画滚动到下一页
                 let adjustedNext = resetIndex + 1
                 if adjustedNext < totalItemsCount { // 确保重置后加 1 不会越界（理论上肯定不会）
-                    collectionView.scrollToItem(at: IndexPath(item: adjustedNext, section: 0),
-                                                 at: pageScrollPosition,
-                                                 animated: true)
+                    scrollToItem(at: adjustedNext, animated: true)
                 }
             } else {
                 // 非无限循环模式：已经到底了，移除定时器停止滚动
@@ -892,9 +906,7 @@ extension PTBannerView {
 
         // 正常情况：带动画滚向下一页
         guard next < totalItemsCount else { return }
-        collectionView.scrollToItem(at: IndexPath(item: next, section: 0),
-                                     at: pageScrollPosition,
-                                     animated: true)
+        scrollToItem(at: next, animated: true)
     }
 
     private func currentVirtualIndex() -> Int? {
@@ -1119,9 +1131,7 @@ extension PTBannerView {
             target = max(0, min(target, totalItemsCount - 1))
         }
 
-        collectionView.scrollToItem(at: IndexPath(item: target, section: 0),
-                                     at: pageScrollPosition,
-                                     animated: true)
+        scrollToItem(at: target, animated: true)
         self.setDescView(index: index)
         self.setDescViewHeight(index: index)
         resumeTask = Task { @MainActor [weak self] in

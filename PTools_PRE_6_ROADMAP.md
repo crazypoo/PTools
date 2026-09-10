@@ -3615,10 +3615,10 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.5 UI Quality
 
-- [ ] UI-595-01 Dynamic Type
-- [ ] UI-595-02 Reduce Motion
-- [ ] UI-595-03 Reduce Transparency
-- [ ] UI-595-04 Visual style strategy
+- [x] UI-595-01 Dynamic Type
+- [x] UI-595-02 Reduce Motion
+- [x] UI-595-03 Reduce Transparency
+- [x] UI-595-04 Visual style strategy
 
 ## Milestone: 5.9.6 Dependencies
 
@@ -3700,7 +3700,11 @@ PooToolsSource/MediaViewer/
 - [x] PERF-594-02：完成 MainActor 重任务代码审查；图片/GIF、视频缩略图和网络缓存维护不在 UI 回调中同步解码大数据，UI 结果仍回到 MainActor。
 - [x] PERF-594-03：为 PTNavBar 增加几何签名缓存，避免重复重建标题约束；PTTabBarView 只在遮罩几何变化时更新图层，并避免布局回调中的重复 layoutIfNeeded。
 - [x] PERF-594-04：新增 PTMemoryWarningCoordinator；PTCollectionView、PTVideoCoverCache 和 PTAudioService 响应内存告警，释放派生缓存并取消未完成的视频封面任务。
-- [x] UI-595-01 / UI-595-02 / UI-595-03：生成 UI 适配扫描报告，保留人工回归门槛。
+- [x] UI-595-01：Alert、TabBar、NavigationBar、Picker、Permission、Collection index 和 ImageEditor 高频文本入口接入 Dynamic Type。
+- [x] UI-595-02：Banner 自动轮播、TabBar Lottie、Picker 过渡、Blur 动画和 Sheet 动画尊重 Reduce Motion，并在系统设置变化后即时刷新。
+- [x] UI-595-03：新增 Core 级视觉策略解析器；Blur、TabBar、Picker、Alert、Sheet 和 Navigation 在 Reduce Transparency 时切换动态不透明背景，并支持设置变化后即时重绘。
+- [x] UI-595-04：新增 `PTVisualStyle`（`automatic` / `classic` / `material` / `glass`）和 `PTVisualStyleResolver`，避免 iOS 26 系统效果判断散落在各模块。
+- [x] UI-595：刷新 `report/accessibility_5_9.{json,md}`；代码门禁完成，真实设备/宿主界面回归仍是发布前置条件。
 - [x] DEP-596-01 / DEP-596-05：固定 AttributedString、SocketRocket revision，并增加依赖所有权文档。
 - [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
 - [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。

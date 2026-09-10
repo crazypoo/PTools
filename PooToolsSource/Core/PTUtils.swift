@@ -9,6 +9,108 @@
 import UIKit
 import UniformTypeIdentifiers
 
+// English: Describes the visual surface policy shared by Core UI components.
+// Español: Describe la política de superficies visuales compartida por los componentes UI de Core.
+// 中文：描述 Core UI 组件共享的视觉表面策略。
+public enum PTVisualStyle: String, CaseIterable, Equatable, Hashable, Sendable {
+    case automatic
+    case classic
+    case material
+    case glass
+}
+
+@MainActor
+public enum PTVisualStyleResolver {
+    // English: Creates the best supported effect while respecting Reduce Transparency and iOS 17 fallback.
+    // Español: Crea el efecto compatible más adecuado respetando Reducir transparencia y la alternativa de iOS 17.
+    // 中文：在遵循“降低透明度”的同时创建当前系统支持的效果，并保留 iOS 17 回退。
+    public static func makeEffect(for style: PTVisualStyle,
+                                  blurStyle: UIBlurEffect.Style = .systemMaterial,
+                                  interactive: Bool = false) -> UIVisualEffect? {
+        guard style != .classic, !UIAccessibility.isReduceTransparencyEnabled else {
+            return nil
+        }
+
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *), (style == .glass || style == .automatic) {
+            let effect = UIGlassEffect(style: .regular)
+            effect.isInteractive = interactive
+            return effect
+        }
+        #endif
+
+        return UIBlurEffect(style: blurStyle)
+    }
+
+    // English: Applies an effect or a dynamic opaque fallback without changing the view hierarchy.
+    // Español: Aplica un efecto o una alternativa opaca dinámica sin cambiar la jerarquía de vistas.
+    // 中文：在不改变视图层级的情况下应用效果，或切换到动态不透明回退背景。
+    public static func apply(to effectView: UIVisualEffectView,
+                             style: PTVisualStyle = .automatic,
+                             blurStyle: UIBlurEffect.Style = .systemMaterial,
+                             fallbackColor: UIColor = .systemBackground,
+                             interactive: Bool = false) {
+        let effect = makeEffect(for: style, blurStyle: blurStyle, interactive: interactive)
+        effectView.effect = effect
+        effectView.backgroundColor = effect == nil
+            ? fallbackColor.resolvedColor(with: effectView.traitCollection)
+            : .clear
+    }
+}
+
+@MainActor
+public enum PTUIAccessibility {
+    // English: Reads the current system accessibility settings at the point of use.
+    // Español: Lee la configuración de accesibilidad del sistema en el momento de uso.
+    // 中文：在使用时读取系统当前的辅助功能设置，避免缓存过期状态。
+    public static var reduceMotionEnabled: Bool {
+        UIAccessibility.isReduceMotionEnabled
+    }
+
+    public static var reduceTransparencyEnabled: Bool {
+        UIAccessibility.isReduceTransparencyEnabled
+    }
+
+    // English: Scales an existing font through Dynamic Type while preserving its family and weight.
+    // Español: Escala una fuente existente mediante Dynamic Type conservando su familia y peso.
+    // 中文：通过 Dynamic Type 缩放现有字体，同时保留字体族和字重。
+    public static func scaledFont(_ font: UIFont, maximumPointSize: CGFloat? = nil) -> UIFont {
+        guard font.pointSize.isFinite, font.pointSize > 0 else { return font }
+        if let maximumPointSize, maximumPointSize.isFinite, maximumPointSize > 0 {
+            return UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+        }
+        return UIFontMetrics.default.scaledFont(for: font)
+    }
+
+    // English: Applies Dynamic Type to a label without replacing custom text or layout constraints.
+    // Español: Aplica Dynamic Type a una etiqueta sin reemplazar su texto ni sus restricciones.
+    // 中文：为标签启用 Dynamic Type，不改变现有文本和布局约束。
+    public static func applyDynamicType(to label: UILabel,
+                                        font: UIFont,
+                                        maximumPointSize: CGFloat? = nil) {
+        label.font = scaledFont(font, maximumPointSize: maximumPointSize)
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    // English: Applies Dynamic Type to a button title label.
+    // Español: Aplica Dynamic Type a la etiqueta de título de un botón.
+    // 中文：为按钮标题标签启用 Dynamic Type。
+    public static func applyDynamicType(to button: UIButton,
+                                        font: UIFont,
+                                        maximumPointSize: CGFloat? = nil) {
+        guard let titleLabel = button.titleLabel else { return }
+        applyDynamicType(to: titleLabel, font: font, maximumPointSize: maximumPointSize)
+    }
+
+    // English: Returns zero when motion reduction is enabled so callers can keep state transitions intact.
+    // Español: Devuelve cero cuando se reduce el movimiento para conservar las transiciones de estado.
+    // 中文：开启“减弱动态效果”时返回零，调用方仍可保持状态切换逻辑完整。
+    public static func animationDuration(_ duration: TimeInterval) -> TimeInterval {
+        guard !reduceMotionEnabled, duration.isFinite else { return 0 }
+        return max(0, duration)
+    }
+}
+
 /*
  ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
  ░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░░░

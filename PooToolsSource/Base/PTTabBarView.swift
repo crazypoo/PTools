@@ -68,6 +68,10 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
         lottieView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reduceMotionStatusDidChange),
+                                               name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                               object: nil)
     }
 
     public var view: UIView { container }
@@ -115,7 +119,29 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
         imageView.isHidden = true
         lottieView.isHidden = false
         lottieView.animation = findAnimation
-        lottieView.play()
+        updateLottieMotionState()
+    }
+
+    // English: Keeps Lottie still when Reduce Motion is enabled and resumes it when allowed.
+    // Español: Mantiene Lottie quieto cuando se reduce el movimiento y lo reanuda cuando se permite.
+    // 中文：开启“减弱动态效果”时停止 Lottie，允许动态效果时恢复播放。
+    private func updateLottieMotionState() {
+        guard lottieView.animation != nil else { return }
+        if UIAccessibility.isReduceMotionEnabled || lottieView.isHidden {
+            lottieView.stop()
+        } else {
+            lottieView.play()
+        }
+    }
+
+    @objc private func reduceMotionStatusDidChange() {
+        updateLottieMotionState()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                                   object: nil)
     }
 }
 
@@ -143,7 +169,8 @@ final public class PTTabBarItemView: UIControl {
         didSet {
             content.setSelected(isSelectedItem, animated: true)
             titleLabel.textColor = isSelectedItem ? PTAppBaseConfig.share.tabSelectedColor : PTAppBaseConfig.share.tabNormalColor
-            titleLabel.font = isSelectedItem ? PTAppBaseConfig.share.tabSelectedFont : PTAppBaseConfig.share.tabNormalFont
+            PTUIAccessibility.applyDynamicType(to: titleLabel,
+                                               font: isSelectedItem ? PTAppBaseConfig.share.tabSelectedFont : PTAppBaseConfig.share.tabNormalFont)
         }
     }
     
@@ -175,7 +202,8 @@ final public class PTTabBarItemView: UIControl {
         if !title.stringIsEmpty() {
             titleLabel.numberOfLines = 1
             titleLabel.text = title
-            titleLabel.font = PTAppBaseConfig.share.tabNormalFont
+            PTUIAccessibility.applyDynamicType(to: titleLabel,
+                                               font: PTAppBaseConfig.share.tabNormalFont)
             titleLabel.textAlignment = .center
             titleLabel.textColor = PTAppBaseConfig.share.tabNormalColor
         }
@@ -281,7 +309,6 @@ final public class PTTabBarView: UIView {
 
     public var items: [PTTabBarItemView] = []
     private var currentIndex: Int = 0
-    
     private let glassBackgroundView = UIVisualEffectView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
@@ -300,7 +327,8 @@ final public class PTTabBarView: UIView {
     
     private lazy var centerNameLabel:UILabel = {
         let view = UILabel()
-        view.font = PTAppBaseConfig.share.tabbarCenterNameFont
+        PTUIAccessibility.applyDynamicType(to: view,
+                                           font: PTAppBaseConfig.share.tabbarCenterNameFont)
         view.textColor = PTAppBaseConfig.share.tabbarCenterNameColor
         view.textAlignment = .center
         view.numberOfLines = 0
@@ -341,11 +369,30 @@ final public class PTTabBarView: UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        installAccessibilityObservers()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+        installAccessibilityObservers()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                   name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                                   object: nil)
+    }
+
+    private func installAccessibilityObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
+    }
+
+    @objc private func accessibilityAppearanceDidChange() {
+        updateVisualAppearance()
     }
 
     // MARK: - Setup
@@ -366,7 +413,6 @@ final public class PTTabBarView: UIView {
         var tabContainerHeight:CGFloat = 0
         
         if PTAppBaseConfig.share.tab26Mode {
-            glassBackgroundView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
             if Gobal_device_info.isFaceIDCapable {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing
             } else {
@@ -374,7 +420,6 @@ final public class PTTabBarView: UIView {
             }
         } else {
             if PTAppBaseConfig.share.tabbarMetailMode {
-                glassBackgroundView.effect = UIBlurEffect(style: .systemMaterial)
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
             } else {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
@@ -382,6 +427,10 @@ final public class PTTabBarView: UIView {
         }
 
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+            PTVisualStyleResolver.apply(to: glassBackgroundView,
+                                        style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                        blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                        fallbackColor: .secondarySystemBackground)
             glassBackgroundView.clipsToBounds = true
             addSubview(glassBackgroundView)
             
@@ -452,12 +501,14 @@ final public class PTTabBarView: UIView {
     
     private func centetButtonEffect() {
         let effectView = UIVisualEffectView()
-        if PTAppBaseConfig.share.tab26Mode {
-            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarCenterMetail {
+            PTVisualStyleResolver.apply(to: effectView,
+                                        style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                        blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                        fallbackColor: .secondarySystemBackground)
         } else {
-            if PTAppBaseConfig.share.tabbarCenterMetail {
-                effectView.effect = UIBlurEffect(style: .systemMaterial)
-            }
+            effectView.effect = nil
+            effectView.backgroundColor = .clear
         }
 
         if PTAppBaseConfig.share.tab26Mode && PTAppBaseConfig.share.tabbarCenterMetail {
@@ -719,7 +770,7 @@ final public class PTTabBarView: UIView {
         }
         
         // 仅在非首次加载且开启了动画时执行 Spring 过渡
-        if animated && sharedSelectionMaskView.frame != .zero {
+        if animated && !UIAccessibility.isReduceMotionEnabled && sharedSelectionMaskView.frame != .zero {
             // 参数调整说明：damping 0.75 带有轻微Q弹的高级感，velocity 响应灵敏
             UIView.animate(withDuration: 0.35,
                            delay: 0,
@@ -939,7 +990,10 @@ final public class PTTabBarView: UIView {
         sharedSelectionMaskView.backgroundColor = PTAppBaseConfig.share.tabSelectedMetailColor
         sharedSelectionMaskView.clipsToBounds = true
         
-        sharedMaskGlassView.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        PTVisualStyleResolver.apply(to: sharedMaskGlassView,
+                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    blurStyle: .systemUltraThinMaterialDark,
+                                    fallbackColor: PTAppBaseConfig.share.tabSelectedMetailColor)
         sharedSelectionMaskView.addSubview(sharedMaskGlassView)
         sharedMaskGlassView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -948,5 +1002,20 @@ final public class PTTabBarView: UIView {
         // 决定父图层：如果主容器有毛玻璃，插在毛玻璃的 contentView 最底层；否则插在 self 最底层
         let targetContainer = (glassBackgroundView.superview != nil) ? glassBackgroundView.contentView : self
         targetContainer.insertSubview(sharedSelectionMaskView, at: 0)
+    }
+
+    // English: Re-applies the TabBar material and selection surface after accessibility changes.
+    // Español: Vuelve a aplicar el material del TabBar y la superficie seleccionada tras cambios de accesibilidad.
+    // 中文：辅助功能设置变化后重新应用 TabBar 材质和选中项表面效果。
+    private func updateVisualAppearance() {
+        guard glassBackgroundView.superview != nil else { return }
+        PTVisualStyleResolver.apply(to: glassBackgroundView,
+                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                    fallbackColor: .secondarySystemBackground)
+        PTVisualStyleResolver.apply(to: sharedMaskGlassView,
+                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    blurStyle: .systemUltraThinMaterialDark,
+                                    fallbackColor: PTAppBaseConfig.share.tabSelectedMetailColor)
     }
 }

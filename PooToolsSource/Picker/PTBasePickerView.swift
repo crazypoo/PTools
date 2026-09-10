@@ -115,6 +115,11 @@ public struct PTPickerStyle: Sendable {
     public var pickerRowHeight: CGFloat = 44.0
     
     public var pickerBackgroundColor: UIColor = .systemBackground
+
+    // English: Selects the shared material policy for the picker surface.
+    // Español: Selecciona la política de material compartida para la superficie del selector.
+    // 中文：选择 Picker 表面的统一材质策略。
+    public var visualStyle: PTVisualStyle = .automatic
     
     public var toolBarTopBottomSpacing:CGFloat = 2.5
     
@@ -156,6 +161,8 @@ open class PTBasePickerView: UIView {
     private var presentationMode: PresentationMode = .embedded
     private var presentationGeneration = 0
     private var isUIConfigured = false
+    private var cancelWidthConstraint: Constraint?
+    private var confirmWidthConstraint: Constraint?
 
     /// EN: Shows the toolbar when the picker is embedded in another view.
     /// ES: Muestra la barra cuando el selector está incrustado en otra vista.
@@ -200,6 +207,10 @@ open class PTBasePickerView: UIView {
         super.init(coder: coder)
         setupUI()
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     // MARK: - Setup UI
     private func setupUI() {
@@ -239,30 +250,29 @@ open class PTBasePickerView: UIView {
 
         var buttonClearGlassOffset:CGFloat = 5
         if #available(iOS 26.0, *) {
-            pickerMaskGlassView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-            pickerMaskGlassView.backgroundColor = pickerStyle.pickerBackgroundColor
+            PTVisualStyleResolver.apply(to: pickerMaskGlassView,
+                                        style: pickerStyle.visualStyle,
+                                        blurStyle: .systemUltraThinMaterial,
+                                        fallbackColor: pickerStyle.pickerBackgroundColor)
             pickerContainer.addSubview(pickerMaskGlassView)
             pickerMaskGlassView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
 
-            cancelButton.configuration = UIButton.Configuration.clearGlass()
-            confirmButton.configuration = UIButton.Configuration.clearGlass()
-            titleLabel.configuration = UIButton.Configuration.clearGlass()
             buttonClearGlassOffset += 25
         } else {
             pickerContainer.backgroundColor = pickerStyle.pickerBackgroundColor
         }
 
         // 配置按钮和标题
-        cancelButton.titleLabel?.font = pickerStyle.cancelTextFont
+        PTUIAccessibility.applyDynamicType(to: cancelButton, font: pickerStyle.cancelTextFont)
         cancelButton.titleLabel?.numberOfLines = 1
         cancelButton.setTitle(pickerStyle.cancelText, for: .normal)
         cancelButton.setTitleColor(pickerStyle.cancelTextColor, for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
         let cancelW = self.cancelButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
         
-        confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
+        PTUIAccessibility.applyDynamicType(to: confirmButton, font: pickerStyle.confirmTextFont)
         confirmButton.titleLabel?.numberOfLines = 1
         confirmButton.setTitle(pickerStyle.confirmText, for: .normal)
         confirmButton.setTitleColor(pickerStyle.confirmTextColor, for: .normal)
@@ -273,18 +283,18 @@ open class PTBasePickerView: UIView {
         titleLabel.isHidden = true
         titleLabel.titleLabel?.adjustsFontSizeToFitWidth = true
         titleLabel.setTitleColor(pickerStyle.titleTextColor, for: .normal)
-        titleLabel.titleLabel?.font = pickerStyle.titleTextFont
+        PTUIAccessibility.applyDynamicType(to: titleLabel, font: pickerStyle.titleTextFont)
         titleLabel.titleLabel?.textAlignment = .center
         toolbarView.addSubviews([cancelButton, confirmButton, titleLabel])
         cancelButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(cancelW)
+            cancelWidthConstraint = make.width.equalTo(cancelW).constraint
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
         confirmButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(confirmW)
+            confirmWidthConstraint = make.width.equalTo(confirmW).constraint
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
@@ -296,8 +306,27 @@ open class PTBasePickerView: UIView {
         }
 
         isUIConfigured = true
+        installAccessibilityObservers()
         applyPickerStyle()
         applyContainerLayout(for: .embedded)
+    }
+
+    // English: Reapply material and Dynamic Type without rebuilding picker controls.
+    // Español: Vuelve a aplicar el material y Dynamic Type sin reconstruir los controles del selector.
+    // 中文：不重建 Picker 控件，仅重新应用材质和 Dynamic Type。
+    private func installAccessibilityObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityAppearanceDidChange),
+                                               name: UIContentSizeCategory.didChangeNotification,
+                                               object: nil)
+    }
+
+    @objc private func accessibilityAppearanceDidChange() {
+        applyPickerStyle()
     }
     
     public func resetTitleLabelwidth() {
@@ -316,20 +345,42 @@ open class PTBasePickerView: UIView {
         containerView.backgroundColor = pickerStyle.containerBackgroundColor
         if #available(iOS 26.0, *) {
             toolbarView.backgroundColor = .clear
-            pickerMaskGlassView.backgroundColor = pickerStyle.pickerBackgroundColor
+            PTVisualStyleResolver.apply(to: pickerMaskGlassView,
+                                        style: pickerStyle.visualStyle,
+                                        blurStyle: .systemUltraThinMaterial,
+                                        fallbackColor: pickerStyle.pickerBackgroundColor)
+            let usesGlassButtons = pickerStyle.visualStyle == .automatic || pickerStyle.visualStyle == .glass
+            if usesGlassButtons && !PTUIAccessibility.reduceTransparencyEnabled {
+                cancelButton.configuration = UIButton.Configuration.clearGlass()
+                confirmButton.configuration = UIButton.Configuration.clearGlass()
+                titleLabel.configuration = UIButton.Configuration.clearGlass()
+            } else {
+                cancelButton.configuration = nil
+                confirmButton.configuration = nil
+                titleLabel.configuration = nil
+            }
         } else {
             toolbarView.backgroundColor = pickerStyle.toolbarBackgroundColor
             pickerContainer.backgroundColor = pickerStyle.pickerBackgroundColor
         }
 
-        cancelButton.titleLabel?.font = pickerStyle.cancelTextFont
+        PTUIAccessibility.applyDynamicType(to: cancelButton, font: pickerStyle.cancelTextFont)
         cancelButton.setTitle(pickerStyle.cancelText, for: .normal)
         cancelButton.setTitleColor(pickerStyle.cancelTextColor, for: .normal)
-        confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
+        PTUIAccessibility.applyDynamicType(to: confirmButton, font: pickerStyle.confirmTextFont)
         confirmButton.setTitle(pickerStyle.confirmText, for: .normal)
         confirmButton.setTitleColor(pickerStyle.confirmTextColor, for: .normal)
         titleLabel.setTitleColor(pickerStyle.titleTextColor, for: .normal)
-        titleLabel.titleLabel?.font = pickerStyle.titleTextFont
+        PTUIAccessibility.applyDynamicType(to: titleLabel, font: pickerStyle.titleTextFont)
+        let buttonClearGlassOffset: CGFloat = {
+            if #available(iOS 26.0, *), (pickerStyle.visualStyle == .automatic || pickerStyle.visualStyle == .glass) {
+                return 30
+            }
+            return 5
+        }()
+        let buttonHeight = toolbarHeight - pickerStyle.toolBarTopBottomSpacing * 2
+        cancelWidthConstraint?.update(offset: cancelButton.sizeFor(height: buttonHeight).width + buttonClearGlassOffset)
+        confirmWidthConstraint?.update(offset: confirmButton.sizeFor(height: buttonHeight).width + buttonClearGlassOffset)
         resetTitleLabelwidth()
     }
 
@@ -994,7 +1045,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
             updateSelectedValues(from: boundaryDate)
             updateDynamicArrays()
             pickerView.reloadAllComponents()
-            scrollToDefaultPosition(animated: true)
+            scrollToDefaultPosition(animated: !PTUIAccessibility.reduceMotionEnabled)
         }
 
         configurationError = resolvedSelectedDate() == nil ? .noRepresentableDate : nil
@@ -1294,7 +1345,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
                 pickerView.reloadComponent(affectedComponent)
                 pickerView.selectRow(selectedRows[affectedComponent],
                                      inComponent: affectedComponent,
-                                     animated: true)
+                                     animated: !PTUIAccessibility.reduceMotionEnabled)
             }
         }
 

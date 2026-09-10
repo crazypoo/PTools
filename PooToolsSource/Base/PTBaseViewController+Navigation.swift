@@ -109,7 +109,8 @@ open class PTNavigationBarContainer: UIView {
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        largeTitleLabel.font = PTAppBaseConfig.share.navLargeTitleFont
+        PTUIAccessibility.applyDynamicType(to: largeTitleLabel,
+                                           font: PTAppBaseConfig.share.navLargeTitleFont)
         largeTitleLabel.textColor = PTAppBaseConfig.share.navTitleTextColor
         largeTitleLabel.numberOfLines = 0
         largeTitleLabel.lineBreakMode = .byTruncatingTail
@@ -277,7 +278,8 @@ extension PTNavigationBarContainer {
         
         let weight: UIFont.Weight = p > 0.5 ? .semibold : .bold
         
-        largeTitleLabel.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+        PTUIAccessibility.applyDynamicType(to: largeTitleLabel,
+                                           font: UIFont.systemFont(ofSize: fontSize, weight: weight))
         updateBackgroundLayout()
 
     }
@@ -371,11 +373,11 @@ extension PTNavigationBarContainer {
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
         appearance.titleTextAttributes = [
-            .font: PTAppBaseConfig.share.navTitleFont,
+            .font: PTUIAccessibility.scaledFont(PTAppBaseConfig.share.navTitleFont),
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
         appearance.largeTitleTextAttributes = [
-            .font: PTAppBaseConfig.share.navLargeTitleFont,
+            .font: PTUIAccessibility.scaledFont(PTAppBaseConfig.share.navLargeTitleFont),
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
 
@@ -386,6 +388,15 @@ extension PTNavigationBarContainer {
         backgroundView.layer.contentsGravity = .resize
         backgroundView.layer.contents = appearance.backgroundImage?.cgImage
         backgroundView.alpha = backgroundAlpha
+
+        if PTUIAccessibility.reduceTransparencyEnabled,
+           styleNeedsOpaqueFallback(from) || styleNeedsOpaqueFallback(to) {
+            backgroundView.layer.contents = nil
+            backgroundView.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+                .resolvedColor(with: traitCollection)
+            backgroundView.alpha = 1
+        }
+
         largeTitleContainer.backgroundColor = .clear
         largeTitleContainer.layer.contents = nil
 
@@ -410,6 +421,17 @@ extension PTNavigationBarContainer {
                 $0.isUserInteractionEnabled = false
                 $0.alpha = 0
             }
+        }
+    }
+
+    private func styleNeedsOpaqueFallback(_ style: PTNavigationBarStyle) -> Bool {
+        switch style {
+        case .transparent:
+            return true
+        case .solid(let color):
+            return color.resolvedColor(with: traitCollection).cgColor.alpha < 0.999
+        case .gradient:
+            return false
         }
     }
     
