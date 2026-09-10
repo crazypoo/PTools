@@ -34,7 +34,7 @@
 | PooToolsSource/Country/PTCountryCodes.swift:19 | share | C Shared mutable service | @MainActor public static let share = PTCountryCodes() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift:14 | shared | C Shared mutable service | static let shared = PTDebugLocationKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DarkMode/PTDrakModeOption.swift:107 | shared | D Shared mutable UI or scene state | static let shared = PTDarkModeScheduleMonitor() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:205 | shared | D Shared mutable UI or scene state | static let shared = LegacyThemeProvider() | 按 Scene 或控制器实例保存；保留兼容入口 |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:228 | shared | D Shared mutable UI or scene state | static let shared = LegacyThemeProvider() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Debug/PTApplicationDirectories.swift:12 | shared | A Stateless convenience or immutable utility | static let shared = PTApplicationDirectories() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Debug/PTDevFunction.swift:15 | share | C Shared mutable service | public static let share = PTDevFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Debug/StdoutCapture.swift:18 | shared | C Shared mutable service | private static let shared = StdoutCapture() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

@@ -14,6 +14,7 @@ ruby Scripts/report_singletons_5_9.rb
 ruby Scripts/report_cache_inventory_5_9.rb
 ruby Scripts/report_accessibility_5_9.rb
 bash Scripts/validate_branch_dependencies.sh
+bash Scripts/validate_dependencies_5_9_6.sh
 bash Scripts/validate_deprecated_inventory.sh
 ruby Scripts/compare_public_api.rb PUBLIC_API_5_8.json PUBLIC_API_5_9.json
 bash Scripts/validate_build_entries.sh

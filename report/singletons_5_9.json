@@ -247,7 +247,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 205,
+      "line": 228,
       "declaration": "static let shared = LegacyThemeProvider()",
       "name": "shared",
       "category": "D",

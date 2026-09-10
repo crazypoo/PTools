@@ -49,7 +49,9 @@ target 'PooTools_Example' do
 #  pod 'netfox', :configurations => ['Debug']
 #  pod 'DiDiPrism'
 #  pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
-  pod 'Bugly'
+  # English: Bugly is optional for the example app; use a vendor-provided XCFramework in a host project when needed.
+  # Español: Bugly es opcional para el ejemplo; usa un XCFramework del proveedor en el proyecto anfitrión cuando sea necesario.
+  # 中文：示例工程中的 Bugly 为可选依赖；需要时由宿主项目接入供应商提供的 XCFramework。
 #  pod 'Reveal-SDK', :configurations => ['Debug']
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze

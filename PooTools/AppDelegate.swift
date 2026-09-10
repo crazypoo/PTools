@@ -15,7 +15,12 @@ import YCSymbolTracker
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
+#if canImport(Bugly)
+// English: Keep crash reporting optional so the example app does not hard-link an obsolete simulator framework.
+// Español: Mantén el informe de fallos opcional para que el ejemplo no enlace un framework de simulador obsoleto.
+// 中文：崩溃上报保持可选，避免示例工程硬链接不支持新模拟器架构的旧 framework。
 import Bugly
+#endif
 import TipKit
 import MediaPlayer
 import Alamofire
@@ -89,7 +94,10 @@ class AppDelegate: PTAppWindowsDelegate {
         permissionStatic.permissionModels = [locationAlways,locationWhen,camera,mic,photo]
         
         PTTip.shared.appdelegateTipSet()
-        // Override point for customization after application launch.
+        // English: Start Bugly only when the host supplies a compatible XCFramework.
+        // Español: Inicia Bugly solo cuando el host proporcione un XCFramework compatible.
+        // 中文：只有宿主提供兼容的 XCFramework 时才启动 Bugly。
+#if canImport(Bugly)
         var debugDevice = false
         let buglyConfig = BuglyConfig()
         debugDevice = true
@@ -102,6 +110,7 @@ class AppDelegate: PTAppWindowsDelegate {
         Bugly.start(withAppId: "32b6206a5d",
                     developmentDevice: debugDevice,
                     config: buglyConfig)
+#endif
                 
         createSettingBundle()
 

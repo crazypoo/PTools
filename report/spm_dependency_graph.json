@@ -1056,90 +1056,6 @@
     {
       "sourceControl": [
         {
-          "identity": "bluecryptor",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Kitura/BlueCryptor.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.0.1",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "blueecc",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Kitura/BlueECC.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.2.200",
-                "upperBound": "2.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "bluersa",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Kitura/BlueRSA.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.0.200",
-                "upperBound": "2.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "cocoalumberjack",
           "location": {
             "remote": [
@@ -1514,62 +1430,6 @@
     {
       "sourceControl": [
         {
-          "identity": "kituracontracts",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Kitura/KituraContracts.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.0.1",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "loggerapi",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Kitura/LoggerAPI.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.0.0",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "lottie-ios",
           "location": {
             "remote": [
@@ -1853,34 +1713,6 @@
           "requirement": {
             "exact": [
               "4.0.0"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "swift-log",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/apple/swift-log.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.0.0",
-                "upperBound": "2.0.0"
-              }
             ]
           },
           "traits": [

@@ -162,18 +162,19 @@ let package = Package(
         .package(url: "https://github.com/kakaopensource/KakaJSON.git", exact: "1.1.2"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.4.0"),
         
-        // 扩展功能依赖
+        // English: Keep feature dependencies explicit and reproducible.
+        // Español: Mantén las dependencias de funciones explícitas y reproducibles.
+        // 中文：保持功能依赖显式且可复现。
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.0"),
         .package(url: "https://github.com/Daltron/NotificationBanner.git", exact: "3.2.0"),
         
-        // 💡 修复：显式引入 MarqueeLabel 以防止 NotificationBanner 在解析隐式依赖时卡死报错
+        // English: Declare MarqueeLabel because NotificationBanner does not expose this dependency reliably.
+        // Español: Declara MarqueeLabel porque NotificationBanner no expone esta dependencia de forma fiable.
+        // 中文：显式声明 MarqueeLabel，避免 NotificationBanner 的隐式依赖解析不稳定。
         .package(url: "https://github.com/cbpowell/MarqueeLabel.git", from: "4.5.3"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
-        .package(url: "https://github.com/Kitura/BlueCryptor.git", from: "2.0.1"),
-        .package(url: "https://github.com/Kitura/BlueRSA.git", from: "1.0.200"),
-        .package(url: "https://github.com/Kitura/BlueECC.git", from: "1.2.200"),
-        .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
-        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1"),
+        // English: Swift-JWT owns its Kitura cryptography dependencies transitively; do not duplicate them in PTools.
+        // Español: Swift-JWT mantiene sus dependencias criptográficas de Kitura de forma transitiva; PTools no las duplica.
+        // 中文：Swift-JWT 通过传递依赖维护 Kitura 加密组件，PTools 不再重复声明它们。
         
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),

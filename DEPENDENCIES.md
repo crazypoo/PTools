@@ -1,46 +1,79 @@
 # PTools 5.9.x 依赖与供应链清单
 
-当前仓库基线：5.8.9。Core 是 PooTools.podspec 的 default_subspec，其他模块均
-围绕 Core 扩展。本文记录依赖所有权、版本约束和 6.0 评估状态，不修改第三方源码。
+当前仓库基线：`5.9.5`（5.9.6 依赖治理工作树）。`Core` 是
+`PooTools.podspec` 的 `default_subspec`，其他模块都围绕 Core 扩展。本文件记录依赖所有权、
+可复现约束、维护风险和替换路线；不修改第三方源码。
+
+## 5.9.6 处理结果
+
+| 项目 | 当前处理 | 证据或剩余工作 |
+| --- | --- | --- |
+| Branch 依赖 | 已完成 | AttributedString、SocketRocket 使用固定 revision；`Package.swift` 不含 `branch:` |
+| Kitura 链 | 已评估 | PooTools 仅在 CheckUpdate 直接使用 Swift-JWT；Blue*、LoggerAPI、KituraContracts 为传递依赖，暂不重写 JWT |
+| Codable 双栈 | 已评估 | SmartCodable 为主要模型入口；KakaJSON 限定为现有兼容路径，6.0 再评估拆出 Serialization |
+| Bugly | 已完成示例工程解耦 | 删除旧 Bugly Pod；示例工程使用 `canImport(Bugly)`，宿主项目必须提供带 Simulator slice 的 XCFramework 才能重新接入 |
+| 所有权文档 | 已完成 | 本文件和 `report/dependency_supply_chain_5_9_6.md` |
 
 ## Swift Package Manager
 
-| 依赖 | 使用边界 | 当前约束 | 5.9.x 状态 |
-| --- | --- | --- | --- |
-| SwiftDate | Core 日期扩展 | exact 7.0.0 | 保留 |
-| SnapKit | Core/Base/UI 布局 | exact 5.7.1 | 保留 |
-| SwifterSwift | Core 扩展 | from 8.0.0 | 评估 API 使用范围 |
-| CocoaLumberjack | Core 日志 | from 3.8.0 | 保留 |
-| DeviceKit | Core 设备信息 | from 5.8.0 | 保留 |
-| AttributedString | Core/Button 文本 | 固定 revision d8a72a7 | 已移除 master 分支 |
-| Kingfisher | Core 图片加载 | exact 8.9.0 | 保留 canonical 入口 |
-| SmartCodable | Core/Network 模型 | from 4.0.0 | 评估 Swift 6 兼容性 |
-| KakaJSON | Network 兼容层 | exact 1.1.2 | 只允许停留在 legacy 边界 |
-| Lottie | Core/组件动画 | from 4.4.0 | 保留 |
-| Alamofire | Network | from 5.8.0 | 保留，禁止绕过执行器 |
-| NotificationBanner / MarqueeLabel | UI 扩展 | exact/from | 保留 |
-| Kitura Swift-JWT | CheckUpdate | exact 4.0.0 | 评估是否移除 Kitura 链 |
-| KituraContracts / LoggerAPI / Blue* | 间接或兼容边界 | 当前解析 | 独立记录外部构建阻断 |
-| SocketRocket | SocketKit | 固定 revision fe86ec0 | 已移除 spm-support 分支 |
+| Dependency | Module | Reason | Maintainer Risk | Replacement |
+| --- | --- | --- | --- | --- |
+| SwiftDate | Core | 日期解析和格式化扩展 | 中；Core API 覆盖面较广 | Foundation `Calendar` / `ISO8601Format`，6.0 评估 |
+| SnapKit | Core/Base/UI | 现有 UIKit 布局 DSL | 低；公开代码大量使用 | 原生 `NSLayoutConstraint`，不在 5.x 强制迁移 |
+| SwifterSwift | Core | 常用 Foundation/UIKit 扩展 | 中；扩展调用分散 | 按调用点迁移到系统 API |
+| CocoaLumberjack | Core/Log | 文件与控制台日志 | 中；日志行为需兼容 | `OSLog` 与内部日志适配器 |
+| DeviceKit | Core | 设备型号和能力判断 | 中；版本覆盖需维护 | `UIDevice` / `utsname` 封装 |
+| AttributedString | Core/Button | 富文本构造 | 中；上游为 revision 固定 | Foundation `AttributedString` 与 UIKit 转换层 |
+| IQKeyboardManager | Core | 键盘避让兼容 | 中；影响宿主全局行为 | UIKit 键盘通知和 `keyboardLayoutGuide` |
+| Kingfisher | Core/Image | 图片缓存和加载 | 中；图片路径调用较多 | `PTLoadImageFunction` + URLSession/缓存适配器 |
+| SmartCodable | Core/Network | 主要 Codable 模型解析 | 中；Swift 6 兼容和宏/运行时行为需跟踪 | Foundation Codable 或独立 Serialization feature |
+| KakaJSON | Core/Network | 历史动态模型兼容 | 高；动态 API 和 Swift 6 边界不安全 | 仅保留兼容包装器，6.0 评估移出 Core |
+| Lottie | Core/组件 | 动画资源播放 | 中 | UIKit/Core Animation，按组件逐步替换 |
+| Alamofire | Network | 上传、下载和请求适配 | 中；必须经过统一执行器 | URLSession 原生执行器，6.0 评估 |
+| NotificationBanner / MarqueeLabel | Core/UI | 提示条和滚动文本 | 中 | UIKit 自实现 |
+| Swift-JWT | CheckUpdate | Apple API JWT 签名 | 高；Kitura 链旧且触发 Swift 6 诊断 | CryptoKit/Security + 内部 JWT 适配器，目标 6.0 |
+| SocketRocket | SocketKit | WebSocket 兼容 | 中；仓库使用固定 revision | URLSessionWebSocketTask，6.0 评估 |
 
-## CocoaPods
+### 固定 revision
 
-- Podfile.lock 当前 PooTools 版本为 5.8.9。
-- Bugly、Metal 搜索路径、部分 Pods Swift 6 诊断属于外部构建环境问题，不能归因于
-  PooTools Core 源码，也不能通过修改 Pods 源码解决。
-- 版本同步前使用 pod install --no-repo-update；本轮不擅自更新依赖版本。
+| Dependency | URL | Revision |
+| --- | --- | --- |
+| AttributedString | `https://github.com/lixiang1994/AttributedString.git` | `d8a72a7e29e8699979b052b59659720087bc2ea0` |
+| SocketRocket | `https://github.com/robnadin/SocketRocket.git` | `fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e` |
 
-## 供应链决策
+固定 revision 解决可复现性问题，但不等价于上游稳定 release；后续应在经过构建和 API 回归后再升级到稳定 tag。
 
-1. 不接受不可复现的 branch 依赖；manifest 使用版本或 revision。
-2. Bugly 必须提供模拟器 slice 和通用 device archive 后，才允许进入完整 Simulator 矩阵。
-3. Kitura 只在实际源代码依赖确认后保留；现阶段先记录 Swift 6 诊断阻断，不删除传递依赖。
-4. SmartCodable/KakaJSON 的动态解析入口必须在兼容层隔离，避免 Any 穿过 actor。
+## Kitura 依赖评估
 
-## 未完成验证
+- `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` 是仓库内唯一直接导入 `SwiftJWT` 的生产源码。
+- `BlueCryptor`、`BlueRSA`、`BlueECC`、`LoggerAPI` 和 `KituraContracts` 由 Swift-JWT 传递引入；它们不再在
+  `Package.swift` 作为 PTools 直接依赖重复声明，但仍会出现在解析结果中。
+- 5.9.x 保留现有 JWT 行为，不在稳定版本中进行加密实现替换。
+- 6.0 迁移目标是使用 CryptoKit/Security 实现窄范围 JWT 签名适配，并在删除 Swift-JWT 前完成 Apple API 回归。
+- 当前 CocoaPods 的 Swift-JWT/KituraContracts 仍可能被外部 Swift 6 诊断阻断；这属于依赖环境阻断，不能归因于 Core 源码。
 
-当前尚未完成：
+## SmartCodable / KakaJSON 双栈边界
 
-- 真实宿主项目的依赖解析和归档。
-- Bugly XCFramework 的供应商替换。
-- Kitura 和 SmartCodable 的最终 6.0 删除决策。
+- SmartCodable：用于 Core 模型、网络模型及部分组件，是 5.x 的主要类型化解析入口。
+- KakaJSON：保留在 `PTBaseModel` 和 Network 的历史兼容边界；新代码不得让 `Any` 或 KakaJSON 动态结果穿过并发执行器。
+- 两者暂不在 5.x 强制删除，避免破坏公开模型和旧请求入口。
+- 6.0 计划将兼容层移动到独立 Serialization feature，并提供 Codable 迁移说明。
+
+## CocoaPods 与二进制框架
+
+- 当前 `Podfile.lock` 的 PooTools 版本为 `5.9.5`。
+- 旧版 Bugly `2.6.1` 仅提供 `Bugly.framework`，没有 XCFramework，也没有 arm64 Simulator slice；已从示例工程 Podfile 和 lockfile 移除。
+- `PooTools/AppDelegate.swift` 的 Bugly 启动保留在 `#if canImport(Bugly)` 中。真实宿主如需崩溃上报，必须自行提供同时包含 Simulator slice 和通用 device archive 的供应商 XCFramework。
+- 本轮未修改 Pods 源码，也未主动升级其他依赖版本。
+
+## 验证记录
+
+| 检查 | 结果 |
+| --- | --- |
+| `pod install --no-repo-update` | 通过，移除 Bugly，其他依赖保持解析结果 |
+| `Package.swift` branch 扫描 | 通过 |
+| AttributedString / SocketRocket revision 扫描 | 通过 |
+| 直接 Kitura 源码使用扫描 | 仅 CheckUpdate 使用 Swift-JWT |
+| Xcode Debug / Release | 需以当前依赖状态重新执行；外部 KituraContracts Swift 6 诊断仍可能阻断 |
+
+详细证据和未完成项见 `report/dependency_supply_chain_5_9_6.md`。

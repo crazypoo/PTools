@@ -2003,49 +2003,49 @@
 | PooToolsSource/DarkMode/PTDrakModeOption.swift:170 | func | public | public func apply() { |
 | PooToolsSource/DarkMode/PTDrakModeOption.swift:177 | class | public | public class PTDarkModeOption { |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:15 | enum | public | public enum PTTabBarVisualStyle: Sendable { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:26 | struct | public | public struct PTNavigationAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:27 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:28 | var | public | public var titleColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:29 | var | public | public var titleFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:30 | var | public | public var largeTitleFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:32 | init | public | public init(backgroundColor: UIColor = .clear, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:44 | struct | public | public struct PTTabBarAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:45 | var | public | public var normalColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:46 | var | public | public var selectedColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:47 | var | public | public var normalFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:48 | var | public | public var selectedFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:49 | var | public | public var visualStyle: PTTabBarVisualStyle |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:51 | init | public | public init(normalColor: UIColor = .secondaryLabel, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:77 | struct | public | public struct PTPermissionAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:78 | var | public | public var titleColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:79 | var | public | public var subtitleColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:80 | var | public | public var deniedColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:82 | init | public | public init(titleColor: UIColor = .label, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:92 | struct | public | public struct PTMediaAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:93 | var | public | public var placeholder: UIImage? |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:94 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:96 | init | public | public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground) { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:103 | struct | public | public struct PTListAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:104 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:105 | var | public | public var cellBackgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:107 | init | public | public init(backgroundColor: UIColor = .systemBackground, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:115 | struct | public | public struct PTAlertAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:116 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:117 | var | public | public var cornerRadius: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:119 | init | public | public init(backgroundColor: UIColor = .secondarySystemBackground, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:130 | struct | public | public struct PTTheme { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:131 | var | public | public var navigation: PTNavigationAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:132 | var | public | public var tabBar: PTTabBarAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:133 | var | public | public var permission: PTPermissionAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:134 | var | public | public var media: PTMediaAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:135 | var | public | public var list: PTListAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:136 | var | public | public var alert: PTAlertAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:138 | init | public | public init(navigation: PTNavigationAppearance = .init(), |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:183 | protocol | public | public protocol PTThemeProvider: AnyObject { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:189 | protocol | public | public protocol PTThemeable: AnyObject { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:202 | class | public | public class LegacyThemeProvider: @MainActor PTThemeProvider { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:209 | func | public | public func updateTheme() { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:216 | func | public | public func register<Observer: PTThemeable>(observer: Observer) { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:49 | struct | public | public struct PTNavigationAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:50 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:51 | var | public | public var titleColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:52 | var | public | public var titleFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:53 | var | public | public var largeTitleFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:55 | init | public | public init(backgroundColor: UIColor = .clear, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:67 | struct | public | public struct PTTabBarAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:68 | var | public | public var normalColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:69 | var | public | public var selectedColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:70 | var | public | public var normalFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:71 | var | public | public var selectedFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:72 | var | public | public var visualStyle: PTTabBarVisualStyle |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:74 | init | public | public init(normalColor: UIColor = .secondaryLabel, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:100 | struct | public | public struct PTPermissionAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:101 | var | public | public var titleColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:102 | var | public | public var subtitleColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:103 | var | public | public var deniedColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:105 | init | public | public init(titleColor: UIColor = .label, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:115 | struct | public | public struct PTMediaAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:116 | var | public | public var placeholder: UIImage? |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:117 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:119 | init | public | public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground) { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:126 | struct | public | public struct PTListAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:127 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:128 | var | public | public var cellBackgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:130 | init | public | public init(backgroundColor: UIColor = .systemBackground, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:138 | struct | public | public struct PTAlertAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:139 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:140 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:142 | init | public | public init(backgroundColor: UIColor = .secondarySystemBackground, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:153 | struct | public | public struct PTTheme { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:154 | var | public | public var navigation: PTNavigationAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:155 | var | public | public var tabBar: PTTabBarAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:156 | var | public | public var permission: PTPermissionAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:157 | var | public | public var media: PTMediaAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:158 | var | public | public var list: PTListAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:159 | var | public | public var alert: PTAlertAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:161 | init | public | public init(navigation: PTNavigationAppearance = .init(), |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:206 | protocol | public | public protocol PTThemeProvider: AnyObject { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:212 | protocol | public | public protocol PTThemeable: AnyObject { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:225 | class | public | public class LegacyThemeProvider: @MainActor PTThemeProvider { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:232 | func | public | public func updateTheme() { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:239 | func | public | public func register<Observer: PTThemeable>(observer: Observer) { |
 | PooToolsSource/Debug/PTDebugFunction.swift:12 | class | public | public class PTDebugFunction: NSObject { |
 | PooToolsSource/Debug/PTDebugViewController.swift:13 | class | public | public class PTDebugViewController: PTBaseViewController { |
 | PooToolsSource/Debug/PTDebugViewController.swift:232 | func | public | public func textFieldShouldReturn(_ textField: UITextField) -> Bool { |

@@ -3625,11 +3625,11 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.6 Dependencies
 
-- [ ] DEP-596-01 Branch dependencies
-- [ ] DEP-596-02 Kitura review
-- [ ] DEP-596-03 Codable stack
-- [ ] DEP-596-04 Binary framework
-- [ ] DEP-596-05 Dependency ownership
+- [x] DEP-596-01 Branch dependencies（AttributedString、SocketRocket 固定 revision）
+- [x] DEP-596-02 Kitura review（保留 Swift-JWT，移除 PTools 未直接使用的重复声明）
+- [x] DEP-596-03 Codable stack（SmartCodable 主入口，KakaJSON 兼容边界）
+- [x] DEP-596-04 Binary framework（示例工程移除旧 Bugly 硬依赖，改为 XCFramework 可选接入）
+- [x] DEP-596-05 Dependency ownership（补齐 `DEPENDENCIES.md` 和专项报告）
 
 ## Milestone: 5.9.7 Migration
 
@@ -3708,7 +3708,12 @@ PooToolsSource/MediaViewer/
 - [x] UI-595-03：新增 Core 级视觉策略解析器；Blur、TabBar、Picker、Alert、Sheet 和 Navigation 在 Reduce Transparency 时切换动态不透明背景，并支持设置变化后即时重绘。
 - [x] UI-595-04：新增 `PTVisualStyle`（`automatic` / `classic` / `material` / `glass`）和 `PTVisualStyleResolver`，避免 iOS 26 系统效果判断散落在各模块。
 - [x] UI-595：刷新 `report/accessibility_5_9.{json,md}`；代码门禁完成，真实设备/宿主界面回归仍是发布前置条件。
-- [x] DEP-596-01 / DEP-596-05：固定 AttributedString、SocketRocket revision，并增加依赖所有权文档。
+- [x] DEP-596-01：固定 AttributedString、SocketRocket revision，并由 `validate_dependencies_5_9_6.sh` 门禁校验。
+- [x] DEP-596-02：确认 CheckUpdate 仅直接使用 Swift-JWT；移除 Package.swift 中未被 PTools 直接使用的 Kitura/LoggerAPI 重复声明，CryptoKit/Security 替换延后到 6.0。
+- [x] DEP-596-03：确认 SmartCodable 为主要模型入口，KakaJSON 仅保留现有兼容边界，记录 Serialization 拆分条件。
+- [x] DEP-596-04：移除 Example 的旧 Bugly Pod 和 lock 条目；AppDelegate 保留 `canImport(Bugly)` 兼容入口，宿主项目重新接入时必须提供 XCFramework。
+- [x] DEP-596-05：更新 `DEPENDENCIES.md`，新增 `report/dependency_supply_chain_5_9_6.md`。
+- [x] 5.9.6 Xcode 验证：Debug / Release 均已执行；结果受外部 KituraContracts Swift 6 诊断阻断，详见 `report/build_validation_5_9_6.md`。
 - [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
 - [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。
 - [x] 记录当前 Xcode Debug / Release 和直接 PooTools scheme 构建结果：`report/build_validation_5_9.md`。
@@ -3722,9 +3727,9 @@ PooToolsSource/MediaViewer/
 - [ ] TEST-592-02 至 TEST-592-05：Xcode iOS Simulator、真实宿主、真机和 Instruments 的实际执行结果；静态夹具已建立但不等于性能验收。
 - [ ] LIFE-593-01 至 LIFE-593-03：多窗口、多 Scene、Scene 断开重连和并行转场的真实宿主回归；静态门禁已完成。
 - [ ] PERF-594-02 至 PERF-594-04：代码实现已完成，仍需在可运行的 Xcode 宿主、真机和 Instruments 中完成性能基线与内存告警实测。
-- [ ] DEP-596-02 至 DEP-596-04：Kitura、SmartCodable 和 Bugly XCFramework 最终决策。
+- [ ] 宿主项目若重新接入 Bugly，仍需供应商 XCFramework、Simulator slice、通用 device archive 和真实宿主归档验证。
 - [ ] DOC-597-03：Example 页面和真实宿主项目迁移。
 - [ ] 5.9.8 / 5.9.9：6.0 rehearsal、完整 Xcode 矩阵、真机/宿主回归和最终 tag。
 
-已知外部阻断：Bugly 模拟器架构、Metal 工具链和部分 Kitura/Pods Swift 6 诊断。阻断
-解除前不得宣称 5.9.x 完整验收通过或创建发布标签。
+已知外部阻断：Metal 工具链和部分 Kitura/Pods Swift 6 诊断。宿主重新接入旧版
+Bugly 时还会重新引入二进制架构阻断。阻断解除前不得宣称 5.9.x 完整验收通过或创建发布标签。
