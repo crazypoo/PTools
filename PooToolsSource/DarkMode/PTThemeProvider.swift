@@ -19,6 +19,29 @@ public enum PTTabBarVisualStyle: Sendable {
     case automatic
 }
 
+// English: Bridge the legacy TabBar style enum to the Core visual style without changing the public legacy type.
+// Español: Conecta el enum visual heredado del TabBar con el estilo visual de Core sin cambiar el tipo público heredado.
+// 中文：在不改变旧公开类型的前提下，将 TabBar 视觉枚举转换为 Core 统一视觉类型。
+extension PTTabBarVisualStyle {
+    init(_ style: PTVisualStyle) {
+        switch style {
+        case .classic: self = .classic
+        case .material: self = .material
+        case .glass: self = .glass
+        case .automatic: self = .automatic
+        }
+    }
+
+    var coreStyle: PTVisualStyle {
+        switch self {
+        case .classic: return .classic
+        case .material: return .material
+        case .glass: return .glass
+        case .automatic: return .automatic
+        }
+    }
+}
+
 // English: Immutable appearance snapshots keep frequently used UI components independent from the mutable legacy config.
 // Español: Las instantáneas inmutables de apariencia desacoplan los componentes UI frecuentes de la configuración heredada mutable.
 // 中文：不可变外观快照让高频 UI 组件不再直接依赖可变的旧配置。
@@ -69,7 +92,7 @@ public struct PTTabBarAppearance {
                                   selectedColor: config.tabSelectedColor,
                                   normalFont: config.tabNormalFont,
                                   selectedFont: config.tabSelectedFont,
-                                  visualStyle: config.tab26Mode ? .automatic : .classic)
+                                  visualStyle: PTTabBarVisualStyle(config.tabBarVisualStyle))
     }
 }
 

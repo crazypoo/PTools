@@ -13,19 +13,19 @@
 | PooToolsSource/Base/PTAudioCache.swift:182 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
 | PooToolsSource/Base/PTAudioCache.swift:222 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
-| PooToolsSource/Base/PTCollectionView.swift:1287 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1288 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1837 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1838 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1928 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1929 | disk or custom cache | return (cache.items, cache.contentHeight) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:10 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:15 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:18 | disk or custom cache | cache.countLimit = max(0, countLimit) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:22 | disk or custom cache | cache.setObject(value, forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:26 | disk or custom cache | cache.object(forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:30 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:34 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/Base/PTCollectionView.swift:1308 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1309 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1860 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1861 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1951 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1952 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:23 | disk or custom cache | cache.setObject(value, forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:27 | disk or custom cache | cache.object(forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:31 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:35 | disk or custom cache | cache.removeAllObjects() |
 | PooToolsSource/Base/PTVideoCoverCache.swift:242 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:344 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
 | PooToolsSource/Base/PTVideoCoverCache.swift:345 | NSCache | let cache = NSCache<NSString, UIImage>() |
@@ -108,12 +108,11 @@
 | PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift:17 | disk or custom cache | // It will be used when storing and retrieving the image to/from cache. |
 | PooToolsSource/NetWork/Network.swift:317 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |
 | PooToolsSource/NetWork/Network.swift:326 | disk or custom cache | // English: Bound the in-memory cache so a large response cannot grow without limit. |
-| PooToolsSource/NetWork/Network.swift:396 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
-| PooToolsSource/NetWork/Network.swift:489 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
-| PooToolsSource/NetWork/Network.swift:507 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
-| PooToolsSource/NetWork/Network.swift:508 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
-| PooToolsSource/NetWork/Network.swift:514 | disk or custom cache | // English: Throttle disk maintenance after writes so normal requests do not rescan the cache directory. |
-| PooToolsSource/NetWork/Network.swift:737 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024) |
+| PooToolsSource/NetWork/Network.swift:399 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
+| PooToolsSource/NetWork/Network.swift:486 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
+| PooToolsSource/NetWork/Network.swift:504 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
+| PooToolsSource/NetWork/Network.swift:505 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
+| PooToolsSource/NetWork/Network.swift:640 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024) |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:155 | disk or custom cache | // MARK: - Cache Public |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:203 | disk or custom cache | // MARK: - Cache Private |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:206 | disk or custom cache | // MARK: - Memory Cache |

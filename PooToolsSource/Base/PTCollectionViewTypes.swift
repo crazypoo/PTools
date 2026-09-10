@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Photos
 
 // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code.
 // Español: Mantiene el tipo de caché reutilizable separado de la fachada y el layout de PTCollectionView.
@@ -128,6 +129,93 @@ public final class PTCollectionDataCoordinator {
         guard rows.indices.contains(indexPath.item) else { return nil }
         return rows[indexPath.item]
     }
+}
+
+// English: Centralize photo prefetching so duplicate batches and stale cancellations do not reach PhotoKit.
+// Español: Centraliza la precarga de fotos para que los lotes duplicados y las cancelaciones obsoletas no lleguen a PhotoKit.
+// 中文：集中管理图片预取，避免重复批次和过期取消请求直接进入 PhotoKit。
+@MainActor
+final class PTCollectionPhotoPrefetchCoordinator {
+    private struct CachedAsset {
+        let asset: PHAsset
+        var requestCount: Int
+    }
+
+    private let imageManager = PHCachingImageManager()
+    private var cachedAssets: [String: CachedAsset] = [:]
+    private var cachedTargetSize: CGSize = .zero
+
+    func prefetch(assets: [PHAsset], targetSize: CGSize) {
+        let normalizedSize = CGSize(width: max(targetSize.width, 1),
+                                    height: max(targetSize.height, 1))
+        if cachedTargetSize != .zero, cachedTargetSize != normalizedSize {
+            removeAll()
+        }
+        cachedTargetSize = normalizedSize
+
+        let uniqueAssets = assets.reduce(into: [PHAsset]()) { result, asset in
+            let identifier = asset.localIdentifier
+            guard !identifier.isEmpty else { return }
+            if var cachedAsset = cachedAssets[identifier] {
+                cachedAsset.requestCount += 1
+                cachedAssets[identifier] = cachedAsset
+            } else {
+                cachedAssets[identifier] = CachedAsset(asset: asset, requestCount: 1)
+                result.append(asset)
+            }
+        }
+        guard !uniqueAssets.isEmpty else { return }
+        imageManager.startCachingImages(for: uniqueAssets,
+                                        targetSize: normalizedSize,
+                                        contentMode: .aspectFill,
+                                        options: nil)
+    }
+
+    func cancel(assets: [PHAsset], targetSize: CGSize) {
+        let normalizedSize = CGSize(width: max(targetSize.width, 1),
+                                    height: max(targetSize.height, 1))
+        guard cachedTargetSize == .zero || cachedTargetSize == normalizedSize else {
+            removeAll()
+            return
+        }
+        var cancelCounts: [String: Int] = [:]
+        for asset in assets {
+            let identifier = asset.localIdentifier
+            guard !identifier.isEmpty else { continue }
+            cancelCounts[identifier, default: 0] += 1
+        }
+        let cached = cancelCounts.compactMap { identifier, cancelCount -> PHAsset? in
+            guard var cachedAsset = cachedAssets[identifier] else { return nil }
+            cachedAsset.requestCount -= cancelCount
+            if cachedAsset.requestCount <= 0 {
+                cachedAssets.removeValue(forKey: identifier)
+                return cachedAsset.asset
+            }
+            cachedAssets[identifier] = cachedAsset
+            return nil
+        }
+        guard !cached.isEmpty else { return }
+        imageManager.stopCachingImages(for: cached,
+                                       targetSize: normalizedSize,
+                                       contentMode: .aspectFill,
+                                       options: nil)
+    }
+
+    func removeAll() {
+        guard !cachedAssets.isEmpty else {
+            cachedTargetSize = .zero
+            return
+        }
+        let assets = cachedAssets.values.map(\.asset)
+        let targetSize = cachedTargetSize
+        cachedAssets.removeAll(keepingCapacity: false)
+        cachedTargetSize = .zero
+        imageManager.stopCachingImages(for: assets,
+                                       targetSize: targetSize,
+                                       contentMode: .aspectFill,
+                                       options: nil)
+    }
+
 }
 
 //MARK: CollectionView展示的样式类型

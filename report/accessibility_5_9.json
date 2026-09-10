@@ -195,22 +195,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 389
+      "line": 419
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 394
+      "line": 424
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 773
+      "line": 803
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1007
+      "line": 1038
     },
     {
       "rule": "accessibility",

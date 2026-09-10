@@ -263,12 +263,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2294,
+      "lines": 2309,
       "classification": "hard_limit_allowlisted"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 364,
+      "lines": 452,
       "classification": "ok"
     },
     {
@@ -353,7 +353,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1021,
+      "lines": 1052,
       "classification": "warning"
     },
     {
@@ -1288,7 +1288,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "lines": 228,
+      "lines": 251,
       "classification": "ok"
     },
     {
@@ -3728,12 +3728,12 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1999,
+      "lines": 1996,
       "classification": "architecture_exception"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "lines": 349,
+      "lines": 483,
       "classification": "ok"
     },
     {

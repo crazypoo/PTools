@@ -75,6 +75,140 @@ public var PTSocketURLMode: NetWorkEnvironment {
     return .Distribution
 }
 
+public enum PTNetworkDedupPolicy: Sendable, Equatable {
+    case none
+    case identical
+    case custom(String)
+
+    func getOptionName() -> String {
+        switch self {
+        case .none: return "none"
+        case .identical: return "identical"
+        case .custom(let string): return string
+        }
+    }
+}
+
+public struct RequestKey: Hashable, Sendable {
+    let url: String
+    let method: String
+    let paramsHash: String
+    let headersHash: String
+    let responseType: String
+
+    init<T>(request: URLRequest, responseType: T.Type = Never.self) {
+        self.url = request.url?.absoluteString ?? ""
+        self.method = request.httpMethod ?? ""
+        // English: Swift's hashValue is randomized per process; stable body and header snapshots keep request identity deterministic.
+        // Español: Swift's hashValue cambia entre procesos; las instantáneas estables del cuerpo y las cabeceras mantienen la identidad determinista.
+        // 中文：Swift 的 hashValue 在不同进程中会变化；稳定的请求体和请求头快照保证请求身份确定。
+        let body = request.httpBody?.sortedJSONData() ?? Data()
+        self.paramsHash = body.base64EncodedString()
+        let headers = (request.allHTTPHeaderFields ?? [:])
+            .map { key, value in "\(key.lowercased())=\(value)" }
+            .sorted()
+            .joined(separator: "\n")
+        self.headersHash = Data(headers.utf8).base64EncodedString()
+        self.responseType = String(reflecting: responseType)
+    }
+}
+
+public struct PTNetworkConfig: Sendable {
+    public var requestTimeout: TimeInterval = 20
+    public var downloadRequestTimeout: TimeInterval = 5
+    public var resourceTimeout: TimeInterval = 3600
+
+    public var serverAddress: String = ""
+    public var serverAddress_dev: String = ""
+    public var socketAddress: String = ""
+    public var socketAddress_dev: String = ""
+
+    public var userToken: String = ""
+    public var retryTimes: Int = 3
+    public var retryDelay: TimeInterval = 1.5
+    public var retryAPIStatusCode: Int = 502
+
+    public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork
+    public var networkCacheExpiration: String = "600"
+    public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto")
+
+    public var maxDiskSize: Int64 = 100 * 1024 * 1024
+    public var cleanThreshold: Double = 0.7
+    public var cleanCachePreSec: TimeInterval = 60
+    public var logMaxCount: Double = 3000
+
+    // English: Deprecated spellings remain as computed adapters while canonical names own the storage.
+    // Español: Las grafías obsoletas permanecen como adaptadores calculados y los nombres canónicos poseen el almacenamiento.
+    // 中文：旧拼写保留为计算属性适配器，存储统一由正确命名的属性持有。
+    @available(*, deprecated, message: "Use requestTimeout instead")
+    public var netRequsetTime: TimeInterval {
+        get { requestTimeout }
+        set { requestTimeout = newValue }
+    }
+
+    @available(*, deprecated, message: "Use downloadRequestTimeout instead")
+    public var downloadRequsetTime: TimeInterval {
+        get { downloadRequestTimeout }
+        set { downloadRequestTimeout = newValue }
+    }
+
+    @available(*, deprecated, message: "Use resourceTimeout instead")
+    public var downloadEndTime: TimeInterval {
+        get { resourceTimeout }
+        set { resourceTimeout = newValue }
+    }
+
+    @available(*, deprecated, message: "Use networkCacheExpiration instead")
+    public var networkCacheEXPTime: String {
+        get { networkCacheExpiration }
+        set { networkCacheExpiration = newValue }
+    }
+
+    @available(*, deprecated, message: "Use networkDedupOption instead")
+    public var networkDudupOption: PTNetworkDedupPolicy {
+        get { networkDedupOption }
+        set { networkDedupOption = newValue }
+    }
+
+    public var waitsForConnectivity: Bool = true
+
+    public init() {}
+}
+
+// English: Freeze the request values needed by an instance before asynchronous execution begins.
+// Español: Congela los valores necesarios para una solicitud de instancia antes de iniciar la ejecución asíncrona.
+// 中文：在异步执行开始前固定实例请求所需的配置值。
+public struct PTNetworkRequestEnvironment: Sendable, Equatable {
+    public let serverAddress: String
+    public let socketAddress: String
+    public let userToken: String
+    public let requestTimeout: TimeInterval
+    public let downloadRequestTimeout: TimeInterval
+    public let resourceTimeout: TimeInterval
+    public let cachePolicy: PTNetworkCachePolicy
+    public let cacheExpiration: String
+    public let dedupPolicy: PTNetworkDedupPolicy
+    public let waitsForConnectivity: Bool
+
+    public init(configuration: PTNetworkConfig) {
+        serverAddress = configuration.serverAddress
+        socketAddress = configuration.socketAddress
+        userToken = configuration.userToken
+        requestTimeout = configuration.requestTimeout
+        downloadRequestTimeout = configuration.downloadRequestTimeout
+        resourceTimeout = configuration.resourceTimeout
+        cachePolicy = configuration.networkCacheOption
+        cacheExpiration = configuration.networkCacheExpiration
+        dedupPolicy = configuration.networkDedupOption
+        waitsForConnectivity = configuration.waitsForConnectivity
+    }
+}
+
+// English: Canonical value-type name for new Network integrations; PTNetworkConfig remains source-compatible.
+// Español: Nombre canónico basado en valor para nuevas integraciones; PTNetworkConfig conserva la compatibilidad.
+// 中文：为新的 Network 集成提供统一值类型名称，同时保留 PTNetworkConfig 兼容性。
+public typealias PTNetworkConfiguration = PTNetworkConfig
+
 // English: Keep concurrency support types in an existing Network source file so every build entry includes them.
 // Español: Mantiene los tipos de soporte de concurrencia en un archivo existente de Network para que todas las entradas de compilación los incluyan.
 // 中文：将并发支撑类型放入已有的 Network 源文件，确保所有构建入口都会编译它们。

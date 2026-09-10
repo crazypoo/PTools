@@ -743,14 +743,16 @@ MediaCore -> Network concrete implementation
 - [x] `NET-583-07`：重试配置改为所属 Network 实例快照。
 - [x] `NET-583-08`：下载 Session 使用实例配置快照，不再从共享单例读取超时配置。
 - [x] `NET-583-09`：生成 Sendable 例外报告并接入质量门禁。
-- [ ] `NET-583-01`–`NET-583-06` / `NET-583-10`：完整请求执行器、HUD 插件、callback/stream 兼容迁移和测试待后续批次；本批不重写既有公开请求路径。
+- [x] `NET-583-02` 兼容切片：新增 Sendable `PTNetworkRequestEnvironment`、实例化 `performCodableRequest`，并按稳定的 header/body 快照隔离请求键和缓存键。
+- [ ] `NET-583-01` / `NET-583-03`–`NET-583-06` / `NET-583-10`：不可变配置、完整插件注册表、全部请求类型统一 Pipeline、HUD 插件解耦、callback/stream 兼容迁移和完整测试仍待后续批次；本批不重写既有公开请求路径。
 
 ### 5.8.4 List
 
 - [x] `LIST-584-01`：新增轻量 `PTCollectionDataCoordinator`，统一 Diffable 校验和 snapshot 查找。
+- [x] `LIST-584-03` 兼容切片：新增 `PTCollectionPhotoPrefetchCoordinator`，按资源标识去重、引用计数取消，并在窗口移除、数据重置和内存告警时清理预取。
 - [x] `LIST-584-09`：将 `PTLRUCache` 从 CollectionView 主文件移出并保持原公开类型名。
 - [x] `LIST-584-10`：新增文件大小门禁和例外清单。
-- [ ] `LIST-584-02`–`LIST-584-08`：布局、预取、骨架、交互、刷新、侧索引和滚动协调器待逐个迁移。
+- [ ] `LIST-584-02` / `LIST-584-04`–`LIST-584-08`：布局、骨架、交互、刷新、侧索引和滚动协调器待逐个迁移。
 
 ### 5.8.5 Navigation
 
@@ -761,7 +763,8 @@ MediaCore -> Network concrete implementation
 ### 5.8.6 Theme / TabBar
 
 - [x] `THEME-586-01` / `THEME-586-02` / `TAB-586-07`：新增外观值快照、`PTTheme` 和统一 TabBar visual style 枚举。
-- [ ] `THEME-586-03` / `THEME-586-04` / `TAB-586-05` / `TAB-586-06`：旧配置全面接入、快照生命周期和 TabBar/Lottie 适配待后续验证。
+- [x] `THEME-586-03` / `THEME-586-04` 兼容切片：`PTAppBaseConfig` 保留 `legacyDefault`，`PTTabBarView` 和项目项在初始化时固定 `PTTabBarAppearance` 快照，旧初始化入口保持不变。
+- [ ] `TAB-586-05` / `TAB-586-06`：TabBar 内部职责完整拆分和 Lottie 适配仍待后续验证。
 
 ### 5.8.7 Media
 
@@ -3507,7 +3510,7 @@ PooToolsSource/MediaViewer/
 ## Milestone: 5.8.3 Network
 
 - [ ] NET-583-01 Immutable configuration
-- [ ] NET-583-02 Request environment
+- [x] NET-583-02 Request environment（兼容切片；完整 adapter 分离仍待完成）
 - [ ] NET-583-03 Plugin registry
 - [ ] NET-583-04 Instance network
 - [ ] NET-583-05 Unified pipeline
@@ -3521,7 +3524,7 @@ PooToolsSource/MediaViewer/
 
 - [x] LIST-584-01 Data coordinator
 - [ ] LIST-584-02 Layout provider
-- [ ] LIST-584-03 Photo prefetch
+- [x] LIST-584-03 Photo prefetch（资源去重、引用计数取消和生命周期清理兼容切片）
 - [ ] LIST-584-04 Skeleton
 - [ ] LIST-584-05 Interaction
 - [ ] LIST-584-06 Refresh
@@ -3544,8 +3547,8 @@ PooToolsSource/MediaViewer/
 
 - [x] THEME-586-01 Appearance structs
 - [x] THEME-586-02 PTTheme
-- [ ] THEME-586-03 BaseConfig compatibility
-- [ ] THEME-586-04 Snapshot semantics
+- [x] THEME-586-03 BaseConfig compatibility（legacyDefault 兼容切片）
+- [x] THEME-586-04 Snapshot semantics（TabBar 外观快照兼容切片）
 - [ ] TAB-586-05 TabBar internals
 - [ ] TAB-586-06 Lottie adapter
 - [x] TAB-586-07 Visual style enum
@@ -3709,9 +3712,11 @@ PooToolsSource/MediaViewer/
 - [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
 - [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。
 - [x] 记录当前 Xcode Debug / Release 和直接 PooTools scheme 构建结果：`report/build_validation_5_9.md`。
+- [x] 2026-09-10 兼容切片：`PTTabBarView` 外观快照、`PTCollectionPhotoPrefetchCoordinator` 预取引用计数与生命周期清理、Network 实例请求环境/Typed Codable 入口，以及稳定 request/cache key；旧公开入口均保留。
 
 ### 待验证或阻断
 
+- [ ] 本次源码修改后的 Xcode Debug / Release 仍被外部 `Pods/KituraContracts` 的 Swift 6 并发诊断阻断；详见 `report/build_validation_5_9_5_current.md`。
 - [ ] 5.9.1 Xcode Debug / Release 完整构建和真实宿主回归：当前被外部 KituraContracts、
   swift-syntax 网络获取和工具链环境阻断；需解除阻断后再完成最终验收。
 - [ ] TEST-592-02 至 TEST-592-05：Xcode iOS Simulator、真实宿主、真机和 Instruments 的实际执行结果；静态夹具已建立但不等于性能验收。

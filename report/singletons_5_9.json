@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "shared_call_count": 1566,
+  "shared_call_count": 1570,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -67,7 +67,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 63,
+      "line": 113,
       "declaration": "public static let shared = PTVideoManager()",
       "name": "shared",
       "category": "B",
@@ -76,7 +76,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 123,
+      "line": 173,
       "declaration": "public static let shared = PTVideoFileCache()",
       "name": "shared",
       "category": "B",
@@ -201,8 +201,17 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
+      "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
+      "line": 210,
+      "declaration": "public static let shared = PTMemoryWarningCoordinator()",
+      "name": "shared",
+      "category": "A",
+      "scope": "Stateless convenience or immutable utility",
+      "action": "优先保留；有可变状态时迁移为实例配置"
+    },
+    {
       "path": "PooToolsSource/Core/PTUtils.swift",
-      "line": 173,
+      "line": 275,
       "declaration": "public static let share = PTUtils()",
       "name": "share",
       "category": "A",
@@ -607,7 +616,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 82,
+      "line": 216,
       "declaration": "public static let shared = RequestDeduplicator()",
       "name": "shared",
       "category": "C",
@@ -661,7 +670,7 @@
     },
     {
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 125,
+      "line": 130,
       "declaration": "public static var shared = PTPickerStyle()",
       "name": "shared",
       "category": "D",

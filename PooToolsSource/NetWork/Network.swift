@@ -335,7 +335,14 @@ public actor NetworkCache {
         let sortedQuery = request.url?.query?.split(separator: "&").sorted().joined(separator: "&") ?? ""
         let rawBody = request.httpBody ?? Data()
         let body = rawBody.sortedJSONData() ?? rawBody
-        return (url + sortedQuery + body.base64EncodedString()).md5
+        // English: Partition cached responses by request headers so credentials and content variants never share data.
+        // Español: Separa las respuestas almacenadas por cabeceras para que las credenciales y variantes no compartan datos.
+        // 中文：按请求头隔离缓存响应，避免不同凭证或内容变体复用数据。
+        let headers = (request.allHTTPHeaderFields ?? [:])
+            .map { key, value in "\(key.lowercased())=\(value)" }
+            .sorted()
+            .joined(separator: "\n")
+        return (url + sortedQuery + headers + body.base64EncodedString()).md5
     }
     
     func save(data: Data, request: URLRequest, expire: TimeInterval) {
@@ -501,108 +508,8 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
         }
         guard request.httpMethod == "GET", request.cachePolicyType != .none else { return }
         await NetworkCache.shared.save(data: data, request: request, expire: request.cacheExpire)
-        // English: Throttle disk maintenance. Español: Limita el mantenimiento del disco. 中文：按节流策略维护磁盘。
-        await NetworkCache.shared.cleanIfNeeded(configuration: Network.share.config)
     }
 }
-
-public enum PTNetworkDedupPolicy : Sendable {
-    case none
-    case identical
-    case custom(String)
-    
-    func getOptionName() -> String {
-        switch self {
-        case .none: return "none"
-        case .identical: return "identical"
-        case .custom(let string): return string
-        }
-    }
-}
-
-public struct RequestKey: Hashable, Sendable {
-    let url: String
-    let method: String
-    let paramsHash: String
-    let responseType: String
-    
-    init<T>(request: URLRequest, responseType: T.Type = Never.self) {
-        self.url = request.url?.absoluteString ?? ""
-        self.method = request.httpMethod ?? ""
-        // Swift's hashValue is randomized per process. A stable body snapshot
-        // keeps identical requests deduplicated across all call sites.
-        let body = request.httpBody?.sortedJSONData() ?? Data()
-        self.paramsHash = body.base64EncodedString()
-        self.responseType = String(reflecting: responseType)
-    }
-}
-
-public struct PTNetworkConfig: Sendable {
-    public var requestTimeout: TimeInterval = 20
-    public var downloadRequestTimeout: TimeInterval = 5
-    public var resourceTimeout: TimeInterval = 3600
-    
-    public var serverAddress: String = ""
-    public var serverAddress_dev: String = ""
-    public var socketAddress: String = ""
-    public var socketAddress_dev: String = ""
-    
-    public var userToken: String = ""
-    public var retryTimes: Int = 3
-    public var retryDelay: TimeInterval = 1.5
-    public var retryAPIStatusCode: Int = 502
-    
-    public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork
-    public var networkCacheExpiration: String = "600"
-    public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto")
-    
-    public var maxDiskSize: Int64 = 100 * 1024 * 1024
-    public var cleanThreshold: Double = 0.7
-    public var cleanCachePreSec: TimeInterval = 60
-    public var logMaxCount: Double = 3000
-
-    // English: Deprecated spellings remain as computed adapters while canonical names own the storage.
-    // Español: Las grafías obsoletas permanecen como adaptadores calculados y los nombres canónicos poseen el almacenamiento.
-    // 中文：旧拼写保留为计算属性适配器，存储统一由正确命名的属性持有。
-    @available(*, deprecated, message: "Use requestTimeout instead")
-    public var netRequsetTime: TimeInterval {
-        get { requestTimeout }
-        set { requestTimeout = newValue }
-    }
-
-    @available(*, deprecated, message: "Use downloadRequestTimeout instead")
-    public var downloadRequsetTime: TimeInterval {
-        get { downloadRequestTimeout }
-        set { downloadRequestTimeout = newValue }
-    }
-
-    @available(*, deprecated, message: "Use resourceTimeout instead")
-    public var downloadEndTime: TimeInterval {
-        get { resourceTimeout }
-        set { resourceTimeout = newValue }
-    }
-
-    @available(*, deprecated, message: "Use networkCacheExpiration instead")
-    public var networkCacheEXPTime: String {
-        get { networkCacheExpiration }
-        set { networkCacheExpiration = newValue }
-    }
-
-    @available(*, deprecated, message: "Use networkDedupOption instead")
-    public var networkDudupOption: PTNetworkDedupPolicy {
-        get { networkDedupOption }
-        set { networkDedupOption = newValue }
-    }
-
-    public var waitsForConnectivity: Bool = true
-
-    public init() {}
-}
-
-// English: Canonical value-type name for new Network integrations; PTNetworkConfig remains source-compatible.
-// Español: Nombre canónico basado en valor para nuevas integraciones; PTNetworkConfig conserva la compatibilidad.
-// 中文：为新的 Network 集成提供统一值类型名称，同时保留 PTNetworkConfig 兼容性。
-public typealias PTNetworkConfiguration = PTNetworkConfig
 
 private enum PreparedUploadMedia {
     case data(Data, mimeType: String, fileName: String)
@@ -710,6 +617,14 @@ public final class Network: @unchecked Sendable {
             configLock.unlock()
         }
     }
+
+    // English: Expose an immutable request environment for instance-based integrations.
+    // Español: Expone un entorno de solicitud inmutable para las integraciones basadas en instancias.
+    // 中文：为实例化网络调用提供不可变请求环境快照。
+    public var requestEnvironment: PTNetworkRequestEnvironment {
+        PTNetworkRequestEnvironment(configuration: config)
+    }
+
     // English: Build the request session from an immutable configuration snapshot.
     // Español: Construye la sesión de solicitudes a partir de una instantánea inmutable de configuración.
     // 中文：使用不可变配置快照创建请求 Session。
@@ -884,9 +799,10 @@ public final class Network: @unchecked Sendable {
         PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .error, loggerType: .network)
     }
     
-    private static func addToken(to headers: HTTPHeaders) -> HTTPHeaders {
+    private static func addToken(to headers: HTTPHeaders,
+                                 configuration: PTNetworkConfig? = nil) -> HTTPHeaders {
         var headers = headers
-        let token = Network.share.config.userToken
+        let token = (configuration ?? Network.share.config).userToken
         if !token.isEmpty {
             headers["token"] = token
             headers["device"] = "iOS"
@@ -981,17 +897,21 @@ public final class Network: @unchecked Sendable {
         return (result, rawJsonString)
     }
     
-    private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool,cachePolicy: PTNetworkCachePolicy? = nil) -> HTTPHeaders {
+    private static func prepareRequestHeaders(header: HTTPHeaders?,
+                                              jsonRequest: Bool,
+                                              cachePolicy: PTNetworkCachePolicy? = nil,
+                                              configuration: PTNetworkConfig? = nil) -> HTTPHeaders {
         var apiHeader = header ?? HTTPHeaders()
         if jsonRequest {
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
         }
-        let finalCachePolicy = cachePolicy ?? Network.share.config.networkCacheOption
+        let configurationSnapshot = configuration ?? Network.share.config
+        let finalCachePolicy = cachePolicy ?? configurationSnapshot.networkCacheOption
         apiHeader["cachePolicy"] = finalCachePolicy.rawValue
-        apiHeader["cacheExpire"] = Network.share.config.networkCacheExpiration
-        apiHeader["dedupPolicy"] = Network.share.config.networkDedupOption.getOptionName()
-        return addToken(to: apiHeader)
+        apiHeader["cacheExpire"] = configurationSnapshot.networkCacheExpiration
+        apiHeader["dedupPolicy"] = configurationSnapshot.networkDedupOption.getOptionName()
+        return addToken(to: apiHeader, configuration: configurationSnapshot)
     }
     
     private static func createURLRequest(urlStr: URLConvertible, needGobal: Bool) async throws -> String {
@@ -1023,6 +943,31 @@ public final class Network: @unchecked Sendable {
         return PTNetworkRequestContext(url: url, method: method, headers: headers)
     }
 
+    // English: Build a context from the instance snapshot so custom Network objects do not fall back to the singleton.
+    // Español: Construye el contexto desde la instantánea de la instancia para que las redes personalizadas no vuelvan al singleton.
+    // 中文：使用实例快照构建请求上下文，避免自定义 Network 实例回退到单例。
+    private func makeInstanceRequestContext(urlStr: URLConvertible,
+                                             needGobal: Bool,
+                                             method: HTTPMethod,
+                                             header: HTTPHeaders?,
+                                             jsonRequest: Bool,
+                                             cachePolicy: PTNetworkCachePolicy?) throws -> PTNetworkRequestContext {
+        let originalURL = try urlStr.asURL().absoluteString
+        let configuration = config
+        let environment = PTNetworkRequestEnvironment(configuration: configuration)
+        let url: String
+        if originalURL.hasPrefix("http") || !needGobal {
+            url = originalURL
+        } else {
+            url = environment.serverAddress + originalURL
+        }
+        let headers = Self.prepareRequestHeaders(header: header,
+                                                 jsonRequest: jsonRequest,
+                                                 cachePolicy: cachePolicy,
+                                                 configuration: configuration)
+        return PTNetworkRequestContext(url: url, method: method, headers: headers)
+    }
+
     /// 统一编码 Parameters，避免请求头声明为 JSON 时仍使用默认表单编码。
     private class func encodeParameters(_ parameters: Parameters?,
                                         into request: URLRequest,
@@ -1049,19 +994,27 @@ public final class Network: @unchecked Sendable {
     private class func execute(url: String,
                                request: URLRequest,
                                uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
+        try await Network.share.executeRequest(url: url, request: request, uploadBody: uploadBody)
+    }
+
+    private func executeRequest(url: String,
+                                request: URLRequest,
+                                uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         var request = request
-        for plugin in Network.share.plugins {
+        let pluginSnapshot = plugins
+        let configurationSnapshot = config
+        for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
 
         if request.isMock,
            let mockData = await NetworkCache.shared.read(request: request) {
-            return responseSnapshot(url: url, response: nil, data: mockData)
+            return Network.responseSnapshot(url: url, response: nil, data: mockData)
         }
 
         let policy: PTNetworkDedupPolicy = request.cachePolicyType == .none ? .none : .identical
         let finalRequest = request
-        let session = Network.share.session
+        let session = self.session
         let realRequest: @Sendable () async throws -> PTNetworkResponseSnapshot = {
             let dataTask = uploadBody.map {
                 session.upload($0, with: finalRequest).serializingData()
@@ -1073,15 +1026,16 @@ public final class Network: @unchecked Sendable {
             })
             try Task.checkCancellation()
 
-            for plugin in Network.share.plugins {
+            for plugin in pluginSnapshot {
                 await plugin.didReceive(response.result, request: finalRequest, response: response.response)
             }
+            await NetworkCache.shared.cleanIfNeeded(configuration: configurationSnapshot)
 
             switch response.result {
             case .success(let data):
-                return responseSnapshot(url: url, response: response.response, data: data)
+                return Network.responseSnapshot(url: url, response: response.response, data: data)
             case .failure(let error):
-                logRequestFailure(url: url, error: error)
+                Network.logRequestFailure(url: url, error: error)
                 throw error
             }
         }
@@ -1097,18 +1051,26 @@ public final class Network: @unchecked Sendable {
     private class func executeLegacy(url: String,
                                      request: URLRequest,
                                      uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
+        try await Network.share.executeLegacyRequest(url: url, request: request, uploadBody: uploadBody)
+    }
+
+    private func executeLegacyRequest(url: String,
+                                      request: URLRequest,
+                                      uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         var request = request
-        for plugin in Network.share.plugins {
+        let pluginSnapshot = plugins
+        let configurationSnapshot = config
+        for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
 
         if request.isMock,
            let mockData = await NetworkCache.shared.read(request: request) {
-            return responseSnapshot(url: url, response: nil, data: mockData)
+            return Network.responseSnapshot(url: url, response: nil, data: mockData)
         }
 
         let finalRequest = request
-        let session = Network.share.session
+        let session = self.session
         let dataTask = uploadBody.map {
             session.upload($0, with: finalRequest).serializingData()
         } ?? session.request(finalRequest).serializingData()
@@ -1119,15 +1081,16 @@ public final class Network: @unchecked Sendable {
         })
         try Task.checkCancellation()
 
-        for plugin in Network.share.plugins {
+        for plugin in pluginSnapshot {
             await plugin.didReceive(response.result, request: finalRequest, response: response.response)
         }
+        await NetworkCache.shared.cleanIfNeeded(configuration: configurationSnapshot)
 
         switch response.result {
         case .success(let data):
-            return responseSnapshot(url: url, response: response.response, data: data)
+            return Network.responseSnapshot(url: url, response: response.response, data: data)
         case .failure(let error):
-            logRequestFailure(url: url, error: error)
+            Network.logRequestFailure(url: url, error: error)
             throw error
         }
     }
@@ -1223,6 +1186,40 @@ public final class Network: @unchecked Sendable {
         var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
         urlRequest.httpBody = body
         return try await executeLegacy(url: context.url, request: urlRequest, uploadBody: body)
+    }
+
+    // English: Canonical instance request entry point using the instance's configuration, session, and plugins.
+    // Español: Entrada canónica de solicitudes de instancia que usa la configuración, sesión y plugins de la instancia.
+    // 中文：实例化请求的统一入口，始终使用实例自己的配置、Session 和插件。
+    public func performCodableRequest<T: SmartCodableX & Sendable>(
+        needGobal: Bool = true,
+        urlStr: URLConvertible,
+        method: HTTPMethod = .post,
+        header: HTTPHeaders? = nil,
+        parameters: Parameters? = nil,
+        cachePolicy: PTNetworkCachePolicy? = nil,
+        modelType: T.Type? = nil,
+        encoder: ParameterEncoding = URLEncoding.default,
+        jsonRequest: Bool = false) async throws -> PTBaseStructModel<T> {
+        let context = try makeInstanceRequestContext(urlStr: urlStr,
+                                                      needGobal: needGobal,
+                                                      method: method,
+                                                      header: header,
+                                                      jsonRequest: jsonRequest,
+                                                      cachePolicy: cachePolicy)
+        Self.logRequestStart(url: context.url,
+                             parameters: parameters,
+                             headers: context.headers,
+                             method: context.method)
+        var urlRequest = try URLRequest(url: context.url,
+                                        method: context.method,
+                                        headers: context.headers)
+        urlRequest = try Self.encodeParameters(parameters,
+                                               into: urlRequest,
+                                               encoder: encoder,
+                                               jsonRequest: jsonRequest)
+        let snapshot = try await executeRequest(url: context.url, request: urlRequest)
+        return try Self.parseCodableResponse(snapshot, modelType: modelType)
     }
     
     private struct PTSafeUploadParamsBox: @unchecked Sendable {

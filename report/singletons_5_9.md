@@ -2,8 +2,8 @@
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1566**
-- 单例声明计数：**92**
+- .shared / .share 调用文本计数：**1570**
+- 单例声明计数：**93**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
 | --- | --- | --- | --- | --- |
@@ -14,8 +14,8 @@
 | PooToolsSource/Base/PTAudioCache.swift:96 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTAudioCache.swift:164 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTBaseViewController.swift:139 | shared | D Shared mutable UI or scene state | public static let shared = PTNavigationBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:63 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:123 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:113 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:173 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/BioID/PTBiologyID.swift:23 | shared | C Shared mutable service | public static let shared = PTBiometricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift:18 | shared | C Shared mutable service | @MainActor static let shared: PTPermissionBluetoothHandler = .init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/C7Collector/C7CameraConfig.swift:14 | share | D Shared mutable UI or scene state | public static let share = C7CameraConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
@@ -29,7 +29,8 @@
 | PooToolsSource/Contact/PTContact.swift:48 | share | C Shared mutable service | public static let share = PTContact() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTAppUserdefault.swift:50 | shared | C Shared mutable service | public static let shared = PTCoreUserDefultsWrapper() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTGCDManager.swift:39 | shared | C Shared mutable service | public static let shared = PTGCDManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Core/PTUtils.swift:173 | share | A Stateless convenience or immutable utility | public static let share = PTUtils() | 优先保留；有可变状态时迁移为实例配置 |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:210 | shared | A Stateless convenience or immutable utility | public static let shared = PTMemoryWarningCoordinator() | 优先保留；有可变状态时迁移为实例配置 |
+| PooToolsSource/Core/PTUtils.swift:275 | share | A Stateless convenience or immutable utility | public static let share = PTUtils() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Country/PTCountryCodes.swift:19 | share | C Shared mutable service | @MainActor public static let share = PTCountryCodes() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift:14 | shared | C Shared mutable service | static let shared = PTDebugLocationKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DarkMode/PTDrakModeOption.swift:107 | shared | D Shared mutable UI or scene state | static let shared = PTDarkModeScheduleMonitor() | 按 Scene 或控制器实例保存；保留兼容入口 |
@@ -74,13 +75,13 @@
 | PooToolsSource/NetWork/Network.swift:92 | shared | C Shared mutable service | public static let shared = NetworkReachability() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/NetWork/Network.swift:139 | shared | C Shared mutable service | public static let shared = PTNetWorkStatus() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/NetWork/Network.swift:316 | shared | B Thread-safe shared cache or resource | static let shared = NetworkCache() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/NetWork/NetworkTypes.swift:82 | shared | C Shared mutable service | public static let shared = RequestDeduplicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetWork/NetworkTypes.swift:216 | shared | C Shared mutable service | public static let shared = RequestDeduplicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:27 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedTestFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/OSSKit/OSSSpeech.swift:198 | shared | C Shared mutable service | public static let shared = OSSSpeech() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PermissionCore/PTPermissionViewController.swift:19 | share | C Shared mutable service | public static let share = PTPermissionStatic() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PhotoPicker/PTMediaLibConfig.swift:197 | share | D Shared mutable UI or scene state | public static let share = PTMediaLibConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/PhotoPicker/PTMediaLibConfig.swift:352 | share | D Shared mutable UI or scene state | public static let share = PTMediaLibUIConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Picker/PTBasePickerView.swift:125 | shared | D Shared mutable UI or scene state | public static var shared = PTPickerStyle() | 按 Scene 或控制器实例保存；保留兼容入口 |
+| PooToolsSource/Picker/PTBasePickerView.swift:130 | shared | D Shared mutable UI or scene state | public static var shared = PTPickerStyle() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Ping/PTPingActivityIndicator.swift:13 | shared | C Shared mutable service | static let shared = PTPingActivityIndicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Protocol/PTProtocol.swift:96 | shared | A Stateless convenience or immutable utility | public static let shared = PTAdapterConfig() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Protocol/PTProtocol.swift:122 | share | A Stateless convenience or immutable utility | public static let share = PTNumberValueAdapter() | 优先保留；有可变状态时迁移为实例配置 |

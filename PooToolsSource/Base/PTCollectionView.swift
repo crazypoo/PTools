@@ -163,7 +163,7 @@ public class PTCollectionView: UIView {
     /// 原生 Diffable 数据源
     private var diffableDataSource: PTDataSource!
     ///Photos
-    let imageManager = PHCachingImageManager()
+    private let photoPrefetchCoordinator = PTCollectionPhotoPrefetchCoordinator()
     var photoAssets: [PHAsset] = []
 
     private lazy var skeletonOverlayView = PTSkeletonOverlayView()
@@ -495,6 +495,16 @@ public class PTCollectionView: UIView {
             make.edges.equalTo(collectionView)
         }
     }
+
+    // English: Stop PhotoKit prefetching when the list leaves the active view hierarchy.
+    // Español: Detiene la precarga de PhotoKit cuando la lista abandona la jerarquía de vistas activa.
+    // 中文：列表离开当前视图层级时停止 PhotoKit 预取。
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil {
+            photoPrefetchCoordinator.removeAll()
+        }
+    }
     
     deinit {
         if let memoryWarningRegistration {
@@ -509,6 +519,7 @@ public class PTCollectionView: UIView {
         heightCache.removeAll()
         waterfallCache.removeAll()
         fallbackLayouts.removeAll()
+        photoPrefetchCoordinator.removeAll()
     }
     
     ///展示界面
@@ -1029,14 +1040,16 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let assets = photoAssets(for: indexPaths)
         if !assets.isEmpty {
-            imageManager.startCachingImages(for: assets, targetSize: viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+            photoPrefetchCoordinator.prefetch(assets: assets,
+                                              targetSize: viewConfig.previewImageSize)
         }
     }
         
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         let assets = photoAssets(for: indexPaths)
         if !assets.isEmpty {
-            imageManager.stopCachingImages(for: assets, targetSize: viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+            photoPrefetchCoordinator.cancel(assets: assets,
+                                             targetSize: viewConfig.previewImageSize)
         }
     }
 }
@@ -1359,6 +1372,7 @@ extension PTCollectionView {
 
         self.autoRegisterIfNeeded(sections: collectionData)
         lastPrefetchItemCount = nil
+        photoPrefetchCoordinator.removeAll()
         
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
@@ -1394,6 +1408,7 @@ extension PTCollectionView {
     
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
         lastPrefetchItemCount = nil
+        photoPrefetchCoordinator.removeAll()
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
         self.waterfallCache.removeAll()

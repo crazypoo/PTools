@@ -150,6 +150,7 @@ final public class PTTabBarItemView: UIControl {
     
     private let titleLabel = UILabel()
     private var content: PTTabBarItemContent
+    private let appearance: PTTabBarAppearance
         
     public class func itemImageSize() -> CGFloat {
         let tab26ModeBottomSpacing = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
@@ -168,13 +169,26 @@ final public class PTTabBarItemView: UIControl {
     public var isSelectedItem = false {
         didSet {
             content.setSelected(isSelectedItem, animated: true)
-            titleLabel.textColor = isSelectedItem ? PTAppBaseConfig.share.tabSelectedColor : PTAppBaseConfig.share.tabNormalColor
+            titleLabel.textColor = isSelectedItem ? appearance.selectedColor : appearance.normalColor
             PTUIAccessibility.applyDynamicType(to: titleLabel,
-                                               font: isSelectedItem ? PTAppBaseConfig.share.tabSelectedFont : PTAppBaseConfig.share.tabNormalFont)
+                                               font: isSelectedItem ? appearance.selectedFont : appearance.normalFont)
         }
     }
     
     public init(content: PTTabBarItemContent, title: String) {
+        self.appearance = .legacyDefault
+        self.content = content
+        super.init(frame: .zero)
+        setupUI(title: title)
+    }
+
+    // English: Capture the appearance snapshot before building the item hierarchy.
+    // Español: Captura la instantánea de apariencia antes de construir la jerarquía del elemento.
+    // 中文：在构建 TabBar 项目层级前固定外观快照。
+    public init(content: PTTabBarItemContent,
+                title: String,
+                appearance: PTTabBarAppearance) {
+        self.appearance = appearance
         self.content = content
         super.init(frame: .zero)
         setupUI(title: title)
@@ -203,9 +217,9 @@ final public class PTTabBarItemView: UIControl {
             titleLabel.numberOfLines = 1
             titleLabel.text = title
             PTUIAccessibility.applyDynamicType(to: titleLabel,
-                                               font: PTAppBaseConfig.share.tabNormalFont)
+                                               font: appearance.normalFont)
             titleLabel.textAlignment = .center
-            titleLabel.textColor = PTAppBaseConfig.share.tabNormalColor
+            titleLabel.textColor = appearance.normalColor
         }
         
         addSubviews(subViews)
@@ -308,6 +322,10 @@ final public class PTTabBarView: UIView {
     public var badgeDragRemoveIndex: ((Int) -> Void)?
 
     public var items: [PTTabBarItemView] = []
+    // English: Keep one immutable appearance snapshot for all items in this bar.
+    // Español: Mantiene una única instantánea inmutable de apariencia para todos los elementos de esta barra.
+    // 中文：为当前 TabBar 的所有项目保存一份不可变外观快照。
+    public private(set) var appearanceSnapshot: PTTabBarAppearance
     private var currentIndex: Int = 0
     private let glassBackgroundView = UIVisualEffectView()
     private let leftStackView = UIStackView()
@@ -367,12 +385,24 @@ final public class PTTabBarView: UIView {
 
     // MARK: - Init
     public override init(frame: CGRect) {
+        self.appearanceSnapshot = .legacyDefault
+        super.init(frame: frame)
+        setupUI()
+        installAccessibilityObservers()
+    }
+
+    // English: Allow new callers to inject a stable appearance without changing the legacy initializer.
+    // Español: Permite inyectar una apariencia estable sin cambiar el inicializador heredado.
+    // 中文：允许新调用方注入稳定外观，同时保持旧初始化方法不变。
+    public init(frame: CGRect, appearance: PTTabBarAppearance) {
+        self.appearanceSnapshot = appearance
         super.init(frame: frame)
         setupUI()
         installAccessibilityObservers()
     }
 
     required init?(coder: NSCoder) {
+        self.appearanceSnapshot = .legacyDefault
         super.init(coder: coder)
         setupUI()
         installAccessibilityObservers()
@@ -428,7 +458,7 @@ final public class PTTabBarView: UIView {
 
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
             PTVisualStyleResolver.apply(to: glassBackgroundView,
-                                        style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                        style: appearanceSnapshot.visualStyle.coreStyle,
                                         blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                         fallbackColor: .secondarySystemBackground)
             glassBackgroundView.clipsToBounds = true
@@ -503,7 +533,7 @@ final public class PTTabBarView: UIView {
         let effectView = UIVisualEffectView()
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarCenterMetail {
             PTVisualStyleResolver.apply(to: effectView,
-                                        style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                        style: appearanceSnapshot.visualStyle.coreStyle,
                                         blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                         fallbackColor: .secondarySystemBackground)
         } else {
@@ -790,7 +820,8 @@ final public class PTTabBarView: UIView {
 
         let item = PTTabBarItemView(
             content: config.content,
-            title: config.title
+            title: config.title,
+            appearance: appearanceSnapshot
         )
 
         item.addAction(UIAction { [weak self] _ in

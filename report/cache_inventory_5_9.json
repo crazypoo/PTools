@@ -57,79 +57,79 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1287,
+      "line": 1308,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1288,
+      "line": 1309,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1837,
+      "line": 1860,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1838,
+      "line": 1861,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1928,
+      "line": 1951,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1929,
+      "line": 1952,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 10,
+      "line": 11,
       "kind": "disk or custom cache",
       "text": "// English: Keep the reusable cache type separate from PTCollectionView's facade and layout code."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 15,
+      "line": 16,
       "kind": "NSCache",
       "text": "private let cache = NSCache<WrappedKey, Value>()"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 18,
+      "line": 19,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = max(0, countLimit)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 22,
+      "line": 23,
       "kind": "disk or custom cache",
       "text": "cache.setObject(value, forKey: WrappedKey(key))"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 26,
+      "line": 27,
       "kind": "disk or custom cache",
       "text": "cache.object(forKey: WrappedKey(key))"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 30,
+      "line": 31,
       "kind": "disk or custom cache",
       "text": "cache.removeObject(forKey: WrappedKey(key))"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 34,
+      "line": 35,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
@@ -627,37 +627,31 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 396,
+      "line": 399,
       "kind": "disk or custom cache",
       "text": "// English: Accept a caller-owned configuration so cache maintenance does not read Network.share."
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 489,
+      "line": 486,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 507,
+      "line": 504,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 508,
+      "line": 505,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 514,
-      "kind": "disk or custom cache",
-      "text": "// English: Throttle disk maintenance after writes so normal requests do not rescan the cache directory."
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 737,
+      "line": 640,
       "kind": "URLCache",
       "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)"
     },

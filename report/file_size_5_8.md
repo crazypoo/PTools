@@ -9,8 +9,8 @@
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/Base/PTBaseViewController.swift` | 1669 | architecture_exception |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2294 | hard_limit_allowlisted |
-| `PooToolsSource/Base/PTTabBarView.swift` | 1021 | warning |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2309 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1052 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1743 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1396 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1426 | warning |
@@ -23,7 +23,7 @@
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1053 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1668 | architecture_exception |
-| `PooToolsSource/NetWork/Network.swift` | 1999 | architecture_exception |
+| `PooToolsSource/NetWork/Network.swift` | 1996 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1185 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1390 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |
