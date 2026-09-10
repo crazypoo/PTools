@@ -69,6 +69,9 @@ private final class PTNavigationDelegateProxy: NSObject, UINavigationControllerD
     func navigationController(_ navigationController: UINavigationController,
                               didShow viewController: UIViewController,
                               animated: Bool) {
+        manager?.navigationController(navigationController,
+                                      didShow: viewController,
+                                      animated: animated)
         hostDelegate?.navigationController?(navigationController,
                                              didShow: viewController,
                                              animated: animated)
@@ -107,14 +110,14 @@ private final class PTNavigationDelegateProxy: NSObject, UINavigationControllerD
     // 中文：显式转发其余 UIKit delegate 回调，避免破坏 actor 隔离。
     nonisolated override func responds(to aSelector: Selector) -> Bool {
         let selectorName = NSStringFromSelector(aSelector)
-        if selectorName == "navigationController:willShowViewController:animated:" {
+        if selectorName == "navigationController:willShowViewController:animated:"
+            || selectorName == "navigationController:didShowViewController:animated:" {
             return true
         }
 
         let isForwardedNavigationSelector: Bool
         switch selectorName {
-        case "navigationController:didShowViewController:animated:",
-             "navigationControllerSupportedInterfaceOrientations:",
+        case "navigationControllerSupportedInterfaceOrientations:",
              "navigationControllerPreferredInterfaceOrientationForPresentation:",
              "navigationController:interactionControllerForAnimationController:",
              "navigationController:animationControllerForOperation:fromViewController:toViewController:":
@@ -550,6 +553,40 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
         viewController.navigationItem.titleView = nil
+    }
+
+    // English: Commit the final navigation-bar state from the controller UIKit actually displayed.
+    // Español: Confirma el estado final de la barra usando el controlador que UIKit realmente mostró.
+    // 中文：根据 UIKit 实际显示的控制器提交最终导航栏状态。
+    public func navigationController(_ navigationController: UINavigationController,
+                                     didShow viewController: UIViewController,
+                                     animated: Bool) {
+        if let baseVC = viewController as? PTBaseViewController,
+           !baseVC.allowControlNavBar() {
+            return
+        }
+
+        stopTransition(for: navigationController)
+
+        let style: PTNavigationBarStyle
+        if let baseVC = viewController as? PTBaseViewController {
+            style = baseVC.preferredNavigationBarStyle()
+            let item = item(for: viewController)
+            item.barColorStyle = style
+        } else {
+            style = .default
+        }
+
+        apply(style: style, in: navigationController)
+        // English: Prefer UIKit's didShow callback over a transient navigation-stack snapshot.
+        // Español: Da prioridad al callback didShow de UIKit sobre una instantánea transitoria de la pila.
+        // 中文：优先使用 UIKit 的 didShow 回调，避免被转场瞬间的导航栈快照覆盖。
+        rememberCurrent(navigationController, viewController: viewController)
+        let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
+        apply(item: item)
+        StatusBarManager.shared.update(with: style)
+        viewController.setNeedsStatusBarAppearanceUpdate()
+        navigationController.setNeedsStatusBarAppearanceUpdate()
     }
     
     // 🌟 新增的辅助方法：提取转场完成后的状态重置逻辑，保持代码清晰
