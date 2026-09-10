@@ -11,17 +11,41 @@
       "path": "PooToolsSource/Base/PTAudioCache.swift",
       "line": 166,
       "kind": "NSCache",
-      "text": "private let durationCache = NSCache<NSString, NSNumber>()"
+      "text": "private let durationCache: NSCache<NSString, NSNumber> = {"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "line": 167,
+      "kind": "NSCache",
+      "text": "let cache = NSCache<NSString, NSNumber>()"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "line": 168,
+      "kind": "disk or custom cache",
+      "text": "cache.countLimit = 256"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "line": 169,
+      "kind": "disk or custom cache",
+      "text": "cache.totalCostLimit = 256 * MemoryLayout<Float>.size"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
       "line": 170,
       "kind": "disk or custom cache",
+      "text": "return cache"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "line": 182,
+      "kind": "disk or custom cache",
       "text": "/// 获取音频时长（一定基于 cache 文件）"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 208,
+      "line": 222,
       "kind": "disk or custom cache",
       "text": "/// 创建播放用 PlayerItem（只用 cache 文件）"
     },
@@ -33,37 +57,37 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1278,
+      "line": 1287,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1279,
+      "line": 1288,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1828,
+      "line": 1837,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1829,
+      "line": 1838,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1919,
+      "line": 1928,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1920,
+      "line": 1929,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -111,55 +135,55 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 192,
+      "line": 242,
       "kind": "disk or custom cache",
       "text": "/// Video cover cache and thumbnail request coordinator."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 287,
+      "line": 344,
       "kind": "NSCache",
       "text": "@MainActor private static let memoryCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 288,
+      "line": 345,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 289,
+      "line": 346,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 100"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 290,
+      "line": 347,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 50 * 1024 * 1024"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 291,
+      "line": 348,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 393,
+      "line": 456,
       "kind": "disk or custom cache",
       "text": "/// Preserves the URL-only key used by the video file cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 402,
+      "line": 465,
       "kind": "disk or custom cache",
       "text": "/// Writes a JPEG cache entry atomically on a utility task."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 420,
+      "line": 483,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
@@ -591,43 +615,49 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 318,
+      "line": 317,
       "kind": "NSCache",
       "text": "private let memoryCache = NSCache<NSString, NSData>()"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 327,
+      "line": 326,
       "kind": "disk or custom cache",
       "text": "// English: Bound the in-memory cache so a large response cannot grow without limit."
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 392,
+      "line": 396,
       "kind": "disk or custom cache",
       "text": "// English: Accept a caller-owned configuration so cache maintenance does not read Network.share."
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 483,
+      "line": 489,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 501,
+      "line": 507,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 502,
+      "line": 508,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 727,
+      "line": 514,
+      "kind": "disk or custom cache",
+      "text": "// English: Throttle disk maintenance after writes so normal requests do not rescan the cache directory."
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 737,
       "kind": "URLCache",
       "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)"
     },
@@ -698,5 +728,5 @@
       "text": "open func cache(viewController: UIViewController, with identifier: String) {"
     }
   ],
-  "bounded_memory_caches": 17
+  "bounded_memory_caches": 18
 }

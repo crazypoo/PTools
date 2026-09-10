@@ -33,6 +33,16 @@ open class PTNavBar: PTNavigationBarContainer {
             }
         }
     }
+
+    private struct WidthLayoutSignature: Equatable {
+        let containerWidth: CGFloat
+        let leftWidth: CGFloat
+        let rightWidth: CGFloat
+        let navigationSpacing: CGFloat
+        let defaultSpace: CGFloat
+    }
+
+    private var lastWidthLayoutSignature: WidthLayoutSignature?
     
     fileprivate var titleViewMAxWidth: CGFloat = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2) {
         didSet {
@@ -215,7 +225,6 @@ open class PTNavBar: PTNavigationBarContainer {
                 make.edges.equalToSuperview()
             }
         }
-        calculateMaxWidth()
     }
 
     // MARK: - Public API
@@ -295,21 +304,29 @@ open class PTNavBar: PTNavigationBarContainer {
     private func calculateMaxWidth() {
         let rightWidthTotal: CGFloat = stackTotalWidth(rightContainer)
         let leftWidthTotal: CGFloat = stackTotalWidth(leftContainer)
-        
+
+        let containerWidth = bounds.width > 0 ? bounds.width : CGFloat.kSCREEN_WIDTH
+        let navigationSpacing = PTAppBaseConfig.share.navContainerSpacing
+        let defaultSpace = PTAppBaseConfig.share.defaultViewSpace
+        let signature = WidthLayoutSignature(containerWidth: containerWidth,
+                                              leftWidth: leftWidthTotal,
+                                              rightWidth: rightWidthTotal,
+                                              navigationSpacing: navigationSpacing,
+                                              defaultSpace: defaultSpace)
+        guard lastWidthLayoutSignature != signature else { return }
+        lastWidthLayoutSignature = signature
+
         titleContainer.snp.remakeConstraints { make in
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
+            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(navigationSpacing)
+            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-navigationSpacing)
             make.height.equalTo(34)
         }
 
-        let newWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - PTAppBaseConfig.share.navContainerSpacing * 2 - leftWidthTotal - rightWidthTotal
+        let newWidth = max(0, containerWidth - defaultSpace * 2 - navigationSpacing * 2 - leftWidthTotal - rightWidthTotal)
         if newWidth != titleViewMAxWidth {
             titleViewMAxWidth = newWidth
-            if let view = titleView {
-                applyTitleViewConstraints(view)
-            }
         }
     }
 }

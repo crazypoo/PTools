@@ -1,7 +1,7 @@
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.9.2`
+- Podspec: `PooTools` `5.9.3`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`

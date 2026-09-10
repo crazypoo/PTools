@@ -247,6 +247,8 @@ public class PTCollectionView: UIView {
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     private var didReportFallbackLayout = false
+    private var memoryWarningRegistration: UUID?
+    private let waterfallCacheLimit = 50
     
     fileprivate lazy var collectionView : PTBaseCollectionView = {
         var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
@@ -475,7 +477,12 @@ public class PTCollectionView: UIView {
         }
         setIndexViews()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        // English: Use one Core-level memory warning fan-out instead of one NotificationCenter observer per list.
+        // Español: Usa una distribución de advertencias de memoria de Core en lugar de un observador por lista.
+        // 中文：使用 Core 统一的内存警告分发，避免每个列表单独注册 NotificationCenter 观察者。
+        memoryWarningRegistration = PTMemoryWarningCoordinator.shared.register { [weak self] in
+            self?.didReceiveMemoryWarning()
+        }
         
         setupDiffableDataSource()
         setiOS17EmptyDataView()
@@ -488,10 +495,14 @@ public class PTCollectionView: UIView {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        if let memoryWarningRegistration {
+            MainActor.gcdRunUnsafely {
+                PTMemoryWarningCoordinator.shared.unregister(memoryWarningRegistration)
+            }
+        }
     }
     
-    @objc private func didReceiveMemoryWarning() {
+    private func didReceiveMemoryWarning() {
         layoutCache.removeAll()
         heightCache.removeAll()
         waterfallCache.removeAll()
@@ -1930,6 +1941,11 @@ extension PTCollectionView {
                                                           itemTrailingSpace: config.cellTrailingSpace,
                                                           itemHeight: itemHeight)
         let items = result.frames.map { NSCollectionLayoutGroupCustomItem(frame: $0) }
+        if waterfallCache.count >= waterfallCacheLimit,
+           waterfallCache[key] == nil,
+           let oldestKey = waterfallCache.keys.first {
+            waterfallCache.removeValue(forKey: oldestKey)
+        }
         waterfallCache[key] = WaterfallCache(items: items,
                                              contentHeight: result.contentHeight)
         return (items, result.contentHeight)

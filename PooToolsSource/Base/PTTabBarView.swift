@@ -486,12 +486,14 @@ final public class PTTabBarView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
-            highlightLayer.frame = glassBackgroundView.bounds
+            if highlightLayer.frame != glassBackgroundView.bounds {
+                highlightLayer.frame = glassBackgroundView.bounds
+            }
         }
         // 无动画强行刷正游标位置，避免初次从 (0,0) 飞过来的尴尬现象
         if let leftStack = leftStackView.superview, leftStack.frame.width > 0 {
             // 如果开启了底色遮罩游标，顺便对其进行无动画校正
-            updateSelectionMaskFrame(to: currentIndex, animated: false)
+            updateSelectionMaskFrame(to: currentIndex, animated: false, ensuringLayout: false)
         }
     }
 
@@ -672,11 +674,17 @@ final public class PTTabBarView: UIView {
     }
     
     // 🌟 新增核心算法：追踪目标 Item 并执行 Frame 平移动画
-    private func updateSelectionMaskFrame(to index: Int, animated: Bool) {
-        guard PTAppBaseConfig.share.tabSelectedMetail, index < items.count else { return }
+    private func updateSelectionMaskFrame(to index: Int,
+                                          animated: Bool,
+                                          ensuringLayout: Bool = true) {
+        guard PTAppBaseConfig.share.tabSelectedMetail,
+              index >= 0,
+              index < items.count else { return }
         
         // 确保布局刷新完毕，拿到最真实的子视图 Frame
-        self.layoutIfNeeded()
+        if ensuringLayout {
+            self.layoutIfNeeded()
+        }
         
         let targetItem = items[index]
         guard let stackView = targetItem.superview else { return }
@@ -697,6 +705,11 @@ final public class PTTabBarView: UIView {
         )
         
         let cornerRadius = finalFrame.height / 2
+
+        let frameChanged = sharedSelectionMaskView.frame != finalFrame
+        let cornerRadiusChanged = sharedSelectionMaskView.layer.cornerRadius != cornerRadius
+            || sharedMaskGlassView.layer.cornerRadius != cornerRadius
+        guard frameChanged || cornerRadiusChanged else { return }
         
         let layoutUpdates = {
             self.sharedSelectionMaskView.frame = finalFrame

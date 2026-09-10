@@ -163,9 +163,21 @@ public final class PTAudioService {
 
     public static let shared = PTAudioService()
 
-    private let durationCache = NSCache<NSString, NSNumber>()
+    private let durationCache: NSCache<NSString, NSNumber> = {
+        let cache = NSCache<NSString, NSNumber>()
+        cache.countLimit = 256
+        cache.totalCostLimit = 256 * MemoryLayout<Float>.size
+        return cache
+    }()
 
-    private init() {}
+    private init() {
+        // English: Drop derived durations under memory pressure; disk media remains available for reuse.
+        // Español: Libera las duraciones derivadas bajo presión de memoria; los medios en disco siguen disponibles.
+        // 中文：内存紧张时释放派生的时长缓存，磁盘媒体仍可继续复用。
+        _ = PTMemoryWarningCoordinator.shared.register { [weak self] in
+            self?.durationCache.removeAllObjects()
+        }
+    }
 
     /// 获取音频时长（一定基于 cache 文件）
     public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) {
@@ -191,7 +203,9 @@ public final class PTAudioService {
                     let seconds = Float(CMTimeGetSeconds(duration))
                     
                     // 将结果存入缓存
-                    self.durationCache.setObject(NSNumber(value: seconds), forKey: key)
+                    self.durationCache.setObject(NSNumber(value: seconds),
+                                                 forKey: key,
+                                                 cost: MemoryLayout<Float>.size)
                     
                     // 返回计算好的秒数和本地 URL
                     completion(seconds, localURL)

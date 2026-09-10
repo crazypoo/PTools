@@ -347,7 +347,7 @@ public actor NetworkCache {
         memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
         
         let path = self.diskPath.nsString.appendingPathComponent(key)
-        Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }
+        Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }
     }
     
     func read(request: URLRequest) -> Data? {
@@ -379,6 +379,7 @@ public actor NetworkCache {
     public func clearAll() {
         memoryCache.removeAllObjects()
         try? FileManager.default.removeItem(atPath: diskPath)
+        try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)
     }
     
     public func cleanIfNeeded() {
@@ -412,19 +413,15 @@ public actor NetworkCache {
         guard let files = try? fm.contentsOfDirectory(at: URL(fileURLWithPath: path), includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey], options: .skipsHiddenFiles) else { return }
 
         var totalSize: Int64 = 0
-        var cacheFiles: [(url: URL, size: Int64, lastAccess: TimeInterval)] = []
-        let now = Date().timeIntervalSince1970
+        var cacheFiles: [(url: URL, size: Int64, lastAccess: Date)] = []
 
         for fileURL in files {
             autoreleasepool {
-                guard let data = try? Data(contentsOf: fileURL), let obj = try? JSONDecoder().decode(CacheObject.self, from: data) else { return }
-                if obj.expireTime < now {
-                    try? fm.removeItem(at: fileURL)
-                    return
-                }
-                let size = (try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
-                totalSize += Int64(size)
-                cacheFiles.append((fileURL, Int64(size), obj.lastAccessTime))
+                // English: Evict by metadata only. Español: Expulsa solo por metadatos. 中文：仅使用元数据淘汰。
+                guard let values = try? fileURL.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]), let fileSize = values.fileSize, fileSize > 0 else { return }
+                let size = Int64(fileSize)
+                totalSize += size
+                cacheFiles.append((fileURL, size, values.contentModificationDate ?? .distantPast))
             }
         }
 
@@ -504,6 +501,8 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
         }
         guard request.httpMethod == "GET", request.cachePolicyType != .none else { return }
         await NetworkCache.shared.save(data: data, request: request, expire: request.cacheExpire)
+        // English: Throttle disk maintenance. Español: Limita el mantenimiento del disco. 中文：按节流策略维护磁盘。
+        await NetworkCache.shared.cleanIfNeeded(configuration: Network.share.config)
     }
 }
 

@@ -28,7 +28,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "lines": 565,
+      "lines": 563,
       "classification": "ok"
     },
     {
@@ -193,7 +193,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "lines": 272,
+      "lines": 286,
       "classification": "ok"
     },
     {
@@ -263,7 +263,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2272,
+      "lines": 2286,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -338,7 +338,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "lines": 315,
+      "lines": 332,
       "classification": "ok"
     },
     {
@@ -353,7 +353,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 939,
+      "lines": 952,
       "classification": "ok"
     },
     {
@@ -368,7 +368,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 450,
+      "lines": 513,
       "classification": "ok"
     },
     {
@@ -1213,7 +1213,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "lines": 203,
+      "lines": 244,
       "classification": "ok"
     },
     {
@@ -1578,7 +1578,7 @@
     },
     {
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "lines": 376,
+      "lines": 373,
       "classification": "ok"
     },
     {
@@ -3523,7 +3523,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1649,
+      "lines": 1668,
       "classification": "architecture_exception"
     },
     {
@@ -3728,7 +3728,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 2000,
+      "lines": 1999,
       "classification": "architecture_exception"
     },
     {

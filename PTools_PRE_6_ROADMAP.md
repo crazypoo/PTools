@@ -3608,10 +3608,10 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.4 Performance
 
-- [ ] PERF-594-01 Cache inventory
-- [ ] PERF-594-02 MainActor heavy work
-- [ ] PERF-594-03 Layout duplicate work
-- [ ] PERF-594-04 Memory warning
+- [x] PERF-594-01 Cache inventory
+- [x] PERF-594-02 MainActor heavy work
+- [x] PERF-594-03 Layout duplicate work
+- [x] PERF-594-04 Memory warning
 
 ## Milestone: 5.9.5 UI Quality
 
@@ -3656,7 +3656,7 @@ PooToolsSource/MediaViewer/
 
 ---
 
-## 5.9.x 当前实施记录（2026-09-09）
+## 5.9.x 当前实施记录（2026-09-10）
 
 以下状态只反映本次工作树已经落地的内容；“已建立”不等于 Xcode、真机或真实宿主项目
 已经通过。所有未完成项保留为待验证或外部阻断，不提前标记完成。
@@ -3696,7 +3696,10 @@ PooToolsSource/MediaViewer/
   和调试组件的显式场景入口，兼容旧的 shared/share 调用。
 - [x] LIFE-593：生成 `report/build_validation_5_9_3.md`，记录静态门禁结果、Xcode Debug / Release
   外部 KituraContracts 阻断，以及仍需真实宿主执行的多 Scene 生命周期回归。
-- [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache 设置数量与成本上限。
+- [x] PERF-594-01：生成缓存盘点报告，并为 NetworkCache、PTVideoCoverCache、PTAudioService 和列表布局缓存设置容量或成本边界。
+- [x] PERF-594-02：完成 MainActor 重任务代码审查；图片/GIF、视频缩略图和网络缓存维护不在 UI 回调中同步解码大数据，UI 结果仍回到 MainActor。
+- [x] PERF-594-03：为 PTNavBar 增加几何签名缓存，避免重复重建标题约束；PTTabBarView 只在遮罩几何变化时更新图层，并避免布局回调中的重复 layoutIfNeeded。
+- [x] PERF-594-04：新增 PTMemoryWarningCoordinator；PTCollectionView、PTVideoCoverCache 和 PTAudioService 响应内存告警，释放派生缓存并取消未完成的视频封面任务。
 - [x] UI-595-01 / UI-595-02 / UI-595-03：生成 UI 适配扫描报告，保留人工回归门槛。
 - [x] DEP-596-01 / DEP-596-05：固定 AttributedString、SocketRocket revision，并增加依赖所有权文档。
 - [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
@@ -3709,7 +3712,7 @@ PooToolsSource/MediaViewer/
   swift-syntax 网络获取和工具链环境阻断；需解除阻断后再完成最终验收。
 - [ ] TEST-592-02 至 TEST-592-05：Xcode iOS Simulator、真实宿主、真机和 Instruments 的实际执行结果；静态夹具已建立但不等于性能验收。
 - [ ] LIFE-593-01 至 LIFE-593-03：多窗口、多 Scene、Scene 断开重连和并行转场的真实宿主回归；静态门禁已完成。
-- [ ] PERF-594-02 至 PERF-594-04：Instruments、真机性能和内存警告实测。
+- [ ] PERF-594-02 至 PERF-594-04：代码实现已完成，仍需在可运行的 Xcode 宿主、真机和 Instruments 中完成性能基线与内存告警实测。
 - [ ] DEP-596-02 至 DEP-596-04：Kitura、SmartCodable 和 Bugly XCFramework 最终决策。
 - [ ] DOC-597-03：Example 页面和真实宿主项目迁移。
 - [ ] 5.9.8 / 5.9.9：6.0 rehearsal、完整 Xcode 矩阵、真机/宿主回归和最终 tag。

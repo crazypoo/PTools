@@ -274,7 +274,7 @@ public actor PTGCDManager {
     }
 }
 
-extension MainActor {
+public extension MainActor {
     @_unavailableFromAsync
     static func gcdRunUnsafely<T: Sendable>(_ body: @MainActor () throws -> T) rethrows -> T {
         return try MainActor.assumeIsolated(body)

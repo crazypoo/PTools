@@ -47,7 +47,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 906,
+      "line": 919,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -570,7 +570,7 @@
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/Network.swift",
       "line": 350,
-      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
+      "text": "Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }"
     },
     {
       "rule": "task_detached",
@@ -581,25 +581,25 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 401,
+      "line": 402,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 638,
+      "line": 637,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1229,
+      "line": 1228,
       "text": "private struct PTSafeUploadParamsBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1523,
+      "line": 1522,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {

@@ -15,6 +15,10 @@ import CryptoKit
 // 串行化缩略图文件 I/O，避免图片解码和磁盘访问阻塞 MainActor。
 private actor PTVideoCoverDiskStore {
     private let directory: URL
+    private let maximumDiskSize: Int64 = 100 * 1024 * 1024
+    private let targetDiskSize: Int64 = 70 * 1024 * 1024
+    private let maintenanceInterval: TimeInterval = 60
+    private var lastMaintenanceTime: TimeInterval = 0
 
     init() {
         let baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
@@ -29,11 +33,57 @@ private actor PTVideoCoverDiskStore {
     }
 
     func writeData(_ data: Data, for key: String) {
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         try? data.write(to: fileURL(for: key), options: .atomic)
+        trimIfNeeded()
     }
 
     private func fileURL(for key: String) -> URL {
         directory.appendingPathComponent(key, isDirectory: false)
+    }
+
+    // English: Trim only by file metadata so maintenance never reloads every cached image into memory.
+    // Español: Recorta solo usando metadatos para que el mantenimiento nunca vuelva a cargar cada imagen en memoria.
+    // 中文：仅使用文件元数据执行裁剪，避免维护时把所有缓存图片重新读入内存。
+    private func trimIfNeeded() {
+        let now = ProcessInfo.processInfo.systemUptime
+        guard now - lastMaintenanceTime >= maintenanceInterval else { return }
+        lastMaintenanceTime = now
+
+        guard let files = try? FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
+            options: [.skipsHiddenFiles]
+        ) else {
+            return
+        }
+
+        var totalSize: Int64 = 0
+        var entries: [(url: URL, size: Int64, modified: Date)] = []
+        entries.reserveCapacity(files.count)
+
+        for fileURL in files {
+            autoreleasepool {
+                guard let values = try? fileURL.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]),
+                      let fileSize = values.fileSize,
+                      fileSize > 0 else {
+                    return
+                }
+                let size = Int64(fileSize)
+                let modified = values.contentModificationDate ?? .distantPast
+                totalSize += size
+                entries.append((fileURL, size, modified))
+            }
+        }
+
+        guard totalSize > maximumDiskSize else { return }
+
+        entries.sort { $0.modified < $1.modified }
+        for entry in entries {
+            try? FileManager.default.removeItem(at: entry.url)
+            totalSize -= entry.size
+            if totalSize <= targetDiskSize { break }
+        }
     }
 }
 
@@ -221,6 +271,13 @@ private final class PTVideoCoverPendingTask {
         }
     }
 
+    // English: Cancel pending thumbnail work before releasing decoded images during memory pressure.
+    // Español: Cancela las miniaturas pendientes antes de liberar imágenes decodificadas bajo presión de memoria.
+    // 中文：内存紧张时先取消待处理缩略图任务，再释放已经解码的图片。
+    func cancel() {
+        task.cancel()
+    }
+
     func wait() async -> UIImage? {
         let waiterID = UUID()
         return await withTaskCancellationHandler(operation: {
@@ -292,6 +349,11 @@ public enum PTVideoCoverCache {
     }()
 
     @MainActor private static var pendingTasks: [String: PTVideoCoverPendingTask] = [:]
+    @MainActor private static let memoryWarningRegistration: UUID = PTMemoryWarningCoordinator.shared.register {
+        PTVideoCoverCache.memoryCache.removeAllObjects()
+        PTVideoCoverCache.pendingTasks.values.forEach { $0.cancel() }
+        PTVideoCoverCache.pendingTasks.removeAll(keepingCapacity: false)
+    }
     private static let diskStore = PTVideoCoverDiskStore()
 
     /// Loads a cached thumbnail or generates the requested one-based frame.
@@ -302,6 +364,7 @@ public enum PTVideoCoverCache {
                              frameNumber: Int = 10,
                              maximumSize: CGSize = PTVideoThumbnailService.defaultMaximumSize,
                              appliesPreferredTrackTransform: Bool = true) async -> UIImage? {
+        _ = memoryWarningRegistration
         let key = thumbnailCacheKey(for: videoURL,
                                     frameNumber: frameNumber,
                                     maximumSize: maximumSize,

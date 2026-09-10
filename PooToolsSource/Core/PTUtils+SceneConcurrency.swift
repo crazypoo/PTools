@@ -201,3 +201,44 @@ public enum PTMainActorBridge {
         after(delay, operation: operation)
     }
 }
+
+// English: Route memory-pressure notifications to bounded in-memory caches on MainActor.
+// Español: Enruta las notificaciones de presión de memoria a las cachés limitadas en memoria dentro de MainActor.
+// 中文：将内存压力通知统一路由到 MainActor 上受容量限制的内存缓存。
+@MainActor
+public final class PTMemoryWarningCoordinator: NSObject {
+    public static let shared = PTMemoryWarningCoordinator()
+
+    private var handlers: [UUID: @MainActor () -> Void] = [:]
+
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(memoryWarningDidReceive),
+                                               name: UIApplication.didReceiveMemoryWarningNotification,
+                                               object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // English: Keep registrations explicit so short-lived views can unregister without retaining their caches.
+    // Español: Mantén los registros explícitos para que las vistas temporales puedan cancelar sin retener sus cachés.
+    // 中文：使用显式注册令牌，短生命周期视图可以注销而不会被缓存协调器持有。
+    @discardableResult
+    public func register(_ handler: @escaping @MainActor () -> Void) -> UUID {
+        let token = UUID()
+        handlers[token] = handler
+        return token
+    }
+
+    public func unregister(_ token: UUID) {
+        handlers[token] = nil
+    }
+
+    @objc private func memoryWarningDidReceive() {
+        let callbacks = Array(handlers.values)
+        callbacks.forEach { $0() }
+    }
+}
