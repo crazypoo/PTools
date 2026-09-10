@@ -2,7 +2,7 @@
 
 ## 范围
 
-本文件记录 5.8.1–5.8.9 的当前实现边界。`ptools` 仍是兼容 umbrella；5.8.1 已先落地可独立编译的 SwiftPM Core / UIFoundation 分层，并保留 Xcode/CocoaPods 的兼容源集。
+本文件记录 5.8.1–5.8.9 的当前实现边界。`ptools` 仍是兼容 umbrella；5.8.1 已先落地可独立编译的 SwiftPM Core / UIFoundation 分层，5.8.2 又增加 Permission Core / Permission UI 的独立 SwiftPM 边界，并保留 Xcode/CocoaPods 的兼容源集。
 
 PTools 面向 iOS 17+ / Swift 6。所有架构结论都以当前工作区源码和生成报告为准，不把静态扫描当作真实设备或生产验证。
 
@@ -19,14 +19,17 @@ PTools 面向 iOS 17+ / Swift 6。所有架构结论都以当前工作区源码�
 - Core 日志新增 `PTLogging`/`PTOSLogger` 值类型契约；CocoaLumberjack、LocalConsole 和运行时调试能力仍属于兼容诊断边界。
 - swizzle 使用集中注册表，避免同一交换被重复执行。
 - `PToolsCore` 已提供 Foundation-only 的 URL 解析、并发值类型和关联对象存储；`PToolsUIFoundation` 独立承载 SnapKit 布局辅助，`ptools` 通过 re-export 保持旧导入方式。
+- `PToolsPermissionCore` 只包含权限状态、结果、错误、请求协议和设置 URL；独立系统权限 target 直接依赖它，不再依赖 SwiftPM 的 `ptools` umbrella。PhotoLibrary 源码因仍属于 Core 兼容集合，暂不重复声明同一路径 target。
+- `PToolsPermissionUI` 只提供可选的权限 UI 状态值、设置页桥接和 UIKit 适配入口；旧 `PermissionCore` UI 类型继续留在 `ptools`，用于保持 CocoaPods/Xcode 兼容。
+- Location handler 和 Bluetooth handler 只负责系统代理生命周期；请求完成前清空回调并解除 delegate，避免授权回调重复或异步请求永久悬挂。
 
 ## 暂缓项
 
 以下项目需要独立 target、完整 Xcode 工程成员和人工回归，不能用同文件声明伪装完成：
 
-- PToolsPermissionCore / PToolsPermissionUI 的真正 target 拆分。
+- 旧 `PTPermissionCell`、`PTPermissionHeader`、`PTPermissionViewController` 等 UIKit 类型从兼容 `PermissionCore` 源集迁移到 `PToolsPermissionUI`；当前先提供不依赖 legacy Base/List 的 UI 边界，避免引入反向依赖。
 - CocoaPods/Xcode 仍使用兼容源集；Core/UIFoundation 在这些入口中的独立 framework module membership 需要后续单独迁移。
-- 每个权限模块从 monolithic `ptools` 中移除依赖。
+- CocoaPods/Xcode 中每个权限 subspec 从 monolithic `ptools` 中移除依赖，并把独立 Permission Core/UI framework 纳入工程成员；SwiftPM 已完成该依赖方向切片。
 - Network 全量 instance pipeline、HUD plugin 和 callback/stream API 迁移。
 - CollectionView 的 layout、prefetch、skeleton、interaction、refresh、side-index coordinator 全量迁移。
 - MediaViewer / PhotoPicker 去除 Network 硬依赖，以及 Editor 全量 protocol 注入。

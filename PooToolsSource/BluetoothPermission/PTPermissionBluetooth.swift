@@ -8,7 +8,9 @@
 
 import Foundation
 import CoreBluetooth
-import CloudKit
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
     
@@ -33,9 +35,6 @@ public class PTPermissionBluetooth: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
-        Task { @MainActor in
-            PTPermissionBluetoothHandler.shared.completion = completion
-            PTPermissionBluetoothHandler.shared.reqeustUpdate()
-        }
+        PTPermissionBluetoothHandler.shared.requestPermission(completion: completion)
     }
 }

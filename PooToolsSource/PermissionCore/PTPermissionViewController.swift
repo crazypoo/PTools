@@ -164,6 +164,10 @@ public class PTPermissionViewController: PTListViewController {
     #if POOTOOLS_PERMISSION_SIRI
                         PTPermission.siri.openSettingPage()
     #endif
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+                    case .custom:
+                        break
+#endif
                     }
                 case .notDetermined:
                     self.permissionRequest(type: cellModel.type)
@@ -398,6 +402,10 @@ public class PTPermissionViewController: PTListViewController {
                     self.showDetail()
                 }
             }
+#endif
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+        case .custom:
+            break
 #endif
         }
     }

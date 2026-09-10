@@ -8,6 +8,9 @@
 
 import Foundation
 import AVFoundation
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 @available(iOS 11.0, macCatalyst 14.0, *)
 public extension PTPermission {

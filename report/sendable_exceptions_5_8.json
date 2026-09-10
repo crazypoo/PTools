@@ -75,13 +75,13 @@
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 26,
+      "line": 36,
       "declaration": "private struct PTSendableExportSession: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 56,
+      "line": 66,
       "declaration": "struct PTSendableAVAsset: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -303,37 +303,37 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 89,
+      "line": 91,
       "declaration": "/// 🌟 步骤 1：标记为 @unchecked Sendable。",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 91,
+      "line": 93,
       "declaration": "public final class NetworkReachability: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 139,
+      "line": 141,
       "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 672,
+      "line": 547,
       "declaration": "public final class Network: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1230,
+      "line": 1228,
       "declaration": "private struct PTSafeUploadParamsBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1502,
+      "line": 1522,
       "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -477,7 +477,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 30,
+      "line": 47,
       "declaration": "private struct PTSafeAudioExportBox: @unchecked Sendable {",
       "allowlisted": true
     },

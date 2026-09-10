@@ -8,6 +8,9 @@
 
 @preconcurrency import UserNotifications
 import os.lock
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
     

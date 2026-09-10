@@ -9,8 +9,8 @@
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 17 | `public struct PTSendableEventArrayBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 25 | `public struct PTSendableReminderArrayBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/AVExport+PTEX.swift` | 13 | `public struct PTAssetExportResult: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/Category/PHAsset+PTEX.swift` | 26 | `private struct PTSendableExportSession: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/Category/PHAsset+PTEX.swift` | 56 | `struct PTSendableAVAsset: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/Category/PHAsset+PTEX.swift` | 36 | `private struct PTSendableExportSession: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/Category/PHAsset+PTEX.swift` | 66 | `struct PTSendableAVAsset: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 89 | `public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 95 | `public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 100 | `public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
@@ -47,12 +47,12 @@
 | `PooToolsSource/NFC/PTNFCToolKit.swift` | 14 | `private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/NFC/PTNFCToolKit.swift` | 19 | `private struct PTNFCSessionSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/NFC/PTNFCToolKit.swift` | 23 | `private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 89 | `/// 🌟 步骤 1：标记为 @unchecked Sendable。` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 91 | `public final class NetworkReachability: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 139 | `public final class PTNetWorkStatus: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 672 | `public final class Network: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 1230 | `private struct PTSafeUploadParamsBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/Network.swift` | 1502 | `private struct PTLegacyModelTypeBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 91 | `/// 🌟 步骤 1：标记为 @unchecked Sendable。` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 93 | `public final class NetworkReachability: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 141 | `public final class PTNetWorkStatus: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 547 | `public final class Network: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 1228 | `private struct PTSafeUploadParamsBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/Network.swift` | 1522 | `private struct PTLegacyModelTypeBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 125 | `/// 使用 @unchecked Sendable 搭配内部状态锁机制，完全适配 Swift 6 并发模型。` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 126 | `public class OSSSpeech: NSObject, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 380 | `// 【Swift 6 规范】定义一个内部引用类型容器来持有状态，并标记为 @unchecked Sendable` | yes | 兼容边界；不得新增业务共享状态 |
@@ -76,7 +76,7 @@
 | `PooToolsSource/VideoEditor/Exporter.swift` | 19 | `struct PTSystemAVAssetBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift` | 14 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1519 | `private struct PTC7SafeBox:@unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/VideoEditor/VideoConverter.swift` | 30 | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
+| `PooToolsSource/VideoEditor/VideoConverter.swift` | 47 | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/Vision/PTVision.swift` | 24 | `private struct PTObservationBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Vision/PTVision.swift` | 29 | `public final class PTVision: NSObject, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 

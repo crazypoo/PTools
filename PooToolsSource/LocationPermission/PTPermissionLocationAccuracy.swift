@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import MapKit
+import CoreLocation
 
 extension CLLocationManager {
     

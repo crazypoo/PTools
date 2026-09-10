@@ -7,7 +7,10 @@
 //
 
 import Foundation
-import EventKit
+import CoreLocation
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
     
@@ -37,7 +40,10 @@ public class PTPermissionLocation: PTPermission {
                 return "NSLocationAlwaysAndWhenInUseUsageDescription"
             }
         default:
-            fatalError()
+            // English: The factory only creates location kinds; return no key instead of crashing on an invalid internal value.
+            // Español: La fábrica solo crea tipos de ubicación; devuelve ninguna clave en lugar de bloquear ante un valor interno inválido.
+            // 中文：工厂只会创建定位类型，内部值异常时返回空键，不让权限查询崩溃。
+            return nil
         }
     }
     
@@ -90,10 +96,17 @@ public class PTPermissionLocation: PTPermission {
                     // English: The system callback may outlive the request call; keep cleanup on MainActor.
                     // Español: El callback del sistema puede sobrevivir a la llamada; mantiene la limpieza en MainActor.
                     // 中文：系统回调可能晚于请求调用返回，因此统一在 MainActor 上完成回收。
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+                    PTPermission.completeRequest { @MainActor in
+                        completion()
+                        PTPermissionLocationWhenInUseHandler.shared = nil
+                    }
+#else
                     PTMainActorBridge.perform {
                         completion()
                         PTPermissionLocationWhenInUseHandler.shared = nil
                     }
+#endif
                 }
             case .always:
                 PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
@@ -101,14 +114,28 @@ public class PTPermissionLocation: PTPermission {
                     // English: Use the same callback bridge for both location authorization modes.
                     // Español: Usa el mismo puente de callback para los dos modos de autorización de ubicación.
                     // 中文：两种定位授权模式统一使用同一个回调桥接入口。
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+                    PTPermission.completeRequest { @MainActor in
+                        completion()
+                        PTPermissionLocationAlwaysHandler.shared = nil
+                    }
+#else
                     PTMainActorBridge.perform {
                         completion()
                         PTPermissionLocationAlwaysHandler.shared = nil
                     }
+#endif
                 }
-            }
+        }
         default:
-            fatalError()
+            // English: Complete unexpected input safely so a malformed internal kind cannot suspend the caller.
+            // Español: Finaliza de forma segura una entrada inesperada para que un tipo interno erróneo no suspenda al llamador.
+            // 中文：安全完成异常输入，避免错误的内部类型让调用方永久等待。
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+            PTPermission.completeRequest(completion)
+#else
+            PTMainActorBridge.perform(completion)
+#endif
         }
     }
 }

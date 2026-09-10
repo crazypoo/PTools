@@ -8,6 +8,9 @@
 
 import Foundation
 import Speech
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
 
@@ -33,9 +36,13 @@ public class PTPermissionSpeech: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         SFSpeechRecognizer.requestAuthorization { status in
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+            PTPermission.completeRequest(completion)
+#else
             PTGCDManager.shared.runOnMain {
                 completion()
             }
+#endif
         }
     }
 }

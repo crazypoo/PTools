@@ -20,6 +20,7 @@ ruby Scripts/report_spm_dependency_graph.rb
 ruby Scripts/report_cocoapods_subspec_graph.rb
 bash Scripts/validate_module_parity.sh "$mode"
 bash Scripts/validate_dependency_direction.sh
+bash Scripts/validate_permission_source_contract.sh
 bash Scripts/validate_file_size_gate.sh
 ruby Scripts/report_sendable_exceptions.rb
 ruby Scripts/report_public_api_5_8.rb

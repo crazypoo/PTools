@@ -8,6 +8,9 @@
 
 import Foundation
 import EventKit
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
     
@@ -37,7 +40,10 @@ public class PTPermissionCalendar: PTPermission {
                 return "NSCalendarsWriteOnlyAccessUsageDescription"
             }
         default:
-            fatalError()
+            // English: Calendar instances are created with a calendar kind; return no key for an unexpected value.
+            // Español: Las instancias de calendario se crean con un tipo de calendario; devuelve ninguna clave ante un valor inesperado.
+            // 中文：日历实例由日历类型创建，遇到异常类型时返回空键而不是崩溃。
+            return nil
         }
     }
     
@@ -61,7 +67,7 @@ public class PTPermissionCalendar: PTPermission {
                     return .authorized
                 }
             default:
-                fatalError()
+                return .notSupported
             }
         @unknown default: return .denied
         }

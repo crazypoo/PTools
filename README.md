@@ -268,6 +268,18 @@ pod 'PooTools/MicPermission', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/MeidaPermission', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/BluetoothPermission', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/SiriPermission', :git => 'https://github.com/crazypoo/PTools.git'
+
+SwiftPM 项目可以只引入权限 Core 和需要的系统权限模块，避免把 `ptools` 的 UI/网络依赖带入权限服务：
+
+```swift
+dependencies: [
+    .product(name: "PToolsPermissionCore", package: "ptools"),
+    .product(name: "PTCameraPermission", package: "ptools")
+]
+```
+
+需要设置页和权限 UI 适配时再增加 `PToolsPermissionUI`。旧 CocoaPods 权限 subspec 和 `PTPermission` 入口继续保留，迁移期间无需一次性改动业务代码。系统权限请求优先使用 `await permission.request()` 或 `await permission.requestStatus()`；旧 callback 入口仍可用。
+
 ### Harbeth照片特效
 pod 'PooTools/Harbeth', :git => 'https://github.com/crazypoo/PTools.git'
 ### ScrollRefresh刷新

@@ -1,9 +1,16 @@
 platform :ios, '17.0'
 use_frameworks!
 
+legacy_swift5_targets = %w[Appz KituraContracts]
+
 post_install do |installer|
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
+        if legacy_swift5_targets.include?(target.name)
+          config.build_settings['SWIFT_VERSION'] = '5.0'
+          config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'minimal'
+        end
+
         config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
 #        if config.name == 'Release'
 #          # swift编译优化级别

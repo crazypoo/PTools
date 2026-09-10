@@ -8,6 +8,9 @@
 
 import Foundation
 import CoreMotion
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 public extension PTPermission {
     

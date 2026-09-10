@@ -26,6 +26,14 @@
 - SwiftPM 使用分层实现，Xcode/CocoaPods 保留兼容源集，未删除公开 API、未升级第三方依赖。
 - `PToolsCore` 与 `PToolsUIFoundation` 独立编译验证通过；Example Xcode Debug/Release 仍需通过外部 Pods 阻断后完成最终构建验收。
 
+## 5.8.2 - Permission boundary slice
+
+- 新增 Foundation-only 的 `PToolsPermissionCore`，提供权限状态、结果、错误、请求协议和设置 URL；不引入 UIKit、Network、Kingfisher 或 Lottie。
+- SwiftPM 的 Camera、Location、Calendar、Motion、Tracking、Reminders、Speech、Health、FaceID、Contacts、Mic、Media、Bluetooth、Siri 和 Notification permission target 改为直接依赖 `PToolsPermissionCore` 及对应系统框架；PhotoLibrary 继续由 Core 兼容源集提供，避免重复源码路径。
+- 新增可选 `PToolsPermissionUI`，提供权限 UI 状态值和设置页桥接；旧 PermissionCore UIKit 类型继续保留在 `ptools`，避免破坏 CocoaPods/Xcode 公开入口。
+- 定位和蓝牙请求代理增加 exactly-once 完成、重复代理事件保护和 delegate 解绑；异常系统状态不会让 async 调用永久等待。
+- 本批只验证 SwiftPM Permission Core/系统权限源的 iOS Simulator Swift 6 编译；完整 Xcode Debug/Release 仍需先解除外部 Pods 的并发诊断阻断。
+
 ## 5.8.9 - 2026-09-09
 
 - 作为 5.9.x Core 治理的稳定起点，统一记录 iOS 17+、Swift 6 和当前模块依赖基线。

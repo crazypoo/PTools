@@ -1,14 +1,14 @@
 # Dependency Direction Gate
 
 - Status: `pass_with_legacy_allowlist`
-- Internal edges: `121`
+- Internal edges: `124`
 - Temporary allowlisted edges: `2`
 - Unallowlisted violations: `0`
 
 ## Rules
 
-- ptools -> local target is forbidden except PToolsCore and PToolsUIFoundation
-- PT*Permission -> non-ptools target is forbidden
+- ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore
+- PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore
 - MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires
 - Navigation/Router -> PhotoPicker is forbidden
 

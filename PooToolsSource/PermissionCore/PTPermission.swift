@@ -6,6 +6,21 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+
+// English: Map the legacy umbrella name to the standalone permission contract in SwiftPM only.
+// Español: Mapea el nombre heredado del umbrella al contrato de permisos independiente solo en SwiftPM.
+// 中文：仅在 SwiftPM 中将旧 umbrella 类型名映射到独立权限契约。
+public typealias PTPermission = PToolsPermissionCore.PTPermission
+
+@MainActor
+public extension PTPermission {
+    var localisedName: String {
+        PTPermissionText.permission_name(for: kind)
+    }
+}
+#else
 import UIKit
 import os.lock
 #if POOTOOLS_PERMISSION_HEALTH
@@ -335,3 +350,4 @@ open class PTPermission {
         case always
     }
 }
+#endif

@@ -48,12 +48,12 @@ edges.each do |edge|
   forbidden = false
   rule = nil
 
-  if source == "ptools" && !%w[PToolsCore PToolsUIFoundation].include?(destination)
+  if source == "ptools" && !%w[PToolsCore PToolsUIFoundation PToolsPermissionCore].include?(destination)
     forbidden = true
-    rule = "Core target may depend only on PToolsCore and PToolsUIFoundation local layers"
-  elsif source.match?(/^PT.*Permission$/) && destination != "ptools"
+    rule = "Core target may depend only on PToolsCore, PToolsUIFoundation, and PToolsPermissionCore local layers"
+  elsif source.match?(/^PT.*Permission$/) && !%w[ptools PToolsPermissionCore].include?(destination)
     forbidden = true
-    rule = "Permission target may depend only on ptools until PermissionCore is split"
+    rule = "Permission target may depend only on ptools or PToolsPermissionCore"
   elsif %w[PooToolsMediaViewer PooToolsPhotoPicker].include?(source) && destination == "PooToolsNetWork"
     forbidden = true
     rule = "Media target must not depend on the concrete Network implementation"
@@ -75,8 +75,8 @@ result = {
   "schema_version" => 1,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
-    "ptools -> local target is forbidden except PToolsCore and PToolsUIFoundation",
-    "PT*Permission -> non-ptools target is forbidden",
+    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",
+    "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
   ],

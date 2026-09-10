@@ -74,6 +74,10 @@ class PTPermissionCell: PTBaseNormalCell {
             cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_bluetooth")
         case .siri:
             cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_siri")
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+        case .custom:
+            cellIcon.image = nil
+#endif
         }
         
         var totalAtt:ASAttributedString = ASAttributedString(string: "")

@@ -17,3 +17,7 @@
 #if canImport(PToolsUIFoundation)
 @_exported import PToolsUIFoundation
 #endif
+
+#if canImport(PToolsPermissionCore)
+@_exported import PToolsPermissionCore
+#endif

@@ -275,13 +275,13 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 224,
+      "line": 234,
       "text": "Task.detached(priority: priority) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTGCDManager.swift",
-      "line": 231,
+      "line": 241,
       "text": "Task.detached(priority: .background) {"
     },
     {

@@ -45,6 +45,13 @@ enum PTPermissionText {
             return "PT Permission siri".localized()
         case .health:
             return "PT Permission health".localized()
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+        case .custom(let value):
+            // English: Preserve custom permission labels in the split core without requiring a new localization key.
+            // Español: Conserva las etiquetas de permisos personalizados sin exigir una nueva clave de localización.
+            // 中文：拆分 Core 后保留自定义权限名称，不强制新增本地化键。
+            return value
+#endif
         }
     }
 }

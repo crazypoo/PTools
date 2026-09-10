@@ -7,8 +7,12 @@
 //
 
 import Foundation
-import MapKit
+import CoreLocation
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
+@MainActor
 class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocationManagerDelegate {
     
     // MARK: - Location Manager
@@ -20,7 +24,7 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
         if status == .notDetermined {
             return
         }
-        completionHandler()
+        finishRequest()
     }
 #endif
 
@@ -29,12 +33,22 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
         if manager.authorizationStatus == .notDetermined {
             return
         }
-        completionHandler()
+        finishRequest()
     }
     
     // MARK: - Process
     
-    var completionHandler: PTActionTask = {}
+    private var completionHandler: PTActionTask?
+
+    // English: Finish once and release the delegate as soon as authorization reaches a terminal state.
+    // Español: Finaliza una sola vez y libera el delegado cuando la autorización llega a un estado terminal.
+    // 中文：授权进入终态后只完成一次，并立即释放代理，避免重复回调和代理滞留。
+    private func finishRequest() {
+        guard let completionHandler else { return }
+        self.completionHandler = nil
+        locationManager.delegate = nil
+        completionHandler()
+    }
     
     @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
         self.completionHandler = completionHandler
@@ -53,11 +67,10 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
         case .notDetermined:
             locationManager.delegate = self
             locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse:
-            locationManager.delegate = self
-            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            finishRequest()
         default:
-            self.completionHandler()
+            finishRequest()
         }
     }
     
@@ -69,7 +82,4 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
         super.init()
     }
     
-    deinit {
-        locationManager.delegate = nil
-    }
 }

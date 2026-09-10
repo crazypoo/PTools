@@ -193,6 +193,28 @@
       ]
     },
     {
+      "name": "PToolsPermissionCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsPermissionCore"
+      ]
+    },
+    {
+      "name": "PToolsPermissionUI",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsPermissionUI"
+      ]
+    },
+    {
       "name": "PToolsUIFoundation",
       "type": {
         "library": [
@@ -226,6 +248,8 @@
         "PTSiriPermission",
         "PTSpeechPermission",
         "PTTrackingPermission",
+        "PToolsPermissionCore",
+        "PToolsPermissionUI",
         "PooToolsBankCard",
         "PooToolsBioID",
         "PooToolsCalendar",
@@ -1869,12 +1893,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -1898,6 +1922,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -1909,12 +1941,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -1938,6 +1970,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -1949,12 +1989,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -1978,6 +2018,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -1989,12 +2037,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2018,6 +2066,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2029,12 +2085,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2058,6 +2114,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2069,12 +2133,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2098,6 +2162,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2109,12 +2181,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2138,6 +2210,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2149,12 +2229,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2178,6 +2258,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2189,12 +2277,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2218,6 +2306,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2229,12 +2325,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2258,6 +2354,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2269,12 +2373,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2298,6 +2402,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2309,12 +2421,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2338,6 +2450,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2349,12 +2469,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2378,6 +2498,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2389,12 +2517,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2418,6 +2546,14 @@
             }
           },
           "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
         }
       ]
     },
@@ -2429,12 +2565,12 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "ptools",
+          "name": "PToolsPermissionCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "PToolsPermissionCore",
               null
             ]
           }
@@ -2455,6 +2591,14 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_PERMISSION_TRACKING"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
             }
           },
           "tool": "swift"
@@ -2605,6 +2749,34 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsPermissionCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsPermissionCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsPermissionTests",
       "type": "test",
       "path": "Tests/PToolsPermissionTests",
@@ -2626,6 +2798,57 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsPermissionUI",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsPermissionUI",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsPermissionCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsPermissionCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsUIFoundation",
@@ -6006,6 +6229,17 @@
           }
         },
         {
+          "name": "PToolsPermissionCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsPermissionCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsUIFoundation",
           "kind": "internal",
           "package": null,
@@ -6311,6 +6545,14 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SPLIT_CORE"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
             }
           },
           "tool": "swift"

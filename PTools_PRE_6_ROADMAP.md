@@ -738,8 +738,11 @@ MediaCore -> Network concrete implementation
 
 ### 5.8.2 Permission
 
+- [x] `PERM-582-01`：新增 Foundation-only `PToolsPermissionCore`，并在 SwiftPM `ptools` 兼容入口中映射旧 `PTPermission` 类型名。
+- [ ] `PERM-582-02`：新增可选 `PToolsPermissionUI` 状态模型和设置页桥接；旧 PermissionCore UIKit 类型的完整迁移仍待 UI 基座独立后处理。
+- [x] `PERM-582-03`：Camera、Location、Calendar、Motion、Tracking、Reminders、Speech、Health、FaceID、Contacts、Mic、Media、Bluetooth、Siri 和 Notification SwiftPM target 改为直接依赖 `PToolsPermissionCore`；PhotoLibrary 因已属于 Core 兼容源集，不重复声明同路径 target。
 - [x] `PERM-582-04`：补充 `currentStatus()`、`requestStatus()`、`openSettings()`，并用 exactly-once 桥接保证回调只恢复一次。
-- [ ] `PERM-582-01` / `PERM-582-02` / `PERM-582-03` / `PERM-582-05`：权限核心、权限 UI、最小依赖 Target 和系统服务彻底分离待后续垂直切片。
+- [ ] `PERM-582-05`：Location handler 和 Bluetooth handler 已独立处理系统代理生命周期；Motion/Speech 等系统服务的统一 protocol 和 CocoaPods/Xcode framework 拆分仍待后续垂直切片。
 
 ### 5.8.3 Network
 
@@ -1119,12 +1122,12 @@ permission == location manager == geocoder == UI
 
 ## 5.8.2 验收
 
-- [ ] 单独引入 CameraPermission 不引入 Kingfisher/Lottie/Network。
-- [ ] 所有权限模块可单独 build。
-- [ ] 权限 UI 可选。
-- [ ] async / callback exactly-once。
-- [ ] permission manager 无 delegate leak。
-- [ ] denied/restricted/notDetermined/authorized 全覆盖。
+- [x] 单独引入 CameraPermission 不引入 Kingfisher/Lottie/Network；契约脚本会阻断 umbrella/UI/network import。
+- [x] 所有独立 SwiftPM 权限 target 已通过 iOS Simulator / Swift 6 直接源码编译；PhotoLibrary Core 兼容源也通过同一编译路径，完整 SwiftPM 图和 Xcode 工程构建仍按外部依赖结果单独记录。
+- [x] 权限 UI 可选；`PToolsPermissionUI` 不依赖 `ptools`，旧 UIKit UI 继续由兼容 umbrella 提供。
+- [x] async / callback exactly-once；Core continuation、Location delegate 和 Bluetooth delegate 均有重复完成保护。
+- [x] permission manager 的 Location/Bluetooth delegate 在完成请求前解除；系统 delegate 为弱引用。
+- [x] 各具体权限实现已统一映射 authorized、denied/restricted、notDetermined 和 unknown 状态；真机弹窗行为仍需宿主回归。
 
 ---
 
@@ -3510,11 +3513,11 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.8.2 Permission
 
-- [ ] PERM-582-01 PermissionCore
-- [ ] PERM-582-02 PermissionUI
-- [ ] PERM-582-03 Minimal targets
+- [x] PERM-582-01 PermissionCore
+- [ ] PERM-582-02 PermissionUI（状态模型/设置桥接已落地，legacy UIKit 类型完整迁移待后续）
+- [x] PERM-582-03 Minimal targets
 - [x] PERM-582-04 Async API
-- [ ] PERM-582-05 System service separation
+- [ ] PERM-582-05 System service separation（Location/Bluetooth 生命周期切片已落地，完整服务协议待后续）
 
 ## Milestone: 5.8.3 Network
 

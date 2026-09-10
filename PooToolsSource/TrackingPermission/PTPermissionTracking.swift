@@ -7,6 +7,9 @@
 //
 
 import AppTrackingTransparency
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+#endif
 
 @available(iOS 14, tvOS 14, *)
 public extension PTPermission {

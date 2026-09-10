@@ -9,8 +9,18 @@
 import UIKit
 import os.lock
 
-// 闭包类型定义：添加 @Sendable 以满足跨边界传递的安全要求
+#if POOTOOLS_SPLIT_PERMISSION_CORE
+import PToolsPermissionCore
+// English: Reuse the permission-core callback type so SwiftPM and feature targets share one ABI-level contract.
+// Español: Reutiliza el tipo de callback del núcleo de permisos para que SwiftPM y los targets de funciones compartan un único contrato.
+// 中文：复用权限 Core 的回调类型，让 SwiftPM 与功能 target 共享同一套契约。
+public typealias PTActionTask = PToolsPermissionCore.PTActionTask
+#else
+// English: Keep the legacy callback type available to the CocoaPods/Xcode source set.
+// Español: Mantiene disponible el tipo de callback heredado para el conjunto de fuentes de CocoaPods/Xcode.
+// 中文：为 CocoaPods/Xcode 旧源码集合保留回调类型。
 public typealias PTActionTask = @Sendable () -> Void
+#endif
 public typealias PTActionAsyncTask = @Sendable () async -> Void
 
 private struct PTGCDOnce: Sendable {

@@ -20,6 +20,11 @@ let package = Package(
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
         .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
+        // English: Publish permission contracts separately so system services do not import the full UI umbrella.
+        // Español: Publica los contratos de permisos por separado para que los servicios del sistema no importen todo el umbrella de UI.
+        // 中文：独立公开权限契约，避免系统服务引入完整 UI umbrella。
+        .library(name: "PToolsPermissionCore", targets: ["PToolsPermissionCore"]),
+        .library(name: "PToolsPermissionUI", targets: ["PToolsPermissionUI"]),
 
         // ==========================================
         // 基础 UI 与细分组件模块
@@ -130,6 +135,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsAll", targets: [
             "ptools",
+            "PToolsPermissionCore", "PToolsPermissionUI",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
             "PooToolsHud", "PooToolsLivePhoto", "PooToolsShare", "PooToolsPDF",
             "PooToolsSVG",
@@ -223,6 +229,29 @@ let package = Package(
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
+        // English: Keep permission state, errors, and request protocols independent from UIKit and feature modules.
+        // Español: Mantén el estado, los errores y los protocolos de permisos independientes de UIKit y de los módulos de funciones.
+        // 中文：让权限状态、错误和请求协议独立于 UIKit 与具体功能模块。
+        .target(
+            name: "PToolsPermissionCore",
+            path: "PooToolsSource/PToolsPermissionCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep UIKit-only settings presentation optional and isolated from system permission services.
+        // Español: Mantén opcional la presentación de ajustes basada en UIKit y aislada de los servicios de permisos.
+        // 中文：让基于 UIKit 的设置页展示保持可选，并与系统权限服务隔离。
+        .target(
+            name: "PToolsPermissionUI",
+            dependencies: ["PToolsPermissionCore", "PToolsUIFoundation"],
+            path: "PooToolsSource/PToolsPermissionUI",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -231,6 +260,7 @@ let package = Package(
             dependencies: [
                 "PToolsCore",
                 "PToolsUIFoundation",
+                "PToolsPermissionCore",
                 "SwiftDate",
                 "SnapKit",
                 "SwifterSwift",
@@ -279,6 +309,7 @@ let package = Package(
                 .define("POOTOOLS_CGDWEBSERVER"),
                 .define("POOTOOLS_SPLIT_CORE"),
                 .define("POOTOOLS_SPLIT_UIFOUNDATION"),
+                .define("POOTOOLS_SPLIT_PERMISSION_CORE"),
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
@@ -299,21 +330,21 @@ let package = Package(
         // ==========================================
         // 权限模块 (Permissions)
         // ==========================================
-        .target(name: "PTCameraPermission", dependencies: ["ptools"], path: "PooToolsSource/CameraPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CAMERA"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTLocationPermission", dependencies: ["ptools"], path: "PooToolsSource/LocationPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_LOCATION"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTCalendarPermission", dependencies: ["ptools"], path: "PooToolsSource/CalendarPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CALENDAR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTMotionPermission", dependencies: ["ptools"], path: "PooToolsSource/MotionPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MOTION"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTTrackingPermission", dependencies: ["ptools"], path: "PooToolsSource/TrackingPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_TRACKING"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTRemindersPermission", dependencies: ["ptools"], path: "PooToolsSource/RemindersPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_REMINDERS"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTSpeechPermission", dependencies: ["ptools"], path: "PooToolsSource/SpeechPremission", swiftSettings: [.define("POOTOOLS_PERMISSION_SPEECH"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTHealthPermission", dependencies: ["ptools"], path: "PooToolsSource/HealthPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_HEALTH"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTFaceIDPermission", dependencies: ["ptools"], path: "PooToolsSource/FaceIDPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_FACEIDPERMISSION"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTContactsPermission", dependencies: ["ptools"], path: "PooToolsSource/ContactsPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CONTACTS"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTMicPermission", dependencies: ["ptools"], path: "PooToolsSource/MicPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MIC"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTMediaPermission", dependencies: ["ptools"], path: "PooToolsSource/MeidaLibraryPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MEDIA"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTBluetoothPermission", dependencies: ["ptools"], path: "PooToolsSource/BluetoothPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_BLUETOOTH"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTSiriPermission", dependencies: ["ptools"], path: "PooToolsSource/SiriPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_SIRI"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PTNotificationPermission", dependencies: ["ptools"], path: "PooToolsSource/NotificationPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_NOTIFICATION"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTCameraPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/CameraPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CAMERA"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTLocationPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/LocationPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_LOCATION"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTCalendarPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/CalendarPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CALENDAR"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTMotionPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/MotionPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MOTION"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTTrackingPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/TrackingPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_TRACKING"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTRemindersPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/RemindersPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_REMINDERS"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTSpeechPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/SpeechPremission", swiftSettings: [.define("POOTOOLS_PERMISSION_SPEECH"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTHealthPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/HealthPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_HEALTH"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTFaceIDPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/FaceIDPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_FACEIDPERMISSION"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTContactsPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/ContactsPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_CONTACTS"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTMicPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/MicPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MIC"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTMediaPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/MeidaLibraryPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_MEDIA"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTBluetoothPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/BluetoothPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_BLUETOOTH"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTSiriPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/SiriPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_SIRI"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PTNotificationPermission", dependencies: ["PToolsPermissionCore"], path: "PooToolsSource/NotificationPermission", swiftSettings: [.define("POOTOOLS_PERMISSION_NOTIFICATION"), .define("POOTOOLS_SPLIT_PERMISSION_CORE"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
         // 核心中上层依赖模块
