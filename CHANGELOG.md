@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.9.7 - Unreleased
+
+- 补齐 README 的 Core、UIKit Base、Network、Media 和 Debug 模块化安装集合，并同步当前 `5.9.6` 标签。
+- 新增 `EXAMPLE_MODULES_5_9.md`，登记 PooTools Example 的导航、列表、媒体、权限、主题和调试页面入口。
+- 补充每个主要模块的直接依赖和不带入的功能边界，避免宿主按功能选择模块时误引入整套组件。
+- 完善 `MIGRATION_6.md` 的 Before/After 迁移配方；5.9.x 继续保留兼容入口，未创建新的发布标签。
+
 ## 5.9.x - Unreleased
 
 - 建立 5.9.x 的 Core API、并发、单例、缓存、无障碍和回归报告，所有报告均基于当前源码生成。

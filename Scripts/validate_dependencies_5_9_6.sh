@@ -51,7 +51,7 @@ if [[ -e Pods/Bugly/Bugly.framework ]]; then
 fi
 require_match 'canImport\(Bugly\)' PooTools/AppDelegate.swift
 
-require_match '当前仓库基线：`5\.9\.5`' DEPENDENCIES.md
+require_match '当前仓库基线：`5\.9\.6`' DEPENDENCIES.md
 require_match 'dependency_supply_chain_5_9_6\.md' DEPENDENCIES.md
 [[ -f report/dependency_supply_chain_5_9_6.md ]] || fail 'dependency report is missing'
 

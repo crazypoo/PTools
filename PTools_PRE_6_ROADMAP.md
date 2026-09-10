@@ -3,9 +3,9 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 审查基线：`master` @ `9e01e16e`（2026-09-09）
-> 当前 Podspec 版本：`5.9.2`
-> 当前最新 Git Tag：`5.9.2`（2026-09-09）
+> 审查基线：`master` @ `226e1b8f`（2026-09-10）
+> 当前 Podspec 版本：`5.9.6`
+> 当前最新 Git Tag：`5.9.6`（2026-09-10）
 > 最低平台：iOS 17.0
 > Swift：Swift 6.0 / Strict Concurrency
 > 核心原则：**5.x 完成内部重构、解耦、兼容迁移和门禁建设；6.0 只做已经准备好的破坏性删除与正式模块边界切换。**
@@ -3633,10 +3633,10 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.9.7 Migration
 
-- [ ] DOC-597-01 README module sets
-- [ ] DOC-597-02 Dependency docs
-- [ ] DOC-597-03 Example pages
-- [ ] DOC-597-04 MIGRATION_6
+- [x] DOC-597-01 README module sets
+- [x] DOC-597-02 Dependency docs
+- [x] DOC-597-03 Example pages index and module regression guide
+- [x] DOC-597-04 MIGRATION_6
 
 ## Milestone: 5.9.8 6.0 Rehearsal
 
@@ -3714,7 +3714,8 @@ PooToolsSource/MediaViewer/
 - [x] DEP-596-04：移除 Example 的旧 Bugly Pod 和 lock 条目；AppDelegate 保留 `canImport(Bugly)` 兼容入口，宿主项目重新接入时必须提供 XCFramework。
 - [x] DEP-596-05：更新 `DEPENDENCIES.md`，新增 `report/dependency_supply_chain_5_9_6.md`。
 - [x] 5.9.6 Xcode 验证：Debug / Release 均已执行；结果受外部 KituraContracts Swift 6 诊断阻断，详见 `report/build_validation_5_9_6.md`。
-- [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG 并新增迁移文档。
+- [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG、依赖文档并补齐迁移配方。
+- [x] DOC-597-03：新增 `EXAMPLE_MODULES_5_9.md`，登记 `PooTools-Example` 的真实页面入口、模块覆盖和回归清单；真实宿主项目迁移继续留到 5.9.8 rehearsal。
 - [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。
 - [x] 记录当前 Xcode Debug / Release 和直接 PooTools scheme 构建结果：`report/build_validation_5_9.md`。
 - [x] 2026-09-10 兼容切片：`PTTabBarView` 外观快照、`PTCollectionPhotoPrefetchCoordinator` 预取引用计数与生命周期清理、Network 实例请求环境/Typed Codable 入口，以及稳定 request/cache key；旧公开入口均保留。
@@ -3728,7 +3729,7 @@ PooToolsSource/MediaViewer/
 - [ ] LIFE-593-01 至 LIFE-593-03：多窗口、多 Scene、Scene 断开重连和并行转场的真实宿主回归；静态门禁已完成。
 - [ ] PERF-594-02 至 PERF-594-04：代码实现已完成，仍需在可运行的 Xcode 宿主、真机和 Instruments 中完成性能基线与内存告警实测。
 - [ ] 宿主项目若重新接入 Bugly，仍需供应商 XCFramework、Simulator slice、通用 device archive 和真实宿主归档验证。
-- [ ] DOC-597-03：Example 页面和真实宿主项目迁移。
+- [ ] 真实宿主项目迁移：需要 CrazyDashboard 和其他宿主项目在 5.9.8 rehearsal 中单独执行。
 - [ ] 5.9.8 / 5.9.9：6.0 rehearsal、完整 Xcode 矩阵、真机/宿主回归和最终 tag。
 
 已知外部阻断：Metal 工具链和部分 Kitura/Pods Swift 6 诊断。宿主重新接入旧版

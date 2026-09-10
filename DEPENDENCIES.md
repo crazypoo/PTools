@@ -1,6 +1,6 @@
 # PTools 5.9.x 依赖与供应链清单
 
-当前仓库基线：`5.9.5`（5.9.6 依赖治理工作树）。`Core` 是
+当前仓库基线：`5.9.6`（最新标签 `5.9.6`）。`Core` 是
 `PooTools.podspec` 的 `default_subspec`，其他模块都围绕 Core 扩展。本文件记录依赖所有权、
 可复现约束、维护风险和替换路线；不修改第三方源码。
 
@@ -13,6 +13,25 @@
 | Codable 双栈 | 已评估 | SmartCodable 为主要模型入口；KakaJSON 限定为现有兼容路径，6.0 再评估拆出 Serialization |
 | Bugly | 已完成示例工程解耦 | 删除旧 Bugly Pod；示例工程使用 `canImport(Bugly)`，宿主项目必须提供带 Simulator slice 的 XCFramework 才能重新接入 |
 | 所有权文档 | 已完成 | 本文件和 `report/dependency_supply_chain_5_9_6.md` |
+
+## 5.9.7 模块集合与直接依赖
+
+以下只记录 CocoaPods subspec 的直接依赖；Core 的传递依赖不会因为选择上层模块而重复声明。
+SwiftPM 使用对应 product 名称，详见 `Package.swift`。
+
+| 模块集合 | CocoaPods 入口 | SwiftPM product | 直接依赖 | 不直接带入 |
+|---|---|---|---|---|
+| Minimal / UIKit Base | `PooTools/Core` | `ptools` | SwiftDate、SnapKit、SwifterSwift、CocoaLumberjack、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SafeSFSymbols、SmartCodable、KakaJSON、Lottie | Alamofire、Kakapos、Harbeth、GCDWebServer |
+| Network | `PooTools/NetWork` | `PooToolsNetWork` | `PooTools/Core`、`PooTools/Loading`、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
+| ImagePicker | `PooTools/ImagePicker` | `PooToolsImagePicker` | `PooTools/Core`、`PooTools/CameraPermission` | PhotoKit 浏览器和多选编辑流程 |
+| PhotoPicker | `PooTools/PhotoPicker` | `PooToolsPhotoPicker` | `PooTools/Core`、`PooTools/ImagePicker`、`PooTools/NetWork`、`PooTools/Loading`、Kakapos | VideoEditor、MediaViewer |
+| MediaViewer | `PooTools/MediaViewer` | `PooToolsMediaViewer` | `PooTools/Core`、ProgressBar、NetWork、PageControl、LivePhoto、Photos | ImagePicker、PhotoPicker 浏览器 |
+| VideoEditor | `PooTools/VideoEditor` | `PooToolsVideoEditor` | `PooTools/Core`、HarbethKit、ProgressBar、Loading | PhotoPicker、Network 请求层 |
+| ScrollBanner / PageControl | `PooTools/ScrollBanner`、`PooTools/PageControl` | `PooToolsScrollBanner`、`PooToolsPageControl` | ScrollBanner → Core + PageControl；PageControl → Core | Network、媒体模块 |
+| Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | Core、NetWork、Share、SearchBar、PDF | Bugly；宿主必须自行提供兼容 XCFramework |
+
+`ImagePicker` 与 `PhotoPicker` 有意共存：前者是单媒体系统入口，后者是多选、编辑、原图和
+Live Photo 的自定义 PhotoKit 浏览器。不要仅因为两者都能选图片就把它们合并为同一个依赖。
 
 ## Swift Package Manager
 
@@ -61,7 +80,7 @@
 
 ## CocoaPods 与二进制框架
 
-- 当前 `Podfile.lock` 的 PooTools 版本为 `5.9.5`。
+- 当前 `Podfile.lock` 的 PooTools 版本为 `5.9.6`。
 - 旧版 Bugly `2.6.1` 仅提供 `Bugly.framework`，没有 XCFramework，也没有 arm64 Simulator slice；已从示例工程 Podfile 和 lockfile 移除。
 - `PooTools/AppDelegate.swift` 的 Bugly 启动保留在 `#if canImport(Bugly)` 中。真实宿主如需崩溃上报，必须自行提供同时包含 Simulator slice 和通用 device archive 的供应商 XCFramework。
 - 本轮未修改 Pods 源码，也未主动升级其他依赖版本。

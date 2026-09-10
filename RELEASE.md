@@ -8,8 +8,9 @@
 - Git tag（格式：`<version>`，不带 `v` 前缀）
 - `CHANGELOG.md` 对应版本章节
 
-当前仓库代码基线为 `5.8.9`，上一正式标签为 `5.7.9`；本轮发布目标为 `5.8.9`。
-5.8.9 是当前 5.x 稳定基线；5.9.x 只在完成源码、依赖、Xcode 和宿主回归后再进入发布流程。
+当前仓库代码基线和最新正式标签均为 `5.9.6`。5.9.7 当前是文档、示例和迁移工作线，
+不因文档完成自动创建新的版本标签。
+5.9.6 是当前 5.x 依赖治理基线；5.9.9 之前仍需完成 Xcode、真机和真实宿主回归。
 `Package.swift` 和 Xcode 工程只维护平台与 Swift 语言契约，不重复维护产品版本号。
 
 5.x Core 分阶段治理任务记录在 [PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)。每项任务完成后才
@@ -43,6 +44,6 @@ xcodebuild -workspace PooTools.xcworkspace -scheme PooTools-Example -destination
 4. 在 GitHub Release 中引用对应的 `CHANGELOG.md` 章节。
 5. 发布后验证 CocoaPods 与 Swift Package Manager 的安装入口。
 
-5.8.9 的发布还必须满足：Core
+5.9.x 的发布还必须满足：Core
 源文件契约无漂移，质量扫描和版本元数据检查通过，并且 Xcode Debug/Release 不是由外部 Pods、Swift Package
 依赖、磁盘空间、Metal 工具链或链接器问题阻断。未满足条件时只保留阻断记录，不创建新的 5.9.x 标签。

@@ -39,10 +39,23 @@ https://github.com/crazypoo/PTools.git
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.8.9'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
 ```
+
+### 模块化安装集合
+
+| 集合 | CocoaPods | Swift Package Manager | 适用场景 |
+|---|---|---|---|
+| Minimal | `PooTools/Core` | `ptools` | Core、Base、Category、主题和基础权限能力 |
+| UIKit Base | `PooTools/Core` | `ptools` | `PTBaseViewController`、`PTBaseNavControl`、`PTCollectionView` 和通用 UI |
+| Network | `PooTools/NetWork` | `PooToolsNetWork` | Codable、上传、下载、缓存和取消 |
+| Media | `PooTools/ImagePicker`、`PooTools/PhotoPicker`、`PooTools/MediaViewer`、`PooTools/VideoEditor` | `PooToolsImagePicker`、`PooToolsPhotoPicker`、`PooToolsMediaViewer`、`PooToolsVideoEditor` | 按媒体能力选择最小入口 |
+| Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | LocalConsole、Inspector 和调试辅助 |
+
+`UIKit Base` 当前与 `Core` 共用一个公开安装入口，不增加只为文档而存在的虚拟 subspec。
+每个集合的直接依赖和不会带入的依赖见 [DEPENDENCIES.md](DEPENDENCIES.md)。
 
 ### Swift 6 迁移要点
 
@@ -64,7 +77,8 @@ Waterfall、Tag、Horizontal 和 Custom 集合布局。页面通过
 
 完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
 [PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)，5.x 兼容入口和 6.0.0 删除条件见
-[MIGRATION_6.md](MIGRATION_6.md)。依赖和回归记录见 [DEPENDENCIES.md](DEPENDENCIES.md)
+[MIGRATION_6.md](MIGRATION_6.md)。示例工程页面和模块回归入口见
+[EXAMPLE_MODULES_5_9.md](EXAMPLE_MODULES_5_9.md)。依赖和回归记录见 [DEPENDENCIES.md](DEPENDENCIES.md)
 与 [REGRESSION_MATRIX_5_9.md](REGRESSION_MATRIX_5_9.md)。
 
 ### Picker 嵌入页面
@@ -127,6 +141,7 @@ PooTools 不会在运行时解析 `.xcstrings` 源文件，而是使用 Foundati
 bash Scripts/validate_build_entries.sh
 bash Scripts/validate_release.sh
 bash Scripts/validate_quality_scans.sh
+bash Scripts/validate_migration_5_9_7.sh
 git diff --check
 ```
 

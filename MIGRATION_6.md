@@ -1,6 +1,6 @@
 # PTools 6.0 迁移清单
 
-状态：5.9.x 进行中，当前源码基线为 5.8.9。本文只覆盖 PooTools.podspec
+状态：5.9.7 Migration 进行中，当前源码基线和最新标签为 `5.9.6`。本文只覆盖 PooTools.podspec
 default_subspec 声明的 Core 及其直接扩展边界，目标平台为 iOS 17+，语言模式为 Swift 6。
 
 ## 迁移原则
@@ -56,6 +56,39 @@ default_subspec 声明的 Core 及其直接扩展边界，目标平台为 iOS 17
 
     let item = PTActionSheetItem(title: "确定")
     item.highlightColor = .systemGray5
+
+## 5.9.7 迁移配方
+
+下表按照 `Before / After / Reason / Automatic migration possibility / Behavior difference` 记录
+5.x 兼容入口。5.9.x 仍保留旧入口；6.0.0 只有在删除门槛全部满足后才移除。
+
+| Before | After | Reason | Automatic migration possibility | Behavior difference |
+|---|---|---|---|---|
+| `PTModelProtocol` 同时承担 Codable 和 Diffable | `PTCodableModelProtocol` + `PTDiffableModel` | 分离解析能力和列表身份 | 可以按协议声明批量替换；`diffId` 需人工确认是否稳定 | Codable 不再隐含列表身份 |
+| `Network.gobalUrl()` | `Network.globalURL()` | 修复公开拼写并统一 async 入口 | 可用 Swift Rename 或全局替换 | 返回值和请求行为保持兼容 |
+| `Network.socketGobalUrl()` | `Network.socketGlobalURL()` | 修复公开拼写 | 可自动替换 | 行为不变 |
+| `PTBaseNavControl.GobalNavControl` | `PTBaseNavControl.globalNavControl` | 修复公开拼写 | 可自动替换 | 仍指向同一导航控制器配置 |
+| `gobalWebImageLoadOption` | `webImageLoadOptions` | 统一图片加载配置命名 | 可自动替换 | 配置值保持不变 |
+| `PTActionSheetItem.heightlightColor` | `highlightColor` | 修复公开拼写 | 可自动替换 | 高亮颜色行为不变 |
+| `PTNetworkConfig.netRequsetTime` | `requestTimeout` | 统一请求超时字段 | 可自动替换 | 超时单位和默认值不变 |
+| `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` | 修复公开类型拼写 | 可自动替换类型名 | UserDefaults key 不变 |
+| `PTCycleScrollView` | `PTBannerView` | 统一 ScrollBanner 实现 | 不能安全自动替换初始化参数和回调 | 轮播、分页和媒体回调以 `PTBannerView` 为准 |
+| `PTImagePicker` 旧闭包入口 | `PTSystemMediaPicker` | 统一系统单媒体选择结果 | 不能自动替换权限和结果处理 | 视频 URL 使用独立临时文件，Live Photo 仍需 PhotoPicker |
+| `PTMediaLibManager.fetchImage` | `PTMediaLibManager.requestImage` | 统一 request ID、取消、降级和复用保护 | 方法名可替换，Cell 复用逻辑需人工检查 | 结果状态更明确，旧 completion 继续兼容 |
+| Network `Any` / KakaJSON 请求 | 类型化 Codable 请求 | 避免动态值跨 Swift 6 并发边界 | 只能按 modelType 逐接口迁移 | 解析失败从运行时动态失败变为明确错误 |
+
+### Example 迁移顺序
+
+仓库内示例页面的入口和回归范围见
+[`EXAMPLE_MODULES_5_9.md`](EXAMPLE_MODULES_5_9.md)。推荐迁移顺序：
+
+1. 先将宿主的 Core、Navigation、Collection 页面切换到稳定的 Base 和场景入口。
+2. 再按单媒体/多媒体边界选择 `PTSystemMediaPicker` 或 `PTMediaLibViewController`。
+3. 将 Network 的 Codable 请求迁移到类型化入口，再处理上传、下载和取消。
+4. 最后迁移 Debug、Alert、Theme 和 Accessibility 场景，并删除宿主侧重复的全局窗口查找。
+
+真实宿主项目不在本仓库内；宿主迁移必须单独记录编译错误、运行时差异和待删除入口，不能以
+`PooTools-Example` 的通过替代真实宿主验收。
 
 ## 6.0.0 删除门槛
 
