@@ -886,7 +886,7 @@ class PTFuncNameViewController: PTBaseViewController {
                                 let newAlertController = PTActionSheetController(titleItem:titleItem,destructiveItems: destructiveItems,contentItems: contentItems)
                                 PTAlertManager.show(newAlertController)
                             case 7:
-                                UIAlertController.base_alertVC(title:"1",msg:"1111111",cancelBtn:"33333")
+                                UIAlertController.base_alertVC(title:"1",msg:"",cancelBtn:"33333")
                             default:
                                 break
                             }
