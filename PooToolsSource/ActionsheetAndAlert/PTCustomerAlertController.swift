@@ -35,10 +35,8 @@ public class PTCustomerAlertController: PTAlertController {
     private enum ActionLayoutMode: Equatable {
         /// 所有内容都可以完整显示
         case fitted
-
         /// Body 固定，按钮区域滚动
         case scrollingActions
-
         /// 整体 Body 滚动
         case scrollingAll
     }
@@ -46,7 +44,6 @@ public class PTCustomerAlertController: PTAlertController {
     private enum CompactActionLayout: Equatable {
         /// 1~2 个按钮横向
         case horizontal
-
         /// Dynamic Type / 标题过长时，2 个按钮纵向
         case vertical
     }
@@ -69,13 +66,10 @@ public class PTCustomerAlertController: PTAlertController {
     /// 最大 Alert 宽度
     public var maximumContentWidth: CGFloat = 340 {
         didSet {
-            guard maximumContentWidth.isFinite,
-                  maximumContentWidth > 0
-            else {
+            guard maximumContentWidth.isFinite, maximumContentWidth > 0 else {
                 maximumContentWidth = Self.defaultMaximumContentWidth
                 return
             }
-
             invalidateContentLayout()
         }
     }
@@ -102,11 +96,7 @@ public class PTCustomerAlertController: PTAlertController {
     /// - customView 内部隐藏/显示某些视图
     public func invalidateContentLayout() {
         layoutSignature = nil
-
-        guard isViewLoaded else {
-            return
-        }
-
+        guard isViewLoaded else { return }
         view.setNeedsLayout()
     }
 
@@ -262,10 +252,7 @@ public class PTCustomerAlertController: PTAlertController {
         label.textAlignment = .center
         label.numberOfLines = 0
 
-        PTUIAccessibility.applyDynamicType(
-            to: label,
-            font: titleFont
-        )
+        PTUIAccessibility.applyDynamicType(to: label, font: titleFont)
 
         label.textColor = titleColor
         label.text = alertTitle
@@ -275,15 +262,9 @@ public class PTCustomerAlertController: PTAlertController {
 
         // 非常重要：
         // 禁止 Auto Layout 无故把 UILabel 在纵向拉高。
-        label.setContentHuggingPriority(
-            .required,
-            for: .vertical
-        )
+        label.setContentHuggingPriority(.required, for: .vertical)
 
-        label.setContentCompressionResistancePriority(
-            .required,
-            for: .vertical
-        )
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
 
         return label
     }()
@@ -353,9 +334,7 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Computed
 
     private var hasTitle: Bool {
-        !alertTitle
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .isEmpty
+        !alertTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private var hasCustomContent: Bool {
@@ -367,31 +346,14 @@ public class PTCustomerAlertController: PTAlertController {
             return contentBackgroundColor
         }
 
-        let effect = PTVisualStyleResolver.makeEffect(
-            for: visualStyle,
-            blurStyle: .systemMaterial
-        )
+        let effect = PTVisualStyleResolver.makeEffect(for: visualStyle, blurStyle: .systemMaterial)
 
-        return effect == nil
-            ? .secondarySystemBackground
-            : .clear
+        return effect == nil ? .secondarySystemBackground : .clear
     }
 
     // MARK: Init
 
-    public init(
-        title: String = "",
-        titleFont: UIFont = .appfont(size: 15),
-        titleColor: UIColor = .systemBlue,
-        customerViewHeight: CGFloat = 100,
-        customerViewCallback: PTCustomerCustomerBlock? = nil,
-        buttons: [String],
-        buttonsColors: [UIColor],
-        buttonsFont: UIFont = .appfont(size: 15),
-        cornerSize: CGFloat = 15,
-        contentSpace: CGFloat = 25,
-        canTapBackground: Bool = false
-    ) {
+    public init(title: String = "", titleFont: UIFont = .appfont(size: 15), titleColor: UIColor = .systemBlue, customerViewHeight: CGFloat = 100, customerViewCallback: PTCustomerCustomerBlock? = nil, buttons: [String], buttonsColors: [UIColor], buttonsFont: UIFont = .appfont(size: 15), cornerSize: CGFloat = 15, contentSpace: CGFloat = 25, canTapBackground: Bool = false) {
         self.alertTitle = title
         self.titleFont = titleFont
         self.titleColor = titleColor
@@ -403,36 +365,23 @@ public class PTCustomerAlertController: PTAlertController {
         self.cornerSize = cornerSize
         self.contentSpace = contentSpace
 
-        self.customerViewHeight = max(
-            0,
-            customerViewHeight
-        )
+        self.customerViewHeight = max(0, customerViewHeight)
 
         self.customerViewCallback = customerViewCallback
 
         self.canTapBackground = canTapBackground
 
-        super.init(
-            nibName: nil,
-            bundle: nil
-        )
+        super.init(nibName: nil, bundle: nil)
     }
 
     // MARK: Width
 
-    static func resolvedContentWidth(
-        containerWidth: CGFloat,
-        contentSpace: CGFloat,
-        maximumWidth: CGFloat = defaultMaximumContentWidth
-    ) -> CGFloat {
+    static func resolvedContentWidth(containerWidth: CGFloat, contentSpace: CGFloat, maximumWidth: CGFloat = defaultMaximumContentWidth) -> CGFloat {
 
         let safeContainerWidth: CGFloat
 
         if containerWidth.isFinite {
-            safeContainerWidth = max(
-                1,
-                containerWidth
-            )
+            safeContainerWidth = max(1,containerWidth)
         } else {
             safeContainerWidth = 1
         }
@@ -440,35 +389,22 @@ public class PTCustomerAlertController: PTAlertController {
         let safeContentSpace: CGFloat
 
         if contentSpace.isFinite {
-            safeContentSpace = max(
-                0,
-                contentSpace
-            )
+            safeContentSpace = max(0,contentSpace)
         } else {
             safeContentSpace = 25
         }
 
         let safeMaximumWidth: CGFloat
 
-        if maximumWidth.isFinite,
-           maximumWidth > 0 {
+        if maximumWidth.isFinite, maximumWidth > 0 {
             safeMaximumWidth = maximumWidth
         } else {
             safeMaximumWidth = defaultMaximumContentWidth
         }
 
-        let widthWithMargins = max(
-            1,
-            safeContainerWidth - safeContentSpace * 2
-        )
+        let widthWithMargins = max(1, safeContainerWidth - safeContentSpace * 2)
 
-        return max(
-            1,
-            min(
-                widthWithMargins,
-                safeMaximumWidth
-            )
-        )
+        return max(1, min(widthWithMargins, safeMaximumWidth))
     }
 
     // MARK: Lifecycle
@@ -476,11 +412,7 @@ public class PTCustomerAlertController: PTAlertController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        contentWidth = Self.resolvedContentWidth(
-            containerWidth: view.bounds.width,
-            contentSpace: contentSpace,
-            maximumWidth: maximumContentWidth
-        )
+        contentWidth = Self.resolvedContentWidth(containerWidth: view.bounds.width, contentSpace: contentSpace, maximumWidth: maximumContentWidth)
 
         configureButtonModels()
         configureRootView()
@@ -511,9 +443,7 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Button Models
 
     private func configureButtonModels() {
-        buttonModels = buttons.enumerated().map {
-            index,
-            title in
+        buttonModels = buttons.enumerated().map { index, title in
 
             let model = PTCustomBottomButtonModel()
 
@@ -536,35 +466,17 @@ public class PTCustomerAlertController: PTAlertController {
 
         view.addSubview(contentView)
 
-        contentView.snp.makeConstraints {
-            make in
-
-            make.centerX.equalTo(
-                view.safeAreaLayoutGuide.snp.centerX
-            )
-
-            make.centerY.equalTo(
-                view.safeAreaLayoutGuide.snp.centerY
-            )
-
-            contentWidthConstraint = make
-                .width
-                .equalTo(contentWidth)
-                .constraint
-
-            contentHeightConstraint = make
-                .height
-                .equalTo(1)
-                .constraint
+        contentView.snp.makeConstraints { make in
+            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+            make.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)
+            contentWidthConstraint = make.width.equalTo(contentWidth).constraint
+            contentHeightConstraint = make.height.equalTo(1).constraint
         }
     }
 
     private func configureSurface() {
         contentView.addSubview(surfaceEffectView)
-
-        surfaceEffectView.snp.makeConstraints {
-            make in
-
+        surfaceEffectView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -572,25 +484,14 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Background Tap
 
     private func configureBackgroundTap() {
-        guard canTapBackground else {
-            return
-        }
+        guard canTapBackground else { return }
 
-        let tap = UITapGestureRecognizer {
-            [weak self] _ in
-
-            guard let self else {
-                return
-            }
+        let tap = UITapGestureRecognizer { [weak self] _ in
+            guard let self else { return }
 
             PTGCDManager.shared.runOnMain {
-                self.dismissSelf {
-                    [weak self] in
-
-                    guard let self else {
-                        return
-                    }
-
+                self.dismissSelf { [weak self = self] in
+                    guard let self else { return }
                     PTGCDManager.shared.runOnMain {
                         self.backgroundTapCallback?(self)
                     }
@@ -600,7 +501,6 @@ public class PTCustomerAlertController: PTAlertController {
 
         tap.cancelsTouchesInView = false
         tap.delegate = self
-
         view.addGestureRecognizer(tap)
     }
 
@@ -616,39 +516,19 @@ public class PTCustomerAlertController: PTAlertController {
 
         bodyContentView.addSubview(bodyHeaderView)
 
-        bodyScrollView.snp.makeConstraints {
-            make in
-
+        bodyScrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
 
-        bodyContentView.snp.makeConstraints {
-            make in
-
-            make.top.equalTo(
-                bodyScrollView.contentLayoutGuide.snp.top
-            )
-
-            make.leading.equalTo(
-                bodyScrollView.contentLayoutGuide.snp.leading
-            )
-
-            make.trailing.equalTo(
-                bodyScrollView.contentLayoutGuide.snp.trailing
-            )
-
-            make.bottom.equalTo(
-                bodyScrollView.contentLayoutGuide.snp.bottom
-            )
-
-            make.width.equalTo(
-                bodyScrollView.frameLayoutGuide.snp.width
-            )
+        bodyContentView.snp.makeConstraints { make in
+            make.top.equalTo(bodyScrollView.contentLayoutGuide.snp.top)
+            make.leading.equalTo(bodyScrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(bodyScrollView.contentLayoutGuide.snp.trailing)
+            make.bottom.equalTo(bodyScrollView.contentLayoutGuide.snp.bottom)
+            make.width.equalTo(bodyScrollView.frameLayoutGuide.snp.width)
         }
 
-        bodyHeaderView.snp.makeConstraints {
-            make in
-
+        bodyHeaderView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
 
@@ -658,29 +538,20 @@ public class PTCustomerAlertController: PTAlertController {
         // actionScrollView 位于 bodyContentView 内。
         if buttons.count > 2 {
             configureScrollableActions()
-
-            bodyScrollView.snp.makeConstraints {
-                make in
-
+            bodyScrollView.snp.makeConstraints { make in
                 make.bottom.equalToSuperview()
             }
         } else {
-            bodyHeaderView.snp.makeConstraints {
-                make in
-
+            bodyHeaderView.snp.makeConstraints { make in
                 make.bottom.equalToSuperview()
             }
 
             if buttons.isEmpty {
-                bodyScrollView.snp.makeConstraints {
-                    make in
-
+                bodyScrollView.snp.makeConstraints { make in
                     make.bottom.equalToSuperview()
                 }
             } else {
-                configureCompactActions(
-                    in: surfaceContentView
-                )
+                configureCompactActions(in: surfaceContentView)
             }
         }
     }
@@ -691,94 +562,45 @@ public class PTCustomerAlertController: PTAlertController {
         titleMessage.isHidden = !hasTitle
         customView.isHidden = !hasCustomContent
 
-        switch (
-            hasTitle,
-            hasCustomContent
-        ) {
+        switch (hasTitle, hasCustomContent) {
 
         // title + custom/msg
         case (true, true):
-
             bodyHeaderView.addSubview(titleMessage)
             bodyHeaderView.addSubview(customView)
-
-            titleMessage.snp.makeConstraints {
-                make in
-
-                make.top
-                    .equalToSuperview()
-                    .offset(titleVerticalInset)
-
-                make.leading.trailing
-                    .equalToSuperview()
-                    .inset(titleHorizontalInset)
+            titleMessage.snp.makeConstraints { make in
+                make.top.equalToSuperview().offset(titleVerticalInset)
+                make.leading.trailing.equalToSuperview().inset(titleHorizontalInset)
             }
-
-            customView.snp.makeConstraints {
-                make in
-
-                make.top
-                    .equalTo(titleMessage.snp.bottom)
-                    .offset(titleVerticalInset)
-
-                make.leading.trailing.bottom
-                    .equalToSuperview()
-
+            customView.snp.makeConstraints { make in
+                make.top.equalTo(titleMessage.snp.bottom).offset(titleVerticalInset)
+                make.leading.trailing.bottom.equalToSuperview()
                 // 只是 fallback。
                 //
                 // customView 里面如果有完整 Auto Layout，
                 // intrinsic height / 内部约束会优先。
-                customerViewFallbackHeightConstraint = make
-                    .height
-                    .equalTo(customerViewHeight)
-                    .priority(200)
-                    .constraint
+                customerViewFallbackHeightConstraint = make.height.equalTo(customerViewHeight).priority(200).constraint
             }
-
         // 只有 title
         case (true, false):
-
             bodyHeaderView.addSubview(titleMessage)
-
-            titleMessage.snp.makeConstraints {
-                make in
-
-                make.top.bottom
-                    .equalToSuperview()
-                    .inset(titleVerticalInset)
-
-                make.leading.trailing
-                    .equalToSuperview()
-                    .inset(titleHorizontalInset)
+            titleMessage.snp.makeConstraints { make in
+                make.top.bottom.equalToSuperview().inset(titleVerticalInset)
+                make.leading.trailing.equalToSuperview().inset(titleHorizontalInset)
             }
-
         // 只有 custom/msg
         case (false, true):
-
             bodyHeaderView.addSubview(customView)
-
-            customView.snp.makeConstraints {
-                make in
-
+            customView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
-
-                customerViewFallbackHeightConstraint = make
-                    .height
-                    .equalTo(customerViewHeight)
-                    .priority(200)
-                    .constraint
+                customerViewFallbackHeightConstraint = make.height.equalTo(customerViewHeight).priority(200).constraint
             }
-
         // 什么都没有
         case (false, false):
-
-            bodyHeaderView.snp.makeConstraints {
-                make in
-
+            bodyHeaderView.snp.makeConstraints { make in
                 make.height.equalTo(0)
             }
         }
-
         // 必须在 customView 已经进入 view hierarchy 后执行，
         // 保持你原来的 callback 使用习惯。
         customerViewCallback?(customView)
@@ -788,308 +610,119 @@ public class PTCustomerAlertController: PTAlertController {
 
     private func configureScrollableActions() {
         bodyContentView.addSubview(actionScrollView)
-
         actionScrollView.addSubview(actionStackView)
-
-        actionScrollView.snp.makeConstraints {
-            make in
-
+        actionScrollView.snp.makeConstraints { make in
             make.top.equalTo(bodyHeaderView.snp.bottom)
-
             make.leading.trailing.bottom.equalToSuperview()
-
-            actionViewportHeightConstraint = make
-                .height
-                .equalTo(1)
-                .constraint
+            actionViewportHeightConstraint = make.height.equalTo(1).constraint
         }
 
-        actionStackView.snp.makeConstraints {
-            make in
-
-            make.top.equalTo(
-                actionScrollView.contentLayoutGuide.snp.top
-            )
-
-            make.leading.equalTo(
-                actionScrollView.contentLayoutGuide.snp.leading
-            )
-
-            make.trailing.equalTo(
-                actionScrollView.contentLayoutGuide.snp.trailing
-            )
-
-            make.bottom.equalTo(
-                actionScrollView.contentLayoutGuide.snp.bottom
-            )
-
-            make.width.equalTo(
-                actionScrollView.frameLayoutGuide.snp.width
-            )
+        actionStackView.snp.makeConstraints { make in
+            make.top.equalTo(actionScrollView.contentLayoutGuide.snp.top)
+            make.leading.equalTo(actionScrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(actionScrollView.contentLayoutGuide.snp.trailing)
+            make.bottom.equalTo(actionScrollView.contentLayoutGuide.snp.bottom)
+            make.width.equalTo(actionScrollView.frameLayoutGuide.snp.width)
         }
 
-        buttonModels.enumerated().forEach {
-            index,
-            model in
-
-            let button = makeActionButton(
-                model: model,
-                index: index
-            )
-
+        buttonModels.enumerated().forEach { index, model in
+            let button = makeActionButton(model: model, index: index)
             actionButtons.append(button)
             actionStackView.addArrangedSubview(button)
-
-            button.snp.makeConstraints {
-                make in
-
-                actionButtonHeightConstraints.append(
-                    make
-                        .height
-                        .equalTo(minimumButtonRowHeight)
-                        .constraint
-                )
+            button.snp.makeConstraints { make in
+                actionButtonHeightConstraints.append(make.height.equalTo(minimumButtonRowHeight).constraint)
             }
-
-            guard index < buttonModels.count - 1 else {
-                return
-            }
-
+            guard index < buttonModels.count - 1 else { return }
             let separator = UIView()
             separator.backgroundColor = .separator
-
             actionStackView.addArrangedSubview(separator)
-
-            separator.snp.makeConstraints {
-                make in
-
+            separator.snp.makeConstraints { make in
                 make.height.equalTo(separatorThickness)
             }
-
             actionSeparatorViews.append(separator)
         }
     }
 
     // MARK: 1~2 Actions
 
-    private func configureCompactActions(
-        in surfaceContentView: UIView
-    ) {
+    private func configureCompactActions(in surfaceContentView: UIView) {
         surfaceContentView.addSubview(compactActionView)
-
-        compactActionView.snp.makeConstraints {
-            make in
-
+        compactActionView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-
             make.top.equalTo(bodyScrollView.snp.bottom)
-
-            compactActionHeightConstraint = make
-                .height
-                .equalTo(
-                    minimumButtonRowHeight +
-                    separatorThickness
-                )
-                .constraint
+            compactActionHeightConstraint = make.height.equalTo(minimumButtonRowHeight + separatorThickness).constraint
         }
-
-        compactActionView.addSubview(
-            compactTopSeparatorView
-        )
-
-        compactActionView.addSubview(
-            compactActionStackView
-        )
-
-        compactActionView.addSubview(
-            compactDividerView
-        )
-
-        compactTopSeparatorView.snp.makeConstraints {
-            make in
-
+        compactActionView.addSubview(compactTopSeparatorView)
+        compactActionView.addSubview(compactActionStackView)
+        compactActionView.addSubview(compactDividerView)
+        compactTopSeparatorView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-
             make.height.equalTo(separatorThickness)
         }
-
-        compactActionStackView.snp.makeConstraints {
-            make in
-
-            make.top.equalTo(
-                compactTopSeparatorView.snp.bottom
-            )
-
+        compactActionStackView.snp.makeConstraints { make in
+            make.top.equalTo(compactTopSeparatorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
-
-        buttonModels.enumerated().forEach {
-            index,
-            model in
-
-            let button = makeActionButton(
-                model: model,
-                index: index
-            )
-
+        buttonModels.enumerated().forEach { index, model in
+            let button = makeActionButton(model: model, index: index)
             actionButtons.append(button)
-
-            compactActionStackView.addArrangedSubview(
-                button
-            )
-
-            button.snp.makeConstraints {
-                make in
-
-                actionButtonHeightConstraints.append(
-                    make
-                        .height
-                        .equalTo(minimumButtonRowHeight)
-                        .constraint
-                )
+            compactActionStackView.addArrangedSubview(button)
+            button.snp.makeConstraints { make in
+                actionButtonHeightConstraints.append(make.height.equalTo(minimumButtonRowHeight).constraint)
             }
         }
-
         configureCompactDivider()
     }
 
     private func configureCompactDivider() {
-        guard buttonModels.count == 2,
-              actionButtons.count == 2
-        else {
+        guard buttonModels.count == 2, actionButtons.count == 2 else {
             compactDividerView.isHidden = true
             return
         }
-
         compactDividerView.isHidden = false
-
-        compactHorizontalDividerConstraints =
-            compactDividerView.snp.prepareConstraints {
-                make in
-
-                make.width.equalTo(separatorThickness)
-
-                make.top.bottom.equalTo(
-                    compactActionStackView
-                )
-
-                make.centerX.equalTo(
-                    compactActionStackView.snp.centerX
-                )
-            }
-
-        compactVerticalDividerConstraints =
-            compactDividerView.snp.prepareConstraints {
-                make in
-
-                make.height.equalTo(separatorThickness)
-
-                make.leading.trailing.equalTo(
-                    compactActionStackView
-                )
-
-                make.top.equalTo(
-                    actionButtons[0].snp.bottom
-                )
-            }
-
-        compactHorizontalDividerConstraints.forEach {
-            $0.activate()
+        compactHorizontalDividerConstraints = compactDividerView.snp.prepareConstraints { make in
+            make.width.equalTo(separatorThickness)
+            make.top.bottom.equalTo(compactActionStackView)
+            make.centerX.equalTo(compactActionStackView.snp.centerX)
         }
+        compactVerticalDividerConstraints = compactDividerView.snp.prepareConstraints { make in
+            make.height.equalTo(separatorThickness)
+            make.leading.trailing.equalTo(compactActionStackView)
+            make.top.equalTo(actionButtons[0].snp.bottom)
+        }
+        compactHorizontalDividerConstraints.forEach { $0.activate() }
     }
 
     // MARK: Button
 
-    private func makeActionButton(
-        model: PTCustomBottomButtonModel,
-        index: Int
-    ) -> UIButton {
+    private func makeActionButton(model: PTCustomBottomButtonModel, index: Int) -> UIButton {
 
         let title = model.titleName ?? ""
-
         let button = UIButton(type: .custom)
-
-        PTUIAccessibility.applyDynamicType(
-            to: button,
-            font: buttonsFont
-        )
-
-        button.setTitleColor(
-            model.titleColor,
-            for: .normal
-        )
-
-        button.setTitle(
-            title,
-            for: .normal
-        )
-
-        button.setTitleColor(
-            .systemGray,
-            for: .highlighted
-        )
-
+        PTUIAccessibility.applyDynamicType(to: button,font: buttonsFont)
+        button.setTitleColor(model.titleColor, for: .normal)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.systemGray, for: .highlighted)
         button.titleLabel?.textAlignment = .center
-
-        button.titleLabel?
-            .adjustsFontForContentSizeCategory = true
-
-        button.titleLabel?
-            .setContentCompressionResistancePriority(
-                .required,
-                for: .vertical
-            )
-
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.setContentCompressionResistancePriority(.required, for: .vertical)
         button.contentHorizontalAlignment = .center
-
         button.accessibilityTraits = .button
-
         button.tag = 100 + index
-
-        button.addAction(
-            UIAction {
-                [weak self] _ in
-
-                self?.handleAction(
-                    title: title,
-                    index: index
-                )
-            },
-            for: .touchUpInside
-        )
-
+        button.addAction(UIAction { [weak self] _ in
+            self?.handleAction(title: title, index: index)
+        },for: .touchUpInside)
         return button
     }
 
-    private func handleAction(
-        title: String,
-        index: Int
-    ) {
-        guard !isHandlingAction else {
-            return
-        }
-
+    private func handleAction(title: String, index: Int) {
+        guard !isHandlingAction else { return }
         isHandlingAction = true
-
-        actionButtons.forEach {
-            $0.isEnabled = false
-        }
-
-        dismissSelf {
-            [weak self] in
-
-            Task {
-                @MainActor [weak self] in
-
-                guard let self else {
-                    return
-                }
-
-                self.bottomButtonTapCallback?(
-                    title,
-                    index
-                )
-
+        actionButtons.forEach { $0.isEnabled = false }
+        dismissSelf { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.bottomButtonTapCallback?(title, index)
                 self.bottomButtonTapCallback = nil
             }
         }
@@ -1104,121 +737,37 @@ public class PTCustomerAlertController: PTAlertController {
     /// titleHeight + customerViewHeight
     ///
     /// 而是直接让 Auto Layout 告诉我们真实 Header 高度。
-    private func resolvedBodyHeight(
-        for width: CGFloat
-    ) -> CGFloat {
-
-        guard hasTitle || hasCustomContent else {
-            return 0
-        }
-
-        let safeWidth = max(
-            1,
-            width
-        )
-
+    private func resolvedBodyHeight(for width: CGFloat) -> CGFloat {
+        guard hasTitle || hasCustomContent else { return 0 }
+        let safeWidth = max(1, width)
         bodyHeaderView.bounds.size.width = safeWidth
-
         bodyHeaderView.setNeedsLayout()
         bodyHeaderView.layoutIfNeeded()
-
-        let fittingSize = CGSize(
-            width: safeWidth,
-            height: UIView.layoutFittingCompressedSize.height
-        )
-
-        let size = bodyHeaderView.systemLayoutSizeFitting(
-            fittingSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-
-        guard size.height.isFinite else {
-            return hasCustomContent
-                ? max(0, customerViewHeight)
-                : 0
-        }
-
-        return ceil(
-            max(
-                0,
-                size.height
-            )
-        )
+        let fittingSize = CGSize(width: safeWidth, height: UIView.layoutFittingCompressedSize.height)
+        let size = bodyHeaderView.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        guard size.height.isFinite else { return hasCustomContent ? max(0, customerViewHeight) : 0 }
+        return ceil(max(0, size.height))
     }
 
     // MARK: Button Height
 
     private func resolvedButtonRowHeight() -> CGFloat {
-        let actualLineHeight =
-            actionButtons
-                .compactMap {
-                    $0.titleLabel?.font.lineHeight
-                }
-                .max()
-            ?? buttonsFont.lineHeight
-
-        guard actualLineHeight.isFinite else {
-            return minimumButtonRowHeight
-        }
-
-        return max(
-            minimumButtonRowHeight,
-            ceil(actualLineHeight + 20)
-        )
+        let actualLineHeight = actionButtons.compactMap { $0.titleLabel?.font.lineHeight }.max() ?? buttonsFont.lineHeight
+        guard actualLineHeight.isFinite else { return minimumButtonRowHeight }
+        return max(minimumButtonRowHeight, ceil(actualLineHeight + 20))
     }
 
-    private func resolvedCompactActionLayout(
-        for width: CGFloat
-    ) -> CompactActionLayout {
-
-        guard buttons.count == 2 else {
-            return .horizontal
-        }
-
-        if traitCollection
-            .preferredContentSizeCategory
-            .isAccessibilityCategory {
-            return .vertical
-        }
-
-        let buttonWidth = max(
-            1,
-            (
-                width -
-                separatorThickness
-            ) / 2
-        )
-
-        let availableTitleWidth = max(
-            1,
-            buttonWidth - 24
-        )
-
-        let actualFont =
-            actionButtons
-                .first?
-                .titleLabel?
-                .font
-            ?? buttonsFont
-
-        let titlesFit = buttons.allSatisfy {
-            title in
-
-            let measuredSize =
-                (title as NSString)
-                    .size(
-                        withAttributes: [
-                            .font: actualFont
-                        ]
-                    )
-
+    private func resolvedCompactActionLayout(for width: CGFloat) -> CompactActionLayout {
+        guard buttons.count == 2 else { return .horizontal }
+        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory { return .vertical }
+        let buttonWidth = max(1, (width - separatorThickness) / 2)
+        let availableTitleWidth = max(1, buttonWidth - 24 )
+        let actualFont = actionButtons.first?.titleLabel?.font ?? buttonsFont
+        let titlesFit = buttons.allSatisfy { title in
+            let measuredSize = (title as NSString).size(withAttributes: [.font: actualFont])
             return measuredSize.width <= availableTitleWidth
         }
-
-        return titlesFit
-            ? .horizontal
-            : .vertical
+        return titlesFit ? .horizontal : .vertical
     }
 
     /// 这里修复你当前代码里一个明确的高度 Bug。
@@ -1231,121 +780,50 @@ public class PTCustomerAlertController: PTAlertController {
     /// 这是错误的。
     ///
     /// 横排无论 1 个还是 2 个按钮都只占一行。
-    private func compactActionHeight(
-        for layout: CompactActionLayout,
-        rowHeight: CGFloat
-    ) -> CGFloat {
-
-        guard !buttons.isEmpty else {
-            return 0
-        }
-
+    private func compactActionHeight(for layout: CompactActionLayout, rowHeight: CGFloat ) -> CGFloat {
+        guard !buttons.isEmpty else { return 0 }
         switch layout {
-
         case .horizontal:
             return separatorThickness + rowHeight
-
         case .vertical:
-            let rowsHeight =
-                CGFloat(buttons.count) *
-                rowHeight
-
-            let internalSeparatorsHeight =
-                CGFloat(
-                    max(
-                        0,
-                        buttons.count - 1
-                    )
-                ) *
-                separatorThickness
-
-            return
-                separatorThickness +
-                rowsHeight +
-                internalSeparatorsHeight
+            let rowsHeight = CGFloat(buttons.count) * rowHeight
+            let internalSeparatorsHeight = CGFloat(max(0, buttons.count - 1)) * separatorThickness
+            return separatorThickness + rowsHeight + internalSeparatorsHeight
         }
     }
 
-    private func actionsContentHeight(
-        rowHeight: CGFloat
-    ) -> CGFloat {
-
-        let rowsHeight =
-            CGFloat(buttons.count) *
-            rowHeight
-
-        let separatorsHeight =
-            CGFloat(
-                max(
-                    0,
-                    buttons.count - 1
-                )
-            ) *
-            separatorThickness
-
-        return
-            rowsHeight +
-            separatorsHeight
+    private func actionsContentHeight(rowHeight: CGFloat) -> CGFloat {
+        let rowsHeight = CGFloat(buttons.count) * rowHeight
+        let separatorsHeight = CGFloat(max(0, buttons.count - 1)) * separatorThickness
+        return rowsHeight + separatorsHeight
     }
 
     // MARK: Compact Layout
 
-    private func applyCompactActionLayout(
-        _ layout: CompactActionLayout
-    ) {
+    private func applyCompactActionLayout(_ layout: CompactActionLayout) {
         guard buttons.count == 2 else {
             compactActionStackView.axis = .horizontal
             compactActionStackView.spacing = 0
             compactDividerView.isHidden = true
             return
         }
-
-        compactActionStackView.axis =
-            layout == .horizontal
-            ? .horizontal
-            : .vertical
-
-        compactActionStackView.spacing =
-            layout == .vertical
-            ? separatorThickness
-            : 0
-
+        compactActionStackView.axis = layout == .horizontal ? .horizontal : .vertical
+        compactActionStackView.spacing = layout == .vertical ? separatorThickness : 0
         if layout == .horizontal {
-
-            compactVerticalDividerConstraints.forEach {
-                $0.deactivate()
-            }
-
-            compactHorizontalDividerConstraints.forEach {
-                $0.activate()
-            }
-
+            compactVerticalDividerConstraints.forEach { $0.deactivate() }
+            compactHorizontalDividerConstraints.forEach { $0.activate() }
         } else {
-
-            compactHorizontalDividerConstraints.forEach {
-                $0.deactivate()
-            }
-
-            compactVerticalDividerConstraints.forEach {
-                $0.activate()
-            }
+            compactHorizontalDividerConstraints.forEach { $0.deactivate()}
+            compactVerticalDividerConstraints.forEach { $0.activate()}
         }
-
         compactDividerView.isHidden = false
     }
 
     // MARK: Main Layout
 
     private func updateAlertLayout() {
-        guard
-            contentWidthConstraint != nil,
-            contentHeightConstraint != nil
-        else {
-            return
-        }
-
-        let safeAreaFrame =
-            view.safeAreaLayoutGuide.layoutFrame
+        guard contentWidthConstraint != nil, contentHeightConstraint != nil else { return }
+        let safeAreaFrame = view.safeAreaLayoutGuide.layoutFrame
 
         let availableWidth: CGFloat
 
@@ -1355,20 +833,7 @@ public class PTCustomerAlertController: PTAlertController {
             availableWidth = view.bounds.width
         }
 
-        let width = Self.resolvedContentWidth(
-            containerWidth: min(
-                max(
-                    1,
-                    view.bounds.width
-                ),
-                max(
-                    1,
-                    availableWidth
-                )
-            ),
-            contentSpace: contentSpace,
-            maximumWidth: maximumContentWidth
-        )
+        let width = Self.resolvedContentWidth(containerWidth: min(max(1, view.bounds.width), max(1, availableWidth)), contentSpace: contentSpace, maximumWidth: maximumContentWidth)
 
         let safeHeight: CGFloat
 
@@ -1382,40 +847,18 @@ public class PTCustomerAlertController: PTAlertController {
             return
         }
 
-        let maximumHeight = max(
-            1,
-            safeHeight -
-            minimumAlertVerticalMargin * 2
-        )
+        let maximumHeight = max(1, safeHeight - minimumAlertVerticalMargin * 2)
 
         // ===============================
         // 重点：
         // title + msg/custom 的真实高度
         // ===============================
 
-        let bodyHeight =
-            resolvedBodyHeight(
-                for: width
-            )
-
-        let rowHeight =
-            resolvedButtonRowHeight()
-
-        let compactLayout =
-            resolvedCompactActionLayout(
-                for: width
-            )
-
-        let verticalButtonsHeight =
-            actionsContentHeight(
-                rowHeight: rowHeight
-            )
-
-        let compactButtonsHeight =
-            compactActionHeight(
-                for: compactLayout,
-                rowHeight: rowHeight
-            )
+        let bodyHeight = resolvedBodyHeight(for: width)
+        let rowHeight = resolvedButtonRowHeight()
+        let compactLayout = resolvedCompactActionLayout(for: width)
+        let verticalButtonsHeight = actionsContentHeight(rowHeight: rowHeight)
+        let compactButtonsHeight = compactActionHeight(for: compactLayout, rowHeight: rowHeight)
 
         let mode: ActionLayoutMode
 
@@ -1427,182 +870,85 @@ public class PTCustomerAlertController: PTAlertController {
 
         if buttons.count > 2 {
 
-            let requiredHeight =
-                bodyHeight +
-                verticalButtonsHeight
+            let requiredHeight = bodyHeight + verticalButtonsHeight
 
             // 全部放得下
             if requiredHeight <= maximumHeight {
-
                 mode = .fitted
-
                 contentHeight = requiredHeight
-
-                actionViewportHeight =
-                    verticalButtonsHeight
-
+                actionViewportHeight = verticalButtonsHeight
             }
 
             // Body 放得下，
             // 给 Action 至少留 2 行左右空间，
             // 只滚按钮。
-            else if
-                bodyHeight +
-                min(
-                    verticalButtonsHeight,
-                    rowHeight * 2
-                )
-                <= maximumHeight {
-
+            else if bodyHeight + min(verticalButtonsHeight, rowHeight * 2) <= maximumHeight {
                 mode = .scrollingActions
-
                 contentHeight = maximumHeight
-
-                actionViewportHeight = max(
-                    rowHeight,
-                    maximumHeight - bodyHeight
-                )
-
+                actionViewportHeight = max(rowHeight, maximumHeight - bodyHeight)
             }
 
             // Body 本身都比较高，
             // 整体滚动。
             else {
-
                 mode = .scrollingAll
-
                 contentHeight = maximumHeight
-
-                actionViewportHeight =
-                    verticalButtonsHeight
+                actionViewportHeight = verticalButtonsHeight
             }
-
         }
 
         // MARK: 0~2 buttons
 
         else {
-
             mode = .fitted
-
-            contentHeight = max(
-                1,
-                min(
-                    bodyHeight +
-                    compactButtonsHeight,
-                    maximumHeight
-                )
-            )
-
+            contentHeight = max(1, min(bodyHeight + compactButtonsHeight, maximumHeight))
             actionViewportHeight = 0
         }
 
-        let signature = AlertLayoutSignature(
-            width: width,
-            safeHeight: safeHeight,
-            bodyHeight: bodyHeight,
-            buttonCount: buttons.count,
-            rowHeight: rowHeight,
-            compactLayout: compactLayout
-        )
+        let signature = AlertLayoutSignature(width: width, safeHeight: safeHeight, bodyHeight: bodyHeight, buttonCount: buttons.count, rowHeight: rowHeight, compactLayout: compactLayout)
 
-        guard
-            signature != layoutSignature ||
-            mode != actionLayoutMode ||
-            compactLayout != compactActionLayout
-        else {
+        guard signature != layoutSignature || mode != actionLayoutMode || compactLayout != compactActionLayout else {
             return
         }
 
-        let modeChanged =
-            mode != actionLayoutMode ||
-            compactLayout != compactActionLayout
+        let modeChanged = mode != actionLayoutMode || compactLayout != compactActionLayout
 
         contentWidth = width
 
-        contentWidthConstraint?
-            .update(
-                offset: width
-            )
+        contentWidthConstraint?.update(offset: width)
 
-        contentHeightConstraint?
-            .update(
-                offset: contentHeight
-            )
+        contentHeightConstraint?.update(offset: contentHeight)
 
-        actionViewportHeightConstraint?
-            .update(
-                offset: actionViewportHeight
-            )
+        actionViewportHeightConstraint?.update(offset: actionViewportHeight)
 
-        actionButtonHeightConstraints.forEach {
-            constraint in
-
-            constraint.update(
-                offset: rowHeight
-            )
+        actionButtonHeightConstraints.forEach { constraint in
+            constraint.update(offset: rowHeight)
         }
 
         // MARK: Scrolling
 
         if buttons.count > 2 {
-
-            bodyScrollView.isScrollEnabled =
-                mode == .scrollingAll
-
-            bodyScrollView.showsVerticalScrollIndicator =
-                bodyScrollView.isScrollEnabled
-
-            actionScrollView.isScrollEnabled =
-                mode == .scrollingActions
-
-            actionScrollView.showsVerticalScrollIndicator =
-                actionScrollView.isScrollEnabled
-
+            bodyScrollView.isScrollEnabled = mode == .scrollingAll
+            bodyScrollView.showsVerticalScrollIndicator = bodyScrollView.isScrollEnabled
+            actionScrollView.isScrollEnabled = mode == .scrollingActions
+            actionScrollView.showsVerticalScrollIndicator = actionScrollView.isScrollEnabled
         } else {
-
-            let bodyViewportHeight = max(
-                0,
-                contentHeight -
-                compactButtonsHeight
-            )
-
-            bodyScrollView.isScrollEnabled =
-                bodyHeight >
-                bodyViewportHeight + 0.5
-
-            bodyScrollView.showsVerticalScrollIndicator =
-                bodyScrollView.isScrollEnabled
+            let bodyViewportHeight = max(0, contentHeight - compactButtonsHeight)
+            bodyScrollView.isScrollEnabled = bodyHeight > bodyViewportHeight + 0.5
+            bodyScrollView.showsVerticalScrollIndicator = bodyScrollView.isScrollEnabled
         }
 
         // MARK: Compact Action
-
-        if buttons.count <= 2,
-           !buttons.isEmpty {
-
-            applyCompactActionLayout(
-                compactLayout
-            )
-
-            compactActionHeightConstraint?
-                .update(
-                    offset: compactButtonsHeight
-                )
+        if buttons.count <= 2, !buttons.isEmpty {
+            applyCompactActionLayout(compactLayout)
+            compactActionHeightConstraint?.update(offset: compactButtonsHeight)
         }
 
         // 切换滚动模式时归零，
         // 避免上一次滚动位置影响新布局。
         if modeChanged {
-
-            bodyScrollView.setContentOffset(
-                .zero,
-                animated: false
-            )
-
-            actionScrollView.setContentOffset(
-                .zero,
-                animated: false
-            )
+            bodyScrollView.setContentOffset(.zero, animated: false)
+            actionScrollView.setContentOffset(.zero,animated: false)
         }
 
         actionLayoutMode = mode
@@ -1613,20 +959,14 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Surface
 
     private func updateContentBackgroundIfLoaded() {
-        guard isViewLoaded else {
-            return
-        }
-
+        guard isViewLoaded else { return }
         updateSurfaceAppearance()
     }
 
     private func updateSurfaceAppearance() {
-        guard isViewLoaded else {
-            return
-        }
+        guard isViewLoaded else { return }
 
-        contentView.backgroundColor =
-            resolvedContentBackgroundColor
+        contentView.backgroundColor = resolvedContentBackgroundColor
 
         guard contentBackgroundColor == nil else {
             surfaceEffectView.effect = nil
@@ -1634,53 +974,19 @@ public class PTCustomerAlertController: PTAlertController {
             return
         }
 
-        PTVisualStyleResolver.apply(
-            to: surfaceEffectView,
-            style: visualStyle,
-            blurStyle: .systemMaterial,
-            fallbackColor: .secondarySystemBackground
-        )
+        PTVisualStyleResolver.apply(to: surfaceEffectView, style: visualStyle, blurStyle: .systemMaterial, fallbackColor: .secondarySystemBackground)
     }
 
     private func installSurfaceAppearanceObservers() {
-        traitChangeRegistration =
-            registerForTraitChanges([
-                UITraitUserInterfaceStyle.self,
-                UITraitAccessibilityContrast.self
-            ]) {
-                [weak self]
-                (_: PTCustomerAlertController,
-                 _: UITraitCollection) in
-
-                guard let self else {
-                    return
-                }
-
+        traitChangeRegistration = registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { [weak self] (_: PTCustomerAlertController, _: UITraitCollection) in
+                guard let self else { return }
                 self.updateSurfaceAppearance()
                 self.invalidateContentLayout()
-            }
+        }
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                accessibilityAppearanceDidChange
-            ),
-            name:
-                UIAccessibility
-                .reduceTransparencyStatusDidChangeNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(accessibilityAppearanceDidChange), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                accessibilityAppearanceDidChange
-            ),
-            name:
-                UIContentSizeCategory
-                .didChangeNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(accessibilityAppearanceDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
 
     @objc
@@ -1694,11 +1000,7 @@ public class PTCustomerAlertController: PTAlertController {
 
 extension PTCustomerAlertController {
 
-    public func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldReceive touch: UITouch
-    ) -> Bool {
-
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         // 只允许点击真正的背景区域关闭。
         //
         // 点击 Alert 内容本身：
@@ -1712,90 +1014,41 @@ extension PTCustomerAlertController {
 
 extension PTCustomerAlertController {
 
-    public override func showAnimation(
-        completion: PTActionTask?
-    ) {
-        let reduceMotion =
-            UIAccessibility.isReduceMotionEnabled
+    public override func showAnimation(completion: PTActionTask?) {
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
 
-        let duration = max(
-            0,
-            config.showAlertDuration
-        )
+        let duration = max(0, config.showAlertDuration)
 
-        contentView.transform =
-            reduceMotion
-            ? .identity
-            : CGAffineTransform(
-                scaleX: 0.94,
-                y: 0.94
-            )
+        contentView.transform = reduceMotion ? .identity : CGAffineTransform(scaleX: 0.94, y: 0.94)
 
         let animations = {
-            self.view.backgroundColor =
-                UIColor.DevMaskColor
-
+            self.view.backgroundColor = UIColor.DevMaskColor
             self.contentView.alpha = 1
-
             if !reduceMotion {
                 self.contentView.transform = .identity
             }
         }
 
-        let finish: (Bool) -> Void = {
-            _ in
-
+        let finish: (Bool) -> Void = { _ in
             let accessibilityTarget: Any?
 
             if self.hasTitle {
-                accessibilityTarget =
-                    self.titleMessage
+                accessibilityTarget = self.titleMessage
             } else {
-                accessibilityTarget =
-                    self.actionButtons.first
+                accessibilityTarget = self.actionButtons.first
             }
 
-            if self.view.window != nil,
-               let accessibilityTarget {
-
-                UIAccessibility.post(
-                    notification: .screenChanged,
-                    argument: accessibilityTarget
-                )
+            if self.view.window != nil, let accessibilityTarget {
+                UIAccessibility.post(notification: .screenChanged, argument: accessibilityTarget)
             }
 
             completion?()
         }
 
         if reduceMotion {
-
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                options: [
-                    .beginFromCurrentState,
-                    .allowUserInteraction,
-                    .curveEaseOut
-                ],
-                animations: animations,
-                completion: finish
-            )
-
+            UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseOut], animations: animations, completion: finish)
         } else {
-
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                usingSpringWithDamping: 0.92,
-                initialSpringVelocity: 0,
-                options: [
-                    .beginFromCurrentState,
-                    .allowUserInteraction,
-                    .curveEaseOut
-                ],
-                animations: animations,
-                completion: finish
-            )
+            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.92, initialSpringVelocity: 0, options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseOut], animations: animations, completion: finish)
         }
     }
 
@@ -1807,8 +1060,7 @@ extension PTCustomerAlertController {
             self.view.backgroundColor = .clear
             self.contentView.alpha = 0
             if !reduceMotion {
-                self.contentView.transform =
-                    CGAffineTransform(scaleX: 0.98, y: 0.98)
+                self.contentView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
             }
         }, completion: { _ in
             completion?()
