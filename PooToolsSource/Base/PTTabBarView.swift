@@ -383,6 +383,24 @@ final public class PTTabBarView: UIView {
     private let sharedSelectionMaskView = UIView()
     private let sharedMaskGlassView = UIVisualEffectView()
 
+    // English: Enable the native glass surface automatically on iOS 27 while keeping explicit legacy styles authoritative.
+    // Español: Activa automáticamente la superficie de vidrio nativa en iOS 27 y conserva la autoridad de los estilos heredados explícitos.
+    // 中文：iOS 27 自动启用系统玻璃表面，同时保留显式旧样式的优先级。
+    private var usesGlassSurfaceContainer: Bool {
+        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+            return true
+        }
+
+        guard #available(iOS 27.0, *) else { return false }
+
+        switch appearanceSnapshot.visualStyle {
+        case .automatic, .glass:
+            return true
+        case .classic, .material:
+            return false
+        }
+    }
+
     // MARK: - Init
     public override init(frame: CGRect) {
         self.appearanceSnapshot = .legacyDefault
@@ -456,7 +474,7 @@ final public class PTTabBarView: UIView {
             }
         }
 
-        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+        if usesGlassSurfaceContainer {
             PTVisualStyleResolver.apply(to: glassBackgroundView,
                                         style: appearanceSnapshot.visualStyle.coreStyle,
                                         blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
@@ -505,7 +523,7 @@ final public class PTTabBarView: UIView {
         [leftStackView, rightStackView].forEach {
             $0.axis = .horizontal
             $0.distribution = .fillEqually
-            if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+            if usesGlassSurfaceContainer {
                 glassBackgroundView.contentView.addSubview($0)
             } else {
                 addSubview($0)
@@ -531,7 +549,7 @@ final public class PTTabBarView: UIView {
     
     private func centetButtonEffect() {
         let effectView = UIVisualEffectView()
-        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarCenterMetail {
+        if usesGlassSurfaceContainer || PTAppBaseConfig.share.tabbarCenterMetail {
             PTVisualStyleResolver.apply(to: effectView,
                                         style: appearanceSnapshot.visualStyle.coreStyle,
                                         blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
@@ -541,7 +559,7 @@ final public class PTTabBarView: UIView {
             effectView.backgroundColor = .clear
         }
 
-        if PTAppBaseConfig.share.tab26Mode && PTAppBaseConfig.share.tabbarCenterMetail {
+        if usesGlassSurfaceContainer && PTAppBaseConfig.share.tabbarCenterMetail {
             effectView.clipsToBounds = true
             centerButton.addSubview(effectView)
             effectView.snp.makeConstraints { make in
@@ -566,7 +584,7 @@ final public class PTTabBarView: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+        if usesGlassSurfaceContainer {
             if highlightLayer.frame != glassBackgroundView.bounds {
                 highlightLayer.frame = glassBackgroundView.bounds
             }
@@ -636,7 +654,7 @@ final public class PTTabBarView: UIView {
 
                 centerButton.snp.remakeConstraints {
                     $0.left.equalTo(self.leftStackView.snp.right)
-                    if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+                    if usesGlassSurfaceContainer || PTAppBaseConfig.share.tabbarMetailMode {
                         $0.centerY.equalTo(glassBackgroundView.snp.top)
                     } else {
                         $0.centerY.equalTo(self.snp.top)
