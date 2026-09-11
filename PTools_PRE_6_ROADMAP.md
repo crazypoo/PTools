@@ -3,6 +3,7 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
+> 本次路线图更新：2026-09-12（新增 5.10.x Debug 解耦与 5.11.x PTInstruments 主线）
 > 审查基线：`master` @ `a5030237`（2026-09-10）
 > 当前 Podspec 版本：`5.9.6`
 > 当前最新 Git Tag：`5.9.6`（2026-09-10）
@@ -39,6 +40,8 @@ PTools 5.x 已经完成了不少重要治理：
 6. **Swift 6 并发最终收口。**
 7. **测试、Benchmark、API baseline、发布门禁。**
 8. **5.x deprecated → 6.0 删除路径冻结。**
+9. **5.10.x 完成 Debug 经典模块的正式解耦、Foundation 化和 Scene/Window 稳定化。**
+10. **5.11.x 完成 PTInstruments、Session、Timeline 与可导出运行时诊断链路。**
 
 ---
 
@@ -398,6 +401,26 @@ Metal Simulator toolchain
                  MediaViewer   PhotoPicker   Image/Video Editor
 ```
 
+Debug / Diagnostics 作为上层一等模块，而不是塞回 Core：
+
+```text
+                     PooToolsDEBUG
+                          │
+          ┌───────────────┼────────────────┐
+          ▼               ▼                ▼
+   Debug Foundation    Collectors      Debug UI
+          │               │                │
+          └───────────────┼────────────────┘
+                          ▼
+                    PTInstruments
+                          │
+                          ▼
+              Session / Timeline / Export
+
+依赖：PooToolsDEBUG -> Core / UIFoundation / 可选功能适配器
+禁止：Core -> PooToolsDEBUG
+```
+
 ---
 
 # 3. 版本策略总览
@@ -449,17 +472,19 @@ Alert 最新修复收口
 
 ## 5.9.x
 
-**6.0 Readiness Series**
+**Quality / Readiness Foundation Series**
+
+5.9.x 不再定义为“最终 5.x”或“Feature Freeze”。在 5.10.x / 5.11.x 已确定继续演进 Debug 的前提下，5.9.x 的职责调整为：先把全仓 API、并发、测试、生命周期、性能、依赖供应链和迁移文档做成可信基线。
 
 目标：
 
 ```text
-冻结 canonical API
+冻结 canonical API 的基本方向
 收口 Swift 6
 建立测试和 benchmark
 清理依赖供应链
-冻结 deprecated 删除清单
-完整演练 6.0
+建立 Scene / Lifecycle / Performance 基线
+为 5.10.x Debug Foundation 提供稳定底座
 ```
 
 推荐版本：
@@ -473,8 +498,63 @@ Alert 最新修复收口
 5.9.5 Accessibility / iOS 26 / Dynamic UI
 5.9.6 Third-party Supply Chain
 5.9.7 Documentation / Example / Migration
-5.9.8 Feature Freeze & 6.0 Rehearsal
-5.9.9 Final 5.x Baseline
+5.9.8 Pre-Debug Architecture Validation
+5.9.9 Pre-Debug Stable Baseline
+```
+
+---
+
+## 5.10.x
+
+**Debug Decoupling & Foundation Series**
+
+定位：Debug 是 PTools 的经典核心调试模块和一等能力，但依赖架构仍必须保持单向：
+
+```text
+PToolsCore / ptools
+        ↑
+        │
+   PooToolsDEBUG
+```
+
+Debug 可以依赖 Core；Core 不允许认识 `LocalConsole`、Inspector、Debug Window、Debug 配置或任何 Debug UI。5.10.x 的重点是建立稳定边界和可复用采集基础，不追求 Instruments UI。
+
+推荐版本：
+
+```text
+5.10.0 Core / Debug Dependency Audit & Contract
+5.10.1 Debug Preferences / Configuration Migration
+5.10.2 Logging Decoupling & Debug Log Sink
+5.10.3 PTDebugManager / Plugin / Event Foundation
+5.10.4 LocalConsole Responsibility Split
+5.10.5 Debug Window / Scene Stabilization
+5.10.6 Network / Lifecycle / Log Collector Migration
+5.10.7 Crash / Leak / Inspector / MockLocation Migration
+5.10.8 Compatibility / Regression / Overhead Audit
+5.10.9 Debug Foundation Stable Baseline
+```
+
+---
+
+## 5.11.x
+
+**PTInstruments & Runtime Diagnostics Series**
+
+5.11.x 在 5.10.x Debug Foundation 上增加统一运行时诊断能力。目标不是复制完整 Xcode Instruments，而是在 App 内提供可录制、可关联、可导出的性能与调试时间线。
+
+推荐版本：
+
+```text
+5.11.0 PTInstruments Core / Session / Recorder
+5.11.1 FPS / Frame Time / Hitch Instruments
+5.11.2 CPU / Memory / Main Thread Stall Instruments
+5.11.3 Network / Lifecycle / Log / Leak Tracks
+5.11.4 Timeline Model / Storage / Sampling Policy
+5.11.5 Timeline UI / Track Rendering / Zoom & Selection
+5.11.6 Event Inspector / Filter / Correlation
+5.11.7 Custom Trace / Export / Import (.pttrace)
+5.11.8 Overhead / Privacy / Real-App Regression
+5.11.9 Final 5.x Debug & Diagnostics Baseline + 6.0 Rehearsal
 ```
 
 ---
@@ -675,7 +755,7 @@ Scripts/validate_module_parity.sh
 ```text
 5.8.0：建立 baseline
 5.8.x 结束：<= 6
-5.9.x 结束：<= 3
+5.11.x 结束：<= 3
 6.0：0~2
 ```
 
@@ -2055,7 +2135,7 @@ PTMediaLibConfig.share
 
 ---
 
-# 13. 5.8.8：Debug / Logging / Runtime Isolation
+# 13. 5.8.8：Debug / Logging / Runtime Isolation（前置基础）
 
 ## DEBUG-588-01 Core 只保留 Logging Protocol
 
@@ -2080,6 +2160,9 @@ Core 不直接依赖 CocoaLumberjack。
 ---
 
 ## DEBUG-588-03 Debug target 不污染 Production Core
+
+> 本节只建立 5.10.x 的前置契约与隔离基础；完整的 Core / Debug 语义解耦、LocalConsole 拆责和 Debug Foundation 统一迁移放到 5.10.x。
+
 
 以下能力全部只能在 Debug/Diagnostics target：
 
@@ -2840,19 +2923,9 @@ Behavior difference
 
 ---
 
-# 23. 5.9.8：Feature Freeze & 6.0 Rehearsal
+# 23. 5.9.8：Pre-Debug Architecture Validation
 
-从 5.9.8：
-
-## 禁止
-
-- [ ] 新大型控件。
-- [ ] 新 Core feature。
-- [ ] 新网络 subsystem。
-- [ ] 新媒体编辑体系。
-- [ ] 新全局 singleton。
-- [ ] 新 deprecated wrapper。
-- [ ] 新第三方依赖，除非用于替代旧高风险依赖。
+5.9.8 不再执行全仓 Feature Freeze，也不提前删除 6.0 deprecated API。它负责验证 5.9.0～5.9.7 建立的 API、并发、测试、生命周期、性能和依赖基线，确保 5.10.x 可以在稳定底座上重构 Debug。
 
 ## 允许
 
@@ -2864,36 +2937,30 @@ Behavior difference
 - [ ] Tests。
 - [ ] Dependency cleanup。
 - [ ] Build fix。
+- [ ] 为 5.10.x Debug 解耦补充必要的非破坏性契约。
 
----
+## 禁止
 
-## MIG-598-01 创建 6.0 rehearsal branch
+- [ ] 在 Core 新增 Debug 专属状态。
+- [ ] 新增 Core → Debug 类型引用。
+- [ ] 新增无法被 5.10.x Plugin / Event Foundation 接管的 Debug 全局单例。
+- [ ] 提前删除尚未经过迁移周期的 public API。
 
-```text
-release/6.0-rehearsal
-```
+## VAL-598-01 Debug 前置依赖审计
 
----
-
-## MIG-598-02 真正删除 deprecated
-
-只在 rehearsal branch 执行：
+至少输出：
 
 ```text
-PTCycleScrollView legacy wrapper
-PTImagePicker deprecated convenience
-旧 Media Save wrappers
-旧 Network dynamic entry
-typo aliases
-重复 Alert wrappers
-其他 MIGRATION_5X 已登记入口
+Core -> Debug direct symbol references
+Core 中 Debug-specific UserDefaults keys
+Core 中 Debug menu / runtime special cases
+LocalConsole responsibilities inventory
+Debug swizzle owners
+Debug Window / Scene ownership
+PooToolsDEBUG -> Core / Network / Share / SearchBar / PDF dependencies
 ```
 
-不要一次删除未登记 API。
-
----
-
-## MIG-598-03 用真实 App 验证
+## VAL-598-02 真实 App 验证
 
 至少：
 
@@ -2903,49 +2970,642 @@ CrazyDashboard
 另一个真实业务 App
 ```
 
-记录：
-
-```text
-编译错误数量
-迁移耗时
-常见 migration pattern
-运行时差异
-```
+本阶段只记录迁移风险，不执行 6.0 删除。
 
 ---
 
-# 24. 5.9.9：最终 5.x 基线
+# 24. 5.9.9：Pre-Debug Stable Baseline
 
-5.9.9 是推荐的最后一个长期稳定 5.x。
+5.9.9 是进入 5.10.x 前的稳定基线，不再定义为“最终 5.x”。
 
-## 只允许
+## 5.9.9 冻结以下基线
 
-```text
-Critical bug
-Security
-Migration blocker
-Build issue
-Documentation
-```
-
----
-
-## 5.9.9 冻结以下内容
-
-- [ ] Module graph。
-- [ ] Canonical API。
-- [ ] Deprecated deletion list。
-- [ ] 6.0 migration guide。
-- [ ] Third-party dependency list。
+- [ ] 5.10.x 开始前的 Module graph。
+- [ ] Canonical API baseline。
 - [ ] Public API baseline。
 - [ ] Sendable exception list。
 - [ ] Performance baseline。
 - [ ] SPM / CocoaPods parity。
 - [ ] iOS 17 / iOS 26 regression matrix。
+- [ ] Debug dependency audit baseline。
+
+要求：
+
+```text
+5.9.9 可以继续被业务项目使用
+5.10.x Debug 内部重构不要求宿主立刻迁移
+旧 LocalConsole / Debug 公开入口必须有兼容策略
+```
 
 ---
 
-# 25. 6.0 准入条件
+# 25. 5.10.x：Debug Decoupling & Foundation
+
+## 25.1 定位与不可破坏原则
+
+Debug 是 PTools 的经典核心调试模块，不按“可有可无的附属工具”处理。5.10.x 的目标不是削弱 Debug，而是把它正式提升为边界清晰的一等模块。
+
+依赖必须保持：
+
+```text
+PToolsCore / ptools
+        ↑
+        │
+   PooToolsDEBUG
+```
+
+必须满足：
+
+```text
+Core 单独安装 / 编译时不需要 Debug
+Debug 安装后可以完整使用 Core
+移除 Debug 不要求修改 Core 源码
+Core 不直接引用 LocalConsole / PTLogLevel / Inspector / DebugWindow / Debug Configuration
+```
+
+5.x 继续兼容经典入口，例如 `LocalConsole.shared`。内部可以改为 Compatibility Layer 转发，但不应为了重构强迫宿主项目一次性迁移。
+
+## 25.2 当前已知解耦重点
+
+结合当前仓库审查，5.10.x 首批治理点至少包含：
+
+### DEBUG-5100-01 `PTNSLog` 不直接认识 `LocalConsole`
+
+当前 Core 日志路径即使受 `POOTOOLS_DEBUG` 条件编译保护，只要源码直接引用 Debug 类型，仍属于反向耦合。
+
+目标：
+
+```text
+PTNSLog / PTLogging / PTLogEvent
+            ↓
+        Log Contract
+            ↑
+            │
+      PTDebugLogSink
+            ↓
+       LocalConsole
+```
+
+要求：
+
+- [ ] Core Logger 不 import / 不引用 Debug 类型。
+- [ ] Console 仍可实时接收 Core 日志。
+- [ ] Instruments Session 后续可复用同一日志事件，不重复 hook。
+
+### DEBUG-5100-02 Debug Preferences 从 Core 迁出
+
+从 `PTCoreUserDefultsWrapper` 等 Core 状态中迁出 Debug 专属配置，例如：
+
+```text
+AppDebugMode
+DevMask / TouchBubble
+TouchInspector / Hits
+LocalConsole font / frame / x / y
+MockLocation open / latitude / longitude
+```
+
+目标：
+
+```text
+PTDebugConfiguration
+        ↓
+PTDebugPreferences
+        ↓
+UserDefaults
+```
+
+旧 key 必须支持无损迁移，不能造成用户已有 Debug 配置全部丢失。
+
+### DEBUG-5100-03 Core Runtime 不特判 Debug UI 语义
+
+Core 中对 `"Debug"`、`"UserDefaults"` 等 Debug 菜单标题或 Debug UI 状态的特殊判断迁入 Debug adapter / category。
+
+原则：
+
+```text
+Core 提供通用 runtime capability
+Debug 决定如何使用 capability
+```
+
+## 25.3 Debug Foundation
+
+建立稳定的内部基础层：
+
+```text
+PooToolsDEBUG
+│
+├── Foundation
+│   ├── PTDebugManager
+│   ├── PTDebugPlugin
+│   ├── PTDebugCollector
+│   ├── PTDebugEvent
+│   ├── PTDebugEventCenter
+│   ├── PTDebugConfiguration
+│   └── PTDebugPreferences
+│
+├── Collectors
+├── Console
+├── Inspector
+├── Network
+├── Lifecycle
+├── Crash
+├── Leak
+├── MockLocation
+└── UI
+```
+
+建议协议：
+
+```swift
+public protocol PTDebugPlugin: AnyObject {
+    var identifier: String { get }
+    var isRunning: Bool { get }
+    func start()
+    func stop()
+}
+```
+
+`PTDebugManager` 只负责：
+
+```text
+register
+start / stop
+plugin lifecycle
+configuration
+session coordination entry
+```
+
+禁止把每个 Debug 工具的业务继续堆进新的巨型 Manager。
+
+## 25.4 LocalConsole 拆责
+
+`LocalConsole` 回归 Console 本身，不继续承担整个 Debug subsystem 的 bootstrap。
+
+逐步迁出：
+
+```text
+URLSession swizzle -> PTNetworkCollector
+UIViewController lifecycle swizzle -> PTLifecycleCollector
+Crash -> PTCrashCollector
+Leak -> PTLeakCollector
+Inspector -> PTInspectorPlugin
+Mock Location -> PTMockLocationPlugin
+stdout / stderr -> PTConsoleCollector
+Debug Window -> PTDebugWindowCoordinator
+```
+
+保留：
+
+```text
+LocalConsole.shared
+LocalConsole.console(for:)
+show / hide / print 等经典公开入口
+```
+
+内部转发到新 Foundation。
+
+## 25.5 Event / Collector 单向数据流
+
+Debug UI 不直接从各 Monitor 拉取内部状态。统一：
+
+```text
+Collector / Plugin
+      ↓
+ PTDebugEvent
+      ↓
+PTDebugEventCenter
+      ↓
+┌───────────┬───────────┬───────────┐
+Console   Storage     Session     Dashboard
+```
+
+这样 5.11.x `PTInstruments` 只需要消费事件和采样，不需要重新实现一套 Network / Lifecycle / Leak 监听。
+
+## 25.6 Window / Scene 稳定化
+
+在现有 `LocalConsole.console(for:)` 和 Scene Scope 基础上继续完成：
+
+- [ ] Debug Window 按 `UIWindowScene` 隔离。
+- [ ] 不使用单一全局 Debug Window 覆盖所有 Scene。
+- [ ] `windowLevel` 不破坏业务 present / sheet。
+- [ ] hitTest 穿透只作用于明确的非交互区域。
+- [ ] close / reopen 生命周期稳定。
+- [ ] 键盘、安全区、刘海、横竖屏、分屏稳定。
+- [ ] Scene disconnect 时彻底释放 Window / observer / display link。
+- [ ] 多 Scene 同时开启 Debug 时状态互不污染。
+
+## 25.7 Swizzle 生命周期
+
+复用 `PTSwizzleRegistry`，每个 Debug hook 必须登记 owner。
+
+要求：
+
+```text
+同一 selector 不重复 swizzle
+插件重复 start 不重复安装
+stop / scene disconnect 有明确清理语义
+无法 undo 的 swizzle 必须登记原因
+Debug 禁用后不继续产生高频事件
+```
+
+## 25.8 推荐版本切片
+
+```text
+5.10.0 依赖审计 / Contract Gate
+5.10.1 Debug Preferences / Configuration
+5.10.2 Logging / Log Sink
+5.10.3 Debug Manager / Plugin / Event Foundation
+5.10.4 LocalConsole 拆责
+5.10.5 Window / Scene / Interaction 稳定化
+5.10.6 Network / Lifecycle / Console Collectors
+5.10.7 Crash / Leak / Inspector / MockLocation
+5.10.8 Compatibility / Regression / Overhead
+5.10.9 Stable Baseline
+```
+
+## 25.9 5.10.x 验收
+
+- [ ] Core 源码扫描不存在 Debug 类型反向引用。
+- [ ] Core Debug-specific preferences 清零或只保留真正通用 contract。
+- [ ] `PTools/Core` / `PToolsCore` 可在不安装 DEBUG subspec/product 时独立工作。
+- [ ] `PooToolsDEBUG` 继续完整依赖 Core，但不存在循环依赖。
+- [ ] 经典 `LocalConsole` API 兼容。
+- [ ] Network / Lifecycle / Crash / Leak / Inspector 不再由 LocalConsole 单例集中 bootstrap。
+- [ ] Debug Window 多 Scene 回归通过。
+- [ ] swizzle 重复安装测试通过。
+- [ ] observer / Notification / DisplayLink / Timer 生命周期有测试或回归记录。
+- [ ] Debug disabled 与 enabled 的性能差异建立 baseline。
+- [ ] SPM / CocoaPods / Example 三入口一致。
+
+建议输出：
+
+```text
+DEBUG_ARCHITECTURE_5_10.md
+DEBUG_DEPENDENCY_GRAPH_5_10.md
+DEBUG_PUBLIC_API_5_10.json
+DEBUG_SWIZZLE_REGISTRY_5_10.md
+DEBUG_SCENE_REGRESSION_5_10.md
+DEBUG_OVERHEAD_BASELINE_5_10.md
+```
+
+---
+
+# 26. 5.11.x：PTInstruments & Runtime Diagnostics
+
+## 26.1 产品定位
+
+`PTInstruments` 属于 `PooToolsDEBUG`，建立在 5.10.x Foundation / Collector / Event 之上。第一阶段目标是应用内诊断平台，而不是复制 Apple Instruments 的底层 profiler。
+
+```text
+Collectors
+    ↓
+PTDebugEventCenter / Samples
+    ↓
+PTInstrumentRecorder
+    ↓
+PTInstrumentSession
+    ↓
+Timeline / Inspector / Export
+```
+
+必须避免：
+
+```text
+PTInstruments 再 swizzle 一遍 URLSession
+PTInstruments 再实现一套 Leak Detector
+PTInstruments 再截获一套 VC Lifecycle
+```
+
+它应该复用 5.10.x 已有 Collector。
+
+## 26.2 Instruments Core
+
+建议类型：
+
+```text
+PTInstrument
+PTInstrumentRecorder
+PTInstrumentSession
+PTInstrumentTrack
+PTInstrumentSample
+PTInstrumentEvent
+PTInstrumentTimeline
+PTInstrumentSamplingPolicy
+```
+
+Session 至少记录：
+
+```text
+id
+startTime / endTime
+app / device / OS metadata
+selected instruments
+events
+samples
+network summary
+leak summary
+performance summary
+```
+
+## 26.3 第一阶段 Instruments
+
+### Performance
+
+- [ ] FPS。
+- [ ] Frame Time。
+- [ ] Hitch / Severe Hitch。
+- [ ] CPU。
+- [ ] Memory footprint / peak / growth。
+- [ ] Main Thread Stall。
+
+FPS / Frame Time 必须根据实际 refresh rate 计算，不能硬编码 60 Hz / 16.67 ms。
+
+Main Thread Stall 优先使用明确、可停止的 RunLoop observation / watchdog 机制，并严格控制自身开销。
+
+### Runtime
+
+- [ ] Network。
+- [ ] UIViewController Lifecycle。
+- [ ] Logs。
+- [ ] Leak。
+- [ ] Crash markers（仅能记录可安全捕获的信息）。
+- [ ] App lifecycle / Scene lifecycle。
+
+## 26.4 Timeline
+
+统一时间轴示意：
+
+```text
+Time      0s        1s        2s        3s
+          │---------│---------│---------│
+CPU       ────╮──────╯───────────────
+Memory    ────────╮───────────────╮──
+FPS       ███████░░███░████████████
+Hitch                █
+Network        ├──────────┤
+Lifecycle   ├──────────────────────
+Logs          •   •      •  •
+```
+
+支持：
+
+```text
+horizontal scroll
+zoom / range selection
+track show / hide
+category filter
+event selection
+cross-track timestamp correlation
+```
+
+点击某个 Hitch 时，应该能关联同一时间附近的：
+
+```text
+Main Thread Stall
+Network event
+Lifecycle event
+Log
+Memory change
+Current Scene / VC
+```
+
+## 26.5 Network Track
+
+优先复用 `URLSessionTaskMetrics` / 现有 Network Collector 可获得的信息，支持：
+
+```text
+request start / end
+method / URL（按隐私策略脱敏）
+status code
+request / response bytes
+duration
+DNS / connect / TLS / TTFB（可获得时）
+retry / cache / cancellation markers
+```
+
+Network Instruments 不应迫使 Network Core 依赖 Debug。
+
+## 26.6 Lifecycle / Leak Track
+
+利用 5.10.x Collector：
+
+```text
+viewDidLoad
+viewWillAppear
+viewDidAppear
+viewWillDisappear
+viewDidDisappear
+expected deinit
+actual deinit
+possible leak
+```
+
+Timeline 可以显示对象生命周期区间；Leak 只提供“潜在泄漏”诊断，不把弱引用延迟检查包装成绝对结论。
+
+## 26.7 Logs Track
+
+Core 日志通过 Logging Contract 进入 Debug Sink，再写入 Session：
+
+```text
+Core Logger
+   ↓
+Log Contract
+   ↓
+Debug Log Sink
+   ├─ LocalConsole
+   └─ PTInstrumentSession
+```
+
+支持 level / category / text filter。
+
+## 26.8 Custom Trace
+
+提供业务侧自定义 trace，但保持 API 小而稳定。
+
+建议：
+
+```swift
+PTTrace.measure("Image Decode") {
+    decodeImage()
+}
+
+try await PTTrace.measure("Load User") {
+    try await loadUser()
+}
+```
+
+也可提供显式 token：
+
+```swift
+let trace = PTTrace.begin("Checkout")
+// ...
+trace.end()
+```
+
+必须处理：
+
+```text
+nested trace
+async cancellation
+重复 end
+跨线程 timestamp
+metadata Sendable boundary
+```
+
+## 26.9 Session / Export / Import
+
+第一阶段建议自定义：
+
+```text
+.pttrace
+```
+
+逻辑结构可包含：
+
+```text
+session.json
+summary.json
+events.*
+samples.*
+network.*
+logs.*
+```
+
+具体二进制 / JSON 格式在实现阶段根据性能决定，不在路线图中提前锁死。
+
+要求：
+
+- [ ] Session 可 start / stop。
+- [ ] 可保存历史记录。
+- [ ] 可导出。
+- [ ] 可重新导入查看。
+- [ ] 大 Session 有容量 / 时间 / sample rate 限制。
+- [ ] Export 默认执行敏感信息脱敏策略。
+
+## 26.10 Debug Dashboard
+
+Instruments 之前或同时建立统一入口：
+
+```text
+PTools Debug
+
+Overview
+FPS / Memory / CPU / Network / Leaks / Errors
+
+Tools
+Console
+Network
+Inspector
+Lifecycle
+Leaks
+Crash
+Performance
+Instruments
+```
+
+Dashboard 只消费 Debug Foundation，不成为新的数据源。
+
+## 26.11 性能开销与采样策略
+
+PTInstruments 本身不能成为明显性能问题。
+
+必须建立：
+
+```text
+Disabled baseline
+Debug enabled baseline
+Recording baseline
+Timeline UI open baseline
+```
+
+采样策略必须可配置：
+
+```text
+CPU / memory interval
+FPS display link lifecycle
+max event count
+max session duration
+max trace size
+network body capture policy
+log retention
+```
+
+不提前硬编码一个缺乏实测依据的 CPU 百分比目标；以 5.10.x baseline 和真实设备回归确定预算，并在 CI / release report 中固定。
+
+## 26.12 隐私与发布边界
+
+- [ ] Network body / header 默认不完整持久化敏感字段。
+- [ ] token / cookie / authorization 支持统一 redaction。
+- [ ] Export 前再次执行脱敏。
+- [ ] Debug / Diagnostics target 默认不污染 Production Core。
+- [ ] 宿主明确启用时才能记录高成本 / 高敏感 Instrument。
+- [ ] Session metadata 不收集与诊断无关的用户数据。
+
+## 26.13 5.11.x 暂不实现
+
+第一版不以“完整复制 Xcode Instruments”为目标，以下能力延后评估：
+
+```text
+完整 Time Profiler call tree
+Allocations object graph
+System Trace
+Metal System Trace
+Mach thread sampling + stack unwinding + symbolication
+dSYM profiler pipeline
+```
+
+原因：这些能力会显著提高实现复杂度、运行时风险和平台审核边界，不应阻塞 5.x Debug 诊断体系落地。
+
+## 26.14 推荐版本切片
+
+```text
+5.11.0 Instruments Core / Session / Recorder
+5.11.1 FPS / Frame Time / Hitch
+5.11.2 CPU / Memory / Main Thread Stall
+5.11.3 Network / Lifecycle / Logs / Leak Tracks
+5.11.4 Timeline Model / Storage
+5.11.5 Timeline UI
+5.11.6 Event Inspector / Filter / Correlation
+5.11.7 Custom Trace / Export / Import
+5.11.8 Overhead / Privacy / Real-App Regression
+5.11.9 Final 5.x Baseline + 6.0 Rehearsal
+```
+
+## 26.15 5.11.x 验收
+
+- [ ] Instruments 不重复安装已有 Collector / swizzle。
+- [ ] FPS / Memory / CPU / Stall 能形成同一 Session 时间基线。
+- [ ] Network / Lifecycle / Log / Leak 可以跨 Track 关联。
+- [ ] Timeline 支持长 Session 的增量加载或等价性能策略。
+- [ ] Session start/stop 不泄漏 Timer / DisplayLink / Observer。
+- [ ] `.pttrace` 可导出并重新打开。
+- [ ] Debug disabled 时 Instruments 不产生后台采样。
+- [ ] Recording overhead 有真实设备 baseline。
+- [ ] PTools Example / CrazyDashboard / 至少一个真实业务 App 完成回归。
+- [ ] iOS 17 / iOS 26、Light / Dark、横竖屏、多 Scene 回归。
+- [ ] 经典 Console / Inspector / Network Debug 入口保持兼容。
+
+## 26.16 5.11.9：最终 5.x 基线与 6.0 Rehearsal
+
+5.11.9 才执行原计划中“最终 5.x”应承担的工作：
+
+```text
+Feature Freeze
+release/6.0-rehearsal
+冻结 module graph
+冻结 public API
+冻结 deprecated deletion list
+冻结 migration guide
+完整 build matrix
+真机 / 多 Scene / Instruments 回归
+真实宿主迁移演练
+```
+
+在 `release/6.0-rehearsal` 上才真正删除已登记 deprecated API，并验证 PTools Example、CrazyDashboard 和其他真实宿主的迁移成本。
+
+---
+
+# 27. 6.0 准入条件
 
 以下未全部满足，不建议发 6.0。
 
@@ -2963,6 +3623,10 @@ Documentation
 - [ ] PTCollectionView 内部 Coordinator 化。
 - [ ] PTAppBaseConfig 不再是唯一主题来源。
 - [ ] Debug 不进入 Production Core。
+- [ ] Core 不存在 `LocalConsole` / Inspector / DebugWindow / Debug Configuration 等 Debug 类型反向引用。
+- [ ] `PTDebugManager` / Plugin / Event / Collector 边界稳定。
+- [ ] `LocalConsole` 已回归 Console 职责，并通过兼容层保留经典入口。
+- [ ] PTInstruments 复用 Debug Collectors，不维护重复 swizzle / monitor。
 
 ---
 
@@ -2979,10 +3643,10 @@ Documentation
 
 ## API
 
-- [ ] deprecated API 至少经过一个 5.9.x 发布周期。
+- [ ] deprecated API 至少经过一个已发布的 5.x 兼容周期，并在 5.11.9 rehearsal 验证删除。
 - [ ] 每个删除项有 replacement。
 - [ ] `MIGRATION_6.md` 有示例。
-- [ ] 5.9.9 Example 不再调用待删除 API。
+- [ ] 5.11.9 Example 不再调用待删除 API。
 - [ ] 真实 App 已 rehearsal。
 
 ---
@@ -3008,6 +3672,9 @@ Documentation
 - [ ] Light。
 - [ ] Dark。
 - [ ] Dynamic Type。
+- [ ] Debug Window 多 Scene / Sheet / Present / Keyboard / Rotation 回归。
+- [ ] PTInstruments Recording overhead baseline。
+- [ ] `.pttrace` 导出 / 导入与敏感信息脱敏回归。
 - [ ] VoiceOver。
 - [ ] Reduce Motion。
 - [ ] Reduce Transparency。
@@ -3018,7 +3685,7 @@ Documentation
 
 ---
 
-# 26. 6.0 建议删除内容
+# 28. 6.0 建议删除内容
 
 注意：这里只列“候选”，最终以 `MIGRATION_6.md` 冻结清单为准。
 
@@ -3062,7 +3729,7 @@ migration 文档完整
 
 ---
 
-# 27. 6.0 不建议为了“干净”而删除的东西
+# 29. 6.0 不建议为了“干净”而删除的东西
 
 不要机械消灭：
 
@@ -3086,7 +3753,7 @@ PTLanguage.share
 
 ---
 
-# 28. 建议新增的质量脚本
+# 30. 建议新增的质量脚本
 
 建议最终 Scripts 至少有：
 
@@ -3102,6 +3769,9 @@ validate_public_api.sh
 validate_sendable_exceptions.sh
 validate_deprecated_inventory.sh
 validate_branch_dependencies.sh
+validate_debug_dependency_direction.sh
+validate_debug_swizzle_registry.sh
+validate_trace_redaction.sh
 
 report_dependency_graph.sh
 report_large_swift_files.sh
@@ -3109,11 +3779,14 @@ report_singletons.sh
 report_concurrency_exceptions.sh
 report_public_api.sh
 report_deprecated_api.sh
+report_debug_reverse_refs.sh
+report_debug_overhead.sh
+report_instruments_session_size.sh
 ```
 
 ---
 
-# 29. 推荐 Issue / Task ID 规范
+# 31. 推荐 Issue / Task ID 规范
 
 继续沿用现在路线图风格，但按领域分：
 
@@ -3139,13 +3812,16 @@ DEP-596-xx
 DOC-597-xx
 MIG-598-xx
 REL-599-xx
+
+DEBUG-5100-xx ... DEBUG-5109-xx
+INST-5110-xx ... INST-5119-xx
 ```
 
 这样不会再全部塞进 `CORE-xxx`。
 
 ---
 
-# 30. 推荐每个版本的 Commit 顺序
+# 32. 推荐每个版本的 Commit 顺序
 
 ## 第 1 个 Commit：Baseline
 
@@ -3218,7 +3894,7 @@ docs: update xxx roadmap
 
 ---
 
-# 31. 每个版本统一 Definition of Done
+# 33. 每个版本统一 Definition of Done
 
 ## Code
 
@@ -3244,6 +3920,9 @@ docs: update xxx roadmap
 - [ ] Rotation。
 - [ ] Memory warning。
 - [ ] Background/Foreground。
+- [ ] 涉及 Debug 时：Debug disabled / enabled 双路径回归。
+- [ ] 涉及 Debug Window 时：多 Scene / present / sheet / keyboard 回归。
+- [ ] 涉及 Instruments 时：Recording start/stop、Session 释放和 overhead baseline。
 
 ## Docs
 
@@ -3255,7 +3934,7 @@ docs: update xxx roadmap
 
 ---
 
-# 32. 最推荐的实际执行顺序
+# 34. 最推荐的实际执行顺序
 
 如果你自己逐项修改，建议严格按下面做：
 
@@ -3350,20 +4029,38 @@ docs: update xxx roadmap
 
 5.9.8
 │
-└─ Feature Freeze + 6.0 rehearsal
+└─ Pre-Debug architecture validation
 
 5.9.9
 │
-└─ Final 5.x stable baseline
+└─ Pre-Debug stable baseline
+
+5.10.x
+│
+├─ Core / Debug 单向依赖
+├─ Debug Configuration / Logging 解耦
+├─ PTDebugManager / Plugin / Event Foundation
+├─ LocalConsole 拆责
+├─ Window / Scene 稳定化
+└─ Collectors 统一迁移
+
+5.11.x
+│
+├─ PTInstruments Core / Session
+├─ FPS / CPU / Memory / Hitch / Stall
+├─ Network / Lifecycle / Logs / Leak Tracks
+├─ Timeline / Event Inspector
+├─ Custom Trace / Export / Import
+└─ 5.11.9 Final 5.x + 6.0 rehearsal
 
 6.0
 │
-└─ 删除已经完整迁移的 legacy API
+└─ 删除已经完整迁移并在 5.11.9 rehearsal 验证的 legacy API
 ```
 
 ---
 
-# 33. 优先级
+# 35. 优先级
 
 ## P0：必须在 6.0 前完成
 
@@ -3375,7 +4072,8 @@ docs: update xxx roadmap
 6. PTCollectionView internal split。
 7. API migration inventory。
 8. Third-party build blockers。
-9. 6.0 rehearsal。
+9. Debug Foundation 解耦与稳定化。
+10. PTInstruments 核心诊断链路与 5.11.9 6.0 rehearsal。
 
 ---
 
@@ -3383,7 +4081,7 @@ docs: update xxx roadmap
 
 1. Theme / Appearance。
 2. Media Network decoupling。
-3. Debug isolation。
+3. Debug Dashboard / Timeline 体验完善。
 4. Scene scope。
 5. Benchmark。
 6. Public API baseline。
@@ -3403,7 +4101,7 @@ docs: update xxx roadmap
 
 ---
 
-# 34. 最终判断
+# 36. 最终判断
 
 PTools 当前已经不属于“缺功能”的阶段。
 
@@ -3437,9 +4135,9 @@ PTCollectionView / BaseVC / Network / TabBar
 内部 Coordinator / Provider / Adapter 化
 ```
 
-如果严格按照这份路线执行，5.9.9 应该成为一个：
+如果严格按照这份路线执行，5.11.9 应该成为一个：
 
-> **公开 API 仍兼容 5.x，但内部结构已经基本达到 6.0 形态的版本。**
+> **公开 API 仍兼容 5.x，Debug Foundation 与 PTInstruments 已稳定，同时内部结构已经基本达到 6.0 形态的版本。**
 
 那么 6.0 的工作就不再是“大规模重写”，而只是：
 
@@ -3455,7 +4153,7 @@ PTCollectionView / BaseVC / Network / TabBar
 
 ---
 
-# 35. 仓库审查参考点
+# 37. 仓库审查参考点
 
 本路线图制定时重点核对：
 
@@ -3486,7 +4184,7 @@ PooToolsSource/MediaViewer/
 
 ---
 
-# 36. 可直接复制到 GitHub Project 的 Milestone
+# 38. 可直接复制到 GitHub Project 的 Milestone
 
 ## Milestone: 5.7.9 Stable Baseline
 
@@ -3650,25 +4348,48 @@ PooToolsSource/MediaViewer/
 - [x] DOC-597-03 Example pages index and module regression guide
 - [x] DOC-597-04 MIGRATION_6
 
-## Milestone: 5.9.8 6.0 Rehearsal
+## Milestone: 5.9.8 Pre-Debug Validation
 
-- [ ] Feature freeze
-- [ ] release/6.0-rehearsal
-- [ ] Delete deprecated
-- [ ] PTools Example migration
-- [ ] CrazyDashboard migration
-- [ ] Real business app migration
+- [ ] 5.9.x architecture validation
+- [ ] Debug dependency audit baseline
+- [ ] Core -> Debug reverse reference scan
+- [ ] LocalConsole responsibility inventory
+- [ ] Real host risk inventory
 
-## Milestone: 5.9.9 Final 5.x
+## Milestone: 5.9.9 Pre-Debug Stable Baseline
 
-- [ ] Full regression
+- [ ] Full regression for 5.9.x
 - [ ] Full build matrix
-- [ ] Freeze module graph
-- [ ] Freeze public API
-- [ ] Freeze deletion list
-- [ ] Freeze migration guide
+- [ ] Freeze pre-5.10 public API baseline
+- [ ] Freeze performance baseline
+- [ ] Freeze Debug dependency baseline
 - [ ] Tag 5.9.9
 
+## Milestone: 5.10.x Debug Foundation
+
+- [ ] DEBUG-5100-01 Core / Debug dependency contract
+- [ ] DEBUG-5100-02 Debug preferences migration
+- [ ] DEBUG-5100-03 Core runtime Debug special-case removal
+- [ ] DEBUG-5102 Logging / Debug Log Sink
+- [ ] DEBUG-5103 PTDebugManager / Plugin / Event Foundation
+- [ ] DEBUG-5104 LocalConsole responsibility split
+- [ ] DEBUG-5105 Debug Window / Scene stabilization
+- [ ] DEBUG-5106 Network / Lifecycle / Console collectors
+- [ ] DEBUG-5107 Crash / Leak / Inspector / MockLocation collectors
+- [ ] DEBUG-5108 Compatibility / overhead / regression
+
+## Milestone: 5.11.x PTInstruments
+
+- [ ] INST-5110 Session / Recorder / Track contracts
+- [ ] INST-5111 FPS / Frame Time / Hitch
+- [ ] INST-5112 CPU / Memory / Main Thread Stall
+- [ ] INST-5113 Network / Lifecycle / Logs / Leak tracks
+- [ ] INST-5114 Timeline model / storage / sampling
+- [ ] INST-5115 Timeline UI
+- [ ] INST-5116 Event Inspector / filter / correlation
+- [ ] INST-5117 Custom Trace / .pttrace export / import
+- [ ] INST-5118 Overhead / privacy / real-app regression
+- [ ] Deprecated deletion rehearsal
 ---
 
 ## 5.9.x 当前实施记录（2026-09-10）
@@ -3727,7 +4448,7 @@ PooToolsSource/MediaViewer/
 - [x] DEP-596-05：更新 `DEPENDENCIES.md`，新增 `report/dependency_supply_chain_5_9_6.md`。
 - [x] 5.9.6 Xcode 验证：Debug / Release 均已执行；结果受外部 KituraContracts Swift 6 诊断阻断，详见 `report/build_validation_5_9_6.md`。
 - [x] DOC-597-01 / DOC-597-02 / DOC-597-04：更新 README、RELEASE、CHANGELOG、依赖文档并补齐迁移配方。
-- [x] DOC-597-03：新增 `EXAMPLE_MODULES_5_9.md`，登记 `PooTools-Example` 的真实页面入口、模块覆盖和回归清单；真实宿主项目迁移继续留到 5.9.8 rehearsal。
+- [x] DOC-597-03：新增 `EXAMPLE_MODULES_5_9.md`，登记 `PooTools-Example` 的真实页面入口、模块覆盖和回归清单；5.9.8 只做真实宿主迁移风险盘点，最终删除与迁移 rehearsal 后移到 5.11.9。
 - [x] 新增 5.9.x 验证脚本：API、并发、单例、缓存、无障碍、依赖分支和迁移门禁。
 - [x] 记录当前 Xcode Debug / Release 和直接 PooTools scheme 构建结果：`report/build_validation_5_9.md`。
 - [x] 2026-09-10 兼容切片：`PTTabBarView` 外观快照、`PTCollectionPhotoPrefetchCoordinator` 预取引用计数与生命周期清理、Network 实例请求环境/Typed Codable 入口，以及稳定 request/cache key；旧公开入口均保留。
@@ -3741,8 +4462,8 @@ PooToolsSource/MediaViewer/
 - [ ] LIFE-593-01 至 LIFE-593-03：多窗口、多 Scene、Scene 断开重连和并行转场的真实宿主回归；静态门禁已完成。
 - [ ] PERF-594-02 至 PERF-594-04：代码实现已完成，仍需在可运行的 Xcode 宿主、真机和 Instruments 中完成性能基线与内存告警实测。
 - [ ] 宿主项目若重新接入 Bugly，仍需供应商 XCFramework、Simulator slice、通用 device archive 和真实宿主归档验证。
-- [ ] 真实宿主项目迁移：需要 CrazyDashboard 和其他宿主项目在 5.9.8 rehearsal 中单独执行。
-- [ ] 5.9.8 / 5.9.9：6.0 rehearsal、完整 Xcode 矩阵、真机/宿主回归和最终 tag。
+- [ ] 真实宿主项目迁移：5.9.8 先完成风险盘点；最终删除与迁移演练放到 5.11.9 rehearsal。
+- [ ] 5.9.8 / 5.9.9：完成 Pre-Debug 验证与稳定基线；5.10.x 完成 Debug Foundation；5.11.9 再执行 6.0 rehearsal、完整 Xcode 矩阵和最终 5.x 基线。
 
 已知外部阻断：Metal 工具链和部分 Kitura/Pods Swift 6 诊断。宿主重新接入旧版
 Bugly 时还会重新引入二进制架构阻断。阻断解除前不得宣称 5.9.x 完整验收通过或创建发布标签。
