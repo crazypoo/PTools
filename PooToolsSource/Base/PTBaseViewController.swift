@@ -1380,36 +1380,22 @@ extension PTBaseViewController {
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
     
     public func returnFrontVC(completion:PTActionTask? = nil) {
+        let finish: @MainActor () -> Void = {
+            PTUIKitRuntimeHooks.controllerTransitionDidComplete?()
+            completion?()
+        }
         if let presentingVC = self.presentingViewController {
             dismiss(animated: true, completion: {
                 PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
-                completion?()
+                Task { @MainActor in finish() }
             })
         } else if let nav = navigationController {
             nav.popViewController(animated: true) {
-                completion?()
+                Task { @MainActor in finish() }
             }
         } else {
-            completion?()
+            finish()
         }
-#if POOTOOLS_DEBUG
-        if UIApplication.shared.inferredEnvironment_PT != .appStore {
-            SwizzleTool.swizzleDidAddSubview {
-                // Configure console window.
-                Task { @MainActor in
-                    let lcm = LocalConsole.shared
-                    if lcm.isVisiable {
-                        if let maskView = lcm.maskView {
-                            PTUtils.fetchWindow()?.bringSubviewToFront(maskView)
-                        }
-                        if let terminal = lcm.terminal {
-                            PTUtils.fetchWindow()?.bringSubviewToFront(terminal)
-                        }
-                    }
-                }
-            }
-        }
-#endif
     }
     
     //MARK: 截图反馈注册

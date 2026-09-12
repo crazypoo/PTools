@@ -186,7 +186,9 @@ public class PTWaterWaveView: UIView {
     }
 
     deinit {
-        displayLink.invalidate()
+        // English: didMoveToWindow invalidates the display link before the view leaves its window, so deinit stays actor-safe.
+        // Español: didMoveToWindow invalida el display link antes de que la vista salga de su ventana, manteniendo deinit seguro para el actor.
+        // 中文：视图离开窗口时由 didMoveToWindow 负责失效 DisplayLink，使 deinit 保持并发隔离安全。
         NotificationCenter.default.removeObserver(self,
                                                    name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                                    object: nil)

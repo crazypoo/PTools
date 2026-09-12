@@ -8,6 +8,25 @@
 
 import UIKit
 import UniformTypeIdentifiers
+import Kingfisher
+
+// English: These MainActor hooks let optional UI integrations extend Core without creating a reverse module dependency.
+// Español: Estos hooks de MainActor permiten ampliar Core con integraciones UI opcionales sin crear una dependencia inversa entre módulos.
+// 中文：这些 MainActor 钩子让可选 UI 集成扩展 Core，同时避免形成反向模块依赖。
+@MainActor
+public enum PTUIKitRuntimeHooks {
+    public static var makeApplicationWindow: ((UIWindowScene) -> UIWindow?)?
+    public static var consoleVisibilityHandler: ((Bool) -> Void)?
+    public static var restoreConsoleState: (() -> Void)?
+    public static var settingsBundleHandler: (() -> Void)?
+    public static var webImageOptionsProvider: ((Int?, TimeInterval?) -> KingfisherOptionsInfo)?
+    public static var interceptPush: ((UIViewController, PTActionTask?) -> Bool)?
+    public static var shouldTrackViewBorders: (() -> Bool)?
+    public static var shouldPreserveContextMenuOrder: ((UIMenu) -> Bool)?
+    public static var presentationWillBegin: (() -> Void)?
+    public static var presentationDidComplete: (() -> Void)?
+    public static var controllerTransitionDidComplete: (() -> Void)?
+}
 
 // English: Describes the visual surface policy shared by Core UI components.
 // Español: Describe la política de superficies visuales compartida por los componentes UI de Core.
@@ -513,29 +532,10 @@ public extension PTUtils {
     }
 
     @MainActor class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
-#if POOTOOLS_DEBUG
-        let share = LocalConsole.shared
-        if share.isVisiable {
-            let nav = PTBaseNavControl(rootViewController: vc)
-            nav.modalPresentationStyle = .formSheet
-            PTUtils.getCurrentVC()?.present(nav, animated: true, completion: {
-                completion?()
-                SwizzleTool.swizzleDidAddSubview {
-                    // Configure console window.
-                    PTMainActorBridge.perform {
-                        if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
-                            currentVC.view.window?.bringSubviewToFront(findMask)
-                        }
-                    }
-                }
-            })
-
-        } else {
-            push(vc)
+        if PTUIKitRuntimeHooks.interceptPush?(vc, completion) == true {
+            return
         }
-#else
         push(vc)
-#endif
     }
     
     @MainActor class func modalDismissBeforePush(_ vc: UIViewController) {
@@ -579,12 +579,12 @@ extension UIView {
     /// 配合 _UIContextMenuListView 的替换方法
     /// 因为 _UIContextMenuListView 是私有类，它继承自 UIView，
     /// 将方法写在 UIView 的 extension 中，Runtime 就能顺利通过 class_getInstanceMethod 找到它。
-    @objc public func swizzled_reverses_Action_Order() -> Bool {
+    @MainActor @objc public func swizzled_reverses_Action_Order() -> Bool {
         if let menu = self.value(forKey: "displayed" + "Menu") as? UIMenu,
-           menu.title == "Debug" || menu.title == "User" + "Defaults" {
+           PTUIKitRuntimeHooks.shouldPreserveContextMenuOrder?(menu) == true {
             return false
         }
-        
+
         if let orig = self.value(forKey: "_" + "reverses" + "Action" + "Order") as? Bool {
             return orig
         }
@@ -616,12 +616,13 @@ public class SwizzleTool: NSObject {
 
     /// 确保上下文菜单始终以非反转顺序显示
     public static func swizzleContextMenuReverseOrder() {
+        guard !isContextMenuSwizzled else { return }
         // 1. 获取私有类
         guard let targetClass = NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View") else {
             PTNSLogConsole("Swizzle Error: 找不到 _UIContextMenuListView 类")
             return
         }
-        Swizzle(targetClass) {
+        Swizzle(targetClass, owner: "core.context-menu") {
             NSSelectorFromString("reverses" + "Action" + "Order") <-> #selector(UIView.swizzled_reverses_Action_Order)
         }
         isContextMenuSwizzled = true
@@ -636,7 +637,7 @@ public class SwizzleTool: NSObject {
         guard !isDidAddSubviewSwizzled else { return }
         
         // 使用你的全局 Swizzle 语法
-        Swizzle(UIWindow.self) {
+        Swizzle(UIWindow.self, owner: "core.window-subview") {
             #selector(UIWindow.didAddSubview(_:)) <-> #selector(UIWindow.swizzled_did_add_subview(_:))
         }
         

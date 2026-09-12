@@ -12,7 +12,7 @@ import Foundation
 extension CLLocationManager {
     @MainActor static func swizzleMethods() {
         DispatchQueue.once(token: "pootools.cllocationmanager.debug.swizzleMethods") {
-            Swizzle(CLLocationManager.self) {
+            Swizzle(CLLocationManager.self, owner: "debug.mock-location") {
                 #selector(CLLocationManager.startUpdatingLocation) <-> #selector(swizzledStartLocation)
                 #selector(CLLocationManager.requestLocation) <-> #selector(swizzedRequestLocation)
             }

@@ -11,6 +11,7 @@ import Foundation
 import CocoaLumberjack
 import SwifterSwift
 import OSLog
+import os.lock
 
 // English: Core logging contracts carry immutable values; diagnostic backends remain replaceable adapters.
 // Español: Los contratos de logging del núcleo transportan valores inmutables; los backends de diagnóstico siguen siendo adaptadores reemplazables.
@@ -38,6 +39,61 @@ public struct PTLogEvent: Sendable {
 
 public protocol PTLogging: Sendable {
     func log(_ event: PTLogEvent)
+}
+
+// English: Core owns only an atomic logging preference and does not know which optional Debug UI consumes it.
+// Español: Core solo posee una preferencia atómica de logging y no conoce qué UI de Debug opcional la consume.
+// 中文：Core 只维护原子化的日志偏好，不感知由哪个可选 Debug UI 消费该配置。
+public enum PTLogRuntimeConfiguration {
+    private static let lock = OSAllocatedUnfairLock(initialState: false)
+
+    public static var defaultWritesToFile: Bool {
+        get { lock.withLock { $0 } }
+        set { lock.withLock { $0 = newValue } }
+    }
+}
+
+// English: A log sink receives immutable events on MainActor and keeps the Core logger independent from optional UI diagnostics.
+// Español: Un sumidero de logs recibe eventos inmutables en MainActor y mantiene el logger de Core independiente de los diagnósticos UI opcionales.
+// 中文：日志接收器在 MainActor 接收不可变事件，让 Core 日志器与可选 UI 诊断能力解耦。
+public struct PTLogSink {
+    public let identifier: String
+    private let handler: @MainActor (PTLogEvent) -> Void
+
+    public init(identifier: String,
+                handler: @escaping @MainActor (PTLogEvent) -> Void) {
+        self.identifier = identifier
+        self.handler = handler
+    }
+
+    @MainActor
+    public func receive(_ event: PTLogEvent) {
+        handler(event)
+    }
+}
+
+// English: The registry is MainActor-isolated so installing or removing a UI sink cannot race with log delivery.
+// Español: El registro está aislado en MainActor para que instalar o quitar un sumidero UI no compita con la entrega de logs.
+// 中文：注册表隔离在 MainActor，避免 UI 日志接收器的安装、移除与投递发生数据竞争。
+@MainActor
+public final class PTLogSinkCenter {
+    public static let shared = PTLogSinkCenter()
+
+    private var sinks: [String: PTLogSink] = [:]
+
+    private init() {}
+
+    public func install(_ sink: PTLogSink) {
+        sinks[sink.identifier] = sink
+    }
+
+    public func remove(identifier: String) {
+        sinks.removeValue(forKey: identifier)
+    }
+
+    public func publish(_ event: PTLogEvent) {
+        sinks.values.forEach { $0.receive(event) }
+    }
 }
 
 public struct PTOSLogger: PTLogging {
@@ -112,7 +168,7 @@ public func prettyJSONString(from object: Any) -> String? {
 
 // MARK: - 快捷控制台打印
 public func PTNSLogConsole(_ any: Any...,
-                           isWriteLog: Bool = PTCoreUserDefultsWrapper.shared.PTLogWrite,
+                           isWriteLog: Bool = PTLogRuntimeConfiguration.defaultWritesToFile,
                            file: NSString = #file,
                            line: Int = #line,
                            column: Int = #column,
@@ -126,7 +182,7 @@ public func PTNSLogConsole(_ any: Any...,
 // MARK: - 自定义打印 (主入口)
 // 🚀 优化点 3：这是一个全局无隔离（nonisolated）函数，你可以在任何 Actor 或线程中直接调用，再也不需要包在主线程里！
 public func PTNSLog(_ msg: Any...,
-                    isWriteLog: Bool = PTCoreUserDefultsWrapper.shared.PTLogWrite,
+                    isWriteLog: Bool = PTLogRuntimeConfiguration.defaultWritesToFile,
                     file: NSString = #file,
                     line: Int = #line,
                     column: Int = #column,
@@ -166,22 +222,25 @@ public func PTNSLog(_ msg: Any...,
                 logger.notice("\(logOutput)")
             }
             
-    #if POOTOOLS_DEBUG
-            // 仅在调试工具目标中同步到 LocalConsole，避免核心日志模块依赖调试模块。
-            if LocalConsole.shared.isVisiable {
-                let consoleLevel: PTLogLevel
-                switch levelType {
-                case .error, .critical, .fault:
-                    consoleLevel = .error
-                case .warning:
-                    consoleLevel = .warning
-                default:
-                    consoleLevel = .info
-                }
-                LocalConsole.shared.print(logOutput, level: consoleLevel)
-            }
-    #endif
         }
+    }
+
+    let severity: PTLogSeverity
+    switch levelType {
+    case .debug:
+        severity = .debug
+    case .warning:
+        severity = .warning
+    case .error, .critical, .fault:
+        severity = .error
+    default:
+        severity = .info
+    }
+    let event = PTLogEvent(message: logOutput,
+                           severity: severity,
+                           category: loggerType.rawValue)
+    Task { @MainActor in
+        PTLogSinkCenter.shared.publish(event)
     }
     
     // 异步写入文件，绝对不阻塞任何业务逻辑线程

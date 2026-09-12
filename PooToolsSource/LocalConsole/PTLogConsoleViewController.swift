@@ -16,9 +16,11 @@ class PTLogConsoleViewController: PTBaseViewController {
 
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
-        view.isOn = PTCoreUserDefultsWrapper.shared.PTLogWrite
+        view.isOn = PTDebugPreferences.shared.writesLogToFile
         view.valueChangeCallBack = { value in
-            PTCoreUserDefultsWrapper.shared.PTLogWrite = value
+            Task { @MainActor in
+                PTDebugPreferences.shared.writesLogToFile = value
+            }
         }
         view.bounds = CGRect(origin: .zero, size: CGSize.SwitchSize)
         return view

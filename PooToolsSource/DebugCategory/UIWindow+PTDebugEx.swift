@@ -39,7 +39,7 @@ extension UIWindow {
     // MARK: - Method swizzling
     @objc class func db_swizzleMethods() {
         DispatchQueue.once(token: "pootools.uiwindow.db_swizzleMethods") {
-            Swizzle(UIWindow.self) {
+            Swizzle(UIWindow.self, owner: "debug.window") {
                 #selector(UIWindow.sendEvent(_:)) <-> #selector(UIWindow.db_sendEvent(_:))
             }
         }
@@ -116,4 +116,3 @@ extension DispatchQueue {
         block()
     }
 }
-

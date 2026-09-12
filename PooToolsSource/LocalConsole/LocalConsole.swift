@@ -198,6 +198,7 @@ final class PTConsoleWindow: UIWindow {
     // 中文：UIKit 断开场景时清理该场景的窗口关联。
     static func removeWindow(for scene: UIWindowScene) {
         let window = windowsBySceneID.removeValue(forKey: scene.session.persistentIdentifier)
+        LocalConsole.removeConsole(for: scene)
         window?.isHidden = true
         window?.rootViewController = nil
     }
@@ -251,6 +252,22 @@ public enum PTLogLevel {
         case .info: return .white
         case .warning: return .systemYellow
         case .error: return .systemRed
+        }
+    }
+}
+
+// English: Convert the Core log severity into the console's existing presentation level.
+// Español: Convierte la severidad del log de Core al nivel de presentación existente de la consola.
+// 中文：将 Core 日志严重级别转换为控制台现有的展示级别。
+private extension PTLogLevel {
+    init(severity: PTLogSeverity) {
+        switch severity {
+        case .debug, .info:
+            self = .info
+        case .warning:
+            self = .warning
+        case .error:
+            self = .error
         }
     }
 }
@@ -310,56 +327,6 @@ public final class PTLogBuffer {
     }
 }
 
-public protocol PTDebugPlugin {
-    
-    /// 显示标题
-    var title: String { get }
-    
-    /// 图标
-    var image: UIImage? { get }
-    
-    /// 分组（关键🔥）
-    var group: String { get }
-    
-    /// 排序（组内排序）
-    var priority: Int { get }
-    
-    /// 是否可用（动态控制）
-    var isEnabled: Bool { get }
-    
-    /// 行为
-    var action: UIAction { get }
-}
-
-@MainActor
-final class PTDebugPluginManager {
-    
-    static let shared = PTDebugPluginManager()
-    
-    private(set) var plugins: [PTDebugPlugin] = []
-    
-    private init() {}
-    
-    func clearAll() {
-        plugins.removeAll()
-    }
-    
-    func register(_ plugin: PTDebugPlugin) {
-        guard !plugins.contains(where: { ObjectIdentifier($0 as AnyObject) == ObjectIdentifier(plugin as AnyObject) }) else {
-            return
-        }
-        plugins.append(plugin)
-    }
-    
-    /// 分组后的插件
-    func groupedPlugins() -> [String: [PTDebugPlugin]] {
-        
-        let enabledPlugins = plugins.filter { $0.isEnabled }
-        
-        return Dictionary(grouping: enabledPlugins, by: { $0.group })
-    }
-}
-
 @objc public enum LocalConsoleActionType : Int {
     case CopyLog
     case ShareLog
@@ -388,6 +355,19 @@ public class LocalConsole: NSObject {
     private static var consolesBySceneID: [String: SceneConsoleBox] = [:]
     private weak var preferredWindowScene: UIWindowScene?
 
+    // English: Expose live console instances to the Debug coordinator without leaking the scene registry.
+    // Español: Expone las instancias de consola activas al coordinador de Debug sin filtrar el registro de escenas.
+    // 中文：向 Debug 协调器提供当前控制台实例，同时不暴露场景注册表的实现细节。
+    static var knownConsoles: [LocalConsole] {
+        var consoles: [LocalConsole] = [shared]
+        for console in consolesBySceneID.values.compactMap(\.console) {
+            if !consoles.contains(where: { $0 === console }) {
+                consoles.append(console)
+            }
+        }
+        return consoles
+    }
+
     // English: Create an isolated console instance for a scene while keeping LocalConsole.shared as the compatibility facade.
     // Español: Crea una consola aislada para una escena y conserva LocalConsole.shared como fachada compatible.
     // 中文：为指定场景创建独立控制台，同时保留 LocalConsole.shared 作为兼容入口。
@@ -400,6 +380,14 @@ public class LocalConsole: NSObject {
         let console = LocalConsole(preferredWindowScene: scene)
         consolesBySceneID[sceneID] = SceneConsoleBox(console: console)
         return console
+    }
+
+    // English: Tear down the console owned by a disconnected scene and remove its subscriptions.
+    // Español: Desmonta la consola de una escena desconectada y elimina sus suscripciones.
+    // 中文：场景断开时拆除该场景控制台，并移除它注册的订阅。
+    static func removeConsole(for scene: UIWindowScene) {
+        let console = consolesBySceneID.removeValue(forKey: scene.session.persistentIdentifier)?.console
+        console?.cleanSystemLogView()
     }
 
     /// 注册一个调试插件。插件会按分组和优先级显示在控制台菜单中。
@@ -419,17 +407,21 @@ public class LocalConsole: NSObject {
     private var pendingUpdate = false
     private let throttleInterval: UInt64 = 50_000_000
     private var pendingUpdateTask: Task<Void, Never>?
-    private var networkStatusTask: Task<Void, Never>?
     private var isMonitoring = false
-    private var didInstallGlobalHooks = false
     private var didInstallBorderHook = false
-    private var didRegisterCrashHandler = false
+    private let logSinkIdentifier = "LocalConsole." + UUID().uuidString
+    private let monitoringOwnerIdentifier = "LocalConsole." + UUID().uuidString
+    private var debugEventObserverToken: UUID?
     private var keyboardObserverTokens: [NSObjectProtocol] = []
     private var dynamicLogs: [String: String] = [:]
     private var dynamicRange: NSRange?
 
     public var closeAllOutsideFunction:PTActionTask?
-    public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?
+    public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? {
+        didSet {
+            PTDebugManager.shared.setLeakHandler(leakCallback)
+        }
+    }
     public var networkStatus = ""
 
     public var menu: UIMenuElement? = nil {
@@ -443,7 +435,7 @@ public class LocalConsole: NSObject {
     @MainActor public var isVisiable:Bool = {
 #if POOTOOLS_DEBUG
         guard UIApplication.shared.inferredEnvironment_PT != .appStore else { return false }
-        return PTCoreUserDefultsWrapper.shared.AppDebugMode
+        return PTDebugPreferences.shared.isConsoleEnabled
 #else
         return false
 #endif
@@ -454,8 +446,9 @@ public class LocalConsole: NSObject {
                 isVisiable = false
                 return
             }
-            PTCoreUserDefultsWrapper.shared.AppDebugMode = isVisiable
+            PTDebugPreferences.shared.isConsoleEnabled = isVisiable
             if isVisiable {
+                installLogSink()
                 createSystemLogView()
                 guard let terminal else { return }
                 terminal.transform = .init(scaleX: 0.9, y: 0.9)
@@ -472,7 +465,7 @@ public class LocalConsole: NSObject {
                 animation.duration = 0.6
                 terminal.layer.add(animation, forKey: animation.keyPath)
                 terminal.layer.shadowOpacity = 0.5
-                if PTCoreUserDefultsWrapper.shared.AppDebbugMark {
+                if PTDebugPreferences.shared.isMaskEnabled {
                     maskOpenFunction()
                 }
                 
@@ -497,7 +490,7 @@ public class LocalConsole: NSObject {
     }
     
     public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
-        PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize = fontSizes
+        PTDebugPreferences.shared.consoleFontSize = fontSizes
         terminal?.fontSize = fontSizes
     }
     
@@ -535,9 +528,9 @@ public class LocalConsole: NSObject {
     
     var debugBordersEnabled = false {
         didSet {
-            
+            PTDebugRuntimeAdapter.install()
             if !didInstallBorderHook {
-                Swizzle(UIView.self) {
+                Swizzle(UIView.self, owner: "debug.console-border") {
                     #selector(UIView.layoutSubviews) <-> #selector(UIView.swizzled_layoutSubviews)
                 }
                 didInstallBorderHook = true
@@ -573,10 +566,11 @@ public class LocalConsole: NSObject {
     @MainActor private init(preferredWindowScene: UIWindowScene? = nil) {
         self.preferredWindowScene = preferredWindowScene
         super.init()
-        
+        PTDebugRuntimeAdapter.install()
+        installLogSink()
         if isVisiable {
             createSystemLogView()
-            if PTCoreUserDefultsWrapper.shared.AppDebbugMark {
+            if PTDebugPreferences.shared.isMaskEnabled {
                 maskOpenFunction()
             }
             
@@ -585,57 +579,51 @@ public class LocalConsole: NSObject {
             cleanSystemLogView()
         }
     }
+
+    // English: Deliver Core log events to this console only while its UI is visible.
+    // Español: Entrega eventos de log de Core a esta consola solo mientras su UI está visible.
+    // 中文：仅在当前控制台可见时，把 Core 日志事件投递到该控制台。
+    private func installLogSink() {
+        removeLogSink()
+        PTLogSinkCenter.shared.install(
+            PTLogSink(identifier: logSinkIdentifier) { [weak self] event in
+                guard let self, self.isVisiable else { return }
+                self.print(event.message, level: PTLogLevel(severity: event.severity))
+            }
+        )
+        debugEventObserverToken = PTDebugEventCenter.shared.addObserver { [weak self] event in
+            guard event.name == "network.status",
+                  let value = event.payload["value"] else { return }
+            self?.networkStatus = value
+        }
+    }
+
+    // English: Remove console subscriptions before tearing down its scene-owned view hierarchy.
+    // Español: Elimina las suscripciones de la consola antes de desmontar su jerarquía de vistas de escena.
+    // 中文：在拆除控制台场景视图层级前，先移除控制台自己的订阅。
+    private func removeLogSink() {
+        PTLogSinkCenter.shared.remove(identifier: logSinkIdentifier)
+        if let debugEventObserverToken {
+            PTDebugEventCenter.shared.removeObserver(debugEventObserverToken)
+            self.debugEventObserverToken = nil
+        }
+    }
     
     @MainActor private func watcherInit() {
         guard !isMonitoring else { return }
         isMonitoring = true
-        Inspector.sharedInstance.start()
-//        PTAlertDebugWindow.shared.show()
-        if !didInstallGlobalHooks {
-            UIView.swizzleMethods()
-            UIWindow.db_swizzleMethods()
-            URLSessionConfiguration.swizzleMethods()
-            UIViewController.lvcdSwizzleLifecycleMethods()
-            didInstallGlobalHooks = true
-        }
-        if PTCoreUserDefultsWrapper.shared.PTMockLocationOpen {
-            CLLocationManager.swizzleMethods()
-        }
-        StdoutCapture.startCapturing()
-        StderrCapture.startCapturing()
-        StderrCapture.syncData()
-        PTNetworkHelper.shared.enable()
-        PTLaunchTimeTracker.measureAppStartUpTime()
-        if !didRegisterCrashHandler {
-            PTCrashManager.register()
-            didRegisterCrashHandler = true
-        }
-        PTPerformanceLeakDetector.delay = 1
-        PTPerformanceLeakDetector.callback = leakCallback
-        
-        networkStatusTask = Task { @MainActor [weak self] in
-            // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
-            for await currentStatus in PTNetWorkStatus.shared.statusStream {
-                guard !Task.isCancelled, let self else { return }
-                PTNSLogConsole("当前网络状态发生了改变：\(NetWorkStatus.valueName(type: currentStatus))")
-                self.networkStatus = NetWorkStatus.valueName(type: currentStatus)
-            }
-        }
+        PTDebugRuntimeAdapter.install()
+        PTDebugManager.shared.setLeakHandler(leakCallback)
+        PTDebugManager.shared.startSession(owner: monitoringOwnerIdentifier)
     }
 
     @MainActor private func stopMonitoringIfNeeded() {
         guard isMonitoring else { return }
         isMonitoring = false
-        networkStatusTask?.cancel()
-        networkStatusTask = nil
         pendingUpdateTask?.cancel()
         pendingUpdateTask = nil
         pendingUpdate = false
-        Inspector.sharedInstance.stop()
-        PTNetworkHelper.shared.disable()
-        StdoutCapture.stopCapturing()
-        StderrCapture.stopCapturing()
-        PTPerformanceLeakDetector.callback = nil
+        PTDebugManager.shared.stopSession(owner: monitoringOwnerIdentifier)
     }
 
     @MainActor private func removeKeyboardObservers() {
@@ -644,6 +632,7 @@ public class LocalConsole: NSObject {
     }
     
     @MainActor public func cleanSystemLogView() {
+        removeLogSink()
         stopMonitoringIfNeeded()
         removeKeyboardObservers()
         dynamicReportTimer = nil
@@ -765,8 +754,8 @@ public class LocalConsole: NSObject {
         didSet {
             terminal?.frame.size = consoleSize
                                     
-            PTCoreUserDefultsWrapper.shared.PTLocalConsoleWidth = consoleSize.width
-            PTCoreUserDefultsWrapper.shared.PTLocalConsoleHeight = consoleSize.height
+            PTDebugPreferences.shared.consoleWidth = consoleSize.width
+            PTDebugPreferences.shared.consoleHeight = consoleSize.height
         }
     }
 
@@ -774,8 +763,8 @@ public class LocalConsole: NSObject {
         Task { @MainActor in
             guard let terminal, let firstEndpoint = possibleEndpoints.first else { return }
             let cachedConsolePosition = CGPoint(
-                x: PTCoreUserDefultsWrapper.shared.PTLocalConsoleX ?? firstEndpoint.x,
-                y: PTCoreUserDefultsWrapper.shared.PTLocalConsoleY ?? firstEndpoint.y
+                x: PTDebugPreferences.shared.consoleX ?? firstEndpoint.x,
+                y: PTDebugPreferences.shared.consoleY ?? firstEndpoint.y
             )
 
             terminal.center = cachedConsolePosition // 先更新位置，再根据当前窗口计算吸附点。
@@ -812,8 +801,8 @@ public class LocalConsole: NSObject {
         let terminal = PTTerminal(inView: consoleWindow.view ,
                                   frame: CGRect(x: 0,
                                                 y: CGFloat.kNavBarHeight_Total,
-                                                width: PTCoreUserDefultsWrapper.shared.PTLocalConsoleWidth ?? consoleSize.width,
-                                                height: PTCoreUserDefultsWrapper.shared.PTLocalConsoleHeight ?? consoleSize.height)
+                                                width: PTDebugPreferences.shared.consoleWidth ?? consoleSize.width,
+                                                height: PTDebugPreferences.shared.consoleHeight ?? consoleSize.height)
         )
         terminal.tag = SystemLogViewTag
 
@@ -869,8 +858,8 @@ public class LocalConsole: NSObject {
                     terminal.center = nearestTargetPosition
                 }
                 positionAnimator.startAnimation()
-                PTCoreUserDefultsWrapper.shared.PTLocalConsoleX = nearestTargetPosition.x
-                PTCoreUserDefultsWrapper.shared.PTLocalConsoleY = nearestTargetPosition.y
+                PTDebugPreferences.shared.consoleX = nearestTargetPosition.x
+                PTDebugPreferences.shared.consoleY = nearestTargetPosition.y
             }
         }
 
@@ -1055,12 +1044,12 @@ extension LocalConsole {
     
     func maskOpenFunction() {
         if maskView != nil {
-            PTCoreUserDefultsWrapper.shared.AppDebbugMark = false
+            PTDebugPreferences.shared.isMaskEnabled = false
             maskView?.removeFromSuperview()
             maskView = nil
         } else {
             Task { @MainActor in
-                PTCoreUserDefultsWrapper.shared.AppDebbugMark = true
+                PTDebugPreferences.shared.isMaskEnabled = true
                 
                 let maskConfig = PTDevMaskConfig()
                 maskView = PTDevMaskView(config: maskConfig)
@@ -1072,23 +1061,20 @@ extension LocalConsole {
     }
     
     func maskOpenBubbleFunction() {
-        PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble = !PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
-        maskView?.showTouch = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
+        PTDebugPreferences.shared.isTouchBubbleEnabled.toggle()
+        maskView?.showTouch = PTDebugPreferences.shared.isTouchBubbleEnabled
     }
 
     @MainActor func closeAllFunction() {
         debugBordersEnabled = false
         PTViewRulerPlugin.share.hide()
         PTColorPickPlugin.share.close()
-        PTNetworkHelper.shared.disable()
-        StdoutCapture.stopCapturing()
-        StderrCapture.stopCapturing()
         PTDebugPerformanceToolKit.shared.floatingShow = false
         PTDebugPerformanceToolKit.shared.performanceClose()
         if terminal != nil {
             ResizeController.shared.isActive = false
         }
-        PTCoreUserDefultsWrapper.shared.AppDebbugMark = false
+        PTDebugPreferences.shared.isMaskEnabled = false
         maskView?.removeFromSuperview()
         maskView = nil
 //        PTAlertDebugWindow.shared.dismiss()
@@ -1328,7 +1314,7 @@ extension LocalConsole {
             actions.append(maskOpen)
 
             if self.maskView != nil {
-                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { [weak self] _ in
+                let maskTouchBubble = UIAction(title: PTDebugPreferences.shared.isTouchBubbleEnabled ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { [weak self] _ in
                     self?.maskOpenBubbleFunction()
                 }
                 actions.append(maskTouchBubble)
@@ -1389,7 +1375,7 @@ extension LocalConsole {
         let combined = "\n--- System Monitor ---\n" + dynamicLogs.values.joined(separator: "\n") + "\n"
         
         let attr = NSAttributedString(string: combined, attributes: [
-            .font: UIFont.systemFont(ofSize: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize, weight: .bold, design: .monospaced),
+            .font: UIFont.systemFont(ofSize: PTDebugPreferences.shared.consoleFontSize, weight: .bold, design: .monospaced),
             .foregroundColor: UIColor.systemGreen // 动态数据给个绿色方便区分
         ])
         
@@ -1566,8 +1552,8 @@ public class PTTerminal:PFloatingButton {
         
     }
 
-    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
-    var fontSize: CGFloat = PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize
+    var fontColor: UIColor = UIColor(hexString: PTDebugPreferences.shared.consoleFontColorHex) ?? .white
+    var fontSize: CGFloat = PTDebugPreferences.shared.consoleFontSize
 
     public func setAttributedText(_ string: String) {
         let att:ASAttributedString =  ASAttributedString("\(string)",.paragraph(.lineSpacing(5),.headIndent(7)),.font(.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced)),.foreground(fontColor))

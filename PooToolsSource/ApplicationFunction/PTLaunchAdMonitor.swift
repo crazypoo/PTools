@@ -196,12 +196,7 @@ public class PTLaunchAdMonitor: NSObject {
                 onWindow.addSubview(contentView)
             }
             onWindow.bringSubviewToFront(contentView)
-#if POOTOOLS_DEBUG
-            let share = LocalConsole.shared
-            if share.isVisiable, let terminal = share.terminal {
-                onWindow.bringSubviewToFront(terminal)
-            }
-#endif
+            PTUIKitRuntimeHooks.controllerTransitionDidComplete?()
         } else if let onViews = onView as? UIView {
             hostView = onViews
             if contentView.superview !== onViews {

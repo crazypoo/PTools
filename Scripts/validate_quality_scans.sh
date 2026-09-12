@@ -62,6 +62,7 @@ ruby Scripts/report_concurrency_5_9.rb >/dev/null
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/validate_dependency_direction.sh
+bash Scripts/validate_debug_foundation_5_10.sh
 bash Scripts/validate_permission_source_contract.sh
 
 if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate PooToolsSource/Contact PooToolsSource/NFC PooToolsSource/NetWork PooToolsSource/PhotoPicker PooToolsSource/VideoEditor; then

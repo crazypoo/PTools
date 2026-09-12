@@ -4367,15 +4367,15 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.10.x Debug Foundation
 
-- [ ] DEBUG-5100-01 Core / Debug dependency contract
-- [ ] DEBUG-5100-02 Debug preferences migration
-- [ ] DEBUG-5100-03 Core runtime Debug special-case removal
-- [ ] DEBUG-5102 Logging / Debug Log Sink
-- [ ] DEBUG-5103 PTDebugManager / Plugin / Event Foundation
-- [ ] DEBUG-5104 LocalConsole responsibility split
-- [ ] DEBUG-5105 Debug Window / Scene stabilization
-- [ ] DEBUG-5106 Network / Lifecycle / Console collectors
-- [ ] DEBUG-5107 Crash / Leak / Inspector / MockLocation collectors
+- [x] DEBUG-5100-01 Core / Debug dependency contract
+- [x] DEBUG-5100-02 Debug preferences migration
+- [x] DEBUG-5100-03 Core runtime Debug special-case removal
+- [x] DEBUG-5102 Logging / Debug Log Sink
+- [x] DEBUG-5103 PTDebugManager / Plugin / Event Foundation
+- [x] DEBUG-5104 LocalConsole responsibility split
+- [x] DEBUG-5105 Debug Window / Scene stabilization
+- [x] DEBUG-5106 Network / Lifecycle / Console collectors
+- [x] DEBUG-5107 Crash / Leak / Inspector / MockLocation collectors
 - [ ] DEBUG-5108 Compatibility / overhead / regression
 
 ## Milestone: 5.11.x PTInstruments
@@ -4467,3 +4467,32 @@ PooToolsSource/MediaViewer/
 
 已知外部阻断：Metal 工具链和部分 Kitura/Pods Swift 6 诊断。宿主重新接入旧版
 Bugly 时还会重新引入二进制架构阻断。阻断解除前不得宣称 5.9.x 完整验收通过或创建发布标签。
+
+## 5.10.x 当前实施记录（2026-09-12）
+
+以下记录对应当前工作树的 5.10.x Debug Foundation 实施；代码落地和编译通过不等于真机、真实宿主或多 Scene 视觉回归已经完成。
+
+### 已实施
+
+- [x] DEBUG-5100-01：Core 增加通用 `PTUIKitRuntimeHooks`、Core 日志 sink 契约；Core 源码不再直接引用 LocalConsole、Inspector、Debug Window 或 Debug 偏好类型。新增 `Scripts/validate_debug_foundation_5_10.sh` 并接入质量门禁。
+- [x] DEBUG-5100-02：新增 `PTDebugConfiguration` 与 `@MainActor PTDebugPreferences`，旧 UserDefaults key 可读取、写入并迁移，`PTCoreUserDefultsWrapper` 旧 Debug 属性改为 deprecated 兼容扩展。
+- [x] DEBUG-5100-03：启动广告、导航、窗口、Context Menu、边框和展示回调改用 Core 通用 hook；Debug 语义集中在 `PTDebugRuntimeAdapter`。
+- [x] DEBUG-5102：新增 `PTLogSink` / `PTLogSinkCenter`，`PTNSLog` 发布不可变 `PTLogEvent`，LocalConsole 只作为可选 sink 消费日志。
+- [x] DEBUG-5103：新增 `PTDebugManager`、`PTDebugPlugin`、`PTDebugCollector`、`PTDebugEvent` 和 `PTDebugEventCenter`；事件只跨 actor 传递值类型快照。
+- [x] DEBUG-5104：LocalConsole 回归显示、缓冲、菜单和经典兼容入口；Network、Lifecycle、Console、Crash、Leak、Inspector、MockLocation 启动职责迁入 Collector。多 Scene Debug session 使用 owner 引用计数。
+- [x] DEBUG-5105：Debug window 按 `UIWindowScene` 管理，Scene disconnect 清理窗口、控制台 sink、事件 observer 和 root controller；窗口层级恢复集中到 `PTDebugWindowCoordinator`。
+- [x] DEBUG-5106 / DEBUG-5107：Network、Lifecycle、Console、Crash、Leak、Inspector、MockLocation Collector 已建立并接入 `PTSwizzleRegistry` owner 记录，重复启动保持幂等。
+- [x] 新增文档：`DEBUG_ARCHITECTURE_5_10.md`、`DEBUG_DEPENDENCY_GRAPH_5_10.md`、`DEBUG_PUBLIC_API_5_10.json`、`DEBUG_SWIZZLE_REGISTRY_5_10.md`、`DEBUG_SCENE_REGRESSION_5_10.md`、`DEBUG_OVERHEAD_BASELINE_5_10.md`。
+
+### 已验证
+
+- [x] `PToolsCore` 独立 SwiftPM 构建通过。
+- [x] `swift package dump-package`、Core source contract、依赖方向和 Debug Foundation 静态门禁通过。
+- [x] `PooTools-Example` iOS Simulator Debug / Release 完整 Xcode 构建通过；最后一次 Debug 日志位于 `/tmp/ptools-510-debug.G6wiU8/xcodebuild-final-debug-warning-fix-6.log`，Release 日志位于 `/tmp/ptools-510-release.qYNzP1/xcodebuild-final-release-warning-fix-2.log`。
+
+### 待验证或阻断
+
+- [ ] DEBUG-5108：CocoaPods lint、SPM/CocoaPods/Example 三入口最终矩阵、真实多 Scene/Scene disconnect/键盘/分屏/横竖屏回归、Debug enabled/disabled 真机性能基线尚未完成；Release 完整 Xcode 构建已通过。
+- [ ] 5.10.9 Stable Baseline：需在上述运行时验证和外部 Pods 阻断分类完成后再标记，不创建 5.10.x 版本 tag。
+
+当前代码未修改第三方依赖、Pods 源码、产品版本号或 tag；外部 KituraContracts、Metal 工具链和其他 Pods 的既有诊断仍需单独归类，不能计入 PooTools 源码通过。

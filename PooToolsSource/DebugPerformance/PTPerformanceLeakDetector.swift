@@ -54,9 +54,23 @@ public final class PTPerformanceLeakDetector {
     public static var warningWindow: UIWindow?
     public static var lastBackgroundedDate = Date(timeIntervalSince1970: 0)
     public static var leaks = [LeakModel]()
+    private static var didInstallBackgroundObserver = false
 
     public static func setup() {
+        guard !didInstallBackgroundObserver else { return }
+        didInstallBackgroundObserver = true
         NotificationCenter.default.addObserver(self, selector: #selector(toBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+
+    // English: Remove only the notification owned by the leak collector; irreversible method swizzles remain registered.
+    // Español: Elimina solo la notificación del collector de fugas; los swizzles irreversibles permanecen registrados.
+    // 中文：只移除泄漏 Collector 自己注册的通知；不可逆方法交换继续保留注册状态。
+    public static func teardown() {
+        guard didInstallBackgroundObserver else { return }
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIApplication.didEnterBackgroundNotification,
+                                                  object: nil)
+        didInstallBackgroundObserver = false
     }
 
     @objc private static func toBackground() {
@@ -322,7 +336,7 @@ extension UIViewController {
     }
 
     private static let lvcdActuallySwizzleLifecycleMethods: Void = {
-        Swizzle(UIViewController.self) {
+        Swizzle(UIViewController.self, owner: "debug.lifecycle") {
             #selector(viewDidLoad) <-> #selector(lvcdViewDidLoad)
             #selector(viewDidDisappear(_:)) <-> #selector(lvcdViewDidDisappear(_:))
             #selector(removeFromParent) <-> #selector(lvcdRemoveFromParent)

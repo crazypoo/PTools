@@ -486,11 +486,11 @@ class PlatterView: UIView {
                 LocalConsole.shared.consoleSize = CGSize(width: systemLog_base_width, height: systemLog_base_height)
                 terminal.center = ResizeController.shared.consoleCenterPoint
                 
-                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize = 7.5
-                terminal.fontSize = PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize
+                PTDebugPreferences.shared.consoleFontSize = 7.5
+                terminal.fontSize = PTDebugPreferences.shared.consoleFontSize
                 
-                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor = "#FFFFFF"
-                terminal.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
+                PTDebugPreferences.shared.consoleFontColorHex = "#FFFFFF"
+                terminal.fontColor = UIColor(hexString: PTDebugPreferences.shared.consoleFontColorHex) ?? .white
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
         }
@@ -527,10 +527,10 @@ class PlatterView: UIView {
             ResizeController.shared.isActive = false
             let colorPicker = PTColorPickerContainerViewController()
             colorPicker.backButton.setImage(image, for: .normal)
-            colorPicker.picker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
+            colorPicker.picker.selectedColor = UIColor(hexString: PTDebugPreferences.shared.consoleFontColorHex) ?? .white
             
             colorPicker.selectedColorCallback = { [weak self] color in
-                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor = color.hexString
+                PTDebugPreferences.shared.consoleFontColorHex = color.hexString
                 self?.FontSColorBlock?(color)
                 PTGCDManager.shared.delayOnMain(time: 0.1) {
                     ResizeController.shared.isActive.toggle()

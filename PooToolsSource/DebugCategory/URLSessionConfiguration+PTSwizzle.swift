@@ -17,7 +17,7 @@ extension URLSessionConfiguration {
         }
         
         DispatchQueue.once(token: "pootools.urlsessionconfiguration.debug.swizzleMethods") {
-            Swizzle(URLSessionConfiguration.self) {
+            Swizzle(URLSessionConfiguration.self, owner: "debug.network") {
                 #selector(getter: URLSessionConfiguration.default) <-> #selector(URLSessionConfiguration.swizzledDefaultSessionConfiguration)
                 #selector(getter: URLSessionConfiguration.ephemeral) <-> #selector(URLSessionConfiguration.swizzledEphemeralSessionConfiguration)
             }

@@ -92,11 +92,11 @@ public class PTDebugViewController: PTBaseViewController {
             if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel
                 if itemRow.title == .DebugMode {
-                    cell.switchValue = PTCoreUserDefultsWrapper.shared.AppDebugMode
+                    cell.switchValue = PTDebugPreferences.shared.isConsoleEnabled
                     cell.switchValueChangeBlock = { title,sender in
-                        PTCoreUserDefultsWrapper.shared.AppDebugMode.toggle()
+                        PTDebugPreferences.shared.isConsoleEnabled.toggle()
                         let console = LocalConsole.shared
-                        console.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
+                        console.isVisiable = PTDebugPreferences.shared.isConsoleEnabled
                     }
                 }
                 return cell

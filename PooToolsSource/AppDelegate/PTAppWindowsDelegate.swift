@@ -20,30 +20,15 @@ import SwifterSwift
 open class PTAppWindowsDelegate: PTAppDelegate {
     
     open var isFullScreen:Bool = false
-    
-#if POOTOOLS_DEBUG
-#endif
+
     // English: Create the application window in the scene supplied by UIKit.
     // Español: Crea la ventana de la aplicación en la escena proporcionada por UIKit.
     // 中文：在 UIKit 提供的场景中创建应用窗口。
     public func makeKeyAndVisible(in scene: UIWindowScene,
                                   createViewControllerHandler: () -> UIViewController,
                                   tint: UIColor) {
-#if POOTOOLS_DEBUG
-        let environment = UIApplication.shared.inferredEnvironment_PT
-
-        switch environment {
-        case .appStore, .testFlight:
-            window = UIWindow(windowScene: scene)
-        default:
-            let inspectorWindow = TouchInspectorWindow(windowScene: scene)
-            inspectorWindow.showTouches = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow
-            inspectorWindow.showHitTesting = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits
-            window = inspectorWindow
-        }
-#else
-        window = UIWindow(windowScene: scene)
-#endif
+        window = PTUIKitRuntimeHooks.makeApplicationWindow?(scene)
+            ?? UIWindow(windowScene: scene)
         window?.tintColor = tint
         window?.rootViewController = createViewControllerHandler()
         window?.makeKeyAndVisible()
@@ -85,18 +70,15 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         }, tint: tint)
     }
     
-#if POOTOOLS_DEBUG
     public func createDevFunction() {
         let environment = UIApplication.shared.inferredEnvironment_PT
         switch environment {
         case .appStore,.testFlight:
             break
         default:
-            let lcm = LocalConsole.shared
-            lcm.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
+            PTUIKitRuntimeHooks.restoreConsoleState?()
         }
     }
-#endif
     
     public func registerRotation(changeCallBack:((_ orientationMask: UIInterfaceOrientationMask) -> ())? = nil) {
         PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange = false
@@ -146,9 +128,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         case .appStore,.testFlight:
             break
         default:
-    #if POOTOOLS_DEBUG
-            PTDebugFunction.registerDefaultsFromSettingsBundle()
-    #endif
+            PTUIKitRuntimeHooks.settingsBundleHandler?()
         }
     }
     

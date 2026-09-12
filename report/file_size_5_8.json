@@ -28,7 +28,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "lines": 563,
+      "lines": 569,
       "classification": "ok"
     },
     {
@@ -63,8 +63,8 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "lines": 772,
-      "classification": "ok"
+      "lines": 1258,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift",
@@ -113,7 +113,7 @@
     },
     {
       "path": "PooToolsSource/Animation/PTWaterWaveView.swift",
-      "lines": 194,
+      "lines": 196,
       "classification": "ok"
     },
     {
@@ -128,7 +128,7 @@
     },
     {
       "path": "PooToolsSource/AppDelegate/PTAppWindowsDelegate.swift",
-      "lines": 177,
+      "lines": 157,
       "classification": "ok"
     },
     {
@@ -148,7 +148,7 @@
     },
     {
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "lines": 507,
+      "lines": 502,
       "classification": "ok"
     },
     {
@@ -188,7 +188,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "lines": 172,
+      "lines": 171,
       "classification": "ok"
     },
     {
@@ -253,7 +253,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1709,
+      "lines": 1695,
       "classification": "architecture_exception"
     },
     {
@@ -353,7 +353,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1052,
+      "lines": 1070,
       "classification": "warning"
     },
     {
@@ -378,7 +378,7 @@
     },
     {
       "path": "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift",
-      "lines": 119,
+      "lines": 140,
       "classification": "ok"
     },
     {
@@ -988,12 +988,12 @@
     },
     {
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "lines": 1850,
+      "lines": 1846,
       "classification": "architecture_exception"
     },
     {
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "lines": 563,
+      "lines": 518,
       "classification": "ok"
     },
     {
@@ -1143,7 +1143,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTAppUserdefault.swift",
-      "lines": 230,
+      "lines": 133,
       "classification": "ok"
     },
     {
@@ -1223,7 +1223,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils.swift",
-      "lines": 646,
+      "lines": 647,
       "classification": "ok"
     },
     {
@@ -1243,7 +1243,7 @@
     },
     {
       "path": "PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift",
-      "lines": 79,
+      "lines": 78,
       "classification": "ok"
     },
     {
@@ -1313,7 +1313,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "lines": 49,
+      "lines": 886,
       "classification": "ok"
     },
     {
@@ -1373,7 +1373,7 @@
     },
     {
       "path": "PooToolsSource/DebugCategory/UIWindow+PTDebugEx.swift",
-      "lines": 119,
+      "lines": 118,
       "classification": "ok"
     },
     {
@@ -1573,7 +1573,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTPerformanceLeakDetector.swift",
-      "lines": 690,
+      "lines": 704,
       "classification": "ok"
     },
     {
@@ -1598,7 +1598,7 @@
     },
     {
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "lines": 219,
+      "lines": 220,
       "classification": "ok"
     },
     {
@@ -3528,7 +3528,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1668,
+      "lines": 1654,
       "classification": "architecture_exception"
     },
     {
@@ -3543,7 +3543,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/PTLogConsoleViewController.swift",
-      "lines": 99,
+      "lines": 101,
       "classification": "ok"
     },
     {
@@ -3593,7 +3593,7 @@
     },
     {
       "path": "PooToolsSource/Log/PTNSLog.swift",
-      "lines": 411,
+      "lines": 470,
       "classification": "ok"
     },
     {
@@ -4303,7 +4303,7 @@
     },
     {
       "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "lines": 122,
+      "lines": 123,
       "classification": "ok"
     },
     {
@@ -4552,7 +4552,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 12,
+  "warning_count": 13,
   "architecture_exception_count": 11,
   "hard_limit_allowlisted_count": 3
 }

@@ -1077,15 +1077,11 @@ public extension UIView {
             tracker = BorderManager(view: self)
             objc_setAssociatedObject(self, &AssociatedKeys.borderTracker, tracker, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-#if POOTOOLS_DEBUG
-        if LocalConsole.shared.debugBordersEnabled {
+        if PTUIKitRuntimeHooks.shouldTrackViewBorders?() == true {
             tracker?.activate()
         } else {
             tracker?.deactivate()
         }
-#else
-        tracker?.deactivate()
-#endif
     }
         
     func isRolling() -> Bool {

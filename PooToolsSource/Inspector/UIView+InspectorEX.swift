@@ -624,7 +624,7 @@ extension UIView {
     // MARK: - Did Move To didMoveToWindow
 
     private static let performSwizzling: Void = {
-        Swizzle(UIView.self) {
+        Swizzle(UIView.self, owner: "debug.inspector") {
             #selector(didMoveToWindow) <-> #selector(swizzled_didMoveToWindow)
         }
     }()

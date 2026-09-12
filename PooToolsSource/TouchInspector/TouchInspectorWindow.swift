@@ -16,19 +16,20 @@ private struct PTTouchValueBox: @unchecked Sendable {
     let value: NSValue
 }
 
+@MainActor
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
 
-    public var showTouches: Bool = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow {
+    public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled {
         didSet {
-            PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits = showTouches
+            PTDebugPreferences.shared.isTouchOverlayEnabled = showTouches
             hideOrUpdateOverlays()
         }
     }
     
-    public var showHitTesting: Bool = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits {
+    public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled {
         didSet {
-            PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits = showHitTesting
+            PTDebugPreferences.shared.isHitTestingEnabled = showHitTesting
             hideOrUpdateOverlays()
         }
     }

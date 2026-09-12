@@ -21,7 +21,7 @@ public struct PTAlertDebugSnapshot {
     }
 }
 
-/// 弹窗调试信息视图，保留给 LocalConsole 等调试模块使用。
+/// 弹窗诊断信息视图，保留给可选调试模块使用。
 @MainActor
 final class PTAlertDebugView: UIView {
 
@@ -552,12 +552,18 @@ private extension PTAlertManager {
 
     func observeSceneDestroy() {
         NotificationCenter.default.addObserver(
-            forName: UIScene.didDisconnectNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            guard let scene = notification.object as? UIWindowScene else { return }
-            self?.sceneContainers.removeValue(forKey: scene.session.persistentIdentifier)
-        }
+            self,
+            selector: #selector(sceneDidDisconnect(_:)),
+            name: UIScene.didDisconnectNotification,
+            object: nil
+        )
+    }
+
+    // English: UIKit delivers scene lifecycle notifications on the main thread; the selector keeps this path free of Sendable captures.
+    // Español: UIKit entrega las notificaciones del ciclo de vida de la escena en el hilo principal; el selector evita capturas Sendable.
+    // 中文：UIKit 会在主线程投递场景生命周期通知，使用 selector 可避免 Sendable 闭包捕获。
+    @objc func sceneDidDisconnect(_ notification: Notification) {
+        guard let scene = notification.object as? UIWindowScene else { return }
+        sceneContainers.removeValue(forKey: scene.session.persistentIdentifier)
     }
 }

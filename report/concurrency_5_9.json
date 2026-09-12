@@ -47,7 +47,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1001,
+      "line": 1019,
       "text": "DispatchQueue.main.async {"
     },
     {

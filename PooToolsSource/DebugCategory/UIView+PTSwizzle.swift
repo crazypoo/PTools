@@ -90,7 +90,7 @@ extension UIView {
     // MARK: - Method swizzling
     static func swizzleMethods() {
         DispatchQueue.once(token: "pootools.uiview.debug.swizzleMethods") {
-            Swizzle(UIView.self) {
+            Swizzle(UIView.self, owner: "debug.view-border") {
                 #selector(UIView.init(coder:)) <-> #selector(UIView.swizzledInitWithCoder(_:))
                 #selector(UIView.init(frame:)) <-> #selector(UIView.swizzledInitWithFrame(_:))
             }

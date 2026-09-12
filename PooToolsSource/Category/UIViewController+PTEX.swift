@@ -436,18 +436,6 @@ public extension UIViewController {
         presenter.present(sheet, animated: true, completion: completion)
     }
     
-#if POOTOOLS_DEBUG
-    // 获取现有的调试窗口
-    static func getExistingDebugWindow() -> [UIWindow]? {
-        UIApplication.shared.currentWindows?.compactMap {
-            if $0 is PTConsoleWindow {
-                return $0
-            } else {
-                return nil
-            }
-        }
-    }
-#endif
 }
 
 extension UIViewController {
@@ -462,48 +450,15 @@ extension UIViewController {
                                   animated: Bool,
                                   completion: PTActionTask?) {
         
-        // ✅ before
-#if POOTOOLS_DEBUG
-        if let debugWindow = UIViewController.getExistingDebugWindow() {
-            debugWindow.forEach { window in
-                window.isHidden = true
-            }
-        }
-#endif
+        PTUIKitRuntimeHooks.presentationWillBegin?()
         
         // ⚠️ 注意：这里其实调用的是原始 present
         pt_swizzled_present(vc, animated: animated) {
             completion?()
-        }
-        
-        #if POOTOOLS_DEBUG
-        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
-            let share = LocalConsole.shared
-            if share.isVisiable {
-                SwizzleTool.swizzleDidAddSubview {
-                    // Configure console window.
-                    Task { @MainActor in
-                        if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
-                            currentVC.view.window?.bringSubviewToFront(findMask)
-                        }
-                    }
-                }
+            Task { @MainActor in
+                PTUIKitRuntimeHooks.presentationDidComplete?()
             }
-
-            // 确保调试窗口在最前
-            if let debugWindow = UIViewController.getExistingDebugWindow() {
-                debugWindow.forEach { value in
-                    value.isHidden = false
-                    switch value {
-                    case let window as PTConsoleWindow:
-                        window.windowLevel = PTConsoleWindow.debugWindowLevel
-                    default:
-                        break
-                    }
-                    value.makeKeyAndVisible()
-                }
-            }        })
-        #endif
+        }
 
     }
 }

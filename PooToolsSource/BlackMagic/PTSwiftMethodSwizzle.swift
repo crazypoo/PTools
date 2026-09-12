@@ -13,19 +13,27 @@ import os.lock
 // Español: El registro evita aplicar dos veces el mismo swizzle desde funciones de depuración independientes.
 // 中文：注册表防止不同调试功能重复执行同一个方法交换。
 public enum PTSwizzleRegistry {
-    private static let lock = OSAllocatedUnfairLock(initialState: Set<String>())
+    private static let lock = OSAllocatedUnfairLock(initialState: [String: String]())
 
     @discardableResult
     public static func claim(target: AnyClass,
                              original: Selector,
                              swizzled: Selector,
-                             isClassMethod: Bool) -> Bool {
+                             isClassMethod: Bool,
+                             owner: String = "legacy") -> Bool {
         let key = "\(ObjectIdentifier(target))|\(original)|\(swizzled)|\(isClassMethod)"
-        return lock.withLock { keys in
-            guard !keys.contains(key) else { return false }
-            keys.insert(key)
+        return lock.withLock { owners in
+            guard owners[key] == nil else { return false }
+            owners[key] = owner
             return true
         }
+    }
+
+    // English: Return a stable snapshot for diagnostics without exposing the registry lock.
+    // Español: Devuelve una instantánea estable para diagnóstico sin exponer el bloqueo del registro.
+    // 中文：返回稳定的 swizzle 所有者快照，不暴露注册表内部锁。
+    public static func registeredOwners() -> [String: String] {
+        lock.withLock { $0 }
     }
 }
 
@@ -60,23 +68,35 @@ public struct Swizzle {
         }
     }
     
-    /// 初始化并执行 Swizzling
+    /// English: Initialize and execute method swizzling.
+    /// Español: Inicializa y ejecuta el intercambio de métodos.
+    /// 中文：初始化并执行方法交换。
     /// - Parameters:
     ///   - type: 要交换方法的类
     ///   - isClassMethod: 是否为类方法（默认为 false，即实例方法）
+    ///   - owner: 注册该 swizzle 的功能所有者
     ///   - makeSwizzlePairs: ResultBuilder 闭包
     @discardableResult
-    public init(_ type: AnyClass, isClassMethod: Bool = false, @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> [SwizzlePair]) {
+    public init(_ type: AnyClass,
+                isClassMethod: Bool = false,
+                owner: String = "legacy",
+                @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> [SwizzlePair]) {
         let swizzlePairs = makeSwizzlePairs()
-        executeSwizzling(on: type, pairs: swizzlePairs, isClassMethod: isClassMethod)
+        executeSwizzling(on: type, pairs: swizzlePairs, isClassMethod: isClassMethod, owner: owner)
     }
-    
+
     @discardableResult
-    public init(_ type: AnyClass, isClassMethod: Bool = false, @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> SwizzlePair) {
-        executeSwizzling(on: type, pairs: [makeSwizzlePairs()], isClassMethod: isClassMethod)
+    public init(_ type: AnyClass,
+                isClassMethod: Bool = false,
+                owner: String = "legacy",
+                @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> SwizzlePair) {
+        executeSwizzling(on: type, pairs: [makeSwizzlePairs()], isClassMethod: isClassMethod, owner: owner)
     }
-    
-    private func executeSwizzling(on targetClass: AnyClass, pairs: [SwizzlePair], isClassMethod: Bool) {
+
+    private func executeSwizzling(on targetClass: AnyClass,
+                                  pairs: [SwizzlePair],
+                                  isClassMethod: Bool,
+                                  owner: String) {
         // 如果是类方法，需要获取元类 (Meta Class)
         let cls: AnyClass = isClassMethod ? object_getClass(targetClass) ?? targetClass : targetClass
         
@@ -92,7 +112,8 @@ public struct Swizzle {
             guard PTSwizzleRegistry.claim(target: targetClass,
                                           original: pair.original,
                                           swizzled: pair.swizzled,
-                                          isClassMethod: isClassMethod) else {
+                                          isClassMethod: isClassMethod,
+                                          owner: owner) else {
                 continue
             }
             

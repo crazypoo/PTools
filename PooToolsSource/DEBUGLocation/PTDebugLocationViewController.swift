@@ -18,11 +18,11 @@ class PTDebugLocationViewController: PTBaseViewController {
 
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
-        view.isOn = PTCoreUserDefultsWrapper.shared.PTMockLocationOpen
+        view.isOn = PTDebugPreferences.shared.isMockLocationEnabled
         view.valueChangeCallBack = { value in
-            PTCoreUserDefultsWrapper.shared.PTMockLocationOpen = value
-            if value {
-                PTGCDManager.shared.runOnMain {
+            Task { @MainActor in
+                PTDebugPreferences.shared.isMockLocationEnabled = value
+                if value {
                     CLLocationManager.swizzleMethods()
                 }
             }

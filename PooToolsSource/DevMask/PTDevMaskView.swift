@@ -11,21 +11,22 @@ import SnapKit
 import SwifterSwift
 import DeviceKit
 
+@MainActor
 @objcMembers
 public class PTDevMaskConfig:NSObject {
     open var isMask:Bool = false
     @MainActor open var maskString:String = "PT Debug mode".localized()
     open var maskFont:UIFont = .appfont(size: 100,bold: true)
     open var motionColor:UIColor = .randomColor
-    open var showTouch:Bool = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
+    open var showTouch:Bool = PTDebugPreferences.shared.isTouchBubbleEnabled
 }
 
 @objcMembers
 public class PTDevMaskView: PTBaseMaskView {
 
     open var showTouch:Bool? {
-        didSet {
-            viewConfig.showTouch = showTouch!
+    didSet {
+            viewConfig.showTouch = showTouch ?? false
         }
     }
     

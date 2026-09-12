@@ -94,13 +94,12 @@ public class PTAppBaseConfig: NSObject {
     // 中文：根据当前应用配置构建网络图片加载选项。
     public func webImageLoadOptions(maxCount:Int? = nil,
                                     retryInterval:TimeInterval? = nil) -> KingfisherOptionsInfo {
-#if POOTOOLS_DEBUG
-        PTDevFunction.webImageLoadOptions()
-#else
+        if let provider = PTUIKitRuntimeHooks.webImageOptionsProvider {
+            return provider(maxCount, retryInterval)
+        }
         let maxC = maxCount ?? PTAppBaseConfig.share.loadImageRetryMaxCount
         let retry = retryInterval ?? PTAppBaseConfig.share.loadImageRetryInerval
         return [KingfisherOptionsInfoItem.cacheOriginalImage,KingfisherOptionsInfoItem.backgroundDecode,KingfisherOptionsInfoItem.retryStrategy(DelayRetryStrategy(maxRetryCount: maxC, retryInterval: .seconds(retry)))]
-#endif
     }
 
     @available(*, deprecated, message: "Use webImageLoadOptions(maxCount:retryInterval:) instead")

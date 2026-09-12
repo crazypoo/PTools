@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "milestone": "5.10.x",
+  "status": "implemented_pending_runtime_regression",
+  "deployment": {
+    "ios": "17.0",
+    "swift": "6.0"
+  },
+  "new_public_contracts": [
+    "PTDebugConfiguration",
+    "PTDebugPreferences",
+    "PTDebugPlugin",
+    "PTDebugCollector",
+    "PTDebugEvent",
+    "PTDebugEventCenter",
+    "PTDebugManager",
+    "PTDebugWindowCoordinator",
+    "PTDebugRuntimeAdapter",
+    "PTLogSink",
+    "PTLogSinkCenter",
+    "PTLogRuntimeConfiguration",
+    "PTUIKitRuntimeHooks"
+  ],
+  "compatibility_contracts": [
+    "LocalConsole.shared",
+    "LocalConsole.console(for:)",
+    "PTDebugPluginManager",
+    "PTCoreUserDefultsWrapper.AppDebugMode",
+    "PTCoreUserDefultsWrapper.AppDebbugTouchBubble",
+    "PTCoreUserDefultsWrapper.AppDebbugMark",
+    "PTCoreUserDefultsWrapper.AppTouchInspectShow",
+    "PTCoreUserDefultsWrapper.AppTouchInspectShowHits",
+    "PTCoreUserDefultsWrapper.PTMockLocationOpen",
+    "PTCoreUserDefultsWrapper.PTLogWrite"
+  ],
+  "compatibility_policy": {
+    "deprecated_since": "5.10.0",
+    "removal_review": "6.0.0",
+    "dynamic_any_cross_actor": false,
+    "business_nonisolated_unsafe": false
+  },
+  "validation": {
+    "core_debug_reverse_reference_scan": "pass",
+    "core_source_contract": "pass",
+    "swiftpm_manifest": "pass",
+    "ptools_core_build": "pass",
+    "xcode_debug_build": "pass",
+    "xcode_release_build": "pass",
+    "cocoapods_lint": "blocked_environment_timeout",
+    "multi_scene_runtime": "pending"
+  }
+}
