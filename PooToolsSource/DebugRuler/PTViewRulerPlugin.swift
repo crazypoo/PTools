@@ -122,6 +122,13 @@ fileprivate class PTVisualInfoController:UIView {
 fileprivate class PTRulerInfoView:UIView {
 
     private weak var hostWindow: UIWindow?
+    // English: Keep the drag position separate from layout recalculation so the ruler does not snap back to center.
+    // Español: Mantén la posición arrastrada separada del recálculo del layout para que la regla no vuelva al centro.
+    // 中文：将拖动位置与布局重算分开保存，避免标尺被重新吸回屏幕中心。
+    private var rulerCenter: CGPoint?
+    private var hasCustomPosition = false
+    private var isAttachedToHostWindow = false
+    private var dragStartCenter: CGPoint?
     
     let viewPointSize:CGFloat = 62
     
@@ -136,40 +143,28 @@ fileprivate class PTRulerInfoView:UIView {
         let view = UIImageView()
         view.isUserInteractionEnabled = true
         
-        let pan = UIPanGestureRecognizer { sender in
-            let pans = sender as! UIPanGestureRecognizer
-            let offsetPoint = pans.translation(in: pans.view)
-            pans.setTranslation(.zero, in: pans.view)
-            let panView = pans.view
-            let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
-            let newY = panView!.frame.origin.y + panView!.frame.size.height / 2 + offsetPoint.y
-            
-            let centerPoint = CGPoint(x: newX, y: newY)
-            panView?.center = centerPoint
+        let pan = UIPanGestureRecognizer { [weak self] sender in
+            guard let self, let pans = sender as? UIPanGestureRecognizer else { return }
 
-            let imageCenterPointY = self.imageView.frame.origin.y + self.imageView.frame.size.height / 2
-            let imageCenterPointX = self.imageView.frame.origin.x + self.imageView.frame.size.width / 2
-
-            self.horizontalLine.frame = CGRectMake(0, imageCenterPointY - 0.25, self.frame.size.width, 0.5)
-            self.verticalLine.frame = CGRectMake(imageCenterPointX - 0.25, 0, 0.5, self.frame.size.height)
-            
-            self.leftLabel.text = String(format: "%.1f", imageCenterPointX)
-            self.leftLabel.sizeToFit()
-            self.leftLabel.frame = CGRectMake(imageCenterPointX / 2, imageCenterPointY - self.leftLabel.frame.size.height, self.leftLabel.frame.size.width, self.leftLabel.frame.size.height)
-            
-            self.topLabel.text = String(format: "%.1f", imageCenterPointY)
-            self.topLabel.sizeToFit()
-            self.topLabel.frame = CGRectMake(imageCenterPointX - self.topLabel.frame.size.width, imageCenterPointY / 2, self.topLabel.frame.size.width, self.topLabel.frame.size.height)
-            
-            self.rightLabel.text = String(format: "%.1f", self.frame.size.width - imageCenterPointX)
-            self.rightLabel.sizeToFit()
-            self.rightLabel.frame = CGRectMake(imageCenterPointX + (self.frame.size.width - imageCenterPointX) / 2, imageCenterPointY - self.rightLabel.frame.size.height, self.rightLabel.frame.size.width, self.rightLabel.frame.size.height)
-
-            self.bottomLabel.text = String(format: "%.1f", self.frame.size.height - imageCenterPointY)
-            self.bottomLabel.sizeToFit()
-            self.bottomLabel.frame = CGRectMake(imageCenterPointX - self.bottomLabel.frame.size.width, imageCenterPointY + (self.frame.size.height - imageCenterPointY) / 2, self.bottomLabel.frame.size.width, self.bottomLabel.frame.size.height)
-
-            self.configInfoLabelText()
+            switch pans.state {
+            case .began:
+                self.dragStartCenter = self.imageView.center
+            case .changed:
+                // English: Use the ruler container as the coordinate space because the image view moves while dragging.
+                // Español: Usa el contenedor de la regla como espacio de coordenadas porque la imagen se mueve al arrastrar.
+                // 中文：使用标尺容器作为坐标空间，因为拖动过程中交叉点本身会移动。
+                let startCenter = self.dragStartCenter ?? self.imageView.center
+                let translation = pans.translation(in: self)
+                let proposedCenter = CGPoint(x: startCenter.x + translation.x,
+                                             y: startCenter.y + translation.y)
+                self.hasCustomPosition = true
+                self.rulerCenter = self.clampedCenter(proposedCenter)
+                self.updateGeometry()
+            case .ended, .cancelled, .failed:
+                self.dragStartCenter = nil
+            default:
+                break
+            }
         }
         view.addGestureRecognizer(pan)
         
@@ -197,46 +192,34 @@ fileprivate class PTRulerInfoView:UIView {
     }()
     
     fileprivate lazy var leftLabel : UILabel = {
-        
-        let centerPoint = self.imageView.frame.origin.x + self.imageView.frame.size.width / 2
-        
         let view = UILabel()
         view.textColor = .red
         view.font = .appfont(size: 12)
-        view.text = String(format: "%.1f", centerPoint)
+        view.text = "0.0"
         return view
     }()
     
     fileprivate lazy var rightLabel : UILabel = {
-        
-        let centerPoint = self.frame.size.width - self.imageView.frame.origin.x + self.imageView.frame.size.width / 2
-        
         let view = UILabel()
         view.textColor = .red
         view.font = .appfont(size: 12)
-        view.text = String(format: "%.1f", centerPoint)
+        view.text = "0.0"
         return view
     }()
     
     fileprivate lazy var topLabel : UILabel = {
-        
-        let centerPoint = self.imageView.frame.origin.y + self.imageView.frame.size.height / 2
-        
         let view = UILabel()
         view.textColor = .red
         view.font = .appfont(size: 12)
-        view.text = String(format: "%.1f", centerPoint)
+        view.text = "0.0"
         return view
     }()
     
     fileprivate lazy var bottomLabel : UILabel = {
-        
-        let centerPoint = self.frame.size.height - self.imageView.frame.origin.y + self.imageView.frame.size.height / 2
-        
         let view = UILabel()
         view.textColor = .red
         view.font = .appfont(size: 12)
-        view.text = String(format: "%.1f", centerPoint)
+        view.text = "0.0"
         return view
     }()
         
@@ -290,6 +273,7 @@ fileprivate class PTRulerInfoView:UIView {
             visualController.removeFromSuperview()
             window.addSubview(visualController)
         }
+        isAttachedToHostWindow = true
         configInfoLabelText()
     }
 
@@ -302,8 +286,23 @@ fileprivate class PTRulerInfoView:UIView {
     // Español: Recalcula la geometría basada en frames cuando cambia el tamaño de la escena o la ventana.
     // 中文：场景或窗口尺寸变化后重新计算基于 frame 的标尺布局。
     private func updateGeometry() {
-        let centerX = bounds.midX
-        let centerY = bounds.midY
+        guard bounds.width > 0, bounds.height > 0 else { return }
+
+        let defaultCenter = CGPoint(x: bounds.midX, y: bounds.midY)
+        let requestedCenter = hasCustomPosition ? (rulerCenter ?? defaultCenter) : defaultCenter
+        let center = clampedCenter(requestedCenter)
+        rulerCenter = center
+        let centerX = center.x
+        let centerY = center.y
+
+        // English: Refresh coordinate values before measuring and positioning the labels.
+        // Español: Actualiza los valores de coordenadas antes de medir y colocar las etiquetas.
+        // 中文：在测量和布局标签之前，先刷新交叉点的坐标值。
+        leftLabel.text = String(format: "%.1f", centerX)
+        rightLabel.text = String(format: "%.1f", bounds.width - centerX)
+        topLabel.text = String(format: "%.1f", centerY)
+        bottomLabel.text = String(format: "%.1f", bounds.height - centerY)
+
         imageView.frame = CGRect(x: centerX - viewPointSize / 2,
                                  y: centerY - viewPointSize / 2,
                                  width: viewPointSize,
@@ -331,6 +330,25 @@ fileprivate class PTRulerInfoView:UIView {
                                    y: centerY + (bounds.height - centerY) / 2,
                                    width: bottomLabel.frame.width,
                                    height: bottomLabel.frame.height)
+
+        if isAttachedToHostWindow {
+            configInfoLabelText()
+        }
+    }
+
+    // English: Keep the draggable marker inside the ruler surface while preserving its last valid position.
+    // Español: Mantén el marcador arrastrable dentro de la superficie de la regla y conserva su última posición válida.
+    // 中文：将可拖动交叉点限制在标尺范围内，同时保留上一次有效位置。
+    private func clampedCenter(_ center: CGPoint) -> CGPoint {
+        func clampedCoordinate(_ value: CGFloat, length: CGFloat) -> CGFloat {
+            guard length > 0 else { return 0 }
+            let halfSize = viewPointSize / 2
+            guard length >= viewPointSize else { return length / 2 }
+            return min(max(value, halfSize), length - halfSize)
+        }
+
+        return CGPoint(x: clampedCoordinate(center.x, length: bounds.width),
+                       y: clampedCoordinate(center.y, length: bounds.height))
     }
     
     func configInfoLabelText() {
