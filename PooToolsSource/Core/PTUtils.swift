@@ -26,6 +26,10 @@ public enum PTUIKitRuntimeHooks {
     public static var presentationWillBegin: (() -> Void)?
     public static var presentationDidComplete: (() -> Void)?
     public static var controllerTransitionDidComplete: (() -> Void)?
+    // English: Debug can receive lifecycle snapshots without making Core depend on a Debug collector.
+    // Español: Debug puede recibir snapshots del ciclo de vida sin que Core dependa de un collector de Debug.
+    // 中文：Debug 可以接收生命周期快照，同时 Core 不依赖 Debug Collector。
+    public static var controllerLifecycleHandler: ((String, String) -> Void)?
 }
 
 // English: Describes the visual surface policy shared by Core UI components.

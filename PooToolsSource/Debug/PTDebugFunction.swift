@@ -705,6 +705,16 @@ public enum PTDebugRuntimeAdapter {
         PTUIKitRuntimeHooks.controllerTransitionDidComplete = {
             PTDebugWindowCoordinator.shared.bringConsoleContentToFront()
         }
+        // English: Forward the existing lifecycle swizzle as immutable text snapshots for optional consumers.
+        // Español: Reenvía el swizzle de ciclo de vida existente como snapshots de texto inmutables para consumidores opcionales.
+        // 中文：把现有生命周期 swizzle 转发为不可变文本快照，供可选消费者使用。
+        PTUIKitRuntimeHooks.controllerLifecycleHandler = { phase, controller in
+            PTDebugEventCenter.shared.publish(
+                PTDebugEvent(name: "lifecycle.\(phase)",
+                             source: "uiviewcontroller",
+                             payload: ["controller": controller])
+            )
+        }
     }
 }
 

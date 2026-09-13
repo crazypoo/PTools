@@ -371,6 +371,10 @@ extension UIViewController {
 
     @objc private func lvcdViewDidLoad() {
         lvcdViewDidLoad() // run original implementation
+        // English: Reuse the existing lifecycle interception and publish only a value snapshot.
+        // Español: Reutiliza la interceptación de ciclo de vida existente y publica solo un snapshot de valor.
+        // 中文：复用现有生命周期拦截，只发布值类型快照。
+        PTUIKitRuntimeHooks.controllerLifecycleHandler?("viewDidLoad", String(describing: type(of: self)))
         PTGCDManager.shared.delayOnMain(time: 0.1) { [weak self] in
             guard let self = self else { return }
             if !self.lvcdShouldIgnore() {
@@ -391,6 +395,10 @@ extension UIViewController {
 
     @objc private func lvcdViewDidDisappear(_ animated: Bool) {
         lvcdViewDidDisappear(animated)
+        // English: The hook remains optional, so Core behavior is unchanged when Debug is absent.
+        // Español: El hook sigue siendo opcional, por lo que Core no cambia cuando Debug está ausente.
+        // 中文：该 hook 保持可选，未安装 Debug 时 Core 行为不变。
+        PTUIKitRuntimeHooks.controllerLifecycleHandler?("viewDidDisappear", String(describing: type(of: self)))
         if (self as? UINavigationController)?.viewControllers.isEmpty ?? true,
            (self as? UITabBarController)?.viewControllers?.isEmpty ?? true,
            (self as? UIPageViewController)?.viewControllers?.isEmpty ?? true,

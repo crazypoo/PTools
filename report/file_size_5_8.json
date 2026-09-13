@@ -1223,7 +1223,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils.swift",
-      "lines": 647,
+      "lines": 651,
       "classification": "ok"
     },
     {
@@ -1313,7 +1313,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "lines": 886,
+      "lines": 896,
       "classification": "ok"
     },
     {
@@ -1329,6 +1329,16 @@
     {
       "path": "PooToolsSource/Debug/PTDevFunction.swift",
       "lines": 37,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Debug/PTInstruments.swift",
+      "lines": 1213,
+      "classification": "warning"
+    },
+    {
+      "path": "PooToolsSource/Debug/PTInstrumentsUI.swift",
+      "lines": 341,
       "classification": "ok"
     },
     {
@@ -1483,7 +1493,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "lines": 451,
+      "lines": 470,
       "classification": "ok"
     },
     {
@@ -1573,7 +1583,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTPerformanceLeakDetector.swift",
-      "lines": 704,
+      "lines": 712,
       "classification": "ok"
     },
     {
@@ -4552,7 +4562,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 13,
+  "warning_count": 14,
   "architecture_exception_count": 11,
   "hard_limit_allowlisted_count": 3
 }

@@ -63,6 +63,7 @@ ruby Scripts/report_concurrency_5_9.rb >/dev/null
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/validate_dependency_direction.sh
 bash Scripts/validate_debug_foundation_5_10.sh
+bash Scripts/validate_instruments_5_11.sh
 bash Scripts/validate_permission_source_contract.sh
 
 if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate PooToolsSource/Contact PooToolsSource/NFC PooToolsSource/NetWork PooToolsSource/PhotoPicker PooToolsSource/VideoEditor; then

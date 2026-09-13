@@ -250,9 +250,28 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
         // 🌟 隔离提取法：将需要跨线程传递的干净数据单独提取为常量
         let modelToSave = finalModel
         let isSuccess = finalModel.isSuccess
+        // English: Publish a redacted request summary to the existing Debug event center without persisting a body.
+        // Español: Publica un resumen de solicitud redactado en el centro de eventos Debug existente sin guardar el cuerpo.
+        // 中文：向现有 Debug 事件中心发布脱敏请求摘要，不持久化请求或响应正文。
+        let networkPayload: [String: String] = [
+            "requestID": finalModel.requestId ?? "",
+            "method": finalModel.method ?? "GET",
+            "url": finalModel.url?.absoluteString ?? "",
+            "statusCode": finalModel.statusCode ?? "0",
+            "responseBytes": String(capturedDataSize),
+            "duration": String(durationDouble),
+            "retryCount": didRetry ? "1" : "0",
+            "fromCache": request.cachePolicy == .returnCacheDataDontLoad ? "true" : "false",
+            "cancelled": ((error as NSError?)?.code == NSURLErrorCancelled) ? "true" : "false"
+        ]
         
         // 🌟 仅仅将最后的存储与通知放入 Task，闭包里没有任何一个地方用到 self
         Task { @MainActor in
+            PTDebugEventCenter.shared.publish(
+                PTDebugEvent(name: "network.request",
+                             source: "urlprotocol",
+                             payload: networkPayload)
+            )
             if PTHttpDatasource.shared.addHttpRequest(modelToSave) {
                 // 通知刷新 UI，安全的切回到 MainActor
                 await MainActor.run {

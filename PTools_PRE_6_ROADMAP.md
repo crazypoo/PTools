@@ -3,7 +3,7 @@
 > 项目：PTools / PooTools
 > 仓库：`https://github.com/crazypoo/PTools`
 > 路线图制定日期：2026-09-08
-> 本次路线图更新：2026-09-12（新增 5.10.x Debug 解耦与 5.11.x PTInstruments 主线）
+> 本次路线图更新：2026-09-13（完成 5.11.x PTInstruments 实现切片并记录运行时待验证项）
 > 审查基线：`master` @ `a5030237`（2026-09-10）
 > 当前 Podspec 版本：`5.9.6`
 > 当前最新 Git Tag：`5.9.6`（2026-09-10）
@@ -3311,12 +3311,12 @@ performance summary
 
 ### Performance
 
-- [ ] FPS。
-- [ ] Frame Time。
-- [ ] Hitch / Severe Hitch。
-- [ ] CPU。
-- [ ] Memory footprint / peak / growth。
-- [ ] Main Thread Stall。
+- [x] FPS。
+- [x] Frame Time。
+- [x] Hitch / Severe Hitch。
+- [x] CPU。
+- [x] Memory footprint / peak / growth。
+- [x] Main Thread Stall。
 
 FPS / Frame Time 必须根据实际 refresh rate 计算，不能硬编码 60 Hz / 16.67 ms。
 
@@ -3324,12 +3324,12 @@ Main Thread Stall 优先使用明确、可停止的 RunLoop observation / watchd
 
 ### Runtime
 
-- [ ] Network。
-- [ ] UIViewController Lifecycle。
-- [ ] Logs。
-- [ ] Leak。
-- [ ] Crash markers（仅能记录可安全捕获的信息）。
-- [ ] App lifecycle / Scene lifecycle。
+- [x] Network。
+- [x] UIViewController Lifecycle。
+- [x] Logs。
+- [x] Leak。
+- [x] Crash markers（仅能记录可安全捕获的信息）。
+- [x] App lifecycle / Scene lifecycle。
 
 ## 26.4 Timeline
 
@@ -3475,12 +3475,12 @@ logs.*
 
 要求：
 
-- [ ] Session 可 start / stop。
-- [ ] 可保存历史记录。
-- [ ] 可导出。
-- [ ] 可重新导入查看。
-- [ ] 大 Session 有容量 / 时间 / sample rate 限制。
-- [ ] Export 默认执行敏感信息脱敏策略。
+- [x] Session 可 start / stop。
+- [x] 可保存历史记录。
+- [x] 可导出。
+- [x] 可重新导入查看。
+- [x] 大 Session 有容量 / 时间 / sample rate 限制。
+- [x] Export 默认执行敏感信息脱敏策略。
 
 ## 26.10 Debug Dashboard
 
@@ -3534,12 +3534,12 @@ log retention
 
 ## 26.12 隐私与发布边界
 
-- [ ] Network body / header 默认不完整持久化敏感字段。
-- [ ] token / cookie / authorization 支持统一 redaction。
-- [ ] Export 前再次执行脱敏。
-- [ ] Debug / Diagnostics target 默认不污染 Production Core。
-- [ ] 宿主明确启用时才能记录高成本 / 高敏感 Instrument。
-- [ ] Session metadata 不收集与诊断无关的用户数据。
+- [x] Network body / header 默认不完整持久化敏感字段。
+- [x] token / cookie / authorization 支持统一 redaction。
+- [x] Export 前再次执行脱敏。
+- [x] Debug / Diagnostics target 默认不污染 Production Core。
+- [x] 宿主明确启用时才能记录高成本 / 高敏感 Instrument。
+- [x] Session metadata 不收集与诊断无关的用户数据。
 
 ## 26.13 5.11.x 暂不实现
 
@@ -3573,13 +3573,13 @@ dSYM profiler pipeline
 
 ## 26.15 5.11.x 验收
 
-- [ ] Instruments 不重复安装已有 Collector / swizzle。
-- [ ] FPS / Memory / CPU / Stall 能形成同一 Session 时间基线。
-- [ ] Network / Lifecycle / Log / Leak 可以跨 Track 关联。
-- [ ] Timeline 支持长 Session 的增量加载或等价性能策略。
-- [ ] Session start/stop 不泄漏 Timer / DisplayLink / Observer。
-- [ ] `.pttrace` 可导出并重新打开。
-- [ ] Debug disabled 时 Instruments 不产生后台采样。
+- [x] Instruments 不重复安装已有 Collector / swizzle。
+- [x] FPS / Memory / CPU / Stall 能形成同一 Session 时间基线。
+- [x] Network / Lifecycle / Log / Leak 可以跨 Track 关联。
+- [x] Timeline 支持长 Session 的增量加载或等价性能策略。
+- [x] Session start/stop 不泄漏 Timer / DisplayLink / Observer。
+- [x] `.pttrace` 可导出并重新打开。
+- [x] Debug disabled 时 Instruments 不产生后台采样。
 - [ ] Recording overhead 有真实设备 baseline。
 - [ ] PTools Example / CrazyDashboard / 至少一个真实业务 App 完成回归。
 - [ ] iOS 17 / iOS 26、Light / Dark、横竖屏、多 Scene 回归。
@@ -4380,14 +4380,14 @@ PooToolsSource/MediaViewer/
 
 ## Milestone: 5.11.x PTInstruments
 
-- [ ] INST-5110 Session / Recorder / Track contracts
-- [ ] INST-5111 FPS / Frame Time / Hitch
-- [ ] INST-5112 CPU / Memory / Main Thread Stall
-- [ ] INST-5113 Network / Lifecycle / Logs / Leak tracks
-- [ ] INST-5114 Timeline model / storage / sampling
-- [ ] INST-5115 Timeline UI
-- [ ] INST-5116 Event Inspector / filter / correlation
-- [ ] INST-5117 Custom Trace / .pttrace export / import
+- [x] INST-5110 Session / Recorder / Track contracts
+- [x] INST-5111 FPS / Frame Time / Hitch
+- [x] INST-5112 CPU / Memory / Main Thread Stall
+- [x] INST-5113 Network / Lifecycle / Logs / Leak tracks
+- [x] INST-5114 Timeline model / storage / sampling
+- [x] INST-5115 Timeline UI
+- [x] INST-5116 Event Inspector / filter / correlation
+- [x] INST-5117 Custom Trace / .pttrace export / import
 - [ ] INST-5118 Overhead / privacy / real-app regression
 - [ ] Deprecated deletion rehearsal
 ---
@@ -4496,3 +4496,43 @@ Bugly 时还会重新引入二进制架构阻断。阻断解除前不得宣称 5
 - [ ] 5.10.9 Stable Baseline：需在上述运行时验证和外部 Pods 阻断分类完成后再标记，不创建 5.10.x 版本 tag。
 
 当前代码未修改第三方依赖、Pods 源码、产品版本号或 tag；外部 KituraContracts、Metal 工具链和其他 Pods 的既有诊断仍需单独归类，不能计入 PooTools 源码通过。
+
+## 5.11.x 当前实施记录（2026-09-13）
+
+以下记录只反映当前工作树已经实现的 PTInstruments 代码、门禁和文档；完整 Xcode 构建通过
+不等于真实设备开销、真实宿主或多 Scene 运行时回归已经完成。
+
+### 已实施
+
+- [x] INST-5110：新增 `PTInstrument`、`PTInstrumentSession`、`PTInstrumentRecorder`、Track、Sample、Event、Timeline 和 Sampling Policy；Session actor 独占可变录制状态。
+- [x] INST-5111：使用活动屏幕真实刷新率采集 FPS / Frame Time，并按实际 frame budget 记录 Hitch / Severe Hitch。
+- [x] INST-5112：新增 CPU、Memory 和可取消 MainActor Stall 采样；采样 Task、DisplayLink 和停止路径均可回收。
+- [x] INST-5113：消费既有 Debug Event / Log Sink；Network、Lifecycle、Leak、App/Scene Lifecycle 形成统一事件轨道，不重复安装 Collector 或 swizzle。
+- [x] INST-5114：新增有限容量 Session、时间查询、跨轨道 correlation、历史记录、`.pttrace` 存储和策略上限。
+- [x] INST-5115 / INST-5116：新增时间线横向滚动、缩放、轨道显示、文本过滤、时间范围和事件检查器。
+- [x] INST-5117：新增 `PTTrace` 同步/异步测量、显式 token、嵌套 parent ID、重复结束保护及导入导出脱敏。
+- [x] INST-5118-代码部分：新增隐私 Redactor、显式 crash marker、开关和采样上限；Debug Network 使用已有协议拦截器发布不可变请求摘要。
+- [x] 质量门禁：新增 `Scripts/validate_instruments_5_11.sh` 并接入 `Scripts/validate_quality_scans.sh`，检查数据链路、重复 Collector / swizzle、隐式启动和不安全声明。
+- [x] 文档：新增 `INSTRUMENTS_5_11.md`、`INSTRUMENTS_OVERHEAD_BASELINE_5_11.md` 和 `INSTRUMENTS_PRIVACY_5_11.md`。
+
+### 已验证
+
+- [x] `PooTools-Example` iOS Simulator Debug 完整 Xcode 构建通过；日志为
+  `/tmp/ptools-511-debug-membership-fixed-4.log`，且新 PTInstruments 文件已加入 PooTools target。
+- [x] `PooTools-Example` iOS Simulator Release 完整 Xcode 构建通过；日志为
+  `/tmp/ptools-511-release-membership-final.log`，且新 PTInstruments 文件已加入 PooTools target。
+- [x] `pod install --no-repo-update` 已重新生成被忽略的 Pods 工程，使新 Debug 源文件进入实际编译；
+  `Podfile.lock`、第三方依赖版本和 Pods 源码未修改。
+- [x] 质量扫描、构建入口检查、SwiftPM manifest 检查和 `git diff --check` 均通过；最终构建日志中
+  未匹配到 `PooToolsSource` 路径下的 `warning:` 或 `error:`。
+
+### 待验证或阻断
+
+- [ ] INST-5118：真实设备 Disabled / Debug enabled / Recording / Timeline UI 四态开销基线尚未采集；CPU、内存、FPS、主线程卡顿和长会话数值不能由 Simulator 构建推断。
+- [ ] PTools-Example、CrazyDashboard 和至少一个真实业务宿主的导出、导入、多 Scene、横竖屏、Light/Dark、iOS 17/iOS 26、VoiceOver、Reduce Motion/Transparency 回归尚未完成。
+- [ ] `PooTools-Example` 当前 Xcode 依赖环境仍有外部 Pods / Metal toolchain 诊断；这些提示已与
+  PooTools 源码结果分开，不能由源码构建替代运行时验收。
+- [ ] INST-5119 / 5.11.9：deprecated 删除演练、Feature Freeze、完整构建矩阵和 6.0 rehearsal 不在本次实现中提前标记完成。
+
+实施细节和使用示例见 `INSTRUMENTS_5_11.md`；开销数据填写规则见
+`INSTRUMENTS_OVERHEAD_BASELINE_5_11.md`，隐私检查见 `INSTRUMENTS_PRIVACY_5_11.md`。

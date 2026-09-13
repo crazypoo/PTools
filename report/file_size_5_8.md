@@ -2,7 +2,7 @@
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：13
+- Warning：14
 - Architecture exception：11
 - Hard-limit allowlisted：3
 
@@ -17,6 +17,7 @@
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1426 | warning |
 | `PooToolsSource/Category/UIView+PTEX.swift` | 1846 | architecture_exception |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
+| `PooToolsSource/Debug/PTInstruments.swift` | 1213 | warning |
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |
 | `PooToolsSource/ImageEditor/PTCutViewController.swift` | 1101 | warning |
 | `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1702 | architecture_exception |
