@@ -65,7 +65,7 @@ public let TouchInspectorHitsDebug = "TS_Hit_debug"
 // English: These deprecated properties preserve source compatibility while forwarding storage to the Debug-owned preference layer.
 // Español: Estas propiedades obsoletas conservan la compatibilidad de código y reenvían el almacenamiento a la capa de preferencias de Debug.
 // 中文：这些弃用属性继续兼容旧代码，并把存储转发到 Debug 自己的偏好层。
-@available(*, deprecated, message: "使用 PTDebugPreferences；Usa PTDebugPreferences.")
+@available(*, deprecated, message: "使用 PTDebugPreferences；Use PTDebugPreferences.")
 public extension PTCoreUserDefultsWrapper {
     var AppDebugMode: Bool {
         get { PTUserDefaultsStore.value(ConsoleDebug, default: false) }
