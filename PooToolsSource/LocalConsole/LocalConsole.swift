@@ -36,6 +36,7 @@ extension String {
     static let clearConsole = "Clear Console"
     static let userDefaults = "UserDefaults"
     static let Performance = "Performance"
+    static let instruments = "Instruments"
     static let hideColorCheck = "Hide Color check"
     static let showColorCheck = "Show Color check"
     static let hideRulerCheck = "Hide Ruler check"
@@ -317,11 +318,27 @@ public final class PTLogBuffer {
             return PendingEntries(entries: [], latestSequence: nextSequence)
         }
 
-        let firstSequence = nextSequence - UInt64(logs.count) + 1
-        let effectiveSequence = max(sequence, firstSequence - 1)
-        let startIndex = min(logs.count, Int(effectiveSequence - firstSequence + 1))
+        let count = logs.count
+        let countAsUInt64 = UInt64(count)
+        let firstSequence = nextSequence >= countAsUInt64
+            ? nextSequence - countAsUInt64 + 1
+            : 1
+
+        // English: Clamp the cursor before converting to Int so stale or wrapped values cannot trap.
+        // Español: Limita el cursor antes de convertirlo a Int para que los valores obsoletos o desbordados no provoquen un trap.
+        // 中文：在转换为 Int 前限制游标，避免过期或溢出的序号触发崩溃。
+        let startIndex: Int
+        if sequence < firstSequence {
+            startIndex = 0
+        } else {
+            let consumedCount = sequence - firstSequence
+            startIndex = consumedCount >= countAsUInt64
+                ? count
+                : Int(consumedCount + 1)
+        }
+
         let entries = logs.dropFirst(startIndex).enumerated().map { offset, item in
-            Entry(sequence: firstSequence + UInt64(startIndex + offset), item: item)
+            Entry(sequence: firstSequence &+ UInt64(startIndex + offset), item: item)
         }
         return PendingEntries(entries: entries, latestSequence: nextSequence)
     }
@@ -400,7 +417,9 @@ public class LocalConsole: NSObject {
         PTDebugPluginManager.shared.clearAll()
     }
             
-    // 使用单调序号，避免缓冲区裁剪旧日志后 UI 游标失效。
+    // English: Keep a monotonic sequence so trimming old logs does not invalidate the UI cursor.
+    // Español: Mantén una secuencia monótona para que recortar logs antiguos no invalide el cursor de la UI.
+    // 中文：使用单调序号，避免缓冲区裁剪旧日志后 UI 游标失效。
     private var lastFlushedSequence: UInt64 = 0
     
     private let logBuffer = PTLogBuffer(maxCount: 50000)
@@ -432,14 +451,7 @@ public class LocalConsole: NSObject {
         }
     }
 
-    @MainActor public var isVisiable:Bool = {
-#if POOTOOLS_DEBUG
-        guard UIApplication.shared.inferredEnvironment_PT != .appStore else { return false }
-        return PTDebugPreferences.shared.isConsoleEnabled
-#else
-        return false
-#endif
-    }() {
+    @MainActor public var isVisiable:Bool = false {
         didSet {
             guard oldValue != isVisiable else { return }
             if UIApplication.shared.inferredEnvironment_PT == .appStore {
@@ -568,15 +580,17 @@ public class LocalConsole: NSObject {
         super.init()
         PTDebugRuntimeAdapter.install()
         installLogSink()
-        if isVisiable {
-            createSystemLogView()
-            if PTDebugPreferences.shared.isMaskEnabled {
-                maskOpenFunction()
+
+        let shouldRestoreVisibility = UIApplication.shared.inferredEnvironment_PT != .appStore
+            && PTDebugPreferences.shared.isConsoleEnabled
+        if shouldRestoreVisibility {
+            // English: Restore persisted visibility only after singleton initialization has returned.
+            // Español: Restaura la visibilidad guardada solo después de que termine la inicialización del singleton.
+            // 中文：只有在单例初始化完成返回后，才恢复持久化的可见状态。
+            PTMainActorBridge.perform { [weak self] in
+                guard let self, !self.isVisiable else { return }
+                self.isVisiable = true
             }
-            
-            watcherInit()
-        } else {
-            cleanSystemLogView()
         }
     }
 
@@ -613,6 +627,7 @@ public class LocalConsole: NSObject {
         guard !isMonitoring else { return }
         isMonitoring = true
         PTDebugRuntimeAdapter.install()
+        PTNetworkHelper.shared.setPreferredHostWindow(consoleOverlayWindow)
         PTDebugManager.shared.setLeakHandler(leakCallback)
         PTDebugManager.shared.startSession(owner: monitoringOwnerIdentifier)
     }
@@ -632,6 +647,7 @@ public class LocalConsole: NSObject {
     }
     
     @MainActor public func cleanSystemLogView() {
+        let hadConsoleUI = terminal != nil || consoleOverlayWindow != nil || maskView != nil
         removeLogSink()
         stopMonitoringIfNeeded()
         removeKeyboardObservers()
@@ -644,7 +660,9 @@ public class LocalConsole: NSObject {
         consoleOverlayWindow?.isHidden = true
         consoleOverlayWindow?.rootViewController = nil
         consoleOverlayWindow = nil
-        closeAllFunction()
+        if hadConsoleUI {
+            closeAllFunction()
+        }
     }
             
     var temporaryKeyboardHeightValueTracker: CGFloat?
@@ -1029,13 +1047,23 @@ extension LocalConsole {
         let vc = PTDebugPerformanceViewController()
         consoleSheetPresent(vc: vc)
     }
+
+    // English: Open the dashboard only for an explicitly started recorder session.
+    // Español: Abre el dashboard solo para una sesión del recorder iniciada explícitamente.
+    // 中文：仅为已通过显式 API 启动的录制会话打开仪表盘，避免控制台隐式开启采样。
+    @MainActor
+    func instrumentDashboardOpen() {
+        guard let session = PTInstrumentRecorder.shared.session else { return }
+        let vc = PTInstrumentDashboardViewController(session: session)
+        consoleSheetPresent(vc: vc)
+    }
     
     func crashLogControlOpen() {
         let vc = PTCrashLogViewController()
         consoleSheetPresent(vc: vc)
     }
     
-    func consoleSheetPresent(vc:PTBaseViewController) {
+    func consoleSheetPresent(vc: PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         let options = PTSheetOptions()
@@ -1170,6 +1198,14 @@ extension LocalConsole {
             UIAction(title: .network, image: UIImage.networkImage) { [weak self] _ in self?.networkWatcherOpen() },
             UIAction(title: .crashLog, image: UIImage.crashLogImage) { [weak self] _ in self?.crashLogControlOpen() },
             UIAction(title: .Performance, image: UIImage.performanceImage) { [weak self] _ in self?.performanceControlOpen() },
+            // English: Keep the entry visible but disabled until an explicit recording session exists.
+            // Español: Mantiene visible la entrada, pero desactivada hasta que exista una sesión explícita.
+            // 中文：保留入口显示，但在没有显式录制会话时禁用。
+            UIAction(title: .instruments,
+                     image: UIImage.performanceImage,
+                     attributes: PTInstrumentRecorder.shared.session == nil ? .disabled : []) { [weak self] _ in
+                self?.instrumentDashboardOpen()
+            },
             UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { [weak self] _ in self?.colorAction() },
             UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { [weak self] _ in self?.rulerAction() },
             UIAction(title: .appDocument, image: UIImage.docImage) { [weak self] _ in self?.documentAction() },

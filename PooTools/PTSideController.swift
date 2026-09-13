@@ -74,6 +74,23 @@ class PTSideController: PTBaseSideController {
         let view = UIButton(type:.custom)
         view.backgroundColor = .random
         view.addActionHandlers { sender in
+            let recorder = PTInstrumentRecorder.shared
+
+            let session = recorder.start(
+                instruments: [
+                    .fps,
+                    .frameTime,
+                    .hitch,
+                    .cpu,
+                    .memory,
+                    .mainThreadStall,
+                    .network,
+                    .lifecycle,
+                    .logs
+                ],
+                policy: PTInstrumentSamplingPolicy(),
+                window: PTSceneContext.activeWindow()
+            )
             let console = LocalConsole.shared
             let visible = !console.isVisiable
             PTDebugPreferences.shared.isConsoleEnabled = visible

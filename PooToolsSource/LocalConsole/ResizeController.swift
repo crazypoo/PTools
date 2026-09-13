@@ -16,6 +16,8 @@ typealias LocalConsoleTextColorTask = ((_ color:UIColor) -> Void)
 class ResizeController {
     
     public static let shared = ResizeController()
+
+    private var didCreateConsoleOutlineView = false
     
     lazy var platterView = PlatterView(frame: .zero)
     
@@ -26,6 +28,7 @@ class ResizeController {
     }
         
     @MainActor lazy var consoleOutlineView: UIView = {
+        didCreateConsoleOutlineView = true
         let view = UIView()
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.randomColor.cgColor
@@ -217,7 +220,12 @@ class ResizeController {
 
     func detachFromConsole() {
         isActive = false
-        consoleOutlineView.removeFromSuperview()
+        // English: Do not instantiate a lazy UI view merely to clean up a console that never activated resizing.
+        // Español: No instancies una vista UI perezosa solo para limpiar una consola que nunca activó el redimensionado.
+        // 中文：未启用调整大小时，清理控制台不应为了移除视图而触发懒加载。
+        if didCreateConsoleOutlineView {
+            consoleOutlineView.removeFromSuperview()
+        }
     }
     
     // 🔴 抽取纯数学公式，极致提高性能

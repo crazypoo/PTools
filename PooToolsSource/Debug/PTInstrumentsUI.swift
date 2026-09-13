@@ -180,7 +180,7 @@ private final class PTInstrumentTimelineCanvas: UIView {
 // Español: El inspector presenta solo un snapshot de valores y su correlación cercana entre pistas.
 // 中文：事件检查器只展示值类型快照及其附近的跨轨道关联数据。
 @MainActor
-public final class PTInstrumentEventInspectorViewController: UIViewController {
+public final class PTInstrumentEventInspectorViewController: PTBaseViewController {
     private let correlation: PTInstrumentCorrelation
     private let textView = UITextView()
 
@@ -196,7 +196,7 @@ public final class PTInstrumentEventInspectorViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Event"
+        pt_Title = "Event"
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.preferredFont(forTextStyle: .body)
@@ -240,12 +240,32 @@ public final class PTInstrumentEventInspectorViewController: UIViewController {
 // Español: El dashboard es un adaptador de presentación sobre una sesión existente y nunca inicia collectors por sí mismo.
 // 中文：Dashboard 只是现有 Session 的展示适配器，不会自行启动 Collector。
 @MainActor
-public final class PTInstrumentDashboardViewController: UIViewController {
+public final class PTInstrumentDashboardViewController: PTBaseViewController {
     private let session: PTInstrumentSession
     private let timelineView = PTInstrumentTimelineView()
     private let summaryLabel = UILabel()
     private var snapshot: PTInstrumentSessionSnapshot?
 
+    lazy var exportSessionButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
+        view.setImage(UIImage(.square.andArrowUp), for: .normal)
+        view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
+        view.addActionHandlers(handler: { _ in
+            self.exportSession()
+        })
+        return view
+    }()
+    
+    lazy var stopRecordingButton:PTBaseButton = {
+        let view = PTBaseButton(type: .custom)
+        view.setImage(UIImage(.stop), for: .normal)
+        view.bounds = .init(origin: .zero, size: .init(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
+        view.addActionHandlers(handler: { _ in
+            self.stopRecording()
+        })
+        return view
+    }()
+        
     public init(session: PTInstrumentSession) {
         self.session = session
         super.init(nibName: nil, bundle: nil)
@@ -255,18 +275,24 @@ public final class PTInstrumentDashboardViewController: UIViewController {
         return nil
     }
 
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCustomRightButtons(buttons: [exportSessionButton,stopRecordingButton], buttonSpacing: 8)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "PTools Instruments"
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(exportSession)),
-            UIBarButtonItem(title: "Stop", style: .plain, target: self, action: #selector(stopRecording))
-        ]
+        pt_Title = "PTools Instruments"
         setupViews()
         timelineView.onSelectEvent = { [weak self] event in
             guard let self, let snapshot = self.snapshot, let correlation = snapshot.timeline.correlation(for: event.id) else { return }
-            self.navigationController?.pushViewController(PTInstrumentEventInspectorViewController(correlation: correlation), animated: true)
+            let pushVC = PTInstrumentEventInspectorViewController(correlation: correlation)
+            if let vc = self.sheetViewController {
+                vc.contentViewController.navigationController?.pushViewController(pushVC, animated: true)
+            } else {
+                self.navigationController?.pushViewController(pushVC, animated: true)
+            }
         }
         Task { @MainActor [weak self] in
             guard let self else { return }

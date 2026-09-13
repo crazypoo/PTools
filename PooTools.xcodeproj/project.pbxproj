@@ -462,6 +462,8 @@
 		55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */; };
 		55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */; };
 		55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */; };
+		55B7214A3056E7C0001E9020 /* PTInstruments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B721483056E7C0001E9020 /* PTInstruments.swift */; };
+		55B7214B3056E7C0001E9020 /* PTInstrumentsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */; };
 		55B8FD942CBC9163006D82AD /* ElementLibrary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55B8FD922CBC9163006D82AD /* ElementLibrary.xcassets */; };
 		55B8FD952CBC9163006D82AD /* Symbols.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55B8FD932CBC9163006D82AD /* Symbols.xcassets */; };
 		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
@@ -1457,6 +1459,8 @@
 		55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertManager.swift; sourceTree = "<group>"; };
 		55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertController.swift; sourceTree = "<group>"; };
 		55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionSheetController.swift; sourceTree = "<group>"; };
+		55B721483056E7C0001E9020 /* PTInstruments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstruments.swift; sourceTree = "<group>"; };
+		55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstrumentsUI.swift; sourceTree = "<group>"; };
 		55B8FD922CBC9163006D82AD /* ElementLibrary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ElementLibrary.xcassets; sourceTree = "<group>"; };
 		55B8FD932CBC9163006D82AD /* Symbols.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Symbols.xcassets; sourceTree = "<group>"; };
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
@@ -2469,6 +2473,8 @@
 		55024DF029F370DB00244E44 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				55B721483056E7C0001E9020 /* PTInstruments.swift */,
+				55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */,
 				557E3A8D2C044157002466A0 /* CwlDemangle.swift */,
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
@@ -5185,6 +5191,8 @@
 				558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */,
 				5512F43E2CACD63F006B3A69 /* PTLivePhoto.swift in Sources */,
 				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
+				55B7214A3056E7C0001E9020 /* PTInstruments.swift in Sources */,
+				55B7214B3056E7C0001E9020 /* PTInstrumentsUI.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */,

@@ -18,6 +18,41 @@ import UIKit
 // 中文：解析活动应用窗口，不依赖全局 key window 取值捷径。
 @MainActor
 public enum PTSceneContext {
+    // English: Resolve windows through one non-recursive implementation shared by every compatibility adapter.
+    // Español: Resuelve las ventanas mediante una única implementación no recursiva compartida por cada adaptador de compatibilidad.
+    // 中文：所有兼容适配器统一使用同一个不会递归的窗口解析实现。
+    @MainActor
+    static func _resolveActiveWindow(in scene: UIWindowScene? = nil) -> UIWindow? {
+        // English: Return nil on accidental re-entry instead of overflowing the stack during early app startup.
+        // Español: Devuelve nil ante una reentrada accidental en lugar de desbordar la pila durante el inicio temprano de la app.
+        // 中文：启动早期发生意外重入时返回 nil，避免栈溢出导致闪退。
+        guard !isResolvingActiveWindow else { return nil }
+        isResolvingActiveWindow = true
+        defer { isResolvingActiveWindow = false }
+
+        let scenes = scene.map { [$0] } ?? connectedWindowScenes().filter {
+            $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive
+        }
+        return scenes
+            .lazy
+            .flatMap { windows(in: $0) }
+            .sorted { lhs, rhs in
+                if lhs.isKeyWindow != rhs.isKeyWindow {
+                    return lhs.isKeyWindow
+                }
+                if lhs.windowLevel != rhs.windowLevel {
+                    return lhs.windowLevel.rawValue < rhs.windowLevel.rawValue
+                }
+                return lhs.rootViewController != nil && rhs.rootViewController == nil
+            }
+            .first { window in
+                !window.isHidden && window.alpha > 0.01 && window.rootViewController != nil
+            }
+    }
+
+    @MainActor
+    private static var isResolvingActiveWindow = false
+
     // English: Keep scene discovery in one place so UI modules do not choose an arbitrary connected scene.
     // Español: Mantén el descubrimiento de escenas en un solo lugar para que los módulos UI no elijan una escena arbitraria.
     // 中文：将场景发现集中到一个入口，避免 UI 模块随意选择某个已连接场景。
@@ -42,24 +77,7 @@ public enum PTSceneContext {
     }
 
     public static func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? {
-        let scenes = scene.map { [$0] } ?? connectedWindowScenes().filter {
-            $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive
-        }
-        return scenes
-            .lazy
-            .flatMap { windows(in: $0) }
-            .sorted { lhs, rhs in
-                if lhs.isKeyWindow != rhs.isKeyWindow {
-                    return lhs.isKeyWindow
-                }
-                if lhs.windowLevel != rhs.windowLevel {
-                    return lhs.windowLevel.rawValue < rhs.windowLevel.rawValue
-                }
-                return lhs.rootViewController != nil && rhs.rootViewController == nil
-            }
-            .first { window in
-                !window.isHidden && window.alpha > 0.01 && window.rootViewController != nil
-            }
+        _resolveActiveWindow(in: scene)
     }
 
     // English: Resolve the scene already hosting a view instead of falling back to another scene.

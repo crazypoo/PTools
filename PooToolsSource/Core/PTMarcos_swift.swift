@@ -17,7 +17,10 @@ public typealias PTBackgroundTask = @Sendable () -> Void
 public typealias PTBoolTask = (@Sendable (Bool) -> Void)
 
 @MainActor public var AppWindows: UIWindow? {
-    PTSceneContext.activeWindow()
+    // English: Use the raw scene resolver so the legacy global cannot participate in a window lookup cycle.
+    // Español: Usa el resolvedor de escenas directo para que el global heredado no participe en un ciclo de búsqueda de ventanas.
+    // 中文：使用底层场景解析器，避免旧的全局入口参与窗口查询循环。
+    PTSceneContext._resolveActiveWindow()
 }
 
 //MARK: 設備信息

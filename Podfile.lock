@@ -7,6 +7,7 @@ PODS:
   - BlueCryptor (1.0.32)
   - BlueECC (1.2.201)
   - BlueRSA (1.0.203)
+  - Bugly (2.6.1)
   - CocoaAsyncSocket (7.6.5)
   - CocoaLumberjack/Core (3.9.1)
   - CocoaLumberjack/Swift (3.9.1):
@@ -453,6 +454,7 @@ PODS:
   - Swinject (2.9.1)
 
 DEPENDENCIES:
+  - Bugly
   - FLEX
   - InAppViewDebugger
   - KTVHTTPCache
@@ -469,6 +471,7 @@ SPEC REPOS:
     - BlueCryptor
     - BlueECC
     - BlueRSA
+    - Bugly
     - CocoaAsyncSocket
     - CocoaLumberjack
     - CollectionViewPagingLayout
@@ -529,6 +532,7 @@ SPEC CHECKSUMS:
   BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
   BlueECC: c9662360a702839aa4d324f9f4cc8b899f6f7dd6
   BlueRSA: 893ae5412de48a508a487067564dbcf9cd49df71
+  Bugly: 217ac2ce5f0f2626d43dbaa4f70764c953a26a31
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: e4ba3b414dfca8c1916c6303d37f63b3a95134c6
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
@@ -579,6 +583,6 @@ SPEC CHECKSUMS:
   SwiftLint: c94465bc87831f3e16c52b3569f0626de50bd7da
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: 83a7e26998eab02c7a31898e2f52e7dfc5aeacf2
+PODFILE CHECKSUM: 9f7674dd8ef88b79044d8955aaa5789c71b329a9
 
 COCOAPODS: 1.16.2

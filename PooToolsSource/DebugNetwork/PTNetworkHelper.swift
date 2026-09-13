@@ -21,6 +21,7 @@ final class PTNetworkHelper {
     var isNetworkEnable: Bool
 
     var floatingView: PFloatingButton?
+    private weak var preferredHostWindow: UIWindow?
     lazy var speedLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .black
@@ -36,6 +37,13 @@ final class PTNetworkHelper {
     private init() {
         self.mainColor = UIColor(hexString: "#42d459") ?? UIColor.green
         self.isNetworkEnable = false
+    }
+
+    // English: Receive the already-created console window without resolving LocalConsole.shared during its initialization.
+    // Español: Recibe la ventana de consola ya creada sin resolver LocalConsole.shared durante su inicialización.
+    // 中文：接收已经创建好的控制台窗口，避免在 LocalConsole 初始化期间再次解析 LocalConsole.shared。
+    func setPreferredHostWindow(_ window: UIWindow?) {
+        preferredHostWindow = window
     }
 
     @MainActor func enable() {
@@ -59,11 +67,12 @@ final class PTNetworkHelper {
         measurementsTimer = nil
         speedUpdateTask?.cancel()
         speedUpdateTask = nil
+        preferredHostWindow = nil
     }
     
     @MainActor private func floatingButtonCreate() {
         if floatingView == nil {
-            guard let hostView = LocalConsole.shared.consoleOverlayWindow ?? PTSceneContext.activeWindow() else { return }
+            guard let hostView = preferredHostWindow ?? PTSceneContext.activeWindow() else { return }
             floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.tag = PTNetworkFloatingTap
             floatingView?.autoDocking = false

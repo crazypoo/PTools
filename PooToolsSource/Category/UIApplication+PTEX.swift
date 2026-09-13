@@ -37,11 +37,14 @@ public extension UIApplication {
     }
     
     @MainActor var currentWindows:[UIWindow]? {
-        PTSceneContext.activeWindow()?.windowScene?.windows
+        PTSceneContext._resolveActiveWindow()?.windowScene?.windows
     }
     
     @MainActor var currentWindow: UIWindow? {
-        PTSceneContext.activeWindow()
+        // English: Keep this legacy property on the non-recursive resolver path.
+        // Español: Mantén esta propiedad heredada en la ruta del resolvedor no recursivo.
+        // 中文：让这个旧属性始终走不会递归的解析路径。
+        PTSceneContext._resolveActiveWindow()
     }
         
     // MARK: - 内部缓存机制 (核心优化部分)
