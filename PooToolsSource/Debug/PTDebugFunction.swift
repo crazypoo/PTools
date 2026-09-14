@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import CoreLocation
 
 @objcMembers
 public class PTDebugFunction: NSObject {
