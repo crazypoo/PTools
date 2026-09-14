@@ -10,6 +10,10 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      - name: Validate documentation structure
+        run: bash Scripts/validate_docs.sh
+      - name: Validate document versions
+        run: bash Scripts/validate_document_versions.sh
       - name: Validate build contract
         run: bash Scripts/validate_build_entries.sh
       - name: Validate release metadata

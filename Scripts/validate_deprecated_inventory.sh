@@ -8,7 +8,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_root"
 
-for file in MIGRATION_6.md PUBLIC_API_5_9.json report/public_api_5_9.md; do
+for file in docs/migration/MIGRATION_6.md report/current/public_api.json report/current/public_api.md report/current/deprecated_api.md; do
   [[ -f "$file" ]] || {
     printf 'FAIL: missing migration/API inventory: %s\n' "$file" >&2
     exit 1
@@ -16,7 +16,7 @@ for file in MIGRATION_6.md PUBLIC_API_5_9.json report/public_api_5_9.md; do
 done
 
 for symbol in globalURL socketGlobalURL globalNavControl webImageLoadOptions highlightColor; do
-  rg -q --fixed-strings "$symbol" MIGRATION_6.md || {
+  rg -q --fixed-strings "$symbol" docs/migration/MIGRATION_6.md || {
     printf 'FAIL: canonical symbol is not documented: %s\n' "$symbol" >&2
     exit 1
   }

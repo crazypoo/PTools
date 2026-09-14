@@ -7,9 +7,11 @@
 require "cocoapods"
 require "fileutils"
 require "json"
+require "open3"
+require "time"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-REPORT_DIR = File.join(REPO_ROOT, "report")
+REPORT_DIR = File.join(REPO_ROOT, "report", "current")
 JSON_PATH = File.join(REPORT_DIR, "cocoapods_subspec_graph.json")
 MARKDOWN_PATH = File.join(REPORT_DIR, "cocoapods_subspec_graph.md")
 
@@ -63,6 +65,8 @@ end
 graph = {
   "schema_version" => 1,
   "generator" => "Scripts/report_cocoapods_subspec_graph.rb",
+  "source_revision" => Open3.capture2("git", "rev-parse", "HEAD", chdir: REPO_ROOT).first.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "name" => specification.name,
   "version" => specification.version.to_s,
   "platforms" => specification.attributes_hash["platforms"] || {},
@@ -76,6 +80,15 @@ FileUtils.mkdir_p(REPORT_DIR)
 File.write(JSON_PATH, JSON.pretty_generate(graph) + "\n")
 
 markdown = []
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{graph["generator"]}"
+markdown << "Source revision: #{graph["source_revision"]}"
+markdown << "Generated at: #{graph["generated_at"]}"
+markdown << "-->"
+markdown << ""
 markdown << "# CocoaPods Subspec Graph"
 markdown << ""
 markdown << "- Schema: `#{graph["schema_version"]}`"

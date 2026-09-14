@@ -8,9 +8,10 @@ require "fileutils"
 require "json"
 require "open3"
 require "set"
+require "time"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-REPORT_DIR = File.join(REPO_ROOT, "report")
+REPORT_DIR = File.join(REPO_ROOT, "report", "current")
 JSON_PATH = File.join(REPORT_DIR, "spm_dependency_graph.json")
 MARKDOWN_PATH = File.join(REPORT_DIR, "spm_dependency_graph.md")
 
@@ -85,6 +86,8 @@ core_dependencies = core_target ? core_target["third_party_dependencies"] : []
 graph = {
   "schema_version" => 1,
   "generator" => "Scripts/report_spm_dependency_graph.rb",
+  "source_revision" => Open3.capture2("git", "rev-parse", "HEAD", chdir: REPO_ROOT).first.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "package" => package["name"],
   "tools_version" => package["toolsVersion"],
   "swift_language_versions" => stable_array(package["swiftLanguageVersions"]),
@@ -116,6 +119,15 @@ def dependency_names(target, key)
 end
 
 markdown = []
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{graph["generator"]}"
+markdown << "Source revision: #{graph["source_revision"]}"
+markdown << "Generated at: #{graph["generated_at"]}"
+markdown << "-->"
+markdown << ""
 markdown << "# SwiftPM Dependency Graph"
 markdown << ""
 markdown << "- Schema: `#{graph["schema_version"]}`"

@@ -1,3 +1,12 @@
+<!--
+AUTO-GENERATED FILE.
+DO NOT EDIT MANUALLY.
+
+Generator: Scripts/report_sendable_exceptions.rb
+Source revision: 95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a
+Generated at: 2026-09-14T05:37:10Z
+-->
+
 # Swift 6 Sendable 例外清单
 
 本文件由 `Scripts/report_sendable_exceptions.rb` 生成；它只记录现状，不把 `@unchecked Sendable` 视为无条件安全。

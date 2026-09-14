@@ -11,11 +11,12 @@ ruby "$repo_root/Scripts/report_spm_dependency_graph.rb" >/dev/null
 
 ruby - "$repo_root" <<'RUBY'
 require "json"
+require "time"
 
 repo_root = File.expand_path(ARGV.fetch(0))
-graph_path = File.join(repo_root, "report/spm_dependency_graph.json")
-report_json_path = File.join(repo_root, "report/dependency_direction_5_8.json")
-report_markdown_path = File.join(repo_root, "report/dependency_direction_5_8.md")
+graph_path = File.join(repo_root, "report/current/spm_dependency_graph.json")
+report_json_path = File.join(repo_root, "report/current/dependency_direction.json")
+report_markdown_path = File.join(repo_root, "report/current/dependency_direction.md")
 allowlist_path = File.join(repo_root, "Scripts/dependency_direction_allowlist.txt")
 graph = JSON.parse(File.read(graph_path))
 
@@ -73,6 +74,9 @@ end
 
 result = {
   "schema_version" => 1,
+  "generator" => "Scripts/validate_dependency_direction.sh",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
     "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",
@@ -87,6 +91,15 @@ result = {
 File.write(report_json_path, JSON.pretty_generate(result) + "\n")
 
 markdown = []
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{result["generator"]}"
+markdown << "Source revision: #{result["source_revision"]}"
+markdown << "Generated at: #{result["generated_at"]}"
+markdown << "-->"
+markdown << ""
 markdown << "# Dependency Direction Gate"
 markdown << ""
 markdown << "- Status: `#{result["status"]}`"

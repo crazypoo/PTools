@@ -2,10 +2,11 @@
 
 require "json"
 require "fileutils"
+require "time"
 
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
-report_dir = File.join(repo_root, "report")
+report_dir = File.join(repo_root, "report", "current")
 FileUtils.mkdir_p(report_dir)
 
 patterns = {
@@ -29,18 +30,30 @@ end
 
 payload = {
   "schema_version" => 1,
+  "generator" => "Scripts/report_accessibility_5_9.rb",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "counts" => counts,
   "locations" => locations
 }
-File.write(File.join(report_dir, "accessibility_5_9.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(report_dir, "accessibility.json"), JSON.pretty_generate(payload) + "\n")
 
 markdown = []
-markdown << "# PTools 5.9.x UI 适配扫描"
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
+markdown << "# PTools 当前 UI 适配扫描"
 markdown << ""
 markdown << "| 能力 | 命中数 |"
 markdown << "| --- | ---: |"
 counts.keys.sort.each { |name| markdown << "| #{name} | #{counts[name]} |" }
 markdown << ""
 markdown << "扫描结果用于定位缺口；Dynamic Type、Reduce Motion 和 Reduce Transparency 仍需按模块人工验证。"
-File.write(File.join(report_dir, "accessibility_5_9.md"), markdown.join("\n") + "\n")
-puts "Accessibility 5.9 report: #{counts.inspect}"
+File.write(File.join(report_dir, "accessibility.md"), markdown.join("\n") + "\n")
+puts "Accessibility current report: #{counts.inspect}"

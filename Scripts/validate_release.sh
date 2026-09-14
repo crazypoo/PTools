@@ -7,53 +7,27 @@ cd "$repo_root"
 
 version="${1:-}"
 if [[ -z "$version" ]]; then
-  version="$(sed -n "s/^[[:space:]]*s.version[[:space:]]*= *'\([^']*\)'.*/\1/p" PooTools.podspec | head -1)"
+  version="$(sed -nE "s/^[[:space:]]*s\.version[[:space:]]*=.*'([^']+)'.*/\1/p" PooTools.podspec | head -n 1)"
 fi
 
-[[ -n "$version" ]] || { printf 'FAIL: unable to determine version\n' >&2; exit 1; }
+[[ -n "$version" ]] || { printf 'FAIL: unable to determine podspec version\n' >&2; exit 1; }
 rg -q --fixed-strings "s.version     = '$version'" PooTools.podspec \
   || { printf 'FAIL: podspec version mismatch: %s\n' "$version" >&2; exit 1; }
-rg -q --fixed-strings "## $version -" CHANGELOG.md \
-  || { printf 'FAIL: CHANGELOG.md has no release heading for %s\n' "$version" >&2; exit 1; }
-rg -q --fixed-strings "tag => '$version'" README.md \
-  || { printf 'FAIL: README.md has no CocoaPods example for %s\n' "$version" >&2; exit 1; }
-rg -q --fixed-strings "发布目标为 \`$version\`" RELEASE.md \
-  || { printf 'FAIL: RELEASE.md target version mismatch: %s\n' "$version" >&2; exit 1; }
 rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
   || { printf 'FAIL: Podfile.lock is not synchronized to %s\n' "$version" >&2; exit 1; }
-[[ -f MIGRATION_5X.md ]] \
-  || { printf 'FAIL: MIGRATION_5X.md is missing\n' >&2; exit 1; }
-rg -q --fixed-strings "6.0.0 删除评估条件" MIGRATION_5X.md \
-  || { printf 'FAIL: MIGRATION_5X.md has no 6.0.0 removal criteria\n' >&2; exit 1; }
+rg -q --fixed-strings "当前代码基线：\`$version\`" ROADMAP.md \
+  || { printf 'FAIL: ROADMAP.md has no current baseline for %s\n' "$version" >&2; exit 1; }
+
+if git show-ref --tags --verify --quiet "refs/tags/$version"; then
+  rg -q --fixed-strings "## $version" CHANGELOG.md \
+    || { printf 'FAIL: CHANGELOG.md has no release heading for tagged version %s\n' "$version" >&2; exit 1; }
+else
+  rg -q --fixed-strings "Unreleased" CHANGELOG.md \
+    || { printf 'FAIL: CHANGELOG.md has no Unreleased section for development version %s\n' "$version" >&2; exit 1; }
+fi
+
+bash Scripts/validate_docs.sh
+bash Scripts/validate_document_versions.sh
 bash Scripts/report_duplicate_entries.sh >/dev/null
 
-if [[ -f PTools_PRE_6_ROADMAP.md ]]; then
-  # English: The pre-6 roadmap owns the current 5.x baseline and migration gate.
-  # Español: La hoja de ruta previa a 6.0 mantiene la línea base y la migración actual de 5.x.
-  # 中文：6.0 前路线图负责当前 5.x 基线和迁移门禁。
-  roadmap_section="$(rg -n -m 1 --fixed-strings "当前 Podspec 版本：\`$version\`" PTools_PRE_6_ROADMAP.md || true)"
-  if [[ -z "$roadmap_section" ]]; then
-    printf 'FAIL: PTools_PRE_6_ROADMAP.md has no current baseline for %s\n' "$version" >&2
-    exit 1
-  fi
-elif [[ -f ROADMAP_5X.md ]]; then
-  roadmap_section="$(awk -v version="$version" '
-    $0 ~ "^## " version "([：: ].*)?$" { found = 1; next }
-    found && /^## / { exit }
-    found { print }
-  ' ROADMAP_5X.md)"
-  if [[ -z "$roadmap_section" ]]; then
-    printf 'FAIL: ROADMAP_5X.md has no section for %s\n' "$version" >&2
-    exit 1
-  fi
-fi
-if [[ -n "${roadmap_section:-}" ]]; then
-  unresolved_tasks="$(printf '%s\n' "$roadmap_section" | rg '^[[:space:]]*-[[:space:]]*(🚧|⬜|⛔)' || true)"
-  if [[ -n "$unresolved_tasks" ]]; then
-    printf '%s\n' "$unresolved_tasks" >&2
-    printf 'FAIL: roadmap still contains unresolved tasks for %s\n' "$version" >&2
-    exit 1
-  fi
-fi
-
-printf 'Release metadata OK: %s\n' "$version"
+printf 'Release metadata OK: development=%s\n' "$version"

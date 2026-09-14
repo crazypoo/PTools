@@ -68,7 +68,7 @@ require_pattern "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift" 
 swift package dump-package >/dev/null
 git diff --check
 
-if [[ ! -f "report/quality_5_9_2.md" ]]; then
+if [[ ! -f "report/baselines/5.9/quality_5.9.2.md" ]]; then
   printf 'FAIL: missing 5.9.2 quality report\n' >&2
   exit 1
 fi

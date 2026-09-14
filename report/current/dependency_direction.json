@@ -1,0 +1,526 @@
+{
+  "schema_version": 1,
+  "generator": "Scripts/validate_dependency_direction.sh",
+  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
+  "generated_at": "2026-09-14T05:37:13Z",
+  "status": "pass_with_legacy_allowlist",
+  "rules": [
+    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",
+    "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
+    "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
+    "Navigation/Router -> PhotoPicker is forbidden"
+  ],
+  "edges": [
+    {
+      "source": "PTBluetoothPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTCalendarPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTCameraPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTContactsPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTFaceIDPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTHealthPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTLocationPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTMediaPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTMicPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTMotionPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTNotificationPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTRemindersPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTSiriPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTSpeechPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PTTrackingPermission",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PToolsPermissionUI",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "PToolsPermissionUI",
+      "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PooToolsBankCard",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsBioID",
+      "destination": "PTFaceIDPermission"
+    },
+    {
+      "source": "PooToolsBioID",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCalendar",
+      "destination": "PTCalendarPermission"
+    },
+    {
+      "source": "PooToolsCalendar",
+      "destination": "PTRemindersPermission"
+    },
+    {
+      "source": "PooToolsCalendar",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCheckBox",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCheckDirtyWord",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCheckUpdate",
+      "destination": "PooToolsNetWork"
+    },
+    {
+      "source": "PooToolsChinesePinyin",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCircle",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCodeView",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsContact",
+      "destination": "PTContactsPermission"
+    },
+    {
+      "source": "PooToolsContact",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCountry",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCustomerLabel",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PooToolsNetWork"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PooToolsPDF"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PooToolsSearchBar"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PooToolsShare"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsDEBUGTrackingEyes",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsDEBUGTrackingEyes",
+      "destination": "PooToolsDEBUG"
+    },
+    {
+      "source": "PooToolsDEBUGTrackingEyes",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsDataEncrypt",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsGuide",
+      "destination": "PooToolsPageControl"
+    },
+    {
+      "source": "PooToolsGuide",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsHandSign",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsHarbethKit",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsHarbethKit",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsHeartRate",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsHeartRate",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsHud",
+      "destination": "PooToolsProgressBar"
+    },
+    {
+      "source": "PooToolsHud",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsIAP",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsImageEditor",
+      "destination": "PooToolsHarbethKit"
+    },
+    {
+      "source": "PooToolsImageEditor",
+      "destination": "PooToolsPhotoPicker"
+    },
+    {
+      "source": "PooToolsImageEditor",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsImagePicker",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsImagePicker",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsInput",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsKeyChain",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsKeyboard",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLaunchTimeProfiler",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLayout",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLivePhoto",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLoading",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLocation",
+      "destination": "PTLocationPermission"
+    },
+    {
+      "source": "PooToolsLocation",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PooToolsLivePhoto"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PooToolsNetWork"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PooToolsPageControl"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PooToolsProgressBar"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsMessageKit",
+      "destination": "PooToolsCustomerLabel"
+    },
+    {
+      "source": "PooToolsMessageKit",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsMotion",
+      "destination": "PTMotionPermission"
+    },
+    {
+      "source": "PooToolsMotion",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsNetWork",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PooToolsNetWork",
+      "destination": "PooToolsLoading"
+    },
+    {
+      "source": "PooToolsNetWork",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsNetworkSpeedTest",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsOSSKitSpeech",
+      "destination": "PTSpeechPermission"
+    },
+    {
+      "source": "PooToolsOSSKitSpeech",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPDF",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPageControl",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPagingControl",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPhoneInfo",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PooToolsImagePicker"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PooToolsLoading"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PooToolsNetWork"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPicker",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPing",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsProgressBar",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsRateView",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsRouter",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSVG",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsScanQRCode",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsScanQRCode",
+      "destination": "PooToolsImagePicker"
+    },
+    {
+      "source": "PooToolsScanQRCode",
+      "destination": "PooToolsPhotoPicker"
+    },
+    {
+      "source": "PooToolsScanQRCode",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsScrollBanner",
+      "destination": "PooToolsPageControl"
+    },
+    {
+      "source": "PooToolsScrollBanner",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSearchBar",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSegmented",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsShare",
+      "destination": "PooToolsCustomerLabel"
+    },
+    {
+      "source": "PooToolsSlider",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSmartScreenshot",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSocketKit",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSpeedPanel",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsStepCount",
+      "destination": "PTHealthPermission"
+    },
+    {
+      "source": "PooToolsStepCount",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsStepper",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsTelephony",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsTipsView",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "PooToolsHarbethKit"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "PooToolsLoading"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "PooToolsProgressBar"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsVision",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsWhatsNewsKit",
+      "destination": "ptools"
+    },
+    {
+      "source": "PooToolsiOS17Tips",
+      "destination": "ptools"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsUIFoundation"
+    }
+  ],
+  "allowed_legacy_edges": [
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PooToolsNetWork",
+      "rule": "Media target must not depend on the concrete Network implementation",
+      "reason": "Legacy media viewer still uses the callback Network facade; migrate to MediaCore provider in 5.8.7."
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PooToolsNetWork",
+      "rule": "Media target must not depend on the concrete Network implementation",
+      "reason": "Legacy PhotoPicker upload/cache path still uses Network; migrate to a media provider in 5.8.7."
+    }
+  ],
+  "violations": []
+}

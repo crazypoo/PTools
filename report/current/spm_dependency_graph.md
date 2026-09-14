@@ -1,3 +1,12 @@
+<!--
+AUTO-GENERATED FILE.
+DO NOT EDIT MANUALLY.
+
+Generator: Scripts/report_spm_dependency_graph.rb
+Source revision: 95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a
+Generated at: 2026-09-14T05:37:12Z
+-->
+
 # SwiftPM Dependency Graph
 
 - Schema: `1`

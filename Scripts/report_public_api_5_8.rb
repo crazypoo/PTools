@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require "json"
+require "fileutils"
+require "time"
 
 # English: Produce a deterministic source-level public API inventory without claiming ABI stability.
 # Español: Produce un inventario determinista de API pública a nivel de código sin afirmar estabilidad ABI.
@@ -8,8 +10,8 @@ require "json"
 
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
-report_dir = File.join(repo_root, "report")
-Dir.mkdir(report_dir) unless Dir.exist?(report_dir)
+report_dir = File.join(repo_root, "report", "baselines", "5.8")
+FileUtils.mkdir_p(report_dir)
 
 declarations = []
 pattern = /^\s*(public|open)\s+(?:nonisolated\s+)?(class|struct|enum|protocol|actor|func|init|var|let|typealias|subscript)\b/
@@ -33,7 +35,10 @@ payload = {
   "baseline" => "5.8.x source inventory",
   "abi_claim" => false,
   "generated_from" => "PooToolsSource/**/*.swift",
+  "generator" => "Scripts/report_public_api_5_8.rb",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "declarations" => declarations
 }
-File.write(File.join(repo_root, "PUBLIC_API_5_8.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(report_dir, "public_api.generated.json"), JSON.pretty_generate(payload) + "\n")
 puts "Public API report: declarations=#{declarations.length}"

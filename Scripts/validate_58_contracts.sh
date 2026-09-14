@@ -23,16 +23,14 @@ bash Scripts/validate_dependency_direction.sh
 bash Scripts/validate_permission_source_contract.sh
 bash Scripts/validate_file_size_gate.sh
 ruby Scripts/report_sendable_exceptions.rb
-ruby Scripts/report_public_api_5_8.rb
 swift package dump-package >/dev/null
 git diff --check
 for report in \
-  ARCHITECTURE_5_8.md \
-  DEPENDENCY_GRAPH_5_8.md \
-  PUBLIC_API_5_8.json \
-  SENDABLE_EXCEPTIONS_5_8.md \
-  PERFORMANCE_BASELINE_5_8.md \
-  report/build_validation_5_8_9.md; do
+  report/baselines/5.8/dependency_graph.md \
+  report/baselines/5.8/public_api.json \
+  report/baselines/5.8/sendable_exceptions.md \
+  report/baselines/5.8/performance_baseline.md \
+  report/baselines/5.8/build_validation_5.8.9.md; do
   [[ -f "$report" ]] || {
     printf 'FAIL: required 5.8.9 report is missing: %s\n' "$report" >&2
     exit 1

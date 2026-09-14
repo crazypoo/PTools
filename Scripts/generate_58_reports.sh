@@ -13,6 +13,5 @@ ruby Scripts/report_spm_dependency_graph.rb >/dev/null
 ruby Scripts/report_cocoapods_subspec_graph.rb >/dev/null
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_sendable_exceptions.rb >/dev/null
-ruby Scripts/report_public_api_5_8.rb >/dev/null
 
 printf 'PASS: 5.8 architecture reports regenerated\n'

@@ -21,13 +21,14 @@ ruby "$repo_root/Scripts/report_cocoapods_subspec_graph.rb"
 ruby - "$repo_root" "$mode" <<'RUBY'
 require "digest"
 require "json"
+require "time"
 
 repo_root = File.expand_path(ARGV.fetch(0))
 mode = ARGV.fetch(1)
-spm = JSON.parse(File.read(File.join(repo_root, "report/spm_dependency_graph.json")))
-pods = JSON.parse(File.read(File.join(repo_root, "report/cocoapods_subspec_graph.json")))
-json_path = File.join(repo_root, "report/module_parity_5_8.json")
-markdown_path = File.join(repo_root, "report/module_parity_5_8.md")
+spm = JSON.parse(File.read(File.join(repo_root, "report/current/spm_dependency_graph.json")))
+pods = JSON.parse(File.read(File.join(repo_root, "report/current/cocoapods_subspec_graph.json")))
+json_path = File.join(repo_root, "report/current/module_parity.json")
+markdown_path = File.join(repo_root, "report/current/module_parity.md")
 
 # English: Normalize historical names only for comparison; preserve original names in the reports.
 # Español: Normaliza solo nombres históricos para comparar; conserva los nombres originales en los informes.
@@ -173,6 +174,8 @@ end
 payload = {
   "schema_version" => 1,
   "generator" => "Scripts/validate_module_parity.sh",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "spm_products" => spm_product_names,
   "aggregate_products" => {
     "spm" => spm_product_names.select { |name| name == "PooToolsAll" },
@@ -185,7 +188,8 @@ payload = {
   "dependency_drift" => dependency_drift,
   "settings_drift" => settings_drift
 }
-fingerprint = Digest::SHA256.hexdigest(JSON.generate(deep_sort(payload)))
+fingerprint_payload = payload.reject { |key, _value| %w[generator source_revision generated_at].include?(key) }
+fingerprint = Digest::SHA256.hexdigest(JSON.generate(deep_sort(fingerprint_payload)))
 result = payload.merge("status" => "baseline", "fingerprint" => fingerprint)
 
 if mode == "update"
@@ -204,6 +208,15 @@ else
 end
 
 markdown = []
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
 markdown << "# SwiftPM / CocoaPods Module Parity"
 markdown << ""
 markdown << "- Status: `baseline`"

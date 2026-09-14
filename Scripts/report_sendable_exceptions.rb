@@ -2,6 +2,7 @@
 
 require "json"
 require "fileutils"
+require "time"
 
 # English: Generate the Swift 6 unchecked-sendable inventory from source and its centralized allowlist.
 # Español: Genera el inventario de unchecked-sendable de Swift 6 desde el código y su lista centralizada.
@@ -10,7 +11,7 @@ require "fileutils"
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
 allowlist_path = File.join(repo_root, "Scripts", "unchecked_sendable_allowlist.txt")
-report_dir = File.join(repo_root, "report")
+report_dir = File.join(repo_root, "report", "current")
 FileUtils.mkdir_p(report_dir)
 
 allowlisted = File.readlines(allowlist_path, chomp: true).filter_map do |line|
@@ -35,13 +36,25 @@ end
 
 payload = {
   "schema_version" => 1,
+  "generator" => "Scripts/report_sendable_exceptions.rb",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "generated_from" => "PooToolsSource/**/*.swift",
   "allowlist" => allowlisted,
   "declarations" => declarations
 }
-File.write(File.join(report_dir, "sendable_exceptions_5_8.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(report_dir, "sendable_exceptions.json"), JSON.pretty_generate(payload) + "\n")
 
 markdown = []
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
 markdown << "# Swift 6 Sendable 例外清单"
 markdown << ""
 markdown << "本文件由 `Scripts/report_sendable_exceptions.rb` 生成；它只记录现状，不把 `@unchecked Sendable` 视为无条件安全。"
@@ -65,6 +78,6 @@ markdown << ""
 markdown << "- 新业务模型不得新增 `@unchecked Sendable`。"
 markdown << "- 新的系统对象包装器必须在 `Scripts/unchecked_sendable_allowlist.txt` 登记，并说明保护方式与替代版本。"
 markdown << "- `nonisolated(unsafe)` 不得用于业务共享状态。"
-File.write(File.join(repo_root, "SENDABLE_EXCEPTIONS_5_8.md"), markdown.join("\n") + "\n")
+File.write(File.join(report_dir, "sendable_exceptions.md"), markdown.join("\n") + "\n")
 
 puts "Sendable report: declarations=#{declarations.length}, allowlisted_files=#{allowlisted.length}"

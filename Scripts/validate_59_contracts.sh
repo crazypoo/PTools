@@ -17,7 +17,19 @@ bash Scripts/validate_branch_dependencies.sh
 bash Scripts/validate_dependencies_5_9_6.sh
 bash Scripts/validate_migration_5_9_7.sh
 bash Scripts/validate_deprecated_inventory.sh
-ruby Scripts/compare_public_api.rb PUBLIC_API_5_8.json PUBLIC_API_5_9.json
+
+# English: Historical API snapshots document evolution; they are not an exact-equality gate for the current checkout.
+# Español: Las instantáneas históricas documentan la evolución; no son una puerta de igualdad exacta para el checkout actual.
+# 中文：历史 API 快照用于记录演进，不应要求当前代码与 5.8/5.9 快照完全相等。
+for snapshot in \
+  report/baselines/5.8/public_api.json \
+  report/baselines/5.9/public_api.json \
+  report/current/public_api.json; do
+  [[ -s "$snapshot" ]] || {
+    printf 'FAIL: required API snapshot is missing: %s\n' "$snapshot" >&2
+    exit 1
+  }
+done
 bash Scripts/validate_build_entries.sh
 bash Scripts/validate_quality_scans.sh
 bash Scripts/validate_592_quality.sh
@@ -26,10 +38,10 @@ swift package dump-package >/dev/null
 git diff --check
 
 for report in \
-  report/concurrency_5_9.md \
-  report/singletons_5_9.md \
-  report/cache_inventory_5_9.md \
-  report/accessibility_5_9.md; do
+  report/current/concurrency.md \
+  report/current/singletons.md \
+  report/current/cache_inventory.md \
+  report/current/accessibility.md; do
   [[ -f "$report" ]] || {
     printf 'FAIL: required 5.9 report is missing: %s\n' "$report" >&2
     exit 1

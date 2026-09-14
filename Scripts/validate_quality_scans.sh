@@ -52,10 +52,15 @@ bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_localizations.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 
-# English: Refresh the 5.9.x concurrency inventory as part of every quality run.
-# Español: Actualiza el inventario de concurrencia de 5.9.x en cada ejecución de calidad.
-# 中文：每次质量扫描都刷新 5.9.x 并发清单。
+# English: Refresh current concurrency and compatibility inventories as part of every quality run.
+# Español: Actualiza los inventarios actuales de concurrencia y compatibilidad en cada ejecución de calidad.
+# 中文：每次质量扫描都刷新当前并发和兼容性清单。
 ruby Scripts/report_concurrency_5_9.rb >/dev/null
+ruby Scripts/report_public_api_5_9.rb >/dev/null
+ruby Scripts/report_sendable_exceptions.rb >/dev/null
+ruby Scripts/report_cache_inventory_5_9.rb >/dev/null
+ruby Scripts/report_singletons_5_9.rb >/dev/null
+ruby Scripts/report_accessibility_5_9.rb >/dev/null
 
 # English: Keep the SPM/CocoaPods parity and dependency-direction baselines in the regular quality gate.
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
@@ -65,6 +70,8 @@ bash Scripts/validate_dependency_direction.sh
 bash Scripts/validate_debug_foundation_5_10.sh
 bash Scripts/validate_instruments_5_11.sh
 bash Scripts/validate_permission_source_contract.sh
+bash Scripts/validate_file_size_gate.sh >/dev/null
+ruby Scripts/report_current_summaries.rb >/dev/null
 
 if rg -n --glob '*.swift' 'nonisolated\(unsafe\)' PooToolsSource/CheckUpdate PooToolsSource/Contact PooToolsSource/NFC PooToolsSource/NetWork PooToolsSource/PhotoPicker PooToolsSource/VideoEditor; then
   printf 'FAIL: business-level nonisolated(unsafe) remains in P0 modules\n' >&2

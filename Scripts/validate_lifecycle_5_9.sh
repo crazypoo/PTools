@@ -30,7 +30,7 @@ done <<< "$scene_scan_files"
 
 ruby Scripts/report_singletons_5_9.rb >/dev/null
 ruby -rjson -e '
-  report = JSON.parse(File.read("report/singletons_5_9.json"))
+  report = JSON.parse(File.read("report/current/singletons.json"))
   entries = report.fetch("declarations")
   valid = entries.all? { |entry| %w[A B C D].include?(entry["category"]) }
   abort "FAIL: singleton report contains an unclassified declaration" unless valid

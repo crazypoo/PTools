@@ -51,8 +51,7 @@ if [[ -e Pods/Bugly/Bugly.framework ]]; then
 fi
 require_match 'canImport\(Bugly\)' PooTools/AppDelegate.swift
 
-require_match '当前仓库基线：`5\.9\.6`' DEPENDENCIES.md
-require_match 'dependency_supply_chain_5_9_6\.md' DEPENDENCIES.md
-[[ -f report/dependency_supply_chain_5_9_6.md ]] || fail 'dependency report is missing'
+require_match 'PooTools/Core' docs/architecture/DEPENDENCIES.md
+[[ -f report/baselines/5.9/dependency_supply_chain_5.9.6.md ]] || fail 'dependency report is missing'
 
 printf 'PASS: 5.9.6 dependency ownership and reproducibility checks\n'

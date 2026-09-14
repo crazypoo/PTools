@@ -1,29 +1,25 @@
 # PooTools
 
 <p align="center">
-<!--<a href=""><img src="https://img.shields.io/cocoapods/v/PooTools.svg"></a>-->
 <a href=""><img src="https://img.shields.io/cocoapods/p/PooTools.svg"></a>
 <a href=""><img src="https://img.shields.io/badge/platform-iOS%2017.0%2B-ff69b5152950834.svg"></a>
-</p>
-<p align="center">
-<a href="https://twitter.com/crazypeepoo"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
-<a href="https://weibo.com/273277355"><img src="https://img.shields.io/badge/weibo-@雀屎桑-red.svg?style=plastic"></a>
 </p>
 
 ## About
 
-该框架集成了一个APP该有的开发框架,工具大部分工具都是高度自定义,一直在自嗨
+PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限和调试工具库。Core 是默认
+基础边界，其他功能按需安装。
 
-## Languages
-🇨🇳 Chinese, 🇭🇰/🇲🇴 Cantonese, 🇺🇸 English, 🇪🇸 Spanish.
+PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
+以 `PooTools.podspec` 和正式 Git tag 为准；当前 `5.11.11` 尚未创建对应正式 tag。
 
-## Attention
+## Requirements
 
-如果全部导入本工具须要注意APP隐私权限配置,使用压缩解压第三方库时,要添加libz.tbd
+- iOS 17.0+
+- Swift 6+
+- Xcode 适配当前 SDK
 
 ## Installation
-
-PTools 当前支持 iOS 17.0+ 和 Swift 6.0。按需选择模块，避免无关功能进入宿主 App。
 
 ### Swift Package Manager
 
@@ -33,328 +29,89 @@ PTools 当前支持 iOS 17.0+ 和 Swift 6.0。按需选择模块，避免无关�
 https://github.com/crazypoo/PTools.git
 ```
 
-常用产品：`ptools`、`PooToolsNetWork`、`PooToolsImagePicker`、`PooToolsPhotoPicker`、
-`PooToolsVideoEditor`、`PooToolsMediaViewer`、`PooToolsRouter`。
+最常用的 product 是 `ptools`（Core）。其他功能 product 和 CocoaPods subspec 的对应关系见
+[模块选择与安装指南](docs/guides/MODULES.md)。
 
 ### CocoaPods
 
 ```ruby
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git', :tag => '5.9.6'
+pod 'PooTools/Core'
+pod 'PooTools/NetWork'
+pod 'PooTools/PhotoPicker'
 ```
 
-### 模块化安装集合
+按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
 
-| 集合 | CocoaPods | Swift Package Manager | 适用场景 |
-|---|---|---|---|
-| Minimal | `PooTools/Core` | `ptools` | Core、Base、Category、主题和基础权限能力 |
-| UIKit Base | `PooTools/Core` | `ptools` | `PTBaseViewController`、`PTBaseNavControl`、`PTCollectionView` 和通用 UI |
-| Network | `PooTools/NetWork` | `PooToolsNetWork` | Codable、上传、下载、缓存和取消 |
-| Media | `PooTools/ImagePicker`、`PooTools/PhotoPicker`、`PooTools/MediaViewer`、`PooTools/VideoEditor` | `PooToolsImagePicker`、`PooToolsPhotoPicker`、`PooToolsMediaViewer`、`PooToolsVideoEditor` | 按媒体能力选择最小入口 |
-| Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | LocalConsole、Inspector 和调试辅助 |
+## Quick Start
 
-`UIKit Base` 当前与 `Core` 共用一个公开安装入口，不增加只为文档而存在的虚拟 subspec。
-每个集合的直接依赖和不会带入的依赖见 [DEPENDENCIES.md](DEPENDENCIES.md)。
-
-### Swift 6 迁移要点
-
-- UI 配置、空状态和媒体保存回调在 `MainActor` 上执行。
-- ScrollBanner 新代码使用 `PTBannerView`；`PTCycleScrollView` 仍可使用，但已作为 deprecated
-  兼容入口转发到统一实现。
-- PageControl 的系统和自定义样式继续保留，进度更新、无障碍和 Reduce Motion 由统一基类处理。
-- 图片请求统一使用 `PTMediaLibManager.requestImage`；旧 `fetchImage` 入口继续兼容。
-- 媒体保存优先使用 `PTMediaSaveService.save(image:videoURL:completion:)`；旧保存入口保留并逐步弃用。
-- Network 普通请求和 Body 请求共用取消、缓存、去重和错误处理管线。
-
-### PTListViewController
-
-Core 提供 `PTListViewController` 作为高频列表页面基类。它只承载一个
-`PTCollectionView`：`.Normal` 适合类表格的纵向列表，其他 `viewType` 继续提供 Grid、
-Waterfall、Tag、Horizontal 和 Custom 集合布局。页面通过
-`makeListViewConfiguration()`、`configureListView(_:)` 和约束扩展点配置列表，不需要维护
-第二套 `UITableView` 数据源；现有 `PTCollectionView` delegate 和大标题滚动逻辑保持兼容。
-
-完整发布和迁移清单见 [RELEASE.md](RELEASE.md)，5.x Core 治理进度见
-[PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)，5.x 兼容入口和 6.0.0 删除条件见
-[MIGRATION_6.md](MIGRATION_6.md)。示例工程页面和模块回归入口见
-[EXAMPLE_MODULES_5_9.md](EXAMPLE_MODULES_5_9.md)。依赖和回归记录见 [DEPENDENCIES.md](DEPENDENCIES.md)
-与 [REGRESSION_MATRIX_5_9.md](REGRESSION_MATRIX_5_9.md)。
-
-### Picker 嵌入页面
-
-`PooTools/Picker` 的滚轮选择器支持先配置、后布局，不必通过 `show()` 才能使用：
+### Base 页面
 
 ```swift
-let picker = PTStringPickerView()
-picker.configure(title: "选择城市", data: ["北京", "上海", "广州"])
-view.addSubview(picker)
-picker.snp.makeConstraints { make in
-    make.leading.trailing.equalToSuperview()
-    make.bottom.equalTo(view.safeAreaLayoutGuide)
-    make.height.equalTo(300)
+@MainActor
+final class ExampleViewController: PTBaseViewController {
+    override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        .solid(.systemBackground)
+    }
 }
 ```
 
-如果需要覆盖层展示，继续调用兼容的 `picker.show()`；也可以使用
-`picker.show(in: hostView)` 指定宿主 View。直接嵌入时默认隐藏工具栏，设置
-`showsToolbarWhenEmbedded = true` 可以显示标题、取消和确定按钮。
+### 列表页面
 
-### Language
-
-语言功能随 `PooTools/Core` 提供，没有独立的 `LanguageSetting` subspec。语言资源
-支持英文、西班牙文、简体中文、繁体中文和香港繁体中文：
+`PTListViewController` 只承载一个 `PTCollectionView`，`.Normal` 可用于类表格纵向列表，其他
+布局类型继续提供 Grid、Waterfall、Tag、Horizontal 和 Custom。
 
 ```swift
-PTLanguage.share.setLanguage(.zh_Hans)
-let cancelTitle = "PT Button cancel".localized()
-let formatted = "PT Photo picker video size less than".localizedFormat(10)
+@MainActor
+final class ExampleListViewController: PTListViewController {
+    override func makeListViewConfiguration() -> PTCollectionViewConfig {
+        let configuration = PTCollectionViewConfig()
+        configuration.viewType = .Normal
+        return configuration
+    }
+}
 ```
 
-如果需要让界面在语言切换后刷新，可以使用 `pt_observerLanguage(didChanged:)`，页面
-销毁或不再需要监听时调用 `pt_removeObserverLanguage()`。监听器现在使用独立的通知 token，
-不会被宿主对象的其他 `removeObserver` 调用误删；同一有效语言重复赋值不会发送通知。旧的
-`PTLanguage.share.language = "zh-Hans"` 写法继续兼容。
+### 图片和媒体
 
-#### Xcode String Catalog 兼容
+图片加载优先使用 `PTLoadImageFunction.loadImage(source:)`；视频缩略图使用
+`PTVideoThumbnailService`；保存图片或视频使用 `PTMediaSaveService`。旧入口仍兼容，迁移条件见
+[MIGRATION_6.md](docs/migration/MIGRATION_6.md)。
 
-新项目可以在 Xcode 的 Localization 设置中使用 `Localizable.xcstrings`，不需要再手动
-创建每个语言的 `.lproj` 目录。只要 String Catalog 已加入 App target 或资源 bundle 的
-Target Membership，并且 Catalog 中的 key 与调用方一致，以下现有入口就可以直接使用：
-
-```swift
-PTLanguage.share.language = "es"
-let title = "PT Upgrade".localized()
-let customTitle = "welcome_title".localized(using: "AppLocalizable", in: .main)
-```
-
-PooTools 不会在运行时解析 `.xcstrings` 源文件，而是使用 Foundation 的
-`LocalizedStringResource` 读取 Xcode 编译后的 Catalog；因此同时兼容旧的
-`Localizable.strings` 和新的 String Catalog。Catalog 语言标识符建议使用 Xcode 提供的
-标准语言代码，例如 `en`、`es`、`zh-Hans` 和 `zh-Hant`。
-
-## Quality and release
-
-项目统一要求 iOS 17.0+ 与 Swift 6.0。提交代码前运行：
-
-```bash
-bash Scripts/validate_build_entries.sh
-bash Scripts/validate_release.sh
-bash Scripts/validate_quality_scans.sh
-bash Scripts/validate_migration_5_9_7.sh
-git diff --check
-```
-
-版本发布流程、版本号同步范围和发布前检查见 [RELEASE.md](RELEASE.md)。5.x Core
-的阶段任务和完成状态见 [PTools_PRE_6_ROADMAP.md](PTools_PRE_6_ROADMAP.md)，重复入口报告见
-`Scripts/report_duplicate_entries.sh`。
-
-其他模块根据项目需要选择：
-
-```ruby
-### 数据加密
-pod 'PooTools/DataEncrypt', :git => 'https://github.com/crazypoo/PTools.git'
-### 银行卡
-pod 'PooTools/BankCard', :git => 'https://github.com/crazypoo/PTools.git'
-### 生物验证(Face ID/Touch ID)
-pod 'PooTools/BilogyID', :git => 'https://github.com/crazypoo/PTools.git'
-### 日历
-pod 'PooTools/Calendar', :git => 'https://github.com/crazypoo/PTools.git'
-### 电话
-pod 'PooTools/Telephony', :git => 'https://github.com/crazypoo/PTools.git'
-### 勾选框
-pod 'PooTools/CheckBox', :git => 'https://github.com/crazypoo/PTools.git'
-### 检查是否包含敏感词
-pod 'PooTools/CheckDirtyWord', :git => 'https://github.com/crazypoo/PTools.git'
-### 验证码
-pod 'PooTools/CodeView', :git => 'https://github.com/crazypoo/PTools.git'
-### 国家代号
-pod 'PooTools/Country', :git => 'https://github.com/crazypoo/PTools.git'
-### 引导模式
-pod 'PooTools/Guide', :git => 'https://github.com/crazypoo/PTools.git'
-### 文字输入
-pod 'PooTools/Input', :git => 'https://github.com/crazypoo/PTools.git'
-### 数字键盘
-pod 'PooTools/CustomerNumberKeyboard', :git => 'https://github.com/crazypoo/PTools.git'
-### KeyChain
-pod 'PooTools/KeyChain', :git => 'https://github.com/crazypoo/PTools.git'
-### Label
-pod 'PooTools/CustomerLabel', :git => 'https://github.com/crazypoo/PTools.git'
-### 语言设置（已包含在 Core）
-pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
-### 线
-pod 'PooTools/Line', :git => 'https://github.com/crazypoo/PTools.git'
-### 加载功能
-pod 'PooTools/Loading', :git => 'https://github.com/crazypoo/PTools.git'
-### 媒体浏览
-pod 'PooTools/MediaViewer', :git => 'https://github.com/crazypoo/PTools.git'
-### Motion
-pod 'PooTools/Motion', :git => 'https://github.com/crazypoo/PTools.git'
-### 电话信息
-pod 'PooTools/PhoneInfo', :git => 'https://github.com/crazypoo/PTools.git'
-### 评分
-pod 'PooTools/RateView', :git => 'https://github.com/crazypoo/PTools.git'
-### 屏幕旋转
-pod 'PooTools/Rotation', :git => 'https://github.com/crazypoo/PTools.git'
-### PageControl
-pod 'PooTools/PageControl', :git => 'https://github.com/crazypoo/PTools.git'
-### Banner
-pod 'PooTools/ScrollBanner', :git => 'https://github.com/crazypoo/PTools.git'
-### SearchBar
-pod 'PooTools/SearchBar', :git => 'https://github.com/crazypoo/PTools.git'
-### Semgented
-pod 'PooTools/Segmented', :git => 'https://github.com/crazypoo/PTools.git'
-### Slider
-pod 'PooTools/Slider', :git => 'https://github.com/crazypoo/PTools.git'
-### 网络层
-pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git'
-### 检测更新
-pod 'PooTools/CheckUpdate', :git => 'https://github.com/crazypoo/PTools.git'
-### CollectionView Layout
-pod 'PooTools/Layout', :git => 'https://github.com/crazypoo/PTools.git'
-### Tabbar
-pod 'PooTools/Tabbar', :git => 'https://github.com/crazypoo/PTools.git'
-### 屏幕截图
-pod 'PooTools/SmartScreenshot', :git => 'https://github.com/crazypoo/PTools.git'
-### 解压
-pod 'PooTools/ZipArchive', :git => 'https://github.com/crazypoo/PTools.git'
-### GCDWebServer
-pod 'PooTools/GCDWebServer', :git => 'https://github.com/crazypoo/PTools.git'
-### 图片颜色
-pod 'PooTools/ImageColors', :git => 'https://github.com/crazypoo/PTools.git'
-### 头像头部居中
-pod 'PooTools/FocusFaceImageView', :git => 'https://github.com/crazypoo/PTools.git'
-### CollectionView/TableView Swipe
-pod 'PooTools/SwipeCell', :git => 'https://github.com/crazypoo/PTools.git'
-### PagingControl
-pod 'PooTools/PagingControl', :git => 'https://github.com/crazypoo/PTools.git'
-### 图片选择器
-pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git'
 ### Picker
-pod 'PooTools/Picker', :git => 'https://github.com/crazypoo/PTools.git'
-### 功能介绍
-pod 'PooTools/Instructions', :git => 'https://github.com/crazypoo/PTools.git'
-### App的Secheme
-pod 'PooTools/Appz', :git => 'https://github.com/crazypoo/PTools.git'
-### App启动时间检测
-pod 'PooTools/LaunchTimeProfiler', :git => 'https://github.com/crazypoo/PTools.git'
-### 语音识别
-pod 'PooTools/Speech', :git => 'https://github.com/crazypoo/PTools.git'
-### HealthKit
-pod 'PooTools/HealthKit', :git => 'https://github.com/crazypoo/PTools.git'
-### 颜色控件
-pod 'PooTools/ColorFunction', :git => 'https://github.com/crazypoo/PTools.git'
-### 弹出框控件
-pod 'PooTools/PopoverKit', :git => 'https://github.com/crazypoo/PTools.git'
-### 扫描二维码/条形码控件
-pod 'PooTools/ScanQRCode', :git => 'https://github.com/crazypoo/PTools.git'
-### Stepper控件
-pod 'PooTools/Stepper', :git => 'https://github.com/crazypoo/PTools.git'
-### Location相關
-pod 'PooTools/Location', :git => 'https://github.com/crazypoo/PTools.git'
-### Permission相关
-pod 'PooTools/NotificationPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/CameraPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/LocationPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/CalendarPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/MotionPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/TrackingPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/RemindersPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/SpeechRecognizerPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/HealthPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/FaceIDPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/ContactsPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/MicPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/MeidaPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/BluetoothPermission', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/SiriPermission', :git => 'https://github.com/crazypoo/PTools.git'
 
-SwiftPM 项目可以只引入权限 Core 和需要的系统权限模块，避免把 `ptools` 的 UI/网络依赖带入权限服务：
+- 单图片、单视频和相机：`PooToolsImagePicker` / `PooTools/ImagePicker`。
+- 多选、原图、Live Photo、自定义 PhotoKit 浏览：`PooToolsPhotoPicker` / `PooTools/PhotoPicker`。
+- 需要把滚轮选择器放入已有页面时，先 `configure(...)`，再添加到宿主 View；覆盖层展示才调用 `show()`。
 
-```swift
-dependencies: [
-    .product(name: "PToolsPermissionCore", package: "ptools"),
-    .product(name: "PTCameraPermission", package: "ptools")
-]
-```
+### Network
 
-需要设置页和权限 UI 适配时再增加 `PToolsPermissionUI`。旧 CocoaPods 权限 subspec 和 `PTPermission` 入口继续保留，迁移期间无需一次性改动业务代码。系统权限请求优先使用 `await permission.request()` 或 `await permission.requestStatus()`；旧 callback 入口仍可用。
+新代码使用类型化 Codable 请求，普通参数、Body、上传、下载和取消统一由 Network 内部请求管线处理。
+动态 `Any` 与 KakaJSON 入口仅作为兼容层保留。
 
-### Harbeth照片特效
-pod 'PooTools/Harbeth', :git => 'https://github.com/crazypoo/PTools.git'
-### ScrollRefresh刷新
-pod 'PooTools/ScrollRefresh', :git => 'https://github.com/crazypoo/PTools.git'
-### SVG相关(关联了kingfisher)
-pod 'PooTools/SVG', :git => 'https://github.com/crazypoo/PTools.git'
-### 分享
-pod 'PooTools/Share', :git => 'https://github.com/crazypoo/PTools.git'
-### FloatPanel
-pod 'PooTools/FloatPanel', :git => 'https://github.com/crazypoo/PTools.git'
+### Debug
 
-FloatPanel 支持 intrinsic、固定高度、百分比、顶部间距和全屏尺寸。所有 UI 配置与回调都应在主线程使用：
+Debug 和 PTInstruments 不会自动进入 Core 运行路径；测试环境显式安装 `PooToolsDEBUG` 后，
+使用 `LocalConsole.console(for:)` 或 `PTInstrumentRecorder`。多 Scene 页面应传入明确的
+`UIWindowScene`，避免控制台显示到错误窗口。
 
-```swift
-let sheet = PTSheetViewController(
-    controller: contentViewController,
-    sizes: [.intrinsic, .percent(0.8), .fullscreen]
-)
-sheet.didDismiss = { _ in
-    // 面板完成关闭后只回调一次
-}
-present(sheet, animated: true)
-```
+## Documentation
 
-如果内容控制器包含 `UIScrollView`，在内容控制器中注册它，让面板在滚动到顶部时接管上下拖动：
+- [模块选择与安装](docs/guides/MODULES.md)
+- [Example 页面与回归入口](docs/guides/EXAMPLE.md)
+- [当前架构](docs/architecture/ARCHITECTURE.md)
+- [Debug 与 PTInstruments](docs/architecture/DEBUG_AND_INSTRUMENTS.md)
+- [依赖与模块边界](docs/architecture/DEPENDENCIES.md)
+- [5.x 到 6.0 迁移](docs/migration/MIGRATION_6.md)
+- [发布流程](docs/maintainers/RELEASE.md)
+- [质量与验收](docs/maintainers/QUALITY.md)
+- [路线图](ROADMAP.md)
+- [变更记录](CHANGELOG.md)
 
-```swift
-sheetViewController?.handleScrollView(tableView)
-```
+## Privacy and Permissions
 
-`PTSheetOptions.pullDismissThreshold` 是新的正确拼写；旧的
-`pullDismissThreshod` 继续保留并标记为 deprecated。键盘、旋转、动态字体和
-NavigationController intrinsic 高度由 FloatPanel 自动重新计算。
-### 空数据
-pod 'PooTools/ListEmptyData', :git => 'https://github.com/crazypoo/PTools.git'
-### DEBUG工具
-pod 'PooTools/DEBUG', :git => 'https://github.com/crazypoo/PTools.git'
-pod 'PooTools/DEBUG_TrackingEyes', :git => 'https://github.com/crazypoo/PTools.git'
-### Vision
-pod 'PooTools/Vision', :git => 'https://github.com/crazypoo/PTools.git'
-### 导航栏相关
-pod 'PooTools/NavBarController', :git => 'https://github.com/crazypoo/PTools.git'
-### 软件内通知栏
-pod 'PooTools/NotificationBanner', :git => 'https://github.com/crazypoo/PTools.git'
-### Controller Router
-pod 'PooTools/Router', :git => 'https://github.com/crazypoo/PTools.git'
-### Ping
-pod 'PooTools/Ping', :git => 'https://github.com/crazypoo/PTools.git'
-### 视频编辑
-pod 'PooTools/VideoEditor', :git => 'https://github.com/crazypoo/PTools.git'
-### APP安全
-pod 'PooTools/SecuritySuite', :git => 'https://github.com/crazypoo/PTools.git'
-### SF
-pod 'PooTools/SF', :git => 'https://github.com/crazypoo/PTools.git'
-### iOS17Tips
-pod 'PooTools/iOS17Tips', :git => 'https://github.com/crazypoo/PTools.git'
-### WhatsNewsKit
-pod 'PooTools/WhatsNewsKit', :git => 'https://github.com/crazypoo/PTools.git'
-### FilterCamera
-pod 'PooTools/FilterCamera', :git => 'https://github.com/crazypoo/PTools.git'
-### ImageEditor
-pod 'PooTools/ImageEditor', :git => 'https://github.com/crazypoo/PTools.git'
-### Circle
-pod 'PooTools/Circle', :git => 'https://github.com/crazypoo/PTools.git'
-### MessageKit
-pod 'PooTools/MessageKit', :git => 'https://github.com/crazypoo/PTools.git'
-### IAPManager
-pod 'PooTools/IAP', :git => 'https://github.com/crazypoo/PTools.git'
-### LivePhoto
-pod 'PooTools/LivePhoto', :git => 'https://github.com/crazypoo/PTools.git'
-```
-## Author
-
-crazypoo, 273277355@qq.com
+使用相机、相册、麦克风、定位、联系人、蓝牙、健康数据或其他系统能力时，请在宿主 App 的
+Info.plist 配置对应的隐私权限说明。压缩/解压相关能力按项目需要链接 `libz.tbd`。
 
 ## License
 
-PooTools is available under the MIT license. See the LICENSE file for more info.
+PooTools 使用 MIT License，详见 [LICENSE](LICENSE)。

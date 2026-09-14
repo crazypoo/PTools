@@ -2,10 +2,11 @@
 
 require "json"
 require "fileutils"
+require "time"
 
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
-report_dir = File.join(repo_root, "report")
+report_dir = File.join(repo_root, "report", "current")
 FileUtils.mkdir_p(report_dir)
 
 patterns = {
@@ -38,14 +39,26 @@ end
 
 payload = {
   "schema_version" => 1,
-  "baseline" => "5.9.x working-tree scan",
+  "baseline" => "current working-tree scan",
+  "generator" => "Scripts/report_concurrency_5_9.rb",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "counts" => counts,
   "locations" => locations
 }
-File.write(File.join(report_dir, "concurrency_5_9.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(report_dir, "concurrency.json"), JSON.pretty_generate(payload) + "\n")
 
 markdown = []
-markdown << "# PTools 5.9.x Swift 6 并发扫描"
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
+markdown << "# PTools 当前 Swift 6 并发扫描"
 markdown << ""
 markdown << "本报告只记录现状；系统对象兼容包装器必须继续登记在 Scripts/unchecked_sendable_allowlist.txt。"
 markdown << ""
@@ -59,5 +72,5 @@ markdown << "- 业务共享状态不得新增 @unchecked Sendable。"
 markdown << "- 生产代码不得新增 nonisolated(unsafe)。"
 markdown << "- Any、Progress 和 UIKit/PhotoKit 对象不得直接跨 actor 传递。"
 markdown << "- Task.detached 只能用于明确不继承 actor 状态的纯后台工作。"
-File.write(File.join(report_dir, "concurrency_5_9.md"), markdown.join("\n") + "\n")
-puts "Concurrency 5.9 report: #{counts.inspect}"
+File.write(File.join(report_dir, "concurrency.md"), markdown.join("\n") + "\n")
+puts "Concurrency current report: #{counts.inspect}"

@@ -2,10 +2,11 @@
 
 require "json"
 require "fileutils"
+require "time"
 
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
-report_dir = File.join(repo_root, "report")
+report_dir = File.join(repo_root, "report", "current")
 FileUtils.mkdir_p(report_dir)
 
 entries = []
@@ -49,13 +50,25 @@ end
 
 payload = {
   "schema_version" => 2,
+  "generator" => "Scripts/report_singletons_5_9.rb",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "shared_call_count" => shared_calls,
   "declarations" => entries
 }
-File.write(File.join(report_dir, "singletons_5_9.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(report_dir, "singletons.json"), JSON.pretty_generate(payload) + "\n")
 
 markdown = []
-markdown << "# PTools 5.9.x 单例范围盘点"
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
+markdown << "# PTools 当前单例范围盘点"
 markdown << ""
 markdown << "本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。"
 markdown << ""
@@ -70,5 +83,5 @@ entries.each do |entry|
   action = entry["action"].gsub("|", "\\|")
   markdown << "| #{entry["path"]}:#{entry["line"]} | #{entry["name"]} | #{entry["category"]} #{scope} | #{declaration} | #{action} |"
 end
-File.write(File.join(report_dir, "singletons_5_9.md"), markdown.join("\n") + "\n")
-puts "Singleton 5.9 report: declarations=#{entries.length}, shared_calls=#{shared_calls}"
+File.write(File.join(report_dir, "singletons.md"), markdown.join("\n") + "\n")
+puts "Singleton current report: declarations=#{entries.length}, shared_calls=#{shared_calls}"

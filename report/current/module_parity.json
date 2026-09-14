@@ -1,0 +1,836 @@
+{
+  "schema_version": 1,
+  "generator": "Scripts/validate_module_parity.sh",
+  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
+  "generated_at": "2026-09-14T05:03:16Z",
+  "spm_products": [
+    "PTBluetoothPermission",
+    "PTCalendarPermission",
+    "PTCameraPermission",
+    "PTContactsPermission",
+    "PTFaceIDPermission",
+    "PTHealthPermission",
+    "PTLocationPermission",
+    "PTMediaPermission",
+    "PTMicPermission",
+    "PTMotionPermission",
+    "PTNotificationPermission",
+    "PTRemindersPermission",
+    "PTSiriPermission",
+    "PTSpeechPermission",
+    "PTTrackingPermission",
+    "PToolsCore",
+    "PToolsPermissionCore",
+    "PToolsPermissionUI",
+    "PToolsUIFoundation",
+    "PooToolsAll",
+    "PooToolsBankCard",
+    "PooToolsBioID",
+    "PooToolsCalendar",
+    "PooToolsCheckBox",
+    "PooToolsCheckDirtyWord",
+    "PooToolsCheckUpdate",
+    "PooToolsChinesePinyin",
+    "PooToolsCircle",
+    "PooToolsCodeView",
+    "PooToolsContact",
+    "PooToolsCountry",
+    "PooToolsCustomerLabel",
+    "PooToolsDEBUG",
+    "PooToolsDEBUGTrackingEyes",
+    "PooToolsDataEncrypt",
+    "PooToolsGuide",
+    "PooToolsHandSign",
+    "PooToolsHarbethKit",
+    "PooToolsHeartRate",
+    "PooToolsHud",
+    "PooToolsIAP",
+    "PooToolsImageEditor",
+    "PooToolsImagePicker",
+    "PooToolsInput",
+    "PooToolsKeyChain",
+    "PooToolsKeyboard",
+    "PooToolsLaunchTimeProfiler",
+    "PooToolsLayout",
+    "PooToolsLivePhoto",
+    "PooToolsLoading",
+    "PooToolsLocation",
+    "PooToolsMediaViewer",
+    "PooToolsMessageKit",
+    "PooToolsMotion",
+    "PooToolsNetWork",
+    "PooToolsNetworkSpeedTest",
+    "PooToolsOSSKitSpeech",
+    "PooToolsPDF",
+    "PooToolsPageControl",
+    "PooToolsPagingControl",
+    "PooToolsPhoneInfo",
+    "PooToolsPhotoPicker",
+    "PooToolsPicker",
+    "PooToolsPing",
+    "PooToolsProgressBar",
+    "PooToolsRateView",
+    "PooToolsRouter",
+    "PooToolsSVG",
+    "PooToolsScanQRCode",
+    "PooToolsScrollBanner",
+    "PooToolsSearchBar",
+    "PooToolsSegmented",
+    "PooToolsShare",
+    "PooToolsSlider",
+    "PooToolsSmartScreenshot",
+    "PooToolsSocketKit",
+    "PooToolsSpeedPanel",
+    "PooToolsStepCount",
+    "PooToolsStepper",
+    "PooToolsTelephony",
+    "PooToolsTipsView",
+    "PooToolsVideoEditor",
+    "PooToolsVision",
+    "PooToolsWhatsNewsKit",
+    "PooToolsiOS17Tips",
+    "ptools"
+  ],
+  "aggregate_products": {
+    "spm": [
+      "PooToolsAll"
+    ],
+    "cocoapods": [
+      "InputAll"
+    ]
+  },
+  "matched": [
+    "BankCard",
+    "BilogyID",
+    "BluetoothPermission",
+    "Calendar",
+    "CalendarPermission",
+    "CameraPermission",
+    "CheckBox",
+    "CheckDirtyWord",
+    "CheckUpdate",
+    "ChinesePinyin",
+    "Circle",
+    "CodeView",
+    "Contact",
+    "ContactsPermission",
+    "Core",
+    "Country",
+    "CustomerLabel",
+    "CustomerNumberKeyboard",
+    "DEBUG",
+    "DEBUG_TrackingEyes",
+    "DataEncrypt",
+    "FaceIDPermission",
+    "Guide",
+    "HandSign",
+    "HarbethKit",
+    "HealthPermission",
+    "HeartRate",
+    "Hud",
+    "IAP",
+    "ImageEditor",
+    "ImagePicker",
+    "Input",
+    "KeyChain",
+    "LaunchTimeProfiler",
+    "Layout",
+    "LivePhoto",
+    "Loading",
+    "Location",
+    "LocationPermission",
+    "MediaViewer",
+    "MeidaPermission",
+    "MessageKit",
+    "MicPermission",
+    "Motion",
+    "MotionPermission",
+    "NetWork",
+    "NetworkSpeedTest",
+    "NotificationPermission",
+    "OSSKitSpeech",
+    "PDF",
+    "PageControl",
+    "PagingControl",
+    "PhoneInfo",
+    "PhotoPicker",
+    "Picker",
+    "Ping",
+    "ProgressBar",
+    "RateView",
+    "RemindersPermission",
+    "Router",
+    "SVG",
+    "ScanQRCode",
+    "ScrollBanner",
+    "SearchBar",
+    "Segmented",
+    "Share",
+    "SiriPermission",
+    "Slider",
+    "SmartScreenshot",
+    "SocketKit",
+    "SpeechRecognizerPermission",
+    "SpeedPanel",
+    "StepCount",
+    "Stepper",
+    "Telephony",
+    "TipsView",
+    "TrackingPermission",
+    "VideoEditor",
+    "Vision",
+    "WhatsNewsKit",
+    "iOS17Tips"
+  ],
+  "spm_only": [
+    "PToolsCore",
+    "PToolsPermissionCore",
+    "PToolsPermissionUI",
+    "PToolsUIFoundation"
+  ],
+  "pod_only": [
+    "Appz",
+    "FilterCamera",
+    "Flag",
+    "GCDWebServer",
+    "InputAll",
+    "Instructions",
+    "MXMetricManagerKit",
+    "NFCKit",
+    "NotificationBanner",
+    "PopoverKit",
+    "SecuritySuite",
+    "Tabbar",
+    "VideoCache",
+    "WebKit",
+    "ZipArchive"
+  ],
+  "source_drift": [],
+  "dependency_drift": [
+    {
+      "module": "BilogyID",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "FaceIDPermission"
+      ],
+      "cocoapods": [
+        "Core",
+        "FaceIDPermission",
+        "KeyChain"
+      ]
+    },
+    {
+      "module": "BluetoothPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "CalendarPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "CameraPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "CheckUpdate",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Swift-JWT"
+      ],
+      "cocoapods": [
+        "SwiftJWT"
+      ]
+    },
+    {
+      "module": "ContactsPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "Core",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsCore",
+        "PToolsPermissionCore",
+        "PToolsUIFoundation"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Core",
+      "field": "third_party_dependencies",
+      "spm": [
+        "AttributedString",
+        "CocoaLumberjack",
+        "DeviceKit",
+        "FlagKit",
+        "IOSSecuritySuite",
+        "IQKeyboardManager",
+        "Instructions",
+        "KakaJSON",
+        "Kingfisher",
+        "NotificationBanner",
+        "Popovers",
+        "SafeSFSymbols",
+        "SmartCodable",
+        "SnapKit",
+        "SwiftDate",
+        "SwifterSwift",
+        "ZipArchive",
+        "lottie-ios"
+      ],
+      "cocoapods": [
+        "AttributedString",
+        "CocoaLumberjack/Swift",
+        "DeviceKit",
+        "IQKeyboardManagerSwift",
+        "IQKeyboardToolbarManager",
+        "KakaJSON",
+        "Kingfisher",
+        "SafeSFSymbols",
+        "SmartCodable",
+        "SmartCodable/Inherit",
+        "SnapKit",
+        "SwiftDate",
+        "SwifterSwift",
+        "lottie-ios"
+      ]
+    },
+    {
+      "module": "FaceIDPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "HealthPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "ImageEditor",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Harbeth"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "LocationPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "MeidaPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "MicPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "MotionPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "NetWork",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "Loading",
+        "PToolsCore"
+      ],
+      "cocoapods": [
+        "Core",
+        "Loading"
+      ]
+    },
+    {
+      "module": "NotificationPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "PagingControl",
+      "field": "third_party_dependencies",
+      "spm": [
+        "JXPagingView",
+        "JXSegmentedView"
+      ],
+      "cocoapods": [
+        "JXPagingView/Paging",
+        "JXSegmentedView"
+      ]
+    },
+    {
+      "module": "PhotoPicker",
+      "field": "internal_dependencies",
+      "spm": [
+        "CameraPermission",
+        "Core",
+        "ImagePicker",
+        "Loading",
+        "NetWork"
+      ],
+      "cocoapods": [
+        "Core",
+        "ImagePicker",
+        "Loading",
+        "NetWork"
+      ]
+    },
+    {
+      "module": "Picker",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit",
+        "SwifterSwift"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "RemindersPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "SVG",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Kingfisher",
+        "PocketSVG"
+      ],
+      "cocoapods": [
+        "PocketSVG",
+        "Protobuf",
+        "SVGAPlayer"
+      ]
+    },
+    {
+      "module": "ScanQRCode",
+      "field": "internal_dependencies",
+      "spm": [
+        "CameraPermission",
+        "Core",
+        "ImagePicker",
+        "PhotoPicker"
+      ],
+      "cocoapods": [
+        "CameraPermission",
+        "Core",
+        "PhotoPicker"
+      ]
+    },
+    {
+      "module": "SiriPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "SpeechRecognizerPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "TrackingPermission",
+      "field": "internal_dependencies",
+      "spm": [
+        "PToolsPermissionCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
+      "module": "VideoEditor",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Harbeth"
+      ],
+      "cocoapods": []
+    }
+  ],
+  "settings_drift": [
+    {
+      "module": "BluetoothPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_BLUETOOTH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_BLUETOOTH"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "CalendarPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CALENDAR",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CALENDAR"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "CameraPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CAMERA",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CAMERA"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "ContactsPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CONTACTS",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_CONTACTS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Core",
+      "spm": {
+        "defines": [
+          "POOTOOLS_APPZ",
+          "POOTOOLS_CGDWEBSERVER",
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_FLAG",
+          "POOTOOLS_INSTRUCTIONS",
+          "POOTOOLS_LAUNCHTIMEPROFILER",
+          "POOTOOLS_NOTIFICATIONBANNER",
+          "POOTOOLS_PICKER",
+          "POOTOOLS_POPOVERKIT",
+          "POOTOOLS_SECURITYSUITE",
+          "POOTOOLS_SPLIT_CORE",
+          "POOTOOLS_SPLIT_PERMISSION_CORE",
+          "POOTOOLS_SPLIT_UIFOUNDATION",
+          "POOTOOLS_TABBAR",
+          "POOTOOLS_VIDEOCACHE",
+          "POOTOOLS_ZIPARCHINE"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "FaceIDPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_FACEIDPERMISSION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_FACEIDPERMISSION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "HealthPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_HEALTH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_HEALTH"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "LocationPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_LOCATION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_LOCATION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "MeidaPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MEDIA",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MEDIA"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "MicPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MIC",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MIC"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "MotionPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MOTION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_MOTION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "NotificationPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_NOTIFICATION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_NOTIFICATION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "RemindersPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_REMINDERS",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_REMINDERS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "SiriPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_SIRI",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_SIRI"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "SpeechRecognizerPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_SPEECH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_SPEECH"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "TrackingPermission",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_TRACKING",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
+        ],
+        "upcoming_features": []
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_PERMISSION_TRACKING"
+        ],
+        "upcoming_features": []
+      }
+    }
+  ],
+  "status": "baseline",
+  "fingerprint": "a2eece8dd925e93d8a84ac2efab6c5b06d779675e636f9d6858799cd8135812b"
+}

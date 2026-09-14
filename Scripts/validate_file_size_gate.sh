@@ -8,7 +8,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 allowlist="$repo_root/Scripts/file_size_allowlist.txt"
-report_dir="$repo_root/report"
+report_dir="$repo_root/report/current"
 mkdir -p "$report_dir"
 
 while IFS='|' read -r path ticket reason; do
@@ -62,7 +62,9 @@ fi
 
 REPORT_DIR="$report_dir" ROWS="$(printf '%s\n' "${rows[@]}")" ruby <<'RUBY'
 require "json"
+require "time"
 
+repo_root = Dir.pwd
 rows = ENV.fetch("ROWS").lines(chomp: true).filter_map do |row|
   path, lines, classification = row.split("|", 3)
   next if path.to_s.empty?
@@ -70,6 +72,9 @@ rows = ENV.fetch("ROWS").lines(chomp: true).filter_map do |row|
 end
 payload = {
   "schema_version" => 1,
+  "generator" => "Scripts/validate_file_size_gate.sh",
+  "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
+  "generated_at" => Time.now.utc.iso8601,
   "thresholds" => { "warning" => 1000, "architecture_exception" => 1500, "hard_failure" => 2000 },
   "files" => rows,
   "warning_count" => rows.count { |row| row["classification"] == "warning" },
@@ -77,10 +82,19 @@ payload = {
   "hard_limit_allowlisted_count" => rows.count { |row| row["classification"] == "hard_limit_allowlisted" }
 }
 directory = ENV.fetch("REPORT_DIR")
-File.write(File.join(directory, "file_size_5_8.json"), JSON.pretty_generate(payload) + "\n")
+File.write(File.join(directory, "large_files.json"), JSON.pretty_generate(payload) + "\n")
 
 markdown = []
-markdown << "# 5.8 文件尺寸门禁"
+markdown << "<!--"
+markdown << "AUTO-GENERATED FILE."
+markdown << "DO NOT EDIT MANUALLY."
+markdown << ""
+markdown << "Generator: #{payload["generator"]}"
+markdown << "Source revision: #{payload["source_revision"]}"
+markdown << "Generated at: #{payload["generated_at"]}"
+markdown << "-->"
+markdown << ""
+markdown << "# 当前文件尺寸门禁"
 markdown << ""
 markdown << "阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。"
 markdown << ""
@@ -94,7 +108,7 @@ rows.select { |row| row["classification"] != "ok" }.each do |row|
   markdown << "| `#{row["path"]}` | #{row["lines"]} | #{row["classification"]} |"
 end
 markdown << "| 无 | 0 | ok |" if rows.none? { |row| row["classification"] != "ok" }
-File.write(File.join(directory, "file_size_5_8.md"), markdown.join("\n") + "\n")
+File.write(File.join(directory, "large_files.md"), markdown.join("\n") + "\n")
 RUBY
 
 printf 'PASS: file-size gate (warnings=%d, exceptions=%d)\n' "$warning_count" "$exception_count"
