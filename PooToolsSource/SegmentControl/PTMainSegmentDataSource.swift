@@ -57,7 +57,7 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Send
             
             self.dataSource.append(contentsOf: newModels)
             
-            for (index, model) in (self.dataSource as! [PTMainSegmentModel]).enumerated() {
+            for (index, model) in self.dataSource.compactMap({ $0 as? PTMainSegmentModel }).enumerated() {
                 if index == selectedIndex {
                     model.isSelected = true
                     model.titleCurrentColor = model.titleSelectedColor

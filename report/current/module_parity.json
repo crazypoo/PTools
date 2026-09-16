@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:03:16Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T05:01:39Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -55,10 +55,12 @@
     "PooToolsLivePhoto",
     "PooToolsLoading",
     "PooToolsLocation",
+    "PooToolsMediaCore",
     "PooToolsMediaViewer",
     "PooToolsMessageKit",
     "PooToolsMotion",
     "PooToolsNetWork",
+    "PooToolsNetwork",
     "PooToolsNetworkSpeedTest",
     "PooToolsOSSKitSpeech",
     "PooToolsPDF",
@@ -139,6 +141,7 @@
     "Loading",
     "Location",
     "LocationPermission",
+    "MediaCore",
     "MediaViewer",
     "MeidaPermission",
     "MessageKit",
@@ -150,6 +153,10 @@
     "NotificationPermission",
     "OSSKitSpeech",
     "PDF",
+    "PToolsCore",
+    "PToolsPermissionCore",
+    "PToolsPermissionUI",
+    "PToolsUIFoundation",
     "PageControl",
     "PagingControl",
     "PhoneInfo",
@@ -182,12 +189,7 @@
     "WhatsNewsKit",
     "iOS17Tips"
   ],
-  "spm_only": [
-    "PToolsCore",
-    "PToolsPermissionCore",
-    "PToolsPermissionUI",
-    "PToolsUIFoundation"
-  ],
+  "spm_only": [],
   "pod_only": [
     "Appz",
     "FilterCamera",
@@ -205,7 +207,15 @@
     "WebKit",
     "ZipArchive"
   ],
-  "source_drift": [],
+  "source_drift": [
+    {
+      "module": "MeidaPermission",
+      "spm": [
+        "MeidaLibraryPermission"
+      ],
+      "cocoapods": []
+    }
+  ],
   "dependency_drift": [
     {
       "module": "BilogyID",
@@ -231,26 +241,6 @@
       ]
     },
     {
-      "module": "CalendarPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "CameraPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
       "module": "CheckUpdate",
       "field": "third_party_dependencies",
       "spm": [
@@ -261,16 +251,6 @@
       ]
     },
     {
-      "module": "ContactsPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
       "module": "Core",
       "field": "internal_dependencies",
       "spm": [
@@ -278,7 +258,9 @@
         "PToolsPermissionCore",
         "PToolsUIFoundation"
       ],
-      "cocoapods": []
+      "cocoapods": [
+        "PToolsUIFoundation"
+      ]
     },
     {
       "module": "Core",
@@ -287,20 +269,15 @@
         "AttributedString",
         "CocoaLumberjack",
         "DeviceKit",
-        "FlagKit",
-        "IOSSecuritySuite",
         "IQKeyboardManager",
-        "Instructions",
         "KakaJSON",
         "Kingfisher",
         "NotificationBanner",
-        "Popovers",
         "SafeSFSymbols",
         "SmartCodable",
         "SnapKit",
         "SwiftDate",
         "SwifterSwift",
-        "ZipArchive",
         "lottie-ios"
       ],
       "cocoapods": [
@@ -321,26 +298,6 @@
       ]
     },
     {
-      "module": "FaceIDPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "HealthPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
       "module": "ImageEditor",
       "field": "third_party_dependencies",
       "spm": [
@@ -349,43 +306,13 @@
       "cocoapods": []
     },
     {
-      "module": "LocationPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
       "module": "MeidaPermission",
       "field": "internal_dependencies",
       "spm": [
         "PToolsPermissionCore"
       ],
       "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "MicPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "MotionPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
+        "MeidaPermission"
       ]
     },
     {
@@ -399,16 +326,6 @@
       "cocoapods": [
         "Core",
         "Loading"
-      ]
-    },
-    {
-      "module": "NotificationPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
       ]
     },
     {
@@ -431,13 +348,13 @@
         "Core",
         "ImagePicker",
         "Loading",
-        "NetWork"
+        "MediaCore"
       ],
       "cocoapods": [
         "Core",
         "ImagePicker",
         "Loading",
-        "NetWork"
+        "MediaCore"
       ]
     },
     {
@@ -450,13 +367,11 @@
       "cocoapods": []
     },
     {
-      "module": "RemindersPermission",
+      "module": "RateView",
       "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
+      "spm": [],
       "cocoapods": [
-        "Core"
+        "PToolsUIFoundation"
       ]
     },
     {
@@ -498,23 +413,11 @@
       ]
     },
     {
-      "module": "SpeechRecognizerPermission",
+      "module": "Slider",
       "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
+      "spm": [],
       "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "TrackingPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
+        "PToolsUIFoundation"
       ]
     },
     {
@@ -606,19 +509,14 @@
           "POOTOOLS_APPZ",
           "POOTOOLS_CGDWEBSERVER",
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_FLAG",
-          "POOTOOLS_INSTRUCTIONS",
           "POOTOOLS_LAUNCHTIMEPROFILER",
           "POOTOOLS_NOTIFICATIONBANNER",
           "POOTOOLS_PICKER",
-          "POOTOOLS_POPOVERKIT",
-          "POOTOOLS_SECURITYSUITE",
           "POOTOOLS_SPLIT_CORE",
           "POOTOOLS_SPLIT_PERMISSION_CORE",
           "POOTOOLS_SPLIT_UIFOUNDATION",
           "POOTOOLS_TABBAR",
-          "POOTOOLS_VIDEOCACHE",
-          "POOTOOLS_ZIPARCHINE"
+          "POOTOOLS_VIDEOCACHE"
         ],
         "upcoming_features": [
           "InferSendableFromCaptures",
@@ -627,7 +525,8 @@
       },
       "cocoapods": {
         "defines": [
-          "POOTOOLS_COCOAPODS"
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_SPLIT_UIFOUNDATION"
         ],
         "upcoming_features": []
       }
@@ -687,6 +586,20 @@
       }
     },
     {
+      "module": "MediaCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "MeidaPermission",
       "spm": {
         "defines": [
@@ -697,10 +610,7 @@
         "upcoming_features": []
       },
       "cocoapods": {
-        "defines": [
-          "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_MEDIA"
-        ],
+        "defines": [],
         "upcoming_features": []
       }
     },
@@ -755,6 +665,62 @@
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_PERMISSION_NOTIFICATION"
         ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "PToolsCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "PToolsPermissionCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "PToolsPermissionUI",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "PToolsUIFoundation",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
         "upcoming_features": []
       }
     },
@@ -832,5 +798,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "a2eece8dd925e93d8a84ac2efab6c5b06d779675e636f9d6858799cd8135812b"
+  "fingerprint": "08c90318a34d8bf66cc46c6c56ad0272185f83c0b487c4b29abe8b1e20ce5af7"
 }

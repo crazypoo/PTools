@@ -192,7 +192,7 @@ public class PTHeartRateViewController: PTBaseViewController {
             make.top.equalTo(self.pulseRate.snp.bottom)
         }
         
-        if !Gobal_device_info.isSimulator {
+        if !deviceInfo.isSimulator {
             PTGCDManager.shared.delayOnMain(time: 0.1) {
                 self.initVideoCapture()
             }

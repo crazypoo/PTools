@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:12Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:30Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -283,6 +283,7 @@
         "PooToolsLivePhoto",
         "PooToolsLoading",
         "PooToolsLocation",
+        "PooToolsMediaCore",
         "PooToolsMediaViewer",
         "PooToolsMessageKit",
         "PooToolsMotion",
@@ -662,6 +663,17 @@
       ]
     },
     {
+      "name": "PooToolsMediaCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsMediaCore"
+      ]
+    },
+    {
       "name": "PooToolsMediaViewer",
       "type": {
         "library": [
@@ -696,6 +708,17 @@
     },
     {
       "name": "PooToolsNetWork",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsNetWork"
+      ]
+    },
+    {
+      "name": "PooToolsNetwork",
       "type": {
         "library": [
           "automatic"
@@ -1213,31 +1236,6 @@
     {
       "sourceControl": [
         {
-          "identity": "flagkit",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/madebybowtie/FlagKit.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "exact": [
-              "2.4.0"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "harbeth",
           "location": {
             "remote": [
@@ -1251,62 +1249,6 @@
             "range": [
               {
                 "lowerBound": "1.1.0",
-                "upperBound": "2.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "instructions",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/ephread/Instructions.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.2.0",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "iossecuritysuite",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/securing/IOSSecuritySuite.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.9.0",
                 "upperBound": "2.0.0"
               }
             ]
@@ -1615,34 +1557,6 @@
     {
       "sourceControl": [
         {
-          "identity": "popovers",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/aheze/Popovers.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.3.0",
-                "upperBound": "2.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "safesfsymbols",
           "location": {
             "remote": [
@@ -1848,39 +1762,11 @@
           ]
         }
       ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "ziparchive",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/ZipArchive/ZipArchive.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.6.0",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
     }
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 18,
+    "direct_third_party_count": 13,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -3074,19 +2960,7 @@
       "path": "PooToolsSource/CheckBox",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
-        {
-          "name": "ptools",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "ptools",
-              null
-            ]
-          }
-        }
-      ],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -3121,19 +2995,7 @@
           }
         }
       ],
-      "internal_dependencies": [
-        {
-          "name": "ptools",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "ptools",
-              null
-            ]
-          }
-        }
-      ],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -4003,6 +3865,17 @@
           }
         },
         {
+          "name": "PooToolsMediaCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsMediaCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsPhotoPicker",
           "kind": "internal",
           "package": null,
@@ -4167,19 +4040,7 @@
       "path": "PooToolsSource/KeyChain",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
-        {
-          "name": "ptools",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "ptools",
-              null
-            ]
-          }
-        }
-      ],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -4465,6 +4326,34 @@
       ]
     },
     {
+      "name": "PooToolsMediaCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsMediaCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PooToolsMediaViewer",
       "type": "regular",
       "path": "PooToolsSource/MediaViewer",
@@ -4483,12 +4372,12 @@
           }
         },
         {
-          "name": "PooToolsNetWork",
+          "name": "PooToolsMediaCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "PooToolsNetWork",
+              "PooToolsMediaCore",
               null
             ]
           }
@@ -4966,19 +4855,7 @@
       "path": "PooToolsSource/PhoneInfo",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
-        {
-          "name": "ptools",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "ptools",
-              null
-            ]
-          }
-        }
-      ],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -5043,12 +4920,12 @@
           }
         },
         {
-          "name": "PooToolsNetWork",
+          "name": "PooToolsMediaCore",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
-              "PooToolsNetWork",
+              "PooToolsMediaCore",
               null
             ]
           }
@@ -5247,20 +5124,31 @@
       "path": "PooToolsSource/RateView",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
+      "internal_dependencies": [],
+      "third_party_dependencies": [
         {
-          "name": "ptools",
-          "kind": "internal",
+          "name": "SnapKit",
+          "kind": "third_party",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "SnapKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwifterSwift",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SwifterSwift",
               null
             ]
           }
         }
       ],
-      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -5634,20 +5522,20 @@
       "path": "PooToolsSource/Slider",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
+      "internal_dependencies": [],
+      "third_party_dependencies": [
         {
-          "name": "ptools",
-          "kind": "internal",
+          "name": "SnapKit",
+          "kind": "third_party",
           "package": null,
           "declaration": {
             "byName": [
-              "ptools",
+              "SnapKit",
               null
             ]
           }
         }
       ],
-      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -6001,6 +5889,17 @@
           }
         },
         {
+          "name": "PooToolsMediaCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsMediaCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsProgressBar",
           "kind": "internal",
           "package": null,
@@ -6290,28 +6189,6 @@
           }
         },
         {
-          "name": "FlagKit",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "FlagKit",
-              null
-            ]
-          }
-        },
-        {
-          "name": "IOSSecuritySuite",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "IOSSecuritySuite",
-              null
-            ]
-          }
-        },
-        {
           "name": "IQKeyboardManagerSwift",
           "kind": "third_party",
           "package": "IQKeyboardManager",
@@ -6320,17 +6197,6 @@
               "IQKeyboardManagerSwift",
               "IQKeyboardManager",
               null,
-              null
-            ]
-          }
-        },
-        {
-          "name": "Instructions",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "Instructions",
               null
             ]
           }
@@ -6379,17 +6245,6 @@
               "NotificationBannerSwift",
               "NotificationBanner",
               null,
-              null
-            ]
-          }
-        },
-        {
-          "name": "Popovers",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "Popovers",
               null
             ]
           }
@@ -6448,17 +6303,6 @@
               null
             ]
           }
-        },
-        {
-          "name": "ZipArchive",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "ZipArchive",
-              null
-            ]
-          }
         }
       ],
       "unknown_dependencies": [],
@@ -6490,22 +6334,6 @@
         {
           "kind": {
             "define": {
-              "_0": "POOTOOLS_FLAG"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_INSTRUCTIONS"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
               "_0": "POOTOOLS_LAUNCHTIMEPROFILER"
             }
           },
@@ -6523,22 +6351,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_PICKER"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_POPOVERKIT"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_SECURITYSUITE"
             }
           },
           "tool": "swift"
@@ -6579,14 +6391,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_VIDEOCACHE"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_ZIPARCHINE"
             }
           },
           "tool": "swift"

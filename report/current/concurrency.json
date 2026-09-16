@@ -2,13 +2,13 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:09Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:27Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 21,
-    "unchecked_sendable": 68,
-    "as_bang": 13
+    "unchecked_sendable": 67,
+    "as_bang": 4
   },
   "locations": [
     {
@@ -142,54 +142,6 @@
       "path": "PooToolsSource/Category/UIControl+PTEX.swift",
       "line": 84,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + self.clickInterval) { [weak self] in"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 51,
-      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 59,
-      "text": "var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 68,
-      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 72,
-      "text": "let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 87,
-      "text": "let result:NSMutableString = str.mutableCopy() as! NSMutableString"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 90,
-      "text": "var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 99,
-      "text": "node = node.object(forKey: word) as! NSMutableDictionary"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 103,
-      "text": "let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber"
     },
     {
       "rule": "unchecked_sendable",
@@ -554,50 +506,44 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 93,
-      "text": "public final class NetworkReachability: @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 141,
-      "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 360,
-      "text": "Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 382,
-      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 412,
-      "text": "Task.detached(priority: .background) {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 547,
+      "line": 92,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1228,
-      "text": "private struct PTSafeUploadParamsBox: @unchecked Sendable {"
+      "line": 850,
+      "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1522,
-      "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 13,
+      "text": "public final class NetworkReachability: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 61,
+      "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 280,
+      "text": "Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 302,
+      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 332,
+      "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "unchecked_sendable",
@@ -688,12 +634,6 @@
       "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
       "line": 16,
       "text": "public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
-      "line": 60,
-      "text": "for (index, model) in (self.dataSource as! [PTMainSegmentModel]).enumerated() {"
     },
     {
       "rule": "unchecked_sendable",

@@ -81,6 +81,45 @@ fi
 allowlist="Scripts/unchecked_sendable_allowlist.txt"
 current_unchecked="$(rg -l --glob '*.swift' '@unchecked Sendable' PooToolsSource | sort)"
 allowed_unchecked="$(rg -v '^\s*(#|$)' "$allowlist" | sort)"
+
+# English: Every unchecked boundary must have a category, protection invariant, and replacement plan.
+# Español: Cada límite unchecked debe tener una categoría, una invariante de protección y un plan de reemplazo.
+# 中文：每个 unchecked 边界都必须登记分类、保护不变量和替代计划。
+concurrency_registry="Scripts/concurrency_exception_registry.json"
+ruby - "$allowlist" "$concurrency_registry" <<'RUBY'
+require "json"
+
+allowlist_path, registry_path = ARGV
+allowed = File.readlines(allowlist_path, chomp: true).reject { |line| line.match?(/^\s*(#|$)/) }.sort
+registry = JSON.parse(File.read(registry_path))
+required_fields = registry.fetch("required_fields")
+categories = registry.fetch("category_definitions")
+entries = registry.fetch("files")
+paths = entries.map { |entry| entry.fetch("path") }.sort
+if paths != allowed
+  missing = allowed - paths
+  extra = paths - allowed
+  abort "FAIL: concurrency registry does not match unchecked allowlist; missing=#{missing.inspect} extra=#{extra.inspect}"
+end
+entries.each do |entry|
+  abort "FAIL: concurrency registry entry is missing path" unless entry["path"].is_a?(String) && !entry["path"].strip.empty?
+  category = entry.fetch("category")
+  abort "FAIL: unknown concurrency registry category #{category.inspect}" unless categories.key?(category)
+  abort "FAIL: concurrency registry path is missing #{entry.fetch("path")}" unless File.file?(entry.fetch("path"))
+end
+categories.each do |category, definition|
+  (required_fields - ["category"]).each do |field|
+    value = definition[field]
+    abort "FAIL: concurrency category #{category} is missing #{field}" unless value.is_a?(String) && !value.strip.empty?
+  end
+end
+actual_unsafe = Dir.glob("PooToolsSource/**/*.swift").select do |path|
+  File.read(path).include?("nonisolated(unsafe)")
+end.sort
+registered_unsafe = registry.fetch("nonisolated_unsafe_files").sort
+abort "FAIL: nonisolated(unsafe) registry mismatch; actual=#{actual_unsafe.inspect} registered=#{registered_unsafe.inspect}" unless actual_unsafe == registered_unsafe
+RUBY
+
 unlisted_unchecked="$(comm -23 <(printf '%s\n' "$current_unchecked") <(printf '%s\n' "$allowed_unchecked") || true)"
 if [[ -n "$unlisted_unchecked" ]]; then
   printf '%s\n' "$unlisted_unchecked" >&2

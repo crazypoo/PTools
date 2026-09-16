@@ -82,6 +82,10 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
     public var showSelectBtnWhenSingleSelect: Bool
     public var sortAscending: Bool
     public var cameraCellAtTop: Bool
+    // English: Keep the PhotoKit cloud request timeout in the picker snapshot instead of reading Network state.
+    // Español: Mantiene el tiempo de espera de iCloud en la instantánea del selector en lugar de leer el estado de Network.
+    // 中文：将 iCloud 请求超时保存到选择器快照中，不再读取 Network 状态。
+    public var iCloudRequestTimeout: TimeInterval
 
     public init(allowSelectImage: Bool = true,
                 allowSelectVideo: Bool = true,
@@ -105,7 +109,8 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
                 alwaysRequestOriginal: Bool = false,
                 showSelectBtnWhenSingleSelect: Bool = false,
                 sortAscending: Bool = false,
-                cameraCellAtTop: Bool = true) {
+                cameraCellAtTop: Bool = true,
+                iCloudRequestTimeout: TimeInterval = 20) {
         self.allowSelectImage = allowSelectImage
         self.allowSelectVideo = allowSelectVideo
         self.allowSelectGif = allowSelectGif
@@ -129,6 +134,7 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
         self.showSelectBtnWhenSingleSelect = showSelectBtnWhenSingleSelect
         self.sortAscending = sortAscending
         self.cameraCellAtTop = cameraCellAtTop
+        self.iCloudRequestTimeout = max(0.1, iCloudRequestTimeout)
     }
 
     public static let singleImage = PTMediaLibSelectionOptions(
@@ -186,7 +192,8 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
             alwaysRequestOriginal: config.alwaysRequestOriginal,
             showSelectBtnWhenSingleSelect: config.showSelectBtnWhenSingleSelect,
             sortAscending: PTMediaLibUIConfig.share.sortAscending,
-            cameraCellAtTop: PTMediaLibUIConfig.share.shortIsTop
+            cameraCellAtTop: PTMediaLibUIConfig.share.shortIsTop,
+            iCloudRequestTimeout: config.iCloudRequestTimeout
         )
     }
 }
@@ -321,6 +328,10 @@ public class PTMediaLibConfig:NSObject {
     /// Allow to choose the minimum data size of the video. Defaults to 0 KB.
     public var minSelectVideoDataSize: PTMediaLibConfig.KBUnit = 0
     public var downloadVideoBeforeSelecting = false
+    // English: Configure the maximum wait for an iCloud video before the picker reports a timeout.
+    // Español: Configura la espera máxima de un vídeo de iCloud antes de informar un tiempo de espera agotado.
+    // 中文：配置 iCloud 视频在选择器报告超时前的最大等待时间。
+    public var iCloudRequestTimeout: TimeInterval = 20
     /// After selecting a image/video in the thumbnail interface, enter the editing interface directly. Defaults to false.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
     /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.

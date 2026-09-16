@@ -6,7 +6,8 @@
 //  Copyright © 2022 crazypoo. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import Darwin
 
 /*
  #define IOS_CELLULAR    @"pdp_ip0"

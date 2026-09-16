@@ -9,6 +9,7 @@ PooToolsSource/LivePhoto/PTLivePhoto.swift
 PooToolsSource/Motion/PTMotion.swift
 PooToolsSource/NFC/PTNFCToolKit.swift
 PooToolsSource/NetWork/Network.swift
+PooToolsSource/NetWork/NetworkSupport.swift
 PooToolsSource/PhotoPicker/PTFetchImageOperation.swift
 PooToolsSource/PhotoPicker/PTMediaLibManager.swift
 PooToolsSource/VideoEditor/CompositionInstruction.swift

@@ -116,7 +116,7 @@ public class PTDevMaskView: PTBaseMaskView {
         }
         
 #if POOTOOLS_DEBUGTRACKINGEYES
-        if Gobal_device_info.isFaceIDCapable {
+        if deviceInfo.isFaceIDCapable {
             PTPermission.camera.request {
                 Task { @MainActor in
                     self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])

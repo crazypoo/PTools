@@ -53,7 +53,7 @@ public extension CGFloat {
     /// - Returns: CGFloat
     @MainActor static func statusBarHeight() -> CGFloat {
         let statusBarFrame = AppWindows?.windowScene?.statusBarManager?.statusBarFrame
-        return statusBarFrame?.height ?? (Gobal_device_info.isFaceIDCapable ? 44 : 20)
+        return statusBarFrame?.height ?? (deviceInfo.isFaceIDCapable ? 44 : 20)
     }
     
     //MARK: 獲取導航欄總高度

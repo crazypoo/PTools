@@ -62,8 +62,8 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
         socketQueue.sync { _socketState }
     }
     
-    private var _networkStatus: NetWorkStatus = .unknown // 假设外部定义了 NetWorkStatus
-    public var networkStatus: NetWorkStatus {
+    private var _networkStatus: NetworkStatus = .unknown
+    public var networkStatus: NetworkStatus {
         get { socketQueue.sync { _networkStatus } }
         set {
             socketQueue.async { [weak self] in

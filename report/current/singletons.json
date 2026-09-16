@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:11Z",
-  "shared_call_count": 1591,
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:28Z",
+  "shared_call_count": 1588,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -160,7 +160,7 @@
     },
     {
       "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "line": 17,
+      "line": 15,
       "declaration": "@MainActor public static let share = PTCheckFWords()",
       "name": "share",
       "category": "C",
@@ -654,8 +654,8 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 95,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 15,
       "declaration": "public static let shared = NetworkReachability()",
       "name": "shared",
       "category": "C",
@@ -663,8 +663,8 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 142,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 62,
       "declaration": "public static let shared = PTNetWorkStatus()",
       "name": "shared",
       "category": "C",
@@ -672,8 +672,8 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 319,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 239,
       "declaration": "static let shared = NetworkCache()",
       "name": "shared",
       "category": "B",
@@ -682,7 +682,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 216,
+      "line": 234,
       "declaration": "public static let shared = RequestDeduplicator()",
       "name": "shared",
       "category": "C",
@@ -718,7 +718,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "line": 197,
+      "line": 204,
       "declaration": "public static let share = PTMediaLibConfig()",
       "name": "share",
       "category": "D",
@@ -727,7 +727,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "line": 352,
+      "line": 363,
       "declaration": "public static let share = PTMediaLibUIConfig()",
       "name": "share",
       "category": "D",

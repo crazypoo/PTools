@@ -6,7 +6,7 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import Security
 import LocalAuthentication
 

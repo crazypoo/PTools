@@ -49,27 +49,27 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 判断机型
     ///小
     static func oneOfSmallDevice() -> Bool {
-        Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
+        deviceInfo.isOneOf(allSmallDevices)
     }
     
     ///大
     static func oneOfPlusDevice() -> Bool {
-        Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
+        deviceInfo.isOneOf(allPlusDevices)
     }
 
     ///X
     static func oneOfXDevice() -> Bool {
-        Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
+        deviceInfo.isOneOf(allSensorHousingDevices)
     }
     
     ///Pad
     static func oneOfPadDevice() -> Bool {
-        Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
+        deviceInfo.isOneOf(allIPadDevices)
     }
     
     //Pro
     static func oneOfProDevice() -> Bool {
-        Gobal_device_info.isOneOf(Gobal_group_of_all_pro_device)
+        deviceInfo.isOneOf(allProDevices)
     }
 
     //MARK: 獲取當前設備的名稱

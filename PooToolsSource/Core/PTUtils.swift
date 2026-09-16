@@ -573,7 +573,7 @@ public extension PTUtils {
 //MARK: OC-FUNCTION
 public extension PTUtils {
     class func oc_isiPhoneSeries() -> Bool {
-        Gobal_device_info.isFaceIDCapable
+        deviceInfo.isFaceIDCapable
     }
 }
 

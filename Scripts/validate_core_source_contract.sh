@@ -53,7 +53,7 @@ end
 actual_paths = relative_paths(actual_paths, repo_root)
 
 podspec = File.read(File.join(repo_root, "PooTools.podspec"))
-pod_source_line = podspec.lines.find { |line| line.include?("subspec.source_files =") }
+pod_source_line = podspec.lines.find { |line| line.include?("PooToolsSource/Core/*") }
 pod_dirs = pod_source_line ? pod_source_line.scan(%r{PooToolsSource/([^/]+)/\*\.}).flatten.to_set : Set.new
 
 package = File.read(File.join(repo_root, "Package.swift"))
@@ -89,7 +89,7 @@ foundation_files = {
     PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift
   ],
   "PToolsUIFoundation" => %w[
-    PooToolsSource/PToolsUIFoundation/PTSnapKitEX.swift
+    PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift
   ]
 }
 

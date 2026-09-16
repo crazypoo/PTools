@@ -20,7 +20,9 @@ ruby "$repo_root/Scripts/report_cocoapods_subspec_graph.rb"
 
 ruby - "$repo_root" "$mode" <<'RUBY'
 require "digest"
+require "date"
 require "json"
+require "set"
 require "time"
 
 repo_root = File.expand_path(ARGV.fetch(0))
@@ -171,6 +173,95 @@ matched.each do |name|
   }
 end
 
+# English: Require every intentional parity exception to carry an owner, reason, and expiry.
+# Español: Exige que cada excepción intencional de paridad tenga responsable, motivo y vencimiento.
+# 中文：要求每条有意保留的 parity 例外都记录负责人、原因和过期日期。
+registry_path = File.join(repo_root, "Scripts/module_registry.json")
+unless File.file?(registry_path)
+  warn "FAIL: module registry is missing: #{registry_path}"
+  exit 1
+end
+registry = JSON.parse(File.read(registry_path))
+expected_metadata = %w[reason owner expiration]
+unless registry.fetch("required_drift_metadata", []) == expected_metadata
+  warn "FAIL: module registry required_drift_metadata must be #{expected_metadata.inspect}"
+  exit 1
+end
+resolution_defaults = registry.fetch("resolution_defaults")
+%w[action target_version].each do |key|
+  value = resolution_defaults[key]
+  if !value.is_a?(String) || value.strip.empty?
+    warn "FAIL: module registry resolution_defaults is missing non-empty #{key}"
+    exit 1
+  end
+end
+
+current_entries = []
+spm_only.each { |module_name| current_entries << { "kind" => "spm_only", "module" => module_name } }
+pod_only.each { |module_name| current_entries << { "kind" => "pod_only", "module" => module_name } }
+source_drift.each { |item| current_entries << item.merge("kind" => "source", "field" => "source_directories") }
+dependency_drift.each { |item| current_entries << item.merge("kind" => "dependency") }
+settings_drift.each { |item| current_entries << item.merge("kind" => "settings") }
+
+# English: Validate registry shape, metadata, expiry, and the current parity identities.
+# Español: Valida la forma, los metadatos, el vencimiento y las identidades actuales de paridad.
+# 中文：校验 registry 结构、元数据、过期日期及当前 parity 身份。
+allowed_kinds = %w[spm_only pod_only source dependency settings]
+validate_entry = lambda do |entry, section|
+  unless entry.is_a?(Hash)
+    warn "FAIL: #{section} contains a non-object entry"
+    exit 1
+  end
+  kind = entry["kind"].to_s
+  module_name = entry["module"].to_s
+  valid_section_kind = section == "known_module_only" ? %w[spm_only pod_only] : %w[source dependency settings]
+  unless valid_section_kind.include?(kind) && allowed_kinds.include?(kind) && !module_name.empty?
+    warn "FAIL: invalid module registry identity in #{section}: #{entry.inspect}"
+    exit 1
+  end
+  expected_metadata.each do |key|
+    value = entry[key]
+    if !value.is_a?(String) || value.strip.empty?
+      warn "FAIL: #{section} #{kind}/#{module_name} is missing non-empty #{key}"
+      exit 1
+    end
+  end
+  begin
+    expiration = Date.iso8601(entry.fetch("expiration"))
+  rescue ArgumentError
+    warn "FAIL: #{section} #{kind}/#{module_name} has invalid expiration #{entry["expiration"].inspect}"
+    exit 1
+  end
+  if expiration < Date.today
+    warn "FAIL: #{section} #{kind}/#{module_name} has expired metadata #{expiration.iso8601}"
+    exit 1
+  end
+  if kind == "dependency" && entry["field"].to_s.empty?
+    warn "FAIL: dependency drift #{module_name} must declare field"
+    exit 1
+  end
+  [kind, module_name, entry["field"].to_s]
+end
+
+known_entries = registry.fetch("known_module_only", []).map { |entry| validate_entry.call(entry, "known_module_only") }
+known_entries.concat(registry.fetch("known_drift", []).map { |entry| validate_entry.call(entry, "known_drift") })
+if known_entries.uniq.length != known_entries.length
+  warn "FAIL: module registry contains duplicate identities"
+  exit 1
+end
+known_identity_set = known_entries.to_set
+current_identity_set = current_entries.map { |entry| [entry["kind"], entry["module"], entry["field"].to_s] }.to_set
+unregistered = current_identity_set - known_identity_set
+stale = known_identity_set - current_identity_set
+unless unregistered.empty?
+  warn "FAIL: new parity drift requires registry reason/owner/expiration: #{unregistered.inspect}"
+  exit 1
+end
+unless stale.empty?
+  warn "FAIL: module registry contains stale identities: #{stale.inspect}"
+  exit 1
+end
+
 payload = {
   "schema_version" => 1,
   "generator" => "Scripts/validate_module_parity.sh",
@@ -261,6 +352,50 @@ markdown << "- `--update` writes a reviewed baseline."
 markdown << "- `--check` (the default) compares the current stable fingerprint and fails on drift."
 markdown << "- This gate reports parity; it does not change either build entry or third-party dependencies."
 File.write(markdown_path, markdown.join("\n") + "\n")
+
+# English: Emit a reviewable resolution table with visible ownership for every exception.
+# Español: Emite una tabla revisable con responsable visible para cada excepción.
+# 中文：生成可审阅的 resolution 表，为每条例外显示负责人。
+resolution_path = File.join(repo_root, "report/current/module_parity_resolution.md")
+resolution = []
+resolution << "<!--"
+resolution << "AUTO-GENERATED FILE."
+resolution << "DO NOT EDIT MANUALLY."
+resolution << ""
+resolution << "Generator: #{payload["generator"]}"
+resolution << "Source revision: #{payload["source_revision"]}"
+resolution << "Generated at: #{payload["generated_at"]}"
+resolution << "-->"
+resolution << ""
+resolution << "# Module Parity Resolution"
+resolution << ""
+resolution << "- Registry: `Scripts/module_registry.json`"
+resolution << "- Current exceptions: `#{current_entries.length}`"
+resolution << "- Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added."
+resolution << ""
+resolution << "| Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |"
+resolution << "| --- | --- | --- | --- | --- | --- | --- | --- |"
+registry_by_identity = (registry.fetch("known_module_only", []) + registry.fetch("known_drift", [])).each_with_object({}) do |entry, result|
+  result[[entry["kind"], entry["module"], entry["field"].to_s]] = entry
+end
+current_entries.sort_by { |entry| [entry["kind"], entry["module"], entry["field"].to_s] }.each do |entry|
+  metadata = registry_by_identity.fetch([entry["kind"], entry["module"], entry["field"].to_s])
+  spm_value = entry.key?("spm") ? entry["spm"] : "—"
+  pod_value = entry.key?("cocoapods") ? entry["cocoapods"] : "—"
+  values = [
+    entry["module"],
+    spm_value,
+    pod_value,
+    metadata["reason"],
+    metadata.fetch("action", resolution_defaults["action"]),
+    metadata["owner"],
+    metadata.fetch("target_version", resolution_defaults["target_version"]),
+    metadata["expiration"]
+  ]
+  values = values.map { |value| value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value }
+  resolution << "| #{values.map { |value| value.to_s.gsub("|", "\\\\|") }.join(" | ")} |"
+end
+File.write(resolution_path, resolution.join("\n") + "\n")
 
 puts "Parity #{mode}: matched=#{matched.length} spm_only=#{spm_only.length} pod_only=#{pod_only.length} source_drift=#{source_drift.length} dependency_drift=#{dependency_drift.length} settings_drift=#{settings_drift.length}"
 RUBY

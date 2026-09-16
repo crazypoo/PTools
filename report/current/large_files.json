@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:16Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:42Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1036,7 +1036,7 @@
     },
     {
       "path": "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift",
-      "lines": 122,
+      "lines": 147,
       "classification": "ok"
     },
     {
@@ -1186,7 +1186,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "lines": 87,
+      "lines": 94,
       "classification": "ok"
     },
     {
@@ -3746,12 +3746,32 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1999,
-      "classification": "architecture_exception"
+      "lines": 1247,
+      "classification": "warning"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkMetrics.swift",
+      "lines": 94,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "lines": 465,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "lines": 483,
+      "lines": 501,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkUploads.swift",
+      "lines": 317,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
+      "lines": 89,
       "classification": "ok"
     },
     {
@@ -3810,18 +3830,23 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "lines": 136,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "lines": 240,
+      "lines": 245,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift",
-      "lines": 68,
+      "lines": 72,
       "classification": "ok"
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTSnapKitEX.swift",
-      "lines": 307,
+      "path": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift",
+      "lines": 308,
       "classification": "ok"
     },
     {
@@ -3901,7 +3926,7 @@
     },
     {
       "path": "PooToolsSource/PhoneInfo/PTPhoneNetWorkInfo.swift",
-      "lines": 95,
+      "lines": 96,
       "classification": "ok"
     },
     {
@@ -3931,7 +3956,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "lines": 484,
+      "lines": 495,
       "classification": "ok"
     },
     {
@@ -3941,7 +3966,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
-      "lines": 833,
+      "lines": 835,
       "classification": "ok"
     },
     {
@@ -3981,7 +4006,7 @@
     },
     {
       "path": "PooToolsSource/Ping/PTPingTool.swift",
-      "lines": 375,
+      "lines": 374,
       "classification": "ok"
     },
     {
@@ -4565,7 +4590,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 14,
-  "architecture_exception_count": 11,
+  "warning_count": 15,
+  "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3
 }

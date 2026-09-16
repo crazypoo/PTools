@@ -25,6 +25,10 @@ let package = Package(
         // 中文：独立公开权限契约，避免系统服务引入完整 UI umbrella。
         .library(name: "PToolsPermissionCore", targets: ["PToolsPermissionCore"]),
         .library(name: "PToolsPermissionUI", targets: ["PToolsPermissionUI"]),
+        // English: Publish transport-neutral media contracts without pulling in feature UI or Network.
+        // Español: Publica contratos multimedia neutrales al transporte sin arrastrar UI de funciones ni Network.
+        // 中文：公开与传输无关的媒体契约，避免引入功能 UI 和 Network。
+        .library(name: "PooToolsMediaCore", targets: ["PooToolsMediaCore"]),
 
         // ==========================================
         // 基础 UI 与细分组件模块
@@ -62,6 +66,10 @@ let package = Package(
         // 核心中上层依赖模块
         // ==========================================
         .library(name: "PooToolsNetWork", targets: ["PooToolsNetWork"]),
+        // English: Keep the corrected Network product name alongside the legacy spelling during the 5.x window.
+        // Español: Mantiene el nombre corregido del producto Network junto al nombre heredado durante 5.x.
+        // 中文：在 5.x 迁移窗口内同时保留正确的 Network 产品名和旧拼写。
+        .library(name: "PooToolsNetwork", targets: ["PooToolsNetWork"]),
         .library(name: "PooToolsDataEncrypt", targets: ["PooToolsDataEncrypt"]),
         .library(name: "PooToolsSearchBar", targets: ["PooToolsSearchBar"]),
         .library(name: "PooToolsMediaViewer", targets: ["PooToolsMediaViewer"]),
@@ -136,6 +144,7 @@ let package = Package(
         .library(name: "PooToolsAll", targets: [
             "ptools",
             "PToolsPermissionCore", "PToolsPermissionUI",
+            "PooToolsMediaCore",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
             "PooToolsHud", "PooToolsLivePhoto", "PooToolsShare", "PooToolsPDF",
             "PooToolsSVG",
@@ -189,18 +198,13 @@ let package = Package(
         
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
-        .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.6.0"),
         .package(url: "https://github.com/pujiaxin33/JXPagingView.git", from: "2.1.0"),
         .package(url: "https://github.com/pujiaxin33/JXSegmentedView.git", from: "1.3.0"),
-        .package(url: "https://github.com/ephread/Instructions.git", from: "2.2.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
-        .package(url: "https://github.com/securing/IOSSecuritySuite.git", from: "1.9.0"),
         .package(url: "https://github.com/yangKJ/Harbeth.git", from: "1.1.0"),
         .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
-        .package(url: "https://github.com/aheze/Popovers.git", from: "1.3.0"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
-        .package(url: "https://github.com/madebybowtie/FlagKit.git", exact: "2.4.0"),
         .package(url: "https://github.com/robnadin/SocketRocket.git", revision: "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0")
 
@@ -252,6 +256,17 @@ let package = Package(
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
+        // English: MediaCore contains only Foundation value contracts and never imports a concrete media framework.
+        // Español: MediaCore solo contiene contratos de valor de Foundation y nunca importa un framework multimedia concreto.
+        // 中文：MediaCore 只包含 Foundation 值类型契约，不导入具体媒体框架。
+        .target(
+            name: "PooToolsMediaCore",
+            path: "PooToolsSource/PToolsMediaCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -273,12 +288,7 @@ let package = Package(
                 "SmartCodable",
                 "KakaJSON",
                 .product(name: "Lottie", package: "lottie-ios"),
-                "ZipArchive",
-                "FlagKit",
                 .product(name: "NotificationBannerSwift", package: "NotificationBanner"),
-                "Instructions",
-                "IOSSecuritySuite",
-                "Popovers",
                 
             ],
             path: "PooToolsSource",
@@ -296,16 +306,11 @@ let package = Package(
             swiftSettings: [
                 .define("POOTOOLS_COCOAPODS"),
                 .define("POOTOOLS_TABBAR"),
-                .define("POOTOOLS_ZIPARCHINE"),
-                .define("POOTOOLS_FLAG"),
                 .define("POOTOOLS_NOTIFICATIONBANNER"),
                 .define("POOTOOLS_PICKER"),
-                .define("POOTOOLS_INSTRUCTIONS"),
                 .define("POOTOOLS_APPZ"),
                 .define("POOTOOLS_LAUNCHTIMEPROFILER"),
-                .define("POOTOOLS_SECURITYSUITE"),
                 .define("POOTOOLS_VIDEOCACHE"),
-                .define("POOTOOLS_POPOVERKIT"),
                 .define("POOTOOLS_CGDWEBSERVER"),
                 .define("POOTOOLS_SPLIT_CORE"),
                 .define("POOTOOLS_SPLIT_UIFOUNDATION"),
@@ -352,18 +357,18 @@ let package = Package(
         .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsProgressBar", "PooToolsNetWork", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
         // 高级业务模块
         // ==========================================
         .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PooToolsImagePicker", "PTCameraPermission", "PooToolsNetWork", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSVG", dependencies: ["ptools", "Kingfisher", "PocketSVG"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsCheckDirtyWord", dependencies: ["ptools"], path: "PooToolsSource/CheckDirtyWord", resources: [.process("Resource")], swiftSettings: [.define("POOTOOLS_CHECKDIRTYWORD"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsCheckDirtyWord", dependencies: [], path: "PooToolsSource/CheckDirtyWord", resources: [.process("Resource")], swiftSettings: [.define("POOTOOLS_CHECKDIRTYWORD"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
         // 其他基础功能 Target 映射
@@ -373,20 +378,20 @@ let package = Package(
         .target(name: "PooToolsBioID", dependencies: ["ptools", "PTFaceIDPermission"], path: "PooToolsSource/BioID", swiftSettings: [.define("POOTOOLS_BILOGYID"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCalendar", dependencies: ["ptools", "PTCalendarPermission", "PTRemindersPermission"], path: "PooToolsSource/Calendar", swiftSettings: [.define("POOTOOLS_CALENDAR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsTelephony", dependencies: ["ptools"], path: "PooToolsSource/CallMessageMail", swiftSettings: [.define("POOTOOLS_TELEPHONY"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsCheckBox", dependencies: ["ptools"], path: "PooToolsSource/CheckBox", swiftSettings: [.define("POOTOOLS_CHECKBOX"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsCheckBox", dependencies: [], path: "PooToolsSource/CheckBox", swiftSettings: [.define("POOTOOLS_CHECKBOX"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCodeView", dependencies: ["ptools"], path: "PooToolsSource/CodeView", swiftSettings: [.define("POOTOOLS_CODEVIEW"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCountry", dependencies: ["ptools"], path: "PooToolsSource/Country", swiftSettings: [.define("POOTOOLS_COUNTRY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsGuide", dependencies: ["ptools", "PooToolsPageControl"], path: "PooToolsSource/Guide", swiftSettings: [.define("POOTOOLS_GUIDE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsInput", dependencies: ["ptools", "PhoneNumberKit"], path: "PooToolsSource/Input", swiftSettings: [.define("POOTOOLS_INPUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyboard", dependencies: ["ptools"], path: "PooToolsSource/Keyboard", swiftSettings: [.define("POOTOOLS_CUSTOMERNUMBERKEYWORD"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsKeyChain", dependencies: ["ptools"], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsKeyChain", dependencies: [], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMotion", dependencies: ["ptools", "PTMotionPermission"], path: "PooToolsSource/Motion", swiftSettings: [.define("POOTOOLS_MOTION"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPhoneInfo", dependencies: ["ptools"], path: "PooToolsSource/PhoneInfo", swiftSettings: [.define("POOTOOLS_PHONEINFO"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsRateView", dependencies: ["ptools"], path: "PooToolsSource/RateView", swiftSettings: [.define("POOTOOLS_RATE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhoneInfo", dependencies: [], path: "PooToolsSource/PhoneInfo", swiftSettings: [.define("POOTOOLS_PHONEINFO"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsRateView", dependencies: ["SnapKit", "SwifterSwift"], path: "PooToolsSource/RateView", swiftSettings: [.define("POOTOOLS_RATE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsScrollBanner", dependencies: ["ptools", "PooToolsPageControl"], path: "PooToolsSource/ScrollBanner", swiftSettings: [.define("POOTOOLS_SCROLLBANNER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSegmented", dependencies: ["ptools"], path: "PooToolsSource/Segmented", swiftSettings: [.define("POOTOOLS_SEGMENT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHandSign", dependencies: ["ptools"], path: "PooToolsSource/SignView", swiftSettings: [.define("POOTOOLS_HANDSIGN"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSlider", dependencies: ["ptools"], path: "PooToolsSource/Slider", swiftSettings: [.define("POOTOOLS_SLIDER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSlider", dependencies: ["SnapKit"], path: "PooToolsSource/Slider", swiftSettings: [.define("POOTOOLS_SLIDER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCheckUpdate", dependencies: ["PooToolsNetWork", .product(name: "SwiftJWT", package: "Swift-JWT")], path: "PooToolsSource/CheckUpdate", swiftSettings: [.define("POOTOOLS_CHECKUPDATE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsLayout", dependencies: ["ptools", "CollectionViewPagingLayout"], path: "PooToolsSource/Layout", swiftSettings: [.define("POOTOOLS_LAYOUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsLocation", dependencies: ["ptools", "PTLocationPermission"], path: "PooToolsSource/Location", swiftSettings: [.define("POOTOOLS_LOCATION"), .define("POOTOOLS_COCOAPODS")]),

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:10Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:27Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -12,6 +12,7 @@
     "PooToolsSource/Motion/PTMotion.swift",
     "PooToolsSource/NFC/PTNFCToolKit.swift",
     "PooToolsSource/NetWork/Network.swift",
+    "PooToolsSource/NetWork/NetworkSupport.swift",
     "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
     "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
     "PooToolsSource/VideoEditor/CompositionInstruction.swift",
@@ -306,38 +307,32 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 91,
-      "declaration": "/// 🌟 步骤 1：标记为 @unchecked Sendable。",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 93,
-      "declaration": "public final class NetworkReachability: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 141,
-      "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 547,
+      "line": 92,
       "declaration": "public final class Network: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1228,
-      "declaration": "private struct PTSafeUploadParamsBox: @unchecked Sendable {",
+      "line": 850,
+      "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1522,
-      "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 11,
+      "declaration": "/// 🌟 步骤 1：标记为 @unchecked Sendable。",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 13,
+      "declaration": "public final class NetworkReachability: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 61,
+      "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
       "allowlisted": true
     },
     {

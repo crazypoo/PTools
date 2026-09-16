@@ -182,7 +182,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.setImage(cameraConfig.flashImage, for: .normal)
         view.setImage(cameraConfig.flashImageSelected, for: .selected)
         view.addActionHandlers { sender in
-            if !Gobal_device_info.isSimulator {
+            if !deviceInfo.isSimulator {
                 self.torchOn = !self.torchOn
                 if self.camera.deviceInput!.device.hasTorch {
                     do {
@@ -486,7 +486,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
                 
         PTGCDManager.shared.delayOnMain(time: 0.1) {
-            if !Gobal_device_info.isSimulator {
+            if !deviceInfo.isSimulator {
                 switch PTPermission.camera.status {
                 case .notDetermined:
                     PTPermission.camera.request {

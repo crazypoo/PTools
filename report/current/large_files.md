@@ -3,16 +3,16 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a
-Generated at: 2026-09-14T05:37:16Z
+Source revision: f003b7df196b49b344ecee008aecc97660736057
+Generated at: 2026-09-16T06:04:42Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：14
-- Architecture exception：11
+- Warning：15
+- Architecture exception：10
 - Hard-limit allowlisted：3
 
 | 文件 | 行数 | 分类 |
@@ -34,7 +34,7 @@ Generated at: 2026-09-14T05:37:16Z
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1053 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1690 | architecture_exception |
-| `PooToolsSource/NetWork/Network.swift` | 1999 | architecture_exception |
+| `PooToolsSource/NetWork/Network.swift` | 1247 | warning |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1185 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1390 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |

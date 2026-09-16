@@ -6,9 +6,7 @@
 //  Copyright © 2022 crazypoo. All rights reserved.
 //
 
-import UIKit
 import Foundation
-import SwifterSwift
 
 let EXIST = "isExists"
 
@@ -24,19 +22,24 @@ public class PTCheckFWords: NSObject {
         initFilter()
     }
     
-    public func initFilter(filePath:String = Bundle.podBundleResource(bundleName: "PooToolsCheckDirtyWordResource", sourceName: "minganci", type: "txt")!) {
-        
-        var dataFile:NSString?
+    public func initFilter(filePath: String = "") {
+        let resolvedPath = filePath.isEmpty ? Self.defaultFilterFilePath() : filePath
+        guard let resolvedPath else {
+            print("PTCheckFWords: 无法找到敏感词资源文件 / No filter resource found / No se encontró el recurso de palabras sensibles")
+            return
+        }
+
+        var dataFile: NSString?
         do {
-            dataFile = try NSString(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
+            dataFile = try NSString(contentsOfFile: resolvedPath, encoding: String.Encoding.utf8.rawValue)
             let dataArr = dataFile?.components(separatedBy: "|")
-            for item in dataArr! {
+            for item in dataArr ?? [] {
                 if item.count > 0 {
                     insertWords(words: item as NSString)
                 }
             }
         } catch {
-            PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .fWord)
+            print("PTCheckFWords: \(error.localizedDescription)")
         }
     }
     
@@ -48,7 +51,10 @@ public class PTCheckFWords: NSObject {
                 let dict = NSMutableDictionary()
                 node.setObject(dict, forKey: word as NSCopying)
             }
-            node = node.object(forKey: word) as! NSMutableDictionary
+            guard let child = node.object(forKey: word) as? NSMutableDictionary else {
+                return
+            }
+            node = child
         }
         node.setObject(NSNumber(integerLiteral: 1), forKey: EXIST as NSCopying)
     }
@@ -56,7 +62,7 @@ public class PTCheckFWords: NSObject {
     public func haveFWord(str:NSString) -> Bool {
         for i in stride(from: 0, to: str.length, by: 1) {
             let subString:NSString = str.substring(from: i) as NSString
-            var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary
+            var node: NSMutableDictionary = root
             var num = 0
             
             for j in stride(from: 0, to: subString.length, by: 1) {
@@ -65,14 +71,14 @@ public class PTCheckFWords: NSObject {
                     break
                 } else {
                     num += 1
-                    node = node.object(forKey: word) as! NSMutableDictionary
+                    guard let child = node.object(forKey: word) as? NSMutableDictionary else {
+                        break
+                    }
+                    node = child
                 }
                 
-                if node.object(forKey: EXIST) != nil {
-                    let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber
-                    if nodeObj.intValue == 1 {
-                        return true
-                    }
+                if let nodeObj = node.object(forKey: EXIST) as? NSNumber, nodeObj.intValue == 1 {
+                    return true
                 }
             }
         }
@@ -84,10 +90,10 @@ public class PTCheckFWords: NSObject {
             return str
         }
         
-        let result:NSMutableString = str.mutableCopy() as! NSMutableString
+        let result = NSMutableString(string: str as String)
         for var i in stride(from: 0, to: str.length, by: 1) {
             let subString:NSString = str.substring(from: i) as NSString
-            var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary
+            var node: NSMutableDictionary = root
             var num = 0
             
             for j in stride(from: 0, to: subString.length, by: 1) {
@@ -96,24 +102,43 @@ public class PTCheckFWords: NSObject {
                     break
                 } else {
                     num += 1
-                    node = node.object(forKey: word) as! NSMutableDictionary
-                }
-                
-                if node.object(forKey: EXIST) != nil {
-                    let nodeObj:NSNumber = node.object(forKey: EXIST) as! NSNumber
-                    if nodeObj.intValue == 1 {
-                        let symbolStr:NSMutableString = NSMutableString()
-                        for _ in stride(from: 0, to: num, by: 1) {
-                            symbolStr.append("*")
-                        }
-                        result.replaceCharacters(in: NSRange(location: i, length: num), with: symbolStr as String)
-                        i += j
+                    guard let child = node.object(forKey: word) as? NSMutableDictionary else {
                         break
                     }
+                    node = child
+                }
+                
+                if let nodeObj = node.object(forKey: EXIST) as? NSNumber, nodeObj.intValue == 1 {
+                    let symbolStr: NSMutableString = NSMutableString()
+                    for _ in stride(from: 0, to: num, by: 1) {
+                        symbolStr.append("*")
+                    }
+                    result.replaceCharacters(in: NSRange(location: i, length: num), with: symbolStr as String)
+                    i += j
+                    break
                 }
             }
         }
         return result
+    }
+
+    private static func defaultFilterFilePath() -> String? {
+        #if SWIFT_PACKAGE
+        return Bundle.module.path(forResource: "minganci", ofType: "txt")
+        #else
+        let bundles = [Bundle.main, Bundle(for: PTCheckFWords.self)]
+        for bundle in bundles {
+            if let resourceBundleURL = bundle.url(forResource: "PooToolsCheckDirtyWordResource", withExtension: "bundle"),
+               let resourceBundle = Bundle(url: resourceBundleURL),
+               let path = resourceBundle.path(forResource: "minganci", ofType: "txt") {
+                return path
+            }
+            if let path = bundle.path(forResource: "minganci", ofType: "txt") {
+                return path
+            }
+        }
+        return nil
+        #endif
     }
     
     func freeFilter() {

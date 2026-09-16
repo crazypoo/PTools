@@ -256,7 +256,7 @@ public class PTScanQRController: PTBaseViewController {
         view.backgroundColor = .black
         
         var views = [UIView]()
-        if Gobal_device_isSimulator {
+        if deviceIsSimulator {
             views = [backBtn, photosButton]
         } else {
             if device.hasTorch {
@@ -279,7 +279,7 @@ public class PTScanQRController: PTBaseViewController {
             make.width.height.equalTo(self.backBtn)
         }
         
-        if !Gobal_device_isSimulator {
+        if !deviceIsSimulator {
             if device.hasTorch {
                 flashButton.snp.makeConstraints { make in
                     make.width.height.equalTo(self.backBtn)

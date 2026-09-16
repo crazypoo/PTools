@@ -82,7 +82,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                             switch index {
                             case 0: // Share
                                 let activityVC = PTActivityViewController(activityItems: [filePath])
-                                if Gobal_device_info.isPad {
+                                if deviceInfo.isPad {
                                     activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
                                     activityVC.popoverPresentationController?.sourceView = self.view
                                     activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)

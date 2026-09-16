@@ -241,9 +241,8 @@ private extension PTPingTool {
             if let failureObj = error.userInfo[kCFGetAddrInfoFailureKey as String] {
                 if let failureNum = failureObj as? NSNumber {
                     if failureNum.intValue != 0 {
-                        let f = gai_strerror(Int32(failureNum.intValue))
-                        if f != nil {
-                            return String(cString: f!)
+                        if let failureString = gai_strerror(Int32(failureNum.intValue)) {
+                            return String(cString: failureString)
                         }
                     }
                 }

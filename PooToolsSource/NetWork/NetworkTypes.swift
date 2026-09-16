@@ -14,7 +14,10 @@ public enum NetworkCellularType: String, Sendable {
     case Cellular5G = "5G"
 }
 
-public enum NetWorkStatus: Sendable {
+// English: NetworkStatus is the canonical value type for connectivity snapshots.
+// Español: NetworkStatus es el tipo de valor canónico para las instantáneas de conectividad.
+// 中文：NetworkStatus 是网络连接状态快照的规范值类型。
+public enum NetworkStatus: Sendable {
     case unknown
     case notReachable
     case wwan(type: NetworkCellularType)
@@ -25,7 +28,7 @@ public enum NetWorkStatus: Sendable {
     case other
     case checking
 
-    @MainActor public static func valueName(type: NetWorkStatus) -> String {
+    @MainActor public static func valueName(type: NetworkStatus) -> String {
         switch type {
         case .unknown: return "PT App network status unknow".localized()
         case .notReachable: return "PT App network status disconnect".localized()
@@ -40,12 +43,15 @@ public enum NetWorkStatus: Sendable {
     }
 }
 
-public enum NetWorkEnvironment: Int, Sendable {
+// English: NetworkEnvironment is the canonical environment selector; the old spelling remains an alias below.
+// Español: NetworkEnvironment es el selector de entorno canónico; la grafía antigua permanece como alias abajo.
+// 中文：NetworkEnvironment 是规范的环境选择类型，旧拼写在下方保留为别名。
+public enum NetworkEnvironment: Int, Sendable {
     case Development
     case Test
     case Distribution
 
-    @MainActor public static func valueName(type: NetWorkEnvironment) -> String {
+    @MainActor public static func valueName(type: NetworkEnvironment) -> String {
         switch type {
         case .Development: return "PT App network environment custom".localized()
         case .Test: return "PT App network environment test".localized()
@@ -54,12 +60,24 @@ public enum NetWorkEnvironment: Int, Sendable {
     }
 }
 
-public typealias NetWorkStatusBlock = @Sendable (NetWorkStatus, NetWorkEnvironment) -> Void
+public typealias NetworkStatusBlock = @Sendable (NetworkStatus, NetworkEnvironment) -> Void
+
+// English: Deprecated aliases preserve source compatibility while directing new code to the corrected names.
+// Español: Los alias obsoletos conservan la compatibilidad de código y dirigen el código nuevo a los nombres corregidos.
+// 中文：旧别名保留源码兼容性，同时引导新代码使用正确命名。
+@available(*, deprecated, renamed: "NetworkStatus")
+public typealias NetWorkStatus = NetworkStatus
+
+@available(*, deprecated, renamed: "NetworkEnvironment")
+public typealias NetWorkEnvironment = NetworkEnvironment
+
+@available(*, deprecated, renamed: "NetworkStatusBlock")
+public typealias NetWorkStatusBlock = NetworkStatusBlock
 public typealias UploadProgress = @MainActor @Sendable (Progress) -> Void
 public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<URL?>) -> Void
 public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void
 
-public var PTBaseURLMode: NetWorkEnvironment {
+public var PTBaseURLMode: NetworkEnvironment {
     guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     if sliderValue == "2" { return .Test }
@@ -67,7 +85,7 @@ public var PTBaseURLMode: NetWorkEnvironment {
     return .Distribution
 }
 
-public var PTSocketURLMode: NetWorkEnvironment {
+public var PTSocketURLMode: NetworkEnvironment {
     guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppSocketServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     if sliderValue == "2" { return .Test }
@@ -178,7 +196,7 @@ public struct PTNetworkConfig: Sendable {
 // English: Freeze the request values needed by an instance before asynchronous execution begins.
 // Español: Congela los valores necesarios para una solicitud de instancia antes de iniciar la ejecución asíncrona.
 // 中文：在异步执行开始前固定实例请求所需的配置值。
-public struct PTNetworkRequestEnvironment: Sendable, Equatable {
+public struct PTNetworkRequestEnvironment: Sendable {
     public let serverAddress: String
     public let socketAddress: String
     public let userToken: String

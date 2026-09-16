@@ -333,7 +333,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             let updateConstraints = {
                 self.ptCustomBar.snp.remakeConstraints { make in
                     if shouldMinimize {
-                        let safeBottom = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
+                        let safeBottom = deviceInfo.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
                         make.left.equalToSuperview().offset(20)
                         make.bottom.equalToSuperview().offset(-safeBottom)
                         make.width.height.equalTo(self.minimizedCircleSize)

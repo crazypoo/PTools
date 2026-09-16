@@ -33,7 +33,7 @@ public class PTFaceEye: NSObject {
     
     ///开启
     @MainActor public func createEye() {
-        if Gobal_device_info.isFaceIDCapable {
+        if deviceInfo.isFaceIDCapable {
             manager.run()
         } else {
             PTNSLogConsole("设备不能运行", levelType: .error,loggerType: .debug)

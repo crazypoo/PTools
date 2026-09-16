@@ -760,7 +760,7 @@ final class PTNetworkCollector: PTDebugCollector {
         statusTask = Task { @MainActor [weak self] in
             for await status in PTNetWorkStatus.shared.statusStream {
                 guard !Task.isCancelled, let self, self.isRunning else { return }
-                let value = NetWorkStatus.valueName(type: status)
+                let value = NetworkStatus.valueName(type: status)
                 PTDebugEventCenter.shared.publish(
                     PTDebugEvent(name: "network.status",
                                  source: self.identifier,

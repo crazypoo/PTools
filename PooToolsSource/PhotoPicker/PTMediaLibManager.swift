@@ -306,8 +306,10 @@ func downloadAssetIfNeed(alertTitle: String? = nil,
     
     // 💡 Swift 6 优化：废弃 Timer，使用现代的 Task 机制处理超时
     let timeoutTask = Task { @MainActor in
-        // 将超时时间转换为纳秒 (nanoseconds)
-        let nanoseconds = UInt64(Network.share.config.requestTimeout * 1_000_000_000)
+        // English: Use the immutable picker snapshot so PhotoKit does not depend on the HTTP Network module.
+        // Español: Usa la instantánea inmutable del selector para que PhotoKit no dependa del módulo HTTP Network.
+        // 中文：使用不可变的选择器快照，让 PhotoKit 不再依赖 HTTP Network 模块。
+        let nanoseconds = UInt64(options.iCloudRequestTimeout * 1_000_000_000)
         try? await Task.sleep(nanoseconds: nanoseconds)
         
         // 醒来后检查任务是否已经被取消，如果取消了说明网络请求已经成功，直接退出

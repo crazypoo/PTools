@@ -66,7 +66,7 @@ public class PTPermissionViewController: PTListViewController {
     public override func configureListView(_ listView: PTCollectionView) {
         let decorationEdges = listView.viewConfig.decorationItemsEdges
         listView.decorationViewReset = { [weak self] collection,decorationView,kind,indexPath,sectionModel in
-            guard let self, Gobal_device_info.isPad else { return }
+            guard let self, deviceInfo.isPad else { return }
             decorationView.frame = CGRectMake(decorationEdges.leading, 0, self.view.frame.size.width - decorationEdges.leading - decorationEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
         }
 

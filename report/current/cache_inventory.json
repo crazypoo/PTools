@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:10Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:28Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -612,45 +612,51 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 320,
+      "line": 219,
+      "kind": "URLCache",
+      "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity,"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 1,
+      "kind": "disk or custom cache",
+      "text": "// English: Keep retry, cache, reachability, and upload support outside the Network facade."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 240,
       "kind": "NSCache",
       "text": "private let memoryCache = NSCache<NSString, NSData>()"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 329,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 249,
       "kind": "disk or custom cache",
       "text": "// English: Bound the in-memory cache so a large response cannot grow without limit."
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 402,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 322,
       "kind": "disk or custom cache",
       "text": "// English: Accept a caller-owned configuration so cache maintenance does not read Network.share."
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 489,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 409,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 507,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 427,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 508,
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 428,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 643,
-      "kind": "URLCache",
-      "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024)"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
@@ -681,6 +687,12 @@
       "line": 219,
       "kind": "disk or custom cache",
       "text": "// MARK: - Disk Cache"
+    },
+    {
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 120,
+      "kind": "disk or custom cache",
+      "text": "// English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches."
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",

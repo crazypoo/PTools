@@ -8,7 +8,9 @@
 //
 
 import Foundation
+#if canImport(PToolsPermissionCore)
 import PToolsPermissionCore
+#endif
 
 public enum PTPermissionUIState: Equatable, Sendable {
     case loading
@@ -38,7 +40,9 @@ public struct PTPermissionUIItem: Equatable, Identifiable, Sendable {
 
 #if canImport(UIKit)
 import UIKit
+#if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
+#endif
 
 // English: UIKit owns settings presentation; the permission core remains usable in non-UI processes and tests.
 // Español: UIKit posee la presentación de ajustes; el núcleo de permisos sigue siendo utilizable en procesos y pruebas sin UI.

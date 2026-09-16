@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "required_fields": ["category", "system_type", "protection", "replacement_plan"],
+  "category_definitions": {
+    "SYSTEM_WRAPPER": {
+      "system_type": "PhotoKit, AVFoundation, Vision, CoreNFC, URLProtocol or Operation framework object",
+      "protection": "The wrapper owns only the framework object crossing the callback boundary; mutable state stays local to the framework queue or an explicit lock.",
+      "replacement_plan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it."
+    },
+    "LOCK_PROTECTED": {
+      "system_type": "Reference type with shared transport, cache, socket or speech state",
+      "protection": "Every mutable field crossing an isolation boundary is accessed through the type's lock or serial queue.",
+      "replacement_plan": "Move shared state to an actor or an immutable instance configuration during the 5.x migration window."
+    },
+    "LEGACY_MODEL": {
+      "system_type": "Existing public reference model or third-party data-source class",
+      "protection": "The object remains on its existing owner/actor; only immutable snapshots cross an isolation boundary.",
+      "replacement_plan": "Add a Sendable value snapshot and migrate new APIs before removing the reference model in 6.0."
+    },
+    "MAIN_ACTOR_ONLY": {
+      "system_type": "UIKit, debug UI, lifecycle, metric or proxy object",
+      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
+      "replacement_plan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware."
+    },
+    "TEMPORARY": {
+      "system_type": "Unclassified compatibility boundary",
+      "protection": "No new usage is allowed; the existing call path is isolated and documented before use.",
+      "replacement_plan": "Assign a concrete system, lock, model or MainActor category before the next release."
+    }
+  },
+  "nonisolated_unsafe_files": [],
+  "files": [
+    {"path":"PooToolsSource/Category/AVExport+PTEX.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Category/PHAsset+PTEX.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/C7Collector/C7CollectorCamera.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Calendar/PTEventOnCalendar.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/Core/OSSVoice.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Debug/PTApplicationDirectories.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/Debug/StdoutCapture.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/DebugCrash/PTCrashHandler.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/ImageEditor/PTWeakProxy.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/ImagePicker/PTImagePicker.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Inspector/KeyboardAnimatable.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/Inspector/MainThreadAsyncOperation.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/Inspector/MainThreadOperation.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/LivePhoto/PTLivePhoto.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/MXMetricKitManager/MetricsManager.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/Motion/PTMotion.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/NFC/PTNFCToolKit.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/NetWork/Network.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/NetWork/NetworkSupport.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/OSSKit/OSSSpeech.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/OSSKit/OSSUtterance.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/PhotoPicker/PTFetchImageOperation.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/PhotoPicker/PTMediaLibManager.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Router/PTRouterManager.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/Router/PTRouterServiceManager.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/SegmentControl/PTMainSegmentModel.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift","category":"LEGACY_MODEL"},
+    {"path":"PooToolsSource/SocketKit/PTSocketManager.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/TouchInspector/TouchInspectorWindow.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/VideoEditor/CompositionInstruction.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/VideoEditor/Compositor.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/VideoEditor/Exporter.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift","category":"MAIN_ACTOR_ONLY"},
+    {"path":"PooToolsSource/VideoEditor/VideoConverter.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/Vision/PTVision.swift","category":"SYSTEM_WRAPPER"}
+  ]
+}

@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_dependency_direction.sh
-Source revision: 95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a
-Generated at: 2026-09-14T05:37:13Z
+Source revision: f003b7df196b49b344ecee008aecc97660736057
+Generated at: 2026-09-16T06:04:30Z
 -->
 
 # Dependency Direction Gate
 
 - Status: `pass_with_legacy_allowlist`
-- Internal edges: `124`
-- Temporary allowlisted edges: `2`
+- Internal edges: `120`
+- Temporary allowlisted edges: `0`
 - Unallowlisted violations: `0`
 
 ## Rules
@@ -23,8 +23,7 @@ Generated at: 2026-09-14T05:37:13Z
 
 ## Temporary legacy edges
 
-- `PooToolsMediaViewer` → `PooToolsNetWork`: Legacy media viewer still uses the callback Network facade; migrate to MediaCore provider in 5.8.7.
-- `PooToolsPhotoPicker` → `PooToolsNetWork`: Legacy PhotoPicker upload/cache path still uses Network; migrate to a media provider in 5.8.7.
+- None
 
 ## Violations
 

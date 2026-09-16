@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: 95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a
-Generated at: 2026-09-14T05:37:10Z
+Source revision: f003b7df196b49b344ecee008aecc97660736057
+Generated at: 2026-09-16T06:04:28Z
 -->
 
 # PTools 当前缓存盘点
@@ -114,18 +114,20 @@ Generated at: 2026-09-14T05:37:10Z
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1424 | disk or custom cache | cache.totalCostLimit = 96 * 1024 * 1024 |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1425 | disk or custom cache | return cache |
 | PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift:17 | disk or custom cache | // It will be used when storing and retrieving the image to/from cache. |
-| PooToolsSource/NetWork/Network.swift:320 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |
-| PooToolsSource/NetWork/Network.swift:329 | disk or custom cache | // English: Bound the in-memory cache so a large response cannot grow without limit. |
-| PooToolsSource/NetWork/Network.swift:402 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
-| PooToolsSource/NetWork/Network.swift:489 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
-| PooToolsSource/NetWork/Network.swift:507 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
-| PooToolsSource/NetWork/Network.swift:508 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
-| PooToolsSource/NetWork/Network.swift:643 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024) |
+| PooToolsSource/NetWork/Network.swift:219 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity, |
+| PooToolsSource/NetWork/NetworkSupport.swift:1 | disk or custom cache | // English: Keep retry, cache, reachability, and upload support outside the Network facade. |
+| PooToolsSource/NetWork/NetworkSupport.swift:240 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |
+| PooToolsSource/NetWork/NetworkSupport.swift:249 | disk or custom cache | // English: Bound the in-memory cache so a large response cannot grow without limit. |
+| PooToolsSource/NetWork/NetworkSupport.swift:322 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
+| PooToolsSource/NetWork/NetworkSupport.swift:409 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
+| PooToolsSource/NetWork/NetworkSupport.swift:427 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
+| PooToolsSource/NetWork/NetworkSupport.swift:428 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:155 | disk or custom cache | // MARK: - Cache Public |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:203 | disk or custom cache | // MARK: - Cache Private |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:206 | disk or custom cache | // MARK: - Memory Cache |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:207 | NSCache | @MainActor private static let imageCache = NSCache<NSString, UIImage>() |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:219 | disk or custom cache | // MARK: - Disk Cache |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:120 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:627 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:665 | disk or custom cache | // MARK: - Cache Helper |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:679 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |

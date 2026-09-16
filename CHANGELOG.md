@@ -3,9 +3,14 @@
 所有正式版本均以同名 Git tag 为准。没有 tag 的开发阶段不会在这里伪装成正式发布版本；构建、
 性能和迁移事实见 `report/`，当前计划见 [ROADMAP.md](ROADMAP.md)。
 
-## Unreleased — 5.11.11 development baseline
+## 5.11.11 — 2026-09-14
 
-当前 `PooTools.podspec` 为 `5.11.11`，但仓库尚未创建 `5.11.11` tag 或对应 GitHub Release。
+- 发布当前 5.11.x 正式基线，包含 Debug Foundation、PTInstruments 和长期文档结构治理。
+- 5.11.x 后续的架构收口、依赖 parity 和 6.0 迁移验证继续记录在 Unreleased 与 `report/`。
+
+## Unreleased — 5.11.x architecture closure
+
+当前 `PooTools.podspec` 仍为 `5.11.11`，工作树中的后续架构收口尚未作为新版本发布。
 
 - 5.10 Debug Foundation 与 5.11 PTInstruments 已进入当前代码架构，仍需真机、真实宿主和多 Scene 回归。
 - 建立长期 `docs/` 文档结构，区分用户指南、当前架构、迁移、维护流程和自动报告。

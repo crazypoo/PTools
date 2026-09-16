@@ -59,7 +59,7 @@ public class PTDarkModeControl: PTListViewController {
     public override func configureListView(_ listView: PTCollectionView) {
         listView.customerLayout = { sectionIndex,sectionModel in
             var cellHeight:CGFloat = 0
-            if Gobal_device_info.isPad {
+            if deviceInfo.isPad {
                 cellHeight = 64
             } else {
                 cellHeight = 44.adapter

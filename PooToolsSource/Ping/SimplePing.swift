@@ -238,7 +238,7 @@ public class SimplePing {
 		/* Our dummy payload is sized so that the resulting ICMP packet, including
 		 * the ICMPHeader, is 64-bytes, which makes it easier to recognise our
 		 * packets on the wire. */
-		let payload = data ?? String(format: "%28zd bottles of beer on the wall", 99 - (nextSequenceNumber % 100)).data(using: .ascii)!
+		let payload = data ?? String(format: "%28zd bottles of beer on the wall", 99 - (nextSequenceNumber % 100)).data(using: .ascii) ?? Data(repeating: 0, count: 56)
 		assert(data != nil || payload.count == 56)
 		
 		let packet: Data

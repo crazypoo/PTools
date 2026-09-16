@@ -48,7 +48,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                 var groupH:CGFloat = 0
                 let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
                 var cellHeight:CGFloat = 0
-                if Gobal_device_info.isPad {
+                if deviceInfo.isPad {
                     cellHeight = 64
                 } else {
                     cellHeight = CGFloat.ScaleW(w: 44)

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "95d9ce2dbcbf6c31a71b63e30b3dfbb6588b888a",
-  "generated_at": "2026-09-14T05:37:12Z",
+  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
+  "generated_at": "2026-09-16T06:04:29Z",
   "name": "PooTools",
   "version": "5.11.11",
   "platforms": {
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 96,
+  "subspec_count": 104,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -55,6 +55,20 @@
     {
       "name": "PooTools/BilogyID",
       "short_name": "BilogyID",
+      "local_dependencies": [
+        "PooTools/BioID"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/BioID",
+      "short_name": "BioID",
       "local_dependencies": [
         "PooTools/Core",
         "PooTools/FaceIDPermission",
@@ -125,7 +139,7 @@
       "name": "PooTools/CalendarPermission",
       "short_name": "CalendarPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -145,7 +159,7 @@
       "name": "PooTools/CameraPermission",
       "short_name": "CameraPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -164,9 +178,7 @@
     {
       "name": "PooTools/CheckBox",
       "short_name": "CheckBox",
-      "local_dependencies": [
-        "PooTools/Core"
-      ],
+      "local_dependencies": [],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/CheckBox/*.{h,m,swift}"
@@ -184,9 +196,7 @@
     {
       "name": "PooTools/CheckDirtyWord",
       "short_name": "CheckDirtyWord",
-      "local_dependencies": [
-        "PooTools/Core"
-      ],
+      "local_dependencies": [],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/CheckDirtyWord/*.{h,m,swift}"
@@ -312,7 +322,7 @@
       "name": "PooTools/ContactsPermission",
       "short_name": "ContactsPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -331,7 +341,9 @@
     {
       "name": "PooTools/Core",
       "short_name": "Core",
-      "local_dependencies": [],
+      "local_dependencies": [
+        "PooTools/PToolsUIFoundation"
+      ],
       "third_party_dependencies": [
         "AttributedString",
         "CocoaLumberjack/Swift",
@@ -427,7 +439,7 @@
         "UIKit"
       ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_UIFOUNDATION"
       }
     },
     {
@@ -592,7 +604,7 @@
       "name": "PooTools/FaceIDPermission",
       "short_name": "FaceIDPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -737,7 +749,7 @@
       "name": "PooTools/HealthPermission",
       "short_name": "HealthPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -823,6 +835,7 @@
       "local_dependencies": [
         "PooTools/Core",
         "PooTools/HarbethKit",
+        "PooTools/MediaCore",
         "PooTools/PhotoPicker"
       ],
       "third_party_dependencies": [],
@@ -986,9 +999,7 @@
     {
       "name": "PooTools/KeyChain",
       "short_name": "KeyChain",
-      "local_dependencies": [
-        "PooTools/Core"
-      ],
+      "local_dependencies": [],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/KeyChain/*.{h,m,swift}"
@@ -1112,7 +1123,7 @@
       "name": "PooTools/LocationPermission",
       "short_name": "LocationPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1149,12 +1160,50 @@
       }
     },
     {
+      "name": "PooTools/MediaCore",
+      "short_name": "MediaCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsMediaCore/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsMediaCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/MediaPermission",
+      "short_name": "MediaPermission",
+      "local_dependencies": [
+        "PooTools/PToolsPermissionCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/MeidaLibraryPermission/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "MeidaLibraryPermission"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MEDIA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/MediaViewer",
       "short_name": "MediaViewer",
       "local_dependencies": [
         "PooTools/Core",
         "PooTools/LivePhoto",
-        "PooTools/NetWork",
+        "PooTools/MediaCore",
         "PooTools/PageControl",
         "PooTools/ProgressBar"
       ],
@@ -1178,21 +1227,15 @@
       "name": "PooTools/MeidaPermission",
       "short_name": "MeidaPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/MediaPermission"
       ],
       "third_party_dependencies": [],
-      "source_files": [
-        "PooToolsSource/MeidaLibraryPermission/*.{h,m,swift}"
-      ],
-      "source_directories": [
-        "MeidaLibraryPermission"
-      ],
+      "source_files": [],
+      "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MEDIA POOTOOLS_COCOAPODS"
-      }
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/MessageKit",
@@ -1219,7 +1262,7 @@
       "name": "PooTools/MicPermission",
       "short_name": "MicPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1262,7 +1305,7 @@
       "name": "PooTools/MotionPermission",
       "short_name": "MotionPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1301,6 +1344,20 @@
     {
       "name": "PooTools/NetWork",
       "short_name": "NetWork",
+      "local_dependencies": [
+        "PooTools/Network"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [],
+      "source_directories": [],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/Network",
+      "short_name": "Network",
       "local_dependencies": [
         "PooTools/Core",
         "PooTools/Loading"
@@ -1363,7 +1420,7 @@
       "name": "PooTools/NotificationPermission",
       "short_name": "NotificationPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1423,6 +1480,85 @@
       }
     },
     {
+      "name": "PooTools/PToolsCore",
+      "short_name": "PToolsCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsCore/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/PToolsPermissionCore",
+      "short_name": "PToolsPermissionCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsPermissionCore/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsPermissionCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/PToolsPermissionUI",
+      "short_name": "PToolsPermissionUI",
+      "local_dependencies": [
+        "PooTools/PToolsPermissionCore",
+        "PooTools/PToolsUIFoundation"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsPermissionUI/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsPermissionUI"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/PToolsUIFoundation",
+      "short_name": "PToolsUIFoundation",
+      "local_dependencies": [],
+      "third_party_dependencies": [
+        "SnapKit"
+      ],
+      "source_files": [
+        "PooToolsSource/PToolsUIFoundation/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsUIFoundation"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
       "name": "PooTools/PageControl",
       "short_name": "PageControl",
       "local_dependencies": [
@@ -1468,9 +1604,7 @@
     {
       "name": "PooTools/PhoneInfo",
       "short_name": "PhoneInfo",
-      "local_dependencies": [
-        "PooTools/Core"
-      ],
+      "local_dependencies": [],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/PhoneInfo/*.{h,m,swift}"
@@ -1494,7 +1628,7 @@
         "PooTools/Core",
         "PooTools/ImagePicker",
         "PooTools/Loading",
-        "PooTools/NetWork"
+        "PooTools/MediaCore"
       ],
       "third_party_dependencies": [
         "Kakapos"
@@ -1594,9 +1728,12 @@
       "name": "PooTools/RateView",
       "short_name": "RateView",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsUIFoundation"
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        "SnapKit",
+        "SwifterSwift"
+      ],
       "source_files": [
         "PooToolsSource/RateView/*.{h,m,swift}"
       ],
@@ -1614,7 +1751,7 @@
       "name": "PooTools/RemindersPermission",
       "short_name": "RemindersPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1819,9 +1956,11 @@
       "name": "PooTools/Slider",
       "short_name": "Slider",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsUIFoundation"
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        "SnapKit"
+      ],
       "source_files": [
         "PooToolsSource/Slider/*.{h,m,swift}"
       ],
@@ -1881,7 +2020,7 @@
       "name": "PooTools/SpeechRecognizerPermission",
       "short_name": "SpeechRecognizerPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -2024,7 +2163,7 @@
       "name": "PooTools/TrackingPermission",
       "short_name": "TrackingPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -2065,6 +2204,7 @@
         "PooTools/Core",
         "PooTools/HarbethKit",
         "PooTools/Loading",
+        "PooTools/MediaCore",
         "PooTools/ProgressBar"
       ],
       "third_party_dependencies": [],

@@ -43,7 +43,7 @@ public class PTHeartRateManager: NSObject {
     public init(cameraType: CameraType, preferredSpec: VideoSpec?, previewContainer: CALayer?) {
         super.init()
         
-        if !Gobal_device_info.isSimulator {
+        if !deviceInfo.isSimulator {
             videoDevice = cameraType.captureDevice()
             
             // MARK: - Setup Video Format

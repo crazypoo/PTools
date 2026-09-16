@@ -365,6 +365,10 @@
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
+		55941A0D305AD2CD00D93744 /* NetworkMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55941A09305AD2CD00D93744 /* NetworkMetrics.swift */; };
+		55941A0E305AD2CD00D93744 /* NetworkUploads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55941A0B305AD2CD00D93744 /* NetworkUploads.swift */; };
+		55941A0F305AD2CD00D93744 /* NetworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55941A0A305AD2CD00D93744 /* NetworkSupport.swift */; };
+		55941A10305AD2CD00D93744 /* PTNetworkArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55941A0C305AD2CD00D93744 /* PTNetworkArchitecture.swift */; };
 		5595F8CE2FA8903400175217 /* UIView+PTEXShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5595F8CD2FA8903400175217 /* UIView+PTEXShake.swift */; };
 		5597CADA2D8F093E00947B58 /* MetricsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5597CAD92D8F093E00947B58 /* MetricsManager.swift */; };
 		559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559978322D5BB07C00484FB1 /* PTRouterBridge.swift */; };
@@ -1357,6 +1361,10 @@
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
+		55941A09305AD2CD00D93744 /* NetworkMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMetrics.swift; sourceTree = "<group>"; };
+		55941A0A305AD2CD00D93744 /* NetworkSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSupport.swift; sourceTree = "<group>"; };
+		55941A0B305AD2CD00D93744 /* NetworkUploads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUploads.swift; sourceTree = "<group>"; };
+		55941A0C305AD2CD00D93744 /* PTNetworkArchitecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkArchitecture.swift; sourceTree = "<group>"; };
 		5595F8CD2FA8903400175217 /* UIView+PTEXShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTEXShake.swift"; sourceTree = "<group>"; };
 		5597CAD92D8F093E00947B58 /* MetricsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsManager.swift; sourceTree = "<group>"; };
 		559978322D5BB07C00484FB1 /* PTRouterBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterBridge.swift; sourceTree = "<group>"; };
@@ -2329,6 +2337,10 @@
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
+				55941A09305AD2CD00D93744 /* NetworkMetrics.swift */,
+				55941A0A305AD2CD00D93744 /* NetworkSupport.swift */,
+				55941A0B305AD2CD00D93744 /* NetworkUploads.swift */,
+				55941A0C305AD2CD00D93744 /* PTNetworkArchitecture.swift */,
 				552660EC303741C700582606 /* NetworkTypes.swift */,
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 			);
@@ -4783,6 +4795,10 @@
 				55B1F0A82B25878200247ED1 /* PTPermissionSettingHeader.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
+				55941A0D305AD2CD00D93744 /* NetworkMetrics.swift in Sources */,
+				55941A0E305AD2CD00D93744 /* NetworkUploads.swift in Sources */,
+				55941A0F305AD2CD00D93744 /* NetworkSupport.swift in Sources */,
+				55941A10305AD2CD00D93744 /* PTNetworkArchitecture.swift in Sources */,
 				556CA4B02B29114E00A5B189 /* PTVideoEditorToolsSlider.swift in Sources */,
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55DD93752B938DE300F65872 /* PTSideMenuControl.swift in Sources */,
