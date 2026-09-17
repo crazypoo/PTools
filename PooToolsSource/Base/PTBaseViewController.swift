@@ -939,6 +939,14 @@ open class PTBaseViewController: UIViewController {
 
     private var hidesBaseNavigationBarOnLoad = false
                    
+    // MARK: - Custom Back Button
+
+    /// setCustomBackButtonView 创建的外层容器
+    private weak var customBackButtonContainer: UIView?
+
+    /// 实际传入的自定义 Back View
+    private weak var customBackButtonContentView: UIView?
+
     open func prefersLargeTitle() -> Bool {
         return false
     }
@@ -1144,11 +1152,21 @@ open class PTBaseViewController: UIViewController {
     open func setCustomBackButtonView(_ customView: UIView,
                                       size: CGSize? = nil,
                                       action: PTActionTask? = nil) {
+        let targetSize = size ?? CGSize(
+            width: PTAppBaseConfig.share.navBarButtonSize,
+            height: PTAppBaseConfig.share.navBarButtonSize
+        )
+
         // 容器 UIView
         let container = UIView()
         container.isUserInteractionEnabled = true
         container.clipsToBounds = true
-        container.bounds = CGRect(origin: .zero, size: size ?? CGSize(width: PTAppBaseConfig.share.navBarButtonSize, height: PTAppBaseConfig.share.navBarButtonSize))
+        container.bounds = CGRect(origin: .zero, size: targetSize)
+        
+        // 保存引用，后面语言切换时可以重新计算 Bounds
+        customBackButtonContainer = container
+        customBackButtonContentView = customView
+
         // 加 customView
         container.addSubview(customView)
         customView.snp.makeConstraints { make in
@@ -1171,6 +1189,58 @@ open class PTBaseViewController: UIViewController {
         item.leftView = [container]
         
         PTNavigationBarManager.shared.update(item: item, for: self)
+    }
+    
+    open func updateCustomBackButtonBounds(_ size: CGSize) {
+        guard let container = customBackButtonContainer,
+              size.width > 0,
+              size.height > 0 else {
+            return
+        }
+
+        // ① 更新真正决定 NavigationBar 布局的 container.bounds
+        container.bounds = CGRect(origin: .zero, size: size)
+        container.setNeedsLayout()
+        container.layoutIfNeeded()
+        
+        // ② 重新通知 PTNavigationBarManager
+        // setLeftView() 会重新读取：
+        // value.bounds.size
+        // 然后重新生成 SnapKit size 约束。
+        let item = PTNavigationBarManager.shared.item(for: self)
+
+        guard item.leftView.contains(where: { $0 === container }) else {
+            return
+        }
+
+        PTNavigationBarManager.shared.update(item: item, for: self)
+    }
+    
+    open func refreshCustomBackButtonBounds(minimumWidth: CGFloat? = nil,height: CGFloat? = nil) {
+        guard let contentView = customBackButtonContentView,
+              let container = customBackButtonContainer else {
+            return
+        }
+
+        contentView.invalidateIntrinsicContentSize()
+        contentView.setNeedsLayout()
+        contentView.layoutIfNeeded()
+
+        let targetHeight: CGFloat
+
+        if let height {
+            targetHeight = height
+        } else if container.bounds.height > 0 {
+            targetHeight = container.bounds.height
+        } else {
+            targetHeight = PTAppBaseConfig.share.navBarButtonSize
+        }
+
+        let fittingSize = contentView.systemLayoutSizeFitting(CGSize(width: UIView.layoutFittingCompressedSize.width, height: targetHeight), withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
+
+        let targetWidth = max(minimumWidth ?? PTAppBaseConfig.share.navBarButtonSize,ceil(fittingSize.width))
+
+        updateCustomBackButtonBounds(CGSize(width: targetWidth, height: targetHeight))
     }
     
     open func setLeftButtons(views:[UIView], buttonSpacing: CGFloat = 10) {
