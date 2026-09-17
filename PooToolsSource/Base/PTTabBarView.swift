@@ -1068,3 +1068,157 @@ final public class PTTabBarView: UIView {
                                     fallbackColor: PTAppBaseConfig.share.tabSelectedMetailColor)
     }
 }
+
+@MainActor
+public extension PTTabBarView {
+
+    /// Refresh only the localized titles of the existing TabBar items.
+    ///
+    /// This intentionally does NOT rebuild `PTTabBarItemView`, so it preserves:
+    /// - current selected index
+    /// - badge state
+    /// - Lottie / image content instances
+    /// - minimized state
+    /// - selection callbacks / double-tap callbacks
+    ///
+    /// Important:
+    /// The number of items and the "has title / no title" structure must remain
+    /// unchanged. A language switch should normally satisfy this requirement.
+    ///
+    /// - Parameters:
+    ///   - configs: Fresh configs created after the app language has changed.
+    ///   - centerTitle: Fresh localized title for the center-raised button.
+    ///   - animated: Whether title changes use a cross-dissolve animation.
+    @discardableResult
+    func reloadLanguage(with configs: [PTTabBarItemConfig], centerTitle: String? = nil, animated: Bool = false) -> Bool {
+        let titles = configs.map(\.title)
+        return reloadLanguage(
+            titles: titles,
+            centerTitle: centerTitle,
+            animated: animated
+        )
+    }
+
+    /// Refresh localized titles directly.
+    ///
+    /// Use this overload when the caller already has the new localized title array.
+    ///
+    /// Example:
+    ///
+    ///     ptCustomBar.reloadLanguage(
+    ///         titles: [
+    ///             "Home".localized(),
+    ///             "Message".localized(),
+    ///             "Mine".localized()
+    ///         ]
+    ///     )
+    ///
+    @discardableResult
+    func reloadLanguage(titles: [String], centerTitle: String? = nil, animated: Bool = false) -> Bool {
+        guard titles.count == items.count else {
+            assertionFailure(
+                "PTTabBarView.reloadLanguage: titles.count (\(titles.count)) " +
+                "must equal items.count (\(items.count))."
+            )
+            return false
+        }
+
+        // A language change should only change text, not TabBar structure.
+        // Rebuilding the whole item hierarchy here would unnecessarily lose
+        // badge/Lottie/runtime state, so reject structural title changes.
+        for (index, item) in items.enumerated() {
+            let title = titles[index]
+            let titleLabel = pt_titleLabel(in: item)
+
+            let currentlyHasTitle = titleLabel != nil
+            let shouldHaveTitle = !title.isEmpty
+
+            guard currentlyHasTitle == shouldHaveTitle else {
+                assertionFailure(
+                    "PTTabBarView.reloadLanguage: item \(index) changed between " +
+                    "\"has title\" and \"no title\". Use setup(configs:layoutStyle:centerContent:) " +
+                    "for structural TabBar changes."
+                )
+                return false
+            }
+        }
+
+        let updates = { [weak self] in
+            guard let self else { return }
+
+            for (index, item) in self.items.enumerated() {
+                guard let titleLabel = self.pt_titleLabel(in: item) else {
+                    // This item intentionally has no title.
+                    continue
+                }
+
+                let title = titles[index]
+                titleLabel.text = title
+
+                // Keep VoiceOver text synchronized with the visible localized title.
+                item.accessibilityLabel = title
+            }
+
+            if let centerTitle {
+                self.pt_applyCenterTitle(centerTitle)
+            }
+
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+
+        if animated && !UIAccessibility.isReduceMotionEnabled {
+            UIView.transition(
+                with: self,
+                duration: PTUIAccessibility.animationDuration(0.20),
+                options: [.transitionCrossDissolve, .allowUserInteraction, .beginFromCurrentState],
+                animations: updates
+            )
+        } else {
+            updates()
+        }
+
+        return true
+    }
+}
+
+// MARK: - Private helpers
+
+@MainActor
+private extension PTTabBarView {
+
+    /// `PTTabBarItemView.setupUI(title:)` currently adds titleLabel first,
+    /// followed by content.view. We intentionally resolve only the direct first
+    /// subview so labels inside a custom item content are not mistaken for the title.
+    func pt_titleLabel(in item: PTTabBarItemView) -> UILabel? {
+        guard let firstSubview = item.subviews.first else {
+            return nil
+        }
+
+        // When an item has no title, content.view is the first direct subview.
+        guard firstSubview !== item.imageContent else {
+            return nil
+        }
+
+        return firstSubview as? UILabel
+    }
+
+    /// Refresh the center-raised localized title without rebuilding centerContent.
+    ///
+    /// `centerTitle`'s existing setter updates the private label's text. The extra
+    /// direct-label lookup also keeps its hidden state correct when empty/non-empty
+    /// values are used.
+    func pt_applyCenterTitle(_ title: String) {
+        centerTitle = title
+
+        // centerNameLabel is the only UILabel directly owned by PTTabBarView.
+        // Item labels live inside left/right stack views.
+        let centerLabel = subviews
+            .compactMap { $0 as? UILabel }
+            .first
+
+        centerLabel?.text = title
+        centerLabel?.isHidden = title.isEmpty
+        centerLabel?.accessibilityLabel = title
+    }
+}
