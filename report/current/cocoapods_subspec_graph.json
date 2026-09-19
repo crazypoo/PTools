@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:43:54Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:11:42Z",
   "name": "PooTools",
-  "version": "5.11.15",
+  "version": "5.12.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -342,6 +342,7 @@
       "name": "PooTools/Core",
       "short_name": "Core",
       "local_dependencies": [
+        "PooTools/PToolsCore",
         "PooTools/PToolsUIFoundation"
       ],
       "third_party_dependencies": [
@@ -439,7 +440,7 @@
         "UIKit"
       ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_UIFOUNDATION"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION"
       }
     },
     {
@@ -1540,7 +1541,9 @@
     {
       "name": "PooTools/PToolsUIFoundation",
       "short_name": "PToolsUIFoundation",
-      "local_dependencies": [],
+      "local_dependencies": [
+        "PooTools/PToolsCore"
+      ],
       "third_party_dependencies": [
         "SnapKit"
       ],

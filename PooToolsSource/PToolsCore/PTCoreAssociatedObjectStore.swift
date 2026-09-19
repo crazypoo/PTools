@@ -1,5 +1,5 @@
 //
-//  PTAssociatedObjectStore.swift
+//  PTCoreAssociatedObjectStore.swift
 //  PToolsCore
 //
 //  Objective-C associated-object compatibility for Foundation extensions.

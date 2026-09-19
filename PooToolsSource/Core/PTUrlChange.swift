@@ -10,8 +10,9 @@ import Foundation
 
 #if canImport(PToolsCore)
 import PToolsCore
-public typealias PTURLParser = PToolsCore.PTURLParser
-#else
+#endif
+
+#if !POOTOOLS_SPLIT_CORE && !canImport(PToolsCore)
 // English: Keep URL query parsing in the Foundation-only core so UI modules do not own this utility.
 // Español: Mantiene el análisis de consultas URL en el núcleo basado solo en Foundation para que los módulos UI no sean propietarios de esta utilidad.
 // 中文：将 URL 查询解析放在仅依赖 Foundation 的核心中，避免由 UI 模块重复维护。

@@ -201,9 +201,7 @@ public struct PTDefaultSceneContextProvider: PTSceneContextProviding {
 // English: Reuse the Foundation-only bridge when the split Core module is available; keep a local fallback for direct legacy source builds.
 // Español: Reutiliza el puente basado solo en Foundation cuando está disponible el módulo Core separado; conserva una alternativa local para compilaciones heredadas directas.
 // 中文：拆分 Core 模块可用时复用 Foundation-only 桥接；直接编译旧源码时保留本地兼容实现。
-#if canImport(PToolsCore)
-public typealias PTMainActorBridge = PToolsCore.PTMainActorBridge
-#else
+#if !POOTOOLS_SPLIT_CORE && !canImport(PToolsCore)
 public enum PTMainActorBridge {
     @discardableResult
     public static func perform(_ operation: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {

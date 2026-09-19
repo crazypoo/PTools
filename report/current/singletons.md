@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd
-Generated at: 2026-09-19T13:43:52Z
+Source revision: bb9fa317fb1609afeb3774eb589eea2140d51e82
+Generated at: 2026-09-19T18:11:40Z
 -->
 
 # PTools 当前单例范围盘点
@@ -38,7 +38,7 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/Contact/PTContact.swift:48 | share | C Shared mutable service | public static let share = PTContact() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTAppUserdefault.swift:45 | shared | C Shared mutable service | public static let shared = PTCoreUserDefultsWrapper() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTGCDManager.swift:49 | shared | C Shared mutable service | public static let shared = PTGCDManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:244 | shared | A Stateless convenience or immutable utility | public static let shared = PTMemoryWarningCoordinator() | 优先保留；有可变状态时迁移为实例配置 |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:250 | shared | A Stateless convenience or immutable utility | public static let shared = PTMemoryWarningCoordinator() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Core/PTUtils.swift:298 | share | A Stateless convenience or immutable utility | public static let share = PTUtils() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Country/PTCountryCodes.swift:19 | share | C Shared mutable service | @MainActor public static let share = PTCountryCodes() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift:14 | shared | C Shared mutable service | static let shared = PTDebugLocationKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
@@ -82,7 +82,7 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift:71 | shared | C Shared mutable service | static var shared: PTPermissionLocationAlwaysHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift:79 | shared | C Shared mutable service | @MainActor static var shared: PTPermissionLocationWhenInUseHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Log/PTLogFileManager.swift:5 | shared | C Shared mutable service | public static let shared = PTLogFileManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Log/PTNSLog.swift:80 | shared | C Shared mutable service | public static let shared = PTLogSinkCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/Log/PTNSLog.swift:86 | shared | C Shared mutable service | public static let shared = PTLogSinkCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:15 | shared | C Shared mutable service | public static let shared = MetricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:36 | share | C Shared mutable service | public static let share = PTMediaBrowserConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MessageKit/PTChatConfig.swift:42 | share | C Shared mutable service | public static let share = PTChatConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

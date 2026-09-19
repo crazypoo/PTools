@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd
-Generated at: 2026-09-19T13:44:02Z
+Source revision: bb9fa317fb1609afeb3774eb589eea2140d51e82
+Generated at: 2026-09-19T18:12:00Z
 -->
 
 # PTools 当前缓存盘点
@@ -133,6 +133,9 @@ Generated at: 2026-09-19T13:44:02Z
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:206 | disk or custom cache | // MARK: - Memory Cache |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:207 | NSCache | @MainActor private static let imageCache = NSCache<NSString, UIImage>() |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:219 | disk or custom cache | // MARK: - Disk Cache |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:5 | disk or custom cache | // English: Foundation-only contracts shared by logging, cache, and error adapters. |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:40 | disk or custom cache | // English: Use a small typed cache contract instead of exposing a third-party cache type. |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:53 | disk or custom cache | // English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free. |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:120 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:627 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:665 | disk or custom cache | // MARK: - Cache Helper |

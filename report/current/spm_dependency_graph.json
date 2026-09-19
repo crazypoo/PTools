@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:43:54Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:11:42Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -2744,7 +2744,19 @@
       "path": "PooToolsSource/PToolsUIFoundation",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        }
+      ],
       "third_party_dependencies": [
         {
           "name": "SnapKit",

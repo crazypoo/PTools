@@ -63,10 +63,39 @@ final class PTCoreContractTests: XCTestCase {
         let cache = PTMemoryCache<String>()
 
         await cache.insert("value", forKey: "key")
-        XCTAssertEqual(await cache.value(forKey: "key"), "value")
+        let storedValue = await cache.value(forKey: "key")
+        XCTAssertEqual(storedValue, "value")
 
         await cache.removeValue(forKey: "key")
-        XCTAssertNil(await cache.value(forKey: "key"))
+        let removedValue = await cache.value(forKey: "key")
+        XCTAssertNil(removedValue)
+    }
+
+    // English: Verify that typed JSON values round-trip without crossing the Any boundary.
+    // Español: Verifica que los valores JSON tipados se conserven sin cruzar el límite de Any.
+    // 中文：验证类型化 JSON 值可以往返编解码且不会跨越 Any 边界。
+    func testJSONValueRoundTrip() throws {
+        let value: PTJSONValue = .object([
+            "name": .string("PTools"),
+            "count": .integer(5),
+            "enabled": .bool(true),
+            "items": .array([.null, .number(2.5)])
+        ])
+
+        let data = try JSONEncoder().encode(value)
+        let decoded = try JSONDecoder().decode(PTJSONValue.self, from: data)
+        XCTAssertEqual(decoded, value)
+    }
+
+    // English: Verify that the common result surface keeps success and failure typed.
+    // Español: Verifica que el resultado común mantenga tipificados el éxito y el fallo.
+    // 中文：验证通用结果类型同时保持成功值和失败错误的明确类型。
+    func testCoreResultIsTyped() {
+        let success: PTResult<String> = .success("ok")
+        let failure: PTResult<String> = .failure(.cancelled)
+
+        XCTAssertEqual(success.successValue, "ok")
+        XCTAssertEqual(failure.failureError, .cancelled)
     }
 
     // English: Verify that the shared MainActor bridge remains cancellable and value-only at its boundary.
@@ -76,7 +105,7 @@ final class PTCoreContractTests: XCTestCase {
     func testMainActorBridgeCanBeCancelledBeforeExecution() async {
         let didRun = PTAtomic(false)
         let task = PTMainActorBridge.after(0.05) {
-            didRun.value = true
+            didRun.compareExchange(expected: false, desired: true)
         }
 
         task.cancel()

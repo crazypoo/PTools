@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd
-Generated at: 2026-09-19T13:43:52Z
+Source revision: bb9fa317fb1609afeb3774eb589eea2140d51e82
+Generated at: 2026-09-19T18:11:39Z
 -->
 
 # PTools 当前公开 API 清单
@@ -128,20 +128,39 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/ActionsheetAndAlert/PTAlertWindow.swift:13 | var | public | public var allowsEventPenetration = false |
 | PooToolsSource/ActionsheetAndAlert/PTAlertWindow.swift:15 | var | public | public var autoHideWhenPenetrated = false |
 | PooToolsSource/ActionsheetAndAlert/PTAlertWindow.swift:17 | var | public | public var rootPopoverController: PTAlertProtocol? { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:15 | enum | public | public enum PTCustomerAlertGlassStyle: Sendable { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:24 | enum | public | public enum PTCustomerAlertCornerStyle: Sendable { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:32 | enum | public | public enum PTCustomerAlertActionStyle: Sendable { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:41 | struct | public | public struct PTCustomerAlertAppearance: Sendable { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:42 | var | public | public var glassEnabled: Bool |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:43 | var | public | public var glassStyle: PTCustomerAlertGlassStyle |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:44 | var | public | public var respectsReduceTransparency: Bool |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:45 | var | public | public var cornerStyle: PTCustomerAlertCornerStyle |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:46 | var | public | public var contentInsets: UIEdgeInsets |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:47 | var | public | public var titleMessageSpacing: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:48 | var | public | public var minimumSingleTextContentHeight: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:49 | var | public | public var minimumDualTextContentHeight: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:50 | var | public | public var actionBaseHeight: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:51 | var | public | public var separatorAlpha: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:52 | var | public | public var dimmingAlpha: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:53 | var | public | public var maximumWidth: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:54 | var | public | public var maximumHeightRatio: CGFloat |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift:56 | init | public | public init( |
 | PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:13 | typealias | public | public typealias PTCustomerCustomerBlock = (_ alertCustomerView: UIView) -> Void |
 | PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:15 | enum | public | @objc public enum PTAlertAnimationType: Int { |
 | PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:24 | class | public | public class PTCustomBottomButtonModel: NSObject { |
 | PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:25 | var | public | public var titleName: String? = "" |
 | PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:26 | var | public | public var titleColor: UIColor? = .systemBlue |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:31 | class | public | public class PTCustomerAlertController: PTAlertController { |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:62 | var | public | public var bottomButtonTapCallback: ((_ title: String, _ index: Int) -> Void)? |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:64 | var | public | public var backgroundTapCallback: ((PTCustomerAlertController) -> Void)? |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:67 | var | public | public var maximumContentWidth: CGFloat = 340 { |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:78 | var | public | public var contentBackgroundColor: UIColor? { |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:85 | var | public | public var visualStyle: PTVisualStyle = .automatic { |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:97 | func | public | public func invalidateContentLayout() { |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:378 | init | public | public init( |
-| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:1151 | func | public | public func gestureRecognizer( |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:32 | class | public | public class PTCustomerAlertController: PTAlertController { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:63 | var | public | public var bottomButtonTapCallback: ((_ title: String, _ index: Int) -> Void)? |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:65 | var | public | public var backgroundTapCallback: ((PTCustomerAlertController) -> Void)? |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:68 | var | public | public var maximumContentWidth: CGFloat = 340 { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:79 | var | public | public var contentBackgroundColor: UIColor? { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:86 | var | public | public var visualStyle: PTVisualStyle = .automatic { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:95 | var | public | public var appearance: PTCustomerAlertAppearance = .default { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:112 | func | public | public func invalidateContentLayout() { |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:374 | init | public | public init( |
+| PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift:1195 | func | public | public func gestureRecognizer( |
 | PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift:14 | class | public | public class PTDynamicNotificationView: UIView { |
 | PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift:16 | var | public | public var hideHandler: PTActionTask? |
 | PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift:27 | init | public | public init(showTimes: TimeInterval = 3, |
@@ -1933,23 +1952,23 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/Core/PTUpdateTipsViewController.swift:120 | var | public | @MainActor public var doneTask:PTActionTask? = nil |
 | PooToolsSource/Core/PTUpdateTipsViewController.swift:121 | var | public | @MainActor public var cancelTask:PTActionTask? = nil |
 | PooToolsSource/Core/PTUpdateTipsViewController.swift:181 | init | public | public init(titleString:String = "",cancelTitle:String = "",doneTitle:String) { |
-| PooToolsSource/Core/PTUrlChange.swift:15 | enum | public | public enum PTURLParser { |
-| PooToolsSource/Core/PTUrlChange.swift:60 | class | public | public class PTUrlChange: NSObject { |
-| PooToolsSource/Core/PTUrlChange.swift:62 | class | public | public class func getRange(text: String, findText: String) -> [Int] { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:12 | func | public | @MainActor public func deviceSafeAreaInsets() -> UIEdgeInsets { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:20 | enum | public | public enum PTSceneContext { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:24 | struct | public | public struct Scope: Hashable, Sendable { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:25 | let | public | public let persistentIdentifier: String |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:27 | init | public | public init(persistentIdentifier: String) { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:171 | protocol | public | public protocol PTSceneContextProviding { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:181 | struct | public | public struct PTDefaultSceneContextProvider: PTSceneContextProviding { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:182 | init | public | public init() {} |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:184 | func | public | public func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:188 | func | public | public func rootViewController(in scene: UIWindowScene? = nil) -> UIViewController? { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:192 | func | public | public func currentViewController(in scene: UIWindowScene? = nil) -> UIViewController? { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:200 | enum | public | public enum PTMainActorBridge { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:264 | func | public | public func register(_ handler: @escaping @MainActor () -> Void) -> UUID { |
-| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:270 | func | public | public func unregister(_ token: UUID) { |
+| PooToolsSource/Core/PTUrlChange.swift:19 | enum | public | public enum PTURLParser { |
+| PooToolsSource/Core/PTUrlChange.swift:64 | class | public | public class PTUrlChange: NSObject { |
+| PooToolsSource/Core/PTUrlChange.swift:66 | class | public | public class func getRange(text: String, findText: String) -> [Int] { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:16 | func | public | @MainActor public func deviceSafeAreaInsets() -> UIEdgeInsets { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:24 | enum | public | public enum PTSceneContext { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:28 | struct | public | public struct Scope: Hashable, Sendable { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:29 | let | public | public let persistentIdentifier: String |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:31 | init | public | public init(persistentIdentifier: String) { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:175 | protocol | public | public protocol PTSceneContextProviding { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:185 | struct | public | public struct PTDefaultSceneContextProvider: PTSceneContextProviding { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:186 | init | public | public init() {} |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:188 | func | public | public func activeWindow(in scene: UIWindowScene? = nil) -> UIWindow? { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:192 | func | public | public func rootViewController(in scene: UIWindowScene? = nil) -> UIViewController? { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:196 | func | public | public func currentViewController(in scene: UIWindowScene? = nil) -> UIViewController? { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:205 | enum | public | public enum PTMainActorBridge { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:270 | func | public | public func register(_ handler: @escaping @MainActor () -> Void) -> UUID { |
+| PooToolsSource/Core/PTUtils+SceneConcurrency.swift:276 | func | public | public func unregister(_ token: UUID) { |
 | PooToolsSource/Core/PTUtils.swift:17 | enum | public | public enum PTUIKitRuntimeHooks { |
 | PooToolsSource/Core/PTUtils.swift:38 | enum | public | public enum PTVisualStyle: String, CaseIterable, Equatable, Hashable, Sendable { |
 | PooToolsSource/Core/PTUtils.swift:46 | enum | public | public enum PTVisualStyleResolver { |
@@ -3457,36 +3476,36 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/Log/Logger+PTEX.swift:71 | var | public | public var PTLogMode: LoggerEXLevelType { |
 | PooToolsSource/Log/PTLogFileManager.swift:4 | actor | public | public actor PTLogFileManager { |
 | PooToolsSource/Log/PTLogFileManager.swift:11 | func | public | public func append(logText: String) { |
-| PooToolsSource/Log/PTNSLog.swift:19 | enum | public | public enum PTLogSeverity: String, Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:26 | struct | public | public struct PTLogEvent: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:27 | let | public | public let message: String |
-| PooToolsSource/Log/PTNSLog.swift:28 | let | public | public let severity: PTLogSeverity |
-| PooToolsSource/Log/PTNSLog.swift:29 | let | public | public let category: String |
-| PooToolsSource/Log/PTNSLog.swift:31 | init | public | public init(message: String, |
-| PooToolsSource/Log/PTNSLog.swift:40 | protocol | public | public protocol PTLogging: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:47 | enum | public | public enum PTLogRuntimeConfiguration { |
-| PooToolsSource/Log/PTNSLog.swift:59 | struct | public | public struct PTLogSink { |
-| PooToolsSource/Log/PTNSLog.swift:60 | let | public | public let identifier: String |
-| PooToolsSource/Log/PTNSLog.swift:63 | init | public | public init(identifier: String, |
-| PooToolsSource/Log/PTNSLog.swift:70 | func | public | public func receive(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:86 | func | public | public func install(_ sink: PTLogSink) { |
-| PooToolsSource/Log/PTNSLog.swift:90 | func | public | public func remove(identifier: String) { |
-| PooToolsSource/Log/PTNSLog.swift:94 | func | public | public func publish(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:99 | struct | public | public struct PTOSLogger: PTLogging { |
-| PooToolsSource/Log/PTNSLog.swift:102 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
-| PooToolsSource/Log/PTNSLog.swift:107 | func | public | public func log(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:155 | func | public | public func prettyJSONString(from object: Any) -> String? { |
-| PooToolsSource/Log/PTNSLog.swift:170 | func | public | public func PTNSLogConsole(_ any: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:184 | func | public | public func PTNSLog(_ msg: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:267 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
-| PooToolsSource/Log/PTNSLog.swift:279 | func | public | public func PTPrint<T>(val: inout T, |
-| PooToolsSource/Log/PTNSLog.swift:296 | func | public | public func PTPrint<T>(ref: T, |
-| PooToolsSource/Log/PTNSLog.swift:314 | enum | public | public enum PTMemAlign : Int { |
-| PooToolsSource/Log/PTNSLog.swift:323 | struct | public | public struct PTMems<T> { |
-| PooToolsSource/Log/PTNSLog.swift:428 | enum | public | public enum PTStringMemType : UInt8 { |
-| PooToolsSource/Log/PTNSLog.swift:439 | struct | public | public struct PTMemsWrapper<Base> { |
-| PooToolsSource/Log/PTNSLog.swift:441 | init | public | public init(_ base: Base) { |
-| PooToolsSource/Log/PTNSLog.swift:446 | protocol | public | public protocol PTMemsCompatible {} |
+| PooToolsSource/Log/PTNSLog.swift:24 | enum | public | public enum PTLogSeverity: String, Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:31 | struct | public | public struct PTLogEvent: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:32 | let | public | public let message: String |
+| PooToolsSource/Log/PTNSLog.swift:33 | let | public | public let severity: PTLogSeverity |
+| PooToolsSource/Log/PTNSLog.swift:34 | let | public | public let category: String |
+| PooToolsSource/Log/PTNSLog.swift:36 | init | public | public init(message: String, |
+| PooToolsSource/Log/PTNSLog.swift:45 | protocol | public | public protocol PTLogging: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:53 | enum | public | public enum PTLogRuntimeConfiguration { |
+| PooToolsSource/Log/PTNSLog.swift:65 | struct | public | public struct PTLogSink { |
+| PooToolsSource/Log/PTNSLog.swift:66 | let | public | public let identifier: String |
+| PooToolsSource/Log/PTNSLog.swift:69 | init | public | public init(identifier: String, |
+| PooToolsSource/Log/PTNSLog.swift:76 | func | public | public func receive(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:92 | func | public | public func install(_ sink: PTLogSink) { |
+| PooToolsSource/Log/PTNSLog.swift:96 | func | public | public func remove(identifier: String) { |
+| PooToolsSource/Log/PTNSLog.swift:100 | func | public | public func publish(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:105 | struct | public | public struct PTOSLogger: PTLogging { |
+| PooToolsSource/Log/PTNSLog.swift:108 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
+| PooToolsSource/Log/PTNSLog.swift:113 | func | public | public func log(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:161 | func | public | public func prettyJSONString(from object: Any) -> String? { |
+| PooToolsSource/Log/PTNSLog.swift:176 | func | public | public func PTNSLogConsole(_ any: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:190 | func | public | public func PTNSLog(_ msg: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:273 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
+| PooToolsSource/Log/PTNSLog.swift:285 | func | public | public func PTPrint<T>(val: inout T, |
+| PooToolsSource/Log/PTNSLog.swift:302 | func | public | public func PTPrint<T>(ref: T, |
+| PooToolsSource/Log/PTNSLog.swift:320 | enum | public | public enum PTMemAlign : Int { |
+| PooToolsSource/Log/PTNSLog.swift:329 | struct | public | public struct PTMems<T> { |
+| PooToolsSource/Log/PTNSLog.swift:434 | enum | public | public enum PTStringMemType : UInt8 { |
+| PooToolsSource/Log/PTNSLog.swift:445 | struct | public | public struct PTMemsWrapper<Base> { |
+| PooToolsSource/Log/PTNSLog.swift:447 | init | public | public init(_ base: Base) { |
+| PooToolsSource/Log/PTNSLog.swift:452 | protocol | public | public protocol PTMemsCompatible {} |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:28 | func | public | public func didReceive(_ payloads: [MXMetricPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:49 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:86 | func | public | public func uploadPendingMetrics() { |
@@ -3997,7 +4016,60 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/PDF/PTPDFManager.swift:110 | class | public | public class PDFWithImage: NSObject { |
 | PooToolsSource/PDF/PTViewToPDF.swift:12 | class | public | public class PTViewToPDF: NSObject { |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:63 | enum | public | public enum PDFImageSize { |
-| PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift:16 | protocol | public | public protocol PTAssociatedObjectStore {} |
+| PooToolsSource/PToolsCore/PTCoreAssociatedObjectStore.swift:16 | protocol | public | public protocol PTAssociatedObjectStore {} |
+| PooToolsSource/PToolsCore/PTCoreCodable.swift:15 | enum | public | public enum PTJSONValue: Sendable, Equatable, Codable { |
+| PooToolsSource/PToolsCore/PTCoreCodable.swift:24 | init | public | public init(from decoder: Decoder) throws { |
+| PooToolsSource/PToolsCore/PTCoreCodable.swift:49 | func | public | public func encode(to encoder: Encoder) throws { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:16 | struct | public | public struct PTLocked<Value: Sendable>: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:19 | init | public | public init(_ value: Value) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:24 | func | public | public func withLock<Result: Sendable>(_ body: @Sendable (inout Value) throws -> Result) rethrows -> Result { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:28 | var | public | public var value: Value { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:32 | func | public | public func replace(with value: Value) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:40 | struct | public | public struct PTAtomic<Value: Equatable & Sendable>: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:43 | init | public | public init(_ value: Value) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:47 | var | public | public var value: Value { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:53 | func | public | public func compareExchange(expected: Value, desired: Value) -> Bool { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:73 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:75 | var | public | public var isCancelled: Bool { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:80 | func | public | public func cancel() -> Bool { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:94 | func | public | public func observe(_ handler: @escaping @Sendable () -> Void) -> PTCancellationRegistration { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:118 | func | public | public func invalidate() { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:134 | func | public | public func cancel() { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:150 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:153 | func | public | public func insert(_ token: PTCancellationToken) -> UUID { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:159 | func | public | public func remove(_ identifier: UUID, cancel: Bool = false) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:166 | func | public | public func cancelAll() { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:186 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:188 | var | public | public var isCancelled: Bool { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:192 | func | public | public func observe(_ handler: @escaping @Sendable () -> Void) -> PTCancellationRegistration { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:196 | func | public | public func invalidate() { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:211 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:214 | func | public | public func insert(_ task: Task<Void, Never>) -> UUID { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:220 | func | public | public func remove(_ identifier: UUID) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:224 | func | public | public func cancel(_ identifier: UUID) { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:229 | func | public | public func cancelAll() { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:246 | protocol | public | public protocol PTInvalidating { |
+| PooToolsSource/PToolsCore/PTCoreConcurrency.swift:250 | protocol | public | public protocol PTCancellable: PTInvalidating { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:12 | enum | public | public enum PTLogSeverity: String, Sendable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:19 | struct | public | public struct PTLogEvent: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:20 | let | public | public let message: String |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:21 | let | public | public let severity: PTLogSeverity |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:22 | let | public | public let category: String |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:24 | init | public | public init(message: String, |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:36 | protocol | public | public protocol PTLogging: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:43 | protocol | public | public protocol PTCacheStorage: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:56 | actor | public | public actor PTMemoryCache<Value: Sendable>: PTCacheStorage { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:57 | typealias | public | public typealias Key = String |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:61 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:63 | func | public | public func value(forKey key: String) async -> Value? { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:67 | func | public | public func insert(_ value: Value, forKey key: String) async { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:71 | func | public | public func removeValue(forKey key: String) async { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:75 | func | public | public func removeAll() async { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:83 | enum | public | public enum PTCoreError: Error, LocalizedError, Sendable, Equatable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:89 | var | public | public var errorDescription: String? { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:106 | enum | public | public enum PTResult<Success: Sendable>: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:110 | var | public | public var successValue: Success? { |
+| PooToolsSource/PToolsCore/PTCoreContracts.swift:115 | var | public | public var failureError: PTCoreError? { |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:15 | struct | public | public struct PTProgressSnapshot: Sendable, Equatable { |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:16 | let | public | public let completedUnitCount: Int64 |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:17 | let | public | public let totalUnitCount: Int64 |
@@ -4018,6 +4090,7 @@ Generated at: 2026-09-19T13:43:52Z
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:68 | struct | public | public struct PTSendableTypeBox<T: Sendable>: Sendable { |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:69 | let | public | public let type: T? |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:71 | init | public | public init(_ type: T?) { |
+| PooToolsSource/PToolsCore/PTMainActorBridge.swift:12 | enum | public | public enum PTMainActorBridge { |
 | PooToolsSource/PToolsCore/PTURLParser.swift:15 | enum | public | public enum PTURLParser { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:15 | enum | public | public enum PTMediaResource: Hashable, Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:25 | enum | public | public enum PTImageSource: Hashable, Sendable { |

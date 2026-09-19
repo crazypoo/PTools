@@ -86,7 +86,11 @@ foundation_files = {
   "PToolsCore" => %w[
     PooToolsSource/PToolsCore/PTURLParser.swift
     PooToolsSource/PToolsCore/PTCoreValueTypes.swift
-    PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift
+    PooToolsSource/PToolsCore/PTCoreAssociatedObjectStore.swift
+    PooToolsSource/PToolsCore/PTCoreConcurrency.swift
+    PooToolsSource/PToolsCore/PTMainActorBridge.swift
+    PooToolsSource/PToolsCore/PTCoreContracts.swift
+    PooToolsSource/PToolsCore/PTCoreCodable.swift
   ],
   "PToolsUIFoundation" => %w[
     PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd
-Generated at: 2026-09-19T13:43:54Z
+Source revision: bb9fa317fb1609afeb3774eb589eea2140d51e82
+Generated at: 2026-09-19T18:11:42Z
 -->
 
 # SwiftPM Dependency Graph
@@ -137,7 +137,7 @@ Generated at: 2026-09-19T13:43:54Z
 | `PToolsPermissionCore` | `PooToolsSource/PToolsPermissionCore` | — | — | 0 source entries / 0 resources |
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
-| `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | — | SnapKit | 0 source entries / 0 resources |
+| `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
 | `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBioID` | `PooToolsSource/BioID` | PTFaceIDPermission, ptools | — | 0 source entries / 0 resources |

@@ -99,3 +99,21 @@ public enum PTCoreError: Error, LocalizedError, Sendable, Equatable {
         }
     }
 }
+
+// English: Keep infrastructure results typed and independent from feature-specific errors.
+// Español: Mantiene los resultados de infraestructura tipados e independientes de errores de funciones concretas.
+// 中文：让基础设施结果保持类型化，并独立于具体功能模块的错误类型。
+public enum PTResult<Success: Sendable>: Sendable {
+    case success(Success)
+    case failure(PTCoreError)
+
+    public var successValue: Success? {
+        guard case .success(let value) = self else { return nil }
+        return value
+    }
+
+    public var failureError: PTCoreError? {
+        guard case .failure(let error) = self else { return nil }
+        return error
+    }
+}

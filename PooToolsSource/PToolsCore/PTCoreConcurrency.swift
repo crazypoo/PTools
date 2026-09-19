@@ -21,7 +21,7 @@ public struct PTLocked<Value: Sendable>: Sendable {
     }
 
     @discardableResult
-    public func withLock<Result: Sendable>(_ body: (inout Value) throws -> Result) rethrows -> Result {
+    public func withLock<Result: Sendable>(_ body: @Sendable (inout Value) throws -> Result) rethrows -> Result {
         try storage.withLock(body)
     }
 

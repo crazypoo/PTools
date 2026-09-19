@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
-  "generated_at": "2026-09-16T05:01:39Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:00:24Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -259,6 +259,7 @@
         "PToolsUIFoundation"
       ],
       "cocoapods": [
+        "PToolsCore",
         "PToolsUIFoundation"
       ]
     },
@@ -526,6 +527,7 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
+          "POOTOOLS_SPLIT_CORE",
           "POOTOOLS_SPLIT_UIFOUNDATION"
         ],
         "upcoming_features": []
@@ -798,5 +800,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "08c90318a34d8bf66cc46c6c56ad0272185f83c0b487c4b29abe8b1e20ce5af7"
+  "fingerprint": "277e6838e07459c3aed1da7c8712be4a1f1c83269b9263dcc0387529cd26d029"
 }

@@ -18,10 +18,9 @@ import os.lock
 // 中文：优先使用 Foundation-only 日志契约，仅在直接编译旧源码时保留本地声明。
 #if canImport(PToolsCore)
 import PToolsCore
-public typealias PTLogSeverity = PToolsCore.PTLogSeverity
-public typealias PTLogEvent = PToolsCore.PTLogEvent
-public typealias PTLogging = PToolsCore.PTLogging
-#else
+#endif
+
+#if !POOTOOLS_SPLIT_CORE && !canImport(PToolsCore)
 public enum PTLogSeverity: String, Sendable {
     case debug
     case info

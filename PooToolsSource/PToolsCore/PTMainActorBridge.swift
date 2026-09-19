@@ -45,10 +45,3 @@ public enum PTMainActorBridge {
         after(delay, operation: operation)
     }
 }
-
-public extension MainActor {
-    @_unavailableFromAsync
-    static func gcdRunUnsafely<T: Sendable>(_ body: @MainActor () throws -> T) rethrows -> T {
-        try MainActor.assumeIsolated(body)
-    }
-}

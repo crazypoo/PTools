@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:43:52Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:11:40Z",
   "shared_call_count": 1515,
   "declarations": [
     {
@@ -205,7 +205,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "line": 244,
+      "line": 250,
       "declaration": "public static let shared = PTMemoryWarningCoordinator()",
       "name": "shared",
       "category": "A",
@@ -601,7 +601,7 @@
     },
     {
       "path": "PooToolsSource/Log/PTNSLog.swift",
-      "line": 80,
+      "line": 86,
       "declaration": "public static let shared = PTLogSinkCenter()",
       "name": "shared",
       "category": "C",

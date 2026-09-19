@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:44:02Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:12:00Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -723,6 +723,24 @@
       "line": 219,
       "kind": "disk or custom cache",
       "text": "// MARK: - Disk Cache"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreContracts.swift",
+      "line": 5,
+      "kind": "disk or custom cache",
+      "text": "// English: Foundation-only contracts shared by logging, cache, and error adapters."
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreContracts.swift",
+      "line": 40,
+      "kind": "disk or custom cache",
+      "text": "// English: Use a small typed cache contract instead of exposing a third-party cache type."
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreContracts.swift",
+      "line": 53,
+      "kind": "disk or custom cache",
+      "text": "// English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free."
     },
     {
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",

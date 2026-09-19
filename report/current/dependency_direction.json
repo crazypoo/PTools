@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:43:54Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:11:43Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",
@@ -78,6 +78,10 @@
     {
       "source": "PToolsPermissionUI",
       "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PToolsUIFoundation",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsBankCard",

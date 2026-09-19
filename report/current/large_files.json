@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
-  "generated_at": "2026-09-19T13:44:02Z",
+  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
+  "generated_at": "2026-09-19T18:12:00Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -65,8 +65,18 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift",
+      "lines": 87,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
+      "lines": 187,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "lines": 1258,
+      "lines": 1306,
       "classification": "warning"
     },
     {
@@ -826,7 +836,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIAlertController+PTEX.swift",
-      "lines": 434,
+      "lines": 458,
       "classification": "ok"
     },
     {
@@ -1231,12 +1241,12 @@
     },
     {
       "path": "PooToolsSource/Core/PTUrlChange.swift",
-      "lines": 81,
+      "lines": 85,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "lines": 278,
+      "lines": 284,
       "classification": "ok"
     },
     {
@@ -3621,7 +3631,7 @@
     },
     {
       "path": "PooToolsSource/Log/PTNSLog.swift",
-      "lines": 470,
+      "lines": 476,
       "classification": "ok"
     },
     {
@@ -3840,13 +3850,33 @@
       "classification": "ok"
     },
     {
-      "path": "PooToolsSource/PToolsCore/PTAssociatedObjectStore.swift",
+      "path": "PooToolsSource/PToolsCore/PTCoreAssociatedObjectStore.swift",
       "lines": 43,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreCodable.swift",
+      "lines": 68,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreConcurrency.swift",
+      "lines": 252,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreContracts.swift",
+      "lines": 119,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsCore/PTCoreValueTypes.swift",
       "lines": 74,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTMainActorBridge.swift",
+      "lines": 47,
       "classification": "ok"
     },
     {

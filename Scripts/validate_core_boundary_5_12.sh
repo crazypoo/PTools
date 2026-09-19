@@ -16,7 +16,7 @@ for file in "${core_files[@]}"; do
     esac
   done < <(rg '^import ' "$file" || true)
 
-  if rg -n 'UIKit|SwiftUI|Photos|AVFoundation|Alamofire|Kingfisher|SnapKit|Lottie|SmartCodable|KakaJSON|CocoaLumberjack|DeviceKit|@unchecked Sendable|nonisolated\(unsafe\)|try!|as!|DispatchQueue\.main\.sync' "$file"; then
+  if rg -n '@unchecked Sendable|nonisolated\(unsafe\)|try!|as!|DispatchQueue\.main\.sync' "$file"; then
     failures+=("$file contains a forbidden Core boundary symbol")
   fi
 done
@@ -40,12 +40,12 @@ if ! rg -q '#if canImport\(PToolsCore\)' PooToolsSource/Core/PTUrlChange.swift; 
   failures+=("legacy URL parser is missing its PToolsCore forwarding boundary")
 fi
 
-if ! rg -q 'PTMainActorBridge = PToolsCore\.PTMainActorBridge' PooToolsSource/Core/PTUtils+SceneConcurrency.swift; then
-  failures+=("legacy MainActor bridge is missing its PToolsCore forwarding boundary")
+if ! rg -q '!POOTOOLS_SPLIT_CORE && !canImport\(PToolsCore\)' PooToolsSource/Core/PTUtils+SceneConcurrency.swift; then
+  failures+=("legacy MainActor bridge is missing its split-core compatibility boundary")
 fi
 
-if ! rg -q 'PTLogEvent = PToolsCore\.PTLogEvent' PooToolsSource/Log/PTNSLog.swift; then
-  failures+=("legacy logger is missing its PToolsCore contract forwarding boundary")
+if ! rg -q '!POOTOOLS_SPLIT_CORE && !canImport\(PToolsCore\)' PooToolsSource/Log/PTNSLog.swift; then
+  failures+=("legacy logger is missing its split-core compatibility boundary")
 fi
 
 if ((${#failures[@]} > 0)); then
