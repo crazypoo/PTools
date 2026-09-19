@@ -9,6 +9,10 @@
 
 import UIKit
 
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
+
 @MainActor public func deviceSafeAreaInsets() -> UIEdgeInsets {
     PTSceneContext.activeWindow()?.safeAreaInsets ?? .zero
 }
@@ -194,9 +198,12 @@ public struct PTDefaultSceneContextProvider: PTSceneContextProviding {
     }
 }
 
-// English: Schedule UI work with cancellation checks at the MainActor boundary.
-// Español: Programa trabajo de UI con comprobaciones de cancelación en el límite de MainActor.
-// 中文：在 MainActor 边界调度 UI 工作，并在执行前检查取消状态。
+// English: Reuse the Foundation-only bridge when the split Core module is available; keep a local fallback for direct legacy source builds.
+// Español: Reutiliza el puente basado solo en Foundation cuando está disponible el módulo Core separado; conserva una alternativa local para compilaciones heredadas directas.
+// 中文：拆分 Core 模块可用时复用 Foundation-only 桥接；直接编译旧源码时保留本地兼容实现。
+#if canImport(PToolsCore)
+public typealias PTMainActorBridge = PToolsCore.PTMainActorBridge
+#else
 public enum PTMainActorBridge {
     @discardableResult
     public static func perform(_ operation: @escaping @MainActor @Sendable () -> Void) -> Task<Void, Never> {
@@ -235,6 +242,7 @@ public enum PTMainActorBridge {
         after(delay, operation: operation)
     }
 }
+#endif
 
 // English: Route memory-pressure notifications to bounded in-memory caches on MainActor.
 // Español: Enruta las notificaciones de presión de memoria a las cachés limitadas en memoria dentro de MainActor.

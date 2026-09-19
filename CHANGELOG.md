@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.12.0 — 2026-09-20
+
+- 收口 `PToolsCore` 的 Foundation-only 边界，新增 `PTLocked`、`PTAtomic`、取消/生命周期/任务存储、MainActor 调度、缓存、日志和基础错误契约。
+- CocoaPods `Core` 与 SwiftPM `ptools` 统一复用 `PToolsCore`，保留旧入口兼容，不迁移 UIKit、媒体和业务实现。
+- 增加 Core 依赖方向与第三方边界检查，避免 Foundation-only Core 引入 UIKit、Network、Media、Debug 或第三方实现。
+- 继续保持 iOS 17+ / Swift 6+，并保留 5.x 兼容 API。
+
 所有正式版本均以同名 Git tag 为准。没有 tag 的开发阶段不会在这里伪装成正式发布版本；构建、
 性能和迁移事实见 `report/`，当前计划见 [ROADMAP.md](ROADMAP.md)。
 

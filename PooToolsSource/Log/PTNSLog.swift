@@ -13,9 +13,15 @@ import SwifterSwift
 import OSLog
 import os.lock
 
-// English: Core logging contracts carry immutable values; diagnostic backends remain replaceable adapters.
-// Español: Los contratos de logging del núcleo transportan valores inmutables; los backends de diagnóstico siguen siendo adaptadores reemplazables.
-// 中文：核心日志契约只传递不可变值，诊断后端保持为可替换适配器。
+// English: Prefer the Foundation-only logging contracts and keep local declarations only for direct legacy source builds.
+// Español: Prefiere los contratos de logging basados solo en Foundation y conserva declaraciones locales únicamente para compilaciones heredadas directas.
+// 中文：优先使用 Foundation-only 日志契约，仅在直接编译旧源码时保留本地声明。
+#if canImport(PToolsCore)
+import PToolsCore
+public typealias PTLogSeverity = PToolsCore.PTLogSeverity
+public typealias PTLogEvent = PToolsCore.PTLogEvent
+public typealias PTLogging = PToolsCore.PTLogging
+#else
 public enum PTLogSeverity: String, Sendable {
     case debug
     case info
@@ -40,6 +46,7 @@ public struct PTLogEvent: Sendable {
 public protocol PTLogging: Sendable {
     func log(_ event: PTLogEvent)
 }
+#endif
 
 // English: Core owns only an atomic logging preference and does not know which optional Debug UI consumes it.
 // Español: Core solo posee una preferencia atómica de logging y no conoce qué UI de Debug opcional la consume.

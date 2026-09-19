@@ -67,6 +67,7 @@ ruby Scripts/report_accessibility_5_9.rb >/dev/null
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/validate_dependency_direction.sh
+bash Scripts/validate_core_boundary_5_12.sh
 bash Scripts/validate_debug_foundation_5_10.sh
 bash Scripts/validate_instruments_5_11.sh
 bash Scripts/validate_permission_source_contract.sh

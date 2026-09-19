@@ -36,6 +36,7 @@ require_pattern "Package.swift" ".target(name: \"PooToolsImagePicker\"" "SwiftPM
 require_pattern "Package.swift" "\"PooToolsImagePicker\", \"PTCameraPermission\"" "SwiftPM PhotoPicker depends on ImagePicker and camera permission"
 
 bash "$repo_root/Scripts/validate_core_source_contract.sh"
+bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"
 bash "$repo_root/Scripts/validate_permission_source_contract.sh"
 
 xcode_settings="$(xcodebuild -workspace "$repo_root/PooTools.xcworkspace" -scheme PooTools-Example -showBuildSettings 2>/dev/null)"

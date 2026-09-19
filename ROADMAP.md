@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.11.14`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.12.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.11.14`。
+> 当前最新正式 Git tag：`5.11.17`；`5.12.0` 为当前开发基线。
 
 ## 范围与约束
 
@@ -18,6 +18,14 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - 测试方法和发布门槛写入 [`docs/maintainers/QUALITY.md`](docs/maintainers/QUALITY.md)。
 - 单次扫描、构建和基准结果写入 `report/`，不混入长期架构文档。
 - 新版本不再创建 `ARCHITECTURE_5_12.md`、`PERFORMANCE_BASELINE_5_12.md` 等版本化长期文档。
+
+## 5.12.0 Core / Foundation 收口
+
+- ✅ 增加 Foundation-only 的 `PToolsCore` 并发、生命周期、缓存、日志和错误契约。
+- ✅ CocoaPods `Core` 依赖并复用 `PToolsCore`，旧 Core 源码通过兼容别名保留公开入口。
+- ✅ Core 的 URL 解析、关联对象和模型值类型不再在拆分构建中重复实现。
+- ✅ 增加 Core 边界静态门禁，明确第三方适配器不得进入 `PToolsCore`。
+- [ ] UIKit、媒体和历史第三方兼容实现继续在后续 5.13–5.15 迁移，不在 5.12.0 直接删除公开入口。
 
 ## 当前 5.11.x 稳定化
 

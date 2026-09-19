@@ -226,7 +226,7 @@ let package = Package(
         // 中文：PToolsUIFoundation 独立承载 SnapKit UI 辅助能力，同时不改变旧源码路径。
         .target(
             name: "PToolsUIFoundation",
-            dependencies: ["SnapKit"],
+            dependencies: ["PToolsCore", "SnapKit"],
             path: "PooToolsSource/PToolsUIFoundation",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
