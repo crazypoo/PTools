@@ -467,6 +467,8 @@
 		55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */; };
 		55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */; };
 		55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */; };
+		D7A4E6C81B9D4D3B9B1A5F20 /* PTCustomerAlertAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A4E6C91B9D4D3B9B1A5F20 /* PTCustomerAlertAppearance.swift */; };
+		D7A4E6CA1B9D4D3B9B1A5F20 /* PTCustomerAlertBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A4E6CB1B9D4D3B9B1A5F20 /* PTCustomerAlertBackgroundView.swift */; };
 		55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */; };
 		55B7214A3056E7C0001E9020 /* PTInstruments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B721483056E7C0001E9020 /* PTInstruments.swift */; };
 		55B7214B3056E7C0001E9020 /* PTInstrumentsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */; };
@@ -1472,6 +1474,8 @@
 		55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertWindow.swift; sourceTree = "<group>"; };
 		55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertManager.swift; sourceTree = "<group>"; };
 		55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertController.swift; sourceTree = "<group>"; };
+		D7A4E6C91B9D4D3B9B1A5F20 /* PTCustomerAlertAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertAppearance.swift; sourceTree = "<group>"; };
+		D7A4E6CB1B9D4D3B9B1A5F20 /* PTCustomerAlertBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertBackgroundView.swift; sourceTree = "<group>"; };
 		55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionSheetController.swift; sourceTree = "<group>"; };
 		55B721483056E7C0001E9020 /* PTInstruments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstruments.swift; sourceTree = "<group>"; };
 		55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstrumentsUI.swift; sourceTree = "<group>"; };
@@ -3606,6 +3610,8 @@
 			isa = PBXGroup;
 			children = (
 				55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */,
+				D7A4E6C91B9D4D3B9B1A5F20 /* PTCustomerAlertAppearance.swift */,
+				D7A4E6CB1B9D4D3B9B1A5F20 /* PTCustomerAlertBackgroundView.swift */,
 				55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */,
 				55B6D7BF2C1D611800033309 /* PTAlertController.swift */,
 				55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */,
@@ -5193,6 +5199,8 @@
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
 				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,
 				55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */,
+				D7A4E6C81B9D4D3B9B1A5F20 /* PTCustomerAlertAppearance.swift in Sources */,
+				D7A4E6CA1B9D4D3B9B1A5F20 /* PTCustomerAlertBackgroundView.swift in Sources */,
 				55ED0D242B11834E00391136 /* AVCaptureDevice+PTEX.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* PTPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,

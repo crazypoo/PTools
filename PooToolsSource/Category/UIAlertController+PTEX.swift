@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 
+@MainActor
 public extension UIAlertController {
     //MARK: 單按鈕Alert
     ///單按鈕Alert
@@ -128,12 +129,15 @@ public extension UIAlertController {
                             cancelBtnColor:UIColor = .systemBlue,
                             doneBtnColors:[UIColor] = [UIColor](),
                             alertBGColor:UIColor = .white,
-    @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
+                            @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
-                            moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
+                            moreBtn: ((_ index:Int,_ title:String)->Void)? = nil,
+                            appearance: PTCustomerAlertAppearance = .default) {
         let titleColorN = titleColor ?? .label
         let msgColorN = msgColor ?? .secondaryLabel
         let hasCancel = !cancelBtn.stringIsEmpty()
+        let normalizedTitle = PTCustomerAlertController.normalizedAlertText(title) ?? ""
+        let normalizedMessage = PTCustomerAlertController.normalizedAlertText(msg)
         // English: Keep the cancel action last, matching the native alert hierarchy.
         // Español: Mantén la acción de cancelar al final, como en la jerarquía nativa de las alertas.
         // 中文：取消操作放在最后，符合系统 Alert 的按钮层级和视觉顺序。
@@ -143,6 +147,14 @@ public extension UIAlertController {
         } + (hasCancel ? [cancelBtnColor] : [])
         let titles = actionTitles.isEmpty ? ["PT Button cancel".localized()] : actionTitles
         let colors = actionColors.isEmpty ? [.systemBlue] : actionColors
+        let actionStyles: [PTCustomerAlertActionStyle]
+        if hasCancel {
+            actionStyles = Array(repeating: .default, count: okBtns.count) + [.cancel]
+        } else if okBtns.isEmpty {
+            actionStyles = [.cancel]
+        } else {
+            actionStyles = Array(repeating: .default, count: okBtns.count)
+        }
         
         let contentSpacing:CGFloat = 25
 
@@ -151,17 +163,15 @@ public extension UIAlertController {
         // 中文：正文测量使用与自定义弹窗表面相同的宽度上限。
         let contentWidth = resolvedCustomerAlertContentWidth(for: showIn, contentSpace: contentSpacing)
         
-        let messageHeight = msg.isEmpty ? 0 : max(44, msg.boundingSize(font: msgFont,width: contentWidth).height + 20)
+        let messageHeight = normalizedMessage.map {
+            max(44, $0.boundingSize(font: msgFont, width: contentWidth).height + 20)
+        } ?? 0
 
-        let alert = PTCustomerAlertController(
-            title: title,
-            titleFont: titleFont,
-            titleColor: titleColorN,
-            customerViewHeight: messageHeight,
-            customerViewCallback: { customerView in
-                guard messageHeight > 0 else { return }
+        let messageCallback: PTCustomerCustomerBlock?
+        if let normalizedMessage {
+            messageCallback = { customerView in
                 let messageLabel = UILabel()
-                messageLabel.text = msg
+                messageLabel.text = normalizedMessage
                 messageLabel.textColor = msgColorN
                 messageLabel.font = msgFont
                 messageLabel.numberOfLines = 0
@@ -171,13 +181,25 @@ public extension UIAlertController {
                 messageLabel.snp.makeConstraints { make in
                     make.edges.equalToSuperview().inset(10)
                 }
-            },
+            }
+        } else {
+            messageCallback = nil
+        }
+
+        let alert = PTCustomerAlertController(
+            title: normalizedTitle,
+            titleFont: titleFont,
+            titleColor: titleColorN,
+            customerViewHeight: messageHeight,
+            customerViewCallback: messageCallback,
             buttons: titles,
             buttonsColors: colors,
             buttonsFont: buttonsFont,
             cornerSize: alertCornerRadius,
             contentSpace: contentSpacing,
-            canTapBackground: false
+            canTapBackground: false,
+            actionStyles: actionStyles,
+            appearance: appearance
         )
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         alert.bottomButtonTapCallback = { _, index in
@@ -277,7 +299,8 @@ public extension UIAlertController {
             buttonsFont: buttonsFont,
             cornerSize: alertCornerRadius,
             contentSpace: 25,
-            canTapBackground: false
+            canTapBackground: false,
+            actionStyles: [.default, .cancel]
         )
         alert.contentBackgroundColor = alertBGColor == .white ? nil : alertBGColor
         alert.bottomButtonTapCallback = { _, index in
@@ -397,7 +420,8 @@ public extension UIAlertController {
                                                       buttons: [sendItem,cancelItem],
                                                       buttonsColors: [],
                                                       buttonsFont: buttonsFont,
-                                                      contentSpace:60)
+                                                      contentSpace:60,
+                                                      actionStyles: [.default, .cancel])
         customerAlert.bottomButtonTapCallback = { _, index in
             if index == 0 {
                 done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")

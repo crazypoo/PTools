@@ -28,6 +28,7 @@ public class PTCustomBottomButtonModel: NSObject {
 
 // MARK: - PTCustomerAlertController
 
+@MainActor
 public class PTCustomerAlertController: PTAlertController {
 
     // MARK: Layout Mode
@@ -88,6 +89,20 @@ public class PTCustomerAlertController: PTAlertController {
         }
     }
 
+    /// English: Configures layout, accessibility, actions, and the alert surface before presentation.
+    /// Español: Configura el diseño, la accesibilidad, las acciones y la superficie antes de presentar.
+    /// 中文：在展示前统一配置布局、辅助功能、操作按钮和背景表面。
+    public var appearance: PTCustomerAlertAppearance = .default {
+        didSet {
+            if appearance.maximumWidth.isFinite, appearance.maximumWidth > 0 {
+                maximumContentWidth = appearance.maximumWidth
+            }
+            updateContentBackgroundIfLoaded()
+            updateActionAppearance()
+            invalidateContentLayout()
+        }
+    }
+
     /// customView 中的内容动态变化以后，可以主动调用一次。
     ///
     /// 例如：
@@ -104,28 +119,32 @@ public class PTCustomerAlertController: PTAlertController {
 
     static let defaultMaximumContentWidth: CGFloat = 340
 
-    /// 系统 Alert 的文字区域不会贴得很靠边。
-    /// 相比旧版 10pt，20pt 更接近 UIAlertController 的视觉比例。
-    private let titleHorizontalInset: CGFloat = 20
+    private var alertContentInsets: UIEdgeInsets {
+        let insets = appearance.contentInsets
+        return UIEdgeInsets(
+            top: max(0, insets.top.isFinite ? insets.top : 20),
+            left: max(0, insets.left.isFinite ? insets.left : 20),
+            bottom: max(0, insets.bottom.isFinite ? insets.bottom : 18),
+            right: max(0, insets.right.isFinite ? insets.right : 20)
+        )
+    }
 
-    /// 单一内容（只有 title 或只有 custom/msg）时的最小视觉高度。
-    /// 一行文字不会让整个 Alert 显得过扁。
-    private let minimumSingleBodyHeight: CGFloat = 76
+    private var minimumSingleBodyHeight: CGFloat {
+        max(0, appearance.minimumSingleTextContentHeight)
+    }
 
-    /// title + custom/msg 同时存在时的最小视觉高度。
-    /// 两边都是一行时仍然保留系统 Alert 风格的呼吸感。
-    private let minimumCombinedBodyHeight: CGFloat = 96
+    private var minimumCombinedBodyHeight: CGFloat {
+        max(0, appearance.minimumDualTextContentHeight)
+    }
 
-    /// 内容区域最少保留的上下间距。
-    /// 真正的“最小高度”由 bodyHeaderView 自己承担，
-    /// 这里仅保证内容变多以后仍不会贴上下边缘。
-    private let singleContentVerticalInset: CGFloat = 14
-    private let combinedContentVerticalInset: CGFloat = 14
+    private var titleMessageSpacing: CGFloat {
+        max(0, appearance.titleMessageSpacing)
+    }
 
-    /// title 和 custom/msg 的视觉间距。
-    private let titleMessageSpacing: CGFloat = 6
+    private var minimumButtonRowHeight: CGFloat {
+        max(1, appearance.actionBaseHeight)
+    }
 
-    private let minimumButtonRowHeight: CGFloat = 44
     private let minimumAlertVerticalMargin: CGFloat = 16
 
     private var separatorThickness: CGFloat {
@@ -141,6 +160,7 @@ public class PTCustomerAlertController: PTAlertController {
     fileprivate let buttons: [String]
     fileprivate let buttonsColors: [UIColor]
     fileprivate var buttonsFont: UIFont = .appfont(size: 15)
+    fileprivate let actionStyles: [PTCustomerAlertActionStyle]
 
     fileprivate var customerViewCallback: PTCustomerCustomerBlock?
 
@@ -199,18 +219,18 @@ public class PTCustomerAlertController: PTAlertController {
 
     fileprivate lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = resolvedContentBackgroundColor
+        view.backgroundColor = .clear
         view.alpha = 0
-        view.layer.cornerRadius = cornerSize
-        view.layer.cornerCurve = .continuous
-        view.clipsToBounds = true
+        view.clipsToBounds = false
         return view
     }()
 
-    private lazy var surfaceEffectView: UIVisualEffectView = {
-        let view = UIVisualEffectView(frame: .zero)
-        view.isUserInteractionEnabled = true
-        view.isAccessibilityElement = false
+    private lazy var surfaceBackgroundView: PTCustomerAlertBackgroundView = {
+        let view = PTCustomerAlertBackgroundView(frame: .zero)
+        view.appearance = appearance
+        view.legacyVisualStyle = visualStyle
+        view.legacyCornerRadius = cornerSize
+        view.contentBackgroundColor = contentBackgroundColor
         return view
     }()
 
@@ -349,36 +369,12 @@ public class PTCustomerAlertController: PTAlertController {
         }
     }
 
-    private var bodyVerticalInset: CGFloat {
-        switch (hasTitle, hasCustomContent) {
-        case (true, true):
-            return combinedContentVerticalInset
-        case (true, false), (false, true):
-            return singleContentVerticalInset
-        case (false, false):
-            return 0
-        }
-    }
-
-    private var resolvedContentBackgroundColor: UIColor {
-        if let contentBackgroundColor {
-            return contentBackgroundColor
-        }
-
-        let effect = PTVisualStyleResolver.makeEffect(
-            for: visualStyle,
-            blurStyle: .systemMaterial
-        )
-
-        return effect == nil ? .secondarySystemBackground : .clear
-    }
-
     // MARK: Init
 
     public init(
         title: String = "",
         titleFont: UIFont = .appfont(size: 15),
-        titleColor: UIColor = .systemBlue,
+        titleColor: UIColor = .label,
         customerViewHeight: CGFloat = 100,
         customerViewCallback: PTCustomerCustomerBlock? = nil,
         buttons: [String],
@@ -386,21 +382,37 @@ public class PTCustomerAlertController: PTAlertController {
         buttonsFont: UIFont = .appfont(size: 15),
         cornerSize: CGFloat = 15,
         contentSpace: CGFloat = 25,
-        canTapBackground: Bool = false
+        canTapBackground: Bool = false,
+        actionStyles: [PTCustomerAlertActionStyle] = [],
+        appearance: PTCustomerAlertAppearance = .default
     ) {
-        self.alertTitle = title
+        self.alertTitle = Self.normalizedAlertText(title) ?? ""
         self.titleFont = titleFont
         self.titleColor = titleColor
         self.buttons = buttons
         self.buttonsColors = buttonsColors
         self.buttonsFont = buttonsFont
+        self.actionStyles = actionStyles
         self.cornerSize = cornerSize
         self.contentSpace = contentSpace
         self.customerViewHeight = max(0, customerViewHeight)
         self.customerViewCallback = customerViewCallback
         self.canTapBackground = canTapBackground
+        self.appearance = appearance
+        self.maximumContentWidth = appearance.maximumWidth.isFinite && appearance.maximumWidth > 0
+            ? appearance.maximumWidth
+            : Self.defaultMaximumContentWidth
 
         super.init(nibName: nil, bundle: nil)
+    }
+
+    // English: Normalize whitespace-only titles so empty content does not reserve layout space.
+    // Español: Normaliza títulos que solo contienen espacios para que no reserven espacio de diseño.
+    // 中文：统一处理只包含空白的标题，避免空内容占用布局空间。
+    static func normalizedAlertText(_ text: String?) -> String? {
+        guard let text else { return nil }
+        let normalized = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return normalized.isEmpty ? nil : normalized
     }
 
     // MARK: Width
@@ -453,6 +465,7 @@ public class PTCustomerAlertController: PTAlertController {
         configureContentHierarchy()
         installSurfaceAppearanceObservers()
         updateSurfaceAppearance()
+        updateActionAppearance()
     }
 
     public override func viewDidLayoutSubviews() {
@@ -479,11 +492,18 @@ public class PTCustomerAlertController: PTAlertController {
             if index < buttonsColors.count {
                 model.titleColor = buttonsColors[index]
             } else {
-                model.titleColor = .systemBlue
+                model.titleColor = actionStyle(at: index) == .destructive
+                    ? .systemRed
+                    : .systemBlue
             }
 
             return model
         }
+    }
+
+    private func actionStyle(at index: Int) -> PTCustomerAlertActionStyle {
+        guard actionStyles.indices.contains(index) else { return .default }
+        return actionStyles[index]
     }
 
     // MARK: Root
@@ -501,8 +521,8 @@ public class PTCustomerAlertController: PTAlertController {
     }
 
     private func configureSurface() {
-        contentView.addSubview(surfaceEffectView)
-        surfaceEffectView.snp.makeConstraints { make in
+        contentView.addSubview(surfaceBackgroundView)
+        surfaceBackgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -533,7 +553,7 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Hierarchy
 
     private func configureContentHierarchy() {
-        let surfaceContentView = surfaceEffectView.contentView
+        let surfaceContentView = surfaceBackgroundView.contentView
 
         surfaceContentView.addSubview(bodyScrollView)
         bodyScrollView.addSubview(bodyContentView)
@@ -601,8 +621,8 @@ public class PTCustomerAlertController: PTAlertController {
         headerContentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.top.greaterThanOrEqualToSuperview().offset(bodyVerticalInset)
-            make.bottom.lessThanOrEqualToSuperview().offset(-bodyVerticalInset)
+            make.top.greaterThanOrEqualToSuperview().offset(alertContentInsets.top)
+            make.bottom.lessThanOrEqualToSuperview().offset(-alertContentInsets.bottom)
         }
 
         switch (hasTitle, hasCustomContent) {
@@ -612,7 +632,8 @@ public class PTCustomerAlertController: PTAlertController {
 
             titleMessage.snp.makeConstraints { make in
                 make.top.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(titleHorizontalInset)
+                make.leading.equalToSuperview().offset(alertContentInsets.left)
+                make.trailing.equalToSuperview().offset(-alertContentInsets.right)
             }
 
             customView.snp.makeConstraints { make in
@@ -632,7 +653,8 @@ public class PTCustomerAlertController: PTAlertController {
 
             titleMessage.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(titleHorizontalInset)
+                make.leading.equalToSuperview().offset(alertContentInsets.left)
+                make.trailing.equalToSuperview().offset(-alertContentInsets.right)
             }
 
         case (false, true):
@@ -784,10 +806,15 @@ public class PTCustomerAlertController: PTAlertController {
         button.setTitle(title, for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)
         button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.setContentCompressionResistancePriority(.required, for: .vertical)
         button.contentHorizontalAlignment = .center
         button.accessibilityTraits = .button
+        if actionStyle(at: index) == .destructive {
+            button.accessibilityHint = "Destructive action"
+        }
         button.tag = 100 + index
 
         button.addAction(
@@ -854,19 +881,30 @@ public class PTCustomerAlertController: PTAlertController {
 
     // MARK: Button Height
 
-    private func resolvedButtonRowHeight() -> CGFloat {
-        let actualLineHeight = actionButtons
-            .compactMap { $0.titleLabel?.font.lineHeight }
-            .max() ?? buttonsFont.lineHeight
+    private func resolvedButtonRowHeight(
+        for width: CGFloat,
+        layout: CompactActionLayout
+    ) -> CGFloat {
+        let actualFont = actionButtons.first?.titleLabel?.font ?? buttonsFont
+        let buttonWidth = layout == .horizontal && buttons.count == 2
+            ? max(1, (width - separatorThickness) / 2)
+            : max(1, width)
+        let availableTitleWidth = max(1, buttonWidth - 24)
+        let maximumTitleHeight = buttons.map { title in
+            let measuredSize = (title as NSString).boundingRect(
+                with: CGSize(width: availableTitleWidth, height: .greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: [.font: actualFont],
+                context: nil
+            )
+            return measuredSize.height
+        }.max() ?? actualFont.lineHeight
 
-        guard actualLineHeight.isFinite else {
+        guard maximumTitleHeight.isFinite else {
             return minimumButtonRowHeight
         }
 
-        return max(
-            minimumButtonRowHeight,
-            ceil(actualLineHeight + 20)
-        )
+        return max(minimumButtonRowHeight, ceil(maximumTitleHeight + 20))
     }
 
     private func resolvedCompactActionLayout(for width: CGFloat) -> CompactActionLayout {
@@ -973,18 +1011,22 @@ public class PTCustomerAlertController: PTAlertController {
 
         guard safeHeight > 0 else { return }
 
-        let maximumHeight = max(
-            1,
-            safeHeight - minimumAlertVerticalMargin * 2
-        )
+        let heightRatio = appearance.maximumHeightRatio.isFinite
+            ? min(1, max(0.5, appearance.maximumHeightRatio))
+            : 0.82
+        let marginLimitedHeight = safeHeight - minimumAlertVerticalMargin * 2
+        let maximumHeight = max(1, min(marginLimitedHeight, safeHeight * heightRatio))
 
         // Body 高度已经同时包含：
         // 1. 真实内容高度；
         // 2. 单内容 / 双内容的最小视觉高度；
         // 3. 上下最小 padding。
         let bodyHeight = resolvedBodyHeight(for: width)
-        let rowHeight = resolvedButtonRowHeight()
         let compactLayout = resolvedCompactActionLayout(for: width)
+        let rowHeight = resolvedButtonRowHeight(
+            for: width,
+            layout: buttons.count > 2 ? .vertical : compactLayout
+        )
         let verticalButtonsHeight = actionsContentHeight(rowHeight: rowHeight)
         let compactButtonsHeight = compactActionHeight(
             for: compactLayout,
@@ -1090,26 +1132,28 @@ public class PTCustomerAlertController: PTAlertController {
 
     private func updateContentBackgroundIfLoaded() {
         guard isViewLoaded else { return }
+        surfaceBackgroundView.appearance = appearance
+        surfaceBackgroundView.legacyVisualStyle = visualStyle
+        surfaceBackgroundView.legacyCornerRadius = cornerSize
+        surfaceBackgroundView.contentBackgroundColor = contentBackgroundColor
         updateSurfaceAppearance()
     }
 
     private func updateSurfaceAppearance() {
         guard isViewLoaded else { return }
+        surfaceBackgroundView.appearance = appearance
+        surfaceBackgroundView.legacyVisualStyle = visualStyle
+        surfaceBackgroundView.legacyCornerRadius = cornerSize
+        surfaceBackgroundView.contentBackgroundColor = contentBackgroundColor
+    }
 
-        contentView.backgroundColor = resolvedContentBackgroundColor
-
-        guard contentBackgroundColor == nil else {
-            surfaceEffectView.effect = nil
-            surfaceEffectView.backgroundColor = .clear
-            return
-        }
-
-        PTVisualStyleResolver.apply(
-            to: surfaceEffectView,
-            style: visualStyle,
-            blurStyle: .systemMaterial,
-            fallbackColor: .secondarySystemBackground
+    private func updateActionAppearance() {
+        let separatorColor = UIColor.separator.withAlphaComponent(
+            min(1, max(0, appearance.separatorAlpha))
         )
+        compactTopSeparatorView.backgroundColor = separatorColor
+        compactDividerView.backgroundColor = separatorColor
+        actionSeparatorViews.forEach { $0.backgroundColor = separatorColor }
     }
 
     private func installSurfaceAppearanceObservers() {
@@ -1170,8 +1214,12 @@ extension PTCustomerAlertController {
             ? .identity
             : CGAffineTransform(scaleX: 0.94, y: 0.94)
 
+        let dimmingAlpha = appearance.dimmingAlpha.isFinite
+            ? min(1, max(0, appearance.dimmingAlpha))
+            : 0.28
+
         let animations = {
-            self.view.backgroundColor = UIColor.DevMaskColor
+            self.view.backgroundColor = UIColor.black.withAlphaComponent(dimmingAlpha)
             self.contentView.alpha = 1
 
             if !reduceMotion {
