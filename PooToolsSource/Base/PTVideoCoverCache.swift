@@ -381,7 +381,7 @@ public enum PTVideoCoverCache {
             pendingTask = PTVideoCoverPendingTask(
                 operation: { @MainActor in
                     if let data = await diskStore.readData(for: key),
-                       let image = UIImage(data: data) {
+                       let image = await decodeImage(from: data) {
                         return image
                     }
 
@@ -391,8 +391,9 @@ public enum PTVideoCoverCache {
                                                                     maximumSize: maximumSize,
                                                                     appliesPreferredTrackTransform: appliesPreferredTrackTransform)
                     guard !Task.isCancelled, let image else { return nil }
-                    guard let data = image.jpegData(compressionQuality: 0.8) else { return image }
-                    await diskStore.writeData(data, for: key)
+                    if let data = await encodeJPEG(image) {
+                        await diskStore.writeData(data, for: key)
+                    }
                     return image
                 },
                 onFinish: { finishedTask in
@@ -467,14 +468,32 @@ public enum PTVideoCoverCache {
     /// 在 utility 任务中以原子方式写入 JPEG 缓存项。
     @MainActor
     static func saveImageToDisk(_ image: UIImage, key: String) {
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
-        Task {
+        Task { @MainActor in
+            guard let data = await encodeJPEG(image) else { return }
             await diskStore.writeData(data, for: key)
         }
     }
 }
 
 private extension PTVideoCoverCache {
+    // English: Decode cached images on a utility executor instead of the MainActor.
+    // Español: Decodifica las imágenes en caché en un ejecutor de utilidad y no en MainActor.
+    // 中文：在 utility 执行器上解码缓存图片，避免阻塞 MainActor。
+    static func decodeImage(from data: Data) async -> UIImage? {
+        await Task.detached(priority: .userInitiated) {
+            UIImage(data: data)
+        }.value
+    }
+
+    // English: Encode generated thumbnails away from UI work before writing the disk cache.
+    // Español: Codifica las miniaturas generadas fuera del trabajo de UI antes de escribir la caché en disco.
+    // 中文：在写入磁盘缓存前，将生成的缩略图放到 UI 工作之外进行编码。
+    static func encodeJPEG(_ image: UIImage) async -> Data? {
+        await Task.detached(priority: .utility) {
+            image.jpegData(compressionQuality: 0.8)
+        }.value
+    }
+
     static func thumbnailCacheKey(for url: URL,
                                   frameNumber: Int,
                                   maximumSize: CGSize,

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:41Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:54Z",
   "name": "PooTools",
-  "version": "5.11.14",
+  "version": "5.11.15",
   "platforms": {
     "ios": "17.0"
   },

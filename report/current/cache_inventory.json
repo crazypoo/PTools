@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:39Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:44:02Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -54,37 +54,37 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1302,
+      "line": 1187,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1303,
+      "line": 1188,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1854,
+      "line": 1739,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1855,
+      "line": 1740,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1945,
+      "line": 1830,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1946,
+      "line": 1831,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -132,7 +132,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 472,
+      "line": 473,
       "kind": "disk or custom cache",
       "text": "// English: Own list layout caches outside PTCollectionView so cache policy can evolve independently."
     },
@@ -174,19 +174,25 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 456,
+      "line": 457,
       "kind": "disk or custom cache",
       "text": "/// Preserves the URL-only key used by the video file cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 465,
+      "line": 466,
       "kind": "disk or custom cache",
       "text": "/// Writes a JPEG cache entry atomically on a utility task."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 483,
+      "line": 488,
+      "kind": "disk or custom cache",
+      "text": "// English: Encode generated thumbnails away from UI work before writing the disk cache."
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 502,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
@@ -618,7 +624,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 219,
+      "line": 220,
       "kind": "URLCache",
       "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity,"
     },
@@ -648,19 +654,43 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 409,
+      "line": 369,
+      "kind": "disk or custom cache",
+      "text": "// English: Keep JSON and file operations off the cache actor while the actor owns only cache state."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 378,
+      "kind": "disk or custom cache",
+      "text": "// English: Decode cache metadata on a utility executor before updating actor-owned memory state."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 387,
+      "kind": "disk or custom cache",
+      "text": "// English: Read cache files without occupying the actor executor with synchronous file I/O."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 396,
+      "kind": "disk or custom cache",
+      "text": "// English: Persist cache data on a background executor and keep the actor responsive."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 447,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 427,
+      "line": 465,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 428,
+      "line": 466,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
     },

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:39Z",
-  "shared_call_count": 1513,
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:52Z",
+  "shared_call_count": 1515,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -60,8 +60,8 @@
       "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 145,
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 137,
       "declaration": "public static let shared = PTNavigationBarManager()",
       "name": "shared",
       "category": "D",

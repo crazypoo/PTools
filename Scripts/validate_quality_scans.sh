@@ -145,7 +145,7 @@ fi
 # Una migración de protocolo puede añadir el nuevo nombre de protocolo Codable a una línea
 # existente de un wrapper legado del SDK sin añadir un nuevo límite unchecked.
 # 仅协议迁移可能会把新的 Codable 协议名加入既有 SDK 兼容包装器行，这不代表新增 unchecked 边界。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable' || true)"
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2
@@ -173,5 +173,10 @@ fi
 # Español: Incluye los contratos de cierre arquitectónico en la puerta de calidad normal.
 # 中文：将架构收口契约纳入常规质量门禁。
 bash Scripts/validate_p1_architecture_closure.sh
+
+# English: Include Phase P cache, MainActor-heavy-work, and extraction contracts in the normal quality gate.
+# Español: Incluye los contratos de caché, trabajo pesado de MainActor y extracción de la Fase P en la puerta normal.
+# 中文：将 Phase P 的缓存、MainActor 重活和文件拆分契约纳入常规质量门禁。
+bash Scripts/validate_p2_performance_closure.sh
 
 printf 'PASS: Swift 6 safety scans\n'

@@ -221,7 +221,7 @@ public protocol NetworkPlugin: Sendable {
     func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async
 }
 
-public struct CacheObject: Codable {
+public struct CacheObject: Codable, Sendable {
     let data: Data
     let expireTime: TimeInterval
     var lastAccessTime: TimeInterval
@@ -268,38 +268,38 @@ public actor NetworkCache {
         return (url + sortedQuery + headers + body.base64EncodedString()).md5
     }
     
-    func save(data: Data, request: URLRequest, expire: TimeInterval) {
+    func save(data: Data, request: URLRequest, expire: TimeInterval) async {
         let key = cacheKey(request)
         let now = Date().timeIntervalSince1970
         let obj = CacheObject(data: data, expireTime: now + expire, lastAccessTime: now)
         
-        guard let encoded = try? JSONEncoder().encode(obj) else { return }
+        guard let encoded = await Self.encode(obj) else { return }
         memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
         
         let path = self.diskPath.nsString.appendingPathComponent(key)
-        Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }
+        Self.write(encoded, to: path)
     }
     
-    func read(request: URLRequest) -> Data? {
+    func read(request: URLRequest) async -> Data? {
         let key = cacheKey(request)
         let now = Date().timeIntervalSince1970
 
         if let data = memoryCache.object(forKey: key as NSString) as Data?,
-           var obj = try? JSONDecoder().decode(CacheObject.self, from: data), obj.expireTime > now {
+           var obj = await Self.decode(data), obj.expireTime > now {
             obj.lastAccessTime = now
-            if let encoded = try? JSONEncoder().encode(obj) {
+            if let encoded = await Self.encode(obj) {
                 memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
             }
             return obj.data
         }
         
         let path = (self.diskPath as NSString).appendingPathComponent(key)
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-           var obj = try? JSONDecoder().decode(CacheObject.self, from: data), obj.expireTime > now {
+        if let data = await Self.readData(from: path),
+           var obj = await Self.decode(data), obj.expireTime > now {
             obj.lastAccessTime = now
-            if let encoded = try? JSONEncoder().encode(obj) {
+            if let encoded = await Self.encode(obj) {
                 memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
-                Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }
+                Self.write(encoded, to: path)
             }
             return obj.data
         }
@@ -363,6 +363,44 @@ public actor NetworkCache {
             try? fm.removeItem(at: file.url)
             totalSize -= file.size
             if totalSize <= targetSize { break }
+        }
+    }
+
+    // English: Keep JSON and file operations off the cache actor while the actor owns only cache state.
+    // Español: Mantiene JSON y las operaciones de archivo fuera del actor de caché; el actor solo posee el estado.
+    // 中文：让 JSON 和文件操作离开缓存 actor，actor 只负责保护缓存状态。
+    private nonisolated static func encode(_ object: CacheObject) async -> Data? {
+        await Task.detached(priority: .utility) {
+            try? JSONEncoder().encode(object)
+        }.value
+    }
+
+    // English: Decode cache metadata on a utility executor before updating actor-owned memory state.
+    // Español: Decodifica los metadatos de caché en un ejecutor de utilidad antes de actualizar el estado del actor.
+    // 中文：在更新 actor 持有的内存状态前，先在 utility 执行器上解码缓存元数据。
+    private nonisolated static func decode(_ data: Data) async -> CacheObject? {
+        await Task.detached(priority: .utility) {
+            try? JSONDecoder().decode(CacheObject.self, from: data)
+        }.value
+    }
+
+    // English: Read cache files without occupying the actor executor with synchronous file I/O.
+    // Español: Lee los archivos de caché sin ocupar el ejecutor del actor con I/O síncrono.
+    // 中文：读取缓存文件时不让同步 I/O 占用 actor 执行器。
+    private nonisolated static func readData(from path: String) async -> Data? {
+        await Task.detached(priority: .utility) {
+            try? Data(contentsOf: URL(fileURLWithPath: path))
+        }.value
+    }
+
+    // English: Persist cache data on a background executor and keep the actor responsive.
+    // Español: Persiste los datos de caché en un ejecutor de fondo y mantiene receptivo el actor.
+    // 中文：在后台执行器持久化缓存数据，保持 actor 响应。
+    private nonisolated static func write(_ data: Data, to path: String) {
+        Task.detached(priority: .background) {
+            let directory = URL(fileURLWithPath: path).deletingLastPathComponent()
+            try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try? data.write(to: URL(fileURLWithPath: path))
         }
     }
 }

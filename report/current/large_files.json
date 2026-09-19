@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:47Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:44:02Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -256,8 +256,8 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1766,
-      "classification": "architecture_exception"
+      "lines": 852,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
@@ -266,12 +266,17 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2303,
+      "lines": 2188,
       "classification": "hard_limit_allowlisted"
     },
     {
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "lines": 130,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 524,
+      "lines": 525,
       "classification": "ok"
     },
     {
@@ -345,6 +350,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "lines": 927,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTNavigationConfiguration.swift",
       "lines": 41,
       "classification": "ok"
@@ -376,7 +386,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 513,
+      "lines": 532,
       "classification": "ok"
     },
     {
@@ -786,7 +796,7 @@
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "lines": 286,
+      "lines": 315,
       "classification": "ok"
     },
     {
@@ -3750,9 +3760,19 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "lines": 243,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network+Logging.swift",
+      "lines": 94,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 1247,
-      "classification": "warning"
+      "lines": 941,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkMetrics.swift",
@@ -3761,7 +3781,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "lines": 465,
+      "lines": 503,
       "classification": "ok"
     },
     {
@@ -4595,7 +4615,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 15,
-  "architecture_exception_count": 10,
+  "warning_count": 14,
+  "architecture_exception_count": 9,
   "hard_limit_allowlisted_count": 3
 }

@@ -1,12 +1,138 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "large_files": [
-    {"path":"PooToolsSource/Base/PTCollectionView.swift","owner":"ui-foundation","reason":"Legacy public facade still owns layout, refresh, interaction, index and skeleton compatibility paths.","next_action":"Move one coordinator at a time without changing the public facade."},
-    {"path":"PooToolsSource/Base/PTBaseViewController.swift","owner":"ui-foundation","reason":"Legacy navigation manager and base controller compatibility implementation share a file.","next_action":"Keep PTNavigationConfigurable canonical and extract only complete extensions."},
-    {"path":"PooToolsSource/NetWork/Network.swift","owner":"network","reason":"Legacy static API remains source-compatible while executor migration is in progress.","next_action":"Continue moving request context, upload and download implementations behind typed executors."}
+    {
+      "path": "PooToolsSource/Base/PTCollectionView.swift",
+      "owner": "ui-foundation",
+      "reason": "Legacy public facade still owns layout, refresh, interaction, index and skeleton compatibility paths.",
+      "next_action": "Move one coordinator at a time without changing the public facade.",
+      "status": "active",
+      "extracted_files": [
+        "PooToolsSource/Base/PTCollectionViewTypes.swift",
+        "PooToolsSource/Base/PTCollectionViewSkeleton.swift"
+      ]
+    },
+    {
+      "path": "PooToolsSource/Base/PTBaseViewController.swift",
+      "owner": "ui-foundation",
+      "reason": "The base controller remains a compatibility facade after the navigation manager extraction.",
+      "next_action": "Keep PTNavigationConfigurable canonical and only move complete extensions after measuring call-site risk.",
+      "status": "closed",
+      "extracted_files": [
+        "PooToolsSource/Base/PTNavigationBarManager.swift"
+      ]
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "owner": "network",
+      "reason": "Legacy static APIs remain source-compatible while request, download and logging implementations move behind typed extensions.",
+      "next_action": "Continue moving request context and upload implementations behind typed executors without changing legacy signatures.",
+      "status": "active",
+      "extracted_files": [
+        "PooToolsSource/NetWork/Network+Download.swift",
+        "PooToolsSource/NetWork/Network+Logging.swift"
+      ]
+    }
   ],
   "caches": [
-    {"path":"PooToolsSource/Base/PTCollectionViewTypes.swift","owner":"ui-foundation","storage":"NSCache","thread":"MainActor","limit":"height=1000, layout=100","eviction":"NSCache eviction and explicit memory-warning clear"},
-    {"path":"PooToolsSource/Base/PTVideoCoverCache.swift","owner":"media","storage":"NSCache plus disk cache","thread":"MainActor adapter","limit":"memory countLimit=100","eviction":"memory warning and cache policy"}
+    {
+      "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
+      "owner": "ui-foundation",
+      "storage": "NSCache",
+      "thread": "MainActor",
+      "count_limit": "1000 by default; configurable per instance",
+      "cost_limit": "none",
+      "disk_limit": "none",
+      "eviction": "NSCache automatic eviction plus explicit remove/removeAll",
+      "memory_warning": "not registered; layout-derived entries are bounded by count"
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "owner": "media",
+      "storage": "MainActor NSCache plus actor-backed disk cache",
+      "thread": "MainActor memory adapter; PTVideoCoverDiskStore actor for file I/O",
+      "count_limit": "100",
+      "cost_limit": "50 MB decoded image cost",
+      "disk_limit": "100 MB maximum; trim to 70 MB",
+      "eviction": "NSCache eviction, periodic metadata-based disk trim, pending-task cancellation",
+      "memory_warning": "clears memory cache and cancels pending thumbnail tasks"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "owner": "network",
+      "storage": "URLCache memory and disk store",
+      "thread": "URLSession/Alamofire session managed",
+      "count_limit": "system managed",
+      "cost_limit": "20 MB memory capacity by default",
+      "disk_limit": "100 MB disk capacity by default",
+      "eviction": "URLCache and HTTP cache policy",
+      "memory_warning": "system-managed; no explicit application clear"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "owner": "network",
+      "storage": "actor-owned NSCache plus JSON files",
+      "thread": "NetworkCache actor; detached disk maintenance",
+      "count_limit": "200",
+      "cost_limit": "50 MB encoded response cost",
+      "disk_limit": "100 MB default; clean target is 70 percent",
+      "eviction": "expiration, NSCache eviction and metadata-based disk cleanup",
+      "memory_warning": "not registered; NSCache remains bounded"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "owner": "media",
+      "storage": "NSCache duration values plus PT audio files",
+      "thread": "MainActor service",
+      "count_limit": "256",
+      "cost_limit": "256 Float values",
+      "disk_limit": "not configured for PT audio files",
+      "eviction": "NSCache eviction and source-file validation",
+      "memory_warning": "clears derived duration values; keeps media files"
+    },
+    {
+      "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
+      "owner": "image-editor",
+      "storage": "NSCache filter output",
+      "thread": "MainActor render task",
+      "count_limit": "6",
+      "cost_limit": "96 MB decoded image cost",
+      "disk_limit": "none",
+      "eviction": "NSCache eviction and source-image identity reset",
+      "memory_warning": "not registered; cache is released with the engine"
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "owner": "pdf",
+      "storage": "NSCache plus optional PNG files",
+      "thread": "MainActor memory cache; synchronous legacy disk adapter",
+      "count_limit": "system default",
+      "cost_limit": "not configured",
+      "disk_limit": "not configured",
+      "eviction": "explicit remove APIs only",
+      "memory_warning": "not registered; follow-up required before 6.0"
+    },
+    {
+      "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
+      "owner": "image-foundation",
+      "storage": "per-UIImageView NSCache for GIF frames",
+      "thread": "owning UIImageView/UI thread",
+      "count_limit": "not configured",
+      "cost_limit": "not configured",
+      "disk_limit": "none",
+      "eviction": "cleared when GIF cache is rebuilt or view releases",
+      "memory_warning": "not registered; follow-up required before 6.0"
+    },
+    {
+      "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
+      "owner": "debug",
+      "storage": "URLCache debug disk and memory store",
+      "thread": "dedicated debug I/O queue",
+      "count_limit": "system managed",
+      "cost_limit": "32 MB memory capacity",
+      "disk_limit": "1 GB debug capacity",
+      "eviction": "expiration metadata and URLCache policy",
+      "memory_warning": "debug-only; no application memory-warning hook"
+    }
   ]
 }

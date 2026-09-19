@@ -31,6 +31,13 @@ public struct PTVideoThumbnailRequest: Sendable {
     }
 }
 
+// English: AVFoundation assets are system-owned references used only by the thumbnail worker.
+// Español: Los recursos de AVFoundation son referencias del sistema usadas solo por el trabajador de miniaturas.
+// 中文：AVFoundation 资源是仅由缩略图工作任务使用的系统引用对象。
+private struct PTVideoAssetSendableBox: @unchecked Sendable {
+    let asset: AVAsset
+}
+
 // English: UI-bound thumbnail providers return UIImage without crossing a nonisolated actor boundary.
 // Español: Los proveedores ligados a UI devuelven UIImage sin cruzar un límite de actor no aislado.
 // 中文：UI 绑定的缩略图提供者直接返回 UIImage，不跨越非隔离 actor 边界。
@@ -200,6 +207,13 @@ public enum PTVideoThumbnailService {
 private extension PTVideoThumbnailService {
     @MainActor
     static func time(for asset: AVAsset, frameNumber: Int) async throws -> CMTime {
+        let assetBox = PTVideoAssetSendableBox(asset: asset)
+        return try await Task.detached(priority: .userInitiated) {
+            try await PTVideoThumbnailService.timeOffMainActor(for: assetBox.asset, frameNumber: frameNumber)
+        }.value
+    }
+
+    static func timeOffMainActor(for asset: AVAsset, frameNumber: Int) async throws -> CMTime {
         guard let track = try await asset.loadTracks(withMediaType: .video).first else {
             throw PTVideoThumbnailError.videoTrackUnavailable
         }
@@ -240,6 +254,21 @@ private extension PTVideoThumbnailService {
                               maximumSize: CGSize?,
                               appliesPreferredTrackTransform: Bool,
                               requiresExactTime: Bool) async throws -> UIImage {
+        let assetBox = PTVideoAssetSendableBox(asset: asset)
+        return try await Task.detached(priority: .userInitiated) {
+            try await PTVideoThumbnailService.generateImageOffMainActor(for: assetBox.asset,
+                                                                         at: time,
+                                                                         maximumSize: maximumSize,
+                                                                         appliesPreferredTrackTransform: appliesPreferredTrackTransform,
+                                                                         requiresExactTime: requiresExactTime)
+        }.value
+    }
+
+    static func generateImageOffMainActor(for asset: AVAsset,
+                                          at time: CMTime,
+                                          maximumSize: CGSize?,
+                                          appliesPreferredTrackTransform: Bool,
+                                          requiresExactTime: Bool) async throws -> UIImage {
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = appliesPreferredTrackTransform
         if let maximumSize,

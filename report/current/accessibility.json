@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:40Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:53Z",
   "counts": {
     "reduce_motion": 40,
     "dynamic_type": 11,
@@ -132,23 +132,13 @@
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 160
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 175
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 58
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 35
     },
     {
       "rule": "reduce_motion",
-      "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 126
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 103
     },
     {
       "rule": "accessibility",
@@ -194,6 +184,16 @@
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTImageCell.swift",
       "line": 133
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 152
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 167
     },
     {
       "rule": "reduce_motion",

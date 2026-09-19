@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:39Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:52Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
     "PooToolsSource/Category/PHAsset+PTEX.swift",
+    "PooToolsSource/Category/PTVideoThumbnailService.swift",
     "PooToolsSource/C7Collector/C7CollectorCamera.swift",
     "PooToolsSource/LivePhoto/PTLivePhoto.swift",
     "PooToolsSource/Motion/PTMotion.swift",
@@ -87,6 +88,12 @@
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
       "line": 66,
       "declaration": "struct PTSendableAVAsset: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
+      "line": 37,
+      "declaration": "private struct PTVideoAssetSendableBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -313,7 +320,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 850,
+      "line": 773,
       "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
       "allowlisted": true
     },

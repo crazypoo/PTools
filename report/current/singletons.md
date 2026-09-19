@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: 60d318f64a7b03360667190ee2f62169f3f1efd0
-Generated at: 2026-09-19T12:04:39Z
+Source revision: a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd
+Generated at: 2026-09-19T13:43:52Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1513**
+- .shared / .share 调用文本计数：**1515**
 - 单例声明计数：**100**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -22,7 +22,7 @@ Generated at: 2026-09-19T12:04:39Z
 | PooToolsSource/Base/PTAppBaseConfig.swift:16 | share | D Shared mutable UI or scene state | public static let share = PTAppBaseConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTAudioCache.swift:96 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTAudioCache.swift:164 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/Base/PTBaseViewController.swift:145 | shared | D Shared mutable UI or scene state | public static let shared = PTNavigationBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
+| PooToolsSource/Base/PTNavigationBarManager.swift:137 | shared | D Shared mutable UI or scene state | public static let shared = PTNavigationBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTVideoCoverCache.swift:113 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTVideoCoverCache.swift:173 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/BioID/PTBiologyID.swift:23 | shared | C Shared mutable service | public static let shared = PTBiometricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

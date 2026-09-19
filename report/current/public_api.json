@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:39Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:52Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -3824,241 +3824,9 @@
       "declaration": "public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void"
     },
     {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|enum|public enum PTScreenShotActionType",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 22,
-      "access": "public",
-      "kind": "enum",
-      "declaration": "public enum PTScreenShotActionType {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|enum|@objc public enum VCStatusBarChangeStatusType : Int",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 26,
-      "access": "public",
-      "kind": "enum",
-      "declaration": "@objc public enum VCStatusBarChangeStatusType : Int {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var isConfigured = false // ✅ 新增",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 33,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var isConfigured = false // ✅ 新增"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var leftView: [UIView] = []",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 34,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var leftView: [UIView] = []"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var leftItemSpacing:CGFloat = 0",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 35,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var leftItemSpacing:CGFloat = 0"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var rightViews: [UIView] = []",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 36,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var rightViews: [UIView] = []"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var rightItemSpacing:CGFloat = 0",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 37,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var rightItemSpacing:CGFloat = 0"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var titleView: UIView?",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 38,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var titleView: UIView?"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var titleViewFillSpace: Bool = true",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 40,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var titleViewFillSpace: Bool = true"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var navTitle:String = \"\"",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 41,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var navTitle:String = \"\""
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var barColorStyle:PTNavigationBarStyle = .transparent",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 42,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var barColorStyle:PTNavigationBarStyle = .transparent"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 245,
-      "access": "public",
-      "kind": "var",
-      "declaration": "public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func installIfNeeded(in nav: UINavigationController)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 247,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func installIfNeeded(in nav: UINavigationController) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func apply(style: PTNavigationBarStyle, in nav: UINavigationController)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 266,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func currentNavigationController(in scene: UIWindowScene) -> UINavigationController?",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 293,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func currentNavigationController(in scene: UIWindowScene) -> UINavigationController? {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func currentViewController(in scene: UIWindowScene) -> UIViewController?",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 303,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func currentViewController(in scene: UIWindowScene) -> UIViewController? {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func setAlpha(_ alpha: CGFloat)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 361,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func setAlpha(_ alpha: CGFloat) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func bind(to nav: UINavigationController)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 368,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func bind(to nav: UINavigationController) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func item(for vc: UIViewController) -> PTNavBarItem",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 394,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func item(for vc: UIViewController) -> PTNavBarItem {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func update(item: PTNavBarItem, for vc: UIViewController)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 403,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func update(item: PTNavBarItem, for vc: UIViewController) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func currentNavLargeTitleBarHeight() -> CGFloat",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 421,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func currentNavLargeTitleBarHeight() -> CGFloat {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func currentNavBarHeight() -> CGFloat",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 428,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func currentNavBarHeight() -> CGFloat {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func navigationController(_ navigationController: UINavigationController,",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 439,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func navigationController(_ navigationController: UINavigationController,"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func navigationController(_ navigationController: UINavigationController,",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 567,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func navigationController(_ navigationController: UINavigationController,"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func restoreIfNeeded(for vc: UIViewController)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 688,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func restoreIfNeeded(for vc: UIViewController) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func refreshCurrentNavBar()",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 706,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func refreshCurrentNavBar() {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func setLeftView(_ views: [UIView],spacing:CGFloat = 8)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 808,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func setRightViews(_ views: [UIView], spacing: CGFloat = 8)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 847,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func setTitleView(_ view: UIView?, fillSpace: Bool = false)",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 886,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {"
-    },
-    {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|class|open class PTBaseViewController: UIViewController, PTNavigationConfigurable",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 939,
+      "line": 25,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTBaseViewController: UIViewController, PTNavigationConfigurable {"
@@ -4066,7 +3834,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func prefersLargeTitle() -> Bool",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 951,
+      "line": 37,
       "access": "open",
       "kind": "func",
       "declaration": "open func prefersLargeTitle() -> Bool {"
@@ -4074,7 +3842,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func allowControlNavBar() -> Bool",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 955,
+      "line": 41,
       "access": "open",
       "kind": "func",
       "declaration": "open func allowControlNavBar() -> Bool {"
@@ -4082,7 +3850,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|var|open var pt_Title:String?",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 959,
+      "line": 45,
       "access": "open",
       "kind": "var",
       "declaration": "open var pt_Title:String? {"
@@ -4090,7 +3858,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func preferredNavigationBarStyle() -> PTNavigationBarStyle",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 973,
+      "line": 59,
       "access": "open",
       "kind": "func",
       "declaration": "open func preferredNavigationBarStyle() -> PTNavigationBarStyle {"
@@ -4098,7 +3866,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|@MainActor open func prepareDefaultNavigationBarItem()",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1047,
+      "line": 133,
       "access": "open",
       "kind": "func",
       "declaration": "@MainActor open func prepareDefaultNavigationBarItem() {"
@@ -4106,7 +3874,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1117,
+      "line": 203,
       "access": "open",
       "kind": "func",
       "declaration": "open func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {}"
@@ -4114,7 +3882,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func parseURLParameters(url: URL) -> [String: String]?",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1123,
+      "line": 209,
       "access": "public",
       "kind": "func",
       "declaration": "public func parseURLParameters(url: URL) -> [String: String]? {"
@@ -4122,7 +3890,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setCustomBackButton(image: UIImage?,",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1128,
+      "line": 214,
       "access": "open",
       "kind": "func",
       "declaration": "open func setCustomBackButton(image: UIImage?,"
@@ -4130,7 +3898,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setCustomBackButtonView(_ customView: UIView,",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1153,
+      "line": 239,
       "access": "open",
       "kind": "func",
       "declaration": "open func setCustomBackButtonView(_ customView: UIView,"
@@ -4138,7 +3906,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func updateCustomBackButtonBounds(_ size: CGSize)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1195,
+      "line": 281,
       "access": "open",
       "kind": "func",
       "declaration": "open func updateCustomBackButtonBounds(_ size: CGSize) {"
@@ -4146,7 +3914,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func refreshCustomBackButtonBounds(minimumWidth: CGFloat? = nil,height: CGFloat? = nil)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1220,
+      "line": 306,
       "access": "open",
       "kind": "func",
       "declaration": "open func refreshCustomBackButtonBounds(minimumWidth: CGFloat? = nil,height: CGFloat? = nil) {"
@@ -4154,7 +3922,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setLeftButtons(views:[UIView], buttonSpacing: CGFloat = 10)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1247,
+      "line": 333,
       "access": "open",
       "kind": "func",
       "declaration": "open func setLeftButtons(views:[UIView], buttonSpacing: CGFloat = 10) {"
@@ -4162,7 +3930,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1261,
+      "line": 347,
       "access": "open",
       "kind": "func",
       "declaration": "open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10) {"
@@ -4170,7 +3938,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setCustomTitleView(_ view: UIView? = nil, fillSpace: Bool = true)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1275,
+      "line": 361,
       "access": "open",
       "kind": "func",
       "declaration": "open func setCustomTitleView(_ view: UIView? = nil, fillSpace: Bool = true) {"
@@ -4178,7 +3946,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func updateNavigationBarBackground(scrollView: UIScrollView, changeOffset: CGFloat = 100, color: UIColor = .white)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1283,
+      "line": 369,
       "access": "open",
       "kind": "func",
       "declaration": "open func updateNavigationBarBackground(scrollView: UIScrollView, changeOffset: CGFloat = 100, color: UIColor = .white) {"
@@ -4186,7 +3954,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func setNavigationBarBackgroundAlpha(clear:Bool = false)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1290,
+      "line": 376,
       "access": "open",
       "kind": "func",
       "declaration": "open func setNavigationBarBackgroundAlpha(clear:Bool = false) {"
@@ -4194,7 +3962,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func safePushViewController(_ vc: UIViewController, animated: Bool = true)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1315,
+      "line": 401,
       "access": "public",
       "kind": "func",
       "declaration": "public func safePushViewController(_ vc: UIViewController, animated: Bool = true) {"
@@ -4202,7 +3970,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func bindScrollView(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1326,
+      "line": 412,
       "access": "open",
       "kind": "func",
       "declaration": "open func bindScrollView(_ scrollView: UIScrollView) {"
@@ -4210,7 +3978,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func scrollViewDidScroll(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1330,
+      "line": 416,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewDidScroll(_ scrollView: UIScrollView) {"
@@ -4218,7 +3986,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1334,
+      "line": 420,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {"
@@ -4226,7 +3994,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func changeStatusBar(type:VCStatusBarChangeStatusType)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1425,
+      "line": 511,
       "access": "open",
       "kind": "func",
       "declaration": "open func changeStatusBar(type:VCStatusBarChangeStatusType) {"
@@ -4234,7 +4002,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func switchOrientation(isFullScreen:Bool)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1437,
+      "line": 523,
       "access": "open",
       "kind": "func",
       "declaration": "open func switchOrientation(isFullScreen:Bool) {"
@@ -4242,7 +4010,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|open|func|open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1451,
+      "line": 537,
       "access": "open",
       "kind": "func",
       "declaration": "open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }"
@@ -4250,7 +4018,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func returnFrontVC(completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1453,
+      "line": 539,
       "access": "public",
       "kind": "func",
       "declaration": "public func returnFrontVC(completion:PTActionTask? = nil) {"
@@ -4258,7 +4026,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func registerScreenShotService()",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1474,
+      "line": 560,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerScreenShotService() {"
@@ -4266,7 +4034,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var emptyDataViewConfig:PTEmptyDataViewConfig?",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1526,
+      "line": 612,
       "access": "public",
       "kind": "var",
       "declaration": "public var emptyDataViewConfig:PTEmptyDataViewConfig? {"
@@ -4274,7 +4042,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func showEmptyView(task: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1542,
+      "line": 628,
       "access": "public",
       "kind": "func",
       "declaration": "public func showEmptyView(task: PTActionTask? = nil) {"
@@ -4282,7 +4050,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func hideEmptyView(task: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1551,
+      "line": 637,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideEmptyView(task: PTActionTask? = nil) {"
@@ -4290,7 +4058,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func emptyViewLoading()",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1556,
+      "line": 642,
       "access": "public",
       "kind": "func",
       "declaration": "public func emptyViewLoading() {"
@@ -4298,7 +4066,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var screenShotHandle:PTScreenShotOnlyGetImageHandle?",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1564,
+      "line": 650,
       "access": "public",
       "kind": "var",
       "declaration": "public var screenShotHandle:PTScreenShotOnlyGetImageHandle? {"
@@ -4306,7 +4074,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|var|public var screenShotActionHandle:PTScreenShotImageHandle?",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1576,
+      "line": 662,
       "access": "public",
       "kind": "var",
       "declaration": "public var screenShotActionHandle:PTScreenShotImageHandle? {"
@@ -4314,7 +4082,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseViewController.swift|public|func|public func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil)",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 1624,
+      "line": 710,
       "access": "public",
       "kind": "func",
       "declaration": "public func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {"
@@ -4424,25 +4192,9 @@
       "declaration": "public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {"
     },
     {
-      "key": "PooToolsSource/Base/PTCollectionView.swift|public|typealias|public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>",
-      "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 36,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>"
-    },
-    {
-      "key": "PooToolsSource/Base/PTCollectionView.swift|public|typealias|public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>",
-      "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 37,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>"
-    },
-    {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|class|public class PTCollectionView: UIView",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 158,
+      "line": 39,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTCollectionView: UIView {"
@@ -4450,7 +4202,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var headerInCollection: PTReusableViewHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 319,
+      "line": 204,
       "access": "open",
       "kind": "var",
       "declaration": "open var headerInCollection: PTReusableViewHandler?"
@@ -4458,7 +4210,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var footerInCollection: PTReusableViewHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 320,
+      "line": 205,
       "access": "open",
       "kind": "var",
       "declaration": "open var footerInCollection: PTReusableViewHandler?"
@@ -4466,7 +4218,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var cellInCollection: PTCellInCollectionHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 321,
+      "line": 206,
       "access": "open",
       "kind": "var",
       "declaration": "open var cellInCollection: PTCellInCollectionHandler?"
@@ -4474,7 +4226,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidSelect: PTCellDidSelectedHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 324,
+      "line": 209,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidSelect: PTCellDidSelectedHandler?"
@@ -4482,7 +4234,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionWillDisplay: PTCellDisplayHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 325,
+      "line": 210,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionWillDisplay: PTCellDisplayHandler?"
@@ -4490,7 +4242,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidEndDisplay: PTCellDisplayHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 326,
+      "line": 211,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidEndDisplay: PTCellDisplayHandler?"
@@ -4498,7 +4250,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionWillBeginDecelerating: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 329,
+      "line": 214,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionWillBeginDecelerating: PTCollectionViewScrollHandler?"
@@ -4506,7 +4258,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionViewDidScroll: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 330,
+      "line": 215,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionViewDidScroll: PTCollectionViewScrollHandler?"
@@ -4514,7 +4266,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionWillBeginDragging: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 331,
+      "line": 216,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionWillBeginDragging: PTCollectionViewScrollHandler?"
@@ -4522,7 +4274,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidEndDragging: ((UICollectionView,Bool) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 332,
+      "line": 217,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidEndDragging: ((UICollectionView,Bool) -> Void)?"
@@ -4530,7 +4282,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidEndDecelerating: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 333,
+      "line": 218,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidEndDecelerating: PTCollectionViewScrollHandler?"
@@ -4538,7 +4290,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 334,
+      "line": 219,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?"
@@ -4546,7 +4298,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 335,
+      "line": 220,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?"
@@ -4554,7 +4306,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 336,
+      "line": 221,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?"
@@ -4562,7 +4314,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var orthogonalDidScroll: ((Int, CGPoint) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 346,
+      "line": 231,
       "access": "open",
       "kind": "var",
       "declaration": "open var orthogonalDidScroll: ((Int, CGPoint) -> Void)?"
@@ -4570,7 +4322,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var orthogonalPageDidChange: ((Int, Int) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 348,
+      "line": 233,
       "access": "open",
       "kind": "var",
       "declaration": "open var orthogonalPageDidChange: ((Int, Int) -> Void)?"
@@ -4578,7 +4330,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionWillReachBottomTask: PTActionTask?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 353,
+      "line": 238,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionWillReachBottomTask: PTActionTask?"
@@ -4586,7 +4338,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var headerRefreshTask: PTActionTask?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 356,
+      "line": 241,
       "access": "open",
       "kind": "var",
       "declaration": "open var headerRefreshTask: PTActionTask?"
@@ -4594,7 +4346,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var footRefreshTask: PTActionTask?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 358,
+      "line": 243,
       "access": "open",
       "kind": "var",
       "declaration": "open var footRefreshTask: PTActionTask?"
@@ -4602,7 +4354,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var waterFallLayout: ((Int, AnyObject) -> CGFloat)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 361,
+      "line": 246,
       "access": "open",
       "kind": "var",
       "declaration": "open var waterFallLayout: ((Int, AnyObject) -> CGFloat)?"
@@ -4610,7 +4362,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var customerLayout: ((Int,PTSection) -> NSCollectionLayoutGroup)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 362,
+      "line": 247,
       "access": "open",
       "kind": "var",
       "declaration": "open var customerLayout: ((Int,PTSection) -> NSCollectionLayoutGroup)?"
@@ -4618,7 +4370,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var customerReuseViews: ((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 363,
+      "line": 248,
       "access": "open",
       "kind": "var",
       "declaration": "open var customerReuseViews: ((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?"
@@ -4626,7 +4378,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var emptyTap: ((UIView?) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 366,
+      "line": 251,
       "access": "open",
       "kind": "var",
       "declaration": "open var emptyTap: ((UIView?) -> Void)?"
@@ -4634,7 +4386,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var emptyButtonTap: ((UIView?) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 367,
+      "line": 252,
       "access": "open",
       "kind": "var",
       "declaration": "open var emptyButtonTap: ((UIView?) -> Void)?"
@@ -4642,7 +4394,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var decorationInCollectionView: PTDecorationInCollectionHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 370,
+      "line": 255,
       "access": "open",
       "kind": "var",
       "declaration": "open var decorationInCollectionView: PTDecorationInCollectionHandler?"
@@ -4650,7 +4402,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var decorationViewReset: PTViewInDecorationResetHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 373,
+      "line": 258,
       "access": "open",
       "kind": "var",
       "declaration": "open var decorationViewReset: PTViewInDecorationResetHandler?"
@@ -4658,7 +4410,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var decorationCustomLayoutInsetReset: ((Int,PTSection) -> NSDirectionalEdgeInsets)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 376,
+      "line": 261,
       "access": "open",
       "kind": "var",
       "declaration": "open var decorationCustomLayoutInsetReset: ((Int,PTSection) -> NSDirectionalEdgeInsets)?"
@@ -4666,7 +4418,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|var|public var contentCollectionView:UICollectionView",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 378,
+      "line": 263,
       "access": "public",
       "kind": "var",
       "declaration": "public var contentCollectionView:UICollectionView { collectionView }"
@@ -4674,7 +4426,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|var|public var collectionSectionDatas:[PTSection]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 379,
+      "line": 264,
       "access": "public",
       "kind": "var",
       "declaration": "public var collectionSectionDatas:[PTSection] { diffableDataSource.snapshot().sectionIdentifiers }"
@@ -4682,7 +4434,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var indexPathSwipe: PTCollectionViewCanSwipeHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 382,
+      "line": 267,
       "access": "open",
       "kind": "var",
       "declaration": "open var indexPathSwipe: PTCollectionViewCanSwipeHandler?"
@@ -4690,7 +4442,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var swipeLeftHandler :PTCollectionViewSwipeHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 383,
+      "line": 268,
       "access": "open",
       "kind": "var",
       "declaration": "open var swipeLeftHandler :PTCollectionViewSwipeHandler?"
@@ -4698,7 +4450,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var swipeRightHandler: PTCollectionViewSwipeHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 384,
+      "line": 269,
       "access": "open",
       "kind": "var",
       "declaration": "open var swipeRightHandler: PTCollectionViewSwipeHandler?"
@@ -4706,7 +4458,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var itemMoveTo: ((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 386,
+      "line": 271,
       "access": "open",
       "kind": "var",
       "declaration": "open var itemMoveTo: ((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?"
@@ -4714,7 +4466,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var forceController: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 388,
+      "line": 273,
       "access": "open",
       "kind": "var",
       "declaration": "open var forceController: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?"
@@ -4722,7 +4474,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var forceActions: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 389,
+      "line": 274,
       "access": "open",
       "kind": "var",
       "declaration": "open var forceActions: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?"
@@ -4730,7 +4482,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|open|var|open var collectionUpdateError: PTCollectionViewUpdateErrorHandler?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 391,
+      "line": 276,
       "access": "open",
       "kind": "var",
       "declaration": "open var collectionUpdateError: PTCollectionViewUpdateErrorHandler?"
@@ -4738,7 +4490,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|var|public var viewConfig: PTCollectionViewConfig!",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 393,
+      "line": 278,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewConfig: PTCollectionViewConfig! {"
@@ -4746,7 +4498,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|init|public init(viewConfig: PTCollectionViewConfig!)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 447,
+      "line": 332,
       "access": "public",
       "kind": "init",
       "declaration": "public init(viewConfig: PTCollectionViewConfig!) {"
@@ -4754,7 +4506,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func showSkeleton(itemCount: Int? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 531,
+      "line": 416,
       "access": "public",
       "kind": "func",
       "declaration": "public func showSkeleton(itemCount: Int? = nil) {"
@@ -4762,7 +4514,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func hideSkeleton()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 542,
+      "line": 427,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideSkeleton() {"
@@ -4770,7 +4522,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func segmentScrolView() -> UIScrollView",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 752,
+      "line": 637,
       "access": "public",
       "kind": "func",
       "declaration": "public func segmentScrolView() -> UIScrollView {"
@@ -4778,7 +4530,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func visibleCells() -> [UICollectionViewCell]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 757,
+      "line": 642,
       "access": "public",
       "kind": "func",
       "declaration": "public func visibleCells() -> [UICollectionViewCell] {"
@@ -4786,7 +4538,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 764,
+      "line": 649,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {"
@@ -4794,7 +4546,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 770,
+      "line": 655,
       "access": "public",
       "kind": "func",
       "declaration": "public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition) {"
@@ -4802,7 +4554,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func cornerPosition(row: Int, count: Int) -> CornerPosition",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 778,
+      "line": 663,
       "access": "public",
       "kind": "func",
       "declaration": "public func cornerPosition(row: Int, count: Int) -> CornerPosition {"
@@ -4810,7 +4562,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func hideIndicator()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 785,
+      "line": 670,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideIndicator() {"
@@ -4818,7 +4570,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func clearLayoutCaches()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 791,
+      "line": 676,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearLayoutCaches() {"
@@ -4826,7 +4578,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 806,
+      "line": 691,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {"
@@ -4834,7 +4586,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 811,
+      "line": 696,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {"
@@ -4842,7 +4594,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 816,
+      "line": 701,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {"
@@ -4850,7 +4602,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 841,
+      "line": 726,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {"
@@ -4858,7 +4610,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 860,
+      "line": 745,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {"
@@ -4866,7 +4618,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 864,
+      "line": 749,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {"
@@ -4874,7 +4626,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 877,
+      "line": 762,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {"
@@ -4882,7 +4634,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewDidScroll(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 882,
+      "line": 767,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidScroll(_ scrollView: UIScrollView) {"
@@ -4890,7 +4642,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewWillBeginDragging(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 888,
+      "line": 773,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {"
@@ -4898,7 +4650,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 893,
+      "line": 778,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {"
@@ -4906,7 +4658,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 899,
+      "line": 784,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {"
@@ -4914,7 +4666,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 904,
+      "line": 789,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {"
@@ -4922,7 +4674,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 910,
+      "line": 795,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {"
@@ -4930,7 +4682,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func scrollViewDidScrollToTop(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 915,
+      "line": 800,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {"
@@ -4938,7 +4690,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 925,
+      "line": 810,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {"
@@ -4946,7 +4698,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 943,
+      "line": 828,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {"
@@ -4954,7 +4706,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 953,
+      "line": 838,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {"
@@ -4962,7 +4714,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath])",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1034,
+      "line": 919,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {"
@@ -4970,7 +4722,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath])",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1042,
+      "line": 927,
       "access": "public",
       "kind": "func",
       "declaration": "public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {"
@@ -4978,7 +4730,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|@MainActor public func showCollectionDetail(collectionData:[PTSection],",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1358,
+      "line": 1243,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func showCollectionDetail(collectionData:[PTSection],"
@@ -4986,7 +4738,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func clearAllData(finishTask:PTCollectionCallback? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1403,
+      "line": 1288,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearAllData(finishTask:PTCollectionCallback? = nil) {"
@@ -4994,7 +4746,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1427,
+      "line": 1312,
       "access": "public",
       "kind": "func",
       "declaration": "public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil) {"
@@ -5002,7 +4754,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1482,
+      "line": 1367,
       "access": "public",
       "kind": "func",
       "declaration": "public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {"
@@ -5010,7 +4762,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1512,
+      "line": 1397,
       "access": "public",
       "kind": "func",
       "declaration": "public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {"
@@ -5018,7 +4770,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1560,
+      "line": 1445,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {"
@@ -5026,7 +4778,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1596,
+      "line": 1481,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {"
@@ -5034,7 +4786,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1646,
+      "line": 1531,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {"
@@ -5042,7 +4794,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func hideEmptyLoading(task: PTActionTask?)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2006,
+      "line": 1891,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideEmptyLoading(task: PTActionTask?) {"
@@ -5050,7 +4802,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func showEmptyLoading()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2010,
+      "line": 1895,
       "access": "public",
       "kind": "func",
       "declaration": "public func showEmptyLoading() {"
@@ -5058,7 +4810,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func reloadEmptyConfig()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2060,
+      "line": 1945,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadEmptyConfig() {"
@@ -5066,7 +4818,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func endRefresh()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2069,
+      "line": 1954,
       "access": "public",
       "kind": "func",
       "declaration": "public func endRefresh() {"
@@ -5074,7 +4826,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func footerRefreshNoMore ()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2073,
+      "line": 1958,
       "access": "public",
       "kind": "func",
       "declaration": "public func footerRefreshNoMore () {"
@@ -5082,7 +4834,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func footerRefreshReset()",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2078,
+      "line": 1963,
       "access": "public",
       "kind": "func",
       "declaration": "public func footerRefreshReset() {"
@@ -5090,7 +4842,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2086,
+      "line": 1971,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {"
@@ -5098,7 +4850,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func registerClassCells(classs:[String:AnyClass])",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2090,
+      "line": 1975,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerClassCells(classs:[String:AnyClass]) {"
@@ -5106,7 +4858,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func registerNibCells(nib:[String:String])",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2094,
+      "line": 1979,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerNibCells(nib:[String:String]) {"
@@ -5114,7 +4866,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func registerSupplementaryView(classs:[String:AnyClass],kind:String)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2098,
+      "line": 1983,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {"
@@ -5122,7 +4874,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2104,
+      "line": 1989,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {"
@@ -5130,7 +4882,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2130,
+      "line": 2015,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) {"
@@ -5138,7 +4890,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2165,
+      "line": 2050,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {"
@@ -5146,7 +4898,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2212,
+      "line": 2097,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) {"
@@ -5154,7 +4906,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil)",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2247,
+      "line": 2132,
       "access": "public",
       "kind": "func",
       "declaration": "public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) {"
@@ -5162,7 +4914,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getRow(at indexPath: IndexPath) -> PTRows?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2265,
+      "line": 2150,
       "access": "public",
       "kind": "func",
       "declaration": "public func getRow(at indexPath: IndexPath) -> PTRows? {"
@@ -5170,7 +4922,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getRows(at indexPaths: [IndexPath]) -> [PTRows]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2269,
+      "line": 2154,
       "access": "public",
       "kind": "func",
       "declaration": "public func getRows(at indexPaths: [IndexPath]) -> [PTRows] {"
@@ -5178,7 +4930,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getRow(by diffId: String) -> PTRows?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2273,
+      "line": 2158,
       "access": "public",
       "kind": "func",
       "declaration": "public func getRow(by diffId: String) -> PTRows? {"
@@ -5186,7 +4938,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getAllRows(in section: Int) -> [PTRows]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2278,
+      "line": 2163,
       "access": "public",
       "kind": "func",
       "declaration": "public func getAllRows(in section: Int) -> [PTRows] {"
@@ -5194,7 +4946,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]]",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2286,
+      "line": 2171,
       "access": "public",
       "kind": "func",
       "declaration": "public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] {"
@@ -5202,10 +4954,26 @@
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|func|public func getSectionIndex(byHeaderID headerID: String) -> Int?",
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2296,
+      "line": 2181,
       "access": "public",
       "kind": "func",
       "declaration": "public func getSectionIndex(byHeaderID headerID: String) -> Int? {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTCollectionViewSkeleton.swift|public|typealias|public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>",
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>"
+    },
+    {
+      "key": "PooToolsSource/Base/PTCollectionViewSkeleton.swift|public|typealias|public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>",
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>"
     },
     {
       "key": "PooToolsSource/Base/PTCollectionViewTypes.swift|public|class|public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject>",
@@ -6002,7 +5770,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionViewTypes.swift|public|enum|public enum PTDiffAnimation",
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 511,
+      "line": 512,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTDiffAnimation {"
@@ -6010,7 +5778,7 @@
     {
       "key": "PooToolsSource/Base/PTCollectionViewTypes.swift|public|enum|public enum CornerPosition",
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 522,
+      "line": 523,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum CornerPosition {"
@@ -7334,6 +7102,238 @@
       "access": "public",
       "kind": "func",
       "declaration": "public func setRightButtons(_ buttons: [UIView]) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|enum|public enum PTScreenShotActionType",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTScreenShotActionType {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|enum|@objc public enum VCStatusBarChangeStatusType : Int",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "@objc public enum VCStatusBarChangeStatusType : Int {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var isConfigured = false // ✅ 新增",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isConfigured = false // ✅ 新增"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var leftView: [UIView] = []",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leftView: [UIView] = []"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var leftItemSpacing:CGFloat = 0",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leftItemSpacing:CGFloat = 0"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var rightViews: [UIView] = []",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var rightViews: [UIView] = []"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var rightItemSpacing:CGFloat = 0",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var rightItemSpacing:CGFloat = 0"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var titleView: UIView?",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var titleView: UIView?"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var titleViewFillSpace: Bool = true",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var titleViewFillSpace: Bool = true"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var navTitle:String = \"\"",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var navTitle:String = \"\""
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var barColorStyle:PTNavigationBarStyle = .transparent",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var barColorStyle:PTNavigationBarStyle = .transparent"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|var|public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 237,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func installIfNeeded(in nav: UINavigationController)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 239,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func installIfNeeded(in nav: UINavigationController) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func apply(style: PTNavigationBarStyle, in nav: UINavigationController)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 258,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func currentNavigationController(in scene: UIWindowScene) -> UINavigationController?",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 285,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func currentNavigationController(in scene: UIWindowScene) -> UINavigationController? {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func currentViewController(in scene: UIWindowScene) -> UIViewController?",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 295,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func currentViewController(in scene: UIWindowScene) -> UIViewController? {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func setAlpha(_ alpha: CGFloat)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 353,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setAlpha(_ alpha: CGFloat) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func bind(to nav: UINavigationController)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 360,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func bind(to nav: UINavigationController) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func item(for vc: UIViewController) -> PTNavBarItem",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 386,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func item(for vc: UIViewController) -> PTNavBarItem {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func update(item: PTNavBarItem, for vc: UIViewController)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 395,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(item: PTNavBarItem, for vc: UIViewController) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func currentNavLargeTitleBarHeight() -> CGFloat",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 413,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func currentNavLargeTitleBarHeight() -> CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func currentNavBarHeight() -> CGFloat",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 420,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func currentNavBarHeight() -> CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func navigationController(_ navigationController: UINavigationController,",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 431,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func navigationController(_ navigationController: UINavigationController,"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func navigationController(_ navigationController: UINavigationController,",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 559,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func navigationController(_ navigationController: UINavigationController,"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func restoreIfNeeded(for vc: UIViewController)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 680,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func restoreIfNeeded(for vc: UIViewController) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func refreshCurrentNavBar()",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 698,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func refreshCurrentNavBar() {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func setLeftView(_ views: [UIView],spacing:CGFloat = 8)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 800,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func setRightViews(_ views: [UIView], spacing: CGFloat = 8)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 839,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTNavigationBarManager.swift|public|func|public func setTitleView(_ view: UIView?, fillSpace: Bool = false)",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 878,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {"
     },
     {
       "key": "PooToolsSource/Base/PTNavigationConfiguration.swift|public|protocol|public protocol PTNavigationConfigurable: AnyObject",
@@ -11658,7 +11658,7 @@
     {
       "key": "PooToolsSource/Category/PTVideoThumbnailService.swift|public|protocol|public protocol PTVideoThumbnailProviding",
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 38,
+      "line": 45,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTVideoThumbnailProviding {"
@@ -11666,7 +11666,7 @@
     {
       "key": "PooToolsSource/Category/PTVideoThumbnailService.swift|public|struct|public struct PTDefaultVideoThumbnailProvider: PTVideoThumbnailProviding",
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 46,
+      "line": 53,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTDefaultVideoThumbnailProvider: PTVideoThumbnailProviding {"
@@ -11674,7 +11674,7 @@
     {
       "key": "PooToolsSource/Category/PTVideoThumbnailService.swift|public|init|public init()",
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 47,
+      "line": 54,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -11682,7 +11682,7 @@
     {
       "key": "PooToolsSource/Category/PTVideoThumbnailService.swift|public|func|public func image(for request: PTVideoThumbnailRequest) async -> UIImage?",
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 49,
+      "line": 56,
       "access": "public",
       "kind": "func",
       "declaration": "public func image(for request: PTVideoThumbnailRequest) async -> UIImage? {"
@@ -11690,7 +11690,7 @@
     {
       "key": "PooToolsSource/Category/PTVideoThumbnailService.swift|public|enum|public enum PTVideoThumbnailService",
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 57,
+      "line": 64,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTVideoThumbnailService {"
@@ -30384,6 +30384,62 @@
       "declaration": "public func sendAPDU(command: NFCISO7816APDU,"
     },
     {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func get(_ url: String) -> DownloadTask?",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 46,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func get(_ url: String) -> DownloadTask? { tasks[url] }"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil)",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 172,
+      "access": "public",
+      "kind": "func",
+      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 194,
+      "access": "public",
+      "kind": "func",
+      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func suspend(fileUrl: String)",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 221,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func resume(fileUrl: String)",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 222,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resume(fileUrl: String) { Task { await store.get(fileUrl)?.start(session: downloadSession) } }"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func cancel(fileUrl: String)",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 223,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancel(fileUrl: String) { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } }"
+    },
+    {
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error>",
+      "path": "PooToolsSource/NetWork/Network+Download.swift",
+      "line": 226,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {"
+    },
+    {
       "key": "PooToolsSource/NetWork/Network.swift|public|enum|public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
       "line": 31,
@@ -30442,7 +30498,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var config: PTNetworkConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 184,
+      "line": 185,
       "access": "public",
       "kind": "var",
       "declaration": "public var config: PTNetworkConfig {"
@@ -30450,7 +30506,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var requestEnvironment: PTNetworkRequestEnvironment",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 200,
+      "line": 201,
       "access": "public",
       "kind": "var",
       "declaration": "public var requestEnvironment: PTNetworkRequestEnvironment {"
@@ -30458,7 +30514,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var hud:PTHudView?",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 238,
+      "line": 239,
       "access": "public",
       "kind": "var",
       "declaration": "public var hud:PTHudView?"
@@ -30466,7 +30522,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|@MainActor public var hudConfig : PTHudConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 239,
+      "line": 240,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var hudConfig : PTHudConfig {"
@@ -30474,7 +30530,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func hudShow()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 247,
+      "line": 248,
       "access": "public",
       "kind": "func",
       "declaration": "public func hudShow() {"
@@ -30482,7 +30538,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func hudHide(completion:PTActionTask? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 258,
+      "line": 259,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func hudHide(completion:PTActionTask? = nil) {"
@@ -30490,7 +30546,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func globalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 272,
+      "line": 273,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func globalURL() async -> String {"
@@ -30498,7 +30554,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGlobalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 291,
+      "line": 292,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGlobalURL() async -> String {"
@@ -30506,7 +30562,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func gobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 308,
+      "line": 309,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func gobalUrl() async -> String {"
@@ -30514,7 +30570,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 313,
+      "line": 314,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGobalUrl() async -> String {"
@@ -30522,7 +30578,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestIPInfoSnapshot(ipAddress: String,",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 336,
+      "line": 337,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestIPInfoSnapshot(ipAddress: String,"
@@ -30530,7 +30586,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 348,
+      "line": 349,
       "access": "public",
       "kind": "class",
       "declaration": "public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {"
@@ -30538,7 +30594,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|typealias|public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 590,
+      "line": 513,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>"
@@ -30546,7 +30602,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 796,
+      "line": 719,
       "access": "public",
       "kind": "func",
       "declaration": "public func performCodableRequest<T: SmartCodableX & Sendable>("
@@ -30554,7 +30610,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 916,
+      "line": 839,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,"
@@ -30562,66 +30618,10 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any>",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 967,
+      "line": 890,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|public func get(_ url: String) -> DownloadTask?",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1049,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func get(_ url: String) -> DownloadTask? { tasks[url] }"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil)",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1176,
-      "access": "public",
-      "kind": "func",
-      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1198,
-      "access": "public",
-      "kind": "func",
-      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|public func suspend(fileUrl: String)",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1225,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|public func resume(fileUrl: String)",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1226,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func resume(fileUrl: String) { Task { await store.get(fileUrl)?.start(session: downloadSession) } }"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|public func cancel(fileUrl: String)",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1227,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func cancel(fileUrl: String) { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } }"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network.swift|public|func|public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error>",
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 1230,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {"
     },
     {
       "key": "PooToolsSource/NetWork/NetworkMetrics.swift|public|func|public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics)",
@@ -30680,12 +30680,12 @@
       "declaration": "public protocol NetworkPlugin: Sendable {"
     },
     {
-      "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|struct|public struct CacheObject: Codable",
+      "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|struct|public struct CacheObject: Codable, Sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
       "line": 224,
       "access": "public",
       "kind": "struct",
-      "declaration": "public struct CacheObject: Codable {"
+      "declaration": "public struct CacheObject: Codable, Sendable {"
     },
     {
       "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|enum|public enum PTNetworkCachePolicy:String, Sendable",
@@ -30722,7 +30722,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|init|public init()",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 412,
+      "line": 450,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -30730,7 +30730,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|func|public func willSend(_ request: inout URLRequest) async",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 414,
+      "line": 452,
       "access": "public",
       "kind": "func",
       "declaration": "public func willSend(_ request: inout URLRequest) async {"
@@ -30738,7 +30738,7 @@
     {
       "key": "PooToolsSource/NetWork/NetworkSupport.swift|public|func|public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 425,
+      "line": 463,
       "access": "public",
       "kind": "func",
       "declaration": "public func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async {"

@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
-  "generated_at": "2026-09-19T12:04:38Z",
+  "source_revision": "a44a135ce4edd8f0baa508ea064ecdc7ee5ea2bd",
+  "generated_at": "2026-09-19T13:43:51Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 21,
-    "unchecked_sendable": 67,
+    "task_detached": 27,
+    "unchecked_sendable": 68,
     "as_bang": 4
   },
   "locations": [
@@ -52,6 +52,18 @@
       "path": "PooToolsSource/Base/PTTabBarView.swift",
       "line": 1026,
       "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 483,
+      "text": "await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 492,
+      "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
@@ -130,6 +142,24 @@
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
       "line": 304,
       "text": "DispatchQueue.main.async {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
+      "line": 37,
+      "text": "private struct PTVideoAssetSendableBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
+      "line": 211,
+      "text": "return try await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
+      "line": 258,
+      "text": "return try await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "main_queue_async",
@@ -512,7 +542,7 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 850,
+      "line": 773,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
@@ -530,19 +560,31 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 280,
-      "text": "Task.detached(priority: .background) { try? FileManager.default.createDirectory(at: URL(fileURLWithPath: path).deletingLastPathComponent(), withIntermediateDirectories: true); try? encoded.write(to: URL(fileURLWithPath: path)) }"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 302,
-      "text": "Task.detached(priority: .background) { try? encoded.write(to: URL(fileURLWithPath: path)) }"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
       "line": 332,
+      "text": "Task.detached(priority: .background) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 373,
+      "text": "await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 382,
+      "text": "await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 391,
+      "text": "await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 400,
       "text": "Task.detached(priority: .background) {"
     },
     {

@@ -4,6 +4,7 @@
 # system-framework-boundary: narrow wrappers around non-Sendable SDK objects
 PooToolsSource/Category/AVExport+PTEX.swift
 PooToolsSource/Category/PHAsset+PTEX.swift
+PooToolsSource/Category/PTVideoThumbnailService.swift
 PooToolsSource/C7Collector/C7CollectorCamera.swift
 PooToolsSource/LivePhoto/PTLivePhoto.swift
 PooToolsSource/Motion/PTMotion.swift
