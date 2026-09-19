@@ -48,10 +48,14 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
 
     private let normalImage: Any
     private let selectedImage: Any?
+    private let appearance: PTTabBarAppearance
 
-    public init(normal: Any, selected: Any? = nil) {
+    public init(normal: Any,
+                selected: Any? = nil,
+                appearance: PTTabBarAppearance = .legacyDefault) {
         self.normalImage = normal
         self.selectedImage = selected
+        self.appearance = appearance
         container.isUserInteractionEnabled = false
         imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
@@ -102,7 +106,7 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
                 } else {
                     imageView.isHidden = false
                     lottieView.isHidden = true
-                    imageView.loadImage(contentData: string,radius: PTAppBaseConfig.share.tabbarRadius,topLeft: PTAppBaseConfig.share.tabbarTopLeft,topRight: PTAppBaseConfig.share.tabbarTopRight,bottomLeft: PTAppBaseConfig.share.tabbarBottomLeft,bottomRight: PTAppBaseConfig.share.tabbarBottomRight,corner: PTAppBaseConfig.share.tabbarCorner,capsule: PTAppBaseConfig.share.tabbarCapsule,borderWidth: PTAppBaseConfig.share.tabbarBorderWidth,borderColor: PTAppBaseConfig.share.tabbarBorderColor,showValueLabel: PTAppBaseConfig.share.tabbarShowValueLabel,valueLabelFont: PTAppBaseConfig.share.loadImageShowValueFont,valueLabelColor: PTAppBaseConfig.share.tabbarValueLabelColor)
+                    imageView.loadImage(contentData: string,radius: appearance.layout.tabbarRadius,topLeft: appearance.layout.tabbarTopLeft,topRight: appearance.layout.tabbarTopRight,bottomLeft: appearance.layout.tabbarBottomLeft,bottomRight: appearance.layout.tabbarBottomRight,corner: appearance.layout.tabbarCorner,capsule: appearance.layout.tabbarCapsule,borderWidth: appearance.layout.tabbarBorderWidth,borderColor: appearance.layout.tabbarBorderColor,showValueLabel: appearance.layout.tabbarShowValueLabel,valueLabelFont: appearance.layout.loadImageShowValueFont,valueLabelColor: appearance.layout.tabbarValueLabelColor)
                 }
             }
         case let animation as LottieAnimation:
@@ -110,7 +114,7 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
         default:
             imageView.isHidden = false
             lottieView.isHidden = true
-            self.imageView.loadImage(contentData: media,radius: PTAppBaseConfig.share.tabbarRadius,topLeft: PTAppBaseConfig.share.tabbarTopLeft,topRight: PTAppBaseConfig.share.tabbarTopRight,bottomLeft: PTAppBaseConfig.share.tabbarBottomLeft,bottomRight: PTAppBaseConfig.share.tabbarBottomRight,corner: PTAppBaseConfig.share.tabbarCorner,capsule: PTAppBaseConfig.share.tabbarCapsule,borderWidth: PTAppBaseConfig.share.tabbarBorderWidth,borderColor: PTAppBaseConfig.share.tabbarBorderColor,showValueLabel: PTAppBaseConfig.share.tabbarShowValueLabel,valueLabelFont: PTAppBaseConfig.share.loadImageShowValueFont,valueLabelColor: PTAppBaseConfig.share.tabbarValueLabelColor)
+            self.imageView.loadImage(contentData: media,radius: appearance.layout.tabbarRadius,topLeft: appearance.layout.tabbarTopLeft,topRight: appearance.layout.tabbarTopRight,bottomLeft: appearance.layout.tabbarBottomLeft,bottomRight: appearance.layout.tabbarBottomRight,corner: appearance.layout.tabbarCorner,capsule: appearance.layout.tabbarCapsule,borderWidth: appearance.layout.tabbarBorderWidth,borderColor: appearance.layout.tabbarBorderColor,showValueLabel: appearance.layout.tabbarShowValueLabel,valueLabelFont: appearance.layout.loadImageShowValueFont,valueLabelColor: appearance.layout.tabbarValueLabelColor)
         }
     }
     
@@ -159,6 +163,17 @@ final public class PTTabBarItemView: UIControl {
         let imageSize = barHeight - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2) - PTAppBaseConfig.share.tabBottomSpacing
         return imageSize
     }
+
+    // English: New instances calculate their icon size from the captured appearance snapshot.
+    // Español: Las nuevas instancias calculan el tamaño del icono desde la instantánea capturada.
+    // 中文：新实例使用捕获的外观快照计算图标尺寸。
+    fileprivate func itemImageSize() -> CGFloat {
+        let layout = appearance.layout
+        let tab26ModeBottomSpacing = deviceInfo.isFaceIDCapable ? layout.tab26BottomSpacing : 0
+        let safeAreaHeight = layout.tab26Mode ? tab26ModeBottomSpacing : 0
+        let barHeight = layout.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
+        return barHeight - safeAreaHeight - layout.tabTopSpacing - layout.tabContentSpacing - (layout.tabSelectedFont.pointSize + 2) - layout.tabBottomSpacing
+    }
     
     public var imageContent: UIView {
         get {
@@ -199,18 +214,10 @@ final public class PTTabBarItemView: UIControl {
     private func setupUI(title: String) {
         
         var subViews = [UIView]()
-        if PTAppBaseConfig.share.tabSelectedMetail {
-            if !title.stringIsEmpty() {
-                subViews = [titleLabel,content.view]
-            } else {
-                subViews = [content.view]
-            }
+        if !title.stringIsEmpty() {
+            subViews = [titleLabel,content.view]
         } else {
-            if !title.stringIsEmpty() {
-                subViews = [titleLabel,content.view]
-            } else {
-                subViews = [content.view]
-            }
+            subViews = [content.view]
         }
         
         if !title.stringIsEmpty() {
@@ -230,20 +237,20 @@ final public class PTTabBarItemView: UIControl {
             } else {
                 $0.center.equalToSuperview()
             }
-            $0.size.equalTo(PTTabBarItemView.itemImageSize())
+            $0.size.equalTo(itemImageSize())
         }
         
         if !title.stringIsEmpty() {
             titleLabel.snp.makeConstraints {
-                $0.top.equalTo(content.view.snp.bottom).offset(PTAppBaseConfig.share.tabContentSpacing)
+                $0.top.equalTo(content.view.snp.bottom).offset(appearance.layout.tabContentSpacing)
                 $0.left.right.bottom.equalToSuperview()
             }
         }
         
-        if PTAppBaseConfig.share.tabSelectedMetail {
-            PTGCDManager.shared.delayOnMain(time: 0.1, block: {
-                self.layoutMetailView()
-            })
+        if appearance.layout.tabSelectedMetail {
+            PTMainActorBridge.after(0.1) { [weak self] in
+                self?.layoutMetailView()
+            }
         }
     }
     
@@ -260,7 +267,7 @@ final public class PTTabBarItemView: UIControl {
             } else {
                 $0.center.equalToSuperview()
             }
-            $0.size.equalTo(PTTabBarItemView.itemImageSize())
+            $0.size.equalTo(itemImageSize())
         }
     }
     
@@ -336,7 +343,7 @@ final public class PTTabBarView: UIView {
     
     public var centerTitle:String {
         get {
-            PTAppBaseConfig.share.tabbarCenterName
+            appearanceSnapshot.layout.tabbarCenterName
         }
         set {
             centerNameLabel.text = newValue
@@ -346,12 +353,12 @@ final public class PTTabBarView: UIView {
     private lazy var centerNameLabel:UILabel = {
         let view = UILabel()
         PTUIAccessibility.applyDynamicType(to: view,
-                                           font: PTAppBaseConfig.share.tabbarCenterNameFont)
-        view.textColor = PTAppBaseConfig.share.tabbarCenterNameColor
+                                           font: appearanceSnapshot.layout.tabbarCenterNameFont)
+        view.textColor = appearanceSnapshot.layout.tabbarCenterNameColor
         view.textAlignment = .center
         view.numberOfLines = 0
         view.lineBreakMode = .byTruncatingTail
-        view.isHidden = PTAppBaseConfig.share.tabbarCenterName.stringIsEmpty()
+        view.isHidden = appearanceSnapshot.layout.tabbarCenterName.stringIsEmpty()
         view.text = centerTitle
         return view
     }()
@@ -387,7 +394,7 @@ final public class PTTabBarView: UIView {
     // Español: Activa automáticamente la superficie de vidrio nativa en iOS 27 y conserva la autoridad de los estilos heredados explícitos.
     // 中文：iOS 27 自动启用系统玻璃表面，同时保留显式旧样式的优先级。
     private var usesGlassSurfaceContainer: Bool {
-        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+        if appearanceSnapshot.layout.tab26Mode || appearanceSnapshot.layout.tabbarMetailMode {
             return true
         }
 
@@ -460,14 +467,14 @@ final public class PTTabBarView: UIView {
 
         var tabContainerHeight:CGFloat = 0
         
-        if PTAppBaseConfig.share.tab26Mode {
+        if appearanceSnapshot.layout.tab26Mode {
             if deviceInfo.isFaceIDCapable {
-                tabContainerHeight = CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing
+                tabContainerHeight = CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing
             } else {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
             }
         } else {
-            if PTAppBaseConfig.share.tabbarMetailMode {
+            if appearanceSnapshot.layout.tabbarMetailMode {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
             } else {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
@@ -477,22 +484,22 @@ final public class PTTabBarView: UIView {
         if usesGlassSurfaceContainer {
             PTVisualStyleResolver.apply(to: glassBackgroundView,
                                         style: appearanceSnapshot.visualStyle.coreStyle,
-                                        blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                        blurStyle: appearanceSnapshot.layout.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                         fallbackColor: .secondarySystemBackground)
             glassBackgroundView.clipsToBounds = true
             addSubview(glassBackgroundView)
             
             glassBackgroundView.snp.makeConstraints {
                 $0.top.equalToSuperview()
-                if PTAppBaseConfig.share.tab26Mode {
-                    $0.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
+                if appearanceSnapshot.layout.tab26Mode {
+                    $0.left.right.equalToSuperview().inset(appearanceSnapshot.layout.tabbarBar26LRSpacing)
                 } else {
                     $0.left.right.equalToSuperview()
                 }
                 $0.height.equalTo(tabContainerHeight)
             }
 
-            if PTAppBaseConfig.share.tab26Mode {
+            if appearanceSnapshot.layout.tab26Mode {
                 glassBackgroundView.layer.cornerRadius = tabContainerHeight / 2
             }
             glassBackgroundView.layer.cornerCurve = .continuous
@@ -510,7 +517,7 @@ final public class PTTabBarView: UIView {
             ]
             highlightLayer.startPoint = CGPoint(x: 0.5, y: 0)
             highlightLayer.endPoint = CGPoint(x: 0.5, y: 1)
-            if PTAppBaseConfig.share.tab26Mode {
+            if appearanceSnapshot.layout.tab26Mode {
                 highlightLayer.cornerRadius = tabContainerHeight / 2
             }
 
@@ -534,7 +541,7 @@ final public class PTTabBarView: UIView {
     private func setupCenterButton() {
 
         addSubviews([centerButton,centerNameLabel])
-        centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
+        centerButton.backgroundColor = appearanceSnapshot.layout.tabbarCenterBGColor
         centetButtonEffect()
         
         centerButton.layer.shadowColor = UIColor.black.cgColor
@@ -549,30 +556,30 @@ final public class PTTabBarView: UIView {
     
     private func centetButtonEffect() {
         let effectView = UIVisualEffectView()
-        if usesGlassSurfaceContainer || PTAppBaseConfig.share.tabbarCenterMetail {
+        if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarCenterMetail {
             PTVisualStyleResolver.apply(to: effectView,
                                         style: appearanceSnapshot.visualStyle.coreStyle,
-                                        blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                        blurStyle: appearanceSnapshot.layout.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                         fallbackColor: .secondarySystemBackground)
         } else {
             effectView.effect = nil
             effectView.backgroundColor = .clear
         }
 
-        if usesGlassSurfaceContainer && PTAppBaseConfig.share.tabbarCenterMetail {
+        if usesGlassSurfaceContainer && appearanceSnapshot.layout.tabbarCenterMetail {
             effectView.clipsToBounds = true
             centerButton.addSubview(effectView)
             effectView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             
-            effectView.layer.cornerRadius = PTAppBaseConfig.share.tabbarCenterButtonSize / 2
+            effectView.layer.cornerRadius = appearanceSnapshot.layout.tabbarCenterButtonSize / 2
             effectView.layer.cornerCurve = .continuous
         }
     }
 
     private func setupShadow() {
-        if PTAppBaseConfig.share.tab26Mode {
+        if appearanceSnapshot.layout.tab26Mode {
             layer.shadowColor = UIColor.black.cgColor
             layer.shadowOpacity = 0.12
             layer.shadowRadius = 30
@@ -623,7 +630,7 @@ final public class PTTabBarView: UIView {
                 centerButton.isHidden = false
                 centerButton.addSubviews([findBig])
                 findBig.snp.remakeConstraints { make in
-                    make.edges.equalToSuperview().inset(PTAppBaseConfig.share.tabbarCenterInsideOffset)
+                    make.edges.equalToSuperview().inset(appearanceSnapshot.layout.tabbarCenterInsideOffset)
                 }
 
                 let midIndex = configs.count / 2
@@ -643,9 +650,9 @@ final public class PTTabBarView: UIView {
 
                 leftStackView.snp.remakeConstraints {
                     $0.left.equalToSuperview()
-                    $0.top.equalToSuperview().inset(PTAppBaseConfig.share.tabTopSpacing)
-                    if PTAppBaseConfig.share.tab26Mode {
-                        $0.bottom.equalToSuperview().inset(PTAppBaseConfig.share.tabBottomSpacing)
+                    $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
+                    if appearanceSnapshot.layout.tab26Mode {
+                        $0.bottom.equalToSuperview().inset(appearanceSnapshot.layout.tabBottomSpacing)
                     } else {
                         $0.height.equalTo(CGFloat.kTabbarHeight)
                     }
@@ -654,18 +661,18 @@ final public class PTTabBarView: UIView {
 
                 centerButton.snp.remakeConstraints {
                     $0.left.equalTo(self.leftStackView.snp.right)
-                    if usesGlassSurfaceContainer || PTAppBaseConfig.share.tabbarMetailMode {
+                    if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
                         $0.centerY.equalTo(glassBackgroundView.snp.top)
                     } else {
                         $0.centerY.equalTo(self.snp.top)
                     }
-                    $0.size.equalTo(PTAppBaseConfig.share.tabbarCenterButtonSize)
+                    $0.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
                 }
-                centerButton.viewCorner(radius: PTAppBaseConfig.share.tabbarCenterButtonSize / 2)
+                centerButton.viewCorner(radius: appearanceSnapshot.layout.tabbarCenterButtonSize / 2)
 
                 centerNameLabel.snp.remakeConstraints { make in
                     make.left.right.equalTo(self.centerButton)
-                    make.top.equalTo(self.centerButton.snp.bottom).offset(PTAppBaseConfig.share.tabbarCenterNameContentSpacing)
+                    make.top.equalTo(self.centerButton.snp.bottom).offset(appearanceSnapshot.layout.tabbarCenterNameContentSpacing)
                     make.bottom.greaterThanOrEqualTo(self.rightStackView)
                 }
                 
@@ -710,7 +717,7 @@ final public class PTTabBarView: UIView {
             minimizedCenterView.addSubview(selectedIcon)
             selectedIcon.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
-                make.size.equalTo(PTTabBarItemView.itemImageSize())
+                make.size.equalTo(items[index].itemImageSize())
             }
         }
         updateSelectionMaskFrame(to: index, animated: false)
@@ -729,9 +736,9 @@ final public class PTTabBarView: UIView {
 
         leftStackView.snp.remakeConstraints {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(PTAppBaseConfig.share.tabTopSpacing)
-            if PTAppBaseConfig.share.tab26Mode {
-                $0.bottom.equalToSuperview().inset(PTAppBaseConfig.share.tabBottomSpacing)
+            $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
+            if appearanceSnapshot.layout.tab26Mode {
+                $0.bottom.equalToSuperview().inset(appearanceSnapshot.layout.tabBottomSpacing)
             } else {
                 $0.height.equalTo(CGFloat.kTabbarHeight)
             }
@@ -776,7 +783,7 @@ final public class PTTabBarView: UIView {
     private func updateSelectionMaskFrame(to index: Int,
                                           animated: Bool,
                                           ensuringLayout: Bool = true) {
-        guard PTAppBaseConfig.share.tabSelectedMetail,
+        guard appearanceSnapshot.layout.tabSelectedMetail,
               index >= 0,
               index < items.count else { return }
         
@@ -795,7 +802,7 @@ final public class PTTabBarView: UIView {
         let convertedFrame = stackView.convert(targetItem.frame, to: targetContainer)
         
         // 还原原有的左右内缩逻辑 (LRSpacing)
-        let inset = PTAppBaseConfig.share.tabSelectedMetailLRSpacing
+        let inset = appearanceSnapshot.layout.tabSelectedMetailLRSpacing
         let finalFrame = CGRect(
             x: convertedFrame.origin.x + inset,
             y: convertedFrame.origin.y,
@@ -880,15 +887,15 @@ final public class PTTabBarView: UIView {
         var itemWidth: CGFloat = 0
         switch layoutStyle {
         case .normal:
-            if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (safeContainerWidth - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2) / CGFloat(items.count)
+            if appearanceSnapshot.layout.tab26Mode {
+                itemWidth = (safeContainerWidth - appearanceSnapshot.layout.tabbarBar26LRSpacing * 2) / CGFloat(items.count)
             } else {
                 itemWidth = safeContainerWidth / CGFloat(items.count)
             }
         case .centerRaised:
-            let centerSize = PTAppBaseConfig.share.tabbarCenterButtonSize
-            if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (safeContainerWidth - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2 - centerSize) / CGFloat(items.count)
+            let centerSize = appearanceSnapshot.layout.tabbarCenterButtonSize
+            if appearanceSnapshot.layout.tab26Mode {
+                itemWidth = (safeContainerWidth - appearanceSnapshot.layout.tabbarBar26LRSpacing * 2 - centerSize) / CGFloat(items.count)
             } else {
                 itemWidth = (safeContainerWidth - centerSize) / CGFloat(items.count)
             }
@@ -916,9 +923,9 @@ final public class PTTabBarView: UIView {
         let offX: CGFloat
         switch content {
         case .text:
-            offX = PTTabBarItemView.itemImageSize() - badgeWidth / 4
+            offX = item.itemImageSize() - badgeWidth / 4
         case .redDot, .number:
-            offX = PTTabBarItemView.itemImageSize() + badgeWidth / 2
+            offX = item.itemImageSize() + badgeWidth / 2
         }
         config.centerOffset = CGPointMake(offX, 7)
         item.imageContent.badgeConfig = config
@@ -953,7 +960,7 @@ final public class PTTabBarView: UIView {
     public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {
         guard selectedIndex >= 0 && selectedIndex < items.count else { return }
         let selectedItem = items[selectedIndex]
-        let circleRadius: CGFloat = PTAppBaseConfig.share.tabbarMiniSize / 2
+        let circleRadius: CGFloat = appearanceSnapshot.layout.tabbarMiniSize / 2
 
         if isMinimized {
             sharedSelectionMaskView.alpha = 0 // 🌟 最小化时隐藏共享游标
@@ -962,7 +969,7 @@ final public class PTTabBarView: UIView {
             minimizedCenterView.addSubview(iconView)
             iconView.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
-                make.size.equalTo(PTTabBarItemView.itemImageSize())
+                make.size.equalTo(selectedItem.itemImageSize())
             }
 
             addSubview(minimizedCenterView)
@@ -1000,17 +1007,17 @@ final public class PTTabBarView: UIView {
 
             // 3. ✅ 安全校验：恢复毛玻璃背景的正常约束
             if glassBackgroundView.superview != nil {
-                let tabContainerHeight = PTAppBaseConfig.share.tab26Mode ? (CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing) : CGFloat.kTabbarHeight_Total
+                let tabContainerHeight = appearanceSnapshot.layout.tab26Mode ? (CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing) : CGFloat.kTabbarHeight_Total
                 glassBackgroundView.snp.remakeConstraints { make in
                     make.top.equalToSuperview()
-                    if PTAppBaseConfig.share.tab26Mode {
-                        make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
+                    if appearanceSnapshot.layout.tab26Mode {
+                        make.left.right.equalToSuperview().inset(appearanceSnapshot.layout.tabbarBar26LRSpacing)
                     } else {
                         make.left.right.equalToSuperview()
                     }
                     make.height.equalTo(tabContainerHeight)
                 }
-                let normalRadius = PTAppBaseConfig.share.tab26Mode ? tabContainerHeight / 2 : 0
+                let normalRadius = appearanceSnapshot.layout.tab26Mode ? tabContainerHeight / 2 : 0
                 glassBackgroundView.layer.cornerRadius = normalRadius
                 highlightLayer.cornerRadius = normalRadius
             }
@@ -1034,15 +1041,15 @@ final public class PTTabBarView: UIView {
     
     // 🌟 新增方法：配置全局共享底色遮罩
     private func setupSharedSelectionMask() {
-        guard PTAppBaseConfig.share.tabSelectedMetail else { return }
+        guard appearanceSnapshot.layout.tabSelectedMetail else { return }
         
-        sharedSelectionMaskView.backgroundColor = PTAppBaseConfig.share.tabSelectedMetailColor
+        sharedSelectionMaskView.backgroundColor = appearanceSnapshot.layout.tabSelectedMetailColor
         sharedSelectionMaskView.clipsToBounds = true
         
         PTVisualStyleResolver.apply(to: sharedMaskGlassView,
-                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    style: appearanceSnapshot.visualStyle.coreStyle,
                                     blurStyle: .systemUltraThinMaterialDark,
-                                    fallbackColor: PTAppBaseConfig.share.tabSelectedMetailColor)
+                                    fallbackColor: appearanceSnapshot.layout.tabSelectedMetailColor)
         sharedSelectionMaskView.addSubview(sharedMaskGlassView)
         sharedMaskGlassView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -1059,13 +1066,13 @@ final public class PTTabBarView: UIView {
     private func updateVisualAppearance() {
         guard glassBackgroundView.superview != nil else { return }
         PTVisualStyleResolver.apply(to: glassBackgroundView,
-                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
-                                    blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
+                                    style: appearanceSnapshot.visualStyle.coreStyle,
+                                    blurStyle: appearanceSnapshot.layout.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                     fallbackColor: .secondarySystemBackground)
         PTVisualStyleResolver.apply(to: sharedMaskGlassView,
-                                    style: PTAppBaseConfig.share.tabBarVisualStyle,
+                                    style: appearanceSnapshot.visualStyle.coreStyle,
                                     blurStyle: .systemUltraThinMaterialDark,
-                                    fallbackColor: PTAppBaseConfig.share.tabSelectedMetailColor)
+                                    fallbackColor: appearanceSnapshot.layout.tabSelectedMetailColor)
     }
 }
 
@@ -1105,13 +1112,7 @@ public extension PTTabBarView {
     ///
     /// Example:
     ///
-    ///     ptCustomBar.reloadLanguage(
-    ///         titles: [
-    ///             "Home".localized(),
-    ///             "Message".localized(),
-    ///             "Mine".localized()
-    ///         ]
-    ///     )
+    ///     ptCustomBar.reloadLanguage(titles: localizedTitles)
     ///
     @discardableResult
     func reloadLanguage(titles: [String], centerTitle: String? = nil, animated: Bool = false) -> Bool {

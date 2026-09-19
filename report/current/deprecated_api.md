@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: f003b7df196b49b344ecee008aecc97660736057
-Generated at: 2026-09-16T06:04:34Z
+Source revision: 60d318f64a7b03360667190ee2f62169f3f1efd0
+Generated at: 2026-09-19T12:04:47Z
 -->
 
 # PTools 当前弃用入口清单
@@ -23,7 +23,7 @@ Generated at: 2026-09-16T06:04:34Z
 | `PooToolsSource/Base/PTAppBaseConfig.swift:106` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:159` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:160` | `GobalNavControl` | `globalNavControl` |
-| `PooToolsSource/Base/PTBaseViewController.swift:1113` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTBaseViewController.swift:1122` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Button/PTActionLayoutButton.swift:658` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:246` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:264` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -49,7 +49,7 @@ Generated at: 2026-09-16T06:04:34Z
 | `PooToolsSource/Core/PTMarcos_swift.swift:48` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Core/PTMarcos_swift.swift:50` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Core/PTMarcos_swift.swift:52` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Core/PTUtils+SceneConcurrency.swift:216` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Core/PTUtils+SceneConcurrency.swift:232` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Debug/PTDebugFunction.swift:50` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/Debug/PTDebugFunction.swift:69` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Debug/PTDebugFunction.swift:70` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |

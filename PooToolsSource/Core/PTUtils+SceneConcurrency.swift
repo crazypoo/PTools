@@ -18,6 +18,17 @@ import UIKit
 // 中文：解析活动应用窗口，不依赖全局 key window 取值捷径。
 @MainActor
 public enum PTSceneContext {
+    // English: Use a stable value identifier when scene-owned state crosses a service boundary.
+    // Español: Usa un identificador de valor estable cuando el estado de una escena cruza un límite de servicio.
+    // 中文：场景状态跨服务边界传递时使用稳定的值类型标识。
+    public struct Scope: Hashable, Sendable {
+        public let persistentIdentifier: String
+
+        public init(persistentIdentifier: String) {
+            self.persistentIdentifier = persistentIdentifier
+        }
+    }
+
     // English: Resolve windows through one non-recursive implementation shared by every compatibility adapter.
     // Español: Resuelve las ventanas mediante una única implementación no recursiva compartida por cada adaptador de compatibilidad.
     // 中文：所有兼容适配器统一使用同一个不会递归的窗口解析实现。
@@ -145,6 +156,11 @@ public enum PTSceneContext {
             return nil
         }
         return PTUtils.getCurrentVC(from: rootViewController)
+    }
+
+    public static func scope(for scene: UIWindowScene?) -> Scope? {
+        guard let scene else { return nil }
+        return Scope(persistentIdentifier: scene.session.persistentIdentifier)
     }
 }
 

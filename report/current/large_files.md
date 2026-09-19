@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: f003b7df196b49b344ecee008aecc97660736057
-Generated at: 2026-09-16T06:04:42Z
+Source revision: 60d318f64a7b03360667190ee2f62169f3f1efd0
+Generated at: 2026-09-19T12:04:47Z
 -->
 
 # 当前文件尺寸门禁
@@ -18,9 +18,9 @@ Generated at: 2026-09-16T06:04:42Z
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1258 | warning |
-| `PooToolsSource/Base/PTBaseViewController.swift` | 1695 | architecture_exception |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2309 | hard_limit_allowlisted |
-| `PooToolsSource/Base/PTTabBarView.swift` | 1070 | warning |
+| `PooToolsSource/Base/PTBaseViewController.swift` | 1766 | architecture_exception |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2303 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1225 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1743 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1396 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1426 | warning |

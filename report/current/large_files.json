@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
-  "generated_at": "2026-09-16T06:04:42Z",
+  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
+  "generated_at": "2026-09-19T12:04:47Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -256,7 +256,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 1695,
+      "lines": 1766,
       "classification": "architecture_exception"
     },
     {
@@ -266,12 +266,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2309,
+      "lines": 2303,
       "classification": "hard_limit_allowlisted"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 452,
+      "lines": 524,
       "classification": "ok"
     },
     {
@@ -345,6 +345,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTNavigationConfiguration.swift",
+      "lines": 41,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTPlayerViewController.swift",
       "lines": 246,
       "classification": "ok"
@@ -356,7 +361,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1070,
+      "lines": 1225,
       "classification": "warning"
     },
     {
@@ -381,7 +386,7 @@
     },
     {
       "path": "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift",
-      "lines": 140,
+      "lines": 179,
       "classification": "ok"
     },
     {
@@ -1221,7 +1226,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "lines": 262,
+      "lines": 278,
       "classification": "ok"
     },
     {
@@ -1296,7 +1301,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "lines": 251,
+      "lines": 395,
       "classification": "ok"
     },
     {
@@ -4061,7 +4066,7 @@
     },
     {
       "path": "PooToolsSource/Rotation/PTRotationManager.swift",
-      "lines": 286,
+      "lines": 291,
       "classification": "ok"
     },
     {

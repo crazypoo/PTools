@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: f003b7df196b49b344ecee008aecc97660736057
-Generated at: 2026-09-16T06:04:30Z
+Source revision: 60d318f64a7b03360667190ee2f62169f3f1efd0
+Generated at: 2026-09-19T12:04:42Z
 -->
 
 # SwiftPM Dependency Graph

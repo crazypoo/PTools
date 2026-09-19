@@ -239,18 +239,21 @@ public class PTCollectionView: UIView {
     private var lastPrefetchItemCount: Int?
     private var indexPanGesture: UIPanGestureRecognizer?
     
-    private var heightCache = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)
+    private let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
+    private var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
     private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
-    private var layoutCache =  PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection>(countLimit: 100)
+    private var layoutCache: PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection> { layoutCacheCoordinator.sections }
     // English: Centralize snapshot validation without changing PTCollectionView's public facade.
     // Español: Centraliza la validación del snapshot sin cambiar la fachada pública de PTCollectionView.
     // 中文：集中快照校验，同时不改变 PTCollectionView 的公开门面。
     private let dataCoordinator = PTCollectionDataCoordinator()
+    private let scrollObserverMultiplexer = PTCollectionScrollObserverMultiplexer()
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     private var didReportFallbackLayout = false
     private var memoryWarningRegistration: UUID?
     private let waterfallCacheLimit = 50
+    private let refreshCoordinator = PTCollectionRefreshCoordinator()
     
     fileprivate lazy var collectionView : PTBaseCollectionView = {
         var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
@@ -277,30 +280,21 @@ public class PTCollectionView: UIView {
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
         
-        if self.viewConfig.topRefresh {
-            view.pt.header = PTRefreshHeader { [weak self] in
+        refreshCoordinator.configure(view,
+                                     config: self.viewConfig,
+                                     onHeader: { [weak self] in
+            PTGCDManager.shared.runOnMain {
                 self?.headerRefreshTask?()
             }
-        }
+                                     },
+                                     onFooter: { [weak self] in
+            PTGCDManager.shared.runOnMain {
+                self?.footRefreshTask?()
+            }
+                                     })
 
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionFooter)
-        if self.viewConfig.footerRefresh {
-            let footerRefresh = PTRefreshAutoFooter{ [weak self] in
-                self?.footRefreshTask?()
-            }
-            footerRefresh.setTitle(self.viewConfig.footerRefreshIdle, for: .idle)
-            footerRefresh.setTitle(self.viewConfig.footerRefreshPulling, for: .pulling)
-            footerRefresh.setTitle(self.viewConfig.footerRefreshRefreshing, for: .refreshing)
-            footerRefresh.setTitle(self.viewConfig.footerRefreshWillRefresh, for: .willRefresh)
-            footerRefresh.setTitle(self.viewConfig.footerRefreshNoMoreData, for: .noMoreData)
-            footerRefresh.setFont(self.viewConfig.footerRefreshTextFont)
-            footerRefresh.setTextColor(self.viewConfig.footerRefreshTextColor)
-            footerRefresh.triggerAutomaticallyRefreshPercent = self.viewConfig.triggerAutomaticallyRefreshPercent
-            footerRefresh.setAutomaticallyHidden(self.viewConfig.isAutomaticallyRefresh)
-            footerRefresh.ignoredContentInsetBottom = self.viewConfig.ignoredScrollViewContentInsetBottom
-            view.pt.autoFooter = footerRefresh
-        }
         if self.viewConfig.viewForPhoto {
             view.prefetchDataSource = self
         }
@@ -478,6 +472,11 @@ public class PTCollectionView: UIView {
             collectionView.allowsMoveItem()
         }
         setIndexViews()
+
+        scrollObserverMultiplexer.add { [weak self] collectionView in
+            self?.listControllerDidScroll?(collectionView)
+            self?.collectionViewDidScroll?(collectionView)
+        }
         
         // English: Use one Core-level memory warning fan-out instead of one NotificationCenter observer per list.
         // Español: Usa una distribución de advertencias de memoria de Core en lugar de un observador por lista.
@@ -886,8 +885,7 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let cv = scrollView as? UICollectionView else { return }
-        listControllerDidScroll?(cv)
-        collectionViewDidScroll?(cv)
+        scrollObserverMultiplexer.notify(cv)
         throttleScrollUpdate()
     }
     

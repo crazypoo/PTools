@@ -169,4 +169,9 @@ if [[ -n "$new_forceful_operations" ]]; then
   exit 1
 fi
 
+# English: Include the architecture-closure contracts in the normal quality gate.
+# Español: Incluye los contratos de cierre arquitectónico en la puerta de calidad normal.
+# 中文：将架构收口契约纳入常规质量门禁。
+bash Scripts/validate_p1_architecture_closure.sh
+
 printf 'PASS: Swift 6 safety scans\n'

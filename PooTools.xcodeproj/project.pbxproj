@@ -843,6 +843,7 @@
 		55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */; };
 		55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */; };
 		55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */; };
+		B51700000000000000000005 /* PTNavigationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000004 /* PTNavigationConfiguration.swift */; };
 		55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */; };
 		55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */; };
 		55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */; };
@@ -1989,6 +1990,7 @@
 		B51700000000000000000001 /* PTMediaRequestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaRequestCoordinator.swift; sourceTree = "<group>"; };
 		B51700000000000000000002 /* PTMediaSaveUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaSaveUI.swift; sourceTree = "<group>"; };
 		B51700000000000000000003 /* PTVideoThumbnailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoThumbnailService.swift; sourceTree = "<group>"; };
+		B51700000000000000000004 /* PTNavigationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavigationConfiguration.swift; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3758,6 +3760,7 @@
 			isa = PBXGroup;
 			children = (
 				552660F2303758BB00582606 /* PTCollectionViewTypes.swift */,
+				B51700000000000000000004 /* PTNavigationConfiguration.swift */,
 				552660EE3037544D00582606 /* PTBaseViewController+NavigationTypes.swift */,
 				55AA10F12C00000100000001 /* PTBaseViewController+Navigation.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
@@ -4361,6 +4364,7 @@
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
+				B51700000000000000000005 /* PTNavigationConfiguration.swift in Sources */,
 				555818D82AFA81E90051C0AA /* Mirror+PTEX.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,

@@ -28,7 +28,9 @@ public final class PTRotationManager {
     }
     
     // MARK: - 属性
-    /// 单例（严谨的单例模式：禁止外部初始化）
+    /// 默认共享实例；需要按场景隔离时可以直接创建独立实例。
+    /// English: The shared instance is a compatibility convenience; callers may create a scene-scoped instance.
+    /// Español: La instancia compartida es una comodidad compatible; se puede crear una instancia por escena.
     public static let shared = PTRotationManager()
     
     /// 可否旋转
@@ -87,7 +89,10 @@ public final class PTRotationManager {
     public var lockLandscapeWhenDeviceOrientationDidChange: ((_ isLock: Bool) -> Void)?
     
     // MARK: - 构造器
-    private init() { // 私有化 init，确保纯正的单例
+    // English: Public initialization allows a scene-owned coordinator; shared remains the compatibility convenience.
+    // Español: La inicialización pública permite un coordinador por escena; shared sigue siendo la comodidad compatible.
+    // 中文：公开初始化支持按场景创建协调器，shared 继续作为兼容便捷入口。
+    public init() {
         setupNotifications()
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
     }

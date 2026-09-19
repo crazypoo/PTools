@@ -144,7 +144,10 @@ public final class PTNavigationBarManager:NSObject {
     
     public static let shared = PTNavigationBarManager()
     
-    private override init() {
+    // English: Public initialization allows one manager instance per scene; shared remains a compatibility convenience.
+    // Español: La inicialización pública permite una instancia por escena; shared sigue siendo una comodidad compatible.
+    // 中文：公开初始化支持按场景创建实例，shared 继续作为兼容便捷入口。
+    public override init() {
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(sceneDidDisconnect(_:)),
@@ -436,8 +439,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController,
                                          willShow viewController: UIViewController,
                                          animated: Bool) {
-        if let baseVC = viewController as? PTBaseViewController,
-           !baseVC.allowControlNavBar() {
+        if let configurable = viewController as? PTNavigationConfigurable,
+           !configurable.allowControlNavBar() {
             return
         }
         
@@ -453,8 +456,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         guard let container = containerMap.object(forKey: navigationController) else { return }
         
         let toStyle: PTNavigationBarStyle
-        if let baseVC = viewController as? PTBaseViewController {
-            toStyle = baseVC.preferredNavigationBarStyle()
+        if let configurable = viewController as? PTNavigationConfigurable {
+            toStyle = configurable.preferredNavigationBarStyle()
             let item = self.item(for: viewController)
             item.barColorStyle = toStyle
         } else {
@@ -464,7 +467,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         StatusBarManager.shared.update(with: toStyle)
         
         let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
-        let fromStyle = (fromVC as? PTBaseViewController)?.preferredNavigationBarStyle() ?? .transparent
+        let fromStyle = (fromVC as? PTNavigationConfigurable)?.preferredNavigationBarStyle() ?? .transparent
 
         // 预设起点，准备动画
         container.prepareTransition(from: fromStyle, to: toStyle)
@@ -564,16 +567,16 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController,
                                      didShow viewController: UIViewController,
                                      animated: Bool) {
-        if let baseVC = viewController as? PTBaseViewController,
-           !baseVC.allowControlNavBar() {
+        if let configurable = viewController as? PTNavigationConfigurable,
+           !configurable.allowControlNavBar() {
             return
         }
 
         stopTransition(for: navigationController)
 
         let style: PTNavigationBarStyle
-        if let baseVC = viewController as? PTBaseViewController {
-            style = baseVC.preferredNavigationBarStyle()
+        if let configurable = viewController as? PTNavigationConfigurable {
+            style = configurable.preferredNavigationBarStyle()
             let item = item(for: viewController)
             item.barColorStyle = style
         } else {
@@ -606,10 +609,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         } else {
             container.apply(style: toStyle)
             StatusBarManager.shared.update(with: toStyle)
-            if let vc = toVC as? PTBaseViewController {
-                vc.setNeedsStatusBarAppearanceUpdate()
-                vc.navigationController?.setNeedsStatusBarAppearanceUpdate()
-            }
+            toVC.setNeedsStatusBarAppearanceUpdate()
+            toVC.navigationController?.setNeedsStatusBarAppearanceUpdate()
         }
     }
 
@@ -639,7 +640,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         // ===== LargeTitle 逻辑（🔥重点）=====
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav),
-              let vc = currentVC as? PTBaseViewController else { return }
+              let vc = currentVC as? PTNavigationConfigurable else { return }
 
         let isLarge = vc.prefersLargeTitle()
         let hasTitle = !item.navTitle.stringIsEmpty()
@@ -935,7 +936,7 @@ extension PTNavigationBarManager {
 
 @objcMembers
 @MainActor
-open class PTBaseViewController: UIViewController {
+open class PTBaseViewController: UIViewController, PTNavigationConfigurable {
 
     private var hidesBaseNavigationBarOnLoad = false
                    

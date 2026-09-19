@@ -13,7 +13,27 @@ import os.lock
 // Español: El registro evita aplicar dos veces el mismo swizzle desde funciones de depuración independientes.
 // 中文：注册表防止不同调试功能重复执行同一个方法交换。
 public enum PTSwizzleRegistry {
-    private static let lock = OSAllocatedUnfairLock(initialState: [String: String]())
+    public struct Registration: Sendable, Equatable {
+        public let target: String
+        public let original: String
+        public let swizzled: String
+        public let isClassMethod: Bool
+        public let owner: String
+
+        public init(target: String,
+                    original: String,
+                    swizzled: String,
+                    isClassMethod: Bool,
+                    owner: String) {
+            self.target = target
+            self.original = original
+            self.swizzled = swizzled
+            self.isClassMethod = isClassMethod
+            self.owner = owner
+        }
+    }
+
+    private static let lock = OSAllocatedUnfairLock(initialState: [String: Registration]())
 
     @discardableResult
     public static func claim(target: AnyClass,
@@ -24,7 +44,11 @@ public enum PTSwizzleRegistry {
         let key = "\(ObjectIdentifier(target))|\(original)|\(swizzled)|\(isClassMethod)"
         return lock.withLock { owners in
             guard owners[key] == nil else { return false }
-            owners[key] = owner
+            owners[key] = Registration(target: NSStringFromClass(target),
+                                       original: NSStringFromSelector(original),
+                                       swizzled: NSStringFromSelector(swizzled),
+                                       isClassMethod: isClassMethod,
+                                       owner: owner)
             return true
         }
     }
@@ -33,7 +57,22 @@ public enum PTSwizzleRegistry {
     // Español: Devuelve una instantánea estable para diagnóstico sin exponer el bloqueo del registro.
     // 中文：返回稳定的 swizzle 所有者快照，不暴露注册表内部锁。
     public static func registeredOwners() -> [String: String] {
-        lock.withLock { $0 }
+        lock.withLock { registrations in
+            registrations.reduce(into: [String: String]()) { result, entry in
+                result[entry.key] = entry.value.owner
+            }
+        }
+    }
+
+    // English: Expose complete swizzle metadata for duplicate and privacy audits.
+    // Español: Expone metadatos completos de swizzle para auditorías de duplicados y privacidad.
+    // 中文：提供完整 swizzle 元数据，用于重复注册和隐私审计。
+    public static func registeredRecords() -> [Registration] {
+        lock.withLock { $0.values.sorted { lhs, rhs in
+            if lhs.target != rhs.target { return lhs.target < rhs.target }
+            if lhs.original != rhs.original { return lhs.original < rhs.original }
+            return lhs.owner < rhs.owner
+        }}
     }
 }
 

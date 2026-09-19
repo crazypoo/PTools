@@ -64,6 +64,10 @@ require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final clas
 require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final class PTDebugEventCenter" "Debug event foundation"
 require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final class PTDebugPreferences" "Debug preference owner"
 require_fragment "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift" "public static func registeredOwners()" "Swizzle owner registry"
+# English: Require complete hook metadata so runtime audits can identify every target and selector.
+# Español: Exige metadatos completos para que las auditorías identifiquen cada target y selector.
+# 中文：要求保留完整 hook 元数据，便于运行时审计定位每个 target 和 selector。
+require_fragment "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift" "public static func registeredRecords()" "Complete swizzle metadata registry"
 require_fragment "PooToolsSource/LocalConsole/LocalConsole.swift" "PTDebugManager.shared.startSession(owner:" "Scene-scoped Debug session start"
 require_fragment "PooToolsSource/LocalConsole/LocalConsole.swift" "PTDebugManager.shared.stopSession(owner:" "Scene-scoped Debug session stop"
 require_fragment "Package.swift" "name: \"PooToolsDEBUG\"" "SwiftPM Debug target"

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
-  "generated_at": "2026-09-16T06:04:28Z",
-  "shared_call_count": 1588,
+  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
+  "generated_at": "2026-09-19T12:04:39Z",
+  "shared_call_count": 1513,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -205,7 +205,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
-      "line": 228,
+      "line": 244,
       "declaration": "public static let shared = PTMemoryWarningCoordinator()",
       "name": "shared",
       "category": "A",
@@ -250,8 +250,8 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 228,
-      "declaration": "static let shared = LegacyThemeProvider()",
+      "line": 370,
+      "declaration": "public static let shared = LegacyThemeProvider()",
       "name": "shared",
       "category": "D",
       "scope": "Shared mutable UI or scene state",
@@ -772,7 +772,7 @@
     },
     {
       "path": "PooToolsSource/Rotation/PTRotationManager.swift",
-      "line": 32,
+      "line": 34,
       "declaration": "public static let shared = PTRotationManager()",
       "name": "shared",
       "category": "D",

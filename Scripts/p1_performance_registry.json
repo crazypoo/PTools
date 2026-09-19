@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "large_files": [
+    {"path":"PooToolsSource/Base/PTCollectionView.swift","owner":"ui-foundation","reason":"Legacy public facade still owns layout, refresh, interaction, index and skeleton compatibility paths.","next_action":"Move one coordinator at a time without changing the public facade."},
+    {"path":"PooToolsSource/Base/PTBaseViewController.swift","owner":"ui-foundation","reason":"Legacy navigation manager and base controller compatibility implementation share a file.","next_action":"Keep PTNavigationConfigurable canonical and extract only complete extensions."},
+    {"path":"PooToolsSource/NetWork/Network.swift","owner":"network","reason":"Legacy static API remains source-compatible while executor migration is in progress.","next_action":"Continue moving request context, upload and download implementations behind typed executors."}
+  ],
+  "caches": [
+    {"path":"PooToolsSource/Base/PTCollectionViewTypes.swift","owner":"ui-foundation","storage":"NSCache","thread":"MainActor","limit":"height=1000, layout=100","eviction":"NSCache eviction and explicit memory-warning clear"},
+    {"path":"PooToolsSource/Base/PTVideoCoverCache.swift","owner":"media","storage":"NSCache plus disk cache","thread":"MainActor adapter","limit":"memory countLimit=100","eviction":"memory warning and cache policy"}
+  ]
+}

@@ -64,23 +64,164 @@ public struct PTNavigationAppearance {
 }
 
 @MainActor
+public struct PTTabBarLayoutAppearance {
+    public let loadImageShowValueFont: UIFont
+    public let tab26BottomSpacing: CGFloat
+    public let tab26Mode: Bool
+    public let tabBottomSpacing: CGFloat
+    public let tabContentSpacing: CGFloat
+    public let tabSelectedFont: UIFont
+    public let tabSelectedMetail: Bool
+    public let tabSelectedMetailColor: UIColor
+    public let tabSelectedMetailLRSpacing: CGFloat
+    public let tabTopSpacing: CGFloat
+    public let tabbarBar26LRSpacing: CGFloat
+    public let tabbarBorderColor: UIColor
+    public let tabbarBorderWidth: CGFloat
+    public let tabbarBottomLeft: CGFloat
+    public let tabbarBottomRight: CGFloat
+    public let tabbarCapsule: Bool
+    public let tabbarCenterBGColor: UIColor
+    public let tabbarCenterButtonSize: CGFloat
+    public let tabbarCenterInsideOffset: CGFloat
+    public let tabbarCenterMetail: Bool
+    public let tabbarCenterName: String
+    public let tabbarCenterNameColor: UIColor
+    public let tabbarCenterNameContentSpacing: CGFloat
+    public let tabbarCenterNameFont: UIFont
+    public let tabbarCorner: UIRectCorner
+    public let tabbarMetailMode: Bool
+    public let tabbarMiniSize: CGFloat
+    public let tabbarRadius: CGFloat
+    public let tabbarShowValueLabel: Bool
+    public let tabbarTopLeft: CGFloat
+    public let tabbarTopRight: CGFloat
+    public let tabbarValueLabelColor: UIColor
+
+    public init(loadImageShowValueFont: UIFont = .systemFont(ofSize: 16),
+                tab26BottomSpacing: CGFloat = 15,
+                tab26Mode: Bool = false,
+                tabBottomSpacing: CGFloat = 5,
+                tabContentSpacing: CGFloat = 2,
+                tabSelectedFont: UIFont = .systemFont(ofSize: 11),
+                tabSelectedMetail: Bool = false,
+                tabSelectedMetailColor: UIColor = .lightGray,
+                tabSelectedMetailLRSpacing: CGFloat = 5,
+                tabTopSpacing: CGFloat = 5,
+                tabbarBar26LRSpacing: CGFloat = 24,
+                tabbarBorderColor: UIColor = .clear,
+                tabbarBorderWidth: CGFloat = 0,
+                tabbarBottomLeft: CGFloat = 0,
+                tabbarBottomRight: CGFloat = 0,
+                tabbarCapsule: Bool = false,
+                tabbarCenterBGColor: UIColor = .clear,
+                tabbarCenterButtonSize: CGFloat = 64,
+                tabbarCenterInsideOffset: CGFloat = 0,
+                tabbarCenterMetail: Bool = false,
+                tabbarCenterName: String = "",
+                tabbarCenterNameColor: UIColor = .black,
+                tabbarCenterNameContentSpacing: CGFloat = 2,
+                tabbarCenterNameFont: UIFont = .systemFont(ofSize: 10),
+                tabbarCorner: UIRectCorner = .allCorners,
+                tabbarMetailMode: Bool = false,
+                tabbarMiniSize: CGFloat = 56,
+                tabbarRadius: CGFloat = 0,
+                tabbarShowValueLabel: Bool = false,
+                tabbarTopLeft: CGFloat = 0,
+                tabbarTopRight: CGFloat = 0,
+                tabbarValueLabelColor: UIColor = .systemBlue) {
+        self.loadImageShowValueFont = loadImageShowValueFont
+        self.tab26BottomSpacing = tab26BottomSpacing
+        self.tab26Mode = tab26Mode
+        self.tabBottomSpacing = tabBottomSpacing
+        self.tabContentSpacing = tabContentSpacing
+        self.tabSelectedFont = tabSelectedFont
+        self.tabSelectedMetail = tabSelectedMetail
+        self.tabSelectedMetailColor = tabSelectedMetailColor
+        self.tabSelectedMetailLRSpacing = tabSelectedMetailLRSpacing
+        self.tabTopSpacing = tabTopSpacing
+        self.tabbarBar26LRSpacing = tabbarBar26LRSpacing
+        self.tabbarBorderColor = tabbarBorderColor
+        self.tabbarBorderWidth = tabbarBorderWidth
+        self.tabbarBottomLeft = tabbarBottomLeft
+        self.tabbarBottomRight = tabbarBottomRight
+        self.tabbarCapsule = tabbarCapsule
+        self.tabbarCenterBGColor = tabbarCenterBGColor
+        self.tabbarCenterButtonSize = tabbarCenterButtonSize
+        self.tabbarCenterInsideOffset = tabbarCenterInsideOffset
+        self.tabbarCenterMetail = tabbarCenterMetail
+        self.tabbarCenterName = tabbarCenterName
+        self.tabbarCenterNameColor = tabbarCenterNameColor
+        self.tabbarCenterNameContentSpacing = tabbarCenterNameContentSpacing
+        self.tabbarCenterNameFont = tabbarCenterNameFont
+        self.tabbarCorner = tabbarCorner
+        self.tabbarMetailMode = tabbarMetailMode
+        self.tabbarMiniSize = tabbarMiniSize
+        self.tabbarRadius = tabbarRadius
+        self.tabbarShowValueLabel = tabbarShowValueLabel
+        self.tabbarTopLeft = tabbarTopLeft
+        self.tabbarTopRight = tabbarTopRight
+        self.tabbarValueLabelColor = tabbarValueLabelColor
+    }
+
+    public static var legacyDefault: PTTabBarLayoutAppearance {
+        let config = PTAppBaseConfig.share
+        return PTTabBarLayoutAppearance(loadImageShowValueFont: config.loadImageShowValueFont,
+                                        tab26BottomSpacing: config.tab26BottomSpacing,
+                                        tab26Mode: config.tab26Mode,
+                                        tabBottomSpacing: config.tabBottomSpacing,
+                                        tabContentSpacing: config.tabContentSpacing,
+                                        tabSelectedFont: config.tabSelectedFont,
+                                        tabSelectedMetail: config.tabSelectedMetail,
+                                        tabSelectedMetailColor: config.tabSelectedMetailColor,
+                                        tabSelectedMetailLRSpacing: config.tabSelectedMetailLRSpacing,
+                                        tabTopSpacing: config.tabTopSpacing,
+                                        tabbarBar26LRSpacing: config.tabbarBar26LRSpacing,
+                                        tabbarBorderColor: config.tabbarBorderColor,
+                                        tabbarBorderWidth: config.tabbarBorderWidth,
+                                        tabbarBottomLeft: config.tabbarBottomLeft,
+                                        tabbarBottomRight: config.tabbarBottomRight,
+                                        tabbarCapsule: config.tabbarCapsule,
+                                        tabbarCenterBGColor: config.tabbarCenterBGColor,
+                                        tabbarCenterButtonSize: config.tabbarCenterButtonSize,
+                                        tabbarCenterInsideOffset: config.tabbarCenterInsideOffset,
+                                        tabbarCenterMetail: config.tabbarCenterMetail,
+                                        tabbarCenterName: config.tabbarCenterName,
+                                        tabbarCenterNameColor: config.tabbarCenterNameColor,
+                                        tabbarCenterNameContentSpacing: config.tabbarCenterNameContentSpacing,
+                                        tabbarCenterNameFont: config.tabbarCenterNameFont,
+                                        tabbarCorner: config.tabbarCorner,
+                                        tabbarMetailMode: config.tabbarMetailMode,
+                                        tabbarMiniSize: config.tabbarMiniSize,
+                                        tabbarRadius: config.tabbarRadius,
+                                        tabbarShowValueLabel: config.tabbarShowValueLabel,
+                                        tabbarTopLeft: config.tabbarTopLeft,
+                                        tabbarTopRight: config.tabbarTopRight,
+                                        tabbarValueLabelColor: config.tabbarValueLabelColor)
+    }
+}
+
+@MainActor
 public struct PTTabBarAppearance {
     public var normalColor: UIColor
     public var selectedColor: UIColor
     public var normalFont: UIFont
     public var selectedFont: UIFont
     public var visualStyle: PTTabBarVisualStyle
+    public let layout: PTTabBarLayoutAppearance
 
     public init(normalColor: UIColor = .secondaryLabel,
                 selectedColor: UIColor = .tintColor,
                 normalFont: UIFont = .systemFont(ofSize: 11),
                 selectedFont: UIFont = .systemFont(ofSize: 11, weight: .semibold),
-                visualStyle: PTTabBarVisualStyle = .automatic) {
+                visualStyle: PTTabBarVisualStyle = .automatic,
+                layout: PTTabBarLayoutAppearance = .legacyDefault) {
         self.normalColor = normalColor
         self.selectedColor = selectedColor
         self.normalFont = normalFont
         self.selectedFont = selectedFont
         self.visualStyle = visualStyle
+        self.layout = layout
     }
 
     // English: Read a single immutable tab-bar appearance snapshot from the legacy configuration.
@@ -92,7 +233,8 @@ public struct PTTabBarAppearance {
                                   selectedColor: config.tabSelectedColor,
                                   normalFont: config.tabNormalFont,
                                   selectedFont: config.tabSelectedFont,
-                                  visualStyle: PTTabBarVisualStyle(config.tabBarVisualStyle))
+                                  visualStyle: PTTabBarVisualStyle(config.tabBarVisualStyle),
+                                  layout: .legacyDefault)
     }
 }
 
@@ -225,7 +367,9 @@ public extension PTThemeable where Self: UITraitEnvironment {
 public class LegacyThemeProvider: @MainActor PTThemeProvider {
     
     /// 单粒
-    static let shared = LegacyThemeProvider()
+    public static let shared = LegacyThemeProvider()
+
+    public init() {}
     /// 监听对象数组
     private var observers: NSHashTable<AnyObject> = NSHashTable.weakObjects()
     /// 更新主题

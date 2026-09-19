@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source_inventory": "report/current/public_api.json",
+  "compatibility_window": "5.x",
+  "entries": [
+    {"symbol":"PTBaseViewController","path":"PooToolsSource/Base/PTBaseViewController.swift","intent":"supported","owner":"ui-foundation","migration":"Keep public through 6.0; use PTNavigationConfigurable for capabilities."},
+    {"symbol":"PTTabBarView","path":"PooToolsSource/Base/PTTabBarView.swift","intent":"supported","owner":"ui-foundation","migration":"Keep public; prefer PTTabBarAppearance snapshots for new instances."},
+    {"symbol":"PTUtils","path":"PooToolsSource/Core/PTUtils.swift","intent":"compatibility","owner":"core","migration":"Keep wrappers while scene and URL helpers remain canonical."},
+    {"symbol":"Network","path":"PooToolsSource/NetWork/Network.swift","intent":"compatibility","owner":"network","migration":"Keep legacy static entry points until the typed executor migration completes."},
+    {"symbol":"PTMediaSaveService","path":"PooToolsSource/Core/PTMediaSaveService.swift","intent":"supported","owner":"media","migration":"Canonical media save implementation."},
+    {"symbol":"PTNavigationConfigurable","path":"PooToolsSource/Base/PTNavigationConfiguration.swift","intent":"supported","owner":"ui-foundation","migration":"Canonical navigation capability contract; PTBaseViewController remains a compatibility implementation."},
+    {"symbol":"PTTabBarAppearance","path":"PooToolsSource/DarkMode/PTThemeProvider.swift","intent":"supported","owner":"ui-foundation","migration":"Use immutable layout snapshots for new TabBar instances; legacy config only supplies defaults."},
+    {"symbol":"PTSwizzleRegistry","path":"PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift","intent":"advanced","owner":"debug","migration":"Use only for explicit runtime hook diagnostics; do not make it a business dependency."}
+  ]
+}

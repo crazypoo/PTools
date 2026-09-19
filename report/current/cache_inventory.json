@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "f003b7df196b49b344ecee008aecc97660736057",
-  "generated_at": "2026-09-16T06:04:28Z",
+  "source_revision": "60d318f64a7b03360667190ee2f62169f3f1efd0",
+  "generated_at": "2026-09-19T12:04:39Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -54,37 +54,37 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1308,
+      "line": 1302,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1309,
+      "line": 1303,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1860,
+      "line": 1854,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1861,
+      "line": 1855,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1951,
+      "line": 1945,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1952,
+      "line": 1946,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -129,6 +129,12 @@
       "line": 35,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
+      "line": 472,
+      "kind": "disk or custom cache",
+      "text": "// English: Own list layout caches outside PTCollectionView so cache policy can evolve independently."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",

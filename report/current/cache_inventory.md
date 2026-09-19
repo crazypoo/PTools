@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: f003b7df196b49b344ecee008aecc97660736057
-Generated at: 2026-09-16T06:04:28Z
+Source revision: 60d318f64a7b03360667190ee2f62169f3f1efd0
+Generated at: 2026-09-19T12:04:39Z
 -->
 
 # PTools 当前缓存盘点
@@ -21,12 +21,12 @@ Generated at: 2026-09-16T06:04:28Z
 | PooToolsSource/Base/PTAudioCache.swift:182 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
 | PooToolsSource/Base/PTAudioCache.swift:222 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
-| PooToolsSource/Base/PTCollectionView.swift:1308 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1309 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1860 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1861 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1951 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1952 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:1302 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1303 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1854 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1855 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1945 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1946 | disk or custom cache | return (cache.items, cache.contentHeight) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |
@@ -34,6 +34,7 @@ Generated at: 2026-09-16T06:04:28Z
 | PooToolsSource/Base/PTCollectionViewTypes.swift:27 | disk or custom cache | cache.object(forKey: WrappedKey(key)) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:31 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:35 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:472 | disk or custom cache | // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:242 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:344 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
 | PooToolsSource/Base/PTVideoCoverCache.swift:345 | NSCache | let cache = NSCache<NSString, UIImage>() |
