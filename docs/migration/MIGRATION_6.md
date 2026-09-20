@@ -155,6 +155,21 @@ let banner = PTBannerView(...)
 指向 canonical API，不得在兼容包装器内复制实现。删除前需要：仓库和 Example 无调用方、真实
 宿主完成迁移、API 差异获批、三套构建入口通过，以及对应回滚方案已准备。
 
+## 13.1 5.19 Package / API Governance
+
+5.19.0 起版本只从根目录 `VERSION` 读取；CocoaPods 的 `s.version` 通过该文件解析，README、
+CHANGELOG、ROADMAP、Podfile.lock 和 CI 门禁必须与其一致。SwiftPM 没有产品版本字段，因此不在
+`Package.swift` 重复维护版本号，发布版本由同名 Git tag 和 `VERSION` 共同确认。
+
+模块安装前先查看 [`PACKAGE_MATRIX.md`](../architecture/PACKAGE_MATRIX.md) 和
+[`DEPENDENCY_MATRIX.md`](../architecture/DEPENDENCY_MATRIX.md)。API 变化以
+`api-baseline/<previous-version>/public_api.json` 为基线；新增 API 需要迁移说明，删除 API 默认
+阻断，除非有批准的 6.0 变更记录。
+
+历史拼写在 5.x 继续保留：`gobal_drop`、`gobalUrl`、`netRequsetTime`、`PTCoreUserDefultsWrapper`
+等旧入口不再用于新代码。编译条件同时提供旧宏和 canonical 宏，6.0 删除旧宏前必须确认所有宿主
+已经切换到正确名称。
+
 ## 14. 6.0 Removed APIs
 
 只有满足第 13 节条件后，才可删除：已明确迁移的拼写错误入口、重复媒体保存实现、旧图片/视频

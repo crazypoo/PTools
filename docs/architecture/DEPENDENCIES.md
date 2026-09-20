@@ -4,6 +4,9 @@
 解析结果分别由 `PooTools.podspec`、`Podfile.lock` 和 `report/current/` 维护；本文件不修改
 第三方源码。
 
+安装入口和 6.0 取舍的逐模块事实见
+[`PACKAGE_MATRIX.md`](PACKAGE_MATRIX.md) 与 [`DEPENDENCY_MATRIX.md`](DEPENDENCY_MATRIX.md)。
+
 ## Ownership rules
 
 - `PooTools/Core` 是 `PooTools.podspec` 的 `default_subspec`，其他能力围绕 Core 扩展。

@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:20:54Z",
+  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
+  "generated_at": "2026-09-20T13:19:00Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -12930,7 +12930,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 497,
+      "line": 468,
       "access": "public",
       "kind": "func",
       "declaration": "public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {"
@@ -12938,7 +12938,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 503,
+      "line": 474,
       "access": "public",
       "kind": "func",
       "declaration": "public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {"
@@ -12946,7 +12946,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 510,
+      "line": 481,
       "access": "public",
       "kind": "func",
       "declaration": "public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {"
@@ -12954,7 +12954,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|class|public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 519,
+      "line": 490,
       "access": "public",
       "kind": "class",
       "declaration": "public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil) {"
@@ -12962,7 +12962,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|class|public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 536,
+      "line": 507,
       "access": "public",
       "kind": "class",
       "declaration": "public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) {"
@@ -42114,7 +42114,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 239,
+      "line": 237,
       "access": "public",
       "kind": "func",
       "declaration": "public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -42122,7 +42122,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 245,
+      "line": 243,
       "access": "public",
       "kind": "func",
       "declaration": "public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String {"
@@ -42130,7 +42130,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 251,
+      "line": 249,
       "access": "public",
       "kind": "func",
       "declaration": "public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -42138,7 +42138,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 257,
+      "line": 255,
       "access": "public",
       "kind": "func",
       "declaration": "public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -42146,7 +42146,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func activateSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 266,
+      "line": 264,
       "access": "public",
       "kind": "func",
       "declaration": "public func activateSearch() {"
@@ -42154,7 +42154,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func deactivateSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 289,
+      "line": 287,
       "access": "public",
       "kind": "func",
       "declaration": "public func deactivateSearch() {"
@@ -42162,7 +42162,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func focusSearchBar()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 298,
+      "line": 296,
       "access": "public",
       "kind": "func",
       "declaration": "public func focusSearchBar() {"
@@ -42170,7 +42170,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func dismissSearchKeyboard()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 307,
+      "line": 305,
       "access": "public",
       "kind": "func",
       "declaration": "public func dismissSearchKeyboard() {"
@@ -42178,7 +42178,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func cancelSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 311,
+      "line": 309,
       "access": "public",
       "kind": "func",
       "declaration": "public func cancelSearch() {"
@@ -42186,7 +42186,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func refreshSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 329,
+      "line": 327,
       "access": "public",
       "kind": "func",
       "declaration": "public func refreshSearch() {"
@@ -42194,7 +42194,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func retryCurrentSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 334,
+      "line": 332,
       "access": "public",
       "kind": "func",
       "declaration": "public func retryCurrentSearch() {"
@@ -42202,7 +42202,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func retryPagination()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 342,
+      "line": 340,
       "access": "public",
       "kind": "func",
       "declaration": "public func retryPagination() {"
@@ -42210,7 +42210,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 349,
+      "line": 347,
       "access": "public",
       "kind": "func",
       "declaration": "public func setResults(_ results: [Item], animated: Bool = true) {"
@@ -42218,7 +42218,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func appendResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 354,
+      "line": 352,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendResults(_ results: [Item], animated: Bool = true) {"
@@ -42226,7 +42226,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func prependResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 359,
+      "line": 357,
       "access": "public",
       "kind": "func",
       "declaration": "public func prependResults(_ results: [Item], animated: Bool = true) {"
@@ -42234,7 +42234,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func removeResult(at index: Int, animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 364,
+      "line": 362,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeResult(at index: Int, animated: Bool = true) {"
@@ -42242,7 +42242,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func replaceResult(at index: Int, with item: Item, animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 371,
+      "line": 369,
       "access": "public",
       "kind": "func",
       "declaration": "public func replaceResult(at index: Int, with item: Item, animated: Bool = true) {"
@@ -42250,7 +42250,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func clearResults(animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 378,
+      "line": 376,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearResults(animated: Bool = true) {"
@@ -42258,7 +42258,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func reloadResults()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 383,
+      "line": 381,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadResults() {"
@@ -42266,7 +42266,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func search(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 390,
+      "line": 388,
       "access": "open",
       "kind": "func",
       "declaration": "open func search(keyword: String) async throws -> [Item] {"
@@ -42274,7 +42274,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func localSearch(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 395,
+      "line": 393,
       "access": "open",
       "kind": "func",
       "declaration": "open func localSearch(keyword: String) async throws -> [Item] {"
@@ -42282,7 +42282,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func remoteSearch(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 400,
+      "line": 398,
       "access": "open",
       "kind": "func",
       "declaration": "open func remoteSearch(keyword: String) async throws -> [Item] {"
@@ -42290,7 +42290,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func merge(local: [Item], remote: [Item]) -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 407,
+      "line": 405,
       "access": "open",
       "kind": "func",
       "declaration": "open func merge(local: [Item], remote: [Item]) -> [Item] {"
@@ -42298,7 +42298,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func loadMore(keyword: String, page: Int) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 411,
+      "line": 409,
       "access": "open",
       "kind": "func",
       "declaration": "open func loadMore(keyword: String, page: Int) async throws -> [Item] {"
@@ -42306,7 +42306,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func makeResultSections(for items: [Item]) -> [PTSection]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 415,
+      "line": 413,
       "access": "open",
       "kind": "func",
       "declaration": "open func makeResultSections(for items: [Item]) -> [PTSection] {"
@@ -42314,7 +42314,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func makeResultCell(collectionView: UICollectionView,",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 427,
+      "line": 425,
       "access": "open",
       "kind": "func",
       "declaration": "open func makeResultCell(collectionView: UICollectionView,"
@@ -42322,7 +42322,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func configureResultCell(_ cell: UICollectionViewCell,",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 433,
+      "line": 431,
       "access": "open",
       "kind": "func",
       "declaration": "open func configureResultCell(_ cell: UICollectionViewCell,"
@@ -42330,7 +42330,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func itemForResult(at indexPath: IndexPath) -> Item?",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 439,
+      "line": 437,
       "access": "open",
       "kind": "func",
       "declaration": "open func itemForResult(at indexPath: IndexPath) -> Item? {"
@@ -42338,7 +42338,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 443,
+      "line": 441,
       "access": "open",
       "kind": "func",
       "declaration": "open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration {"
@@ -42346,7 +42346,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 447,
+      "line": 445,
       "access": "open",
       "kind": "func",
       "declaration": "open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration {"
@@ -42354,7 +42354,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillActivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 453,
+      "line": 451,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillActivate() {}"
@@ -42362,7 +42362,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidActivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 454,
+      "line": 452,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidActivate() {}"
@@ -42370,7 +42370,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchTextDidChange(_ keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 455,
+      "line": 453,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchTextDidChange(_ keyword: String) {}"
@@ -42378,7 +42378,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillBegin(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 456,
+      "line": 454,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillBegin(keyword: String) {}"
@@ -42386,7 +42386,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidFinish(keyword: String, results: [Item])",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 457,
+      "line": 455,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidFinish(keyword: String, results: [Item]) {}"
@@ -42394,7 +42394,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidFail(keyword: String, error: Error)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 458,
+      "line": 456,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidFail(keyword: String, error: Error) {}"
@@ -42402,7 +42402,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillCancel()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 459,
+      "line": 457,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillCancel() {}"
@@ -42410,7 +42410,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidCancel()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 460,
+      "line": 458,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidCancel() {}"
@@ -42418,7 +42418,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidDeactivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 461,
+      "line": 459,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidDeactivate() {}"
@@ -42426,7 +42426,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillRefresh(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 462,
+      "line": 460,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillRefresh(keyword: String) {}"
@@ -42434,7 +42434,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidRefresh(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 463,
+      "line": 461,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidRefresh(keyword: String) {}"
@@ -42442,7 +42442,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func didSelect(item: Item, at indexPath: IndexPath)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 464,
+      "line": 462,
       "access": "open",
       "kind": "func",
       "declaration": "open func didSelect(item: Item, at indexPath: IndexPath) {}"
@@ -42450,7 +42450,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func clearSearchHistory()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 466,
+      "line": 464,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearSearchHistory() {"
@@ -42458,7 +42458,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func deleteSearchHistory(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 477,
+      "line": 475,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteSearchHistory(keyword: String) {"
@@ -42466,7 +42466,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func reloadLocalization()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 488,
+      "line": 486,
       "access": "open",
       "kind": "func",
       "declaration": "open func reloadLocalization() {"
@@ -42474,7 +42474,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func installCustomSearchBar(_ searchBar: PTSearchBar)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 501,
+      "line": 499,
       "access": "open",
       "kind": "func",
       "declaration": "open func installCustomSearchBar(_ searchBar: PTSearchBar) {}"

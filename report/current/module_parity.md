@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 6ad7c31d56c6a663590271fe7b5db709d246de7d
-Generated at: 2026-09-20T13:19:04Z
+Source revision: 5276a8381a0e5044f28fcf62920c9ef8e22c83dc
+Generated at: 2026-09-20T16:15:35Z
 -->
 
 # SwiftPM / CocoaPods Module Parity

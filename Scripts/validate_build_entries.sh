@@ -4,6 +4,12 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+version="$(tr -d '[:space:]' < "$repo_root/VERSION")"
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+  printf 'FAIL: VERSION is not semantic\n' >&2
+  exit 1
+}
+
 require_pattern() {
   local file="$1"
   local pattern="$2"
@@ -20,6 +26,11 @@ require_pattern() {
 require_pattern "Package.swift" "// swift-tools-version: 6.0" "SPM tools version is Swift 6.0"
 require_pattern "Package.swift" ".iOS(.v17)" "SPM deployment target is iOS 17"
 require_pattern "Package.swift" "swiftLanguageModes: [.v6]" "SPM language mode is Swift 6"
+require_pattern "PooTools.podspec" "version_path = File.join(__dir__, 'VERSION')" "CocoaPods reads the single VERSION source"
+require_pattern "Package.swift" "POOTOOLS_BIOID" "SPM has canonical BioID compile flag"
+require_pattern "Package.swift" "POOTOOLS_BILOGYID" "SPM keeps legacy BilogyID compile alias"
+require_pattern "PooTools.podspec" "POOTOOLS_ZIPARCHIVE" "CocoaPods has canonical ZipArchive compile flag"
+require_pattern "PooTools.podspec" "POOTOOLS_ZIPARCHINE" "CocoaPods keeps legacy ZipArchine compile alias"
 
 require_pattern "PooTools.podspec" "s.platform = :ios, '17.0'" "CocoaPods platform is iOS 17"
 require_pattern "PooTools.podspec" "s.swift_versions = ['6.0']" "CocoaPods Swift version is 6.0"

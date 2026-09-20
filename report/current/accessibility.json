@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
-  "generated_at": "2026-09-20T13:19:01Z",
+  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
+  "generated_at": "2026-09-20T14:20:55Z",
   "counts": {
     "reduce_motion": 41,
     "accessibility": 182,
@@ -943,7 +943,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 505
+      "line": 507
     },
     {
       "rule": "reduce_transparency",

@@ -28,7 +28,7 @@ require_text() {
 # English: Validate the media contract against the current development version instead of freezing an old release number.
 # Español: Valida el contrato multimedia contra la versión de desarrollo actual, sin congelar un número antiguo.
 # 中文：媒体契约校验当前开发版本，不再绑定已经完成的旧版本号。
-current_version="$(sed -nE "s/^[[:space:]]*s\\.version[[:space:]]*=.*'([^']+)'.*/\\1/p" PooTools.podspec | head -n 1)"
+current_version="$(tr -d '[:space:]' < VERSION)"
 [[ -n "$current_version" ]] || fail "podspec version is missing"
 require_text PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift "public struct PTMediaAsset" "typed media asset contract"
 require_text PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift "public enum PTMediaType" "typed media type contract"

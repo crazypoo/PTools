@@ -1,0 +1,27 @@
+{
+  "version": "5.19.0",
+  "policy": "5.x keeps deprecated wrappers; 6.0 removes legacy spellings after migration evidence.",
+  "entries": [
+    {"legacy": "gobal_drop", "canonical": "drop", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "gobalUrl", "canonical": "globalURL", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "socketGobalUrl", "canonical": "socketGlobalURL", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "gobalWebImageLoadOption", "canonical": "webImageLoadOptions", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "heightlightColor", "canonical": "highlightColor", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "netRequsetTime", "canonical": "requestTimeout", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "downloadRequsetTime", "canonical": "downloadRequestTimeout", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "downloadEndTime", "canonical": "resourceTimeout", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "networkCacheEXPTime", "canonical": "networkCacheExpiration", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "networkDudupOption", "canonical": "networkDedupOption", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},
+    {"legacy": "PTCoreUserDefultsWrapper", "canonical": "PTCoreUserDefaultsWrapper", "kind": "typealias", "status": "compatibility", "remove_in": "6.0.0"},
+    {"legacy": "BilogyID", "canonical": "BioID", "kind": "module", "status": "compatibility", "remove_in": "6.0.0"},
+    {"legacy": "MeidaPermission", "canonical": "MediaPermission", "kind": "module", "status": "compatibility", "remove_in": "6.0.0"},
+    {"legacy": "ZipArchine", "canonical": "ZipArchive", "kind": "compile_flag", "status": "alias", "remove_in": "6.0.0"},
+    {"legacy": "MXMerric", "canonical": "MXMetricManagerKit", "kind": "compile_flag", "status": "alias", "remove_in": "6.0.0"}
+  ],
+  "compile_flag_aliases": [
+    {"legacy": "POOTOOLS_BILOGYID", "canonical": "POOTOOLS_BIOID"},
+    {"legacy": "POOTOOLS_ZIPARCHINE", "canonical": "POOTOOLS_ZIPARCHIVE"},
+    {"legacy": "POOTOOLS_MXMERRICKITMANAGER", "canonical": "POOTOOLS_MXMETRICMANAGERKIT"}
+  ]
+}
+

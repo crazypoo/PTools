@@ -12,11 +12,16 @@
 - [当前架构](architecture/ARCHITECTURE.md)
 - [Debug 与 PTInstruments](architecture/DEBUG_AND_INSTRUMENTS.md)
 - [依赖与模块边界](architecture/DEPENDENCIES.md)
+- [CocoaPods / SwiftPM 包矩阵](architecture/PACKAGE_MATRIX.md)
+- [直接依赖矩阵](architecture/DEPENDENCY_MATRIX.md)
 
 ## 维护者
 
 - [发布流程](maintainers/RELEASE.md)
 - [质量与验收方法](maintainers/QUALITY.md)
+- [测试矩阵](maintainers/TEST_MATRIX.md)
+- [模块结账清单](maintainers/MODULE_CHECKLIST.md)
+- [Public API baseline](../api-baseline/README.md)
 
 ## 项目入口
 

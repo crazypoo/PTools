@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 6ad7c31d56c6a663590271fe7b5db709d246de7d
-Generated at: 2026-09-20T13:19:10Z
+Source revision: 5276a8381a0e5044f28fcf62920c9ef8e22c83dc
+Generated at: 2026-09-20T14:21:04Z
 -->
 
 # PTools 当前弃用入口清单
@@ -35,6 +35,7 @@ Generated at: 2026-09-20T13:19:10Z
 | `PooToolsSource/Category/UIImage+PTEX.swift:709` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/UIImage+PTEX.swift:723` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/UIImage+PTEX.swift:753` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Category/UIViewController+PTEX.swift:342` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:408` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/Core/PTAppUserdefault.swift:43` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/Core/PTAppUserdefault.swift:45` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
@@ -142,4 +143,4 @@ Generated at: 2026-09-20T13:19:10Z
 | `PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:29` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:35` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 
-扫描数量：`128`。该数量用于发现漂移，不代表可以自动删除公开 API。
+扫描数量：`129`。该数量用于发现漂移，不代表可以自动删除公开 API。

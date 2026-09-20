@@ -34,7 +34,7 @@ public class PTOpenSystemFunction: NSObject {
     static let setPhone = "PT Open setting phone".localized()
     
     private class func showAlert(_ msg:String) {
-        UIAlertController.gobal_drop(title: "PT Alert Opps".localized(),subTitle: msg)
+        UIAlertController.drop(title: "PT Alert Opps".localized(),subTitle: msg)
     }
     
     private class func validateScheme(_ scheme: String?) -> String? {

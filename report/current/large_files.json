@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
-  "generated_at": "2026-09-20T13:19:19Z",
+  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
+  "generated_at": "2026-09-20T14:21:09Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1021,7 +1021,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "lines": 518,
+      "lines": 547,
       "classification": "ok"
     },
     {
@@ -4341,7 +4341,7 @@
     },
     {
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "lines": 880,
+      "lines": 882,
       "classification": "ok"
     },
     {

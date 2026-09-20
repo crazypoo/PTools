@@ -663,10 +663,10 @@ class PTFuncNameViewController: PTBaseViewController {
                         Task { @MainActor in
                             let isCleared = await PCleanCache.clearCaches()
                             if isCleared {
-                                UIAlertController.gobal_drop(title: "清理成功")
+                                    UIAlertController.drop(title: "清理成功")
                                 self.showCollectionViewData()
                             } else {
-                                UIAlertController.gobal_drop(title: "暂时没有缓存了")
+                                    UIAlertController.drop(title: "暂时没有缓存了")
                             }
                         }
                     }
@@ -832,7 +832,7 @@ class PTFuncNameViewController: PTBaseViewController {
                                 PTAlertManager.show(tips)
                             case 2:
                                 UIAlertController.alertSendFeedBack { title, content in
-                                    UIAlertController.gobal_drop(title: title,subTitle: content) {
+                                UIAlertController.drop(title: title,subTitle: content) {
                                         Task { @MainActor in
                                             UIAlertController.base_textfield_alertVC(okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), placeHolders: ["placeholder"], textFieldTexts: ["Test"], keyboardType: [.default], textFieldDelegate: self) { result in
                                                 

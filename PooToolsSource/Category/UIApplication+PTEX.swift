@@ -138,7 +138,7 @@ public extension PTPOP where Base: UIApplication {
         UIApplication.shared.setAlternateIconName(name) { error in
             if error != nil {
                 Task { @MainActor in
-                    UIViewController.gobal_drop(title: error.debugDescription)
+                    UIViewController.drop(title: error.debugDescription)
                 }
             }
             Task { @MainActor in

@@ -23,11 +23,16 @@ required_documents=(
   docs/architecture/ARCHITECTURE.md
   docs/architecture/DEBUG_AND_INSTRUMENTS.md
   docs/architecture/DEPENDENCIES.md
+  docs/architecture/PACKAGE_MATRIX.md
+  docs/architecture/DEPENDENCY_MATRIX.md
   docs/guides/MODULES.md
   docs/guides/EXAMPLE.md
   docs/migration/MIGRATION_6.md
   docs/maintainers/RELEASE.md
   docs/maintainers/QUALITY.md
+  docs/maintainers/TEST_MATRIX.md
+  docs/maintainers/MODULE_CHECKLIST.md
+  api-baseline/README.md
 )
 for document in "${required_documents[@]}"; do
   [[ -f "$document" ]] || {

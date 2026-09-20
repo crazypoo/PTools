@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.18.1`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.19.0`。
 
 ## Requirements
 
@@ -41,6 +41,12 @@ pod 'PooTools/PhotoPicker'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
+
+包入口、直接依赖、测试领域和公开 API 迁移分别见
+[PACKAGE_MATRIX](docs/architecture/PACKAGE_MATRIX.md)、
+[DEPENDENCY_MATRIX](docs/architecture/DEPENDENCY_MATRIX.md)、
+[TEST_MATRIX](docs/maintainers/TEST_MATRIX.md) 和
+[6.0 迁移说明](docs/migration/MIGRATION_6.md)。
 
 ## Quick Start
 
@@ -132,7 +138,10 @@ Debug 和 PTInstruments 不会自动进入 Core 运行路径；测试环境显�
 - [当前架构](docs/architecture/ARCHITECTURE.md)
 - [Debug 与 PTInstruments](docs/architecture/DEBUG_AND_INSTRUMENTS.md)
 - [依赖与模块边界](docs/architecture/DEPENDENCIES.md)
+- [CocoaPods / SwiftPM 包矩阵](docs/architecture/PACKAGE_MATRIX.md)
+- [直接依赖矩阵](docs/architecture/DEPENDENCY_MATRIX.md)
 - [5.x 到 6.0 迁移](docs/migration/MIGRATION_6.md)
+- [测试矩阵](docs/maintainers/TEST_MATRIX.md)
 - [发布流程](docs/maintainers/RELEASE.md)
 - [质量与验收](docs/maintainers/QUALITY.md)
 - [路线图](ROADMAP.md)

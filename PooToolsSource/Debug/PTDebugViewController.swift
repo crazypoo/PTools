@@ -144,7 +144,7 @@ public class PTDebugViewController: PTBaseViewController {
                             }
                         }
                     default:
-                        UIViewController.gobal_drop(title: "Input with custom mode")
+                        UIViewController.drop(title: "Input with custom mode")
                     }
                 } else if itemRow.title == .socketMode {
                     UIAlertController.baseActionSheet(title: "Socket Mode", cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index,string in
@@ -185,7 +185,7 @@ public class PTDebugViewController: PTBaseViewController {
                             }
                         }
                     default:
-                        UIViewController.gobal_drop(title: "Input with custom mode")
+                        UIViewController.drop(title: "Input with custom mode")
                     }
                 }
             }

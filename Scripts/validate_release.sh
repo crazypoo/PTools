@@ -7,12 +7,17 @@ cd "$repo_root"
 
 version="${1:-}"
 if [[ -z "$version" ]]; then
-  version="$(sed -nE "s/^[[:space:]]*s\.version[[:space:]]*=.*'([^']+)'.*/\1/p" PooTools.podspec | head -n 1)"
+  version="$(tr -d '[:space:]' < VERSION)"
 fi
 
 [[ -n "$version" ]] || { printf 'FAIL: unable to determine podspec version\n' >&2; exit 1; }
-rg -q --fixed-strings "s.version     = '$version'" PooTools.podspec \
-  || { printf 'FAIL: podspec version mismatch: %s\n' "$version" >&2; exit 1; }
+[[ "$version" == "$(tr -d '[:space:]' < VERSION)" ]] \
+  || { printf 'FAIL: requested release version does not match VERSION: %s\n' "$version" >&2; exit 1; }
+rg -q --fixed-strings "version_path = File.join(__dir__, 'VERSION')" PooTools.podspec \
+  || { printf 'FAIL: podspec does not use VERSION as its source\n' >&2; exit 1; }
+pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("version")')"
+[[ "$pod_version" == "$version" ]] \
+  || { printf 'FAIL: resolved podspec version mismatch: %s != %s\n' "$pod_version" "$version" >&2; exit 1; }
 rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
   || { printf 'FAIL: Podfile.lock is not synchronized to %s\n' "$version" >&2; exit 1; }
 rg -q --fixed-strings "当前代码基线：\`$version\`" ROADMAP.md \
@@ -28,6 +33,7 @@ fi
 
 bash Scripts/validate_docs.sh
 bash Scripts/validate_document_versions.sh
+bash Scripts/validate_519_package_tests_docs.sh
 bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_network_security.sh
 bash Scripts/validate_515_media.sh

@@ -1,6 +1,10 @@
+version_path = File.join(__dir__, 'VERSION')
+version = File.read(version_path).strip
+raise "PooTools VERSION must be semantic" unless version.match?(/\A\d+\.\d+\.\d+\z/)
+
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '5.18.2'
+    s.version     = version
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -158,7 +162,7 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'LocalAuthentication','Security'
         subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_BIOID POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
         }
     end
 
@@ -416,7 +420,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'SSZipArchive'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ZIPARCHIVE POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
         }
     end
     
@@ -931,7 +935,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/MXMetricKitManager/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_MXMERRICKITMANAGER POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_MXMETRICMANAGERKIT POOTOOLS_MXMERRICKITMANAGER POOTOOLS_COCOAPODS"
         }
     end
     

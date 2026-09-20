@@ -106,7 +106,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                         make.edges.equalToSuperview()
                     }
                 default:
-                    UIViewController.gobal_drop(title: "请先将设备连接到WIFI上方可操作")
+                    UIViewController.drop(title: "请先将设备连接到WIFI上方可操作")
                     self.localNetwork = false
                 }            }
         case String.dymanicCode:
@@ -265,7 +265,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                         
                         vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
                             Task { @MainActor in
-                                UIViewController.gobal_drop(title: resultText)
+                                UIViewController.drop(title: resultText)
                             }
                         }
                     }
@@ -1089,7 +1089,7 @@ class PTFuncDetailViewController: PTBaseViewController {
 
 extension PTFuncDetailViewController {
     func alert(title:String,message:String) {
-        UIViewController.gobal_drop(title: title,subTitle: message)
+        UIViewController.drop(title: title,subTitle: message)
     }
 }
 

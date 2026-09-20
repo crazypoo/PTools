@@ -16,6 +16,7 @@ bash Scripts/validate_build_entries.sh
 bash Scripts/validate_quality_scans.sh
 bash Scripts/validate_debug_instruments_5_18.sh
 bash Scripts/validate_517_ui.sh
+bash Scripts/validate_519_package_tests_docs.sh
 swift package dump-package
 git diff --check
 ```
@@ -29,6 +30,7 @@ git diff --check
 - Core 不直接依赖 Network、Debug UI 或业务模块。
 - 新代码不增加未经登记的 `@unchecked Sendable`、`nonisolated(unsafe)`、`try!` 或 `as!`。
 - 公开 API baseline、模块图、重复入口和 deprecated inventory 有事实报告。
+- VERSION 是唯一产品版本源；Package matrix、Dependency matrix、Test matrix 和 API baseline 已同步。
 - 文档根目录、相对链接和版本事实通过文档门禁。
 
 ## Build Matrix
@@ -99,6 +101,7 @@ Simulator 结果只能证明功能回归和构建，不替代真实设备的性�
 | 当前依赖/API/并发/模块扫描 | `report/current/` |
 | 发布冻结基线 | `report/baselines/<version>/` |
 | 人维护的测试方法 | 本文件 |
+| 测试领域与验证缺口 | `TEST_MATRIX.md` |
 | 发布流程 | `docs/maintainers/RELEASE.md` |
 
 自动报告必须包含 `AUTO-GENERATED`、Generator、Source revision 和 Generated at 元数据。

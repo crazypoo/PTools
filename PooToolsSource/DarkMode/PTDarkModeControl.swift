@@ -96,7 +96,7 @@ public class PTDarkModeControl: PTListViewController {
                         guard timeIntervalValue.count == 2 else { return }
                         let darkModePickerView = PTDarkModePickerView(startTime: timeIntervalValue[0], endTime: timeIntervalValue[1]) { [weak self] startTime, endTime in
                             if startTime == endTime {
-                                PTBaseViewController.gobal_drop(title: PTDarkModeOption.timeSetErrorMsg)
+                                PTBaseViewController.drop(title: PTDarkModeOption.timeSetErrorMsg)
                             } else {
                                 PTDarkModeOption.setSmartPeelingTimeChange(startTime: startTime, endTime: endTime)
                                 self?.themeSetBlock?()

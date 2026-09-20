@@ -1,8 +1,13 @@
 # Changelog
 
-## Unreleased — 5.18.x
+## Unreleased — 5.19.x
 
-当前开发基线为 `5.18.1`，尚未创建正式 Git tag。
+当前开发基线为 `5.19.0`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+
+- 新增 `VERSION` 单一版本源，校验 CocoaPods、SwiftPM、Podfile.lock、README、CHANGELOG、ROADMAP 和发布元数据，防止版本漂移。
+- 新增 CocoaPods / SwiftPM 包矩阵、直接依赖矩阵、5.18.2 Public API baseline 和 13 个领域测试矩阵。
+- 新增 API 删除门禁、命名债务登记和编译宏新旧别名；`drop`、`POOTOOLS_BIOID`、`POOTOOLS_ZIPARCHIVE`、`POOTOOLS_MXMETRICMANAGERKIT` 作为 canonical 入口。
+- 补齐 Package、Dependency、Tests、API 和 Documentation 维护入口；第三方依赖版本和 Pods 源码保持不变。
 
 - 新增可复用的 `PTSearchViewController<Item>` 搜索基类，统一 SearchBar、PTCollectionView、状态机、History、Suggestion、Pagination、Refresh、Empty、Error 和生命周期取消。
 - 新增 `PooToolsSearch` SwiftPM product 与 `PooTools/Search` CocoaPods subspec；旧 `SearchBar` 继续独立可选安装，避免无搜索需求的宿主增加容器依赖。
@@ -15,10 +20,19 @@
 - LocalConsole 改用当前 UIWindowScene 的屏幕与安全区计算，初始化失败安全返回，不影响业务窗口；保留多 Scene、关闭、拖动、键盘和旋转兼容路径。
 - 保留既有公开 API、第三方依赖版本和 Pods 源码不变；真实设备 30–60 分钟录制、性能中位数和多 Scene 宿主回归仍是发布前条件。
 
+## 5.18.2 — 2026-09-20
+
+- 发布 5.18.2 正式兼容基线；5.19.0 在此版本上继续进行 Package、Dependency、Tests、Docs 和 API 治理。
+
+## 5.18.1 — 2026-09-20
+
+- 增加可复用 Search 容器、搜索状态机、异步 Provider、历史记录、建议、分页、刷新和多种导航栏展示位置。
+- 保留 SearchBar 独立入口，并提供 SwiftPM `PooToolsSearch` 与 CocoaPods `PooTools/Search`。
+
 ## 5.18.0 — 2026-09-20
 
 - 完成 Debug / Instruments 的 5.18.0 稳定基线；新增 Hook Registry、环形录制、`.pttrace` 导入回放和多 Scene LocalConsole 生命周期治理。
-- 5.18.1 的 Search 容器在此开发基线之上继续演进，尚未创建新的正式 tag。
+- 5.18.x 的 Search 兼容演进继续记录在后续开发版本中。
 
 ## 5.17.0 — 2026-09-20
 

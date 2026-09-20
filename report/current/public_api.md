@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 6ad7c31d56c6a663590271fe7b5db709d246de7d
-Generated at: 2026-09-20T13:19:00Z
+Source revision: 5276a8381a0e5044f28fcf62920c9ef8e22c83dc
+Generated at: 2026-09-20T14:20:54Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1628,11 +1628,11 @@ Generated at: 2026-09-20T13:19:00Z
 | PooToolsSource/Category/UIView+PTEX.swift:1799 | protocol | public | public protocol UIFadeOut {} |
 | PooToolsSource/Category/UIView+PTEX.swift:1813 | func | public | public func fadeUpdate(duration: TimeInterval = 1, |
 | PooToolsSource/Category/UIViewController+PTEX.swift:18 | enum | public | @objc public enum PTSheetPresentType:Int { |
-| PooToolsSource/Category/UIViewController+PTEX.swift:468 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
-| PooToolsSource/Category/UIViewController+PTEX.swift:474 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
-| PooToolsSource/Category/UIViewController+PTEX.swift:481 | func | public | public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) { |
-| PooToolsSource/Category/UIViewController+PTEX.swift:490 | class | public | public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil) { |
-| PooToolsSource/Category/UIViewController+PTEX.swift:507 | class | public | public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) { |
+| PooToolsSource/Category/UIViewController+PTEX.swift:497 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
+| PooToolsSource/Category/UIViewController+PTEX.swift:503 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
+| PooToolsSource/Category/UIViewController+PTEX.swift:510 | func | public | public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) { |
+| PooToolsSource/Category/UIViewController+PTEX.swift:519 | class | public | public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil) { |
+| PooToolsSource/Category/UIViewController+PTEX.swift:536 | class | public | public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) { |
 | PooToolsSource/CheckBox/PTCheckBox.swift:11 | typealias | public | public typealias PTCheckboxValueChangedBlock = (_ isChecked: Bool) -> Void |
 | PooToolsSource/CheckBox/PTCheckBox.swift:13 | enum | public | public enum PTCheckBoxStyle: Int { |
 | PooToolsSource/CheckBox/PTCheckBox.swift:24 | enum | public | public enum PTCheckBoxBorderStyle: Int { |
@@ -5276,52 +5276,52 @@ Generated at: 2026-09-20T13:19:00Z
 | PooToolsSource/Search/PTSearchViewController.swift:86 | var | public | public var keywordDidChange: (@MainActor (String) -> Void)? |
 | PooToolsSource/Search/PTSearchViewController.swift:87 | var | public | public var resultDidSelect: (@MainActor (Item) -> Void)? |
 | PooToolsSource/Search/PTSearchViewController.swift:111 | init | public | public init(configuration: PTSearchConfiguration = .standard) { |
-| PooToolsSource/Search/PTSearchViewController.swift:237 | func | public | public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
-| PooToolsSource/Search/PTSearchViewController.swift:243 | func | public | public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String { |
-| PooToolsSource/Search/PTSearchViewController.swift:249 | func | public | public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
-| PooToolsSource/Search/PTSearchViewController.swift:255 | func | public | public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
-| PooToolsSource/Search/PTSearchViewController.swift:264 | func | public | public func activateSearch() { |
-| PooToolsSource/Search/PTSearchViewController.swift:287 | func | public | public func deactivateSearch() { |
-| PooToolsSource/Search/PTSearchViewController.swift:296 | func | public | public func focusSearchBar() { |
-| PooToolsSource/Search/PTSearchViewController.swift:305 | func | public | public func dismissSearchKeyboard() { |
-| PooToolsSource/Search/PTSearchViewController.swift:309 | func | public | public func cancelSearch() { |
-| PooToolsSource/Search/PTSearchViewController.swift:327 | func | public | public func refreshSearch() { |
-| PooToolsSource/Search/PTSearchViewController.swift:332 | func | public | public func retryCurrentSearch() { |
-| PooToolsSource/Search/PTSearchViewController.swift:340 | func | public | public func retryPagination() { |
-| PooToolsSource/Search/PTSearchViewController.swift:347 | func | public | public func setResults(_ results: [Item], animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:352 | func | public | public func appendResults(_ results: [Item], animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:357 | func | public | public func prependResults(_ results: [Item], animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:362 | func | public | public func removeResult(at index: Int, animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:369 | func | public | public func replaceResult(at index: Int, with item: Item, animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:376 | func | public | public func clearResults(animated: Bool = true) { |
-| PooToolsSource/Search/PTSearchViewController.swift:381 | func | public | public func reloadResults() { |
-| PooToolsSource/Search/PTSearchViewController.swift:388 | func | open | open func search(keyword: String) async throws -> [Item] { |
-| PooToolsSource/Search/PTSearchViewController.swift:393 | func | open | open func localSearch(keyword: String) async throws -> [Item] { |
-| PooToolsSource/Search/PTSearchViewController.swift:398 | func | open | open func remoteSearch(keyword: String) async throws -> [Item] { |
-| PooToolsSource/Search/PTSearchViewController.swift:405 | func | open | open func merge(local: [Item], remote: [Item]) -> [Item] { |
-| PooToolsSource/Search/PTSearchViewController.swift:409 | func | open | open func loadMore(keyword: String, page: Int) async throws -> [Item] { |
-| PooToolsSource/Search/PTSearchViewController.swift:413 | func | open | open func makeResultSections(for items: [Item]) -> [PTSection] { |
-| PooToolsSource/Search/PTSearchViewController.swift:425 | func | open | open func makeResultCell(collectionView: UICollectionView, |
-| PooToolsSource/Search/PTSearchViewController.swift:431 | func | open | open func configureResultCell(_ cell: UICollectionViewCell, |
-| PooToolsSource/Search/PTSearchViewController.swift:437 | func | open | open func itemForResult(at indexPath: IndexPath) -> Item? { |
-| PooToolsSource/Search/PTSearchViewController.swift:441 | func | open | open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration { |
-| PooToolsSource/Search/PTSearchViewController.swift:445 | func | open | open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration { |
-| PooToolsSource/Search/PTSearchViewController.swift:451 | func | open | open func searchWillActivate() {} |
-| PooToolsSource/Search/PTSearchViewController.swift:452 | func | open | open func searchDidActivate() {} |
-| PooToolsSource/Search/PTSearchViewController.swift:453 | func | open | open func searchTextDidChange(_ keyword: String) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:454 | func | open | open func searchWillBegin(keyword: String) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:455 | func | open | open func searchDidFinish(keyword: String, results: [Item]) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:456 | func | open | open func searchDidFail(keyword: String, error: Error) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:457 | func | open | open func searchWillCancel() {} |
-| PooToolsSource/Search/PTSearchViewController.swift:458 | func | open | open func searchDidCancel() {} |
-| PooToolsSource/Search/PTSearchViewController.swift:459 | func | open | open func searchDidDeactivate() {} |
-| PooToolsSource/Search/PTSearchViewController.swift:460 | func | open | open func searchWillRefresh(keyword: String) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:461 | func | open | open func searchDidRefresh(keyword: String) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:462 | func | open | open func didSelect(item: Item, at indexPath: IndexPath) {} |
-| PooToolsSource/Search/PTSearchViewController.swift:464 | func | public | public func clearSearchHistory() { |
-| PooToolsSource/Search/PTSearchViewController.swift:475 | func | public | public func deleteSearchHistory(keyword: String) { |
-| PooToolsSource/Search/PTSearchViewController.swift:486 | func | open | open func reloadLocalization() { |
-| PooToolsSource/Search/PTSearchViewController.swift:499 | func | open | open func installCustomSearchBar(_ searchBar: PTSearchBar) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:239 | func | public | public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:245 | func | public | public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String { |
+| PooToolsSource/Search/PTSearchViewController.swift:251 | func | public | public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:257 | func | public | public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:266 | func | public | public func activateSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:289 | func | public | public func deactivateSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:298 | func | public | public func focusSearchBar() { |
+| PooToolsSource/Search/PTSearchViewController.swift:307 | func | public | public func dismissSearchKeyboard() { |
+| PooToolsSource/Search/PTSearchViewController.swift:311 | func | public | public func cancelSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:329 | func | public | public func refreshSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:334 | func | public | public func retryCurrentSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:342 | func | public | public func retryPagination() { |
+| PooToolsSource/Search/PTSearchViewController.swift:349 | func | public | public func setResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:354 | func | public | public func appendResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:359 | func | public | public func prependResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:364 | func | public | public func removeResult(at index: Int, animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:371 | func | public | public func replaceResult(at index: Int, with item: Item, animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:378 | func | public | public func clearResults(animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:383 | func | public | public func reloadResults() { |
+| PooToolsSource/Search/PTSearchViewController.swift:390 | func | open | open func search(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:395 | func | open | open func localSearch(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:400 | func | open | open func remoteSearch(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:407 | func | open | open func merge(local: [Item], remote: [Item]) -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:411 | func | open | open func loadMore(keyword: String, page: Int) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:415 | func | open | open func makeResultSections(for items: [Item]) -> [PTSection] { |
+| PooToolsSource/Search/PTSearchViewController.swift:427 | func | open | open func makeResultCell(collectionView: UICollectionView, |
+| PooToolsSource/Search/PTSearchViewController.swift:433 | func | open | open func configureResultCell(_ cell: UICollectionViewCell, |
+| PooToolsSource/Search/PTSearchViewController.swift:439 | func | open | open func itemForResult(at indexPath: IndexPath) -> Item? { |
+| PooToolsSource/Search/PTSearchViewController.swift:443 | func | open | open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration { |
+| PooToolsSource/Search/PTSearchViewController.swift:447 | func | open | open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration { |
+| PooToolsSource/Search/PTSearchViewController.swift:453 | func | open | open func searchWillActivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:454 | func | open | open func searchDidActivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:455 | func | open | open func searchTextDidChange(_ keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:456 | func | open | open func searchWillBegin(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:457 | func | open | open func searchDidFinish(keyword: String, results: [Item]) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:458 | func | open | open func searchDidFail(keyword: String, error: Error) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:459 | func | open | open func searchWillCancel() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:460 | func | open | open func searchDidCancel() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:461 | func | open | open func searchDidDeactivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:462 | func | open | open func searchWillRefresh(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:463 | func | open | open func searchDidRefresh(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:464 | func | open | open func didSelect(item: Item, at indexPath: IndexPath) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:466 | func | public | public func clearSearchHistory() { |
+| PooToolsSource/Search/PTSearchViewController.swift:477 | func | public | public func deleteSearchHistory(keyword: String) { |
+| PooToolsSource/Search/PTSearchViewController.swift:488 | func | open | open func reloadLocalization() { |
+| PooToolsSource/Search/PTSearchViewController.swift:501 | func | open | open func installCustomSearchBar(_ searchBar: PTSearchBar) {} |
 | PooToolsSource/SearchBar/PTSearchBar.swift:18 | enum | public | public enum PTSearchVisualStyle: Sendable, Equatable { |
 | PooToolsSource/SearchBar/PTSearchBar.swift:26 | class | public | public class PTSearchBarTextFieldClearButtonConfig: NSObject { |
 | PooToolsSource/SearchBar/PTSearchBar.swift:27 | var | public | public var clearAction: PTActionTask? |

@@ -7,7 +7,7 @@ cd "$repo_root"
 
 core_files=(PooToolsSource/PToolsCore/*.swift)
 failures=()
-podspec_version="$(sed -nE "s/^[[:space:]]*s\.version[[:space:]]*=.*'([^']+)'.*/\1/p" PooTools.podspec | head -n 1)"
+podspec_version="$(tr -d '[:space:]' < VERSION)"
 
 for file in "${core_files[@]}"; do
   while IFS= read -r import_line; do
@@ -23,7 +23,7 @@ for file in "${core_files[@]}"; do
 done
 
 required_fragments=(
-  "s.version     = '${podspec_version}'"
+  "version_path = File.join(__dir__, 'VERSION')"
   "subspec.dependency 'PooTools/PToolsCore'"
   "POOTOOLS_SPLIT_CORE"
   "name: \"PToolsCore\""

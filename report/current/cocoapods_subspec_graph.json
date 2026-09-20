@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
-  "generated_at": "2026-09-20T13:19:04Z",
+  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
+  "generated_at": "2026-09-20T16:15:35Z",
   "name": "PooTools",
-  "version": "5.18.1",
+  "version": "5.19.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -88,7 +88,7 @@
         "Security"
       ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BIOID POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1159,7 +1159,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MXMERRICKITMANAGER POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MXMETRICMANAGERKIT POOTOOLS_MXMERRICKITMANAGER POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2347,7 +2347,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ZIPARCHIVE POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
       }
     },
     {

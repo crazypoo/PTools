@@ -297,7 +297,10 @@ public extension UIViewController {
     ///   - bannerBackgroundColor: 背景颜色
     ///   - notifiTap: 点击回调
     ///   - notifiDismiss:
-    @objc class func gobal_drop(title:String = "",
+    // English: Present a lightweight notification using the configured banner or alert adapter.
+    // Español: Presenta una notificación ligera mediante el adaptador de banner o alerta configurado.
+    // 中文：使用当前配置的通知条或弹窗适配器展示轻量提示。
+    @objc class func drop(title:String = "",
                                 titleFont:UIFont = UIFont.appfont(size: 16),
                                 titleColor:UIColor = .black,
                                 subTitle:String = "",
@@ -331,6 +334,32 @@ public extension UIViewController {
             notifiDismiss?()
         }
 #endif
+    }
+
+    // English: Keep the historical misspelling as a source-compatible forwarding adapter.
+    // Español: Mantiene la grafía histórica como adaptador de reenvío compatible con el código existente.
+    // 中文：保留历史拼写，并将其作为兼容现有代码的转发适配器。
+    @available(*, deprecated, message: "Use drop(...) instead")
+    @objc class func gobal_drop(title:String = "",
+                                titleFont:UIFont = UIFont.appfont(size: 16),
+                                titleColor:UIColor = .black,
+                                subTitle:String = "",
+                                subTitleFont:UIFont = UIFont.appfont(size: 16),
+                                subTitleColor:UIColor = .black,
+                                duration:CGFloat = 1.5,
+                                bannerBackgroundColor:UIColor = .white,
+                                notifiTap:PTActionTask? = nil,
+                                notifiDismiss:PTActionTask? = nil) {
+        drop(title: title,
+             titleFont: titleFont,
+             titleColor: titleColor,
+             subTitle: subTitle,
+             subTitleFont: subTitleFont,
+             subTitleColor: subTitleColor,
+             duration: duration,
+             bannerBackgroundColor: bannerBackgroundColor,
+             notifiTap: notifiTap,
+             notifiDismiss: notifiDismiss)
     }
     
     @available(iOS 13, tvOS 13, *)

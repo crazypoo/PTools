@@ -5,8 +5,17 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-version="$(sed -nE "s/^[[:space:]]*s\.version[[:space:]]*=.*'([^']+)'.*/\1/p" PooTools.podspec | head -n 1)"
-[[ -n "$version" ]] || { printf 'FAIL: PooTools.podspec version is missing\n' >&2; exit 1; }
+version="$(tr -d '[:space:]' < VERSION)"
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { printf 'FAIL: VERSION is not semantic: %s\n' "$version" >&2; exit 1; }
+rg -q --fixed-strings "version_path = File.join(__dir__, 'VERSION')" PooTools.podspec \
+  || { printf 'FAIL: PooTools.podspec does not read VERSION\n' >&2; exit 1; }
+rg -q --fixed-strings 's.version     = version' PooTools.podspec \
+  || { printf 'FAIL: PooTools.podspec does not assign the VERSION value\n' >&2; exit 1; }
+pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("version")')"
+[[ "$pod_version" == "$version" ]] || {
+  printf 'FAIL: CocoaPods resolved version %s does not match VERSION %s\n' "$pod_version" "$version" >&2
+  exit 1
+}
 
 latest_tag="$(git tag --list | ruby -e 'require "rubygems"; tags = STDIN.readlines(chomp: true).select { |tag| tag.match?("\\A\\d+\\.\\d+\\.\\d+\\z") }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")')"
 [[ -n "$latest_tag" ]] || { printf 'FAIL: no semantic release tag is available\n' >&2; exit 1; }

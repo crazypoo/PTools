@@ -6,11 +6,13 @@
 
 ## Version source of truth
 
-1. 读取 `PooTools.podspec` 的 `s.version`。
+1. 读取根目录 `VERSION`；`PooTools.podspec` 必须从该文件解析 `s.version`。
 2. 发布前确认同名 Git tag 不存在或明确是本次待创建 tag。
 3. CHANGELOG 必须有对应正式发布章节；开发版本只放 `Unreleased`。
 4. `Podfile.lock` 中 PooTools 的解析版本必须与 podspec 一致。
 5. README 和长期架构文档不得硬编码未发布 tag。
+6. `PACKAGE_MATRIX.md`、`DEPENDENCY_MATRIX.md`、`TEST_MATRIX.md`、`MODULE_CHECKLIST.md` 和
+   `api-baseline/` 必须与当前版本和最新正式 tag 对齐。
 
 ## Preflight
 
@@ -21,6 +23,7 @@ bash Scripts/validate_build_entries.sh
 bash Scripts/validate_core_source_contract.sh
 bash Scripts/validate_quality_scans.sh
 bash Scripts/validate_release.sh
+bash Scripts/validate_519_package_tests_docs.sh
 git diff --check
 ```
 

@@ -213,31 +213,31 @@ public struct PTNetworkConfig: Sendable {
     // English: Deprecated spellings remain as computed adapters while canonical names own the storage.
     // Español: Las grafías obsoletas permanecen como adaptadores calculados y los nombres canónicos poseen el almacenamiento.
     // 中文：旧拼写保留为计算属性适配器，存储统一由正确命名的属性持有。
-    @available(*, deprecated, message: "Use requestTimeout instead")
+    @available(*, deprecated, renamed: "requestTimeout")
     public var netRequsetTime: TimeInterval {
         get { requestTimeout }
         set { requestTimeout = newValue }
     }
 
-    @available(*, deprecated, message: "Use downloadRequestTimeout instead")
+    @available(*, deprecated, renamed: "downloadRequestTimeout")
     public var downloadRequsetTime: TimeInterval {
         get { downloadRequestTimeout }
         set { downloadRequestTimeout = newValue }
     }
 
-    @available(*, deprecated, message: "Use resourceTimeout instead")
+    @available(*, deprecated, renamed: "resourceTimeout")
     public var downloadEndTime: TimeInterval {
         get { resourceTimeout }
         set { resourceTimeout = newValue }
     }
 
-    @available(*, deprecated, message: "Use networkCacheExpiration instead")
+    @available(*, deprecated, renamed: "networkCacheExpiration")
     public var networkCacheEXPTime: String {
         get { networkCacheExpiration }
         set { networkCacheExpiration = newValue }
     }
 
-    @available(*, deprecated, message: "Use networkDedupOption instead")
+    @available(*, deprecated, renamed: "networkDedupOption")
     public var networkDudupOption: PTNetworkDedupPolicy {
         get { networkDedupOption }
         set { networkDedupOption = newValue }
