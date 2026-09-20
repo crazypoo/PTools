@@ -21,14 +21,21 @@ public struct PTVisionTextResult {
     }
 }
 
+// English: Vision observations are system-owned references kept in a narrow callback bridge.
+// Español: Las observaciones de Vision son referencias del sistema conservadas en un puente de callback estrecho.
+// 中文：Vision observation 是系统管理的引用对象，仅在窄范围回调桥接中传递。
 private struct PTObservationBox: @unchecked Sendable {
     let items: [VNRecognizedTextObservation]
 }
 
-// 1. 标记为 final 和 Sendable，向 Swift 6 证明这个单例是跨线程安全的
-public final class PTVision: NSObject, @unchecked Sendable {
+public final class PTVision: NSObject {
     
-    public static let share = PTVision()
+    // English: Keep the legacy entry point without storing a non-Sendable global singleton.
+    // Español: Conserva la entrada heredada sin almacenar un singleton global no Sendable.
+    // 中文：保留旧入口，但不再存储不可 Sendable 的全局单例。
+    public static var share: PTVision {
+        PTVision()
+    }
     
     // 私有化初始化方法，确保单例的纯粹性
     private override init() {
@@ -40,13 +47,15 @@ public final class PTVision: NSObject, @unchecked Sendable {
     public static func funcQRCode(withImage image: UIImage,
                                   type: VNBarcodeSymbology = .qr,
                                   callback: @escaping @Sendable (String) -> Void) {
-        guard let ciImage = CIImage(image: image) else {
-            PTNSLogConsole("Failed to convert UIImage to CIImage")
+        guard let cgImage = image.cgImage else {
+            PTNSLogConsole("Failed to extract CGImage from UIImage")
             callback("")
             return
         }
         
-        // 切换到后台任务执行识别，避免阻塞调用者的线程
+        // English: Capture an immutable CGImage snapshot before leaving the caller's actor.
+        // Español: Captura una instantánea inmutable de CGImage antes de salir del actor del llamador.
+        // 中文：离开调用方 actor 前先捕获不可变的 CGImage 快照。
         Task.detached(priority: .userInitiated) {
             let barcodeRequest = VNDetectBarcodesRequest { request, error in
                 guard let results = request.results as? [VNBarcodeObservation] else {
@@ -66,7 +75,7 @@ public final class PTVision: NSObject, @unchecked Sendable {
                 callback("") // 如果遍历完没有匹配的类型，也返回空
             }
 
-            let requestHandler = VNImageRequestHandler(ciImage: ciImage, options: [:])
+            let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
 
             do {
                 try requestHandler.perform([barcodeRequest])

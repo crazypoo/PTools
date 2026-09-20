@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
-  "generated_at": "2026-09-20T16:54:12Z",
+  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
+  "generated_at": "2026-09-20T18:11:35Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 28,
-    "unchecked_sendable": 68,
+    "task_detached": 24,
+    "unchecked_sendable": 67,
     "as_bang": 4
   },
   "locations": [
@@ -64,24 +64,6 @@
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 490,
       "text": "await Task.detached(priority: .userInitiated) {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 499,
-      "text": "await Task.detached(priority: .utility) {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/BioID/PTBiologyID.swift",
-      "line": 137,
-      "text": "return await Task.detached {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/BioID/PTBiologyID.swift",
-      "line": 152,
-      "text": "return await Task.detached {"
     },
     {
       "rule": "unchecked_sendable",
@@ -254,7 +236,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Colors/UIImage+PTColorEX.swift",
-      "line": 151,
+      "line": 157,
       "text": "Task.detached(priority: .userInitiated) {"
     },
     {
@@ -296,13 +278,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 557,
-      "text": "data = await Task.detached(priority: .userInitiated, operation: {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 566,
+      "line": 567,
       "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
     },
     {
@@ -758,25 +734,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 24,
+      "line": 27,
       "text": "private struct PTObservationBox: @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 29,
-      "text": "public final class PTVision: NSObject, @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 50,
+      "line": 59,
       "text": "Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 107,
+      "line": 116,
       "text": "Task.detached(priority: .userInitiated) {"
     }
   ]

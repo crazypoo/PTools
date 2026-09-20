@@ -82,7 +82,10 @@ public class PTHealthKit: NSObject {
     }
     
     func stepAll() {
-        guard let quantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) as? HKQuantityType else {
+        // English: quantityType already returns the concrete quantity type; avoid a redundant cast warning.
+        // Español: quantityType ya devuelve el tipo concreto; evita una conversión redundante y su advertencia.
+        // 中文：quantityType 已经返回具体的 HKQuantityType，移除多余转换以消除警告。
+        guard let quantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else {
             return
         }
         let calendar = NSCalendar.current

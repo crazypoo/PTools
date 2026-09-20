@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: 7beff0ffd16062cec5a2c5da1044b5111779d7e8
-Generated at: 2026-09-20T16:54:13Z
+Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
+Generated at: 2026-09-20T18:11:36Z
 -->
 
 # PTools 当前单例范围盘点
@@ -116,7 +116,7 @@ Generated at: 2026-09-20T16:54:13Z
 | PooToolsSource/Speech/PTSpeech.swift:25 | share | C Shared mutable service | public static let share = PTSpeech() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/StatusBar/StatusBarManager.swift:35 | shared | D Shared mutable UI or scene state | public static let shared = StatusBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/VideoEditor/PTVideoEditorConfig.swift:15 | share | C Shared mutable service | public static let share = PTVideoEditorConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Vision/PTVision.swift:31 | share | C Shared mutable service | public static let share = PTVision() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/Vision/PTVision.swift:36 | share | C Shared mutable service | public static var share: PTVision { | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/WhereIsMyEye/PTFaceEye.swift:15 | share | C Shared mutable service | public static let share = PTFaceEye() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/iCloud/PTiCloudFileManager.swift:16 | shared | C Shared mutable service | public static let shared = PTiCloudFileManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/iOS17Tips/PTTip.swift:96 | shared | C Shared mutable service | public static let shared = PTTip() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

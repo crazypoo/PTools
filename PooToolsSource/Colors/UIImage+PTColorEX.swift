@@ -147,9 +147,15 @@ extension UIImage {
     #endif
 
     public func getColors(quality: UIImageColorsQuality = .high, _ completion: @escaping @MainActor @Sendable (UIImageColors?) -> Void) {
-        let image = self
+        // English: Serialize the UIKit image before the background task so it captures only Sendable data.
+        // Español: Serializa la imagen UIKit antes de la tarea de fondo para capturar solo datos Sendable.
+        // 中文：先把 UIKit 图片序列化，保证后台任务只捕获 Sendable 数据。
+        guard let imageData = pngData() else {
+            Task { @MainActor in completion(nil) }
+            return
+        }
         Task.detached(priority: .userInitiated) {
-            let result = image.getColors(quality: quality)
+            let result = UIImage(data: imageData)?.getColors(quality: quality)
             await MainActor.run {
                 completion(result)
             }

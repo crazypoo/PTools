@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
-  "generated_at": "2026-09-20T16:54:38Z",
+  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
+  "generated_at": "2026-09-20T18:11:49Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -204,7 +204,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 509,
+      "line": 510,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },

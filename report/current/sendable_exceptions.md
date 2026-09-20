@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: 7beff0ffd16062cec5a2c5da1044b5111779d7e8
-Generated at: 2026-09-20T16:54:12Z
+Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
+Generated at: 2026-09-20T18:11:36Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -86,8 +86,7 @@ Generated at: 2026-09-20T16:54:12Z
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift` | 14 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1531 | `private struct PTC7SafeBox:@unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/VideoConverter.swift` | 47 | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/Vision/PTVision.swift` | 24 | `private struct PTObservationBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/Vision/PTVision.swift` | 29 | `public final class PTVision: NSObject, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/Vision/PTVision.swift` | 27 | `private struct PTObservationBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 
 ## 版本门槛
 

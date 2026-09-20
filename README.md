@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.19.1`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.19.2`。
 
 ## Requirements
 
@@ -136,6 +136,7 @@ Debug 和 PTInstruments 不会自动进入 Core 运行路径；测试环境显�
 - [模块选择与安装](docs/guides/MODULES.md)
 - [Example 页面与回归入口](docs/guides/EXAMPLE.md)
 - [当前架构](docs/architecture/ARCHITECTURE.md)
+- [Swift 6 并发边界](docs/architecture/CONCURRENCY.md)
 - [Debug 与 PTInstruments](docs/architecture/DEBUG_AND_INSTRUMENTS.md)
 - [依赖与模块边界](docs/architecture/DEPENDENCIES.md)
 - [CocoaPods / SwiftPM 包矩阵](docs/architecture/PACKAGE_MATRIX.md)

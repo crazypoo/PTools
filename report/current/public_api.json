@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
-  "generated_at": "2026-09-20T16:54:12Z",
+  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
+  "generated_at": "2026-09-20T18:11:35Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -7314,7 +7314,7 @@
     {
       "key": "PooToolsSource/Base/PTNavBar.swift|public|func|public func setLeftButtons(_ buttons: [UIView])",
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 232,
+      "line": 238,
       "access": "public",
       "kind": "func",
       "declaration": "public func setLeftButtons(_ buttons: [UIView]) {"
@@ -7322,7 +7322,7 @@
     {
       "key": "PooToolsSource/Base/PTNavBar.swift|public|func|public func setRightButtons(_ buttons: [UIView])",
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 261,
+      "line": 267,
       "access": "public",
       "kind": "func",
       "declaration": "public func setRightButtons(_ buttons: [UIView]) {"
@@ -8242,7 +8242,7 @@
     {
       "key": "PooToolsSource/BioID/PTBiologyID.swift|public|func|public func deleteBiometryID(account: String? = nil) async -> PTBiologyVerifyStatus",
       "path": "PooToolsSource/BioID/PTBiologyID.swift",
-      "line": 158,
+      "line": 161,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteBiometryID(account: String? = nil) async -> PTBiologyVerifyStatus {"
@@ -13978,7 +13978,7 @@
     {
       "key": "PooToolsSource/Colors/UIImage+PTColorEX.swift|public|func|public func getColors(quality: UIImageColorsQuality = .high) -> UIImageColors?",
       "path": "PooToolsSource/Colors/UIImage+PTColorEX.swift",
-      "line": 159,
+      "line": 165,
       "access": "public",
       "kind": "func",
       "declaration": "public func getColors(quality: UIImageColorsQuality = .high) -> UIImageColors? {"
@@ -20594,7 +20594,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 123,
+      "line": 126,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -20602,7 +20602,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 156,
+      "line": 159,
       "access": "public",
       "kind": "func",
       "declaration": "public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -47642,7 +47642,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|func|public func findText(withImage image: UIImage,",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 95,
+      "line": 104,
       "access": "public",
       "kind": "func",
       "declaration": "public func findText(withImage image: UIImage,"
@@ -47650,7 +47650,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|func|public func findText(withImageView imageView: UIImageView,",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 161,
+      "line": 170,
       "access": "public",
       "kind": "func",
       "declaration": "public func findText(withImageView imageView: UIImageView,"
@@ -47658,7 +47658,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func calculateHeight(for html: String) async -> CGFloat",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 51,
+      "line": 52,
       "access": "public",
       "kind": "func",
       "declaration": "public func calculateHeight(for html: String) async -> CGFloat {"
@@ -47666,7 +47666,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 108,
+      "line": 109,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {"
@@ -47674,7 +47674,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 125,
+      "line": 126,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {"
@@ -47682,7 +47682,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 130,
+      "line": 131,
       "access": "public",
       "kind": "func",
       "declaration": "public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {"

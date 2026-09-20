@@ -10,6 +10,7 @@
 ## 架构
 
 - [当前架构](architecture/ARCHITECTURE.md)
+- [Swift 6 并发边界](architecture/CONCURRENCY.md)
 - [Debug 与 PTInstruments](architecture/DEBUG_AND_INSTRUMENTS.md)
 - [依赖与模块边界](architecture/DEPENDENCIES.md)
 - [CocoaPods / SwiftPM 包矩阵](architecture/PACKAGE_MATRIX.md)

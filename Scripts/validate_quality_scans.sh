@@ -61,6 +61,7 @@ ruby Scripts/report_sendable_exceptions.rb >/dev/null
 ruby Scripts/report_cache_inventory_5_9.rb >/dev/null
 ruby Scripts/report_singletons_5_9.rb >/dev/null
 ruby Scripts/report_accessibility_5_9.rb >/dev/null
+bash Scripts/validate_concurrency_5_19.sh
 
 # English: Keep the SPM/CocoaPods parity and dependency-direction baselines in the regular quality gate.
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.

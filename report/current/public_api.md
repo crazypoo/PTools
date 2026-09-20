@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 7beff0ffd16062cec5a2c5da1044b5111779d7e8
-Generated at: 2026-09-20T16:54:12Z
+Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
+Generated at: 2026-09-20T18:11:35Z
 -->
 
 # PTools 当前公开 API 清单
@@ -926,8 +926,8 @@ Generated at: 2026-09-20T16:54:12Z
 | PooToolsSource/Base/PTNavBar.swift:73 | enum | public | public enum PTTitleViewMode: Sendable { |
 | PooToolsSource/Base/PTNavBar.swift:79 | var | public | public var titleViewMode: PTTitleViewMode = .fill { |
 | PooToolsSource/Base/PTNavBar.swift:85 | var | public | public var titleView: UIView? { |
-| PooToolsSource/Base/PTNavBar.swift:232 | func | public | public func setLeftButtons(_ buttons: [UIView]) { |
-| PooToolsSource/Base/PTNavBar.swift:261 | func | public | public func setRightButtons(_ buttons: [UIView]) { |
+| PooToolsSource/Base/PTNavBar.swift:238 | func | public | public func setLeftButtons(_ buttons: [UIView]) { |
+| PooToolsSource/Base/PTNavBar.swift:267 | func | public | public func setRightButtons(_ buttons: [UIView]) { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:14 | enum | public | public enum PTScreenShotActionType { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:18 | enum | public | @objc public enum VCStatusBarChangeStatusType : Int { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:25 | var | public | public var isConfigured = false // ✅ 新增 |
@@ -1042,7 +1042,7 @@ Generated at: 2026-09-20T16:54:12Z
 | PooToolsSource/BioID/PTBiologyID.swift:57 | func | public | public func startAuthentication(alertTitle: String = "生物识别验证", allowSystemFallback: Bool = true) async -> PTBiologyVerifyStatus { |
 | PooToolsSource/BioID/PTBiologyID.swift:130 | func | public | public func saveAccount(_ reason: String = "保存账号密码需要验证", account: String, password: String) async -> Bool { |
 | PooToolsSource/BioID/PTBiologyID.swift:148 | func | public | public func readPassword(for account: String, reason: String = "需要验证才能读取密码") async -> String? { |
-| PooToolsSource/BioID/PTBiologyID.swift:158 | func | public | public func deleteBiometryID(account: String? = nil) async -> PTBiologyVerifyStatus { |
+| PooToolsSource/BioID/PTBiologyID.swift:161 | func | public | public func deleteBiometryID(account: String? = nil) async -> PTBiologyVerifyStatus { |
 | PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift:15 | enum | public | public enum PTSwizzleRegistry { |
 | PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift:16 | struct | public | public struct Registration: Sendable, Equatable { |
 | PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift:17 | let | public | public let target: String |
@@ -1759,7 +1759,7 @@ Generated at: 2026-09-20T16:54:12Z
 | PooToolsSource/Colors/UIImage+PTColorEX.swift:24 | init | public | public init(background: UIColor, primary: UIColor, secondary: UIColor, detail: UIColor) { |
 | PooToolsSource/Colors/UIImage+PTColorEX.swift:32 | enum | public | public enum UIImageColorsQuality: CGFloat, Sendable { |
 | PooToolsSource/Colors/UIImage+PTColorEX.swift:149 | func | public | public func getColors(quality: UIImageColorsQuality = .high, _ completion: @escaping @MainActor @Sendable (UIImageColors?) -> Void) { |
-| PooToolsSource/Colors/UIImage+PTColorEX.swift:159 | func | public | public func getColors(quality: UIImageColorsQuality = .high) -> UIImageColors? { |
+| PooToolsSource/Colors/UIImage+PTColorEX.swift:165 | func | public | public func getColors(quality: UIImageColorsQuality = .high) -> UIImageColors? { |
 | PooToolsSource/Contact/PTContact.swift:23 | class | public | public class PTContactIndexModel: NSObject { |
 | PooToolsSource/Contact/PTContact.swift:24 | var | open | open var indexStrings:[String] = [String]() |
 | PooToolsSource/Contact/PTContact.swift:25 | var | open | open var contractModel:[PTContactModel] = [PTContactModel]() |
@@ -2586,8 +2586,8 @@ Generated at: 2026-09-20T16:54:12Z
 | PooToolsSource/HealthKit/PTHealthKit.swift:39 | func | public | public func start() { |
 | PooToolsSource/HealthKit/PTHealthKit.swift:45 | func | public | public func stop() { |
 | PooToolsSource/HealthKit/PTHealthKit.swift:53 | func | public | public func invalidate() { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:123 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:156 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:126 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:159 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:22 | class | public | public class PTPermissionHealth: PTPermission { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:26 | var | open | open var readingUsageDescriptionKey: String? { "NSHealthUpdateUsageDescription" } |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:27 | var | open | open var writingUsageDescriptionKey: String? { "NSHealthShareUsageDescription" } |
@@ -5967,12 +5967,12 @@ Generated at: 2026-09-20T16:54:12Z
 | PooToolsSource/Vision/PTVision.swift:15 | let | public | public let text: String |
 | PooToolsSource/Vision/PTVision.swift:16 | let | public | public let observations: [VNRecognizedTextObservation] |
 | PooToolsSource/Vision/PTVision.swift:18 | init | public | public init(text: String, observations: [VNRecognizedTextObservation]) { |
-| PooToolsSource/Vision/PTVision.swift:95 | func | public | public func findText(withImage image: UIImage, |
-| PooToolsSource/Vision/PTVision.swift:161 | func | public | public func findText(withImageView imageView: UIImageView, |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:51 | func | public | public func calculateHeight(for html: String) async -> CGFloat { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:108 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:125 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:130 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
+| PooToolsSource/Vision/PTVision.swift:104 | func | public | public func findText(withImage image: UIImage, |
+| PooToolsSource/Vision/PTVision.swift:170 | func | public | public func findText(withImageView imageView: UIImageView, |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:52 | func | public | public func calculateHeight(for html: String) async -> CGFloat { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:109 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:126 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:131 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:14 | enum | public | @objc public enum PTWhatsNewsPresentationOption:Int { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:26 | class | public | public class PTWhatsNews:NSObject { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:32 | class | public | @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool { |

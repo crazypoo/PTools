@@ -39,9 +39,10 @@ public final class PTHTMLHeightCalculator: NSObject {
     // Español: Finaliza de forma segura un cálculo suspendido antes de liberar la vista WebKit.
     // 中文：释放 WebKit 视图前安全结束挂起的计算。
     deinit {
+        // English: Continuations are safe to finish during teardown, but UIKit/WebKit cleanup is actor-isolated.
+        // Español: Las continuaciones pueden finalizarse durante la destrucción, pero la limpieza UIKit/WebKit requiere su actor.
+        // 中文：销毁时可以安全结束 continuation，但 UIKit/WebKit 清理必须遵守对应 actor 隔离。
         activeContinuation?.resume(returning: 0)
-        webView.stopLoading()
-        webView.navigationDelegate = nil
         activeNavigation = nil
     }
 

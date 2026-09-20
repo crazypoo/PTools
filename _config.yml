@@ -1,1 +1,22 @@
+# English: Configure the repository root as the lightweight GitHub Pages documentation site.
+# Español: Configura la raíz del repositorio como un sitio ligero de documentación de GitHub Pages.
+# 中文：将仓库根目录配置为轻量的 GitHub Pages 文档站点。
 theme: jekyll-theme-cayman
+title: PTools
+description: iOS 17+ / Swift 6+ UIKit toolkit documentation
+lang: zh-CN
+markdown: kramdown
+
+# English: Keep source code, generated artifacts, and local dependencies out of the documentation site.
+# Español: Mantén el código fuente, los artefactos generados y las dependencias locales fuera del sitio.
+# 中文：将源码、生成产物和本地依赖排除在文档站点之外。
+exclude:
+  - PooToolsSource
+  - Pods
+  - .build
+  - DerivedData
+  - Scripts
+  - report
+  - Package.swift
+  - Podfile
+  - Podfile.lock

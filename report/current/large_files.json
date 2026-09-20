@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
-  "generated_at": "2026-09-20T16:54:35Z",
+  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
+  "generated_at": "2026-09-20T18:11:49Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -356,7 +356,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "lines": 332,
+      "lines": 338,
       "classification": "ok"
     },
     {
@@ -396,12 +396,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 539,
+      "lines": 540,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/BioID/PTBiologyID.swift",
-      "lines": 170,
+      "lines": 171,
       "classification": "ok"
     },
     {
@@ -1146,7 +1146,7 @@
     },
     {
       "path": "PooToolsSource/Colors/UIImage+PTColorEX.swift",
-      "lines": 325,
+      "lines": 331,
       "classification": "ok"
     },
     {
@@ -1211,7 +1211,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "lines": 785,
+      "lines": 786,
       "classification": "ok"
     },
     {
@@ -1431,7 +1431,7 @@
     },
     {
       "path": "PooToolsSource/DebugCategory/UIWindow+PTDebugEx.swift",
-      "lines": 118,
+      "lines": 127,
       "classification": "ok"
     },
     {
@@ -1751,7 +1751,7 @@
     },
     {
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "lines": 176,
+      "lines": 179,
       "classification": "ok"
     },
     {
@@ -4021,7 +4021,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift",
-      "lines": 179,
+      "lines": 189,
       "classification": "ok"
     },
     {
@@ -4691,12 +4691,12 @@
     },
     {
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "lines": 206,
+      "lines": 215,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "lines": 155,
+      "lines": 156,
       "classification": "ok"
     },
     {

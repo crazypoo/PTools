@@ -493,12 +493,13 @@ private extension PTVideoCoverCache {
     }
 
     // English: Encode generated thumbnails away from UI work before writing the disk cache.
-    // Español: Codifica las miniaturas generadas fuera del trabajo de UI antes de escribir la caché en disco.
-    // 中文：在写入磁盘缓存前，将生成的缩略图放到 UI 工作之外进行编码。
+    // Español: Codifica las miniaturas generadas dentro del actor UI para no cruzar UIImage entre actores.
+    // 中文：在 UI actor 内编码生成的缩略图，避免 UIImage 跨 actor 传递。
     static func encodeJPEG(_ image: UIImage) async -> Data? {
-        await Task.detached(priority: .utility) {
-            image.jpegData(compressionQuality: 0.8)
-        }.value
+        // English: The input is a UIKit object; keeping this small thumbnail encode actor-bound avoids a data race.
+        // Español: La entrada es un objeto UIKit; mantener esta pequeña codificación en el actor evita una carrera.
+        // 中文：输入是 UIKit 对象；小尺寸封面在当前 actor 内编码可避免数据竞争。
+        image.jpegData(compressionQuality: 0.8)
     }
 
     static func thumbnailCacheKey(for url: URL,

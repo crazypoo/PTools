@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
-  "generated_at": "2026-09-20T16:54:13Z",
+  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
+  "generated_at": "2026-09-20T18:11:36Z",
   "shared_call_count": 1544,
   "declarations": [
     {
@@ -907,8 +907,8 @@
     },
     {
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 31,
-      "declaration": "public static let share = PTVision()",
+      "line": 36,
+      "declaration": "public static var share: PTVision {",
       "name": "share",
       "category": "C",
       "scope": "Shared mutable service",

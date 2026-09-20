@@ -1,5 +1,5 @@
 {
-  "version": "5.19.1",
+  "version": "5.19.2",
   "policy": "5.x keeps deprecated wrappers; 6.0 removes legacy spellings after migration evidence.",
   "entries": [
     {"legacy": "gobal_drop", "canonical": "drop", "kind": "api", "status": "wrapper", "remove_in": "6.0.0"},

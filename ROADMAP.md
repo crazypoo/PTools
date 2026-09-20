@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.19.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.19.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.18.2`；`5.19.1` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.19.1`；`5.19.2` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -16,6 +16,7 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - Debug 与 PTInstruments 设计写入 [`docs/architecture/DEBUG_AND_INSTRUMENTS.md`](docs/architecture/DEBUG_AND_INSTRUMENTS.md)。
 - 发布流程写入 [`docs/maintainers/RELEASE.md`](docs/maintainers/RELEASE.md)。
 - 测试方法和发布门槛写入 [`docs/maintainers/QUALITY.md`](docs/maintainers/QUALITY.md)。
+- Swift 6 并发边界、例外和后台工作分类写入 [`docs/architecture/CONCURRENCY.md`](docs/architecture/CONCURRENCY.md)。
 - 单次扫描、构建和基准结果写入 `report/`，不混入长期架构文档。
 - 新版本不再创建 `ARCHITECTURE_5_12.md`、`PERFORMANCE_BASELINE_5_12.md` 等版本化长期文档。
 
@@ -110,6 +111,18 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 修复 `PTMediaLibViewController.selectLibButton` 重新测量后被导航栏左右铺满约束覆盖的问题，恢复 `PTNavBar` 的 `.auto` 标题宽度逻辑。
 - ✅ 标题内容变化后按实际富文本与图片尺寸重新获取 bounds，向上取整并保证最小可见宽度，避免标题或下拉图标显示不全。
 - ✅ 复用既有标题视图并刷新约束，不在每次标题更新时重复移除和添加视图；保留 iOS 17+、Swift 6+ 和公开 API 兼容。
+
+## 5.19.2 PhotoPicker / Swift 6 Concurrency / Documentation
+
+- ✅ 修复 `PTMediaLibAlbumListViewController.navTitle` 未居中：伪导航栏标题使用 `.auto` 测量模式，标题单行截断并设置水平 hugging/compression resistance，保证按钮变化和长标题下仍保持视觉中心。
+- ✅ 修复 `PTHTMLHeightCalculator` 在 `deinit` 中直接触碰 WebKit MainActor 状态的警告；销毁阶段只结束挂起 continuation，WebKit 对象由 UIKit 生命周期释放。
+- ✅ 修复 `PTHealthKit` 的冗余条件转换，并移除 `PTBiometricsManager` 对 `LAContext` 的 detached 捕获。
+- ✅ 将图片颜色计算、Vision 识别和视频封面处理改为先创建 `Data`/`CGImage`/系统对象快照，再进入后台工作；业务回调继续回到 MainActor。
+- ✅ 将 Debug 窗口的 `UIWindow.lastTouch` 改为锁保护的值类型状态；`PTLanguage`、路由、动画配置等已有 actor/锁边界继续登记，不新增 `nonisolated(unsafe)`。
+- ✅ 新增 [`CONCURRENCY.md`](docs/architecture/CONCURRENCY.md) 和 `validate_concurrency_5_19.sh`，统一记录 actor isolation、non-Sendable capture、MainActor、全局状态和 detached 使用规则。
+- ✅ 将根目录 `_config.yml` 作为 GitHub Pages 文档配置使用，补充站点信息和源码排除清单；不把它误用为 iOS 构建配置。
+- ✅ 合并历史架构收口文档到当前架构、质量和并发文档，避免重复事实源；保留公开 API、iOS 17+ / Swift 6+ 和第三方依赖兼容策略。
+- [ ] 完成真实设备、真实宿主和 iOS 17/26/27 的并发、PhotoKit、Vision、WebKit 与导航视觉回归后，再创建正式 `5.19.2` tag。
 
 ## 5.19.0 Package / Dependency / Tests / Docs
 

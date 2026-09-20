@@ -554,9 +554,10 @@ public class PTLoadImageFunction: NSObject {
         if let embeddedData {
             data = embeddedData
         } else {
-            data = await Task.detached(priority: .userInitiated, operation: {
-                dataProvider()
-            }).value
+            // English: The provider belongs to Kingfisher; invoke it before the detached decode task.
+            // Español: El proveedor pertenece a Kingfisher; ejecútalo antes de la tarea detached de decodificación.
+            // 中文：该 provider 属于 Kingfisher，先在当前边界读取数据，再进入 detached 解码任务。
+            data = dataProvider()
         }
         guard let data,
               detectImageType(from: data) == .gif else {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.lock
 import UIKit
 
 extension UIWindow {
@@ -18,7 +19,15 @@ extension UIWindow {
         static var associatedReusableTouchIndicators: UInt8 = 1
     }
 
-    static var lastTouch: CGPoint?
+    // English: Protect the debug-only touch snapshot instead of exposing an unsynchronized global variable.
+    // Español: Protege la instantánea de toque de depuración en lugar de exponer una variable global sin sincronización.
+    // 中文：保护仅用于调试的触摸快照，避免暴露未同步的全局可变变量。
+    private static let lastTouchLock = OSAllocatedUnfairLock<CGPoint?>(initialState: nil)
+
+    static var lastTouch: CGPoint? {
+        get { lastTouchLock.withLock { $0 } }
+        set { lastTouchLock.withLock { $0 = newValue } }
+    }
 
     // MARK: - ReusableTouchIndicators property
     private var reusableTouchIndicators: NSMutableSet {

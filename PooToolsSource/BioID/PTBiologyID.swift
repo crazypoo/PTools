@@ -133,37 +133,38 @@ public class PTBiometricsManager: NSObject {
         context.localizedReason = reason
         let accessControl = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, .userPresence, nil)
         
-        // Task.detached 将耗时的 Keychain 加密存储放入后台并发队列
-        return await Task.detached {
-            return PTKeyChain.saveAccountInfo(
-                service: kBiometryService.nsString,
-                account: account.nsString,
-                password: password.nsString,
-                context: context,
-                accessControl: accessControl
-            )
-        }.value
+        // English: Keep LAContext and its Keychain access on MainActor; they are not Sendable system objects.
+        // Español: Mantiene LAContext y el acceso al Keychain en MainActor; son objetos del sistema no Sendable.
+        // 中文：LAContext 与 Keychain 访问保持在 MainActor，因为它们是不可跨 actor 传递的系统对象。
+        return PTKeyChain.saveAccountInfo(
+            service: kBiometryService.nsString,
+            account: account.nsString,
+            password: password.nsString,
+            context: context,
+            accessControl: accessControl
+        )
     }
 
     public func readPassword(for account: String, reason: String = "需要验证才能读取密码") async -> String? {
         let context = LAContext()
         context.localizedReason = reason
 
-        return await Task.detached {
-            return PTKeyChain.getPassword(service: kBiometryService.nsString, account: account.nsString, context: context)
-        }.value
+        // English: Do not capture LAContext in an unstructured detached task; keep its lifetime actor-bound.
+        // Español: No captura LAContext en una tarea detached no estructurada; conserva su ciclo de vida en el actor.
+        // 中文：不要在非结构化 detached 任务中捕获 LAContext，让它的生命周期保持在 actor 内。
+        return PTKeyChain.getPassword(service: kBiometryService.nsString,
+                                      account: account.nsString,
+                                      context: context)
     }
 
     // MARK: - 6. 适配基于闭包的旧方法 (withCheckedContinuation)
     public func deleteBiometryID(account: String? = nil) async -> PTBiologyVerifyStatus {
-        // 🔥 将原先基于闭包的 PTKeyChain 强行包装成 async / await 风格
+        // English: Bridge the legacy callback without creating an extra global-queue hop.
+        // Español: Puentea el callback heredado sin crear un salto adicional a una cola global.
+        // 中文：桥接旧回调时不再额外跳转到全局队列。
         return await withCheckedContinuation { continuation in
-            DispatchQueue.global().async {
-                // 假设你的 PTKeyChain 仍在使用原来的闭包回调方式
-                PTKeyChain.deleteAccountInfo(service: kBiometryService.nsString, account: (account ?? "").nsString) { _, status in
-                    // 将结果通过 continuation 回传，完美融入 async 体系
-                    continuation.resume(returning: status) // *注：需确保状态枚举类型匹配
-                }
+            PTKeyChain.deleteAccountInfo(service: kBiometryService.nsString, account: (account ?? "").nsString) { _, status in
+                continuation.resume(returning: status)
             }
         }
     }

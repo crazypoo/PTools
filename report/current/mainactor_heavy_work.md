@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 7beff0ffd16062cec5a2c5da1044b5111779d7e8
-Generated at: 2026-09-20T16:54:39Z
+Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
+Generated at: 2026-09-20T18:11:49Z
 -->
 
 # MainActor 重活盘点
@@ -24,21 +24,21 @@ Generated at: 2026-09-20T16:54:39Z
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 206 | `FileManager.default` | review-required | `return FileManager.default.fileExists(atPath: url.path) ? url : nil` |
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 211 | `FileManager.default` | review-required | `guard FileManager.default.fileExists(atPath: localURL.path) else {` |
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 216 | `FileManager.default` | review-required | `if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 500 | `jpegData\(` | explicit-background-or-actor-boundary | `image.jpegData(compressionQuality: 0.8)` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 515 | `FileManager.default` | review-required | `let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 502 | `jpegData\(` | explicit-background-or-actor-boundary | `image.jpegData(compressionQuality: 0.8)` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 516 | `FileManager.default` | review-required | `let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 150 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 217 | `loadTracks\(` | explicit-background-or-actor-boundary | `guard let track = try await asset.loadTracks(withMediaType: .video).first else {` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 272 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 287 | `generator.image` | review-required | `let result = try await generator.image(at: time)` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 298 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 96 | `Data\(contentsOf:` | dedicated-system-or-disk-boundary | `return try Data(contentsOf: url, options: .mappedIfSafe)` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 623 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 635 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 654 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 655 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 674 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 675 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 679 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 624 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 636 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 655 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 656 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 675 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 676 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 680 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
 | `PooToolsSource/NetWork/Network.swift` | 438 | `JSONDecoder` | review-required | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
 | `PooToolsSource/NetWork/Network.swift` | 694 | `JSONDecoder` | review-required | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
 | `PooToolsSource/NetWork/Network.swift` | 794 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |

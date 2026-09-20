@@ -90,7 +90,13 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         view.font = PTAppBaseConfig.share.navTitleFont
         view.textColor = PTAppBaseConfig.share.navTitleTextColor
         view.textAlignment = .center
-        view.numberOfLines = 0
+        // English: Keep the navigation title single-line so its intrinsic width is stable.
+        // Español: Mantiene el título de navegación en una sola línea para estabilizar su ancho intrínseco.
+        // 中文：导航标题使用单行，保证 intrinsic width 稳定。
+        view.numberOfLines = 1
+        view.lineBreakMode = .byTruncatingTail
+        view.setContentHuggingPriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
         return view
     }()
 
@@ -157,6 +163,10 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     func fakeNavSet() {
         fakeNav.setLeftButtons([dismissButton])
+        // English: Use the measured title mode so the title is centered in the fake bar, not stretched between buttons.
+        // Español: Usa el modo de título medido para centrarlo en la barra falsa, sin estirarlo entre los botones.
+        // 中文：使用测量标题模式，让标题在伪导航栏中心对齐，而不是在按钮之间被拉伸。
+        fakeNav.titleViewMode = .auto
         navTitle.text = PTMediaLibUIConfig.share.albumListNavName
         fakeNav.titleView = navTitle
     }

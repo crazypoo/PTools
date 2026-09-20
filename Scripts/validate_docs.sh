@@ -21,6 +21,7 @@ done
 required_documents=(
   docs/README.md
   docs/architecture/ARCHITECTURE.md
+  docs/architecture/CONCURRENCY.md
   docs/architecture/DEBUG_AND_INSTRUMENTS.md
   docs/architecture/DEPENDENCIES.md
   docs/architecture/PACKAGE_MATRIX.md

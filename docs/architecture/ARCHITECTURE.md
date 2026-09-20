@@ -174,3 +174,9 @@ Debug 与 PTInstruments 的结构、采样边界、隐私和多 Scene 规则见
 [`PACKAGE_MATRIX.md`](PACKAGE_MATRIX.md)，直接依赖和 6.0 取舍见
 [`DEPENDENCY_MATRIX.md`](DEPENDENCY_MATRIX.md)。发布版本只从根目录 `VERSION` 读取，SwiftPM
 不额外维护产品版本字段。
+
+## 17. Canonical documentation ownership
+
+并发规则、系统对象例外和后台工作分类统一维护在 [`CONCURRENCY.md`](CONCURRENCY.md)；构建、质量和
+发布流程分别维护在 `docs/maintainers/QUALITY.md` 与 `docs/maintainers/RELEASE.md`。历史版本的
+Core、P1 和 P2 收口记录已经合并到本架构文档、并发文档、依赖文档和质量文档，不再保留重复的版本化事实源。
