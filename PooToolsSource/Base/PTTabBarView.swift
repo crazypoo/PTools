@@ -49,6 +49,8 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
     private let normalImage: Any
     private let selectedImage: Any?
     private let appearance: PTTabBarAppearance
+    private var lottieLoadTask: Task<Void, Never>?
+    private var mediaGeneration = 0
 
     public init(normal: Any,
                 selected: Any? = nil,
@@ -85,37 +87,66 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
     }
     
     @MainActor private func imageSet(media:Any) {
+        mediaGeneration &+= 1
+        let generation = mediaGeneration
+        lottieLoadTask?.cancel()
+        lottieLoadTask = nil
+
         switch media {
         case let string as String:
             if string.lowercased().contains("json") {
                 if string.isURL(),let lottieURL = URL(string: string) {
-                    Task { @MainActor in
+                    // English: Guard asynchronous Lottie results with the current media generation.
+                    // Español: Protege los resultados asíncronos de Lottie con la generación multimedia actual.
+                    // 中文：使用当前媒体 generation 校验异步 Lottie 结果，避免回写旧图标。
+                    lottieLoadTask = Task { @MainActor [weak self] in
                         let lottieAnimation = await LottieAnimation.loadedFrom(url: lottieURL)
+                        guard !Task.isCancelled,
+                              let self,
+                              self.mediaGeneration == generation else { return }
+                        self.lottieLoadTask = nil
                         if let findAnimation = lottieAnimation {
                             lottieAnimationSet(findAnimation: findAnimation)
                         } else {
-                            imageView.isHidden = true
-                            lottieView.isHidden = false
-                            self.imageSet(media: self.normalImage)
+                            displayRasterImage(media: self.normalImage)
                         }
                     }
+                } else {
+                    displayRasterImage(media: media)
                 }
             } else {
                 if let findAnimation = LottieAnimation.named(string) {
                     lottieAnimationSet(findAnimation: findAnimation)
                 } else {
-                    imageView.isHidden = false
-                    lottieView.isHidden = true
-                    imageView.loadImage(contentData: string,radius: appearance.layout.tabbarRadius,topLeft: appearance.layout.tabbarTopLeft,topRight: appearance.layout.tabbarTopRight,bottomLeft: appearance.layout.tabbarBottomLeft,bottomRight: appearance.layout.tabbarBottomRight,corner: appearance.layout.tabbarCorner,capsule: appearance.layout.tabbarCapsule,borderWidth: appearance.layout.tabbarBorderWidth,borderColor: appearance.layout.tabbarBorderColor,showValueLabel: appearance.layout.tabbarShowValueLabel,valueLabelFont: appearance.layout.loadImageShowValueFont,valueLabelColor: appearance.layout.tabbarValueLabelColor)
+                    displayRasterImage(media: media)
                 }
             }
         case let animation as LottieAnimation:
             lottieAnimationSet(findAnimation: animation)
         default:
-            imageView.isHidden = false
-            lottieView.isHidden = true
-            self.imageView.loadImage(contentData: media,radius: appearance.layout.tabbarRadius,topLeft: appearance.layout.tabbarTopLeft,topRight: appearance.layout.tabbarTopRight,bottomLeft: appearance.layout.tabbarBottomLeft,bottomRight: appearance.layout.tabbarBottomRight,corner: appearance.layout.tabbarCorner,capsule: appearance.layout.tabbarCapsule,borderWidth: appearance.layout.tabbarBorderWidth,borderColor: appearance.layout.tabbarBorderColor,showValueLabel: appearance.layout.tabbarShowValueLabel,valueLabelFont: appearance.layout.loadImageShowValueFont,valueLabelColor: appearance.layout.tabbarValueLabelColor)
+            displayRasterImage(media: media)
         }
+    }
+
+    // English: Render non-Lottie media through the existing image-loading pipeline.
+    // Español: Renderiza medios que no son Lottie mediante el pipeline de imágenes existente.
+    // 中文：非 Lottie 媒体继续复用现有图片加载管线。
+    private func displayRasterImage(media: Any) {
+        imageView.isHidden = false
+        lottieView.isHidden = true
+        imageView.loadImage(contentData: media,
+                            radius: appearance.layout.tabbarRadius,
+                            topLeft: appearance.layout.tabbarTopLeft,
+                            topRight: appearance.layout.tabbarTopRight,
+                            bottomLeft: appearance.layout.tabbarBottomLeft,
+                            bottomRight: appearance.layout.tabbarBottomRight,
+                            corner: appearance.layout.tabbarCorner,
+                            capsule: appearance.layout.tabbarCapsule,
+                            borderWidth: appearance.layout.tabbarBorderWidth,
+                            borderColor: appearance.layout.tabbarBorderColor,
+                            showValueLabel: appearance.layout.tabbarShowValueLabel,
+                            valueLabelFont: appearance.layout.loadImageShowValueFont,
+                            valueLabelColor: appearance.layout.tabbarValueLabelColor)
     }
     
     private func lottieAnimationSet(findAnimation:LottieAnimation) {
@@ -143,6 +174,7 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
     }
 
     deinit {
+        lottieLoadTask?.cancel()
         NotificationCenter.default.removeObserver(self,
                                                    name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                                    object: nil)
@@ -187,6 +219,8 @@ final public class PTTabBarItemView: UIControl {
             titleLabel.textColor = isSelectedItem ? appearance.selectedColor : appearance.normalColor
             PTUIAccessibility.applyDynamicType(to: titleLabel,
                                                font: isSelectedItem ? appearance.selectedFont : appearance.normalFont)
+            accessibilityTraits = isSelectedItem ? [.button, .selected] : [.button]
+            accessibilityLabel = titleLabel.text
         }
     }
     
@@ -230,6 +264,9 @@ final public class PTTabBarItemView: UIControl {
         }
         
         addSubviews(subViews)
+
+        accessibilityTraits = [.button]
+        accessibilityLabel = title
                 
         content.view.snp.makeConstraints {
             if !title.stringIsEmpty() {
@@ -881,7 +918,9 @@ final public class PTTabBarView: UIView {
         var safeContainerWidth: CGFloat = self.bounds.width
         if safeContainerWidth <= 0 {
             // 兜底推导：当前 App 运行窗口的真实宽度
-            safeContainerWidth = self.superview?.bounds.width ?? AppWindows?.bounds.width ?? 375.0
+            safeContainerWidth = self.superview?.bounds.width
+                ?? PTSceneContext.window(for: self)?.bounds.width
+                ?? 375.0
         }
         
         var itemWidth: CGFloat = 0
@@ -1078,6 +1117,45 @@ final public class PTTabBarView: UIView {
 
 @MainActor
 public extension PTTabBarView {
+
+    // English: Re-layout existing items without rebuilding content, badges or animations.
+    // Español: Reorganiza los elementos existentes sin reconstruir contenido, badges ni animaciones.
+    // 中文：只重新布局现有项目，不重建内容、角标或动画状态。
+    func reloadData() {
+        setNeedsLayout()
+        layoutIfNeeded()
+        updateSelectionMaskFrame(to: currentIndex, animated: false)
+    }
+
+    // English: Refresh one item while preserving the rest of the TabBar hierarchy.
+    // Español: Actualiza un elemento conservando el resto de la jerarquía del TabBar.
+    // 中文：只刷新一个项目，同时保留 TabBar 其他层级和运行状态。
+    func reloadItem(at index: Int) {
+        guard items.indices.contains(index) else { return }
+        items[index].isSelectedItem = index == currentIndex
+        items[index].setNeedsLayout()
+        setNeedsLayout()
+    }
+
+    func reloadItem(at indexPath: IndexPath) {
+        reloadItem(at: indexPath.item)
+    }
+
+    // English: Invalidate geometry after safe-area, rotation or Dynamic Type changes.
+    // Español: Invalida la geometría tras cambios de área segura, rotación o Dynamic Type.
+    // 中文：安全区、旋转或 Dynamic Type 变化后使布局失效并刷新。
+    func invalidateLayout() {
+        setNeedsLayout()
+        layoutIfNeeded()
+        updateSelectionMaskFrame(to: currentIndex, animated: false)
+    }
+
+    // English: Re-apply localization-dependent layout without changing item identity.
+    // Español: Reaplica el layout dependiente de la localización sin cambiar la identidad de los elementos.
+    // 中文：不改变项目身份，只刷新本地化相关布局。
+    func refreshLocalization() {
+        invalidateLayout()
+    }
 
     /// Refresh only the localized titles of the existing TabBar items.
     ///

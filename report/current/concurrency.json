@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
-  "generated_at": "2026-09-19T18:11:39Z",
+  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
+  "generated_at": "2026-09-20T01:45:19Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 27,
@@ -50,7 +50,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1026,
+      "line": 1065,
       "text": "DispatchQueue.main.async {"
     },
     {

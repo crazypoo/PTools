@@ -58,20 +58,26 @@ public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 /// 列表数据更新失败时返回的结构化错误，避免 Diffable 在异常输入下直接触发断言。
 public enum PTCollectionViewUpdateError: Error, Equatable, LocalizedError, Sendable {
     case emptySectionIdentifier
+    case emptyRowIdentifier
     case duplicateSectionIdentifier(String)
     case duplicateRowIdentifier(String)
     case invalidSectionIndex(Int)
+    case snapshotApplyInProgress
 
     public var errorDescription: String? {
         switch self {
         case .emptySectionIdentifier:
             return "Section 标识不能为空"
+        case .emptyRowIdentifier:
+            return "Row 标识不能为空"
         case .duplicateSectionIdentifier(let identifier):
             return "Section 标识重复：\(identifier)"
         case .duplicateRowIdentifier(let identifier):
             return "Row 标识重复：\(identifier)"
         case .invalidSectionIndex(let index):
             return "Section 下标无效：\(index)"
+        case .snapshotApplyInProgress:
+            return "列表正在更新，请等待当前更新完成"
         }
     }
 }
@@ -99,6 +105,9 @@ public final class PTCollectionDataCoordinator {
             }
 
             for row in section.rows ?? [] {
+                guard !row.diffId.isEmpty else {
+                    return .emptyRowIdentifier
+                }
                 guard rowIdentifiers.insert(row.diffId).inserted else {
                     return .duplicateRowIdentifier(row.diffId)
                 }
@@ -111,6 +120,9 @@ public final class PTCollectionDataCoordinator {
                                 against snapshot: PTSnapshot) -> PTCollectionViewUpdateError? {
         var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.diffId))
         for row in rows {
+            guard !row.diffId.isEmpty else {
+                return .emptyRowIdentifier
+            }
             guard rowIdentifiers.insert(row.diffId).inserted else {
                 return .duplicateRowIdentifier(row.diffId)
             }

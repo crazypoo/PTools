@@ -49,6 +49,10 @@ open class PTBaseTabBarViewController: UITabBarController {
     private var accessoryContainerInstalled = false
     private var tabBarVisibilityGeneration = 0
     private var accessoryTransitionGeneration = 0
+    // English: Ignore stale navigation callbacks that finish after a newer transition.
+    // Español: Ignora callbacks de navegación antiguos que terminan después de una transición nueva.
+    // 中文：忽略在新转场之后才完成的旧导航回调。
+    private var tabBarTransitionGeneration = 0
     private var isSynchronizingSelection = false
     
     /// 滑动状态回调：是否已经向下滑动、当前的 Y 轴偏移量
@@ -108,6 +112,39 @@ open class PTBaseTabBarViewController: UITabBarController {
         if !tabBar.frame.equalTo(.zero) {
             tabBar.frame = .zero
         }
+    }
+
+    // English: Recalculate custom bar and accessory geometry after safe-area changes.
+    // Español: Recalcula la geometría de la barra y del accessory tras cambios del área segura.
+    // 中文：安全区变化后重新计算自定义 TabBar 和附属视图布局。
+    open override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        ptCustomBar.invalidateLayout()
+        accessoryContainerView.setNeedsLayout()
+    }
+
+    // English: Keep split-view, Stage Manager and rotation layouts synchronized with the active tab.
+    // Español: Mantiene sincronizados los layouts de split-view, Stage Manager y rotación con la pestaña activa.
+    // 中文：让分屏、台前调度和旋转布局与当前 Tab 保持同步。
+    open override func viewWillTransition(to size: CGSize,
+                                          with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.ptCustomBar.invalidateLayout()
+            self?.accessoryContainerView.setNeedsLayout()
+            self?.view.layoutIfNeeded()
+        }, completion: { [weak self] _ in
+            self?.restoreVisibilityState()
+        })
+    }
+
+    // English: Restore the custom bar from the currently visible controller without starting a new transition.
+    // Español: Restaura la barra usando el controlador visible sin iniciar una transición nueva.
+    // 中文：根据当前可见控制器恢复自定义 TabBar 状态，不启动新的转场。
+    public func restoreVisibilityState() {
+        guard let target = currentContentViewController() else { return }
+        updateTabBar(to: target, animated: false)
+        ptCustomBar.invalidateLayout()
     }
     
     // MARK: 设置UIViewController
@@ -257,9 +294,12 @@ open class PTBaseTabBarViewController: UITabBarController {
                               to viewController: UIViewController,
                               animated: Bool,
                               coordinator: UIViewControllerTransitionCoordinator?) {
+        tabBarTransitionGeneration &+= 1
+        let generation = tabBarTransitionGeneration
         
         // 👉 fallback（无动画）
         guard let coordinator else {
+            guard generation == tabBarTransitionGeneration else { return }
             updateTabBar(to: viewController, animated: animated)
             return
         }
@@ -268,8 +308,10 @@ open class PTBaseTabBarViewController: UITabBarController {
         coordinator.animate(alongsideTransition: { _ in
             // The transition coordinator owns the animation. Starting a nested
             // UIView animation here can leave the custom bar in a stale state.
+            guard generation == self.tabBarTransitionGeneration else { return }
             self.updateTabBar(to: viewController, animated: false)
         }, completion: { context in
+            guard generation == self.tabBarTransitionGeneration else { return }
             
             // ❗取消手势
             if context.isCancelled {
@@ -374,6 +416,7 @@ extension PTBaseTabBarViewController {
         isTabBarGloballyHidden = hidden
         
         if hidden {
+            accessoryContainerView.isHidden = true
             accessoryContainerView.isUserInteractionEnabled = false
         } else {
             accessoryContainerView.isHidden = false

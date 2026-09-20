@@ -68,6 +68,7 @@ ruby Scripts/report_accessibility_5_9.rb >/dev/null
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/validate_dependency_direction.sh
 bash Scripts/validate_core_boundary_5_12.sh
+bash Scripts/validate_ui_5_13_contract.sh
 bash Scripts/validate_debug_foundation_5_10.sh
 bash Scripts/validate_instruments_5_11.sh
 bash Scripts/validate_permission_source_contract.sh

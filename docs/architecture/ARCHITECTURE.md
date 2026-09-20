@@ -77,12 +77,18 @@ Network 的 Codable、Body、普通参数、上传、下载、callback、async �
 另一个导航栈的全局样式。TabBar 外观使用值快照，iOS 26+ 的系统玻璃效果只在可用系统版本启用，
 旧系统保持动态颜色和材质回退。
 
+5.13.0 起，导航栏项目在转场回调中绑定到具体的 UINavigationController 和目标控制器；TabBar
+ 的过期转场完成回调会被丢弃，并在安全区、旋转、分屏和台前调度变化后显式恢复可见性状态。
+
 ## 8. Collection / List
 
 `PTCollectionView` 是列表和集合的统一实现；`PTListViewController` 只承载一个
 `PTCollectionView`，`.Normal` 提供类表格布局，其他 `viewType` 提供 Grid、Waterfall、Tag、
 Horizontal 和 Custom。Diffable 更新使用稳定 ID，Cell 复用清理旧请求、generation、手势、
 播放器和动画。Skeleton、empty、loading、error 和 content 由统一状态入口管理。
+
+5.13.0 起，Diffable 快照提交在组件内部串行化并报告重叠更新，空 Row 身份和非法列数在进入布局
+ 引擎前被拒绝；`PTReusableTaskBag` 为高频 Cell 提供统一的异步任务取消和内容重置契约。
 
 ## 9. Media
 

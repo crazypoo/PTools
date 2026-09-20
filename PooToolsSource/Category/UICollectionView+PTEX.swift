@@ -300,8 +300,7 @@ public extension UICollectionView {
     /// 獲取Cell在Window的位置
     /// 注：去除了危险的 AppWindows! 强制解包，改用更安全的获取方式
     @objc func cellInWindow(cellFrame: CGRect) -> CGRect {
-        let keyWindow = AppWindows ?? self.window
-        guard let window = keyWindow else { return cellFrame }
+        guard let window = PTSceneContext.window(for: self) else { return cellFrame }
         return convert(cellFrame, to: window)
     }
     

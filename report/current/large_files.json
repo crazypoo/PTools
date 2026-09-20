@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
-  "generated_at": "2026-09-19T18:12:00Z",
+  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
+  "generated_at": "2026-09-20T01:45:34Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -216,7 +216,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseCellOption.swift",
-      "lines": 369,
+      "lines": 422,
       "classification": "ok"
     },
     {
@@ -251,7 +251,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "lines": 655,
+      "lines": 698,
       "classification": "ok"
     },
     {
@@ -276,7 +276,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2188,
+      "lines": 2215,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -286,7 +286,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 525,
+      "lines": 537,
       "classification": "ok"
     },
     {
@@ -361,7 +361,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "lines": 927,
+      "lines": 963,
       "classification": "ok"
     },
     {
@@ -381,7 +381,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1225,
+      "lines": 1303,
       "classification": "warning"
     },
     {
@@ -856,7 +856,7 @@
     },
     {
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "lines": 666,
+      "lines": 665,
       "classification": "ok"
     },
     {
@@ -3901,7 +3901,7 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift",
-      "lines": 308,
+      "lines": 329,
       "classification": "ok"
     },
     {

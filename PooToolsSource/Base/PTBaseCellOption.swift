@@ -27,12 +27,50 @@ public extension PTCellBindable {
     }
 }
 
+// English: Own reusable cell tasks so reuse always cancels work for the previous model.
+// Español: Agrupa las tareas reutilizables para cancelar siempre el trabajo del modelo anterior.
+// 中文：集中管理 Cell 的可复用任务，确保复用时取消旧模型的异步工作。
+@MainActor
+public final class PTReusableTaskBag {
+    private var tasks: [UUID: Task<Void, Never>] = [:]
+
+    public init() {}
+
+    @discardableResult
+    public func insert(_ task: Task<Void, Never>, replacing identifier: UUID? = nil) -> UUID {
+        if let identifier {
+            tasks[identifier]?.cancel()
+            tasks[identifier] = task
+            return identifier
+        }
+
+        let identifier = UUID()
+        tasks[identifier] = task
+        return identifier
+    }
+
+    public func cancel(_ identifier: UUID) {
+        tasks.removeValue(forKey: identifier)?.cancel()
+    }
+
+    public func cancelAll() {
+        tasks.values.forEach { $0.cancel() }
+        tasks.removeAll(keepingCapacity: true)
+    }
+
+    deinit {
+        tasks.values.forEach { $0.cancel() }
+    }
+}
+
 @objcMembers
 // English: Cell registration and UIKit state are isolated to MainActor.
 // Español: El registro de celdas y el estado de UIKit están aislados en MainActor.
 // 中文：Cell 注册和 UIKit 状态统一隔离到 MainActor。
 @MainActor
 open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable {
+
+    public let reusableTaskBag = PTReusableTaskBag()
     
     public var isStaticCell:Bool = false {
         didSet {
@@ -77,6 +115,21 @@ open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable 
     
     open class func cellSizeValue() -> NSValue {
         NSValue(cgSize: cellSize())
+    }
+
+    // English: Subclasses override these hooks to cancel and clear model-bound work during reuse.
+    // Español: Las subclases sobrescriben estos hooks para cancelar y limpiar trabajo ligado al modelo.
+    // 中文：子类可重写这些钩子，在复用时取消并清理与模型绑定的工作。
+    open func cancelAsyncWork() {
+        reusableTaskBag.cancelAll()
+    }
+
+    open func resetContent() {}
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        cancelAsyncWork()
+        resetContent()
     }
 }
 

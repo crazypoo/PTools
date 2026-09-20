@@ -128,6 +128,10 @@ public class PTCollectionView: UIView {
     // Español: Centraliza la validación del snapshot sin cambiar la fachada pública de PTCollectionView.
     // 中文：集中快照校验，同时不改变 PTCollectionView 的公开门面。
     private let dataCoordinator = PTCollectionDataCoordinator()
+    // English: Serialize Diffable snapshot applications to prevent nested update assertions.
+    // Español: Serializa las aplicaciones de snapshots Diffable para evitar aserciones anidadas.
+    // 中文：串行化 Diffable 快照提交，避免嵌套更新触发系统断言。
+    private var snapshotApplyInFlight = false
     private let scrollObserverMultiplexer = PTCollectionScrollObserverMultiplexer()
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
@@ -452,6 +456,29 @@ private extension PTCollectionView {
             return false
         }
         return true
+    }
+
+    // English: Apply one snapshot at a time and report overlapping callers instead of crashing.
+    // Español: Aplica un snapshot a la vez e informa de llamadas solapadas en lugar de bloquearse.
+    // 中文：一次只提交一个快照，遇到重叠调用时返回错误而不是触发崩溃。
+    func applySnapshot(_ snapshot: PTSnapshot,
+                       animatingDifferences: Bool,
+                       completion: (() -> Void)? = nil) {
+        guard !snapshotApplyInFlight else {
+            reportUpdateError(.snapshotApplyInProgress)
+            completion?()
+            return
+        }
+
+        snapshotApplyInFlight = true
+        diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
+            guard let self else {
+                completion?()
+                return
+            }
+            self.snapshotApplyInFlight = false
+            completion?()
+        }
     }
 
     func updateSkeletonLayout() {
@@ -905,7 +932,7 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
 
         let finalIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: destinationIndex, section: destinationSectionIndex)
         let animated = !viewConfig.refreshWithoutAnimation
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self else { return }
             self.itemMoveTo?(collectionView, sourceIndexPath, finalIndexPath)
         }
@@ -1278,7 +1305,7 @@ extension PTCollectionView {
             PTUnavailableManager.render(.content, in: self)
         }
         
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
             self.setiOS17EmptyDataView()
             finishTask?(self.collectionView)
@@ -1297,7 +1324,7 @@ extension PTCollectionView {
         snapshot.deleteAllItems()
         
         let animated = !self.viewConfig.refreshWithoutAnimation
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
             self.setiOS17EmptyDataView()
             finishTask?(self.collectionView)
@@ -1357,7 +1384,7 @@ extension PTCollectionView {
             
             // 6. 提交动画
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        self.applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self else { return }
             self.setiOS17EmptyDataView()
             completion?()
@@ -1388,7 +1415,7 @@ extension PTCollectionView {
         snapshot.appendItems(rows, toSection: sectionModel)
         
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        self.applySnapshot(snapshot, animatingDifferences: animated) {
             self.setiOS17EmptyDataView()
             completion?()
         }
@@ -1436,7 +1463,7 @@ extension PTCollectionView {
         }
 
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        self.applySnapshot(snapshot, animatingDifferences: animated) {
             self.setiOS17EmptyDataView()
             completion?()
         }
@@ -1472,7 +1499,7 @@ extension PTCollectionView {
         }
         
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        self.applySnapshot(snapshot, animatingDifferences: animated) {
             self.setiOS17EmptyDataView()
             completion?()
         }
@@ -1519,7 +1546,7 @@ extension PTCollectionView {
         }
 
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        self.applySnapshot(snapshot, animatingDifferences: animated) {
             if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                 self.collectionView.collectionViewLayout.invalidateLayout()
             }
@@ -1551,7 +1578,7 @@ extension PTCollectionView {
         snapshot.deleteSections(existingSections)
         
         let animated = !self.viewConfig.refreshWithoutAnimation
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        self.applySnapshot(snapshot, animatingDifferences: animated) {
             self.setiOS17EmptyDataView()
             completion?()
         }
@@ -1590,7 +1617,7 @@ extension PTCollectionView {
                 data: sectionModel.rows,
                 groupWidth: screenWidth,
                 itemHeight: viewConfig.itemHeight,
-                cellRowCount: viewConfig.rowCount,
+                cellRowCount: max(1, viewConfig.rowCount),
                 originalX: viewConfig.itemOriginalX,
                 topContentSpace: viewConfig.contentTopSpace,
                 bottomContentSpace: viewConfig.contentBottomSpace,
@@ -1833,7 +1860,7 @@ extension PTCollectionView {
         
         let result = PTCollectionLayoutGeometry.waterfall(data: data,
                                                           width: width,
-                                                          rowCount: config.rowCount,
+                                                          rowCount: max(1, config.rowCount),
                                                           itemOriginalX: config.itemOriginalX,
                                                           topContentSpace: config.contentTopSpace,
                                                           bottomContentSpace: config.contentBottomSpace,
@@ -2007,7 +2034,7 @@ extension PTCollectionView {
         }
 
         snapshot.reloadSections(validSections)
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        applySnapshot(snapshot, animatingDifferences: animated) {
             completion?()
         }
     }
@@ -2042,7 +2069,7 @@ extension PTCollectionView {
 
         snapshot.reloadItems(existingRows)
         let animated = !viewConfig.refreshWithoutAnimation
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        applySnapshot(snapshot, animatingDifferences: animated) {
             completion?()
         }
     }
@@ -2082,7 +2109,7 @@ extension PTCollectionView {
 
         snapshot.reloadItems(allRowsToReload)
         let animated = !viewConfig.refreshWithoutAnimation
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self else {
                 completion?()
                 return
@@ -2117,7 +2144,7 @@ extension PTCollectionView {
             snapshot.reloadItems(allExistingItems)
         }
 
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self else {
                 completion?()
                 return
@@ -2138,7 +2165,7 @@ extension PTCollectionView {
         }
 
         snapshot.reconfigureItems(allItems)
-        diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+        applySnapshot(snapshot, animatingDifferences: animated) {
             completion?()
         }
     }

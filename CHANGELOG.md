@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.13.0 — 2026-09-20
+
+- 完成 UIFoundation、Navigation、Tabbar 和 Collection 的 5.13.x 治理，统一安全区、Scene、Dynamic Type、辅助功能和减弱动态效果边界。
+- 修复多层 push/pop、交互式返回、旋转、分屏和台前调度下导航栏与自定义 Tabbar 状态被旧转场覆盖的问题。
+- 增加 Tabbar 局部刷新、本地化刷新和布局失效入口，Lottie 加载增加取消与 generation 保护。
+- 增加 CollectionView Diffable 快照串行保护、稳定身份校验和 Cell 异步任务复用清理能力。
+- 继续保持 iOS 17+ / Swift 6+ 与 5.x 公开 API 兼容。
+
+## 5.12.1 — 2026-09-20
+
+- 同步 5.12.x Core / Foundation 稳定基线，修复版本元数据和构建入口一致性问题。
+
 ## 5.12.0 — 2026-09-20
 
 - 收口 `PToolsCore` 的 Foundation-only 边界，新增 `PTLocked`、`PTAtomic`、取消/生命周期/任务存储、MainActor 调度、缓存、日志和基础错误契约。
@@ -25,9 +37,9 @@
 - 发布当前 5.11.x 正式基线，包含 Debug Foundation、PTInstruments 和长期文档结构治理。
 - 5.11.x 后续的架构收口、依赖 parity 和 6.0 迁移验证继续记录在 Unreleased 与 `report/`。
 
-## Unreleased — 5.11.x architecture closure
+## Unreleased — 5.13.x UIFoundation / Navigation / Tabbar / Collection
 
-当前 `PooTools.podspec` 为 `5.11.14`，工作树中的后续架构收口尚未作为新版本发布。
+当前 `PooTools.podspec` 为 `5.13.0`，工作树中的后续架构收口尚未作为新版本发布。
 
 - 5.10 Debug Foundation 与 5.11 PTInstruments 已进入当前代码架构，仍需真机、真实宿主和多 Scene 回归。
 - 建立长期 `docs/` 文档结构，区分用户指南、当前架构、迁移、维护流程和自动报告。

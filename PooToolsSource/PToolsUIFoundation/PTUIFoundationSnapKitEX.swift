@@ -16,6 +16,28 @@ import SnapKit
 import UIKit
 public typealias ConstraintView = UIView
 public typealias ConstraintEdgeInsets = UIEdgeInsets
+
+// English: Keep common UIKit context resolution in the UI foundation layer.
+// Español: Mantiene la resolución del contexto UIKit común en la capa UI foundation.
+// 中文：将常用 UIKit 上下文解析集中在 UIFoundation 层。
+@MainActor
+public enum PTUIFoundationContext {
+    public static func safeAreaInsets(for view: UIView) -> UIEdgeInsets {
+        view.safeAreaInsets
+    }
+
+    public static func windowScene(for view: UIView) -> UIWindowScene? {
+        view.window?.windowScene
+    }
+
+    public static func resolvedColor(_ color: UIColor, for view: UIView) -> UIColor {
+        color.resolvedColor(with: view.traitCollection)
+    }
+
+    public static func animationDuration(_ duration: TimeInterval) -> TimeInterval {
+        UIAccessibility.isReduceMotionEnabled ? 0 : max(0, duration)
+    }
+}
 #else
 import AppKit
 public typealias ConstraintView = NSView
@@ -305,4 +327,3 @@ public extension Array where Element: ConstraintView {
         return ConstraintGroup(array: self)
     }
 }
-

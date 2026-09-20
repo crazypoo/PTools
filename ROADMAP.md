@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.12.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.13.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.11.17`；`5.12.0` 为当前开发基线。
+> 当前最新正式 Git tag：`5.12.1`；`5.13.0` 为当前开发基线。
 
 ## 范围与约束
 
@@ -26,6 +26,18 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ Core 的 URL 解析、关联对象和模型值类型不再在拆分构建中重复实现。
 - ✅ 增加 Core 边界静态门禁，明确第三方适配器不得进入 `PToolsCore`。
 - [ ] UIKit、媒体和历史第三方兼容实现继续在后续 5.13–5.15 迁移，不在 5.12.0 直接删除公开入口。
+
+## 5.13.0 UIFoundation / Navigation / Tabbar / Collection
+
+- ✅ UIFoundation 增加安全区、Scene、动态颜色和减弱动态效果的统一上下文辅助能力。
+- ✅ Navigation 按具体导航控制器应用导航栏项目，交互式 push/pop 不再依赖跨栈全局控制器状态。
+- ✅ Tabbar 增加安全区、旋转、分屏和台前调度后的布局恢复，并过滤过期转场回调。
+- ✅ Tabbar 补齐 `reloadData()`、`reloadItem(at:)`、`invalidateLayout()`、`refreshLocalization()` 入口。
+- ✅ Lottie 图标增加取消和 generation 校验，避免快速切换后旧动画回写当前 Tab。
+- ✅ CollectionView 增加 Diffable 快照串行保护、空 Row 身份校验和 rowCount 安全归一化。
+- ✅ 基础 Cell 增加 `PTReusableTaskBag`、`cancelAsyncWork()` 和 `resetContent()` 复用契约。
+- ✅ 列表高频 UI 文件继续通过 `PTSceneContext` 解析窗口，兼容多 Scene、分屏和外接显示器。
+- ✅ 保持 iOS 17+、Swift 6+ 和现有公开 API 兼容；旧入口继续作为适配层保留。
 
 ## 当前 5.11.x 稳定化
 

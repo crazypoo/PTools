@@ -279,6 +279,18 @@ public final class PTNavigationBarManager:NSObject {
                                                                        viewController: viewController)
     }
 
+    // English: Update the active stack without replacing the stable controller during an interactive transition.
+    // Español: Actualiza la pila activa sin reemplazar el controlador estable durante una transición interactiva.
+    // 中文：只更新当前导航栈，不在交互式转场期间提前替换稳定的控制器。
+    private func rememberNavigationController(_ navigationController: UINavigationController) {
+        currentNav = navigationController
+        guard let scene = PTSceneContext.windowScene(for: navigationController) else { return }
+        let sceneID = scene.session.persistentIdentifier
+        let currentSceneController = navigationContextsBySceneID[sceneID]?.viewController
+        navigationContextsBySceneID[sceneID] = NavigationContextBox(navigationController: navigationController,
+                                                                       viewController: currentSceneController)
+    }
+
     // English: Expose a scene-scoped lookup for new callers while preserving existing global convenience APIs.
     // Español: Expone una búsqueda por escena para los nuevos llamadores y conserva las APIs globales existentes.
     // 中文：为新调用方提供按场景查询，同时保留现有全局便捷 API。
@@ -437,7 +449,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
         
         installIfNeeded(in: navigationController)
-        rememberCurrent(navigationController, viewController: viewController)
+        rememberNavigationController(navigationController)
         resetSystemNavBarAppearance(navigationController)
         
         // 安全准备默认返回按钮数据（来自我们上一步的优化）
@@ -472,7 +484,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             // 💡 这是 Present 出来的根视图！
             // 整个 NavController 正在被系统整体推上来（Slide Up）。
             container.apply(style: toStyle)
-            self.apply(item: item)
+            self.apply(item: item, in: navigationController, viewController: viewController)
             if let vc = viewController as? PTBaseViewController {
                 vc.setNeedsStatusBarAppearanceUpdate()
             }
@@ -500,7 +512,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                                           duration: PTUIAccessibility.animationDuration(context.transitionDuration),
                                           options: .transitionCrossDissolve,
                                           animations: {
-                            self.apply(item: item)
+                            self.apply(item: item, in: navigationController, viewController: viewController)
                         }, completion: nil)
                     }, completion: { context in
                         self.stopTransition(for: navigationController)
@@ -526,7 +538,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                                       duration: PTUIAccessibility.animationDuration(0.25),
                                       options: .transitionCrossDissolve,
                                       animations: {
-                        self.apply(item: item)
+                        self.apply(item: item, in: navigationController, viewController: viewController)
                     }, completion: { _ in
                         if let vc = viewController as? PTBaseViewController {
                             vc.setNeedsStatusBarAppearanceUpdate()
@@ -534,7 +546,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                     })
                 } else {
                     container.apply(style: toStyle)
-                    self.apply(item: item)
+                    self.apply(item: item, in: navigationController, viewController: viewController)
                     if let vc = viewController as? PTBaseViewController {
                         vc.setNeedsStatusBarAppearanceUpdate()
                     }
@@ -581,7 +593,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         // 中文：优先使用 UIKit 的 didShow 回调，避免被转场瞬间的导航栈快照覆盖。
         rememberCurrent(navigationController, viewController: viewController)
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
-        apply(item: item)
+        apply(item: item, in: navigationController, viewController: viewController)
         StatusBarManager.shared.update(with: style)
         viewController.setNeedsStatusBarAppearanceUpdate()
         navigationController.setNeedsStatusBarAppearanceUpdate()
@@ -607,11 +619,21 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     }
 
     private func apply(item: PTNavBarItem) {
-        setLeftView(item.leftView,spacing: item.leftItemSpacing)
-        setRightViews(item.rightViews,spacing: item.rightItemSpacing)
+        guard let nav = currentNav, let vc = currentVC else { return }
+        apply(item: item, in: nav, viewController: vc)
+    }
+
+    // English: Apply every item to the navigation controller that owns the transition callback.
+    // Español: Aplica cada elemento al controlador de navegación dueño del callback de transición.
+    // 中文：将整套导航栏项目应用到触发当前转场回调的导航控制器。
+    private func apply(item: PTNavBarItem,
+                       in navigationController: UINavigationController,
+                       viewController: UIViewController) {
+        setLeftView(item.leftView, spacing: item.leftItemSpacing, in: navigationController)
+        setRightViews(item.rightViews, spacing: item.rightItemSpacing, in: navigationController)
         if let findTitleView = item.titleView {
             titleLabel = false
-            setTitleView(findTitleView,fillSpace: item.titleViewFillSpace)
+            setTitleView(findTitleView, fillSpace: item.titleViewFillSpace, in: navigationController)
         } else if !item.navTitle.stringIsEmpty() {
             titleLabel = true
             let titleLabel = UILabel()
@@ -623,18 +645,17 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             titleLabel.text = item.navTitle
             titleLabel.textAlignment = .center
             titleLabel.clipsToBounds = true
-            setTitleView(titleLabel,fillSpace: false)
+            setTitleView(titleLabel, fillSpace: false, in: navigationController)
         } else {
             titleLabel = false
-            setTitleView(nil)
+            setTitleView(nil, fillSpace: false, in: navigationController)
         }
         
         // ===== LargeTitle 逻辑（🔥重点）=====
-        guard let nav = currentNav,
-              let container = containerMap.object(forKey: nav),
-              let vc = currentVC as? PTNavigationConfigurable else { return }
+        guard let container = containerMap.object(forKey: navigationController),
+              let configurable = viewController as? PTNavigationConfigurable else { return }
 
-        let isLarge = vc.prefersLargeTitle()
+        let isLarge = configurable.prefersLargeTitle()
         let hasTitle = !item.navTitle.stringIsEmpty()
 
         if isLarge && hasTitle {
@@ -687,7 +708,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             return
         }
         apply(style: item.barColorStyle, in: nav)
-        apply(item: item)
+        apply(item: item, in: nav, viewController: realVC)
         
         // 🔥 关键：同步更新状态栏单例并通知系统刷新
         StatusBarManager.shared.update(with: item.barColorStyle)
@@ -797,9 +818,16 @@ extension PTNavigationBarManager {
         return offsetHeight
     }
     
-    public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
-        guard let nav = currentNav,
-              let container = containerMap.object(forKey: nav) else { return }
+    public func setLeftView(_ views: [UIView], spacing: CGFloat = 8) {
+        guard let nav = currentNav else { return }
+        setLeftView(views, spacing: spacing, in: nav)
+    }
+
+    // English: Keep the explicit navigation controller overload private to avoid cross-stack updates.
+    // Español: Mantiene privada la sobrecarga con navegación explícita para evitar actualizar otra pila.
+    // 中文：显式传入导航控制器的重载保持私有，避免误更新其他导航栈。
+    private func setLeftView(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
+        guard let container = containerMap.object(forKey: nav) else { return }
         container.leftContainer.spacing = spacing
         container.leftContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.leftContainer.isHidden = true
@@ -837,8 +865,12 @@ extension PTNavigationBarManager {
     }
     
     public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
-        guard let nav = currentNav,
-              let container = containerMap.object(forKey: nav) else { return }
+        guard let nav = currentNav else { return }
+        setRightViews(views, spacing: spacing, in: nav)
+    }
+
+    private func setRightViews(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
+        guard let container = containerMap.object(forKey: nav) else { return }
         container.rightContainer.spacing = spacing
         container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.rightContainer.isHidden = true
@@ -876,8 +908,12 @@ extension PTNavigationBarManager {
     }
     
     public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {
-        guard let nav = currentNav,
-              let container = containerMap.object(forKey: nav) else { return }
+        guard let nav = currentNav else { return }
+        setTitleView(view, fillSpace: fillSpace, in: nav)
+    }
+
+    private func setTitleView(_ view: UIView?, fillSpace: Bool, in nav: UINavigationController) {
+        guard let container = containerMap.object(forKey: nav) else { return }
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
         container.titleContainer.isHidden = true
         guard let view else { return }
