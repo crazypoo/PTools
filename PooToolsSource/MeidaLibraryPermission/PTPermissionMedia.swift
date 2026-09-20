@@ -35,8 +35,9 @@ public class PTPermissionMedia: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         MPMediaLibrary.requestAuthorization { status in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
 }

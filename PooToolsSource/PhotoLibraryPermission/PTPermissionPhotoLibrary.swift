@@ -40,14 +40,29 @@ public class PTPermissionPhotoLibrary: PTPermission {
         @unknown default: return .denied
         }
     }
+
+    // English: Preserve limited Photos access in the normalized state while keeping the legacy status mapping.
+    // Español: Conserva el acceso limitado a Fotos en el estado normalizado y mantiene el mapeo heredado.
+    // 中文：在统一状态中保留相册 limited 权限，同时维持旧版 status 映射。
+    public override var authorizationState: PTPermissionAuthorizationState {
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
+        case .authorized: return .authorized
+        case .limited: return .limited
+        case .denied: return .denied
+        case .restricted: return .restricted
+        case .notDetermined: return .notDetermined
+        @unknown default: return .unavailable
+        }
+    }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         // English: Use PhotoKit's async authorization API so Photos never invokes a MainActor callback on its own queue.
         // Español: Usa la API async de autorización de PhotoKit para que Photos nunca invoque un callback de MainActor en su propia cola.
         // 中文：使用 PhotoKit 的异步授权 API，避免 Photos 队列直接调用 MainActor 回调闭包。
         Task { @MainActor in
             _ = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
-            completion()
+            finish()
         }
     }
 }

@@ -108,15 +108,25 @@ public enum PTPermissionError: Error, Equatable, Sendable, CustomStringConvertib
 public struct PTPermissionResult: Equatable, Sendable {
     public let kind: PTPermissionKind
     public let status: PTPermissionStatus
+    public let authorizationState: PTPermissionAuthorizationState
     public let error: PTPermissionError?
     public let didRequest: Bool
 
     public init(kind: PTPermissionKind,
                 status: PTPermissionStatus,
+                authorizationState: PTPermissionAuthorizationState? = nil,
                 error: PTPermissionError? = nil,
                 didRequest: Bool = true) {
         self.kind = kind
         self.status = status
+        self.authorizationState = authorizationState ?? {
+            switch status {
+            case .authorized: return .authorized
+            case .denied: return .denied
+            case .notDetermined: return .notDetermined
+            case .notSupported: return .unavailable
+            }
+        }()
         self.error = error
         self.didRequest = didRequest
     }
@@ -129,8 +139,10 @@ public struct PTPermissionResult: Equatable, Sendable {
 public protocol PTPermissionRequesting: AnyObject {
     var kind: PTPermissionKind { get }
     var status: PTPermissionStatus { get }
+    var authorizationState: PTPermissionAuthorizationState { get }
     func request(completion: @escaping PTActionTask)
     func requestStatus() async -> PTPermissionStatus
+    func requestAuthorizationState() async -> PTPermissionAuthorizationState
     func request() async -> PTPermissionResult
 }
 
@@ -169,6 +181,18 @@ open class PTPermission: PTPermissionRequesting {
     open var notDetermined: Bool { status == .notDetermined }
     open var debugName: String { kind.name }
 
+    // English: Expose one normalized state while keeping the legacy status API source-compatible.
+    // Español: Expone un estado normalizado y conserva la API de estado heredada compatible con el código existente.
+    // 中文：提供统一状态，同时保持旧版 status API 的源码兼容性。
+    open var authorizationState: PTPermissionAuthorizationState {
+        switch status {
+        case .authorized: return .authorized
+        case .denied: return .denied
+        case .notDetermined: return .notDetermined
+        case .notSupported: return .unavailable
+        }
+    }
+
     open var kind: Kind { .custom(String(describing: type(of: self))) }
     open var status: Status { .notSupported }
     open var settingsURL: URL? { PTPermissionSettings.applicationURL }
@@ -194,8 +218,23 @@ open class PTPermission: PTPermissionRequesting {
 
     public nonisolated static func completeRequest(_ completion: @escaping @MainActor @Sendable () -> Void) {
         Task { @MainActor in
-            guard !Task.isCancelled else { return }
             completion()
+        }
+    }
+
+    // English: Gate compatibility callbacks before crossing to MainActor so duplicate system callbacks complete only once.
+    // Español: Filtra los callbacks compatibles antes de cruzar a MainActor para que callbacks duplicados solo completen una vez.
+    // 中文：在进入 MainActor 前先给兼容回调加闸门，确保系统重复回调只完成一次。
+    public nonisolated static func makeCompletionOnce(_ completion: @escaping PTActionTask) -> PTActionTask {
+        let gate = OSAllocatedUnfairLock(initialState: false)
+        return {
+            let shouldComplete = gate.withLock { completed in
+                guard !completed else { return false }
+                completed = true
+                return true
+            }
+            guard shouldComplete else { return }
+            Self.completeRequest(completion)
         }
     }
 
@@ -225,11 +264,22 @@ open class PTPermission: PTPermissionRequesting {
         }
     }
 
+    // English: Provide the new normalized async entry without changing the legacy status return type.
+    // Español: Proporciona la nueva entrada async normalizada sin cambiar el tipo de retorno de estado heredado.
+    // 中文：新增统一状态的异步入口，不改变旧版 status 返回类型。
+    public func requestAuthorizationState() async -> PTPermissionAuthorizationState {
+        _ = await requestStatus()
+        return authorizationState
+    }
+
     @discardableResult
     public func request() async -> PTPermissionResult {
         let status = await requestStatus()
         let error: PTPermissionError? = status == .notSupported ? .notSupported : nil
-        return PTPermissionResult(kind: kind, status: status, error: error)
+        return PTPermissionResult(kind: kind,
+                                  status: status,
+                                  authorizationState: authorizationState,
+                                  error: error)
     }
 
     @available(iOSApplicationExtension, unavailable)

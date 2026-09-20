@@ -83,6 +83,8 @@ git diff --check
 - Media：4K 图片、GIF、视频帧、冷/热缓存、导出和内存警告。
 - Media 5.15：`PTImageDownsampler` 目标像素、Memory/Disk 变体键、100+ 媒体快速浏览、视频 Range
   续传、`.part` 清理、编辑导出取消、Live Photo/播放器 observer 释放和低磁盘空间。
+- Permission 5.16：统一授权状态、重复请求 exactly-once、Photos limited、Notification provisional/critical、
+  Location accuracy、IAP/NFC/Motion/HealthKit/MetricKit/GPS 生命周期停止和 delegate/observer 清理。
 - Debug：Core only、Debug hidden、单 Scene recording、双 Scene recording。
 - PTInstruments：启动耗时、CPU、内存、FPS、hitch、主线程卡顿、日志吞吐和五分钟长会话。
 

@@ -13,19 +13,45 @@ import MetricKit
 public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {
     
     public static let shared = MetricsManager()
+    private var isRegistered = false
+    private var isInvalidated = false
     
     // 私有化 init，保证单例唯一性
     private override init() {
         super.init()
-        MXMetricManager.shared.add(self)
+        start()
     }
     
     deinit {
+        if isRegistered {
+            MXMetricManager.shared.remove(self)
+        }
+    }
+
+    // Lifecycle methods prevent duplicate MetricKit subscriptions.
+    // Estos métodos de ciclo de vida evitan suscripciones duplicadas a MetricKit.
+    // 生命周期方法用于避免 MetricKit 重复订阅。
+    public func start() {
+        guard !isInvalidated, !isRegistered else { return }
+        MXMetricManager.shared.add(self)
+        isRegistered = true
+    }
+
+    public func stop() {
+        guard isRegistered else { return }
         MXMetricManager.shared.remove(self)
+        isRegistered = false
+    }
+
+    public func invalidate() {
+        guard !isInvalidated else { return }
+        isInvalidated = true
+        stop()
     }
 
     // MARK: - MetricKit 代理方法
     public func didReceive(_ payloads: [MXMetricPayload]) {
+        guard !isInvalidated else { return }
         // 1. 同步提纯：在跨越并发边界前，将非 Sendable 的 Payload 提取并转换为天生 Sendable 的 Data
         var safeDataArray: [Data] = []
         
@@ -47,6 +73,7 @@ public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @uncheck
     }
 
     public func didReceive(_ payloads: [MXDiagnosticPayload]) {
+        guard !isInvalidated else { return }
         // 同理，处理诊断数据
         var safeDataArray: [Data] = []
         

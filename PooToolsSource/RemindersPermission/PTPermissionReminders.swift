@@ -38,11 +38,12 @@ public class PTPermissionReminders: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         
         let eventStore = EKEventStore()
         
         eventStore.requestFullAccessToReminders { (accessGranted: Bool, error: Error?) in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
 }

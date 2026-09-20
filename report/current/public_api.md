@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
-Generated at: 2026-09-20T06:27:29Z
+Source revision: c873550f2d347ba97088f840f8d4655ac652afcd
+Generated at: 2026-09-20T08:52:20Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1057,6 +1057,8 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift:128 | init | public | public init(_ type: AnyClass, |
 | PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift:22 | class | public | public class PTPermissionBluetooth: PTPermission { |
 | PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift:25 | var | open | open var usageDescriptionKey: String? { "NSBluetoothAlwaysUsageDescription" } |
+| PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift:50 | var | public | public var bluetoothState: PTBluetoothPermissionState { |
+| PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift:70 | func | public | public func invalidate() { |
 | PooToolsSource/Blur/PSecurityStrategy.swift:11 | let | public | public let effectTag = 19999 |
 | PooToolsSource/Blur/PSecurityStrategy.swift:14 | class | public | public class PSecurityStrategy: NSObject { |
 | PooToolsSource/Blur/PTFrostedGlassView.swift:13 | class | public | public class PTFrostedGlassView: UIView { |
@@ -2423,6 +2425,8 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/DevMask/SpringMotionView-iOS.swift:29 | func | public | public func move(to point: CGPoint) { |
 | PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift:22 | class | public | public class PTPermissionFaceID: PTPermission { |
 | PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift:25 | var | open | open var usageDescriptionKey: String? { "NSFaceIDUsageDescription" } |
+| PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift:52 | var | public | public var faceIDState: PTFaceIDPermissionState { |
+| PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift:88 | func | public | public func requestWithPasscodeFallback(completion: @escaping PTActionTask) { |
 | PooToolsSource/FloatPanel/PTBaseViewController+FloatPanel.swift:22 | func | open | open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool { |
 | PooToolsSource/FloatPanel/PTSheetContentViewController.swift:14 | class | public | public class PTSheetContentViewController: PTBaseViewController { |
 | PooToolsSource/FloatPanel/PTSheetContentViewController.swift:27 | var | public | public var contentBackgroundColor: UIColor? { |
@@ -2546,9 +2550,12 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/Guide/PTGuidePageHUD.swift:422 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
 | PooToolsSource/HealthKit/PTHealthKit.swift:13 | typealias | public | public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void |
 | PooToolsSource/HealthKit/PTHealthKit.swift:16 | class | public | public class PTHealthKit: NSObject { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:26 | var | public | public var loadBlock:StepBlock? |
-| PooToolsSource/HealthKit/PTHealthKit.swift:88 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:121 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:29 | var | public | public var loadBlock:StepBlock? |
+| PooToolsSource/HealthKit/PTHealthKit.swift:39 | func | public | public func start() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:45 | func | public | public func stop() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:53 | func | public | public func invalidate() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:123 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:156 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:22 | class | public | public class PTPermissionHealth: PTPermission { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:26 | var | open | open var readingUsageDescriptionKey: String? { "NSHealthUpdateUsageDescription" } |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:27 | var | open | open var writingUsageDescriptionKey: String? { "NSHealthShareUsageDescription" } |
@@ -2610,19 +2617,22 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/IAP/PTIAPManager.swift:14 | typealias | public | public typealias PurchaseCompletionBlock = (SKPaymentTransaction?) -> Void |
 | PooToolsSource/IAP/PTIAPManager.swift:15 | typealias | public | public typealias IAPErrorBlock = (Error) -> Void |
 | PooToolsSource/IAP/PTIAPManager.swift:18 | class | public | public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver { |
-| PooToolsSource/IAP/PTIAPManager.swift:73 | func | public | public func hasPurchased(_ productID: String) -> Bool { |
-| PooToolsSource/IAP/PTIAPManager.swift:87 | func | public | public func getProducts(forIds productIds: [String], completion: @escaping ProductsCompletionBlock) { |
-| PooToolsSource/IAP/PTIAPManager.swift:120 | func | public | public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) { |
-| PooToolsSource/IAP/PTIAPManager.swift:132 | func | public | public func restorePurchases() { |
-| PooToolsSource/IAP/PTIAPManager.swift:136 | func | public | public func restorePurchases(completion: PTActionTask?, error: IAPErrorBlock?) { |
-| PooToolsSource/IAP/PTIAPManager.swift:142 | func | public | public func purchase(product: SKProduct, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) { |
-| PooToolsSource/IAP/PTIAPManager.swift:153 | func | public | public func purchase(productId: String, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) { |
-| PooToolsSource/IAP/PTIAPManager.swift:163 | func | public | @MainActor public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) { |
-| PooToolsSource/IAP/PTIAPManager.swift:208 | func | public | public func canPurchase() -> Bool { |
-| PooToolsSource/IAP/PTIAPManager.swift:214 | func | public | public func addPurchasesChangedCallback(_ callback: @escaping PTActionTask, withContext context: AnyObject) { |
-| PooToolsSource/IAP/PTIAPManager.swift:218 | func | public | public func removePurchasesChangedCallback(withContext context: AnyObject) { |
-| PooToolsSource/IAP/PTIAPManager.swift:222 | func | public | @MainActor public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) { |
-| PooToolsSource/IAP/PTIAPManager.swift:228 | func | public | public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) { |
+| PooToolsSource/IAP/PTIAPManager.swift:55 | func | public | public func start() { |
+| PooToolsSource/IAP/PTIAPManager.swift:62 | func | public | public func stop() { |
+| PooToolsSource/IAP/PTIAPManager.swift:74 | func | public | public func invalidate() { |
+| PooToolsSource/IAP/PTIAPManager.swift:100 | func | public | public func hasPurchased(_ productID: String) -> Bool { |
+| PooToolsSource/IAP/PTIAPManager.swift:114 | func | public | public func getProducts(forIds productIds: [String], completion: @escaping ProductsCompletionBlock) { |
+| PooToolsSource/IAP/PTIAPManager.swift:147 | func | public | public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) { |
+| PooToolsSource/IAP/PTIAPManager.swift:159 | func | public | public func restorePurchases() { |
+| PooToolsSource/IAP/PTIAPManager.swift:163 | func | public | public func restorePurchases(completion: PTActionTask?, error: IAPErrorBlock?) { |
+| PooToolsSource/IAP/PTIAPManager.swift:169 | func | public | public func purchase(product: SKProduct, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) { |
+| PooToolsSource/IAP/PTIAPManager.swift:180 | func | public | public func purchase(productId: String, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) { |
+| PooToolsSource/IAP/PTIAPManager.swift:190 | func | public | @MainActor public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) { |
+| PooToolsSource/IAP/PTIAPManager.swift:235 | func | public | public func canPurchase() -> Bool { |
+| PooToolsSource/IAP/PTIAPManager.swift:241 | func | public | public func addPurchasesChangedCallback(_ callback: @escaping PTActionTask, withContext context: AnyObject) { |
+| PooToolsSource/IAP/PTIAPManager.swift:245 | func | public | public func removePurchasesChangedCallback(withContext context: AnyObject) { |
+| PooToolsSource/IAP/PTIAPManager.swift:249 | func | public | @MainActor public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) { |
+| PooToolsSource/IAP/PTIAPManager.swift:255 | func | public | public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) { |
 | PooToolsSource/ImageEditor/PTAdjustSliderView.swift:19 | struct | public | public struct PTAdjustStatus { |
 | PooToolsSource/ImageEditor/PTAdjustSliderView.swift:20 | var | public | public var brightness: Float = 1 |
 | PooToolsSource/ImageEditor/PTAdjustSliderView.swift:21 | var | public | public var contrast: Float = 0 |
@@ -3489,13 +3499,19 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/Location/PTGetGPSData.swift:17 | var | open | open var selectCurrentBlock:PTActionTask? |
 | PooToolsSource/Location/PTGetGPSData.swift:18 | var | open | open var selectNewBlock:PTActionTask? |
 | PooToolsSource/Location/PTGetGPSData.swift:19 | var | open | open var showChangeAlert:Bool = false |
-| PooToolsSource/Location/PTGetGPSData.swift:33 | func | public | public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) { |
-| PooToolsSource/Location/PTGetGPSData.swift:51 | func | public | @MainActor public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) { |
-| PooToolsSource/Location/PTGetGPSData.swift:60 | func | public | public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { |
-| PooToolsSource/Location/PTGetGPSData.swift:106 | func | public | @MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) { |
-| PooToolsSource/LocationPermission/PTPermissionLocation.swift:22 | class | public | public class PTPermissionLocation: PTPermission { |
-| PooToolsSource/LocationPermission/PTPermissionLocation.swift:33 | var | open | open var usageDescriptionKey: String? { |
-| PooToolsSource/LocationPermission/PTPermissionLocation.swift:77 | var | public | public var isPrecise: Bool { |
+| PooToolsSource/Location/PTGetGPSData.swift:37 | func | public | public func start() { |
+| PooToolsSource/Location/PTGetGPSData.swift:50 | func | public | public func stop() { |
+| PooToolsSource/Location/PTGetGPSData.swift:55 | func | public | public func invalidate() { |
+| PooToolsSource/Location/PTGetGPSData.swift:64 | func | public | public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) { |
+| PooToolsSource/Location/PTGetGPSData.swift:82 | func | public | @MainActor public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) { |
+| PooToolsSource/Location/PTGetGPSData.swift:91 | func | public | public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { |
+| PooToolsSource/Location/PTGetGPSData.swift:137 | func | public | @MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:25 | enum | public | public enum PTLocationAccuracyState: String, Sendable { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:31 | class | public | public class PTPermissionLocation: PTPermission { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:43 | var | open | open var usageDescriptionKey: String? { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:114 | var | public | public var isPrecise: Bool { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:126 | var | public | public var accuracyState: PTLocationAccuracyState { |
+| PooToolsSource/LocationPermission/PTPermissionLocation.swift:139 | func | public | public func requestTemporaryFullAccuracy(purposeKey: String, completion: @escaping PTActionTask) { |
 | PooToolsSource/LocationPermission/PTPermissionLocationAccuracy.swift:14 | func | public | public func setAccuracy(_ value: PTPermissionLocationAccuracy) { |
 | PooToolsSource/LocationPermission/PTPermissionLocationAccuracy.swift:19 | enum | public | public enum PTPermissionLocationAccuracy { |
 | PooToolsSource/Log/Logger+PTEX.swift:15 | enum | public | public enum LoggerEXType: String, CaseIterable,Sendable { |
@@ -3533,9 +3549,12 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/Log/PTNSLog.swift:445 | struct | public | public struct PTMemsWrapper<Base> { |
 | PooToolsSource/Log/PTNSLog.swift:447 | init | public | public init(_ base: Base) { |
 | PooToolsSource/Log/PTNSLog.swift:452 | protocol | public | public protocol PTMemsCompatible {} |
-| PooToolsSource/MXMetricKitManager/MetricsManager.swift:28 | func | public | public func didReceive(_ payloads: [MXMetricPayload]) { |
-| PooToolsSource/MXMetricKitManager/MetricsManager.swift:49 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
-| PooToolsSource/MXMetricKitManager/MetricsManager.swift:86 | func | public | public func uploadPendingMetrics() { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:34 | func | public | public func start() { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:40 | func | public | public func stop() { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:46 | func | public | public func invalidate() { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:53 | func | public | public func didReceive(_ payloads: [MXMetricPayload]) { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:75 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
+| PooToolsSource/MXMetricKitManager/MetricsManager.swift:113 | func | public | public func uploadPendingMetrics() { |
 | PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:332 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
 | PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:658 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
 | PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:663 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
@@ -3828,8 +3847,11 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/Motion/PTMotion.swift:127 | func | public | public func calibrateZeroPoint() { |
 | PooToolsSource/Motion/PTMotion.swift:135 | func | public | public func resetLeanAngles() { |
 | PooToolsSource/Motion/PTMotion.swift:143 | func | public | @MainActor public func startMotion(from startDate: Date = Date()) { |
-| PooToolsSource/Motion/PTMotion.swift:163 | func | public | public func stopMotion() { |
-| PooToolsSource/Motion/PTMotion.swift:203 | func | public | public func headphoneMotionManagerDidDisconnect(_ manager: CMHeadphoneMotionManager) { |
+| PooToolsSource/Motion/PTMotion.swift:164 | func | public | @MainActor public func stopMotion() { |
+| PooToolsSource/Motion/PTMotion.swift:178 | func | public | @MainActor public func start() { |
+| PooToolsSource/Motion/PTMotion.swift:182 | func | public | @MainActor public func stop() { |
+| PooToolsSource/Motion/PTMotion.swift:186 | func | public | @MainActor public func invalidate() { |
+| PooToolsSource/Motion/PTMotion.swift:222 | func | public | public func headphoneMotionManagerDidDisconnect(_ manager: CMHeadphoneMotionManager) { |
 | PooToolsSource/MotionPermission/PTPermissionMotion.swift:22 | class | public | public class PTPermissionMotion: PTPermission { |
 | PooToolsSource/MotionPermission/PTPermissionMotion.swift:25 | var | open | open var usageDescriptionKey: String? { "NSMotionUsageDescription" } |
 | PooToolsSource/NFC/PTNFCToolKit.swift:50 | class | public | public class PTNFCToolKit: NSObject { |
@@ -3853,9 +3875,11 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/NFC/PTNFCToolKit.swift:70 | var | public | public var writingSuccessMsg = "寫入成功" |
 | PooToolsSource/NFC/PTNFCToolKit.swift:71 | var | public | public var lockErrorMsg = "無法鎖定: " |
 | PooToolsSource/NFC/PTNFCToolKit.swift:72 | var | public | public var onlyReadMsg = "標籤已鎖定為唯讀" |
-| PooToolsSource/NFC/PTNFCToolKit.swift:86 | func | public | public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void, |
-| PooToolsSource/NFC/PTNFCToolKit.swift:102 | func | public | public func startWriting(message: NFCNDEFMessage, |
-| PooToolsSource/NFC/PTNFCToolKit.swift:121 | func | public | public func sendAPDU(command: NFCISO7816APDU, |
+| PooToolsSource/NFC/PTNFCToolKit.swift:91 | func | public | public func invalidate() { |
+| PooToolsSource/NFC/PTNFCToolKit.swift:96 | func | public | public func stop() { |
+| PooToolsSource/NFC/PTNFCToolKit.swift:100 | func | public | public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void, |
+| PooToolsSource/NFC/PTNFCToolKit.swift:117 | func | public | public func startWriting(message: NFCNDEFMessage, |
+| PooToolsSource/NFC/PTNFCToolKit.swift:137 | func | public | public func sendAPDU(command: NFCISO7816APDU, |
 | PooToolsSource/NetWork/Network+Download.swift:46 | func | public | public func get(_ url: String) -> DownloadTask? { tasks[url] } |
 | PooToolsSource/NetWork/Network+Download.swift:172 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) { |
 | PooToolsSource/NetWork/Network+Download.swift:194 | func | public | @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL { |
@@ -4035,7 +4059,10 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:166 | func | public | public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) { |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:180 | func | public | public func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) { |
 | PooToolsSource/NotificationPermission/PTPermissionNotification.swift:22 | class | public | public class PTPermissionNotification: PTPermission { |
-| PooToolsSource/NotificationPermission/PTPermissionNotification.swift:26 | func | public | @MainActor public func authorizationStatus() async throws -> PTPermission.Status { |
+| PooToolsSource/NotificationPermission/PTPermissionNotification.swift:29 | func | public | @MainActor public func authorizationStatus() async throws -> PTPermission.Status { |
+| PooToolsSource/NotificationPermission/PTPermissionNotification.swift:49 | func | public | public func refreshAuthorizationState() async -> PTPermissionAuthorizationState { |
+| PooToolsSource/NotificationPermission/PTPermissionNotification.swift:68 | func | public | public func requestAuthorization() async -> PTPermissionAuthorizationState { |
+| PooToolsSource/NotificationPermission/PTPermissionNotification.swift:91 | var | public | public var supportsProvisionalAuthorization: Bool { true } |
 | PooToolsSource/OSSKit/OSSSpeech.swift:29 | enum | public | public enum OSSSpeechKitAuthorizationStatus: Int, Sendable { |
 | PooToolsSource/OSSKit/OSSSpeech.swift:35 | var | public | @MainActor public var message: String { |
 | PooToolsSource/OSSKit/OSSSpeech.swift:46 | enum | public | public enum OSSSpeechKitErrorType: Int, Sendable { |
@@ -4193,6 +4220,10 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:181 | protocol | public | public protocol PTThumbnailProviding: Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:190 | protocol | public | public protocol PTMediaCaching: Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:199 | protocol | public | public protocol PTMediaCancellationToken: Sendable { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift:17 | enum | public | public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift:27 | var | public | public var isGranted: Bool { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift:40 | enum | public | public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift:53 | enum | public | public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable { |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:20 | typealias | public | public typealias PTActionTask = @Sendable () -> Void |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:22 | enum | public | public enum PTPermissionStatus: Int, CustomStringConvertible, Equatable, Sendable { |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:28 | var | public | public var description: String { |
@@ -4205,32 +4236,35 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:108 | struct | public | public struct PTPermissionResult: Equatable, Sendable { |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:109 | let | public | public let kind: PTPermissionKind |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:110 | let | public | public let status: PTPermissionStatus |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:111 | let | public | public let error: PTPermissionError? |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:112 | let | public | public let didRequest: Bool |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:114 | init | public | public init(kind: PTPermissionKind, |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:129 | protocol | public | public protocol PTPermissionRequesting: AnyObject { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:140 | enum | public | public enum PTPermissionSettings { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:148 | enum | public | public enum PTPermissionSettingsRouter { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:161 | class | open | open class PTPermission: PTPermissionRequesting { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:162 | typealias | public | public typealias Status = PTPermissionStatus |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:163 | typealias | public | public typealias Kind = PTPermissionKind |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:164 | typealias | public | public typealias CalendarAccess = PTPermissionCalendarAccess |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:165 | typealias | public | public typealias LocationAccess = PTPermissionLocationAccess |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:167 | var | open | open var authorized: Bool { status == .authorized } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:168 | var | open | open var denied: Bool { status == .denied } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:169 | var | open | open var notDetermined: Bool { status == .notDetermined } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:170 | var | open | open var debugName: String { kind.name } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:172 | var | open | open var kind: Kind { .custom(String(describing: type(of: self))) } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:173 | var | open | open var status: Status { .notSupported } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:174 | var | open | open var settingsURL: URL? { PTPermissionSettings.applicationURL } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:175 | var | open | open var canBePresentWithCustomInterface: Bool { true } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:184 | init | public | public init() {} |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:189 | func | open | open func request(completion: @escaping PTActionTask) { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:193 | func | public | public func currentStatus() -> Status { status } |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:202 | func | public | public func requestStatus() async -> Status { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:229 | func | public | public func request() async -> PTPermissionResult { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:236 | func | open | open func openSettingPage() { |
-| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:241 | func | open | open func openSettings() { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:111 | let | public | public let authorizationState: PTPermissionAuthorizationState |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:112 | let | public | public let error: PTPermissionError? |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:113 | let | public | public let didRequest: Bool |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:115 | init | public | public init(kind: PTPermissionKind, |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:139 | protocol | public | public protocol PTPermissionRequesting: AnyObject { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:152 | enum | public | public enum PTPermissionSettings { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:160 | enum | public | public enum PTPermissionSettingsRouter { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:173 | class | open | open class PTPermission: PTPermissionRequesting { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:174 | typealias | public | public typealias Status = PTPermissionStatus |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:175 | typealias | public | public typealias Kind = PTPermissionKind |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:176 | typealias | public | public typealias CalendarAccess = PTPermissionCalendarAccess |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:177 | typealias | public | public typealias LocationAccess = PTPermissionLocationAccess |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:179 | var | open | open var authorized: Bool { status == .authorized } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:180 | var | open | open var denied: Bool { status == .denied } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:181 | var | open | open var notDetermined: Bool { status == .notDetermined } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:182 | var | open | open var debugName: String { kind.name } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:187 | var | open | open var authorizationState: PTPermissionAuthorizationState { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:196 | var | open | open var kind: Kind { .custom(String(describing: type(of: self))) } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:197 | var | open | open var status: Status { .notSupported } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:198 | var | open | open var settingsURL: URL? { PTPermissionSettings.applicationURL } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:199 | var | open | open var canBePresentWithCustomInterface: Bool { true } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:208 | init | public | public init() {} |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:213 | func | open | open func request(completion: @escaping PTActionTask) { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:217 | func | public | public func currentStatus() -> Status { status } |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:241 | func | public | public func requestStatus() async -> Status { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:270 | func | public | public func requestAuthorizationState() async -> PTPermissionAuthorizationState { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:276 | func | public | public func request() async -> PTPermissionResult { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:286 | func | open | open func openSettingPage() { |
+| PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:291 | func | open | open func openSettings() { |
 | PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift:15 | enum | public | public enum PTPermissionUIState: Equatable, Sendable { |
 | PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift:21 | struct | public | public struct PTPermissionUIItem: Equatable, Identifiable, Sendable { |
 | PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift:22 | let | public | public let id: String |
@@ -4309,28 +4343,34 @@ Generated at: 2026-09-20T06:27:29Z
 | PooToolsSource/PageControl/PTSnakePageControl.swift:11 | typealias | public | public typealias SnakePageControlBlock = (_ sender: PTSnakePageControl) -> Void |
 | PooToolsSource/PageControl/PTSnakePageControl.swift:15 | class | open | open class PTSnakePageControl: PTBasePageControl { |
 | PooToolsSource/PermissionCore/PTPermission.swift:15 | typealias | public | public typealias PTPermission = PToolsPermissionCore.PTPermission |
-| PooToolsSource/PermissionCore/PTPermission.swift:31 | class | open | open class PTPermission { |
-| PooToolsSource/PermissionCore/PTPermission.swift:33 | var | open | open var authorized: Bool { |
-| PooToolsSource/PermissionCore/PTPermission.swift:37 | var | open | open var denied: Bool { |
-| PooToolsSource/PermissionCore/PTPermission.swift:41 | var | open | open var notDetermined: Bool { |
-| PooToolsSource/PermissionCore/PTPermission.swift:45 | var | open | open var debugName: String { |
-| PooToolsSource/PermissionCore/PTPermission.swift:49 | var | open | @MainActor open var localisedName: String { |
-| PooToolsSource/PermissionCore/PTPermission.swift:59 | func | open | open func openSettingPage() { |
-| PooToolsSource/PermissionCore/PTPermission.swift:69 | func | open | open func openSettings() { |
-| PooToolsSource/PermissionCore/PTPermission.swift:76 | func | public | public func currentStatus() -> Status { |
-| PooToolsSource/PermissionCore/PTPermission.swift:82 | var | open | open var kind: PTPermission.Kind { |
-| PooToolsSource/PermissionCore/PTPermission.swift:86 | var | open | open var status: PTPermission.Status { |
-| PooToolsSource/PermissionCore/PTPermission.swift:90 | func | open | open func request(completion: @escaping PTActionTask) { |
-| PooToolsSource/PermissionCore/PTPermission.swift:225 | func | public | public func requestStatus() async -> Status { |
-| PooToolsSource/PermissionCore/PTPermission.swift:249 | func | public | public func request() async { |
-| PooToolsSource/PermissionCore/PTPermission.swift:253 | var | open | open var canBePresentWithCustomInterface: Bool { |
-| PooToolsSource/PermissionCore/PTPermission.swift:259 | init | public | public init() {} |
-| PooToolsSource/PermissionCore/PTPermission.swift:263 | enum | public | @objc public enum Status: Int, CustomStringConvertible, Sendable { |
-| PooToolsSource/PermissionCore/PTPermission.swift:270 | var | public | public var description: String { |
-| PooToolsSource/PermissionCore/PTPermission.swift:280 | enum | public | public enum Kind: Sendable { |
-| PooToolsSource/PermissionCore/PTPermission.swift:299 | var | public | public var name: String { |
-| PooToolsSource/PermissionCore/PTPermission.swift:341 | enum | public | public enum CalendarAccess: Sendable { |
-| PooToolsSource/PermissionCore/PTPermission.swift:347 | enum | public | public enum LocationAccess: Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:33 | enum | public | public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:43 | var | public | public var isGranted: Bool { |
+| PooToolsSource/PermissionCore/PTPermission.swift:53 | enum | public | public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:63 | enum | public | public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:73 | class | open | open class PTPermission { |
+| PooToolsSource/PermissionCore/PTPermission.swift:75 | var | open | open var authorized: Bool { |
+| PooToolsSource/PermissionCore/PTPermission.swift:79 | var | open | open var denied: Bool { |
+| PooToolsSource/PermissionCore/PTPermission.swift:83 | var | open | open var notDetermined: Bool { |
+| PooToolsSource/PermissionCore/PTPermission.swift:90 | var | open | open var authorizationState: PTPermissionAuthorizationState { |
+| PooToolsSource/PermissionCore/PTPermission.swift:99 | var | open | open var debugName: String { |
+| PooToolsSource/PermissionCore/PTPermission.swift:103 | var | open | @MainActor open var localisedName: String { |
+| PooToolsSource/PermissionCore/PTPermission.swift:113 | func | open | open func openSettingPage() { |
+| PooToolsSource/PermissionCore/PTPermission.swift:123 | func | open | open func openSettings() { |
+| PooToolsSource/PermissionCore/PTPermission.swift:130 | func | public | public func currentStatus() -> Status { |
+| PooToolsSource/PermissionCore/PTPermission.swift:136 | var | open | open var kind: PTPermission.Kind { |
+| PooToolsSource/PermissionCore/PTPermission.swift:140 | var | open | open var status: PTPermission.Status { |
+| PooToolsSource/PermissionCore/PTPermission.swift:144 | func | open | open func request(completion: @escaping PTActionTask) { |
+| PooToolsSource/PermissionCore/PTPermission.swift:295 | func | public | public func requestStatus() async -> Status { |
+| PooToolsSource/PermissionCore/PTPermission.swift:319 | func | public | public func request() async { |
+| PooToolsSource/PermissionCore/PTPermission.swift:326 | func | public | public func requestAuthorizationState() async -> PTPermissionAuthorizationState { |
+| PooToolsSource/PermissionCore/PTPermission.swift:331 | var | open | open var canBePresentWithCustomInterface: Bool { |
+| PooToolsSource/PermissionCore/PTPermission.swift:337 | init | public | public init() {} |
+| PooToolsSource/PermissionCore/PTPermission.swift:341 | enum | public | @objc public enum Status: Int, CustomStringConvertible, Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:348 | var | public | public var description: String { |
+| PooToolsSource/PermissionCore/PTPermission.swift:358 | enum | public | public enum Kind: Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:377 | var | public | public var name: String { |
+| PooToolsSource/PermissionCore/PTPermission.swift:419 | enum | public | public enum CalendarAccess: Sendable { |
+| PooToolsSource/PermissionCore/PTPermission.swift:425 | enum | public | public enum LocationAccess: Sendable { |
 | PooToolsSource/PermissionCore/PTPermissionHeader.swift:19 | class | open | open class func cellHeight()->CGFloat { |
 | PooToolsSource/PermissionCore/PTPermissionModel.swift:13 | class | public | public class PTPermissionModel: NSObject { |
 | PooToolsSource/PermissionCore/PTPermissionModel.swift:17 | var | public | public var name: String = "" |

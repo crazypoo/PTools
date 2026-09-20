@@ -82,7 +82,9 @@ SocketRocket、DataEncrypt、KeyChain 和 SecuritySuite 入口在 5.x 保留为�
 ## 8. Permissions
 
 权限请求应使用统一状态和 exactly-once completion，并回到 `MainActor`。denied、restricted、
-limited、cancelled 和系统错误都必须有终态；不要让调用方等待一个不会再次到来的 delegate 回调。
+limited、provisional、ephemeral、cancelled 和系统错误都必须有终态；不要让调用方等待一个不会再次
+到来的 delegate 回调。5.16.0 起系统服务在页面退出时调用 `stop()` 或 `invalidate()`，尤其是 IAP、
+NFC、Motion、HealthKit、MetricKit 和 GPS；旧 callback 入口仍保留，但内部统一经过异步状态桥接。
 
 ## 9. Debug / PTInstruments
 

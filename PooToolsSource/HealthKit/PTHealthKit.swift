@@ -22,17 +22,46 @@ public class PTHealthKit: NSObject {
         let store = HKHealthStore()
         return store
     }()
+    private var statisticsQuery: HKStatisticsCollectionQuery?
+    private var isStarted = false
+    private var isInvalidated = false
 
     public var loadBlock:StepBlock?
     
     public override init() {
         super.init()
+        start()
+    }
+
+    // Lifecycle methods own the long-lived HealthKit query.
+    // Estos métodos de ciclo de vida controlan la consulta persistente de HealthKit.
+    // 生命周期方法负责管理长期运行的 HealthKit 查询。
+    public func start() {
+        guard !isInvalidated, !isStarted else { return }
+        isStarted = true
         kitSetting()
+    }
+
+    public func stop() {
+        if let statisticsQuery {
+            healthStore.stop(statisticsQuery)
+            self.statisticsQuery = nil
+        }
+        isStarted = false
+    }
+
+    public func invalidate() {
+        guard !isInvalidated else { return }
+        isInvalidated = true
+        stop()
+        loadBlock = nil
     }
     
     func dataTypesToRead()->Set<HKObjectType> {
-
-        [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!]
+        guard let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else {
+            return []
+        }
+        return [stepType]
     }
 
     func kitSetting() {
@@ -53,14 +82,20 @@ public class PTHealthKit: NSObject {
     }
     
     func stepAll() {
+        guard let quantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) as? HKQuantityType else {
+            return
+        }
         let calendar = NSCalendar.current
         var interval = DateComponents()
         interval.day = 1
         var anchorComponents = calendar.dateComponents([.day,.month,.year], from: Date())
         anchorComponents.hour = 0
-        let anchorDate = calendar.date(from: anchorComponents)
-        let quantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)
-        let query = HKStatisticsCollectionQuery(quantityType: quantityType!, quantitySamplePredicate: nil,options: .cumulativeSum, anchorDate: anchorDate!, intervalComponents: interval)
+        guard let anchorDate = calendar.date(from: anchorComponents) else { return }
+        if let statisticsQuery {
+            healthStore.stop(statisticsQuery)
+        }
+        let query = HKStatisticsCollectionQuery(quantityType: quantityType, quantitySamplePredicate: nil,options: .cumulativeSum, anchorDate: anchorDate, intervalComponents: interval)
+        statisticsQuery = query
         query.initialResultsHandler = { querys, results, error in
             if error != nil {
                 PTNSLogConsole("*** An error occurred while calculating the statistics: \(error!.localizedDescription) ***",levelType: .error,loggerType: .health)
@@ -72,9 +107,9 @@ public class PTHealthKit: NSObject {
             results?.enumerateStatistics(from: todayDate, to: endDate, with: { result, stop in
                 Task { @MainActor in
                     let quantity = result.sumQuantity()
-                    if quantity != nil {
-                        let value = quantity?.doubleValue(for: .count())
-                        self.stepCounts += value!
+                    if let quantity {
+                        let value = quantity.doubleValue(for: .count())
+                        self.stepCounts += value
                     }
                     self.isLoad = true
                     self.loadBlock?(self.isLoad,self.stepCounts)

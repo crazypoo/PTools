@@ -25,7 +25,11 @@ require_text() {
     fi
 }
 
-require_text PooTools.podspec "s.version[[:space:]]*=[[:space:]]*'5\\.15\\.0'" "podspec version is 5.15.0"
+# English: Validate the media contract against the current development version instead of freezing an old release number.
+# Español: Valida el contrato multimedia contra la versión de desarrollo actual, sin congelar un número antiguo.
+# 中文：媒体契约校验当前开发版本，不再绑定已经完成的旧版本号。
+current_version="$(sed -nE "s/^[[:space:]]*s\\.version[[:space:]]*=.*'([^']+)'.*/\\1/p" PooTools.podspec | head -n 1)"
+[[ -n "$current_version" ]] || fail "podspec version is missing"
 require_text PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift "public struct PTMediaAsset" "typed media asset contract"
 require_text PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift "public enum PTMediaType" "typed media type contract"
 require_text PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift "public struct PTMediaMetadata" "typed media metadata contract"

@@ -22,12 +22,43 @@ public class PTGetGPSData: NSObject {
     var lat:Double = 0
     var lon:Double = 0
     var isShow:NSInteger = 0
+    private var isInvalidated = false
     
     public override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = 1000
+    }
+
+    // English: Start one location session and keep its delegate on MainActor.
+    // Español: Inicia una sesión de ubicación y mantiene su delegado en MainActor.
+    // 中文：启动一次定位会话，并让代理始终受 MainActor 管理。
+    public func start() {
+        guard !isInvalidated else { return }
+        locationManager.delegate = self
+        switch locationManager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        default:
+            errorBlock?()
+        }
+    }
+
+    public func stop() {
+        locationManager.stopUpdatingLocation()
+        locationManager.delegate = nil
+    }
+
+    public func invalidate() {
+        guard !isInvalidated else { return }
+        isInvalidated = true
+        stop()
+        errorBlock = nil
+        selectCurrentBlock = nil
+        selectNewBlock = nil
     }
     
     public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) {
@@ -105,12 +136,8 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
     
     @MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
-            Task { @MainActor in
-                // 在主线程上更新UI或执行其他操作
-                self.locationManager.requestWhenInUseAuthorization()
-                self.locationManager.requestAlwaysAuthorization()
-            }
-        } else {
+            locationManager.startUpdatingLocation()
+        } else if status != .notDetermined {
             errorBlock?()
         }
     }

@@ -36,8 +36,9 @@ public class PTPermissionTracking: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         ATTrackingManager.requestTrackingAuthorization { _ in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
 }

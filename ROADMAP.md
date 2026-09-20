@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.15.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.16.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.13.0`；`5.15.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.15.0`；`5.16.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -62,6 +62,16 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ ImagePicker 继续承担单媒体系统选择，PhotoPicker 继续承担自定义 PhotoKit 多媒体选择；两者保持清晰共存和兼容入口。
 - ✅ 更新 Media、Picker、Editor 的迁移、模块和依赖文档；Xcode Simulator Debug/Release 构建作为本版本必要门禁。
 - [ ] 在真实设备和独立宿主完成 4K 图片、100+ 媒体快速浏览、Live Photo、iCloud、编辑取消、后台切换和低磁盘空间回归。
+
+## 5.16.0 Permission / System Services
+
+- ✅ Permission Core 增加统一的 `PTPermissionAuthorizationState`，保留旧 `PTPermissionStatus` 入口，并将 callback 兼容层统一收敛到 exactly-once 完成闸门。
+- ✅ Location、Bluetooth、Photos、Notification 和 Face ID 补齐 restricted、limited、provisional、ephemeral、硬件状态、精度和 passcode fallback 等值类型状态。
+- ✅ PhotoKit、Notification、Location 和联系人等系统回调明确回到 `MainActor`；重复点击、系统回调缺失或重复时不会让兼容 completion 永久悬挂或重复执行。
+- ✅ IAP、NFC、Motion、HealthKit、MetricKit 和 GPS 增加幂等 `start()` / `stop()` / `invalidate()` 生命周期入口，释放 delegate、observer、query、session 和 pending callback。
+- ✅ 修复 HealthKit 统计查询未停止、IAP transaction observer 重复注册、NFC 旧 session 残留、定位授权成功后重复请求和 Photos limited 状态丢失问题。
+- ✅ 增加 5.16 Permission / System Services 质量门禁，并保持 iOS 17+、Swift 6+、CocoaPods/SwiftPM/Xcode 入口和既有公开 API 兼容。
+- [ ] 在真实设备和独立宿主完成权限弹窗后台切换、Scene disconnect、Location accuracy、Photos limited、通知 provisional/critical、IAP、NFC、HealthKit 和 MetricKit 回归。
 
 ## 当前 5.11.x 稳定化
 

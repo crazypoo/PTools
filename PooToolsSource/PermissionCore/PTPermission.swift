@@ -27,6 +27,48 @@ import os.lock
 import HealthKit
 #endif
 
+// English: Keep the normalized state types in the legacy merged target, where the standalone core source is intentionally excluded by CocoaPods.
+// Español: Mantén los tipos de estado normalizados en el target heredado combinado, donde CocoaPods excluye intencionadamente el código del núcleo independiente.
+// 中文：在旧版聚合 target 中定义统一状态类型，因为 CocoaPods 会有意排除独立 Core 源码。
+public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable {
+    case notDetermined
+    case authorized
+    case denied
+    case restricted
+    case limited
+    case unavailable
+    case provisional
+    case ephemeral
+
+    public var isGranted: Bool {
+        switch self {
+        case .authorized, .limited, .provisional, .ephemeral:
+            return true
+        case .notDetermined, .denied, .restricted, .unavailable:
+            return false
+        }
+    }
+}
+
+public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable {
+    case notDetermined
+    case authorized
+    case denied
+    case poweredOff
+    case unsupported
+    case resetting
+    case unknown
+}
+
+public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {
+    case available
+    case notEnrolled
+    case lockedOut
+    case passcodeFallback
+    case unavailable
+    case unknown
+}
+
 @MainActor
 open class PTPermission {
     
@@ -40,6 +82,18 @@ open class PTPermission {
     
     open var notDetermined: Bool {
         status == .notDetermined
+    }
+
+    // English: Expose one normalized state while keeping the legacy four-value status API.
+    // Español: Expone un estado normalizado y conserva la API heredada de cuatro valores.
+    // 中文：提供统一权限状态，同时保留旧版四值 status API。
+    open var authorizationState: PTPermissionAuthorizationState {
+        switch status {
+        case .authorized: return .authorized
+        case .denied: return .denied
+        case .notDetermined: return .notDetermined
+        case .notSupported: return .unavailable
+        }
     }
     
     open var debugName: String {
@@ -97,6 +151,22 @@ open class PTPermission {
     public nonisolated static func completeRequest(_ completion: @escaping PTActionTask) {
         Task { @MainActor in
             completion()
+        }
+    }
+
+    // English: Gate compatibility callbacks before the MainActor hop to guarantee exactly-once completion.
+    // Español: Filtra los callbacks compatibles antes del salto a MainActor para garantizar una finalización única.
+    // 中文：在切换到 MainActor 前给兼容回调加闸门，保证只完成一次。
+    public nonisolated static func makeCompletionOnce(_ completion: @escaping PTActionTask) -> PTActionTask {
+        let gate = OSAllocatedUnfairLock(initialState: false)
+        return {
+            let shouldComplete = gate.withLock { completed in
+                guard !completed else { return false }
+                completed = true
+                return true
+            }
+            guard shouldComplete else { return }
+            Self.completeRequest(completion)
         }
     }
 
@@ -248,6 +318,14 @@ open class PTPermission {
     /// 中文：保留旧 async API，并统一转发到类型化状态结果。
     public func request() async {
         _ = await requestStatus()
+    }
+
+    // English: Add a typed async state entry while preserving the historical async Void API.
+    // Español: Añade una entrada async de estado tipado y conserva la API async Void histórica.
+    // 中文：新增类型化状态异步入口，同时保留旧的 async Void API。
+    public func requestAuthorizationState() async -> PTPermissionAuthorizationState {
+        _ = await requestStatus()
+        return authorizationState
     }
     
     open var canBePresentWithCustomInterface: Bool {

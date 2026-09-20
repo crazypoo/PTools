@@ -35,20 +35,24 @@ class PTPermissionLocationAlwaysHandler: NSObject, @preconcurrency CLLocationMan
     
     // MARK: - Process
     
-    private var completionHandler: PTActionTask?
+    // English: Keep repeated callers attached to the same system authorization flow.
+    // Español: Mantén los llamadores repetidos vinculados al mismo flujo de autorización del sistema.
+    // 中文：让重复调用方复用同一次系统授权流程。
+    private var completionHandlers: [PTActionTask] = []
 
     // English: Finish once and detach the delegate before forwarding the result to the permission bridge.
     // Español: Finaliza una sola vez y separa el delegado antes de reenviar el resultado al puente de permisos.
     // 中文：在通过权限桥接转发结果前只完成一次，并先解除代理关系。
     private func finishRequest() {
-        guard let completionHandler else { return }
-        self.completionHandler = nil
+        guard !completionHandlers.isEmpty else { return }
+        let completionHandlers = self.completionHandlers
+        self.completionHandlers.removeAll(keepingCapacity: false)
         locationManager.delegate = nil
-        completionHandler()
+        completionHandlers.forEach { $0() }
     }
     
     @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
-        self.completionHandler = completionHandler
+        completionHandlers.append(completionHandler)
         
         let status = locationManager.authorizationStatus
 

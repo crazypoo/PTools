@@ -36,8 +36,9 @@ public class PTPermissionHealth: PTPermission {
     }
     
     public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         HKHealthStore().requestAuthorization(toShare: writingTypes, read: readingTypes) { _, _ in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
     
@@ -67,6 +68,6 @@ public class PTPermissionHealth: PTPermission {
         // English: Finish immediately so an erased health permission cannot trap or suspend an async caller.
         // Español: Finaliza inmediatamente para que un permiso Health borrado no bloquee ni provoque un trap al llamador async.
         // 中文：立即完成请求，避免类型擦除后的 Health 权限触发崩溃或让异步调用永久等待。
-        PTPermission.completeRequest(completion)
+        PTPermission.makeCompletionOnce(completion)()
     }
 }

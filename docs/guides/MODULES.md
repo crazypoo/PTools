@@ -62,6 +62,11 @@ https://github.com/crazypoo/PTools.git
 `PTTrackingPermission`、`PTRemindersPermission`、`PTSiriPermission` 和 `PTMediaPermission`。
 公共状态和结果来自 Permission Core；UI 页面属于可选 Permission UI/兼容层。
 
+5.16.0 起新代码优先读取 `authorizationState`，不要把旧 `Bool` 或四值 `PTPermissionStatus` 当作完整
+权限语义。系统服务退出页面时调用对应的 `stop()` 或 `invalidate()`：IAP、NFC、Motion、HealthKit、
+MetricKit 和 GPS 会释放各自的观察者、会话、查询和代理；Notification、Photos 和 Location 的 callback
+兼容入口仍保证只完成一次。
+
 ## UI / Data / Device
 
 常用 UI products 包括 `PooToolsCustomerLabel`、`PooToolsProgressBar`、`PooToolsLoading`、

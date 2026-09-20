@@ -73,7 +73,9 @@ public class PTNFCToolKit: NSObject {
 
     private var readerSession: NFCTagReaderSession?
     private var onReadSuccess: (([NFCNDEFPayload]) -> Void)?
-    // 注意：如果你的 PTActionTask 不是 @Sendable，Swift 6 可能会提醒。建议定义为 typealias PTActionTask = @Sendable () -> Void
+    // English: The shared completion type is Sendable so NFC callbacks can safely cross the legacy delegate boundary.
+    // Español: El tipo de completion compartido es Sendable para cruzar de forma segura el límite del delegado NFC heredado.
+    // 中文：共享 completion 类型遵循 Sendable，确保 NFC 回调可以安全跨越旧版代理边界。
     private var onWriteSuccess: PTActionTask?
     private var onError: ((Error) -> Void)?
     private var apduCommand: NFCISO7816APDU?
@@ -83,8 +85,21 @@ public class PTNFCToolKit: NSObject {
 
     // MARK: - Public API
 
+    // Invalidate the active session before starting another one.
+    // Invalida la sesión activa antes de iniciar otra.
+    // 开始新的会话前先使当前会话失效。
+    public func invalidate() {
+        readerSession?.invalidate()
+        clear()
+    }
+
+    public func stop() {
+        invalidate()
+    }
+
     public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void,
                              onError: @escaping (Error) -> Void) {
+        invalidate()
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 0, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return
@@ -103,6 +118,7 @@ public class PTNFCToolKit: NSObject {
                              lockAfterWrite: Bool = false,
                              onSuccess: @escaping PTActionTask,
                              onError: @escaping (Error) -> Void) {
+        invalidate()
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 1, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return
@@ -121,6 +137,7 @@ public class PTNFCToolKit: NSObject {
     public func sendAPDU(command: NFCISO7816APDU,
                          onSuccess: @escaping (Data) -> Void,
                          onError: @escaping (Error) -> Void) {
+        invalidate()
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 2, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return

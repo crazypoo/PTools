@@ -35,8 +35,9 @@ public class PTPermissionSiri: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         INPreferences.requestSiriAuthorization { _ in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
 }

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
-  "generated_at": "2026-09-20T06:27:30Z",
-  "shared_call_count": 1522,
+  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
+  "generated_at": "2026-09-20T08:52:20Z",
+  "shared_call_count": 1527,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -106,7 +106,7 @@
     },
     {
       "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift",
-      "line": 22,
+      "line": 25,
       "declaration": "@MainActor static let shared: PTPermissionBluetoothHandler = .init()",
       "name": "shared",
       "category": "C",
@@ -592,7 +592,7 @@
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift",
-      "line": 71,
+      "line": 75,
       "declaration": "static var shared: PTPermissionLocationAlwaysHandler?",
       "name": "shared",
       "category": "C",
@@ -601,7 +601,7 @@
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift",
-      "line": 79,
+      "line": 83,
       "declaration": "@MainActor static var shared: PTPermissionLocationWhenInUseHandler?",
       "name": "shared",
       "category": "C",

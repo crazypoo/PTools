@@ -29,6 +29,8 @@ public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @Main
     
     private var restoreCompletionBlock: PTActionTask?
     private var restoreErrorBlock: IAPErrorBlock?
+    private var isRegisteredWithPaymentQueue = false
+    private var isInvalidated = false
     
     override init() {
         if let purchasedItems = NSArray(contentsOf: PTIAPManager.purchasesURL()) as? [String] {
@@ -39,15 +41,40 @@ public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @Main
         self.products = [:]
         
         super.init()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-        Task { @MainActor in
-            SKPaymentQueue.default().add(self)
-        }
+
+        start()
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    // Lifecycle methods keep StoreKit observation idempotent.
+    // Estos métodos mantienen idempotente la observación de StoreKit.
+    // 生命周期方法保证 StoreKit 观察者注册具备幂等性。
+    public func start() {
+        guard !isInvalidated, !isRegisteredWithPaymentQueue else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        SKPaymentQueue.default().add(self)
+        isRegisteredWithPaymentQueue = true
+    }
+
+    public func stop() {
+        guard isRegisteredWithPaymentQueue else { return }
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
+        SKPaymentQueue.default().remove(self)
+        productRequests.forEach { $0.0.cancel() }
+        productRequests.removeAll()
+        payments.removeAll()
+        restoreCompletionBlock = nil
+        restoreErrorBlock = nil
+        isRegisteredWithPaymentQueue = false
+    }
+
+    public func invalidate() {
+        guard !isInvalidated else { return }
+        isInvalidated = true
+        stop()
     }
     
     @objc private func willResignActive(_ notification: Notification) {
@@ -231,4 +258,3 @@ public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @Main
         restoreErrorBlock = nil
     }
 }
-

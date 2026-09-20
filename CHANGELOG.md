@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.16.0 — 2026-09-20
+
+- 完成 Permission Core 状态统一：新增 `PTPermissionAuthorizationState`，保留旧状态 API，并统一 callback exactly-once 完成语义。
+- 修复 Location、Bluetooth、Photos、Notification 和 Face ID 的细分状态丢失，补充定位精度、临时全精度、通知 critical alert 和密码回退入口。
+- 修复 PhotoKit 授权回调边界，通知授权改为异步刷新；权限重复请求、系统回调重复或缺失时不会重复执行 completion。
+- 为 IAP、NFC、Motion、HealthKit、MetricKit 和 GPS 增加可幂等停止/失效的生命周期入口，清理 observer、delegate、query、session 和待处理回调。
+- 继续支持 iOS 17+ / Swift 6+、CocoaPods、SwiftPM 和 Xcode 入口；5.16.0 尚未创建正式 Git tag。
+
 ## 5.15.0 — 2026-09-20
 
 - 完成 Media 全家桶第一轮收口：MediaCore 增加 `PTMediaAsset`、`PTMediaType`、`PTMediaMetadata`、`PTMediaResource` 和 `PTMediaSource` 值类型契约。
@@ -55,7 +63,7 @@
 
 ## Unreleased — 5.16.x
 
-当前 `PooTools.podspec` 为 `5.15.0`，5.16.x 后续架构收口尚未作为新版本发布。
+当前 `PooTools.podspec` 为 `5.16.0`，5.16.x 的真实设备和独立宿主回归仍属于发布前工作。
 
 - 5.10 Debug Foundation 与 5.11 PTInstruments 已进入当前代码架构，仍需真机、真实宿主和多 Scene 回归。
 - 建立长期 `docs/` 文档结构，区分用户指南、当前架构、迁移、维护流程和自动报告。
@@ -114,8 +122,8 @@
 5.6.0  5.6.1  5.6.2  5.6.3  5.6.4  5.6.5  5.6.6  5.6.7  5.6.8  5.6.9  5.6.10
 5.7.0  5.7.1  5.7.2  5.7.3  5.7.4  5.7.5  5.7.6  5.7.7  5.7.8  5.7.9
 5.8.9  5.9.0  5.9.2  5.9.3  5.9.4  5.9.5  5.9.6  5.9.7  5.9.9
-5.11.11  5.11.12  5.11.13  5.11.14  5.11.16  5.11.17  5.12.1  5.13.0
+5.11.11  5.11.12  5.11.13  5.11.14  5.11.16  5.11.17  5.12.1  5.13.0  5.14.0  5.15.0
 ```
 
 `5.9.1`、`5.9.8`、所有 `5.10.x`、`5.11.0`、`5.11.1` 和 `5.11.15` 当前没有对应 Git tag，
-因此不作为已发布版本列出；`5.15.0` 当前仍是开发基线。
+因此不作为已发布版本列出；`5.16.0` 当前仍是开发基线。

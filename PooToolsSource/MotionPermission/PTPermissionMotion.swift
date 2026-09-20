@@ -35,11 +35,12 @@ public class PTPermissionMotion: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         let manager = CMMotionActivityManager()
         let today = Date()
         
         manager.queryActivityStarting(from: today, to: today, to: OperationQueue.main, withHandler: { (activities: [CMMotionActivity]?, error: Error?) -> () in
-            PTPermission.completeRequest(completion)
+            finish()
             manager.stopActivityUpdates()
         })
     }

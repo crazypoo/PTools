@@ -35,12 +35,13 @@ public class PTPermissionSpeech: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         SFSpeechRecognizer.requestAuthorization { status in
 #if POOTOOLS_SPLIT_PERMISSION_CORE
-            PTPermission.completeRequest(completion)
+            finish()
 #else
             PTGCDManager.shared.runOnMain {
-                completion()
+                finish()
             }
 #endif
         }

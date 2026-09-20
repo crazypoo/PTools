@@ -62,7 +62,9 @@ Permission Core。请求完成必须 exactly once，并回到 `MainActor`；rest
 未决定和系统错误不能让 async 调用永久等待。
 
 Photo Library、Camera、Location、Contacts、NFC、Motion、Notification、Health 等系统对象
-不跨模块暴露可变共享状态；需要跨边界时使用结果快照或窄范围包装器。
+不跨模块暴露可变共享状态；需要跨边界时使用结果快照或窄范围包装器。5.16.0 起，IAP、NFC、Motion、
+HealthKit、MetricKit 和 GPS 管理器提供幂等的 `start()`、`stop()`、`invalidate()` 生命周期；退出页面或
+失效时必须释放系统 delegate、observer、query、session 和待处理回调。
 
 ## 6. Network Boundary
 

@@ -15,7 +15,10 @@ import PToolsPermissionCore
 @MainActor
 class PTPermissionBluetoothHandler: NSObject, @preconcurrency CBCentralManagerDelegate {
 
-    private var completion: PTActionTask?
+    // English: Keep repeated permission callers on one central-manager lifecycle.
+    // Español: Mantén los llamadores repetidos dentro de un único ciclo de vida del gestor central.
+    // 中文：让重复权限请求复用同一个中央管理器生命周期。
+    private var completions: [PTActionTask] = []
     
     // MARK: - Init
     
@@ -28,12 +31,16 @@ class PTPermissionBluetoothHandler: NSObject, @preconcurrency CBCentralManagerDe
     // MARK: - Manager
     
     var manager: CBCentralManager?
+
+    var currentState: CBManagerState {
+        manager?.state ?? .unknown
+    }
     
     // English: Store the callback and start one central-manager observation for one permission request.
     // Español: Guarda el callback e inicia una sola observación del gestor central para cada solicitud.
     // 中文：保存回调，并为每次权限请求只启动一次中央管理器观察。
     func requestPermission(completion: @escaping PTActionTask) {
-        self.completion = completion
+        completions.append(completion)
         requestUpdate()
     }
 
@@ -68,9 +75,19 @@ class PTPermissionBluetoothHandler: NSObject, @preconcurrency CBCentralManagerDe
     // Español: Limpia el callback antes de invocarlo para que los eventos duplicados del delegado sean inocuos.
     // 中文：调用前先清空回调，让重复代理事件不会重复完成请求。
     private func finishRequest() {
-        guard let completion else { return }
-        self.completion = nil
+        guard !completions.isEmpty else { return }
+        let completions = self.completions
+        self.completions.removeAll(keepingCapacity: false)
         manager?.delegate = nil
-        completion()
+        completions.forEach { $0() }
+    }
+
+    // English: Explicitly stop the manager when the owning flow leaves the screen.
+    // Español: Detiene explícitamente el gestor cuando el flujo propietario abandona la pantalla.
+    // 中文：所属流程退出页面时显式停止蓝牙管理器。
+    func invalidate() {
+        completions.removeAll(keepingCapacity: false)
+        manager?.delegate = nil
+        manager = nil
     }
 }

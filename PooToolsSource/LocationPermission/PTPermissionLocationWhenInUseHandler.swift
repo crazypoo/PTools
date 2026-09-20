@@ -38,20 +38,24 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
     
     // MARK: - Process
     
-    private var completionHandler: PTActionTask?
+    // English: Keep every caller while one system prompt is active instead of overwriting the previous callback.
+    // Español: Conserva todos los llamadores mientras el diálogo del sistema está activo en lugar de sobrescribir el callback anterior.
+    // 中文：系统弹窗进行期间保留所有调用方，避免新的请求覆盖旧回调。
+    private var completionHandlers: [PTActionTask] = []
 
     // English: Finish once and release the delegate as soon as authorization reaches a terminal state.
     // Español: Finaliza una sola vez y libera el delegado cuando la autorización llega a un estado terminal.
     // 中文：授权进入终态后只完成一次，并立即释放代理，避免重复回调和代理滞留。
     private func finishRequest() {
-        guard let completionHandler else { return }
-        self.completionHandler = nil
+        guard !completionHandlers.isEmpty else { return }
+        let completionHandlers = self.completionHandlers
+        self.completionHandlers.removeAll(keepingCapacity: false)
         locationManager.delegate = nil
-        completionHandler()
+        completionHandlers.forEach { $0() }
     }
     
     @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
-        self.completionHandler = completionHandler
+        completionHandlers.append(completionHandler)
         
         let status: CLAuthorizationStatus = {
             #if os(visionOS)

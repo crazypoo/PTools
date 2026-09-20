@@ -35,8 +35,9 @@ public class PTPermissionMic: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         AVAudioApplication.requestRecordPermission { granted in
-            PTPermission.completeRequest(completion)
+            finish()
         }
     }
 }

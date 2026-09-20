@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
-  "generated_at": "2026-09-20T06:27:41Z",
+  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
+  "generated_at": "2026-09-20T08:52:31Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -411,12 +411,12 @@
     },
     {
       "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift",
-      "lines": 40,
+      "lines": 73,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift",
-      "lines": 76,
+      "lines": 93,
       "classification": "ok"
     },
     {
@@ -536,7 +536,7 @@
     },
     {
       "path": "PooToolsSource/CalendarPermission/PTPermissionCalendar.swift",
-      "lines": 103,
+      "lines": 104,
       "classification": "ok"
     },
     {
@@ -551,7 +551,7 @@
     },
     {
       "path": "PooToolsSource/CameraPermission/PTPermissionCamera.swift",
-      "lines": 45,
+      "lines": 46,
       "classification": "ok"
     },
     {
@@ -1156,7 +1156,7 @@
     },
     {
       "path": "PooToolsSource/ContactsPermission/PTPermissionContacts.swift",
-      "lines": 48,
+      "lines": 49,
       "classification": "ok"
     },
     {
@@ -1681,7 +1681,7 @@
     },
     {
       "path": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift",
-      "lines": 54,
+      "lines": 94,
       "classification": "ok"
     },
     {
@@ -1746,12 +1746,12 @@
     },
     {
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "lines": 141,
+      "lines": 176,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/HealthPermission/PTPermissionHealth.swift",
-      "lines": 72,
+      "lines": 73,
       "classification": "ok"
     },
     {
@@ -1781,7 +1781,7 @@
     },
     {
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "lines": 234,
+      "lines": 260,
       "classification": "ok"
     },
     {
@@ -3611,12 +3611,12 @@
     },
     {
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "lines": 138,
+      "lines": 165,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
-      "lines": 141,
+      "lines": 208,
       "classification": "ok"
     },
     {
@@ -3626,12 +3626,12 @@
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift",
-      "lines": 77,
+      "lines": 81,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift",
-      "lines": 85,
+      "lines": 89,
       "classification": "ok"
     },
     {
@@ -3651,7 +3651,7 @@
     },
     {
       "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
-      "lines": 143,
+      "lines": 170,
       "classification": "ok"
     },
     {
@@ -3691,7 +3691,7 @@
     },
     {
       "path": "PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift",
-      "lines": 42,
+      "lines": 43,
       "classification": "ok"
     },
     {
@@ -3766,22 +3766,22 @@
     },
     {
       "path": "PooToolsSource/MicPermission/PTPermissionMic.swift",
-      "lines": 42,
+      "lines": 43,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "lines": 380,
+      "lines": 399,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MotionPermission/PTPermissionMotion.swift",
-      "lines": 46,
+      "lines": 47,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
-      "lines": 388,
+      "lines": 405,
       "classification": "ok"
     },
     {
@@ -3836,7 +3836,7 @@
     },
     {
       "path": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
-      "lines": 80,
+      "lines": 111,
       "classification": "ok"
     },
     {
@@ -3905,8 +3905,13 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+      "lines": 61,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "lines": 245,
+      "lines": 295,
       "classification": "ok"
     },
     {
@@ -3951,7 +3956,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "lines": 353,
+      "lines": 431,
       "classification": "ok"
     },
     {
@@ -4001,7 +4006,7 @@
     },
     {
       "path": "PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift",
-      "lines": 53,
+      "lines": 68,
       "classification": "ok"
     },
     {
@@ -4126,7 +4131,7 @@
     },
     {
       "path": "PooToolsSource/RemindersPermission/PTPermissionReminders.swift",
-      "lines": 48,
+      "lines": 49,
       "classification": "ok"
     },
     {
@@ -4351,7 +4356,7 @@
     },
     {
       "path": "PooToolsSource/SiriPermission/PTPermissionSiri.swift",
-      "lines": 42,
+      "lines": 43,
       "classification": "ok"
     },
     {
@@ -4381,7 +4386,7 @@
     },
     {
       "path": "PooToolsSource/SpeechPremission/PTPermissionSpeech.swift",
-      "lines": 48,
+      "lines": 49,
       "classification": "ok"
     },
     {
@@ -4436,7 +4441,7 @@
     },
     {
       "path": "PooToolsSource/TrackingPermission/PTPermissionTracking.swift",
-      "lines": 43,
+      "lines": 44,
       "classification": "ok"
     },
     {

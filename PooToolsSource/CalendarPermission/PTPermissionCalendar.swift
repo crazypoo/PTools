@@ -74,18 +74,19 @@ public class PTPermissionCalendar: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         
         let eventStore = EKEventStore()
         
         let requestWriteOnly = {
             eventStore.requestWriteOnlyAccessToEvents { (accessGranted: Bool, error: Error?) in
-                PTPermission.completeRequest(completion)
+                finish()
             }
         }
         
         let requestFull = {
             eventStore.requestFullAccessToEvents { (accessGranted: Bool, error: Error?) in
-                PTPermission.completeRequest(completion)
+                finish()
             }
         }
         

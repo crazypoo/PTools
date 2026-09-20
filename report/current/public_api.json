@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
-  "generated_at": "2026-09-20T06:27:29Z",
+  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
+  "generated_at": "2026-09-20T08:52:20Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -8358,6 +8358,22 @@
       "access": "open",
       "kind": "var",
       "declaration": "open var usageDescriptionKey: String? { \"NSBluetoothAlwaysUsageDescription\" }"
+    },
+    {
+      "key": "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift|public|var|public var bluetoothState: PTBluetoothPermissionState",
+      "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift",
+      "line": 50,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bluetoothState: PTBluetoothPermissionState {"
+    },
+    {
+      "key": "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift",
+      "line": 70,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
     },
     {
       "key": "PooToolsSource/Blur/PSecurityStrategy.swift|public|let|public let effectTag = 19999",
@@ -19288,6 +19304,22 @@
       "declaration": "open var usageDescriptionKey: String? { \"NSFaceIDUsageDescription\" }"
     },
     {
+      "key": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift|public|var|public var faceIDState: PTFaceIDPermissionState",
+      "path": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var faceIDState: PTFaceIDPermissionState {"
+    },
+    {
+      "key": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift|public|func|public func requestWithPasscodeFallback(completion: @escaping PTActionTask)",
+      "path": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func requestWithPasscodeFallback(completion: @escaping PTActionTask) {"
+    },
+    {
       "key": "PooToolsSource/FloatPanel/PTBaseViewController+FloatPanel.swift|open|func|open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool",
       "path": "PooToolsSource/FloatPanel/PTBaseViewController+FloatPanel.swift",
       "line": 22,
@@ -20274,15 +20306,39 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|var|public var loadBlock:StepBlock?",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 26,
+      "line": 29,
       "access": "public",
       "kind": "var",
       "declaration": "public var loadBlock:StepBlock?"
     },
     {
+      "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func start()",
+      "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() {"
+    },
+    {
+      "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func stop()",
+      "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
+      "line": 45,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 88,
+      "line": 123,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -20290,7 +20346,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 121,
+      "line": 156,
       "access": "public",
       "kind": "func",
       "declaration": "public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -20784,9 +20840,33 @@
       "declaration": "public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver {"
     },
     {
+      "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func start()",
+      "path": "PooToolsSource/IAP/PTIAPManager.swift",
+      "line": 55,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() {"
+    },
+    {
+      "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func stop()",
+      "path": "PooToolsSource/IAP/PTIAPManager.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/IAP/PTIAPManager.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func hasPurchased(_ productID: String) -> Bool",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 73,
+      "line": 100,
       "access": "public",
       "kind": "func",
       "declaration": "public func hasPurchased(_ productID: String) -> Bool {"
@@ -20794,7 +20874,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func getProducts(forIds productIds: [String], completion: @escaping ProductsCompletionBlock)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 87,
+      "line": 114,
       "access": "public",
       "kind": "func",
       "declaration": "public func getProducts(forIds productIds: [String], completion: @escaping ProductsCompletionBlock) {"
@@ -20802,7 +20882,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 120,
+      "line": 147,
       "access": "public",
       "kind": "func",
       "declaration": "public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {"
@@ -20810,7 +20890,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func restorePurchases()",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 132,
+      "line": 159,
       "access": "public",
       "kind": "func",
       "declaration": "public func restorePurchases() {"
@@ -20818,7 +20898,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func restorePurchases(completion: PTActionTask?, error: IAPErrorBlock?)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 136,
+      "line": 163,
       "access": "public",
       "kind": "func",
       "declaration": "public func restorePurchases(completion: PTActionTask?, error: IAPErrorBlock?) {"
@@ -20826,7 +20906,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func purchase(product: SKProduct, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 142,
+      "line": 169,
       "access": "public",
       "kind": "func",
       "declaration": "public func purchase(product: SKProduct, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) {"
@@ -20834,7 +20914,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func purchase(productId: String, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 153,
+      "line": 180,
       "access": "public",
       "kind": "func",
       "declaration": "public func purchase(productId: String, completion: @escaping PurchaseCompletionBlock, error: @escaping IAPErrorBlock) {"
@@ -20842,7 +20922,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|@MainActor public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 163,
+      "line": 190,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {"
@@ -20850,7 +20930,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func canPurchase() -> Bool",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 208,
+      "line": 235,
       "access": "public",
       "kind": "func",
       "declaration": "public func canPurchase() -> Bool {"
@@ -20858,7 +20938,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func addPurchasesChangedCallback(_ callback: @escaping PTActionTask, withContext context: AnyObject)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 214,
+      "line": 241,
       "access": "public",
       "kind": "func",
       "declaration": "public func addPurchasesChangedCallback(_ callback: @escaping PTActionTask, withContext context: AnyObject) {"
@@ -20866,7 +20946,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func removePurchasesChangedCallback(withContext context: AnyObject)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 218,
+      "line": 245,
       "access": "public",
       "kind": "func",
       "declaration": "public func removePurchasesChangedCallback(withContext context: AnyObject) {"
@@ -20874,7 +20954,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|@MainActor public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 222,
+      "line": 249,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {"
@@ -20882,7 +20962,7 @@
     {
       "key": "PooToolsSource/IAP/PTIAPManager.swift|public|func|public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error)",
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 228,
+      "line": 255,
       "access": "public",
       "kind": "func",
       "declaration": "public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {"
@@ -27816,9 +27896,33 @@
       "declaration": "open var showChangeAlert:Bool = false"
     },
     {
+      "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|public func start()",
+      "path": "PooToolsSource/Location/PTGetGPSData.swift",
+      "line": 37,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() {"
+    },
+    {
+      "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|public func stop()",
+      "path": "PooToolsSource/Location/PTGetGPSData.swift",
+      "line": 50,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/Location/PTGetGPSData.swift",
+      "line": 55,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?)",
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 33,
+      "line": 64,
       "access": "public",
       "kind": "func",
       "declaration": "public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) {"
@@ -27826,7 +27930,7 @@
     {
       "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|@MainActor public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)",
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 51,
+      "line": 82,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {"
@@ -27834,7 +27938,7 @@
     {
       "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])",
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 60,
+      "line": 91,
       "access": "public",
       "kind": "func",
       "declaration": "public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {"
@@ -27842,15 +27946,23 @@
     {
       "key": "PooToolsSource/Location/PTGetGPSData.swift|public|func|@MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)",
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 106,
+      "line": 137,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {"
     },
     {
+      "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|public|enum|public enum PTLocationAccuracyState: String, Sendable",
+      "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLocationAccuracyState: String, Sendable {"
+    },
+    {
       "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|public|class|public class PTPermissionLocation: PTPermission",
       "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
-      "line": 22,
+      "line": 31,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTPermissionLocation: PTPermission {"
@@ -27858,7 +27970,7 @@
     {
       "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|open|var|open var usageDescriptionKey: String?",
       "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
-      "line": 33,
+      "line": 43,
       "access": "open",
       "kind": "var",
       "declaration": "open var usageDescriptionKey: String? {"
@@ -27866,10 +27978,26 @@
     {
       "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|public|var|public var isPrecise: Bool",
       "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
-      "line": 77,
+      "line": 114,
       "access": "public",
       "kind": "var",
       "declaration": "public var isPrecise: Bool {"
+    },
+    {
+      "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|public|var|public var accuracyState: PTLocationAccuracyState",
+      "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
+      "line": 126,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accuracyState: PTLocationAccuracyState {"
+    },
+    {
+      "key": "PooToolsSource/LocationPermission/PTPermissionLocation.swift|public|func|public func requestTemporaryFullAccuracy(purposeKey: String, completion: @escaping PTActionTask)",
+      "path": "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func requestTemporaryFullAccuracy(purposeKey: String, completion: @escaping PTActionTask) {"
     },
     {
       "key": "PooToolsSource/LocationPermission/PTPermissionLocationAccuracy.swift|public|func|public func setAccuracy(_ value: PTPermissionLocationAccuracy)",
@@ -28168,9 +28296,33 @@
       "declaration": "public protocol PTMemsCompatible {}"
     },
     {
+      "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func start()",
+      "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() {"
+    },
+    {
+      "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func stop()",
+      "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+      "line": 46,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func didReceive(_ payloads: [MXMetricPayload])",
       "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
-      "line": 28,
+      "line": 53,
       "access": "public",
       "kind": "func",
       "declaration": "public func didReceive(_ payloads: [MXMetricPayload]) {"
@@ -28178,7 +28330,7 @@
     {
       "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func didReceive(_ payloads: [MXDiagnosticPayload])",
       "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
-      "line": 49,
+      "line": 75,
       "access": "public",
       "kind": "func",
       "declaration": "public func didReceive(_ payloads: [MXDiagnosticPayload]) {"
@@ -28186,7 +28338,7 @@
     {
       "key": "PooToolsSource/MXMetricKitManager/MetricsManager.swift|public|func|public func uploadPendingMetrics()",
       "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
-      "line": 86,
+      "line": 113,
       "access": "public",
       "kind": "func",
       "declaration": "public func uploadPendingMetrics() {"
@@ -30528,17 +30680,41 @@
       "declaration": "@MainActor public func startMotion(from startDate: Date = Date()) {"
     },
     {
-      "key": "PooToolsSource/Motion/PTMotion.swift|public|func|public func stopMotion()",
+      "key": "PooToolsSource/Motion/PTMotion.swift|public|func|@MainActor public func stopMotion()",
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 163,
+      "line": 164,
       "access": "public",
       "kind": "func",
-      "declaration": "public func stopMotion() {"
+      "declaration": "@MainActor public func stopMotion() {"
+    },
+    {
+      "key": "PooToolsSource/Motion/PTMotion.swift|public|func|@MainActor public func start()",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 178,
+      "access": "public",
+      "kind": "func",
+      "declaration": "@MainActor public func start() {"
+    },
+    {
+      "key": "PooToolsSource/Motion/PTMotion.swift|public|func|@MainActor public func stop()",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "func",
+      "declaration": "@MainActor public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/Motion/PTMotion.swift|public|func|@MainActor public func invalidate()",
+      "path": "PooToolsSource/Motion/PTMotion.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "func",
+      "declaration": "@MainActor public func invalidate() {"
     },
     {
       "key": "PooToolsSource/Motion/PTMotion.swift|public|func|public func headphoneMotionManagerDidDisconnect(_ manager: CMHeadphoneMotionManager)",
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 203,
+      "line": 222,
       "access": "public",
       "kind": "func",
       "declaration": "public func headphoneMotionManagerDidDisconnect(_ manager: CMHeadphoneMotionManager) {"
@@ -30728,9 +30904,25 @@
       "declaration": "public var onlyReadMsg = \"標籤已鎖定為唯讀\""
     },
     {
+      "key": "PooToolsSource/NFC/PTNFCToolKit.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
+      "key": "PooToolsSource/NFC/PTNFCToolKit.swift|public|func|public func stop()",
+      "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
       "key": "PooToolsSource/NFC/PTNFCToolKit.swift|public|func|public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void,",
       "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
-      "line": 86,
+      "line": 100,
       "access": "public",
       "kind": "func",
       "declaration": "public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void,"
@@ -30738,7 +30930,7 @@
     {
       "key": "PooToolsSource/NFC/PTNFCToolKit.swift|public|func|public func startWriting(message: NFCNDEFMessage,",
       "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
-      "line": 102,
+      "line": 117,
       "access": "public",
       "kind": "func",
       "declaration": "public func startWriting(message: NFCNDEFMessage,"
@@ -30746,7 +30938,7 @@
     {
       "key": "PooToolsSource/NFC/PTNFCToolKit.swift|public|func|public func sendAPDU(command: NFCISO7816APDU,",
       "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
-      "line": 121,
+      "line": 137,
       "access": "public",
       "kind": "func",
       "declaration": "public func sendAPDU(command: NFCISO7816APDU,"
@@ -32186,10 +32378,34 @@
     {
       "key": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift|public|func|@MainActor public func authorizationStatus() async throws -> PTPermission.Status",
       "path": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
-      "line": 26,
+      "line": 29,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func authorizationStatus() async throws -> PTPermission.Status {"
+    },
+    {
+      "key": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift|public|func|public func refreshAuthorizationState() async -> PTPermissionAuthorizationState",
+      "path": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func refreshAuthorizationState() async -> PTPermissionAuthorizationState {"
+    },
+    {
+      "key": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift|public|func|public func requestAuthorization() async -> PTPermissionAuthorizationState",
+      "path": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
+      "line": 68,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func requestAuthorization() async -> PTPermissionAuthorizationState {"
+    },
+    {
+      "key": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift|public|var|public var supportsProvisionalAuthorization: Bool",
+      "path": "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var supportsProvisionalAuthorization: Bool { true }"
     },
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|enum|public enum OSSSpeechKitAuthorizationStatus: Int, Sendable",
@@ -33448,6 +33664,38 @@
       "declaration": "public protocol PTMediaCancellationToken: Sendable {"
     },
     {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|var|public var isGranted: Bool",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isGranted: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias PTActionTask = @Sendable () -> Void",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
       "line": 20,
@@ -33544,9 +33792,17 @@
       "declaration": "public let status: PTPermissionStatus"
     },
     {
-      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let error: PTPermissionError?",
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let authorizationState: PTPermissionAuthorizationState",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
       "line": 111,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let authorizationState: PTPermissionAuthorizationState"
+    },
+    {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let error: PTPermissionError?",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
+      "line": 112,
       "access": "public",
       "kind": "let",
       "declaration": "public let error: PTPermissionError?"
@@ -33554,7 +33810,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let didRequest: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 112,
+      "line": 113,
       "access": "public",
       "kind": "let",
       "declaration": "public let didRequest: Bool"
@@ -33562,7 +33818,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|init|public init(kind: PTPermissionKind,",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 114,
+      "line": 115,
       "access": "public",
       "kind": "init",
       "declaration": "public init(kind: PTPermissionKind,"
@@ -33570,7 +33826,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|protocol|public protocol PTPermissionRequesting: AnyObject",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 129,
+      "line": 139,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTPermissionRequesting: AnyObject {"
@@ -33578,7 +33834,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionSettings",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 140,
+      "line": 152,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionSettings {"
@@ -33586,7 +33842,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionSettingsRouter",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 148,
+      "line": 160,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionSettingsRouter {"
@@ -33594,7 +33850,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|class|open class PTPermission: PTPermissionRequesting",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 161,
+      "line": 173,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTPermission: PTPermissionRequesting {"
@@ -33602,7 +33858,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias Status = PTPermissionStatus",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 162,
+      "line": 174,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Status = PTPermissionStatus"
@@ -33610,7 +33866,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias Kind = PTPermissionKind",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 163,
+      "line": 175,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Kind = PTPermissionKind"
@@ -33618,7 +33874,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias CalendarAccess = PTPermissionCalendarAccess",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 164,
+      "line": 176,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias CalendarAccess = PTPermissionCalendarAccess"
@@ -33626,7 +33882,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias LocationAccess = PTPermissionLocationAccess",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 165,
+      "line": 177,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias LocationAccess = PTPermissionLocationAccess"
@@ -33634,7 +33890,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var authorized: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 167,
+      "line": 179,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorized: Bool { status == .authorized }"
@@ -33642,7 +33898,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var denied: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 168,
+      "line": 180,
       "access": "open",
       "kind": "var",
       "declaration": "open var denied: Bool { status == .denied }"
@@ -33650,7 +33906,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var notDetermined: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 169,
+      "line": 181,
       "access": "open",
       "kind": "var",
       "declaration": "open var notDetermined: Bool { status == .notDetermined }"
@@ -33658,15 +33914,23 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var debugName: String",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 170,
+      "line": 182,
       "access": "open",
       "kind": "var",
       "declaration": "open var debugName: String { kind.name }"
     },
     {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var authorizationState: PTPermissionAuthorizationState",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
+      "line": 187,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var authorizationState: PTPermissionAuthorizationState {"
+    },
+    {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var kind: Kind",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 172,
+      "line": 196,
       "access": "open",
       "kind": "var",
       "declaration": "open var kind: Kind { .custom(String(describing: type(of: self))) }"
@@ -33674,7 +33938,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var status: Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 173,
+      "line": 197,
       "access": "open",
       "kind": "var",
       "declaration": "open var status: Status { .notSupported }"
@@ -33682,7 +33946,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var settingsURL: URL?",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 174,
+      "line": 198,
       "access": "open",
       "kind": "var",
       "declaration": "open var settingsURL: URL? { PTPermissionSettings.applicationURL }"
@@ -33690,7 +33954,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var canBePresentWithCustomInterface: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 175,
+      "line": 199,
       "access": "open",
       "kind": "var",
       "declaration": "open var canBePresentWithCustomInterface: Bool { true }"
@@ -33698,7 +33962,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 184,
+      "line": 208,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -33706,7 +33970,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func request(completion: @escaping PTActionTask)",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 189,
+      "line": 213,
       "access": "open",
       "kind": "func",
       "declaration": "open func request(completion: @escaping PTActionTask) {"
@@ -33714,7 +33978,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func currentStatus() -> Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 193,
+      "line": 217,
       "access": "public",
       "kind": "func",
       "declaration": "public func currentStatus() -> Status { status }"
@@ -33722,15 +33986,23 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func requestStatus() async -> Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 202,
+      "line": 241,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestStatus() async -> Status {"
     },
     {
+      "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func requestAuthorizationState() async -> PTPermissionAuthorizationState",
+      "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
+      "line": 270,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func requestAuthorizationState() async -> PTPermissionAuthorizationState {"
+    },
+    {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func request() async -> PTPermissionResult",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 229,
+      "line": 276,
       "access": "public",
       "kind": "func",
       "declaration": "public func request() async -> PTPermissionResult {"
@@ -33738,7 +34010,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func openSettingPage()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 236,
+      "line": 286,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettingPage() {"
@@ -33746,7 +34018,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func openSettings()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 241,
+      "line": 291,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettings() {"
@@ -34376,9 +34648,41 @@
       "declaration": "public typealias PTPermission = PToolsPermissionCore.PTPermission"
     },
     {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var isGranted: Bool",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 43,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isGranted: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {"
+    },
+    {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|class|open class PTPermission",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 31,
+      "line": 73,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTPermission {"
@@ -34386,7 +34690,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var authorized: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 33,
+      "line": 75,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorized: Bool {"
@@ -34394,7 +34698,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var denied: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 37,
+      "line": 79,
       "access": "open",
       "kind": "var",
       "declaration": "open var denied: Bool {"
@@ -34402,15 +34706,23 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var notDetermined: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 41,
+      "line": 83,
       "access": "open",
       "kind": "var",
       "declaration": "open var notDetermined: Bool {"
     },
     {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var authorizationState: PTPermissionAuthorizationState",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 90,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var authorizationState: PTPermissionAuthorizationState {"
+    },
+    {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var debugName: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 45,
+      "line": 99,
       "access": "open",
       "kind": "var",
       "declaration": "open var debugName: String {"
@@ -34418,7 +34730,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|@MainActor open var localisedName: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 49,
+      "line": 103,
       "access": "open",
       "kind": "var",
       "declaration": "@MainActor open var localisedName: String {"
@@ -34426,7 +34738,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func openSettingPage()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 59,
+      "line": 113,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettingPage() {"
@@ -34434,7 +34746,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func openSettings()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 69,
+      "line": 123,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettings() {"
@@ -34442,7 +34754,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func currentStatus() -> Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 76,
+      "line": 130,
       "access": "public",
       "kind": "func",
       "declaration": "public func currentStatus() -> Status {"
@@ -34450,7 +34762,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var kind: PTPermission.Kind",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 82,
+      "line": 136,
       "access": "open",
       "kind": "var",
       "declaration": "open var kind: PTPermission.Kind {"
@@ -34458,7 +34770,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var status: PTPermission.Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 86,
+      "line": 140,
       "access": "open",
       "kind": "var",
       "declaration": "open var status: PTPermission.Status {"
@@ -34466,7 +34778,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func request(completion: @escaping PTActionTask)",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 90,
+      "line": 144,
       "access": "open",
       "kind": "func",
       "declaration": "open func request(completion: @escaping PTActionTask) {"
@@ -34474,7 +34786,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func requestStatus() async -> Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 225,
+      "line": 295,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestStatus() async -> Status {"
@@ -34482,15 +34794,23 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func request() async",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 249,
+      "line": 319,
       "access": "public",
       "kind": "func",
       "declaration": "public func request() async {"
     },
     {
+      "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func requestAuthorizationState() async -> PTPermissionAuthorizationState",
+      "path": "PooToolsSource/PermissionCore/PTPermission.swift",
+      "line": 326,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func requestAuthorizationState() async -> PTPermissionAuthorizationState {"
+    },
+    {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var canBePresentWithCustomInterface: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 253,
+      "line": 331,
       "access": "open",
       "kind": "var",
       "declaration": "open var canBePresentWithCustomInterface: Bool {"
@@ -34498,7 +34818,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|init|public init()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 259,
+      "line": 337,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -34506,7 +34826,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|@objc public enum Status: Int, CustomStringConvertible, Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 263,
+      "line": 341,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum Status: Int, CustomStringConvertible, Sendable {"
@@ -34514,7 +34834,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var description: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 270,
+      "line": 348,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -34522,7 +34842,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum Kind: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 280,
+      "line": 358,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum Kind: Sendable {"
@@ -34530,7 +34850,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var name: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 299,
+      "line": 377,
       "access": "public",
       "kind": "var",
       "declaration": "public var name: String {"
@@ -34538,7 +34858,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum CalendarAccess: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 341,
+      "line": 419,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum CalendarAccess: Sendable {"
@@ -34546,7 +34866,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum LocationAccess: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 347,
+      "line": 425,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum LocationAccess: Sendable {"

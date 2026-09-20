@@ -37,9 +37,10 @@ public class PTPermissionCamera: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
+        let finish = PTPermission.makeCompletionOnce(completion)
         AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: {
             _ in
-            PTPermission.completeRequest(completion)
+            finish()
         })
     }
 }

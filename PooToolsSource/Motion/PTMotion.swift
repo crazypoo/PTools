@@ -141,6 +141,7 @@ public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDel
     
     // MARK: - Start Motion Tracking
     @MainActor public func startMotion(from startDate: Date = Date()) {
+        headphoneManager.delegate = self
         guard CMPedometer.isStepCountingAvailable(), CMMotionActivityManager.isActivityAvailable() else {
             let msg = "哎喲，不能運行哦，僅支持 M7 以上處理器，暫時只能在 iPhone5s 以上使用。"
             // 假设这是你的弹窗工具：
@@ -160,7 +161,7 @@ public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDel
     }
     
     // MARK: - Stop Motion Tracking
-    public func stopMotion() {
+    @MainActor public func stopMotion() {
         pedometer.stopUpdates()
         pedometer.stopEventUpdates()
         activityManager.stopActivityUpdates()
@@ -169,6 +170,24 @@ public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDel
         phoneManager.stopDeviceMotionUpdates()
         if headphoneManager.isDeviceMotionActive { headphoneManager.stopDeviceMotionUpdates() }
         motionStarted = false
+    }
+
+    // These lifecycle aliases let callers stop sensors without knowing the legacy API name.
+    // Estos alias de ciclo de vida permiten detener sensores sin conocer el nombre heredado.
+    // 这些生命周期别名让调用方无需了解旧 API 名称即可停止传感器。
+    @MainActor public func start() {
+        startMotion()
+    }
+
+    @MainActor public func stop() {
+        stopMotion()
+    }
+
+    @MainActor public func invalidate() {
+        stopMotion()
+        operationQueue.cancelAllOperations()
+        headphoneManager.delegate = nil
+        delegates.removeAll()
     }
     
     // MARK: - 双擎运动数据调度核心

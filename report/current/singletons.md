@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
-Generated at: 2026-09-20T06:27:30Z
+Source revision: c873550f2d347ba97088f840f8d4655ac652afcd
+Generated at: 2026-09-20T08:52:20Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1522**
+- .shared / .share 调用文本计数：**1527**
 - 单例声明计数：**103**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -27,7 +27,7 @@ Generated at: 2026-09-20T06:27:30Z
 | PooToolsSource/Base/PTVideoCoverCache.swift:112 | shared | B Thread-safe shared cache or resource | static let shared = PTVideoFileDownloadCoordinator() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTVideoCoverCache.swift:177 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/BioID/PTBiologyID.swift:23 | shared | C Shared mutable service | public static let shared = PTBiometricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift:22 | shared | C Shared mutable service | @MainActor static let shared: PTPermissionBluetoothHandler = .init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift:25 | shared | C Shared mutable service | @MainActor static let shared: PTPermissionBluetoothHandler = .init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/C7Collector/C7CameraConfig.swift:14 | share | D Shared mutable UI or scene state | public static let share = C7CameraConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/C7Collector/PTCameraFilterConfig.swift:35 | share | D Shared mutable UI or scene state | public static let share = PTCameraFilterConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/C7Collector/PTHarBethFilter.swift:21 | share | C Shared mutable service | public static let share = PTHarBethFilter(name: "", type: .cigaussian) | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
@@ -81,8 +81,8 @@ Generated at: 2026-09-20T06:27:30Z
 | PooToolsSource/LocalConsole/ResizeController.swift:18 | shared | D Shared mutable UI or scene state | public static let shared = ResizeController() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LocalConsole/SystemReport.swift:12 | shared | D Shared mutable UI or scene state | @MainActor public static let shared = SystemReport() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Location/PTGetGPSData.swift:15 | share | C Shared mutable service | public static let share = PTGetGPSData() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift:71 | shared | C Shared mutable service | static var shared: PTPermissionLocationAlwaysHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift:79 | shared | C Shared mutable service | @MainActor static var shared: PTPermissionLocationWhenInUseHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift:75 | shared | C Shared mutable service | static var shared: PTPermissionLocationAlwaysHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift:83 | shared | C Shared mutable service | @MainActor static var shared: PTPermissionLocationWhenInUseHandler? | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Log/PTLogFileManager.swift:5 | shared | C Shared mutable service | public static let shared = PTLogFileManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Log/PTNSLog.swift:86 | shared | C Shared mutable service | public static let shared = PTLogSinkCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:15 | shared | C Shared mutable service | public static let shared = MetricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
