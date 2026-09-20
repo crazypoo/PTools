@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:35Z",
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:41Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -206,7 +206,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "lines": 286,
+      "lines": 319,
       "classification": "ok"
     },
     {
@@ -396,7 +396,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 532,
+      "lines": 539,
       "classification": "ok"
     },
     {
@@ -1200,18 +1200,33 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Core/PTImageDownsampler.swift",
+      "lines": 82,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Core/PTLayerExports.swift",
       "lines": 23,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "lines": 778,
+      "lines": 785,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
       "lines": 94,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "lines": 165,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Core/PTMediaLifecycle.swift",
+      "lines": 12,
       "classification": "ok"
     },
     {
@@ -3646,7 +3661,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "lines": 710,
+      "lines": 718,
       "classification": "ok"
     },
     {
@@ -3661,7 +3676,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "lines": 783,
+      "lines": 784,
       "classification": "ok"
     },
     {
@@ -3886,7 +3901,7 @@
     },
     {
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "lines": 136,
+      "lines": 203,
       "classification": "ok"
     },
     {
@@ -4566,7 +4581,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "lines": 1623,
+      "lines": 1635,
       "classification": "architecture_exception"
     },
     {

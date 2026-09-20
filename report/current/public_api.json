@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:11Z",
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:29Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -3322,7 +3322,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func cacheFileURL(for url: URL) -> URL",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 110,
+      "line": 143,
       "access": "public",
       "kind": "func",
       "declaration": "public func cacheFileURL(for url: URL) -> URL {"
@@ -3330,7 +3330,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 122,
+      "line": 155,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) {"
@@ -3338,7 +3338,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 183,
+      "line": 216,
       "access": "public",
       "kind": "func",
       "declaration": "public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) {"
@@ -3346,7 +3346,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 223,
+      "line": 256,
       "access": "public",
       "kind": "func",
       "declaration": "public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) {"
@@ -3354,7 +3354,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|enum|public enum PTAudioTranscoder",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 234,
+      "line": 267,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTAudioTranscoder {"
@@ -8098,7 +8098,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|struct|public struct PTVideoCacheItem",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 93,
+      "line": 31,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTVideoCacheItem {"
@@ -8106,7 +8106,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|let|public let originalURLString: String",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 95,
+      "line": 33,
       "access": "public",
       "kind": "let",
       "declaration": "public let originalURLString: String"
@@ -8114,7 +8114,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var coverImage: UIImage?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 98,
+      "line": 36,
       "access": "public",
       "kind": "var",
       "declaration": "public var coverImage: UIImage?"
@@ -8122,7 +8122,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var localVideoURL: URL?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 101,
+      "line": 39,
       "access": "public",
       "kind": "var",
       "declaration": "public var localVideoURL: URL?"
@@ -8130,7 +8130,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var isFullyCached: Bool",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 104,
+      "line": 42,
       "access": "public",
       "kind": "var",
       "declaration": "public var isFullyCached: Bool {"
@@ -8138,7 +8138,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|@MainActor public func getVideoItem(for urlString: String,",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 123,
+      "line": 61,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func getVideoItem(for urlString: String,"
@@ -8146,7 +8146,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func cacheURL(for videoURL: URL) -> URL",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 191,
+      "line": 197,
       "access": "public",
       "kind": "func",
       "declaration": "public func cacheURL(for videoURL: URL) -> URL {"
@@ -8154,7 +8154,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func cachedFileURL(for url: URL) -> URL?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 198,
+      "line": 204,
       "access": "public",
       "kind": "func",
       "declaration": "public func cachedFileURL(for url: URL) -> URL? {"
@@ -8162,7 +8162,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func prepareVideo(url: URL,",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 219,
+      "line": 225,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepareVideo(url: URL,"
@@ -8170,7 +8170,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|enum|public enum PTVideoCoverCache",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 343,
+      "line": 350,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTVideoCoverCache {"
@@ -14848,6 +14848,38 @@
       "declaration": "open func hasCache(_ imageView: PlatformImageView) -> Bool {"
     },
     {
+      "key": "PooToolsSource/Core/PTImageDownsampler.swift|public|struct|public struct PTImageMemoryBudget: Sendable",
+      "path": "PooToolsSource/Core/PTImageDownsampler.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTImageMemoryBudget: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTImageDownsampler.swift|public|let|public let maximumPixelSize: Int",
+      "path": "PooToolsSource/Core/PTImageDownsampler.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumPixelSize: Int"
+    },
+    {
+      "key": "PooToolsSource/Core/PTImageDownsampler.swift|public|init|public init(maximumPixelSize: Int = PTImageDownsampler.defaultMaximumPixelSize)",
+      "path": "PooToolsSource/Core/PTImageDownsampler.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(maximumPixelSize: Int = PTImageDownsampler.defaultMaximumPixelSize) {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTImageDownsampler.swift|public|enum|public enum PTImageDownsampler",
+      "path": "PooToolsSource/Core/PTImageDownsampler.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTImageDownsampler {"
+    },
+    {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTImageType : Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 17,
@@ -15382,6 +15414,126 @@
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kOSType: String = UIDevice.current.systemName + UIDevice.current.systemVersion"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|enum|public enum PTMediaCacheVariant: String, Hashable, Sendable",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTMediaCacheVariant: String, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|struct|public struct PTMediaCacheKey: Hashable, Sendable",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTMediaCacheKey: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let resourceIdentifier: String",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let resourceIdentifier: String"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let variant: PTMediaCacheVariant",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let variant: PTMediaCacheVariant"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let pixelWidth: Int?",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let pixelWidth: Int?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let pixelHeight: Int?",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let pixelHeight: Int?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let frameNumber: Int?",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let frameNumber: Int?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|init|public init(resourceIdentifier: String,",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(resourceIdentifier: String,"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|actor|public actor PTMediaCache",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTMediaCache {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|init|public init(directory: URL? = nil,",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 69,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(directory: URL? = nil,"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func data(for key: PTMediaCacheKey) -> Data?",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 79,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func data(for key: PTMediaCacheKey) -> Data? {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func insert(_ data: Data, for key: PTMediaCacheKey)",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func insert(_ data: Data, for key: PTMediaCacheKey) {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func removeValue(for key: PTMediaCacheKey)",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeValue(for key: PTMediaCacheKey) {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func removeAll()",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeAll() {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaLifecycle.swift|public|protocol|public protocol PTMediaInvalidating: AnyObject",
+      "path": "PooToolsSource/Core/PTMediaLifecycle.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTMediaInvalidating: AnyObject {"
     },
     {
       "key": "PooToolsSource/Core/PTMediaSaveService.swift|public|enum|public enum PTMediaSaveError: Error, LocalizedError, Sendable",
@@ -28042,7 +28194,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|open|class|open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 324,
+      "line": 332,
       "access": "open",
       "kind": "class",
       "declaration": "open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint {"
@@ -28050,7 +28202,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func viewForZooming(in scrollView: UIScrollView) -> UIView?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 650,
+      "line": 658,
       "access": "public",
       "kind": "func",
       "declaration": "public func viewForZooming(in scrollView: UIScrollView) -> UIView? {"
@@ -28058,7 +28210,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 655,
+      "line": 663,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {"
@@ -28066,7 +28218,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 660,
+      "line": 668,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { }"
@@ -28074,7 +28226,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 662,
+      "line": 670,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }"
@@ -28082,7 +28234,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidZoom(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 664,
+      "line": 672,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidZoom(_ scrollView: UIScrollView) {"
@@ -28090,7 +28242,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidScroll(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 674,
+      "line": 682,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidScroll(_ scrollView: UIScrollView) {"
@@ -28386,7 +28538,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|init|public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 274,
+      "line": 275,
       "access": "public",
       "kind": "init",
       "declaration": "public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) {"
@@ -28394,7 +28546,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|func|public func mediasShow()",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 443,
+      "line": 444,
       "access": "public",
       "kind": "func",
       "declaration": "public func mediasShow() {"
@@ -28402,7 +28554,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|func|public func reloadConfig(mediaData:[PTMediaBrowserModel])",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 448,
+      "line": 449,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadConfig(mediaData:[PTMediaBrowserModel]) {"
@@ -32978,15 +33130,143 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaResource: Hashable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 15,
+      "line": 10,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTMediaResource: Hashable, Sendable {"
     },
     {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaType: String, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTMediaType: String, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|struct|public struct PTMediaMetadata: Hashable, Sendable",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTMediaMetadata: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let pixelWidth: Int?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let pixelWidth: Int?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let pixelHeight: Int?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 35,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let pixelHeight: Int?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let duration: TimeInterval?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let duration: TimeInterval?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let byteCount: Int64?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 37,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let byteCount: Int64?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let fileExtension: String?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 38,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let fileExtension: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let isDegraded: Bool",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isDegraded: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|init|public init(pixelWidth: Int? = nil,",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(pixelWidth: Int? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaSource: Hashable, Sendable",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTMediaSource: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|struct|public struct PTMediaAsset: Hashable, Sendable",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTMediaAsset: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let identifier: String",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 68,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let type: PTMediaType",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 69,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let type: PTMediaType"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let source: PTMediaSource",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 70,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let source: PTMediaSource"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let metadata: PTMediaMetadata?",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let metadata: PTMediaMetadata?"
+    },
+    {
+      "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|init|public init(identifier: String,",
+      "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(identifier: String,"
+    },
+    {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTImageSource: Hashable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 25,
+      "line": 92,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageSource: Hashable, Sendable {"
@@ -32994,7 +33274,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTVideoSource: Hashable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 33,
+      "line": 100,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTVideoSource: Hashable, Sendable {"
@@ -33002,7 +33282,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|struct|public struct PTMediaProgressSnapshot: Hashable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 40,
+      "line": 107,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTMediaProgressSnapshot: Hashable, Sendable {"
@@ -33010,7 +33290,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let completedUnitCount: Int64",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 41,
+      "line": 108,
       "access": "public",
       "kind": "let",
       "declaration": "public let completedUnitCount: Int64"
@@ -33018,7 +33298,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let totalUnitCount: Int64",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 42,
+      "line": 109,
       "access": "public",
       "kind": "let",
       "declaration": "public let totalUnitCount: Int64"
@@ -33026,7 +33306,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let fractionCompleted: Double",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 43,
+      "line": 110,
       "access": "public",
       "kind": "let",
       "declaration": "public let fractionCompleted: Double"
@@ -33034,7 +33314,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|init|public init(completedUnitCount: Int64 = 0,",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 45,
+      "line": 112,
       "access": "public",
       "kind": "init",
       "declaration": "public init(completedUnitCount: Int64 = 0,"
@@ -33042,7 +33322,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|struct|public struct PTImageLoadingOptions: Hashable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 57,
+      "line": 124,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTImageLoadingOptions: Hashable, Sendable {"
@@ -33050,7 +33330,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let maximumPixelSize: Int?",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 58,
+      "line": 125,
       "access": "public",
       "kind": "let",
       "declaration": "public let maximumPixelSize: Int?"
@@ -33058,7 +33338,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let scale: Double",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 59,
+      "line": 126,
       "access": "public",
       "kind": "let",
       "declaration": "public let scale: Double"
@@ -33066,7 +33346,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let allowsNetworkAccess: Bool",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 60,
+      "line": 127,
       "access": "public",
       "kind": "let",
       "declaration": "public let allowsNetworkAccess: Bool"
@@ -33074,7 +33354,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|init|public init(maximumPixelSize: Int? = nil,",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 62,
+      "line": 129,
       "access": "public",
       "kind": "init",
       "declaration": "public init(maximumPixelSize: Int? = nil,"
@@ -33082,7 +33362,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|struct|public struct PTImageLoadResult: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 74,
+      "line": 141,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTImageLoadResult: Sendable {"
@@ -33090,7 +33370,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let data: Data",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 75,
+      "line": 142,
       "access": "public",
       "kind": "let",
       "declaration": "public let data: Data"
@@ -33098,7 +33378,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let isDegraded: Bool",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 76,
+      "line": 143,
       "access": "public",
       "kind": "let",
       "declaration": "public let isDegraded: Bool"
@@ -33106,7 +33386,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|let|public let source: PTImageSource",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 77,
+      "line": 144,
       "access": "public",
       "kind": "let",
       "declaration": "public let source: PTImageSource"
@@ -33114,7 +33394,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|init|public init(data: Data, isDegraded: Bool = false, source: PTImageSource)",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 79,
+      "line": 146,
       "access": "public",
       "kind": "init",
       "declaration": "public init(data: Data, isDegraded: Bool = false, source: PTImageSource) {"
@@ -33122,7 +33402,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaCoreError: Error, Equatable, Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 89,
+      "line": 156,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTMediaCoreError: Error, Equatable, Sendable {"
@@ -33130,7 +33410,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|protocol|public protocol PTImageLoading: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 99,
+      "line": 166,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTImageLoading: Sendable {"
@@ -33138,7 +33418,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|protocol|public protocol PTVideoResourceProviding: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 107,
+      "line": 174,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTVideoResourceProviding: Sendable {"
@@ -33146,7 +33426,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|protocol|public protocol PTThumbnailProviding: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 114,
+      "line": 181,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTThumbnailProviding: Sendable {"
@@ -33154,7 +33434,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|protocol|public protocol PTMediaCaching: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 123,
+      "line": 190,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTMediaCaching: Sendable {"
@@ -33162,7 +33442,7 @@
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|protocol|public protocol PTMediaCancellationToken: Sendable",
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 132,
+      "line": 199,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTMediaCancellationToken: Sendable {"
@@ -45400,12 +45680,12 @@
       "declaration": "public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {"
     },
     {
-      "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|class|public class PTVideoEditorToolsViewController: PTBaseViewController",
+      "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|class|public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInvalidating",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
       "line": 122,
       "access": "public",
       "kind": "class",
-      "declaration": "public class PTVideoEditorToolsViewController: PTBaseViewController {"
+      "declaration": "public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInvalidating {"
     },
     {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|var|public var onEditCompleteHandler:((URL)->Void)?",
@@ -45424,9 +45704,17 @@
       "declaration": "public var onlyOutput:Bool = false"
     },
     {
+      "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+      "line": 887,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|init|public init(asset:PHAsset,avAsset:AVAsset)",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1009,
+      "line": 1021,
       "access": "public",
       "kind": "init",
       "declaration": "public init(asset:PHAsset,avAsset:AVAsset) {"
@@ -45434,7 +45722,7 @@
     {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|func|public func videoEditorShow(vc:UIViewController)",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1199,
+      "line": 1211,
       "access": "public",
       "kind": "func",
       "declaration": "public func videoEditorShow(vc:UIViewController) {"
@@ -45442,7 +45730,7 @@
     {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|func|public func preview(_ collector: C7Collector, fliter image: C7Image)",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1392,
+      "line": 1404,
       "access": "public",
       "kind": "func",
       "declaration": "public func preview(_ collector: C7Collector, fliter image: C7Image) {"
@@ -45450,7 +45738,7 @@
     {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|func|public func scrollViewWillBeginDragging(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1421,
+      "line": 1433,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {"
@@ -45458,7 +45746,7 @@
     {
       "key": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift|public|func|public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1425,
+      "line": 1437,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {"

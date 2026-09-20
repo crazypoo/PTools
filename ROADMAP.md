@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.14.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.15.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.13.0`；`5.14.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.13.0`；`5.15.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -51,6 +51,17 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 增加 `PTSecurity` 原生安全门面，使用 CryptoKit/Security.framework，旧 CryptoSwift、KeyChain 和 SecuritySuite 入口保持兼容。
 - ✅ CocoaPods 与 SwiftPM 增加 Security 产品/子模块；不升级第三方依赖，不修改 Pods 源码。
 - [ ] 完成真实宿主与真机上的 100 并发 401、断网恢复、WebSocket 服务端心跳和 Keychain 生物识别回归。
+
+## 5.15.0 Media 全家桶
+
+- ✅ MediaCore 增加统一的 `PTMediaAsset`、`PTMediaType`、`PTMediaMetadata`、`PTMediaResource` 和 `PTMediaSource` 值类型，Picker、Viewer、Editor 适配层不再新增重复基础模型。
+- ✅ Core 增加 `PTImageDownsampler` 和 `PTImageMemoryBudget`；本地大图、Data 图片和视频封面统一使用 ImageIO 目标像素解码。
+- ✅ 增加 `PTMediaCache`，以 Memory/Disk、处理变体、尺寸和帧号组成稳定缓存键，避免原图、缩略图、GIF 与 Live Photo 冲突。
+- ✅ `PTVideoFileCache` 增加下载去重、Range 续传、`.part` 临时文件、原子替换和视频磁盘容量维护。
+- ✅ MediaViewer Cell 统一复用失效、任务取消、GIF 停止、Live Photo 停止和缩放状态清理；VideoEditor 提供幂等 `invalidate()` 生命周期入口。
+- ✅ ImagePicker 继续承担单媒体系统选择，PhotoPicker 继续承担自定义 PhotoKit 多媒体选择；两者保持清晰共存和兼容入口。
+- ✅ 更新 Media、Picker、Editor 的迁移、模块和依赖文档；Xcode Simulator Debug/Release 构建作为本版本必要门禁。
+- [ ] 在真实设备和独立宿主完成 4K 图片、100+ 媒体快速浏览、Live Photo、iCloud、编辑取消、后台切换和低磁盘空间回归。
 
 ## 当前 5.11.x 稳定化
 

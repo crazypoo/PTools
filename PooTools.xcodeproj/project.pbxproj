@@ -257,6 +257,9 @@
 		557451262C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557451252C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift */; };
 		557451282C09B12C0008FCAD /* PTMenuSheetButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557451272C09B12C0008FCAD /* PTMenuSheetButtonView.swift */; };
 		5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */; };
+		5A1500010000000000000001 /* PTImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1500020000000000000001 /* PTImageDownsampler.swift */; };
+		5A1500030000000000000002 /* PTMediaCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1500040000000000000002 /* PTMediaCache.swift */; };
+		5A1500050000000000000003 /* PTMediaLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1500060000000000000003 /* PTMediaLifecycle.swift */; };
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
 		5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */; };
@@ -1259,6 +1262,9 @@
 		557451252C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMenuSheetButtonItems.swift; sourceTree = "<group>"; };
 		557451272C09B12C0008FCAD /* PTMenuSheetButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMenuSheetButtonView.swift; sourceTree = "<group>"; };
 		5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadImageFunction.swift; sourceTree = "<group>"; };
+		5A1500020000000000000001 /* PTImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageDownsampler.swift; sourceTree = "<group>"; };
+		5A1500040000000000000002 /* PTMediaCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaCache.swift; sourceTree = "<group>"; };
+		5A1500060000000000000003 /* PTMediaLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaLifecycle.swift; sourceTree = "<group>"; };
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
 		5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGetGPSData.swift; sourceTree = "<group>"; };
@@ -3666,6 +3672,9 @@
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,
 				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
 				5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */,
+				5A1500020000000000000001 /* PTImageDownsampler.swift */,
+				5A1500040000000000000002 /* PTMediaCache.swift */,
+				5A1500060000000000000003 /* PTMediaLifecycle.swift */,
 				552660F43037590000582606 /* PTMediaSaveService.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */,
@@ -5075,6 +5084,9 @@
 				5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */,
 				55DE3FA02F14BEE200947153 /* PTColorPickerContainerViewController.swift in Sources */,
 				5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */,
+				5A1500010000000000000001 /* PTImageDownsampler.swift in Sources */,
+				5A1500030000000000000002 /* PTMediaCache.swift in Sources */,
+				5A1500050000000000000003 /* PTMediaLifecycle.swift in Sources */,
 				55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				553065212B971AB000BFB4EA /* UIViewController+PTSheetEX.swift in Sources */,

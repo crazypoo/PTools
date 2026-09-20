@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:12Z",
-  "shared_call_count": 1519,
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:30Z",
+  "shared_call_count": 1522,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -43,7 +43,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 96,
+      "line": 129,
       "declaration": "public static let shared = PTAudioCacheFileManager()",
       "name": "shared",
       "category": "B",
@@ -52,7 +52,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 164,
+      "line": 197,
       "declaration": "public static let shared = PTAudioService()",
       "name": "shared",
       "category": "B",
@@ -70,7 +70,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 113,
+      "line": 51,
       "declaration": "public static let shared = PTVideoManager()",
       "name": "shared",
       "category": "B",
@@ -79,7 +79,16 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 173,
+      "line": 112,
+      "declaration": "static let shared = PTVideoFileDownloadCoordinator()",
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 177,
       "declaration": "public static let shared = PTVideoFileCache()",
       "name": "shared",
       "category": "B",
@@ -202,6 +211,15 @@
       "category": "C",
       "scope": "Shared mutable service",
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 59,
+      "declaration": "public static let shared = PTMediaCache()",
+      "name": "shared",
+      "category": "B",
+      "scope": "Thread-safe shared cache or resource",
+      "action": "保留共享入口，但必须有容量、过期和清理策略"
     },
     {
       "path": "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",

@@ -1,103 +1,75 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:37Z",
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:42Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 24,
+      "line": 147,
       "operation": "FileManager.default",
       "classification": "explicit-background-or-actor-boundary",
-      "text": "let baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first"
+      "text": "guard let files = try? FileManager.default.contentsOfDirectory(at: directory,"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 27,
-      "operation": "FileManager.default",
-      "classification": "review-required",
-      "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
-    },
-    {
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 36,
-      "operation": "FileManager.default",
-      "classification": "review-required",
-      "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
-    },
-    {
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 53,
-      "operation": "FileManager.default",
-      "classification": "review-required",
-      "text": "guard let files = try? FileManager.default.contentsOfDirectory("
-    },
-    {
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 83,
+      "line": 165,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "try? FileManager.default.removeItem(at: entry.url)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 181,
+      "line": 186,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 184,
+      "line": 189,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "if !FileManager.default.fileExists(atPath: dir.path) {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 185,
+      "line": 190,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 200,
+      "line": 206,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "return FileManager.default.fileExists(atPath: url.path) ? url : nil"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 205,
+      "line": 211,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "guard FileManager.default.fileExists(atPath: localURL.path) else {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 210,
+      "line": 216,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 484,
-      "operation": "UIImage\\(data:",
-      "classification": "explicit-background-or-actor-boundary",
-      "text": "UIImage(data: data)"
-    },
-    {
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 493,
+      "line": 500,
       "operation": "jpegData\\(",
       "classification": "explicit-background-or-actor-boundary",
       "text": "image.jpegData(compressionQuality: 0.8)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 508,
+      "line": 515,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {"
@@ -146,56 +118,49 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 415,
-      "operation": "Data\\(contentsOf:",
-      "classification": "explicit-background-or-actor-boundary",
-      "text": "guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {"
-    },
-    {
-      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 625,
+      "line": 623,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 637,
+      "line": 635,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 656,
+      "line": 654,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "kCGImageSourceCreateThumbnailFromImageAlways as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 657,
+      "line": 655,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "kCGImageSourceCreateThumbnailWithTransform as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 670,
+      "line": 674,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
-      "text": "let source = CGImageSourceCreateWithData(data as CFData, nil),"
+      "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil),"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 671,
+      "line": 675,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
-      "text": "let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options) else {"
+      "text": "let cgImage = CGImageSourceCreateImageAtIndex(source, 0, ["
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 672,
+      "line": 679,
       "operation": "UIImage\\(data:",
       "classification": "review-required",
       "text": "return UIImage(data: data)"
@@ -299,6 +264,6 @@
       "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
     }
   ],
-  "review_required_count": 29,
-  "background_or_actor_count": 13
+  "review_required_count": 26,
+  "background_or_actor_count": 11
 }

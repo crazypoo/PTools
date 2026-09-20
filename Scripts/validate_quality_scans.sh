@@ -180,6 +180,7 @@ bash Scripts/validate_p1_architecture_closure.sh
 # Español: Incluye los contratos de caché, trabajo pesado de MainActor y extracción de la Fase P en la puerta normal.
 # 中文：将 Phase P 的缓存、MainActor 重活和文件拆分契约纳入常规质量门禁。
 bash Scripts/validate_p2_performance_closure.sh
-bash Scripts/validate_514_network_security.sh
+bash Scripts/validate_network_security.sh
+bash Scripts/validate_515_media.sh
 
 printf 'PASS: Swift 6 safety scans\n'

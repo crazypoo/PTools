@@ -412,10 +412,8 @@ public class PTLoadImageFunction: NSObject {
             guard maximumPixelSize != nil else {
                 return UIImage(contentsOfFile: path)
             }
-            guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
-                return nil
-            }
-            return PTLoadImageFunction.decodeImage(data: data, maximumPixelSize: maximumPixelSize)
+            return PTImageDownsampler.decode(url: URL(fileURLWithPath: path),
+                                             targetSize: targetSize)
         }.value
         return image.map { imageResult($0) } ?? emptyResult()
     }
@@ -666,9 +664,18 @@ public class PTLoadImageFunction: NSObject {
     /// 按请求的最大像素尺寸解码静态图片。
     private nonisolated static func decodeImage(data: Data,
                                                 maximumPixelSize: Int?) -> UIImage? {
-        guard let options = imageDecodeOptions(maximumPixelSize: maximumPixelSize),
-              let source = CGImageSourceCreateWithData(data as CFData, nil),
-              let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options) else {
+        if let maximumPixelSize,
+           maximumPixelSize > 0,
+           let image = PTImageDownsampler.decode(data: data,
+                                                 targetSize: CGSize(width: maximumPixelSize,
+                                                                    height: maximumPixelSize)) {
+            return image
+        }
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [
+                kCGImageSourceShouldCache as String: false,
+                kCGImageSourceShouldCacheImmediately as String: false
+              ] as CFDictionary) else {
             return UIImage(data: data)
         }
         return UIImage(cgImage: cgImage)

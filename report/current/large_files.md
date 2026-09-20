@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 47d01176ff4982b8098d0c49b20b00cbec440594
-Generated at: 2026-09-20T03:15:35Z
+Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
+Generated at: 2026-09-20T06:27:41Z
 -->
 
 # 当前文件尺寸门禁
@@ -40,4 +40,4 @@ Generated at: 2026-09-20T03:15:35Z
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1171 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
 | `PooToolsSource/TipsView/PTTipsView.swift` | 1227 | warning |
-| `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1623 | architecture_exception |
+| `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1635 | architecture_exception |

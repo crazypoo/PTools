@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: 47d01176ff4982b8098d0c49b20b00cbec440594
-Generated at: 2026-09-20T03:15:36Z
+Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
+Generated at: 2026-09-20T06:27:42Z
 -->
 
 # PTools 当前缓存盘点
@@ -13,13 +13,13 @@ Generated at: 2026-09-20T03:15:36Z
 
 | 位置 | 类型 | 代码行 |
 | --- | --- | --- |
-| PooToolsSource/Base/PTAudioCache.swift:166 | NSCache | private let durationCache: NSCache<NSString, NSNumber> = { |
-| PooToolsSource/Base/PTAudioCache.swift:167 | NSCache | let cache = NSCache<NSString, NSNumber>() |
-| PooToolsSource/Base/PTAudioCache.swift:168 | disk or custom cache | cache.countLimit = 256 |
-| PooToolsSource/Base/PTAudioCache.swift:169 | disk or custom cache | cache.totalCostLimit = 256 * MemoryLayout<Float>.size |
-| PooToolsSource/Base/PTAudioCache.swift:170 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTAudioCache.swift:182 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
-| PooToolsSource/Base/PTAudioCache.swift:222 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
+| PooToolsSource/Base/PTAudioCache.swift:199 | NSCache | private let durationCache: NSCache<NSString, NSNumber> = { |
+| PooToolsSource/Base/PTAudioCache.swift:200 | NSCache | let cache = NSCache<NSString, NSNumber>() |
+| PooToolsSource/Base/PTAudioCache.swift:201 | disk or custom cache | cache.countLimit = 256 |
+| PooToolsSource/Base/PTAudioCache.swift:202 | disk or custom cache | cache.totalCostLimit = 256 * MemoryLayout<Float>.size |
+| PooToolsSource/Base/PTAudioCache.swift:203 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTAudioCache.swift:215 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
+| PooToolsSource/Base/PTAudioCache.swift:255 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
 | PooToolsSource/Base/PTCollectionView.swift:1214 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
 | PooToolsSource/Base/PTCollectionView.swift:1215 | disk or custom cache | return cache.doubleValue |
@@ -35,16 +35,18 @@ Generated at: 2026-09-20T03:15:36Z
 | PooToolsSource/Base/PTCollectionViewTypes.swift:31 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:35 | disk or custom cache | cache.removeAllObjects() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:485 | disk or custom cache | // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:242 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:344 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:345 | NSCache | let cache = NSCache<NSString, UIImage>() |
-| PooToolsSource/Base/PTVideoCoverCache.swift:346 | disk or custom cache | cache.countLimit = 100 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:347 | disk or custom cache | cache.totalCostLimit = 50 * 1024 * 1024 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:348 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTVideoCoverCache.swift:457 | disk or custom cache | /// Preserves the URL-only key used by the video file cache. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:466 | disk or custom cache | /// Writes a JPEG cache entry atomically on a utility task. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:488 | disk or custom cache | // English: Encode generated thumbnails away from UI work before writing the disk cache. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:502 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:108 | disk or custom cache | // English: A shared actor prevents concurrent callers from writing the same video cache file. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:172 | disk or custom cache | /// Video file cache manager. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:249 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:351 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:352 | NSCache | let cache = NSCache<NSString, UIImage>() |
+| PooToolsSource/Base/PTVideoCoverCache.swift:353 | disk or custom cache | cache.countLimit = 100 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:354 | disk or custom cache | cache.totalCostLimit = 50 * 1024 * 1024 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:355 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTVideoCoverCache.swift:464 | disk or custom cache | /// Preserves the URL-only key used by the video file cache. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:473 | disk or custom cache | /// Writes a JPEG cache entry atomically on a utility task. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:495 | disk or custom cache | // English: Encode generated thumbnails away from UI work before writing the disk cache. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:509 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
 | PooToolsSource/Button/PTActionLayoutButton.swift:100 | disk or custom cache | // English: Cache the last layout size to avoid rebuilding identical constraints. |
 | PooToolsSource/Category/FileManager+PTEX.swift:25 | disk or custom cache | - 3.1、Library/Cache |
 | PooToolsSource/Category/FileManager+PTEX.swift:28 | disk or custom cache | - 系统不会清理 cache 目录中的文件 |
@@ -79,7 +81,9 @@ Generated at: 2026-09-20T03:15:36Z
 | PooToolsSource/Core/PTGifManager.swift:185 | disk or custom cache | /// Check if this manager has cache for an imageView |
 | PooToolsSource/Core/PTGifManager.swift:186 | disk or custom cache | /// - Parameter imageView: The image view we're searching cache for |
 | PooToolsSource/Core/PTGifManager.swift:187 | disk or custom cache | /// - Returns : a boolean for wether we have cache for the imageView |
-| PooToolsSource/Core/PTLoadImageFunction.swift:550 | disk or custom cache | // Prefer Kingfisher's embedded original bytes before asking the cache serializer for data. |
+| PooToolsSource/Core/PTLoadImageFunction.swift:548 | disk or custom cache | // Prefer Kingfisher's embedded original bytes before asking the cache serializer for data. |
+| PooToolsSource/Core/PTMediaCache.swift:8 | disk or custom cache | // English: Cache variants are part of the key so originals, thumbnails, GIF frames, and Live Photo resources never collide. |
+| PooToolsSource/Core/PTMediaCache.swift:21 | disk or custom cache | // English: A stable cache key is derived from media identity and rendering intent, not Swift's randomized hashValue. |
 | PooToolsSource/Debug/CwlDemangle.swift:3481 | disk or custom cache | _ = printOptional(name.children.at(0), prefix: "lazy protocol witness table cache variable for type ") |
 | PooToolsSource/Debug/CwlDemangle.swift:3548 | disk or custom cache | case .typeMetadataInstantiationCache: printFirstChild(name, prefix: "type metadata instantiation cache for ") |
 | PooToolsSource/Debug/CwlDemangle.swift:3549 | disk or custom cache | case .typeMetadataInstantiationFunction: printFirstChild(name, prefix: "type metadata instantiation cache for ") |
@@ -147,7 +151,7 @@ Generated at: 2026-09-20T03:15:36Z
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:5 | disk or custom cache | // English: Foundation-only contracts shared by logging, cache, and error adapters. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:40 | disk or custom cache | // English: Use a small typed cache contract instead of exposing a third-party cache type. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:53 | disk or custom cache | // English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free. |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:120 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:187 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:627 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:665 | disk or custom cache | // MARK: - Cache Helper |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:679 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |

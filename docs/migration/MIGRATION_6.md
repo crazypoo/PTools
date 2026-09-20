@@ -22,6 +22,9 @@ iOS 17+，语言模式为 Swift 6+。
 | 图片加载 | `PTLoadImageFunction.loadImage(source:)` | 控件和字符串重复入口 | 5.1.0 | 旧入口调用方清零 |
 | 视频缩略图 | `PTVideoThumbnailService` | AVAsset/FileManager 旧入口 | 5.1.0 | 结果和缓存回归通过 |
 | 媒体保存 | `PTMediaSaveService` | UIImage/PHPhotoLibrary 重复保存 | 5.1.0 | 兼容包装器调用方清零 |
+| 媒体值类型 | `PTMediaAsset` / `PTMediaMetadata` / `PTMediaSource` | Picker/Viewer/Editor 自定义基础模型 | 5.15.0 | 所有新跨模块接口使用值快照 |
+| 图片降采样 | `PTImageDownsampler` | `UIImage(data:)` 和本地文件重复解码 | 5.15.0 | 大图入口全部提供目标尺寸 |
+| 媒体缓存 | `PTMediaCache` | 模块私有原图/缩略图/GIF 缓存 | 5.15.0 | 旧缓存目录迁移或自然淘汰 |
 | 空状态 | `PTUnavailableManager.render` | Base/Collection 独立状态实现 | 5.1.0 | 状态机回归通过 |
 | 基础 URL | `Network.globalURL()` | `Network.gobalUrl()` | 5.9.0 | 删除拼写兼容入口 |
 | Socket URL | `Network.socketGlobalURL()` | `Network.socketGobalUrl()` | 5.9.0 | 删除拼写兼容入口 |
@@ -71,6 +74,10 @@ SocketRocket、DataEncrypt、KeyChain 和 SecuritySuite 入口在 5.x 保留为�
 单媒体系统选择使用 `PTSystemMediaPicker`；多选、原图、Live Photo、编辑和 iCloud 进度使用
 `PTMediaLibViewController`。图片加载使用 `PTLoadImageFunction`，视频首帧使用
 `PTVideoThumbnailService`，保存使用 `PTMediaSaveService`。视频临时 URL 的生命周期由调用方明确管理。
+跨模块描述使用 `PTMediaAsset`、`PTMediaType`、`PTMediaMetadata`、`PTMediaResource` 和
+`PTMediaSource`。大图优先传递 `targetSize`，缓存使用 `PTMediaCacheKey` 的明确变体；编辑结果不
+覆盖原图缓存键。视频缓存支持取消、并发去重、Range 续传和原子提交，退出 Viewer/Editor 时调用
+对应媒体对象的 `invalidate()`。
 
 ## 8. Permissions
 

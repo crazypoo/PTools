@@ -21,6 +21,7 @@
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
 | SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |
+| MediaCore | `PooTools/MediaCore` | `PooToolsMediaCore` | Foundation-only 值类型和并发契约 | UIKit、PhotoKit、Network、Debug |
 | ImagePicker | `PooTools/ImagePicker` | `PooToolsImagePicker` | Core、CameraPermission | PhotoKit 多选浏览器 |
 | PhotoPicker | `PooTools/PhotoPicker` | `PooToolsPhotoPicker` | Core、ImagePicker、Network、Loading、Kakapos | VideoEditor、MediaViewer |
 | MediaViewer | `PooTools/MediaViewer` | `PooToolsMediaViewer` | Core、ProgressBar、Network、PageControl、LivePhoto、Photos | ImagePicker、PhotoPicker 浏览器 |
@@ -31,6 +32,10 @@
 
 ImagePicker 与 PhotoPicker 有意共存：前者负责单媒体系统选择和相机，后者负责多选、编辑、原图、
 Live Photo、自定义 Cell 和 iCloud 进度。不要因都能选择图片就合并成一条不清晰的依赖。
+
+5.15.0 的媒体缓存和解码由 Core 提供：`PTImageDownsampler` 负责 ImageIO 目标像素解码，
+`PTMediaCache` 负责 Memory/Disk 变体键和容量维护，`PTVideoThumbnailService` 负责视频帧生成。
+Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、视频封面磁盘目录或重复的缓存键。
 
 ## Third-party inventory
 

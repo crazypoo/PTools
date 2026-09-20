@@ -111,6 +111,12 @@ ImagePicker 是轻量系统单媒体入口，PhotoPicker 是自定义 PhotoKit �
 重复承担同一职责。图片请求、视频缩略图、原图数据、媒体保存和导出均使用类型化结果与取消路径。
 大图、GIF、视频原始数据和导出对象不能无界长期持有。
 
+5.15.0 起，`PooToolsMediaCore` 提供 `PTMediaAsset`、`PTMediaType`、`PTMediaMetadata`、
+`PTMediaResource` 和 `PTMediaSource` 值类型。Core 的 `PTImageDownsampler` 使用 ImageIO 按目标像素
+预算解码，`PTMediaCache` 以资源、变体、尺寸和帧号生成稳定键，并由 actor 串行化 Memory/Disk
+读写和容量维护。视频文件缓存使用独立 `.part` 文件、Range 续传、并发下载去重和原子提交。
+MediaViewer Cell 与 VideoEditor 通过幂等媒体失效入口释放任务、播放器、Live Photo 和 observer。
+
 ## 10. Theme / Appearance
 
 Theme、DarkMode、Colors、Font 和 Alert/ActionSheet 使用动态系统颜色、trait collection 和

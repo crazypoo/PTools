@@ -1,48 +1,48 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:36Z",
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:42Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 166,
+      "line": 199,
       "kind": "NSCache",
       "text": "private let durationCache: NSCache<NSString, NSNumber> = {"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 167,
+      "line": 200,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, NSNumber>()"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 168,
+      "line": 201,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 256"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 169,
+      "line": 202,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 256 * MemoryLayout<Float>.size"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 170,
+      "line": 203,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 182,
+      "line": 215,
       "kind": "disk or custom cache",
       "text": "/// 获取音频时长（一定基于 cache 文件）"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 222,
+      "line": 255,
       "kind": "disk or custom cache",
       "text": "/// 创建播放用 PlayerItem（只用 cache 文件）"
     },
@@ -138,61 +138,73 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 242,
+      "line": 108,
+      "kind": "disk or custom cache",
+      "text": "// English: A shared actor prevents concurrent callers from writing the same video cache file."
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 172,
+      "kind": "disk or custom cache",
+      "text": "/// Video file cache manager."
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 249,
       "kind": "disk or custom cache",
       "text": "/// Video cover cache and thumbnail request coordinator."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 344,
+      "line": 351,
       "kind": "NSCache",
       "text": "@MainActor private static let memoryCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 345,
+      "line": 352,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 346,
+      "line": 353,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 100"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 347,
+      "line": 354,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 50 * 1024 * 1024"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 348,
+      "line": 355,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 457,
+      "line": 464,
       "kind": "disk or custom cache",
       "text": "/// Preserves the URL-only key used by the video file cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 466,
+      "line": 473,
       "kind": "disk or custom cache",
       "text": "/// Writes a JPEG cache entry atomically on a utility task."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 488,
+      "line": 495,
       "kind": "disk or custom cache",
       "text": "// English: Encode generated thumbnails away from UI work before writing the disk cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 502,
+      "line": 509,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
@@ -402,9 +414,21 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 550,
+      "line": 548,
       "kind": "disk or custom cache",
       "text": "// Prefer Kingfisher's embedded original bytes before asking the cache serializer for data."
+    },
+    {
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 8,
+      "kind": "disk or custom cache",
+      "text": "// English: Cache variants are part of the key so originals, thumbnails, GIF frames, and Live Photo resources never collide."
+    },
+    {
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 21,
+      "kind": "disk or custom cache",
+      "text": "// English: A stable cache key is derived from media identity and rendering intent, not Swift's randomized hashValue."
     },
     {
       "path": "PooToolsSource/Debug/CwlDemangle.swift",
@@ -810,7 +834,7 @@
     },
     {
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
-      "line": 120,
+      "line": 187,
       "kind": "disk or custom cache",
       "text": "// English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches."
     },

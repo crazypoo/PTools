@@ -2,11 +2,6 @@
 // Español: MediaCore contiene contratos basados en valores compartidos por las funciones multimedia.
 // 中文：MediaCore 提供媒体功能之间共享的值类型契约。
 
-// English: CocoaPods aggregates legacy media declarations with this opt-in target; SPM keeps the Foundation-only contracts isolated, while CocoaPods uses the existing compatibility surface.
-// Español: CocoaPods agrega las declaraciones multimedia heredadas con este target opcional; SPM mantiene aislados los contratos basados solo en Foundation y CocoaPods conserva la superficie compatible existente.
-// 中文：CocoaPods 会把旧媒体声明与这个可选 target 聚合，因此 SPM 使用独立的 Foundation 契约，CocoaPods 保留现有兼容 API，避免重复符号。
-#if !POOTOOLS_COCOAPODS
-
 import Foundation
 
 // English: A media resource is a Sendable descriptor; platform objects stay in feature adapters.
@@ -18,6 +13,78 @@ public enum PTMediaResource: Hashable, Sendable {
     case remoteURL(URL)
     case photoAsset(identifier: String)
 }
+
+// English: A stable media kind lets feature modules share one classification without importing UIKit.
+// Español: Un tipo multimedia estable permite compartir una clasificación sin importar UIKit.
+// 中文：稳定的媒体类型让各功能模块共享分类，同时不引入 UIKit。
+public enum PTMediaType: String, Hashable, Sendable {
+    case image
+    case animatedImage
+    case video
+    case livePhoto
+    case audio
+    case document
+    case unknown
+}
+
+// English: Metadata is an immutable snapshot, so dimensions and duration can cross task boundaries safely.
+// Español: Los metadatos son una instantánea inmutable para cruzar límites de tareas de forma segura.
+// 中文：媒体元数据是不可变快照，可以安全跨越任务边界。
+public struct PTMediaMetadata: Hashable, Sendable {
+    public let pixelWidth: Int?
+    public let pixelHeight: Int?
+    public let duration: TimeInterval?
+    public let byteCount: Int64?
+    public let fileExtension: String?
+    public let isDegraded: Bool
+
+    public init(pixelWidth: Int? = nil,
+                pixelHeight: Int? = nil,
+                duration: TimeInterval? = nil,
+                byteCount: Int64? = nil,
+                fileExtension: String? = nil,
+                isDegraded: Bool = false) {
+        self.pixelWidth = pixelWidth
+        self.pixelHeight = pixelHeight
+        self.duration = duration
+        self.byteCount = byteCount
+        self.fileExtension = fileExtension
+        self.isDegraded = isDegraded
+    }
+}
+
+// English: A source identifies the media without carrying a mutable platform object.
+// Español: Una fuente identifica el contenido sin transportar objetos mutables de la plataforma.
+// 中文：媒体来源只描述资源身份，不跨边界携带可变系统对象。
+public enum PTMediaSource: Hashable, Sendable {
+    case resource(PTMediaResource)
+    case named(String)
+}
+
+// English: PTMediaAsset is the canonical value model shared by picker, viewer, and editor adapters.
+// Español: PTMediaAsset es el modelo de valor canónico compartido por los adaptadores de picker, viewer y editor.
+// 中文：PTMediaAsset 是 Picker、Viewer 和 Editor 适配层共用的规范值模型。
+public struct PTMediaAsset: Hashable, Sendable {
+    public let identifier: String
+    public let type: PTMediaType
+    public let source: PTMediaSource
+    public let metadata: PTMediaMetadata?
+
+    public init(identifier: String,
+                type: PTMediaType,
+                source: PTMediaSource,
+                metadata: PTMediaMetadata? = nil) {
+        self.identifier = identifier
+        self.type = type
+        self.source = source
+        self.metadata = metadata
+    }
+}
+
+// English: Legacy image and video contracts stay SPM-only because CocoaPods already exposes same-module compatibility names from Core.
+// Español: Los contratos heredados de imagen y vídeo permanecen solo en SPM porque CocoaPods ya expone nombres compatibles del mismo módulo desde Core.
+// 中文：旧的图片和视频契约仅在 SPM 中保留，因为 CocoaPods 的 Core 已经暴露同模块兼容名称。
+#if !POOTOOLS_COCOAPODS
 
 // English: Image sources are transport-neutral and do not require UIKit or a concrete loader.
 // Español: Las fuentes de imagen son neutrales al transporte y no requieren UIKit ni un cargador concreto.

@@ -255,13 +255,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        // MARK: - 2. 彻底清理状态，取消正在进行的任务防止卡顿和错乱
-        loadTask?.cancel()
-        loadTask = nil
-        loadIdentifier = UUID()
-        imageView.kf.cancelDownloadTask() // 假设底层下载使用了 Kingfisher，取消未完成的网络请求
-        livePhoto.stopPlayback() // 滑出屏幕时停止 LivePhoto 播放
+        invalidateMediaResources()
         
+        // MARK: - 2. 彻底清理状态，取消正在进行的任务防止卡顿和错乱
         currentCellType = .None
         gifImage = nil
         videoCacheURL = nil
@@ -280,6 +276,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
         contentScrolView.setZoomScale(1, animated: false)
         contentScrolView.contentOffset = .zero
+    }
+
+    // English: Invalidate every asynchronous media resource before a cell is reused or released.
+    // Español: Invalida todos los recursos multimedia asíncronos antes de reutilizar o liberar la celda.
+    // 中文：在 Cell 复用或释放前，统一失效所有异步媒体资源。
+    func invalidateMediaResources() {
+        loadTask?.cancel()
+        loadTask = nil
+        loadIdentifier = UUID()
+        imageView.kf.cancelDownloadTask()
+        imageView.stopAnimating()
+        livePhoto.stopPlayback()
     }
     
     required public init?(coder aDecoder: NSCoder) {

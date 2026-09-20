@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 47d01176ff4982b8098d0c49b20b00cbec440594
-Generated at: 2026-09-20T03:15:11Z
+Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
+Generated at: 2026-09-20T06:27:29Z
 -->
 
 # PTools 当前公开 API 清单
@@ -427,11 +427,11 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/Base/PTAppBaseConfig.swift:169 | var | public | public var tabBarAccessoryHeight: CGFloat = 44 |
 | PooToolsSource/Base/PTAppBaseConfig.swift:170 | var | public | public var tabBarAccessoryBottomSpacing: CGFloat = 10 |
 | PooToolsSource/Base/PTAudioCache.swift:15 | typealias | public | public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void |
-| PooToolsSource/Base/PTAudioCache.swift:110 | func | public | public func cacheFileURL(for url: URL) -> URL { |
-| PooToolsSource/Base/PTAudioCache.swift:122 | func | public | public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:183 | func | public | public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:223 | func | public | public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:234 | enum | public | public enum PTAudioTranscoder { |
+| PooToolsSource/Base/PTAudioCache.swift:143 | func | public | public func cacheFileURL(for url: URL) -> URL { |
+| PooToolsSource/Base/PTAudioCache.swift:155 | func | public | public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:216 | func | public | public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:256 | func | public | public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:267 | enum | public | public enum PTAudioTranscoder { |
 | PooToolsSource/Base/PTBaseButton.swift:15 | class | open | open class PTBaseButton: UIButton { |
 | PooToolsSource/Base/PTBaseButton.swift:45 | func | public | public func startLoading(indicatorColor: UIColor = .white) { |
 | PooToolsSource/Base/PTBaseButton.swift:76 | func | public | public func stopLoading() { |
@@ -1024,16 +1024,16 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/Base/PTUnavailableFunction.swift:28 | var | public | public var customerView: UIView? = nil |
 | PooToolsSource/Base/PTUnavailableFunction.swift:31 | enum | public | public enum PTUnavailableState: Sendable { |
 | PooToolsSource/Base/PTUnavailableFunction.swift:39 | struct | public | public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态方法 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:93 | struct | public | public struct PTVideoCacheItem { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:95 | let | public | public let originalURLString: String |
-| PooToolsSource/Base/PTVideoCoverCache.swift:98 | var | public | public var coverImage: UIImage? |
-| PooToolsSource/Base/PTVideoCoverCache.swift:101 | var | public | public var localVideoURL: URL? |
-| PooToolsSource/Base/PTVideoCoverCache.swift:104 | var | public | public var isFullyCached: Bool { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:123 | func | public | @MainActor public func getVideoItem(for urlString: String, |
-| PooToolsSource/Base/PTVideoCoverCache.swift:191 | func | public | public func cacheURL(for videoURL: URL) -> URL { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:198 | func | public | public func cachedFileURL(for url: URL) -> URL? { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:219 | func | public | public func prepareVideo(url: URL, |
-| PooToolsSource/Base/PTVideoCoverCache.swift:343 | enum | public | public enum PTVideoCoverCache { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:31 | struct | public | public struct PTVideoCacheItem { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:33 | let | public | public let originalURLString: String |
+| PooToolsSource/Base/PTVideoCoverCache.swift:36 | var | public | public var coverImage: UIImage? |
+| PooToolsSource/Base/PTVideoCoverCache.swift:39 | var | public | public var localVideoURL: URL? |
+| PooToolsSource/Base/PTVideoCoverCache.swift:42 | var | public | public var isFullyCached: Bool { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:61 | func | public | @MainActor public func getVideoItem(for urlString: String, |
+| PooToolsSource/Base/PTVideoCoverCache.swift:197 | func | public | public func cacheURL(for videoURL: URL) -> URL { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:204 | func | public | public func cachedFileURL(for url: URL) -> URL? { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:225 | func | public | public func prepareVideo(url: URL, |
+| PooToolsSource/Base/PTVideoCoverCache.swift:350 | enum | public | public enum PTVideoCoverCache { |
 | PooToolsSource/BioID/PTBiologyID.swift:13 | enum | public | @objc public enum PTBiometryStatus: Int { |
 | PooToolsSource/BioID/PTBiologyID.swift:22 | class | public | public class PTBiometricsManager: NSObject { |
 | PooToolsSource/BioID/PTBiologyID.swift:33 | var | public | public var currentBiometryStatus: PTBiometryStatus { |
@@ -1868,6 +1868,10 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/Core/PTGifManager.swift:172 | func | open | open func clear() { |
 | PooToolsSource/Core/PTGifManager.swift:181 | func | open | open func containsImageView(_ imageView: PlatformImageView) -> Bool{ |
 | PooToolsSource/Core/PTGifManager.swift:188 | func | open | open func hasCache(_ imageView: PlatformImageView) -> Bool { |
+| PooToolsSource/Core/PTImageDownsampler.swift:13 | struct | public | public struct PTImageMemoryBudget: Sendable { |
+| PooToolsSource/Core/PTImageDownsampler.swift:14 | let | public | public let maximumPixelSize: Int |
+| PooToolsSource/Core/PTImageDownsampler.swift:16 | init | public | public init(maximumPixelSize: Int = PTImageDownsampler.defaultMaximumPixelSize) { |
+| PooToolsSource/Core/PTImageDownsampler.swift:26 | enum | public | public enum PTImageDownsampler { |
 | PooToolsSource/Core/PTLoadImageFunction.swift:17 | enum | public | public enum PTImageType : Sendable { |
 | PooToolsSource/Core/PTLoadImageFunction.swift:25 | typealias | public | public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void) |
 | PooToolsSource/Core/PTLoadImageFunction.swift:28 | enum | public | public enum PTImageSource { |
@@ -1935,6 +1939,21 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/Core/PTMarcos_swift.swift:88 | let | public | @MainActor public let kPlatformName: String? = infoDictionary?["DTPlatformName"] as? String |
 | PooToolsSource/Core/PTMarcos_swift.swift:91 | let | public | @MainActor public let kiOSVersion: String = UIDevice.current.systemVersion |
 | PooToolsSource/Core/PTMarcos_swift.swift:94 | let | public | @MainActor public let kOSType: String = UIDevice.current.systemName + UIDevice.current.systemVersion |
+| PooToolsSource/Core/PTMediaCache.swift:11 | enum | public | public enum PTMediaCacheVariant: String, Hashable, Sendable { |
+| PooToolsSource/Core/PTMediaCache.swift:24 | struct | public | public struct PTMediaCacheKey: Hashable, Sendable { |
+| PooToolsSource/Core/PTMediaCache.swift:25 | let | public | public let resourceIdentifier: String |
+| PooToolsSource/Core/PTMediaCache.swift:26 | let | public | public let variant: PTMediaCacheVariant |
+| PooToolsSource/Core/PTMediaCache.swift:27 | let | public | public let pixelWidth: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:28 | let | public | public let pixelHeight: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:29 | let | public | public let frameNumber: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:31 | init | public | public init(resourceIdentifier: String, |
+| PooToolsSource/Core/PTMediaCache.swift:58 | actor | public | public actor PTMediaCache { |
+| PooToolsSource/Core/PTMediaCache.swift:69 | init | public | public init(directory: URL? = nil, |
+| PooToolsSource/Core/PTMediaCache.swift:79 | func | public | public func data(for key: PTMediaCacheKey) -> Data? { |
+| PooToolsSource/Core/PTMediaCache.swift:92 | func | public | public func insert(_ data: Data, for key: PTMediaCacheKey) { |
+| PooToolsSource/Core/PTMediaCache.swift:100 | func | public | public func removeValue(for key: PTMediaCacheKey) { |
+| PooToolsSource/Core/PTMediaCache.swift:105 | func | public | public func removeAll() { |
+| PooToolsSource/Core/PTMediaLifecycle.swift:10 | protocol | public | public protocol PTMediaInvalidating: AnyObject { |
 | PooToolsSource/Core/PTMediaSaveService.swift:13 | enum | public | public enum PTMediaSaveError: Error, LocalizedError, Sendable { |
 | PooToolsSource/Core/PTMediaSaveService.swift:19 | var | public | public var errorDescription: String? { |
 | PooToolsSource/Core/PTMediaSaveService.swift:30 | enum | public | public enum PTMediaSaveResult { |
@@ -3517,13 +3536,13 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:28 | func | public | public func didReceive(_ payloads: [MXMetricPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:49 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:86 | func | public | public func uploadPendingMetrics() { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:324 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:650 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:655 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:660 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:662 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:664 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:674 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:332 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:658 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:663 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:668 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:670 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:672 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:682 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:11 | typealias | public | public typealias PTViewerSaveBlock = (_ finish:Bool) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:12 | typealias | public | public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:13 | typealias | public | public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Void |
@@ -3560,9 +3579,9 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/MediaViewer/PTMediaBrowserController.swift:33 | var | public | public var viewSaveImageBlock:PTViewerSaveBlock? |
 | PooToolsSource/MediaViewer/PTMediaBrowserController.swift:35 | var | public | public var viewDeleteImageBlock:PTViewerIndexBlock? |
 | PooToolsSource/MediaViewer/PTMediaBrowserController.swift:38 | var | public | public var browserCurrentDataBlock:((Int)->Void)? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:274 | init | public | public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:443 | func | public | public func mediasShow() { |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:448 | func | public | public func reloadConfig(mediaData:[PTMediaBrowserModel]) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:275 | init | public | public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:444 | func | public | public func mediasShow() { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:449 | func | public | public func reloadConfig(mediaData:[PTMediaBrowserModel]) { |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:13 | var | public | public var imageInfo: String = "" |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:17 | var | public | public var imageURL: Any? |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:18 | var | public | public var modelEX: String = "" |
@@ -4134,30 +4153,46 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:71 | init | public | public init(_ type: T?) { |
 | PooToolsSource/PToolsCore/PTMainActorBridge.swift:12 | enum | public | public enum PTMainActorBridge { |
 | PooToolsSource/PToolsCore/PTURLParser.swift:15 | enum | public | public enum PTURLParser { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:15 | enum | public | public enum PTMediaResource: Hashable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:25 | enum | public | public enum PTImageSource: Hashable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:33 | enum | public | public enum PTVideoSource: Hashable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:40 | struct | public | public struct PTMediaProgressSnapshot: Hashable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:41 | let | public | public let completedUnitCount: Int64 |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:42 | let | public | public let totalUnitCount: Int64 |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:43 | let | public | public let fractionCompleted: Double |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:45 | init | public | public init(completedUnitCount: Int64 = 0, |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:57 | struct | public | public struct PTImageLoadingOptions: Hashable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:58 | let | public | public let maximumPixelSize: Int? |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:59 | let | public | public let scale: Double |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:60 | let | public | public let allowsNetworkAccess: Bool |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:62 | init | public | public init(maximumPixelSize: Int? = nil, |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:74 | struct | public | public struct PTImageLoadResult: Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:75 | let | public | public let data: Data |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:76 | let | public | public let isDegraded: Bool |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:77 | let | public | public let source: PTImageSource |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:79 | init | public | public init(data: Data, isDegraded: Bool = false, source: PTImageSource) { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:89 | enum | public | public enum PTMediaCoreError: Error, Equatable, Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:99 | protocol | public | public protocol PTImageLoading: Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:107 | protocol | public | public protocol PTVideoResourceProviding: Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:114 | protocol | public | public protocol PTThumbnailProviding: Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:123 | protocol | public | public protocol PTMediaCaching: Sendable { |
-| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:132 | protocol | public | public protocol PTMediaCancellationToken: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:10 | enum | public | public enum PTMediaResource: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:20 | enum | public | public enum PTMediaType: String, Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:33 | struct | public | public struct PTMediaMetadata: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:34 | let | public | public let pixelWidth: Int? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:35 | let | public | public let pixelHeight: Int? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:36 | let | public | public let duration: TimeInterval? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:37 | let | public | public let byteCount: Int64? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:38 | let | public | public let fileExtension: String? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:39 | let | public | public let isDegraded: Bool |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:41 | init | public | public init(pixelWidth: Int? = nil, |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:59 | enum | public | public enum PTMediaSource: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:67 | struct | public | public struct PTMediaAsset: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:68 | let | public | public let identifier: String |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:69 | let | public | public let type: PTMediaType |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:70 | let | public | public let source: PTMediaSource |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:71 | let | public | public let metadata: PTMediaMetadata? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:73 | init | public | public init(identifier: String, |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:92 | enum | public | public enum PTImageSource: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:100 | enum | public | public enum PTVideoSource: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:107 | struct | public | public struct PTMediaProgressSnapshot: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:108 | let | public | public let completedUnitCount: Int64 |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:109 | let | public | public let totalUnitCount: Int64 |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:110 | let | public | public let fractionCompleted: Double |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:112 | init | public | public init(completedUnitCount: Int64 = 0, |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:124 | struct | public | public struct PTImageLoadingOptions: Hashable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:125 | let | public | public let maximumPixelSize: Int? |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:126 | let | public | public let scale: Double |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:127 | let | public | public let allowsNetworkAccess: Bool |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:129 | init | public | public init(maximumPixelSize: Int? = nil, |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:141 | struct | public | public struct PTImageLoadResult: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:142 | let | public | public let data: Data |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:143 | let | public | public let isDegraded: Bool |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:144 | let | public | public let source: PTImageSource |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:146 | init | public | public init(data: Data, isDegraded: Bool = false, source: PTImageSource) { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:156 | enum | public | public enum PTMediaCoreError: Error, Equatable, Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:166 | protocol | public | public protocol PTImageLoading: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:174 | protocol | public | public protocol PTVideoResourceProviding: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:181 | protocol | public | public protocol PTThumbnailProviding: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:190 | protocol | public | public protocol PTMediaCaching: Sendable { |
+| PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:199 | protocol | public | public protocol PTMediaCancellationToken: Sendable { |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:20 | typealias | public | public typealias PTActionTask = @Sendable () -> Void |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:22 | enum | public | public enum PTPermissionStatus: Int, CustomStringConvertible, Equatable, Sendable { |
 | PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift:28 | var | public | public var description: String { |
@@ -5687,14 +5722,15 @@ Generated at: 2026-09-20T03:15:11Z
 | PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:28 | init | public | public init(delay: TimeInterval) { |
 | PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:34 | func | public | public func debounce(action: @escaping @Sendable () async -> Void) { |
 | PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:112 | func | public | public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) { |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:122 | class | public | public class PTVideoEditorToolsViewController: PTBaseViewController { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:122 | class | public | public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInvalidating { |
 | PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:143 | var | public | public var onEditCompleteHandler:((URL)->Void)? |
 | PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:144 | var | public | public var onlyOutput:Bool = false |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1009 | init | public | public init(asset:PHAsset,avAsset:AVAsset) { |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1199 | func | public | public func videoEditorShow(vc:UIViewController) { |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1392 | func | public | public func preview(_ collector: C7Collector, fliter image: C7Image) { |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1421 | func | public | public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { |
-| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1425 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:887 | func | public | public func invalidate() { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1021 | init | public | public init(asset:PHAsset,avAsset:AVAsset) { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1211 | func | public | public func videoEditorShow(vc:UIViewController) { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1404 | func | public | public func preview(_ collector: C7Collector, fliter image: C7Image) { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1433 | func | public | public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { |
+| PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift:1437 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
 | PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift:13 | class | public | public class PTVideoFrameTimeLineFunction { |
 | PooToolsSource/VideoEditor/Provider.swift:14 | struct | public | public struct Provider { |
 | PooToolsSource/VideoEditor/Provider.swift:23 | init | public | public init(with videoURL: URL, to outputURL: URL? = nil) { |

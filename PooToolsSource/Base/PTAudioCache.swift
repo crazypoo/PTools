@@ -20,30 +20,58 @@ public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Doub
 enum PTCoreFileDownloadService {
     static func download(from url: URL,
                          to destinationURL: URL,
-                         progress: FileDownloadProgress?) async throws -> URL {
-        // Give every transfer its own temporary file so concurrent requests cannot overwrite each other.
-        // Cada transferencia usa su propio archivo temporal para evitar sobrescrituras concurrentes.
-        // 每次传输使用独立临时文件，避免并发请求互相覆盖。
+                         progress: FileDownloadProgress?,
+                         allowsResume: Bool = false) async throws -> URL {
+        // English: Resume only uses a destination-scoped partial file and still commits atomically.
+        // Español: La reanudación usa un archivo parcial ligado al destino y conserva la sustitución atómica.
+        // 中文：断点续传只使用与目标绑定的分片文件，并继续采用原子替换。
         let directoryURL = destinationURL.deletingLastPathComponent()
-        let temporaryName = ".\(destinationURL.lastPathComponent).\(UUID().uuidString).pt-download"
-        let temporaryURL = directoryURL.appendingPathComponent(temporaryName, isDirectory: false)
+        let temporaryURL: URL
+        if allowsResume {
+            temporaryURL = destinationURL.appendingPathExtension("part")
+        } else {
+            let temporaryName = ".\(destinationURL.lastPathComponent).\(UUID().uuidString).pt-download"
+            temporaryURL = directoryURL.appendingPathComponent(temporaryName, isDirectory: false)
+        }
         try FileManager.default.createDirectory(at: directoryURL,
                                                  withIntermediateDirectories: true)
-        guard FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) else {
+
+        var existingBytes: Int64 = 0
+        if allowsResume,
+           let attributes = try? FileManager.default.attributesOfItem(atPath: temporaryURL.path),
+           let size = attributes[.size] as? NSNumber {
+            existingBytes = max(0, size.int64Value)
+        } else if !FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) {
             throw CocoaError(.fileWriteUnknown)
         }
 
         defer {
-            try? FileManager.default.removeItem(at: temporaryURL)
+            if !allowsResume {
+                try? FileManager.default.removeItem(at: temporaryURL)
+            }
         }
 
-        let (bytes, response) = try await URLSession.shared.bytes(from: url)
-        if let httpResponse = response as? HTTPURLResponse,
-           !(200..<300).contains(httpResponse.statusCode) {
+        var request = URLRequest(url: url)
+        if existingBytes > 0 {
+            request.setValue("bytes=\(existingBytes)-", forHTTPHeaderField: "Range")
+        }
+        let (bytes, response) = try await URLSession.shared.bytes(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200..<300).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
 
-        let totalBytes = response.expectedContentLength > 0 ? response.expectedContentLength : 0
+        let shouldAppend = allowsResume && existingBytes > 0 && httpResponse.statusCode == 206
+        if allowsResume && existingBytes > 0 && !shouldAppend {
+            existingBytes = 0
+            try? FileManager.default.removeItem(at: temporaryURL)
+            guard FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) else {
+                throw CocoaError(.fileWriteUnknown)
+            }
+        }
+
+        let expectedBytes = response.expectedContentLength > 0 ? response.expectedContentLength : 0
+        let totalBytes = shouldAppend ? expectedBytes + existingBytes : expectedBytes
         let fileHandle = try FileHandle(forWritingTo: temporaryURL)
         var isClosed = false
         defer {
@@ -54,7 +82,12 @@ enum PTCoreFileDownloadService {
 
         var buffer = Data()
         buffer.reserveCapacity(64 * 1024)
-        var receivedBytes: Int64 = 0
+        var receivedBytes: Int64 = shouldAppend ? existingBytes : 0
+        if shouldAppend {
+            try fileHandle.seekToEnd()
+        } else {
+            try fileHandle.truncate(atOffset: 0)
+        }
         var lastProgressTime = -Double.infinity
 
         for try await byte in bytes {

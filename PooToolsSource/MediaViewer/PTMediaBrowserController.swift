@@ -201,6 +201,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                         endCell.imageView.stopAnimating()
                     default: break
                     }
+                    endCell.invalidateMediaResources()
                     
                     if self.viewConfig.pageControlShow {
                         self.pageControlProgressSet(indexPath: currentIndex)

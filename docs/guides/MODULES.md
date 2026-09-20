@@ -11,6 +11,7 @@
 | 能力 | CocoaPods | Swift Package Manager | 典型用途 |
 | --- | --- | --- | --- |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | Base、Category、Theme、列表和基础权限 |
+| MediaCore | `PooTools/MediaCore` | `PooToolsMediaCore` | 媒体值类型、来源、元数据和并发契约 |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Codable、上传、下载、缓存和取消 |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Keychain、CryptoKit 摘要、HMAC、AES-GCM、签名和验签 |
 | Socket | `PooTools/SocketKit` | `PooToolsSocketKit` | actor WebSocket、心跳、重连和发送队列 |
@@ -19,6 +20,7 @@
 | MediaViewer | `PooTools/MediaViewer` | `PooToolsMediaViewer` | 图片、GIF、视频预览 |
 | ImageEditor | `PooTools/ImageEditor` | `PooToolsImageEditor` | 图片裁剪、贴纸、滤镜、编辑导出 |
 | VideoEditor | `PooTools/VideoEditor` | `PooToolsVideoEditor` | 视频编辑和导出 |
+| PDF / SVG / Screenshot / QRCode | `PooTools/PDF`、`PooTools/SVG`、`PooTools/SmartScreenshot`、`PooTools/ScanQRCode` | 对应 products | 文档渲染、矢量、截图和二维码 |
 | ScrollBanner | `PooTools/ScrollBanner` | `PooToolsScrollBanner` | `PTBannerView` 轮播 |
 | PageControl | `PooTools/PageControl` | `PooToolsPageControl` | 分页指示器 |
 | Picker | `PooTools/Picker` | `PooToolsPicker` | 嵌入式或覆盖层滚轮选择器 |
@@ -79,6 +81,11 @@ https://github.com/crazypoo/PTools.git
 Network 新代码从 `PTNetworkExecutor` 开始；Socket 新代码从 `PTWebSocketClient` 开始；安全存储和
 密码学新代码从 `PTSecurity` 开始。旧入口只用于兼容既有宿主，迁移时不要同时维护第二套请求、重连
 或密钥存储逻辑。
+
+Media 新代码从 `PTMediaCore` 的值类型、`PTLoadImageFunction.loadImage(source:)`、
+`PTVideoThumbnailService`、`PTMediaSaveService` 和 `PTMediaCache` 开始。单媒体选择使用
+`PTSystemMediaPicker`，多媒体 PhotoKit 浏览使用 `PTMediaLibViewController`；`targetSize` 应传入
+图片加载入口，避免在 Cell 或 Viewer 内自行完整解码大图。
 
 ## 依赖与迁移
 

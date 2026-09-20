@@ -14,76 +14,14 @@ import CryptoKit
 // Serializa el acceso a los archivos para que la decodificación y el disco no bloqueen MainActor.
 // 串行化缩略图文件 I/O，避免图片解码和磁盘访问阻塞 MainActor。
 private actor PTVideoCoverDiskStore {
-    private let directory: URL
-    private let maximumDiskSize: Int64 = 100 * 1024 * 1024
-    private let targetDiskSize: Int64 = 70 * 1024 * 1024
-    private let maintenanceInterval: TimeInterval = 60
-    private var lastMaintenanceTime: TimeInterval = 0
-
-    init() {
-        let baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-        let directory = baseURL.appendingPathComponent("PTVideoCoverCache", isDirectory: true)
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        self.directory = directory
+    func readData(for key: String) async -> Data? {
+        let cacheKey = PTMediaCacheKey(resourceIdentifier: key, variant: .videoThumbnail)
+        return await PTMediaCache.shared.data(for: cacheKey)
     }
 
-    func readData(for key: String) -> Data? {
-        try? Data(contentsOf: fileURL(for: key), options: .mappedIfSafe)
-    }
-
-    func writeData(_ data: Data, for key: String) {
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try? data.write(to: fileURL(for: key), options: .atomic)
-        trimIfNeeded()
-    }
-
-    private func fileURL(for key: String) -> URL {
-        directory.appendingPathComponent(key, isDirectory: false)
-    }
-
-    // English: Trim only by file metadata so maintenance never reloads every cached image into memory.
-    // Español: Recorta solo usando metadatos para que el mantenimiento nunca vuelva a cargar cada imagen en memoria.
-    // 中文：仅使用文件元数据执行裁剪，避免维护时把所有缓存图片重新读入内存。
-    private func trimIfNeeded() {
-        let now = ProcessInfo.processInfo.systemUptime
-        guard now - lastMaintenanceTime >= maintenanceInterval else { return }
-        lastMaintenanceTime = now
-
-        guard let files = try? FileManager.default.contentsOfDirectory(
-            at: directory,
-            includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
-            options: [.skipsHiddenFiles]
-        ) else {
-            return
-        }
-
-        var totalSize: Int64 = 0
-        var entries: [(url: URL, size: Int64, modified: Date)] = []
-        entries.reserveCapacity(files.count)
-
-        for fileURL in files {
-            autoreleasepool {
-                guard let values = try? fileURL.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]),
-                      let fileSize = values.fileSize,
-                      fileSize > 0 else {
-                    return
-                }
-                let size = Int64(fileSize)
-                let modified = values.contentModificationDate ?? .distantPast
-                totalSize += size
-                entries.append((fileURL, size, modified))
-            }
-        }
-
-        guard totalSize > maximumDiskSize else { return }
-
-        entries.sort { $0.modified < $1.modified }
-        for entry in entries {
-            try? FileManager.default.removeItem(at: entry.url)
-            totalSize -= entry.size
-            if totalSize <= targetDiskSize { break }
-        }
+    func writeData(_ data: Data, for key: String) async {
+        let cacheKey = PTMediaCacheKey(resourceIdentifier: key, variant: .videoThumbnail)
+        await PTMediaCache.shared.insert(data, for: cacheKey)
     }
 }
 
@@ -167,7 +105,73 @@ public final class PTVideoManager: Sendable {
     }
 }
 
-/// 视频文件沙盒缓存管理类
+// English: A shared actor prevents concurrent callers from writing the same video cache file.
+// Español: Un actor compartido evita que llamadas concurrentes escriban el mismo archivo de vídeo.
+// 中文：共享 Actor 防止并发调用同时写入同一个视频缓存文件。
+private actor PTVideoFileDownloadCoordinator {
+    static let shared = PTVideoFileDownloadCoordinator()
+    private var tasks: [URL: Task<URL, Error>] = [:]
+
+    func download(from url: URL,
+                  to destinationURL: URL,
+                  progress: FileDownloadProgress?) async throws -> URL {
+        if let task = tasks[destinationURL] {
+            return try await task.value
+        }
+
+        let task = Task.detached(priority: .utility) {
+            try await PTCoreFileDownloadService.download(from: url,
+                                                         to: destinationURL,
+                                                         progress: progress,
+                                                         allowsResume: true)
+        }
+        tasks[destinationURL] = task
+        defer { tasks[destinationURL] = nil }
+        return try await task.value
+    }
+}
+
+// English: Video file quota maintenance uses metadata only and never decodes a cached movie.
+// Español: El mantenimiento de cuota usa solo metadatos y nunca decodifica una película en caché.
+// 中文：视频文件容量维护只读取文件元数据，不解码缓存视频。
+private actor PTVideoFileDiskMaintenance {
+    private let directory: URL
+    private let maximumSize: Int64 = 512 * 1024 * 1024
+    private let targetSize: Int64 = 384 * 1024 * 1024
+
+    init(directory: URL) {
+        self.directory = directory
+    }
+
+    func trimIfNeeded() {
+        guard let files = try? FileManager.default.contentsOfDirectory(at: directory,
+                                                                        includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
+                                                                        options: [.skipsHiddenFiles]) else { return }
+        var totalSize: Int64 = 0
+        var entries: [(url: URL, size: Int64, date: Date)] = []
+        for url in files where url.pathExtension != "part" {
+            autoreleasepool {
+                guard let values = try? url.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]),
+                      let fileSize = values.fileSize,
+                      fileSize > 0 else { return }
+                let size = Int64(fileSize)
+                totalSize += size
+                entries.append((url, size, values.contentModificationDate ?? .distantPast))
+            }
+        }
+        guard totalSize > maximumSize else { return }
+        entries.sort { $0.date < $1.date }
+        for entry in entries {
+            try? FileManager.default.removeItem(at: entry.url)
+            totalSize -= entry.size
+            if totalSize <= targetSize { break }
+        }
+    }
+}
+
+/// Video file cache manager.
+/// Gestor de caché de archivos de vídeo.
+/// 视频文件沙盒缓存管理类。
 public final class PTVideoFileCache: Sendable {
 
     public static let shared = PTVideoFileCache()
@@ -176,6 +180,7 @@ public final class PTVideoFileCache: Sendable {
     
     // 🌟 Swift 6 改进：摒弃 lazy var，改为通过 init 初始化的 let 常量，彻底消除并发读写隐患
     private let cacheDirectory: URL
+    private let diskMaintenance: PTVideoFileDiskMaintenance
 
     private init() {
         let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
@@ -185,6 +190,7 @@ public final class PTVideoFileCache: Sendable {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         }
         self.cacheDirectory = dir
+        self.diskMaintenance = PTVideoFileDiskMaintenance(directory: dir)
     }
 
     /// 同一个 URL → 同一个文件路径
@@ -228,9 +234,10 @@ public final class PTVideoFileCache: Sendable {
 
             let localURL = cacheURL(for: url)
             do {
-                _ = try await PTCoreFileDownloadService.download(from: url,
-                                                                 to: localURL,
-                                                                 progress: progress)
+                _ = try await PTVideoFileDownloadCoordinator.shared.download(from: url,
+                                                                              to: localURL,
+                                                                              progress: progress)
+                await diskMaintenance.trimIfNeeded()
                 completion(localURL)
             } catch {
                 completion(nil)
@@ -481,7 +488,7 @@ private extension PTVideoCoverCache {
     // 中文：在 utility 执行器上解码缓存图片，避免阻塞 MainActor。
     static func decodeImage(from data: Data) async -> UIImage? {
         await Task.detached(priority: .userInitiated) {
-            UIImage(data: data)
+            PTImageDownsampler.decode(data: data, targetSize: nil)
         }.value
     }
 

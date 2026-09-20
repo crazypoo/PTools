@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.15.0 — 2026-09-20
+
+- 完成 Media 全家桶第一轮收口：MediaCore 增加 `PTMediaAsset`、`PTMediaType`、`PTMediaMetadata`、`PTMediaResource` 和 `PTMediaSource` 值类型契约。
+- 增加 `PTImageDownsampler` 与 `PTImageMemoryBudget`，图片和视频封面路径按目标像素解码，避免本地大图先完整读入 `Data`。
+- 增加带 Memory/Disk、变体和容量维护的 `PTMediaCache`，视频封面迁移到统一缓存键，区分原图、缩略图、GIF、Live Photo 和视频帧。
+- 视频缓存增加并发下载去重、Range 续传、`.part` 临时文件和原子提交；MediaViewer Cell 与 VideoEditor 增加统一媒体资源失效入口。
+- 保留 ImagePicker、PhotoPicker、MediaViewer、ImageEditor、VideoEditor、LivePhoto、PDF、SVG、QRCode 和 SmartScreenshot 的现有公开入口，继续支持 iOS 17+ / Swift 6+。
+
 ## 5.14.0 — 2026-09-20
 
 - Network 增加统一的 `PTNetworkRequest`、`PTNetworkExecutor`、类型化响应、请求上下文和错误分类入口。
@@ -45,9 +53,9 @@
 - 发布当前 5.11.x 正式基线，包含 Debug Foundation、PTInstruments 和长期文档结构治理。
 - 5.11.x 后续的架构收口、依赖 parity 和 6.0 迁移验证继续记录在 Unreleased 与 `report/`。
 
-## Unreleased — 5.15.x
+## Unreleased — 5.16.x
 
-当前 `PooTools.podspec` 为 `5.14.0`，工作树中的后续架构收口尚未作为新版本发布。
+当前 `PooTools.podspec` 为 `5.15.0`，5.16.x 后续架构收口尚未作为新版本发布。
 
 - 5.10 Debug Foundation 与 5.11 PTInstruments 已进入当前代码架构，仍需真机、真实宿主和多 Scene 回归。
 - 建立长期 `docs/` 文档结构，区分用户指南、当前架构、迁移、维护流程和自动报告。
@@ -110,4 +118,4 @@
 ```
 
 `5.9.1`、`5.9.8`、所有 `5.10.x`、`5.11.0`、`5.11.1` 和 `5.11.15` 当前没有对应 Git tag，
-因此不作为已发布版本列出；`5.14.0` 当前仍是开发基线。
+因此不作为已发布版本列出；`5.15.0` 当前仍是开发基线。

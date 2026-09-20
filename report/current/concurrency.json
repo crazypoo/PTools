@@ -2,11 +2,11 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T03:15:11Z",
+  "source_revision": "3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821",
+  "generated_at": "2026-09-20T06:27:29Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 27,
+    "task_detached": 28,
     "unchecked_sendable": 68,
     "as_bang": 4
   },
@@ -56,13 +56,19 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 483,
+      "line": 122,
+      "text": "let task = Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 490,
       "text": "await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 492,
+      "line": 499,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
@@ -290,13 +296,13 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 559,
+      "line": 557,
       "text": "data = await Task.detached(priority: .userInitiated, operation: {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 568,
+      "line": 566,
       "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
     },
     {
@@ -734,7 +740,7 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1519,
+      "line": 1531,
       "text": "private struct PTC7SafeBox:@unchecked Sendable {"
     },
     {

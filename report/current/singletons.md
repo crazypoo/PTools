@@ -3,16 +3,16 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: 47d01176ff4982b8098d0c49b20b00cbec440594
-Generated at: 2026-09-20T03:15:12Z
+Source revision: 3aa5bc72e8cbdfca13dc7b2297d9579b71ce4821
+Generated at: 2026-09-20T06:27:30Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1519**
-- 单例声明计数：**101**
+- .shared / .share 调用文本计数：**1522**
+- 单例声明计数：**103**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
 | --- | --- | --- | --- | --- |
@@ -20,11 +20,12 @@ Generated at: 2026-09-20T03:15:12Z
 | PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift:148 | shared | D Shared mutable UI or scene state | public static let shared = PTAlertManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift:91 | share | D Shared mutable UI or scene state | public static let share = PTLaunchAdMonitor() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTAppBaseConfig.swift:16 | share | D Shared mutable UI or scene state | public static let share = PTAppBaseConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Base/PTAudioCache.swift:96 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/Base/PTAudioCache.swift:164 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTAudioCache.swift:129 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTAudioCache.swift:197 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTNavigationBarManager.swift:137 | shared | D Shared mutable UI or scene state | public static let shared = PTNavigationBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:113 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:173 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:51 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:112 | shared | B Thread-safe shared cache or resource | static let shared = PTVideoFileDownloadCoordinator() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTVideoCoverCache.swift:177 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoFileCache() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/BioID/PTBiologyID.swift:23 | shared | C Shared mutable service | public static let shared = PTBiometricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift:22 | shared | C Shared mutable service | @MainActor static let shared: PTPermissionBluetoothHandler = .init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/C7Collector/C7CameraConfig.swift:14 | share | D Shared mutable UI or scene state | public static let share = C7CameraConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
@@ -38,6 +39,7 @@ Generated at: 2026-09-20T03:15:12Z
 | PooToolsSource/Contact/PTContact.swift:48 | share | C Shared mutable service | public static let share = PTContact() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTAppUserdefault.swift:45 | shared | C Shared mutable service | public static let shared = PTCoreUserDefultsWrapper() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTGCDManager.swift:49 | shared | C Shared mutable service | public static let shared = PTGCDManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/Core/PTMediaCache.swift:59 | shared | B Thread-safe shared cache or resource | public static let shared = PTMediaCache() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Core/PTUtils+SceneConcurrency.swift:250 | shared | A Stateless convenience or immutable utility | public static let shared = PTMemoryWarningCoordinator() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Core/PTUtils.swift:298 | share | A Stateless convenience or immutable utility | public static let share = PTUtils() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Country/PTCountryCodes.swift:19 | share | C Shared mutable service | @MainActor public static let share = PTCountryCodes() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

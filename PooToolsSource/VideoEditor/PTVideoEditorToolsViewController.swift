@@ -119,7 +119,7 @@ extension PTCropDimView:@MainActor CAAnimationDelegate {
 }
 
 @objcMembers
-public class PTVideoEditorToolsViewController: PTBaseViewController {
+public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInvalidating {
     // 创建一个 0.3 秒延迟的防抖器
     private let reloadDebouncer = PTDebouncer(delay: 0.3)
     // 用于管理和释放播放进度的监听器，防止 CPU 泄漏
@@ -881,6 +881,19 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         scrubTask?.cancel()
     }
 
+    // English: Release playback, observers, scrub work, and export resources in one idempotent operation.
+    // Español: Libera reproducción, observadores, tareas de búsqueda y exportación en una operación idempotente.
+    // 中文：通过一个幂等入口释放播放、观察者、拖动取帧任务和导出资源。
+    public func invalidate() {
+        cancelCurrentExport()
+        removeTimeObserver()
+        c7Player?.pause()
+        avPlayer?.pause()
+        scrubImageGenerator?.cancelAllCGImageGeneration()
+        scrubImageGenerator = nil
+        hideExportHUD()
+    }
+
     private func performExport(configuration: ExportConfiguration) async {
         var cleanupURLs = Set<URL>()
 
@@ -977,8 +990,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         guard isBeingDismissed || isMovingFromParent || navigationController?.isBeingDismissed == true else { return }
-        cancelCurrentExport()
-        removeTimeObserver()
+        invalidate()
     }
 
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
