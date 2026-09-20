@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:20:53Z",
+  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
+  "generated_at": "2026-09-20T16:54:12Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
@@ -638,7 +638,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 987,
+      "line": 998,
       "text": "DispatchQueue.main.async {"
     },
     {

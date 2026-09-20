@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 5276a8381a0e5044f28fcf62920c9ef8e22c83dc
-Generated at: 2026-09-20T14:21:04Z
+Source revision: 7beff0ffd16062cec5a2c5da1044b5111779d7e8
+Generated at: 2026-09-20T16:54:22Z
 -->
 
 # PTools 当前回归状态
@@ -13,7 +13,7 @@ Generated at: 2026-09-20T14:21:04Z
 
 - 当前 podspec 版本：`unknown`
 - 最新正式 Git tag：`5.18.2`
-- 当前提交：`5276a8381a0e5044f28fcf62920c9ef8e22c83dc`
+- 当前提交：`7beff0ffd16062cec5a2c5da1044b5111779d7e8`
 - 当前状态：`static_and_build_evidence_required`
 
 ## 发布前仍需人工确认

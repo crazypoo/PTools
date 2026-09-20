@@ -87,15 +87,22 @@ open class PTNavBar: PTNavigationBarContainer {
             oldValue?.removeFromSuperview()
                         
             guard let newView = titleView else {
-                titleContainer.isHidden = true // 👈 判空处理
+                // English: Hide the title container when no title view is installed.
+                // Español: Oculta el contenedor cuando no hay una vista de título instalada.
+                // 中文：没有标题视图时隐藏标题容器。
+                titleContainer.isHidden = true
                 return
             }
             
-            titleContainer.isHidden = false // 👈 关键修复
+            // English: Keep the title container visible for the new title view.
+            // Español: Mantiene visible el contenedor para la nueva vista de título.
+            // 中文：为新的标题视图保持标题容器可见。
+            titleContainer.isHidden = false
 
             titleContainer.addSubview(newView)
-            // 如果该边有按钮：边界 = 基础边距 + 按钮总宽度 + 标题间距
-            // 如果该边没按钮：边界 = 仅仅保留基础的安全边距（不浪费一丝多余空间）
+            // English: Keep the title container inside the button-safe area and let the selected title mode size the view.
+            // Español: Mantiene el contenedor del título dentro del área segura de los botones y deja que el modo elegido determine su tamaño.
+            // 中文：让标题容器保持在按钮安全区域内，并由当前标题模式决定标题视图的尺寸。
             let leftSpace = leftContainerWidth > 0
                 ? (PTAppBaseConfig.share.defaultViewSpace + leftContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
                 : PTAppBaseConfig.share.defaultViewSpace
@@ -111,12 +118,11 @@ open class PTNavBar: PTNavigationBarContainer {
                 make.left.equalToSuperview().offset(leftSpace)
                 make.right.equalToSuperview().offset(-rightSpace)
             }
-            
-            newView.snp.makeConstraints { make in
-                make.left.right.equalToSuperview()
-                make.height.equalTo(newView.bounds.size.height)
-                make.centerY.equalToSuperview()
-            }
+
+            // English: Do not overwrite `.auto` with edge constraints; measured title views must keep their content width.
+            // Español: No sobrescribas `.auto` con restricciones a los bordes; las vistas medidas deben conservar el ancho de su contenido.
+            // 中文：不要用边缘约束覆盖 `.auto`；已测量的标题视图必须保留自身内容宽度。
+            applyTitleViewConstraints(newView)
         }
     }
     

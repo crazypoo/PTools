@@ -10,7 +10,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" == "5.19.0" ]] || { printf 'FAIL: 5.19 gate requires VERSION=5.19.0, got %s\n' "$version" >&2; exit 1; }
+[[ "$version" =~ ^5\.19\.[0-9]+$ ]] || { printf 'FAIL: 5.19 gate requires a 5.19.x VERSION, got %s\n' "$version" >&2; exit 1; }
 
 required_files=(
   docs/architecture/PACKAGE_MATRIX.md
@@ -26,7 +26,7 @@ for file in "${required_files[@]}"; do
 done
 
 for matrix in docs/architecture/PACKAGE_MATRIX.md docs/architecture/DEPENDENCY_MATRIX.md; do
-  rg -q --fixed-strings 'Version source: 5.19.0' "$matrix" \
+  rg -q --fixed-strings "Version source: $version" "$matrix" \
     || { printf 'FAIL: matrix is not generated from VERSION: %s\n' "$matrix" >&2; exit 1; }
 done
 ruby - "docs/architecture/PACKAGE_MATRIX.md" <<'RUBY'

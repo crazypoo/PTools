@@ -2,7 +2,9 @@
 
 ## Unreleased — 5.19.x
 
-当前开发基线为 `5.19.0`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+当前开发基线为 `5.19.1`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+
+- 修复 PhotoPicker `PTMediaLibViewController.selectLibButton` 的 bounds 重算和导航栏 `.auto` 标题约束，避免相册标题或下拉图标显示不全。
 
 - 新增 `VERSION` 单一版本源，校验 CocoaPods、SwiftPM、Podfile.lock、README、CHANGELOG、ROADMAP 和发布元数据，防止版本漂移。
 - 新增 CocoaPods / SwiftPM 包矩阵、直接依赖矩阵、5.18.2 Public API baseline 和 13 个领域测试矩阵。
@@ -22,7 +24,7 @@
 
 ## 5.18.2 — 2026-09-20
 
-- 发布 5.18.2 正式兼容基线；5.19.0 在此版本上继续进行 Package、Dependency、Tests、Docs 和 API 治理。
+- 发布 5.18.2 正式兼容基线；5.19.x 在此版本上继续进行 Package、Dependency、Tests、Docs 和 API 治理。
 
 ## 5.18.1 — 2026-09-20
 

@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.19.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.19.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.18.2`；`5.19.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.18.2`；`5.19.1` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -105,16 +105,22 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - [ ] 在真实宿主完成快速输入、旧请求回写、History/Suggestion、分页/刷新、Push/Pop、Dynamic Type、RTL、VoiceOver、Dark Mode、多 Scene 和 iOS 17/18/26+ 视觉回归。
 - [ ] 不新增 XCTest target；如后续需要单元测试，先在独立测试宿主验证并保留现有公开 API 不变。
 
+## 5.19.1 PhotoPicker Layout Patch
+
+- ✅ 修复 `PTMediaLibViewController.selectLibButton` 重新测量后被导航栏左右铺满约束覆盖的问题，恢复 `PTNavBar` 的 `.auto` 标题宽度逻辑。
+- ✅ 标题内容变化后按实际富文本与图片尺寸重新获取 bounds，向上取整并保证最小可见宽度，避免标题或下拉图标显示不全。
+- ✅ 复用既有标题视图并刷新约束，不在每次标题更新时重复移除和添加视图；保留 iOS 17+、Swift 6+ 和公开 API 兼容。
+
 ## 5.19.0 Package / Dependency / Tests / Docs
 
-- ✅ 新增根目录 `VERSION` 作为唯一版本源，CocoaPods、Podfile.lock、README、CHANGELOG、ROADMAP 和版本门禁统一读取或验证 `5.19.0`。
+- ✅ 新增根目录 `VERSION` 作为唯一版本源，CocoaPods、Podfile.lock、README、CHANGELOG、ROADMAP 和版本门禁统一读取或验证 5.19.x。
 - ✅ 生成 CocoaPods / SwiftPM `PACKAGE_MATRIX.md`，为模块标记 A（双入口）、B（仅 Pods）、C（仅 SPM）、D（兼容弃用）、E（合并）或 F（6.0 移除）。
 - ✅ 生成 `DEPENDENCY_MATRIX.md`，记录每个模块的直接依赖、第三方依赖、可移除候选和 6.0 决策。
-- ✅ 建立 5.18.2 Public API baseline 与 5.19.0 API 差异门禁；新增 API 必须记录，删除 API 默认失败。
+- ✅ 建立 5.18.2 Public API baseline 与 5.19.x API 差异门禁；新增 API 必须记录，删除 API 默认失败。
 - ✅ 建立 13 个领域的测试矩阵，复用现有 SwiftPM 测试 target，并明确静态、Example、Simulator、真机和真实宿主的验证缺口。
 - ✅ 建立历史拼写和编译宏兼容登记；新增 `drop`、`POOTOOLS_BIOID`、`POOTOOLS_ZIPARCHIVE` 和 `POOTOOLS_MXMETRICMANAGERKIT` canonical 入口，旧名称继续兼容。
 - ✅ 补齐 Package、依赖、测试、API、迁移和文档质量门禁；不升级第三方依赖、不修改 Pods 源码。
-- [ ] 完成真实宿主、真机和 SwiftPM/CocoaPods/Xcode 全矩阵运行回归后，再创建 `5.19.0` tag。
+- [ ] 完成真实宿主、真机和 SwiftPM/CocoaPods/Xcode 全矩阵运行回归后，再创建 5.19.x 正式 tag。
 
 ## 当前 5.11.x 稳定化
 

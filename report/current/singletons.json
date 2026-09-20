@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:20:54Z",
+  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
+  "generated_at": "2026-09-20T16:54:13Z",
   "shared_call_count": 1544,
   "declarations": [
     {

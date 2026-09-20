@@ -944,11 +944,22 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     @MainActor
     func resetTitleSelectBounds() {
-        selectLibButton.bounds = CGRect(
-            origin: .zero,
-            size: CGSize(width: selectLibButton.getKitCurrentDimension(), height: 34)
-        )
-        fakeNav.titleView = selectLibButton
+        // English: Measure after the attributed title is applied so the navigation bar receives the real content width.
+        // Español: Mide después de aplicar el título enriquecido para que la barra reciba el ancho real del contenido.
+        // 中文：在设置富文本标题后再测量，确保导航栏拿到真实的内容宽度。
+        let measuredWidth = ceil(max(selectLibButton.getKitCurrentDimension(),
+                                     selectLibButton.intrinsicContentSize.width))
+        selectLibButton.bounds = CGRect(origin: .zero,
+                                        size: CGSize(width: max(1, measuredWidth), height: 34))
+
+        // English: Reuse the existing title view and refresh its `.auto` constraints without reparenting it.
+        // Español: Reutiliza la vista de título existente y actualiza sus restricciones `.auto` sin cambiarla de supervista.
+        // 中文：复用现有标题视图，仅刷新 `.auto` 约束，不重复移除和添加视图。
+        if fakeNav.titleView !== selectLibButton {
+            fakeNav.titleView = selectLibButton
+        } else {
+            fakeNav.titleViewMode = .auto
+        }
     }
 
     // MARK: - Load

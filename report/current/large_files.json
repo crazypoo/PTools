@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:21:09Z",
+  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
+  "generated_at": "2026-09-20T16:54:35Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -4051,7 +4051,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "lines": 1185,
+      "lines": 1196,
       "classification": "warning"
     },
     {

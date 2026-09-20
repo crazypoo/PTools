@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:20:54Z",
+  "source_revision": "7beff0ffd16062cec5a2c5da1044b5111779d7e8",
+  "generated_at": "2026-09-20T16:54:12Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -36994,7 +36994,7 @@
     {
       "key": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift|public|func|public func mediaLibShow()",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 997,
+      "line": 1008,
       "access": "public",
       "kind": "func",
       "declaration": "public func mediaLibShow() {"
@@ -37002,7 +37002,7 @@
     {
       "key": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift|public|func|public func requestSelectPhoto(viewController: UIViewController? = nil)",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1047,
+      "line": 1058,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestSelectPhoto(viewController: UIViewController? = nil) {"
@@ -37010,7 +37010,7 @@
     {
       "key": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift|public|func|public func imagePickerControllerDidCancel(_ picker: UIImagePickerController)",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1163,
+      "line": 1174,
       "access": "public",
       "kind": "func",
       "declaration": "public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {"
@@ -37018,7 +37018,7 @@
     {
       "key": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift|public|func|public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any])",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1167,
+      "line": 1178,
       "access": "public",
       "kind": "func",
       "declaration": "public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {"
