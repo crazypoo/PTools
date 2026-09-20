@@ -17,6 +17,11 @@ public final class PTHTMLHeightCalculator: NSObject {
     private let webView: WKWebView
     // 使用 Continuation 桥接传统 Delegate 到 async/await 体系
     private var activeContinuation: CheckedContinuation<CGFloat, Never>?
+    private var activeNavigation: WKNavigation?
+
+    // English: Ignore callbacks from a navigation that was replaced by a newer calculation.
+    // Español: Ignora callbacks de una navegación reemplazada por un cálculo más reciente.
+    // 中文：忽略已被新计算替换的旧导航回调。
 
     // ✅ 在初始化时直接构建 WebView，消除 initWebView() 样板代码和强制解包(!)
     public override init() {
@@ -30,10 +35,21 @@ public final class PTHTMLHeightCalculator: NSObject {
         self.webView.navigationDelegate = self
     }
 
+    // English: Finish a suspended calculation safely before releasing the WebKit view.
+    // Español: Finaliza de forma segura un cálculo suspendido antes de liberar la vista WebKit.
+    // 中文：释放 WebKit 视图前安全结束挂起的计算。
+    deinit {
+        activeContinuation?.resume(returning: 0)
+        webView.stopLoading()
+        webView.navigationDelegate = nil
+        activeNavigation = nil
+    }
+
     /// 现代化的 Swift 6 异步计算接口
     /// - Parameter html: 原始 HTML 字符串
     /// - Returns: 计算出的实际渲染高度
     public func calculateHeight(for html: String) async -> CGFloat {
+        webView.stopLoading()
         // 确保上一个未完成的任务安全释放（防止重复调用挂起）
         activeContinuation?.resume(returning: 0)
         activeContinuation = nil
@@ -42,7 +58,7 @@ public final class PTHTMLHeightCalculator: NSObject {
         
         return await withCheckedContinuation { continuation in
             self.activeContinuation = continuation
-            self.webView.loadHTMLString(processedHTML, baseURL: nil)
+            self.activeNavigation = self.webView.loadHTMLString(processedHTML, baseURL: nil)
         }
     }
     
@@ -90,11 +106,14 @@ public final class PTHTMLHeightCalculator: NSObject {
 extension PTHTMLHeightCalculator: WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard isCurrentNavigation(navigation) else { return }
         // 使用 Task 包装与 WebView 交互的 JS 评估，对齐 Actor 隔离
-        Task {
+        Task { @MainActor [weak self, weak webView] in
+            guard let self, let webView, self.isCurrentNavigation(navigation) else { return }
             do {
                 // 推荐获取 document.documentElement.scrollHeight 往往比 body 更加精准
                 let result = try await webView.evaluateJavaScript("document.documentElement.scrollHeight")
+                guard self.isCurrentNavigation(navigation) else { return }
                 let height = (result as? NSNumber)?.decimalValue.description.cgFloat ?? 0
                 finishCalculation(with: height)
             } catch {
@@ -104,12 +123,24 @@ extension PTHTMLHeightCalculator: WKNavigationDelegate {
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        guard isCurrentNavigation(navigation) else { return }
         finishCalculation(with: 0)
+    }
+
+    public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        guard activeContinuation != nil else { return }
+        activeNavigation = webView.reload()
     }
     
     private func finishCalculation(with height: CGFloat) {
         activeContinuation?.resume(returning: height)
         activeContinuation = nil
+        activeNavigation = nil
+    }
+
+    private func isCurrentNavigation(_ navigation: WKNavigation?) -> Bool {
+        guard let navigation, let activeNavigation else { return false }
+        return navigation === activeNavigation
     }
 }
 

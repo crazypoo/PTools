@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
-  "generated_at": "2026-09-20T08:52:20Z",
+  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
+  "generated_at": "2026-09-20T11:40:39Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -4354,7 +4354,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 130,
+      "line": 140,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {"
@@ -4362,7 +4362,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 134,
+      "line": 157,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {"
@@ -4370,7 +4370,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!)",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 139,
+      "line": 162,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {"
@@ -4378,7 +4378,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!)",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 143,
+      "line": 166,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {"
@@ -4386,7 +4386,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 148,
+      "line": 171,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {"
@@ -4394,7 +4394,7 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 154,
+      "line": 177,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {"
@@ -4402,10 +4402,18 @@
     {
       "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error)",
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "line": 159,
+      "line": 182,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {"
+    },
+    {
+      "key": "PooToolsSource/Base/PTBaseWebViewController.swift|public|func|public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)",
+      "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {"
     },
     {
       "key": "PooToolsSource/Base/PTCollectionView.swift|public|class|public class PTCollectionView: UIView",
@@ -20786,7 +20794,7 @@
     {
       "key": "PooToolsSource/Hud/PTProgressHUD.swift|public|func|public func hide(animated: Bool, afterDelay delay: TimeInterval)",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 391,
+      "line": 405,
       "access": "public",
       "kind": "func",
       "declaration": "public func hide(animated: Bool, afterDelay delay: TimeInterval) {"
@@ -20794,7 +20802,7 @@
     {
       "key": "PooToolsSource/Hud/PTProgressHUD.swift|public|func|public func show(animated: Bool)",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 405,
+      "line": 419,
       "access": "public",
       "kind": "func",
       "declaration": "public func show(animated: Bool) {"
@@ -20802,7 +20810,7 @@
     {
       "key": "PooToolsSource/Hud/PTProgressHUD.swift|public|func|public func hide(animated: Bool)",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 449,
+      "line": 470,
       "access": "public",
       "kind": "func",
       "declaration": "public func hide(animated: Bool) {"
@@ -24098,7 +24106,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|init|public init(config: PTInputBoxConfiguration)",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 114,
+      "line": 115,
       "access": "public",
       "kind": "init",
       "declaration": "public init(config: PTInputBoxConfiguration) {"
@@ -24106,7 +24114,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|func|public func clear()",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 316,
+      "line": 339,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -24114,7 +24122,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|func|public func showInput()",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 324,
+      "line": 347,
       "access": "public",
       "kind": "func",
       "declaration": "public func showInput() {"
@@ -24122,7 +24130,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|func|public func hideInput()",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 329,
+      "line": 353,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideInput() {"
@@ -24130,7 +24138,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|func|public func setCode(_ code: String)",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 334,
+      "line": 359,
       "access": "public",
       "kind": "func",
       "declaration": "public func setCode(_ code: String) {"
@@ -24138,7 +24146,7 @@
     {
       "key": "PooToolsSource/Input/PTInputBoxView.swift|public|func|public func getCode() -> String?",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 339,
+      "line": 364,
       "access": "public",
       "kind": "func",
       "declaration": "public func getCode() -> String? {"
@@ -27354,7 +27362,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|public|func|public func hudShow()",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 96,
+      "line": 97,
       "access": "public",
       "kind": "func",
       "declaration": "public func hudShow() {"
@@ -27362,7 +27370,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|public|func|public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?)",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 122,
+      "line": 138,
       "access": "public",
       "kind": "func",
       "declaration": "public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?) {"
@@ -27370,7 +27378,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|public|class|public class PTLoadingHud: UIView",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 146,
+      "line": 169,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTLoadingHud: UIView {"
@@ -27378,7 +27386,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var hudConfig = PTHudConfig.share",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 147,
+      "line": 170,
       "access": "open",
       "kind": "var",
       "declaration": "open var hudConfig = PTHudConfig.share"
@@ -27386,7 +27394,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var length: CGFloat = maxLength",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 148,
+      "line": 171,
       "access": "open",
       "kind": "var",
       "declaration": "open var length: CGFloat = maxLength"
@@ -27394,7 +27402,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var gradualColor: UIColor = .randomColor",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 149,
+      "line": 172,
       "access": "open",
       "kind": "var",
       "declaration": "open var gradualColor: UIColor = .randomColor"
@@ -27402,7 +27410,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var finalColor: UIColor = .randomColor",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 150,
+      "line": 173,
       "access": "open",
       "kind": "var",
       "declaration": "open var finalColor: UIColor = .randomColor"
@@ -27410,7 +27418,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var prevColor: UIColor = .randomColor",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 151,
+      "line": 174,
       "access": "open",
       "kind": "var",
       "declaration": "open var prevColor: UIColor = .randomColor"
@@ -27418,7 +27426,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var rotateAngle: NSInteger = NSInteger(arc4random() % 360)",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 152,
+      "line": 175,
       "access": "open",
       "kind": "var",
       "declaration": "open var rotateAngle: NSInteger = NSInteger(arc4random() % 360)"
@@ -27426,7 +27434,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var colorIndex: NSInteger = 0",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 153,
+      "line": 176,
       "access": "open",
       "kind": "var",
       "declaration": "open var colorIndex: NSInteger = 0"
@@ -27434,7 +27442,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var waitingFrameCount: NSInteger = 0",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 154,
+      "line": 177,
       "access": "open",
       "kind": "var",
       "declaration": "open var waitingFrameCount: NSInteger = 0"
@@ -27442,7 +27450,7 @@
     {
       "key": "PooToolsSource/Loading/PTHudView.swift|open|var|open var status: PTHudStatus = .Decrease",
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 155,
+      "line": 178,
       "access": "open",
       "kind": "var",
       "declaration": "open var status: PTHudStatus = .Decrease"
@@ -41202,15 +41210,15 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchPlaceholder: String = \"PT Input text\".localized()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 22,
+      "line": 30,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchPlaceholder: String = \"PT Input text\".localized() { didSet { updateTextUI() } }"
+      "declaration": "open var searchPlaceholder: String = \"PT Input text\".localized() {"
     },
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16)",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 23,
+      "line": 38,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } }"
@@ -41218,7 +41226,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldBorderColor: UIColor = UIColor.random",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 24,
+      "line": 39,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } }"
@@ -41226,7 +41234,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var cursorColor: UIColor = .lightGray",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 25,
+      "line": 40,
       "access": "open",
       "kind": "var",
       "declaration": "open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } }"
@@ -41234,7 +41242,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchPlaceholderColor: UIColor = UIColor.random",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 26,
+      "line": 41,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } }"
@@ -41242,7 +41250,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextColor: UIColor = UIColor.random",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 27,
+      "line": 42,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } }"
@@ -41250,7 +41258,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarOutViewColor: UIColor = UIColor.random",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 28,
+      "line": 43,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } }"
@@ -41258,7 +41266,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldCornerRadius: CGFloat = 5",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 29,
+      "line": 44,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } }"
@@ -41266,7 +41274,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldBorderWidth: CGFloat = 0.5",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 30,
+      "line": 45,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } }"
@@ -41274,15 +41282,31 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextFieldBackgroundColor: UIColor = UIColor.random",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 31,
+      "line": 46,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } }"
     },
     {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchDebounceInterval: TimeInterval = 0.3",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 51,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var searchDebounceInterval: TimeInterval = 0.3"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|@nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)?",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 56,
+      "access": "open",
+      "kind": "var",
+      "declaration": "@nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)? {"
+    },
+    {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchImageTopSpacing: CGFloat = 2",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 33,
+      "line": 72,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchImageTopSpacing: CGFloat = 2"
@@ -41290,7 +41314,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarImage: Any?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 34,
+      "line": 73,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarImage: Any? {"
@@ -41298,10 +41322,34 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var clearConfig: PTSearchBarTextFieldClearButtonConfig?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 38,
+      "line": 77,
       "access": "open",
       "kind": "var",
       "declaration": "open var clearConfig: PTSearchBarTextFieldClearButtonConfig? {"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func cancelSearch()",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 237,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancelSearch() {"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func clearSearch()",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 247,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func clearSearch() {"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func refreshLocalizedText()",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 256,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func refreshLocalizedText() {"
     },
     {
       "key": "PooToolsSource/Security/PTSecurity.swift|public|enum|public enum PTSecurityError: Error, LocalizedError, Sendable",
@@ -44930,7 +44978,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func show(text: String, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 600,
+      "line": 613,
       "access": "open",
       "kind": "func",
       "declaration": "open func show(text: String, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {"
@@ -44938,7 +44986,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func show(attributedText: NSAttributedString, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 615,
+      "line": 628,
       "access": "open",
       "kind": "func",
       "declaration": "open func show(attributedText: NSAttributedString, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {"
@@ -44946,7 +44994,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func show(customView: UIView, direction: PopTipDirection, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 630,
+      "line": 643,
       "access": "open",
       "kind": "func",
       "declaration": "open func show(customView: UIView, direction: PopTipDirection, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {"
@@ -44954,7 +45002,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 646,
+      "line": 659,
       "access": "open",
       "kind": "func",
       "declaration": "open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil) {"
@@ -44962,7 +45010,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func update(text: String)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 679,
+      "line": 692,
       "access": "open",
       "kind": "func",
       "declaration": "open func update(text: String) {"
@@ -44970,7 +45018,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func update(attributedText: NSAttributedString)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 684,
+      "line": 697,
       "access": "open",
       "kind": "func",
       "declaration": "open func update(attributedText: NSAttributedString) {"
@@ -44978,7 +45026,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func update(customView: UIView)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 689,
+      "line": 702,
       "access": "open",
       "kind": "func",
       "declaration": "open func update(customView: UIView) {"
@@ -44986,7 +45034,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|@objc open func hide(forced: Bool = false)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 696,
+      "line": 709,
       "access": "open",
       "kind": "func",
       "declaration": "@objc open func hide(forced: Bool = false) {"
@@ -44994,7 +45042,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func startActionAnimation()",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 738,
+      "line": 751,
       "access": "open",
       "kind": "func",
       "declaration": "open func startActionAnimation() {"
@@ -45002,7 +45050,7 @@
     {
       "key": "PooToolsSource/TipsView/PTTipsView.swift|open|func|open func stopActionAnimation(_ completion: (() -> Void)? = nil)",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 742,
+      "line": 755,
       "access": "open",
       "kind": "func",
       "declaration": "open func stopActionAnimation(_ completion: (() -> Void)? = nil) {"
@@ -46226,7 +46274,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func calculateHeight(for html: String) async -> CGFloat",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 36,
+      "line": 51,
       "access": "public",
       "kind": "func",
       "declaration": "public func calculateHeight(for html: String) async -> CGFloat {"
@@ -46234,7 +46282,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 92,
+      "line": 108,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {"
@@ -46242,10 +46290,18 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 106,
+      "line": 125,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {"
+    },
+    {
+      "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)",
+      "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
+      "line": 130,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {"
     },
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|enum|@objc public enum PTWhatsNewsPresentationOption:Int",

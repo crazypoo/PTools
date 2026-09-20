@@ -199,6 +199,8 @@ public class PTProgressHUD: UIView {
     private var graceTimer: Timer?
     private var isFinished: Bool = false
     private var hideTimer: Timer? // 👈 新增：用于处理延迟隐藏的定时器
+    private var presentationGeneration: UInt = 0
+    private var didCompletePresentation = true
     
     // 动态约束引用
     private var bezelCenterXConstraint: NSLayoutConstraint!
@@ -222,6 +224,18 @@ public class PTProgressHUD: UIView {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+    }
+
+    // English: Stop delayed work when the HUD leaves its presentation window.
+    // Español: Detiene el trabajo retrasado cuando el HUD sale de su ventana de presentación.
+    // 中文：HUD 离开展示窗口时停止延迟任务。
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window == nil else { return }
+        graceTimer?.invalidate()
+        graceTimer = nil
+        hideTimer?.invalidate()
+        hideTimer = nil
     }
     
     // MARK: - UI 布局设置
@@ -403,7 +417,13 @@ public class PTProgressHUD: UIView {
     // MARK: - 显示/隐藏逻辑
     
     public func show(animated: Bool) {
+        presentationGeneration &+= 1
+        graceTimer?.invalidate()
+        graceTimer = nil
+        hideTimer?.invalidate()
+        hideTimer = nil
         isFinished = false
+        didCompletePresentation = false
         
         // 宽限时间逻辑
         if graceTime > 0.0 {
@@ -414,6 +434,7 @@ public class PTProgressHUD: UIView {
     }
     
     @objc private func handleGraceTimer() {
+        graceTimer = nil
         // 如果在宽限期内已经被标记结束，则不展示
         if isFinished { return }
         animateIn(animated: true)
@@ -447,6 +468,8 @@ public class PTProgressHUD: UIView {
     }
     
     public func hide(animated: Bool) {
+        presentationGeneration &+= 1
+        let generation = presentationGeneration
         isFinished = true
         graceTimer?.invalidate()
         graceTimer = nil
@@ -463,7 +486,8 @@ public class PTProgressHUD: UIView {
         let timeInterval = Date().timeIntervalSince(showStarted ?? Date())
         let delay = max(0, minShowTime - timeInterval)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self, self.presentationGeneration == generation else { return }
             self.performHide(animated: animated)
         }
     }
@@ -486,8 +510,11 @@ public class PTProgressHUD: UIView {
     }
     
     private func done() {
+        guard !didCompletePresentation else { return }
+        didCompletePresentation = true
         self.alpha = 0.0
         self.isHidden = true
+        showStarted = nil
         self.removeFromSuperview()
         self.completionBlock?()
     }

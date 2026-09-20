@@ -74,6 +74,11 @@ MetricKit 和 GPS 会释放各自的观察者、会话、查询和代理；Notif
 `PooToolsPagingControl`、`PooToolsRateView`、`PooToolsTipsView`、`PooToolsNotificationBanner`、
 `PooToolsPopoverKit` 和 `PooToolsInput`。
 
+5.17.x 的 UI/Utility 全量结账清单见
+[`UI_COMPONENTS_5_17.md`](../ui/UI_COMPONENTS_5_17.md)。SearchBar、Picker、HUD/Loading/Tips、
+WebKit、ZipArchive 和 GCDWebServer 的生命周期与外部依赖边界由 `Scripts/validate_517_ui.sh`
+统一检查；清单中的真实宿主回归不能由静态门禁代替。
+
 数据、设备和网络 products 包括 `PooToolsDataEncrypt`、`PooToolsKeyChain`、`PooToolsPhoneInfo`、
 `PooToolsTelephony`、`PooToolsVision`、`PooToolsScanQRCode`、`PooToolsSocketKit`、
 `PooToolsNetworkSpeedTest`、`PooToolsSpeedPanel`、`PooToolsPDF`、`PooToolsSVG`、

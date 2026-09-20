@@ -3,6 +3,7 @@
 ## 使用者
 
 - [模块选择与安装](guides/MODULES.md)
+- [5.17 UI Components / Utility 结账清单](ui/UI_COMPONENTS_5_17.md)
 - [Example 页面与回归入口](guides/EXAMPLE.md)
 - [5.x 到 6.0 迁移](migration/MIGRATION_6.md)
 

@@ -109,6 +109,7 @@ public class PTInputBoxView: UIView {
     private var cursorLayers: [CAShapeLayer] = []
     // 存储下划线的数组
     private var underLineViews: [UIView] = []
+    private var autoShowWorkItem: DispatchWorkItem?
     
     // MARK: - Init
     public init(config: PTInputBoxConfiguration) {
@@ -195,15 +196,37 @@ public class PTInputBoxView: UIView {
         // 初始状态更新
         updateUIState()
         
-        if config.autoShowKeyboard {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.hiddenTextField.becomeFirstResponder()
-            }
+        scheduleAutoShowKeyboardIfNeeded()
+    }
+
+    // English: Delay keyboard presentation until the input view belongs to a window.
+    // Español: Retrasa el teclado hasta que la vista de entrada pertenezca a una ventana.
+    // 中文：等输入视图挂载到窗口后再延迟弹出键盘。
+    private func scheduleAutoShowKeyboardIfNeeded() {
+        autoShowWorkItem?.cancel()
+        guard config.autoShowKeyboard, window != nil else { return }
+
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self, self.window != nil, !self.hiddenTextField.isFirstResponder else { return }
+            self.hiddenTextField.becomeFirstResponder()
+        }
+        autoShowWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil {
+            autoShowWorkItem?.cancel()
+            autoShowWorkItem = nil
+        } else {
+            scheduleAutoShowKeyboardIfNeeded()
         }
     }
-    
+
     // MARK: - Actions
     @objc private func viewTapped() {
+        autoShowWorkItem?.cancel()
         hiddenTextField.becomeFirstResponder()
     }
     
@@ -322,11 +345,13 @@ public class PTInputBoxView: UIView {
     }
     
     public func showInput() {
+        autoShowWorkItem?.cancel()
         hiddenTextField.becomeFirstResponder()
         updateUIState() // 刷新光标状态
     }
     
     public func hideInput() {
+        autoShowWorkItem?.cancel()
         hiddenTextField.resignFirstResponder()
         updateUIState() // 刷新光标状态
     }

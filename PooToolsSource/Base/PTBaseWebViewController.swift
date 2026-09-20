@@ -98,6 +98,16 @@ open class PTBaseWebViewController: PTBaseViewController {
         vcDismiss?()
     }
 
+    // English: Stop an in-flight navigation when the controller is leaving the screen.
+    // Español: Detiene una navegación en curso cuando el controlador abandona la pantalla.
+    // 中文：控制器离开页面时停止正在进行的导航。
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isMovingFromParent || isBeingDismissed {
+            webView.stopLoading()
+        }
+    }
+
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -112,7 +122,7 @@ open class PTBaseWebViewController: PTBaseViewController {
         }
         self.loadWeb()
     }
-    
+
     func loadWeb() {
         if !showString.stringIsEmpty(),let url = URL(string: showString) {
             let request = URLRequest(url: url)
@@ -128,7 +138,20 @@ open class PTBaseWebViewController: PTBaseViewController {
 extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate {
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        return .allow
+        guard let url = navigationAction.request.url,
+              let scheme = url.scheme?.lowercased() else {
+            return .cancel
+        }
+
+        switch scheme {
+        case "http", "https", "file", "about", "data":
+            return .allow
+        default:
+            if UIApplication.shared.canOpenURL(url) {
+                await UIApplication.shared.open(url)
+            }
+            return .cancel
+        }
     }
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
@@ -158,5 +181,10 @@ extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate {
     /// 页面加载失败
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         PTNSLogConsole("页面加载失败  \(error)")
+    }
+
+    public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        guard webView.url != nil else { return }
+        webView.reload()
     }
 }

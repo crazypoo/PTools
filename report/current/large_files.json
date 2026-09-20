@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
-  "generated_at": "2026-09-20T08:52:31Z",
+  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
+  "generated_at": "2026-09-20T11:40:50Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -271,7 +271,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
-      "lines": 162,
+      "lines": 190,
       "classification": "ok"
     },
     {
@@ -1776,7 +1776,7 @@
     },
     {
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "lines": 494,
+      "lines": 521,
       "classification": "ok"
     },
     {
@@ -1936,7 +1936,7 @@
     },
     {
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "lines": 342,
+      "lines": 367,
       "classification": "ok"
     },
     {
@@ -3571,7 +3571,7 @@
     },
     {
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "lines": 280,
+      "lines": 312,
       "classification": "ok"
     },
     {
@@ -4271,7 +4271,7 @@
     },
     {
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "lines": 191,
+      "lines": 295,
       "classification": "ok"
     },
     {
@@ -4421,7 +4421,7 @@
     },
     {
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "lines": 1227,
+      "lines": 1246,
       "classification": "warning"
     },
     {
@@ -4621,7 +4621,7 @@
     },
     {
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "lines": 124,
+      "lines": 155,
       "classification": "ok"
     },
     {

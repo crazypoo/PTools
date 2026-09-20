@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: c873550f2d347ba97088f840f8d4655ac652afcd
-Generated at: 2026-09-20T08:52:20Z
+Source revision: 5946a5f19c1c57167d79c1246b0b15a59a24e336
+Generated at: 2026-09-20T11:40:39Z
 -->
 
 # PTools 当前公开 API 清单
@@ -556,13 +556,14 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/Base/PTBaseWebViewController.swift:24 | var | public | public var backImage:UIImage = UIColor.random.createImageWithColor().transformImage(size: CGSizeMake(24, 24)) |
 | PooToolsSource/Base/PTBaseWebViewController.swift:26 | var | public | public var hiddenNav = false { |
 | PooToolsSource/Base/PTBaseWebViewController.swift:87 | init | public | public init(showString:String = "") { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:130 | func | public | public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:134 | func | public | public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:139 | func | public | public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:143 | func | public | public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:148 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:154 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
-| PooToolsSource/Base/PTBaseWebViewController.swift:159 | func | public | public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:140 | func | public | public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:157 | func | public | public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:162 | func | public | public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:166 | func | public | public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:171 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:177 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:182 | func | public | public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/Base/PTBaseWebViewController.swift:186 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
 | PooToolsSource/Base/PTCollectionView.swift:39 | class | public | public class PTCollectionView: UIView { |
 | PooToolsSource/Base/PTCollectionView.swift:208 | var | open | open var headerInCollection: PTReusableViewHandler? |
 | PooToolsSource/Base/PTCollectionView.swift:209 | var | open | open var footerInCollection: PTReusableViewHandler? |
@@ -2610,9 +2611,9 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/Hud/PTProgressHUD.swift:129 | var | public | public var detailsFont: UIFont = .systemFont(ofSize: 14) { |
 | PooToolsSource/Hud/PTProgressHUD.swift:134 | var | public | public var blurEffectStyle: UIBlurEffect.Style = .systemThickMaterial { |
 | PooToolsSource/Hud/PTProgressHUD.swift:143 | var | public | public var bezelColor: UIColor? { |
-| PooToolsSource/Hud/PTProgressHUD.swift:391 | func | public | public func hide(animated: Bool, afterDelay delay: TimeInterval) { |
-| PooToolsSource/Hud/PTProgressHUD.swift:405 | func | public | public func show(animated: Bool) { |
-| PooToolsSource/Hud/PTProgressHUD.swift:449 | func | public | public func hide(animated: Bool) { |
+| PooToolsSource/Hud/PTProgressHUD.swift:405 | func | public | public func hide(animated: Bool, afterDelay delay: TimeInterval) { |
+| PooToolsSource/Hud/PTProgressHUD.swift:419 | func | public | public func show(animated: Bool) { |
+| PooToolsSource/Hud/PTProgressHUD.swift:470 | func | public | public func hide(animated: Bool) { |
 | PooToolsSource/IAP/PTIAPManager.swift:13 | typealias | public | public typealias ProductsCompletionBlock = ([SKProduct]) -> Void |
 | PooToolsSource/IAP/PTIAPManager.swift:14 | typealias | public | public typealias PurchaseCompletionBlock = (SKPaymentTransaction?) -> Void |
 | PooToolsSource/IAP/PTIAPManager.swift:15 | typealias | public | public typealias IAPErrorBlock = (Error) -> Void |
@@ -3024,12 +3025,12 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/Input/PTInputBoxView.swift:77 | class | public | public class PTInputBoxView: UIView { |
 | PooToolsSource/Input/PTInputBoxView.swift:80 | var | public | public var inputBlock: ((_ code: String) -> Void)? |
 | PooToolsSource/Input/PTInputBoxView.swift:81 | var | public | public var finishBlock: ((_ codeView: PTInputBoxView, _ code: String) -> Void)? |
-| PooToolsSource/Input/PTInputBoxView.swift:114 | init | public | public init(config: PTInputBoxConfiguration) { |
-| PooToolsSource/Input/PTInputBoxView.swift:316 | func | public | public func clear() { |
-| PooToolsSource/Input/PTInputBoxView.swift:324 | func | public | public func showInput() { |
-| PooToolsSource/Input/PTInputBoxView.swift:329 | func | public | public func hideInput() { |
-| PooToolsSource/Input/PTInputBoxView.swift:334 | func | public | public func setCode(_ code: String) { |
-| PooToolsSource/Input/PTInputBoxView.swift:339 | func | public | public func getCode() -> String? { |
+| PooToolsSource/Input/PTInputBoxView.swift:115 | init | public | public init(config: PTInputBoxConfiguration) { |
+| PooToolsSource/Input/PTInputBoxView.swift:339 | func | public | public func clear() { |
+| PooToolsSource/Input/PTInputBoxView.swift:347 | func | public | public func showInput() { |
+| PooToolsSource/Input/PTInputBoxView.swift:353 | func | public | public func hideInput() { |
+| PooToolsSource/Input/PTInputBoxView.swift:359 | func | public | public func setCode(_ code: String) { |
+| PooToolsSource/Input/PTInputBoxView.swift:364 | func | public | public func getCode() -> String? { |
 | PooToolsSource/Input/PTTextField.swift:13 | class | public | public class PTTextCustomRightViewConfig: NSObject { |
 | PooToolsSource/Input/PTTextField.swift:14 | var | open | open var size: CGSize = .zero |
 | PooToolsSource/Input/PTTextField.swift:15 | var | open | open var image: Any? |
@@ -3431,18 +3432,18 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/Loading/PTHudView.swift:51 | var | open | open var backgroundColor: UIColor = .clear |
 | PooToolsSource/Loading/PTHudView.swift:54 | func | public | public func conterViewSizeSet(@PTClampedPropertyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size: CGFloat) { |
 | PooToolsSource/Loading/PTHudView.swift:60 | class | public | public class PTHudView: UIView { |
-| PooToolsSource/Loading/PTHudView.swift:96 | func | public | public func hudShow() { |
-| PooToolsSource/Loading/PTHudView.swift:122 | func | public | public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?) { |
-| PooToolsSource/Loading/PTHudView.swift:146 | class | public | public class PTLoadingHud: UIView { |
-| PooToolsSource/Loading/PTHudView.swift:147 | var | open | open var hudConfig = PTHudConfig.share |
-| PooToolsSource/Loading/PTHudView.swift:148 | var | open | open var length: CGFloat = maxLength |
-| PooToolsSource/Loading/PTHudView.swift:149 | var | open | open var gradualColor: UIColor = .randomColor |
-| PooToolsSource/Loading/PTHudView.swift:150 | var | open | open var finalColor: UIColor = .randomColor |
-| PooToolsSource/Loading/PTHudView.swift:151 | var | open | open var prevColor: UIColor = .randomColor |
-| PooToolsSource/Loading/PTHudView.swift:152 | var | open | open var rotateAngle: NSInteger = NSInteger(arc4random() % 360) |
-| PooToolsSource/Loading/PTHudView.swift:153 | var | open | open var colorIndex: NSInteger = 0 |
-| PooToolsSource/Loading/PTHudView.swift:154 | var | open | open var waitingFrameCount: NSInteger = 0 |
-| PooToolsSource/Loading/PTHudView.swift:155 | var | open | open var status: PTHudStatus = .Decrease |
+| PooToolsSource/Loading/PTHudView.swift:97 | func | public | public func hudShow() { |
+| PooToolsSource/Loading/PTHudView.swift:138 | func | public | public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?) { |
+| PooToolsSource/Loading/PTHudView.swift:169 | class | public | public class PTLoadingHud: UIView { |
+| PooToolsSource/Loading/PTHudView.swift:170 | var | open | open var hudConfig = PTHudConfig.share |
+| PooToolsSource/Loading/PTHudView.swift:171 | var | open | open var length: CGFloat = maxLength |
+| PooToolsSource/Loading/PTHudView.swift:172 | var | open | open var gradualColor: UIColor = .randomColor |
+| PooToolsSource/Loading/PTHudView.swift:173 | var | open | open var finalColor: UIColor = .randomColor |
+| PooToolsSource/Loading/PTHudView.swift:174 | var | open | open var prevColor: UIColor = .randomColor |
+| PooToolsSource/Loading/PTHudView.swift:175 | var | open | open var rotateAngle: NSInteger = NSInteger(arc4random() % 360) |
+| PooToolsSource/Loading/PTHudView.swift:176 | var | open | open var colorIndex: NSInteger = 0 |
+| PooToolsSource/Loading/PTHudView.swift:177 | var | open | open var waitingFrameCount: NSInteger = 0 |
+| PooToolsSource/Loading/PTHudView.swift:178 | var | open | open var status: PTHudStatus = .Decrease |
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:54 | func | public | public func relativeVelocity(forVelocity velocity: CGFloat, from currentLocation: CGFloat, to targetLocation: CGFloat) -> CGFloat { |
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:66 | func | public | public func project(initialVelocity: CGFloat, decelerationRate: CGFloat) -> CGFloat { |
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:71 | func | public | public func nearestTargetTo(_ point: CGPoint, possibleTargets: [CGPoint]) -> CGPoint { |
@@ -5162,19 +5163,24 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/SearchBar/PTSearchBar.swift:14 | var | public | public var clearImage: Any? |
 | PooToolsSource/SearchBar/PTSearchBar.swift:15 | var | public | public var clearTopSpace: CGFloat = 2 |
 | PooToolsSource/SearchBar/PTSearchBar.swift:19 | class | public | public class PTSearchBar: UISearchBar { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:22 | var | open | open var searchPlaceholder: String = "PT Input text".localized() { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:23 | var | open | open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:24 | var | open | open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:25 | var | open | open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:26 | var | open | open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:27 | var | open | open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:28 | var | open | open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:29 | var | open | open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:30 | var | open | open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:31 | var | open | open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:33 | var | open | open var searchImageTopSpacing: CGFloat = 2 |
-| PooToolsSource/SearchBar/PTSearchBar.swift:34 | var | open | open var searchBarImage: Any? { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:38 | var | open | open var clearConfig: PTSearchBarTextFieldClearButtonConfig? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:30 | var | open | open var searchPlaceholder: String = "PT Input text".localized() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:38 | var | open | open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:39 | var | open | open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:40 | var | open | open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:41 | var | open | open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:42 | var | open | open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:43 | var | open | open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:44 | var | open | open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:45 | var | open | open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:46 | var | open | open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:51 | var | open | open var searchDebounceInterval: TimeInterval = 0.3 |
+| PooToolsSource/SearchBar/PTSearchBar.swift:56 | var | open | @nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:72 | var | open | open var searchImageTopSpacing: CGFloat = 2 |
+| PooToolsSource/SearchBar/PTSearchBar.swift:73 | var | open | open var searchBarImage: Any? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:77 | var | open | open var clearConfig: PTSearchBarTextFieldClearButtonConfig? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:237 | func | public | public func cancelSearch() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:247 | func | public | public func clearSearch() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:256 | func | public | public func refreshLocalizedText() { |
 | PooToolsSource/Security/PTSecurity.swift:9 | enum | public | public enum PTSecurityError: Error, LocalizedError, Sendable { |
 | PooToolsSource/Security/PTSecurity.swift:20 | var | public | public var errorDescription: String? { |
 | PooToolsSource/Security/PTSecurity.swift:35 | enum | public | public enum PTSecurityHashAlgorithm: Sendable { |
@@ -5628,16 +5634,16 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/TipsView/PTTipsView.swift:218 | var | open | open var dismissHandler: ((PTTipsView) -> Void)? |
 | PooToolsSource/TipsView/PTTipsView.swift:220 | var | open | open var entranceAnimationHandler: ((@escaping () -> Void) -> Void)? |
 | PooToolsSource/TipsView/PTTipsView.swift:221 | var | open | open var exitAnimationHandler: ((@escaping () -> Void) -> Void)? |
-| PooToolsSource/TipsView/PTTipsView.swift:600 | func | open | open func show(text: String, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
-| PooToolsSource/TipsView/PTTipsView.swift:615 | func | open | open func show(attributedText: NSAttributedString, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
-| PooToolsSource/TipsView/PTTipsView.swift:630 | func | open | open func show(customView: UIView, direction: PopTipDirection, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
-| PooToolsSource/TipsView/PTTipsView.swift:646 | func | open | open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil) { |
-| PooToolsSource/TipsView/PTTipsView.swift:679 | func | open | open func update(text: String) { |
-| PooToolsSource/TipsView/PTTipsView.swift:684 | func | open | open func update(attributedText: NSAttributedString) { |
-| PooToolsSource/TipsView/PTTipsView.swift:689 | func | open | open func update(customView: UIView) { |
-| PooToolsSource/TipsView/PTTipsView.swift:696 | func | open | @objc open func hide(forced: Bool = false) { |
-| PooToolsSource/TipsView/PTTipsView.swift:738 | func | open | open func startActionAnimation() { |
-| PooToolsSource/TipsView/PTTipsView.swift:742 | func | open | open func stopActionAnimation(_ completion: (() -> Void)? = nil) { |
+| PooToolsSource/TipsView/PTTipsView.swift:613 | func | open | open func show(text: String, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
+| PooToolsSource/TipsView/PTTipsView.swift:628 | func | open | open func show(attributedText: NSAttributedString, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
+| PooToolsSource/TipsView/PTTipsView.swift:643 | func | open | open func show(customView: UIView, direction: PopTipDirection, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) { |
+| PooToolsSource/TipsView/PTTipsView.swift:659 | func | open | open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil) { |
+| PooToolsSource/TipsView/PTTipsView.swift:692 | func | open | open func update(text: String) { |
+| PooToolsSource/TipsView/PTTipsView.swift:697 | func | open | open func update(attributedText: NSAttributedString) { |
+| PooToolsSource/TipsView/PTTipsView.swift:702 | func | open | open func update(customView: UIView) { |
+| PooToolsSource/TipsView/PTTipsView.swift:709 | func | open | @objc open func hide(forced: Bool = false) { |
+| PooToolsSource/TipsView/PTTipsView.swift:751 | func | open | open func startActionAnimation() { |
+| PooToolsSource/TipsView/PTTipsView.swift:755 | func | open | open func stopActionAnimation(_ completion: (() -> Void)? = nil) { |
 | PooToolsSource/TouchInspector/TouchInspectorWindow.swift:21 | class | public | public class TouchInspectorWindow: UIWindow { |
 | PooToolsSource/TouchInspector/TouchInspectorWindow.swift:23 | var | public | public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled { |
 | PooToolsSource/TouchInspector/TouchInspectorWindow.swift:30 | var | public | public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled { |
@@ -5790,9 +5796,10 @@ Generated at: 2026-09-20T08:52:20Z
 | PooToolsSource/Vision/PTVision.swift:18 | init | public | public init(text: String, observations: [VNRecognizedTextObservation]) { |
 | PooToolsSource/Vision/PTVision.swift:95 | func | public | public func findText(withImage image: UIImage, |
 | PooToolsSource/Vision/PTVision.swift:161 | func | public | public func findText(withImageView imageView: UIImageView, |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:36 | func | public | public func calculateHeight(for html: String) async -> CGFloat { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:92 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:106 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:51 | func | public | public func calculateHeight(for html: String) async -> CGFloat { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:108 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:125 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:130 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:14 | enum | public | @objc public enum PTWhatsNewsPresentationOption:Int { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:26 | class | public | public class PTWhatsNews:NSObject { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:32 | class | public | @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool { |

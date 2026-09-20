@@ -25,7 +25,15 @@ require_text() {
     fi
 }
 
-require_text PooTools.podspec "s.version[[:space:]]*=[[:space:]]*'5\\.16\\.0'" "podspec version is 5.16.0"
+# English: Read the active podspec version so this historical permission gate remains reusable.
+# Español: Lee la versión activa del podspec para que esta puerta histórica de permisos siga siendo reutilizable.
+# 中文：读取当前 podspec 版本，使这个历史权限门禁可以持续复用。
+current_version="$(sed -n "s/^[[:space:]]*s\.version[[:space:]]*=[[:space:]]*'\\([^']*\\)'.*/\\1/p" PooTools.podspec | head -n 1)"
+if [[ -z "$current_version" ]]; then
+    fail "unable to read the active podspec version"
+else
+    require_text PooTools.podspec "s.version[[:space:]]*=[[:space:]]*'${current_version//./\\.}'" "podspec version is ${current_version}"
+fi
 require_text PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift "enum PTPermissionAuthorizationState" "normalized permission state"
 require_text PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift "makeCompletionOnce" "exactly-once permission bridge"
 require_text PooToolsSource/PermissionCore/PTPermission.swift "makeCompletionOnce" "legacy exactly-once permission bridge"

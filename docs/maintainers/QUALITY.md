@@ -14,6 +14,7 @@ bash Scripts/validate_docs.sh
 bash Scripts/validate_document_versions.sh
 bash Scripts/validate_build_entries.sh
 bash Scripts/validate_quality_scans.sh
+bash Scripts/validate_517_ui.sh
 swift package dump-package
 git diff --check
 ```

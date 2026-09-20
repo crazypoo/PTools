@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
-  "generated_at": "2026-09-20T08:52:21Z",
+  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
+  "generated_at": "2026-09-20T11:40:40Z",
   "counts": {
     "reduce_motion": 41,
-    "accessibility": 178,
+    "accessibility": 180,
     "reduce_transparency": 3,
     "dynamic_type": 11
   },
@@ -937,6 +937,16 @@
     },
     {
       "rule": "accessibility",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 264
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 293
+    },
+    {
+      "rule": "accessibility",
       "path": "PooToolsSource/Security/PTSecurity.swift",
       "line": 58
     },
@@ -1168,12 +1178,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 604
+      "line": 617
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 619
+      "line": 632
     }
   ]
 }

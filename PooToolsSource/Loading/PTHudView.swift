@@ -60,6 +60,7 @@ public class PTHudConfig: NSObject {
 public class PTHudView: UIView {
     
     fileprivate let hudShare = PTHudConfig.share
+    private var isShowing = false
     
     lazy var centerView: UIView = {
         let view = UIView()
@@ -99,12 +100,27 @@ public class PTHudView: UIView {
             PTNSLogConsole("不可以小于两个颜色", levelType: .error, loggerType: .alert)
             return
         }
+
+        // English: Resolve the active scene instead of attaching the HUD to a stale global window.
+        // Español: Resuelve la escena activa en lugar de adjuntar el HUD a una ventana global obsoleta.
+        // 中文：使用当前活动场景，避免把 HUD 添加到过期的全局窗口。
+        guard let window = PTSceneContext.activeWindow() else {
+            PTNSLogConsole("无法找到可展示 HUD 的活动窗口", levelType: .error, loggerType: .alert)
+            return
+        }
+
         backgroundColor = PTHudConfig.share.backgroundColor
-        AppWindows?.addSubview(self)
-        self.snp.makeConstraints { make in
+        if superview !== window {
+            removeFromSuperview()
+            window.addSubview(self)
+        }
+        self.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
+        isShowing = true
+        centerView.layer.removeAllAnimations()
+        centerView.alpha = 1
         centerView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         UIView.animate(withDuration: 0.3 / 1.5, animations: {
             self.centerView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
@@ -120,10 +136,17 @@ public class PTHudView: UIView {
     }
     
     public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?) {
+        guard isShowing || superview != nil else {
+            completion?()
+            return
+        }
+        isShowing = false
         UIView.animate(withDuration: duration, animations: {
             self.centerView.alpha = 0
         }) { _ in
             self.removeFromSuperview()
+            self.centerView.alpha = 1
+            self.centerView.transform = .identity
             completion?()
         }
     }
@@ -198,6 +221,11 @@ public class PTLoadingHud: UIView {
     }
     
     @objc func refreshCricle() {
+        guard !hudConfig.hudColors.isEmpty else {
+            invalidateDisplayLink()
+            return
+        }
+
         // CADisplayLink 默认在主线程回调，因此直接更新逻辑即可
         switch self.status {
         case .Decrease:
@@ -270,6 +298,10 @@ extension PTLoadingHud {
     public override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         if newSuperview != nil {
+            guard !hudConfig.hudColors.isEmpty else {
+                invalidateDisplayLink()
+                return
+            }
             colorIndex = Int(arc4random()) % hudConfig.hudColors.count
             finalColor = hudConfig.hudColors[colorIndex]
             setupDisplayLink() // 添加到视图时开启定时器

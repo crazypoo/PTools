@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "c873550f2d347ba97088f840f8d4655ac652afcd",
-  "generated_at": "2026-09-20T08:52:19Z",
+  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
+  "generated_at": "2026-09-20T11:40:38Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
@@ -380,14 +380,14 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 287,
+      "line": 301,
       "text": "DispatchQueue.main.async { self.updateIndicators() }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 466,
-      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) {"
+      "line": 489,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in"
     },
     {
       "rule": "task_detached",
@@ -422,14 +422,14 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 182,
+      "line": 183,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 199,
-      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in"
+      "line": 214,
+      "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)"
     },
     {
       "rule": "main_queue_async",

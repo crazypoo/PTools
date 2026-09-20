@@ -183,5 +183,6 @@ bash Scripts/validate_p2_performance_closure.sh
 bash Scripts/validate_network_security.sh
 bash Scripts/validate_515_media.sh
 bash Scripts/validate_516_permission.sh
+bash Scripts/validate_517_ui.sh
 
 printf 'PASS: Swift 6 safety scans\n'

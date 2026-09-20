@@ -269,6 +269,19 @@ open class PTTipsView: UIView {
             view.setNeedsDisplay()
         }
     }
+
+    // English: Stop delayed dismissal and animations when the tip leaves the window.
+    // Español: Detiene el cierre retrasado y las animaciones cuando el aviso sale de la ventana.
+    // 中文：提示视图离开窗口时停止延迟关闭和动画。
+    open override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window == nil else { return }
+        dismissTimer?.invalidate()
+        dismissTimer = nil
+        layer.removeAllAnimations()
+        isAnimating = false
+        isPerformingExitAnimation = false
+    }
     
     // MARK: - 布局与计算 (Layout & Math)
     
@@ -909,7 +922,15 @@ open class PTTipsView: UIView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        // English: Release timer and layer work before the tip is deallocated.
+        // Español: Libera el temporizador y el trabajo de las capas antes de desalojar el aviso.
+        // 中文：提示视图释放前清理定时器和图层动画。
+        MainActor.gcdRunUnsafely {
+            dismissTimer?.invalidate()
+            dismissTimer = nil
+            layer.removeAllAnimations()
+            NotificationCenter.default.removeObserver(self)
+        }
     }
 }
 

@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.16.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.17.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.15.0`；`5.16.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.16.0`；`5.17.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -72,6 +72,16 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 修复 HealthKit 统计查询未停止、IAP transaction observer 重复注册、NFC 旧 session 残留、定位授权成功后重复请求和 Photos limited 状态丢失问题。
 - ✅ 增加 5.16 Permission / System Services 质量门禁，并保持 iOS 17+、Swift 6+、CocoaPods/SwiftPM/Xcode 入口和既有公开 API 兼容。
 - [ ] 在真实设备和独立宿主完成权限弹窗后台切换、Scene disconnect、Location accuracy、Photos limited、通知 provisional/critical、IAP、NFC、HealthKit 和 MetricKit 回归。
+
+## 5.17.0 UI Components / Utility
+
+- ✅ 建立 42 个 UI/Utility 模块逐项结账清单，记录 Owner、Dependency、Lifecycle、Test、Example、Doc 和 6.0 decision。
+- ✅ SearchBar 增加可取消防抖、异步搜索 generation、加载状态、清空入口和不覆盖自定义文字的语言刷新。
+- ✅ Loading/HUD/TipsView 收敛场景窗口、重复展示、空配置、Timer、DisplayLink、动画和离屏生命周期。
+- ✅ Picker、Alert、Scene、MainActor 和 WebKit 的 canonical contract 纳入 5.17 静态门禁；WebKit 增加旧导航回调隔离、外部 scheme 取消和内容进程恢复。
+- ✅ ZipArchive、GCDWebServer、Instructions、Appz、Flag、PopoverKit 和 NotificationBanner 作为外部适配器登记边界，不修改第三方源码。
+- ✅ 质量门禁接入 `Scripts/validate_517_ui.sh`，保持 iOS 17+、Swift 6+、公开 API 和三套入口兼容。
+- [ ] 在真实宿主和设备完成键盘、Stage Manager、VoiceOver、Dynamic Type、Dark Mode、WebKit 进程恢复、外部服务、轮播/分页和所有 42 个模块的视觉回归。
 
 ## 当前 5.11.x 稳定化
 
