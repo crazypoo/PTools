@@ -2,13 +2,23 @@
 
 ## Unreleased — 5.18.x
 
-当前开发基线为 `5.18.0`，尚未创建正式 Git tag。
+当前开发基线为 `5.18.1`，尚未创建正式 Git tag。
 
+- 新增可复用的 `PTSearchViewController<Item>` 搜索基类，统一 SearchBar、PTCollectionView、状态机、History、Suggestion、Pagination、Refresh、Empty、Error 和生命周期取消。
+- 新增 `PooToolsSearch` SwiftPM product 与 `PooTools/Search` CocoaPods subspec；旧 `SearchBar` 继续独立可选安装，避免无搜索需求的宿主增加容器依赖。
+- 搜索请求使用 `PTSearchSnapshot` 和集中 `PTSearchTaskCoordinator` 防止旧请求回写新关键词，支持 Local、Remote、Hybrid 和 Custom 四种模式。
+- 搜索展示支持 contentTop、navigationBar、navigationBarExpanded 和 custom；导航栏状态通过 `PTSearchPresentationContext` 保存和恢复，iOS 26 使用原生 `UIGlassEffect`，iOS 17–25 使用材质兼容实现。
+- 增加 Search SwiftPM/CocoaPods/源码静态契约门禁；不新增 XCTest target，运行时键盘、Dynamic Type、VoiceOver、RTL、Dark Mode 和多 Scene 回归仍需真实宿主验证。
 - 新增 `PTDebugHookRegistry`，统一 Debug Collector 和 Core runtime hook 的安装、卸载与状态快照，避免重复安装或不可逆地散落管理。
 - PTInstruments 增加磁盘、线程、启动、ViewController 生命周期、Task 和 Signpost 采样入口；补齐 `.pttrace` 导入、只读回放、轨迹对比和实时快照。
 - Session 改用有界环形缓冲，Dashboard 以固定节奏批量刷新；Debug 未启用时不创建采样任务、DisplayLink 或高频 observer。
 - LocalConsole 改用当前 UIWindowScene 的屏幕与安全区计算，初始化失败安全返回，不影响业务窗口；保留多 Scene、关闭、拖动、键盘和旋转兼容路径。
 - 保留既有公开 API、第三方依赖版本和 Pods 源码不变；真实设备 30–60 分钟录制、性能中位数和多 Scene 宿主回归仍是发布前条件。
+
+## 5.18.0 — 2026-09-20
+
+- 完成 Debug / Instruments 的 5.18.0 稳定基线；新增 Hook Registry、环形录制、`.pttrace` 导入回放和多 Scene LocalConsole 生命周期治理。
+- 5.18.1 的 Search 容器在此开发基线之上继续演进，尚未创建新的正式 tag。
 
 ## 5.17.0 — 2026-09-20
 

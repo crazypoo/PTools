@@ -27,6 +27,7 @@ require_pattern "PooTools.podspec" "'IPHONEOS_DEPLOYMENT_TARGET' => '17.0'" "Coc
 require_pattern "PooTools.podspec" "'SWIFT_VERSION' => '6.0'" "CocoaPods target Swift version is explicit"
 require_pattern "PooTools.podspec" "s.subspec 'ImagePicker'" "CocoaPods ImagePicker subspec is declared"
 require_pattern "PooTools.podspec" "subspec.dependency 'PooTools/ImagePicker'" "CocoaPods PhotoPicker reuses ImagePicker"
+require_pattern "PooTools.podspec" "s.subspec 'Search'" "CocoaPods Search subspec is declared"
 
 require_pattern "PooTools.xcodeproj/project.pbxproj" "IPHONEOS_DEPLOYMENT_TARGET = 17.0;" "Xcode deployment target is iOS 17"
 require_pattern "PooTools.xcodeproj/project.pbxproj" "SWIFT_VERSION = 6.0;" "Xcode Swift version is 6.0"
@@ -34,6 +35,8 @@ require_pattern "PooTools.xcodeproj/project.pbxproj" "SWIFT_VERSION = 6.0;" "Xco
 require_pattern "Package.swift" ".library(name: \"PooToolsImagePicker\", targets: [\"PooToolsImagePicker\"])" "SwiftPM ImagePicker product is declared"
 require_pattern "Package.swift" ".target(name: \"PooToolsImagePicker\"" "SwiftPM ImagePicker target is declared"
 require_pattern "Package.swift" "\"PooToolsImagePicker\", \"PTCameraPermission\"" "SwiftPM PhotoPicker depends on ImagePicker and camera permission"
+require_pattern "Package.swift" ".library(name: \"PooToolsSearch\", targets: [\"PooToolsSearch\"])" "SwiftPM Search product is declared"
+require_pattern "Package.swift" ".target(name: \"PooToolsSearch\"" "SwiftPM Search target is declared"
 
 bash "$repo_root/Scripts/validate_core_source_contract.sh"
 bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"

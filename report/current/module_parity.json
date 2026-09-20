@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
-  "generated_at": "2026-09-20T02:51:56Z",
+  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
+  "generated_at": "2026-09-20T13:17:18Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -76,6 +76,7 @@
     "PooToolsSVG",
     "PooToolsScanQRCode",
     "PooToolsScrollBanner",
+    "PooToolsSearch",
     "PooToolsSearchBar",
     "PooToolsSecurity",
     "PooToolsSegmented",
@@ -171,6 +172,7 @@
     "SVG",
     "ScanQRCode",
     "ScrollBanner",
+    "Search",
     "SearchBar",
     "Security",
     "Segmented",
@@ -802,5 +804,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "369413528d32f50c45f75ab4524824cf1d47dd6752cda7a20cc17b9d2dd440e3"
+  "fingerprint": "c065ae0c4df183a145885e991f5ad92df0b26838824dc6c2ed97bd2f9738b277"
 }

@@ -73,6 +73,7 @@ let package = Package(
         .library(name: "PooToolsDataEncrypt", targets: ["PooToolsDataEncrypt"]),
         .library(name: "PooToolsSecurity", targets: ["PooToolsSecurity"]),
         .library(name: "PooToolsSearchBar", targets: ["PooToolsSearchBar"]),
+        .library(name: "PooToolsSearch", targets: ["PooToolsSearch"]),
         .library(name: "PooToolsMediaViewer", targets: ["PooToolsMediaViewer"]),
 
         // ==========================================
@@ -153,7 +154,7 @@ let package = Package(
             "PTTrackingPermission", "PTRemindersPermission", "PTSpeechPermission", "PTHealthPermission",
             "PTFaceIDPermission", "PTContactsPermission", "PTMicPermission", "PTMediaPermission",
             "PTBluetoothPermission", "PTSiriPermission", "PTNotificationPermission",
-            "PooToolsNetWork", "PooToolsDataEncrypt", "PooToolsSecurity", "PooToolsSearchBar",
+            "PooToolsNetWork", "PooToolsDataEncrypt", "PooToolsSecurity", "PooToolsSearchBar", "PooToolsSearch",
             "PooToolsMediaViewer", "PooToolsImagePicker", "PooToolsPhotoPicker", "PooToolsHarbethKit",
             "PooToolsImageEditor", "PooToolsVideoEditor", "PooToolsCheckDirtyWord", "PooToolsStepper",
             "PooToolsBankCard", "PooToolsBioID", "PooToolsCalendar", "PooToolsTelephony", "PooToolsCheckBox",
@@ -359,6 +360,7 @@ let package = Package(
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSearch", dependencies: ["ptools", "PooToolsSearchBar", "AttributedString"], path: "PooToolsSource/Search", swiftSettings: [.define("POOTOOLS_SEARCH"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================

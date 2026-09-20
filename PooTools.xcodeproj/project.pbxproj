@@ -927,6 +927,20 @@
 		55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73A29D5C80900CF6272 /* PTTextField.swift */; };
 		55F7C2B62E118C8900EF2945 /* PTAutoScrollLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */; };
 		55F8ED7E30600BEA00488EFA /* PTDebugHookRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8ED7D30600BEA00488EFA /* PTDebugHookRegistry.swift */; };
+		55F8EDAD30601C3700488EFA /* PTSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDAB30601C3700488EFA /* PTSearchViewController.swift */; };
+		55F8EDAE30601C3700488EFA /* PTSearchHistoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA130601C3700488EFA /* PTSearchHistoryProvider.swift */; };
+		55F8EDAF30601C3700488EFA /* PTSearchPlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA430601C3700488EFA /* PTSearchPlacement.swift */; };
+		55F8EDB030601C3700488EFA /* PTSearchTaskCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDAA30601C3700488EFA /* PTSearchTaskCoordinator.swift */; };
+		55F8EDB130601C3700488EFA /* PTSearchConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8ED9E30601C3700488EFA /* PTSearchConfiguration.swift */; };
+		55F8EDB230601C3700488EFA /* PTSearchEmptyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8ED9F30601C3700488EFA /* PTSearchEmptyConfiguration.swift */; };
+		55F8EDB330601C3700488EFA /* PTSearchSuggestionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA930601C3700488EFA /* PTSearchSuggestionProvider.swift */; };
+		55F8EDB430601C3700488EFA /* PTSearchSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA730601C3700488EFA /* PTSearchSnapshot.swift */; };
+		55F8EDB530601C3700488EFA /* PTSearchPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA330601C3700488EFA /* PTSearchPagination.swift */; };
+		55F8EDB630601C3700488EFA /* PTSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA830601C3700488EFA /* PTSearchState.swift */; };
+		55F8EDB730601C3700488EFA /* PTSearchResultProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA630601C3700488EFA /* PTSearchResultProvider.swift */; };
+		55F8EDB830601C3700488EFA /* PTSearchMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA230601C3700488EFA /* PTSearchMode.swift */; };
+		55F8EDB930601C3700488EFA /* PTSearchPresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA530601C3700488EFA /* PTSearchPresentationContext.swift */; };
+		55F8EDBA30601C3700488EFA /* PTSearchErrorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F8EDA030601C3700488EFA /* PTSearchErrorConfiguration.swift */; };
 		55FA6CB12B02354800BC464B /* PTDarkSmartFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */; };
 		55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */; };
 		55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */; };
@@ -1943,6 +1957,20 @@
 		55F7A73A29D5C80900CF6272 /* PTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTextField.swift; sourceTree = "<group>"; };
 		55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAutoScrollLabel.swift; sourceTree = "<group>"; };
 		55F8ED7D30600BEA00488EFA /* PTDebugHookRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugHookRegistry.swift; sourceTree = "<group>"; };
+		55F8ED9E30601C3700488EFA /* PTSearchConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchConfiguration.swift; sourceTree = "<group>"; };
+		55F8ED9F30601C3700488EFA /* PTSearchEmptyConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchEmptyConfiguration.swift; sourceTree = "<group>"; };
+		55F8EDA030601C3700488EFA /* PTSearchErrorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchErrorConfiguration.swift; sourceTree = "<group>"; };
+		55F8EDA130601C3700488EFA /* PTSearchHistoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchHistoryProvider.swift; sourceTree = "<group>"; };
+		55F8EDA230601C3700488EFA /* PTSearchMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchMode.swift; sourceTree = "<group>"; };
+		55F8EDA330601C3700488EFA /* PTSearchPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchPagination.swift; sourceTree = "<group>"; };
+		55F8EDA430601C3700488EFA /* PTSearchPlacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchPlacement.swift; sourceTree = "<group>"; };
+		55F8EDA530601C3700488EFA /* PTSearchPresentationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchPresentationContext.swift; sourceTree = "<group>"; };
+		55F8EDA630601C3700488EFA /* PTSearchResultProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchResultProvider.swift; sourceTree = "<group>"; };
+		55F8EDA730601C3700488EFA /* PTSearchSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchSnapshot.swift; sourceTree = "<group>"; };
+		55F8EDA830601C3700488EFA /* PTSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchState.swift; sourceTree = "<group>"; };
+		55F8EDA930601C3700488EFA /* PTSearchSuggestionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchSuggestionProvider.swift; sourceTree = "<group>"; };
+		55F8EDAA30601C3700488EFA /* PTSearchTaskCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchTaskCoordinator.swift; sourceTree = "<group>"; };
+		55F8EDAB30601C3700488EFA /* PTSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchViewController.swift; sourceTree = "<group>"; };
 		55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkSmartFooter.swift; sourceTree = "<group>"; };
 		55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModeHeader.swift; sourceTree = "<group>"; };
 		55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkFollowSystemFooter.swift; sourceTree = "<group>"; };
@@ -2079,6 +2107,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55F8EDAC30601C3700488EFA /* Search */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -4046,6 +4075,27 @@
 			path = DebugNetwork;
 			sourceTree = "<group>";
 		};
+		55F8EDAC30601C3700488EFA /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				55F8ED9E30601C3700488EFA /* PTSearchConfiguration.swift */,
+				55F8ED9F30601C3700488EFA /* PTSearchEmptyConfiguration.swift */,
+				55F8EDA030601C3700488EFA /* PTSearchErrorConfiguration.swift */,
+				55F8EDA130601C3700488EFA /* PTSearchHistoryProvider.swift */,
+				55F8EDA230601C3700488EFA /* PTSearchMode.swift */,
+				55F8EDA330601C3700488EFA /* PTSearchPagination.swift */,
+				55F8EDA430601C3700488EFA /* PTSearchPlacement.swift */,
+				55F8EDA530601C3700488EFA /* PTSearchPresentationContext.swift */,
+				55F8EDA630601C3700488EFA /* PTSearchResultProvider.swift */,
+				55F8EDA730601C3700488EFA /* PTSearchSnapshot.swift */,
+				55F8EDA830601C3700488EFA /* PTSearchState.swift */,
+				55F8EDA930601C3700488EFA /* PTSearchSuggestionProvider.swift */,
+				55F8EDAA30601C3700488EFA /* PTSearchTaskCoordinator.swift */,
+				55F8EDAB30601C3700488EFA /* PTSearchViewController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -4315,8 +4365,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4326,13 +4375,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4347,13 +4392,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4530,6 +4571,20 @@
 				55BA8FBD2D29A7D70065FBD0 /* LayerAttributesSectionDataSource.swift in Sources */,
 				55BA8FBE2D29A7D70065FBD0 /* ElementInspectorPanelViewController.swift in Sources */,
 				55BA8FBF2D29A7D70065FBD0 /* String+InspectorEX.swift in Sources */,
+				55F8EDAD30601C3700488EFA /* PTSearchViewController.swift in Sources */,
+				55F8EDAE30601C3700488EFA /* PTSearchHistoryProvider.swift in Sources */,
+				55F8EDAF30601C3700488EFA /* PTSearchPlacement.swift in Sources */,
+				55F8EDB030601C3700488EFA /* PTSearchTaskCoordinator.swift in Sources */,
+				55F8EDB130601C3700488EFA /* PTSearchConfiguration.swift in Sources */,
+				55F8EDB230601C3700488EFA /* PTSearchEmptyConfiguration.swift in Sources */,
+				55F8EDB330601C3700488EFA /* PTSearchSuggestionProvider.swift in Sources */,
+				55F8EDB430601C3700488EFA /* PTSearchSnapshot.swift in Sources */,
+				55F8EDB530601C3700488EFA /* PTSearchPagination.swift in Sources */,
+				55F8EDB630601C3700488EFA /* PTSearchState.swift in Sources */,
+				55F8EDB730601C3700488EFA /* PTSearchResultProvider.swift in Sources */,
+				55F8EDB830601C3700488EFA /* PTSearchMode.swift in Sources */,
+				55F8EDB930601C3700488EFA /* PTSearchPresentationContext.swift in Sources */,
+				55F8EDBA30601C3700488EFA /* PTSearchErrorConfiguration.swift in Sources */,
 				55BA8FC02D29A7D70065FBD0 /* ViewFrameSizeSectionDataSource.swift in Sources */,
 				55BA8FC12D29A7D70065FBD0 /* UIMenu+InspectorEX.swift in Sources */,
 				55BA8FC22D29A7D70065FBD0 /* HierarchyInspectorActionTableViewCell.swift in Sources */,

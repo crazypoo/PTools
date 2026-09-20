@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "0c4464d6b89fe5b65e29c1dacfa1285400eca29a",
-  "generated_at": "2026-09-20T12:31:44Z",
+  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
+  "generated_at": "2026-09-20T13:19:04Z",
   "name": "PooTools",
-  "version": "5.18.0",
+  "version": "5.18.1",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 105,
+  "subspec_count": 106,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -953,6 +953,7 @@
         "PooTools/SVG",
         "PooTools/ScanQRCode",
         "PooTools/ScrollBanner",
+        "PooTools/Search",
         "PooTools/SearchBar",
         "PooTools/Security",
         "PooTools/SecuritySuite",
@@ -1856,6 +1857,29 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCROLLBANNER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Search",
+      "short_name": "Search",
+      "local_dependencies": [
+        "PooTools/Core",
+        "PooTools/SearchBar"
+      ],
+      "third_party_dependencies": [
+        "AttributedString"
+      ],
+      "source_files": [
+        "PooToolsSource/Search/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Search"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEARCH POOTOOLS_COCOAPODS"
       }
     },
     {

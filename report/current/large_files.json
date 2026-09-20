@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "0c4464d6b89fe5b65e29c1dacfa1285400eca29a",
-  "generated_at": "2026-09-20T12:31:54Z",
+  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
+  "generated_at": "2026-09-20T13:19:19Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -4275,8 +4275,78 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Search/PTSearchConfiguration.swift",
+      "lines": 113,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchEmptyConfiguration.swift",
+      "lines": 35,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchErrorConfiguration.swift",
+      "lines": 46,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchHistoryProvider.swift",
+      "lines": 68,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchMode.swift",
+      "lines": 17,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchPagination.swift",
+      "lines": 66,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchPlacement.swift",
+      "lines": 17,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchPresentationContext.swift",
+      "lines": 74,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchResultProvider.swift",
+      "lines": 28,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchSnapshot.swift",
+      "lines": 20,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchState.swift",
+      "lines": 62,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchSuggestionProvider.swift",
+      "lines": 28,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchTaskCoordinator.swift",
+      "lines": 48,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Search/PTSearchViewController.swift",
+      "lines": 880,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "lines": 295,
+      "lines": 434,
       "classification": "ok"
     },
     {

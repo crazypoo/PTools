@@ -28,6 +28,7 @@
 | ImageEditor | `PooTools/ImageEditor` | `PooToolsImageEditor` | Core、HarbethKit、PhotoPicker | Network 请求层 |
 | VideoEditor | `PooTools/VideoEditor` | `PooToolsVideoEditor` | Core、HarbethKit、ProgressBar、Loading | Network 请求层 |
 | ScrollBanner / PageControl | `PooTools/ScrollBanner`、`PooTools/PageControl` | 对应 `PooToolsScrollBanner`、`PooToolsPageControl` | Core；ScrollBanner 使用 PageControl | Network、媒体模块 |
+| Search / SearchBar | `PooTools/Search`、`PooTools/SearchBar` | `PooToolsSearch`、`PooToolsSearchBar` | Search 依赖 Core、SearchBar、AttributedString；SearchBar 只依赖 Core | Network、媒体和业务数据 |
 | Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | Core、Network、Share、SearchBar、PDF | Core 反向依赖 Debug；生产不隐式启动诊断 |
 
 ImagePicker 与 PhotoPicker 有意共存：前者负责单媒体系统选择和相机，后者负责多选、编辑、原图、

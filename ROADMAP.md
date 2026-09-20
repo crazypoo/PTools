@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.18.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.18.1`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.17.0`；`5.18.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.18.0`；`5.18.1` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -93,6 +93,17 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 新增 `Scripts/validate_debug_instruments_5_18.sh` 并接入质量扫描；PooTools Debug Simulator Debug 构建通过。
 - [ ] 在真实设备完成 CPU、内存、FPS、Hitch、主线程卡顿、磁盘、线程和 30–60 分钟录制的中位数/峰值对比。
 - [ ] 在多 Scene、分屏、旋转、键盘、Scene disconnect 和真实宿主中完成 Debug window 与 Hook install/uninstall 回归。
+
+## 5.18.1 Search Container
+
+- ✅ 新增 `PTSearchViewController<Item>`，通过 `PTListViewController` 复用 `PTBaseViewController`、`PTCollectionView` 和 `PTSearchBar`，不依赖 `UISearchController`。
+- ✅ 新增 `PTSearchState`、`PTSearchConfiguration`、Local/Remote/Hybrid/Custom 模式、Provider、History、Suggestion、Pagination、Refresh、Empty、Error 和 Snapshot 契约。
+- ✅ 统一 debounce、Task cancellation、旧请求丢弃、分页锁、搜索取消、键盘处理和页面销毁时的任务释放路径。
+- ✅ 支持 contentTop、navigationBar、navigationBarExpanded 和 custom 四种展示位置；导航栏通过 `PTSearchPresentationContext` 恢复原始状态。
+- ✅ SearchBar 支持 classic、custom、glass 视觉样式；iOS 26 使用 `UIGlassEffect`，iOS 17–25 使用语义材质回退，并保留 Dynamic Type、RTL、Dark Mode、Reduce Transparency 和 VoiceOver 入口。
+- ✅ 增加 SwiftPM、CocoaPods、源码解析和版本契约门禁；Search 作为 Core/SearchBar 之上的可选模块发布。
+- [ ] 在真实宿主完成快速输入、旧请求回写、History/Suggestion、分页/刷新、Push/Pop、Dynamic Type、RTL、VoiceOver、Dark Mode、多 Scene 和 iOS 17/18/26+ 视觉回归。
+- [ ] 不新增 XCTest target；如后续需要单元测试，先在独立测试宿主验证并保留现有公开 API 不变。
 
 ## 当前 5.11.x 稳定化
 

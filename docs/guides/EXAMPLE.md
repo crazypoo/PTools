@@ -21,6 +21,7 @@
 | Navigation | `PTTestTabbarViewController`、`PTTestVC`、`PTRouteViewController` | push/pop、interactive-pop、场景解析 | `PTBaseNavControl`、`PTSceneContext` |
 | TabBar | `PTTestTabbarViewController`、`PTTabBarTestOneViewController` | 外观快照、徽标、Accessory 和选择 | `PTBaseTabBarViewController` |
 | Collection | `PTFuncNameViewController`、`PTImageListViewController`、`PTTestVC` | Diffable、预取、骨架、空状态和分页 | `PTCollectionView`、`PTListViewController` |
+| Search | 暂无固定展厅页面 | debounce、竞态取消、History、Suggestion、分页、刷新和导航栏恢复 | `PTSearchViewController`、`PooTools/Search` |
 | Network | 网络和局域网传送示例 | 状态、请求日志、上传/下载和取消 | `PooToolsNetWork` |
 | Media | 图片、视频、签名、识字和媒体选择示例 | 图片加载、视频缩略图、保存和权限 | `PTLoadImageFunction`、`PTVideoThumbnailService`、`PTMediaSaveService` |
 | Picker | 媒体选择和 `PTImageListViewController` | 系统 ImagePicker、PhotoPicker、取消和结果状态 | `PTSystemMediaPicker` 或 `PTMediaLibViewController` |
@@ -62,6 +63,11 @@ final class ExampleListViewController: PTListViewController {
 
 轻量单媒体选择使用 `PTSystemMediaPicker`；多选、原图、Live Photo、编辑和 iCloud 进度使用
 `PTMediaLibViewController`。两条路径都必须在页面退出时处理取消和结果生命周期。
+
+### Search
+
+搜索容器不把业务请求写进 `PTSearchBar`。页面只实现 `search(keyword:)` 和 `didSelect(item:at:)`，
+搜索基类负责状态、取消、竞态、空状态和列表更新；需要真实宿主数据时再通过 Provider 注入。
 
 ### Debug
 

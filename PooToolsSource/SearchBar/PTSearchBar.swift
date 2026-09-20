@@ -8,6 +8,20 @@
 
 import UIKit
 
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
+// English: Keep visual treatment independent from the search request pipeline.
+// Español: Mantiene el tratamiento visual independiente de la canalización de solicitudes.
+// 中文：让视觉样式与搜索请求管线保持解耦。
+public enum PTSearchVisualStyle: Sendable, Equatable {
+    case automatic
+    case classic
+    case glass
+    case custom
+}
+
 @objcMembers
 public class PTSearchBarTextFieldClearButtonConfig: NSObject {
     public var clearAction: PTActionTask?
@@ -25,6 +39,20 @@ public class PTSearchBar: UISearchBar {
     private var searchImageTask: Task<Void, Never>?
     private var clearImageTask: Task<Void, Never>?
     private var previousSearchText = ""
+    private var didInstallTextFieldTargets = false
+    private var visualBackgroundView: UIVisualEffectView?
+
+    // English: These callbacks observe UIKit editing events without taking ownership of the caller's delegate.
+    // Español: Estos callbacks observan los eventos de edición de UIKit sin apropiarse del delegate del cliente.
+    // 中文：这些回调只观察 UIKit 编辑事件，不接管调用方的 delegate。
+    @nonobjc open var textChangeHandler: (@MainActor @Sendable (String) -> Void)?
+    @nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)?
+    @nonobjc open var editingBeganHandler: (@MainActor @Sendable () -> Void)?
+    @nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)?
+
+    open var visualStyle: PTSearchVisualStyle = .automatic {
+        didSet { updateVisualStyle() }
+    }
     
     // MARK: - 🎨 UI 属性配置
     open var searchPlaceholder: String = "PT Input text".localized() {
@@ -106,6 +134,7 @@ public class PTSearchBar: UISearchBar {
         updateTextUI()
         updateBackgroundUI()
         updateLoadingAccessibility()
+        updateVisualStyle()
     }
     
     public override func layoutSubviews() {
@@ -114,6 +143,8 @@ public class PTSearchBar: UISearchBar {
         // 例如设置圆角等依赖 bounds 的操作
         updateBorderUI()
         setupClearAction()
+        installTextFieldTargetsIfNeeded()
+        updateVisualStyleLayout()
     }
     
     // MARK: - 🖌 私有更新方法
@@ -149,6 +180,78 @@ public class PTSearchBar: UISearchBar {
     /// 更新背景颜色
     private func updateBackgroundUI() {
         backgroundImage = searchBarOutViewColor.createImageWithColor()
+    }
+
+    // English: Use native Liquid Glass on iOS 26 and a semantic blur fallback on iOS 17–25.
+    // Español: Usa Liquid Glass nativo en iOS 26 y un desenfoque semántico de respaldo en iOS 17–25.
+    // 中文：iOS 26 使用原生 Liquid Glass，iOS 17–25 使用语义模糊兼容实现。
+    private func updateVisualStyle() {
+        let resolvedStyle: PTSearchVisualStyle
+        switch visualStyle {
+        case .automatic:
+            resolvedStyle = .classic
+        case .custom, .classic, .glass:
+            resolvedStyle = visualStyle
+        }
+
+        if resolvedStyle == .glass {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                visualBackgroundView?.isHidden = true
+                backgroundColor = .secondarySystemBackground
+                backgroundImage = UIImage()
+            } else {
+                if visualBackgroundView == nil {
+                    let blurView = UIVisualEffectView(effect: makeGlassEffect())
+                    blurView.isUserInteractionEnabled = false
+                    blurView.layer.cornerRadius = searchBarTextFieldCornerRadius
+                    blurView.clipsToBounds = true
+                    insertSubview(blurView, at: 0)
+                    visualBackgroundView = blurView
+                } else {
+                    visualBackgroundView?.effect = makeGlassEffect()
+                }
+                backgroundImage = UIImage()
+                backgroundColor = .clear
+                visualBackgroundView?.isHidden = false
+            }
+        } else {
+            visualBackgroundView?.isHidden = true
+            if resolvedStyle == .custom {
+                backgroundImage = UIImage()
+            } else {
+                updateBackgroundUI()
+            }
+        }
+        updateVisualStyleLayout()
+    }
+
+    // English: Keep the availability check in one place so the rest of the visual code stays identical.
+    // Español: Mantiene la comprobación de disponibilidad en un solo lugar para que el resto sea idéntico.
+    // 中文：把系统可用性判断集中在一个方法内，保证其余视觉逻辑只有一套。
+    private func makeGlassEffect() -> UIVisualEffect {
+        if #available(iOS 26.0, *) {
+            return UIGlassEffect(style: .regular)
+        }
+        return UIBlurEffect(style: .systemMaterial)
+    }
+
+    private func updateVisualStyleLayout() {
+        guard let visualBackgroundView else { return }
+        visualBackgroundView.frame = bounds
+        visualBackgroundView.layer.cornerRadius = searchBarTextFieldCornerRadius
+        sendSubviewToBack(visualBackgroundView)
+    }
+
+    // English: Install target-actions once because UISearchBar's text field is created lazily by UIKit.
+    // Español: Instala los target-actions una sola vez porque UIKit crea el campo de texto de forma diferida.
+    // 中文：只安装一次 target-action，因为 UIKit 会延迟创建搜索文本框。
+    private func installTextFieldTargetsIfNeeded() {
+        guard !didInstallTextFieldTargets, let textField = safeSearchTextField else { return }
+        textField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(textFieldDidEndOnExit(_:)), for: .editingDidEndOnExit)
+        didInstallTextFieldTargets = true
     }
     
     // MARK: - 🖼 图片加载逻辑
@@ -211,15 +314,14 @@ public class PTSearchBar: UISearchBar {
     
     /// 绑定自定义的 Clear 按钮事件
     private func setupClearAction() {
-        // 方案: 监听 UITextField 的 .editingChanged 事件来捕获清除行为
-        // 虽然直接拿 _clearButton 绑定事件可以做到，但容易失效。
-        // 由于当用户点击原生清除按钮时，UITextField 会发出 text 改变的通知。
+        // English: The shared editing target already observes the native clear-button change event.
+        // Español: El target de edición compartido ya observa el cambio emitido por el botón nativo de borrar.
+        // 中文：统一的编辑 target 已经能够监听原生清除按钮发出的文本变化。
         guard let searchTextField = safeSearchTextField else { return }
-        
-        // 先移除旧的以防重复绑定
-        searchTextField.removeTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        guard clearConfig != nil else { return }
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        installTextFieldTargetsIfNeeded()
+        if clearConfig == nil {
+            previousSearchText = searchTextField.text ?? ""
+        }
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
@@ -228,7 +330,44 @@ public class PTSearchBar: UISearchBar {
             clearConfig?.clearAction?()
         }
         previousSearchText = text
+        textChangeHandler?(text)
         scheduleSearch(for: text)
+    }
+
+    @objc private func textFieldEditingChanged(_ textField: UITextField) {
+        textFieldDidChange(textField)
+    }
+
+    @objc private func textFieldDidBeginEditing(_ textField: UITextField) {
+        editingBeganHandler?()
+    }
+
+    @objc private func textFieldDidEndEditing(_ textField: UITextField) {
+        editingEndedHandler?()
+    }
+
+    @objc private func textFieldDidEndOnExit(_ textField: UITextField) {
+        returnHandler?(textField.text ?? "")
+    }
+
+    // English: Update text programmatically through the same event path when requested.
+    // Español: Actualiza el texto programáticamente usando la misma ruta de eventos cuando se solicita.
+    // 中文：按需通过同一套事件路径更新程序设置的文本。
+    public func setSearchText(_ text: String?, notify: Bool = true) {
+        guard let textField = safeSearchTextField else { return }
+        textField.text = text
+        previousSearchText = text ?? ""
+        if notify {
+            textField.sendActions(for: .editingChanged)
+        }
+    }
+
+    public func focusSearchField() {
+        safeSearchTextField?.becomeFirstResponder()
+    }
+
+    public func resignSearchField() {
+        safeSearchTextField?.resignFirstResponder()
     }
 
     // English: Cancel the pending debounce or the active handler without touching the caller's delegate.

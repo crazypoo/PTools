@@ -23,6 +23,7 @@
 | PDF / SVG / Screenshot / QRCode | `PooTools/PDF`、`PooTools/SVG`、`PooTools/SmartScreenshot`、`PooTools/ScanQRCode` | 对应 products | 文档渲染、矢量、截图和二维码 |
 | ScrollBanner | `PooTools/ScrollBanner` | `PooToolsScrollBanner` | `PTBannerView` 轮播 |
 | PageControl | `PooTools/PageControl` | `PooToolsPageControl` | 分页指示器 |
+| Search | `PooTools/Search` | `PooToolsSearch` | `PTSearchViewController` 搜索容器 |
 | Picker | `PooTools/Picker` | `PooToolsPicker` | 嵌入式或覆盖层滚轮选择器 |
 | Router | `PooTools/Router` | `PooToolsRouter` | 类型化路由和安全实例化 |
 | Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | LocalConsole、Inspector、PTInstruments |
@@ -73,6 +74,10 @@ MetricKit 和 GPS 会释放各自的观察者、会话、查询和代理；Notif
 `PooToolsHud`、`PooToolsSearchBar`、`PooToolsSegmented`、`PooToolsSlider`、`PooToolsStepper`、
 `PooToolsPagingControl`、`PooToolsRateView`、`PooToolsTipsView`、`PooToolsNotificationBanner`、
 `PooToolsPopoverKit` 和 `PooToolsInput`。
+
+`PooToolsSearchBar` 只提供输入框和视觉/事件能力；`PooToolsSearch` 在其上复用
+`PTListViewController` 与 `PTCollectionView`，提供 `PTSearchState`、异步 Provider、History、Suggestion、
+Pagination、Refresh 和 NavigationBar 展示恢复。只需要输入框时不要安装 Search 容器。
 
 5.17.x 的 UI/Utility 全量结账清单见
 [`UI_COMPONENTS_5_17.md`](../ui/UI_COMPONENTS_5_17.md)。SearchBar、Picker、HUD/Loading/Tips、

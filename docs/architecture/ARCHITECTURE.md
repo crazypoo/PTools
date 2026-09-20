@@ -107,6 +107,19 @@ Horizontal 和 Custom。Diffable 更新使用稳定 ID，Cell 复用清理旧请
 5.13.0 起，Diffable 快照提交在组件内部串行化并报告重叠更新，空 Row 身份和非法列数在进入布局
  引擎前被拒绝；`PTReusableTaskBag` 为高频 Cell 提供统一的异步任务取消和内容重置契约。
 
+## 8.1 Search Container
+
+`PooToolsSearch` 的 `PTSearchViewController<Item>` 通过 `PTListViewController` 间接继承
+`PTBaseViewController`，复用现有 `PTCollectionView` 和 `PTSearchBar`，不引入 `UISearchController` 的
+第二套生命周期。`PTSearchState` 只在 MainActor 上驱动 UI；请求使用 `PTSearchTaskCoordinator` 管理
+取消，并使用 `PTSearchSnapshot` 丢弃旧关键词的返回值。
+
+Local、Remote、Hybrid 和 Custom 只改变 Provider 调用方式；History、Suggestion、Pagination、Refresh、
+Empty 和 Error 仍经过同一状态机。`PTSearchPresentationContext` 只保存当前页面的导航栏项目，退出搜索时
+恢复 title、左右按钮、自定义 titleView 和导航栏样式，不修改 UIKit 全局 appearance。
+
+Search 是 Core 之上的可选容器：需要输入框的宿主只安装 `SearchBar`，需要完整页面时再安装 `Search`。
+
 ## 9. Media
 
 ImagePicker 是轻量系统单媒体入口，PhotoPicker 是自定义 PhotoKit 多媒体入口；两者共存但不

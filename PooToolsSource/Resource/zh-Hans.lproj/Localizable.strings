@@ -265,3 +265,11 @@
 "Error" = "错误";
 "network-details-title" = "详情";
 "Loading" = "加载中";
+"Cancel" = "取消";
+"Found %d results" = "找到 %d 个结果";
+"No Results" = "暂无结果";
+"Please try again" = "请重试";
+"Retry" = "重试";
+"Search" = "搜索";
+"Search Failed" = "搜索失败";
+"Try another keyword" = "请尝试其他关键词";

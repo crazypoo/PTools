@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '5.18.0'
+    s.version     = '5.18.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -328,6 +328,19 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/SearchBar/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SEARCHBAR POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: SearchViewController is an opt-in container layered on Core and SearchBar.
+    # Español: SearchViewController es un contenedor opcional sobre Core y SearchBar.
+    # 中文：SearchViewController 是建立在 Core 和 SearchBar 之上的可选容器模块。
+    s.subspec 'Search' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/SearchBar'
+        subspec.dependency 'AttributedString'
+        subspec.source_files = 'PooToolsSource/Search/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SEARCH POOTOOLS_COCOAPODS"
         }
     end
     
@@ -989,6 +1002,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PageControl'
         subspec.dependency 'PooTools/ScrollBanner'
         subspec.dependency 'PooTools/SearchBar'
+        subspec.dependency 'PooTools/Search'
         subspec.dependency 'PooTools/Segmented'
         subspec.dependency 'PooTools/Slider'
         subspec.dependency 'PooTools/CheckUpdate'

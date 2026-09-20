@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "0c4464d6b89fe5b65e29c1dacfa1285400eca29a",
-  "generated_at": "2026-09-20T12:31:45Z",
+  "source_revision": "6ad7c31d56c6a663590271fe7b5db709d246de7d",
+  "generated_at": "2026-09-20T13:19:04Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -303,6 +303,7 @@
         "PooToolsSVG",
         "PooToolsScanQRCode",
         "PooToolsScrollBanner",
+        "PooToolsSearch",
         "PooToolsSearchBar",
         "PooToolsSecurity",
         "PooToolsSegmented",
@@ -892,6 +893,17 @@
       },
       "targets": [
         "PooToolsScrollBanner"
+      ]
+    },
+    {
+      "name": "PooToolsSearch",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSearch"
       ]
     },
     {
@@ -5414,6 +5426,69 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SCROLLBANNER"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSearch",
+      "type": "regular",
+      "path": "PooToolsSource/Search",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsSearchBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSearchBar",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "AttributedString",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "AttributedString",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SEARCH"
             }
           },
           "tool": "swift"

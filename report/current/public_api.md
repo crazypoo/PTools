@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 0c4464d6b89fe5b65e29c1dacfa1285400eca29a
-Generated at: 2026-09-20T12:31:42Z
+Source revision: 6ad7c31d56c6a663590271fe7b5db709d246de7d
+Generated at: 2026-09-20T13:19:00Z
 -->
 
 # PTools 当前公开 API 清单
@@ -5189,29 +5189,171 @@ Generated at: 2026-09-20T12:31:42Z
 | PooToolsSource/ScrollBanner/PTCycleScrollView.swift:178 | func | public | public func automaticScroll() { |
 | PooToolsSource/ScrollBanner/PTCycleScrollView.swift:190 | func | public | public func scollToIndex(targetIndex: Int) { |
 | PooToolsSource/ScrollBanner/PTCycleScrollView.swift:197 | func | public | public func pageControlIndexWithCurrentCellIndex(index: NSInteger) -> Int { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:12 | class | public | public class PTSearchBarTextFieldClearButtonConfig: NSObject { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:13 | var | public | public var clearAction: PTActionTask? |
-| PooToolsSource/SearchBar/PTSearchBar.swift:14 | var | public | public var clearImage: Any? |
-| PooToolsSource/SearchBar/PTSearchBar.swift:15 | var | public | public var clearTopSpace: CGFloat = 2 |
-| PooToolsSource/SearchBar/PTSearchBar.swift:19 | class | public | public class PTSearchBar: UISearchBar { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:30 | var | open | open var searchPlaceholder: String = "PT Input text".localized() { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:38 | var | open | open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:39 | var | open | open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:40 | var | open | open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:41 | var | open | open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:42 | var | open | open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:43 | var | open | open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:44 | var | open | open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:45 | var | open | open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:46 | var | open | open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
-| PooToolsSource/SearchBar/PTSearchBar.swift:51 | var | open | open var searchDebounceInterval: TimeInterval = 0.3 |
-| PooToolsSource/SearchBar/PTSearchBar.swift:56 | var | open | @nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)? { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:72 | var | open | open var searchImageTopSpacing: CGFloat = 2 |
-| PooToolsSource/SearchBar/PTSearchBar.swift:73 | var | open | open var searchBarImage: Any? { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:77 | var | open | open var clearConfig: PTSearchBarTextFieldClearButtonConfig? { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:237 | func | public | public func cancelSearch() { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:247 | func | public | public func clearSearch() { |
-| PooToolsSource/SearchBar/PTSearchBar.swift:256 | func | public | public func refreshLocalizedText() { |
+| PooToolsSource/Search/PTSearchConfiguration.swift:16 | struct | public | public struct PTSearchConfiguration: Sendable, Equatable { |
+| PooToolsSource/Search/PTSearchConfiguration.swift:17 | var | public | public var minimumCharacters: Int |
+| PooToolsSource/Search/PTSearchConfiguration.swift:18 | var | public | public var debounceInterval: Duration |
+| PooToolsSource/Search/PTSearchConfiguration.swift:19 | var | public | public var searchWhileTyping: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:20 | var | public | public var searchOnReturn: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:21 | var | public | public var clearOnCancel: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:22 | var | public | public var clearOnEmptyKeyword: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:23 | var | public | public var keepsPreviousResultsWhileLoading: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:24 | var | public | public var showsCancelButton: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:25 | var | public | public var dismissKeyboardOnScroll: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:26 | var | public | public var dismissKeyboardOnSelection: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:27 | var | public | public var automaticallyShowsHistory: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:28 | var | public | public var automaticallyShowsSuggestions: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:29 | var | public | public var enablesPagination: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:30 | var | public | public var enablesRefresh: Bool |
+| PooToolsSource/Search/PTSearchConfiguration.swift:31 | var | public | public var paginationPageSize: Int |
+| PooToolsSource/Search/PTSearchConfiguration.swift:32 | var | public | public var historyMaximumCount: Int |
+| PooToolsSource/Search/PTSearchConfiguration.swift:33 | var | public | public var mode: PTSearchMode |
+| PooToolsSource/Search/PTSearchConfiguration.swift:34 | var | public | public var placement: PTSearchPlacement |
+| PooToolsSource/Search/PTSearchConfiguration.swift:35 | var | public | public var visualStyle: PTSearchVisualStyle |
+| PooToolsSource/Search/PTSearchConfiguration.swift:37 | init | public | public init(minimumCharacters: Int = 1, |
+| PooToolsSource/Search/PTSearchConfiguration.swift:107 | var | public | public var debounceTimeInterval: TimeInterval { |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:17 | struct | public | public struct PTSearchEmptyConfiguration { |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:18 | var | public | public var image: UIImage? |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:19 | var | public | public var title: String |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:20 | var | public | public var message: String |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:21 | var | public | public var actionTitle: String |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:22 | var | public | public var action: (@MainActor () -> Void)? |
+| PooToolsSource/Search/PTSearchEmptyConfiguration.swift:24 | init | public | public init(image: UIImage? = UIImage(systemName: "magnifyingglass"), |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:16 | enum | public | public enum PTSearchErrorKind: Sendable, Equatable { |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:25 | struct | public | public struct PTSearchErrorConfiguration { |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:26 | var | public | public var kind: PTSearchErrorKind |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:27 | var | public | public var image: UIImage? |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:28 | var | public | public var title: String |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:29 | var | public | public var message: String |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:30 | var | public | public var retryTitle: String |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:31 | var | public | public var retryAction: (@MainActor () -> Void)? |
+| PooToolsSource/Search/PTSearchErrorConfiguration.swift:33 | init | public | public init(kind: PTSearchErrorKind = .unknown, |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:12 | protocol | public | public protocol PTSearchHistoryProvider: Sendable { |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:19 | actor | public | public actor PTUserDefaultsSearchHistoryProvider: PTSearchHistoryProvider { |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:22 | let | public | public let maximumCount: Int |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:24 | init | public | public init(suiteName: String? = nil, |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:32 | func | public | public func loadHistory() async -> [String] { |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:36 | func | public | public func save(keyword: String) async { |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:45 | func | public | public func delete(keyword: String) async { |
+| PooToolsSource/Search/PTSearchHistoryProvider.swift:50 | func | public | public func clear() async { |
+| PooToolsSource/Search/PTSearchMode.swift:12 | enum | public | public enum PTSearchMode: Sendable, Equatable { |
+| PooToolsSource/Search/PTSearchPagination.swift:13 | enum | public | public enum PTSearchPaginationState { |
+| PooToolsSource/Search/PTSearchPagination.swift:21 | struct | public | public struct PTSearchPagination { |
+| PooToolsSource/Search/PTSearchPagination.swift:27 | init | public | public init(pageSize: Int = 20) { |
+| PooToolsSource/Search/PTSearchPagination.swift:34 | var | public | public var canLoadMore: Bool { |
+| PooToolsSource/Search/PTSearchPagination.swift:38 | var | public | public var isLoading: Bool { |
+| PooToolsSource/Search/PTSearchPlacement.swift:12 | enum | public | public enum PTSearchPlacement: Sendable, Equatable { |
+| PooToolsSource/Search/PTSearchPresentationContext.swift:30 | init | public | public init(viewController: UIViewController) { |
+| PooToolsSource/Search/PTSearchPresentationContext.swift:57 | func | public | public func restore() { |
+| PooToolsSource/Search/PTSearchResultProvider.swift:12 | protocol | public | public protocol PTSearchResultProvider: Sendable { |
+| PooToolsSource/Search/PTSearchResultProvider.swift:18 | struct | public | public struct PTClosureSearchResultProvider<Item: Sendable>: PTSearchResultProvider { |
+| PooToolsSource/Search/PTSearchResultProvider.swift:21 | init | public | public init(handler: @escaping @Sendable (String) async throws -> [Item]) { |
+| PooToolsSource/Search/PTSearchResultProvider.swift:25 | func | public | public func search(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchSnapshot.swift:12 | struct | public | public struct PTSearchSnapshot: Sendable, Equatable { |
+| PooToolsSource/Search/PTSearchSnapshot.swift:13 | let | public | public let id: UUID |
+| PooToolsSource/Search/PTSearchSnapshot.swift:14 | let | public | public let keyword: String |
+| PooToolsSource/Search/PTSearchSnapshot.swift:16 | init | public | public init(id: UUID = UUID(), keyword: String) { |
+| PooToolsSource/Search/PTSearchState.swift:13 | enum | public | public enum PTSearchState { |
+| PooToolsSource/Search/PTSearchState.swift:26 | var | public | public var keyword: String? { |
+| PooToolsSource/Search/PTSearchState.swift:37 | var | public | public var isLoading: Bool { |
+| PooToolsSource/Search/PTSearchState.swift:47 | enum | public | public enum PTSearchError: Error, LocalizedError, Sendable { |
+| PooToolsSource/Search/PTSearchState.swift:52 | var | public | public var errorDescription: String? { |
+| PooToolsSource/Search/PTSearchSuggestionProvider.swift:12 | protocol | public | public protocol PTSearchSuggestionProvider: Sendable { |
+| PooToolsSource/Search/PTSearchSuggestionProvider.swift:18 | struct | public | public struct PTClosureSearchSuggestionProvider<Suggestion: Sendable>: PTSearchSuggestionProvider { |
+| PooToolsSource/Search/PTSearchSuggestionProvider.swift:21 | init | public | public init(handler: @escaping @Sendable (String) async throws -> [Suggestion]) { |
+| PooToolsSource/Search/PTSearchSuggestionProvider.swift:25 | func | public | public func suggestions(for keyword: String) async throws -> [Suggestion] { |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:14 | enum | public | public enum Key: Hashable, Sendable { |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:25 | init | public | public init() {} |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:27 | func | public | public func replace(_ task: Task<Void, Never>, for key: Key) { |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:32 | func | public | public func cancel(_ key: Key) { |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:36 | func | public | public func cancel<S: Sequence>(_ keys: S) where S.Element == Key { |
+| PooToolsSource/Search/PTSearchTaskCoordinator.swift:40 | func | public | public func cancelAll() { |
+| PooToolsSource/Search/PTSearchViewController.swift:73 | class | open | open class PTSearchViewController<Item: Sendable>: PTListViewController { |
+| PooToolsSource/Search/PTSearchViewController.swift:74 | let | public | public let searchConfiguration: PTSearchConfiguration |
+| PooToolsSource/Search/PTSearchViewController.swift:76 | var | public | public var collectionView: PTCollectionView { listView } |
+| PooToolsSource/Search/PTSearchViewController.swift:82 | var | open | open var searchMode: PTSearchMode |
+| PooToolsSource/Search/PTSearchViewController.swift:83 | var | public | public var historyProvider: (any PTSearchHistoryProvider)? |
+| PooToolsSource/Search/PTSearchViewController.swift:85 | var | public | public var searchStateDidChange: (@MainActor (PTSearchState) -> Void)? |
+| PooToolsSource/Search/PTSearchViewController.swift:86 | var | public | public var keywordDidChange: (@MainActor (String) -> Void)? |
+| PooToolsSource/Search/PTSearchViewController.swift:87 | var | public | public var resultDidSelect: (@MainActor (Item) -> Void)? |
+| PooToolsSource/Search/PTSearchViewController.swift:111 | init | public | public init(configuration: PTSearchConfiguration = .standard) { |
+| PooToolsSource/Search/PTSearchViewController.swift:237 | func | public | public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:243 | func | public | public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String { |
+| PooToolsSource/Search/PTSearchViewController.swift:249 | func | public | public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:255 | func | public | public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item { |
+| PooToolsSource/Search/PTSearchViewController.swift:264 | func | public | public func activateSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:287 | func | public | public func deactivateSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:296 | func | public | public func focusSearchBar() { |
+| PooToolsSource/Search/PTSearchViewController.swift:305 | func | public | public func dismissSearchKeyboard() { |
+| PooToolsSource/Search/PTSearchViewController.swift:309 | func | public | public func cancelSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:327 | func | public | public func refreshSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:332 | func | public | public func retryCurrentSearch() { |
+| PooToolsSource/Search/PTSearchViewController.swift:340 | func | public | public func retryPagination() { |
+| PooToolsSource/Search/PTSearchViewController.swift:347 | func | public | public func setResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:352 | func | public | public func appendResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:357 | func | public | public func prependResults(_ results: [Item], animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:362 | func | public | public func removeResult(at index: Int, animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:369 | func | public | public func replaceResult(at index: Int, with item: Item, animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:376 | func | public | public func clearResults(animated: Bool = true) { |
+| PooToolsSource/Search/PTSearchViewController.swift:381 | func | public | public func reloadResults() { |
+| PooToolsSource/Search/PTSearchViewController.swift:388 | func | open | open func search(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:393 | func | open | open func localSearch(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:398 | func | open | open func remoteSearch(keyword: String) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:405 | func | open | open func merge(local: [Item], remote: [Item]) -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:409 | func | open | open func loadMore(keyword: String, page: Int) async throws -> [Item] { |
+| PooToolsSource/Search/PTSearchViewController.swift:413 | func | open | open func makeResultSections(for items: [Item]) -> [PTSection] { |
+| PooToolsSource/Search/PTSearchViewController.swift:425 | func | open | open func makeResultCell(collectionView: UICollectionView, |
+| PooToolsSource/Search/PTSearchViewController.swift:431 | func | open | open func configureResultCell(_ cell: UICollectionViewCell, |
+| PooToolsSource/Search/PTSearchViewController.swift:437 | func | open | open func itemForResult(at indexPath: IndexPath) -> Item? { |
+| PooToolsSource/Search/PTSearchViewController.swift:441 | func | open | open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration { |
+| PooToolsSource/Search/PTSearchViewController.swift:445 | func | open | open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration { |
+| PooToolsSource/Search/PTSearchViewController.swift:451 | func | open | open func searchWillActivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:452 | func | open | open func searchDidActivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:453 | func | open | open func searchTextDidChange(_ keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:454 | func | open | open func searchWillBegin(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:455 | func | open | open func searchDidFinish(keyword: String, results: [Item]) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:456 | func | open | open func searchDidFail(keyword: String, error: Error) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:457 | func | open | open func searchWillCancel() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:458 | func | open | open func searchDidCancel() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:459 | func | open | open func searchDidDeactivate() {} |
+| PooToolsSource/Search/PTSearchViewController.swift:460 | func | open | open func searchWillRefresh(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:461 | func | open | open func searchDidRefresh(keyword: String) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:462 | func | open | open func didSelect(item: Item, at indexPath: IndexPath) {} |
+| PooToolsSource/Search/PTSearchViewController.swift:464 | func | public | public func clearSearchHistory() { |
+| PooToolsSource/Search/PTSearchViewController.swift:475 | func | public | public func deleteSearchHistory(keyword: String) { |
+| PooToolsSource/Search/PTSearchViewController.swift:486 | func | open | open func reloadLocalization() { |
+| PooToolsSource/Search/PTSearchViewController.swift:499 | func | open | open func installCustomSearchBar(_ searchBar: PTSearchBar) {} |
+| PooToolsSource/SearchBar/PTSearchBar.swift:18 | enum | public | public enum PTSearchVisualStyle: Sendable, Equatable { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:26 | class | public | public class PTSearchBarTextFieldClearButtonConfig: NSObject { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:27 | var | public | public var clearAction: PTActionTask? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:28 | var | public | public var clearImage: Any? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:29 | var | public | public var clearTopSpace: CGFloat = 2 |
+| PooToolsSource/SearchBar/PTSearchBar.swift:33 | class | public | public class PTSearchBar: UISearchBar { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:48 | var | open | @nonobjc open var textChangeHandler: (@MainActor @Sendable (String) -> Void)? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:49 | var | open | @nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:50 | var | open | @nonobjc open var editingBeganHandler: (@MainActor @Sendable () -> Void)? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:51 | var | open | @nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)? |
+| PooToolsSource/SearchBar/PTSearchBar.swift:53 | var | open | open var visualStyle: PTSearchVisualStyle = .automatic { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:58 | var | open | open var searchPlaceholder: String = "PT Input text".localized() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:66 | var | open | open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:67 | var | open | open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:68 | var | open | open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:69 | var | open | open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:70 | var | open | open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:71 | var | open | open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:72 | var | open | open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:73 | var | open | open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:74 | var | open | open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } } |
+| PooToolsSource/SearchBar/PTSearchBar.swift:79 | var | open | open var searchDebounceInterval: TimeInterval = 0.3 |
+| PooToolsSource/SearchBar/PTSearchBar.swift:84 | var | open | @nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:100 | var | open | open var searchImageTopSpacing: CGFloat = 2 |
+| PooToolsSource/SearchBar/PTSearchBar.swift:101 | var | open | open var searchBarImage: Any? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:105 | var | open | open var clearConfig: PTSearchBarTextFieldClearButtonConfig? { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:356 | func | public | public func setSearchText(_ text: String?, notify: Bool = true) { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:365 | func | public | public func focusSearchField() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:369 | func | public | public func resignSearchField() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:376 | func | public | public func cancelSearch() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:386 | func | public | public func clearSearch() { |
+| PooToolsSource/SearchBar/PTSearchBar.swift:395 | func | public | public func refreshLocalizedText() { |
 | PooToolsSource/Security/PTSecurity.swift:9 | enum | public | public enum PTSecurityError: Error, LocalizedError, Sendable { |
 | PooToolsSource/Security/PTSecurity.swift:20 | var | public | public var errorDescription: String? { |
 | PooToolsSource/Security/PTSecurity.swift:35 | enum | public | public enum PTSecurityHashAlgorithm: Sendable { |

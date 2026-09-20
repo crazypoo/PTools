@@ -265,3 +265,11 @@
 "Error" = "Error";
 "network-details-title" = "Detalles";
 "Loading" = "Cargando";
+"Cancel" = "Cancelar";
+"Found %d results" = "Se encontraron %d resultados";
+"No Results" = "Sin resultados";
+"Please try again" = "Inténtalo de nuevo";
+"Retry" = "Reintentar";
+"Search" = "Buscar";
+"Search Failed" = "Búsqueda fallida";
+"Try another keyword" = "Prueba otra palabra clave";

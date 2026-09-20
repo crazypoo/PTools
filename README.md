@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.18.0`。
+以 `PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.18.1`。
 
 ## Requirements
 
@@ -77,6 +77,29 @@ final class ExampleListViewController: PTListViewController {
 `PTImageDownsampler` 解码；视频缩略图使用 `PTVideoThumbnailService` 和变体缓存；保存图片或视频使用
 `PTMediaSaveService`。旧入口仍兼容，迁移条件见
 [MIGRATION_6.md](docs/migration/MIGRATION_6.md)。
+
+### 搜索页面
+
+需要完整搜索容器时选择 `PooTools/Search` 或 `PooToolsSearch`；只使用输入框时继续选择
+`PooTools/SearchBar` 或 `PooToolsSearchBar`。搜索基类复用 `PTListViewController`、`PTCollectionView`
+和 `PTSearchBar`，统一处理取消、防抖、竞态、历史、分页、刷新、空状态和错误状态。
+
+```swift
+@MainActor
+final class ExampleSearchViewController: PTSearchViewController<String> {
+    private let source: [String] = []
+
+    override func search(keyword: String) async throws -> [String] {
+        source.filter { $0.localizedCaseInsensitiveContains(keyword) }
+    }
+
+    override func didSelect(item: String, at indexPath: IndexPath) {
+        // English: Handle the selected result.
+        // Español: Procesa el resultado seleccionado.
+        // 中文：处理用户选中的搜索结果。
+    }
+}
+```
 
 ### Picker
 

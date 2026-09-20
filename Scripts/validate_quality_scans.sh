@@ -185,5 +185,6 @@ bash Scripts/validate_network_security.sh
 bash Scripts/validate_515_media.sh
 bash Scripts/validate_516_permission.sh
 bash Scripts/validate_517_ui.sh
+bash Scripts/validate_search_5_18_1.sh
 
 printf 'PASS: Swift 6 safety scans\n'

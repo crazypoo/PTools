@@ -265,3 +265,11 @@
 "Error" = "錯誤";
 "network-details-title" = "詳情";
 "Loading" = "載入中";
+"Cancel" = "取消";
+"Found %d results" = "找到 %d 個結果";
+"No Results" = "沒有結果";
+"Please try again" = "請再試一次";
+"Retry" = "重試";
+"Search" = "搜尋";
+"Search Failed" = "搜尋失敗";
+"Try another keyword" = "請嘗試其他關鍵字";
