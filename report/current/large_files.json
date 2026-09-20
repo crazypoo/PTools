@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
-  "generated_at": "2026-09-20T11:40:50Z",
+  "source_revision": "0c4464d6b89fe5b65e29c1dacfa1285400eca29a",
+  "generated_at": "2026-09-20T12:31:54Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1356,7 +1356,12 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "lines": 897,
+      "lines": 948,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Debug/PTDebugHookRegistry.swift",
+      "lines": 101,
       "classification": "ok"
     },
     {
@@ -1376,12 +1381,12 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "lines": 1213,
+      "lines": 1434,
       "classification": "warning"
     },
     {
       "path": "PooToolsSource/Debug/PTInstrumentsUI.swift",
-      "lines": 367,
+      "lines": 401,
       "classification": "ok"
     },
     {
@@ -3581,7 +3586,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1690,
+      "lines": 1698,
       "classification": "architecture_exception"
     },
     {
@@ -4421,7 +4426,7 @@
     },
     {
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "lines": 1246,
+      "lines": 1248,
       "classification": "warning"
     },
     {

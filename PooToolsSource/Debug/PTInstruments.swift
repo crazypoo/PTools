@@ -24,6 +24,12 @@ public enum PTInstrumentKind: String, Codable, CaseIterable, Sendable {
     case crash
     case appLifecycle
     case sceneLifecycle
+    case disk
+    case launch
+    case viewControllerLifecycle
+    case threads
+    case tasks
+    case signposts
     case custom
 }
 
@@ -289,6 +295,32 @@ public struct PTInstrumentSessionSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+// English: Trace comparison is a value snapshot so analysis never shares mutable recorder state.
+// Español: La comparación de trazas es un snapshot de valor y nunca comparte estado mutable del recorder.
+// 中文：轨迹对比使用值类型快照，不共享 Recorder 的可变状态。
+public struct PTInstrumentTraceComparison: Codable, Sendable, Equatable {
+    public let leftID: UUID
+    public let rightID: UUID
+    public let durationDelta: TimeInterval
+    public let eventCountDelta: Int
+    public let sampleCountDelta: Int
+    public let droppedCountDelta: Int
+
+    public init(leftID: UUID,
+                rightID: UUID,
+                durationDelta: TimeInterval,
+                eventCountDelta: Int,
+                sampleCountDelta: Int,
+                droppedCountDelta: Int) {
+        self.leftID = leftID
+        self.rightID = rightID
+        self.durationDelta = durationDelta
+        self.eventCountDelta = eventCountDelta
+        self.sampleCountDelta = sampleCountDelta
+        self.droppedCountDelta = droppedCountDelta
+    }
+}
+
 // English: Network records are immutable summaries, so the Network module does not depend on the Debug module.
 // Español: Los registros de red son resúmenes inmutables para que Network no dependa del módulo Debug.
 // 中文：网络记录是不可变摘要，因此 Network 模块不需要依赖 Debug 模块。
@@ -496,7 +528,57 @@ public enum PTInstrumentTraceStore {
               document.schemaVersion == 1 else {
             throw PTInstrumentSessionError.invalidArchive
         }
-        return document.session
+        return PTInstrumentRedactor.redact(document.session)
+    }
+
+    // English: This named import entry makes the .pttrace workflow explicit without breaking load(from:).
+    // Español: Esta entrada de importación con nombre hace explícito el flujo .pttrace sin romper load(from:).
+    // 中文：这个明确命名的导入入口让 .pttrace 流程更清晰，同时保留 load(from:) 兼容性。
+    public static func importTrace(from url: URL,
+                                  maxBytes: Int = 10 * 1024 * 1024) throws -> PTInstrumentSessionSnapshot {
+        guard maxBytes > 0,
+              let values = try? url.resourceValues(forKeys: [.fileSizeKey]),
+              let fileSize = values.fileSize,
+              fileSize <= maxBytes else {
+            throw PTInstrumentSessionError.archiveTooLarge
+        }
+        return try load(from: url)
+    }
+
+    // English: Replay returns a filtered value timeline and never executes application code from an archive.
+    // Español: Replay devuelve una línea de tiempo filtrada y nunca ejecuta código de la aplicación desde un archivo.
+    // 中文：回放只返回过滤后的值类型时间线，不会执行归档中的任何业务代码。
+    public static func replay(_ snapshot: PTInstrumentSessionSnapshot,
+                              through elapsed: TimeInterval? = nil) -> PTInstrumentTimeline {
+        let endDate: Date
+        if let elapsed {
+            endDate = min(snapshot.endDate,
+                          snapshot.startDate.addingTimeInterval(max(0, elapsed)))
+        } else {
+            endDate = snapshot.endDate
+        }
+        let tracks = snapshot.timeline.tracks.map { track in
+            PTInstrumentTrack(kind: track.kind,
+                              isVisible: track.isVisible,
+                              samples: track.samples.filter { $0.timestamp <= endDate },
+                              events: track.events.filter { $0.timestamp <= endDate })
+        }
+        return PTInstrumentTimeline(startDate: snapshot.startDate,
+                                    endDate: endDate,
+                                    tracks: tracks)
+    }
+
+    public static func compare(_ left: PTInstrumentSessionSnapshot,
+                               _ right: PTInstrumentSessionSnapshot) -> PTInstrumentTraceComparison {
+        PTInstrumentTraceComparison(leftID: left.id,
+                                    rightID: right.id,
+                                    durationDelta: right.timeline.duration - left.timeline.duration,
+                                    eventCountDelta: Int(right.summary["eventCount"] ?? 0)
+                                        - Int(left.summary["eventCount"] ?? 0),
+                                    sampleCountDelta: Int(right.summary["sampleCount"] ?? 0)
+                                        - Int(left.summary["sampleCount"] ?? 0),
+                                    droppedCountDelta: Int(right.summary["droppedCount"] ?? 0)
+                                        - Int(left.summary["droppedCount"] ?? 0))
     }
 
     public static func history() -> [URL] {
@@ -510,6 +592,34 @@ public enum PTInstrumentTraceStore {
                 let rightDate = (try? rhs.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? nil
                 return (leftDate ?? .distantPast) > (rightDate ?? .distantPast)
             } ?? []
+    }
+}
+
+// English: The bounded ring buffer overwrites the oldest diagnostics entry instead of growing without limit.
+// Español: El buffer circular limitado sobrescribe la entrada más antigua en lugar de crecer sin límite.
+// 中文：有界环形缓冲覆盖最旧的诊断记录，避免内存随录制时间无限增长。
+private struct PTInstrumentRingBuffer<Element> {
+    private let capacity: Int
+    private var values: [Element] = []
+    private var head = 0
+
+    init(capacity: Int) {
+        self.capacity = max(1, capacity)
+    }
+
+    mutating func append(_ element: Element) -> Bool {
+        guard values.count == capacity else {
+            values.append(element)
+            return false
+        }
+        values[head] = element
+        head = (head + 1) % capacity
+        return true
+    }
+
+    var orderedValues: [Element] {
+        guard values.count == capacity, head != 0 else { return values }
+        return Array(values[head..<values.count]) + Array(values[0..<head])
     }
 }
 
@@ -530,7 +640,8 @@ public actor PTInstrumentSession {
     private let startDate: Date
     private var endDate: Date?
     private var state: State = .recording
-    private var tracks: [PTInstrumentKind: PTInstrumentTrack] = [:]
+    private var sampleBuffers: [PTInstrumentKind: PTInstrumentRingBuffer<PTInstrumentSample>] = [:]
+    private var eventBuffers: [PTInstrumentKind: PTInstrumentRingBuffer<PTInstrumentEvent>] = [:]
     private var eventCount = 0
     private var sampleCount = 0
     private var droppedCount = 0
@@ -566,31 +677,22 @@ public actor PTInstrumentSession {
 
     public func recordSample(_ sample: PTInstrumentSample) {
         guard shouldRecord(kind: sample.kind) else { return }
-        let track = tracks[sample.kind] ?? PTInstrumentTrack(kind: sample.kind)
-        guard sampleCount < policy.maxSampleCount else {
-            droppedCount += 1
-            return
-        }
-        var updated = track
-        updated.samples.append(sample)
-        tracks[sample.kind] = updated
+        var buffer = sampleBuffers[sample.kind]
+            ?? PTInstrumentRingBuffer(capacity: capacity(for: sample.kind,
+                                                         totalLimit: policy.maxSampleCount))
+        if buffer.append(sample) { droppedCount += 1 }
+        sampleBuffers[sample.kind] = buffer
         sampleCount += 1
     }
 
     public func recordEvent(_ event: PTInstrumentEvent) {
         guard shouldRecord(kind: event.kind) else { return }
-        let track = tracks[event.kind] ?? PTInstrumentTrack(kind: event.kind)
-        let trackLimit = event.kind == .logs ? policy.logRetention : policy.maxEventCount
-        guard eventCount < policy.maxEventCount else {
-            droppedCount += 1
-            return
-        }
-        var updated = track
-        updated.events.append(event)
-        if updated.events.count > trackLimit {
-            updated.events = Array(updated.events.suffix(trackLimit))
-        }
-        tracks[event.kind] = updated
+        let totalLimit = event.kind == .logs ? policy.logRetention : policy.maxEventCount
+        var buffer = eventBuffers[event.kind]
+            ?? PTInstrumentRingBuffer(capacity: capacity(for: event.kind,
+                                                         totalLimit: totalLimit))
+        if buffer.append(event) { droppedCount += 1 }
+        eventBuffers[event.kind] = buffer
         eventCount += 1
     }
 
@@ -618,7 +720,13 @@ public actor PTInstrumentSession {
 
     private func makeSnapshot() -> PTInstrumentSessionSnapshot {
         let end = endDate ?? Date()
-        let timeline = PTInstrumentTimeline(startDate: startDate, endDate: end, tracks: Array(tracks.values))
+        let kinds = Set(sampleBuffers.keys).union(eventBuffers.keys)
+        let tracks = kinds.map { kind in
+            PTInstrumentTrack(kind: kind,
+                              samples: sampleBuffers[kind]?.orderedValues ?? [],
+                              events: eventBuffers[kind]?.orderedValues ?? [])
+        }
+        let timeline = PTInstrumentTimeline(startDate: startDate, endDate: end, tracks: tracks)
         let cpuSamples = timeline.samples(kinds: [.cpu])
         let memorySamples = timeline.samples(kinds: [.memory])
         let fpsSamples = timeline.samples(kinds: [.fps])
@@ -656,6 +764,10 @@ public actor PTInstrumentSession {
             timeline: timeline,
             summary: summary
         )
+    }
+
+    private func capacity(for kind: PTInstrumentKind, totalLimit: Int) -> Int {
+        max(1, totalLimit / max(1, selectedInstruments.count))
     }
 }
 
@@ -887,6 +999,23 @@ private enum PTInstrumentResourceReader {
         }
         return total / Double(max(1, ProcessInfo.processInfo.activeProcessorCount))
     }
+
+    static func freeDiskMB() -> Double {
+        guard let attributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()),
+              let bytes = attributes[.systemFreeSize] as? NSNumber else { return 0 }
+        return bytes.doubleValue / 1_048_576
+    }
+
+    static func threadCount() -> Double {
+        var threads: thread_act_array_t?
+        var count = mach_msg_type_number_t(0)
+        guard task_threads(mach_task_self_, &threads, &count) == KERN_SUCCESS,
+              let threads else { return 0 }
+        vm_deallocate(mach_task_self_,
+                      vm_address_t(UInt(bitPattern: threads)),
+                      vm_size_t(Int(count) * MemoryLayout<thread_t>.stride))
+        return Double(count)
+    }
 }
 
 private actor PTInstrumentResourceSampler {
@@ -910,6 +1039,19 @@ private actor PTInstrumentResourceSampler {
                                                                    timestamp: timestamp,
                                                                    value: PTInstrumentResourceReader.memoryMB(),
                                                                    unit: "MB"))
+                }
+                if instruments.contains(.disk) {
+                    await session.recordSample(PTInstrumentSample(kind: .disk,
+                                                                   timestamp: timestamp,
+                                                                   value: PTInstrumentResourceReader.freeDiskMB(),
+                                                                   unit: "MB",
+                                                                   metadata: ["scope": "filesystem-free"]))
+                }
+                if instruments.contains(.threads) {
+                    await session.recordSample(PTInstrumentSample(kind: .threads,
+                                                                   timestamp: timestamp,
+                                                                   value: PTInstrumentResourceReader.threadCount(),
+                                                                   unit: "threads"))
                 }
                 do {
                     try await Task.sleep(nanoseconds: Self.nanoseconds(policy.cpuMemoryInterval))
@@ -1023,13 +1165,19 @@ public final class PTInstrumentRecorder: NSObject {
             sampler.start()
             displayLinkSampler = sampler
         }
-        if instrumentSet.contains(.cpu) || instrumentSet.contains(.memory) {
+        if instrumentSet.contains(.cpu)
+            || instrumentSet.contains(.memory)
+            || instrumentSet.contains(.disk)
+            || instrumentSet.contains(.threads) {
             Task { await resourceSampler.start(session: session, policy: policy, instruments: instrumentSet) }
         }
         if instrumentSet.contains(.mainThreadStall) {
             Task { await stallSampler.start(session: session, policy: policy) }
         }
         installLifecycleBridgeIfNeeded()
+        if instrumentSet.contains(.launch) {
+            recordEvent(kind: .launch, name: "instrument-session-start")
+        }
         durationTask = Task { @MainActor [weak self] in
             do {
                 try await Task.sleep(nanoseconds: Self.nanoseconds(policy.maxSessionDuration))
@@ -1059,7 +1207,10 @@ public final class PTInstrumentRecorder: NSObject {
 
     private func installEventBridgeIfNeeded() {
         guard eventObserverToken == nil,
-              selectedInstruments.contains(where: { [.network, .lifecycle, .leak, .crash, .appLifecycle, .sceneLifecycle].contains($0) }) else { return }
+              selectedInstruments.contains(where: {
+                  [.network, .lifecycle, .viewControllerLifecycle, .leak, .crash,
+                   .appLifecycle, .sceneLifecycle, .custom].contains($0)
+              }) else { return }
         eventObserverToken = PTDebugEventCenter.shared.addObserver { [weak self] event in
             self?.record(event: event)
         }
@@ -1163,6 +1314,57 @@ public final class PTInstrumentRecorder: NSObject {
         }
     }
 
+    // English: Launch markers are explicit opt-in events and do not install another application lifecycle observer.
+    // Español: Los marcadores de lanzamiento son eventos explícitos y no instalan otro observer del ciclo de vida.
+    // 中文：启动标记是显式可选事件，不会重复安装应用生命周期观察者。
+    public func recordLaunch(_ name: String = "launch",
+                             metadata: [String: String] = [:]) {
+        recordEvent(kind: .launch, name: name, metadata: metadata)
+    }
+
+    // English: View-controller lifecycle data is recorded from existing Core hooks as immutable text snapshots.
+    // Español: El ciclo de vida de view controller usa snapshots de texto inmutables provenientes de hooks existentes de Core.
+    // 中文：ViewController 生命周期复用现有 Core Hook 的不可变文本快照，不新增 swizzle。
+    public func recordViewControllerLifecycle(_ name: String,
+                                              metadata: [String: String] = [:]) {
+        recordEvent(kind: .viewControllerLifecycle, name: name, metadata: metadata)
+    }
+
+    // English: Task and signpost APIs are lightweight explicit markers for callers that already own those scopes.
+    // Español: Las APIs de Task y signpost son marcadores ligeros para los callers que ya poseen esos ámbitos.
+    // 中文：Task 和 Signpost API 是轻量显式标记，调用方继续拥有对应作用域。
+    public func recordTask(_ name: String,
+                           duration: TimeInterval? = nil,
+                           metadata: [String: String] = [:]) {
+        recordEvent(kind: .tasks, name: name, duration: duration, metadata: metadata)
+    }
+
+    public func recordSignpost(_ name: String,
+                               duration: TimeInterval? = nil,
+                               metadata: [String: String] = [:]) {
+        recordEvent(kind: .signposts, name: name, duration: duration, metadata: metadata)
+    }
+
+    public func liveSnapshot() async -> PTInstrumentSessionSnapshot? {
+        guard let session else { return nil }
+        return await session.snapshot()
+    }
+
+    public func importTrace(from url: URL,
+                            maxBytes: Int = 10 * 1024 * 1024) throws -> PTInstrumentSessionSnapshot {
+        try PTInstrumentTraceStore.importTrace(from: url, maxBytes: maxBytes)
+    }
+
+    public func replay(_ snapshot: PTInstrumentSessionSnapshot,
+                       through elapsed: TimeInterval? = nil) -> PTInstrumentTimeline {
+        PTInstrumentTraceStore.replay(snapshot, through: elapsed)
+    }
+
+    public func compare(_ left: PTInstrumentSessionSnapshot,
+                        _ right: PTInstrumentSessionSnapshot) -> PTInstrumentTraceComparison {
+        PTInstrumentTraceStore.compare(left, right)
+    }
+
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
         recordLifecycle(name: "application-did-become-active", kind: .appLifecycle, notification: notification)
     }
@@ -1198,10 +1400,29 @@ public final class PTInstrumentRecorder: NSObject {
         }
     }
 
+    private func recordEvent(kind: PTInstrumentKind,
+                             name: String,
+                             duration: TimeInterval? = nil,
+                             metadata: [String: String] = [:]) {
+        guard let session, selectedInstruments.contains(kind) else { return }
+        let safeName = PTInstrumentRedactor.redactText(name)
+        let safeMetadata = PTInstrumentRedactor.redactMetadata(metadata)
+        Task {
+            await session.recordEvent(PTInstrumentEvent(kind: kind,
+                                                        timestamp: Date(),
+                                                        name: safeName,
+                                                        duration: duration,
+                                                        metadata: safeMetadata))
+        }
+    }
+
     private static func instrumentKind(for eventName: String) -> PTInstrumentKind {
         let name = eventName.lowercased()
         if name.hasPrefix("network") { return .network }
-        if name.hasPrefix("lifecycle") || name.contains("viewdid") { return .lifecycle }
+        if name.contains("viewdid") || name.contains("viewwill") {
+            return .viewControllerLifecycle
+        }
+        if name.hasPrefix("lifecycle") { return .lifecycle }
         if name.hasPrefix("leak") { return .leak }
         if name.hasPrefix("crash") { return .crash }
         return .custom

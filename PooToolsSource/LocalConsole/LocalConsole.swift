@@ -156,7 +156,7 @@ final class PTConsoleWindow: UIWindow {
         backgroundColor = .clear
     }
 
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { return nil }
 
     // English: Return the console window owned by the requested scene without selecting a random connected scene.
     // Español: Devuelve la ventana de consola de la escena solicitada sin elegir una escena conectada al azar.
@@ -697,16 +697,24 @@ public class LocalConsole: NSObject {
     }
 
     @MainActor var possibleEndpoints: [CGPoint] {
-        guard let appWindow = AppWindows else { return [] }
-        
-        let screenSize = appWindow.frame.size
-        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-        let hasNotch = UIDevice.current.hasNotch
-        let safeInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
-        let isPortrait = screenSize.width < screenSize.height
-        let orientation = UIDevice.current.orientation
+        // English: Resolve geometry from this console's scene so split-screen windows do not use another scene's bounds.
+        // Español: Resuelve la geometría desde la escena de esta consola para que Split View no use los límites de otra escena.
+        // 中文：从当前控制台所属场景读取几何信息，避免分屏时误用其他场景的尺寸。
+        guard let scene = preferredWindowScene
+                ?? consoleOverlayWindow?.windowScene
+                ?? PTSceneContext.activeWindow()?.windowScene,
+              let appWindow = scene.windows.first(where: { $0.isKeyWindow }) ?? scene.windows.first else {
+            return []
+        }
 
-        let isLandscape = isPhone && !isPortrait
+        let screenSize = scene.coordinateSpace.bounds.size
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        let safeInsets = consoleOverlayWindow?.safeAreaInsets ?? appWindow.safeAreaInsets
+        let hasNotch = safeInsets.top > 20 || safeInsets.bottom > 0
+        let orientation = scene.interfaceOrientation
+        let isPortrait = orientation.isPortrait
+
+        let isLandscape = isPhone && orientation.isLandscape
         let isLeftNotch = isLandscape && hasNotch && orientation == .landscapeLeft
         let isRightNotch = isLandscape && hasNotch && orientation == .landscapeRight
 

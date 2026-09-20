@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 5946a5f19c1c57167d79c1246b0b15a59a24e336
-Generated at: 2026-09-20T11:40:46Z
+Source revision: 0c4464d6b89fe5b65e29c1dacfa1285400eca29a
+Generated at: 2026-09-20T12:31:49Z
 -->
 
 # PTools 当前弃用入口清单

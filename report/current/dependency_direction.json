@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "5946a5f19c1c57167d79c1246b0b15a59a24e336",
-  "generated_at": "2026-09-20T11:40:42Z",
+  "source_revision": "0c4464d6b89fe5b65e29c1dacfa1285400eca29a",
+  "generated_at": "2026-09-20T12:31:45Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",

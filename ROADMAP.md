@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.17.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.18.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.16.0`；`5.17.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.17.0`；`5.18.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -82,6 +82,17 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ ZipArchive、GCDWebServer、Instructions、Appz、Flag、PopoverKit 和 NotificationBanner 作为外部适配器登记边界，不修改第三方源码。
 - ✅ 质量门禁接入 `Scripts/validate_517_ui.sh`，保持 iOS 17+、Swift 6+、公开 API 和三套入口兼容。
 - [ ] 在真实宿主和设备完成键盘、Stage Manager、VoiceOver、Dynamic Type、Dark Mode、WebKit 进程恢复、外部服务、轮播/分页和所有 42 个模块的视觉回归。
+
+## 5.18.0 Debug / Instruments
+
+- ✅ 新增 `PTDebugHookRegistry`，统一 Collector 与 Core runtime adapter 的安装、卸载、owner 和状态快照；重复启动幂等，停止路径可逆。
+- ✅ PTInstruments 增加 disk、threads、launch、ViewController lifecycle、tasks 和 signposts 类型化入口，复用现有 Debug Event Center，不新增重复 swizzle 或 Collector。
+- ✅ `PTInstrumentSession` 使用固定容量环形缓冲，超过容量覆盖最旧记录并累计 `droppedCount`；CPU、memory、disk、threads、FPS 和主线程卡顿采样均可取消。
+- ✅ `.pttrace` 增加显式导入、只读回放、轨迹对比和 `PTInstrumentRecorder.liveSnapshot()`；Dashboard 以固定节奏批量刷新，减少 UI 压力。
+- ✅ LocalConsole 的窗口初始化、Scene 几何、安全区和关闭路径继续保持可逆，异常初始化不再触发 `fatalError`。
+- ✅ 新增 `Scripts/validate_debug_instruments_5_18.sh` 并接入质量扫描；PooTools Debug Simulator Debug 构建通过。
+- [ ] 在真实设备完成 CPU、内存、FPS、Hitch、主线程卡顿、磁盘、线程和 30–60 分钟录制的中位数/峰值对比。
+- [ ] 在多 Scene、分屏、旋转、键盘、Scene disconnect 和真实宿主中完成 Debug window 与 Hook install/uninstall 回归。
 
 ## 当前 5.11.x 稳定化
 

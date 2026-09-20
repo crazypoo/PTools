@@ -14,6 +14,7 @@ bash Scripts/validate_docs.sh
 bash Scripts/validate_document_versions.sh
 bash Scripts/validate_build_entries.sh
 bash Scripts/validate_quality_scans.sh
+bash Scripts/validate_debug_instruments_5_18.sh
 bash Scripts/validate_517_ui.sh
 swift package dump-package
 git diff --check
@@ -69,7 +70,7 @@ git diff --check
 
 - Debug disabled 不创建窗口、采样器、DisplayLink、sink 或高频 observer。
 - 两个 Scene 同时显示 Console 时，关闭一个不停止另一个的 Collector。
-- PTInstrumentRecorder 快速 start/stop、空数据、上限、取消和导出/导入。
+- PTInstrumentRecorder 快速 start/stop、空数据、上限、取消、导出/导入、回放和对比；Hook Registry 安装/卸载可逆。
 - `.pttrace` 不含 query、Authorization、Cookie、Token、密码、响应正文或用户输入。
 
 ## Performance Measurement
@@ -86,8 +87,8 @@ git diff --check
   续传、`.part` 清理、编辑导出取消、Live Photo/播放器 observer 释放和低磁盘空间。
 - Permission 5.16：统一授权状态、重复请求 exactly-once、Photos limited、Notification provisional/critical、
   Location accuracy、IAP/NFC/Motion/HealthKit/MetricKit/GPS 生命周期停止和 delegate/observer 清理。
-- Debug：Core only、Debug hidden、单 Scene recording、双 Scene recording。
-- PTInstruments：启动耗时、CPU、内存、FPS、hitch、主线程卡顿、日志吞吐和五分钟长会话。
+- Debug：Core only、Debug hidden、单 Scene recording、双 Scene recording、Hook uninstall 后无残留。
+- PTInstruments：启动耗时、CPU、内存、FPS、hitch、主线程卡顿、磁盘、线程、日志吞吐和 30–60 分钟长会话。
 
 Simulator 结果只能证明功能回归和构建，不替代真实设备的性能预算。
 

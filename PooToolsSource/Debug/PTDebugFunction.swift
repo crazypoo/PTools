@@ -516,24 +516,38 @@ public final class PTDebugManager {
     }
 
     public func register(collector: PTDebugCollector) {
+        if let previous = collectors[collector.identifier], previous !== collector {
+            PTDebugHookRegistry.shared.unregister(identifier: Self.hookIdentifier(for: previous.identifier))
+        }
         if collectors[collector.identifier] == nil {
             collectorOrder.append(collector.identifier)
         }
         collectors[collector.identifier] = collector
+        let hookIdentifier = Self.hookIdentifier(for: collector.identifier)
+        PTDebugHookRegistry.shared.register(identifier: hookIdentifier,
+                                            owner: "collector.\(collector.identifier)",
+                                            install: { [weak collector] in
+                                                collector?.start()
+                                            },
+                                            uninstall: { [weak collector] in
+                                                collector?.stop()
+                                            })
     }
 
     public func start(identifier: String) {
-        collectors[identifier]?.start()
+        PTDebugHookRegistry.shared.install(identifier: Self.hookIdentifier(for: identifier))
         plugins[identifier]?.start()
     }
 
     public func stop(identifier: String) {
-        collectors[identifier]?.stop()
+        PTDebugHookRegistry.shared.uninstall(identifier: Self.hookIdentifier(for: identifier))
         plugins[identifier]?.stop()
     }
 
     public func startAll() {
-        collectorOrder.forEach { collectors[$0]?.start() }
+        collectorOrder.forEach { identifier in
+            PTDebugHookRegistry.shared.install(identifier: Self.hookIdentifier(for: identifier))
+        }
         plugins.values.forEach { $0.start() }
     }
 
@@ -560,7 +574,9 @@ public final class PTDebugManager {
     public func stopAll() {
         sessionOwners.removeAll()
         plugins.values.forEach { $0.stop() }
-        collectorOrder.reversed().forEach { collectors[$0]?.stop() }
+        collectorOrder.reversed().forEach { identifier in
+            PTDebugHookRegistry.shared.uninstall(identifier: Self.hookIdentifier(for: identifier))
+        }
     }
 
     public func collector(identifier: String) -> PTDebugCollector? {
@@ -569,6 +585,10 @@ public final class PTDebugManager {
 
     public func setLeakHandler(_ handler: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?) {
         (collectors["leak"] as? PTLeakCollector)?.handler = handler
+    }
+
+    private static func hookIdentifier(for collectorIdentifier: String) -> String {
+        "collector.\(collectorIdentifier)"
     }
 }
 
@@ -645,8 +665,23 @@ public final class PTDebugWindowCoordinator {
 @MainActor
 public enum PTDebugRuntimeAdapter {
     private static var isInstalled = false
+    private static let hookIdentifier = "runtime-adapter"
 
     public static func install() {
+        if !PTDebugHookRegistry.shared.contains(hookIdentifier) {
+            PTDebugHookRegistry.shared.register(identifier: hookIdentifier,
+                                                owner: "PTDebugRuntimeAdapter",
+                                                install: { installNow() },
+                                                uninstall: { uninstallNow() })
+        }
+        PTDebugHookRegistry.shared.install(identifier: hookIdentifier)
+    }
+
+    public static func uninstall() {
+        PTDebugHookRegistry.shared.uninstall(identifier: hookIdentifier)
+    }
+
+    private static func installNow() {
         guard !isInstalled else { return }
         isInstalled = true
 
@@ -716,6 +751,22 @@ public enum PTDebugRuntimeAdapter {
                              payload: ["controller": controller])
             )
         }
+    }
+
+    private static func uninstallNow() {
+        PTUIKitRuntimeHooks.makeApplicationWindow = nil
+        PTUIKitRuntimeHooks.consoleVisibilityHandler = nil
+        PTUIKitRuntimeHooks.restoreConsoleState = nil
+        PTUIKitRuntimeHooks.settingsBundleHandler = nil
+        PTUIKitRuntimeHooks.webImageOptionsProvider = nil
+        PTUIKitRuntimeHooks.interceptPush = nil
+        PTUIKitRuntimeHooks.shouldTrackViewBorders = nil
+        PTUIKitRuntimeHooks.shouldPreserveContextMenuOrder = nil
+        PTUIKitRuntimeHooks.presentationWillBegin = nil
+        PTUIKitRuntimeHooks.presentationDidComplete = nil
+        PTUIKitRuntimeHooks.controllerTransitionDidComplete = nil
+        PTUIKitRuntimeHooks.controllerLifecycleHandler = nil
+        isInstalled = false
     }
 }
 

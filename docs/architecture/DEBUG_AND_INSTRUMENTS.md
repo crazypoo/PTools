@@ -80,6 +80,11 @@ LocalConsole、Inspector 和 PTInstrument Dashboard 必须绑定发起调用的 
 停止时释放可安全撤销的 Task、callback、notification 和 console sink；Objective-C swizzle 与 signal
 handler 若没有安全通用的撤销方式，必须保留 owner 和不可逆原因。
 
+`PTDebugHookRegistry` 是 5.18.0 起的统一可逆入口。Collector 使用 `collector.<identifier>` 注册，
+Core runtime adapter 使用 `runtime-adapter` 注册；`install()`、`uninstall()` 和 `isInstalled` 都在
+`MainActor` 上执行。Registry 只保存安装/卸载闭包和不可变描述快照，不把 UIKit 对象或动态 `Any`
+跨 actor 传递。
+
 ## 9. PTInstruments Data Flow
 
 ```text
@@ -108,10 +113,15 @@ Session actor 是唯一可变采样状态所有者。Recorder、采样器和 UI 
 未调用 `start` 时不创建 DisplayLink、采样 Task、observer 或 trace store。超过样本、事件、日志、
 会话时长和归档大小上限时增加 dropped count，不无限增长内存。
 
-采样能力包括 FPS/frame time/hitch、CPU、memory、main-thread stall、network、lifecycle、leak、logs
-和 custom trace；每一种能力只能在宿主显式选择后创建对应采样器。`PTInstrumentTimelineView`、
+采样能力包括 FPS/frame time/hitch、CPU、memory、disk、threads、main-thread stall、network、
+launch、ViewController lifecycle、app/scene lifecycle、tasks、signposts、leak、logs 和 custom trace；
+每一种能力只能在宿主显式选择后创建对应采样器。`PTInstrumentTimelineView`、
 `PTInstrumentEventInspectorViewController` 和 `PTInstrumentDashboardViewController` 只消费快照，
 不直接修改 Session actor。
+
+Session 使用固定容量的环形缓冲保存 samples/events。容量达到策略上限后覆盖最旧记录并增加
+`droppedCount`，不会因 30–60 分钟录制持续扩大内存。Dashboard 每 500ms 批量读取一次快照，
+不会按每条采样刷新 UIKit。
 
 ## 11. Timeline / Inspector
 
@@ -121,7 +131,9 @@ Inspector 根据事件时间和 track 关联附近样本；UI 只读取 snapshot
 ## 12. Export / Import
 
 `.pttrace` 是 JSON 归档，保存前和导入后都执行 redaction。导出不包含完整 URL query、fragment、
-Authorization、Cookie、Token、密码、响应正文或用户输入。导出、导入和删除由宿主 Debug UI 显式触发。
+Authorization、Cookie、Token、密码、响应正文或用户输入。`importTrace` 会先检查归档大小；`replay`
+只生成过滤后的值类型时间线，不执行归档中的业务代码；`compare` 只返回持续时间、事件、样本和
+丢弃数量差异。导出、导入、回放、对比和删除由宿主 Debug UI 显式触发。
 
 ## 13. Privacy / Redaction
 

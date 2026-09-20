@@ -245,6 +245,7 @@ public final class PTInstrumentDashboardViewController: PTBaseViewController {
     private let timelineView = PTInstrumentTimelineView()
     private let summaryLabel = UILabel()
     private var snapshot: PTInstrumentSessionSnapshot?
+    private var liveRefreshTask: Task<Void, Never>?
 
     lazy var exportSessionButton:PTBaseButton = {
         let view = PTBaseButton(type: .custom)
@@ -278,6 +279,13 @@ public final class PTInstrumentDashboardViewController: PTBaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomRightButtons(buttons: [exportSessionButton,stopRecordingButton], buttonSpacing: 8)
+        startLiveRefresh()
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        liveRefreshTask?.cancel()
+        liveRefreshTask = nil
     }
     
     public override func viewDidLoad() {
@@ -304,13 +312,39 @@ public final class PTInstrumentDashboardViewController: PTBaseViewController {
     }
 
     @objc private func stopRecording() {
+        liveRefreshTask?.cancel()
+        liveRefreshTask = nil
         Task { @MainActor [weak self] in
             guard let self else { return }
             guard let snapshot = await PTInstrumentRecorder.shared.stop() else { return }
-            self.snapshot = snapshot
-            self.summaryLabel.text = Self.summaryText(snapshot.summary)
-            self.timelineView.update(snapshot: snapshot)
+            apply(snapshot: snapshot)
         }
+    }
+
+    // English: Refreshing at a fixed cadence batches actor reads and avoids a UI update per sample.
+    // Español: La actualización a una cadencia fija agrupa lecturas del actor y evita una actualización por muestra.
+    // 中文：固定节奏刷新可以批量读取 actor，避免每条采样都触发一次 UI 更新。
+    private func startLiveRefresh() {
+        liveRefreshTask?.cancel()
+        liveRefreshTask = Task { @MainActor [weak self, session = self.session] in
+            while !Task.isCancelled {
+                guard let self else { return }
+                let snapshot = await session.snapshot()
+                self.apply(snapshot: snapshot)
+                if await session.currentState() == .stopped { return }
+                do {
+                    try await Task.sleep(nanoseconds: 500_000_000)
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
+    private func apply(snapshot: PTInstrumentSessionSnapshot) {
+        self.snapshot = snapshot
+        summaryLabel.text = Self.summaryText(snapshot.summary)
+        timelineView.update(snapshot: snapshot)
     }
 
     @objc private func exportSession() {
