@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:34Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:35Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3781,8 +3781,8 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 941,
-      "classification": "ok"
+      "lines": 1072,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkMetrics.swift",
@@ -3791,12 +3791,12 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "lines": 503,
+      "lines": 617,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "lines": 501,
+      "lines": 556,
       "classification": "ok"
     },
     {
@@ -3806,7 +3806,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
-      "lines": 89,
+      "lines": 203,
       "classification": "ok"
     },
     {
@@ -4255,6 +4255,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "lines": 200,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
       "lines": 159,
       "classification": "ok"
@@ -4347,6 +4352,11 @@
     {
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
       "lines": 397,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "lines": 376,
       "classification": "ok"
     },
     {
@@ -4645,7 +4655,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 14,
+  "warning_count": 15,
   "architecture_exception_count": 9,
   "hard_limit_allowlisted_count": 3
 }

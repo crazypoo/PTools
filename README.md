@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.13.0`。
+以 `PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.14.0`。
 
 ## Requirements
 
@@ -85,8 +85,14 @@ final class ExampleListViewController: PTListViewController {
 
 ### Network
 
-新代码使用类型化 Codable 请求，普通参数、Body、上传、下载和取消统一由 Network 内部请求管线处理。
-动态 `Any` 与 KakaJSON 入口仅作为兼容层保留。
+新代码使用 `PTNetworkRequest` 与 `PTNetworkExecutor`，普通参数、Body、上传、下载、取消、缓存、
+重试、去重和认证刷新统一由 Network 请求管线处理。动态 `Any` 与 KakaJSON 入口仅作为兼容层保留。
+
+### Socket / Security
+
+新 WebSocket 代码使用 actor 隔离的 `PTWebSocketClient`；旧 `PTSocketManager` 和 SocketRocket
+入口继续作为 5.x 兼容层。新安全代码使用 `PTSecurity` 的 CryptoKit/Security.framework 入口；
+旧 DataEncrypt、KeyChain 和 SecuritySuite API 保持兼容，不把第三方类型暴露到新入口。
 
 ### Debug
 

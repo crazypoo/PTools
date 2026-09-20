@@ -19,6 +19,8 @@
 | --- | --- | --- | --- | --- |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | SwiftDate、SnapKit、SwifterSwift、CocoaLumberjack、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
+| Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
+| SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |
 | ImagePicker | `PooTools/ImagePicker` | `PooToolsImagePicker` | Core、CameraPermission | PhotoKit 多选浏览器 |
 | PhotoPicker | `PooTools/PhotoPicker` | `PooToolsPhotoPicker` | Core、ImagePicker、Network、Loading、Kakapos | VideoEditor、MediaViewer |
 | MediaViewer | `PooTools/MediaViewer` | `PooToolsMediaViewer` | Core、ProgressBar、Network、PageControl、LivePhoto、Photos | ImagePicker、PhotoPicker 浏览器 |
@@ -46,6 +48,7 @@ Live Photo、自定义 Cell 和 iCloud 进度。不要因都能选择图片就�
 | KakaJSON | 兼容层 | 历史动态模型解析 | 高 | 只保留兼容包装器，6.0 评估移出 Core |
 | Lottie | UI / Debug | 动画资源播放 | 中 | UIKit / Core Animation |
 | Alamofire | Network | 上传、下载和请求适配 | 中 | URLSession 统一执行器 |
+| CryptoSwift | DataEncrypt 兼容层 | 历史 AES/DES API | 高 | `PTSecurity` 的 CryptoKit/Security.framework 入口 |
 | NotificationBanner / MarqueeLabel | UI | 提示条和滚动文本 | 中 | UIKit 自实现 |
 | Swift-JWT | CheckUpdate | Apple API JWT 签名 | 高 | CryptoKit/Security 窄适配器 |
 | SocketRocket | SocketKit | WebSocket 兼容 | 中 | URLSessionWebSocketTask |

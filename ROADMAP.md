@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.13.0`（来自 `PooTools.podspec`）
+> 当前代码基线：`5.14.0`（来自 `PooTools.podspec`）
 >
-> 当前最新正式 Git tag：`5.12.1`；`5.13.0` 为当前开发基线。
+> 当前最新正式 Git tag：`5.13.0`；`5.14.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -38,6 +38,19 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 基础 Cell 增加 `PTReusableTaskBag`、`cancelAsyncWork()` 和 `resetContent()` 复用契约。
 - ✅ 列表高频 UI 文件继续通过 `PTSceneContext` 解析窗口，兼容多 Scene、分屏和外接显示器。
 - ✅ 保持 iOS 17+、Swift 6+ 和现有公开 API 兼容；旧入口继续作为适配层保留。
+
+## 5.14.0 Network / Socket / Security
+
+- ✅ 建立 `PTNetworkRequest`、`PTNetworkResponse` 和 `PTNetworkExecutor` 类型化请求契约，旧动态入口继续停留在兼容层。
+- ✅ 统一普通请求、Body、上传/下载生命周期的取消、错误快照、日志脱敏和执行边界。
+- ✅ 增加指数退避、抖动、Retry-After、幂等键保护和可重试状态/网络错误策略。
+- ✅ 修复请求去重的稳定 key、等待者独立取消和 multipart 兼容边界。
+- ✅ 完成缓存策略、过期判断、ETag/Last-Modified、304、`networkElseCache` 和损坏缓存恢复。
+- ✅ 增加认证刷新 actor 合并，多个 401 请求只共享一次 token 刷新并各自重放一次。
+- ✅ 增加原生 `PTWebSocketClient`，覆盖状态机、队列上限、心跳、超时、网络恢复和前后台生命周期；`PTSocketManager` 保留兼容入口。
+- ✅ 增加 `PTSecurity` 原生安全门面，使用 CryptoKit/Security.framework，旧 CryptoSwift、KeyChain 和 SecuritySuite 入口保持兼容。
+- ✅ CocoaPods 与 SwiftPM 增加 Security 产品/子模块；不升级第三方依赖，不修改 Pods 源码。
+- [ ] 完成真实宿主与真机上的 100 并发 401、断网恢复、WebSocket 服务端心跳和 Keychain 生物识别回归。
 
 ## 当前 5.11.x 稳定化
 

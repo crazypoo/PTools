@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:34Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:36Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -624,9 +624,33 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 220,
+      "line": 55,
+      "kind": "disk or custom cache",
+      "text": "case cache(String)"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 83,
+      "kind": "disk or custom cache",
+      "text": "case .cache(let message): return \"PT Network cache failed: \\(message)\""
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 110,
+      "kind": "disk or custom cache",
+      "text": "case .cache: return 9999999912"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 275,
       "kind": "URLCache",
       "text": "urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity,"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 591,
+      "kind": "disk or custom cache",
+      "text": "throw PTNetworkError.cache(\"cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable\")"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
@@ -636,63 +660,105 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 240,
+      "line": 237,
+      "kind": "disk or custom cache",
+      "text": "// English: A cache entry carries validators and freshness without exposing URLSession objects."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 257,
       "kind": "NSCache",
       "text": "private let memoryCache = NSCache<NSString, NSData>()"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 249,
+      "line": 266,
       "kind": "disk or custom cache",
       "text": "// English: Bound the in-memory cache so a large response cannot grow without limit."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 322,
+      "line": 286,
+      "kind": "disk or custom cache",
+      "text": "\"pt-cache-miss\","
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 296,
+      "kind": "disk or custom cache",
+      "text": "// English: Cache-control and revalidation headers must not change the resource identity."
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 389,
       "kind": "disk or custom cache",
       "text": "// English: Accept a caller-owned configuration so cache maintenance does not read Network.share."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 369,
+      "line": 436,
       "kind": "disk or custom cache",
       "text": "// English: Keep JSON and file operations off the cache actor while the actor owns only cache state."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 378,
+      "line": 445,
       "kind": "disk or custom cache",
       "text": "// English: Decode cache metadata on a utility executor before updating actor-owned memory state."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 387,
+      "line": 454,
       "kind": "disk or custom cache",
       "text": "// English: Read cache files without occupying the actor executor with synchronous file I/O."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 396,
+      "line": 463,
       "kind": "disk or custom cache",
       "text": "// English: Persist cache data on a background executor and keep the actor responsive."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 447,
+      "line": 498,
+      "kind": "disk or custom cache",
+      "text": "get { value(forHTTPHeaderField: \"PT-Cache-Miss\") == \"true\" }"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 499,
+      "kind": "disk or custom cache",
+      "text": "set { setValue(newValue ? \"true\" : \"false\", forHTTPHeaderField: \"PT-Cache-Miss\") }"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 520,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 465,
+      "line": 546,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 466,
+      "line": 547,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 553,
+      "kind": "disk or custom cache",
+      "text": "if response?.value(forHTTPHeaderField: \"Cache-Control\")?.lowercased().contains(\"no-store\") == true { return }"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 579,
+      "kind": "disk or custom cache",
+      "text": "guard let cacheControl = response?.value(forHTTPHeaderField: \"Cache-Control\") else { return fallback }"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",

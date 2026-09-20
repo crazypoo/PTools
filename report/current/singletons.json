@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:21Z",
-  "shared_call_count": 1515,
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:12Z",
+  "shared_call_count": 1519,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -673,7 +673,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 239,
+      "line": 256,
       "declaration": "static let shared = NetworkCache()",
       "name": "shared",
       "category": "B",
@@ -682,8 +682,17 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 234,
+      "line": 289,
       "declaration": "public static let shared = RequestDeduplicator()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
+      "line": 168,
+      "declaration": "public static let shared = PTNetworkExecutor(network: .share)",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

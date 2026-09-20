@@ -71,6 +71,7 @@ let package = Package(
         // 中文：在 5.x 迁移窗口内同时保留正确的 Network 产品名和旧拼写。
         .library(name: "PooToolsNetwork", targets: ["PooToolsNetWork"]),
         .library(name: "PooToolsDataEncrypt", targets: ["PooToolsDataEncrypt"]),
+        .library(name: "PooToolsSecurity", targets: ["PooToolsSecurity"]),
         .library(name: "PooToolsSearchBar", targets: ["PooToolsSearchBar"]),
         .library(name: "PooToolsMediaViewer", targets: ["PooToolsMediaViewer"]),
 
@@ -152,7 +153,7 @@ let package = Package(
             "PTTrackingPermission", "PTRemindersPermission", "PTSpeechPermission", "PTHealthPermission",
             "PTFaceIDPermission", "PTContactsPermission", "PTMicPermission", "PTMediaPermission",
             "PTBluetoothPermission", "PTSiriPermission", "PTNotificationPermission",
-            "PooToolsNetWork", "PooToolsDataEncrypt", "PooToolsSearchBar",
+            "PooToolsNetWork", "PooToolsDataEncrypt", "PooToolsSecurity", "PooToolsSearchBar",
             "PooToolsMediaViewer", "PooToolsImagePicker", "PooToolsPhotoPicker", "PooToolsHarbethKit",
             "PooToolsImageEditor", "PooToolsVideoEditor", "PooToolsCheckDirtyWord", "PooToolsStepper",
             "PooToolsBankCard", "PooToolsBioID", "PooToolsCalendar", "PooToolsTelephony", "PooToolsCheckBox",
@@ -356,6 +357,7 @@ let package = Package(
         // ==========================================
         .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
 

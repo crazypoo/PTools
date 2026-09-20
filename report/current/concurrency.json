@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:19Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:11Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 27,
@@ -536,13 +536,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 92,
+      "line": 143,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 773,
+      "line": 904,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
@@ -560,31 +560,31 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 332,
+      "line": 399,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 373,
+      "line": 440,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 382,
+      "line": 449,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 391,
+      "line": 458,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 400,
+      "line": 467,
       "text": "Task.detached(priority: .background) {"
     },
     {

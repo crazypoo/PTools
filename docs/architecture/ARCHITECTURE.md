@@ -67,8 +67,23 @@ Photo Library、Camera、Location、Contacts、NFC、Motion、Notification、Hea
 ## 6. Network Boundary
 
 Network 的 Codable、Body、普通参数、上传、下载、callback、async 和 stream 入口最终进入统一
-请求上下文。请求上下文负责 headers、cache policy、retry、dedup、cancellation、错误转换和
-脱敏日志。旧动态 `Any` 入口不得进入并发核心执行器。
+请求上下文。新代码使用 `PTNetworkRequest`、`PTNetworkResponse` 和 `PTNetworkExecutor`；请求上下文
+负责 headers、cache policy、retry、dedup、cancellation、认证刷新、错误转换和脱敏日志。旧动态
+`Any` 入口不得进入并发核心执行器，旧 callback 入口只负责适配结果。
+
+缓存按 `none`、`cacheOnly`、`networkOnly`、`cacheElseNetwork` 和 `networkElseCache` 处理，并保留
+ETag、Last-Modified、Cache-Control、304 与损坏缓存恢复信息。重试必须经过幂等性策略；认证刷新由
+actor 合并，避免并发 401 产生刷新风暴。
+
+## 6.1 Socket / Security Boundary
+
+新 WebSocket 入口是 actor 隔离的 `PTWebSocketClient`，只交换 `PTWebSocketMessage`、状态和配置值；
+`PTSocketManager` 与 SocketRocket 仅作为兼容适配层保留。连接状态、发送队列、心跳、路径变化和前后台
+生命周期由客户端统一管理。
+
+新安全入口是 `PTSecurity`，只暴露 Foundation、CryptoKit 和 Security.framework 可表达的值类型；
+Keychain accessibility、生物识别项目、AES-GCM、HMAC、摘要、P-256 签名和验签不把 CryptoSwift、
+IOSSecuritySuite 或其他第三方类型泄漏到公共契约。旧安全 API 由兼容层继续维护。
 
 ## 7. Navigation / TabBar
 

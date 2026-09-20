@@ -134,28 +134,15 @@ extension Error {
 // MARK: - ================= 3. 拦截器、配置与去重池 =================
 
 final class RetryHandler: Sendable, RequestInterceptor {
-    private let retryLimitSnapshot: Int
-    private let baseDelaySnapshot: TimeInterval
-    private let statusCodeToRetry: Int
-    private let maxDelay: TimeInterval = 8.0
-    private let jitter: TimeInterval = 0.4
+    private let policy: PTRetryPolicy
     
     // English: Snapshot retry settings from the owning Network instance.
     // Español: Captura la configuración de reintentos de la instancia Network propietaria.
     // 中文：从所属 Network 实例快照重试配置。
     init(configuration: PTNetworkSessionConfiguration) {
-        retryLimitSnapshot = configuration.retryTimes
-        baseDelaySnapshot = configuration.retryDelay
-        statusCodeToRetry = configuration.retryAPIStatusCode
-    }
-    
-    private func shouldRetry(statusCode: Int?) -> Bool {
-        guard let code = statusCode else { return true }
-        let retryableStatusCodes: Set<Int> = [408, 425, 429, 500, 502, 503, 504]
-        if retryableStatusCodes.contains(code) { return true }
-        if code == statusCodeToRetry { return true }
-        if (500...599).contains(code) { return true }
-        return false
+        policy = PTRetryPolicy(maxAttempts: configuration.retryTimes,
+                               baseDelay: configuration.retryDelay,
+                               retryableStatusCodes: [408, 425, 429, 500, 502, 503, 504, configuration.retryAPIStatusCode])
     }
     
     public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
@@ -170,27 +157,20 @@ final class RetryHandler: Sendable, RequestInterceptor {
         }
 
         let statusCode = (request.task?.response as? HTTPURLResponse)?.statusCode
-        let nsError = error as NSError
-        let urlErrorCode = URLError.Code(rawValue: nsError.code)
-        let isURLErrorDomain = (nsError.domain == NSURLErrorDomain)
-        let temporaryURLErrors: Set<URLError.Code> = [.timedOut, .cannotFindHost, .cannotConnectToHost, .networkConnectionLost, .dnsLookupFailed]
-        let isTemporaryNetworkIssue = isURLErrorDomain && temporaryURLErrors.contains(urlErrorCode)
-
-        let canRetryByError = error.isNetworkError || isTemporaryNetworkIssue
-        let canRetryByStatus = shouldRetry(statusCode: statusCode)
-        
-        guard request.retryCount < retryLimitSnapshot, (canRetryByError || canRetryByStatus) else {
+        guard let originalRequest = request.request,
+              request.retryCount < policy.maxAttempts,
+              policy.allowsRetry(for: originalRequest,
+                                 statusCode: statusCode,
+                                 error: statusCode == nil ? error : nil) else {
             return completion(.doNotRetry)
         }
         
         let isExpensive = NetworkReachability.shared.isExpensive
-        let delay: TimeInterval
-        if isExpensive {
-            delay = min(baseDelaySnapshot * 2.0, maxDelay)
-        } else {
-            let nth = max(1, request.retryCount + 1)
-            delay = min(baseDelaySnapshot * pow(2.0, Double(nth - 1)) + Double.random(in: 0...jitter), maxDelay)
-        }
+        let retryAfter = (request.task?.response as? HTTPURLResponse)?.value(forHTTPHeaderField: "Retry-After")
+            .flatMap(TimeInterval.init)
+        let delay = policy.delay(for: request.retryCount + 1,
+                                 retryAfter: retryAfter,
+                                 isExpensive: isExpensive)
         completion(.retryWithDelay(delay))
     }
 }
@@ -225,6 +205,43 @@ public struct CacheObject: Codable, Sendable {
     let data: Data
     let expireTime: TimeInterval
     var lastAccessTime: TimeInterval
+    let headers: [String: String]
+    let statusCode: Int?
+
+    init(data: Data,
+         expireTime: TimeInterval,
+         lastAccessTime: TimeInterval,
+         headers: [String: String] = [:],
+         statusCode: Int? = nil) {
+        self.data = data
+        self.expireTime = expireTime
+        self.lastAccessTime = lastAccessTime
+        self.headers = headers
+        self.statusCode = statusCode
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case data, expireTime, lastAccessTime, headers, statusCode
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        data = try container.decode(Data.self, forKey: .data)
+        expireTime = try container.decode(TimeInterval.self, forKey: .expireTime)
+        lastAccessTime = try container.decode(TimeInterval.self, forKey: .lastAccessTime)
+        headers = try container.decodeIfPresent([String: String].self, forKey: .headers) ?? [:]
+        statusCode = try container.decodeIfPresent(Int.self, forKey: .statusCode)
+    }
+}
+
+// English: A cache entry carries validators and freshness without exposing URLSession objects.
+// Español: La entrada de caché transporta validadores y vigencia sin exponer objetos de URLSession.
+// 中文：缓存条目携带验证器和新鲜度信息，但不暴露 URLSession 对象。
+struct PTNetworkCacheEntry: Sendable {
+    let data: Data
+    let headers: [String: String]
+    let statusCode: Int?
+    let isExpired: Bool
 }
 
 public enum PTNetworkCachePolicy:String, Sendable {
@@ -261,17 +278,47 @@ public actor NetworkCache {
         // English: Partition cached responses by request headers so credentials and content variants never share data.
         // Español: Separa las respuestas almacenadas por cabeceras para que las credenciales y variantes no compartan datos.
         // 中文：按请求头隔离缓存响应，避免不同凭证或内容变体复用数据。
+        let controlHeaders: Set<String> = [
+            "cachepolicy",
+            "cacheexpire",
+            "deduppolicy",
+            "mockresponse",
+            "pt-cache-miss",
+            "pt-auth-retry",
+            "if-none-match",
+            "if-modified-since"
+        ]
         let headers = (request.allHTTPHeaderFields ?? [:])
+            .filter { !controlHeaders.contains($0.key.lowercased()) }
             .map { key, value in "\(key.lowercased())=\(value)" }
             .sorted()
             .joined(separator: "\n")
+        // English: Cache-control and revalidation headers must not change the resource identity.
+        // Español: Las cabeceras de control y revalidación no deben cambiar la identidad del recurso.
+        // 中文：缓存控制头和重新验证头不能改变资源本身的缓存身份。
         return (url + sortedQuery + headers + body.base64EncodedString()).md5
     }
     
     func save(data: Data, request: URLRequest, expire: TimeInterval) async {
+        await save(data: data,
+                   request: request,
+                   expire: expire,
+                   headers: [:],
+                   statusCode: nil)
+    }
+
+    func save(data: Data,
+              request: URLRequest,
+              expire: TimeInterval,
+              headers: [String: String],
+              statusCode: Int?) async {
         let key = cacheKey(request)
         let now = Date().timeIntervalSince1970
-        let obj = CacheObject(data: data, expireTime: now + expire, lastAccessTime: now)
+        let obj = CacheObject(data: data,
+                              expireTime: now + max(0, expire),
+                              lastAccessTime: now,
+                              headers: headers,
+                              statusCode: statusCode)
         
         guard let encoded = await Self.encode(obj) else { return }
         memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
@@ -281,27 +328,47 @@ public actor NetworkCache {
     }
     
     func read(request: URLRequest) async -> Data? {
+        await readEntry(request: request)?.data
+    }
+
+    func readEntry(request: URLRequest) async -> PTNetworkCacheEntry? {
         let key = cacheKey(request)
         let now = Date().timeIntervalSince1970
 
-        if let data = memoryCache.object(forKey: key as NSString) as Data?,
-           var obj = await Self.decode(data), obj.expireTime > now {
-            obj.lastAccessTime = now
-            if let encoded = await Self.encode(obj) {
-                memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
+        if let data = memoryCache.object(forKey: key as NSString) as Data? {
+            if var obj = await Self.decode(data) {
+                obj.lastAccessTime = now
+                if let encoded = await Self.encode(obj) {
+                    memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
+                }
+                return PTNetworkCacheEntry(data: obj.data,
+                                           headers: obj.headers,
+                                           statusCode: obj.statusCode,
+                                           isExpired: obj.expireTime <= now)
             }
-            return obj.data
+            // English: Drop a corrupted memory entry and allow a valid disk entry to recover it.
+            // Español: Elimina la entrada de memoria dañada y permite recuperarla desde el disco.
+            // 中文：删除损坏的内存条目，并尝试从磁盘副本恢复。
+            memoryCache.removeObject(forKey: key as NSString)
         }
         
         let path = (self.diskPath as NSString).appendingPathComponent(key)
-        if let data = await Self.readData(from: path),
-           var obj = await Self.decode(data), obj.expireTime > now {
-            obj.lastAccessTime = now
-            if let encoded = await Self.encode(obj) {
-                memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
-                Self.write(encoded, to: path)
+        if let data = await Self.readData(from: path) {
+            if var obj = await Self.decode(data) {
+                obj.lastAccessTime = now
+                if let encoded = await Self.encode(obj) {
+                    memoryCache.setObject(encoded as NSData, forKey: key as NSString, cost: encoded.count)
+                    Self.write(encoded, to: path)
+                }
+                return PTNetworkCacheEntry(data: obj.data,
+                                           headers: obj.headers,
+                                           statusCode: obj.statusCode,
+                                           isExpired: obj.expireTime <= now)
             }
-            return obj.data
+            // English: Remove a corrupted disk entry so the next network response can rebuild it.
+            // Español: Elimina la entrada de disco dañada para que la siguiente respuesta pueda reconstruirla.
+            // 中文：删除损坏的磁盘条目，让下一次网络响应重新建立缓存。
+            try? FileManager.default.removeItem(atPath: path)
         }
         return nil
     }
@@ -426,6 +493,11 @@ extension URLRequest {
         get { value(forHTTPHeaderField: "mockResponse") == "true" }
         set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "mockResponse") }
     }
+
+    var isCacheMiss: Bool {
+        get { value(forHTTPHeaderField: "PT-Cache-Miss") == "true" }
+        set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "PT-Cache-Miss") }
+    }
         
     var dedupPolicy: PTNetworkDedupPolicy {
         get {
@@ -440,6 +512,7 @@ extension URLRequest {
                 }
             }
         }
+        set { setValue(newValue.getOptionName(), forHTTPHeaderField: "dedupPolicy") }
     }
 }
 
@@ -452,11 +525,19 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
     public func willSend(_ request: inout URLRequest) async {
         guard request.httpMethod == "GET" else { return }
         let policy = request.cachePolicyType
+        let entry = await NetworkCache.shared.readEntry(request: request)
         switch policy {
         case .none, .networkOnly: return
         case .cacheOnly, .cacheElseNetwork:
-            if let _ = await NetworkCache.shared.read(request: request) { request.isMock = true }
-        case .networkElseCache: return
+            if let entry, !entry.isExpired {
+                request.isMock = true
+            } else if policy == .cacheOnly {
+                request.isCacheMiss = true
+            } else {
+                applyValidators(from: entry, to: &request)
+            }
+        case .networkElseCache:
+            applyValidators(from: entry, to: &request)
         }
     }
     
@@ -468,7 +549,40 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
             return
         }
         guard request.httpMethod == "GET", request.cachePolicyType != .none else { return }
-        await NetworkCache.shared.save(data: data, request: request, expire: request.cacheExpire)
+        if let statusCode = response?.statusCode, !(200..<300).contains(statusCode) { return }
+        if response?.value(forHTTPHeaderField: "Cache-Control")?.lowercased().contains("no-store") == true { return }
+        var headers: [String: String] = [:]
+        response?.allHeaderFields.forEach { key, value in
+            headers[String(describing: key)] = String(describing: value)
+        }
+        await NetworkCache.shared.save(data: data,
+                                       request: request,
+                                       expire: cacheLifetime(response: response, fallback: request.cacheExpire),
+                                       headers: headers,
+                                       statusCode: response?.statusCode)
+    }
+
+    // English: Revalidate stale entries with standard HTTP validators instead of downloading a full response blindly.
+    // Español: Revalida las entradas caducadas con validadores HTTP estándar en lugar de descargar siempre toda la respuesta.
+    // 中文：对过期缓存使用标准 HTTP 验证器重新验证，避免无条件下载完整响应。
+    private func applyValidators(from entry: PTNetworkCacheEntry?, to request: inout URLRequest) {
+        guard let entry else { return }
+        if let etag = entry.headers.first(where: { $0.key.caseInsensitiveCompare("ETag") == .orderedSame })?.value {
+            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+        }
+        if let modified = entry.headers.first(where: { $0.key.caseInsensitiveCompare("Last-Modified") == .orderedSame })?.value {
+            request.setValue(modified, forHTTPHeaderField: "If-Modified-Since")
+        }
+    }
+
+    private func cacheLifetime(response: HTTPURLResponse?, fallback: TimeInterval) -> TimeInterval {
+        guard let cacheControl = response?.value(forHTTPHeaderField: "Cache-Control") else { return fallback }
+        let maxAge = cacheControl
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { $0.lowercased().hasPrefix("max-age=") }
+            .flatMap { TimeInterval($0.dropFirst("max-age=".count)) }
+        return maxAge ?? fallback
     }
 }
 

@@ -29,5 +29,6 @@ fi
 bash Scripts/validate_docs.sh
 bash Scripts/validate_document_versions.sh
 bash Scripts/report_duplicate_entries.sh >/dev/null
+bash Scripts/validate_514_network_security.sh
 
 printf 'Release metadata OK: development=%s\n' "$version"

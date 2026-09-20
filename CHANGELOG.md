@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.14.0 — 2026-09-20
+
+- Network 增加统一的 `PTNetworkRequest`、`PTNetworkExecutor`、类型化响应、请求上下文和错误分类入口。
+- 补齐指数退避、抖动、Retry-After、幂等请求保护、缓存过期/ETag/Last-Modified/304、缓存损坏恢复、请求去重和认证刷新合并。
+- SocketKit 增加 actor 隔离的 `PTWebSocketClient`，支持连接状态、发送队列上限、取消、心跳超时、网络恢复和前后台生命周期。
+- Security 增加不暴露第三方类型的 `PTSecurity`，统一 Keychain、CryptoKit 摘要、HMAC、AES-GCM、P-256 签名和验签入口。
+- 保留旧 Network、SocketRocket、DataEncrypt、KeyChain 和 SecuritySuite 公开入口，继续支持 iOS 17+ / Swift 6+。
+
 ## 5.13.0 — 2026-09-20
 
 - 完成 UIFoundation、Navigation、Tabbar 和 Collection 的 5.13.x 治理，统一安全区、Scene、Dynamic Type、辅助功能和减弱动态效果边界。
@@ -37,9 +45,9 @@
 - 发布当前 5.11.x 正式基线，包含 Debug Foundation、PTInstruments 和长期文档结构治理。
 - 5.11.x 后续的架构收口、依赖 parity 和 6.0 迁移验证继续记录在 Unreleased 与 `report/`。
 
-## Unreleased — 5.13.x UIFoundation / Navigation / Tabbar / Collection
+## Unreleased — 5.15.x
 
-当前 `PooTools.podspec` 为 `5.13.0`，工作树中的后续架构收口尚未作为新版本发布。
+当前 `PooTools.podspec` 为 `5.14.0`，工作树中的后续架构收口尚未作为新版本发布。
 
 - 5.10 Debug Foundation 与 5.11 PTInstruments 已进入当前代码架构，仍需真机、真实宿主和多 Scene 回归。
 - 建立长期 `docs/` 文档结构，区分用户指南、当前架构、迁移、维护流程和自动报告。
@@ -98,6 +106,8 @@
 5.6.0  5.6.1  5.6.2  5.6.3  5.6.4  5.6.5  5.6.6  5.6.7  5.6.8  5.6.9  5.6.10
 5.7.0  5.7.1  5.7.2  5.7.3  5.7.4  5.7.5  5.7.6  5.7.7  5.7.8  5.7.9
 5.8.9  5.9.0  5.9.2  5.9.3  5.9.4  5.9.5  5.9.6  5.9.7  5.9.9
+5.11.11  5.11.12  5.11.13  5.11.14  5.11.16  5.11.17  5.12.1  5.13.0
 ```
 
-`5.9.1`、`5.9.8`、所有 `5.10.x` 和所有 `5.11.x` 当前没有对应 Git tag，因此不作为已发布版本列出。
+`5.9.1`、`5.9.8`、所有 `5.10.x`、`5.11.0`、`5.11.1` 和 `5.11.15` 当前没有对应 Git tag，
+因此不作为已发布版本列出；`5.14.0` 当前仍是开发基线。

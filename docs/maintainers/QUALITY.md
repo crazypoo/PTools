@@ -76,7 +76,10 @@ git diff --check
 使用同一设备、同一构建和同一操作脚本，每种状态至少重复五次，记录中位数和峰值：
 
 - CollectionView：1k/10k snapshot、增量刷新、快速滚动、布局旋转和预取。
-- Network：dedup、cache hit/miss、retry、大响应、上传、下载和取消。
+- Network：dedup、cache hit/miss、过期/304/损坏缓存、retry/Retry-After、幂等 POST、100 并发 401
+  刷新、大响应、上传、下载和取消。
+- Socket / Security：离线重连、心跳超时、发送队列上限、前后台切换、Keychain accessibility、
+  生物识别项目、AES-GCM、HMAC、P-256 签名验签和敏感日志脱敏。
 - Media：4K 图片、GIF、视频帧、冷/热缓存、导出和内存警告。
 - Debug：Core only、Debug hidden、单 Scene recording、双 Scene recording。
 - PTInstruments：启动耗时、CPU、内存、FPS、hitch、主线程卡顿、日志吞吐和五分钟长会话。

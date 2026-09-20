@@ -44,9 +44,15 @@ iOS 17+，语言模式为 Swift 6+。
 
 ## 4. Network
 
-新代码优先使用类型化 Codable 请求。普通参数、Body、上传、下载、cache、retry、dedup 和
-cancellation 统一走内部请求上下文。迁移动态请求时要人工确认参数编码、错误映射、进度和取消
-语义，不要仅替换方法名。
+新代码优先使用 `PTNetworkRequest` 和 `PTNetworkExecutor`。普通参数、Body、上传、下载、cache、
+retry、dedup、认证刷新和 cancellation 统一走内部请求上下文。迁移动态请求时要人工确认参数编码、
+错误映射、进度和取消语义，不要仅替换方法名。
+
+### 4.1 Socket / Security
+
+新 WebSocket 代码使用 `PTWebSocketClient`；新安全代码使用 `PTSecurity`。`PTSocketManager`、
+SocketRocket、DataEncrypt、KeyChain 和 SecuritySuite 入口在 5.x 保留为兼容层，6.0 删除前必须
+完成真实宿主迁移、Keychain 数据迁移和断网/认证回归。
 
 ## 5. Navigation
 

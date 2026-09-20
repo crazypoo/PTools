@@ -93,7 +93,7 @@ public var PTSocketURLMode: NetworkEnvironment {
     return .Distribution
 }
 
-public enum PTNetworkDedupPolicy: Sendable, Equatable {
+public enum PTNetworkDedupPolicy: Sendable, Equatable, Hashable {
     case none
     case identical
     case custom(String)
@@ -104,6 +104,61 @@ public enum PTNetworkDedupPolicy: Sendable, Equatable {
         case .identical: return "identical"
         case .custom(let string): return string
         }
+    }
+}
+
+// English: Retry policy is an immutable value that prevents unsafe retries of non-idempotent requests.
+// Español: La política de reintento es un valor inmutable que evita reintentos inseguros de solicitudes no idempotentes.
+// 中文：重试策略是不可变值类型，用于避免对非幂等请求进行不安全重试。
+public struct PTRetryPolicy: Sendable, Equatable {
+    public let maxAttempts: Int
+    public let baseDelay: TimeInterval
+    public let maxDelay: TimeInterval
+    public let jitter: TimeInterval
+    public let retryableStatusCodes: Set<Int>
+    public let retryableURLErrorCodes: Set<Int>
+    public let requiresIdempotencyKeyForUnsafeMethods: Bool
+
+    public init(maxAttempts: Int = 3,
+                baseDelay: TimeInterval = 1.5,
+                maxDelay: TimeInterval = 8,
+                jitter: TimeInterval = 0.4,
+                retryableStatusCodes: Set<Int> = [408, 425, 429, 500, 502, 503, 504],
+                retryableURLErrorCodes: Set<Int> = [NSURLErrorTimedOut,
+                                                    NSURLErrorCannotFindHost,
+                                                    NSURLErrorCannotConnectToHost,
+                                                    NSURLErrorNetworkConnectionLost,
+                                                    NSURLErrorDNSLookupFailed],
+                requiresIdempotencyKeyForUnsafeMethods: Bool = true) {
+        self.maxAttempts = max(0, maxAttempts)
+        self.baseDelay = max(0, baseDelay)
+        self.maxDelay = max(self.baseDelay, maxDelay)
+        self.jitter = max(0, jitter)
+        self.retryableStatusCodes = retryableStatusCodes
+        self.retryableURLErrorCodes = retryableURLErrorCodes
+        self.requiresIdempotencyKeyForUnsafeMethods = requiresIdempotencyKeyForUnsafeMethods
+    }
+
+    public func allowsRetry(for request: URLRequest, statusCode: Int?, error: Error?) -> Bool {
+        let method = (request.httpMethod ?? "GET").uppercased()
+        let safeMethods = ["GET", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE"]
+        if requiresIdempotencyKeyForUnsafeMethods,
+           !safeMethods.contains(method),
+           request.value(forHTTPHeaderField: "Idempotency-Key")?.isEmpty != false {
+            return false
+        }
+        if let statusCode { return retryableStatusCodes.contains(statusCode) }
+        guard let error else { return false }
+        let nsError = error as NSError
+        return nsError.domain == NSURLErrorDomain && retryableURLErrorCodes.contains(nsError.code)
+    }
+
+    public func delay(for attempt: Int, retryAfter: TimeInterval? = nil, isExpensive: Bool = false) -> TimeInterval {
+        if let retryAfter { return min(max(retryAfter, 0), maxDelay) }
+        let exponent = max(0, attempt - 1)
+        let multiplier = isExpensive ? 2.0 : 1.0
+        let randomJitter = jitter == 0 ? 0 : Double.random(in: 0...jitter)
+        return min(baseDelay * pow(2, Double(exponent)) * multiplier + randomJitter, maxDelay)
     }
 }
 

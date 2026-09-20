@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "bb9fa317fb1609afeb3774eb589eea2140d51e82",
-  "generated_at": "2026-09-19T18:00:24Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T02:51:56Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -77,6 +77,7 @@
     "PooToolsScanQRCode",
     "PooToolsScrollBanner",
     "PooToolsSearchBar",
+    "PooToolsSecurity",
     "PooToolsSegmented",
     "PooToolsShare",
     "PooToolsSlider",
@@ -171,6 +172,7 @@
     "ScanQRCode",
     "ScrollBanner",
     "SearchBar",
+    "Security",
     "Segmented",
     "Share",
     "SiriPermission",
@@ -800,5 +802,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "277e6838e07459c3aed1da7c8712be4a1f1c83269b9263dcc0387529cd26d029"
+  "fingerprint": "369413528d32f50c45f75ab4524824cf1d47dd6752cda7a20cc17b9d2dd440e3"
 }

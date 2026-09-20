@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:21Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:13Z",
   "counts": {
     "reduce_motion": 41,
-    "accessibility": 173,
+    "accessibility": 178,
     "reduce_transparency": 3,
     "dynamic_type": 11
   },
@@ -934,6 +934,31 @@
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
       "line": 685
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "line": 58
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "line": 63
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "line": 67
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "line": 83
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Security/PTSecurity.swift",
+      "line": 197
     },
     {
       "rule": "accessibility",

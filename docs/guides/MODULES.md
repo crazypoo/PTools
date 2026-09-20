@@ -12,6 +12,8 @@
 | --- | --- | --- | --- |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | Base、Category、Theme、列表和基础权限 |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Codable、上传、下载、缓存和取消 |
+| Security | `PooTools/Security` | `PooToolsSecurity` | Keychain、CryptoKit 摘要、HMAC、AES-GCM、签名和验签 |
+| Socket | `PooTools/SocketKit` | `PooToolsSocketKit` | actor WebSocket、心跳、重连和发送队列 |
 | ImagePicker | `PooTools/ImagePicker` | `PooToolsImagePicker` | 单媒体系统选择、相机 |
 | PhotoPicker | `PooTools/PhotoPicker` | `PooToolsPhotoPicker` | 多选、PhotoKit、原图、Live Photo、编辑 |
 | MediaViewer | `PooTools/MediaViewer` | `PooToolsMediaViewer` | 图片、GIF、视频预览 |
@@ -73,6 +75,10 @@ https://github.com/crazypoo/PTools.git
 完整 CocoaPods subspec 名称以 `PooTools.podspec` 为准，完整 SwiftPM product/target 以
 `swift package dump-package` 和 `report/current` 为准。新增模块应先更新 podspec/manifest，
 再更新本文件，不在这里复制依赖实现。
+
+Network 新代码从 `PTNetworkExecutor` 开始；Socket 新代码从 `PTWebSocketClient` 开始；安全存储和
+密码学新代码从 `PTSecurity` 开始。旧入口只用于兼容既有宿主，迁移时不要同时维护第二套请求、重连
+或密钥存储逻辑。
 
 ## 依赖与迁移
 

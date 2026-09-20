@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '5.13.0'
+    s.version     = '5.14.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -114,6 +114,17 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/AESAndDES/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Publish the native CryptoKit/Security facade without third-party security types.
+    # Español: Publica la fachada nativa de CryptoKit/Security sin tipos de seguridad de terceros.
+    # 中文：发布不暴露第三方安全类型的 CryptoKit/Security 原生门面。
+    s.subspec 'Security' do |subspec|
+        subspec.source_files = 'PooToolsSource/Security/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation', 'CryptoKit', 'Security', 'LocalAuthentication'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SECURITY POOTOOLS_COCOAPODS"
         }
     end
     
@@ -955,6 +966,7 @@ Pod::Spec.new do |s|
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
+        subspec.dependency 'PooTools/Security'
         subspec.dependency 'PooTools/Hud'
         subspec.dependency 'PooTools/BankCard'
         subspec.dependency 'PooTools/BilogyID'

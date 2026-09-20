@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:34Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:37Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -202,89 +202,103 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 383,
+      "line": 438,
       "operation": "JSONDecoder",
       "classification": "review-required",
       "text": "if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 663,
+      "line": 694,
+      "operation": "JSONDecoder",
+      "classification": "review-required",
+      "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 794,
       "operation": "JSONSerialization",
       "classification": "review-required",
       "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 709,
+      "line": 840,
       "operation": "JSONSerialization",
       "classification": "review-required",
       "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 246,
+      "line": 263,
       "operation": "FileManager.default",
       "classification": "explicit-background-or-actor-boundary",
       "text": "?? FileManager.default.temporaryDirectory.path"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 248,
+      "line": 265,
       "operation": "FileManager.default",
       "classification": "explicit-background-or-actor-boundary",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 311,
+      "line": 371,
+      "operation": "FileManager.default",
+      "classification": "review-required",
+      "text": "try? FileManager.default.removeItem(atPath: path)"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+      "line": 378,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "try? FileManager.default.removeItem(atPath: diskPath)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 312,
+      "line": 379,
       "operation": "FileManager.default",
       "classification": "review-required",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 342,
+      "line": 409,
       "operation": "FileManager.default",
       "classification": "explicit-background-or-actor-boundary",
       "text": "let fm = FileManager.default"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 374,
+      "line": 441,
       "operation": "JSONEncoder",
       "classification": "explicit-background-or-actor-boundary",
       "text": "try? JSONEncoder().encode(object)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 383,
+      "line": 450,
       "operation": "JSONDecoder",
       "classification": "explicit-background-or-actor-boundary",
       "text": "try? JSONDecoder().decode(CacheObject.self, from: data)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 392,
+      "line": 459,
       "operation": "Data\\(contentsOf:",
       "classification": "explicit-background-or-actor-boundary",
       "text": "try? Data(contentsOf: URL(fileURLWithPath: path))"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 402,
+      "line": 469,
       "operation": "FileManager.default",
       "classification": "explicit-background-or-actor-boundary",
       "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
     }
   ],
-  "review_required_count": 27,
+  "review_required_count": 29,
   "background_or_actor_count": 13
 }

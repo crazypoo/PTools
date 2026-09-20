@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "70977e9fff1f55366be262a39e2529fd993e6456",
-  "generated_at": "2026-09-20T01:45:23Z",
+  "source_revision": "47d01176ff4982b8098d0c49b20b00cbec440594",
+  "generated_at": "2026-09-20T03:15:15Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -304,6 +304,7 @@
         "PooToolsScanQRCode",
         "PooToolsScrollBanner",
         "PooToolsSearchBar",
+        "PooToolsSecurity",
         "PooToolsSegmented",
         "PooToolsShare",
         "PooToolsSlider",
@@ -902,6 +903,17 @@
       },
       "targets": [
         "PooToolsSearchBar"
+      ]
+    },
+    {
+      "name": "PooToolsSecurity",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSecurity"
       ]
     },
     {
@@ -5442,6 +5454,34 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SEARCHBAR"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSecurity",
+      "type": "regular",
+      "path": "PooToolsSource/Security",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_SECURITY"
             }
           },
           "tool": "swift"
