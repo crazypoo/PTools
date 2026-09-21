@@ -100,28 +100,9 @@ open class PTNavBar: PTNavigationBarContainer {
             titleContainer.isHidden = false
 
             titleContainer.addSubview(newView)
-            // English: Keep the title container inside the button-safe area and let the selected title mode size the view.
-            // Español: Mantiene el contenedor del título dentro del área segura de los botones y deja que el modo elegido determine su tamaño.
-            // 中文：让标题容器保持在按钮安全区域内，并由当前标题模式决定标题视图的尺寸。
-            let leftSpace = leftContainerWidth > 0
-                ? (PTAppBaseConfig.share.defaultViewSpace + leftContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
-                : PTAppBaseConfig.share.defaultViewSpace
-            
-            let rightSpace = rightContainerWidth > 0
-                ? (PTAppBaseConfig.share.defaultViewSpace + rightContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
-                : PTAppBaseConfig.share.defaultViewSpace
-
-            let top = isFakeNav ? 0 : (CGFloat.statusBarHeight() + navOffset())
-            titleContainer.snp.remakeConstraints { make in
-                make.bottom.equalToSuperview()
-                make.top.equalToSuperview().inset(top)
-                make.left.equalToSuperview().offset(leftSpace)
-                make.right.equalToSuperview().offset(-rightSpace)
-            }
-
-            // English: Do not overwrite `.auto` with edge constraints; measured title views must keep their content width.
-            // Español: No sobrescribas `.auto` con restricciones a los bordes; las vistas medidas deben conservar el ancho de su contenido.
-            // 中文：不要用边缘约束覆盖 `.auto`；已测量的标题视图必须保留自身内容宽度。
+            // English: Keep titleContainer constraints under calculateMaxWidth so the title stays centered in the full bar.
+            // Español: Mantiene las restricciones de titleContainer en calculateMaxWidth para centrar el título en toda la barra.
+            // 中文：将 titleContainer 的约束统一交给 calculateMaxWidth，保证标题相对整条导航栏居中。
             applyTitleViewConstraints(newView)
         }
     }
@@ -267,9 +248,9 @@ open class PTNavBar: PTNavigationBarContainer {
     public func setRightButtons(_ buttons: [UIView]) {
         rightContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
         guard !buttons.isEmpty else {
-            leftContainer.isHidden = true
-            self.leftContainerWidth = 0
-            updateContainerConstraints(leftContainer, isLeft: true)
+            rightContainer.isHidden = true
+            self.rightContainerWidth = 0
+            updateContainerConstraints(rightContainer, isLeft: false)
             calculateMaxWidth()
             return
         }
@@ -314,6 +295,11 @@ open class PTNavBar: PTNavigationBarContainer {
         let containerWidth = bounds.width > 0 ? bounds.width : CGFloat.kSCREEN_WIDTH
         let navigationSpacing = PTAppBaseConfig.share.navContainerSpacing
         let defaultSpace = PTAppBaseConfig.share.defaultViewSpace
+        // English: Use the wider button group on both sides so a centered title never conflicts with an edge button.
+        // Español: Usa el grupo de botones más ancho en ambos lados para que el título centrado nunca choque con un botón.
+        // 中文：两侧都按较宽的按钮组计算，保证居中标题不会与边缘按钮产生约束冲突。
+        let widestButtonGroup = max(leftWidthTotal, rightWidthTotal)
+        let availableWidth = max(0, containerWidth - defaultSpace * 2 - navigationSpacing * 2 - widestButtonGroup * 2)
         let signature = WidthLayoutSignature(containerWidth: containerWidth,
                                               leftWidth: leftWidthTotal,
                                               rightWidth: rightWidthTotal,
@@ -327,10 +313,14 @@ open class PTNavBar: PTNavigationBarContainer {
             make.centerX.equalToSuperview()
             make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(navigationSpacing)
             make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-navigationSpacing)
+            // English: Give the title container an explicit width so Auto Layout cannot reuse an old ambiguous frame.
+            // Español: Define un ancho explícito para que Auto Layout no reutilice un frame antiguo y ambiguo.
+            // 中文：为标题容器设置明确宽度，避免 Auto Layout 复用旧的模糊 frame。
+            make.width.equalTo(availableWidth)
             make.height.equalTo(34)
         }
 
-        let newWidth = max(0, containerWidth - defaultSpace * 2 - navigationSpacing * 2 - leftWidthTotal - rightWidthTotal)
+        let newWidth = availableWidth
         if newWidth != titleViewMAxWidth {
             titleViewMAxWidth = newWidth
         }

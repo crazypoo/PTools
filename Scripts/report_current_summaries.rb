@@ -102,7 +102,7 @@ write_markdown(
   ].compact
 )
 
-version = File.read(File.join(repo_root, "PooTools.podspec"))[/s\.version\s*=\s*'([^']+)'/, 1] || "unknown"
+version = File.read(File.join(repo_root, "VERSION")).strip
 tags = `git -C "#{repo_root}" tag --list`.lines(chomp: true).filter_map do |tag|
   tag if tag.match?(/\A\d+\.\d+\.\d+\z/)
 end

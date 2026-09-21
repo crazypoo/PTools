@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.19.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.19.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.19.1`；`5.19.2` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.19.2`；`5.19.3` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -112,6 +112,13 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 标题内容变化后按实际富文本与图片尺寸重新获取 bounds，向上取整并保证最小可见宽度，避免标题或下拉图标显示不全。
 - ✅ 复用既有标题视图并刷新约束，不在每次标题更新时重复移除和添加视图；保留 iOS 17+、Swift 6+ 和公开 API 兼容。
 
+## 5.19.3 PTNavBar Navigation Title Centering
+
+- ✅ 修复 `PTNavBar.titleView` 设置时覆盖 `titleContainer` 约束的问题，标题现在相对整条伪导航栏居中。
+- ✅ 为标题容器设置明确可用宽度，并按左右较宽按钮组计算安全边界，避免长标题和按钮布局变化导致偏移。
+- ✅ 修复清空右侧按钮时误操作左侧容器的问题。
+- [ ] 完成真实设备和真实宿主中的 PhotoPicker 相册标题、旋转、分屏、长标题和按钮切换回归后，再创建正式 `5.19.3` tag。
+
 ## 5.19.2 PhotoPicker / Swift 6 Concurrency / Documentation
 
 - ✅ 修复 `PTMediaLibAlbumListViewController.navTitle` 未居中：伪导航栏标题使用 `.auto` 测量模式，标题单行截断并设置水平 hugging/compression resistance，保证按钮变化和长标题下仍保持视觉中心。
@@ -122,7 +129,7 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 新增 [`CONCURRENCY.md`](docs/architecture/CONCURRENCY.md) 和 `validate_concurrency_5_19.sh`，统一记录 actor isolation、non-Sendable capture、MainActor、全局状态和 detached 使用规则。
 - ✅ 将根目录 `_config.yml` 作为 GitHub Pages 文档配置使用，补充站点信息和源码排除清单；不把它误用为 iOS 构建配置。
 - ✅ 合并历史架构收口文档到当前架构、质量和并发文档，避免重复事实源；保留公开 API、iOS 17+ / Swift 6+ 和第三方依赖兼容策略。
-- [ ] 完成真实设备、真实宿主和 iOS 17/26/27 的并发、PhotoKit、Vision、WebKit 与导航视觉回归后，再创建正式 `5.19.2` tag。
+- ✅ 已创建正式 `5.19.2` tag；后续导航标题修复和回归记录归入 `5.19.3` 开发线。
 
 ## 5.19.0 Package / Dependency / Tests / Docs
 
