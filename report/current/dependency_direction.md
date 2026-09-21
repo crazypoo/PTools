@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_dependency_direction.sh
-Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
-Generated at: 2026-09-20T18:11:41Z
+Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
+Generated at: 2026-09-21T04:50:01Z
 -->
 
 # Dependency Direction Gate

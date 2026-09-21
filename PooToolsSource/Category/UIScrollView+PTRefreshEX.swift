@@ -365,6 +365,19 @@ open class PTRefreshComponent: UIView {
     public var ignoredContentInsetBottom: CGFloat = 0.0
     public var ignoredContentInsetLeft: CGFloat = 0.0
     public var ignoredContentInsetRight: CGFloat = 0.0
+
+    // English: Include the caller's scroll insets when deciding whether a footer can be reached.
+    // Español: Incluye los insets de desplazamiento del llamador al decidir si se puede alcanzar el footer.
+    // 中文：判断底部刷新是否可到达时，必须把调用方设置的滚动 inset 纳入计算。
+    fileprivate var hasScrollableVerticalContent: Bool {
+        guard let scrollView else { return false }
+        let inset = scrollView.contentInset
+        let effectiveBottomInset = max(0, inset.bottom - ignoredContentInsetBottom)
+        let effectiveContentHeight = scrollView.contentSize.height
+            + inset.top
+            + effectiveBottomInset
+        return effectiveContentHeight > scrollView.bounds.height
+    }
     
     @discardableResult
     public func setIgnoredContentInsetTop(_ inset: CGFloat) -> Self {
@@ -711,14 +724,16 @@ public final class PTRefreshFooter: PTRefreshComponent {
     
     // MARK: - 动态检测隐藏逻辑
     public override func checkAutomaticallyHidden() {
-        guard let scrollView = scrollView else { return }
+        guard scrollView != nil else { return }
         
         // 获取最终的配置：优先读取局部 custom 属性，再读全局 shared 配置
         let autoHidden = customAutomaticallyHidden ?? PTRefreshConfig.shared.footer.automaticallyHidden
         
         if autoHidden {
-            // 核心判断公式：内容高度 == 0，或者 内容高度不足以撑开当前 ScrollView 的可视高度
-            let isShorterThanScreen = scrollView.contentSize.height <= scrollView.bounds.height
+            // English: Treat content and explicit top/bottom insets as one scrollable range.
+            // Español: Trata el contenido y los insets superior/inferior explícitos como un único rango desplazable.
+            // 中文：将内容高度和显式上下 inset 视为同一个可滚动范围。
+            let isShorterThanScreen = !hasScrollableVerticalContent
             self.isHidden = isShorterThanScreen
         } else {
             // 如果开发者明确关闭了自动隐藏，就永远显示
@@ -730,6 +745,10 @@ public final class PTRefreshFooter: PTRefreshComponent {
         guard let scrollView = scrollView else { return }
         if state == .idle {
             self.originalContentInsetBottom = scrollView.contentInset.bottom
+            // English: Re-evaluate visibility after external inset changes, including iOS 26 layout insets.
+            // Español: Reevalúa la visibilidad después de cambios externos de inset, incluidos los del layout de iOS 26.
+            // 中文：外部修改 inset 后重新计算可见性，兼容 iOS 26 的布局 inset。
+            checkAutomaticallyHidden()
         }
     }
 
@@ -744,7 +763,7 @@ public final class PTRefreshFooter: PTRefreshComponent {
         guard let scrollView = scrollView else { return }
         if self.isHidden { return }
         if state == .noMoreData || state == .refreshing || state == .willRefresh { return }
-        guard scrollView.contentSize.height > scrollView.bounds.height else { return }
+        guard hasScrollableVerticalContent else { return }
         
         let offsetY = scrollView.contentOffset.y
         let judgeOffsetY = scrollView.contentSize.height - scrollView.bounds.height + originalContentInsetBottom - ignoredContentInsetBottom
@@ -1302,10 +1321,10 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
     }
     
     public override func checkAutomaticallyHidden() {
-        guard let scrollView = scrollView else { return }
+        guard scrollView != nil else { return }
         let autoHidden = customAutomaticallyHidden ?? PTRefreshConfig.shared.footer.automaticallyHidden
         if autoHidden {
-            self.isHidden = scrollView.contentSize.height <= scrollView.bounds.height
+            self.isHidden = !hasScrollableVerticalContent
         } else {
             self.isHidden = false
         }
@@ -1315,6 +1334,10 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
         guard let scrollView = scrollView else { return }
         if state == .idle {
             self.originalContentInsetBottom = scrollView.contentInset.bottom
+            // English: Re-evaluate visibility after external inset changes, including iOS 26 layout insets.
+            // Español: Reevalúa la visibilidad después de cambios externos de inset, incluidos los del layout de iOS 26.
+            // 中文：外部修改 inset 后重新计算可见性，兼容 iOS 26 的布局 inset。
+            checkAutomaticallyHidden()
         }
     }
     
@@ -1331,7 +1354,7 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
         
         if self.isHidden { return }
         if state == .noMoreData || state == .refreshing || state == .willRefresh { return }
-        guard scrollView.contentSize.height > scrollView.bounds.height else { return }
+        guard hasScrollableVerticalContent else { return }
         
         let offsetY = scrollView.contentOffset.y
         // 判断刚好滑到底部的临界值

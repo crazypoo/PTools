@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-# English: Keep the 5.19.3 concurrency boundary focused on real unsafe crossings.
-# Español: Mantiene el límite de concurrencia de 5.19.3 enfocado en cruces realmente inseguros.
-# 中文：让 5.19.3 并发边界门禁只关注真实的不安全跨越。
+# English: Keep the 5.19.x concurrency boundary focused on real unsafe crossings.
+# Español: Mantiene el límite de concurrencia de 5.19.x enfocado en cruces realmente inseguros.
+# 中文：让 5.19.x 并发边界门禁只关注真实的不安全跨越。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
@@ -42,4 +42,4 @@ for requirement in "${required_patterns[@]}"; do
     || { printf 'FAIL: concurrency boundary marker missing: %s (%s)\n' "$path" "$pattern" >&2; exit 1; }
 done
 
-printf 'PASS: PTools 5.19.3 concurrency boundaries\n'
+printf 'PASS: PTools 5.19.5 concurrency boundaries\n'

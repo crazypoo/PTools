@@ -134,7 +134,16 @@ private final class PTDarkModeScheduleMonitor: NSObject {
         modeDidChange()
     }
 
-    @objc private func environmentDidChange() {
+    // English: NotificationCenter may invoke this Objective-C selector on the posting queue; hop before touching MainActor state.
+    // Español: NotificationCenter puede invocar este selector Objective-C en la cola emisora; cambia de contexto antes de tocar el estado de MainActor.
+    // 中文：NotificationCenter 可能在发送通知的后台队列调用这个 Objective-C selector，先切回 MainActor 再访问主线程状态。
+    @objc private nonisolated func environmentDidChange() {
+        PTMainActorBridge.perform { [weak self] in
+            self?.handleEnvironmentDidChange()
+        }
+    }
+
+    private func handleEnvironmentDidChange() {
         PTDarkModeOption.refreshCurrentMode(notify: false)
         modeDidChange()
     }

@@ -2,7 +2,12 @@
 
 ## Unreleased — 5.19.x
 
-当前开发基线为 `5.19.3`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+当前开发基线为 `5.19.5`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+
+- 修复 `PTDarkModeScheduleMonitor` 的系统环境通知回调从后台队列进入 `@MainActor` 时触发的 dispatch 队列断言；通知入口先桥接到 `MainActor`，再刷新暗色模式状态。
+- 修复 `PTCollectionView` 在外部设置 `contentInset.top/bottom` 后底部刷新仍保持隐藏的问题；footer 现在按有效可滚动范围重新计算，并继续保持 `verticalScrollIndicatorInsets` 仅影响滚动指示器。
+
+## 5.19.3 — 2026-09-21
 
 - 修复 `PTNavBar` 设置 `titleView` 时覆盖标题容器约束的问题；标题容器现在按整条导航栏居中，并根据较宽的按钮组设置明确可用宽度。
 

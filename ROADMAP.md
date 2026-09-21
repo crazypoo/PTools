@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.19.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.19.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.19.2`；`5.19.3` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.19.3`；`5.19.4` 和 `5.19.5` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -112,12 +112,26 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 标题内容变化后按实际富文本与图片尺寸重新获取 bounds，向上取整并保证最小可见宽度，避免标题或下拉图标显示不全。
 - ✅ 复用既有标题视图并刷新约束，不在每次标题更新时重复移除和添加视图；保留 iOS 17+、Swift 6+ 和公开 API 兼容。
 
+## 5.19.5 Collection Refresh Inset Compatibility
+
+- ✅ 底部刷新隐藏判断纳入调用方设置的 `contentInset.top/bottom`，避免 iOS 26 布局留白让 `PTRefreshFooter` / `PTRefreshAutoFooter` 永久隐藏。
+- ✅ 外部修改 `contentInset` 后立即重新计算 footer 可见性并更新还原基线，`footRefreshTask` 可以在列表重新变为可滚动时正常触发。
+- ✅ `verticalScrollIndicatorInsets.bottom` 保持纯展示职责，不改变内容滚动和刷新触发边界。
+- [ ] 在真实设备验证不同内容高度、导航栏/TabBar 留白、旋转、分屏和 iOS 26 玻璃布局下的底部刷新回调，再创建正式 `5.19.5` tag。
+
+## 5.19.4 Dark Mode MainActor Notification Bridge
+
+- ✅ 修复 `PTDarkModeScheduleMonitor.environmentDidChange` 被系统时间、时区或场景通知从后台队列调用时触发 `dispatch_assert_queue` 的问题。
+- ✅ Objective-C 通知入口保持 `nonisolated`，只负责通过 `PTMainActorBridge` 投递；暗色模式刷新、定时器和 observer 状态仍只在 `MainActor` 内访问。
+- ✅ 不使用 `nonisolated(unsafe)`，不改变公开暗色模式 API，也不改变通知名称和已有刷新语义。
+- [ ] 在真实设备验证手动切换外观、跨午夜、修改时区、系统时间变化、Scene 激活和后台恢复；该验证继续随 `5.19.5` 开发线保留。
+
 ## 5.19.3 PTNavBar Navigation Title Centering
 
 - ✅ 修复 `PTNavBar.titleView` 设置时覆盖 `titleContainer` 约束的问题，标题现在相对整条伪导航栏居中。
 - ✅ 为标题容器设置明确可用宽度，并按左右较宽按钮组计算安全边界，避免长标题和按钮布局变化导致偏移。
 - ✅ 修复清空右侧按钮时误操作左侧容器的问题。
-- [ ] 完成真实设备和真实宿主中的 PhotoPicker 相册标题、旋转、分屏、长标题和按钮切换回归后，再创建正式 `5.19.3` tag。
+- ✅ 已创建正式 `5.19.3` tag；后续暗色模式通知线程修复和回归记录归入 `5.19.4` 开发线。
 
 ## 5.19.2 PhotoPicker / Swift 6 Concurrency / Documentation
 

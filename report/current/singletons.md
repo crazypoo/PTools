@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
-Generated at: 2026-09-20T18:11:36Z
+Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
+Generated at: 2026-09-21T04:49:55Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1544**
+- .shared / .share 调用文本计数：**1538**
 - 单例声明计数：**104**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |

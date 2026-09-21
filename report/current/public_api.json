@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93",
-  "generated_at": "2026-09-20T18:11:35Z",
+  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
+  "generated_at": "2026-09-21T04:49:55Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -7314,7 +7314,7 @@
     {
       "key": "PooToolsSource/Base/PTNavBar.swift|public|func|public func setLeftButtons(_ buttons: [UIView])",
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 238,
+      "line": 219,
       "access": "public",
       "kind": "func",
       "declaration": "public func setLeftButtons(_ buttons: [UIView]) {"
@@ -7322,7 +7322,7 @@
     {
       "key": "PooToolsSource/Base/PTNavBar.swift|public|func|public func setRightButtons(_ buttons: [UIView])",
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 267,
+      "line": 248,
       "access": "public",
       "kind": "func",
       "declaration": "public func setRightButtons(_ buttons: [UIView]) {"
@@ -12674,7 +12674,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func setIgnoredContentInsetTop(_ inset: CGFloat) -> Self",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 370,
+      "line": 383,
       "access": "public",
       "kind": "func",
       "declaration": "public func setIgnoredContentInsetTop(_ inset: CGFloat) -> Self {"
@@ -12682,7 +12682,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func setIgnoredContentInsetBottom(_ inset: CGFloat) -> Self",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 376,
+      "line": 389,
       "access": "public",
       "kind": "func",
       "declaration": "public func setIgnoredContentInsetBottom(_ inset: CGFloat) -> Self {"
@@ -12690,7 +12690,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func setIgnoredContentInsetLeft(_ inset: CGFloat) -> Self",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 382,
+      "line": 395,
       "access": "public",
       "kind": "func",
       "declaration": "public func setIgnoredContentInsetLeft(_ inset: CGFloat) -> Self {"
@@ -12698,7 +12698,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func setIgnoredContentInsetRight(_ inset: CGFloat) -> Self",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 388,
+      "line": 401,
       "access": "public",
       "kind": "func",
       "declaration": "public func setIgnoredContentInsetRight(_ inset: CGFloat) -> Self {"
@@ -12706,7 +12706,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func resolvedTitle(for state: PTRefreshState, globalConfig: PTRefreshTextConfig) -> String",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 394,
+      "line": 407,
       "access": "public",
       "kind": "func",
       "declaration": "public func resolvedTitle(for state: PTRefreshState, globalConfig: PTRefreshTextConfig) -> String {"
@@ -12714,7 +12714,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func setupUI()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 416,
+      "line": 429,
       "access": "open",
       "kind": "func",
       "declaration": "open func setupUI() {"
@@ -12722,7 +12722,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func scrollViewContentSizeDidChange()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 454,
+      "line": 467,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewContentSizeDidChange() {}"
@@ -12730,7 +12730,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func scrollViewContentOffsetDidChange()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 455,
+      "line": 468,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewContentOffsetDidChange() {}"
@@ -12738,7 +12738,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func scrollViewContentInsetDidChange()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 456,
+      "line": 469,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewContentInsetDidChange() {}"
@@ -12746,7 +12746,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState)",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 457,
+      "line": 470,
       "access": "open",
       "kind": "func",
       "declaration": "open func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {}"
@@ -12754,7 +12754,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func pullingPercentDidChange(percent: CGFloat)",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 459,
+      "line": 472,
       "access": "open",
       "kind": "func",
       "declaration": "open func pullingPercentDidChange(percent: CGFloat) {}"
@@ -12762,7 +12762,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|func|open func scrollViewPanStateDidChange()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 462,
+      "line": 475,
       "access": "open",
       "kind": "func",
       "declaration": "open func scrollViewPanStateDidChange() {"
@@ -12770,7 +12770,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func beginRefreshing()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 469,
+      "line": 482,
       "access": "public",
       "kind": "func",
       "declaration": "public func beginRefreshing() {"
@@ -12778,7 +12778,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func endRefreshing()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 474,
+      "line": 487,
       "access": "public",
       "kind": "func",
       "declaration": "public func endRefreshing() {"
@@ -12786,7 +12786,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func endRefreshingWithNoMoreData()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 481,
+      "line": 494,
       "access": "public",
       "kind": "func",
       "declaration": "public func endRefreshingWithNoMoreData() {"
@@ -12794,7 +12794,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func resetNoMoreData()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 487,
+      "line": 500,
       "access": "public",
       "kind": "func",
       "declaration": "public func resetNoMoreData() {"
@@ -12802,7 +12802,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func executeAction()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 491,
+      "line": 504,
       "access": "public",
       "kind": "func",
       "declaration": "public func executeAction() {"
@@ -12810,7 +12810,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func updateTimeLabel()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 505,
+      "line": 518,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateTimeLabel() {"
@@ -12818,7 +12818,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|open|class|open class PTRefreshHeader: PTRefreshComponent",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 524,
+      "line": 537,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTRefreshHeader: PTRefreshComponent {"
@@ -12826,7 +12826,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|let|public let gifView = UIImageView()",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 1167,
+      "line": 1186,
       "access": "public",
       "kind": "let",
       "declaration": "public let gifView = UIImageView()"
@@ -12834,7 +12834,7 @@
     {
       "key": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift|public|func|public func setImages(_ images: [UIImage], duration: TimeInterval? = nil, for state: PTRefreshState) -> Self",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 1211,
+      "line": 1230,
       "access": "public",
       "kind": "func",
       "declaration": "public func setImages(_ images: [UIImage], duration: TimeInterval? = nil, for state: PTRefreshState) -> Self {"
@@ -16394,7 +16394,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTDrakModeOption.swift|public|func|public func apply()",
       "path": "PooToolsSource/DarkMode/PTDrakModeOption.swift",
-      "line": 170,
+      "line": 179,
       "access": "public",
       "kind": "func",
       "declaration": "public func apply() {"
@@ -16402,7 +16402,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTDrakModeOption.swift|public|class|public class PTDarkModeOption",
       "path": "PooToolsSource/DarkMode/PTDrakModeOption.swift",
-      "line": 177,
+      "line": 186,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTDarkModeOption {"

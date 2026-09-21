@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: f2c27a9adb5b065c1b77622ac31afb8c8f2a2a93
-Generated at: 2026-09-20T18:11:35Z
+Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
+Generated at: 2026-09-21T04:49:55Z
 -->
 
 # PTools 当前公开 API 清单
@@ -926,8 +926,8 @@ Generated at: 2026-09-20T18:11:35Z
 | PooToolsSource/Base/PTNavBar.swift:73 | enum | public | public enum PTTitleViewMode: Sendable { |
 | PooToolsSource/Base/PTNavBar.swift:79 | var | public | public var titleViewMode: PTTitleViewMode = .fill { |
 | PooToolsSource/Base/PTNavBar.swift:85 | var | public | public var titleView: UIView? { |
-| PooToolsSource/Base/PTNavBar.swift:238 | func | public | public func setLeftButtons(_ buttons: [UIView]) { |
-| PooToolsSource/Base/PTNavBar.swift:267 | func | public | public func setRightButtons(_ buttons: [UIView]) { |
+| PooToolsSource/Base/PTNavBar.swift:219 | func | public | public func setLeftButtons(_ buttons: [UIView]) { |
+| PooToolsSource/Base/PTNavBar.swift:248 | func | public | public func setRightButtons(_ buttons: [UIView]) { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:14 | enum | public | public enum PTScreenShotActionType { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:18 | enum | public | @objc public enum VCStatusBarChangeStatusType : Int { |
 | PooToolsSource/Base/PTNavigationBarManager.swift:25 | var | public | public var isConfigured = false // ✅ 新增 |
@@ -1596,27 +1596,27 @@ Generated at: 2026-09-20T18:11:35Z
 | PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:365 | var | public | public var ignoredContentInsetBottom: CGFloat = 0.0 |
 | PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:366 | var | public | public var ignoredContentInsetLeft: CGFloat = 0.0 |
 | PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:367 | var | public | public var ignoredContentInsetRight: CGFloat = 0.0 |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:370 | func | public | public func setIgnoredContentInsetTop(_ inset: CGFloat) -> Self { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:376 | func | public | public func setIgnoredContentInsetBottom(_ inset: CGFloat) -> Self { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:382 | func | public | public func setIgnoredContentInsetLeft(_ inset: CGFloat) -> Self { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:388 | func | public | public func setIgnoredContentInsetRight(_ inset: CGFloat) -> Self { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:394 | func | public | public func resolvedTitle(for state: PTRefreshState, globalConfig: PTRefreshTextConfig) -> String { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:416 | func | open | open func setupUI() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:454 | func | open | open func scrollViewContentSizeDidChange() {} |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:455 | func | open | open func scrollViewContentOffsetDidChange() {} |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:456 | func | open | open func scrollViewContentInsetDidChange() {} |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:457 | func | open | open func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {} |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:459 | func | open | open func pullingPercentDidChange(percent: CGFloat) {} |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:462 | func | open | open func scrollViewPanStateDidChange() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:469 | func | public | public func beginRefreshing() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:474 | func | public | public func endRefreshing() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:481 | func | public | public func endRefreshingWithNoMoreData() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:487 | func | public | public func resetNoMoreData() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:491 | func | public | public func executeAction() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:505 | func | public | public func updateTimeLabel() { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:524 | class | open | open class PTRefreshHeader: PTRefreshComponent { |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:1167 | let | public | public let gifView = UIImageView() |
-| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:1211 | func | public | public func setImages(_ images: [UIImage], duration: TimeInterval? = nil, for state: PTRefreshState) -> Self { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:383 | func | public | public func setIgnoredContentInsetTop(_ inset: CGFloat) -> Self { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:389 | func | public | public func setIgnoredContentInsetBottom(_ inset: CGFloat) -> Self { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:395 | func | public | public func setIgnoredContentInsetLeft(_ inset: CGFloat) -> Self { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:401 | func | public | public func setIgnoredContentInsetRight(_ inset: CGFloat) -> Self { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:407 | func | public | public func resolvedTitle(for state: PTRefreshState, globalConfig: PTRefreshTextConfig) -> String { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:429 | func | open | open func setupUI() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:467 | func | open | open func scrollViewContentSizeDidChange() {} |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:468 | func | open | open func scrollViewContentOffsetDidChange() {} |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:469 | func | open | open func scrollViewContentInsetDidChange() {} |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:470 | func | open | open func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {} |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:472 | func | open | open func pullingPercentDidChange(percent: CGFloat) {} |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:475 | func | open | open func scrollViewPanStateDidChange() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:482 | func | public | public func beginRefreshing() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:487 | func | public | public func endRefreshing() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:494 | func | public | public func endRefreshingWithNoMoreData() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:500 | func | public | public func resetNoMoreData() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:504 | func | public | public func executeAction() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:518 | func | public | public func updateTimeLabel() { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:537 | class | open | open class PTRefreshHeader: PTRefreshComponent { |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:1186 | let | public | public let gifView = UIImageView() |
+| PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:1230 | func | public | public func setImages(_ images: [UIImage], duration: TimeInterval? = nil, for state: PTRefreshState) -> Self { |
 | PooToolsSource/Category/UISlider+PTEX.swift:11 | typealias | public | public typealias SliderBlock = (_ sender:UISlider) -> Void |
 | PooToolsSource/Category/UISwitch+PTEX.swift:11 | typealias | public | public typealias SwitchBlock = (_ sender:UISwitch) -> Void |
 | PooToolsSource/Category/UITabBar+PTEX.swift:33 | var | public | @MainActor public var standardAppearance: UITabBarAppearance { |
@@ -2061,8 +2061,8 @@ Generated at: 2026-09-20T18:11:35Z
 | PooToolsSource/DarkMode/PTDarkModeControl.swift:24 | var | open | open var themeSetBlock: PTActionTask? |
 | PooToolsSource/DarkMode/PTDarkModeControl.swift:243 | func | public | public func apply() { |
 | PooToolsSource/DarkMode/PTDarkSmartFooter.swift:14 | class | public | public class PTDarkSmartFooter: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable { |
-| PooToolsSource/DarkMode/PTDrakModeOption.swift:170 | func | public | public func apply() { |
-| PooToolsSource/DarkMode/PTDrakModeOption.swift:177 | class | public | public class PTDarkModeOption { |
+| PooToolsSource/DarkMode/PTDrakModeOption.swift:179 | func | public | public func apply() { |
+| PooToolsSource/DarkMode/PTDrakModeOption.swift:186 | class | public | public class PTDarkModeOption { |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:15 | enum | public | public enum PTTabBarVisualStyle: Sendable { |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:49 | struct | public | public struct PTNavigationAppearance { |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:50 | var | public | public var backgroundColor: UIColor |
