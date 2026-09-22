@@ -36,6 +36,7 @@ markdown_path = File.join(repo_root, "report/current/module_parity.md")
 # Español: Normaliza solo nombres históricos para comparar; conserva los nombres originales en los informes.
 # 中文：仅在比较时归一化历史命名，报告中仍保留原始名称。
 ALIASES = {
+  "PToolsLogging" => "Logging",
   "Network" => "NetWork",
   "BioID" => "BilogyID",
   "MediaPermission" => "MeidaPermission",

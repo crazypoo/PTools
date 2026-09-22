@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:49:55Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:15:36Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -27730,7 +27730,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMin:CGFloat = 4",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 24,
+      "line": 27,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMin:CGFloat = 4"
@@ -27738,7 +27738,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMax:CGFloat = 20",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 25,
+      "line": 28,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMax:CGFloat = 20"
@@ -27746,7 +27746,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let SystemLogViewTag = 999999",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 26,
+      "line": 29,
       "access": "public",
       "kind": "let",
       "declaration": "public let SystemLogViewTag = 999999"
@@ -27754,7 +27754,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_width:CGFloat = 240",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 27,
+      "line": 30,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_width:CGFloat = 240"
@@ -27762,7 +27762,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_height:CGFloat = 148",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 28,
+      "line": 31,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_height:CGFloat = 148"
@@ -27770,7 +27770,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let borderLine:CGFloat = 5",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 29,
+      "line": 32,
       "access": "public",
       "kind": "let",
       "declaration": "public let borderLine:CGFloat = 5"
@@ -27778,7 +27778,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let diameter:CGFloat = 28",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 30,
+      "line": 33,
       "access": "public",
       "kind": "let",
       "declaration": "public let diameter:CGFloat = 28"
@@ -27786,7 +27786,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|public enum PTLogLevel",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 246,
+      "line": 269,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLogLevel {"
@@ -27794,7 +27794,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|struct|public struct LogItem",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 277,
+      "line": 304,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct LogItem {"
@@ -27802,7 +27802,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|@objc public enum LocalConsoleActionType : Int",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 347,
+      "line": 374,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum LocalConsoleActionType : Int {"
@@ -27810,7 +27810,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|typealias|public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 357,
+      "line": 384,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void"
@@ -27818,7 +27818,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class LocalConsole: NSObject",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 361,
+      "line": 388,
       "access": "public",
       "kind": "class",
       "declaration": "public class LocalConsole: NSObject {"
@@ -27826,7 +27826,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func registerDebugPlugin(_ plugin: PTDebugPlugin)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 411,
+      "line": 438,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerDebugPlugin(_ plugin: PTDebugPlugin) {"
@@ -27834,7 +27834,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clearDebugPlugins()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 416,
+      "line": 443,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearDebugPlugins() {"
@@ -27842,7 +27842,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var closeAllOutsideFunction:PTActionTask?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 438,
+      "line": 465,
       "access": "public",
       "kind": "var",
       "declaration": "public var closeAllOutsideFunction:PTActionTask?"
@@ -27850,7 +27850,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 439,
+      "line": 466,
       "access": "public",
       "kind": "var",
       "declaration": "public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? {"
@@ -27858,7 +27858,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var networkStatus = \"\"",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 444,
+      "line": 471,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkStatus = \"\""
@@ -27866,7 +27866,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var menu: UIMenuElement? = nil",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 446,
+      "line": 473,
       "access": "public",
       "kind": "var",
       "declaration": "public var menu: UIMenuElement? = nil {"
@@ -27874,7 +27874,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|@MainActor public var isVisiable:Bool = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 454,
+      "line": 481,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var isVisiable:Bool = false {"
@@ -27882,7 +27882,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 504,
+      "line": 531,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {"
@@ -27890,7 +27890,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontColor(color:UIColor)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 509,
+      "line": 536,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontColor(color:UIColor) {"
@@ -27898,7 +27898,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var terminal:PTTerminal?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 513,
+      "line": 540,
       "access": "public",
       "kind": "var",
       "declaration": "public var terminal:PTTerminal?"
@@ -27906,7 +27906,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var maskView:PTDevMaskView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 514,
+      "line": 541,
       "access": "public",
       "kind": "var",
       "declaration": "public var maskView:PTDevMaskView?"
@@ -27914,7 +27914,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var showAllUserDefaultsKeys = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 522,
+      "line": 549,
       "access": "public",
       "kind": "var",
       "declaration": "public var showAllUserDefaultsKeys = false {"
@@ -27922,7 +27922,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func cleanSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 649,
+      "line": 676,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func cleanSystemLogView() {"
@@ -27930,7 +27930,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func createSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 813,
+      "line": 840,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func createSystemLogView() {"
@@ -27938,7 +27938,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 900,
+      "line": 927,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitDisabled = false"
@@ -27946,7 +27946,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitWarningDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 901,
+      "line": 928,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitWarningDisabled = false"
@@ -27954,7 +27954,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func print(_ items: Any, level: PTLogLevel = .info)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 903,
+      "line": 930,
       "access": "public",
       "kind": "func",
       "declaration": "public func print(_ items: Any, level: PTLogLevel = .info) {"
@@ -27962,7 +27962,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 949,
+      "line": 976,
       "access": "public",
       "kind": "func",
       "declaration": "public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {"
@@ -27970,7 +27970,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clear()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1025,
+      "line": 1052,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -27978,7 +27978,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class PTTerminal:PFloatingButton",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1522,
+      "line": 1549,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTerminal:PFloatingButton {"
@@ -27986,7 +27986,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var systemText : PTInvertedTextView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1523,
+      "line": 1550,
       "access": "public",
       "kind": "var",
       "declaration": "public var systemText : PTInvertedTextView?"
@@ -27994,7 +27994,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttributedText(_ string: String)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1602,
+      "line": 1629,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttributedText(_ string: String) {"
@@ -28002,7 +28002,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func appendLog(_ item: PTLogBuffer.LogItem)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1619,
+      "line": 1646,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendLog(_ item: PTLogBuffer.LogItem) {"
@@ -33598,6 +33598,230 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTURLParser {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|enum|public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|struct|public struct PTLogCategory: RawRepresentable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLogCategory: RawRepresentable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|init|public init(rawValue: String)",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|enum|public enum PTLogPrivacy: Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 45,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLogPrivacy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|typealias|public typealias PTLogMetadata = [String: String]",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTLogMetadata = [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|struct|public struct PTLogRecord: Identifiable, Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLogRecord: Identifiable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let id: UInt64",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let sequence: UInt64",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 55,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sequence: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let timestamp: Date",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 56,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let timestamp: Date"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let level: PTLogLevel",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 57,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let level: PTLogLevel"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let subsystem: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let subsystem: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let category: PTLogCategory",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let category: PTLogCategory"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let message: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 60,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let message: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let metadata: PTLogMetadata",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let metadata: PTLogMetadata"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let privacy: PTLogPrivacy",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let privacy: PTLogPrivacy"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let file: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let file: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let function: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let function: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let line: UInt",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let line: UInt"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|init|public init(sequence: UInt64,",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(sequence: UInt64,"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|struct|public struct PTLogConfiguration: Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLogConfiguration: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|var|public var minimumLevel: PTLogLevel",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var minimumLevel: PTLogLevel"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|var|public var categoryLevels: [PTLogCategory: PTLogLevel]",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var categoryLevels: [PTLogCategory: PTLogLevel]"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|var|public var subsystem: String",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var subsystem: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|init|public init(minimumLevel: PTLogLevel =",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(minimumLevel: PTLogLevel = {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|func|public func minimumLevel(for category: PTLogCategory) -> PTLogLevel",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 112,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func minimumLevel(for category: PTLogCategory) -> PTLogLevel {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|protocol|public protocol PTLogDestination: Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 117,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTLogDestination: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogger.swift|public|enum|public enum PTLogger",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogger.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLogger {"
     },
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaResource: Hashable, Sendable",

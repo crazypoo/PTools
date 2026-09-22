@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:15:42Z
-Version source: 5.19.5
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T03:45:20Z
+Version source: 5.20.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -53,6 +53,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Loading` | A | `PooTools/Loading` | `PooToolsLoading` | Keep; review drift |
 | `Location` | A | `PooTools/Location` | `PooToolsLocation` | Keep; review drift |
 | `LocationPermission` | A | `PooTools/LocationPermission` | `PTLocationPermission` | Keep; review drift |
+| `Logging` | A | `PooTools/Logging` | `PToolsLogging` | Keep; review drift |
 | `MediaCore` | A | `PooTools/MediaCore` | `PooToolsMediaCore` | Keep; review drift |
 | `MediaViewer` | A | `PooTools/MediaViewer` | `PooToolsMediaViewer` | Keep; review drift |
 | `MeidaPermission` | A | `PooTools/MediaPermission` / `PooTools/MeidaPermission` | `PTMediaPermission` | Keep; review drift |

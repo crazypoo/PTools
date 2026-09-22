@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.19.x
+## Unreleased — 5.20.x
 
-当前开发基线为 `5.19.5`，尚未创建正式 Git tag；版本唯一来源为根目录 `VERSION`。
+当前开发基线为 `5.20.0`；版本唯一来源为根目录 `VERSION`，5.20.0 尚未创建新的正式 tag。
+
+- 完成 CocoaLumberjack 使用面审计，记录 DDLog、文件日志、formatter、运行时等级、包装器和公开 API 泄露结果。
+- 新增 SwiftPM `PToolsLogging` product/target 与 CocoaPods `PooTools/Logging` subspec，Core 依赖新的日志契约但保留旧日志实现。
+- 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，为后续 OSLog、文件日志和 Debug 接入提供 Swift 6 值类型边界。
+- 5.20.0 不删除 CocoaLumberjack、不迁移 `PTNSLog` 调用、不修改第三方依赖；这些变更保留到后续里程碑并由审计报告跟踪。
+
+## 5.19.5 — 2026-09-22
 
 - 修复 `PTDarkModeScheduleMonitor` 的系统环境通知回调从后台队列进入 `@MainActor` 时触发的 dispatch 队列断言；通知入口先桥接到 `MainActor`，再刷新暗色模式状态。
 - 修复 `PTCollectionView` 在外部设置 `contentInset.top/bottom` 后底部刷新仍保持隐藏的问题；footer 现在按有效可滚动范围重新计算，并继续保持 `verticalScrollIndicatorInsets` 仅影响滚动指示器。

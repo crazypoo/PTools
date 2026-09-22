@@ -14,6 +14,9 @@ import SwifterSwift
 import SafeSFSymbols
 import SnapKit
 import CoreLocation
+#if canImport(PToolsLogging)
+import PToolsLogging
+#endif
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
@@ -243,19 +246,43 @@ final class PTConsoleWindow: UIWindow {
     }
 }
 
+// English: Reuse the shared logging level when the logging target is available.
+// Español: Reutiliza el nivel de logging compartido cuando el objetivo de logging está disponible.
+// 中文：日志目标可用时复用统一日志等级。
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+private extension PTLogLevel {
+    var color: UIColor {
+        switch self {
+        case .trace, .debug, .info, .notice:
+            return .white
+        case .warning:
+            return .systemYellow
+        case .error, .fault:
+            return .systemRed
+        }
+    }
+}
+#else
+// English: Keep a source-only compatibility level for the Example target's direct compilation.
+// Español: Conserva un nivel de compatibilidad solo de código fuente para la compilación directa del target Example.
+// 中文：为 Example 目标直接编译保留仅源码级兼容日志等级。
 public enum PTLogLevel {
     case info
     case warning
     case error
-    
+
     var color: UIColor {
         switch self {
-        case .info: return .white
-        case .warning: return .systemYellow
-        case .error: return .systemRed
+        case .info:
+            return .white
+        case .warning:
+            return .systemYellow
+        case .error:
+            return .systemRed
         }
     }
 }
+#endif
 
 // English: Convert the Core log severity into the console's existing presentation level.
 // Español: Convierte la severidad del log de Core al nivel de presentación existente de la consola.

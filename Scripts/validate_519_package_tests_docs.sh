@@ -2,15 +2,15 @@
 
 set -euo pipefail
 
-# English: Gate the 5.19 package, dependency, API, test, and documentation contracts.
-# Español: Protege los contratos de paquetes, dependencias, API, pruebas y documentación de 5.19.
-# 中文：统一门禁 5.19 的包、依赖、API、测试和文档契约。
+# English: Gate the 5.19/5.20 package, dependency, API, test, and documentation contracts.
+# Español: Protege los contratos de paquetes, dependencias, API, pruebas y documentación de 5.19/5.20.
+# 中文：统一门禁 5.19/5.20 的包、依赖、API、测试和文档契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.19\.[0-9]+$ ]] || { printf 'FAIL: 5.19 gate requires a 5.19.x VERSION, got %s\n' "$version" >&2; exit 1; }
+[[ "$version" =~ ^5\.(19|20)\.[0-9]+$ ]] || { printf 'FAIL: package/docs gate requires a 5.19.x or 5.20.x VERSION, got %s\n' "$version" >&2; exit 1; }
 
 required_files=(
   docs/architecture/PACKAGE_MATRIX.md
@@ -22,7 +22,7 @@ required_files=(
   Scripts/naming_debt_registry.json
 )
 for file in "${required_files[@]}"; do
-  [[ -f "$file" ]] || { printf 'FAIL: 5.19 required file is missing: %s\n' "$file" >&2; exit 1; }
+  [[ -f "$file" ]] || { printf 'FAIL: package/docs required file is missing: %s\n' "$file" >&2; exit 1; }
 done
 
 for matrix in docs/architecture/PACKAGE_MATRIX.md docs/architecture/DEPENDENCY_MATRIX.md; do
@@ -56,4 +56,4 @@ swift package dump-package >/dev/null
 bash Scripts/validate_module_parity.sh --check
 git diff --check
 
-printf 'PASS: PTools 5.19 Package / Dependency / Tests / Docs contracts\n'
+printf 'PASS: PTools package / dependency / tests / docs contracts (%s)\n' "$version"

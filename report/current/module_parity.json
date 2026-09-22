@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "5276a8381a0e5044f28fcf62920c9ef8e22c83dc",
-  "generated_at": "2026-09-20T14:06:54Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T03:45:19Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -20,6 +20,7 @@
     "PTSpeechPermission",
     "PTTrackingPermission",
     "PToolsCore",
+    "PToolsLogging",
     "PToolsPermissionCore",
     "PToolsPermissionUI",
     "PToolsUIFoundation",
@@ -143,6 +144,7 @@
     "Loading",
     "Location",
     "LocationPermission",
+    "Logging",
     "MediaCore",
     "MediaViewer",
     "MeidaPermission",
@@ -258,11 +260,13 @@
       "module": "Core",
       "field": "internal_dependencies",
       "spm": [
+        "Logging",
         "PToolsCore",
         "PToolsPermissionCore",
         "PToolsUIFoundation"
       ],
       "cocoapods": [
+        "Logging",
         "PToolsCore",
         "PToolsUIFoundation"
       ]
@@ -592,6 +596,23 @@
       }
     },
     {
+      "module": "Logging",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_LOGGING"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "MediaCore",
       "spm": {
         "defines": [],
@@ -804,5 +825,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "c065ae0c4df183a145885e991f5ad92df0b26838824dc6c2ed97bd2f9738b277"
+  "fingerprint": "84e549f966e465b0d778826048d5954963cd29be38d92a9a048932a2bae7ada3"
 }

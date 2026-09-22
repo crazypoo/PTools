@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:50:43Z
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T04:17:16Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `54`
+- Current exceptions: `55`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -18,7 +18,7 @@ Generated at: 2026-09-21T04:50:43Z
 | BilogyID | ["Core","FaceIDPermission"] | ["Core","FaceIDPermission","KeyChain"] | CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | BluetoothPermission | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CheckUpdate | ["Swift-JWT"] | ["SwiftJWT"] | Equivalent dependency uses different SPM and CocoaPods names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
-| Core | ["PToolsCore","PToolsPermissionCore","PToolsUIFoundation"] | ["PToolsCore","PToolsUIFoundation"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| Core | ["Logging","PToolsCore","PToolsPermissionCore","PToolsUIFoundation"] | ["Logging","PToolsCore","PToolsUIFoundation"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | Core | ["AttributedString","CocoaLumberjack","DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","NotificationBanner","SafeSFSymbols","SmartCodable","SnapKit","SwiftDate","SwifterSwift","lottie-ios"] | ["AttributedString","CocoaLumberjack/Swift","DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SafeSFSymbols","SmartCodable","SmartCodable/Inherit","SnapKit","SwiftDate","SwifterSwift","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
@@ -55,6 +55,7 @@ Generated at: 2026-09-21T04:50:43Z
 | FaceIDPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | HealthPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_HEALTH","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_HEALTH"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | LocationPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_LOCATION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_LOCATION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
+| Logging | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_LOGGING"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | logging | 6.0.0 | 2026-12-31 |
 | MediaCore | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | media | 6.0.0 | 2026-12-31 |
 | MeidaPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MEDIA","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":[],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | MicPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MIC","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MIC"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |

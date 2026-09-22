@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:50:01Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:17:17Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore",
+    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, and PToolsLogging",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -494,6 +494,10 @@
     {
       "source": "ptools",
       "destination": "PToolsCore"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsLogging"
     },
     {
       "source": "ptools",

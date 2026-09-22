@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:50:11Z
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T04:15:55Z
 -->
 
 # 当前文件尺寸门禁
@@ -32,7 +32,7 @@ Generated at: 2026-09-21T04:50:11Z
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1552 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1053 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1698 | architecture_exception |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1725 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1072 | warning |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1196 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1390 | warning |

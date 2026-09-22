@@ -3,20 +3,20 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_dependency_direction.sh
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:50:01Z
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T04:17:17Z
 -->
 
 # Dependency Direction Gate
 
 - Status: `pass_with_legacy_allowlist`
-- Internal edges: `123`
+- Internal edges: `124`
 - Temporary allowlisted edges: `0`
 - Unallowlisted violations: `0`
 
 ## Rules
 
-- ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, and PToolsPermissionCore
+- ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, and PToolsLogging
 - PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore
 - MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires
 - Navigation/Router -> PhotoPicker is forbidden

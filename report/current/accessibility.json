@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:49:56Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:15:37Z",
   "counts": {
     "reduce_motion": 41,
     "accessibility": 182,

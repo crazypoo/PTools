@@ -33,6 +33,17 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the logging contract without importing UIKit or legacy logging dependencies.
+    # Español: Publica el contrato de logging sin importar UIKit ni las dependencias de logging heredadas.
+    # 中文：发布不引入 UIKit 和旧日志依赖的日志契约。
+    s.subspec 'Logging' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsLogging/**/*.swift'
+        subspec.frameworks = 'Foundation', 'OSLog'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_LOGGING POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'PToolsUIFoundation' do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'SnapKit'
@@ -63,6 +74,7 @@ Pod::Spec.new do |s|
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/PToolsUIFoundation'
+        subspec.dependency 'PooTools/Logging'
         subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
         subspec.dependency 'SwifterSwift'

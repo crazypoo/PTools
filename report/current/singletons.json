@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:49:55Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:15:37Z",
   "shared_call_count": 1538,
   "declarations": [
     {
@@ -556,7 +556,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 144,
+      "line": 147,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -565,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 362,
+      "line": 389,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",

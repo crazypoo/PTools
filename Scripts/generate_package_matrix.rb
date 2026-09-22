@@ -19,6 +19,7 @@ version = File.read(File.join(repo_root, "VERSION")).strip
 revision = Open3.capture2("git", "rev-parse", "HEAD", chdir: repo_root).first.strip
 
 aliases = {
+  "PToolsLogging" => "Logging",
   "Network" => "NetWork",
   "BioID" => "BilogyID",
   "MediaPermission" => "MeidaPermission",

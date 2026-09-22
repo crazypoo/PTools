@@ -78,6 +78,7 @@
     {"kind":"settings","module":"PToolsCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"architecture","expiration":"2026-12-31"},
     {"kind":"settings","module":"PToolsPermissionCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"settings","module":"PToolsPermissionUI","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"PToolsUIFoundation","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"}
+    {"kind":"settings","module":"PToolsUIFoundation","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
+    {"kind":"settings","module":"Logging","reason":"SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.","owner":"logging","expiration":"2026-12-31"}
   ]
 }

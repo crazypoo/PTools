@@ -10,7 +10,7 @@
 ## Ownership rules
 
 - `PooTools/Core` 是 `PooTools.podspec` 的 `default_subspec`，其他能力围绕 Core 扩展。
-- SwiftPM 的 `PToolsCore`、`PToolsUIFoundation`、`PToolsPermissionCore` 和 `PToolsPermissionUI`
+- SwiftPM 的 `PToolsLogging`、`PToolsCore`、`PToolsUIFoundation`、`PToolsPermissionCore` 和 `PToolsPermissionUI`
   提供分层契约；`ptools` 是兼容 umbrella。
 - 功能模块只声明直接依赖，不在文档中重复计算传递依赖。
 - 第三方依赖的版本、revision 和实际解析状态以 `Package.swift`、`Podfile.lock` 和自动报告为准。
@@ -20,7 +20,8 @@
 
 | 模块 | CocoaPods | SwiftPM | 主要直接依赖 | 不应直接带入 |
 | --- | --- | --- | --- | --- |
-| Core / UIKit Base | `PooTools/Core` | `ptools` | SwiftDate、SnapKit、SwifterSwift、CocoaLumberjack、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
+| Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog（后端按后续版本接入） | UIKit、Debug UI、CocoaLumberjack、Network、媒体 |
+| Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、SwiftDate、SnapKit、SwifterSwift、CocoaLumberjack、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
 | SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |

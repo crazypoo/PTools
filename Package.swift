@@ -15,6 +15,10 @@ let package = Package(
         // 核心基座
         // ==========================================
         .library(name: "ptools", targets: ["ptools"]),
+        // English: Publish the Foundation and OSLog-ready logging contract independently.
+        // Español: Publica de forma independiente el contrato de logging basado en Foundation y preparado para OSLog.
+        // 中文：独立公开基于 Foundation、可逐步接入 OSLog 的日志契约。
+        .library(name: "PToolsLogging", targets: ["PToolsLogging"]),
         // English: Publish the Foundation-only layers so clients can depend on the smallest stable module.
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
@@ -144,7 +148,7 @@ let package = Package(
         // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
         // ==========================================
         .library(name: "PooToolsAll", targets: [
-            "ptools",
+            "ptools", "PToolsLogging",
             "PToolsPermissionCore", "PToolsPermissionUI",
             "PooToolsMediaCore",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
@@ -212,6 +216,17 @@ let package = Package(
 
     ],
     targets: [
+        // English: Keep logging below UIKit, Debug, CocoaLumberjack, and feature modules.
+        // Español: Mantén logging por debajo de UIKit, Debug, CocoaLumberjack y los módulos de funciones.
+        // 中文：让日志层位于 UIKit、Debug、CocoaLumberjack 和功能模块之下。
+        .target(
+            name: "PToolsLogging",
+            path: "PooToolsSource/PToolsLogging",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // English: PToolsCore contains only value types, URL parsing, and Foundation/Objective-C compatibility helpers.
         // Español: PToolsCore solo contiene tipos de valor, análisis URL y compatibilidad de Foundation/Objective-C.
         // 中文：PToolsCore 只包含值类型、URL 解析以及 Foundation/Objective-C 兼容辅助能力。
@@ -275,6 +290,7 @@ let package = Package(
         .target(
             name: "ptools",
             dependencies: [
+                "PToolsLogging",
                 "PToolsCore",
                 "PToolsUIFoundation",
                 "PToolsPermissionCore",

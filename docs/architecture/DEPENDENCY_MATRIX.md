@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:15:42Z
-Version source: 5.19.5
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T03:45:20Z
+Version source: 5.20.0
 -->
 
 # Direct Dependency Matrix
@@ -29,7 +29,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
-| `Core` | `PToolsCore`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `CocoaLumberjack/Swift`, `CocoaLumberjackSwift`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `SwifterSwift`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `CocoaLumberjack/Swift`, `CocoaLumberjackSwift`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `SwifterSwift`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | — | No direct third-party dependency | Deprecate alias |
@@ -59,6 +59,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Loading` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Location` | `Core`, `LocationPermission`, `PTLocationPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `LocationPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
+| `Logging` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `MXMetricManagerKit` | `Core` | — | No direct third-party dependency | Keep; review direct drift |
 | `MediaCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `MediaViewer` | `Core`, `LivePhoto`, `MediaCore`, `PageControl`, `PooToolsLivePhoto`, `PooToolsMediaCore`, `PooToolsPageControl`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |

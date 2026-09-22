@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: f11d04278acc91482fe20fae90f57bb672c8166a
-Generated at: 2026-09-21T04:49:55Z
+Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
+Generated at: 2026-09-22T04:15:36Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3478,41 +3478,41 @@ Generated at: 2026-09-21T04:49:55Z
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:54 | func | public | public func relativeVelocity(forVelocity velocity: CGFloat, from currentLocation: CGFloat, to targetLocation: CGFloat) -> CGFloat { |
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:66 | func | public | public func project(initialVelocity: CGFloat, decelerationRate: CGFloat) -> CGFloat { |
 | PooToolsSource/LocalConsole/GestureEndpointPredictor.swift:71 | func | public | public func nearestTargetTo(_ point: CGPoint, possibleTargets: [CGPoint]) -> CGPoint { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:24 | let | public | public let LocalConsoleFontMin:CGFloat = 4 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:25 | let | public | public let LocalConsoleFontMax:CGFloat = 20 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:26 | let | public | public let SystemLogViewTag = 999999 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:27 | let | public | public let systemLog_base_width:CGFloat = 240 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:28 | let | public | public let systemLog_base_height:CGFloat = 148 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:29 | let | public | public let borderLine:CGFloat = 5 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:30 | let | public | public let diameter:CGFloat = 28 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:246 | enum | public | public enum PTLogLevel { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:277 | struct | public | public struct LogItem { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:347 | enum | public | @objc public enum LocalConsoleActionType : Int { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:357 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
-| PooToolsSource/LocalConsole/LocalConsole.swift:361 | class | public | public class LocalConsole: NSObject { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:411 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:416 | func | public | public func clearDebugPlugins() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:438 | var | public | public var closeAllOutsideFunction:PTActionTask? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:439 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:444 | var | public | public var networkStatus = "" |
-| PooToolsSource/LocalConsole/LocalConsole.swift:446 | var | public | public var menu: UIMenuElement? = nil { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:454 | var | public | @MainActor public var isVisiable:Bool = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:504 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:509 | func | public | public func setAttFontColor(color:UIColor) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:513 | var | public | public var terminal:PTTerminal? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:514 | var | public | public var maskView:PTDevMaskView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:522 | var | public | public var showAllUserDefaultsKeys = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:649 | func | public | @MainActor public func cleanSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:813 | func | public | @MainActor public func createSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:900 | var | public | public var isCharacterLimitDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:901 | var | public | public var isCharacterLimitWarningDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:903 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:949 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1025 | func | public | public func clear() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1522 | class | public | public class PTTerminal:PFloatingButton { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1523 | var | public | public var systemText : PTInvertedTextView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1602 | func | public | public func setAttributedText(_ string: String) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1619 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:27 | let | public | public let LocalConsoleFontMin:CGFloat = 4 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:28 | let | public | public let LocalConsoleFontMax:CGFloat = 20 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:29 | let | public | public let SystemLogViewTag = 999999 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:30 | let | public | public let systemLog_base_width:CGFloat = 240 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:31 | let | public | public let systemLog_base_height:CGFloat = 148 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:32 | let | public | public let borderLine:CGFloat = 5 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:33 | let | public | public let diameter:CGFloat = 28 |
+| PooToolsSource/LocalConsole/LocalConsole.swift:269 | enum | public | public enum PTLogLevel { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:304 | struct | public | public struct LogItem { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:374 | enum | public | @objc public enum LocalConsoleActionType : Int { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:384 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
+| PooToolsSource/LocalConsole/LocalConsole.swift:388 | class | public | public class LocalConsole: NSObject { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:438 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:443 | func | public | public func clearDebugPlugins() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:465 | var | public | public var closeAllOutsideFunction:PTActionTask? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:466 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:471 | var | public | public var networkStatus = "" |
+| PooToolsSource/LocalConsole/LocalConsole.swift:473 | var | public | public var menu: UIMenuElement? = nil { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:481 | var | public | @MainActor public var isVisiable:Bool = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:531 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:536 | func | public | public func setAttFontColor(color:UIColor) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:540 | var | public | public var terminal:PTTerminal? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:541 | var | public | public var maskView:PTDevMaskView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:549 | var | public | public var showAllUserDefaultsKeys = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:676 | func | public | @MainActor public func cleanSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:840 | func | public | @MainActor public func createSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:927 | var | public | public var isCharacterLimitDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:928 | var | public | public var isCharacterLimitWarningDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:930 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:976 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1052 | func | public | public func clear() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1549 | class | public | public class PTTerminal:PFloatingButton { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1550 | var | public | public var systemText : PTInvertedTextView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1629 | func | public | public func setAttributedText(_ string: String) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1646 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:11 | class | public | public class PTInvertedTextView: UITextView { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:13 | var | public | public var pendingOffsetChange = false |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:26 | var | public | public var cancelNextContentSizeDidSet = false |
@@ -4212,6 +4212,34 @@ Generated at: 2026-09-21T04:49:55Z
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:71 | init | public | public init(_ type: T?) { |
 | PooToolsSource/PToolsCore/PTMainActorBridge.swift:12 | enum | public | public enum PTMainActorBridge { |
 | PooToolsSource/PToolsCore/PTURLParser.swift:15 | enum | public | public enum PTURLParser { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:12 | enum | public | public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:26 | struct | public | public struct PTLogCategory: RawRepresentable, Hashable, Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:27 | let | public | public let rawValue: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:29 | init | public | public init(rawValue: String) { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:45 | enum | public | public enum PTLogPrivacy: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:51 | typealias | public | public typealias PTLogMetadata = [String: String] |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:53 | struct | public | public struct PTLogRecord: Identifiable, Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:54 | let | public | public let id: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:55 | let | public | public let sequence: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:56 | let | public | public let timestamp: Date |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:57 | let | public | public let level: PTLogLevel |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:58 | let | public | public let subsystem: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:59 | let | public | public let category: PTLogCategory |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:60 | let | public | public let message: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:61 | let | public | public let metadata: PTLogMetadata |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:62 | let | public | public let privacy: PTLogPrivacy |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:63 | let | public | public let file: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:64 | let | public | public let function: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:65 | let | public | public let line: UInt |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:67 | init | public | public init(sequence: UInt64, |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:93 | struct | public | public struct PTLogConfiguration: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:94 | var | public | public var minimumLevel: PTLogLevel |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:95 | var | public | public var categoryLevels: [PTLogCategory: PTLogLevel] |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:96 | var | public | public var subsystem: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:98 | init | public | public init(minimumLevel: PTLogLevel = { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:112 | func | public | public func minimumLevel(for category: PTLogCategory) -> PTLogLevel { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:117 | protocol | public | public protocol PTLogDestination: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogger.swift:13 | enum | public | public enum PTLogger { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:10 | enum | public | public enum PTMediaResource: Hashable, Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:20 | enum | public | public enum PTMediaType: String, Hashable, Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:33 | struct | public | public struct PTMediaMetadata: Hashable, Sendable { |

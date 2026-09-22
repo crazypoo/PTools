@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:50:11Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:15:55Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3586,7 +3586,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1698,
+      "lines": 1725,
       "classification": "architecture_exception"
     },
     {
@@ -3902,6 +3902,16 @@
     {
       "path": "PooToolsSource/PToolsCore/PTURLParser.swift",
       "lines": 56,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "lines": 122,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogger.swift",
+      "lines": 182,
       "classification": "ok"
     },
     {

@@ -48,10 +48,14 @@ require_pattern "Package.swift" ".target(name: \"PooToolsImagePicker\"" "SwiftPM
 require_pattern "Package.swift" "\"PooToolsImagePicker\", \"PTCameraPermission\"" "SwiftPM PhotoPicker depends on ImagePicker and camera permission"
 require_pattern "Package.swift" ".library(name: \"PooToolsSearch\", targets: [\"PooToolsSearch\"])" "SwiftPM Search product is declared"
 require_pattern "Package.swift" ".target(name: \"PooToolsSearch\"" "SwiftPM Search target is declared"
+require_pattern "Package.swift" ".library(name: \"PToolsLogging\", targets: [\"PToolsLogging\"])" "SwiftPM logging product is declared"
+require_pattern "Package.swift" "name: \"PToolsLogging\"" "SwiftPM logging target is declared"
+require_pattern "PooTools.podspec" "s.subspec 'Logging'" "CocoaPods logging subspec is declared"
 
 bash "$repo_root/Scripts/validate_core_source_contract.sh"
 bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"
 bash "$repo_root/Scripts/validate_permission_source_contract.sh"
+bash "$repo_root/Scripts/validate_logging_foundation_5_20.sh"
 
 xcode_settings="$(xcodebuild -workspace "$repo_root/PooTools.xcworkspace" -scheme PooTools-Example -showBuildSettings 2>/dev/null)"
 if ! rg -q --fixed-strings "IPHONEOS_DEPLOYMENT_TARGET = 17.0" <<< "$xcode_settings"; then

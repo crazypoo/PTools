@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "f11d04278acc91482fe20fae90f57bb672c8166a",
-  "generated_at": "2026-09-21T04:50:42Z",
+  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
+  "generated_at": "2026-09-22T04:17:16Z",
   "name": "PooTools",
-  "version": "5.19.5",
+  "version": "5.20.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 106,
+  "subspec_count": 107,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -342,6 +342,7 @@
       "name": "PooTools/Core",
       "short_name": "Core",
       "local_dependencies": [
+        "PooTools/Logging",
         "PooTools/PToolsCore",
         "PooTools/PToolsUIFoundation"
       ],
@@ -1140,6 +1141,27 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Logging",
+      "short_name": "Logging",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsLogging/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsLogging"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "OSLog"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOGGING POOTOOLS_COCOAPODS"
       }
     },
     {
