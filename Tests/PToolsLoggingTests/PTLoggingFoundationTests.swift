@@ -2,9 +2,9 @@
 //  PTLoggingFoundationTests.swift
 //  PToolsLoggingTests
 //
-// English: Verifies filtering, privacy redaction and bounded logging for the 5.21.x pipeline.
-// Español: Verifica el filtrado, la redacción de privacidad y el logging acotado de la tubería 5.21.x.
-// 中文：验证 5.21.x 日志管线的过滤、隐私脱敏和有界写入。
+// English: Verifies filtering, privacy redaction and bounded logging for the 5.22.x pipeline.
+// Español: Verifica el filtrado, la redacción de privacidad y el logging acotado de la tubería 5.22.x.
+// 中文：验证 5.22.x 日志管线的过滤、隐私脱敏和有界写入。
 //
 
 import Foundation

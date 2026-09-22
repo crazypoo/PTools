@@ -69,6 +69,7 @@ bash Scripts/validate_concurrency_5_19.sh
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/validate_logging_foundation_5_20.sh
 bash Scripts/validate_logging_5_21.sh
+bash Scripts/validate_logging_5_22.sh
 bash Scripts/validate_519_package_tests_docs.sh
 bash Scripts/validate_deprecated_inventory.sh
 bash Scripts/validate_dependency_direction.sh

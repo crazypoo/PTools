@@ -1119,9 +1119,9 @@ private actor PTMainThreadStallSampler {
     }
 }
 
-// English: Recorder consumes existing Debug events and log sinks; it never installs another swizzle or collector.
-// Español: Recorder consume eventos y sumideros de logs existentes; nunca instala otro swizzle ni collector.
-// 中文：Recorder 消费现有 Debug 事件和日志 sink，不重复安装 swizzle 或 Collector。
+// English: Recorder consumes Debug events and the shared PTLogger memory stream; it never installs another swizzle or collector.
+// Español: Recorder consume eventos de Debug y el flujo de memoria compartido de PTLogger; nunca instala otro swizzle ni collector.
+// 中文：Recorder 消费 Debug 事件和共享的 PTLogger 内存流，不重复安装 swizzle 或 Collector。
 @MainActor
 public final class PTInstrumentRecorder: NSObject {
     public static let shared = PTInstrumentRecorder()
@@ -1138,8 +1138,6 @@ public final class PTInstrumentRecorder: NSObject {
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
     private var logSubscriptionTask: Task<Void, Never>?
     private var memoryLogDestination: PTMemoryLogDestination?
-#else
-    private var logSinkIdentifier: String?
 #endif
     private var durationTask: Task<Void, Never>?
 
@@ -1237,13 +1235,6 @@ public final class PTInstrumentRecorder: NSObject {
                 self?.record(log: record)
             }
         }
-#else
-        guard logSinkIdentifier == nil else { return }
-        let identifier = "ptools.instruments.logs.\(UUID().uuidString)"
-        logSinkIdentifier = identifier
-        PTLogSinkCenter.shared.install(PTLogSink(identifier: identifier) { [weak self] event in
-            self?.record(log: event)
-        })
 #endif
     }
 
@@ -1266,11 +1257,6 @@ public final class PTInstrumentRecorder: NSObject {
         logSubscriptionTask?.cancel()
         logSubscriptionTask = nil
         memoryLogDestination = nil
-#else
-        if let logSinkIdentifier {
-            PTLogSinkCenter.shared.remove(identifier: logSinkIdentifier)
-            self.logSinkIdentifier = nil
-        }
 #endif
         NotificationCenter.default.removeObserver(self)
     }
@@ -1307,18 +1293,6 @@ public final class PTInstrumentRecorder: NSObject {
                                                         name: message,
                                                         severity: log.level.rawValue.description,
                                                         metadata: metadata))
-        }
-    }
-#else
-    private func record(log: PTLogEvent) {
-        guard let session, selectedInstruments.contains(.logs) else { return }
-        let message = PTInstrumentRedactor.redactText(log.message)
-        Task {
-            await session.recordEvent(PTInstrumentEvent(kind: .logs,
-                                                        timestamp: Date(),
-                                                        name: message,
-                                                        severity: log.severity.rawValue,
-                                                        metadata: ["category": log.category]))
         }
     }
 #endif

@@ -1,0 +1,8 @@
+# English: These removals are the reviewed 5.22.1 logging compatibility closure.
+# Español: Estas eliminaciones son el cierre de compatibilidad de logging 5.22.1 revisado.
+# 中文：这些删除项是已审阅的 5.22.1 日志兼容层收口。
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|struct|PTLogSink

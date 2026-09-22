@@ -78,7 +78,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
         subspec.dependency 'SwifterSwift'
-        subspec.dependency 'CocoaLumberjack/Swift'
         subspec.dependency 'DeviceKit'
         subspec.dependency 'AttributedString'
         subspec.dependency 'IQKeyboardToolbarManager'

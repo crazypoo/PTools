@@ -62,7 +62,10 @@ require_fragment() {
 }
 
 require_fragment "PooToolsSource/Core/PTUtils.swift" "public enum PTUIKitRuntimeHooks" "Core runtime hook contract"
-require_fragment "PooToolsSource/Log/PTNSLog.swift" "public final class PTLogSinkCenter" "Core log sink contract"
+# English: The 5.22 Core adapter must expose PTLogger forwarding instead of the removed UI sink registry.
+# Español: El adaptador Core 5.22 debe exponer el reenvío a PTLogger en lugar del registro de sinks UI eliminado.
+# 中文：5.22 Core 适配层必须验证 PTLogger 转发，而不是已删除的 UI sink 注册表。
+require_fragment "PooToolsSource/Log/PTNSLog.swift" "PTLogger.log(" "Core logger forwarding contract"
 require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final class PTDebugManager" "Debug manager foundation"
 require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final class PTDebugEventCenter" "Debug event foundation"
 require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "public final class PTDebugPreferences" "Debug preference owner"

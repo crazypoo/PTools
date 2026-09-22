@@ -9,21 +9,27 @@
 import UIKit
 import Foundation
 import SwifterSwift
-import OSLog
 import os.lock
+
+#if !canImport(PToolsLogging) && !POOTOOLS_LOGGING
+import os
+#endif
 
 #if canImport(PToolsLogging)
 import PToolsLogging
 #endif
 
-// English: Prefer the Foundation-only logging contracts and keep local declarations only for direct legacy source builds.
-// Español: Prefiere los contratos de logging basados solo en Foundation y conserva declaraciones locales únicamente para compilaciones heredadas directas.
-// 中文：优先使用 Foundation-only 日志契约，仅在直接编译旧源码时保留本地声明。
+// English: Use the Foundation-only logging contracts supplied by the required PToolsCore target.
+// Español: Usa los contratos de logging basados solo en Foundation proporcionados por el target obligatorio PToolsCore.
+// 中文：使用必需的 PToolsCore target 提供的 Foundation-only 日志契约。
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
 
-#if !POOTOOLS_SPLIT_CORE && !canImport(PToolsCore)
+#if !canImport(PToolsCore) && !POOTOOLS_SPLIT_CORE
+// English: Keep the direct Example target compatible with the Foundation logging protocol without a second logging backend.
+// Español: Mantiene compatible el target Example directo con el protocolo de logging de Foundation sin un segundo backend.
+// 中文：在不引入第二套日志后端的前提下，保持 Example 直接 target 兼容 Foundation 日志协议。
 public enum PTLogSeverity: String, Sendable {
     case debug
     case info
@@ -62,58 +68,42 @@ public enum PTLogRuntimeConfiguration {
     }
 }
 
-// English: A log sink receives immutable events on MainActor and keeps the Core logger independent from optional UI diagnostics.
-// Español: Un sumidero de logs recibe eventos inmutables en MainActor y mantiene el logger de Core independiente de los diagnósticos UI opcionales.
-// 中文：日志接收器在 MainActor 接收不可变事件，让 Core 日志器与可选 UI 诊断能力解耦。
-public struct PTLogSink {
-    public let identifier: String
-    private let handler: @MainActor (PTLogEvent) -> Void
-
-    public init(identifier: String,
-                handler: @escaping @MainActor (PTLogEvent) -> Void) {
-        self.identifier = identifier
-        self.handler = handler
-    }
-
-    @MainActor
-    public func receive(_ event: PTLogEvent) {
-        handler(event)
-    }
-}
-
-// English: The registry is MainActor-isolated so installing or removing a UI sink cannot race with log delivery.
-// Español: El registro está aislado en MainActor para que instalar o quitar un sumidero UI no compita con la entrega de logs.
-// 中文：注册表隔离在 MainActor，避免 UI 日志接收器的安装、移除与投递发生数据竞争。
-@MainActor
-public final class PTLogSinkCenter {
-    public static let shared = PTLogSinkCenter()
-
-    private var sinks: [String: PTLogSink] = [:]
-
-    private init() {}
-
-    public func install(_ sink: PTLogSink) {
-        sinks[sink.identifier] = sink
-    }
-
-    public func remove(identifier: String) {
-        sinks.removeValue(forKey: identifier)
-    }
-
-    public func publish(_ event: PTLogEvent) {
-        sinks.values.forEach { $0.receive(event) }
-    }
-}
-
 public struct PTOSLogger: PTLogging {
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    private let subsystem: String
+    private let category: PTLogCategory
+#else
     private let logger: Logger
+#endif
 
     public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools",
                 category: String = "PooTools") {
-        logger = Logger(subsystem: subsystem, category: category)
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        self.subsystem = subsystem
+        self.category = PTLogCategory(rawValue: category)
+#else
+        self.logger = Logger(subsystem: subsystem, category: category)
+#endif
     }
 
     public func log(_ event: PTLogEvent) {
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        let level: PTLogLevel
+        switch event.severity {
+        case .debug:
+            level = .debug
+        case .info:
+            level = .info
+        case .warning:
+            level = .warning
+        case .error:
+            level = .error
+        }
+        PTLogger.log(event.message,
+                     level: level,
+                     category: category,
+                     metadata: ["subsystem": subsystem])
+#else
         switch event.severity {
         case .debug:
             logger.debug("\(event.message, privacy: .public)")
@@ -124,6 +114,7 @@ public struct PTOSLogger: PTLogging {
         case .error:
             logger.error("\(event.message, privacy: .public)")
         }
+#endif
     }
 }
 
@@ -216,9 +207,9 @@ public func PTNSLog(_ msg: Any...,
     
     """
     
-    // English: Forward every legacy call to the Swift 6 logger synchronously; UI consumers subscribe separately.
-    // Español: Reenvía cada llamada heredada al logger Swift 6 de forma síncrona; los consumidores UI se suscriben aparte.
-    // 中文：所有旧日志调用同步转发到 Swift 6 日志器，UI 消费者单独订阅。
+    // English: Forward calls to PTLogger when the logging target is present; direct Example builds use native OSLog.
+    // Español: Reenvía las llamadas a PTLogger cuando existe el target de logging; las compilaciones directas de Example usan OSLog nativo.
+    // 中文：日志 target 存在时转发到 PTLogger；Example 直接构建使用系统 OSLog。
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
     let logLevel: PTLogLevel
     switch levelType {
@@ -247,10 +238,7 @@ public func PTNSLog(_ msg: Any...,
                  ],
                  source: PTLogSource(file: fileName, function: fn, line: UInt(max(0, line))))
 #else
-    // English: Keep direct source builds functional without importing the optional PToolsLogging target.
-    // Español: Mantiene funcionales las compilaciones directas sin importar el target opcional PToolsLogging.
-    // 中文：在未引入可选 PToolsLogging target 的直接源码构建中保持可用。
-    let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.ptools.legacy",
+    let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.ptools.example",
                         category: loggerType.rawValue)
     switch levelType {
     case .debug:
@@ -264,24 +252,6 @@ public func PTNSLog(_ msg: Any...,
     }
 #endif
 
-    let severity: PTLogSeverity
-    switch levelType {
-    case .debug:
-        severity = .debug
-    case .warning:
-        severity = .warning
-    case .error, .critical, .fault:
-        severity = .error
-    default:
-        severity = .info
-    }
-    let event = PTLogEvent(message: logOutput,
-                           severity: severity,
-                           category: loggerType.rawValue)
-    Task { @MainActor in
-        PTLogSinkCenter.shared.publish(event)
-    }
-    
     // English: Install the canonical bounded file destination only when the legacy call requests file output.
     // Español: Instala el destino de archivos acotado y canónico solo cuando la llamada heredada solicita salida a disco.
     // 中文：只有旧入口明确要求写文件时，才安装统一的有界文件日志目标。

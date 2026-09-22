@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: d4b02fe00a18e3a2b39d69e94d389e8a57794a32
-Generated at: 2026-09-22T06:56:07Z
+Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
+Generated at: 2026-09-22T08:21:18Z
 -->
 
 # PTools 当前公开 API 清单
@@ -2351,18 +2351,18 @@ Generated at: 2026-09-22T06:56:07Z
 | PooToolsSource/Debug/PTInstruments.swift:809 | let | public | public let name: String |
 | PooToolsSource/Debug/PTInstruments.swift:833 | func | public | public func end(metadata: [String: String] = [:]) { |
 | PooToolsSource/Debug/PTInstruments.swift:863 | enum | public | public enum PTTrace { |
-| PooToolsSource/Debug/PTInstruments.swift:1151 | func | public | public func start(instruments: [PTInstrumentKind] = PTInstrumentKind.allCases, |
-| PooToolsSource/Debug/PTInstruments.swift:1201 | func | public | public func stop() async -> PTInstrumentSessionSnapshot? { |
-| PooToolsSource/Debug/PTInstruments.swift:1326 | func | public | public func record(network: PTInstrumentNetworkRecord) { |
-| PooToolsSource/Debug/PTInstruments.swift:1355 | func | public | public func recordCrashMarker(_ name: String = "crash-marker", |
-| PooToolsSource/Debug/PTInstruments.swift:1371 | func | public | public func recordLaunch(_ name: String = "launch", |
-| PooToolsSource/Debug/PTInstruments.swift:1379 | func | public | public func recordViewControllerLifecycle(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1387 | func | public | public func recordTask(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1393 | func | public | public func recordSignpost(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1399 | func | public | public func liveSnapshot() async -> PTInstrumentSessionSnapshot? { |
-| PooToolsSource/Debug/PTInstruments.swift:1404 | func | public | public func importTrace(from url: URL, |
-| PooToolsSource/Debug/PTInstruments.swift:1409 | func | public | public func replay(_ snapshot: PTInstrumentSessionSnapshot, |
-| PooToolsSource/Debug/PTInstruments.swift:1414 | func | public | public func compare(_ left: PTInstrumentSessionSnapshot, |
+| PooToolsSource/Debug/PTInstruments.swift:1149 | func | public | public func start(instruments: [PTInstrumentKind] = PTInstrumentKind.allCases, |
+| PooToolsSource/Debug/PTInstruments.swift:1199 | func | public | public func stop() async -> PTInstrumentSessionSnapshot? { |
+| PooToolsSource/Debug/PTInstruments.swift:1300 | func | public | public func record(network: PTInstrumentNetworkRecord) { |
+| PooToolsSource/Debug/PTInstruments.swift:1329 | func | public | public func recordCrashMarker(_ name: String = "crash-marker", |
+| PooToolsSource/Debug/PTInstruments.swift:1345 | func | public | public func recordLaunch(_ name: String = "launch", |
+| PooToolsSource/Debug/PTInstruments.swift:1353 | func | public | public func recordViewControllerLifecycle(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1361 | func | public | public func recordTask(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1367 | func | public | public func recordSignpost(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1373 | func | public | public func liveSnapshot() async -> PTInstrumentSessionSnapshot? { |
+| PooToolsSource/Debug/PTInstruments.swift:1378 | func | public | public func importTrace(from url: URL, |
+| PooToolsSource/Debug/PTInstruments.swift:1383 | func | public | public func replay(_ snapshot: PTInstrumentSessionSnapshot, |
+| PooToolsSource/Debug/PTInstruments.swift:1388 | func | public | public func compare(_ left: PTInstrumentSessionSnapshot, |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:12 | var | public | public var onSelectEvent: ((PTInstrumentEvent) -> Void)? |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:13 | var | public | public var query: String = "" { |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:32 | func | public | public func update(snapshot: PTInstrumentSessionSnapshot) { |
@@ -3485,37 +3485,37 @@ Generated at: 2026-09-22T06:56:07Z
 | PooToolsSource/LocalConsole/LocalConsole.swift:31 | let | public | public let systemLog_base_height:CGFloat = 148 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:32 | let | public | public let borderLine:CGFloat = 5 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:33 | let | public | public let diameter:CGFloat = 28 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:269 | enum | public | public enum PTLogLevel: CaseIterable { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:304 | struct | public | public struct LogItem { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:394 | enum | public | @objc public enum LocalConsoleActionType : Int { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:404 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
-| PooToolsSource/LocalConsole/LocalConsole.swift:408 | class | public | public class LocalConsole: NSObject { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:458 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:463 | func | public | public func clearDebugPlugins() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:493 | var | public | public var logCategoryFilter: Set<String> = [] { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:496 | var | public | public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:499 | var | public | public var logKeywordFilter: String = "" { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:503 | var | public | public var closeAllOutsideFunction:PTActionTask? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:504 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:509 | var | public | public var networkStatus = "" |
-| PooToolsSource/LocalConsole/LocalConsole.swift:511 | var | public | public var menu: UIMenuElement? = nil { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:519 | var | public | @MainActor public var isVisiable:Bool = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:572 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:577 | func | public | public func setAttFontColor(color:UIColor) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:581 | var | public | public var terminal:PTTerminal? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:582 | var | public | public var maskView:PTDevMaskView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:590 | var | public | public var showAllUserDefaultsKeys = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:735 | func | public | @MainActor public func cleanSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:899 | func | public | @MainActor public func createSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:986 | var | public | public var isCharacterLimitDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:987 | var | public | public var isCharacterLimitWarningDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:989 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1080 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1156 | func | public | public func clear() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1658 | class | public | public class PTTerminal:PFloatingButton { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1659 | var | public | public var systemText : PTInvertedTextView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1738 | func | public | public func setAttributedText(_ string: String) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1755 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:269 | enum | public | public enum PTLogLevel: CaseIterable, Hashable { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:288 | struct | public | public struct LogItem { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:378 | enum | public | @objc public enum LocalConsoleActionType : Int { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:388 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
+| PooToolsSource/LocalConsole/LocalConsole.swift:392 | class | public | public class LocalConsole: NSObject { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:442 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:447 | func | public | public func clearDebugPlugins() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:475 | var | public | public var logCategoryFilter: Set<String> = [] { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:478 | var | public | public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:481 | var | public | public var logKeywordFilter: String = "" { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:485 | var | public | public var closeAllOutsideFunction:PTActionTask? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:486 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:491 | var | public | public var networkStatus = "" |
+| PooToolsSource/LocalConsole/LocalConsole.swift:493 | var | public | public var menu: UIMenuElement? = nil { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:501 | var | public | @MainActor public var isVisiable:Bool = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:554 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:559 | func | public | public func setAttFontColor(color:UIColor) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:563 | var | public | public var terminal:PTTerminal? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:564 | var | public | public var maskView:PTDevMaskView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:572 | var | public | public var showAllUserDefaultsKeys = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:708 | func | public | @MainActor public func cleanSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:872 | func | public | @MainActor public func createSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:959 | var | public | public var isCharacterLimitDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:960 | var | public | public var isCharacterLimitWarningDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:962 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1053 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1129 | func | public | public func clear() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1631 | class | public | public class PTTerminal:PFloatingButton { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1632 | var | public | public var systemText : PTInvertedTextView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1711 | func | public | public func setAttributedText(_ string: String) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1728 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:11 | class | public | public class PTInvertedTextView: UITextView { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:13 | var | public | public var pendingOffsetChange = false |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:26 | var | public | public var cancelNextContentSizeDidSet = false |
@@ -3552,38 +3552,31 @@ Generated at: 2026-09-22T06:56:07Z
 | PooToolsSource/Log/Logger+PTEX.swift:15 | enum | public | public enum LoggerEXType: String, CaseIterable,Sendable { |
 | PooToolsSource/Log/Logger+PTEX.swift:60 | enum | public | @objc public enum LoggerEXLevelType: Int, CaseIterable, Sendable { |
 | PooToolsSource/Log/Logger+PTEX.swift:71 | var | public | public var PTLogMode: LoggerEXLevelType { |
-| PooToolsSource/Log/PTLogFileManager.swift:4 | actor | public | public actor PTLogFileManager { |
-| PooToolsSource/Log/PTLogFileManager.swift:11 | func | public | public func append(logText: String) { |
-| PooToolsSource/Log/PTNSLog.swift:27 | enum | public | public enum PTLogSeverity: String, Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:34 | struct | public | public struct PTLogEvent: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:35 | let | public | public let message: String |
-| PooToolsSource/Log/PTNSLog.swift:36 | let | public | public let severity: PTLogSeverity |
-| PooToolsSource/Log/PTNSLog.swift:37 | let | public | public let category: String |
-| PooToolsSource/Log/PTNSLog.swift:39 | init | public | public init(message: String, |
-| PooToolsSource/Log/PTNSLog.swift:48 | protocol | public | public protocol PTLogging: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:56 | enum | public | public enum PTLogRuntimeConfiguration { |
-| PooToolsSource/Log/PTNSLog.swift:68 | struct | public | public struct PTLogSink { |
-| PooToolsSource/Log/PTNSLog.swift:69 | let | public | public let identifier: String |
-| PooToolsSource/Log/PTNSLog.swift:72 | init | public | public init(identifier: String, |
-| PooToolsSource/Log/PTNSLog.swift:79 | func | public | public func receive(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:95 | func | public | public func install(_ sink: PTLogSink) { |
-| PooToolsSource/Log/PTNSLog.swift:99 | func | public | public func remove(identifier: String) { |
-| PooToolsSource/Log/PTNSLog.swift:103 | func | public | public func publish(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:108 | struct | public | public struct PTOSLogger: PTLogging { |
-| PooToolsSource/Log/PTNSLog.swift:111 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
-| PooToolsSource/Log/PTNSLog.swift:116 | func | public | public func log(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:164 | func | public | public func prettyJSONString(from object: Any) -> String? { |
-| PooToolsSource/Log/PTNSLog.swift:179 | func | public | public func PTNSLogConsole(_ any: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:193 | func | public | public func PTNSLog(_ msg: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:300 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
-| PooToolsSource/Log/PTNSLog.swift:312 | func | public | public func PTPrint<T>(val: inout T, |
-| PooToolsSource/Log/PTNSLog.swift:329 | func | public | public func PTPrint<T>(ref: T, |
-| PooToolsSource/Log/PTNSLog.swift:347 | enum | public | public enum PTMemAlign : Int { |
-| PooToolsSource/Log/PTNSLog.swift:356 | struct | public | public struct PTMems<T> { |
-| PooToolsSource/Log/PTNSLog.swift:461 | enum | public | public enum PTStringMemType : UInt8 { |
-| PooToolsSource/Log/PTNSLog.swift:472 | struct | public | public struct PTMemsWrapper<Base> { |
-| PooToolsSource/Log/PTNSLog.swift:474 | init | public | public init(_ base: Base) { |
-| PooToolsSource/Log/PTNSLog.swift:479 | protocol | public | public protocol PTMemsCompatible {} |
+| PooToolsSource/Log/PTLogFileManager.swift:14 | actor | public | public actor PTLogFileManager { |
+| PooToolsSource/Log/PTLogFileManager.swift:19 | func | public | public func append(logText: String) { |
+| PooToolsSource/Log/PTNSLog.swift:33 | enum | public | public enum PTLogSeverity: String, Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:40 | struct | public | public struct PTLogEvent: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:41 | let | public | public let message: String |
+| PooToolsSource/Log/PTNSLog.swift:42 | let | public | public let severity: PTLogSeverity |
+| PooToolsSource/Log/PTNSLog.swift:43 | let | public | public let category: String |
+| PooToolsSource/Log/PTNSLog.swift:45 | init | public | public init(message: String, |
+| PooToolsSource/Log/PTNSLog.swift:54 | protocol | public | public protocol PTLogging: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:62 | enum | public | public enum PTLogRuntimeConfiguration { |
+| PooToolsSource/Log/PTNSLog.swift:71 | struct | public | public struct PTOSLogger: PTLogging { |
+| PooToolsSource/Log/PTNSLog.swift:79 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
+| PooToolsSource/Log/PTNSLog.swift:89 | func | public | public func log(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:155 | func | public | public func prettyJSONString(from object: Any) -> String? { |
+| PooToolsSource/Log/PTNSLog.swift:170 | func | public | public func PTNSLogConsole(_ any: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:184 | func | public | public func PTNSLog(_ msg: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:270 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
+| PooToolsSource/Log/PTNSLog.swift:282 | func | public | public func PTPrint<T>(val: inout T, |
+| PooToolsSource/Log/PTNSLog.swift:299 | func | public | public func PTPrint<T>(ref: T, |
+| PooToolsSource/Log/PTNSLog.swift:317 | enum | public | public enum PTMemAlign : Int { |
+| PooToolsSource/Log/PTNSLog.swift:326 | struct | public | public struct PTMems<T> { |
+| PooToolsSource/Log/PTNSLog.swift:431 | enum | public | public enum PTStringMemType : UInt8 { |
+| PooToolsSource/Log/PTNSLog.swift:442 | struct | public | public struct PTMemsWrapper<Base> { |
+| PooToolsSource/Log/PTNSLog.swift:444 | init | public | public init(_ base: Base) { |
+| PooToolsSource/Log/PTNSLog.swift:449 | protocol | public | public protocol PTMemsCompatible {} |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:34 | func | public | public func start() { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:40 | func | public | public func stop() { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:46 | func | public | public func invalidate() { |

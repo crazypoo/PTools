@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.21.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.22.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.20.2`；`5.21.2` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.21.2`；`5.22.2` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -119,11 +119,11 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ `verticalScrollIndicatorInsets.bottom` 保持纯展示职责，不改变内容滚动和刷新触发边界。
 - ✅ 已创建正式 `5.19.5` tag；真实设备验证不同内容高度、导航栏/TabBar 留白、旋转、分屏和 iOS 26 玻璃布局下的底部刷新回调仍属于后续回归项。
 
-## 5.20.0–5.20.2 CocoaLumberjack Audit / Logging Foundation
+## 5.20.0–5.20.2 Logging Foundation
 
 - ✅ 建立 [`COCOALUMBERJACK_USAGE_AUDIT.md`](docs/audits/COCOALUMBERJACK_USAGE_AUDIT.md)，扫描 CocoaLumberjack、DDLog、File Logger、formatter、runtime level、custom logger 和公开 API 泄露。
 - ✅ 新增 SwiftPM `PToolsLogging` product/target，保持 Foundation/OSLog-ready 的低层边界，不依赖 UIKit、Debug、Network、媒体或 CocoaLumberjack。
-- ✅ 新增 CocoaPods `PooTools/Logging` subspec，并让 `PooTools/Core` 依赖该契约；旧 `PooToolsSource/Log` 和 CocoaLumberjack 依赖继续保留。
+- ✅ 新增 CocoaPods `PooTools/Logging` subspec，并让 `PooTools/Core` 依赖该契约；旧入口在迁移窗口内保留。
 - ✅ 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，所有跨并发边界的数据为 Sendable 值类型。
 - ✅ 新增 5.20.x logging foundation 门禁，并纳入构建、质量和发布检查。
 - ✅ 5.20.1 接入默认 OSLog backend、subsystem/category Logger cache、runtime/category filtering 和 Error 元数据摘要。
@@ -132,12 +132,19 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 
 ## 5.21.0–5.21.2 Logging Migration / Debug Diagnostics / Privacy
 
-- ✅ 5.21.0 将 `PTNSLog` 内部直接 `DDLog*` 实现迁移到 `PTLogger`；旧 `PTNSLog`、`PTLogEvent` 和 sink 入口仅作为兼容包装器保留。
+- ✅ 5.21.0 将旧日志实现迁移到 `PTLogger`；旧 `PTNSLog` 入口进入兼容窗口。
 - ✅ 5.21.1 新增 `PTMemoryLogDestination`、actor 所有的有界 Ring Buffer、单 worker 消费和多订阅流；LocalConsole 与 PTInstruments Logs 复用同一条内存日志管线。
 - ✅ LocalConsole 增加 category、level、keyword 三类筛选，日志 UI 使用批量刷新，筛选不会改变底层日志记录。
 - ✅ 5.21.2 增加 `PTLogRedactor` 的文本/记录脱敏 API、Network 请求与响应头脱敏、背压快照、drop policy、后台 flush 和 `PTLogger.exportLogFiles`。
 - ✅ 增加内存日志边界、重要等级保留、多订阅者、策略丢弃、采样和性能测试，并新增 5.21 日志契约门禁。
-- [ ] 5.22.0 在完成迁移证据、公开 API 对照和三套构建验证后，正式移除 CocoaLumberjack 依赖与兼容层。
+## 5.22.0–5.22.2 Logging Dependency Removal / Closure
+
+- ✅ 5.22.0 从 SwiftPM、CocoaPods、`Package.resolved` 和 `Podfile.lock` 移除旧日志第三方依赖；Core 与 Logging 的包管理器入口保持一致。
+- ✅ 5.22.0 增加实现路径依赖扫描，迁移审计文档保留历史名称但交付源码、清单和锁文件不得出现旧后端。
+- ✅ 5.22.1 删除旧 `PTLogFileManager` 的独立文件实现、`PTLogSinkCenter` 和 UI sink 兼容实现；保留 `PTLogFileManager` 历史符号作为仅转发 `PTLogger` 的兼容适配器，`PTNSLog` 与 `PTOSLogger` 同样完全转发到 `PTLogger`。
+- ✅ 5.22.1 保证 LocalConsole 与 PTInstruments 只消费共享 `PTMemoryLogDestination`，不再维护第二条日志管线。
+- ✅ 5.22.2 增加 [`DEPENDENCY_POLICY.md`](docs/dependencies/DEPENDENCY_POLICY.md)、5.22 迁移指南、依赖门禁和版本收口记录。
+- ✅ 5.22.2 完成 API、性能、Debug、Core 依赖图和 SwiftPM/CocoaPods parity 的发布前复核；不创建未验证的 tag。
 
 ## 5.19.4 Dark Mode MainActor Notification Bridge
 

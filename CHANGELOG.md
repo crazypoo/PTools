@@ -1,14 +1,23 @@
 # Changelog
 
-## Unreleased — 5.21.x
+## Unreleased — 5.22.x
 
-当前开发基线为 `5.21.2`；版本唯一来源为根目录 `VERSION`，5.20.2 是最近的正式基线。
+当前开发基线为 `5.22.2`；版本唯一来源为根目录 `VERSION`，`5.21.2` 是最近的正式基线。
+
+- 5.22.0 从 SwiftPM、CocoaPods、`Package.resolved` 和 `Podfile.lock` 移除旧日志第三方依赖，新增实现路径扫描，确保交付源码不再直接依赖旧后端。
+- 5.22.1 删除旧文件日志管理器的独立实现和 UI sink 兼容实现；`PTLogFileManager` 历史符号保留为仅转发 `PTLogger` 的适配器，`PTNSLog`、`PTOSLogger` 入口和 Debug UI 共用统一日志管线。
+- 5.22.2 增加依赖策略、迁移指南、5.22 日志门禁和依赖矩阵复核，完成 API、性能、Debug、Core 与 SwiftPM/CocoaPods parity 收口。
 
 - 5.21.0 将 PTools 生产 Swift 内部的直接 `DDLog*` 实现迁移到 `PTLogger`；`PTNSLog`、`PTLogEvent` 和旧 sink 继续作为兼容包装器保留。
 - 5.21.1 新增有界 `PTMemoryLogDestination`、actor 所有的 Ring Buffer 和多订阅流；LocalConsole 与 PTInstruments Logs 复用同一个内存数据源。
 - LocalConsole 增加 category、level 和关键字筛选，UI 更新改为批量刷新，不改变旧调试入口。
 - 5.21.2 增加日志隐私脱敏 API、Network 请求/响应头脱敏、背压计数、drop policy、后台 worker、文件导出 API 和内存日志性能测试。
 - 新增 `PToolsLoggingTests` 对内存容量、重要等级保留、多订阅者、丢弃策略、采样策略、脱敏和性能路径进行验证。
+
+## 5.21.2 — 2026-09-22
+
+- 完成日志隐私脱敏、Network 请求/响应头脱敏、背压计数、drop policy、后台 worker、文件导出 API 和内存日志性能测试。
+- LocalConsole 与 PTInstruments 接入共享有界内存日志目标，旧公开日志入口进入 5.22.x 收口窗口。
 
 ## 5.20.2 — 2026-09-22
 

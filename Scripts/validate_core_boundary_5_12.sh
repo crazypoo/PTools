@@ -45,8 +45,12 @@ if ! rg -q '!POOTOOLS_SPLIT_CORE && !canImport\(PToolsCore\)' PooToolsSource/Cor
   failures+=("legacy MainActor bridge is missing its split-core compatibility boundary")
 fi
 
-if ! rg -q '!POOTOOLS_SPLIT_CORE && !canImport\(PToolsCore\)' PooToolsSource/Log/PTNSLog.swift; then
-  failures+=("legacy logger is missing its split-core compatibility boundary")
+# English: The 5.22 logger no longer carries a source-only fallback; it imports the canonical Core contract when available.
+# Español: El logger 5.22 ya no lleva un fallback solo de código fuente; importa el contrato canónico de Core cuando está disponible.
+# 中文：5.22 日志器不再保留仅源码回退，而是在可用时导入 Core 的 canonical 契约。
+if ! rg -q '!POOTOOLS_SPLIT_CORE && !canImport\(PToolsCore\)' PooToolsSource/Log/PTNSLog.swift \
+   && ! rg -q '#if canImport\(PToolsCore\)' PooToolsSource/Log/PTNSLog.swift; then
+  failures+=("legacy logger is missing its PToolsCore forwarding boundary")
 fi
 
 if ((${#failures[@]} > 0)); then

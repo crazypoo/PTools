@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 7c396199a48eb9f36883b9633dd19df597b0b5e8
-Generated at: 2026-09-22T05:12:07Z
-Version source: 5.21.2
+Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
+Generated at: 2026-09-22T07:22:01Z
+Version source: 5.22.2
 -->
 
 # Direct Dependency Matrix
@@ -29,7 +29,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
-| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `CocoaLumberjack/Swift`, `CocoaLumberjackSwift`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `SwifterSwift`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `SwifterSwift`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | — | No direct third-party dependency | Deprecate alias |

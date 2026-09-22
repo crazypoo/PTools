@@ -247,8 +247,8 @@ final class PTConsoleWindow: UIWindow {
 }
 
 // English: Reuse the shared logging level when the logging target is available.
-// Español: Reutiliza el nivel de logging compartido cuando el objetivo de logging está disponible.
-// 中文：日志目标可用时复用统一日志等级。
+// Español: Reutiliza el nivel de logging compartido cuando el target de logging está disponible.
+// 中文：日志 target 可用时复用统一日志等级。
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
 private extension PTLogLevel {
     var color: UIColor {
@@ -263,10 +263,10 @@ private extension PTLogLevel {
     }
 }
 #else
-// English: Keep a source-only compatibility level for the Example target's direct compilation.
-// Español: Conserva un nivel de compatibilidad solo de código fuente para la compilación directa del target Example.
-// 中文：为 Example 目标直接编译保留仅源码级兼容日志等级。
-public enum PTLogLevel: CaseIterable {
+// English: Keep a tiny display-only level for the direct Example target, which does not compile PToolsLogging sources.
+// Español: Conserva un nivel mínimo solo para mostrar logs en el target Example directo, que no compila las fuentes de PToolsLogging.
+// 中文：为未编译 PToolsLogging 源码的 Example 直接 target 保留仅用于展示的最小日志等级。
+public enum PTLogLevel: CaseIterable, Hashable {
     case info
     case warning
     case error
@@ -283,22 +283,6 @@ public enum PTLogLevel: CaseIterable {
     }
 }
 #endif
-
-// English: Convert the Core log severity into the console's existing presentation level.
-// Español: Convierte la severidad del log de Core al nivel de presentación existente de la consola.
-// 中文：将 Core 日志严重级别转换为控制台现有的展示级别。
-private extension PTLogLevel {
-    init(severity: PTLogSeverity) {
-        switch severity {
-        case .debug, .info:
-            self = .info
-        case .warning:
-            self = .warning
-        case .error:
-            self = .error
-        }
-    }
-}
 
 public final class PTLogBuffer {
     public struct LogItem {
@@ -483,8 +467,6 @@ public class LocalConsole: NSObject {
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
     private var memoryLogDestination: PTMemoryLogDestination?
     private var memoryLogTask: Task<Void, Never>?
-#else
-    private let logSinkIdentifier = "LocalConsole." + UUID().uuidString
 #endif
 
     // English: These filters are applied to the bounded buffer before any text reaches the console view.
@@ -678,13 +660,6 @@ public class LocalConsole: NSObject {
                 self.print(record)
             }
         }
-#else
-        PTLogSinkCenter.shared.install(
-            PTLogSink(identifier: logSinkIdentifier) { [weak self] event in
-                guard let self, self.isVisiable else { return }
-                self.print(event.message, level: PTLogLevel(severity: event.severity))
-            }
-        )
 #endif
         debugEventObserverToken = PTDebugEventCenter.shared.addObserver { [weak self] event in
             guard event.name == "network.status",
@@ -700,8 +675,6 @@ public class LocalConsole: NSObject {
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
         memoryLogTask?.cancel()
         memoryLogTask = nil
-#else
-        PTLogSinkCenter.shared.remove(identifier: logSinkIdentifier)
 #endif
         if let debugEventObserverToken {
             PTDebugEventCenter.shared.removeObserver(debugEventObserverToken)

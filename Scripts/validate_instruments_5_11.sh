@@ -35,7 +35,10 @@ require_fragment "$instrument_file" "public struct PTInstrumentSamplingPolicy" "
 require_fragment "$instrument_file" "public enum PTInstrumentTraceStore" "trace storage contract"
 require_fragment "$instrument_file" "public enum PTInstrumentRedactor" "export redaction contract"
 require_fragment "$instrument_file" "PTDebugEventCenter.shared.addObserver" "existing Debug event bridge"
-require_fragment "$instrument_file" "PTLogSinkCenter.shared.install" "existing Core log sink bridge"
+# English: Instruments consumes the shared bounded PTLogger memory destination.
+# Español: Instruments consume el destino de memoria acotado y compartido de PTLogger.
+# 中文：Instruments 消费共享的有界 PTLogger 内存日志目标。
+require_fragment "$instrument_file" "PTLogger.memoryDestination() ?? PTLogger.installMemoryDestination()" "shared PTLogger memory bridge"
 require_fragment "$instrument_file" "public func recordCrashMarker" "safe explicit crash marker"
 require_fragment "$instrument_file" "CADisplayLink" "display-link performance sampling"
 require_fragment "$instrument_file" "await MainActor.run { () }" "cancellable main-thread stall probe"

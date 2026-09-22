@@ -178,7 +178,6 @@ let package = Package(
         .package(url: "https://github.com/malcommac/SwiftDate.git", exact: "7.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.7.1"),
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "8.0.0"),
-        .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.0"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
         .package(url: "https://github.com/lixiang1994/AttributedString.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
@@ -216,9 +215,9 @@ let package = Package(
 
     ],
     targets: [
-        // English: Keep logging below UIKit, Debug, CocoaLumberjack, and feature modules.
-        // Español: Mantén logging por debajo de UIKit, Debug, CocoaLumberjack y los módulos de funciones.
-        // 中文：让日志层位于 UIKit、Debug、CocoaLumberjack 和功能模块之下。
+        // English: Keep logging below UIKit, Debug and feature modules.
+        // Español: Mantén logging por debajo de UIKit, Debug y los módulos de funciones.
+        // 中文：让日志层位于 UIKit、Debug 和功能模块之下。
         .target(
             name: "PToolsLogging",
             path: "PooToolsSource/PToolsLogging",
@@ -297,7 +296,6 @@ let package = Package(
                 "SwiftDate",
                 "SnapKit",
                 "SwifterSwift",
-                .product(name: "CocoaLumberjackSwift", package: "CocoaLumberjack"),
                 "DeviceKit",
                 "AttributedString",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),

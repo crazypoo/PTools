@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Validate the 5.21 logging migration, Debug bridge and privacy contracts.
-# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21.
-# 中文：校验 5.21 日志迁移、Debug 桥接和隐私契约。
+# English: Validate the 5.21–5.22 logging migration, Debug bridge and privacy contracts.
+# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21–5.22.
+# 中文：校验 5.21–5.22 日志迁移、Debug 桥接和隐私契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.21\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.21 logging gate requires a 5.21.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(21|22)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.21/5.22 logging gate requires a 5.21.x or 5.22.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -28,16 +28,16 @@ required_files=(
 )
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || {
-    printf 'FAIL: 5.21 logging file is missing: %s\n' "$file" >&2
+    printf 'FAIL: 5.21/5.22 logging file is missing: %s\n' "$file" >&2
     exit 1
   }
 done
 
-# English: CocoaLumberjack remains a compatibility dependency, but PTools production Swift no longer calls it directly.
-# Español: CocoaLumberjack sigue siendo una dependencia de compatibilidad, pero Swift de producción ya no la llama directamente.
-# 中文：CocoaLumberjack 仍作为兼容依赖保留，但 PTools 生产 Swift 不再直接调用它。
+# English: PTools production Swift must route logging through PTLogger; legacy backend calls are forbidden.
+# Español: El Swift de producción de PTools debe dirigir el logging por PTLogger; se prohíben los backends heredados.
+# 中文：PTools 生产 Swift 必须统一通过 PTLogger 记录日志，禁止调用旧日志后端。
 if rg -n --glob '*.swift' 'DDLog|import CocoaLumberjack' PooToolsSource; then
-  printf 'FAIL: direct CocoaLumberjack usage remains in PooTools production Swift\n' >&2
+  printf 'FAIL: direct legacy logging usage remains in PooTools production Swift\n' >&2
   exit 1
 fi
 
@@ -59,9 +59,9 @@ for requirement in "${required_patterns[@]}"; do
   file="${requirement%%|*}"
   pattern="${requirement#*|}"
   rg -q --fixed-strings "$pattern" "$file" || {
-    printf 'FAIL: 5.21 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
+    printf 'FAIL: 5.21/5.22 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
     exit 1
   }
 done
 
-printf 'PASS: PTools 5.21 logging migration, memory diagnostics and privacy contracts\n'
+printf 'PASS: PTools 5.21/5.22 logging migration, memory diagnostics and privacy contracts\n'

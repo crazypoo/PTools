@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "d4b02fe00a18e3a2b39d69e94d389e8a57794a32",
-  "generated_at": "2026-09-22T06:56:09Z",
-  "shared_call_count": 1538,
+  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
+  "generated_at": "2026-09-22T08:21:18Z",
+  "shared_call_count": 1533,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -565,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 409,
+      "line": 393,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -619,17 +619,8 @@
     },
     {
       "path": "PooToolsSource/Log/PTLogFileManager.swift",
-      "line": 5,
+      "line": 15,
       "declaration": "public static let shared = PTLogFileManager()",
-      "name": "shared",
-      "category": "C",
-      "scope": "Shared mutable service",
-      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
-    },
-    {
-      "path": "PooToolsSource/Log/PTNSLog.swift",
-      "line": 89,
-      "declaration": "public static let shared = PTLogSinkCenter()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

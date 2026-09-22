@@ -9,6 +9,13 @@ unless old_path && new_path
   exit 2
 end
 
+# English: Allow only removals explicitly reviewed for a release migration.
+# Español: Permite solo las eliminaciones revisadas explícitamente para una migración de release.
+# 中文：只允许发布迁移中明确审阅并登记的删除项。
+allowlist_path = options.filter_map do |option|
+  option.delete_prefix("--allow-removals-file=") if option.start_with?("--allow-removals-file=")
+end.first
+
 def entries(path)
   JSON.parse(File.read(path)).fetch("declarations", []).map do |entry|
     declaration = entry.fetch("declaration").to_s.gsub(/\s+/, " ")
@@ -50,4 +57,20 @@ unless removed.empty?
   removed.each { |entry| warn "- #{entry}" }
 end
 
-exit 1 if !removed.empty? && !options.include?("--allow-removals")
+if allowlist_path
+  allowlisted = File.readlines(allowlist_path, chomp: true)
+    .reject { |line| line.match?(/^\s*(#|$)/) }
+    .to_set
+  removed_set = removed.to_set
+  unexpected = removed_set - allowlisted
+  stale = allowlisted - removed_set
+  unless unexpected.empty? && stale.empty?
+    warn "Allowlisted API removals do not match the current diff"
+    warn "Unexpected removals: #{unexpected.sort.inspect}" unless unexpected.empty?
+    warn "Stale allowlist entries: #{stale.sort.inspect}" unless stale.empty?
+    exit 1
+  end
+  puts "Allowlisted removals: #{removed.length}"
+end
+
+exit 1 if !removed.empty? && !options.include?("--allow-removals") && !allowlist_path

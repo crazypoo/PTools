@@ -1,5 +1,5 @@
 {
-  "originHash" : "30c8e9bf2b669dc7e74d992592c04ac8ebdb7c2115cf55808bb0568a10c8c053",
+  "originHash" : "98b84c84d4f041ade796669376cb40fef5a2c56693281bed8549d28e1d7d2e67",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -43,15 +43,6 @@
       "state" : {
         "revision" : "f40325520344a966523b214394aa350132a6af68",
         "version" : "1.0.203"
-      }
-    },
-    {
-      "identity" : "cocoalumberjack",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
-      "state" : {
-        "revision" : "c5f2ed4d219866117e135cf648180dc7b66739d3",
-        "version" : "3.9.1"
       }
     },
     {

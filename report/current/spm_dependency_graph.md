@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: d4b02fe00a18e3a2b39d69e94d389e8a57794a32
-Generated at: 2026-09-22T06:58:22Z
+Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
+Generated at: 2026-09-22T08:21:44Z
 -->
 
 # SwiftPM Dependency Graph
@@ -14,7 +14,7 @@ Generated at: 2026-09-22T06:58:22Z
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
 - Target count: `97`
-- Core direct third-party dependencies: `13` (baseline `18`)
+- Core direct third-party dependencies: `12` (baseline `18`)
 
 ## Products
 
@@ -212,7 +212,7 @@ Generated at: 2026-09-22T06:58:22Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsUIFoundation | AttributedString, CocoaLumberjackSwift, DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate, SwifterSwift | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsUIFoundation | AttributedString, DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate, SwifterSwift | 28 source entries / 1 resources |
 
 ## Notes
 

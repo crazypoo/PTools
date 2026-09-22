@@ -2,12 +2,14 @@
 
 set -euo pipefail
 
-# English: Compare the current public API against the latest formal release baseline.
-# Español: Compara la API pública actual con la línea base de la última versión formal.
-# 中文：将当前公开 API 与最新正式版本基线比较。
+# English: Compare the current public API against the latest formal release baseline and reviewed migrations.
+# Español: Compara la API pública actual con la línea base formal y las migraciones revisadas.
+# 中文：将当前公开 API 与最新正式版本基线及已审阅迁移进行比较。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
+
+version="$(tr -d '[:space:]' < VERSION)"
 
 latest_tag="$(git tag --list | ruby -e 'require "rubygems"; tags = STDIN.readlines(chomp: true).select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")')"
 [[ -n "$latest_tag" ]] || { printf 'FAIL: no semantic release tag is available\n' >&2; exit 1; }
@@ -34,7 +36,12 @@ fi
 
 comparison="$(mktemp)"
 trap 'rm -f "$comparison"' EXIT
-if ruby Scripts/compare_public_api.rb "$baseline" report/current/public_api.json >"$comparison" 2>&1; then
+removal_allowlist="api-baseline/removals_${version}.txt"
+comparison_args=("$baseline" "report/current/public_api.json")
+if [[ -f "$removal_allowlist" ]]; then
+  comparison_args+=("--allow-removals-file=$removal_allowlist")
+fi
+if ruby Scripts/compare_public_api.rb "${comparison_args[@]}" >"$comparison" 2>&1; then
   cat "$comparison"
 else
   cat "$comparison"

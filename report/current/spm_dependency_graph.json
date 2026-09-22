@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "d4b02fe00a18e3a2b39d69e94d389e8a57794a32",
-  "generated_at": "2026-09-22T06:58:22Z",
+  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
+  "generated_at": "2026-09-22T08:21:44Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1163,34 +1163,6 @@
     {
       "sourceControl": [
         {
-          "identity": "cocoalumberjack",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/CocoaLumberjack/CocoaLumberjack.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "3.8.0",
-                "upperBound": "4.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "collectionviewpaginglayout",
           "location": {
             "remote": [
@@ -1802,7 +1774,7 @@
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 13,
+    "direct_third_party_count": 12,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -6369,19 +6341,6 @@
           "declaration": {
             "byName": [
               "AttributedString",
-              null
-            ]
-          }
-        },
-        {
-          "name": "CocoaLumberjackSwift",
-          "kind": "third_party",
-          "package": "CocoaLumberjack",
-          "declaration": {
-            "product": [
-              "CocoaLumberjackSwift",
-              "CocoaLumberjack",
-              null,
               null
             ]
           }
