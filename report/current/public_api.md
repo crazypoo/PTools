@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
-Generated at: 2026-09-22T04:15:36Z
+Source revision: 7c396199a48eb9f36883b9633dd19df597b0b5e8
+Generated at: 2026-09-22T05:30:01Z
 -->
 
 # PTools 当前公开 API 清单
@@ -4238,8 +4238,29 @@ Generated at: 2026-09-22T04:15:36Z
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:96 | var | public | public var subsystem: String |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:98 | init | public | public init(minimumLevel: PTLogLevel = { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:112 | func | public | public func minimumLevel(for category: PTLogCategory) -> PTLogLevel { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:117 | protocol | public | public protocol PTLogDestination: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:120 | struct | public | public struct PTLogFileConfiguration: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:121 | let | public | public let directoryURL: URL |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:122 | let | public | public let maximumFileSize: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:123 | let | public | public let maximumFileAge: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:124 | let | public | public let maximumFiles: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:125 | let | public | public let retentionDays: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:126 | let | public | public let maximumTotalSize: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:127 | let | public | public let bufferCapacity: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:128 | let | public | public let bufferSize: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:129 | let | public | public let flushInterval: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:131 | init | public | public init(directoryURL: URL? = nil, |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:155 | protocol | public | public protocol PTLogDestination: Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogger.swift:13 | enum | public | public enum PTLogger { |
+| PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:13 | let | public | public let identifier: String |
+| PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:54 | init | public | public init(identifier: String = "ptools.file", |
+| PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:85 | func | public | public func append(_ record: PTLogRecord) { |
+| PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:90 | func | public | public func flush() async { |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:14 | struct | public | public struct PTOSLogDestination: PTLogDestination { |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:17 | let | public | public let identifier: String |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:19 | init | public | public init(identifier: String = PTOSLogDestination.defaultIdentifier) { |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:23 | func | public | public func append(_ record: PTLogRecord) { |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:30 | func | public | public func flush() async {} |
+| PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift:12 | enum | public | public enum PTLogRedactor { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:10 | enum | public | public enum PTMediaResource: Hashable, Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:20 | enum | public | public enum PTMediaType: String, Hashable, Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:33 | struct | public | public struct PTMediaMetadata: Hashable, Sendable { |

@@ -1,8 +1,10 @@
 # PToolsLogging
 
-<!-- English: This target contains only the logging contract and synchronous facade for 5.20.0. -->
-<!-- Español: Este target contiene únicamente el contrato de logging y la fachada síncrona de 5.20.0. -->
-<!-- 中文：此 target 在 5.20.0 只包含日志契约和同步门面。 -->
+<!-- English: This target contains the 5.20.x logging contract, OSLog backend and opt-in file destination. -->
+<!-- Español: Este target contiene el contrato de logging 5.20.x, el backend OSLog y el destino de archivos opcional. -->
+<!-- 中文：此 target 在 5.20.x 包含日志契约、OSLog 后端和可选文件日志目标。 -->
 
-`PToolsLogging` is the foundation for the later OSLog, file, memory and Debug
-destinations. It intentionally does not import UIKit or CocoaLumberjack.
+`PToolsLogging` provides synchronous lazy logging, OSLog output, privacy redaction
+and an opt-in file destination. It intentionally does not import UIKit or
+CocoaLumberjack. File I/O is performed by one bounded stream consumer and an
+actor-owned writer; UI and Debug consumers remain outside this module.

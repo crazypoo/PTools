@@ -14,7 +14,9 @@ public enum PTLogger {
     private struct RuntimeState: Sendable {
         var configuration = PTLogConfiguration()
         var sequence: UInt64 = 0
-        var destinations: [String: any PTLogDestination] = [:]
+        var destinations: [String: any PTLogDestination] = [
+            PTOSLogDestination.defaultIdentifier: PTOSLogDestination()
+        ]
     }
 
     private static let state = OSAllocatedUnfairLock(initialState: RuntimeState())
@@ -27,6 +29,10 @@ public enum PTLogger {
         state.withLock { $0.sequence }
     }
 
+    public static var logDirectory: URL {
+        PTLogFileConfiguration().directoryURL
+    }
+
     public static func configure(_ update: @Sendable (inout PTLogConfiguration) -> Void) {
         state.withLock { update(&$0.configuration) }
     }
@@ -37,6 +43,20 @@ public enum PTLogger {
 
     public static func removeDestination(identifier: String) {
         state.withLock { _ = $0.destinations.removeValue(forKey: identifier) }
+    }
+
+    // English: Install file logging explicitly so disk I/O remains opt-in for host applications.
+    // Español: Instala el logging de archivos de forma explícita para que la E/S de disco sea opcional.
+    // 中文：显式安装文件日志，让磁盘 I/O 默认保持可选。
+    @discardableResult
+    public static func installFileDestination(configuration: PTLogFileConfiguration = PTLogFileConfiguration()) -> String {
+        let destination = PTFileLogDestination(configuration: configuration)
+        addDestination(destination)
+        return destination.identifier
+    }
+
+    public static func logFiles(configuration: PTLogFileConfiguration = PTLogFileConfiguration()) async -> [URL] {
+        await PTFileLogDestination.logFiles(configuration: configuration)
     }
 
     public static func isEnabled(level: PTLogLevel,
@@ -117,8 +137,12 @@ public enum PTLogger {
                              file: StaticString = #fileID,
                              function: StaticString = #function,
                              line: UInt = #line) {
-        let message = String(reflecting: error)
-        write({ message }, level: .error, category: category, metadata: metadata, privacy: privacy,
+        let nsError = error as NSError
+        var errorMetadata = metadata
+        errorMetadata["errorDomain"] = nsError.domain
+        errorMetadata["errorCode"] = String(nsError.code)
+        let message = "\(String(describing: type(of: error))): \(nsError.localizedDescription)"
+        write({ message }, level: .error, category: category, metadata: errorMetadata, privacy: privacy,
               file: String(describing: file), function: String(describing: function), line: line)
     }
 

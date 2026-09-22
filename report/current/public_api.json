@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
-  "generated_at": "2026-09-22T04:15:36Z",
+  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
+  "generated_at": "2026-09-22T05:30:01Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -33808,9 +33808,97 @@
       "declaration": "public func minimumLevel(for category: PTLogCategory) -> PTLogLevel {"
     },
     {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|struct|public struct PTLogFileConfiguration: Sendable",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 120,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLogFileConfiguration: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let directoryURL: URL",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 121,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let directoryURL: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let maximumFileSize: UInt64",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 122,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumFileSize: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let maximumFileAge: TimeInterval",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 123,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumFileAge: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let maximumFiles: Int",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 124,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumFiles: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let retentionDays: TimeInterval",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 125,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let retentionDays: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let maximumTotalSize: UInt64",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 126,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumTotalSize: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let bufferCapacity: Int",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 127,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bufferCapacity: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let bufferSize: Int",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 128,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bufferSize: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|let|public let flushInterval: TimeInterval",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 129,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let flushInterval: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|init|public init(directoryURL: URL? = nil,",
+      "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
+      "line": 131,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(directoryURL: URL? = nil,"
+    },
+    {
       "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|protocol|public protocol PTLogDestination: Sendable",
       "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
-      "line": 117,
+      "line": 155,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTLogDestination: Sendable {"
@@ -33822,6 +33910,86 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLogger {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift|public|let|public let identifier: String",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift|public|init|public init(identifier: String = \"ptools.file\",",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(identifier: String = \"ptools.file\","
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift|public|func|public func append(_ record: PTLogRecord)",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func append(_ record: PTLogRecord) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift|public|func|public func flush() async",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func flush() async {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public|struct|public struct PTOSLogDestination: PTLogDestination",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOSLogDestination: PTLogDestination {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public|let|public let identifier: String",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public|init|public init(identifier: String = PTOSLogDestination.defaultIdentifier)",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(identifier: String = PTOSLogDestination.defaultIdentifier) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public|func|public func append(_ record: PTLogRecord)",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func append(_ record: PTLogRecord) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public|func|public func flush() async",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func flush() async {}"
+    },
+    {
+      "key": "PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift|public|enum|public enum PTLogRedactor",
+      "path": "PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLogRedactor {"
     },
     {
       "key": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift|public|enum|public enum PTMediaResource: Hashable, Sendable",

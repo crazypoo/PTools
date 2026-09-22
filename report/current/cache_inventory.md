@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
-Generated at: 2026-09-22T04:15:55Z
+Source revision: 7c396199a48eb9f36883b9633dd19df597b0b5e8
+Generated at: 2026-09-22T05:30:18Z
 -->
 
 # PTools 当前缓存盘点
@@ -151,6 +151,10 @@ Generated at: 2026-09-22T04:15:55Z
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:5 | disk or custom cache | // English: Foundation-only contracts shared by logging, cache, and error adapters. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:40 | disk or custom cache | // English: Use a small typed cache contract instead of exposing a third-party cache type. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:53 | disk or custom cache | // English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free. |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:39 | disk or custom cache | // English: Cache OSLog Logger instances so high-frequency logging does not recreate them. |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:44 | disk or custom cache | return loggerCache.withLock { cache in |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:45 | disk or custom cache | if let logger = cache[key] { |
+| PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:49 | disk or custom cache | cache[key] = logger |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:187 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:627 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:665 | disk or custom cache | // MARK: - Cache Helper |

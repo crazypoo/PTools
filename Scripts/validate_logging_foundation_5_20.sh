@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-# English: Validate the 5.20.0 logging foundation without requiring the legacy logger migration.
-# Español: Valida la base de logging de 5.20.0 sin exigir todavía la migración del logger heredado.
-# 中文：校验 5.20.0 日志基础层，但不提前要求迁移旧日志实现。
+# English: Validate the 5.20.x logging foundation without requiring the legacy logger migration.
+# Español: Valida la base de logging de 5.20.x sin exigir todavía la migración del logger heredado.
+# 中文：校验 5.20.x 日志基础层，但不提前要求迁移旧日志实现。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
@@ -18,7 +18,13 @@ version="$(tr -d '[:space:]' < VERSION)"
 required_files=(
   PooToolsSource/PToolsLogging/Core/PTLogTypes.swift
   PooToolsSource/PToolsLogging/Core/PTLogger.swift
+  PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift
+  PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift
+  PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift
+  PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift
+  PooToolsSource/PToolsLogging/Internal/PTLoggerInternalDiagnostics.swift
   PooToolsSource/PToolsLogging/README.md
+  Tests/PToolsLoggingTests/PTLoggingFoundationTests.swift
   docs/audits/COCOALUMBERJACK_USAGE_AUDIT.md
 )
 for file in "${required_files[@]}"; do
@@ -29,6 +35,7 @@ required_patterns=(
   'Package.swift|.library(name: "PToolsLogging", targets: ["PToolsLogging"])'
   'Package.swift|name: "PToolsLogging"'
   'Package.swift|"PToolsLogging"'
+  'Package.swift|name: "PToolsLoggingTests"'
   'PooTools.podspec|s.subspec '\''Logging'\''' 
   'PooTools.podspec|PooToolsSource/PToolsLogging/**/*.swift'
   'PooTools.podspec|subspec.dependency '\''PooTools/Logging'\'''
@@ -37,6 +44,12 @@ required_patterns=(
   'PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public struct PTLogRecord'
   'PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public struct PTLogConfiguration'
   'PooToolsSource/PToolsLogging/Core/PTLogger.swift|public enum PTLogger'
+  'PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift|public struct PTOSLogDestination'
+  'PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift|public final class PTFileLogDestination'
+  'PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift|actor PTLogFileWriter'
+  'PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift|public enum PTLogRedactor'
+  'PooToolsSource/PToolsLogging/Core/PTLogger.swift|installFileDestination'
+  'PooToolsSource/PToolsLogging/Core/PTLogger.swift|logFiles'
 )
 for requirement in "${required_patterns[@]}"; do
   file="${requirement%%|*}"

@@ -1,8 +1,8 @@
 # CocoaLumberjack 使用审计
 
-本报告对应 5.20.0，基于当前工作区的 `VERSION` 和源码快照生成。它是迁移前的事实清单，
-不是删除 CocoaLumberjack 的变更请求。5.20.0 只建立日志基础契约；依赖删除、旧调用迁移和
-兼容层清理分别属于后续 5.21.x / 5.22.x 里程碑。
+本报告对应 5.20.2，基于当前工作区的 `VERSION` 和源码快照生成。它是迁移前的事实清单，
+不是删除 CocoaLumberjack 的变更请求。5.20.x 建立日志基础契约、OSLog 后端和文件日志后端；
+依赖删除、旧调用迁移和兼容层清理分别属于后续 5.21.x / 5.22.x 里程碑。
 
 ## 审计范围与命令
 
@@ -49,13 +49,14 @@ Core 和 Debug 的业务调用主要通过公开兼容入口 `PTNSLog` / `PTNSLo
 - `PTNSLog` 通过 `isWriteLog` 决定是否异步写入；
 - LocalConsole / PTInstruments 消费的是 `PTLogEvent` / `PTLogSinkCenter`，不是 DDFileLogger 文件读取。
 
-该实现的统一 `PTFileLogDestination`、buffer、flush、rotation 和 retention 属于 5.20.2。
+5.20.2 新增的 `PTFileLogDestination` 已使用独立目录、32 KB 缓冲、单消费者流、flush、
+rotation、retention 和隐私脱敏；旧 `PTLogFileManager` 仍保留给兼容入口，不在本轮删除。
 
 ### C. Formatter
 
 未发现 `DDLogFormatter` 或 `format(message:)` 实现。`PTNSLog` 当前自行生成包含环境、时间、
 文件、行列、函数和消息正文的多行字符串。格式字段需要在 5.20.2 的文件后端设计中保持兼容，
-不能在 5.20.0 直接改变旧日志输出。
+不能在 5.20.x 直接改变旧日志输出。
 
 ### D. Runtime Level
 
@@ -65,8 +66,9 @@ Core 和 Debug 的业务调用主要通过公开兼容入口 `PTNSLog` / `PTNSLo
 - `PTLogMode`：根据 Debug、TestFlight 和 App Store 环境选择等级；
 - `PTNSLog`：将旧等级映射到 `PTLogSeverity` 和旧 OSLog/CocoaLumberjack 输出。
 
-没有 `DDLogLevel` 或 `dynamicLogLevel` 的动态全局变量。新 `PToolsLogging` 在 5.20.0 提供
-`PTLogLevel`、按 category 的最低等级和 subsystem 配置，但尚未接管旧 PTNSLog 输出。
+没有 `DDLogLevel` 或 `dynamicLogLevel` 的动态全局变量。新 `PToolsLogging` 在 5.20.x 提供
+`PTLogLevel`、按 category 的最低等级、subsystem 配置和默认 OSLog destination，但尚未接管旧
+PTNSLog 输出。
 
 ### E. Custom Logger
 
@@ -79,7 +81,7 @@ Core 和 Debug 的业务调用主要通过公开兼容入口 `PTNSLog` / `PTNSLo
 `DDLogLevel` 等 CocoaLumberjack 类型。公开 API 中可见的是 `PTNSLog`、`PTNSLogConsole`、
 `PTLogFileManager`、`PTOSLogger`、`PTLogging` 和 `PTLogEvent`。
 
-## 5.20.0 基础架构落点
+## 5.20.x 基础架构落点
 
 新增 `PToolsLogging`，仅包含 Foundation 值类型和日志门面：
 
@@ -88,18 +90,22 @@ Core 和 Debug 的业务调用主要通过公开兼容入口 `PTNSLog` / `PTNSLo
 - `PTLogRecord`：不可变日志快照；
 - `PTLogConfiguration`：全局最低等级、分类等级和 subsystem；
 - `PTLogDestination`：后端扩展契约；
-- `PTLogger`：惰性同步写入、过滤、序列号和异步 flush 入口。
+- `PTLogger`：惰性同步写入、过滤、序列号、默认 OSLog 输出、文件目标安装和异步 flush 入口。
+- `PTOSLogDestination`：按 subsystem/category 缓存 Apple `Logger`，并根据隐私级别映射 OSLog privacy。
+- `PTFileLogDestination`：可选文件后端，使用 `Library/Caches/PTools/Logs`、32 KB buffer、异步 flush、
+  5 MiB/24 小时轮转和 7 天/7 文件/30 MiB 清理策略。
+- `PTLogRedactor`：对 Authorization、Cookie、token、password、secret 等 key 做大小写不敏感脱敏。
 
 SwiftPM product 为 `PToolsLogging`，CocoaPods subspec 为 `PooTools/Logging`。Core 依赖新契约，
-但旧 `PooToolsSource/Log`、CocoaLumberjack 依赖和公开兼容入口均未删除，避免 5.20.0 引入破坏性
+但旧 `PooToolsSource/Log`、CocoaLumberjack 依赖和公开兼容入口均未删除，避免 5.20.x 引入破坏性
 迁移。
 
 ## 后续迁移边界
 
 | 版本 | 允许的变化 |
 | --- | --- |
-| 5.20.1 | 增加 OSLog destination、缓存和基础测试；旧 CocoaLumberjack 仍存在 |
-| 5.20.2 | 增加文件 destination、flush、rotation、retention 和失败兜底 |
+| 5.20.1 | ✅ OSLog destination、缓存、运行时等级过滤、Error 摘要和基础测试；旧 CocoaLumberjack 仍存在 |
+| 5.20.2 | ✅ 文件 destination、flush、rotation、retention、脱敏、容量边界和失败兜底 |
 | 5.21.0 | 按模块把 `DDLog*` / `PTNSLog*` 调用迁移到 `PTLogger` |
 | 5.21.1–5.21.2 | LocalConsole、PTInstruments、脱敏和性能接入 |
 | 5.22.0+ | 只有迁移证据、API 对照和三套构建通过后，才删除 CocoaLumberjack |

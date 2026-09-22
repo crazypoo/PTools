@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 87204b75bb73c4f90cdbc528ce371b8b20b933a9
-Generated at: 2026-09-22T04:17:17Z
+Source revision: 7c396199a48eb9f36883b9633dd19df597b0b5e8
+Generated at: 2026-09-22T05:30:08Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,7 +13,7 @@ Generated at: 2026-09-22T04:17:17Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `96`
+- Target count: `97`
 - Core direct third-party dependencies: `13` (baseline `18`)
 
 ## Products
@@ -135,6 +135,7 @@ Generated at: 2026-09-22T04:17:17Z
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsListTests` | `Tests/PToolsListTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsLogging` | `PooToolsSource/PToolsLogging` | — | — | 0 source entries / 0 resources |
+| `PToolsLoggingTests` | `Tests/PToolsLoggingTests` | PToolsLogging | — | 0 source entries / 0 resources |
 | `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |

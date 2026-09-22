@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
-  "generated_at": "2026-09-22T04:15:55Z",
+  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
+  "generated_at": "2026-09-22T05:30:18Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3906,12 +3906,37 @@
     },
     {
       "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
-      "lines": 122,
+      "lines": 160,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsLogging/Core/PTLogger.swift",
-      "lines": 182,
+      "lines": 206,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "lines": 112,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",
+      "lines": 95,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift",
+      "lines": 274,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Internal/PTLoggerInternalDiagnostics.swift",
+      "lines": 22,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift",
+      "lines": 65,
       "classification": "ok"
     },
     {

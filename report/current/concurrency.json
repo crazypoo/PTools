@@ -2,11 +2,11 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "87204b75bb73c4f90cdbc528ce371b8b20b933a9",
-  "generated_at": "2026-09-22T04:15:36Z",
+  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
+  "generated_at": "2026-09-22T05:30:00Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 24,
+    "task_detached": 27,
     "unchecked_sendable": 67,
     "as_bang": 4
   },
@@ -586,6 +586,24 @@
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "line": 27,
       "text": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 65,
+      "text": "self.worker = Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 68,
+      "text": "self.timer = Task.detached(priority: .utility) { [continuation = streamPair.continuation] in"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+      "line": 98,
+      "text": "return await Task.detached(priority: .utility) {"
     },
     {
       "rule": "unchecked_sendable",

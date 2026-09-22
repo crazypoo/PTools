@@ -114,6 +114,44 @@ public struct PTLogConfiguration: Sendable {
     }
 }
 
+// English: Keep file policy values immutable across logging backends and actor boundaries.
+// Español: Mantén inmutables los valores de política de archivos entre backends y límites de actor.
+// 中文：让文件策略值在日志后端和 actor 边界之间保持不可变。
+public struct PTLogFileConfiguration: Sendable {
+    public let directoryURL: URL
+    public let maximumFileSize: UInt64
+    public let maximumFileAge: TimeInterval
+    public let maximumFiles: Int
+    public let retentionDays: TimeInterval
+    public let maximumTotalSize: UInt64
+    public let bufferCapacity: Int
+    public let bufferSize: Int
+    public let flushInterval: TimeInterval
+
+    public init(directoryURL: URL? = nil,
+                maximumFileSize: UInt64 = 5 * 1024 * 1024,
+                maximumFileAge: TimeInterval = 24 * 60 * 60,
+                maximumFiles: Int = 7,
+                retentionDays: TimeInterval = 7 * 24 * 60 * 60,
+                maximumTotalSize: UInt64 = 30 * 1024 * 1024,
+                bufferCapacity: Int = 5_000,
+                bufferSize: Int = 32 * 1024,
+                flushInterval: TimeInterval = 1) {
+        let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        self.directoryURL = directoryURL
+            ?? cachesURL.appendingPathComponent("PTools/Logs", isDirectory: true)
+        self.maximumFileSize = max(1, maximumFileSize)
+        self.maximumFileAge = max(1, maximumFileAge)
+        self.maximumFiles = max(1, maximumFiles)
+        self.retentionDays = max(0, retentionDays)
+        self.maximumTotalSize = max(1, maximumTotalSize)
+        self.bufferCapacity = max(1, bufferCapacity)
+        self.bufferSize = max(1, bufferSize)
+        self.flushInterval = max(0.1, flushInterval)
+    }
+}
+
 public protocol PTLogDestination: Sendable {
     var identifier: String { get }
 

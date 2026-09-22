@@ -20,7 +20,7 @@
 
 | 模块 | CocoaPods | SwiftPM | 主要直接依赖 | 不应直接带入 |
 | --- | --- | --- | --- | --- |
-| Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog（后端按后续版本接入） | UIKit、Debug UI、CocoaLumberjack、Network、媒体 |
+| Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog、文件日志后端 | UIKit、Debug UI、CocoaLumberjack、Network、媒体 |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、SwiftDate、SnapKit、SwifterSwift、CocoaLumberjack、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |

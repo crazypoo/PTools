@@ -501,6 +501,11 @@ let package = Package(
             name: "PToolsPermissionTests",
             dependencies: ["ptools"],
             path: "Tests/PToolsPermissionTests"
+        ),
+        .testTarget(
+            name: "PToolsLoggingTests",
+            dependencies: ["PToolsLogging"],
+            path: "Tests/PToolsLoggingTests"
         )
     ],
     swiftLanguageModes: [.v6]

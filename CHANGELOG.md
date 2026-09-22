@@ -2,12 +2,21 @@
 
 ## Unreleased — 5.20.x
 
-当前开发基线为 `5.20.0`；版本唯一来源为根目录 `VERSION`，5.20.0 尚未创建新的正式 tag。
+当前开发基线为 `5.20.2`；版本唯一来源为根目录 `VERSION`，`5.20.0` 已是最新正式 tag，本次 5.20.1/5.20.2 仍处于 Unreleased。
 
 - 完成 CocoaLumberjack 使用面审计，记录 DDLog、文件日志、formatter、运行时等级、包装器和公开 API 泄露结果。
 - 新增 SwiftPM `PToolsLogging` product/target 与 CocoaPods `PooTools/Logging` subspec，Core 依赖新的日志契约但保留旧日志实现。
 - 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，为后续 OSLog、文件日志和 Debug 接入提供 Swift 6 值类型边界。
-- 5.20.0 不删除 CocoaLumberjack、不迁移 `PTNSLog` 调用、不修改第三方依赖；这些变更保留到后续里程碑并由审计报告跟踪。
+- 5.20.1 增加默认 `PTOSLogDestination`、subsystem/category Logger 缓存、动态等级过滤和 Error 元数据摘要。
+- 5.20.2 增加可选 `PTFileLogDestination`、单消费者异步缓冲、32 KB flush、warning/error/fault 优先 flush、5 MB/24 小时轮转、7 天/7 文件/30 MB 保留策略和脱敏兜底。
+- 增加 `PToolsLoggingTests`，覆盖等级过滤、分类等级、敏感字段、文件写入和轮转保留边界。
+
+## 5.20.0 — 2026-09-22
+
+- 完成 CocoaLumberjack 使用面审计，记录 DDLog、文件日志、formatter、运行时等级、包装器和公开 API 泄露结果。
+- 新增 SwiftPM `PToolsLogging` product/target 与 CocoaPods `PooTools/Logging` subspec，Core 依赖新的日志契约但保留旧日志实现。
+- 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，为后续 OSLog、文件日志和 Debug 接入提供 Swift 6 值类型边界。
+- 5.20.x 不删除 CocoaLumberjack、不迁移 `PTNSLog` 调用、不修改第三方依赖；这些变更保留到后续里程碑并由审计报告跟踪。
 
 ## 5.19.5 — 2026-09-22
 

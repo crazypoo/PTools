@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.20.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.20.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.19.5`；`5.20.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.20.0`；`5.20.2` 为当前开发基线，5.20.1/5.20.2 尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -119,14 +119,17 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ `verticalScrollIndicatorInsets.bottom` 保持纯展示职责，不改变内容滚动和刷新触发边界。
 - ✅ 已创建正式 `5.19.5` tag；真实设备验证不同内容高度、导航栏/TabBar 留白、旋转、分屏和 iOS 26 玻璃布局下的底部刷新回调仍属于后续回归项。
 
-## 5.20.0 CocoaLumberjack Audit / Logging Foundation
+## 5.20.0–5.20.2 CocoaLumberjack Audit / Logging Foundation
 
 - ✅ 建立 [`COCOALUMBERJACK_USAGE_AUDIT.md`](docs/audits/COCOALUMBERJACK_USAGE_AUDIT.md)，扫描 CocoaLumberjack、DDLog、File Logger、formatter、runtime level、custom logger 和公开 API 泄露。
 - ✅ 新增 SwiftPM `PToolsLogging` product/target，保持 Foundation/OSLog-ready 的低层边界，不依赖 UIKit、Debug、Network、媒体或 CocoaLumberjack。
 - ✅ 新增 CocoaPods `PooTools/Logging` subspec，并让 `PooTools/Core` 依赖该契约；旧 `PooToolsSource/Log` 和 CocoaLumberjack 依赖继续保留。
 - ✅ 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，所有跨并发边界的数据为 Sendable 值类型。
-- ✅ 新增 5.20.0 logging foundation 门禁，并纳入构建、质量和发布检查。
-- [ ] 5.20.1 再接入 OSLog backend、logger cache、runtime/category filtering、error API 和基础测试；不在 5.20.0 提前迁移旧调用。
+- ✅ 新增 5.20.x logging foundation 门禁，并纳入构建、质量和发布检查。
+- ✅ 5.20.1 接入默认 OSLog backend、subsystem/category Logger cache、runtime/category filtering 和 Error 元数据摘要。
+- ✅ 5.20.2 接入可选文件日志、单消费者缓冲、flush、轮转、保留、脱敏和内部错误降级；文件错误不会反向触发日志递归。
+- ✅ 新增 `PToolsLoggingTests`，覆盖等级、分类、隐私脱敏、文件写入和轮转边界。
+- [ ] 5.21.0 按模块迁移 `DDLog*` / `PTNSLog*` 调用；5.20.x 不提前删除 CocoaLumberjack 或旧兼容入口。
 
 ## 5.19.4 Dark Mode MainActor Notification Bridge
 
