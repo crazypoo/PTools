@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
-  "generated_at": "2026-09-22T05:30:18Z",
+  "source_revision": "d4b02fe00a18e3a2b39d69e94d389e8a57794a32",
+  "generated_at": "2026-09-22T06:56:31Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1381,7 +1381,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "lines": 1434,
+      "lines": 1485,
       "classification": "warning"
     },
     {
@@ -3586,7 +3586,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1725,
+      "lines": 1834,
       "classification": "architecture_exception"
     },
     {
@@ -3651,7 +3651,7 @@
     },
     {
       "path": "PooToolsSource/Log/PTNSLog.swift",
-      "lines": 476,
+      "lines": 503,
       "classification": "ok"
     },
     {
@@ -3796,7 +3796,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network+Logging.swift",
-      "lines": 94,
+      "lines": 122,
       "classification": "ok"
     },
     {
@@ -3806,7 +3806,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkMetrics.swift",
-      "lines": 94,
+      "lines": 98,
       "classification": "ok"
     },
     {
@@ -3906,17 +3906,22 @@
     },
     {
       "path": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift",
-      "lines": 160,
+      "lines": 224,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsLogging/Core/PTLogger.swift",
-      "lines": 206,
+      "lines": 265,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
       "lines": 112,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift",
+      "lines": 271,
       "classification": "ok"
     },
     {
@@ -3936,7 +3941,7 @@
     },
     {
       "path": "PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift",
-      "lines": 65,
+      "lines": 97,
       "classification": "ok"
     },
     {

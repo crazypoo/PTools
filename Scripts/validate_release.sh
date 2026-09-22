@@ -34,6 +34,7 @@ fi
 bash Scripts/validate_docs.sh
 bash Scripts/validate_document_versions.sh
 bash Scripts/validate_logging_foundation_5_20.sh
+bash Scripts/validate_logging_5_21.sh
 bash Scripts/validate_519_package_tests_docs.sh
 bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_network_security.sh

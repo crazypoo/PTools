@@ -50,6 +50,70 @@ public enum PTLogPrivacy: Sendable {
 
 public typealias PTLogMetadata = [String: String]
 
+// English: Preserve source information as an immutable value when a legacy logger forwards a dynamic file name.
+// Español: Conserva la información de origen como un valor inmutable cuando un logger heredado reenvía un archivo dinámico.
+// 中文：旧日志器转发动态文件名时，将来源信息保存为不可变值。
+public struct PTLogSource: Sendable, Equatable {
+    public let file: String
+    public let function: String
+    public let line: UInt
+
+    public init(file: String, function: String, line: UInt) {
+        self.file = file
+        self.function = function
+        self.line = line
+    }
+}
+
+// English: Make bounded destinations explicit about which records may be discarded under pressure.
+// Español: Hace explícito qué registros pueden descartarse cuando un destino acotado sufre presión.
+// 中文：明确有界日志目标在背压下允许丢弃哪些记录。
+public enum PTLogDropPolicy: String, Codable, Sendable {
+    case dropOldest
+    case dropNewest
+    case preferImportant
+}
+
+// English: Keep sampling policy as a small value contract so future backends do not invent incompatible controls.
+// Español: Mantiene la política de muestreo como un contrato de valor pequeño para que futuros backends no inventen controles incompatibles.
+// 中文：用小型值类型定义采样策略，避免后续日志后端各自发明不兼容的控制方式。
+public enum PTLogSamplingPolicy: Sendable, Equatable {
+    case all
+    case every(Int)
+    case first(Int)
+
+    public static var `default`: Self { .all }
+
+    public func accepts(index: UInt64) -> Bool {
+        switch self {
+        case .all:
+            return true
+        case let .every(interval):
+            let safeInterval = max(1, interval)
+            return index % UInt64(safeInterval) == 0
+        case let .first(limit):
+            return index <= UInt64(max(0, limit))
+        }
+    }
+}
+
+// English: Expose loss counters without exposing mutable queue state across actors.
+// Español: Expone contadores de pérdida sin exponer el estado mutable de las colas entre actores.
+// 中文：只暴露丢弃计数，不把可变队列状态跨 actor 暴露出去。
+public struct PTLogBackpressureSnapshot: Sendable, Equatable {
+    public let queueDroppedCount: UInt64
+    public let bufferDroppedCount: UInt64
+
+    public init(queueDroppedCount: UInt64 = 0, bufferDroppedCount: UInt64 = 0) {
+        self.queueDroppedCount = queueDroppedCount
+        self.bufferDroppedCount = bufferDroppedCount
+    }
+
+    public var totalDroppedCount: UInt64 {
+        queueDroppedCount &+ bufferDroppedCount
+    }
+}
+
 public struct PTLogRecord: Identifiable, Sendable {
     public let id: UInt64
     public let sequence: UInt64

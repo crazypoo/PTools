@@ -1,15 +1,19 @@
 # Changelog
 
-## Unreleased — 5.20.x
+## Unreleased — 5.21.x
 
-当前开发基线为 `5.20.2`；版本唯一来源为根目录 `VERSION`，`5.20.0` 已是最新正式 tag，本次 5.20.1/5.20.2 仍处于 Unreleased。
+当前开发基线为 `5.21.2`；版本唯一来源为根目录 `VERSION`，5.20.2 是最近的正式基线。
 
-- 完成 CocoaLumberjack 使用面审计，记录 DDLog、文件日志、formatter、运行时等级、包装器和公开 API 泄露结果。
-- 新增 SwiftPM `PToolsLogging` product/target 与 CocoaPods `PooTools/Logging` subspec，Core 依赖新的日志契约但保留旧日志实现。
-- 新增 `PTLogLevel`、`PTLogCategory`、`PTLogRecord`、`PTLogConfiguration`、`PTLogDestination` 和 `PTLogger`，为后续 OSLog、文件日志和 Debug 接入提供 Swift 6 值类型边界。
-- 5.20.1 增加默认 `PTOSLogDestination`、subsystem/category Logger 缓存、动态等级过滤和 Error 元数据摘要。
-- 5.20.2 增加可选 `PTFileLogDestination`、单消费者异步缓冲、32 KB flush、warning/error/fault 优先 flush、5 MB/24 小时轮转、7 天/7 文件/30 MB 保留策略和脱敏兜底。
-- 增加 `PToolsLoggingTests`，覆盖等级过滤、分类等级、敏感字段、文件写入和轮转保留边界。
+- 5.21.0 将 PTools 生产 Swift 内部的直接 `DDLog*` 实现迁移到 `PTLogger`；`PTNSLog`、`PTLogEvent` 和旧 sink 继续作为兼容包装器保留。
+- 5.21.1 新增有界 `PTMemoryLogDestination`、actor 所有的 Ring Buffer 和多订阅流；LocalConsole 与 PTInstruments Logs 复用同一个内存数据源。
+- LocalConsole 增加 category、level 和关键字筛选，UI 更新改为批量刷新，不改变旧调试入口。
+- 5.21.2 增加日志隐私脱敏 API、Network 请求/响应头脱敏、背压计数、drop policy、后台 worker、文件导出 API 和内存日志性能测试。
+- 新增 `PToolsLoggingTests` 对内存容量、重要等级保留、多订阅者、丢弃策略、采样策略、脱敏和性能路径进行验证。
+
+## 5.20.2 — 2026-09-22
+
+- 增加可选 `PTFileLogDestination`、单消费者异步缓冲、32 KB flush、warning/error/fault 优先 flush、5 MB/24 小时轮转和 7 天/7 文件/30 MB 保留策略。
+- 增加日志脱敏兜底和 `PToolsLoggingTests`，覆盖等级过滤、分类等级、敏感字段、文件写入和轮转保留边界。
 
 ## 5.20.0 — 2026-09-22
 

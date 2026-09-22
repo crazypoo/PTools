@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 import QuartzCore
 import Darwin
+#if canImport(PToolsLogging)
+import PToolsLogging
+#endif
 
 // English: Tracks are value types so recorded data can cross actor boundaries without UIKit or Foundation mutable state.
 // Español: Las pistas son tipos de valor para cruzar actores sin estado mutable de UIKit o Foundation.
@@ -1132,7 +1135,12 @@ public final class PTInstrumentRecorder: NSObject {
     private let resourceSampler = PTInstrumentResourceSampler()
     private let stallSampler = PTMainThreadStallSampler()
     private var eventObserverToken: UUID?
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    private var logSubscriptionTask: Task<Void, Never>?
+    private var memoryLogDestination: PTMemoryLogDestination?
+#else
     private var logSinkIdentifier: String?
+#endif
     private var durationTask: Task<Void, Never>?
 
     public override init() {
@@ -1217,12 +1225,26 @@ public final class PTInstrumentRecorder: NSObject {
     }
 
     private func installLogBridgeIfNeeded() {
-        guard logSinkIdentifier == nil, selectedInstruments.contains(.logs) else { return }
+        guard selectedInstruments.contains(.logs) else { return }
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        guard logSubscriptionTask == nil else { return }
+        let destination = PTLogger.memoryDestination() ?? PTLogger.installMemoryDestination()
+        memoryLogDestination = destination
+        logSubscriptionTask = Task { @MainActor [weak self, destination] in
+            let stream = await destination.subscribe()
+            for await record in stream {
+                guard !Task.isCancelled else { return }
+                self?.record(log: record)
+            }
+        }
+#else
+        guard logSinkIdentifier == nil else { return }
         let identifier = "ptools.instruments.logs.\(UUID().uuidString)"
         logSinkIdentifier = identifier
         PTLogSinkCenter.shared.install(PTLogSink(identifier: identifier) { [weak self] event in
             self?.record(log: event)
         })
+#endif
     }
 
     private func installLifecycleBridgeIfNeeded() {
@@ -1240,10 +1262,16 @@ public final class PTInstrumentRecorder: NSObject {
             PTDebugEventCenter.shared.removeObserver(eventObserverToken)
             self.eventObserverToken = nil
         }
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        logSubscriptionTask?.cancel()
+        logSubscriptionTask = nil
+        memoryLogDestination = nil
+#else
         if let logSinkIdentifier {
             PTLogSinkCenter.shared.remove(identifier: logSinkIdentifier)
             self.logSinkIdentifier = nil
         }
+#endif
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -1260,6 +1288,28 @@ public final class PTInstrumentRecorder: NSObject {
         }
     }
 
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    // English: Record the immutable PTLogger snapshot so Instruments receives source, category and level metadata.
+    // Español: Registra el snapshot inmutable de PTLogger para que Instruments reciba origen, categoría y nivel.
+    // 中文：记录 PTLogger 的不可变快照，让 Instruments 保留来源、分类和等级信息。
+    private func record(log: PTLogRecord) {
+        guard let session, selectedInstruments.contains(.logs) else { return }
+        let message = PTInstrumentRedactor.redactText(log.message)
+        var metadata = PTInstrumentRedactor.redactMetadata(log.metadata)
+        metadata["subsystem"] = PTInstrumentRedactor.redactText(log.subsystem)
+        metadata["category"] = PTInstrumentRedactor.redactText(log.category.rawValue)
+        metadata["file"] = PTInstrumentRedactor.redactText(log.file)
+        metadata["function"] = PTInstrumentRedactor.redactText(log.function)
+        metadata["line"] = String(log.line)
+        Task {
+            await session.recordEvent(PTInstrumentEvent(kind: .logs,
+                                                        timestamp: log.timestamp,
+                                                        name: message,
+                                                        severity: log.level.rawValue.description,
+                                                        metadata: metadata))
+        }
+    }
+#else
     private func record(log: PTLogEvent) {
         guard let session, selectedInstruments.contains(.logs) else { return }
         let message = PTInstrumentRedactor.redactText(log.message)
@@ -1271,6 +1321,7 @@ public final class PTInstrumentRecorder: NSObject {
                                                         metadata: ["category": log.category]))
         }
     }
+#endif
 
     public func record(network: PTInstrumentNetworkRecord) {
         guard let session, selectedInstruments.contains(.network) else { return }

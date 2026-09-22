@@ -55,8 +55,54 @@ public enum PTLogger {
         return destination.identifier
     }
 
+    // English: Reuse the existing file destination so toggling legacy file logging cannot duplicate writers.
+    // Español: Reutiliza el destino de archivos existente para que activar el logging heredado no duplique writers.
+    // 中文：复用已有文件日志目标，避免旧开关反复创建重复 writer。
+    @discardableResult
+    public static func installFileDestinationIfNeeded(configuration: PTLogFileConfiguration = PTLogFileConfiguration()) -> String {
+        state.withLock { state in
+            if state.destinations["ptools.file"] is PTFileLogDestination {
+                return "ptools.file"
+            }
+            let destination = PTFileLogDestination(configuration: configuration)
+            state.destinations[destination.identifier] = destination
+            return destination.identifier
+        }
+    }
+
+    // English: Install one shared memory destination for LocalConsole and Instruments without duplicating log pipelines.
+    // Español: Instala un único destino de memoria compartido para LocalConsole e Instruments sin duplicar tuberías de logs.
+    // 中文：为 LocalConsole 和 Instruments 安装共享的内存日志目标，避免重复日志管线。
+    @discardableResult
+    public static func installMemoryDestination(capacity: Int = 2_000,
+                                                queueCapacity: Int = 5_000,
+                                                dropPolicy: PTLogDropPolicy = .preferImportant) -> PTMemoryLogDestination {
+        state.withLock { state in
+            if let destination = state.destinations[PTMemoryLogDestination.defaultIdentifier] as? PTMemoryLogDestination {
+                return destination
+            }
+            let destination = PTMemoryLogDestination(capacity: capacity,
+                                                     queueCapacity: queueCapacity,
+                                                     dropPolicy: dropPolicy)
+            state.destinations[destination.identifier] = destination
+            return destination
+        }
+    }
+
+    public static func memoryDestination() -> PTMemoryLogDestination? {
+        state.withLock { $0.destinations[PTMemoryLogDestination.defaultIdentifier] as? PTMemoryLogDestination }
+    }
+
     public static func logFiles(configuration: PTLogFileConfiguration = PTLogFileConfiguration()) async -> [URL] {
         await PTFileLogDestination.logFiles(configuration: configuration)
+    }
+
+    // English: Flush persistent destinations before returning files suitable for sharing or export.
+    // Español: Vacía los destinos persistentes antes de devolver archivos aptos para compartir o exportar.
+    // 中文：返回可分享或导出的文件前，先刷新所有持久化日志目标。
+    public static func exportLogFiles(configuration: PTLogFileConfiguration = PTLogFileConfiguration()) async -> [URL] {
+        await flush()
+        return await logFiles(configuration: configuration)
     }
 
     public static func isEnabled(level: PTLogLevel,
@@ -167,6 +213,19 @@ public enum PTLogger {
                            line: UInt = #line) {
         write(message, level: level, category: category, metadata: metadata, privacy: privacy,
               file: String(describing: file), function: String(describing: function), line: line)
+    }
+
+    // English: Accept dynamic source snapshots from compatibility wrappers without using unsafe StaticString conversions.
+    // Español: Acepta snapshots de origen dinámicos desde wrappers de compatibilidad sin conversiones inseguras de StaticString.
+    // 中文：兼容包装器可传入动态来源快照，不再进行不安全的 StaticString 转换。
+    public static func log(_ message: String,
+                           level: PTLogLevel,
+                           category: PTLogCategory = .general,
+                           metadata: PTLogMetadata = [:],
+                           privacy: PTLogPrivacy = .public,
+                           source: PTLogSource) {
+        write({ message }, level: level, category: category, metadata: metadata, privacy: privacy,
+              file: source.file, function: source.function, line: source.line)
     }
 
     public static func flush() async {

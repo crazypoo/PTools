@@ -266,7 +266,7 @@ private extension PTLogLevel {
 // English: Keep a source-only compatibility level for the Example target's direct compilation.
 // Español: Conserva un nivel de compatibilidad solo de código fuente para la compilación directa del target Example.
 // 中文：为 Example 目标直接编译保留仅源码级兼容日志等级。
-public enum PTLogLevel {
+public enum PTLogLevel: CaseIterable {
     case info
     case warning
     case error
@@ -304,6 +304,7 @@ public final class PTLogBuffer {
     public struct LogItem {
         let text: String
         let level: PTLogLevel
+        let category: String
     }
 
     private var logs: [LogItem] = []
@@ -324,13 +325,21 @@ public final class PTLogBuffer {
         self.maxCount = maxCount
     }
     
-    func append(_ text: String, level: PTLogLevel = .info) {
-        logs.append(LogItem(text: text, level: level))
+    func append(_ text: String, level: PTLogLevel = .info, category: String = "") {
+        logs.append(LogItem(text: text, level: level, category: category))
         nextSequence &+= 1
         if logs.count > maxCount {
             logs.removeFirst(logs.count - maxCount)
         }
     }
+
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    func append(_ record: PTLogRecord) {
+        append("[\(record.category.rawValue)] \(record.message)",
+               level: record.level,
+               category: record.category.rawValue)
+    }
+#endif
     
     func clear() {
         logs.removeAll()
@@ -368,6 +377,17 @@ public final class PTLogBuffer {
             Entry(sequence: firstSequence &+ UInt64(startIndex + offset), item: item)
         }
         return PendingEntries(entries: entries, latestSequence: nextSequence)
+    }
+
+    func matches(_ item: LogItem,
+                 categories: Set<String>,
+                 levels: Set<PTLogLevel>,
+                 keyword: String) -> Bool {
+        guard levels.contains(item.level) else { return false }
+        if !categories.isEmpty, !categories.contains(item.category) { return false }
+        let normalizedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedKeyword.isEmpty else { return true }
+        return item.text.localizedCaseInsensitiveContains(normalizedKeyword)
     }
 }
 
@@ -455,12 +475,30 @@ public class LocalConsole: NSObject {
     private var pendingUpdateTask: Task<Void, Never>?
     private var isMonitoring = false
     private var didInstallBorderHook = false
-    private let logSinkIdentifier = "LocalConsole." + UUID().uuidString
     private let monitoringOwnerIdentifier = "LocalConsole." + UUID().uuidString
     private var debugEventObserverToken: UUID?
     private var keyboardObserverTokens: [NSObjectProtocol] = []
     private var dynamicLogs: [String: String] = [:]
     private var dynamicRange: NSRange?
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    private var memoryLogDestination: PTMemoryLogDestination?
+    private var memoryLogTask: Task<Void, Never>?
+#else
+    private let logSinkIdentifier = "LocalConsole." + UUID().uuidString
+#endif
+
+    // English: These filters are applied to the bounded buffer before any text reaches the console view.
+    // Español: Estos filtros se aplican al buffer acotado antes de que el texto llegue a la vista de consola.
+    // 中文：日志文本进入控制台视图前，先在有界缓冲区内应用这些过滤条件。
+    public var logCategoryFilter: Set<String> = [] {
+        didSet { reloadLogFilters() }
+    }
+    public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) {
+        didSet { reloadLogFilters() }
+    }
+    public var logKeywordFilter: String = "" {
+        didSet { reloadLogFilters() }
+    }
 
     public var closeAllOutsideFunction:PTActionTask?
     public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? {
@@ -489,6 +527,9 @@ public class LocalConsole: NSObject {
             if isVisiable {
                 installLogSink()
                 createSystemLogView()
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+                refreshMemoryLogSnapshot()
+#endif
                 guard let terminal else { return }
                 terminal.transform = .init(scaleX: 0.9, y: 0.9)
                 UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.6) {
@@ -626,12 +667,25 @@ public class LocalConsole: NSObject {
     // 中文：仅在当前控制台可见时，把 Core 日志事件投递到该控制台。
     private func installLogSink() {
         removeLogSink()
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        let destination = PTLogger.memoryDestination() ?? PTLogger.installMemoryDestination()
+        memoryLogDestination = destination
+        memoryLogTask = Task { @MainActor [weak self, destination] in
+            let stream = await destination.subscribe()
+            for await record in stream {
+                guard !Task.isCancelled else { return }
+                guard let self, self.isVisiable else { continue }
+                self.print(record)
+            }
+        }
+#else
         PTLogSinkCenter.shared.install(
             PTLogSink(identifier: logSinkIdentifier) { [weak self] event in
                 guard let self, self.isVisiable else { return }
                 self.print(event.message, level: PTLogLevel(severity: event.severity))
             }
         )
+#endif
         debugEventObserverToken = PTDebugEventCenter.shared.addObserver { [weak self] event in
             guard event.name == "network.status",
                   let value = event.payload["value"] else { return }
@@ -643,7 +697,12 @@ public class LocalConsole: NSObject {
     // Español: Elimina las suscripciones de la consola antes de desmontar su jerarquía de vistas de escena.
     // 中文：在拆除控制台场景视图层级前，先移除控制台自己的订阅。
     private func removeLogSink() {
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        memoryLogTask?.cancel()
+        memoryLogTask = nil
+#else
         PTLogSinkCenter.shared.remove(identifier: logSinkIdentifier)
+#endif
         if let debugEventObserverToken {
             PTDebugEventCenter.shared.removeObserver(debugEventObserverToken)
             self.debugEventObserverToken = nil
@@ -931,6 +990,45 @@ public class LocalConsole: NSObject {
         logBuffer.append("\(items)", level: level)
         scheduleUIUpdate()
     }
+
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    private func print(_ record: PTLogRecord) {
+        logBuffer.append(record)
+        scheduleUIUpdate()
+    }
+
+    // English: Reload the retained memory snapshot when the console becomes visible again.
+    // Español: Recarga el snapshot retenido en memoria cuando la consola vuelve a ser visible.
+    // 中文：控制台重新显示时，重新加载内存日志目标中保留的快照。
+    private func refreshMemoryLogSnapshot() {
+        guard let destination = memoryLogDestination else { return }
+        Task { @MainActor [weak self, destination] in
+            let records = await destination.snapshot()
+            guard let self, self.isVisiable else { return }
+            self.logBuffer.clear()
+            records.forEach { self.logBuffer.append($0) }
+            self.lastFlushedSequence = 0
+            self.terminal?.systemText?.text = ""
+            self.pendingUpdateTask?.cancel()
+            self.pendingUpdateTask = nil
+            self.pendingUpdate = false
+            self.scheduleUIUpdate()
+        }
+    }
+#endif
+
+    // English: Rebuild only the rendered text; the shared memory destination and business log records remain untouched.
+    // Español: Reconstruye solo el texto renderizado; el destino compartido y los registros de negocio permanecen intactos.
+    // 中文：只重建当前显示文本，不修改共享内存日志目标和业务日志记录。
+    private func reloadLogFilters() {
+        guard terminal != nil else { return }
+        pendingUpdateTask?.cancel()
+        pendingUpdateTask = nil
+        pendingUpdate = false
+        terminal?.systemText?.text = ""
+        lastFlushedSequence = 0
+        scheduleUIUpdate()
+    }
     
     func scheduleUIUpdate() {
         guard !pendingUpdate else { return }
@@ -953,11 +1051,17 @@ public class LocalConsole: NSObject {
         let pending = logBuffer.pending(after: lastFlushedSequence)
         guard !pending.entries.isEmpty else { return }
 
-        let batch = Array(pending.entries.prefix(200))
+        let sourceBatch = Array(pending.entries.prefix(200))
+        let batch = sourceBatch.filter {
+            logBuffer.matches($0.item,
+                              categories: logCategoryFilter,
+                              levels: logLevelFilter,
+                              keyword: logKeywordFilter)
+        }
         terminal.appendLogs(batch.map(\.item))
-        lastFlushedSequence = batch.last?.sequence ?? lastFlushedSequence
+        lastFlushedSequence = sourceBatch.last?.sequence ?? lastFlushedSequence
 
-        if batch.count < pending.entries.count {
+        if sourceBatch.count < pending.entries.count {
             scheduleUIUpdate()
         }
     }
@@ -1056,6 +1160,11 @@ extension LocalConsole {
         pendingUpdateTask?.cancel()
         pendingUpdateTask = nil
         pendingUpdate = false
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        if let memoryLogDestination {
+            Task { await memoryLogDestination.clear() }
+        }
+#endif
     }
     
     func loadedLibs() {

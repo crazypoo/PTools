@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
-  "generated_at": "2026-09-22T05:30:01Z",
+  "source_revision": "d4b02fe00a18e3a2b39d69e94d389e8a57794a32",
+  "generated_at": "2026-09-22T06:56:09Z",
   "shared_call_count": 1538,
   "declarations": [
     {
@@ -349,7 +349,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 778,
+      "line": 781,
       "declaration": "static let shared = PTTraceRuntime()",
       "name": "shared",
       "category": "C",
@@ -358,7 +358,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 1124,
+      "line": 1127,
       "declaration": "public static let shared = PTInstrumentRecorder()",
       "name": "shared",
       "category": "C",
@@ -565,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 389,
+      "line": 409,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -628,7 +628,7 @@
     },
     {
       "path": "PooToolsSource/Log/PTNSLog.swift",
-      "line": 86,
+      "line": 89,
       "declaration": "public static let shared = PTLogSinkCenter()",
       "name": "shared",
       "category": "C",

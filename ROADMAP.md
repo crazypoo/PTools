@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.20.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.21.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.20.0`；`5.20.2` 为当前开发基线，5.20.1/5.20.2 尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.20.2`；`5.21.2` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -129,7 +129,15 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 5.20.1 接入默认 OSLog backend、subsystem/category Logger cache、runtime/category filtering 和 Error 元数据摘要。
 - ✅ 5.20.2 接入可选文件日志、单消费者缓冲、flush、轮转、保留、脱敏和内部错误降级；文件错误不会反向触发日志递归。
 - ✅ 新增 `PToolsLoggingTests`，覆盖等级、分类、隐私脱敏、文件写入和轮转边界。
-- [ ] 5.21.0 按模块迁移 `DDLog*` / `PTNSLog*` 调用；5.20.x 不提前删除 CocoaLumberjack 或旧兼容入口。
+
+## 5.21.0–5.21.2 Logging Migration / Debug Diagnostics / Privacy
+
+- ✅ 5.21.0 将 `PTNSLog` 内部直接 `DDLog*` 实现迁移到 `PTLogger`；旧 `PTNSLog`、`PTLogEvent` 和 sink 入口仅作为兼容包装器保留。
+- ✅ 5.21.1 新增 `PTMemoryLogDestination`、actor 所有的有界 Ring Buffer、单 worker 消费和多订阅流；LocalConsole 与 PTInstruments Logs 复用同一条内存日志管线。
+- ✅ LocalConsole 增加 category、level、keyword 三类筛选，日志 UI 使用批量刷新，筛选不会改变底层日志记录。
+- ✅ 5.21.2 增加 `PTLogRedactor` 的文本/记录脱敏 API、Network 请求与响应头脱敏、背压快照、drop policy、后台 flush 和 `PTLogger.exportLogFiles`。
+- ✅ 增加内存日志边界、重要等级保留、多订阅者、策略丢弃、采样和性能测试，并新增 5.21 日志契约门禁。
+- [ ] 5.22.0 在完成迁移证据、公开 API 对照和三套构建验证后，正式移除 CocoaLumberjack 依赖与兼容层。
 
 ## 5.19.4 Dark Mode MainActor Notification Bridge
 

@@ -39,7 +39,10 @@ core_paths=(
   PooToolsSource/iCloud
 )
 
-forbidden_core_references='\b(LocalConsole|PTLogLevel|PTConsoleWindow|TouchInspectorWindow|PTDebugFunction|PTDevFunction|Inspector|PTDebugPreferences|PTDebugManager)\b'
+# English: PTLogLevel belongs to the Foundation logging contract, so it is allowed in the Core log adapter.
+# Español: PTLogLevel pertenece al contrato de logging de Foundation, por lo que se permite en el adaptador de Core.
+# 中文：PTLogLevel 属于 Foundation 日志契约，因此允许出现在 Core 日志适配层。
+forbidden_core_references='\b(LocalConsole|PTConsoleWindow|TouchInspectorWindow|PTDebugFunction|PTDevFunction|Inspector|PTDebugPreferences|PTDebugManager)\b'
 core_references="$(rg -n --glob '*.swift' "$forbidden_core_references" "${core_paths[@]}" || true)"
 if [[ -n "$core_references" ]]; then
   printf '%s\n' "$core_references" >&2

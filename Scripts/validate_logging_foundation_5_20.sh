@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Validate the 5.20.x logging foundation without requiring the legacy logger migration.
-# Español: Valida la base de logging de 5.20.x sin exigir todavía la migración del logger heredado.
-# 中文：校验 5.20.x 日志基础层，但不提前要求迁移旧日志实现。
+# English: Validate the 5.20/5.21 logging foundation without requiring 5.22 dependency removal.
+# Español: Valida la base de logging de 5.20/5.21 sin exigir todavía la eliminación de dependencias de 5.22.
+# 中文：校验 5.20/5.21 日志基础层，但不提前要求 5.22 的依赖删除。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.20\.[0-9]+$ ]] || {
-  printf 'FAIL: logging foundation gate requires a 5.20.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(20|21)\.[0-9]+$ ]] || {
+  printf 'FAIL: logging foundation gate requires a 5.20.x or 5.21.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -65,4 +65,4 @@ if rg -n --glob '*.swift' '^(import|@_exported import) (UIKit|CocoaLumberjack|Al
   exit 1
 fi
 
-printf 'PASS: PTools 5.20 logging foundation contract\n'
+printf 'PASS: PTools 5.20/5.21 logging foundation contract\n'

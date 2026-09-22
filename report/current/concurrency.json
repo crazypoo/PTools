@@ -2,11 +2,11 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "7c396199a48eb9f36883b9633dd19df597b0b5e8",
-  "generated_at": "2026-09-22T05:30:00Z",
+  "source_revision": "d4b02fe00a18e3a2b39d69e94d389e8a57794a32",
+  "generated_at": "2026-09-22T06:56:07Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 27,
+    "task_detached": 28,
     "unchecked_sendable": 67,
     "as_bang": 4
   },
@@ -604,6 +604,12 @@
       "path": "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
       "line": 98,
       "text": "return await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift",
+      "line": 222,
+      "text": "self.worker = Task.detached(priority: .utility) {"
     },
     {
       "rule": "unchecked_sendable",

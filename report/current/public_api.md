@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 7c396199a48eb9f36883b9633dd19df597b0b5e8
-Generated at: 2026-09-22T05:30:01Z
+Source revision: d4b02fe00a18e3a2b39d69e94d389e8a57794a32
+Generated at: 2026-09-22T06:56:07Z
 -->
 
 # PTools 当前公开 API 清单
@@ -2224,145 +2224,145 @@ Generated at: 2026-09-22T05:30:01Z
 | PooToolsSource/Debug/PTDevFunction.swift:14 | class | public | public class PTDevFunction: NSObject { |
 | PooToolsSource/Debug/PTDevFunction.swift:20 | class | public | public class func webImageLoadOptions() -> KingfisherOptionsInfo { |
 | PooToolsSource/Debug/PTDevFunction.swift:34 | class | public | public class func gobalWebImageLoadOption() -> KingfisherOptionsInfo { |
-| PooToolsSource/Debug/PTInstruments.swift:13 | enum | public | public enum PTInstrumentKind: String, Codable, CaseIterable, Sendable { |
-| PooToolsSource/Debug/PTInstruments.swift:36 | protocol | public | public protocol PTInstrument: Sendable { |
-| PooToolsSource/Debug/PTInstruments.swift:40 | struct | public | public struct PTBuiltInInstrument: PTInstrument, Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:41 | let | public | public let kind: PTInstrumentKind |
-| PooToolsSource/Debug/PTInstruments.swift:43 | init | public | public init(kind: PTInstrumentKind) { |
-| PooToolsSource/Debug/PTInstruments.swift:51 | struct | public | public struct PTInstrumentSamplingPolicy: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:52 | var | public | public var cpuMemoryInterval: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:53 | var | public | public var fpsSampleInterval: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:54 | var | public | public var mainThreadStallInterval: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:55 | var | public | public var mainThreadStallThreshold: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:56 | var | public | public var maxEventCount: Int |
-| PooToolsSource/Debug/PTInstruments.swift:57 | var | public | public var maxSampleCount: Int |
-| PooToolsSource/Debug/PTInstruments.swift:58 | var | public | public var maxSessionDuration: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:59 | var | public | public var maxTraceSizeBytes: Int |
-| PooToolsSource/Debug/PTInstruments.swift:60 | var | public | public var captureNetworkBodies: Bool |
-| PooToolsSource/Debug/PTInstruments.swift:61 | var | public | public var logRetention: Int |
-| PooToolsSource/Debug/PTInstruments.swift:63 | init | public | public init(cpuMemoryInterval: TimeInterval = 1, |
-| PooToolsSource/Debug/PTInstruments.swift:86 | struct | public | public struct PTInstrumentSessionMetadata: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:87 | let | public | public let bundleIdentifier: String |
-| PooToolsSource/Debug/PTInstruments.swift:88 | let | public | public let appVersion: String |
-| PooToolsSource/Debug/PTInstruments.swift:89 | let | public | public let operatingSystem: String |
-| PooToolsSource/Debug/PTInstruments.swift:90 | let | public | public let deviceModel: String |
-| PooToolsSource/Debug/PTInstruments.swift:91 | let | public | public let screenRefreshRate: Double |
-| PooToolsSource/Debug/PTInstruments.swift:93 | init | public | public init(bundleIdentifier: String, |
-| PooToolsSource/Debug/PTInstruments.swift:120 | struct | public | public struct PTInstrumentSample: Codable, Sendable, Equatable, Identifiable { |
-| PooToolsSource/Debug/PTInstruments.swift:121 | let | public | public let id: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:122 | let | public | public let kind: PTInstrumentKind |
-| PooToolsSource/Debug/PTInstruments.swift:123 | let | public | public let timestamp: Date |
-| PooToolsSource/Debug/PTInstruments.swift:124 | let | public | public let value: Double |
-| PooToolsSource/Debug/PTInstruments.swift:125 | let | public | public let unit: String |
-| PooToolsSource/Debug/PTInstruments.swift:126 | let | public | public let duration: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:127 | let | public | public let metadata: [String: String] |
-| PooToolsSource/Debug/PTInstruments.swift:129 | init | public | public init(id: UUID = UUID(), |
-| PooToolsSource/Debug/PTInstruments.swift:146 | struct | public | public struct PTInstrumentEvent: Codable, Sendable, Equatable, Identifiable { |
-| PooToolsSource/Debug/PTInstruments.swift:147 | let | public | public let id: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:148 | let | public | public let kind: PTInstrumentKind |
-| PooToolsSource/Debug/PTInstruments.swift:149 | let | public | public let timestamp: Date |
-| PooToolsSource/Debug/PTInstruments.swift:150 | let | public | public let name: String |
-| PooToolsSource/Debug/PTInstruments.swift:151 | let | public | public let duration: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:152 | let | public | public let severity: String? |
-| PooToolsSource/Debug/PTInstruments.swift:153 | let | public | public let metadata: [String: String] |
-| PooToolsSource/Debug/PTInstruments.swift:154 | let | public | public let parentID: UUID? |
-| PooToolsSource/Debug/PTInstruments.swift:156 | init | public | public init(id: UUID = UUID(), |
-| PooToolsSource/Debug/PTInstruments.swift:175 | struct | public | public struct PTInstrumentTrack: Codable, Sendable, Equatable, Identifiable { |
-| PooToolsSource/Debug/PTInstruments.swift:176 | let | public | public let id: String |
-| PooToolsSource/Debug/PTInstruments.swift:177 | let | public | public let kind: PTInstrumentKind |
-| PooToolsSource/Debug/PTInstruments.swift:178 | var | public | public var isVisible: Bool |
-| PooToolsSource/Debug/PTInstruments.swift:179 | var | public | public var samples: [PTInstrumentSample] |
-| PooToolsSource/Debug/PTInstruments.swift:180 | var | public | public var events: [PTInstrumentEvent] |
-| PooToolsSource/Debug/PTInstruments.swift:182 | init | public | public init(kind: PTInstrumentKind, |
-| PooToolsSource/Debug/PTInstruments.swift:194 | struct | public | public struct PTInstrumentCorrelation: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:195 | let | public | public let event: PTInstrumentEvent |
-| PooToolsSource/Debug/PTInstruments.swift:196 | let | public | public let relatedEvents: [PTInstrumentEvent] |
-| PooToolsSource/Debug/PTInstruments.swift:197 | let | public | public let relatedSamples: [PTInstrumentSample] |
-| PooToolsSource/Debug/PTInstruments.swift:199 | init | public | public init(event: PTInstrumentEvent, |
-| PooToolsSource/Debug/PTInstruments.swift:208 | struct | public | public struct PTInstrumentTimeline: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:209 | let | public | public let startDate: Date |
-| PooToolsSource/Debug/PTInstruments.swift:210 | let | public | public let endDate: Date |
-| PooToolsSource/Debug/PTInstruments.swift:211 | let | public | public let tracks: [PTInstrumentTrack] |
-| PooToolsSource/Debug/PTInstruments.swift:213 | init | public | public init(startDate: Date, endDate: Date, tracks: [PTInstrumentTrack]) { |
-| PooToolsSource/Debug/PTInstruments.swift:219 | var | public | public var duration: TimeInterval { |
-| PooToolsSource/Debug/PTInstruments.swift:223 | func | public | public func events(in range: DateInterval? = nil, |
-| PooToolsSource/Debug/PTInstruments.swift:242 | func | public | public func samples(in range: DateInterval? = nil, |
-| PooToolsSource/Debug/PTInstruments.swift:251 | func | public | public func correlation(for eventID: UUID, |
-| PooToolsSource/Debug/PTInstruments.swift:269 | struct | public | public struct PTInstrumentSessionSnapshot: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:270 | let | public | public let formatVersion: Int |
-| PooToolsSource/Debug/PTInstruments.swift:271 | let | public | public let id: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:272 | let | public | public let startDate: Date |
-| PooToolsSource/Debug/PTInstruments.swift:273 | let | public | public let endDate: Date |
-| PooToolsSource/Debug/PTInstruments.swift:274 | let | public | public let metadata: PTInstrumentSessionMetadata |
-| PooToolsSource/Debug/PTInstruments.swift:275 | let | public | public let selectedInstruments: [PTInstrumentKind] |
-| PooToolsSource/Debug/PTInstruments.swift:276 | let | public | public let timeline: PTInstrumentTimeline |
-| PooToolsSource/Debug/PTInstruments.swift:277 | let | public | public let summary: [String: Double] |
-| PooToolsSource/Debug/PTInstruments.swift:279 | init | public | public init(formatVersion: Int = 1, |
-| PooToolsSource/Debug/PTInstruments.swift:301 | struct | public | public struct PTInstrumentTraceComparison: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:302 | let | public | public let leftID: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:303 | let | public | public let rightID: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:304 | let | public | public let durationDelta: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:305 | let | public | public let eventCountDelta: Int |
-| PooToolsSource/Debug/PTInstruments.swift:306 | let | public | public let sampleCountDelta: Int |
-| PooToolsSource/Debug/PTInstruments.swift:307 | let | public | public let droppedCountDelta: Int |
-| PooToolsSource/Debug/PTInstruments.swift:309 | init | public | public init(leftID: UUID, |
-| PooToolsSource/Debug/PTInstruments.swift:327 | struct | public | public struct PTInstrumentNetworkRecord: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:328 | let | public | public let requestID: String? |
-| PooToolsSource/Debug/PTInstruments.swift:329 | let | public | public let method: String |
-| PooToolsSource/Debug/PTInstruments.swift:330 | let | public | public let url: String |
-| PooToolsSource/Debug/PTInstruments.swift:331 | let | public | public let statusCode: Int? |
-| PooToolsSource/Debug/PTInstruments.swift:332 | let | public | public let requestBytes: Int64? |
-| PooToolsSource/Debug/PTInstruments.swift:333 | let | public | public let responseBytes: Int64? |
-| PooToolsSource/Debug/PTInstruments.swift:334 | let | public | public let duration: TimeInterval |
-| PooToolsSource/Debug/PTInstruments.swift:335 | let | public | public let dnsDuration: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:336 | let | public | public let connectDuration: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:337 | let | public | public let tlsDuration: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:338 | let | public | public let timeToFirstByte: TimeInterval? |
-| PooToolsSource/Debug/PTInstruments.swift:339 | let | public | public let retryCount: Int |
-| PooToolsSource/Debug/PTInstruments.swift:340 | let | public | public let fromCache: Bool |
-| PooToolsSource/Debug/PTInstruments.swift:341 | let | public | public let cancelled: Bool |
-| PooToolsSource/Debug/PTInstruments.swift:343 | init | public | public init(requestID: String? = nil, |
-| PooToolsSource/Debug/PTInstruments.swift:374 | enum | public | public enum PTInstrumentSessionError: LocalizedError, Sendable { |
-| PooToolsSource/Debug/PTInstruments.swift:379 | var | public | public var errorDescription: String? { |
-| PooToolsSource/Debug/PTInstruments.swift:394 | enum | public | public enum PTInstrumentRedactor { |
-| PooToolsSource/Debug/PTInstruments.swift:476 | struct | public | public struct PTInstrumentTraceDocument: Codable, Sendable, Equatable { |
-| PooToolsSource/Debug/PTInstruments.swift:477 | let | public | public let schemaVersion: Int |
-| PooToolsSource/Debug/PTInstruments.swift:478 | let | public | public let exportedAt: Date |
-| PooToolsSource/Debug/PTInstruments.swift:479 | let | public | public let session: PTInstrumentSessionSnapshot |
-| PooToolsSource/Debug/PTInstruments.swift:481 | init | public | public init(schemaVersion: Int = 1, |
-| PooToolsSource/Debug/PTInstruments.swift:490 | enum | public | public enum PTInstrumentTraceStore { |
-| PooToolsSource/Debug/PTInstruments.swift:629 | actor | public | public actor PTInstrumentSession { |
-| PooToolsSource/Debug/PTInstruments.swift:630 | enum | public | public enum State: String, Sendable { |
-| PooToolsSource/Debug/PTInstruments.swift:635 | let | public | public let id: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:636 | let | public | public let selectedInstruments: [PTInstrumentKind] |
-| PooToolsSource/Debug/PTInstruments.swift:637 | let | public | public let metadata: PTInstrumentSessionMetadata |
-| PooToolsSource/Debug/PTInstruments.swift:638 | let | public | public let policy: PTInstrumentSamplingPolicy |
-| PooToolsSource/Debug/PTInstruments.swift:649 | init | public | public init(id: UUID = UUID(), |
-| PooToolsSource/Debug/PTInstruments.swift:660 | func | public | public func start() { |
-| PooToolsSource/Debug/PTInstruments.swift:668 | func | public | public func stop() -> PTInstrumentSessionSnapshot { |
-| PooToolsSource/Debug/PTInstruments.swift:674 | func | public | public func currentState() -> State { |
-| PooToolsSource/Debug/PTInstruments.swift:678 | func | public | public func recordSample(_ sample: PTInstrumentSample) { |
-| PooToolsSource/Debug/PTInstruments.swift:688 | func | public | public func recordEvent(_ event: PTInstrumentEvent) { |
-| PooToolsSource/Debug/PTInstruments.swift:699 | func | public | public func snapshot() -> PTInstrumentSessionSnapshot { |
-| PooToolsSource/Debug/PTInstruments.swift:703 | func | public | public func timeline() -> PTInstrumentTimeline { |
-| PooToolsSource/Debug/PTInstruments.swift:707 | func | public | public func export(to destination: URL? = nil) throws -> URL { |
-| PooToolsSource/Debug/PTInstruments.swift:804 | struct | public | public struct PTTraceToken: Sendable { |
-| PooToolsSource/Debug/PTInstruments.swift:805 | let | public | public let id: UUID |
-| PooToolsSource/Debug/PTInstruments.swift:806 | let | public | public let name: String |
-| PooToolsSource/Debug/PTInstruments.swift:830 | func | public | public func end(metadata: [String: String] = [:]) { |
-| PooToolsSource/Debug/PTInstruments.swift:860 | enum | public | public enum PTTrace { |
-| PooToolsSource/Debug/PTInstruments.swift:1143 | func | public | public func start(instruments: [PTInstrumentKind] = PTInstrumentKind.allCases, |
-| PooToolsSource/Debug/PTInstruments.swift:1193 | func | public | public func stop() async -> PTInstrumentSessionSnapshot? { |
-| PooToolsSource/Debug/PTInstruments.swift:1275 | func | public | public func record(network: PTInstrumentNetworkRecord) { |
-| PooToolsSource/Debug/PTInstruments.swift:1304 | func | public | public func recordCrashMarker(_ name: String = "crash-marker", |
-| PooToolsSource/Debug/PTInstruments.swift:1320 | func | public | public func recordLaunch(_ name: String = "launch", |
-| PooToolsSource/Debug/PTInstruments.swift:1328 | func | public | public func recordViewControllerLifecycle(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1336 | func | public | public func recordTask(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1342 | func | public | public func recordSignpost(_ name: String, |
-| PooToolsSource/Debug/PTInstruments.swift:1348 | func | public | public func liveSnapshot() async -> PTInstrumentSessionSnapshot? { |
-| PooToolsSource/Debug/PTInstruments.swift:1353 | func | public | public func importTrace(from url: URL, |
-| PooToolsSource/Debug/PTInstruments.swift:1358 | func | public | public func replay(_ snapshot: PTInstrumentSessionSnapshot, |
-| PooToolsSource/Debug/PTInstruments.swift:1363 | func | public | public func compare(_ left: PTInstrumentSessionSnapshot, |
+| PooToolsSource/Debug/PTInstruments.swift:16 | enum | public | public enum PTInstrumentKind: String, Codable, CaseIterable, Sendable { |
+| PooToolsSource/Debug/PTInstruments.swift:39 | protocol | public | public protocol PTInstrument: Sendable { |
+| PooToolsSource/Debug/PTInstruments.swift:43 | struct | public | public struct PTBuiltInInstrument: PTInstrument, Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:44 | let | public | public let kind: PTInstrumentKind |
+| PooToolsSource/Debug/PTInstruments.swift:46 | init | public | public init(kind: PTInstrumentKind) { |
+| PooToolsSource/Debug/PTInstruments.swift:54 | struct | public | public struct PTInstrumentSamplingPolicy: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:55 | var | public | public var cpuMemoryInterval: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:56 | var | public | public var fpsSampleInterval: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:57 | var | public | public var mainThreadStallInterval: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:58 | var | public | public var mainThreadStallThreshold: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:59 | var | public | public var maxEventCount: Int |
+| PooToolsSource/Debug/PTInstruments.swift:60 | var | public | public var maxSampleCount: Int |
+| PooToolsSource/Debug/PTInstruments.swift:61 | var | public | public var maxSessionDuration: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:62 | var | public | public var maxTraceSizeBytes: Int |
+| PooToolsSource/Debug/PTInstruments.swift:63 | var | public | public var captureNetworkBodies: Bool |
+| PooToolsSource/Debug/PTInstruments.swift:64 | var | public | public var logRetention: Int |
+| PooToolsSource/Debug/PTInstruments.swift:66 | init | public | public init(cpuMemoryInterval: TimeInterval = 1, |
+| PooToolsSource/Debug/PTInstruments.swift:89 | struct | public | public struct PTInstrumentSessionMetadata: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:90 | let | public | public let bundleIdentifier: String |
+| PooToolsSource/Debug/PTInstruments.swift:91 | let | public | public let appVersion: String |
+| PooToolsSource/Debug/PTInstruments.swift:92 | let | public | public let operatingSystem: String |
+| PooToolsSource/Debug/PTInstruments.swift:93 | let | public | public let deviceModel: String |
+| PooToolsSource/Debug/PTInstruments.swift:94 | let | public | public let screenRefreshRate: Double |
+| PooToolsSource/Debug/PTInstruments.swift:96 | init | public | public init(bundleIdentifier: String, |
+| PooToolsSource/Debug/PTInstruments.swift:123 | struct | public | public struct PTInstrumentSample: Codable, Sendable, Equatable, Identifiable { |
+| PooToolsSource/Debug/PTInstruments.swift:124 | let | public | public let id: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:125 | let | public | public let kind: PTInstrumentKind |
+| PooToolsSource/Debug/PTInstruments.swift:126 | let | public | public let timestamp: Date |
+| PooToolsSource/Debug/PTInstruments.swift:127 | let | public | public let value: Double |
+| PooToolsSource/Debug/PTInstruments.swift:128 | let | public | public let unit: String |
+| PooToolsSource/Debug/PTInstruments.swift:129 | let | public | public let duration: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:130 | let | public | public let metadata: [String: String] |
+| PooToolsSource/Debug/PTInstruments.swift:132 | init | public | public init(id: UUID = UUID(), |
+| PooToolsSource/Debug/PTInstruments.swift:149 | struct | public | public struct PTInstrumentEvent: Codable, Sendable, Equatable, Identifiable { |
+| PooToolsSource/Debug/PTInstruments.swift:150 | let | public | public let id: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:151 | let | public | public let kind: PTInstrumentKind |
+| PooToolsSource/Debug/PTInstruments.swift:152 | let | public | public let timestamp: Date |
+| PooToolsSource/Debug/PTInstruments.swift:153 | let | public | public let name: String |
+| PooToolsSource/Debug/PTInstruments.swift:154 | let | public | public let duration: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:155 | let | public | public let severity: String? |
+| PooToolsSource/Debug/PTInstruments.swift:156 | let | public | public let metadata: [String: String] |
+| PooToolsSource/Debug/PTInstruments.swift:157 | let | public | public let parentID: UUID? |
+| PooToolsSource/Debug/PTInstruments.swift:159 | init | public | public init(id: UUID = UUID(), |
+| PooToolsSource/Debug/PTInstruments.swift:178 | struct | public | public struct PTInstrumentTrack: Codable, Sendable, Equatable, Identifiable { |
+| PooToolsSource/Debug/PTInstruments.swift:179 | let | public | public let id: String |
+| PooToolsSource/Debug/PTInstruments.swift:180 | let | public | public let kind: PTInstrumentKind |
+| PooToolsSource/Debug/PTInstruments.swift:181 | var | public | public var isVisible: Bool |
+| PooToolsSource/Debug/PTInstruments.swift:182 | var | public | public var samples: [PTInstrumentSample] |
+| PooToolsSource/Debug/PTInstruments.swift:183 | var | public | public var events: [PTInstrumentEvent] |
+| PooToolsSource/Debug/PTInstruments.swift:185 | init | public | public init(kind: PTInstrumentKind, |
+| PooToolsSource/Debug/PTInstruments.swift:197 | struct | public | public struct PTInstrumentCorrelation: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:198 | let | public | public let event: PTInstrumentEvent |
+| PooToolsSource/Debug/PTInstruments.swift:199 | let | public | public let relatedEvents: [PTInstrumentEvent] |
+| PooToolsSource/Debug/PTInstruments.swift:200 | let | public | public let relatedSamples: [PTInstrumentSample] |
+| PooToolsSource/Debug/PTInstruments.swift:202 | init | public | public init(event: PTInstrumentEvent, |
+| PooToolsSource/Debug/PTInstruments.swift:211 | struct | public | public struct PTInstrumentTimeline: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:212 | let | public | public let startDate: Date |
+| PooToolsSource/Debug/PTInstruments.swift:213 | let | public | public let endDate: Date |
+| PooToolsSource/Debug/PTInstruments.swift:214 | let | public | public let tracks: [PTInstrumentTrack] |
+| PooToolsSource/Debug/PTInstruments.swift:216 | init | public | public init(startDate: Date, endDate: Date, tracks: [PTInstrumentTrack]) { |
+| PooToolsSource/Debug/PTInstruments.swift:222 | var | public | public var duration: TimeInterval { |
+| PooToolsSource/Debug/PTInstruments.swift:226 | func | public | public func events(in range: DateInterval? = nil, |
+| PooToolsSource/Debug/PTInstruments.swift:245 | func | public | public func samples(in range: DateInterval? = nil, |
+| PooToolsSource/Debug/PTInstruments.swift:254 | func | public | public func correlation(for eventID: UUID, |
+| PooToolsSource/Debug/PTInstruments.swift:272 | struct | public | public struct PTInstrumentSessionSnapshot: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:273 | let | public | public let formatVersion: Int |
+| PooToolsSource/Debug/PTInstruments.swift:274 | let | public | public let id: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:275 | let | public | public let startDate: Date |
+| PooToolsSource/Debug/PTInstruments.swift:276 | let | public | public let endDate: Date |
+| PooToolsSource/Debug/PTInstruments.swift:277 | let | public | public let metadata: PTInstrumentSessionMetadata |
+| PooToolsSource/Debug/PTInstruments.swift:278 | let | public | public let selectedInstruments: [PTInstrumentKind] |
+| PooToolsSource/Debug/PTInstruments.swift:279 | let | public | public let timeline: PTInstrumentTimeline |
+| PooToolsSource/Debug/PTInstruments.swift:280 | let | public | public let summary: [String: Double] |
+| PooToolsSource/Debug/PTInstruments.swift:282 | init | public | public init(formatVersion: Int = 1, |
+| PooToolsSource/Debug/PTInstruments.swift:304 | struct | public | public struct PTInstrumentTraceComparison: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:305 | let | public | public let leftID: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:306 | let | public | public let rightID: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:307 | let | public | public let durationDelta: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:308 | let | public | public let eventCountDelta: Int |
+| PooToolsSource/Debug/PTInstruments.swift:309 | let | public | public let sampleCountDelta: Int |
+| PooToolsSource/Debug/PTInstruments.swift:310 | let | public | public let droppedCountDelta: Int |
+| PooToolsSource/Debug/PTInstruments.swift:312 | init | public | public init(leftID: UUID, |
+| PooToolsSource/Debug/PTInstruments.swift:330 | struct | public | public struct PTInstrumentNetworkRecord: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:331 | let | public | public let requestID: String? |
+| PooToolsSource/Debug/PTInstruments.swift:332 | let | public | public let method: String |
+| PooToolsSource/Debug/PTInstruments.swift:333 | let | public | public let url: String |
+| PooToolsSource/Debug/PTInstruments.swift:334 | let | public | public let statusCode: Int? |
+| PooToolsSource/Debug/PTInstruments.swift:335 | let | public | public let requestBytes: Int64? |
+| PooToolsSource/Debug/PTInstruments.swift:336 | let | public | public let responseBytes: Int64? |
+| PooToolsSource/Debug/PTInstruments.swift:337 | let | public | public let duration: TimeInterval |
+| PooToolsSource/Debug/PTInstruments.swift:338 | let | public | public let dnsDuration: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:339 | let | public | public let connectDuration: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:340 | let | public | public let tlsDuration: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:341 | let | public | public let timeToFirstByte: TimeInterval? |
+| PooToolsSource/Debug/PTInstruments.swift:342 | let | public | public let retryCount: Int |
+| PooToolsSource/Debug/PTInstruments.swift:343 | let | public | public let fromCache: Bool |
+| PooToolsSource/Debug/PTInstruments.swift:344 | let | public | public let cancelled: Bool |
+| PooToolsSource/Debug/PTInstruments.swift:346 | init | public | public init(requestID: String? = nil, |
+| PooToolsSource/Debug/PTInstruments.swift:377 | enum | public | public enum PTInstrumentSessionError: LocalizedError, Sendable { |
+| PooToolsSource/Debug/PTInstruments.swift:382 | var | public | public var errorDescription: String? { |
+| PooToolsSource/Debug/PTInstruments.swift:397 | enum | public | public enum PTInstrumentRedactor { |
+| PooToolsSource/Debug/PTInstruments.swift:479 | struct | public | public struct PTInstrumentTraceDocument: Codable, Sendable, Equatable { |
+| PooToolsSource/Debug/PTInstruments.swift:480 | let | public | public let schemaVersion: Int |
+| PooToolsSource/Debug/PTInstruments.swift:481 | let | public | public let exportedAt: Date |
+| PooToolsSource/Debug/PTInstruments.swift:482 | let | public | public let session: PTInstrumentSessionSnapshot |
+| PooToolsSource/Debug/PTInstruments.swift:484 | init | public | public init(schemaVersion: Int = 1, |
+| PooToolsSource/Debug/PTInstruments.swift:493 | enum | public | public enum PTInstrumentTraceStore { |
+| PooToolsSource/Debug/PTInstruments.swift:632 | actor | public | public actor PTInstrumentSession { |
+| PooToolsSource/Debug/PTInstruments.swift:633 | enum | public | public enum State: String, Sendable { |
+| PooToolsSource/Debug/PTInstruments.swift:638 | let | public | public let id: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:639 | let | public | public let selectedInstruments: [PTInstrumentKind] |
+| PooToolsSource/Debug/PTInstruments.swift:640 | let | public | public let metadata: PTInstrumentSessionMetadata |
+| PooToolsSource/Debug/PTInstruments.swift:641 | let | public | public let policy: PTInstrumentSamplingPolicy |
+| PooToolsSource/Debug/PTInstruments.swift:652 | init | public | public init(id: UUID = UUID(), |
+| PooToolsSource/Debug/PTInstruments.swift:663 | func | public | public func start() { |
+| PooToolsSource/Debug/PTInstruments.swift:671 | func | public | public func stop() -> PTInstrumentSessionSnapshot { |
+| PooToolsSource/Debug/PTInstruments.swift:677 | func | public | public func currentState() -> State { |
+| PooToolsSource/Debug/PTInstruments.swift:681 | func | public | public func recordSample(_ sample: PTInstrumentSample) { |
+| PooToolsSource/Debug/PTInstruments.swift:691 | func | public | public func recordEvent(_ event: PTInstrumentEvent) { |
+| PooToolsSource/Debug/PTInstruments.swift:702 | func | public | public func snapshot() -> PTInstrumentSessionSnapshot { |
+| PooToolsSource/Debug/PTInstruments.swift:706 | func | public | public func timeline() -> PTInstrumentTimeline { |
+| PooToolsSource/Debug/PTInstruments.swift:710 | func | public | public func export(to destination: URL? = nil) throws -> URL { |
+| PooToolsSource/Debug/PTInstruments.swift:807 | struct | public | public struct PTTraceToken: Sendable { |
+| PooToolsSource/Debug/PTInstruments.swift:808 | let | public | public let id: UUID |
+| PooToolsSource/Debug/PTInstruments.swift:809 | let | public | public let name: String |
+| PooToolsSource/Debug/PTInstruments.swift:833 | func | public | public func end(metadata: [String: String] = [:]) { |
+| PooToolsSource/Debug/PTInstruments.swift:863 | enum | public | public enum PTTrace { |
+| PooToolsSource/Debug/PTInstruments.swift:1151 | func | public | public func start(instruments: [PTInstrumentKind] = PTInstrumentKind.allCases, |
+| PooToolsSource/Debug/PTInstruments.swift:1201 | func | public | public func stop() async -> PTInstrumentSessionSnapshot? { |
+| PooToolsSource/Debug/PTInstruments.swift:1326 | func | public | public func record(network: PTInstrumentNetworkRecord) { |
+| PooToolsSource/Debug/PTInstruments.swift:1355 | func | public | public func recordCrashMarker(_ name: String = "crash-marker", |
+| PooToolsSource/Debug/PTInstruments.swift:1371 | func | public | public func recordLaunch(_ name: String = "launch", |
+| PooToolsSource/Debug/PTInstruments.swift:1379 | func | public | public func recordViewControllerLifecycle(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1387 | func | public | public func recordTask(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1393 | func | public | public func recordSignpost(_ name: String, |
+| PooToolsSource/Debug/PTInstruments.swift:1399 | func | public | public func liveSnapshot() async -> PTInstrumentSessionSnapshot? { |
+| PooToolsSource/Debug/PTInstruments.swift:1404 | func | public | public func importTrace(from url: URL, |
+| PooToolsSource/Debug/PTInstruments.swift:1409 | func | public | public func replay(_ snapshot: PTInstrumentSessionSnapshot, |
+| PooToolsSource/Debug/PTInstruments.swift:1414 | func | public | public func compare(_ left: PTInstrumentSessionSnapshot, |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:12 | var | public | public var onSelectEvent: ((PTInstrumentEvent) -> Void)? |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:13 | var | public | public var query: String = "" { |
 | PooToolsSource/Debug/PTInstrumentsUI.swift:32 | func | public | public func update(snapshot: PTInstrumentSessionSnapshot) { |
@@ -3485,34 +3485,37 @@ Generated at: 2026-09-22T05:30:01Z
 | PooToolsSource/LocalConsole/LocalConsole.swift:31 | let | public | public let systemLog_base_height:CGFloat = 148 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:32 | let | public | public let borderLine:CGFloat = 5 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:33 | let | public | public let diameter:CGFloat = 28 |
-| PooToolsSource/LocalConsole/LocalConsole.swift:269 | enum | public | public enum PTLogLevel { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:269 | enum | public | public enum PTLogLevel: CaseIterable { |
 | PooToolsSource/LocalConsole/LocalConsole.swift:304 | struct | public | public struct LogItem { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:374 | enum | public | @objc public enum LocalConsoleActionType : Int { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:384 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
-| PooToolsSource/LocalConsole/LocalConsole.swift:388 | class | public | public class LocalConsole: NSObject { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:438 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:443 | func | public | public func clearDebugPlugins() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:465 | var | public | public var closeAllOutsideFunction:PTActionTask? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:466 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:471 | var | public | public var networkStatus = "" |
-| PooToolsSource/LocalConsole/LocalConsole.swift:473 | var | public | public var menu: UIMenuElement? = nil { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:481 | var | public | @MainActor public var isVisiable:Bool = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:531 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:536 | func | public | public func setAttFontColor(color:UIColor) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:540 | var | public | public var terminal:PTTerminal? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:541 | var | public | public var maskView:PTDevMaskView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:549 | var | public | public var showAllUserDefaultsKeys = false { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:676 | func | public | @MainActor public func cleanSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:840 | func | public | @MainActor public func createSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:927 | var | public | public var isCharacterLimitDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:928 | var | public | public var isCharacterLimitWarningDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:930 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:976 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1052 | func | public | public func clear() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1549 | class | public | public class PTTerminal:PFloatingButton { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1550 | var | public | public var systemText : PTInvertedTextView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1629 | func | public | public func setAttributedText(_ string: String) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1646 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:394 | enum | public | @objc public enum LocalConsoleActionType : Int { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:404 | typealias | public | public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void |
+| PooToolsSource/LocalConsole/LocalConsole.swift:408 | class | public | public class LocalConsole: NSObject { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:458 | func | public | public func registerDebugPlugin(_ plugin: PTDebugPlugin) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:463 | func | public | public func clearDebugPlugins() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:493 | var | public | public var logCategoryFilter: Set<String> = [] { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:496 | var | public | public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:499 | var | public | public var logKeywordFilter: String = "" { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:503 | var | public | public var closeAllOutsideFunction:PTActionTask? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:504 | var | public | public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:509 | var | public | public var networkStatus = "" |
+| PooToolsSource/LocalConsole/LocalConsole.swift:511 | var | public | public var menu: UIMenuElement? = nil { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:519 | var | public | @MainActor public var isVisiable:Bool = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:572 | func | public | public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:577 | func | public | public func setAttFontColor(color:UIColor) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:581 | var | public | public var terminal:PTTerminal? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:582 | var | public | public var maskView:PTDevMaskView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:590 | var | public | public var showAllUserDefaultsKeys = false { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:735 | func | public | @MainActor public func cleanSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:899 | func | public | @MainActor public func createSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:986 | var | public | public var isCharacterLimitDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:987 | var | public | public var isCharacterLimitWarningDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:989 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1080 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1156 | func | public | public func clear() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1658 | class | public | public class PTTerminal:PFloatingButton { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1659 | var | public | public var systemText : PTInvertedTextView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1738 | func | public | public func setAttributedText(_ string: String) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1755 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:11 | class | public | public class PTInvertedTextView: UITextView { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:13 | var | public | public var pendingOffsetChange = false |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:26 | var | public | public var cancelNextContentSizeDidSet = false |
@@ -3551,36 +3554,36 @@ Generated at: 2026-09-22T05:30:01Z
 | PooToolsSource/Log/Logger+PTEX.swift:71 | var | public | public var PTLogMode: LoggerEXLevelType { |
 | PooToolsSource/Log/PTLogFileManager.swift:4 | actor | public | public actor PTLogFileManager { |
 | PooToolsSource/Log/PTLogFileManager.swift:11 | func | public | public func append(logText: String) { |
-| PooToolsSource/Log/PTNSLog.swift:24 | enum | public | public enum PTLogSeverity: String, Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:31 | struct | public | public struct PTLogEvent: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:32 | let | public | public let message: String |
-| PooToolsSource/Log/PTNSLog.swift:33 | let | public | public let severity: PTLogSeverity |
-| PooToolsSource/Log/PTNSLog.swift:34 | let | public | public let category: String |
-| PooToolsSource/Log/PTNSLog.swift:36 | init | public | public init(message: String, |
-| PooToolsSource/Log/PTNSLog.swift:45 | protocol | public | public protocol PTLogging: Sendable { |
-| PooToolsSource/Log/PTNSLog.swift:53 | enum | public | public enum PTLogRuntimeConfiguration { |
-| PooToolsSource/Log/PTNSLog.swift:65 | struct | public | public struct PTLogSink { |
-| PooToolsSource/Log/PTNSLog.swift:66 | let | public | public let identifier: String |
-| PooToolsSource/Log/PTNSLog.swift:69 | init | public | public init(identifier: String, |
-| PooToolsSource/Log/PTNSLog.swift:76 | func | public | public func receive(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:92 | func | public | public func install(_ sink: PTLogSink) { |
-| PooToolsSource/Log/PTNSLog.swift:96 | func | public | public func remove(identifier: String) { |
-| PooToolsSource/Log/PTNSLog.swift:100 | func | public | public func publish(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:105 | struct | public | public struct PTOSLogger: PTLogging { |
-| PooToolsSource/Log/PTNSLog.swift:108 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
-| PooToolsSource/Log/PTNSLog.swift:113 | func | public | public func log(_ event: PTLogEvent) { |
-| PooToolsSource/Log/PTNSLog.swift:161 | func | public | public func prettyJSONString(from object: Any) -> String? { |
-| PooToolsSource/Log/PTNSLog.swift:176 | func | public | public func PTNSLogConsole(_ any: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:190 | func | public | public func PTNSLog(_ msg: Any..., |
-| PooToolsSource/Log/PTNSLog.swift:273 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
-| PooToolsSource/Log/PTNSLog.swift:285 | func | public | public func PTPrint<T>(val: inout T, |
-| PooToolsSource/Log/PTNSLog.swift:302 | func | public | public func PTPrint<T>(ref: T, |
-| PooToolsSource/Log/PTNSLog.swift:320 | enum | public | public enum PTMemAlign : Int { |
-| PooToolsSource/Log/PTNSLog.swift:329 | struct | public | public struct PTMems<T> { |
-| PooToolsSource/Log/PTNSLog.swift:434 | enum | public | public enum PTStringMemType : UInt8 { |
-| PooToolsSource/Log/PTNSLog.swift:445 | struct | public | public struct PTMemsWrapper<Base> { |
-| PooToolsSource/Log/PTNSLog.swift:447 | init | public | public init(_ base: Base) { |
-| PooToolsSource/Log/PTNSLog.swift:452 | protocol | public | public protocol PTMemsCompatible {} |
+| PooToolsSource/Log/PTNSLog.swift:27 | enum | public | public enum PTLogSeverity: String, Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:34 | struct | public | public struct PTLogEvent: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:35 | let | public | public let message: String |
+| PooToolsSource/Log/PTNSLog.swift:36 | let | public | public let severity: PTLogSeverity |
+| PooToolsSource/Log/PTNSLog.swift:37 | let | public | public let category: String |
+| PooToolsSource/Log/PTNSLog.swift:39 | init | public | public init(message: String, |
+| PooToolsSource/Log/PTNSLog.swift:48 | protocol | public | public protocol PTLogging: Sendable { |
+| PooToolsSource/Log/PTNSLog.swift:56 | enum | public | public enum PTLogRuntimeConfiguration { |
+| PooToolsSource/Log/PTNSLog.swift:68 | struct | public | public struct PTLogSink { |
+| PooToolsSource/Log/PTNSLog.swift:69 | let | public | public let identifier: String |
+| PooToolsSource/Log/PTNSLog.swift:72 | init | public | public init(identifier: String, |
+| PooToolsSource/Log/PTNSLog.swift:79 | func | public | public func receive(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:95 | func | public | public func install(_ sink: PTLogSink) { |
+| PooToolsSource/Log/PTNSLog.swift:99 | func | public | public func remove(identifier: String) { |
+| PooToolsSource/Log/PTNSLog.swift:103 | func | public | public func publish(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:108 | struct | public | public struct PTOSLogger: PTLogging { |
+| PooToolsSource/Log/PTNSLog.swift:111 | init | public | public init(subsystem: String = Bundle.main.bundleIdentifier ?? "PooTools", |
+| PooToolsSource/Log/PTNSLog.swift:116 | func | public | public func log(_ event: PTLogEvent) { |
+| PooToolsSource/Log/PTNSLog.swift:164 | func | public | public func prettyJSONString(from object: Any) -> String? { |
+| PooToolsSource/Log/PTNSLog.swift:179 | func | public | public func PTNSLogConsole(_ any: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:193 | func | public | public func PTNSLog(_ msg: Any..., |
+| PooToolsSource/Log/PTNSLog.swift:300 | func | public | public func PTPrintPointer<T>(ptr: UnsafePointer<T>, |
+| PooToolsSource/Log/PTNSLog.swift:312 | func | public | public func PTPrint<T>(val: inout T, |
+| PooToolsSource/Log/PTNSLog.swift:329 | func | public | public func PTPrint<T>(ref: T, |
+| PooToolsSource/Log/PTNSLog.swift:347 | enum | public | public enum PTMemAlign : Int { |
+| PooToolsSource/Log/PTNSLog.swift:356 | struct | public | public struct PTMems<T> { |
+| PooToolsSource/Log/PTNSLog.swift:461 | enum | public | public enum PTStringMemType : UInt8 { |
+| PooToolsSource/Log/PTNSLog.swift:472 | struct | public | public struct PTMemsWrapper<Base> { |
+| PooToolsSource/Log/PTNSLog.swift:474 | init | public | public init(_ base: Base) { |
+| PooToolsSource/Log/PTNSLog.swift:479 | protocol | public | public protocol PTMemsCompatible {} |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:34 | func | public | public func start() { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:40 | func | public | public func stop() { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:46 | func | public | public func invalidate() { |
@@ -4218,43 +4221,70 @@ Generated at: 2026-09-22T05:30:01Z
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:29 | init | public | public init(rawValue: String) { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:45 | enum | public | public enum PTLogPrivacy: Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:51 | typealias | public | public typealias PTLogMetadata = [String: String] |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:53 | struct | public | public struct PTLogRecord: Identifiable, Sendable { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:54 | let | public | public let id: UInt64 |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:55 | let | public | public let sequence: UInt64 |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:56 | let | public | public let timestamp: Date |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:57 | let | public | public let level: PTLogLevel |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:58 | let | public | public let subsystem: String |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:59 | let | public | public let category: PTLogCategory |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:60 | let | public | public let message: String |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:61 | let | public | public let metadata: PTLogMetadata |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:62 | let | public | public let privacy: PTLogPrivacy |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:63 | let | public | public let file: String |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:64 | let | public | public let function: String |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:65 | let | public | public let line: UInt |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:67 | init | public | public init(sequence: UInt64, |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:93 | struct | public | public struct PTLogConfiguration: Sendable { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:94 | var | public | public var minimumLevel: PTLogLevel |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:95 | var | public | public var categoryLevels: [PTLogCategory: PTLogLevel] |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:96 | var | public | public var subsystem: String |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:98 | init | public | public init(minimumLevel: PTLogLevel = { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:112 | func | public | public func minimumLevel(for category: PTLogCategory) -> PTLogLevel { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:120 | struct | public | public struct PTLogFileConfiguration: Sendable { |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:121 | let | public | public let directoryURL: URL |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:122 | let | public | public let maximumFileSize: UInt64 |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:123 | let | public | public let maximumFileAge: TimeInterval |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:124 | let | public | public let maximumFiles: Int |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:125 | let | public | public let retentionDays: TimeInterval |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:126 | let | public | public let maximumTotalSize: UInt64 |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:127 | let | public | public let bufferCapacity: Int |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:128 | let | public | public let bufferSize: Int |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:129 | let | public | public let flushInterval: TimeInterval |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:131 | init | public | public init(directoryURL: URL? = nil, |
-| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:155 | protocol | public | public protocol PTLogDestination: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:56 | struct | public | public struct PTLogSource: Sendable, Equatable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:57 | let | public | public let file: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:58 | let | public | public let function: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:59 | let | public | public let line: UInt |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:61 | init | public | public init(file: String, function: String, line: UInt) { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:71 | enum | public | public enum PTLogDropPolicy: String, Codable, Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:80 | enum | public | public enum PTLogSamplingPolicy: Sendable, Equatable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:87 | func | public | public func accepts(index: UInt64) -> Bool { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:103 | struct | public | public struct PTLogBackpressureSnapshot: Sendable, Equatable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:104 | let | public | public let queueDroppedCount: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:105 | let | public | public let bufferDroppedCount: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:107 | init | public | public init(queueDroppedCount: UInt64 = 0, bufferDroppedCount: UInt64 = 0) { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:112 | var | public | public var totalDroppedCount: UInt64 { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:117 | struct | public | public struct PTLogRecord: Identifiable, Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:118 | let | public | public let id: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:119 | let | public | public let sequence: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:120 | let | public | public let timestamp: Date |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:121 | let | public | public let level: PTLogLevel |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:122 | let | public | public let subsystem: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:123 | let | public | public let category: PTLogCategory |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:124 | let | public | public let message: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:125 | let | public | public let metadata: PTLogMetadata |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:126 | let | public | public let privacy: PTLogPrivacy |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:127 | let | public | public let file: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:128 | let | public | public let function: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:129 | let | public | public let line: UInt |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:131 | init | public | public init(sequence: UInt64, |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:157 | struct | public | public struct PTLogConfiguration: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:158 | var | public | public var minimumLevel: PTLogLevel |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:159 | var | public | public var categoryLevels: [PTLogCategory: PTLogLevel] |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:160 | var | public | public var subsystem: String |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:162 | init | public | public init(minimumLevel: PTLogLevel = { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:176 | func | public | public func minimumLevel(for category: PTLogCategory) -> PTLogLevel { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:184 | struct | public | public struct PTLogFileConfiguration: Sendable { |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:185 | let | public | public let directoryURL: URL |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:186 | let | public | public let maximumFileSize: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:187 | let | public | public let maximumFileAge: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:188 | let | public | public let maximumFiles: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:189 | let | public | public let retentionDays: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:190 | let | public | public let maximumTotalSize: UInt64 |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:191 | let | public | public let bufferCapacity: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:192 | let | public | public let bufferSize: Int |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:193 | let | public | public let flushInterval: TimeInterval |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:195 | init | public | public init(directoryURL: URL? = nil, |
+| PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:219 | protocol | public | public protocol PTLogDestination: Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogger.swift:13 | enum | public | public enum PTLogger { |
 | PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:13 | let | public | public let identifier: String |
 | PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:54 | init | public | public init(identifier: String = "ptools.file", |
 | PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:85 | func | public | public func append(_ record: PTLogRecord) { |
 | PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift:90 | func | public | public func flush() async { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:107 | actor | public | public actor PTMemoryLogStore { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:114 | init | public | public init(capacity: Int = 2_000, dropPolicy: PTLogDropPolicy = .preferImportant) { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:140 | func | public | public func snapshot() -> [PTLogRecord] { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:144 | func | public | public func clear() { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:149 | func | public | public func backpressureSnapshot() -> PTLogBackpressureSnapshot { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:153 | func | public | public func subscribe() -> AsyncStream<PTLogRecord> { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:177 | let | public | public let identifier: String |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:210 | init | public | public init(identifier: String = PTMemoryLogDestination.defaultIdentifier, |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:239 | func | public | public func append(_ record: PTLogRecord) { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:245 | func | public | public func flush() async { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:253 | func | public | public func snapshot() async -> [PTLogRecord] { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:257 | func | public | public func clear() async { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:261 | func | public | public func subscribe() async -> AsyncStream<PTLogRecord> { |
+| PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift:265 | func | public | public func backpressureSnapshot() async -> PTLogBackpressureSnapshot { |
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:14 | struct | public | public struct PTOSLogDestination: PTLogDestination { |
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:17 | let | public | public let identifier: String |
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:19 | init | public | public init(identifier: String = PTOSLogDestination.defaultIdentifier) { |

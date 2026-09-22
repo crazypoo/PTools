@@ -2,9 +2,9 @@
 //  PTLoggingFoundationTests.swift
 //  PToolsLoggingTests
 //
-// English: Verifies filtering, privacy redaction and bounded file logging for the 5.20.x foundation.
-// Español: Verifica el filtrado, la redacción de privacidad y el logging de archivos acotado de 5.20.x.
-// 中文：验证 5.20.x 日志基础层的过滤、隐私脱敏和有界文件写入。
+// English: Verifies filtering, privacy redaction and bounded logging for the 5.21.x pipeline.
+// Español: Verifica el filtrado, la redacción de privacidad y el logging acotado de la tubería 5.21.x.
+// 中文：验证 5.21.x 日志管线的过滤、隐私脱敏和有界写入。
 //
 
 import Foundation
@@ -160,5 +160,96 @@ final class PTLoggingFoundationTests: XCTestCase {
             let values = try file.resourceValues(forKeys: [.fileSizeKey])
             XCTAssertGreaterThan(values.fileSize ?? 0, 0)
         }
+    }
+
+    // English: The memory destination keeps diagnostics bounded while preserving important records.
+    // Español: El destino de memoria mantiene los diagnósticos acotados y conserva los registros importantes.
+    // 中文：内存日志目标限制诊断容量，同时保留重要等级的记录。
+    func testMemoryDestinationKeepsBoundedSnapshotAndRedacts() async {
+        let destination = PTMemoryLogDestination(capacity: 2,
+                                                  queueCapacity: 32,
+                                                  dropPolicy: .preferImportant)
+        destination.append(makeRecord(sequence: 1,
+                                      level: .info,
+                                      message: "token=secret-value"))
+        destination.append(makeRecord(sequence: 2,
+                                      level: .warning,
+                                      message: "warning"))
+        destination.append(makeRecord(sequence: 3,
+                                      level: .error,
+                                      message: "error"))
+
+        await destination.flush()
+
+        let records = await destination.snapshot()
+        XCTAssertEqual(records.count, 2)
+        XCTAssertTrue(records.contains { $0.level == .warning })
+        XCTAssertTrue(records.contains { $0.level == .error })
+        XCTAssertFalse(records.contains { $0.message.contains("secret-value") })
+
+        let pressure = await destination.backpressureSnapshot()
+        XCTAssertGreaterThanOrEqual(pressure.bufferDroppedCount, 1)
+    }
+
+    // English: Verify that a strict drop-newest policy does not reorder retained records.
+    // Español: Verifica que la política estricta de descartar el más nuevo no reordene los registros retenidos.
+    // 中文：验证严格丢弃最新记录的策略不会重排已保留记录。
+    func testMemoryDestinationDropNewestPolicy() async {
+        let destination = PTMemoryLogDestination(capacity: 1,
+                                                  queueCapacity: 8,
+                                                  dropPolicy: .dropNewest)
+        destination.append(makeRecord(sequence: 1, level: .info, message: "first"))
+        destination.append(makeRecord(sequence: 2, level: .info, message: "second"))
+
+        await destination.flush()
+
+        let records = await destination.snapshot()
+        XCTAssertEqual(records.map(\.sequence), [1])
+        let pressure = await destination.backpressureSnapshot()
+        XCTAssertGreaterThanOrEqual(pressure.bufferDroppedCount, 1)
+    }
+
+    // English: Multiple consumers must receive the same immutable record snapshot.
+    // Español: Varios consumidores deben recibir el mismo snapshot de registro inmutable.
+    // 中文：多个消费者必须收到同一份不可变日志快照。
+    func testMemoryDestinationSupportsMultipleSubscribers() async {
+        let destination = PTMemoryLogDestination(capacity: 8, queueCapacity: 8)
+        let firstStream = await destination.subscribe()
+        let secondStream = await destination.subscribe()
+        var firstIterator = firstStream.makeAsyncIterator()
+        var secondIterator = secondStream.makeAsyncIterator()
+
+        destination.append(makeRecord(sequence: 1, level: .info, message: "shared"))
+        await destination.flush()
+
+        let first = await firstIterator.next()
+        let second = await secondIterator.next()
+        XCTAssertEqual(first?.sequence, 1)
+        XCTAssertEqual(second?.sequence, 1)
+        XCTAssertEqual(first?.message, second?.message)
+    }
+
+    // English: Sampling policies are deterministic and safe for concurrent callers to copy.
+    // Español: Las políticas de muestreo son deterministas y seguras para copiar entre llamadas concurrentes.
+    // 中文：采样策略具有确定性，可以安全地在并发调用之间复制。
+    func testSamplingPolicy() {
+        XCTAssertTrue(PTLogSamplingPolicy.all.accepts(index: 0))
+        XCTAssertTrue(PTLogSamplingPolicy.every(3).accepts(index: 6))
+        XCTAssertFalse(PTLogSamplingPolicy.every(3).accepts(index: 7))
+        XCTAssertTrue(PTLogSamplingPolicy.first(2).accepts(index: 1))
+        XCTAssertFalse(PTLogSamplingPolicy.first(2).accepts(index: 3))
+    }
+
+    private func makeRecord(sequence: UInt64,
+                            level: PTLogLevel,
+                            message: String) -> PTLogRecord {
+        PTLogRecord(sequence: sequence,
+                    level: level,
+                    subsystem: "com.example.tests",
+                    category: .performance,
+                    message: message,
+                    file: #fileID,
+                    function: #function,
+                    line: #line)
     }
 }

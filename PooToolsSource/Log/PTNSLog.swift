@@ -8,10 +8,13 @@
 
 import UIKit
 import Foundation
-import CocoaLumberjack
 import SwifterSwift
 import OSLog
 import os.lock
+
+#if canImport(PToolsLogging)
+import PToolsLogging
+#endif
 
 // English: Prefer the Foundation-only logging contracts and keep local declarations only for direct legacy source builds.
 // Español: Prefiere los contratos de logging basados solo en Foundation y conserva declaraciones locales únicamente para compilaciones heredadas directas.
@@ -213,23 +216,53 @@ public func PTNSLog(_ msg: Any...,
     
     """
     
-    // 🚀 优化点 4：os.Logger 和 DDLog 都是天生线程安全的，直接在当前线程输出，效率最高。
-    if currentAppEnvironment.contains("生產") {
-        DDLogSet(levelType: levelType, prefix: logOutput)
-    } else {
-        Task { @MainActor in
-            let logger = Logger.logger(categoryName: loggerType.rawValue)
-            switch levelType {
-            case .debug: logger.debug("\(logOutput)")
-            case .error: logger.error("\(logOutput)")
-            case .info: logger.info("\(logOutput)")
-            case .warning: logger.warning("\(logOutput)")
-            case .trace, .notice, .critical, .fault:
-                logger.notice("\(logOutput)")
-            }
-            
-        }
+    // English: Forward every legacy call to the Swift 6 logger synchronously; UI consumers subscribe separately.
+    // Español: Reenvía cada llamada heredada al logger Swift 6 de forma síncrona; los consumidores UI se suscriben aparte.
+    // 中文：所有旧日志调用同步转发到 Swift 6 日志器，UI 消费者单独订阅。
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+    let logLevel: PTLogLevel
+    switch levelType {
+    case .debug:
+        logLevel = .debug
+    case .error:
+        logLevel = .error
+    case .warning:
+        logLevel = .warning
+    case .trace:
+        logLevel = .trace
+    case .notice:
+        logLevel = .notice
+    case .critical, .fault:
+        logLevel = .fault
+    case .info:
+        logLevel = .info
     }
+
+    PTLogger.log(logOutput,
+                 level: logLevel,
+                 category: PTLogCategory(rawValue: loggerType.rawValue),
+                 metadata: [
+                    "environment": currentAppEnvironment,
+                    "column": String(column)
+                 ],
+                 source: PTLogSource(file: fileName, function: fn, line: UInt(max(0, line))))
+#else
+    // English: Keep direct source builds functional without importing the optional PToolsLogging target.
+    // Español: Mantiene funcionales las compilaciones directas sin importar el target opcional PToolsLogging.
+    // 中文：在未引入可选 PToolsLogging target 的直接源码构建中保持可用。
+    let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.ptools.legacy",
+                        category: loggerType.rawValue)
+    switch levelType {
+    case .debug:
+        logger.debug("\(logOutput, privacy: .public)")
+    case .error, .critical, .fault:
+        logger.error("\(logOutput, privacy: .public)")
+    case .warning:
+        logger.warning("\(logOutput, privacy: .public)")
+    default:
+        logger.info("\(logOutput, privacy: .public)")
+    }
+#endif
 
     let severity: PTLogSeverity
     switch levelType {
@@ -249,23 +282,17 @@ public func PTNSLog(_ msg: Any...,
         PTLogSinkCenter.shared.publish(event)
     }
     
-    // 异步写入文件，绝对不阻塞任何业务逻辑线程
+    // English: Install the canonical bounded file destination only when the legacy call requests file output.
+    // Español: Instala el destino de archivos acotado y canónico solo cuando la llamada heredada solicita salida a disco.
+    // 中文：只有旧入口明确要求写文件时，才安装统一的有界文件日志目标。
     if isWriteLog {
+#if canImport(PToolsLogging) || POOTOOLS_LOGGING
+        PTLogger.installFileDestinationIfNeeded()
+#else
         Task {
             await PTLogFileManager.shared.append(logText: logOutput)
         }
-    }
-}
-
-// MARK: - 辅助组件
-fileprivate func DDLogSet(levelType: LoggerEXLevelType = .info, prefix: String) {
-    DDLog.add(DDOSLogger.sharedInstance)
-    switch levelType {
-    case .debug: DDLogDebug(DDLogMessageFormat(stringLiteral: prefix))
-    case .error: DDLogError(DDLogMessageFormat(stringLiteral: prefix))
-    case .info: DDLogInfo(DDLogMessageFormat(stringLiteral: prefix))
-    case .warning: DDLogWarn(DDLogMessageFormat(stringLiteral: prefix))
-    default: DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+#endif
     }
 }
 

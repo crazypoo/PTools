@@ -83,12 +83,16 @@ public final class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate {
         PTNSLogConsole("request url:\(String(describing: metric.request.url))")
         PTNSLogConsole("request httpMethod:\(String(describing: metric.request.httpMethod))")
         PTNSLogConsole("request timeoutInterval:\(metric.request.timeoutInterval)")
-        PTNSLogConsole("-----request allHTTPHeaderFields---\n\(String(describing: metric.request.allHTTPHeaderFields?.debugDescription))\n-----request allHTTPHeaderFields end-----")
-        PTNSLogConsole("request httpBody:\(String(describing: metric.request.httpBody))")
+        let requestHeaders = Network.redactedHeaders(metric.request.allHTTPHeaderFields ?? [:])
+        PTNSLogConsole("-----request allHTTPHeaderFields---\n\(requestHeaders)\n-----request allHTTPHeaderFields end-----")
+        let requestBodySize = metric.request.httpBody?.count ?? 0
+        PTNSLogConsole("request httpBody: [\(requestBodySize) bytes]")
 
         let httpURLResponse:HTTPURLResponse? = metric.response as? HTTPURLResponse ?? nil
         PTNSLogConsole("response statusCode:\(String(describing: httpURLResponse?.statusCode))")
-        PTNSLogConsole("-----response allHeaderFields:\n\(String(describing: httpURLResponse?.allHeaderFields))\n-----response allHeaderFields end-----")
+        let responseHeaders = httpURLResponse?.allHeaderFields.reduce(into: [String: String]()) { result, item in
+            result[String(describing: item.key)] = String(describing: item.value)
+        } ?? [:]
+        PTNSLogConsole("-----response allHeaderFields:\n\(Network.redactedHeaders(responseHeaders))\n-----response allHeaderFields end-----")
     }
 }
-
