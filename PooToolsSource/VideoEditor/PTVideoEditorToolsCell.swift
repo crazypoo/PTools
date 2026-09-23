@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 class PTVideoEditorToolsCell: PTBaseNormalCell {
     // MARK: Private Properties
@@ -56,7 +58,7 @@ extension PTVideoEditorToolsCell {
         case .mute:
             buttonView.selectedImage = UIImage(.speaker.zzz).withTintColor(PTVideoEditorConfig.share.themeColor)
         case .rewrite:
-            buttonView.selectedImage = UIImage(.repeat).withTintColor(PTVideoEditorConfig.share.themeColor)
+            buttonView.selectedImage = UIImage(.repeatSymbol).withTintColor(PTVideoEditorConfig.share.themeColor)
         default:break
         }
         self.viewModel = viewModel

@@ -10,7 +10,9 @@ import UIKit
 import Harbeth
 import AVFoundation
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import DeviceKit
 import Photos
 

@@ -10,7 +10,9 @@ import UIKit
 import AttributedString
 import Photos
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 #if canImport(PToolsCore)
 import PToolsCore
 #endif

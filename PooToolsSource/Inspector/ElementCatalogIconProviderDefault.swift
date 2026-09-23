@@ -7,7 +7,9 @@
 import MapKit
 import UIKit
 import WebKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 extension ViewHierarchyElementIconProvider {
     @MainActor static let `default` = ViewHierarchyElementIconProvider { object in
@@ -113,7 +115,7 @@ extension ViewHierarchyElementIconProvider {
 
         case let view:
             if view._className == "CGDrawingView" { return .staticText }
-            if view._className.contains("Effects") { return .init(.wand.andStars) }
+            if view._className.contains("Effects") { return .init(.wandAndStars) }
             if view.children.isEmpty { return .emptyViewSymbol }
             if view.className.contains("Background") { return .icon("BackgroundView-32_Normal") }
             if view.className.contains("DropShadow") { return .icon("DropShadow-32_Normal") }
@@ -127,10 +129,10 @@ extension ViewHierarchyElementIconProvider {
 private extension UIImage {
     static let activityIndicatorView: UIImage = UIImage(.cursorarrow.rays,weight: .bold)
     static let button: UIImage = UIImage(.hand.tapFill)
-    static let collectionView: UIImage = UIImage(systemName: "square.grid.3x1.below.line.grid.1x2")!
+    static let collectionView: UIImage = UIImage.pt_symbol(.squareGrid3x1BelowLineGrid1x2) ?? UIImage()
     static let collectionViewController: UIImage = UIImage(.square.grid_3x3)
     @MainActor static let containerViewSymbol: UIImage = .icon("filled-view-32_Normal")!
-    static let control: UIImage = UIImage(systemName: "dial.min.fill")!
+    static let control: UIImage = UIImage.pt_symbol(.dialMinFill) ?? UIImage()
     @MainActor static let datePicker: UIImage = .icon("UIDatePicker_32_Normal")!
     @MainActor static let emptyViewSymbol: UIImage = .icon("EmptyView-32_Normal")!
     @MainActor static let horizontalStack: UIImage = .icon("HStack-32_Normal")!
@@ -151,7 +153,7 @@ private extension UIImage {
     @MainActor static let tabBarController: UIImage = .icon("TabbedView-32_Normal")!
     static let tableView: UIImage = UIImage(.square.fillTextGrid_1x2)
     @MainActor static let tableViewController: UIImage = .icon("UITableViewController")!
-    static let textField: UIImage = UIImage(systemName: "character.textbox")!.applyingSymbolConfiguration(.init(weight: .bold))!
+    static let textField: UIImage = (UIImage.pt_symbol(.characterTextbox) ?? UIImage()).applyingSymbolConfiguration(.init(weight: .bold)) ?? UIImage()
     static let textView: UIImage = UIImage(.textformat.abcDottedunderline,weight:.bold)
     @MainActor static let toggle: UIImage = .icon("Toggle-32_Normal")!
     @MainActor static let toolbar: UIImage = .icon("UIToolbar-32_Normal")!

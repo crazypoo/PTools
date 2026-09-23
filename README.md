@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.23.0`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.24.0`。
 
 ## Requirements
 
@@ -117,6 +117,13 @@ final class ExampleSearchViewController: PTSearchViewController<String> {
 
 新代码使用 `PTNetworkRequest` 与 `PTNetworkExecutor`，普通参数、Body、上传、下载、取消、缓存、
 重试、去重和认证刷新统一由 Network 请求管线处理。动态 `Any` 与 KakaJSON 入口仅作为兼容层保留。
+
+### SF Symbols
+
+Core 使用 `PToolsSymbols` 提供类型化 SF Symbols、别名、回退和可选变量值解析。新代码优先使用
+`UIImage(ptSymbol:)` 或 `UIImage.pt_symbol(_:fallback:)`；只有服务端或运行时拼接名称才使用
+`PTSymbol(rawValue:)`。具体迁移规则见
+[SafeSFSymbols 迁移指南](docs/migrations/SAFESFSYMBOLS_TO_PTSYMBOL.md)。
 
 ### Socket / Security
 

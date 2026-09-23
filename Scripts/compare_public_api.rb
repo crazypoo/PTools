@@ -29,6 +29,87 @@ def entries(path)
                 else
                   declaration.sub(/[\{;].*$/, "").strip
                 end
+    # English: Default argument expressions are implementation policy, not part of a Swift function signature.
+    # Español: Las expresiones de argumentos predeterminados son política de implementación, no parte de la firma Swift.
+    # 中文：默认参数表达式属于实现策略，不属于 Swift 方法签名，因此不参与 API 身份比较。
+    if %w[func init].include?(kind)
+      normalized = +signature
+      parameter_depth = 0
+      square_depth = 0
+      brace_depth = 0
+      string_delimiter = nil
+      escaping = false
+      removing_default = false
+      rebuilt = +""
+      normalized.each_char do |character|
+        if string_delimiter
+          rebuilt << character unless removing_default
+          if escaping
+            escaping = false
+          elsif character == "\\"
+            escaping = true
+          elsif character == string_delimiter
+            string_delimiter = nil
+          end
+          next
+        end
+
+        if removing_default
+          case character
+          when '"', "'"
+            string_delimiter = character
+          when '('
+            parameter_depth += 1
+          when ')'
+            if parameter_depth == 1 && square_depth.zero? && brace_depth.zero?
+              removing_default = false
+              rebuilt << character
+            else
+              parameter_depth -= 1 if parameter_depth.positive?
+            end
+          when '['
+            square_depth += 1
+          when ']'
+            square_depth -= 1 if square_depth.positive?
+          when '{'
+            brace_depth += 1
+          when '}'
+            brace_depth -= 1 if brace_depth.positive?
+          when ','
+            if parameter_depth == 1 && square_depth.zero? && brace_depth.zero?
+              removing_default = false
+              rebuilt << character
+            end
+          end
+          next
+        end
+
+        case character
+        when '('
+          parameter_depth += 1
+        when ')'
+          parameter_depth -= 1 if parameter_depth.positive?
+        when '['
+          square_depth += 1
+        when ']'
+          square_depth -= 1 if square_depth.positive?
+        when '{'
+          brace_depth += 1
+        when '}'
+          brace_depth -= 1 if brace_depth.positive?
+        when '"', "'"
+          string_delimiter = character
+        when '='
+          if parameter_depth == 1 && square_depth.zero? && brace_depth.zero?
+            rebuilt.rstrip!
+            removing_default = true
+            next
+          end
+        end
+        rebuilt << character
+      end
+      signature = rebuilt.gsub(/\s+/, " ").strip
+    end
     # English: A public symbol keeps its API identity when its implementation moves to another source file.
     # Español: Un símbolo público conserva su identidad de API aunque su implementación cambie de archivo fuente.
     # 中文：公开符号移动到其他源码文件时，API 身份仍由访问级别、类型和签名决定。

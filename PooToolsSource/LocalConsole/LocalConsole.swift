@@ -10,7 +10,9 @@ import UIKit
 import DeviceKit
 import CoreFoundation
 import AttributedString
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import SnapKit
 import CoreLocation
 #if canImport(PToolsLogging)
@@ -88,7 +90,7 @@ extension UIImage {
     static func maskImage()-> UIImage {
         return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static let maskBubbleImage = (UIImage(systemName: "bubble.right") ?? UIImage()).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let maskBubbleImage = (UIImage.pt_symbol(.bubbleRight) ?? UIImage()).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func viewFrameImage()-> UIImage {
         return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
@@ -122,7 +124,7 @@ extension UIImage {
     static let debugControllerImage = UIImage(.pencil).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let terminateAppImage = UIImage(.xmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func respringImage()-> UIImage {
-        return UIImage(.arrowtriangle.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        return UIImage(.arrowtriangleBackward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))

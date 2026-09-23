@@ -8,7 +8,9 @@
 
 import UIKit
 import AVFoundation
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 extension NSError {
     convenience init(message: String) {

@@ -13,7 +13,9 @@ import UIKit
 import SnapKit
 import Harbeth
 import Photos
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
 

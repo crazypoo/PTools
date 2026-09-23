@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.23.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.24.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.22.2`；`5.23.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.22.2`；`5.24.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -27,6 +27,16 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ 统一安全下标、JSON 序列化、URL 查询参数、视图层级查找、子视图批量操作和圆角辅助逻辑，避免强制转换、强制解包和不稳定的字典随机顺序。
 - ✅ 新增 [`SWIFTERSWIFT_USAGE_AUDIT.md`](docs/audits/SWIFTERSWIFT_USAGE_AUDIT.md)、[`SWIFTERSWIFT_TO_PTOOLS.md`](docs/migrations/SWIFTERSWIFT_TO_PTOOLS.md)、[`PTOOLS_CATEGORY_GUIDELINES.md`](docs/architecture/PTOOLS_CATEGORY_GUIDELINES.md) 与一次性移除门禁。
 - ✅ CocoaPods lockfile、Debug/Release Xcode workspace、SwiftPM、质量与发布门禁均已通过；未创建 `5.23.0` tag，等待显式发布操作。
+
+## 5.24.0 SafeSFSymbols 移除与 PToolsSymbols 收口
+
+- ✅ 从 SwiftPM、CocoaPods、锁文件和生产源码移除 SafeSFSymbols 直接依赖；历史审计和迁移说明保留在文档中。
+- ✅ 新增 `PToolsSymbols`，提供 `PTSymbol`、类型化生成目录、动态 raw value 逃生口、别名、回退、变量值归一化和无崩溃诊断。
+- ✅ 将静态 SF Symbol 使用迁移到 `UIImage(ptSymbol:)` / `UIImage.pt_symbol`；动态系统名称只保留在运行时解析白名单。
+- ✅ 新增标准化 `SFSymbolCatalog.json`、`PTSymbolGen`、生成校验、差异报告和 5.24.0 符号门禁。
+- ✅ 增加 SwiftPM `PToolsSymbols` product/target、CocoaPods `Symbols` subspec、Core 依赖和符号测试入口。
+- ✅ 增加 SafeSFSymbols 使用审计、迁移指南、符号设计规范、依赖声明和第三方通知。
+- [ ] 完成当前工作区对应的 Xcode Debug/Release、CocoaPods lint 和真实宿主 SF Symbols 视觉回归后，再决定是否创建 `5.24.0` 正式 tag。
 
 ## 5.12.0 Core / Foundation 收口
 

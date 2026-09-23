@@ -7,7 +7,9 @@
 
 import UIKit
 import MapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import SwiftDate
 import SmartCodable
 

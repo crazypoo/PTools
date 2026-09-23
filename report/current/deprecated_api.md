@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: c7c2b410cb0c49d60bf80474823c455593114303
-Generated at: 2026-09-23T05:03:31Z
+Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
+Generated at: 2026-09-23T07:31:27Z
 -->
 
 # PTools 当前弃用入口清单
@@ -19,11 +19,11 @@ Generated at: 2026-09-23T05:03:31Z
 | `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:93` | `heightlightColor` | `highlightColor` |
 | `PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:104` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:111` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Base/PTAppBaseConfig.swift:105` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Base/PTAppBaseConfig.swift:106` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
+| `PooToolsSource/Base/PTAppBaseConfig.swift:107` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTAppBaseConfig.swift:108` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:159` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:160` | `GobalNavControl` | `globalNavControl` |
-| `PooToolsSource/Base/PTBaseViewController.swift:207` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTBaseViewController.swift:209` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Button/PTActionLayoutButton.swift:658` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:246` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:264` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |

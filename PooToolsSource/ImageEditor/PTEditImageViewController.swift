@@ -9,7 +9,9 @@
 import UIKit
 import SnapKit
 import Photos
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import Harbeth
 
 #if SWIFT_PACKAGE

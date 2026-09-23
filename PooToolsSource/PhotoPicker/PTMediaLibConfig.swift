@@ -12,7 +12,9 @@ import AVFoundation
 import Accelerate
 import MobileCoreServices
 import UIKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 #if SWIFT_PACKAGE
 import ptools

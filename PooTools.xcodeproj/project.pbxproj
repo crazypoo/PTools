@@ -999,6 +999,16 @@
 		A51700000000000000000003 /* PTVideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000003 /* PTVideoThumbnailService.swift */; };
 		A57F00000000000000000001 /* PTListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F00000000000000000002 /* PTListViewController.swift */; };
 		B51700000000000000000005 /* PTNavigationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000004 /* PTNavigationConfiguration.swift */; };
+		B52400000000000000000001 /* PTSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000011 /* PTSymbol.swift */; };
+		B52400000000000000000002 /* PTSymbolCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000012 /* PTSymbolCatalog.swift */; };
+		B52400000000000000000003 /* PTSymbolDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000013 /* PTSymbolDiagnostics.swift */; };
+		B52400000000000000000004 /* PTSymbolResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000014 /* PTSymbolResolver.swift */; };
+		B52400000000000000000005 /* UIImage+PTSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000015 /* UIImage+PTSymbol.swift */; };
+		B52400000000000000000006 /* PTSymbols+iOS17.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000016 /* PTSymbols+iOS17.swift */; };
+		B52400000000000000000007 /* PTSymbols+iOS18.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000017 /* PTSymbols+iOS18.swift */; };
+		B52400000000000000000008 /* PTSymbols+iOS26.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000018 /* PTSymbols+iOS26.swift */; };
+		B52400000000000000000009 /* PTSymbols+Semantic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000019 /* PTSymbols+Semantic.swift */; };
+		B5240000000000000000000A /* SFSymbolCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = B5240000000000000000001A /* SFSymbolCatalog.json */; };
 		CB55590C25D04EBCA6C02E8E /* Network+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F3C2B183334E31ABE12A02 /* Network+Download.swift */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
@@ -2035,6 +2045,16 @@
 		B51700000000000000000002 /* PTMediaSaveUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaSaveUI.swift; sourceTree = "<group>"; };
 		B51700000000000000000003 /* PTVideoThumbnailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoThumbnailService.swift; sourceTree = "<group>"; };
 		B51700000000000000000004 /* PTNavigationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavigationConfiguration.swift; sourceTree = "<group>"; };
+		B52400000000000000000011 /* PTSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSymbol.swift; sourceTree = "<group>"; };
+		B52400000000000000000012 /* PTSymbolCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSymbolCatalog.swift; sourceTree = "<group>"; };
+		B52400000000000000000013 /* PTSymbolDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSymbolDiagnostics.swift; sourceTree = "<group>"; };
+		B52400000000000000000014 /* PTSymbolResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSymbolResolver.swift; sourceTree = "<group>"; };
+		B52400000000000000000015 /* UIImage+PTSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+PTSymbol.swift"; sourceTree = "<group>"; };
+		B52400000000000000000016 /* PTSymbols+iOS17.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+iOS17.swift"; sourceTree = "<group>"; };
+		B52400000000000000000017 /* PTSymbols+iOS18.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+iOS18.swift"; sourceTree = "<group>"; };
+		B52400000000000000000018 /* PTSymbols+iOS26.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+iOS26.swift"; sourceTree = "<group>"; };
+		B52400000000000000000019 /* PTSymbols+Semantic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+Semantic.swift"; sourceTree = "<group>"; };
+		B5240000000000000000001A /* SFSymbolCatalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SFSymbolCatalog.json; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2107,6 +2127,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				B52400000000000000000010 /* PToolsSymbols */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -4240,6 +4261,47 @@
 			path = Log;
 			sourceTree = "<group>";
 		};
+		B52400000000000000000010 /* PToolsSymbols */ = {
+			isa = PBXGroup;
+			children = (
+				B52400000000000000000011 /* PTSymbol.swift */,
+				B52400000000000000000012 /* PTSymbolCatalog.swift */,
+				B52400000000000000000013 /* PTSymbolDiagnostics.swift */,
+				B52400000000000000000014 /* PTSymbolResolver.swift */,
+				B52400000000000000000015 /* UIImage+PTSymbol.swift */,
+				B5240000000000000000001B /* Generated */,
+				B5240000000000000000001C /* Semantic */,
+				B5240000000000000000001D /* Resources */,
+			);
+			path = PToolsSymbols;
+			sourceTree = "<group>";
+		};
+		B5240000000000000000001B /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				B52400000000000000000016 /* PTSymbols+iOS17.swift */,
+				B52400000000000000000017 /* PTSymbols+iOS18.swift */,
+				B52400000000000000000018 /* PTSymbols+iOS26.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		B5240000000000000000001C /* Semantic */ = {
+			isa = PBXGroup;
+			children = (
+				B52400000000000000000019 /* PTSymbols+Semantic.swift */,
+			);
+			path = Semantic;
+			sourceTree = "<group>";
+		};
+		B5240000000000000000001D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B5240000000000000000001A /* SFSymbolCatalog.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4308,6 +4370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5240000000000000000000A /* SFSymbolCatalog.json in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				55FA6CBF2B02860D00BC464B /* icon_cycle_unselected@3x.png in Resources */,
 				55102AAE2AFFAB5900E9529D /* icon_permission_faceid.png in Resources */,
@@ -4365,8 +4428,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4376,13 +4438,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4397,13 +4455,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4435,6 +4489,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B52400000000000000000001 /* PTSymbol.swift in Sources */,
+				B52400000000000000000002 /* PTSymbolCatalog.swift in Sources */,
+				B52400000000000000000003 /* PTSymbolDiagnostics.swift in Sources */,
+				B52400000000000000000004 /* PTSymbolResolver.swift in Sources */,
+				B52400000000000000000005 /* UIImage+PTSymbol.swift in Sources */,
+				B52400000000000000000006 /* PTSymbols+iOS17.swift in Sources */,
+				B52400000000000000000007 /* PTSymbols+iOS18.swift in Sources */,
+				B52400000000000000000008 /* PTSymbols+iOS26.swift in Sources */,
+				B52400000000000000000009 /* PTSymbols+Semantic.swift in Sources */,
 				559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */,
 				552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */,
 				55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */,

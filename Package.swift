@@ -24,6 +24,10 @@ let package = Package(
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
         .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
+        // English: Publish the typed SF Symbols runtime independently from the UIKit umbrella.
+        // Español: Publica el runtime tipado de SF Symbols de forma independiente del umbrella UIKit.
+        // 中文：独立公开类型化 SF Symbols 运行时，避免必须引入完整 UIKit umbrella。
+        .library(name: "PToolsSymbols", targets: ["PToolsSymbols"]),
         // English: Publish permission contracts separately so system services do not import the full UI umbrella.
         // Español: Publica los contratos de permisos por separado para que los servicios del sistema no importen todo el umbrella de UI.
         // 中文：独立公开权限契约，避免系统服务引入完整 UI umbrella。
@@ -148,7 +152,7 @@ let package = Package(
         // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
         // ==========================================
         .library(name: "PooToolsAll", targets: [
-            "ptools", "PToolsLogging",
+            "ptools", "PToolsLogging", "PToolsSymbols",
             "PToolsPermissionCore", "PToolsPermissionUI",
             "PooToolsMediaCore",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
@@ -181,7 +185,6 @@ let package = Package(
         .package(url: "https://github.com/lixiang1994/AttributedString.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.9.0"),
-        .package(url: "https://github.com/sparrowcode/SafeSFSymbols.git", from: "2.0.0"),
         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "4.0.0"),
         .package(url: "https://github.com/kakaopensource/KakaJSON.git", exact: "1.1.2"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.4.0"),
@@ -248,6 +251,20 @@ let package = Package(
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
+        // English: PToolsSymbols contains only Foundation/UIKit adapters and checked-in catalog data.
+        // Español: PToolsSymbols solo contiene adaptadores Foundation/UIKit y datos de catálogo versionados.
+        // 中文：PToolsSymbols 只包含 Foundation/UIKit 适配层和已提交的目录数据。
+        .target(
+            name: "PToolsSymbols",
+            path: "PooToolsSource/PToolsSymbols",
+            resources: [
+                .process("Resources")
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // English: Keep permission state, errors, and request protocols independent from UIKit and feature modules.
         // Español: Mantén el estado, los errores y los protocolos de permisos independientes de UIKit y de los módulos de funciones.
         // 中文：让权限状态、错误和请求协议独立于 UIKit 与具体功能模块。
@@ -298,7 +315,7 @@ let package = Package(
                 "AttributedString",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 "Kingfisher",
-                "SafeSFSymbols",
+                "PToolsSymbols",
                 "SmartCodable",
                 "KakaJSON",
                 .product(name: "Lottie", package: "lottie-ios"),
@@ -379,10 +396,10 @@ let package = Package(
         // 高级业务模块
         // ==========================================
         .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "PToolsSymbols", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSVG", dependencies: ["ptools", "Kingfisher", "PocketSVG"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCheckDirtyWord", dependencies: [], path: "PooToolsSource/CheckDirtyWord", resources: [.process("Resource")], swiftSettings: [.define("POOTOOLS_CHECKDIRTYWORD"), .define("POOTOOLS_COCOAPODS")]),
 
@@ -427,7 +444,7 @@ let package = Package(
         .target(name: "PooToolsHeartRate", dependencies: ["ptools", .product(name: "Lottie", package: "lottie-ios"), "PTCameraPermission"], path: "PooToolsSource/HeartRate", swiftSettings: [.define("POOTOOLS_HEARTRATE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsChinesePinyin", dependencies: ["ptools"], path: "PooToolsSource/Pinyin", swiftSettings: [.define("POOTOOLS_CHINESEPINYIN"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCircle", dependencies: ["ptools"], path: "PooToolsSource/Circle", swiftSettings: [.define("POOTOOLS_CIRCLE"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsMessageKit", dependencies: ["ptools", "PooToolsCustomerLabel"], path: "PooToolsSource/MessageKit", swiftSettings: [.define("POOTOOLS_MESSAGEKIT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsMessageKit", dependencies: ["ptools", "PToolsSymbols", "PooToolsCustomerLabel"], path: "PooToolsSource/MessageKit", swiftSettings: [.define("POOTOOLS_MESSAGEKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSocketKit", dependencies: ["ptools", "SocketRocket"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsIAP", dependencies: ["ptools"], path: "PooToolsSource/IAP", swiftSettings: [.define("POOTOOLS_IAP"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsTipsView", dependencies: ["ptools"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
@@ -438,7 +455,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF"],
+            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols"],
             path: "PooToolsSource",
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
@@ -502,6 +519,11 @@ let package = Package(
             name: "PToolsLoggingTests",
             dependencies: ["PToolsLogging"],
             path: "Tests/PToolsLoggingTests"
+        ),
+        .testTarget(
+            name: "PToolsSymbolsTests",
+            dependencies: ["PToolsSymbols"],
+            path: "Tests/PToolsSymbolsTests"
         )
     ],
     swiftLanguageModes: [.v6]

@@ -51,6 +51,10 @@ require_pattern "Package.swift" ".target(name: \"PooToolsSearch\"" "SwiftPM Sear
 require_pattern "Package.swift" ".library(name: \"PToolsLogging\", targets: [\"PToolsLogging\"])" "SwiftPM logging product is declared"
 require_pattern "Package.swift" "name: \"PToolsLogging\"" "SwiftPM logging target is declared"
 require_pattern "PooTools.podspec" "s.subspec 'Logging'" "CocoaPods logging subspec is declared"
+require_pattern "Package.swift" ".library(name: \"PToolsSymbols\", targets: [\"PToolsSymbols\"])" "SwiftPM symbol product is declared"
+require_pattern "Package.swift" "name: \"PToolsSymbols\"" "SwiftPM symbol target is declared"
+require_pattern "PooTools.podspec" "s.subspec 'Symbols'" "CocoaPods symbol subspec is declared"
+require_pattern "PooTools.podspec" "subspec.dependency 'PooTools/Symbols'" "Core reuses the symbol subspec"
 
 bash "$repo_root/Scripts/validate_core_source_contract.sh"
 bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"

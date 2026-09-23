@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 public enum PTVideoEditorVideoToolsType: CaseIterable {
     case speed

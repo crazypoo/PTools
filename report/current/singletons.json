@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:02:51Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:11Z",
   "shared_call_count": 1533,
   "declarations": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 16,
+      "line": 18,
       "declaration": "public static let share = PTAppBaseConfig()",
       "name": "share",
       "category": "D",
@@ -124,7 +124,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "line": 35,
+      "line": 37,
       "declaration": "public static let share = PTCameraFilterConfig()",
       "name": "share",
       "category": "D",
@@ -556,7 +556,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 146,
+      "line": 148,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -565,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 392,
+      "line": 394,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -646,7 +646,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 42,
+      "line": 44,
       "declaration": "public static let share = PTChatConfig()",
       "name": "share",
       "category": "C",
@@ -745,7 +745,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "line": 204,
+      "line": 206,
       "declaration": "public static let share = PTMediaLibConfig()",
       "name": "share",
       "category": "D",
@@ -754,7 +754,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "line": 363,
+      "line": 365,
       "declaration": "public static let share = PTMediaLibUIConfig()",
       "name": "share",
       "category": "D",
@@ -889,7 +889,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
-      "line": 15,
+      "line": 17,
       "declaration": "public static let share = PTVideoEditorConfig()",
       "name": "share",
       "category": "C",

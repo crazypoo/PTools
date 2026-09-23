@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 #if SWIFT_PACKAGE
 import ptools
@@ -21,7 +24,7 @@ public struct PTSearchEmptyConfiguration {
     public var actionTitle: String
     public var action: (@MainActor () -> Void)?
 
-    public init(image: UIImage? = UIImage(systemName: "magnifyingglass"),
+    public init(image: UIImage? = UIImage.pt_symbol(.magnifyingglass),
                 title: String = "No Results".localized(),
                 message: String = "Try another keyword".localized(),
                 actionTitle: String = "",

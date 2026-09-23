@@ -8,7 +8,9 @@
 
 import UIKit
 import Kingfisher
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 @MainActor
 @objcMembers

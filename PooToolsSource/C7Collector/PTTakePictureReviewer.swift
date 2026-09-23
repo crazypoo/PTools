@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import SnapKit
 
 //MARK: ScreenShot的小控件

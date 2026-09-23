@@ -1,0 +1,8 @@
+# English: These removals were reviewed in the 5.22 logging compatibility closure and remain acknowledged for 5.24.
+# Español: Estas eliminaciones se revisaron en el cierre de compatibilidad de logging 5.22 y siguen reconocidas en 5.24.
+# 中文：这些删除项已在 5.22 日志兼容层收口中审阅，并在 5.24 中继续登记。
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|struct|PTLogSink

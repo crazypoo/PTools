@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import AttributedString
 
 class PTLogConsoleViewController: PTBaseViewController {

@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: c7c2b410cb0c49d60bf80474823c455593114303
-Generated at: 2026-09-23T03:21:52Z
-Version source: 5.23.0
+Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
+Generated at: 2026-09-23T06:30:41Z
+Version source: 5.24.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -96,6 +96,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `SpeedPanel` | A | `PooTools/SpeedPanel` | `PooToolsSpeedPanel` | Keep; review drift |
 | `StepCount` | A | `PooTools/StepCount` | `PooToolsStepCount` | Keep; review drift |
 | `Stepper` | A | `PooTools/Stepper` | `PooToolsStepper` | Keep; review drift |
+| `Symbols` | A | `PooTools/Symbols` | — | Keep; review drift |
 | `Telephony` | A | `PooTools/Telephony` | `PooToolsTelephony` | Keep; review drift |
 | `TipsView` | A | `PooTools/TipsView` | `PooToolsTipsView` | Keep; review drift |
 | `TrackingPermission` | A | `PooTools/TrackingPermission` | `PTTrackingPermission` | Keep; review drift |

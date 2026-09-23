@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 #if SWIFT_PACKAGE
 import ptools
@@ -31,7 +34,7 @@ public struct PTSearchErrorConfiguration {
     public var retryAction: (@MainActor () -> Void)?
 
     public init(kind: PTSearchErrorKind = .unknown,
-                image: UIImage? = UIImage(systemName: "exclamationmark.triangle"),
+                image: UIImage? = UIImage.pt_symbol(.exclamationmarkTriangle),
                 title: String = "Search Failed".localized(),
                 message: String = "Please try again".localized(),
                 retryTitle: String = "Retry".localized(),

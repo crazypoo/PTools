@@ -9,7 +9,9 @@
 import UIKit
 import SnapKit
 import AttributedString
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
 #endif

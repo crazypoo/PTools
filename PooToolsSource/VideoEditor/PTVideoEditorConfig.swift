@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 @MainActor
 @objcMembers
@@ -30,7 +32,7 @@ public class PTVideoEditorConfig: NSObject {
     public var rotateImage:UIImage = UIImage(.rotate.right).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     public var presetsImage:UIImage = UIImage(.tv).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     public var filterImage:UIImage = UIImage(.camera.filters).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-    public var rewriteImage:UIImage = UIImage(.repeat).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    public var rewriteImage:UIImage = UIImage(.repeatSymbol).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     public var trimLeftImage:UIImage = UIImage(.arrow.left)
     public var trimRightImage:UIImage = UIImage(.arrow.right)
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:02:49Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:10Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -476,7 +476,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1533,
+      "line": 1535,
       "declaration": "private struct PTC7SafeBox:@unchecked Sendable {",
       "allowlisted": true
     },

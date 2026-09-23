@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 #if SWIFT_PACKAGE
 // English: Import Core explicitly for the shared controller and configuration APIs.

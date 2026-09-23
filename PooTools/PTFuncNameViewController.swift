@@ -11,7 +11,9 @@ import SnapKit
 @preconcurrency import DeviceKit
 import Photos
 import Combine
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import AttributedString
 
 struct UserModel: PTPickerStringModel {

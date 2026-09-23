@@ -51,6 +51,17 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'UIKit','Foundation'
     end
 
+    # English: Publish typed SF Symbols and the normalized catalog as a small reusable layer.
+    # Español: Publica los SF Symbols tipados y el catálogo normalizado como una capa reutilizable pequeña.
+    # 中文：将类型化 SF Symbols 和标准化目录作为轻量可复用层公开。
+    s.subspec 'Symbols' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsSymbols/**/*.swift'
+        subspec.resource_bundles = {
+            'PooToolsSymbolsResources' => ['PooToolsSource/PToolsSymbols/Resources/**/*']
+        }
+        subspec.frameworks = 'UIKit','Foundation','OSLog'
+    end
+
     s.subspec 'PToolsPermissionCore' do |subspec|
         subspec.source_files = 'PooToolsSource/PToolsPermissionCore/*.{h,m,swift}'
         subspec.frameworks = 'Foundation'
@@ -75,6 +86,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PooTools/Logging'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
         subspec.dependency 'DeviceKit'
@@ -82,7 +94,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
         subspec.dependency 'Kingfisher'
-        subspec.dependency 'SafeSFSymbols'
         subspec.dependency 'SmartCodable'
         subspec.dependency 'SmartCodable/Inherit'
         subspec.dependency 'KakaJSON'
@@ -498,6 +509,7 @@ Pod::Spec.new do |s|
         
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SearchBar'
@@ -658,6 +670,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'HarbethKit' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'Harbeth'
         subspec.dependency 'PooTools/CameraPermission'
 #        subspec.dependency 'PooTools/MicPermission'
@@ -731,6 +744,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'VideoEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/MediaCore'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/ProgressBar'
@@ -816,6 +830,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'PhotoPicker' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/MediaCore'
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Loading'
@@ -849,6 +864,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'ImageEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/MediaCore'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/PhotoPicker'
@@ -884,6 +900,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'MessageKit' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/CustomerLabel'
         subspec.source_files = 'PooToolsSource/MessageKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

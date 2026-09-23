@@ -10,8 +10,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(22|23)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.22+ logging closure requires a 5.22.x or 5.23.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(22|23|24)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.22+ logging closure requires a 5.22.x, 5.23.x or 5.24.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 

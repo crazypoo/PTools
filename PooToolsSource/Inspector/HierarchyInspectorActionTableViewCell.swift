@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 protocol HierarchyInspectorActionTableViewCellViewModelProtocol {
     var title: String { get }
@@ -35,7 +38,7 @@ final class HierarchyInspectorActionTableViewCell: HierarchyInspectorTableViewCe
 
     private lazy var checkmarkImageView = UIImageView(image: checkmarkImage)
 
-    private lazy var checkmarkImage = UIImage(systemName: "checkmark")!
+    private lazy var checkmarkImage = UIImage.pt_symbol(.checkmark) ?? UIImage()
         .applyingSymbolConfiguration(
             .init(pointSize: 16)
         )

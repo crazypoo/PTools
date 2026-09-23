@@ -28,7 +28,7 @@ final class LoaderView: LayerViewComponent {
         frame: bounds,
         name: elementName,
         colorScheme: colorScheme,
-        element: ViewHierarchyElement(with: self, iconProvider: .default)
+        element: ViewHierarchyElement(with: self, iconProvider: ViewHierarchyElementIconProvider.default)
     ).then {
         $0.initialTransformation = .identity
         $0.displayMode = .text
@@ -77,7 +77,7 @@ final class LoaderView: LayerViewComponent {
 
         backgroundColor = colorScheme.value(for: self)
 
-        highlightView.borderWidth = .zero
+        highlightView.borderWidth = 0
         highlightView.borderColor = HSL(color: colorScheme.value(for: self)).lighter(amount: 0.07).toDynamicColor()
         
         layer.cornerRadius = frame.height / .pi

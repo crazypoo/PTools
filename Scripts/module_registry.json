@@ -8,6 +8,7 @@
   "modules": [
     {"name":"PToolsCore","spm_product":"PToolsCore","spm_target":"PToolsCore","pod_subspec":"PToolsCore","source_path":"PooToolsSource/PToolsCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"foundation"},
     {"name":"PToolsUIFoundation","spm_product":"PToolsUIFoundation","spm_target":"PToolsUIFoundation","pod_subspec":"PToolsUIFoundation","source_path":"PooToolsSource/PToolsUIFoundation","dependencies":["SnapKit"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"ui-foundation"},
+    {"name":"Symbols","spm_product":"PToolsSymbols","spm_target":"PToolsSymbols","pod_subspec":"Symbols","source_path":"PooToolsSource/PToolsSymbols","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":["SFSymbolCatalog.json"],"category":"ui-foundation"},
     {"name":"PToolsPermissionCore","spm_product":"PToolsPermissionCore","spm_target":"PToolsPermissionCore","pod_subspec":"PToolsPermissionCore","source_path":"PooToolsSource/PToolsPermissionCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"permission-foundation"},
     {"name":"PToolsPermissionUI","spm_product":"PToolsPermissionUI","spm_target":"PToolsPermissionUI","pod_subspec":"PToolsPermissionUI","source_path":"PooToolsSource/PToolsPermissionUI","dependencies":["PToolsPermissionCore","PToolsUIFoundation"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"permission-ui"},
     {"name":"MediaCore","spm_product":"PooToolsMediaCore","spm_target":"PooToolsMediaCore","pod_subspec":"MediaCore","source_path":"PooToolsSource/PToolsMediaCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"media-foundation"},
@@ -79,6 +80,7 @@
     {"kind":"settings","module":"PToolsPermissionCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"settings","module":"PToolsPermissionUI","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"settings","module":"PToolsUIFoundation","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Logging","reason":"SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.","owner":"logging","expiration":"2026-12-31"}
+    {"kind":"settings","module":"Logging","reason":"SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.","owner":"logging","expiration":"2026-12-31"},
+    {"kind":"settings","module":"Symbols","reason":"SwiftPM enables strict concurrency for the standalone symbol target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"}
   ]
 }

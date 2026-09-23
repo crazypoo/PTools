@@ -5,7 +5,9 @@
 //
 
 import UIKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 extension Manager: @preconcurrency KeyCommandPresentable {
     @MainActor var keyCommands: [UIKeyCommand] {

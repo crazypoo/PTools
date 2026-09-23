@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 // MARK: - 单条请求深度详情展示页面
 class PTNetworkWatcherDetailViewController: PTBaseViewController {

@@ -8,7 +8,9 @@
 
 import UIKit
 import Foundation
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import SnapKit
 
 #if SWIFT_PACKAGE

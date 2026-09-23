@@ -6,7 +6,8 @@
 - 新增 API 必须出现在 CHANGELOG 或迁移文档中。
 - 删除 API 和 breaking signature 默认让门禁失败。
 - deprecated API 必须注明兼容入口、canonical 入口和 6.0 删除条件。
-- 5.23.0 的 `removals_5.23.0.txt` 延续登记 5.22 日志兼容层已经审阅的删除项，避免旧迁移在新版本中被重复判定为未审阅。
+- 5.23.0 和 5.24.0 的 `removals_<version>.txt` 延续登记 5.22 日志兼容层已经审阅的删除项，避免旧迁移在新版本中被重复判定为未审阅。
+- API 比较会忽略默认参数表达式；默认值变化不改变 Swift 方法签名，但仍必须在迁移文档中说明行为变化。
 - 报告来自 `Scripts/report_public_api_5_9.rb`；比较由 `Scripts/compare_public_api.rb` 完成。
 
 ## 目录约定

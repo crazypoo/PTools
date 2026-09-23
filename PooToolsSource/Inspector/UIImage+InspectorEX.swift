@@ -9,7 +9,9 @@
 import UIKit
 import AVFoundation
 import QuartzCore
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 
 extension UIImage {
     func withOptions(_ imageOptions: UIImage.Option...) -> UIImage {
@@ -143,9 +145,14 @@ extension UIImage {
 
 extension UIImage {
     @available(iOS 13, tvOS 13, *)
-    public convenience init(_ symbol: SafeSFSymbol, weight: UIImage.SymbolWeight) {
+    public convenience init(_ symbol: PTSymbol, weight: UIImage.SymbolWeight) {
         let configuration = UIImage.SymbolConfiguration(weight: weight)
-        self.init(systemName: symbol.name, withConfiguration: configuration)!
+        if let image = PTSymbolResolver.image(symbol, configuration: configuration), let cgImage = image.cgImage {
+            self.init(cgImage: cgImage, scale: image.scale, orientation: image.imageOrientation)
+        }
+        else {
+            self.init()
+        }
     }
 }
 

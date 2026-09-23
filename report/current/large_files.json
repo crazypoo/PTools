@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:03:48Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:34Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -201,7 +201,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "lines": 171,
+      "lines": 173,
       "classification": "ok"
     },
     {
@@ -266,7 +266,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 850,
+      "lines": 852,
       "classification": "ok"
     },
     {
@@ -391,7 +391,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTUnavailableFunction.swift",
-      "lines": 199,
+      "lines": 201,
       "classification": "ok"
     },
     {
@@ -506,12 +506,12 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "lines": 386,
+      "lines": 388,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "lines": 819,
+      "lines": 821,
       "classification": "ok"
     },
     {
@@ -526,7 +526,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "lines": 127,
+      "lines": 129,
       "classification": "ok"
     },
     {
@@ -1291,7 +1291,7 @@
     },
     {
       "path": "PooToolsSource/DEBUGLocation/PTDebugLocationMapViewController.swift",
-      "lines": 111,
+      "lines": 113,
       "classification": "ok"
     },
     {
@@ -1301,7 +1301,7 @@
     },
     {
       "path": "PooToolsSource/DEBUGLocation/PTDebugLocationViewController.swift",
-      "lines": 133,
+      "lines": 135,
       "classification": "ok"
     },
     {
@@ -1326,7 +1326,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTDarkSmartFooter.swift",
-      "lines": 120,
+      "lines": 122,
       "classification": "ok"
     },
     {
@@ -1461,7 +1461,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift",
-      "lines": 194,
+      "lines": 196,
       "classification": "ok"
     },
     {
@@ -1471,7 +1471,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashLogViewController.swift",
-      "lines": 119,
+      "lines": 121,
       "classification": "ok"
     },
     {
@@ -1491,7 +1491,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCreateLeakViewController.swift",
-      "lines": 62,
+      "lines": 64,
       "classification": "ok"
     },
     {
@@ -1531,7 +1531,7 @@
     },
     {
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "lines": 430,
+      "lines": 432,
       "classification": "ok"
     },
     {
@@ -1576,12 +1576,12 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "lines": 253,
+      "lines": 255,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
-      "lines": 380,
+      "lines": 382,
       "classification": "ok"
     },
     {
@@ -1596,12 +1596,12 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
-      "lines": 312,
+      "lines": 314,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTDebugSnapshotViewController.swift",
-      "lines": 56,
+      "lines": 58,
       "classification": "ok"
     },
     {
@@ -1611,7 +1611,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "lines": 144,
+      "lines": 146,
       "classification": "ok"
     },
     {
@@ -1811,7 +1811,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageViewController.swift",
-      "lines": 1550,
+      "lines": 1552,
       "classification": "architecture_exception"
     },
     {
@@ -1821,7 +1821,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditInputViewController.swift",
-      "lines": 643,
+      "lines": 645,
       "classification": "ok"
     },
     {
@@ -1871,7 +1871,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTStickerManager.swift",
-      "lines": 1052,
+      "lines": 1054,
       "classification": "warning"
     },
     {
@@ -2236,7 +2236,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/ElementCatalogIconProviderDefault.swift",
-      "lines": 161,
+      "lines": 163,
       "classification": "ok"
     },
     {
@@ -2421,7 +2421,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/HierarchyInspectorActionTableViewCell.swift",
-      "lines": 52,
+      "lines": 55,
       "classification": "ok"
     },
     {
@@ -2761,7 +2761,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "lines": 239,
+      "lines": 241,
       "classification": "ok"
     },
     {
@@ -3146,7 +3146,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/UIImage+InspectorEX.swift",
-      "lines": 183,
+      "lines": 190,
       "classification": "ok"
     },
     {
@@ -3586,7 +3586,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1816,
+      "lines": 1818,
       "classification": "architecture_exception"
     },
     {
@@ -3601,7 +3601,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/PTLogConsoleViewController.swift",
-      "lines": 103,
+      "lines": 105,
       "classification": "ok"
     },
     {
@@ -3711,7 +3711,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "lines": 218,
+      "lines": 220,
       "classification": "ok"
     },
     {
@@ -3965,6 +3965,51 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS17.swift",
+      "lines": 299,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS18.swift",
+      "lines": 6,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS26.swift",
+      "lines": 6,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/PTSymbol.swift",
+      "lines": 101,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/PTSymbolCatalog.swift",
+      "lines": 27,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/PTSymbolDiagnostics.swift",
+      "lines": 18,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/PTSymbolResolver.swift",
+      "lines": 37,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/Semantic/PTSymbols+Semantic.swift",
+      "lines": 32,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSymbols/UIImage+PTSymbol.swift",
+      "lines": 92,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift",
       "lines": 329,
       "classification": "ok"
@@ -4021,7 +4066,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionSettingCell.swift",
-      "lines": 165,
+      "lines": 167,
       "classification": "ok"
     },
     {
@@ -4061,7 +4106,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift",
-      "lines": 188,
+      "lines": 190,
       "classification": "ok"
     },
     {
@@ -4071,12 +4116,12 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-      "lines": 421,
+      "lines": 423,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "lines": 495,
+      "lines": 497,
       "classification": "ok"
     },
     {
@@ -4091,7 +4136,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "lines": 1195,
+      "lines": 1197,
       "classification": "warning"
     },
     {
@@ -4321,12 +4366,12 @@
     },
     {
       "path": "PooToolsSource/Search/PTSearchEmptyConfiguration.swift",
-      "lines": 35,
+      "lines": 38,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Search/PTSearchErrorConfiguration.swift",
-      "lines": 46,
+      "lines": 49,
       "classification": "ok"
     },
     {
@@ -4646,7 +4691,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
-      "lines": 84,
+      "lines": 86,
       "classification": "ok"
     },
     {
@@ -4661,7 +4706,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsCell.swift",
-      "lines": 64,
+      "lines": 66,
       "classification": "ok"
     },
     {
@@ -4671,7 +4716,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsModel.swift",
-      "lines": 72,
+      "lines": 74,
       "classification": "ok"
     },
     {
@@ -4701,7 +4746,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "lines": 1637,
+      "lines": 1639,
       "classification": "architecture_exception"
     },
     {

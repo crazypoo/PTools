@@ -8,7 +8,9 @@
 
 import UIKit
 import AttributedString
-import SafeSFSymbols
+#if SWIFT_PACKAGE
+import PToolsSymbols
+#endif
 import SnapKit
 
 @objcMembers

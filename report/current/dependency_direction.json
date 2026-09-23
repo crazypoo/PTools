@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:03:18Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:19Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, and PToolsLogging",
+    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -141,6 +141,10 @@
     },
     {
       "source": "PooToolsDEBUG",
+      "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsDEBUG",
       "destination": "PooToolsNetWork"
     },
     {
@@ -193,6 +197,10 @@
     },
     {
       "source": "PooToolsHarbethKit",
+      "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsHarbethKit",
       "destination": "ptools"
     },
     {
@@ -214,6 +222,10 @@
     {
       "source": "PooToolsIAP",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsImageEditor",
+      "destination": "PToolsSymbols"
     },
     {
       "source": "PooToolsImageEditor",
@@ -293,6 +305,10 @@
     },
     {
       "source": "PooToolsMessageKit",
+      "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsMessageKit",
       "destination": "PooToolsCustomerLabel"
     },
     {
@@ -346,6 +362,10 @@
     {
       "source": "PooToolsPhotoPicker",
       "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PToolsSymbols"
     },
     {
       "source": "PooToolsPhotoPicker",
@@ -461,6 +481,10 @@
     },
     {
       "source": "PooToolsVideoEditor",
+      "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsVideoEditor",
       "destination": "PooToolsHarbethKit"
     },
     {
@@ -502,6 +526,10 @@
     {
       "source": "ptools",
       "destination": "PToolsPermissionCore"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsSymbols"
     },
     {
       "source": "ptools",

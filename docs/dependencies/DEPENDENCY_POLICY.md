@@ -38,6 +38,13 @@ SwiftPM 与 CocoaPods 必须同时满足：
 - Category 能力优先使用 Foundation/UIKit 原生 API；只有跨模块重复且具备明确行为契约的能力才进入 PTools Category。
 - 新增 Category 方法必须有 English、Español、中文说明，并通过 `Scripts/validate_swifterswift_removal.sh` 和三套入口验证。
 
+## 5.24 SF Symbols 依赖收口
+
+- 5.24.0：从 SwiftPM、CocoaPods、锁文件和生产源码移除 SafeSFSymbols，改由 `PToolsSymbols` 维护类型化符号目录和 UIKit 解析适配层。
+- `PToolsSymbols` 只依赖 Foundation、UIKit 和 OSLog；Core 通过 `PToolsSymbols` 获取静态符号能力，不把第三方符号类型暴露到公开 API。
+- 动态 raw value 仅用于服务端、配置文件或新系统名称等运行时场景；静态名称必须进入标准化目录并经过生成校验。
+- 符号缺失、系统版本不支持或目录数据错误时只能返回安全失败/回退图像并记录诊断，不得使用强制解包或 `fatalError`。
+
 ## 新依赖准入
 
 新增依赖前必须说明：

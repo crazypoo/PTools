@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:46:54Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:47Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -228,6 +228,17 @@
       ]
     },
     {
+      "name": "PToolsSymbols",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsSymbols"
+      ]
+    },
+    {
       "name": "PToolsUIFoundation",
       "type": {
         "library": [
@@ -264,6 +275,7 @@
         "PToolsLogging",
         "PToolsPermissionCore",
         "PToolsPermissionUI",
+        "PToolsSymbols",
         "PooToolsBankCard",
         "PooToolsBioID",
         "PooToolsCalendar",
@@ -1565,34 +1577,6 @@
     {
       "sourceControl": [
         {
-          "identity": "safesfsymbols",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/sparrowcode/SafeSFSymbols.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.0.0",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "smartcodable",
           "location": {
             "remote": [
@@ -1746,7 +1730,7 @@
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 11,
+    "direct_third_party_count": 10,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -2770,6 +2754,64 @@
       ]
     },
     {
+      "name": "PToolsSymbols",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsSymbols",
+      "sources": [],
+      "resources": [
+        {
+          "path": "Resources",
+          "rule": {
+            "process": {}
+          }
+        }
+      ],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsSymbolsTests",
+      "type": "test",
+      "path": "Tests/PToolsSymbolsTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
       "name": "PToolsUIFoundation",
       "type": "regular",
       "path": "PooToolsSource/PToolsUIFoundation",
@@ -3397,6 +3439,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsNetWork",
           "kind": "internal",
           "package": null,
@@ -3697,6 +3750,17 @@
           }
         },
         {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -3904,6 +3968,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
         {
           "name": "PooToolsHarbethKit",
           "kind": "internal",
@@ -4496,6 +4571,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsCustomerLabel",
           "kind": "internal",
           "package": null,
@@ -4944,6 +5030,17 @@
           "declaration": {
             "byName": [
               "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
               null
             ]
           }
@@ -5987,6 +6084,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsHarbethKit",
           "kind": "internal",
           "package": null,
@@ -6272,6 +6380,17 @@
           }
         },
         {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsUIFoundation",
           "kind": "internal",
           "package": null,
@@ -6363,17 +6482,6 @@
               "NotificationBannerSwift",
               "NotificationBanner",
               null,
-              null
-            ]
-          }
-        },
-        {
-          "name": "SafeSFSymbols",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SafeSFSymbols",
               null
             ]
           }

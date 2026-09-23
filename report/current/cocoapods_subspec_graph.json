@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
-  "generated_at": "2026-09-23T05:46:55Z",
+  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
+  "generated_at": "2026-09-23T07:31:48Z",
   "name": "PooTools",
-  "version": "5.23.0",
+  "version": "5.24.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 107,
+  "subspec_count": 108,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -344,7 +344,8 @@
       "local_dependencies": [
         "PooTools/Logging",
         "PooTools/PToolsCore",
-        "PooTools/PToolsUIFoundation"
+        "PooTools/PToolsUIFoundation",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [
         "AttributedString",
@@ -353,7 +354,6 @@
         "IQKeyboardToolbarManager",
         "KakaJSON",
         "Kingfisher",
-        "SafeSFSymbols",
         "SmartCodable",
         "SmartCodable/Inherit",
         "SnapKit",
@@ -512,7 +512,8 @@
         "PooTools/NetWork",
         "PooTools/PDF",
         "PooTools/SearchBar",
-        "PooTools/Share"
+        "PooTools/Share",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -727,7 +728,8 @@
       "short_name": "HarbethKit",
       "local_dependencies": [
         "PooTools/CameraPermission",
-        "PooTools/Core"
+        "PooTools/Core",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [
         "Harbeth"
@@ -836,7 +838,8 @@
         "PooTools/Core",
         "PooTools/HarbethKit",
         "PooTools/MediaCore",
-        "PooTools/PhotoPicker"
+        "PooTools/PhotoPicker",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1265,7 +1268,8 @@
       "short_name": "MessageKit",
       "local_dependencies": [
         "PooTools/Core",
-        "PooTools/CustomerLabel"
+        "PooTools/CustomerLabel",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1653,7 +1657,8 @@
         "PooTools/Core",
         "PooTools/ImagePicker",
         "PooTools/Loading",
-        "PooTools/MediaCore"
+        "PooTools/MediaCore",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [
         "Kakapos"
@@ -2170,6 +2175,30 @@
       }
     },
     {
+      "name": "PooTools/Symbols",
+      "short_name": "Symbols",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsSymbols/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsSymbols"
+      ],
+      "resource_bundles": {
+        "PooToolsSymbolsResources": [
+          "PooToolsSource/PToolsSymbols/Resources/**/*"
+        ]
+      },
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "OSLog",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
       "name": "PooTools/Tabbar",
       "short_name": "Tabbar",
       "local_dependencies": [
@@ -2275,7 +2304,8 @@
         "PooTools/HarbethKit",
         "PooTools/Loading",
         "PooTools/MediaCore",
-        "PooTools/ProgressBar"
+        "PooTools/ProgressBar",
+        "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
       "source_files": [

@@ -49,9 +49,9 @@ edges.each do |edge|
   forbidden = false
   rule = nil
 
-  if source == "ptools" && !%w[PToolsCore PToolsUIFoundation PToolsPermissionCore PToolsLogging].include?(destination)
+  if source == "ptools" && !%w[PToolsCore PToolsUIFoundation PToolsPermissionCore PToolsLogging PToolsSymbols].include?(destination)
     forbidden = true
-    rule = "Core target may depend only on PToolsCore, PToolsUIFoundation, PToolsPermissionCore, and PToolsLogging local layers"
+    rule = "Core target may depend only on PToolsCore, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols local layers"
   elsif source.match?(/^PT.*Permission$/) && !%w[ptools PToolsPermissionCore].include?(destination)
     forbidden = true
     rule = "Permission target may depend only on ptools or PToolsPermissionCore"
@@ -79,7 +79,7 @@ result = {
   "generated_at" => Time.now.utc.iso8601,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
-    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, and PToolsLogging",
+    "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
