@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import Foundation
-import SwifterSwift
 import AttributedString
 
 public class PTFloatingPlaseholderConfig: NSObject {

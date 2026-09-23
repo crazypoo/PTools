@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.22.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.23.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.21.2`；`5.22.2` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.22.2`；`5.23.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -19,6 +19,14 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - Swift 6 并发边界、例外和后台工作分类写入 [`docs/architecture/CONCURRENCY.md`](docs/architecture/CONCURRENCY.md)。
 - 单次扫描、构建和基准结果写入 `report/`，不混入长期架构文档。
 - 新版本不再创建 `ARCHITECTURE_5_12.md`、`PERFORMANCE_BASELINE_5_12.md` 等版本化长期文档。
+
+## 5.23.0 SwifterSwift 一次性移除与 Category 收口
+
+- ✅ 从 PooToolsSource、Example、Tests 和所有 SwiftPM/CocoaPods 活动清单移除 SwifterSwift 直接导入与依赖声明；历史审计和许可证说明保留在文档中。
+- ✅ 以 Foundation/UIKit 原生实现替换实际使用的序列、数组、字典、Optional、URL、范围集合和 UIView 辅助能力，旧 PTools 入口保持兼容。
+- ✅ 统一安全下标、JSON 序列化、URL 查询参数、视图层级查找、子视图批量操作和圆角辅助逻辑，避免强制转换、强制解包和不稳定的字典随机顺序。
+- ✅ 新增 [`SWIFTERSWIFT_USAGE_AUDIT.md`](docs/audits/SWIFTERSWIFT_USAGE_AUDIT.md)、[`SWIFTERSWIFT_TO_PTOOLS.md`](docs/migrations/SWIFTERSWIFT_TO_PTOOLS.md)、[`PTOOLS_CATEGORY_GUIDELINES.md`](docs/architecture/PTOOLS_CATEGORY_GUIDELINES.md) 与一次性移除门禁。
+- ✅ CocoaPods lockfile、Debug/Release Xcode workspace、SwiftPM、质量与发布门禁均已通过；未创建 `5.23.0` tag，等待显式发布操作。
 
 ## 5.12.0 Core / Foundation 收口
 

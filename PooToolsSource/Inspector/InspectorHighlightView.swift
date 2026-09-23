@@ -360,7 +360,7 @@ private extension InspectorHighlightView {
         hostView.isUserInteractionEnabled = true
     }
 
-    private var cgFloatDepth: CGFloat { element.depth.cgFloat }
+    private var cgFloatDepth: CGFloat { CGFloat(element.depth) }
 
     func updateViews(isHighlighted: Bool? = nil) {
         elementNameView.tintColor = borderColor?.withAlphaComponent(0.85)

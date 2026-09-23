@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 public typealias PTRateScoreBlock = (_ score:CGFloat) -> Void
 
@@ -66,7 +65,7 @@ public class PTRateView: UIView {
     private func setupBaseUI() {
         backgroundColor = .clear
         
-        addSubviews([backgroundStarView, foregroundStarView])
+        addSubviews(backgroundStarView, foregroundStarView)
         backgroundStarView.clipsToBounds = true
         foregroundStarView.clipsToBounds = true
 
@@ -84,7 +83,7 @@ public class PTRateView: UIView {
 
         // 优化：只有当已有的子视图数量与配置的星星数量不一致时，才重新创建 View。
         if backgroundStarView.subviews.count != config.numberOfStar {
-            backgroundStarView.removeSubviews()
+            backgroundStarView.removeAllSubviews()
             createStars(in: backgroundStarView, image: config.bImage, baseTag: PTRateBackgroundViewTags)
         } else {
             // 数量一致，只更新图片和显示模式
@@ -92,7 +91,7 @@ public class PTRateView: UIView {
         }
 
         if foregroundStarView.subviews.count != config.numberOfStar {
-            foregroundStarView.removeSubviews()
+            foregroundStarView.removeAllSubviews()
             createStars(in: foregroundStarView, image: config.fImage, baseTag: PTRateForegroundViewTags)
         } else {
             updateExistingStars(in: foregroundStarView, image: config.fImage, baseTag: PTRateForegroundViewTags)

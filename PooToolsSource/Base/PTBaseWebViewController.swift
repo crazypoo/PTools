@@ -73,7 +73,7 @@ open class PTBaseWebViewController: PTBaseViewController {
             if self.checkVCIsPresenting() {
                 self.dismissAnimated()
             } else {
-                self.navigationController?.popViewController()
+                self.navigationController?.popViewController(animated: true)
             }
         }
         return view

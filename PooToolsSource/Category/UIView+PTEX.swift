@@ -329,6 +329,79 @@ public extension PTPOP where Base:UIView {
 
 // MARK: - 核心路径生成器 (复用逻辑)
 public extension UIView {
+    /// English: Adds views in order while keeping existing array-based call sites compatible.
+    /// Español: Añade vistas en orden y mantiene compatibles las llamadas heredadas basadas en arrays.
+    /// 中文：按顺序添加子 View，同时兼容现有数组调用方式。
+    @MainActor
+    func addSubviews(_ views: UIView...) {
+        views.forEach(addSubview)
+    }
+
+    /// English: Array/sequence adapter retained during the migration.
+    /// Español: Adaptador de arrays/secuencias conservado durante la migración.
+    /// 中文：迁移期间保留数组/序列适配器，避免现有调用点破坏。
+    @MainActor
+    func addSubviews<S: Sequence>(_ views: S) where S.Element: UIView {
+        views.forEach(addSubview)
+    }
+
+    /// English: Adds gesture recognizers in order without a collection helper dependency.
+    /// Español: Añade reconocedores de gestos en orden sin depender de un helper de colecciones.
+    /// 中文：按顺序添加手势识别器，不依赖集合辅助库。
+    @MainActor
+    func addGestureRecognizers(_ gestures: [UIGestureRecognizer]) {
+        gestures.forEach(addGestureRecognizer)
+    }
+
+    /// English: Removes every direct subview exactly once.
+    /// Español: Elimina cada subvista directa exactamente una vez.
+    /// 中文：一次性移除所有直接子 View。
+    @MainActor
+    func removeAllSubviews() {
+        subviews.forEach { $0.removeFromSuperview() }
+    }
+
+    /// English: Removes all gesture recognizers currently attached to the view.
+    /// Español: Elimina todos los reconocedores de gestos asociados actualmente a la vista.
+    /// 中文：移除当前附加到 View 上的全部手势识别器。
+    @MainActor
+    func removeAllGestureRecognizers() {
+        gestureRecognizers?.forEach(removeGestureRecognizer)
+    }
+
+    /// English: Finds the nearest view controller through the responder chain.
+    /// Español: Busca el controlador más cercano mediante la cadena de responders.
+    /// 中文：通过响应链查找最近的 UIViewController。
+    @MainActor
+    var parentViewController: UIViewController? {
+        var responder: UIResponder? = self
+        while let next = responder?.next {
+            if let viewController = next as? UIViewController { return viewController }
+            responder = next
+        }
+        return nil
+    }
+
+    /// English: Finds the first responder in this view hierarchy.
+    /// Español: Busca el primer responder dentro de esta jerarquía de vistas.
+    /// 中文：查找当前 View 层级中的第一响应者。
+    @MainActor
+    func firstResponder() -> UIResponder? {
+        if isFirstResponder { return self }
+        for subview in subviews {
+            if let responder = subview.firstResponder() { return responder }
+        }
+        return nil
+    }
+
+    /// English: Reports the effective right-to-left layout direction.
+    /// Español: Indica la dirección de diseño efectiva de derecha a izquierda.
+    /// 中文：返回当前生效的从右到左布局方向。
+    @MainActor
+    var isRightToLeft: Bool {
+        effectiveUserInterfaceLayoutDirection == .rightToLeft
+    }
+
     
     // MARK: - 辅助获取/创建 Tracker 的私有方法
     private func getOrCreateTracker() -> PTCornerTrackerView {

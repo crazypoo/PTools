@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 public class PTDarkSmartFooter: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {

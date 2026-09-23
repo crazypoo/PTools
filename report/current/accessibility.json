@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
-  "generated_at": "2026-09-22T08:21:19Z",
+  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
+  "generated_at": "2026-09-23T05:02:52Z",
   "counts": {
     "reduce_motion": 41,
     "accessibility": 182,
@@ -53,82 +53,82 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 92
+      "line": 91
     },
     {
       "rule": "dynamic_type",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
+      "line": 284
+    },
+    {
+      "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
       "line": 285
     },
     {
-      "rule": "accessibility",
-      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 286
-    },
-    {
       "rule": "dynamic_type",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 811
+      "line": 810
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 814
+      "line": 813
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 816
+      "line": 815
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1171
+      "line": 1170
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1178
+      "line": 1177
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1185
+      "line": 1184
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1210
+      "line": 1209
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1231
+      "line": 1230
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1234
+      "line": 1233
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1236
+      "line": 1235
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1239
+      "line": 1238
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1242
+      "line": 1241
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1279
+      "line": 1278
     },
     {
       "rule": "reduce_motion",
@@ -143,7 +143,7 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Animation/PTWaterWaveView.swift",
-      "line": 105
+      "line": 104
     },
     {
       "rule": "accessibility",
@@ -158,12 +158,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 222
+      "line": 221
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 230
+      "line": 229
     },
     {
       "rule": "accessibility",
@@ -198,42 +198,47 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTImageCell.swift",
-      "line": 19
+      "line": 18
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTImageCell.swift",
-      "line": 64
+      "line": 63
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTImageCell.swift",
-      "line": 84
+      "line": 83
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTImageCell.swift",
-      "line": 99
+      "line": 98
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTImageCell.swift",
-      "line": 133
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 152
+      "line": 132
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 167
+      "line": 151
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "line": 166
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 165
+      "line": 164
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 221
     },
     {
       "rule": "accessibility",
@@ -243,7 +248,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 223
+      "line": 267
     },
     {
       "rule": "accessibility",
@@ -253,42 +258,37 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 269
+      "line": 480
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 481
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 486
+      "line": 485
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 865
+      "line": 864
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1102
+      "line": 1101
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1238
+      "line": 1237
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1249
+      "line": 1248
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1301
+      "line": 1300
     },
     {
       "rule": "accessibility",
@@ -333,7 +333,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTLayoutButton.swift",
-      "line": 729
+      "line": 732
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Button/PTLoginDescButton.swift",
+      "line": 36
     },
     {
       "rule": "accessibility",
@@ -341,29 +346,24 @@
       "line": 37
     },
     {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Button/PTLoginDescButton.swift",
-      "line": 38
-    },
-    {
       "rule": "dynamic_type",
       "path": "PooToolsSource/Button/PTLoginDescButton.swift",
-      "line": 102
+      "line": 101
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTLoginDescButton.swift",
-      "line": 133
+      "line": 132
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Button/PTLoginDescButton.swift",
+      "line": 147
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTLoginDescButton.swift",
       "line": 148
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Button/PTLoginDescButton.swift",
-      "line": 149
     },
     {
       "rule": "reduce_motion",
@@ -373,17 +373,17 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Button/PTMenuSheetButtonView.swift",
-      "line": 114
+      "line": 113
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTMenuSheetButtonView.swift",
-      "line": 363
+      "line": 362
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTMenuSheetButtonView.swift",
-      "line": 372
+      "line": 371
     },
     {
       "rule": "dynamic_type",
@@ -468,7 +468,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/DarkMode/PTDarkModePickerView.swift",
-      "line": 163
+      "line": 162
     },
     {
       "rule": "accessibility",
@@ -883,57 +883,57 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 223
+      "line": 222
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 319
+      "line": 318
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 323
+      "line": 322
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 328
+      "line": 327
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 416
+      "line": 415
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 488
+      "line": 487
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 532
-    },
-    {
-      "rule": "reduce_motion",
-      "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 364
+      "line": 531
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 401
+      "line": 363
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 405
+      "line": 400
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 685
+      "line": 404
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
+      "line": 684
     },
     {
       "rule": "accessibility",
@@ -988,7 +988,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Share/PTActivityViewController.swift",
-      "line": 177
+      "line": 176
     },
     {
       "rule": "reduce_motion",

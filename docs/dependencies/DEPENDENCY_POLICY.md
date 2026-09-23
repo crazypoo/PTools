@@ -32,6 +32,12 @@ SwiftPM 与 CocoaPods 必须同时满足：
 4. 依赖矩阵、模块矩阵和 `VERSION` 来源保持一致。
 5. 任何有意的 parity 差异都要登记原因、负责人、期限和 6.0 处理动作。
 
+## 5.23 Category 依赖收口
+
+- 5.23.0：从源码、SwiftPM、CocoaPods 和锁文件移除 SwifterSwift；历史审计、许可证说明和迁移指南允许保留该名称。
+- Category 能力优先使用 Foundation/UIKit 原生 API；只有跨模块重复且具备明确行为契约的能力才进入 PTools Category。
+- 新增 Category 方法必须有 English、Español、中文说明，并通过 `Scripts/validate_swifterswift_removal.sh` 和三套入口验证。
+
 ## 新依赖准入
 
 新增依赖前必须说明：

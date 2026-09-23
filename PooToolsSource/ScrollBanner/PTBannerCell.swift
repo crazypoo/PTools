@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 import AttributedString
-import SwifterSwift
 import SnapKit
 
 @MainActor

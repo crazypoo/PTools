@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
-  "generated_at": "2026-09-22T08:21:17Z",
+  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
+  "generated_at": "2026-09-23T05:02:46Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
@@ -44,13 +44,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTPlayerViewController.swift",
-      "line": 142,
+      "line": 141,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1065,
+      "line": 1064,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -74,7 +74,7 @@
     {
       "rule": "as_bang",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 372,
+      "line": 368,
       "text": "let tap = sender as! UITapGestureRecognizer"
     },
     {
@@ -152,7 +152,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 293,
+      "line": 302,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -164,73 +164,73 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 89,
+      "line": 88,
       "text": "public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 95,
+      "line": 94,
       "text": "public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 100,
+      "line": 99,
       "text": "public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 105,
+      "line": 104,
       "text": "public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 122,
+      "line": 121,
       "text": "public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 134,
+      "line": 133,
       "text": "public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 142,
+      "line": 141,
       "text": "public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 173,
+      "line": 172,
       "text": "public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 183,
+      "line": 182,
       "text": "public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 191,
+      "line": 190,
       "text": "public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 205,
+      "line": 204,
       "text": "public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 214,
+      "line": 213,
       "text": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {"
     },
     {
@@ -260,25 +260,25 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 389,
+      "line": 388,
       "text": "let gifResult = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 401,
+      "line": 400,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 411,
+      "line": 410,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 567,
+      "line": 566,
       "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
     },
     {
@@ -308,13 +308,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 123,
+      "line": 122,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 248,
+      "line": 249,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -344,13 +344,13 @@
     {
       "rule": "as_bang",
       "path": "PooToolsSource/DebugUserDefault/PTUserDefaultKeysAndValues.swift",
-      "line": 30,
+      "line": 29,
       "text": "let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys as! [String]"
     },
     {
       "rule": "as_bang",
       "path": "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
-      "line": 96,
+      "line": 95,
       "text": "model.desc = String(format: \"%@\", value.values.first as! CVarArg)"
     },
     {
@@ -368,7 +368,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 930,
+      "line": 929,
       "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
     },
     {
@@ -386,13 +386,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTGrowingText.swift",
-      "line": 117,
+      "line": 116,
       "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTGrowingText.swift",
-      "line": 167,
+      "line": 166,
       "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
@@ -518,55 +518,55 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 143,
+      "line": 142,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 904,
+      "line": 903,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 13,
+      "line": 12,
       "text": "public final class NetworkReachability: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 61,
+      "line": 60,
       "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 399,
+      "line": 398,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 440,
+      "line": 439,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 449,
+      "line": 448,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 458,
+      "line": 457,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 467,
+      "line": 466,
       "text": "Task.detached(priority: .background) {"
     },
     {
@@ -632,13 +632,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 910,
+      "line": 909,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 998,
+      "line": 997,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -734,13 +734,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "line": 14,
+      "line": 13,
       "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1531,
+      "line": 1533,
       "text": "private struct PTC7SafeBox:@unchecked Sendable {"
     },
     {

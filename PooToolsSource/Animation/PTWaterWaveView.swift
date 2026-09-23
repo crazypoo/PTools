@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 @objcMembers
 public class PTWaterWaveView: UIView {

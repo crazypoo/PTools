@@ -79,6 +79,7 @@ bash Scripts/validate_debug_foundation_5_10.sh
 bash Scripts/validate_instruments_5_11.sh
 bash Scripts/validate_debug_instruments_5_18.sh
 bash Scripts/validate_permission_source_contract.sh
+bash Scripts/validate_swifterswift_removal.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_current_summaries.rb >/dev/null
 

@@ -11,7 +11,6 @@ import Network
 import ObjectiveC
 import Foundation
 import SnapKit
-import SwifterSwift
 
 class PTTestVC: PTBaseViewController {
 
@@ -39,7 +38,7 @@ class PTTestVC: PTBaseViewController {
                 let cellModel = (itemRow.dataModel as! PTFusionCellModel)
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
                 cell.cellModel = cellModel
-                cell.contentView.backgroundColor = .random
+                cell.contentView.backgroundColor = DynamicColor.randomColor
                 return cell
             }
             return nil

@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 open class PTImageCell: PTBaseNormalCell {
     public static let ID = "PTImageCell"

@@ -8,7 +8,6 @@
 
 import UIKit
 import Harbeth
-import SwifterSwift
 import CoreImage
 import AVFoundation
 import Vision

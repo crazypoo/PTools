@@ -24,7 +24,6 @@ import Bugly
 import TipKit
 import MediaPlayer
 import Alamofire
-import SwifterSwift
 import FamilyControls
 
 //find . -type f | grep -e ".a" -e ".framework" | xargs grep -s UIWebView
@@ -121,9 +120,9 @@ class AppDelegate: PTAppWindowsDelegate {
         PTAppBaseConfig.share.tab26Mode = true
         PTAppBaseConfig.share.tabbarMetailMode = true
         PTAppBaseConfig.share.tabSelectedMetail = true
-        PTAppBaseConfig.share.tabSelectedMetailColor = .random
+        PTAppBaseConfig.share.tabSelectedMetailColor = DynamicColor.randomColor
         PTAppBaseConfig.share.navTitleFont = .appfont(size: 18)
-        PTAppBaseConfig.share.navTitleTextColor = .random
+        PTAppBaseConfig.share.navTitleTextColor = DynamicColor.randomColor
         PTAppBaseConfig.share.viewControllerBackItemImage = UIImage(named: "DemoImage")!
 //        PTAppBaseConfig.share.viewControllerBaseBackgroundColor = .random
         registerRotation()

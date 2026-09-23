@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 #if SWIFT_PACKAGE
 // English: Import Core explicitly for the base controller and shared utilities.

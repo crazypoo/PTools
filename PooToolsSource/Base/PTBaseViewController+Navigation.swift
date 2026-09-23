@@ -9,7 +9,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 // English: The title container participates in navigation-bar layout on MainActor.
 // Español: El contenedor del título participa en el layout de navegación dentro de MainActor.

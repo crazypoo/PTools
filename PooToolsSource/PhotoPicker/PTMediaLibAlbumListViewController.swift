@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import Photos
-import SwifterSwift
 import AttributedString
 import SafeSFSymbols
 

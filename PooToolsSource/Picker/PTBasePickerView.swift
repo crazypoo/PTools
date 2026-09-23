@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 import Foundation
 #if SWIFT_PACKAGE

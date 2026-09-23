@@ -11,7 +11,6 @@ import SnapKit
 import MobileCoreServices
 import QuickLook
 import AttributedString
-import SwifterSwift
 import DeviceKit
 
 public class PTFileBrowserViewController: PTBaseViewController {
@@ -37,7 +36,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
         emptyConfig.buttonTitle = ""
         emptyConfig.mainTitleAtt = """
                 \(wrap: .embedding("""
-                \("No file",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
+                \("No file",.foreground(DynamicColor.randomColor),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
                 """))
                 """
         emptyConfig.secondaryEmptyAtt = nil
@@ -123,7 +122,9 @@ public class PTFileBrowserViewController: PTBaseViewController {
                                     DispatchQueue.main.async {
                                         UIAlertController.base_alertVC(title: "PT File hash".localized(), msg: hashValue, okBtns: ["PT File copy".localized()], cancelBtn: "PT Button cancel".localized()) {
                                         } moreBtn: { index, title in
-                                            hashValue.copyToPasteboard()
+                                            Task { @MainActor in
+                                                hashValue.copyToPasteboard()
+                                            }
                                         }
                                     }
                                 }

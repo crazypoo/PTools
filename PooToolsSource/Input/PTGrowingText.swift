@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 public typealias GrowingTextDidChangeHeight = (_ view: PTGrowingTextView, _ height: CGFloat) -> Void
 public typealias GrowingTextDidChange = (_ view: PTGrowingTextView) -> Void

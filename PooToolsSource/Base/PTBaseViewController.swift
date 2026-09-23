@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import AttributedString
 import Photos
 import SnapKit
@@ -547,9 +546,8 @@ extension PTBaseViewController {
                 Task { @MainActor in finish() }
             })
         } else if let nav = navigationController {
-            nav.popViewController(animated: true) {
-                Task { @MainActor in finish() }
-            }
+            nav.popViewController(animated: true)
+            Task { @MainActor in finish() }
         } else {
             finish()
         }

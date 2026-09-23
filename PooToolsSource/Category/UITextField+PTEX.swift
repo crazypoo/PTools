@@ -8,11 +8,36 @@
 
 import UIKit
 import Foundation
-import SwifterSwift
 
 @MainActor private var maxLengthKey:UInt8 = 0
 
 public extension UITextField {
+    /// English: Adds a reusable left inset using the native left-view mechanism.
+    /// Español: Añade un margen izquierdo reutilizable mediante el mecanismo nativo de leftView.
+    /// 中文：使用系统 leftView 机制添加可复用的左侧内边距。
+    @MainActor
+    func addPaddingLeft(_ width: CGFloat) {
+        guard width > 0 else {
+            leftView = nil
+            leftViewMode = .never
+            return
+        }
+
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: bounds.height))
+        leftView = paddingView
+        leftViewMode = .always
+    }
+
+    /// English: Applies a color to the current placeholder without changing its text.
+    /// Español: Aplica un color al placeholder actual sin cambiar su texto.
+    /// 中文：在不改变占位文字的情况下设置当前 placeholder 的颜色。
+    @MainActor
+    func setPlaceHolderTextColor(_ color: UIColor) {
+        guard let placeholder else { return }
+        attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                    attributes: [.foregroundColor: color])
+    }
+
     var maxLength: Int {
         get {
             guard let length = getAssociatedObject(forKey: &maxLengthKey) as? Int else { return Int.max }

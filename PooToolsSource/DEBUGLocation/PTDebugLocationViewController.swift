@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 import CoreLocation
 
@@ -56,7 +55,7 @@ class PTDebugLocationViewController: PTBaseViewController {
                     self.viewModel.selectedIndex = .zero
                     self.loadListModel()
                 }
-                self.navigationController?.pushViewController(vc)
+                self.navigationController?.pushViewController(vc, animated: true)
             default:
                 self.viewModel.selectedIndex = indexPath.row
                 let location = self.viewModel.locations[indexPath.row - 1]

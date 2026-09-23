@@ -144,13 +144,3 @@ extension PTHTMLHeightCalculator: WKNavigationDelegate {
         return navigation === activeNavigation
     }
 }
-
-// 辅助转换代码 (支持 String 转 CGFloat，确保编译顺畅)
-private extension String {
-    var cgFloat: CGFloat {
-        if let doubleValue = Double(self) {
-            return CGFloat(doubleValue)
-        }
-        return 0
-    }
-}

@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 enum FileSharingManager {
@@ -238,8 +237,8 @@ class PTLoadedLibsViewController: PTBaseViewController {
 
 extension PTLoadedLibsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.textField?.resignFirstResponder()
-        self.viewModel.searchLibraries(with: searchBar.textField?.text ?? "")
+        searchBar.searchTextField.resignFirstResponder()
+        self.viewModel.searchLibraries(with: searchBar.searchTextField.text ?? "")
         newCollectionView.clearAllData { [weak self] cView in
             self?.setDataList()
         }
@@ -289,7 +288,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         let button = PTBaseButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
         button.addActionHandlers { [weak self] sender in
-            self?.navigationController?.popViewController()
+            self?.navigationController?.popViewController(animated: true)
         }
         return button
     }()

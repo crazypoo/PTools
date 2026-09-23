@@ -13,7 +13,6 @@ import SnapKit
 import Photos
 import Vision
 import VisionKit
-import SwifterSwift
 import CommonCrypto
 import AttributedString
 import PhotosUI
@@ -83,13 +82,11 @@ class PTFuncDetailViewController: PTBaseViewController {
                         self.webServer!.allowHiddenItems = false
                         self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
                         
-                        self.webServer.run { server in
-                            if self.webServer!.start() {
-                                let port = self.webServer!.port
-                                uploadInfoString = String(format: "请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址", self.webServer!.serverURL! as CVarArg,port)
-                            } else {
-                                uploadInfoString = "GCDWebServer not running!"
-                            }
+                        if let server = self.webServer, server.start() {
+                            let address = server.serverURL?.absoluteString ?? ""
+                            uploadInfoString = "请在上传设备浏览器上输入\(address)\n端口为:\(server.port)\n例子:IP地址:端口地址"
+                        } else {
+                            uploadInfoString = "GCDWebServer not running!"
                         }
                     } else {
                         uploadInfoString = "GCDWebServer not running!"
@@ -167,7 +164,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             config.originalX = 0
             
             let segView = PTSegmentView(config: config)
-            segView.backgroundColor = .random
+            segView.backgroundColor = DynamicColor.randomColor
             segView.viewDatas = [model1,model2,model3,model4]
             view.addSubview(segView)
             segView.snp.makeConstraints { make in
@@ -211,10 +208,10 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.throughLabel:
             let throughLabel = PTLabel()
             throughLabel.text = "111111111"
-            throughLabel.backgroundColor = .random
+            throughLabel.backgroundColor = DynamicColor.randomColor
             throughLabel.verticalAlignment = .middle
             throughLabel.strikeThroughAlignment = .middle
-            throughLabel.strikeThroughColor = .random
+            throughLabel.strikeThroughColor = DynamicColor.randomColor
             PTGCDManager.shared.delayOnMain(time: 2) {
                 throughLabel.strikeThroughEnabled = true
             }
@@ -226,7 +223,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
             
             let setBtn = UIButton(type: .custom)
-            setBtn.backgroundColor = .random
+            setBtn.backgroundColor = DynamicColor.randomColor
             view.addSubview(setBtn)
             setBtn.snp.makeConstraints { make in
                 make.size.equalTo(64)
@@ -241,7 +238,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.vision:
             
             let view = UIButton(type: .custom)
-            view.backgroundColor = .random
+            view.backgroundColor = DynamicColor.randomColor
             self.view.addSubview(view)
             view.snp.makeConstraints { make in
                 make.size.equalTo(64)
@@ -296,7 +293,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
                 label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
                 label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
-                label.chinaCellPhoneColor = .random
+                label.chinaCellPhoneColor = DynamicColor.randomColor
                 
                 label.handleMentionTap { text in
                     self.alert(title:"Mention", message: text)
@@ -655,7 +652,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             cConfig.contentTopSpace = 10
             cConfig.contentBottomSpace = 10
             let aaaaaaa = PTCollectionView(viewConfig: cConfig)
-            aaaaaaa.backgroundColor = .random
+            aaaaaaa.backgroundColor = DynamicColor.randomColor
             aaaaaaa.registerClassCells(classs: [PTTagCell.ID:PTTagCell.self])
             aaaaaaa.customerLayout = { indexPath,sectionModel in
                 return UICollectionView.tagShowLayout(data: tagModels,itemHeight: cConfig.itemHeight, topContentSpace: cConfig.contentTopSpace, bottomContentSpace: cConfig.contentBottomSpace,itemLeadingSpace: cConfig.cellLeadingSpace,itemTrailingSpace: cConfig.cellTrailingSpace)
@@ -909,10 +906,10 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
 
             let progressView = UIProgressView()
-            progressView.trackTintColor = .random
+            progressView.trackTintColor = DynamicColor.randomColor
             
             let createButton = UIButton(type: .custom)
-            createButton.setTitleColor(.random, for: .normal)
+            createButton.setTitleColor(DynamicColor.randomColor, for: .normal)
             switch self.typeString {
             case String.LivePhoto:
                 createButton.setTitle("Create LivePhoto Button", for: .normal)
@@ -934,7 +931,8 @@ class PTFuncDetailViewController: PTBaseViewController {
                             var photoURL: URL?
                             if let sourceKeyPhoto = self.pickedPhoto {
                                 guard let data = sourceKeyPhoto.jpegData(compressionQuality: 1.0) else { return }
-                                photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory().appendingPathComponent("photo.jpg"))
+                                photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory())
+                                    .appendingPathComponent("photo.jpg")
                                 if let photoURL = photoURL {
                                     try? data.write(to: photoURL)
                                 }

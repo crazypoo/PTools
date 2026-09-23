@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 extension CGFloat: PTProtocolCompatible {}
 //MARK: 溫度單位
@@ -99,7 +98,7 @@ public extension PTPOP where Base == CGFloat {
     /// - Returns: 四舍五入返回结果
     func rounding(scale: Int16 = 1) -> CGFloat {
         let value = NSDecimalNumberHandler.pt.rounding(value: base,scale: scale)
-        return "\(value.floatValue)".cgFloat() ?? 0
+        return "\(value.floatValue)".cgFloat
     }
     
     var toPi: CGFloat {

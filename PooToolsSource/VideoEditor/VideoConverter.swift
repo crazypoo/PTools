@@ -356,11 +356,15 @@ open class VideoConverter {
         case .mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2:
             // 默认使用唯一文件名，避免多个导出任务争用同一个中间文件。
             let tempName = temporaryFileName ?? "PTVideoEditor_\(UUID().uuidString).\(outputType)"
-            filePath = FileManager.pt.TmpDirectory().appendingPathComponent(tempName)
+            filePath = URL(fileURLWithPath: FileManager.pt.TmpDirectory())
+                .appendingPathComponent(tempName)
+                .path
         default:
             let fileName = "PTVideoEditor_audio_\(UUID().uuidString).\(outputType)"
             // 这里假设 OutputFilePath 是你全局定义的路径
-            filePath = OutputFilePath.appendingPathComponent(fileName)
+            filePath = URL(fileURLWithPath: OutputFilePath)
+                .appendingPathComponent(fileName)
+                .path
         }
 
         let url = URL(fileURLWithPath: filePath)

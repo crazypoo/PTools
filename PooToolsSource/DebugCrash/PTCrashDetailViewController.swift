@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 class PTCrashDetailViewController: PTBaseViewController {
@@ -54,7 +53,7 @@ class PTCrashDetailViewController: PTBaseViewController {
                 if cellModel?.title == "Snapshot" {
                     let image = self.viewModel.data.context.uiImage
                     let vc = PTDebugSnapshotViewController(snapshotImage: image)
-                    self.navigationController?.pushViewController(vc)
+                    self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
         }
@@ -64,7 +63,7 @@ class PTCrashDetailViewController: PTBaseViewController {
     lazy var backButton:UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers(handler: { _ in
-            self.navigationController?.popViewController()
+            self.navigationController?.popViewController(animated: true)
         })
         return button
     }()

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
-Generated at: 2026-09-22T08:21:44Z
+Source revision: c7c2b410cb0c49d60bf80474823c455593114303
+Generated at: 2026-09-23T05:46:55Z
 -->
 
 # Module Parity Resolution
@@ -19,13 +19,13 @@ Generated at: 2026-09-22T08:21:44Z
 | BluetoothPermission | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CheckUpdate | ["Swift-JWT"] | ["SwiftJWT"] | Equivalent dependency uses different SPM and CocoaPods names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Core | ["Logging","PToolsCore","PToolsPermissionCore","PToolsUIFoundation"] | ["Logging","PToolsCore","PToolsUIFoundation"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
-| Core | ["AttributedString","DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","NotificationBanner","SafeSFSymbols","SmartCodable","SnapKit","SwiftDate","SwifterSwift","lottie-ios"] | ["AttributedString","DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SafeSFSymbols","SmartCodable","SmartCodable/Inherit","SnapKit","SwiftDate","SwifterSwift","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| Core | ["AttributedString","DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","NotificationBanner","SafeSFSymbols","SmartCodable","SnapKit","SwiftDate","lottie-ios"] | ["AttributedString","DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SafeSFSymbols","SmartCodable","SmartCodable/Inherit","SnapKit","SwiftDate","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | NetWork | ["Core","Loading","PToolsCore"] | ["Core","Loading"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | PagingControl | ["JXPagingView","JXSegmentedView"] | ["JXPagingView/Paging","JXSegmentedView"] | SPM uses products; CocoaPods uses subspec-qualified names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | PhotoPicker | ["CameraPermission","Core","ImagePicker","Loading","MediaCore"] | ["Core","ImagePicker","Loading","MediaCore"] | SPM adds standalone CameraPermission; CocoaPods keeps Core route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
-| Picker | ["SnapKit","SwifterSwift"] | [] | SPM declares direct utilities; CocoaPods resolves them through Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| Picker | ["SnapKit"] | [] | SPM declares direct utilities; CocoaPods resolves them through Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | RateView | [] | ["PToolsUIFoundation"] | CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |
 | SVG | ["Kingfisher","PocketSVG"] | ["PocketSVG","Protobuf","SVGAPlayer"] | SPM and CocoaPods expose different direct and transitive SVG dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ScanQRCode | ["CameraPermission","Core","ImagePicker","PhotoPicker"] | ["CameraPermission","Core","PhotoPicker"] | SPM declares ImagePicker and PhotoPicker routes; CocoaPods uses its local graph. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |

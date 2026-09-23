@@ -10,7 +10,6 @@ import UIKit
 import AVKit
 import DeviceKit
 import SnapKit
-import SwifterSwift
 
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
@@ -114,7 +113,7 @@ public class PTLaunchAdMonitor: NSObject {
             // 假设 clearGlass() 是你们项目里的扩展，若报错可改为常规配置
             view.configuration = UIButton.Configuration.clearGlass()
         } else {
-            view.setBackgroundColor(color: .DevMaskColor, forState: .normal)
+            view.backgroundColor = .DevMaskColor
         }
         return view
     }()

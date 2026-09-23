@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 public extension UILabel {
     @MainActor

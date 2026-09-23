@@ -8,7 +8,6 @@
 
 import Foundation
 import OSLog
-import SwifterSwift
 
 // 优化 1：使用 String 作为 RawValue 时，如果不赋值，默认就是 case 的字符串名称
 // 优化 2：将 case 改为小驼峰命名 (lowerCamelCase)，符合 Swift API 设计规范

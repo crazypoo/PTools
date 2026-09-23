@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 @MainActor
 class PTUserDefaultKeysAndValues: NSObject {

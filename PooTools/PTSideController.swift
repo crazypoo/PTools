@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 
 class PTSideController: PTBaseSideController {
@@ -40,7 +39,7 @@ class PTSideController: PTBaseSideController {
                         }
                         button.addActionHandlers { sender in
                             let vcs = PTBaseViewController()
-                            vc.navigationController?.pushViewController(vcs)
+                            vc.navigationController?.pushViewController(vcs, animated: true)
                         }
                         
                         let nav = PTBaseNavControl(rootViewController: vc)
@@ -63,7 +62,7 @@ class PTSideController: PTBaseSideController {
     
     lazy var inspectorButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.backgroundColor = .random
+        view.backgroundColor = DynamicColor.randomColor
         view.addActionHandlers { sender in
             Inspector.sharedInstance.present(animated: true)
         }
@@ -72,7 +71,7 @@ class PTSideController: PTBaseSideController {
     
     lazy var lcButton:UIButton = {
         let view = UIButton(type:.custom)
-        view.backgroundColor = .random
+        view.backgroundColor = DynamicColor.randomColor
         view.addActionHandlers { sender in
             let recorder = PTInstrumentRecorder.shared
 

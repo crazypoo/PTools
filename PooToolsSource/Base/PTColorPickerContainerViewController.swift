@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 open class PTColorPickerContainerViewController: PTBaseViewController {
 
@@ -28,7 +27,7 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
             if self.checkVCIsPresenting() {
                 self.dismissAnimated()
             } else {
-                self.navigationController?.popViewController()
+                self.navigationController?.popViewController(animated: true)
             }
         }
         return colorPickerBack

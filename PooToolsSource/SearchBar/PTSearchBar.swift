@@ -64,14 +64,14 @@ public class PTSearchBar: UISearchBar {
         }
     }
     open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } }
-    open var searchBarTextFieldBorderColor: UIColor = UIColor.random { didSet { updateBorderUI() } }
+    open var searchBarTextFieldBorderColor: UIColor = DynamicColor.randomColor { didSet { updateBorderUI() } }
     open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } }
-    open var searchPlaceholderColor: UIColor = UIColor.random { didSet { updateTextUI() } }
-    open var searchTextColor: UIColor = UIColor.random { didSet { updateTextUI() } }
-    open var searchBarOutViewColor: UIColor = UIColor.random { didSet { updateBackgroundUI() } }
+    open var searchPlaceholderColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
+    open var searchTextColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
+    open var searchBarOutViewColor: UIColor = DynamicColor.randomColor { didSet { updateBackgroundUI() } }
     open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } }
     open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } }
-    open var searchTextFieldBackgroundColor: UIColor = UIColor.random { didSet { updateTextUI() } }
+    open var searchTextFieldBackgroundColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
 
     // English: Debounce text changes before starting an asynchronous search.
     // Español: Aplica debounce a los cambios de texto antes de iniciar una búsqueda asíncrona.

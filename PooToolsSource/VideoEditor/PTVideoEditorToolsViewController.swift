@@ -10,7 +10,6 @@ import UIKit
 // AVFoundation editor objects are retained and used on the MainActor;
 // asynchronous export helpers use explicit system compatibility boxes.
 @preconcurrency import AVFoundation
-import SwifterSwift
 import SnapKit
 import Harbeth
 import Photos
@@ -787,7 +786,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         if self.degree == 0 || self.degree == 180 {
             return self.originImageView.frame
         } else if self.degree == 90 || self.degree == 270 {
-            return CGRect(x: self.originImageView.frame.origin.y, y: self.originImageView.frame.origin.x, width: self.originImageView.size.height, height: self.originImageView.size.width)
+            return CGRect(x: self.originImageView.frame.origin.y,
+                          y: self.originImageView.frame.origin.x,
+                          width: self.originImageView.bounds.height,
+                          height: self.originImageView.bounds.width)
         } else {
             return .zero
         }
@@ -917,9 +919,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
 
             var resultURL = convertedURL
             if !configuration.isOnlyAudio, configuration.filterType != .none {
-                let outputPath = FileManager.pt.DocumnetsDirectory()
+                let outputURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory())
                     .appendingPathComponent("PTVideoEditor_\(UUID().uuidString).\(configuration.outputType.name)")
-                let outputURL = URL(fileURLWithPath: outputPath)
                 cleanupURLs.insert(outputURL)
                 resultURL = try await harbethExportAsync(sourceURL: convertedURL,
                                                          outputURL: outputURL,
@@ -971,7 +972,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         } else if presentingViewController != nil {
             dismiss(animated: true, completion: completion)
         } else if let navigationController {
-            navigationController.popViewController(animated: true, completion)
+            navigationController.popViewController(animated: true)
+            completion?()
         } else {
             completion?()
         }

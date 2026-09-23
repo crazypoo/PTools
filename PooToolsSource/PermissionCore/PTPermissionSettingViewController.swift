@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 @objcMembers
 public class PTPermissionSettingViewController: PTBaseViewController {

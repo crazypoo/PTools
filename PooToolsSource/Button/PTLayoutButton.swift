@@ -430,7 +430,10 @@ public class PTLayoutButton: UIButton {
         if CGSize.zero.equalTo(imageSize) {
             imageView?.sizeToFit()
         } else if let imageView {
-            imageView.frame = CGRect(x: imageView.x, y: imageView.y, width: imageSize.width, height: imageSize.height)
+            imageView.frame = CGRect(x: imageView.frame.origin.x,
+                                     y: imageView.frame.origin.y,
+                                     width: imageSize.width,
+                                     height: imageSize.height)
         }
         titleLabel?.sizeToFit()
 

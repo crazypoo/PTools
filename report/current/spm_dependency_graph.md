@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
-Generated at: 2026-09-22T08:21:44Z
+Source revision: c7c2b410cb0c49d60bf80474823c455593114303
+Generated at: 2026-09-23T05:46:54Z
 -->
 
 # SwiftPM Dependency Graph
@@ -14,7 +14,7 @@ Generated at: 2026-09-22T08:21:44Z
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
 - Target count: `97`
-- Core direct third-party dependencies: `12` (baseline `18`)
+- Core direct third-party dependencies: `11` (baseline `18`)
 
 ## Products
 
@@ -187,10 +187,10 @@ Generated at: 2026-09-22T08:21:44Z
 | `PooToolsPagingControl` | `PooToolsSource/SegmentControl` | ptools | JXPagingView, JXSegmentedView | 0 source entries / 0 resources |
 | `PooToolsPhoneInfo` | `PooToolsSource/PhoneInfo` | — | — | 0 source entries / 0 resources |
 | `PooToolsPhotoPicker` | `PooToolsSource` | PTCameraPermission, PooToolsImagePicker, PooToolsLoading, PooToolsMediaCore, ptools | Kakapos | 1 source entries / 0 resources |
-| `PooToolsPicker` | `PooToolsSource/Picker` | ptools | SnapKit, SwifterSwift | 0 source entries / 0 resources |
+| `PooToolsPicker` | `PooToolsSource/Picker` | ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsPing` | `PooToolsSource/Ping` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsProgressBar` | `PooToolsSource/ProgressBar` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsRateView` | `PooToolsSource/RateView` | — | SnapKit, SwifterSwift | 0 source entries / 0 resources |
+| `PooToolsRateView` | `PooToolsSource/RateView` | — | SnapKit | 0 source entries / 0 resources |
 | `PooToolsRouter` | `PooToolsSource/Router` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSVG` | `PooToolsSource/KingfisherSVG` | ptools | Kingfisher, PocketSVG | 0 source entries / 0 resources |
 | `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PooToolsImagePicker, PooToolsPhotoPicker, ptools | — | 0 source entries / 0 resources |
@@ -212,7 +212,7 @@ Generated at: 2026-09-22T08:21:44Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsUIFoundation | AttributedString, DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate, SwifterSwift | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsUIFoundation | AttributedString, DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SafeSFSymbols, SmartCodable, SnapKit, SwiftDate | 28 source entries / 1 resources |
 
 ## Notes
 

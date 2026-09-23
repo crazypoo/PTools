@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwifterSwift
 
 /*
  示例：分组排序后，请使用条件转换，避免异常数据造成崩溃。
@@ -17,6 +16,63 @@ import SwifterSwift
 //MARK: 数据根据字段归组
 ///数据根据字段归组
 public extension Sequence {
+    /// English: Removes duplicates while preserving the first occurrence order.
+    /// Español: Elimina duplicados conservando el orden de la primera aparición.
+    /// 中文：移除重复元素并保留第一次出现的顺序。
+    func removingDuplicates<Key: Hashable>(by key: (Element) throws -> Key) rethrows -> [Element] {
+        var seen = Set<Key>()
+        var result: [Element] = []
+        for element in self {
+            let identifier = try key(element)
+            if seen.insert(identifier).inserted {
+                result.append(element)
+            }
+        }
+        return result
+    }
+
+    /// English: Returns the only matching element, or nil when there are zero or multiple matches.
+    /// Español: Devuelve el único elemento coincidente o nil si hay cero o varios.
+    /// 中文：仅在恰好匹配一个元素时返回，否则返回 nil。
+    func single(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+        var hasMatch = false
+        var match: Element?
+        for element in self {
+            guard try predicate(element) else { continue }
+            guard !hasMatch else { return nil }
+            hasMatch = true
+            match = element
+        }
+        return match
+    }
+
+    /// English: Splits the sequence into matching and non-matching elements without changing order.
+    /// Español: Divide la secuencia en elementos coincidentes y no coincidentes sin cambiar el orden.
+    /// 中文：按条件拆分序列，保持原有顺序。
+    func divided(by predicate: (Element) throws -> Bool) rethrows -> (matching: [Element], nonMatching: [Element]) {
+        var matching: [Element] = []
+        var nonMatching: [Element] = []
+        for element in self {
+            if try predicate(element) {
+                matching.append(element)
+            } else {
+                nonMatching.append(element)
+            }
+        }
+        return (matching, nonMatching)
+    }
+
+    /// English: Sums transformed values using the value type's additive identity.
+    /// Español: Suma los valores transformados usando el elemento neutro aditivo del tipo.
+    /// 中文：使用值类型的加法单位元，对转换后的值求和。
+    func sum<Value: AdditiveArithmetic>(for transform: (Element) throws -> Value) rethrows -> Value {
+        var result = Value.zero
+        for element in self {
+            result += try transform(element)
+        }
+        return result
+    }
+
     func group<U: Hashable>(by key: (Iterator.Element) -> U) -> [U:[Iterator.Element]] {
         var categories: [U: [Iterator.Element]] = [:]
         for element in self {
@@ -33,14 +89,7 @@ public extension Array {
     //MARK: 數組去重
     ///數組去重
     func filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
-        var result = [Element]()
-        for value in self {
-            let key = filter(value)
-            if !result.map({filter($0)}).contains(key) {
-                result.append(value)
-            }
-        }
-        return result
+        handleFilter(filter)
     }
     
     //MARK: 數組冒泡排序
@@ -94,7 +143,7 @@ public extension Array {
             //调用filterCall，获得需要用来判断的属性E
             let identifer = filterCall(model)
             //此处利用map函数 来将model类型数组转换成E类型的数组，以此来判断
-            if !temp.map( { filterCall($0) } ).contains(identifer) {
+            if !temp.contains(where: { filterCall($0) == identifer }) {
                 temp.append(model)
             }
         }
@@ -146,8 +195,48 @@ public extension Array {
         }
     }
     
-    subscript(safe index:Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
+    /// English: Swaps two valid indices and ignores invalid input instead of trapping.
+    /// Español: Intercambia dos índices válidos e ignora entradas no válidas sin provocar un fallo.
+    /// 中文：交换两个有效下标；遇到无效下标时安全忽略，避免崩溃。
+    mutating func safeSwap(from firstIndex: Index, to secondIndex: Index) {
+        guard indices.contains(firstIndex), indices.contains(secondIndex) else { return }
+        swapAt(firstIndex, secondIndex)
+    }
+
+    /// English: Sorts by a derived comparable value.
+    /// Español: Ordena usando un valor comparable derivado。
+    /// 中文：按照转换得到的可比较值排序。
+    func sorted<Key: Comparable>(matching key: (Element) throws -> Key) rethrows -> [Element] {
+        try sorted(matching: key, by: <)
+    }
+
+    /// English: Sorts by a derived value and caller-provided ordering.
+    /// Español: Ordena por un valor derivado y una regla de orden proporcionada por el llamador.
+    /// 中文：按照转换值和调用方提供的比较规则排序。
+    func sorted<Key>(matching key: (Element) throws -> Key,
+                     by areInIncreasingOrder: (Key, Key) throws -> Bool) rethrows -> [Element] {
+        var decorated: [(element: Element, key: Key)] = []
+        decorated.reserveCapacity(count)
+        for element in self {
+            decorated.append((element, try key(element)))
+        }
+
+        // English: Stable insertion sort keeps the throwing comparator outside Swift's non-throwing sort closure.
+        // Español: La ordenación por inserción estable mantiene el comparador que puede lanzar errores fuera del cierre no lanzable de Swift.
+        // 中文：使用稳定插入排序，使可抛出比较器不必进入 Swift 的非抛出排序闭包。
+        var result: [(element: Element, key: Key)] = []
+        result.reserveCapacity(decorated.count)
+        for item in decorated {
+            var insertionIndex = result.endIndex
+            for index in result.indices {
+                if try areInIncreasingOrder(item.key, result[index].key) {
+                    insertionIndex = index
+                    break
+                }
+            }
+            result.insert(item, at: insertionIndex)
+        }
+        return result.map(\.element)
     }
     
     /// 获取数组中的元素,增加了数组越界的判断
@@ -186,6 +275,15 @@ public extension Array {
             copy.swapAt(i, Int(arc4random_uniform(UInt32(i + 1))))
         }
         return Array(copy.suffix(n))
+    }
+}
+
+/// English: In-place hashable deduplication preserving the first occurrence order.
+/// Español: Elimina duplicados in situ para elementos hashables conservando el primer orden.
+/// 中文：对可哈希元素原地去重，并保留第一次出现的顺序。
+public extension Array where Element: Hashable {
+    mutating func removeDuplicates() {
+        self = removingDuplicates(by: { $0 })
     }
 }
 
@@ -251,18 +349,6 @@ public extension Array where Element : Equatable {
     /// - Parameter array: 数组元素
     /// - Returns: 返回相同的元素
     func sameElement(array: [Element]) -> [Element] {
-        var dict1: [String: Int] = [:]
-        self.forEach({
-            dict1["\($0)"] = 1
-        })
-        var sameElements: [Element] = []
-        array.forEach({
-            if 1 == dict1["\($0)"] {
-                // 此处便可取到相同元素
-                PTNSLogConsole("相同的元素：\($0)")
-                sameElements.append($0)
-            }
-        })
-        return sameElements
+        return array.filter { contains($0) }
     }
 }

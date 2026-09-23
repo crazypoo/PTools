@@ -6,7 +6,6 @@ import Foundation
 @preconcurrency import Alamofire
 import Network
 import CoreTelephony
-import SwifterSwift
 
 /// 🌟 步骤 1：标记为 @unchecked Sendable。
 /// 这告诉编译器：“虽然我内部有 var，但我会通过加锁的方式自己保证线程安全，请允许我跨线程传递。”

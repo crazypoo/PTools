@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 import SafeSFSymbols
 #if POOTOOLS_PERMISSION_HEALTH

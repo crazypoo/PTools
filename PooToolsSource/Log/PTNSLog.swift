@@ -8,7 +8,6 @@
 
 import UIKit
 import Foundation
-import SwifterSwift
 import os.lock
 
 #if !canImport(PToolsLogging) && !POOTOOLS_LOGGING

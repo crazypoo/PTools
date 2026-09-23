@@ -78,11 +78,11 @@ run_build() {
     return 1
   fi
 
-  # Do not treat an Xcode log containing an error diagnostic as a successful build when xcodebuild reports zero.
-  # No trates como compilación correcta un registro de Xcode con errores aunque xcodebuild devuelva cero.
-  # 即使 xcodebuild 返回 0，只要日志含有错误诊断，也不能判定构建成功。
+  # English: Only classify concrete file/line compiler diagnostics as errors; tool command text may contain the word "error".
+  # Español: Solo clasifica como error un diagnóstico concreto con archivo y línea; el texto de una herramienta puede contener "error".
+  # 中文：只把带有文件和行号的真实编译器诊断视为错误，工具命令文本可能只是包含 “error” 单词。
   if [[ "$build_exit" -eq 0 ]]; then
-    non_source_errors="$(rg -n '(^|[^[:alnum:]_])error:' "$build_log" \
+    non_source_errors="$(rg -n '(^|/)[^:[:space:]]+:[0-9]+:[0-9]+: (fatal )?error:' "$build_log" \
       | rg -v --fixed-strings "$repo_root/PooToolsSource/" || true)"
     if [[ -n "$non_source_errors" ]]; then
       printf '%s\n' "$non_source_errors" | head -40 >&2

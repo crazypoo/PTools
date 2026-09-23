@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 enum PerformanceType: String,CaseIterable {
@@ -109,7 +108,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                         PTDebugPerformanceToolKit.generate()
                     } else if cellModel.name == "⚠️show leaks" {
                         let vc = PTLeakListViewController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     } else if cellModel.name == "Create Leak" {
                         let vc = PTCreateLeakViewController()
                         self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])

@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
-Generated at: 2026-09-22T08:21:44Z
+Source revision: c7c2b410cb0c49d60bf80474823c455593114303
+Generated at: 2026-09-23T05:46:55Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `e7bb541d7063634f75421b71747b8776fb4f834c6b4b3e8612496f2cedf5ea3f`
+- Fingerprint: `0acf1b217b0a6eea6812d89776bb7c0a4091b8fa1cbe4e9e6a1184b91de64e64`
 - Matched modules: `89`
 - SwiftPM-only modules: `0`
 - CocoaPods-only modules: `15`
@@ -40,13 +40,13 @@ The baseline records existing differences as explicit review items. A later mani
 - `BluetoothPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
 - `CheckUpdate` / `third_party_dependencies`: SPM=["Swift-JWT"]; CocoaPods=["SwiftJWT"]
 - `Core` / `internal_dependencies`: SPM=["Logging", "PToolsCore", "PToolsPermissionCore", "PToolsUIFoundation"]; CocoaPods=["Logging", "PToolsCore", "PToolsUIFoundation"]
-- `Core` / `third_party_dependencies`: SPM=["AttributedString", "DeviceKit", "IQKeyboardManager", "KakaJSON", "Kingfisher", "NotificationBanner", "SafeSFSymbols", "SmartCodable", "SnapKit", "SwiftDate", "SwifterSwift", "lottie-ios"]; CocoaPods=["AttributedString", "DeviceKit", "IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "KakaJSON", "Kingfisher", "SafeSFSymbols", "SmartCodable", "SmartCodable/Inherit", "SnapKit", "SwiftDate", "SwifterSwift", "lottie-ios"]
+- `Core` / `third_party_dependencies`: SPM=["AttributedString", "DeviceKit", "IQKeyboardManager", "KakaJSON", "Kingfisher", "NotificationBanner", "SafeSFSymbols", "SmartCodable", "SnapKit", "SwiftDate", "lottie-ios"]; CocoaPods=["AttributedString", "DeviceKit", "IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "KakaJSON", "Kingfisher", "SafeSFSymbols", "SmartCodable", "SmartCodable/Inherit", "SnapKit", "SwiftDate", "lottie-ios"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `NetWork` / `internal_dependencies`: SPM=["Core", "Loading", "PToolsCore"]; CocoaPods=["Core", "Loading"]
 - `PagingControl` / `third_party_dependencies`: SPM=["JXPagingView", "JXSegmentedView"]; CocoaPods=["JXPagingView/Paging", "JXSegmentedView"]
 - `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore"]
-- `Picker` / `third_party_dependencies`: SPM=["SnapKit", "SwifterSwift"]; CocoaPods=[]
+- `Picker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `RateView` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
 - `SVG` / `third_party_dependencies`: SPM=["Kingfisher", "PocketSVG"]; CocoaPods=["PocketSVG", "Protobuf", "SVGAPlayer"]
 - `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]

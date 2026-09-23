@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 @preconcurrency import DeviceKit
 import Photos
 import Combine
@@ -98,7 +97,7 @@ class YDSWhiteDecorationView: UICollectionReusableView {
     public static let ID = "YDSWhiteDecorationView"
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .random
+        backgroundColor = DynamicColor.randomColor
         Task { @MainActor in
             self.viewCornerRectCorner(radius: 8,corner: [.allCorners])
         }
@@ -118,7 +117,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
 //        return .solid(.random)
-        return .gradient(type: .TopToBottom, colors: [.random,.random])
+        return .gradient(type: .TopToBottom, colors: [DynamicColor.randomColor,DynamicColor.randomColor])
     }
 
     var cacheSize = ""
@@ -608,13 +607,13 @@ class PTFuncNameViewController: PTBaseViewController {
             return true
         }
         aaaaaaa.swipeLeftHandler = { collection,sectionModel,indexPath in
-            let swipeAction = PTSwipeAction(name: "1111111", image: nil, backgroundColor: .random) { sender in
+            let swipeAction = PTSwipeAction(name: "1111111", image: nil, backgroundColor: DynamicColor.randomColor) { sender in
                 PTNSLogConsole("123123123123123")
             }
             return [swipeAction]
         }
         aaaaaaa.swipeRightHandler = { collection,sectionModel,indexPath in
-            let swipeAction = PTSwipeAction(name: "333333", image: nil, backgroundColor: .random) { sender in
+            let swipeAction = PTSwipeAction(name: "333333", image: nil, backgroundColor: DynamicColor.randomColor) { sender in
                 PTNSLogConsole("4444444")
             }
             return [swipeAction]
@@ -780,7 +779,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 } else if itemRow.title == .osskit {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTSpeechViewController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .share {
                     PTGCDManager.shared.runOnMain {
@@ -964,17 +963,17 @@ class PTFuncNameViewController: PTBaseViewController {
                 } else if itemRow.title == .darkMode {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTDarkModeControl()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .tipkit {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTTipsDemoController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .document {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTDocumentViewController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .svga {
     //                let vc = PTSVGAViewController()
@@ -985,7 +984,7 @@ class PTFuncNameViewController: PTBaseViewController {
                         vc.resultBlock = { result,error in
                             PTNSLogConsole("\(result)")
                         }
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .filtercamera {
                     PTGCDManager.shared.runOnMain {
@@ -1025,12 +1024,12 @@ class PTFuncNameViewController: PTBaseViewController {
                 } else if itemRow.title == .messageKit {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTTestChatViewController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .BlurImageList {
                     PTGCDManager.shared.runOnMain {
                         let vc = PTImageListViewController()
-                        self.navigationController?.pushViewController(vc)
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else if itemRow.title == .mediaSelect {
                     PTGCDManager.shared.runOnMain {
@@ -1153,7 +1152,7 @@ class PTFuncNameViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         
         let more = UIButton(type: .custom)
-        more.setTitleColor(.random, for: .normal)
+        more.setTitleColor(DynamicColor.randomColor, for: .normal)
         more.setTitle("More", for: .normal)
         more.frame = CGRect(x: 0, y: 0, width: 54, height: 40)
 
@@ -1162,7 +1161,7 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.layoutStyle = .leftImageRightTitle
         popover.midSpacing = 0
         popover.setTitleFont(.appfont(size: 12), state: .normal)
-        popover.setTitleColor(.random, state: .normal)
+        popover.setTitleColor(DynamicColor.randomColor, state: .normal)
         popover.setTitle("Popover", state: .normal)
         popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
         popover.isUserInteractionEnabled = true
@@ -1186,7 +1185,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var config = PTBadgeConfiguration()
         config.centerOffset = CGPointMake(20, 0)
-        config.bgColor = .random
+        config.bgColor = DynamicColor.randomColor
         config.canDragToDelete = true
         more.badgeConfig = config
         more.showBadge(style: .new, value: "我愛你", aniType: .none)
@@ -1194,7 +1193,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
         let popoverButton = UIButton(type: .custom)
-        popoverButton.backgroundColor = .random
+        popoverButton.backgroundColor = DynamicColor.randomColor
         
         popoverContent.view.addSubview(popoverButton)
         popoverButton.snp.makeConstraints { make in
@@ -1222,7 +1221,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
 
         let testButton = UIButton(type: .custom)
-        testButton.setBackgroundColor(color: .random, forState: .normal)
+        testButton.backgroundColor = DynamicColor.randomColor
         popoverContent.view.addSubview(testButton)
         testButton.snp.makeConstraints { make in
             make.size.equalTo(50)
@@ -1258,7 +1257,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
-        collectionView.backgroundColor = .random
+        collectionView.backgroundColor = DynamicColor.randomColor
         
         let collectionInset:CGFloat = CGFloat.kTabbarHeight_Total
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
@@ -1281,12 +1280,12 @@ class PTFuncNameViewController: PTBaseViewController {
             emptyConfig.image = UIImage(.exclamationmark.triangle)
             emptyConfig.mainTitleAtt = """
                 \(wrap: .embedding("""
-                \("PT Alert Opps".localized(),.foreground(.random),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+                \("PT Alert Opps".localized(),.foreground(DynamicColor.randomColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
                 """))
                 """
             emptyConfig.secondaryEmptyAtt = """
                 \(wrap: .embedding("""
-                \("PT Photo picker empty media".localized(),.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+                \("PT Photo picker empty media".localized(),.foreground(DynamicColor.randomColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
                 """))
                 """
 
@@ -1343,7 +1342,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         PTGCDManager.shared.delayOnMain(time: 5) {
             let vvvvv = PTDynamicNotificationView(showTimes: 3, canTap: true) { view in
-                view.backgroundColor = .random
+                view.backgroundColor = DynamicColor.randomColor
             }
             vvvvv.showNotification()
             vvvvv.hideHandler = {
@@ -1486,7 +1485,7 @@ class PTFuncNameViewController: PTBaseViewController {
             if keyValue is String {
                 if (keyValue as! String).isURL() {
                     let vc = PTBaseWebViewController(showString: (keyValue as! String))
-                    self.navigationController?.pushViewController(vc)
+                    self.navigationController?.pushViewController(vc, animated: true)
 //                    PTAppStoreFunction.jumpLink(url: URL(string: (keyValue as! String))!)
                 }
             }

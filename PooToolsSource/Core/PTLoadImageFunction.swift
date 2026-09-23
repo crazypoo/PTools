@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 import Kingfisher
-import SwifterSwift
 @preconcurrency import Photos
 import ImageIO
 import os

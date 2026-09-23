@@ -7,11 +7,19 @@
 //
 
 import UIKit
-import SwifterSwift
 
 extension UIApplication: PTProtocolCompatible { }
 
 public extension UIApplication {
+    /// English: Describes the build environment inferred from the application receipt.
+    /// Español: Describe el entorno de compilación inferido a partir del recibo de la aplicación.
+    /// 中文：描述根据应用收据推断出的构建环境。
+    enum Environment: Sendable {
+        case debug
+        case testFlight
+        case appStore
+    }
+
     
     @objc func clearLaunchScreenCache() {
         let result = FileManager.pt.removefolder(folderPath: FileManager.pt.homeDirectory() + "/Library/SplashBoard")

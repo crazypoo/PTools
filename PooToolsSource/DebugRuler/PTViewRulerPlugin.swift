@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import AttributedString
-import SwifterSwift
 
 @MainActor
 open class PTViewRulerPlugin: NSObject {

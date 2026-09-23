@@ -19,7 +19,7 @@
     {"name":"KeyChain","spm_product":"PooToolsKeyChain","spm_target":"PooToolsKeyChain","pod_subspec":"KeyChain","source_path":"PooToolsSource/KeyChain","dependencies":[],"compile_flags":["POOTOOLS_KEYCHAIN"],"resources":[],"category":"foundation-adapter"},
     {"name":"PhoneInfo","spm_product":"PooToolsPhoneInfo","spm_target":"PooToolsPhoneInfo","pod_subspec":"PhoneInfo","source_path":"PooToolsSource/PhoneInfo","dependencies":[],"compile_flags":["POOTOOLS_PHONEINFO"],"resources":[],"category":"foundation-adapter"},
     {"name":"CheckBox","spm_product":"PooToolsCheckBox","spm_target":"PooToolsCheckBox","pod_subspec":"CheckBox","source_path":"PooToolsSource/CheckBox","dependencies":[],"compile_flags":["POOTOOLS_CHECKBOX"],"resources":[],"category":"ui-leaf"},
-    {"name":"RateView","spm_product":"PooToolsRateView","spm_target":"PooToolsRateView","pod_subspec":"RateView","source_path":"PooToolsSource/RateView","dependencies":["PToolsUIFoundation","SnapKit","SwifterSwift"],"compile_flags":["POOTOOLS_RATE"],"resources":[],"category":"ui-leaf"},
+    {"name":"RateView","spm_product":"PooToolsRateView","spm_target":"PooToolsRateView","pod_subspec":"RateView","source_path":"PooToolsSource/RateView","dependencies":["PToolsUIFoundation","SnapKit"],"compile_flags":["POOTOOLS_RATE"],"resources":[],"category":"ui-leaf"},
     {"name":"Slider","spm_product":"PooToolsSlider","spm_target":"PooToolsSlider","pod_subspec":"Slider","source_path":"PooToolsSource/Slider","dependencies":["PToolsUIFoundation","SnapKit"],"compile_flags":["POOTOOLS_SLIDER"],"resources":[],"category":"ui-leaf"}
   ],
   "known_module_only": [

@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 
 public typealias SignImageBlock = (_ signImage:UIImage?) -> Void

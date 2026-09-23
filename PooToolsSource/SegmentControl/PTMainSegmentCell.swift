@@ -9,7 +9,6 @@
 import UIKit
 import JXSegmentedView
 import SnapKit
-import SwifterSwift
 import AttributedString
 import Kingfisher
 

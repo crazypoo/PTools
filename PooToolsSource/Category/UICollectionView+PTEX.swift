@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 struct PTCollectionLayoutGeometryResult {
     let frames: [CGRect]
@@ -210,6 +209,16 @@ enum PTCollectionLayoutGeometry {
 }
 
 public extension UICollectionView {
+    /// English: Scrolls to the last content position while respecting adjusted insets.
+    /// Español: Desplaza hasta el final respetando los márgenes ajustados del contenido.
+    /// 中文：遵循 adjustedContentInset 将列表滚动到内容底部。
+    @MainActor
+    func scrollToBottom(animated: Bool = false) {
+        let bottomOffset = max(-adjustedContentInset.top,
+                               contentSize.height - bounds.height + adjustedContentInset.bottom)
+        setContentOffset(CGPoint(x: contentOffset.x, y: bottomOffset), animated: animated)
+    }
+
     
     // MARK: - 基础功能
     

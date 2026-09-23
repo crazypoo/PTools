@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 import AttributedString
 
@@ -91,11 +90,14 @@ class PTLogConsoleViewController: PTBaseViewController {
         if let content = handler.content as? String {
             let infoAtt:ASAttributedString = """
                         \(wrap: .embedding("""
-                        \(content,.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)),.foreground(DynamicColor(light: .black, dark: .white)))
+                        \(content,.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)),.foreground(UIColor { traits in traits.userInterfaceStyle == .dark ? .white : .black }))
                         """))
                         """
             infoLabel.attributedText = infoAtt.value
-            infoLabel.scrollToBottom()
+            infoLabel.layoutIfNeeded()
+            let bottomOffset = max(-infoLabel.adjustedContentInset.top,
+                                   infoLabel.contentSize.height - infoLabel.bounds.height + infoLabel.adjustedContentInset.bottom)
+            infoLabel.setContentOffset(CGPoint(x: 0, y: bottomOffset), animated: false)
         }
     }
 }

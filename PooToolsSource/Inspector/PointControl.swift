@@ -7,28 +7,26 @@
 import UIKit
 
 final class PointControl: StepperPairControl<CGFloat> {
-//    private var x: CGFloat {
-//        get { firstValue }
-//        set { firstValue = newValue }
-//    }
-//
-//    private var y: CGFloat {
-//        get { secondValue }
-//        set { secondValue = newValue }
-//    }
-//
-//    var point: CGPoint {
-//        get {
-//            CGPoint(
-//                x: x,
-//                y: y
-//            )
-//        }
-//        set {
-//            x = newValue.x
-//            y = newValue.y
-//        }
-//    }
+    // English: Expose point components through the existing stepper values.
+    // Español: Expone los componentes del punto mediante los valores existentes del stepper.
+    // 中文：通过现有 stepper 数值暴露点坐标分量。
+    var x: CGFloat {
+        get { firstValue }
+        set { firstValue = newValue }
+    }
+
+    var y: CGFloat {
+        get { secondValue }
+        set { secondValue = newValue }
+    }
+
+    var point: CGPoint {
+        get { CGPoint(x: x, y: y) }
+        set {
+            x = newValue.x
+            y = newValue.y
+        }
+    }
 
     override var title: String? {
         didSet {

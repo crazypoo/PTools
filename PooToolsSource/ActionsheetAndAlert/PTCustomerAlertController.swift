@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 public typealias PTCustomerCustomerBlock = (_ alertCustomerView: UIView) -> Void
 

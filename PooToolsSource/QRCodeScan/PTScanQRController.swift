@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import Photos
-import SwifterSwift
 
 #if SWIFT_PACKAGE
 import ptools

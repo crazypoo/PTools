@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 import Network
 import ObjectiveC
@@ -84,7 +83,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         view.collectionDidSelect = { [weak self] collection, model, indexPath in
             if let itemRow = model.rows?[indexPath.row], let cellModel = itemRow.dataModel as? PTHttpModel {
                 let vc = PTNetworkWatcherDetailViewController(viewModel: cellModel)
-                self?.navigationController?.pushViewController(vc)
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
         return view

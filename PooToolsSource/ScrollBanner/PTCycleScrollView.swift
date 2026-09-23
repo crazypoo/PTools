@@ -10,7 +10,6 @@
 import UIKit
 import AVFoundation
 import AttributedString
-import SwifterSwift
 
 /// English: Page-control styles kept for source compatibility with the legacy banner API.
 /// Español: Estilos de control de páginas conservados para compatibilidad con la API heredada.

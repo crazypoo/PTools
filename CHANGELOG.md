@@ -1,12 +1,19 @@
 # Changelog
 
-## Unreleased — 5.22.x
+## Unreleased — 5.23.x
 
-当前开发基线为 `5.22.2`；版本唯一来源为根目录 `VERSION`，`5.21.2` 是最近的正式基线。
+当前开发基线为 `5.23.0`；版本唯一来源为根目录 `VERSION`，`5.22.2` 是最近的正式基线。
+
+- 5.23.0 移除 SwifterSwift 的源码导入、SwiftPM/CocoaPods 直接依赖和锁文件记录；新增 PTools 自有的 Sequence、Array、Dictionary、Optional、URL、RangeReplaceableCollection 与 UIView 兼容入口。
+- 5.23.0 统一安全下标、JSON 序列化、查询参数、视图层级和圆角辅助逻辑，避免强制解包、重复实现和不稳定的随机顺序；新增迁移指南、类别规范、依赖审计和持续门禁。
 
 - 5.22.0 从 SwiftPM、CocoaPods、`Package.resolved` 和 `Podfile.lock` 移除旧日志第三方依赖，新增实现路径扫描，确保交付源码不再直接依赖旧后端。
 - 5.22.1 删除旧文件日志管理器的独立实现和 UI sink 兼容实现；`PTLogFileManager` 历史符号保留为仅转发 `PTLogger` 的适配器，`PTNSLog`、`PTOSLogger` 入口和 Debug UI 共用统一日志管线。
 - 5.22.2 增加依赖策略、迁移指南、5.22 日志门禁和依赖矩阵复核，完成 API、性能、Debug、Core 与 SwiftPM/CocoaPods parity 收口。
+
+## 5.22.2 — 2026-09-22
+
+- 完成日志依赖移除、兼容层收口、依赖策略、迁移文档和发布前质量复核；5.23.0 在此正式基线上继续进行 Category 依赖替换。
 
 - 5.21.0 将 PTools 生产 Swift 内部的直接 `DDLog*` 实现迁移到 `PTLogger`；`PTNSLog`、`PTLogEvent` 和旧 sink 继续作为兼容包装器保留。
 - 5.21.1 新增有界 `PTMemoryLogDestination`、actor 所有的 Ring Buffer 和多订阅流；LocalConsole 与 PTInstruments Logs 复用同一个内存数据源。

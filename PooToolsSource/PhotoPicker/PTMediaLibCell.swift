@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 import Photos
 import AttributedString

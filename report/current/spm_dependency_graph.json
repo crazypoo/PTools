@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
-  "generated_at": "2026-09-22T08:21:44Z",
+  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
+  "generated_at": "2026-09-23T05:46:54Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1742,39 +1742,11 @@
           ]
         }
       ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "swifterswift",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/SwifterSwift/SwifterSwift.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "8.0.0",
-                "upperBound": "9.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
     }
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 12,
+    "direct_third_party_count": 11,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -5084,17 +5056,6 @@
               null
             ]
           }
-        },
-        {
-          "name": "SwifterSwift",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SwifterSwift",
-              null
-            ]
-          }
         }
       ],
       "unknown_dependencies": [],
@@ -5212,17 +5173,6 @@
           "declaration": {
             "byName": [
               "SnapKit",
-              null
-            ]
-          }
-        },
-        {
-          "name": "SwifterSwift",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SwifterSwift",
               null
             ]
           }
@@ -6457,17 +6407,6 @@
           "declaration": {
             "byName": [
               "SwiftDate",
-              null
-            ]
-          }
-        },
-        {
-          "name": "SwifterSwift",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SwifterSwift",
               null
             ]
           }

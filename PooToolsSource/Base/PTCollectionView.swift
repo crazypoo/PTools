@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import AttributedString
 import Photos
-import SwifterSwift
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
 

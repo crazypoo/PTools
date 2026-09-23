@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 
 let CorpSize: CGFloat = 150

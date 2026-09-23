@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 public typealias CallBlock = (_ timeInterval:TimeInterval)->Void
 public typealias CanCall = (_ ok:Bool)->Void

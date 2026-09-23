@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import SwifterSwift
 import SnapKit
 import AttributedString
 

@@ -9,22 +9,20 @@ import UIKit
 final class Icon: BaseView {
     let glpyh: Glyph
 
-//    var size: CGSize {
-//        didSet {
-//            widthConstraint.constant = size.width
-//            heightConstraint.constant = size.height
-//        }
-//    }
+    // English: Store the requested icon size before BaseView performs setup.
+    // Español: Guarda el tamaño solicitado antes de que BaseView ejecute setup.
+    // 中文：在 BaseView 执行 setup 前保存请求的图标尺寸。
+    private let iconSize: CGSize
 
-    private lazy var widthConstraint_inspector = widthAnchor.constraint(equalToConstant: size.width)
+    private lazy var widthConstraint_inspector = widthAnchor.constraint(equalToConstant: iconSize.width)
 
-    private lazy var heightConstraint_inspector = heightAnchor.constraint(equalToConstant: size.height)
+    private lazy var heightConstraint_inspector = heightAnchor.constraint(equalToConstant: iconSize.height)
 
     @MainActor init(_ glpyh: Glyph, color: UIColor? = nil, size: CGSize = CGSize(width: 16, height: 16)) {
         self.glpyh = glpyh
+        self.iconSize = size
 
         super.init(frame: CGRect(origin: .zero, size: size))
-        self.size = size
 
         tintColor = color ?? Inspector.sharedInstance.configuration.colorStyle.textColor
         setupTraitObservation()

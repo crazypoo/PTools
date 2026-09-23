@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 import AVKit
-import SwifterSwift
 
 extension FileManager: PTProtocolCompatible {}
 // MARK: 沙盒路径的获取
@@ -191,19 +190,21 @@ public extension PTPOP where Base: FileManager {
     @discardableResult
     static func isFileExist(filePath:String,
                             fileName:String) -> Bool {
-        let filePaths = (filePath + "/").appendingPathComponent(fileName)
+        let filePaths = URL(fileURLWithPath: filePath).appendingPathComponent(fileName).path
         let result = fileManager.fileExists(atPath: filePaths)
         return result
     }
     
     @discardableResult
     static func renameFile(oldPath:String,newName:String) -> (isSuccess:Bool,filePath:String) {
-        let lastPathComponent = oldPath.lastPathComponent
-        let fileExtension = oldPath.pathExtension
-        let pathNew = oldPath.replacingOccurrences(of: lastPathComponent, with: "")
-        let newPath = pathNew + newName + "." + fileExtension
+        let oldURL = URL(fileURLWithPath: oldPath)
+        let fileExtension = oldURL.pathExtension
+        let newURL = oldURL.deletingLastPathComponent()
+            .appendingPathComponent(newName)
+            .appendingPathExtension(fileExtension)
+        let newPath = newURL.path
         do {
-            try fileManager.moveItem(at: URL(fileURLWithPath: oldPath), to: URL(fileURLWithPath: pathNew))
+            try fileManager.moveItem(at: oldURL, to: newURL)
             return (true,newPath)
         } catch {
             return (false,"")
@@ -513,7 +514,7 @@ public extension PTPOP where Base: FileManager {
     ///  - path: 文件路径
     /// - Returns: 文件扩展类型
     static func fileSuffixAtPath(path: String) -> String {
-        path.pathExtension
+        URL(fileURLWithPath: path).pathExtension
     }
     
     //MARK: 根据文件路径获取文件名称，是否需要后缀
@@ -524,10 +525,10 @@ public extension PTPOP where Base: FileManager {
     /// - Returns: 文件名称
     static func fileName(path: String,
                          suffix: Bool = true) -> String {
-        let fileName = path.lastPathComponent
+        let fileName = URL(fileURLWithPath: path).lastPathComponent
         guard suffix else {
             // 删除后缀
-            return fileName.deletingPathExtension
+            return URL(fileURLWithPath: fileName).deletingPathExtension().lastPathComponent
         }
         return fileName
     }

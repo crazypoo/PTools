@@ -177,7 +177,6 @@ let package = Package(
         // Core 依赖
         .package(url: "https://github.com/malcommac/SwiftDate.git", exact: "7.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.7.1"),
-        .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "8.0.0"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
         .package(url: "https://github.com/lixiang1994/AttributedString.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
@@ -295,7 +294,6 @@ let package = Package(
                 "PToolsPermissionCore",
                 "SwiftDate",
                 "SnapKit",
-                "SwifterSwift",
                 "DeviceKit",
                 "AttributedString",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
@@ -405,7 +403,7 @@ let package = Package(
         .target(name: "PooToolsKeyChain", dependencies: [], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMotion", dependencies: ["ptools", "PTMotionPermission"], path: "PooToolsSource/Motion", swiftSettings: [.define("POOTOOLS_MOTION"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPhoneInfo", dependencies: [], path: "PooToolsSource/PhoneInfo", swiftSettings: [.define("POOTOOLS_PHONEINFO"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsRateView", dependencies: ["SnapKit", "SwifterSwift"], path: "PooToolsSource/RateView", swiftSettings: [.define("POOTOOLS_RATE"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsRateView", dependencies: ["SnapKit"], path: "PooToolsSource/RateView", swiftSettings: [.define("POOTOOLS_RATE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsScrollBanner", dependencies: ["ptools", "PooToolsPageControl"], path: "PooToolsSource/ScrollBanner", swiftSettings: [.define("POOTOOLS_SCROLLBANNER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSegmented", dependencies: ["ptools"], path: "PooToolsSource/Segmented", swiftSettings: [.define("POOTOOLS_SEGMENT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHandSign", dependencies: ["ptools"], path: "PooToolsSource/SignView", swiftSettings: [.define("POOTOOLS_HANDSIGN"), .define("POOTOOLS_COCOAPODS")]),
@@ -433,7 +431,7 @@ let package = Package(
         .target(name: "PooToolsSocketKit", dependencies: ["ptools", "SocketRocket"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsIAP", dependencies: ["ptools"], path: "PooToolsSource/IAP", swiftSettings: [.define("POOTOOLS_IAP"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsTipsView", dependencies: ["ptools"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPicker", dependencies: ["ptools", "SnapKit", "SwifterSwift"], path: "PooToolsSource/Picker", swiftSettings: [.define("POOTOOLS_PICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPicker", dependencies: ["ptools", "SnapKit"], path: "PooToolsSource/Picker", swiftSettings: [.define("POOTOOLS_PICKER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
         // 调试工具模块 (DEBUG)

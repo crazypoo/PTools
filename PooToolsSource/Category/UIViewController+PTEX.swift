@@ -141,9 +141,8 @@ public extension UIViewController {
                 dismissBolck?()
             }
         } else {
-            navigationController?.popViewController(animated: true) {
-                dismissBolck?()
-            }
+            navigationController?.popViewController(animated: true)
+            dismissBolck?()
         }
     }
     

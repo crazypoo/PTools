@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 public class PTDebugViewController: PTBaseViewController {
     

@@ -9,7 +9,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 public enum PTScreenShotActionType {
     case Share,Feedback,Edit

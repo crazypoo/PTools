@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 class PTCrashLogViewController: PTBaseViewController {
@@ -49,7 +48,7 @@ class PTCrashLogViewController: PTBaseViewController {
             let data = self.viewModel.data[indexPath.row]
             let viewModel = PTCrashDetailModel(data: data)
             let vc = PTCrashDetailViewController(viewModel: viewModel)
-            self.navigationController?.pushViewController(vc)
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         return view
     }()

@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 class PTLeakListViewController: PTBaseViewController {
@@ -60,7 +59,7 @@ class PTLeakListViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { collection,model,indexPath in            
             let vc = PTDebugSnapshotViewController(snapshotImage: self.viewModel.filteredInfo[indexPath.row].screenshot ?? UIImage())
-            self.navigationController?.pushViewController(vc)
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         return view
     }()
@@ -68,7 +67,7 @@ class PTLeakListViewController: PTBaseViewController {
     lazy var backButton:UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
+            self.navigationController?.popViewController(animated: true)
         }
         return button
     }()

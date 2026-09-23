@@ -9,7 +9,6 @@
 import UIKit
 @preconcurrency import AVFoundation
 import SnapKit
-import SwifterSwift
 
 open class PTPlayerViewController: PTBaseViewController {
 
@@ -226,7 +225,7 @@ open class PTPlayerViewController: PTBaseViewController {
         } else {
             if let _ = self.sheetViewController {
                 if self.navigationController?.viewControllers.last == self {
-                    self.navigationController?.popViewController()
+                    self.navigationController?.popViewController(animated: true)
                 } else {
                     self.returnFrontVC()
                 }

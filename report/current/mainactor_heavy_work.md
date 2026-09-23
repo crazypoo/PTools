@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
-Generated at: 2026-09-22T08:21:34Z
+Source revision: c7c2b410cb0c49d60bf80474823c455593114303
+Generated at: 2026-09-23T05:03:50Z
 -->
 
 # MainActor 重活盘点
@@ -31,25 +31,25 @@ Generated at: 2026-09-22T08:21:34Z
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 272 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 287 | `generator.image` | review-required | `let result = try await generator.image(at: time)` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 298 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 96 | `Data\(contentsOf:` | dedicated-system-or-disk-boundary | `return try Data(contentsOf: url, options: .mappedIfSafe)` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 624 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 636 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 655 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 656 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 675 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 676 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 680 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
-| `PooToolsSource/NetWork/Network.swift` | 438 | `JSONDecoder` | review-required | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
-| `PooToolsSource/NetWork/Network.swift` | 694 | `JSONDecoder` | review-required | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
-| `PooToolsSource/NetWork/Network.swift` | 794 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |
-| `PooToolsSource/NetWork/Network.swift` | 840 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 263 | `FileManager.default` | explicit-background-or-actor-boundary | `?? FileManager.default.temporaryDirectory.path` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 265 | `FileManager.default` | explicit-background-or-actor-boundary | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 371 | `FileManager.default` | review-required | `try? FileManager.default.removeItem(atPath: path)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 378 | `FileManager.default` | review-required | `try? FileManager.default.removeItem(atPath: diskPath)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 379 | `FileManager.default` | review-required | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 409 | `FileManager.default` | explicit-background-or-actor-boundary | `let fm = FileManager.default` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 441 | `JSONEncoder` | explicit-background-or-actor-boundary | `try? JSONEncoder().encode(object)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 450 | `JSONDecoder` | explicit-background-or-actor-boundary | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 459 | `Data\(contentsOf:` | explicit-background-or-actor-boundary | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 469 | `FileManager.default` | explicit-background-or-actor-boundary | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 95 | `Data\(contentsOf:` | dedicated-system-or-disk-boundary | `return try Data(contentsOf: url, options: .mappedIfSafe)` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 623 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 635 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 654 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 655 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 674 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 675 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 679 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
+| `PooToolsSource/NetWork/Network.swift` | 437 | `JSONDecoder` | review-required | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
+| `PooToolsSource/NetWork/Network.swift` | 693 | `JSONDecoder` | review-required | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
+| `PooToolsSource/NetWork/Network.swift` | 793 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |
+| `PooToolsSource/NetWork/Network.swift` | 839 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 262 | `FileManager.default` | explicit-background-or-actor-boundary | `?? FileManager.default.temporaryDirectory.path` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 264 | `FileManager.default` | explicit-background-or-actor-boundary | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 370 | `FileManager.default` | review-required | `try? FileManager.default.removeItem(atPath: path)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 377 | `FileManager.default` | review-required | `try? FileManager.default.removeItem(atPath: diskPath)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 378 | `FileManager.default` | review-required | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 408 | `FileManager.default` | explicit-background-or-actor-boundary | `let fm = FileManager.default` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 440 | `JSONEncoder` | explicit-background-or-actor-boundary | `try? JSONEncoder().encode(object)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 449 | `JSONDecoder` | explicit-background-or-actor-boundary | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 458 | `Data\(contentsOf:` | explicit-background-or-actor-boundary | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 468 | `FileManager.default` | explicit-background-or-actor-boundary | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |

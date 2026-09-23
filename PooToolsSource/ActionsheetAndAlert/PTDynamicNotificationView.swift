@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 @MainActor
 public class PTDynamicNotificationView: UIView {

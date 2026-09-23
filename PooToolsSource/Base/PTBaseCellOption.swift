@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 public protocol PTCellBindable: PTAnyCellBindable {
     associatedtype ModelType

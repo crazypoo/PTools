@@ -15,7 +15,6 @@ import AppKit
 #endif
 
 import CommonCrypto
-import SwifterSwift
 import AVFoundation
 import Foundation
 import SwiftDate
@@ -23,6 +22,87 @@ import CryptoKit
 import CoreLocation
 
 extension String:PTProtocolCompatible {}
+
+public extension String {
+    #if canImport(UIKit)
+    /// English: Copies the string to the system pasteboard on the main actor.
+    /// Español: Copia la cadena al portapapeles del sistema en el actor principal.
+    /// 中文：在主 actor 上将字符串复制到系统剪贴板。
+    @MainActor
+    func copyToPasteboard() {
+        UIPasteboard.general.string = self
+    }
+    #endif
+
+    /// English: Bridges to NSString only at Objective-C API boundaries.
+    /// Español: Convierte a NSString solo en los límites de APIs de Objective-C.
+    /// 中文：仅在 Objective-C API 边界处转换为 NSString。
+    var nsString: NSString { self as NSString }
+
+    /// English: Provides the string as Unicode characters without a third-party dependency.
+    /// Español: Expone la cadena como caracteres Unicode sin una dependencia de terceros.
+    /// 中文：无第三方依赖地将字符串转换为 Unicode 字符数组。
+    var charactersArray: [Character] { Array(self) }
+
+    /// English: Trims whitespace and newlines from both ends.
+    /// Español: Recorta espacios y saltos de línea en ambos extremos.
+    /// 中文：移除两端的空白和换行符。
+    var trimmed: String { trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    /// English: Parses a decimal string without relying on a third-party numeric extension.
+    /// Español: Convierte una cadena decimal sin depender de una extensión numérica de terceros.
+    /// 中文：不依赖第三方数字扩展，将十进制字符串转换为 Float。
+    func float() -> Float? { Float(trimmed) }
+
+    /// English: Parses the string as an integer for legacy numeric helpers.
+    /// Español: Convierte la cadena a un entero para los helpers numéricos heredados.
+    /// 中文：将字符串解析为整数，兼容旧版数字辅助方法。
+    var int: Int? { Int(trimmed) }
+
+    /// English: Parses the string as a CGFloat and returns zero for invalid input.
+    /// Español: Convierte la cadena a CGFloat y devuelve cero cuando la entrada no es válida.
+    /// 中文：将字符串解析为 CGFloat；输入无效时返回 0。
+    var cgFloat: CGFloat {
+        CGFloat(Double(trimmed) ?? 0)
+    }
+
+    /// English: Parses common ISO and local date-time representations used by legacy PTools APIs.
+    /// Español: Analiza formatos de fecha y hora ISO y locales usados por las APIs heredadas de PTools.
+    /// 中文：解析旧版 PTools API 使用的常见 ISO 和本地日期时间格式。
+    var dateTime: Date? {
+        if let date = ISO8601DateFormatter().date(from: self) {
+            return date
+        }
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.current
+        for format in ["yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm"] {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: self) {
+                return date
+            }
+        }
+        return nil
+    }
+}
+
+public extension Optional where Wrapped: Collection {
+    /// English: True when the optional is nil or contains an empty collection.
+    /// Español: Es true cuando el opcional es nil o contiene una colección vacía.
+    /// 中文：可选值为 nil 或内部集合为空时返回 true。
+    var isNilOrEmpty: Bool {
+        self?.isEmpty ?? true
+    }
+
+    /// English: Returns the collection only when it is present and non-empty.
+    /// Español: Devuelve la colección solo cuando existe y no está vacía.
+    /// 中文：只有存在且非空时才返回集合。
+    var nonEmpty: Wrapped? {
+        guard let value = self, !value.isEmpty else { return nil }
+        return value
+    }
+}
 
 /** 数字类型*/
 let NUM = 1
@@ -293,6 +373,11 @@ public extension String {
     func isMail() -> Bool {
         checkWithString(expression: String.MAIL)
     }
+
+    /// English: Keeps the common email-validation spelling used by legacy callers.
+    /// Español: Conserva la forma habitual de validación de correo usada por los llamadores heredados.
+    /// 中文：保留旧调用方使用的常见邮箱校验属性名称。
+    var isValidEmail: Bool { isMail() }
     
     //MARK: 判斷字符串是否中文
     ///判斷字符串是否中文

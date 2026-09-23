@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SwiftDate
 
 extension Date: PTProtocolCompatible {}
@@ -34,6 +33,23 @@ public enum PTTimestampType: Int {
 }
 
 public extension Date {
+    /// English: Reports whether the date belongs to the current calendar week.
+    /// Español: Indica si la fecha pertenece a la semana calendario actual.
+    /// 中文：判断日期是否属于当前日历周。
+    var isInCurrentWeek: Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        return calendar.component(.weekOfYear, from: self) == calendar.component(.weekOfYear, from: now)
+            && calendar.component(.yearForWeekOfYear, from: self) == calendar.component(.yearForWeekOfYear, from: now)
+    }
+
+    /// English: Reports whether the date belongs to the current calendar year.
+    /// Español: Indica si la fecha pertenece al año calendario actual.
+    /// 中文：判断日期是否属于当前日历年。
+    var isInCurrentYear: Bool {
+        Calendar.current.isDate(self, equalTo: Date(), toGranularity: .year)
+    }
+
     //MARK: 获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
     ///获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
     func getWeekDayType() -> Int? {

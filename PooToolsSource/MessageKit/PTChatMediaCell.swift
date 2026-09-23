@@ -9,7 +9,6 @@ import UIKit
 import AVFoundation
 import SnapKit
 import Photos
-import SwifterSwift
 
 @MainActor
 public class PTChatMediaCell: PTChatBaseCell {

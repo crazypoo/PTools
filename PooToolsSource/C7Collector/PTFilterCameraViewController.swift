@@ -10,7 +10,6 @@ import UIKit
 import Harbeth
 import AVFoundation
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 import DeviceKit
 import Photos
@@ -138,9 +137,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                                     self.useThisImageHandler?(ei)
                                 }
                             } else {
-                                self.navigationController?.popViewController(animated: true) {
-                                    self.useThisImageHandler?(ei)
-                                }
+                                self.navigationController?.popViewController(animated: true)
+                                self.useThisImageHandler?(ei)
                             }
                         }
                         vc.backHandler = {
@@ -158,9 +156,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                                 self.useThisImageHandler?(image)
                             }
                         } else {
-                            self.navigationController?.popViewController(animated: true) {
-                                self.useThisImageHandler?(image)
-                            }
+                            self.navigationController?.popViewController(animated: true)
+                            self.useThisImageHandler?(image)
                         }
                     }
                 }
@@ -240,9 +237,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.addActionHandlers { _ in
             self.camera.stopRunning()
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                self.navigationController?.popViewController(animated: true) {
-                    self.mediaLibDismissCallback?()
-                }
+                            self.navigationController?.popViewController(animated: true)
+                            self.mediaLibDismissCallback?()
             } else {
                 self.returnFrontVC()
             }

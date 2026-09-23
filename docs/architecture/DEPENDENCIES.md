@@ -21,7 +21,7 @@
 | 模块 | CocoaPods | SwiftPM | 主要直接依赖 | 不应直接带入 |
 | --- | --- | --- | --- | --- |
 | Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog、文件日志后端 | UIKit、Debug UI、外部日志后端、Network、媒体 |
-| Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、SwiftDate、SnapKit、SwifterSwift、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
+| Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、SwiftDate、SnapKit、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
 | SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |
@@ -48,7 +48,6 @@ Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、�
 | --- | --- | --- | --- | --- |
 | SwiftDate | Core | 日期解析和格式化 | 中 | Foundation `Calendar` / ISO8601 |
 | SnapKit | Core / UI | UIKit 布局 DSL | 低至中 | 原生 `NSLayoutConstraint`，按模块迁移 |
-| SwifterSwift | Core | Foundation/UIKit 扩展 | 中 | 按调用点迁移系统 API |
 | PToolsLogging | Core / Debug | PTLogger、OSLog、文件日志和内存日志 | 低 | PTools 自有实现；不得重新引入外部日志后端 |
 | DeviceKit | Core | 设备型号和能力判断 | 中 | `UIDevice` / `utsname` 封装 |
 | AttributedString | Core / Button | 富文本构造 | 中 | Foundation `AttributedString` 适配层 |

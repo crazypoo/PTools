@@ -67,7 +67,7 @@ class PTSpeechViewController: PTBaseViewController {
         speechKit.delegate = self
         
         let voiceButton = UIButton(type: .custom)
-        voiceButton.backgroundColor = .random
+        voiceButton.backgroundColor = DynamicColor.randomColor
         view.addSubview(voiceButton)
         voiceButton.snp.makeConstraints { make in
             make.size.equalTo(100)

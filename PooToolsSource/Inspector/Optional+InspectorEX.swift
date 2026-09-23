@@ -8,8 +8,6 @@
 
 import Foundation
 
-extension Optional where Wrapped: Collection {
-    var isNilOrEmpty: Bool {
-        self?.isEmpty ?? true
-    }
-}
+// English: The canonical optional collection helper lives in Optional+PTEX.swift.
+// Español: El auxiliar canónico de colecciones opcionales vive en Optional+PTEX.swift.
+// 中文：可选集合的唯一实现位于 Optional+PTEX.swift。

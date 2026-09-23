@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 
 public typealias PTStepperErrorAlert = (_ type:Bool) -> Void

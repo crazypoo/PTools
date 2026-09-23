@@ -10,7 +10,6 @@ import UIKit
 import DeviceKit
 import CoreFoundation
 import AttributedString
-import SwifterSwift
 import SafeSFSymbols
 import SnapKit
 import CoreLocation
@@ -921,20 +920,25 @@ public class LocalConsole: NSObject {
     private func setupTerminalActions() {
 
         terminal?.dragEnd = { [weak self] in
-            Task { @MainActor in
-                guard let self, let terminal = self.terminal else { return }
-                let endpoints = self.possibleEndpoints
+            guard let console = self else { return }
+            Task { @MainActor [weak console] in
+                guard let console, let terminal = console.terminal else { return }
+                let endpoints = console.possibleEndpoints
                 guard !endpoints.isEmpty else { return }
                 // After the PiP is thrown, determine the best corner and re-target it there.
                 let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
+                // English: This callback does not expose drag velocity, so use zero initial velocity.
+                // Español: Este callback no expone la velocidad de arrastre, por lo que usa velocidad inicial cero.
+                // 中文：该回调没有提供拖拽速度，因此使用零初速度进行吸附。
+                let initialVelocity = CGPoint.zero
                 let projectedPosition = CGPoint(
-                    x: terminal.center.x + project(initialVelocity: terminal.x, decelerationRate: decelerationRate),
-                    y: terminal.center.y + project(initialVelocity: terminal.y, decelerationRate: decelerationRate)
+                    x: terminal.center.x + project(initialVelocity: initialVelocity.x, decelerationRate: decelerationRate),
+                    y: terminal.center.y + project(initialVelocity: initialVelocity.y, decelerationRate: decelerationRate)
                 )
-                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: endpoints)
+                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: Array(endpoints))
                 let relativeInitialVelocity = CGVector(
-                    dx: relativeVelocity(forVelocity: terminal.x, from: terminal.center.x, to: nearestTargetPosition.x),
-                    dy: relativeVelocity(forVelocity: terminal.y, from: terminal.center.y, to: nearestTargetPosition.y)
+                    dx: relativeVelocity(forVelocity: initialVelocity.x, from: terminal.center.x, to: nearestTargetPosition.x),
+                    dy: relativeVelocity(forVelocity: initialVelocity.y, from: terminal.center.y, to: nearestTargetPosition.y)
                 )
                 
                 let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
@@ -1232,7 +1236,10 @@ extension LocalConsole {
     }
     
     func copyTextAction() {
-        terminal?.systemText?.pt_fullText.copyToPasteboard()
+        let text = terminal?.systemText?.pt_fullText
+        Task { @MainActor in
+            text?.copyToPasteboard()
+        }
     }
     
     func viewFramesAction() {
@@ -1400,16 +1407,18 @@ extension LocalConsole {
                     // 安全解包，避免应用崩溃
                     guard let firstKey = dict.keys.first, let firstVal = dict.values.first else { return }
                     
-                    let action = UIAction(title: firstKey, image: nil) { [weak self] _ in
-                        guard let self = self else { return }
-                        UIAlertController.base_alertVC(
+                            let action = UIAction(title: firstKey, image: nil) { [weak self] _ in
+                                guard let self = self else { return }
+                                UIAlertController.base_alertVC(
                             title: "Key\n" + firstKey,
                             msg: "\nValue\n" + "\(firstVal)",
                             okBtns: ["Copy Value", "Clear Value", "Edit value"],
                             cancelBtn: "Cancel",
                             moreBtn: { index, title in
                                 if title == "Copy Value" {
-                                    "\(firstVal)".copyToPasteboard()
+                                    Task { @MainActor in
+                                        "\(firstVal)".copyToPasteboard()
+                                    }
                                 } else if title == "Clear Value" {
                                     UserDefaults.standard.removeObject(forKey: firstKey)
                                 } else if title == "Edit value" {
@@ -1642,7 +1651,7 @@ public class PTTerminal:PFloatingButton {
         draggable = true
         layer.shadowRadius = 16
         layer.shadowOpacity = 0.5
-        layerShadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.cornerRadius = 22
         tag = SystemLogViewTag
         layer.cornerCurve = .continuous

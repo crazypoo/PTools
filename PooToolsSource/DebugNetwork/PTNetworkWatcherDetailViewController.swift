@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 // MARK: - 单条请求深度详情展示页面
@@ -107,7 +106,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
     lazy var backButton: UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
-        button.addActionHandlers { [weak self] _ in self?.navigationController?.popViewController() }
+        button.addActionHandlers { [weak self] _ in self?.navigationController?.popViewController(animated: true) }
         return button
     }()
 

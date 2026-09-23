@@ -10,6 +10,17 @@ import Foundation
 
 public extension Collection {
     subscript(safe index: Self.Index) -> Iterator.Element? {
-        (startIndex..<endIndex).contains(index) ? self[index] : nil
+        indices.contains(index) ? self[index] : nil
+    }
+}
+
+public extension RangeReplaceableCollection {
+    /// English: Removes and returns the first element matching the predicate.
+    /// Español: Elimina y devuelve el primer elemento que coincide con el predicado.
+    /// 中文：移除并返回第一个满足条件的元素。
+    @discardableResult
+    mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+        guard let index = try firstIndex(where: predicate) else { return nil }
+        return remove(at: index)
     }
 }

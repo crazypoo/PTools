@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 #if SWIFT_PACKAGE
 // English: Import Core explicitly for the editor host and shared UI utilities.
@@ -635,7 +634,7 @@ class PTCutViewController: PTBaseViewController {
         dismissAnimateFromRect = clipBoxFrame
         dismissAnimateImage = image.clipImage
         clipDoneBlock?(angle, image.editRect, selectedRatio)
-        navigationController?.popViewController()
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func rotateBtnClick() {

@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 import MapKit
 
@@ -24,7 +23,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
     lazy var backButton:UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers(handler: { _ in
-            self.navigationController?.popViewController()
+            self.navigationController?.popViewController(animated: true)
         })
         return button
     }()
@@ -36,7 +35,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
                 let selectedLocation = CLLocation(latitude: selectedLocationCoordinate.latitude, longitude: selectedLocationCoordinate.longitude)
                 self.locationCallBack?(selectedLocation)
             }
-            self.navigationController?.popViewController()
+            self.navigationController?.popViewController(animated: true)
         }
         return doneButton
     }()

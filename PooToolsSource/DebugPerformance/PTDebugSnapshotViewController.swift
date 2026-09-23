@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 class PTDebugSnapshotViewController: PTBaseViewController {
@@ -26,7 +25,7 @@ class PTDebugSnapshotViewController: PTBaseViewController {
     lazy var backButton:UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
+            self.navigationController?.popViewController(animated: true)
         }
         return button
     }()

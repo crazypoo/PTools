@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import AttributedString
-import SwifterSwift
 
 public enum PTScrollDirection {
     case up
@@ -135,7 +134,9 @@ public class PTAutoScrollLabel: UIView {
             label.frame = CGRect(x: xOffset, y: 0, width: size.width + 10, height: bounds.height)
             xOffset += label.frame.width + itemSpacing
             
-            // 安全使用 SwifterSwift 拓展
+            // English: Use the local PTools corner helper without a third-party extension.
+            // Español: Usa el auxiliar local de esquinas de PTools sin una extensión de terceros.
+            // 中文：使用 PTools 本地圆角辅助方法，不再依赖第三方扩展。
             label.viewCorner(radius: bounds.height / 2)
         }
 

@@ -264,7 +264,12 @@ public extension DynamicColor {
         let lightColor = lightBackground.mixed(withColor: .darkGray, weight: 0.09)
             .mixed(withColor: .systemBlue, weight: 0.01)
         let darkColor = darkBackground
-        return DynamicColor(light: lightColor, dark: darkColor)
+        // English: Use UIKit's trait-aware color provider instead of a third-party initializer.
+        // Español: Usa el proveedor de colores sensible a traits de UIKit en lugar de un inicializador de terceros.
+        // 中文：使用 UIKit 的 trait 感知颜色提供器，替代第三方初始化方法。
+        return DynamicColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark ? darkColor : lightColor
+        }
     }
 #endif
 

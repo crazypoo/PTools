@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 53df8df283216eb0238f3e828d38df451f013a0d
-Generated at: 2026-09-22T07:22:01Z
-Version source: 5.22.2
+Source revision: c7c2b410cb0c49d60bf80474823c455593114303
+Generated at: 2026-09-23T03:21:46Z
+Version source: 5.23.0
 -->
 
 # Direct Dependency Matrix
@@ -29,7 +29,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
-| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `SwifterSwift`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsUIFoundation` | `AttributedString`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SafeSFSymbols`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | — | No direct third-party dependency | Deprecate alias |
@@ -83,11 +83,11 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PagingControl` | `Core`, `ptools` | `JXPagingView`, `JXPagingView/Paging`, `JXSegmentedView` | 6.0 review | Keep; review direct drift |
 | `PhoneInfo` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `ptools` | `Kakapos` | 6.0 review | Keep; review direct drift |
-| `Picker` | `Core`, `ptools` | `SnapKit`, `SwifterSwift` | 6.0 review | Keep; review direct drift |
+| `Picker` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `Ping` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `PopoverKit` | `Core` | `Popovers` | 6.0 review | Keep; review direct drift |
 | `ProgressBar` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `RateView` | `PToolsUIFoundation` | `SnapKit`, `SwifterSwift` | 6.0 review | Keep; review direct drift |
+| `RateView` | `PToolsUIFoundation` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `RemindersPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Router` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `SVG` | `Core`, `ptools` | `Kingfisher`, `PocketSVG`, `Protobuf`, `SVGAPlayer` | 6.0 review | Keep; review direct drift |

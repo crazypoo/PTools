@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import Kingfisher
 
 @objc public enum PTSegmentSelectedType : Int {
@@ -268,7 +267,7 @@ public class PTSegmentView: UIView {
             subV.removeFromSuperview()
         }
         subViewArr.removeAll()
-        scrolView.removeSubviews()
+        scrolView.removeAllSubviews()
         setUI(datas: viewDatas)
         block?(selectedIndex ?? 0)
     }

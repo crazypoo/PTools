@@ -29,7 +29,7 @@ class PTTagCell: PTBaseNormalCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.viewCorner(radius: 0,borderWidth: 1,borderColor: .random)
+        contentView.viewCorner(radius: 0,borderWidth: 1,borderColor: DynamicColor.randomColor)
         contentView.addSubviews([tagLabel])
         tagLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview()

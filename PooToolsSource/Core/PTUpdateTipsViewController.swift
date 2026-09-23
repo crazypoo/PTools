@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 
 // English: This content view builds UIKit hierarchy and constraints, so it is MainActor isolated.

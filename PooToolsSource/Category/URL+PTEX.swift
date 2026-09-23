@@ -10,6 +10,37 @@ import Foundation
 import AVFoundation
 
 public extension URL {
+    /// English: Uses Foundation's URLComponents for safe query inspection.
+    /// Español: Usa URLComponents de Foundation para inspeccionar consultas de forma segura.
+    /// 中文：使用 Foundation 的 URLComponents 安全读取查询参数。
+    var queryItems: [URLQueryItem] {
+        URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems ?? []
+    }
+
+    /// English: Returns the first query value with the requested name.
+    /// Español: Devuelve el primer valor de consulta con el nombre solicitado.
+    /// 中文：返回指定名称的第一个查询值。
+    func queryValue(for name: String) -> String? {
+        queryItems.first(where: { $0.name == name })?.value
+    }
+
+    /// English: Appends query items without force-unwrapping URLComponents.
+    /// Español: Añade elementos de consulta sin desempaquetar URLComponents de forma forzada.
+    /// 中文：追加查询项时不强制解包 URLComponents。
+    func appendingQueryItems(_ items: [URLQueryItem]) -> URL? {
+        guard !items.isEmpty else { return self }
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: true) else { return nil }
+        components.queryItems = (components.queryItems ?? []) + items
+        return components.url
+    }
+
+    /// English: Appends string query parameters using URLQueryItem encoding.
+    /// Español: Añade parámetros de texto usando la codificación de URLQueryItem.
+    /// 中文：使用 URLQueryItem 编码追加字符串查询参数。
+    func appendingQueryParameters(_ parameters: [String: String]) -> URL? {
+        appendingQueryItems(parameters.map { URLQueryItem(name: $0.key, value: $0.value) })
+    }
+
     var urlQueryParameters: [String: String]? {
         ptQueryParameters(allowSchemeFallback: true)
     }

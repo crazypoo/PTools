@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
-  "generated_at": "2026-09-22T08:21:18Z",
+  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
+  "generated_at": "2026-09-23T05:02:49Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -98,73 +98,73 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 89,
+      "line": 88,
       "declaration": "public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 95,
+      "line": 94,
       "declaration": "public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 100,
+      "line": 99,
       "declaration": "public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 105,
+      "line": 104,
       "declaration": "public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 122,
+      "line": 121,
       "declaration": "public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 134,
+      "line": 133,
       "declaration": "public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 142,
+      "line": 141,
       "declaration": "public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 173,
+      "line": 172,
       "declaration": "public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 183,
+      "line": 182,
       "declaration": "public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 191,
+      "line": 190,
       "declaration": "public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 205,
+      "line": 204,
       "declaration": "public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 214,
+      "line": 213,
       "declaration": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {",
       "allowlisted": true
     },
@@ -314,31 +314,31 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 143,
+      "line": 142,
       "declaration": "public final class Network: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 904,
+      "line": 903,
       "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 11,
+      "line": 10,
       "declaration": "/// 🌟 步骤 1：标记为 @unchecked Sendable。",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 13,
+      "line": 12,
       "declaration": "public final class NetworkReachability: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 61,
+      "line": 60,
       "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -470,13 +470,13 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "line": 14,
+      "line": 13,
       "declaration": "private struct PTSafeMediaBox<T>: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1531,
+      "line": 1533,
       "declaration": "private struct PTC7SafeBox:@unchecked Sendable {",
       "allowlisted": true
     },

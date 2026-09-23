@@ -5,7 +5,6 @@
 import UIKit
 @preconcurrency import Alamofire
 import Photos
-import SwifterSwift
 
 extension Network {
     // English: Convert legacy dynamic upload inputs into immutable Sendable snapshots before starting asynchronous work.

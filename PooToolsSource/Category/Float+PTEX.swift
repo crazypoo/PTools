@@ -59,6 +59,16 @@ public extension PTPOP where Base == Float {
 
 // MARK: - BinaryFloatingPoint扩展
 public extension BinaryFloatingPoint {
+
+    /// English: Converts any binary floating-point value to Float for legacy call sites.
+    /// Español: Convierte cualquier valor de coma flotante binaria a Float para llamadas heredadas.
+    /// 中文：将任意二进制浮点值转换为 Float，兼容历史调用点。
+    var float: Float { Float(self) }
+
+    /// English: Converts a binary floating-point value to Int using truncation toward zero.
+    /// Español: Convierte un valor de coma flotante binaria a Int truncando hacia cero.
+    /// 中文：将二进制浮点值向零截断转换为 Int。
+    var int: Int { Int(self) }
     
     ///    截取二进制浮点数
     ///

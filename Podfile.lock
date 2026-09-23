@@ -89,37 +89,37 @@ PODS:
   - PhoneNumberKit/UIKit (4.3.0):
     - PhoneNumberKit/PhoneNumberKitCore
   - PocketSVG (2.7.3)
-  - PooTools/Appz (5.22.2):
+  - PooTools/Appz (5.23.0):
     - Appz
     - PooTools/Core
-  - PooTools/BankCard (5.22.2):
+  - PooTools/BankCard (5.23.0):
     - PooTools/Core
-  - PooTools/BilogyID (5.22.2):
+  - PooTools/BilogyID (5.23.0):
     - PooTools/BioID
-  - PooTools/BioID (5.22.2):
+  - PooTools/BioID (5.23.0):
     - PooTools/Core
     - PooTools/FaceIDPermission
     - PooTools/KeyChain
-  - PooTools/Calendar (5.22.2):
+  - PooTools/Calendar (5.23.0):
     - PooTools/CalendarPermission
     - PooTools/Core
     - PooTools/RemindersPermission
-  - PooTools/CalendarPermission (5.22.2):
+  - PooTools/CalendarPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/CameraPermission (5.22.2):
+  - PooTools/CameraPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/CheckBox (5.22.2)
-  - PooTools/CheckDirtyWord (5.22.2)
-  - PooTools/CheckUpdate (5.22.2):
+  - PooTools/CheckBox (5.23.0)
+  - PooTools/CheckDirtyWord (5.23.0)
+  - PooTools/CheckUpdate (5.23.0):
     - PooTools/NetWork
     - SwiftJWT
-  - PooTools/ChinesePinyin (5.22.2):
+  - PooTools/ChinesePinyin (5.23.0):
     - PooTools/Core
-  - PooTools/Circle (5.22.2):
+  - PooTools/Circle (5.23.0):
     - PooTools/Core
-  - PooTools/CodeView (5.22.2):
+  - PooTools/CodeView (5.23.0):
     - PooTools/Core
-  - PooTools/Core (5.22.2):
+  - PooTools/Core (5.23.0):
     - AttributedString
     - DeviceKit
     - IQKeyboardManagerSwift
@@ -135,63 +135,62 @@ PODS:
     - SmartCodable/Inherit
     - SnapKit
     - SwiftDate
-    - SwifterSwift
-  - PooTools/Country (5.22.2):
+  - PooTools/Country (5.23.0):
     - PooTools/Core
-  - PooTools/CustomerLabel (5.22.2):
+  - PooTools/CustomerLabel (5.23.0):
     - PooTools/Core
-  - PooTools/CustomerNumberKeyboard (5.22.2):
+  - PooTools/CustomerNumberKeyboard (5.23.0):
     - PooTools/Core
-  - PooTools/DataEncrypt (5.22.2):
+  - PooTools/DataEncrypt (5.23.0):
     - CryptoSwift
     - PooTools/Core
-  - PooTools/DEBUG (5.22.2):
+  - PooTools/DEBUG (5.23.0):
     - PooTools/Core
     - PooTools/NetWork
     - PooTools/PDF
     - PooTools/SearchBar
     - PooTools/Share
-  - PooTools/DEBUG_TrackingEyes (5.22.2):
+  - PooTools/DEBUG_TrackingEyes (5.23.0):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/DEBUG
-  - PooTools/FaceIDPermission (5.22.2):
+  - PooTools/FaceIDPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/Flag (5.22.2):
+  - PooTools/Flag (5.23.0):
     - FlagKit
     - PooTools/Core
-  - PooTools/GCDWebServer (5.22.2):
+  - PooTools/GCDWebServer (5.23.0):
     - GCDWebServer
     - GCDWebServer/WebUploader
     - PooTools/Core
-  - PooTools/Guide (5.22.2):
+  - PooTools/Guide (5.23.0):
     - PooTools/Core
     - PooTools/PageControl
-  - PooTools/HarbethKit (5.22.2):
+  - PooTools/HarbethKit (5.23.0):
     - Harbeth
     - PooTools/CameraPermission
     - PooTools/Core
-  - PooTools/HeartRate (5.22.2):
+  - PooTools/HeartRate (5.23.0):
     - lottie-ios
     - PooTools/CameraPermission
     - PooTools/Core
-  - PooTools/Hud (5.22.2):
+  - PooTools/Hud (5.23.0):
     - PooTools/Core
     - PooTools/ProgressBar
-  - PooTools/IAP (5.22.2):
+  - PooTools/IAP (5.23.0):
     - PooTools/Core
-  - PooTools/ImageEditor (5.22.2):
+  - PooTools/ImageEditor (5.23.0):
     - PooTools/Core
     - PooTools/HarbethKit
     - PooTools/MediaCore
     - PooTools/PhotoPicker
-  - PooTools/ImagePicker (5.22.2):
+  - PooTools/ImagePicker (5.23.0):
     - PooTools/CameraPermission
     - PooTools/Core
-  - PooTools/Input (5.22.2):
+  - PooTools/Input (5.23.0):
     - PhoneNumberKit
     - PooTools/Core
-  - PooTools/InputAll (5.22.2):
+  - PooTools/InputAll (5.23.0):
     - PooTools/Appz
     - PooTools/BankCard
     - PooTools/BilogyID
@@ -262,144 +261,143 @@ PODS:
     - PooTools/Vision
     - PooTools/WhatsNewsKit
     - PooTools/ZipArchive
-  - PooTools/Instructions (5.22.2):
+  - PooTools/Instructions (5.23.0):
     - Instructions
     - PooTools/Core
-  - PooTools/iOS17Tips (5.22.2):
+  - PooTools/iOS17Tips (5.23.0):
     - PooTools/Core
-  - PooTools/KeyChain (5.22.2)
-  - PooTools/LaunchTimeProfiler (5.22.2):
+  - PooTools/KeyChain (5.23.0)
+  - PooTools/LaunchTimeProfiler (5.23.0):
     - PooTools/Core
-  - PooTools/Layout (5.22.2):
+  - PooTools/Layout (5.23.0):
     - CollectionViewPagingLayout
     - PooTools/Core
-  - PooTools/LivePhoto (5.22.2):
+  - PooTools/LivePhoto (5.23.0):
     - PooTools/Core
-  - PooTools/Loading (5.22.2):
+  - PooTools/Loading (5.23.0):
     - PooTools/Core
-  - PooTools/Location (5.22.2):
+  - PooTools/Location (5.23.0):
     - PooTools/Core
     - PooTools/LocationPermission
-  - PooTools/LocationPermission (5.22.2):
+  - PooTools/LocationPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/Logging (5.22.2)
-  - PooTools/MediaCore (5.22.2)
-  - PooTools/MediaViewer (5.22.2):
+  - PooTools/Logging (5.23.0)
+  - PooTools/MediaCore (5.23.0)
+  - PooTools/MediaViewer (5.23.0):
     - PooTools/Core
     - PooTools/LivePhoto
     - PooTools/MediaCore
     - PooTools/PageControl
     - PooTools/ProgressBar
-  - PooTools/MessageKit (5.22.2):
+  - PooTools/MessageKit (5.23.0):
     - PooTools/Core
     - PooTools/CustomerLabel
-  - PooTools/Motion (5.22.2):
+  - PooTools/Motion (5.23.0):
     - PooTools/Core
     - PooTools/MotionPermission
-  - PooTools/MotionPermission (5.22.2):
+  - PooTools/MotionPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/NetWork (5.22.2):
+  - PooTools/NetWork (5.23.0):
     - PooTools/Network
-  - PooTools/Network (5.22.2):
+  - PooTools/Network (5.23.0):
     - Alamofire
     - PooTools/Core
     - PooTools/Loading
-  - PooTools/NotificationBanner (5.22.2):
+  - PooTools/NotificationBanner (5.23.0):
     - NotificationBannerSwift
     - PooTools/Core
-  - PooTools/OSSKitSpeech (5.22.2):
+  - PooTools/OSSKitSpeech (5.23.0):
     - PooTools/Core
     - PooTools/SpeechRecognizerPermission
-  - PooTools/PageControl (5.22.2):
+  - PooTools/PageControl (5.23.0):
     - PooTools/Core
-  - PooTools/PagingControl (5.22.2):
+  - PooTools/PagingControl (5.23.0):
     - JXPagingView/Paging
     - JXSegmentedView
     - PooTools/Core
-  - PooTools/PDF (5.22.2):
+  - PooTools/PDF (5.23.0):
     - PooTools/Core
-  - PooTools/PhoneInfo (5.22.2)
-  - PooTools/PhotoPicker (5.22.2):
+  - PooTools/PhoneInfo (5.23.0)
+  - PooTools/PhotoPicker (5.23.0):
     - Kakapos
     - PooTools/Core
     - PooTools/ImagePicker
     - PooTools/Loading
     - PooTools/MediaCore
-  - PooTools/Picker (5.22.2):
+  - PooTools/Picker (5.23.0):
     - PooTools/Core
-  - PooTools/Ping (5.22.2):
+  - PooTools/Ping (5.23.0):
     - PooTools/Core
-  - PooTools/PopoverKit (5.22.2):
+  - PooTools/PopoverKit (5.23.0):
     - PooTools/Core
     - Popovers
-  - PooTools/ProgressBar (5.22.2):
+  - PooTools/ProgressBar (5.23.0):
     - PooTools/Core
-  - PooTools/PToolsCore (5.22.2)
-  - PooTools/PToolsPermissionCore (5.22.2)
-  - PooTools/PToolsUIFoundation (5.22.2):
+  - PooTools/PToolsCore (5.23.0)
+  - PooTools/PToolsPermissionCore (5.23.0)
+  - PooTools/PToolsUIFoundation (5.23.0):
     - PooTools/PToolsCore
     - SnapKit
-  - PooTools/RateView (5.22.2):
+  - PooTools/RateView (5.23.0):
     - PooTools/PToolsUIFoundation
     - SnapKit
-    - SwifterSwift
-  - PooTools/RemindersPermission (5.22.2):
+  - PooTools/RemindersPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/Router (5.22.2):
+  - PooTools/Router (5.23.0):
     - PooTools/Core
-  - PooTools/ScanQRCode (5.22.2):
+  - PooTools/ScanQRCode (5.23.0):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/PhotoPicker
-  - PooTools/ScrollBanner (5.22.2):
+  - PooTools/ScrollBanner (5.23.0):
     - PooTools/Core
     - PooTools/PageControl
-  - PooTools/Search (5.22.2):
+  - PooTools/Search (5.23.0):
     - AttributedString
     - PooTools/Core
     - PooTools/SearchBar
-  - PooTools/SearchBar (5.22.2):
+  - PooTools/SearchBar (5.23.0):
     - PooTools/Core
-  - PooTools/Security (5.22.2)
-  - PooTools/SecuritySuite (5.22.2):
+  - PooTools/Security (5.23.0)
+  - PooTools/SecuritySuite (5.23.0):
     - IOSSecuritySuite
     - PooTools/Core
-  - PooTools/Segmented (5.22.2):
+  - PooTools/Segmented (5.23.0):
     - PooTools/Core
-  - PooTools/Share (5.22.2):
+  - PooTools/Share (5.23.0):
     - PooTools/CustomerLabel
-  - PooTools/Slider (5.22.2):
+  - PooTools/Slider (5.23.0):
     - PooTools/PToolsUIFoundation
     - SnapKit
-  - PooTools/SmartScreenshot (5.22.2):
+  - PooTools/SmartScreenshot (5.23.0):
     - PooTools/Core
-  - PooTools/SocketKit (5.22.2):
+  - PooTools/SocketKit (5.23.0):
     - PooTools/Core
     - SocketRocket
-  - PooTools/SpeechRecognizerPermission (5.22.2):
+  - PooTools/SpeechRecognizerPermission (5.23.0):
     - PooTools/PToolsPermissionCore
-  - PooTools/Stepper (5.22.2):
+  - PooTools/Stepper (5.23.0):
     - PooTools/Core
-  - PooTools/SVG (5.22.2):
+  - PooTools/SVG (5.23.0):
     - PocketSVG
     - PooTools/Core
     - Protobuf (= 3.22.1)
     - SVGAPlayer
-  - PooTools/Tabbar (5.22.2):
+  - PooTools/Tabbar (5.23.0):
     - PooTools/Core
-  - PooTools/Telephony (5.22.2):
+  - PooTools/Telephony (5.23.0):
     - PooTools/Core
-  - PooTools/VideoEditor (5.22.2):
+  - PooTools/VideoEditor (5.23.0):
     - PooTools/Core
     - PooTools/HarbethKit
     - PooTools/Loading
     - PooTools/MediaCore
     - PooTools/ProgressBar
-  - PooTools/Vision (5.22.2):
+  - PooTools/Vision (5.23.0):
     - PooTools/Core
-  - PooTools/WhatsNewsKit (5.22.2):
+  - PooTools/WhatsNewsKit (5.23.0):
     - PooTools/Core
-  - PooTools/ZipArchive (5.22.2):
+  - PooTools/ZipArchive (5.23.0):
     - PooTools/Core
     - SSZipArchive
   - Popovers (1.3.0)
@@ -422,45 +420,6 @@ PODS:
   - SVGAPlayer/ProtoFiles (2.5.7):
     - Protobuf (~> 3.4)
   - SwiftDate (7.0.0)
-  - SwifterSwift (8.0.0):
-    - SwifterSwift/AppKit (= 8.0.0)
-    - SwifterSwift/AppKitNoIBInspectable (= 8.0.0)
-    - SwifterSwift/CoreAnimation (= 8.0.0)
-    - SwifterSwift/CoreGraphics (= 8.0.0)
-    - SwifterSwift/CoreLocation (= 8.0.0)
-    - SwifterSwift/CryptoKit (= 8.0.0)
-    - SwifterSwift/Dispatch (= 8.0.0)
-    - SwifterSwift/Foundation (= 8.0.0)
-    - SwifterSwift/HealthKit (= 8.0.0)
-    - SwifterSwift/MapKit (= 8.0.0)
-    - SwifterSwift/NoIBInspectable (= 8.0.0)
-    - SwifterSwift/SceneKit (= 8.0.0)
-    - SwifterSwift/SpriteKit (= 8.0.0)
-    - SwifterSwift/StoreKit (= 8.0.0)
-    - SwifterSwift/SwiftStdlib (= 8.0.0)
-    - SwifterSwift/UIKit (= 8.0.0)
-    - SwifterSwift/UIKitNoIBInspectable (= 8.0.0)
-    - SwifterSwift/WebKit (= 8.0.0)
-  - SwifterSwift/AppKit (8.0.0)
-  - SwifterSwift/AppKitNoIBInspectable (8.0.0):
-    - SwifterSwift/AppKit
-  - SwifterSwift/CoreAnimation (8.0.0)
-  - SwifterSwift/CoreGraphics (8.0.0)
-  - SwifterSwift/CoreLocation (8.0.0)
-  - SwifterSwift/CryptoKit (8.0.0)
-  - SwifterSwift/Dispatch (8.0.0)
-  - SwifterSwift/Foundation (8.0.0)
-  - SwifterSwift/HealthKit (8.0.0)
-  - SwifterSwift/MapKit (8.0.0)
-  - SwifterSwift/NoIBInspectable (8.0.0)
-  - SwifterSwift/SceneKit (8.0.0)
-  - SwifterSwift/SpriteKit (8.0.0)
-  - SwifterSwift/StoreKit (8.0.0)
-  - SwifterSwift/SwiftStdlib (8.0.0)
-  - SwifterSwift/UIKit (8.0.0)
-  - SwifterSwift/UIKitNoIBInspectable (8.0.0):
-    - SwifterSwift/UIKit
-  - SwifterSwift/WebKit (8.0.0)
   - SwiftJWT (3.6.200):
     - BlueCryptor (~> 1.0)
     - BlueECC (~> 1.1)
@@ -530,7 +489,6 @@ SPEC REPOS:
     - SSZipArchive
     - SVGAPlayer
     - SwiftDate
-    - SwifterSwift
     - SwiftJWT
     - SwiftLint
     - Swinject
@@ -580,7 +538,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: d8a400a22cea696c20028ebfdf75560dc31144e1
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: 809155922dca4b2faa32834aab806b251978392b
+  PooTools: fb42ca69c4849dfa0540cef2e00ec3da16e81545
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
   SafeSFSymbols: c57c8752149b2ddc0213d3d519a3a31a8bd76340
@@ -590,7 +548,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 8a6ee5677c8e304bebc109e39cf0da91ccef22ea
   SVGAPlayer: 318b85a78b61292d6ae9dfcd651f3f0d1cdadd86
   SwiftDate: bbc26e26fc8c0c33fbee8c140c5e8a68293a148a
-  SwifterSwift: 517fa61daf5b4c5e3ed13b9f35f4c26b310cfb97
   SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
   SwiftLint: c94465bc87831f3e16c52b3569f0626de50bd7da
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b

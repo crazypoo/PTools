@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwifterSwift
 
 public typealias PTBankBlock = (_ success:Bool,_ result:NSString) -> Void
 

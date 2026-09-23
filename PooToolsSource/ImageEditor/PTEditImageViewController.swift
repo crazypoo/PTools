@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import Photos
-import SwifterSwift
 import SafeSFSymbols
 import Harbeth
 
@@ -498,8 +497,7 @@ public class PTEditImageViewController: PTBaseViewController {
             colorPicker.selectedColorCallback = { color in
                 self.drawEngine.drawColor = color
             }
-            self.navigationController?.pushViewController(colorPicker, completion: {
-            })
+            self.navigationController?.pushViewController(colorPicker, animated: true)
             colorPicker.viewDismiss = {
                 PTGCDManager.shared.runOnMain {
                     if let engine = self.activeEngine {
@@ -1085,7 +1083,7 @@ extension PTEditImageViewController {
             self.mainScrollView.alpha = 1
         }
         
-        self.navigationController?.pushViewController(vc)
+        self.navigationController?.pushViewController(vc, animated: true)
         
         toolsModel.first(where: { $0.currentType == .clip })?.isSelected = false
         selectedTool = nil

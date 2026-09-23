@@ -14,7 +14,6 @@ import AVFoundation
 import Photos
 import MobileCoreServices
 import ImageIO
-import SwifterSwift
 import CoreImage
 
 extension UIImage : PTProtocolCompatible {}

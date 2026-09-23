@@ -35,19 +35,82 @@ public extension [AnyHashable: Any] {
 }
 
 public extension Dictionary {
+    /// English: Serializes a JSON-compatible dictionary without forcing a cast.
+    /// Español: Serializa un diccionario compatible con JSON sin forzar conversiones.
+    /// 中文：安全序列化 JSON 兼容字典，不进行强制转换。
+    func jsonData(options: JSONSerialization.WritingOptions = []) -> Data? {
+        guard JSONSerialization.isValidJSONObject(self) else { return nil }
+        return try? JSONSerialization.data(withJSONObject: self, options: options)
+    }
+
+    /// English: Returns the UTF-8 JSON representation when serialization succeeds.
+    /// Español: Devuelve la representación JSON UTF-8 cuando la serialización tiene éxito.
+    /// 中文：序列化成功时返回 UTF-8 JSON 字符串。
+    func jsonString(options: JSONSerialization.WritingOptions = []) -> String? {
+        guard let data = jsonData(options: options) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
     func asJsonStr() -> String? {
-        var jsonStr: String?
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .sortedKeys)
-            jsonStr = String(decoding: jsonData, as: UTF8.self)
-        } catch {
-            return nil
-        }
-        return jsonStr
+        jsonString(options: [.sortedKeys])
     }
 }
 
 public extension Dictionary {
+    /// English: Groups dictionary values by a key path.
+    /// Español: Agrupa los valores del diccionario mediante una ruta de clave.
+    /// 中文：按照值上的 KeyPath 对字典值进行分组。
+    func grouping<Group: Hashable>(by keyPath: KeyPath<Value, Group>) -> [Group: [Value]] {
+        var result: [Group: [Value]] = [:]
+        for value in values {
+            result[value[keyPath: keyPath], default: []].append(value)
+        }
+        return result
+    }
+
+    /// English: Removes all entries whose keys occur in the supplied sequence.
+    /// Español: Elimina todas las entradas cuyas claves aparecen en la secuencia dada.
+    /// 中文：移除给定序列中出现的所有键。
+    mutating func removeAll<S: Sequence>(keys: S) where S.Element == Key {
+        for key in keys { removeValue(forKey: key) }
+    }
+
+    /// English: Transforms keys and values together.
+    /// Español: Transforma conjuntamente las claves y los valores.
+    /// 中文：同时转换字典的键和值。
+    func mapKeysAndValues<NewKey: Hashable, NewValue>(
+        _ transform: (Key, Value) throws -> (NewKey, NewValue)
+    ) rethrows -> [NewKey: NewValue] {
+        try Dictionary<NewKey, NewValue>(uniqueKeysWithValues: map(transform))
+    }
+
+    /// English: Transforms keys and values while allowing entries to be dropped.
+    /// Español: Transforma claves y valores permitiendo descartar entradas.
+    /// 中文：转换键和值，并允许过滤掉部分条目。
+    func compactMapKeysAndValues<NewKey: Hashable, NewValue>(
+        _ transform: (Key, Value) throws -> (NewKey, NewValue)?
+    ) rethrows -> [NewKey: NewValue] {
+        try Dictionary<NewKey, NewValue>(uniqueKeysWithValues: compactMap(transform))
+    }
+
+    /// English: Returns a dictionary containing only the requested keys.
+    /// Español: Devuelve un diccionario que contiene solo las claves solicitadas.
+    /// 中文：返回只包含指定键的字典。
+    func pick<S: Sequence>(keys: S) -> [Key: Value] where S.Element == Key {
+        var result: [Key: Value] = [:]
+        for key in keys {
+            if let value = self[key] { result[key] = value }
+        }
+        return result
+    }
+
+    /// English: Returns all keys whose values equal the supplied value.
+    /// Español: Devuelve todas las claves cuyos valores son iguales al valor dado.
+    /// 中文：返回值等于给定值的所有键。
+    func keys(forValue value: Value) -> [Key] where Value: Equatable {
+        compactMap { $0.value == value ? $0.key : nil }
+    }
+
     //MARK: 检查字典里面是否有某个 key
     ///检查字典里面是否有某个 key
     func has(_ key: Key) -> Bool {
@@ -81,29 +144,32 @@ public extension Dictionary {
     //MARK: 字典转JSON字符串
     ///字典转JSONString
     func toJSON(options:JSONSerialization.WritingOptions = JSONSerialization.WritingOptions.prettyPrinted) -> String? {
-        if let jsonData = try? JSONSerialization.data(withJSONObject: self, options: JSONSerialization.WritingOptions.prettyPrinted) {
-            let jsonStr = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-            return String(jsonStr ?? "")
-        }
-        return nil
+        jsonString(options: options)
     }
     
     //MARK: 字典里面所有的key
     ///字典里面所有的key
     /// - Returns: key 数组
     func allKeys() -> [Key] {
-        /*
-         shuffled：不会改变原数组，返回一个新的随机化的数组。  可以用于let 数组
-         */
-        keys.shuffled()
+        Array(keys)
     }
     
     //MARK: 字典里面所有的value
     ///字典里面所有的value
     /// - Returns: value 数组
     func allValues() -> [Value] {
-        values.shuffled()
+        Array(values)
     }
+
+    /// English: Explicitly returns keys in random order.
+    /// Español: Devuelve explícitamente las claves en orden aleatorio.
+    /// 中文：显式返回随机顺序的键。
+    func shuffledKeys() -> [Key] { keys.shuffled() }
+
+    /// English: Explicitly returns values in random order.
+    /// Español: Devuelve explícitamente los valores en orden aleatorio。
+    /// 中文：显式返回随机顺序的值。
+    func shuffledValues() -> [Value] { values.shuffled() }
     
     //MARK: 设置value
     subscript<Result>(key: Key, as type: Result.Type) -> Result? {
@@ -131,24 +197,17 @@ public extension Dictionary {
     ///   - newValue: 新的value
     @discardableResult
     mutating func setValue(keys: [String], newValue: Any) -> Bool {
-        guard keys.count > 1 else {
-            guard let keyString = keys.first,
-                  let key = keyString as? Key,
-                  let typedValue = newValue as? Value else {
-                return false
-            }
+        guard let keyString = keys.first,
+              let key = keyString as? Key,
+              let typedValue = newValue as? Value else { return false }
+        if keys.count == 1 {
             self[key] = typedValue
             return true
         }
-        guard let keyString = keys.first,
-              let key = keyString as? Key,
-              self.keys.contains(key),
-              var value1 = self[key] as? [String: Any] else {
-            return false
-        }
-        let result = Dictionary<String, Any>.value(keys: Array(keys[1..<keys.count]), oldValue: &value1, newValue: newValue)
-        guard let typedValue = value1 as? Value else { return false }
-        self[key] = typedValue
+        guard var nested = self[key] as? [String: Any] else { return false }
+        let result = nested.setValue(newValue, at: Array(keys.dropFirst()))
+        guard let converted = nested as? Value else { return false }
+        self[key] = converted
         return result
     }
     
@@ -193,6 +252,34 @@ public extension Dictionary {
             }
         })
         self = tem
+    }
+}
+
+/// English: Typed-looking deep-path access for the legacy string/Any dictionary shape.
+/// Español: Acceso tipado por rutas profundas para la forma heredada de diccionario String/Any.
+/// 中文：为历史 String/Any 字典提供结构清晰的深层路径读写入口。
+public extension Dictionary where Key == String, Value == Any {
+    func value(at path: [String]) -> Any? {
+        guard !path.isEmpty else { return nil }
+        var current: Any = self
+        for key in path {
+            guard let dictionary = current as? [String: Any], let next = dictionary[key] else { return nil }
+            current = next
+        }
+        return current
+    }
+
+    @discardableResult
+    mutating func setValue(_ value: Any, at path: [String]) -> Bool {
+        guard let first = path.first else { return false }
+        if path.count == 1 {
+            self[first] = value
+            return true
+        }
+        guard var nested = self[first] as? [String: Any] else { return false }
+        guard nested.setValue(value, at: Array(path.dropFirst())) else { return false }
+        self[first] = nested
+        return true
     }
 }
 

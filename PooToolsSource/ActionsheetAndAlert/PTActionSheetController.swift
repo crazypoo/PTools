@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void

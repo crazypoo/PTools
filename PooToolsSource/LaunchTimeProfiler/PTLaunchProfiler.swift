@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 import SnapKit
-import SwifterSwift
 
 /// 冷启动耗时分析器
 @MainActor
@@ -262,7 +261,7 @@ private final class EntryWindow: UIWindow {
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 30)
         label.isUserInteractionEnabled = true
-        label.backgroundColor = .random
+        label.backgroundColor = DynamicColor.randomColor
         return label
     }()
     
@@ -279,7 +278,8 @@ private final class EntryWindow: UIWindow {
         }
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        gesLabel.addGestureRecognizers([tap,pan])
+        gesLabel.addGestureRecognizer(tap)
+        gesLabel.addGestureRecognizer(pan)
     }
         
     required init?(coder: NSCoder) { fatalError() }
@@ -334,7 +334,7 @@ private class DashboardViewController: PTBaseViewController, UITableViewDataSour
     
     private lazy var copyBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitleColor(.random, for: .normal)
+        btn.setTitleColor(DynamicColor.randomColor, for: .normal)
         btn.setTitle("Copy Log", for: .normal)
         btn.addTarget(self, action: #selector(copyLog), for: .touchUpInside)
         btn.layer.masksToBounds = true

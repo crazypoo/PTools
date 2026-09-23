@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 
 typealias LocalConsoleTextColorTask = ((_ color:UIColor) -> Void)
@@ -523,7 +522,7 @@ class PlatterView: UIView {
         slider.keyboardType = .decimalPad
         slider.delegate = self
         slider.viewCorner(radius: 5,borderWidth: 1, borderColor: .randomColor)
-        slider.tintColor = .random
+        slider.tintColor = DynamicColor.randomColor
         return slider
     }()
     
@@ -538,7 +537,7 @@ class PlatterView: UIView {
             colorPicker.picker.selectedColor = UIColor(hexString: PTDebugPreferences.shared.consoleFontColorHex) ?? .white
             
             colorPicker.selectedColorCallback = { [weak self] color in
-                PTDebugPreferences.shared.consoleFontColorHex = color.hexString
+                PTDebugPreferences.shared.consoleFontColorHex = String(format: "#%06X", color.toHex())
                 self?.FontSColorBlock?(color)
                 PTGCDManager.shared.delayOnMain(time: 0.1) {
                     ResizeController.shared.isActive.toggle()

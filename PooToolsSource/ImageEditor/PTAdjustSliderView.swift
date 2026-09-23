@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 #if SWIFT_PACKAGE
 // English: Import the Core target explicitly when this file is built as a Swift package target.

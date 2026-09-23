@@ -37,7 +37,7 @@ class PTTabBarTestOneViewController: PTBaseViewController {
         pt_Title = "11111111111111111"
         
         let buttons = UIButton(type: .custom)
-        buttons.backgroundColor = .random
+        buttons.backgroundColor = DynamicColor.randomColor
         buttons.addActionHandlers { sender in
             self.pt_Title = "2222222222222"
         }

@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Enforce the final 5.22 logging dependency and compatibility boundary.
-# Español: Refuerza el límite final de dependencias y compatibilidad de logging de 5.22.
-# 中文：强制执行 5.22 日志依赖和兼容层的最终边界。
+# English: Enforce the final 5.22+ logging dependency and compatibility boundary.
+# Español: Refuerza el límite final de dependencias y compatibilidad de logging desde 5.22.
+# 中文：强制执行 5.22 及以后日志依赖和兼容层的最终边界。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.22\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.22 logging closure requires a 5.22.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(22|23)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.22+ logging closure requires a 5.22.x or 5.23.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -47,7 +47,7 @@ required_files=(
 )
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || {
-    printf 'FAIL: 5.22 logging closure file is missing: %s\n' "$file" >&2
+    printf 'FAIL: 5.22+ logging closure file is missing: %s\n' "$file" >&2
     exit 1
   }
 done
@@ -68,7 +68,7 @@ for requirement in "${required_patterns[@]}"; do
   file="${requirement%%|*}"
   pattern="${requirement#*|}"
   rg -q --fixed-strings "$pattern" "$file" || {
-    printf 'FAIL: 5.22 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
+    printf 'FAIL: 5.22+ logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
     exit 1
   }
 done
@@ -78,4 +78,4 @@ done
 # 中文：历史文件管理器符号只能作为仅调用 PTLogger 的兼容适配器保留。
 
 git diff --check
-printf 'PASS: PTools 5.22 logging dependency removal, compatibility closure and backend parity\n'
+printf 'PASS: PTools 5.22+ logging dependency removal, compatibility closure and backend parity\n'

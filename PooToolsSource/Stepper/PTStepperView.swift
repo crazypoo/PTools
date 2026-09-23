@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 
 public enum PTStepperViewType {
@@ -59,13 +58,17 @@ open class PTStepperListModel:NSObject {
     
     public var titleAtt:ASAttributedString?
     ///标题颜色
-    public var titleColor:UIColor = DynamicColor(light: .black, dark: .white)
+    public var titleColor:UIColor = UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .white : .black
+    }
     ///标题字体
     public var titleFont:UIFont = .appfont(size: 14)
     ///描述
     public var desc:String = ""
     ///描述颜色
-    public var descColor:UIColor = DynamicColor(light: .black, dark: .white)
+    public var descColor:UIColor = UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .white : .black
+    }
     ///描述字体
     public var descFont:UIFont = .appfont(size: 14)
     ///描述富文本
@@ -128,7 +131,7 @@ open class PTStepperView: UIView {
                 } else {
                     itemW = self.viewConfig.itemWidth
                 }
-                return UICollectionView.horizontalLayout(data: section.rows,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
+                return UICollectionView.horizontalLayout(data: section.rows,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.bounds.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
             case .Vertical(_):
                 return UICollectionView.waterFallLayout(data: section.rows,rowCount: 1,itemOriginalX: self.viewConfig.itemOriginalX, itemSpace: 0) { index, rowModels in
                     var realHeight:CGFloat = self.viewConfig.itemHeight
@@ -294,7 +297,7 @@ open class PTStepperView: UIView {
         case .Horizontal(let type):
             if type == .Normal {
                 PTGCDManager.shared.delayOnMain(time: 0.01) {
-                    self.normalHorizontalItemWidth = self.width / CGFloat(self.viewConfig.stepperModels.count)
+                    self.normalHorizontalItemWidth = self.bounds.width / CGFloat(self.viewConfig.stepperModels.count)
                 }
             }
         case .Vertical( _):

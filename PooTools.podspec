@@ -77,7 +77,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Logging'
         subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
-        subspec.dependency 'SwifterSwift'
         subspec.dependency 'DeviceKit'
         subspec.dependency 'AttributedString'
         subspec.dependency 'IQKeyboardToolbarManager'
@@ -314,7 +313,6 @@ Pod::Spec.new do |s|
     s.subspec 'RateView' do |subspec|
         subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'SnapKit'
-        subspec.dependency 'SwifterSwift'
         subspec.source_files = 'PooToolsSource/RateView/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_RATE POOTOOLS_COCOAPODS"

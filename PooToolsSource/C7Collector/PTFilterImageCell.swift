@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 // MARK: Filter cell
 // English: Expose the shared filter cell so ImageEditor and other SPM targets use one implementation.

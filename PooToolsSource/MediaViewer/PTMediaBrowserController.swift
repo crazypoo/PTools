@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AttributedString
 #if POOTOOLS_VIDEOCACHE
 import KTVHTTPCache
@@ -59,9 +58,8 @@ public class PTMediaBrowserController: PTBaseViewController {
                         }
                     }
                 } else {
-                    self.navigationController?.popViewController(animated: true) {
-                        self.viewDismissBlock?()
-                    }
+                    self.navigationController?.popViewController(animated: true)
+                    self.viewDismissBlock?()
                 }
             } else {
                 Task { @MainActor in
@@ -170,10 +168,9 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                     let current = PTUtils.getCurrentVC()
                     if let _ = current?.sheetViewController {
-                        current?.navigationController?.pushViewController(videoController, completion: {
-                            videoController.videoPlayer?.play()
-                            videoController.sheetViewController?.setSizes([.fullscreen])
-                        })
+                        current?.navigationController?.pushViewController(videoController, animated: true)
+                        videoController.videoPlayer?.play()
+                        videoController.sheetViewController?.setSizes([.fullscreen])
                     } else {
                         self?.present(videoController, animated: true) {
                             videoController.videoPlayer?.play()

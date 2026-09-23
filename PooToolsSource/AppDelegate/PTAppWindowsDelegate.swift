@@ -8,7 +8,6 @@
 
 #if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
-import SwifterSwift
 
 /// 服务路由
 @MainActor public var serivceHost = "scheme://services?"

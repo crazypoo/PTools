@@ -17,6 +17,22 @@ public enum PTColorTone {
 
 public extension UIColor {
 
+    /// English: Returns a darker color using a bounded RGB subtraction.
+    /// Español: Devuelve un color más oscuro mediante una resta RGB limitada.
+    /// 中文：通过有界 RGB 减法返回更深的颜色。
+    func darken(by amount: CGFloat = 0.2) -> UIColor {
+        let clampedAmount = min(max(amount, 0), 1)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return self }
+        return UIColor(red: max(0, red - clampedAmount),
+                       green: max(0, green - clampedAmount),
+                       blue: max(0, blue - clampedAmount),
+                       alpha: alpha)
+    }
+
     // 统一使用颜色模块的 Hex 解析器，避免同一颜色在不同入口产生不同结果。
 
     //MARK: hex 色值

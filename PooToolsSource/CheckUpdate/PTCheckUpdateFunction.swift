@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SwiftJWT
 import Alamofire
 import SmartCodable

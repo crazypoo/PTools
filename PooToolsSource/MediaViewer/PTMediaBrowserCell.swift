@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import AVFoundation
 import AVKit
 import Kingfisher
@@ -193,7 +192,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         guard !hasSetupGesture else { return }
         hasSetupGesture = true
 
-        imageView.removeGestureRecognizers()
+        imageView.removeAllGestureRecognizers()
         
         let doubleTap = UITapGestureRecognizer { [weak self] sender in
             guard let self = self, let ges = sender as? UITapGestureRecognizer else { return }
@@ -398,7 +397,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func loadDataUrl(loadUrl:String, currentID: UUID) {
         if !loadUrl.isEmpty {
-            if GlobalVideoExts.contains(loadUrl.pathExtension.lowercased()) {
+            let pathExtension = URL(string: loadUrl)?.pathExtension
+                ?? URL(fileURLWithPath: loadUrl).pathExtension
+            if GlobalVideoExts.contains(pathExtension.lowercased()) {
                 self.videoUrlLoad(url: loadUrl,currentID:currentID)
             } else {
                 if !loadUrl.stringIsEmpty() {

@@ -11,7 +11,6 @@ import UIKit
 // callbacks are normalized inside Network's request executor.
 @preconcurrency import Alamofire
 import Network
-import SwifterSwift
 import CoreTelephony
 import Photos
 import SmartCodable

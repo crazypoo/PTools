@@ -10,7 +10,6 @@ import UIKit
 import Foundation
 import SafeSFSymbols
 import SnapKit
-import SwifterSwift
 
 #if SWIFT_PACKAGE
 // English: Import Core explicitly for MainActor bridges and shared UI extensions.

@@ -9,7 +9,6 @@
 import UIKit
 import AttributedString
 import SnapKit
-import SwifterSwift
 
 @objc public enum PTWhatsNewsPresentationOption:Int {
     /// 版本不同就显示

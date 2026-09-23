@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 extension NSString:PTProtocolCompatible {}
 

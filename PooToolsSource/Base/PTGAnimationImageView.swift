@@ -15,7 +15,9 @@ open class PTGAnimationImageView: UIView {
             if let findAny = imageSet {
                 switch findAny {
                 case let urlString as String:
-                    if urlString.pathExtension.contains("json"),urlString.isURL(),let lottieURL = URL(string: urlString) {
+                    if let lottieURL = URL(string: urlString),
+                       lottieURL.pathExtension.contains("json"),
+                       urlString.isURL() {
                         Task { @MainActor in
                             let lottieAnimation = await LottieAnimation.loadedFrom(url: lottieURL)
                             if let findAnimation = lottieAnimation {

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "53df8df283216eb0238f3e828d38df451f013a0d",
-  "generated_at": "2026-09-22T08:21:44Z",
+  "source_revision": "c7c2b410cb0c49d60bf80474823c455593114303",
+  "generated_at": "2026-09-23T05:46:55Z",
   "name": "PooTools",
-  "version": "5.22.2",
+  "version": "5.23.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -358,7 +358,6 @@
         "SmartCodable/Inherit",
         "SnapKit",
         "SwiftDate",
-        "SwifterSwift",
         "lottie-ios"
       ],
       "source_files": [
@@ -1757,8 +1756,7 @@
         "PooTools/PToolsUIFoundation"
       ],
       "third_party_dependencies": [
-        "SnapKit",
-        "SwifterSwift"
+        "SnapKit"
       ],
       "source_files": [
         "PooToolsSource/RateView/*.{h,m,swift}"

@@ -8,7 +8,6 @@
 
 import UIKit
 import ObjectiveC
-import SwifterSwift
 
 public enum PTRefreshState: Sendable {
     case idle        // 普通状态

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 
 // MARK: - Debug Snapshot
 public struct PTAlertDebugSnapshot {

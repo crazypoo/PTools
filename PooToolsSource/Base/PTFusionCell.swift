@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import AttributedString
-import SwifterSwift
 
 // ✅ Swift 6 优化：显式标记 @MainActor 确保 UI 回调在主线程安全执行
 public typealias PTCellSwitchBlock = @MainActor (_ rowText: String, _ sender: UIControl) -> Void

@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 
 open class PTShareItem: NSObject,UIActivityItemSource {
     let title: String

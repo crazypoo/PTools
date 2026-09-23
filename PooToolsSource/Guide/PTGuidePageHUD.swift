@@ -9,7 +9,6 @@
 import UIKit
 import AVKit
 import SnapKit
-import SwifterSwift
 import Kingfisher
 
 public enum PTGuidePageControlSelection {

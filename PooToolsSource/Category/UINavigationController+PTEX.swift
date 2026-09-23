@@ -8,7 +8,6 @@
 
 #if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
-import SwifterSwift
 
 public extension UINavigationController {
     

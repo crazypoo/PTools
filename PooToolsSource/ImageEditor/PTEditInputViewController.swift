@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import SwifterSwift
 import SafeSFSymbols
 
 #if SWIFT_PACKAGE
@@ -109,8 +108,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
             colorPicker.selectedColorCallback = { color in
                 self.currentColor = color
             }
-            self.navigationController?.pushViewController(colorPicker, completion: {
-            })
+            self.navigationController?.pushViewController(colorPicker, animated: true)
         }
         return view
     }()

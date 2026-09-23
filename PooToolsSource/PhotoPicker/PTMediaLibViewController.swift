@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwifterSwift
 import SnapKit
 import Photos
 import Combine
@@ -290,7 +289,7 @@ extension PTMediaLibView {
             cell.coverView.isHidden = !uiConfig.showInvalidMask
             cell.enableSelect = false
         } else if !activeSelectionOptions.allowMixSelect && selCount > 0 {
-            let hasVideo = selectedModel.any { $0.type == .video }
+            let hasVideo = selectedModel.contains { $0.type == .video }
             let isTypeMismatch = hasVideo ? (model.type != .video) : (model.type == .video)
             if isTypeMismatch {
                 cell.coverView.backgroundColor = .DevMaskColor
