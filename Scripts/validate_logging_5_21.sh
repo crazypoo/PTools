@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Validate the 5.21–5.24 logging migration, Debug bridge and privacy contracts.
-# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21–5.24.
-# 中文：校验 5.21–5.24 日志迁移、Debug 桥接和隐私契约。
+# English: Validate the 5.21–5.25 logging migration, Debug bridge and privacy contracts.
+# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21–5.25.
+# 中文：校验 5.21–5.25 日志迁移、Debug 桥接和隐私契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(21|22|23|24)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.21–5.24 logging gate requires a 5.21.x, 5.22.x, 5.23.x or 5.24.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(21|22|23|24|25)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.21–5.25 logging gate requires a 5.21.x through 5.25.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -28,7 +28,7 @@ required_files=(
 )
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || {
-    printf 'FAIL: 5.21–5.24 logging file is missing: %s\n' "$file" >&2
+    printf 'FAIL: 5.21–5.25 logging file is missing: %s\n' "$file" >&2
     exit 1
   }
 done
@@ -59,9 +59,9 @@ for requirement in "${required_patterns[@]}"; do
   file="${requirement%%|*}"
   pattern="${requirement#*|}"
   rg -q --fixed-strings "$pattern" "$file" || {
-    printf 'FAIL: 5.21–5.24 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
+    printf 'FAIL: 5.21–5.25 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
     exit 1
   }
 done
 
-printf 'PASS: PTools 5.21–5.24 logging migration, memory diagnostics and privacy contracts\n'
+printf 'PASS: PTools 5.21–5.25 logging migration, memory diagnostics and privacy contracts\n'

@@ -13,7 +13,9 @@ import Combine
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 #if SWIFT_PACKAGE
 import ptools
@@ -920,10 +922,10 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
 
     @MainActor
-    func titleAtt() -> ASAttributedString {
+    func titleAtt() -> PTRichText {
         guard let album = mediaListView.currentAlbum else { return "" }
 
-        var buttonAtt: ASAttributedString = """
+        var buttonAtt: PTRichText = """
         \(album.title,
           .font(PTMediaLibUIConfig.share.selectLibTitleFont),
           .foreground(PTAppBaseConfig.share.viewDefaultTextColor),

@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 public typealias PTAttLabelCallBack = (String) -> Void

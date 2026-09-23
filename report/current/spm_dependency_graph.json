@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:47Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:13Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1150,31 +1150,6 @@
     {
       "sourceControl": [
         {
-          "identity": "attributedstring",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/lixiang1994/AttributedString.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "revision": [
-              "d8a72a7e29e8699979b052b59659720087bc2ea0"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "collectionviewpaginglayout",
           "location": {
             "remote": [
@@ -1730,7 +1705,7 @@
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 10,
+    "direct_third_party_count": 9,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -2752,6 +2727,29 @@
           "tool": "swift"
         }
       ]
+    },
+    {
+      "name": "PToolsRichTextTests",
+      "type": "test",
+      "path": "Tests/PToolsRichTextTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsSymbols",
@@ -5530,6 +5528,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsSearchBar",
           "kind": "internal",
           "package": null,
@@ -5552,19 +5561,7 @@
           }
         }
       ],
-      "third_party_dependencies": [
-        {
-          "name": "AttributedString",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "AttributedString",
-              null
-            ]
-          }
-        }
-      ],
+      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -6403,17 +6400,6 @@
         }
       ],
       "third_party_dependencies": [
-        {
-          "name": "AttributedString",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "AttributedString",
-              null
-            ]
-          }
-        },
         {
           "name": "DeviceKit",
           "kind": "third_party",

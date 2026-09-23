@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import Photos
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
@@ -1936,7 +1938,7 @@ extension PTCollectionView {
                                 .isTouchAllowed(true)
                         }
                     } else {
-                        let buttonAtt:ASAttributedString = """
+                        let buttonAtt:PTRichText = """
                                     \(wrap: .embedding("""
                                     \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
                                     """))

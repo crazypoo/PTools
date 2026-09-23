@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 // MARK: - 抓包主列表展示 Cell
 class PTNetworkWatcherCell: PTBaseNormalCell {
@@ -34,7 +36,7 @@ class PTNetworkWatcherCell: PTBaseNormalCell {
             codeLabel.textColor = successColor
             codeLabel.text = cellModel.statusCode
             
-            let att: ASAttributedString = """
+            let att: PTRichText = """
             \(wrap: .embedding("""
             \("[\(cellModel.method ?? "")]", .foreground(.gray), .font(.appfont(size: 17)), .paragraph(.alignment(.left))) \(cellModel.startTime ?? "", .foreground(successColor), .font(.appfont(size: 12)), .paragraph(.alignment(.left)))
             \(cellModel.id, .foreground(successColor), .font(.appfont(size: 18)), .paragraph(.alignment(.left))) \(cellModel.url?.absoluteString ?? "", .foreground(.gray), .font(.appfont(size: 13)), .paragraph(.alignment(.left)))

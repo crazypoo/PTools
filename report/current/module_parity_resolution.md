@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:48Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:13Z
 -->
 
 # Module Parity Resolution
@@ -19,7 +19,7 @@ Generated at: 2026-09-23T07:31:48Z
 | BluetoothPermission | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CheckUpdate | ["Swift-JWT"] | ["SwiftJWT"] | Equivalent dependency uses different SPM and CocoaPods names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Core | ["Logging","PToolsCore","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
-| Core | ["AttributedString","DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","NotificationBanner","SmartCodable","SnapKit","SwiftDate","lottie-ios"] | ["AttributedString","DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SmartCodable","SmartCodable/Inherit","SnapKit","SwiftDate","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| Core | ["DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","NotificationBanner","SmartCodable","SnapKit","SwiftDate","lottie-ios"] | ["DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SmartCodable","SmartCodable/Inherit","SnapKit","SwiftDate","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | NetWork | ["Core","Loading","PToolsCore"] | ["Core","Loading"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |

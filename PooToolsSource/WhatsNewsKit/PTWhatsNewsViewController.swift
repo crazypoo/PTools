@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 @objc public enum PTWhatsNewsPresentationOption:Int {
@@ -54,10 +56,10 @@ public class PTWhatsNewsTitleItem:NSObject {
     public var title:String = ""
     public var titleFont:UIFont = .systemFont(ofSize: 26)
     public var titleColor:UIColor = .black
-    public var atts:ASAttributedString?
+    public var atts:PTRichText?
     public var textAlignment:NSTextAlignment = .center
     
-    @MainActor public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: ASAttributedString? = nil, textAlignment:NSTextAlignment = .center) {
+    @MainActor public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: PTRichText? = nil, textAlignment:NSTextAlignment = .center) {
         self.title = title
         self.titleFont = titleFont
         self.titleColor = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
@@ -148,11 +150,11 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
                 imageView.image = nil
             }
             
-            let attTitle:ASAttributedString = ASAttributedString("\(cellModel!.title)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.contentSpace)),.font(cellModel!.titleFont),.foreground(cellModel!.titleColor))
+            let attTitle:PTRichText = PTRichText("\(cellModel!.title)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.contentSpace)),.font(cellModel!.titleFont),.foreground(cellModel!.titleColor))
             
-            let attSubTitle:ASAttributedString = ASAttributedString("\(!cellModel!.title.stringIsEmpty() ? "\n\(cellModel!.subTitle)" : cellModel!.subTitle)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.contentSpace)),.font(cellModel!.subTitleFont),.foreground(cellModel!.subTitleColor))
+            let attSubTitle:PTRichText = PTRichText("\(!cellModel!.title.stringIsEmpty() ? "\n\(cellModel!.subTitle)" : cellModel!.subTitle)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.contentSpace)),.font(cellModel!.subTitleFont),.foreground(cellModel!.subTitleColor))
 
-            var totalAtt:ASAttributedString = ASAttributedString(string: "")
+            var totalAtt:PTRichText = PTRichText(string: "")
 
             if !cellModel!.title.stringIsEmpty() {
                 totalAtt += attTitle

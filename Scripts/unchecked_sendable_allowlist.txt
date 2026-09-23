@@ -13,6 +13,10 @@ PooToolsSource/NetWork/Network.swift
 PooToolsSource/NetWork/NetworkSupport.swift
 PooToolsSource/PhotoPicker/PTFetchImageOperation.swift
 PooToolsSource/PhotoPicker/PTMediaLibManager.swift
+# matcher cache only: NSLock serializes Foundation matcher access; PTRichText remains a value model
+# caché de matchers únicamente: NSLock serializa el acceso a Foundation; PTRichText sigue siendo un modelo de valor
+# 仅匹配器缓存：NSLock 串行化 Foundation 匹配器访问；PTRichText 仍然是值模型
+PooToolsSource/PToolsUIFoundation/PTRichText.swift
 PooToolsSource/VideoEditor/CompositionInstruction.swift
 PooToolsSource/VideoEditor/Compositor.swift
 PooToolsSource/VideoEditor/Exporter.swift

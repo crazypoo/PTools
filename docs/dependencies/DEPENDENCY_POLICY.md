@@ -45,6 +45,16 @@ SwiftPM 与 CocoaPods 必须同时满足：
 - 动态 raw value 仅用于服务端、配置文件或新系统名称等运行时场景；静态名称必须进入标准化目录并经过生成校验。
 - 符号缺失、系统版本不支持或目录数据错误时只能返回安全失败/回退图像并记录诊断，不得使用强制解包或 `fatalError`。
 
+## 5.25 富文本依赖收口
+
+5.25.0 从 SwiftPM、CocoaPods、锁文件和生产源码移除 `lixiang1994/AttributedString`，由 `PTRichText` 提供基于 Foundation `AttributedString` 的值模型、UIKit 桥接、安全 Range、匹配和内容替换能力。
+
+富文本核心只保存值、语义属性和 Action ID；点击闭包、异步图片加载和 UIKit 视图由 MainActor 渲染器或显式控件回调管理。不得把 closure、`UIView` 或第三方富文本类型写入跨 actor 的文本值。历史 API 报告可以保留旧符号以说明迁移，但实现路径、包清单和新增调用不得重新引入该依赖。
+
+Rich text core stores values, semantic attributes, and action IDs only; tap closures, asynchronous images, and UIKit views remain in MainActor renderers or explicit control callbacks. Historical API reports may retain removed symbols for migration context, but implementation paths, manifests, and new call sites must not reintroduce the dependency.
+
+El núcleo de texto enriquecido solo almacena valores, atributos semánticos e identificadores de acción; los cierres, las imágenes asíncronas y las vistas UIKit permanecen en renderizadores MainActor o callbacks explícitos.
+
 ## 新依赖准入
 
 新增依赖前必须说明：

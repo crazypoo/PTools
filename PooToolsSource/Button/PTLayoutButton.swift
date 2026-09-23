@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import Kingfisher
 
 @objc public enum PTLayoutButtonStyle: Int {
@@ -761,7 +763,7 @@ public class PTLayoutButton: UIButton {
                 textAlignment = .right
             }
 
-            let att: ASAttributedString = """
+            let att: PTRichText = """
             \(wrap: .embedding("""
             \(title, .foreground(titleColor), .font(titleFont), .paragraph(.alignment(textAlignment)))\("\n ", .foreground(.clear), .font(.appfont(size: titlePadding)), .paragraph(.alignment(textAlignment)))\("\n\(subTitle)", .foreground(subTitleColor), .font(subTitleFont), .paragraph(.alignment(textAlignment)))
             """))

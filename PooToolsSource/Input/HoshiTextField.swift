@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString // 依赖第三方或自定义的属性字符串库
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif // 依赖第三方或自定义的属性字符串库
 import SnapKit        // 依赖 SnapKit 进行自动布局
 
 // MARK: - HoshiTextField
@@ -41,7 +43,7 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
     // MARK: - 属性覆盖与扩展
     
     /// 自定义的属性字符串占位符
-    dynamic open var placeholderAtt: ASAttributedString? {
+    dynamic open var placeholderAtt: PTRichText? {
         didSet { updatePlaceholder() }
     }
 
@@ -145,7 +147,7 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
     private func updatePlaceholder() {
         if let placeholderAtt = placeholderAtt {
             // 假设扩展了 UILabel 支持此属性
-            placeholderLabel.attributed.text = placeholderAtt
+            placeholderLabel.attributedText = placeholderAtt.value
         } else {
             placeholderLabel.text = placeholder
             placeholderLabel.textColor = placeholderColor
@@ -213,7 +215,7 @@ open class PTHoshiTextField: UITextField {
         didSet { updatePlaceholder() }
     }
     
-    dynamic open var placeholderAtt: ASAttributedString? {
+    dynamic open var placeholderAtt: PTRichText? {
         didSet { updatePlaceholder() }
     }
     
@@ -350,8 +352,8 @@ open class PTHoshiTextField: UITextField {
     
     private func updatePlaceholder() {
         if let placeholderAtt = placeholderAtt {
-            floatingLabel.attributed.text = placeholderAtt
-            attributedPlaceholder = placeholderAtt.value // 确保 value 是系统自带的 NSAttributedString
+            floatingLabel.attributedText = placeholderAtt.value
+            attributedPlaceholder = placeholderAtt.value // English: Keep UIKit on the system bridge. // Español: Mantén UIKit en el puente del sistema. // 中文：通过系统桥接交给 UIKit。
         } else {
             floatingLabel.text = placeholder
             floatingLabel.font = placeholderFont

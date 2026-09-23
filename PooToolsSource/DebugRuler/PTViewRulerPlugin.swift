@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 @MainActor
 open class PTViewRulerPlugin: NSObject {

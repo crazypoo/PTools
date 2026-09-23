@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:48Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:13Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `170457dd3dce65c14a4009b603b56fb70c643a3a30767437591a54df81e9ad98`
+- Fingerprint: `26cf38df210b3947f6d23beaf61bc61e173c32020f9062d2f5f88b40a8274220`
 - Matched modules: `90`
 - SwiftPM-only modules: `0`
 - CocoaPods-only modules: `15`
@@ -40,7 +40,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `BluetoothPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
 - `CheckUpdate` / `third_party_dependencies`: SPM=["Swift-JWT"]; CocoaPods=["SwiftJWT"]
 - `Core` / `internal_dependencies`: SPM=["Logging", "PToolsCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
-- `Core` / `third_party_dependencies`: SPM=["AttributedString", "DeviceKit", "IQKeyboardManager", "KakaJSON", "Kingfisher", "NotificationBanner", "SmartCodable", "SnapKit", "SwiftDate", "lottie-ios"]; CocoaPods=["AttributedString", "DeviceKit", "IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "KakaJSON", "Kingfisher", "SmartCodable", "SmartCodable/Inherit", "SnapKit", "SwiftDate", "lottie-ios"]
+- `Core` / `third_party_dependencies`: SPM=["DeviceKit", "IQKeyboardManager", "KakaJSON", "Kingfisher", "NotificationBanner", "SmartCodable", "SnapKit", "SwiftDate", "lottie-ios"]; CocoaPods=["DeviceKit", "IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "KakaJSON", "Kingfisher", "SmartCodable", "SmartCodable/Inherit", "SnapKit", "SwiftDate", "lottie-ios"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `NetWork` / `internal_dependencies`: SPM=["Core", "Loading", "PToolsCore"]; CocoaPods=["Core", "Loading"]

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:10Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:07Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -16,6 +16,7 @@
     "PooToolsSource/NetWork/NetworkSupport.swift",
     "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
     "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+    "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
     "PooToolsSource/VideoEditor/CompositionInstruction.swift",
     "PooToolsSource/VideoEditor/Compositor.swift",
     "PooToolsSource/VideoEditor/Exporter.swift",
@@ -370,6 +371,12 @@
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "line": 27,
       "declaration": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 339,
+      "declaration": "private final class PTTextMatcherCache: @unchecked Sendable {",
       "allowlisted": true
     },
     {

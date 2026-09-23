@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:48Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:13Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.24.0`
+- Podspec: `PooTools` `5.25.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -36,7 +36,7 @@ Generated at: 2026-09-23T07:31:48Z
 | `CodeView` | `PooTools/Core` | — | `CodeView` | — | — |
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
-| `Core` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `AttributedString`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
+| `Core` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
@@ -102,7 +102,7 @@ Generated at: 2026-09-23T07:31:48Z
 | `SVG` | `PooTools/Core` | `PocketSVG`, `Protobuf`, `SVGAPlayer` | `KingfisherSVG` | — | — |
 | `ScanQRCode` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/PhotoPicker` | — | `QRCodeScan` | — | — |
 | `ScrollBanner` | `PooTools/Core`, `PooTools/PageControl` | — | `ScrollBanner` | — | — |
-| `Search` | `PooTools/Core`, `PooTools/SearchBar` | `AttributedString` | `Search` | — | — |
+| `Search` | `PooTools/Core`, `PooTools/PToolsUIFoundation`, `PooTools/SearchBar` | — | `Search` | — | — |
 | `SearchBar` | `PooTools/Core` | — | `SearchBar` | — | — |
 | `Security` | — | — | `Security` | CryptoKit, Foundation, LocalAuthentication, Security | — |
 | `SecuritySuite` | `PooTools/Core` | `IOSSecuritySuite` | — | — | — |

@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.24.0`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.25.0`。
 
 ## Requirements
 
@@ -83,6 +83,18 @@ final class ExampleListViewController: PTListViewController {
 `PTImageDownsampler` 解码；视频缩略图使用 `PTVideoThumbnailService` 和变体缓存；保存图片或视频使用
 `PTMediaSaveService`。旧入口仍兼容，迁移条件见
 [MIGRATION_6.md](docs/migration/MIGRATION_6.md)。
+
+### Rich Text
+
+富文本统一使用 `PTRichText`，底层存储为 Foundation `AttributedString`，需要 UIKit 展示时显式桥接：
+
+```swift
+let title: PTRichText = "欢迎 \(userName, .foreground(.secondaryLabel))"
+titleLabel.pt_apply(richText: title)
+```
+
+Action、链接、匹配、Markdown、本地化和附件描述都保持为值数据；点击行为通过
+`PTTextActionRegistry` 或控件回调注册，不把闭包写进富文本模型。
 
 ### 搜索页面
 

@@ -7,13 +7,15 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 public class PTBannerModel: NSObject {
     open var media:Any?
     open var title:String = ""
     open var desc:String = ""
-    open var att:ASAttributedString?
+    open var att:PTRichText?
     // MARK: Title
     /// 字体颜色
     open var titleColor: UIColor = UIColor.white

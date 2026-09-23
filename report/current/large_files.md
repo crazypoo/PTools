@@ -3,22 +3,22 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:34Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:24Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：15
+- Warning：16
 - Architecture exception：9
 - Hard-limit allowlisted：3
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1305 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2214 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2216 | hard_limit_allowlisted |
 | `PooToolsSource/Base/PTTabBarView.swift` | 1302 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1828 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1395 | warning |
@@ -32,12 +32,13 @@ Generated at: 2026-09-23T07:31:34Z
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1552 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1818 | architecture_exception |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1820 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1071 | warning |
-| `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1197 | warning |
+| `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1460 | warning |
+| `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1389 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |
-| `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1170 | warning |
+| `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1172 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
 | `PooToolsSource/TipsView/PTTipsView.swift` | 1248 | warning |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1639 | architecture_exception |

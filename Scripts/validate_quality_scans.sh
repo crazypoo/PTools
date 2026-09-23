@@ -81,6 +81,7 @@ bash Scripts/validate_debug_instruments_5_18.sh
 bash Scripts/validate_permission_source_contract.sh
 bash Scripts/validate_swifterswift_removal.sh
 bash Scripts/validate_symbols_5_24.sh
+bash Scripts/validate_attributedstring_absorption_5_25.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_current_summaries.rb >/dev/null
 
@@ -148,15 +149,15 @@ if [[ -n "$stale_unchecked" ]]; then
   exit 1
 fi
 
-# Only immutable SDK type metadata and system object boxes may use this narrow compatibility exception.
-# Solo los metadatos de tipo inmutables del SDK y las cajas de objetos del sistema pueden usar esta excepción.
-# 仅不可变 SDK 类型元数据和系统对象包装器可以使用这个窄范围兼容例外。
+# Only immutable SDK type metadata, system object boxes and the lock-protected matcher cache may use this narrow compatibility exception.
+# Solo los metadatos de tipo inmutables del SDK, las cajas de objetos del sistema y la caché de matchers protegida por bloqueo pueden usar esta excepción.
+# 仅不可变 SDK 类型元数据、系统对象包装器和加锁匹配器缓存可以使用这个窄范围兼容例外。
 # A protocol-only migration can add the new Codable protocol name to an existing
 # legacy SDK wrapper line without adding a new unchecked boundary.
 # Una migración de protocolo puede añadir el nuevo nombre de protocolo Codable a una línea
 # existente de un wrapper legado del SDK sin añadir un nuevo límite unchecked.
 # 仅协议迁移可能会把新的 Codable 协议名加入既有 SDK 兼容包装器行，这不代表新增 unchecked 边界。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox' || true)"
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

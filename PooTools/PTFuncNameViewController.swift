@@ -14,7 +14,9 @@ import Combine
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 struct UserModel: PTPickerStringModel {
     let userId: String

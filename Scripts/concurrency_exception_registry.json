@@ -57,6 +57,7 @@
     {"path":"PooToolsSource/OSSKit/OSSUtterance.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PhotoPicker/PTFetchImageOperation.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PhotoPicker/PTMediaLibManager.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/PToolsUIFoundation/PTRichText.swift","category":"LOCK_PROTECTED"},
     {"path":"PooToolsSource/Router/PTRouterManager.swift","category":"LEGACY_MODEL"},
     {"path":"PooToolsSource/Router/PTRouterServiceManager.swift","category":"LEGACY_MODEL"},
     {"path":"PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift","category":"LEGACY_MODEL"},

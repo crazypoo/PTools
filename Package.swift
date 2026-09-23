@@ -182,7 +182,6 @@ let package = Package(
         .package(url: "https://github.com/malcommac/SwiftDate.git", exact: "7.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.7.1"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
-        .package(url: "https://github.com/lixiang1994/AttributedString.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.9.0"),
         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "4.0.0"),
@@ -312,7 +311,6 @@ let package = Package(
                 "SwiftDate",
                 "SnapKit",
                 "DeviceKit",
-                "AttributedString",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 "Kingfisher",
                 "PToolsSymbols",
@@ -389,7 +387,7 @@ let package = Package(
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSearch", dependencies: ["ptools", "PooToolsSearchBar", "AttributedString"], path: "PooToolsSource/Search", swiftSettings: [.define("POOTOOLS_SEARCH"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSearch", dependencies: ["ptools", "PooToolsSearchBar", "PToolsUIFoundation"], path: "PooToolsSource/Search", swiftSettings: [.define("POOTOOLS_SEARCH"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PooToolsMediaCore", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLivePhoto"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
@@ -489,6 +487,14 @@ let package = Package(
             name: "PToolsUIFoundationTests",
             dependencies: ["ptools"],
             path: "Tests/PToolsUIFoundationTests"
+        ),
+        // English: Keep rich-text value, range, matcher, and bridge regressions isolated from feature targets.
+        // Español: Mantiene aisladas las regresiones de valores, rangos, coincidencias y puentes de texto enriquecido.
+        // 中文：将富文本值、Range、匹配器和桥接回归测试与功能目标隔离。
+        .testTarget(
+            name: "PToolsRichTextTests",
+            dependencies: ["PToolsUIFoundation"],
+            path: "Tests/PToolsRichTextTests"
         ),
         .testTarget(
             name: "PToolsNetworkTests",

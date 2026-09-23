@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:10Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:07Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -67,6 +67,7 @@ Generated at: 2026-09-23T07:31:10Z
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 380 | `// 【Swift 6 规范】定义一个内部引用类型容器来持有状态，并标记为 @unchecked Sendable` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 382 | `final class ConverterState: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSUtterance.swift` | 27 | `public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 339 | `private final class PTTextMatcherCache: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PhotoPicker/PTFetchImageOperation.swift` | 20 | `final class PTFetchImageOperation: Operation, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 18 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 26 | `public struct PTSendableDictionaryBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |

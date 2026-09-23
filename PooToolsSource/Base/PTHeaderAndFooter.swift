@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 @objcMembers
 public class PTFusionHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
@@ -94,17 +96,18 @@ public class PTVersionFooter: PTBaseCollectionReusableView,@MainActor PTSuppleme
         let version = kAppVersion ?? ""
         let build = kAppBuildVersion ?? ""
         
-        let att:ASAttributedString = """
+        let att:PTRichText = """
         \(wrap: .embedding("""
         \("\(appName) \(version)(\(build))",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
-        \("PT Privacy".localized(),.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue),.action {
-                if let url = URL(string: PTAppBaseConfig.share.privacyURL) {
-                    PTAppStoreFunction.jumpLink(url: url)
-                }
-        })
+        \("PT Privacy".localized(),.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue))
         """))
         """
-        view.attributed.text = att
+        view.attributedText = att.value
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer { _ in
+            guard let url = URL(string: PTAppBaseConfig.share.privacyURL) else { return }
+            PTAppStoreFunction.jumpLink(url: url)
+        })
         return view
     }()
 

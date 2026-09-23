@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T06:30:41Z
-Version source: 5.24.0
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T08:08:55Z
+Version source: 5.25.0
 -->
 
 # Direct Dependency Matrix
@@ -29,7 +29,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
-| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `AttributedString`, `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Logging`, `PToolsCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `DeviceKit`, `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `NotificationBannerSwift`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `SwiftDate`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | — | No direct third-party dependency | Deprecate alias |
@@ -93,7 +93,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `SVG` | `Core`, `ptools` | `Kingfisher`, `PocketSVG`, `Protobuf`, `SVGAPlayer` | 6.0 review | Keep; review direct drift |
 | `ScanQRCode` | `CameraPermission`, `Core`, `PTCameraPermission`, `PhotoPicker`, `PooToolsImagePicker`, `PooToolsPhotoPicker`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ScrollBanner` | `Core`, `PageControl`, `PooToolsPageControl`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `Search` | `Core`, `PooToolsSearchBar`, `SearchBar`, `ptools` | `AttributedString` | 6.0 review | Keep; review direct drift |
+| `Search` | `Core`, `PooToolsSearchBar`, `SearchBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `SearchBar` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Security` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `SecuritySuite` | `Core` | `IOSSecuritySuite` | 6.0 review | Keep; review direct drift |

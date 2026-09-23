@@ -115,8 +115,8 @@ class AppDelegate: PTAppWindowsDelegate {
 
         IQKeyboardToolbarManager.shared.isEnabled = true
         
-        PTAppBaseConfig.share.tabTopSpacing = Gobal_device_info.isFaceIDCapable ? 5 : 0
-        PTAppBaseConfig.share.tab26BottomSpacing = Gobal_device_info.isFaceIDCapable ? 15 : 0
+        PTAppBaseConfig.share.tabTopSpacing = deviceInfo.isFaceIDCapable ? 5 : 0
+        PTAppBaseConfig.share.tab26BottomSpacing = deviceInfo.isFaceIDCapable ? 15 : 0
         PTAppBaseConfig.share.tab26Mode = true
         PTAppBaseConfig.share.tabbarMetailMode = true
         PTAppBaseConfig.share.tabSelectedMetail = true

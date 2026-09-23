@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T07:31:47Z
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T13:11:13Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,8 +13,8 @@ Generated at: 2026-09-23T07:31:47Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `99`
-- Core direct third-party dependencies: `10` (baseline `18`)
+- Target count: `100`
+- Core direct third-party dependencies: `9` (baseline `18`)
 
 ## Products
 
@@ -143,6 +143,7 @@ Generated at: 2026-09-23T07:31:47Z
 | `PToolsPermissionCore` | `PooToolsSource/PToolsPermissionCore` | — | — | 0 source entries / 0 resources |
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
+| `PToolsRichTextTests` | `Tests/PToolsRichTextTests` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsSymbols` | `PooToolsSource/PToolsSymbols` | — | — | 0 source entries / 1 resources |
 | `PToolsSymbolsTests` | `Tests/PToolsSymbolsTests` | PToolsSymbols | — | 0 source entries / 0 resources |
 | `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
@@ -198,7 +199,7 @@ Generated at: 2026-09-23T07:31:47Z
 | `PooToolsSVG` | `PooToolsSource/KingfisherSVG` | ptools | Kingfisher, PocketSVG | 0 source entries / 0 resources |
 | `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PooToolsImagePicker, PooToolsPhotoPicker, ptools | — | 0 source entries / 0 resources |
 | `PooToolsScrollBanner` | `PooToolsSource/ScrollBanner` | PooToolsPageControl, ptools | — | 0 source entries / 0 resources |
-| `PooToolsSearch` | `PooToolsSource/Search` | PooToolsSearchBar, ptools | AttributedString | 0 source entries / 0 resources |
+| `PooToolsSearch` | `PooToolsSource/Search` | PToolsUIFoundation, PooToolsSearchBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSearchBar` | `PooToolsSource/SearchBar` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSecurity` | `PooToolsSource/Security` | — | — | 0 source entries / 0 resources |
 | `PooToolsSegmented` | `PooToolsSource/Segmented` | ptools | — | 0 source entries / 0 resources |
@@ -215,7 +216,7 @@ Generated at: 2026-09-23T07:31:47Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | AttributedString, DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SmartCodable, SnapKit, SwiftDate | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, NotificationBannerSwift, SmartCodable, SnapKit, SwiftDate | 28 source entries / 1 resources |
 
 ## Notes
 

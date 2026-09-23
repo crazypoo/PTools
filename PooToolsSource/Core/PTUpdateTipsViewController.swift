@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 // English: This content view builds UIKit hierarchy and constraints, so it is MainActor isolated.
 // Español: Esta vista construye la jerarquía y las restricciones de UIKit, por eso está aislada en MainActor.
@@ -80,12 +82,12 @@ public class PTUpdateTipsContentView : UIView {
             make.size.equalTo(CGSize(width: baseContentSize.width, height: tmpHight))
         }
         
-        let att:ASAttributedString = """
+        let att:PTRichText = """
         \(wrap: .embedding("""
         \(descriptionString,.foreground(.black),.font(descFont),.paragraph(.alignment(.left)),.baselineOffset(2))
         """))
         """
-        valueLabel.attributed.text = att
+        valueLabel.attributedText = att.value
         
         scrollView.contentSize = CGSize(width: baseContentSize.width, height: tmpHight + 10)
                 

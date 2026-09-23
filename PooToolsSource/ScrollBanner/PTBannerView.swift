@@ -9,7 +9,9 @@
 import UIKit
 import AVFoundation
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 @MainActor
 public final class PTBannerScheduler {
@@ -628,7 +630,7 @@ public class PTBannerView: UIView {
 
     func setDescView(index:Int) {
         guard bannerModel.indices.contains(index) else {
-            descTitleView.attributed.text = nil
+            descTitleView.attributedText = nil
             descTitleView.text = nil
             descTitleView.isHidden = true
             return
@@ -637,43 +639,43 @@ public class PTBannerView: UIView {
         let cellModel = bannerModel[index]
 
         if let attModel = cellModel.att {
-            descTitleView.attributed.text = attModel
+            descTitleView.attributedText = attModel.value
             descTitleView.isHidden = false
         } else {
             if !cellModel.title.stringIsEmpty() || !cellModel.desc.stringIsEmpty() {
                 if !cellModel.title.stringIsEmpty(),!cellModel.desc.stringIsEmpty() {
-                    let att:ASAttributedString = """
+                    let att:PTRichText = """
                     \(wrap: .embedding("""
                     \(cellModel.title,.foreground(cellModel.titleColor),.font(cellModel.titleFont))
                     \(cellModel.desc,.foreground(cellModel.descColor),.font(cellModel.descFont))
                     """),.paragraph(.alignment(.left),.lineSpacing(cellModel.titleLineSpacing)))
                     """
-                    descTitleView.attributed.text = att
+                    descTitleView.attributedText = att.value
                 } else if cellModel.title.stringIsEmpty(),!cellModel.desc.stringIsEmpty() {
-                    let att:ASAttributedString = """
+                    let att:PTRichText = """
                     \(wrap: .embedding("""
                     \(cellModel.desc,.foreground(cellModel.descColor),.font(cellModel.descFont))
                     """),.paragraph(.alignment(.left),.lineSpacing(cellModel.titleLineSpacing)))
                     """
-                    descTitleView.attributed.text = att
+                    descTitleView.attributedText = att.value
                 } else if !cellModel.title.stringIsEmpty(),cellModel.desc.stringIsEmpty() {
-                    let att:ASAttributedString = """
+                    let att:PTRichText = """
                     \(wrap: .embedding("""
                     \(cellModel.title,.foreground(cellModel.titleColor),.font(cellModel.titleFont))
                     """),.paragraph(.alignment(.left),.lineSpacing(cellModel.titleLineSpacing)))
                     """
-                    descTitleView.attributed.text = att
+                    descTitleView.attributedText = att.value
                 } else {
-                    let att:ASAttributedString = """
+                    let att:PTRichText = """
                     \(wrap: .embedding("""
                     \("",.foreground(cellModel.titleColor),.font(cellModel.titleFont))
                     """),.paragraph(.alignment(.left),.lineSpacing(cellModel.titleLineSpacing)))
                     """
-                    descTitleView.attributed.text = att
+                    descTitleView.attributedText = att.value
                 }
                 descTitleView.isHidden = false
             } else {
-                descTitleView.attributed.text = nil
+                descTitleView.attributedText = nil
                 descTitleView.text = nil
                 descTitleView.isHidden = true
             }
@@ -809,7 +811,7 @@ extension PTBannerView {
             customPageControl.removeFromSuperview()
             descTitleView.removeFromSuperview()
             customPageControl.isHidden = true
-            descTitleView.attributed.text = nil
+            descTitleView.attributedText = nil
             descTitleView.text = nil
             updateTitleHeight(pageControlHeight + viewConfig.pageControlBottom * 2)
             PTBannerPlayerManager.shared.stopIfContainerBelongs(to: self)

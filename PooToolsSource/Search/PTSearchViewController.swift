@@ -8,7 +8,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 #if SWIFT_PACKAGE
 import ptools
@@ -834,8 +836,8 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         let model = emptyConfiguration(for: keyword)
         let config = PTEmptyDataViewConfig()
         config.image = model.image
-        config.mainTitleAtt = ASAttributedString(string: model.title)
-        config.secondaryEmptyAtt = ASAttributedString(string: model.message)
+        config.mainTitleAtt = PTRichText(string: model.title)
+        config.secondaryEmptyAtt = PTRichText(string: model.message)
         config.buttonTitle = model.actionTitle
         PTUnavailableManager.render(.empty, in: collectionView, config: config, action: model.action)
     }
@@ -844,8 +846,8 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         let model = errorConfiguration(for: keyword, error: error)
         let config = PTEmptyDataViewConfig()
         config.image = model.image
-        config.mainTitleAtt = ASAttributedString(string: model.title)
-        config.secondaryEmptyAtt = ASAttributedString(string: model.message)
+        config.mainTitleAtt = PTRichText(string: model.title)
+        config.secondaryEmptyAtt = PTRichText(string: model.message)
         config.buttonTitle = model.retryTitle
         PTUnavailableManager.render(.error, in: collectionView, config: config, action: model.retryAction)
         transitionWithoutRendering(to: .failure(keyword, error))

@@ -8,7 +8,9 @@
 
 import UIKit
 import Kingfisher
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import Photos
 import ObjectiveC
 
@@ -176,9 +178,9 @@ public extension UIButton {
     @available(iOS 15.0, *)
     func applyConfiguration(image: UIImage? = nil,
                             highlightedImage: UIImage? = nil,
-                            attributedTitle: ASAttributedString? = nil,
-                            highlightedAttributedTitle: ASAttributedString? = nil,
-                            attributedSubtitle: ASAttributedString? = nil,
+                            attributedTitle: PTRichText? = nil,
+                            highlightedAttributedTitle: PTRichText? = nil,
+                            attributedSubtitle: PTRichText? = nil,
                             layout: PTLayoutButtonStyle = .leftImageRightTitle,
                             imagePadding: CGFloat = 6,
                             contentInsets: UIEdgeInsets = .zero,

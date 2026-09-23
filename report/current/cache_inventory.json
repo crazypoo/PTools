@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:34Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:25Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -54,37 +54,37 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1213,
+      "line": 1215,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1214,
+      "line": 1216,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1765,
+      "line": 1767,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1766,
+      "line": 1768,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1856,
+      "line": 1858,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1857,
+      "line": 1859,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -210,7 +210,7 @@
     },
     {
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 100,
+      "line": 102,
       "kind": "disk or custom cache",
       "text": "// English: Cache the last layout size to avoid rebuilding identical constraints."
     },
@@ -863,20 +863,38 @@
       "text": "// English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches."
     },
     {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 336,
+      "kind": "disk or custom cache",
+      "text": "// English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock."
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 341,
+      "kind": "NSCache",
+      "text": "private let regexCache = NSCache<NSString, NSRegularExpression>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 342,
+      "kind": "NSCache",
+      "text": "private let detectorCache = NSCache<NSNumber, NSDataDetector>()"
+    },
+    {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 628,
+      "line": 630,
       "kind": "disk or custom cache",
       "text": "PTAlertTipsViewController.tipsAlertShow(title: \"Error\",subtitle: \"Save to cache failed\", icon: .Error)"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 666,
+      "line": 668,
       "kind": "disk or custom cache",
       "text": "// MARK: - Cache Helper"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 680,
+      "line": 682,
       "kind": "disk or custom cache",
       "text": "PTNSLogConsole(\"Video cache export failed: \\(String(describing: error))\")"
     },
@@ -899,5 +917,5 @@
       "text": "open func cache(viewController: UIViewController, with identifier: String) {"
     }
   ],
-  "bounded_memory_caches": 18
+  "bounded_memory_caches": 20
 }

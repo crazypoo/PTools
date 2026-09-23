@@ -1,0 +1,11 @@
+# English: These removals were reviewed for the 5.25.0 rich-text absorption and the earlier logging closure.
+# Español: Estas eliminaciones se revisaron para la absorción de texto enriquecido 5.25.0 y el cierre de logging anterior.
+# 中文：这些删除项已针对 5.25.0 富文本吸收以及此前的日志兼容层收口完成审阅。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|struct|PTLogSink

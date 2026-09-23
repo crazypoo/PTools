@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import Photos
 import SnapKit
 #if SWIFT_PACKAGE

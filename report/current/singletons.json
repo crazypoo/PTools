@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:11Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:07Z",
   "shared_call_count": 1533,
   "declarations": [
     {
@@ -457,7 +457,7 @@
     },
     {
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 15,
+      "line": 17,
       "declaration": "public static let share = PTViewRulerPlugin.init()",
       "name": "share",
       "category": "D",
@@ -556,7 +556,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 148,
+      "line": 150,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -565,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 394,
+      "line": 396,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -853,7 +853,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 17,
+      "line": 19,
       "declaration": "public static let shared = PTBannerScheduler()",
       "name": "shared",
       "category": "D",

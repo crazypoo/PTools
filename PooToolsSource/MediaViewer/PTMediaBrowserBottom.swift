@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 let PageControlHeight:CGFloat = 20
 let PageControlBottomSpace:CGFloat = 5
@@ -21,6 +23,7 @@ let ContentMoreSpacing:CGFloat = 10
 class PTMediaBrowserBottom: UIView {
     
     var pageTabCallback:((_ index:Int)->Void)?
+    var titleTapCallback:(() -> Void)?
     
     lazy var pageControlView:UIView = {
         switch viewConfig.pageControlOption {
@@ -87,6 +90,9 @@ class PTMediaBrowserBottom: UIView {
         let view = UILabel()
         view.isUserInteractionEnabled = true
         view.numberOfLines = 0
+        view.addGestureRecognizer(UITapGestureRecognizer { [weak self] _ in
+            self?.titleTapCallback?()
+        })
         return view
     }()
     
@@ -152,7 +158,7 @@ class PTMediaBrowserBottom: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setLabelAtt(att:ASAttributedString) {
-        titleLabel.attributed.text = att
+    func setLabelAtt(att:PTRichText) {
+        titleLabel.attributedText = att.value
     }
 }

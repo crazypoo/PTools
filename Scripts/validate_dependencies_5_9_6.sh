@@ -23,9 +23,7 @@ if rg -n 'branch:' Package.swift >/dev/null; then
   fail 'Package.swift contains a floating branch dependency'
 fi
 
-require_match 'AttributedString\.git", revision: "d8a72a7e29e8699979b052b59659720087bc2ea0"' Package.swift
 require_match 'SocketRocket\.git", revision: "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"' Package.swift
-require_match '"revision"[[:space:]]*:[[:space:]]*"d8a72a7e29e8699979b052b59659720087bc2ea0"' Package.resolved
 require_match '"revision"[[:space:]]*:[[:space:]]*"fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"' Package.resolved
 
 # English: Kitura cryptography packages must remain transitive through Swift-JWT until the 6.0 migration.

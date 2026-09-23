@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:19Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:13Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
@@ -426,6 +426,10 @@
     {
       "source": "PooToolsScrollBanner",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSearch",
+      "destination": "PToolsUIFoundation"
     },
     {
       "source": "PooToolsSearch",

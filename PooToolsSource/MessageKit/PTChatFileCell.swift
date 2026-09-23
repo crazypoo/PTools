@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 @MainActor
@@ -165,7 +167,7 @@ public class PTChatFileCell: PTChatBaseCell {
     // 设置文件信息的富文本
     private func setFileInfo(name: String, size: String) {
         let config = PTChatConfig.share
-        let infoAtt: ASAttributedString = """
+        let infoAtt: PTRichText = """
         \(wrap: .embedding("""
         \(name, .foreground(config.fileNameColor), .font(config.fileNameFont), .paragraph(.alignment(.left), .lineSpacing(config.fileContentSpace)))
         \(size, .foreground(config.fileSizeColor), .font(config.fileSizeFont), .paragraph(.alignment(.left), .lineSpacing(config.fileContentSpace)))

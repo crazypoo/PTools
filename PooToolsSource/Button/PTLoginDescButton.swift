@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 public class PTLoginDescConfig: NSObject {
@@ -17,8 +19,8 @@ public class PTLoginDescConfig: NSObject {
     public var textFont: UIFont = .appfont(size: 12)
     public var leftDesc: String = "A"
     public var rightDesc: String = "B"
-    public var leftAttributedDesc: ASAttributedString?
-    public var rightAttributedDesc: ASAttributedString?
+    public var leftAttributedDesc: PTRichText?
+    public var rightAttributedDesc: PTRichText?
     public var numberOfLines: Int = 1
     public var lineBreakMode: NSLineBreakMode = .byWordWrapping
     public var lineWidth: CGFloat = 1
@@ -101,7 +103,14 @@ open class PTLoginDescButton: UIView {
             label.adjustsFontForContentSizeCategory = true
             label.setContentHuggingPriority(.required, for: .horizontal)
             label.setContentCompressionResistancePriority(.required, for: .horizontal)
+            label.isUserInteractionEnabled = true
         }
+        leftDesc.addGestureRecognizer(UITapGestureRecognizer { [weak self] _ in
+            self?.descHandler?(.Left)
+        })
+        rightDesc.addGestureRecognizer(UITapGestureRecognizer { [weak self] _ in
+            self?.descHandler?(.Right)
+        })
         verLine.setContentHuggingPriority(.required, for: .horizontal)
         verLine.setContentCompressionResistancePriority(.required, for: .horizontal)
 
@@ -118,31 +127,27 @@ open class PTLoginDescButton: UIView {
     }
 
     private func configure(label: PTLoginDescLabel,
-                           attributedText: ASAttributedString?,
+                           attributedText: PTRichText?,
                            plainText: String,
                            color: UIColor,
                            type: PTLoginDescButtonType) {
         label.numberOfLines = max(0, viewConfig.numberOfLines)
         label.lineBreakMode = viewConfig.lineBreakMode
 
-        let source = attributedText ?? ASAttributedString(string: plainText)
+        let source = attributedText ?? PTRichText(string: plainText)
         guard source.length > 0 else {
-            label.attributed.text = nil
+            label.attributedText = nil
             label.isHidden = true
             label.accessibilityLabel = nil
             return
         }
 
-        let fallbackAction = ASAttributedString.Attribute.action { [weak self] in
-            self?.descHandler?(type)
-        }
-        let styledText = ASAttributedString(source, with: [
+        let styledText = PTRichText(source, with: [
             .font(viewConfig.textFont),
             .foreground(color),
-            .paragraph(.alignment(.center), .lineBreakMode(viewConfig.lineBreakMode)),
-            fallbackAction
+            .paragraph(.alignment(.center), .lineBreakMode(viewConfig.lineBreakMode))
         ])
-        label.attributed.text = styledText
+        label.attributedText = styledText.value
         label.isHidden = false
         label.accessibilityLabel = styledText.value.string
         label.accessibilityTraits = .button

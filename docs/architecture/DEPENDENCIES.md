@@ -21,7 +21,7 @@
 | 模块 | CocoaPods | SwiftPM | 主要直接依赖 | 不应直接带入 |
 | --- | --- | --- | --- | --- |
 | Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog、文件日志后端 | UIKit、Debug UI、外部日志后端、Network、媒体 |
-| Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、SwiftDate、SnapKit、DeviceKit、AttributedString、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
+| Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、PToolsUIFoundation、SwiftDate、SnapKit、DeviceKit、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
 | SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |
@@ -32,7 +32,7 @@
 | ImageEditor | `PooTools/ImageEditor` | `PooToolsImageEditor` | Core、HarbethKit、PhotoPicker | Network 请求层 |
 | VideoEditor | `PooTools/VideoEditor` | `PooToolsVideoEditor` | Core、HarbethKit、ProgressBar、Loading | Network 请求层 |
 | ScrollBanner / PageControl | `PooTools/ScrollBanner`、`PooTools/PageControl` | 对应 `PooToolsScrollBanner`、`PooToolsPageControl` | Core；ScrollBanner 使用 PageControl | Network、媒体模块 |
-| Search / SearchBar | `PooTools/Search`、`PooTools/SearchBar` | `PooToolsSearch`、`PooToolsSearchBar` | Search 依赖 Core、SearchBar、AttributedString；SearchBar 只依赖 Core | Network、媒体和业务数据 |
+| Search / SearchBar | `PooTools/Search`、`PooTools/SearchBar` | `PooToolsSearch`、`PooToolsSearchBar` | Search 依赖 Core、SearchBar；富文本使用 Core 提供的 `PTRichText` | Network、媒体和业务数据 |
 | Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | Core、Network、Share、SearchBar、PDF | Core 反向依赖 Debug；生产不隐式启动诊断 |
 
 ImagePicker 与 PhotoPicker 有意共存：前者负责单媒体系统选择和相机，后者负责多选、编辑、原图、
@@ -50,7 +50,7 @@ Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、�
 | SnapKit | Core / UI | UIKit 布局 DSL | 低至中 | 原生 `NSLayoutConstraint`，按模块迁移 |
 | PToolsLogging | Core / Debug | PTLogger、OSLog、文件日志和内存日志 | 低 | PTools 自有实现；不得重新引入外部日志后端 |
 | DeviceKit | Core | 设备型号和能力判断 | 中 | `UIDevice` / `utsname` 封装 |
-| AttributedString | Core / Button | 富文本构造 | 中 | Foundation `AttributedString` 适配层 |
+| PTRichText | Core / UI Foundation | Foundation `AttributedString` 值模型、UIKit 桥接和安全匹配 | 低 | PTools 自有实现；继续收敛 UIKit 与 Foundation 边界 |
 | IQKeyboardManager | Core / UI | 键盘避让兼容 | 中 | `keyboardLayoutGuide` 和通知 |
 | Kingfisher | Core / Image | 图片缓存和加载 | 中 | `PTLoadImageFunction` + URLSession/cache |
 | SmartCodable | Core / Network | 类型化模型解析 | 中 | Foundation Codable 或独立 Serialization |
@@ -68,7 +68,6 @@ Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、�
 
 | 依赖 | URL | Revision |
 | --- | --- | --- |
-| AttributedString | `https://github.com/lixiang1994/AttributedString.git` | `d8a72a7e29e8699979b052b59659720087bc2ea0` |
 | SocketRocket | `https://github.com/robnadin/SocketRocket.git` | `fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e` |
 
 固定 revision 只保证可复现，不等价于上游 release 稳定；升级必须经过构建、API 和运行时回归。
@@ -85,6 +84,19 @@ BlueECC、LoggerAPI 和 KituraContracts 是传递依赖，不在 PTools Core 重
 SmartCodable 是当前类型化入口；KakaJSON 只留在 `PTBaseModel` 和 Network 的历史兼容边界。新
 代码不得让 `Any` 或 KakaJSON 动态结果进入 Swift 6 并发核心执行器。后续可在独立 Serialization
 feature 中完成迁移，不能在兼容版本中直接删除公开模型。
+
+## Rich text boundary
+
+5.25.0 removes the third-party `lixiang1994/AttributedString` package from SwiftPM,
+CocoaPods and production source. `PTRichText` stores the Foundation `AttributedString`
+value and exposes an explicit `NSAttributedString` bridge for UIKit. Search, Base, Button,
+ScrollBanner, Stepper, PhotoPicker and WhatsNewsKit use this bridge instead of importing a
+third-party type. Interactive text actions are represented by explicit UI callbacks or
+`PTTextActionRegistry`; closures are not stored inside the Sendable text value.
+
+5.25.0 从 SwiftPM、CocoaPods 和生产源码移除 `lixiang1994/AttributedString`。`PTRichText`
+内部保存 Foundation `AttributedString`，通过明确的 `NSAttributedString` 桥接服务 UIKit。
+交互行为使用 UI 回调或 `PTTextActionRegistry`，不把闭包写入 Sendable 富文本值。
 
 ## Binary and validation
 

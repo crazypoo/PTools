@@ -67,7 +67,7 @@ for source in "${permission_sources[@]}"; do
   require_pattern "$source" "import PToolsPermissionCore" "${source} imports the split permission core"
 done
 
-if rg -n '^import (ptools|Kingfisher|Lottie|Alamofire|SnapKit|AttributedString)' \
+if rg -n '^import (ptools|Kingfisher|Lottie|Alamofire|SnapKit)' \
   PooToolsSource/CameraPermission \
   PooToolsSource/LocationPermission \
   PooToolsSource/CalendarPermission \

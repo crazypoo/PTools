@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 public typealias SignImageBlock = (_ signImage:UIImage?) -> Void
 
@@ -74,19 +76,19 @@ public class PTSignView: UIView {
     lazy var infoLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        var totalAtts:ASAttributedString = ASAttributedString("")
+        var totalAtts:PTRichText = PTRichText("")
         if !self.viewConfig.infoTitle.stringIsEmpty() && self.viewConfig.infoDesc.stringIsEmpty() {
-            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
+            let textAtt:PTRichText = PTRichText("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
             totalAtts = textAtt
         } else if self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
-            let descAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
+            let descAtt:PTRichText = PTRichText("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
             totalAtts = descAtt
         } else if !self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
-            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
-            let descAtt:ASAttributedString = ASAttributedString("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
+            let textAtt:PTRichText = PTRichText("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
+            let descAtt:PTRichText = PTRichText("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
             totalAtts = textAtt + descAtt
         }
-        view.attributed.text = totalAtts
+        view.attributedText = totalAtts.value
 
         return view
     }()

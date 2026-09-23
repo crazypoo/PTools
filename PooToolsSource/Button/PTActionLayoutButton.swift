@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 public class PTActionLayoutButton: UIControl {
@@ -312,11 +314,11 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedBGColor: UIColor = .clear
     public var currentBGColor: UIColor = .clear
 
-    fileprivate var normalAtt: ASAttributedString?
-    fileprivate var highlightedAtt: ASAttributedString?
-    fileprivate var disabledAtt: ASAttributedString?
-    fileprivate var selectedAtt: ASAttributedString?
-    public var currentAtt: ASAttributedString? = nil
+    fileprivate var normalAtt: PTRichText?
+    fileprivate var highlightedAtt: PTRichText?
+    fileprivate var disabledAtt: PTRichText?
+    fileprivate var selectedAtt: PTRichText?
+    public var currentAtt: PTRichText? = nil
 
     public var progressLayerRadius: CGFloat = 0
     public var progressLayerTopLeft: CGFloat = 0
@@ -388,36 +390,21 @@ public class PTActionLayoutButton: UIControl {
         titleLabel.numberOfLines = numbersOfLine
         
         if let att = currentAtt {
-            titleLabel.attributed.text = att
+            titleLabel.attributedText = att.value
             
-            // English: Keep one fallback gesture and do not add duplicates on every refresh.
-            // Español: Conserva un solo gesto de respaldo y no añadas duplicados en cada actualización.
-            // 中文：只保留一个兜底手势，避免每次刷新重复添加。
-            if !att.value.containsAction() {
-                if !(titleLabel.gestureRecognizers?.contains(labelTapGesture) ?? false) {
-                    titleLabel.addGestureRecognizer(labelTapGesture)
-                }
-            } else {
-                titleLabel.removeGestureRecognizer(labelTapGesture)
+            if !(titleLabel.gestureRecognizers?.contains(labelTapGesture) ?? false) {
+                titleLabel.addGestureRecognizer(labelTapGesture)
             }
         } else {
-            // English: Remove the fallback gesture when the attributed text owns the action.
-            // Español: Elimina el gesto de respaldo cuando el texto atribuido contiene la acción.
-            // 中文：富文本自身包含动作时移除兜底手势。
-            titleLabel.removeGestureRecognizer(labelTapGesture)
-            
-            // English: Capture the control weakly because the attributed text is retained by the label.
-            // Español: Captura el control débilmente porque la etiqueta conserva el texto atribuido.
-            // 中文：富文本会被标签持有，因此闭包弱引用控件以避免循环引用。
-            let nameAtt: ASAttributedString = """
+            let nameAtt: PTRichText = """
                         \(wrap: .embedding("""
                         \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace),.lineBreakMode(self.textLineBreakMode)))
-                        """),.action { [weak self] in
-                            guard let self = self else { return }
-                            self.sendActions(for: .touchUpInside)
-                        })
+                        """))
                         """
-            self.titleLabel.attributed.text = nameAtt
+            self.titleLabel.attributedText = nameAtt.value
+            if !(titleLabel.gestureRecognizers?.contains(labelTapGesture) ?? false) {
+                titleLabel.addGestureRecognizer(labelTapGesture)
+            }
         }
         
         backgroundColor = currentBGColor
@@ -607,7 +594,7 @@ public extension PTActionLayoutButton {
         updateAppearance()
     }
     
-    func setAtt(_ att:ASAttributedString?,state:UIControl.State) {
+    func setAtt(_ att:PTRichText?,state:UIControl.State) {
         switch state {
         case .normal:
             normalAtt = att

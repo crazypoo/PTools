@@ -9,7 +9,9 @@
 import UIKit
 import SnapKit
 import Photos
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif

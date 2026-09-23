@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 class PTloadedLibHeader : PTBaseCollectionReusableView {
     static let ID = "PTloadedLibHeader"
@@ -98,14 +100,14 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
             }
             
             let desc = library.path + "\nSize: " + library.size + " Address: " + library.address
-            let att:ASAttributedString = """
+            let att:PTRichText = """
         \(wrap: .embedding("""
         \(displayName,.foreground(.lightGray),.font(.appfont(size: 18)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
         \(desc,.foreground(.lightGray),.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
         """))
         """
             Task { @MainActor in
-                self.libName.attributed.text = att
+                self.libName.attributedText = att.value
                 
                 self.statusLabel.text = library.isPrivate ? "Private" : "Public"
                 self.statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen

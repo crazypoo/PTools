@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
@@ -79,15 +81,15 @@ class PTPermissionCell: PTBaseNormalCell {
 #endif
         }
         
-        var totalAtt:ASAttributedString = ASAttributedString(string: "")
+        var totalAtt:PTRichText = PTRichText(string: "")
         
-        let att:ASAttributedString =  ASAttributedString("\(permissionName)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellTitleFont),.foreground(PTAppBaseConfig.share.permissionCellTitleTextColor))
+        let att:PTRichText =  PTRichText("\(permissionName)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellTitleFont),.foreground(PTAppBaseConfig.share.permissionCellTitleTextColor))
         if !cellModel.desc.stringIsEmpty() {
-            let descAtt:ASAttributedString =  ASAttributedString("\n\(cellModel.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
+            let descAtt:PTRichText =  PTRichText("\n\(cellModel.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
             totalAtt = att + descAtt
         }
         
-        cellTitle.attributed.text = totalAtt
+        cellTitle.attributedText = totalAtt.value
         
         switch cellStatus {
         case .authorized:

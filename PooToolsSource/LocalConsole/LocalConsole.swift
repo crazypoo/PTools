@@ -9,7 +9,9 @@
 import UIKit
 import DeviceKit
 import CoreFoundation
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
@@ -1720,9 +1722,9 @@ public class PTTerminal:PFloatingButton {
     var fontSize: CGFloat = PTDebugPreferences.shared.consoleFontSize
 
     public func setAttributedText(_ string: String) {
-        let att:ASAttributedString =  ASAttributedString("\(string)",.paragraph(.lineSpacing(5),.headIndent(7)),.font(.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced)),.foreground(fontColor))
+        let att:PTRichText =  PTRichText("\(string)",.paragraph(.lineSpacing(5),.headIndent(7)),.font(.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced)),.foreground(fontColor))
 
-        systemText?.attributed.text = att
+        systemText?.attributedText = att.value
     }
 
     required init?(coder: NSCoder) {

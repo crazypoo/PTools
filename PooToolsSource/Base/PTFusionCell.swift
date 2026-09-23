@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 // ✅ Swift 6 优化：显式标记 @MainActor 确保 UI 回调在主线程安全执行
 public typealias PTCellSwitchBlock = @MainActor (_ rowText: String, _ sender: UIControl) -> Void
@@ -222,8 +224,8 @@ extension PTFusionContentView {
     /// 清理复用状态，但保留事件桥接，避免每次复用重复添加按钮事件。
     func resetForReuse() {
         cellModel = PTFusionCellModel()
-        titleLabel.attributed.text = nil
-        contentLabel.attributed.text = nil
+        titleLabel.attributedText = nil
+        contentLabel.attributedText = nil
 
         [leftIcon, rightIcon, disclosure].forEach { imageView in
             imageView.cancelImageLoad()
@@ -408,9 +410,9 @@ extension PTFusionContentView {
     }
     
     private func applyData(_ model: PTFusionCellModel) {
-        titleLabel.attributed.text = model.cachedTitleAttr
+        titleLabel.attributedText = model.cachedTitleAttr.value
         contentLabel.numberOfLines = model.contentNumberOfLines
-        contentLabel.attributed.text = model.cachedContentAttr
+        contentLabel.attributedText = model.cachedContentAttr.value
         
         leftIcon.contentMode = .scaleAspectFit
         applyImage(model.leftImage, to: leftIcon, iCloudDocumentName: model.iCloudDocument)

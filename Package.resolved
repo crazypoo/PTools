@@ -1,5 +1,5 @@
 {
-  "originHash" : "e7f2f3368045d845b6578c240d0f3aa4050244b82b1de8bf626f63ffb27d4e3c",
+  "originHash" : "a012181f05843b326d4b68835109c90260b085f99be8d37966239dbaa69fda45",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,14 +8,6 @@
       "state" : {
         "revision" : "7595cbcf59809f9977c5f6378500de2ad73b7ddb",
         "version" : "5.12.0"
-      }
-    },
-    {
-      "identity" : "attributedstring",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lixiang1994/AttributedString.git",
-      "state" : {
-        "revision" : "d8a72a7e29e8699979b052b59659720087bc2ea0"
       }
     },
     {

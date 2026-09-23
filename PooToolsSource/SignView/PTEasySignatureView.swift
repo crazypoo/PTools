@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 @objcMembers
 public class PTSignatureConfig:NSObject {
@@ -64,19 +66,19 @@ class PTEasySignatureView: UIView {
         let view = UILabel()
         view.numberOfLines = 0
         
-        var totalAtts:ASAttributedString = ASAttributedString("")
+        var totalAtts:PTRichText = PTRichText("")
         if !self.viewConfig.infoTitle.stringIsEmpty() && self.viewConfig.infoDesc.stringIsEmpty() {
-            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
+            let textAtt:PTRichText = PTRichText("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
             totalAtts = textAtt
         } else if self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
-            let descAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
+            let descAtt:PTRichText = PTRichText("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
             totalAtts = descAtt
         } else if !self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
-            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
-            let descAtt:ASAttributedString = ASAttributedString("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
+            let textAtt:PTRichText = PTRichText("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
+            let descAtt:PTRichText = PTRichText("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
             totalAtts = textAtt + descAtt
         }
-        view.attributed.text = totalAtts
+        view.attributedText = totalAtts.value
         return view
     }()
     

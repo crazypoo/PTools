@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
@@ -45,12 +47,12 @@ class PTPermissionSettingCell: PTBaseNormalCell {
                 break
             }
             infoLabel.text = cellModel.desc
-            let statusAtt:ASAttributedString = """
+            let statusAtt:PTRichText = """
             \(wrap: .embedding("""
             \("PT Permission Status title".localized(),.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(PTPermissionStatic.share.permissionSettingFont),.paragraph(.alignment(.left)))\(statusText,.foreground(statusColor),.font(PTPermissionStatic.share.permissionSettingFont),.paragraph(.alignment(.left)))
             """))
             """
-            statusLabel.attributed.text = statusAtt
+            statusLabel.attributedText = statusAtt.value
             
             let tap = UITapGestureRecognizer { sender in
                 PTOpenSystemFunction.jumpCurrentAppSetting()

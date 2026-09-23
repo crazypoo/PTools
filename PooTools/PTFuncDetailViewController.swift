@@ -14,7 +14,9 @@ import Photos
 import Vision
 import VisionKit
 import CommonCrypto
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import PhotosUI
 
 let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
@@ -37,7 +39,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     var webServer:GCDWebUploader?
     fileprivate var localNetwork:Bool = false
-    var appNetWorkStatus:NetWorkStatus? = .unknown
+    var appNetWorkStatus:NetworkStatus? = .unknown
 
     init(typeString: String!) {
         super.init(nibName: nil, bundle: nil)
@@ -609,7 +611,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalToSuperview().inset(20)
             }
         case String.CycleBanner:
-            let att1:ASAttributedString = """
+            let att1:PTRichText = """
                     \(wrap: .embedding("""
                     \("1112312312312312312312312312323",.foreground(.init(hexString: "de1e50")!),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))
                     \("112123123123123123",.foreground(.systemBlue),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))

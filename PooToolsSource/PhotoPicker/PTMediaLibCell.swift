@@ -9,7 +9,9 @@
 import UIKit
 import SnapKit
 import Photos
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
@@ -315,13 +317,13 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
     
     private func updateAlbumUI() {
         guard let albumModel else { return }
-        let att: ASAttributedString = """
+        let att: PTRichText = """
         \(wrap: .embedding("""
         \(albumModel.title, .foreground(PTAppBaseConfig.share.viewDefaultTextColor), .font(PTMediaLibUIConfig.share.albumCellTitleFont))
         \("\n\(albumModel.count)", .foreground(.secondaryLabel), .font(PTMediaLibUIConfig.share.albumCellDescFont))
         """))
         """
-        contentLabel.attributed.text = att
+        contentLabel.attributedText = att.value
         
         imageIdentifier = albumModel.headImageAsset?.localIdentifier
         imageView.image = PTAppBaseConfig.share.defaultEmptyImage

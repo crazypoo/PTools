@@ -1,8 +1,16 @@
 # Changelog
 
-## Unreleased — 5.24.x
+## Unreleased — 5.25.x
 
-当前开发基线为 `5.24.0`；版本唯一来源为根目录 `VERSION`，`5.23.0` 是最近的正式基线。
+当前开发基线为 `5.25.0`；版本唯一来源为根目录 `VERSION`，`5.24.0` 是上一版正式基线。
+
+## 5.25.0 — 2026-09-23
+
+- 移除 `lixiang1994/AttributedString` 的 SwiftPM、CocoaPods、锁文件和生产源码依赖。
+- 新增基于 Foundation `AttributedString` 的 `PTRichText`，提供 UIKit `NSAttributedString` 桥接、安全 Range 校验、样式合并、插值、Markdown、本地化、正则/数据检测匹配和内容替换能力。
+- 增加类型化 Action ID/Registry、点击与长按交互、附件描述与异步加载取消、TextKit View Provider、自适应图像字形保留和 10,000 段性能覆盖。
+- Base、Button、Search、ScrollBanner、Stepper、PhotoPicker、MediaViewer、MessageKit 和 WhatsNewsKit 迁移到 `PTRichText`，点击行为改为显式 UI 回调，避免把闭包写入并发值模型。
+- 新增 5.25.0 富文本依赖吸收审计和持续集成门禁；保留历史 API 报告中的旧类型记录，避免篡改历史基线。
 
 - 5.24.0 移除 SafeSFSymbols 的 SwiftPM、CocoaPods 和源码导入依赖，新增 `PToolsSymbols` 类型化符号层、标准化目录、别名/回退解析和安全图片构造入口。
 - 5.24.0 将静态 SF Symbol 使用迁移到类型化入口；动态服务端名称保留在明确的解析白名单中，并增加目录生成、差异报告、依赖门禁和迁移文档。

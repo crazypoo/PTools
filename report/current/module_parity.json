@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T06:30:40Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T08:08:55Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -279,7 +279,6 @@
       "module": "Core",
       "field": "third_party_dependencies",
       "spm": [
-        "AttributedString",
         "DeviceKit",
         "IQKeyboardManager",
         "KakaJSON",
@@ -291,7 +290,6 @@
         "lottie-ios"
       ],
       "cocoapods": [
-        "AttributedString",
         "DeviceKit",
         "IQKeyboardManagerSwift",
         "IQKeyboardToolbarManager",
@@ -838,5 +836,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "170457dd3dce65c14a4009b603b56fb70c643a3a30767437591a54df81e9ad98"
+  "fingerprint": "26cf38df210b3947f6d23beaf61bc61e173c32020f9062d2f5f88b40a8274220"
 }

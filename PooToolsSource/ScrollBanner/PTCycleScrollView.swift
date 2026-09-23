@@ -9,7 +9,9 @@
 
 import UIKit
 import AVFoundation
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 /// English: Page-control styles kept for source compatibility with the legacy banner API.
 /// Español: Estilos de control de páginas conservados para compatibilidad con la API heredada.
@@ -259,7 +261,7 @@ public class PTCycleScrollView: PTBannerView {
             }
             if legacyTitles.indices.contains(index) {
                 let value = legacyTitles[index]
-                if let attributed = value as? ASAttributedString {
+                if let attributed = value as? PTRichText {
                     model.att = attributed
                 } else if let text = value as? String {
                     model.title = text

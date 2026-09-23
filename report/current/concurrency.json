@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "84f512673b489f53d4eac962bef71e5903208ac1",
-  "generated_at": "2026-09-23T07:31:09Z",
+  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
+  "generated_at": "2026-09-23T13:11:06Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
-    "unchecked_sendable": 67,
+    "unchecked_sendable": 68,
     "as_bang": 4
   },
   "locations": [
@@ -308,13 +308,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 122,
+      "line": 124,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 249,
+      "line": 251,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -613,6 +613,12 @@
     },
     {
       "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 339,
+      "text": "private final class PTTextMatcherCache: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
       "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
       "line": 20,
       "text": "final class PTFetchImageOperation: Operation, @unchecked Sendable {"
@@ -632,13 +638,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 911,
+      "line": 913,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 999,
+      "line": 1001,
       "text": "DispatchQueue.main.async {"
     },
     {

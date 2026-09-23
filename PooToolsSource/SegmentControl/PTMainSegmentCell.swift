@@ -9,9 +9,27 @@
 import UIKit
 import JXSegmentedView
 import SnapKit
-import AttributedString
-import Kingfisher
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
+// English: Kingfisher exposes a legacy callback boundary; UI application remains isolated to this MainActor cell.
+// Español: Kingfisher expone un límite de callback heredado; la aplicación de UI permanece aislada en esta celda MainActor.
+// 中文：Kingfisher 暴露的是旧式回调边界；UI 更新仍严格隔离在这个 MainActor Cell 内。
+@preconcurrency import Kingfisher
 
+// English: This MainActor-owned weak reference crosses Kingfisher's Sendable callback without moving the cell itself.
+// Español: Esta referencia débil propiedad de MainActor cruza el callback Sendable de Kingfisher sin mover la celda.
+// 中文：这个由 MainActor 持有的弱引用只跨过 Kingfisher 的 Sendable 回调，不跨线程传递 Cell 本身。
+@MainActor
+private final class PTMainSegmentCellReference {
+    weak var cell: PTMainSegmentCell?
+
+    init(cell: PTMainSegmentCell) {
+        self.cell = cell
+    }
+}
+
+@MainActor
 public class PTMainSegmentCell: JXSegmentedBaseCell {
     
     open override var isSelected: Bool {
@@ -114,8 +132,8 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
         if !(cellItemModel!.subTitle!).stringIsEmpty() {
             subTitleLabel.backgroundColor = myItemModel.subTitleCurrentBGColor
             
-            let subAtt:ASAttributedString =  ASAttributedString("\(myItemModel.subTitle!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont),.foreground(myItemModel.subTitleCurrentColor))
-            subTitleLabel.attributed.text = subAtt
+            let subAtt:PTRichText =  PTRichText("\(myItemModel.subTitle!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont),.foreground(myItemModel.subTitleCurrentColor))
+            subTitleLabel.attributedText = subAtt.value
 
         } else {
             subTitleLabel.backgroundColor = .clear
@@ -123,16 +141,34 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         switch cellItemModel!.onlyShowTitle! {
         case .ImageTitle:
-            ImageDownloader.default.downloadImage(with: URL(string: myItemModel.imageURL)!, options: PTAppBaseConfig.share.webImageLoadOptions()) { result in
+            guard let imageURL = URL(string: myItemModel.imageURL) else {
+                titleLabel.text = myItemModel.title
+                return
+            }
+            let title = myItemModel.title ?? ""
+            let titleFont = myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont
+            let titleColor = myItemModel.titleCurrentColor
+            let cellReference = PTMainSegmentCellReference(cell: self)
+            ImageDownloader.default.downloadImage(with: imageURL, options: PTAppBaseConfig.share.webImageLoadOptions()) { [cellReference] result in
                 switch result {
                 case .success(let value):
-                    let imageAtt:ASAttributedString = """
-                    \(wrap:.embedding("""
-                    \(.image(value.image,.custom(size: CGSize(width: 20, height: 20))))
-                    """),.paragraph(.alignment(.center)),.baselineOffset(2.5))
-                    """
-                    let textAtt:ASAttributedString = ASAttributedString("\(myItemModel.title!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont),.foreground(myItemModel.titleCurrentColor))
-                    self.titleLabel.attributed.text = imageAtt + textAtt
+                    let image = value.image
+                    Task { @MainActor in
+                        guard let cell = cellReference.cell else { return }
+                        let imageAtt = PTRichText(
+                            "\u{FFFC}",
+                            .image(image, .custom(size: CGSize(width: 20, height: 20))),
+                            .paragraph(.alignment(.center)),
+                            .baselineOffset(2.5)
+                        )
+                        let textAtt = PTRichText(
+                            title,
+                            .paragraph(.alignment(.center)),
+                            .font(titleFont),
+                            .foreground(titleColor)
+                        )
+                        cell.titleLabel.attributedText = (imageAtt + textAtt).value
+                    }
                 case .failure(let error):
                     PTNSLogConsole(error,levelType: .error,loggerType: .segment)
                 }

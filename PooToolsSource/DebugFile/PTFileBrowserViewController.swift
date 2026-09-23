@@ -10,7 +10,9 @@ import UIKit
 import SnapKit
 import MobileCoreServices
 import QuickLook
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import DeviceKit
 
 public class PTFileBrowserViewController: PTBaseViewController {

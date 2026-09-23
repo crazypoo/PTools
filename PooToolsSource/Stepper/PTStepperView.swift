@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 public enum PTStepperViewType {
     case Horizontal(type:PTStepperHorizontalSubType)
@@ -56,7 +58,7 @@ open class PTStepperListModel:NSObject {
     ///标题
     public var title:String = ""
     
-    public var titleAtt:ASAttributedString?
+    public var titleAtt:PTRichText?
     ///标题颜色
     public var titleColor:UIColor = UIColor { traits in
         traits.userInterfaceStyle == .dark ? .white : .black
@@ -72,7 +74,7 @@ open class PTStepperListModel:NSObject {
     ///描述字体
     public var descFont:UIFont = .appfont(size: 14)
     ///描述富文本
-    public var descAtt:ASAttributedString?
+    public var descAtt:PTRichText?
     ///圈圈是否填充颜色
     public var circleFillColor:Bool = true
     ///圈圈大小min15max64
@@ -219,7 +221,7 @@ open class PTStepperView: UIView {
                                 cell.descLabel.textColor = cellModel.descColor
                                 cell.descLabel.textAlignment = .left
                             } else if let att = cellModel.descAtt {
-                                cell.descLabel.attributed.text = att
+                                cell.descLabel.attributedText = att.value
                             }
                             
                             if !cellModel.title.stringIsEmpty() {
@@ -228,7 +230,7 @@ open class PTStepperView: UIView {
                                 cell.infoLabel.text = cellModel.title
                                 cell.infoLabel.textAlignment = .left
                             } else if let att = cellModel.titleAtt {
-                                cell.infoLabel.attributed.text = att
+                                cell.infoLabel.attributedText = att.value
                             }
     //                    case .Card:
     //                        break

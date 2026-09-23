@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if POOTOOLS_VIDEOCACHE
 import KTVHTTPCache
 #endif
@@ -679,45 +681,41 @@ fileprivate extension PTMediaBrowserController {
 
 //MARK: Bottom
 fileprivate extension PTMediaBrowserController {
-    func labelMoreAtt(models:PTMediaBrowserModel) -> ASAttributedString {
-        let atts:ASAttributedString = """
+    func labelMoreAtt(models:PTMediaBrowserModel) -> PTRichText {
+        let atts:PTRichText = """
         \(wrap: .embedding("""
-        \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action { [weak self] in
-                guard let self = self else { return }
-                PTGCDManager.shared.delayOnMain(time: 0.1) {
-                    let fullAtts:ASAttributedString = """
-                    \(wrap: .embedding("""
-                    \(models.imageInfo,.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
-                    """))
-                    """
-                    self.bottomControl.setLabelAtt(att: fullAtts)
-                }
-
-                let maskView = UIView()
-                maskView.backgroundColor = .DevMaskColor
-                self.view.addSubview(maskView)
-        
-                let tapGes = UITapGestureRecognizer { [weak self] sender in
-                    maskView.removeFromSuperview()
-                    self?.updateBottom(models: models)
-                }
-                maskView.addGestureRecognizer(tapGes)
-                maskView.snp.makeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.equalTo(self.navControl.snp.bottom)
-                    make.bottom.equalTo(self.bottomControl.snp.top)
-                }
-        
-                let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
-
-                self.bottomControl.snp.updateConstraints { make in
-                    make.left.right.bottom.equalToSuperview()
-                    make.height.equalTo(self.heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing)
-                }
-        })
+        \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))
         """))
         """
         return atts
+    }
+
+    private func showFullInfo(for models: PTMediaBrowserModel) {
+        let fullAtts:PTRichText = """
+        \(wrap: .embedding("""
+        \(models.imageInfo,.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))
+        """))
+        """
+        bottomControl.setLabelAtt(att: fullAtts)
+
+        let maskView = UIView()
+        maskView.backgroundColor = .DevMaskColor
+        view.addSubview(maskView)
+        maskView.addGestureRecognizer(UITapGestureRecognizer { [weak self] _ in
+            maskView.removeFromSuperview()
+            self?.updateBottom(models: models)
+        })
+        maskView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(navControl.snp.bottom)
+            make.bottom.equalTo(bottomControl.snp.top)
+        }
+
+        let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
+        bottomControl.snp.updateConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing)
+        }
     }
     
     func updateBottom(models:PTMediaBrowserModel) {
@@ -725,7 +723,8 @@ fileprivate extension PTMediaBrowserController {
         let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
         var bottomH:CGFloat = CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
         if models.imageInfo.stringIsEmpty() {
-            bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
+            bottomControl.titleTapCallback = nil
+            bottomControl.setLabelAtt(att: PTRichText(stringLiteral: ""))
             switch viewConfig.actionType {
             case .Empty:break
             default:
@@ -733,15 +732,19 @@ fileprivate extension PTMediaBrowserController {
             }
         } else {
             if numberOfLines(models.imageInfo) > numberOfVisibleLines {
+                bottomControl.titleTapCallback = { [weak self] in
+                    self?.showFullInfo(for: models)
+                }
                 bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
                 bottomControl.setLabelAtt(att: labelMoreAtt(models: models))
             } else {
+                bottomControl.titleTapCallback = nil
                 var textH:CGFloat = heightForString(models.imageInfo)
                 if textH < 44 {
                     textH = 44
                 }
                 
-                let atts:ASAttributedString = """
+                let atts:PTRichText = """
                 \(wrap: .embedding("""
                 \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))
                 """))

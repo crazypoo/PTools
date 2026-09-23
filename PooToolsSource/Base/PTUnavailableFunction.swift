@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
@@ -16,8 +18,8 @@ import SnapKit
 @objcMembers
 @MainActor
 open class PTEmptyDataViewConfig: NSObject {
-    public var mainTitleAtt: ASAttributedString?
-    public var secondaryEmptyAtt: ASAttributedString?
+    public var mainTitleAtt: PTRichText?
+    public var secondaryEmptyAtt: PTRichText?
     public var buttonTitle: String = ""
     public var buttonFont: UIFont = .appfont(size: 18)
     public var buttonTextColor: UIColor = .systemBlue

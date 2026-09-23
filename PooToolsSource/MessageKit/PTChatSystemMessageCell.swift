@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 @MainActor
@@ -20,13 +22,13 @@ public class PTChatSystemMessageCell: PTBaseNormalCell {
                 return
             }
             let timeText = cellModel.messageTimeStamp.conversationTimeSet() ?? ""
-            var timeAtt:ASAttributedString = """
+            var timeAtt:PTRichText = """
                     \(wrap: .embedding("""
                     \(timeText,.foreground(PTChatConfig.share.chatTimeColor),.font(PTChatConfig.share.chatTimeFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemTimeLineSpace))))
                     """))
                     """
             if let msgContent = cellModel.msgContent as? String,!msgContent.stringIsEmpty() {
-                let contentAtt:ASAttributedString = """
+                let contentAtt:PTRichText = """
                         \(wrap: .embedding("""
                         \("\n\(msgContent)",.foreground(PTChatConfig.share.chatSystemMessageColor),.font(PTChatConfig.share.chatSystemMessageFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemContentLineSpace))))
                         """))

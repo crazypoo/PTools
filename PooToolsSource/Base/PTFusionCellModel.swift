@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 public enum PTFusionShowAccessoryType: Equatable, Hashable {
     case Switch(type:SwitchType)
@@ -69,13 +71,13 @@ open class PTFusionCellModel: NSObject {
     ///主标题下文字颜色
     public var descColor:UIColor = UIColor.lightGray
     ///主标题的富文本
-    public var nameAttr:ASAttributedString?
+    public var nameAttr:PTRichText?
     ///描述
     public var content:String = ""
     ///描述文字颜色
     public var contentTextColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
     ///Content的富文本
-    public var contentAttr:ASAttributedString?
+    public var contentAttr:PTRichText?
     ///content字体
     public var contentFont:UIFont = .appfont(size: 16)
     ///content行數
@@ -154,17 +156,17 @@ open class PTFusionCellModel: NSObject {
     @PTClampedPropertyWrapper(range:20...88) public var switchControlWidth: CGFloat = 51
     
     /// 兼容旧名称，但每次读取都会根据当前模型重新生成，避免模型复用后显示旧文字。
-    public var cachedTitleAttr: ASAttributedString {
+    public var cachedTitleAttr: PTRichText {
         get { titleLabelAtt() }
         set { nameAttr = newValue }
     }
 
-    public func titleLabelAtt() -> ASAttributedString {
+    public func titleLabelAtt() -> PTRichText {
         if let findModel = nameAttr {
             return findModel
         } else {
             if !name.stringIsEmpty() && !desc.stringIsEmpty() {
-                let att:ASAttributedString = """
+                let att:PTRichText = """
                             \(wrap: .embedding("""
                             \(name,.font(cellFont),.foreground(nameColor))
                             \(desc,.font(cellDescFont),.foreground(descColor))
@@ -172,21 +174,21 @@ open class PTFusionCellModel: NSObject {
                             """
                 return att
             } else if !name.stringIsEmpty() && desc.stringIsEmpty() {
-                let att:ASAttributedString = """
+                let att:PTRichText = """
                             \(wrap: .embedding("""
                             \(name,.font(cellFont),.foreground(nameColor))
                             """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
                             """
                 return att
             } else if name.stringIsEmpty() && !desc.stringIsEmpty() {
-                let att:ASAttributedString = """
+                let att:PTRichText = """
                             \(wrap: .embedding("""
                             \(desc,.font(cellDescFont),.foreground(descColor))
                             """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
                             """
                 return att
             } else {
-                let att:ASAttributedString = """
+                let att:PTRichText = """
                             \(wrap: .embedding("""
                             """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
                             """
@@ -196,20 +198,20 @@ open class PTFusionCellModel: NSObject {
     }
     
     /// 兼容旧名称，但每次读取都会根据当前模型重新生成，避免内容缓存失效。
-    public var cachedContentAttr: ASAttributedString {
+    public var cachedContentAttr: PTRichText {
         get { contentLabelAtt() }
         set { contentAttr = newValue }
     }
 
-    public  func contentLabelAtt() -> ASAttributedString {
+    public  func contentLabelAtt() -> PTRichText {
         if let findModel = contentAttr {
             return findModel
         } else {
             if !content.stringIsEmpty() {
-                let contentAtts:ASAttributedString =  ASAttributedString("\(content)",.paragraph(.alignment(.right),.lineSpacing(labelLineSpace),.lineBreakMode(contentLineBreakMode)),.font(contentFont),.foreground(contentTextColor))
+                let contentAtts:PTRichText =  PTRichText("\(content)",.paragraph(.alignment(.right),.lineSpacing(labelLineSpace),.lineBreakMode(contentLineBreakMode)),.font(contentFont),.foreground(contentTextColor))
                 return contentAtts
             } else {
-                let att:ASAttributedString = """
+                let att:PTRichText = """
                             \(wrap: .embedding("""
                             """),.paragraph(.alignment(.right),.lineSpacing(labelLineSpace)))
                             """

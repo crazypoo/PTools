@@ -9,7 +9,9 @@
 import UIKit
 import SnapKit
 import Foundation
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 public class PTFloatingPlaseholderConfig: NSObject {
     public var containerRadius: CGFloat = 0
@@ -51,8 +53,8 @@ public class PTFloatingPlaseholderTextField: UIView {
     private var lastBounds: CGRect = .zero
     
     // 【优化】缓存富文本，避免每次动画都重新生成字符串（提升性能）
-    private var cachedNormalAttString: ASAttributedString?
-    private var cachedFloatingAttString: ASAttributedString?
+    private var cachedNormalAttString: PTRichText?
+    private var cachedFloatingAttString: PTRichText?
     
     public var inputedCallback: ((String) -> Void)?
     public var inputBegainCallback: PTActionTask?
@@ -170,16 +172,16 @@ public class PTFloatingPlaseholderTextField: UIView {
         }
     }
     
-    private func getPlaceholderAtt(mainString: String, isNormal: Bool) -> ASAttributedString {
+    private func getPlaceholderAtt(mainString: String, isNormal: Bool) -> PTRichText {
         let plaseHolderFont = isNormal ? viewConfig.normalPlaceholderFont : viewConfig.floatingPlaceholderFont
         let plaseHolderColor = isNormal ? viewConfig.normalPlaceholderColor : viewConfig.floatingPlaceholderColor
-        var placeholderAtt: ASAttributedString = """
+        var placeholderAtt: PTRichText = """
                     \(wrap: .embedding("""
                     \(mainString,.foreground(plaseHolderColor),.font(plaseHolderFont),.paragraph(.alignment(viewConfig.textAlignment)))
                     """))
                     """
         if viewConfig.isMust {
-            let placeholderLastAtt: ASAttributedString = """
+            let placeholderLastAtt: PTRichText = """
                         \(wrap: .embedding("""
                         \(" *",.foreground(.systemRed),.font(plaseHolderFont),.paragraph(.alignment(viewConfig.textAlignment)))
                         """))
@@ -196,7 +198,7 @@ public class PTFloatingPlaseholderTextField: UIView {
         self.cachedNormalAttString = getPlaceholderAtt(mainString: placeholder, isNormal: true)
         self.cachedFloatingAttString = getPlaceholderAtt(mainString: placeholder, isNormal: false)
         
-        placeholderLabel.attributed.text = cachedNormalAttString
+        placeholderLabel.attributedText = cachedNormalAttString?.value
         textField.text = text
 
         let textIsNotEmpty = !(text ?? "").stringIsEmpty()
@@ -221,7 +223,7 @@ public class PTFloatingPlaseholderTextField: UIView {
     // MARK: - Floating
     private func setFloating(_ float: Bool, animated: Bool) {
         // 如果状态没有变化，直接返回，避免多余动画
-        if isFloating == float && placeholderLabel.attributed.text != nil { return }
+        if isFloating == float && placeholderLabel.attributedText != nil { return }
         isFloating = float
 
         placeholderLabel.snp.remakeConstraints { make in
@@ -240,7 +242,7 @@ public class PTFloatingPlaseholderTextField: UIView {
 
         let animations = {
             // 【优化】直接使用预先缓存的字符串，不用重复计算
-            self.placeholderLabel.attributed.text = float ? self.cachedFloatingAttString : self.cachedNormalAttString
+            self.placeholderLabel.attributedText = (float ? self.cachedFloatingAttString : self.cachedNormalAttString)?.value
             self.layoutIfNeeded()
             self.updateBorderPath()
         }

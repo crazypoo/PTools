@@ -90,7 +90,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
         subspec.dependency 'DeviceKit'
-        subspec.dependency 'AttributedString'
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
         subspec.dependency 'Kingfisher'
@@ -360,8 +359,8 @@ Pod::Spec.new do |s|
     # 中文：SearchViewController 是建立在 Core 和 SearchBar 之上的可选容器模块。
     s.subspec 'Search' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PooTools/SearchBar'
-        subspec.dependency 'AttributedString'
         subspec.source_files = 'PooToolsSource/Search/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SEARCH POOTOOLS_COCOAPODS"

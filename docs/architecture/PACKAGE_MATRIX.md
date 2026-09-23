@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 84f512673b489f53d4eac962bef71e5903208ac1
-Generated at: 2026-09-23T06:30:41Z
-Version source: 5.24.0
+Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
+Generated at: 2026-09-23T08:08:55Z
+Version source: 5.25.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix

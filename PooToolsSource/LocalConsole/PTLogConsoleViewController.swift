@@ -11,7 +11,9 @@ import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 
 class PTLogConsoleViewController: PTBaseViewController {
 
@@ -90,7 +92,7 @@ class PTLogConsoleViewController: PTBaseViewController {
     func reloadText() {
         let handler = FileManager.pt.readFromFile(readType: .TextType, readPath: filePath)
         if let content = handler.content as? String {
-            let infoAtt:ASAttributedString = """
+            let infoAtt:PTRichText = """
                         \(wrap: .embedding("""
                         \(content,.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)),.foreground(UIColor { traits in traits.userInterfaceStyle == .dark ? .white : .black }))
                         """))

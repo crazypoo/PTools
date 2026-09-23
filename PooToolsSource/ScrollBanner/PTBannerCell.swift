@@ -8,7 +8,9 @@
 
 import UIKit
 import AVFoundation
-import AttributedString
+#if canImport(PToolsUIFoundation)
+import PToolsUIFoundation
+#endif
 import SnapKit
 
 @MainActor
