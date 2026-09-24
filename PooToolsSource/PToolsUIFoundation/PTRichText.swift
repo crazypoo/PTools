@@ -145,6 +145,7 @@ public enum PTTextParagraphAttribute {
     case headIndent(CGFloat)
     case tailIndent(CGFloat)
     case lineBreakMode(NSLineBreakMode)
+    case lineBreakStrategy(NSParagraphStyle.LineBreakStrategy)
     case minimumLineHeight(CGFloat)
     case maximumLineHeight(CGFloat)
     case baseWritingDirection(NSWritingDirection)
@@ -289,6 +290,7 @@ public struct PTTextAttribute {
             case .headIndent(let value): paragraph.headIndent = value
             case .tailIndent(let value): paragraph.tailIndent = value
             case .lineBreakMode(let value): paragraph.lineBreakMode = value
+            case .lineBreakStrategy(let value): paragraph.lineBreakStrategy = value
             case .minimumLineHeight(let value): paragraph.minimumLineHeight = value
             case .maximumLineHeight(let value): paragraph.maximumLineHeight = value
             case .baseWritingDirection(let value): paragraph.baseWritingDirection = value
