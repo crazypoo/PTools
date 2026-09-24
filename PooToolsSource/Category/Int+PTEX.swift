@@ -95,6 +95,10 @@ public extension Int {
             String(format: "%.0f", num) :
             String(format: "%.1f", num)
     }
+    
+    var cgFloat: CGFloat {
+        return CGFloat(self)
+    }
 }
 
 extension Int: PTNumberValueAdapterable {

@@ -31,6 +31,10 @@ public extension Float {
         }
         return returnValue
     }
+    
+    var cgFloat: CGFloat {
+        return CGFloat(self)
+    }
 }
 
 public extension PTPOP where Base == Float {

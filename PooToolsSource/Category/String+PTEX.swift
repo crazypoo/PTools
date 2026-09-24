@@ -105,6 +105,19 @@ public extension String {
             return false
         }
     }
+    
+    func date(withFormat format: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: self)
+    }
+    
+    func cgFloat(locale: Locale = .current) -> CGFloat? {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.allowsFloats = true
+        return formatter.number(from: self) as? CGFloat
+    }
 }
 
 public extension Optional where Wrapped: Collection {

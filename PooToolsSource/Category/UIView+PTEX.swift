@@ -1039,6 +1039,14 @@ public extension UIView {
         }
         removeTrackerIfUnused()
     }
+    
+    var screenshot: UIImage? {
+        let size = layer.frame.size
+        guard size != .zero else { return nil }
+        return UIGraphicsImageRenderer(size: layer.frame.size).image { context in
+            layer.render(in: context.cgContext)
+        }
+    }
 }
 
 public extension UIView {

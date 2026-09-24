@@ -28,4 +28,11 @@ public extension UIStackView {
         removeAllArrangedSubviews()
         addArrangedSubviews(arrangedSubviews)
     }
+    
+    /// Removes all views in stack’s array of arranged subviews.
+    func removeArrangedSubviews() {
+        for view in arrangedSubviews {
+            removeArrangedSubview(view)
+        }
+    }
 }

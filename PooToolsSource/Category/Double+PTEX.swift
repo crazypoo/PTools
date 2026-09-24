@@ -124,6 +124,10 @@ public extension Double {
     var cm: Double { return self / 100.0 }
     var mm: Double { return self / 1_000.0 }
     var ft: Double { return self / 3.28084 }
+    
+    var cgFloat: CGFloat {
+        return CGFloat(self)
+    }
 }
 
 public extension PTPOP where Base == Double {
