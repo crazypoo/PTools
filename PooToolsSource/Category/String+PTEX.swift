@@ -85,6 +85,26 @@ public extension String {
         }
         return nil
     }
+    
+    var base64Encoded: String? {
+        let plainData = data(using: .utf8)
+        return plainData?.base64EncodedString()
+    }
+    
+    func pathExtension() -> String {
+        return self.nsString.pathExtension
+    }
+    
+    var bool: Bool {
+        switch self.lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return false
+        }
+    }
 }
 
 public extension Optional where Wrapped: Collection {

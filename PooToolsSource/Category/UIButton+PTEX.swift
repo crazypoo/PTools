@@ -58,7 +58,6 @@ public extension UIButton {
         })
     }
     
-    @available(iOS 15.0, *)
     func layoutButtonWithEdgeInsets(style:PTLayoutButtonStyle,
                                     imageTitleSpace:CGFloat) {
         self.applyConfiguration(layout:style,imagePadding: imageTitleSpace)
@@ -175,7 +174,6 @@ public extension UIButton {
     }
         
     // 优化：UIButton.Configuration 是 iOS 15.0+ 引入的，必须打上 @available 标签防止低版本设备崩溃
-    @available(iOS 15.0, *)
     func applyConfiguration(image: UIImage? = nil,
                             highlightedImage: UIImage? = nil,
                             attributedTitle: PTRichText? = nil,
@@ -277,6 +275,17 @@ public extension UIButton {
     
     @objc func getButtonHeight(width:CGFloat) -> CGFloat {
         getButtonSize(width: width).height
+    }
+    
+    func setBackgroundColor(color: UIColor, forState: UIControl.State) {
+        clipsToBounds = true // maintain corner radius
+
+        let colorImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { context in
+            color.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+            draw(.zero)
+        }
+        setBackgroundImage(colorImage, for: forState)
     }
 }
 

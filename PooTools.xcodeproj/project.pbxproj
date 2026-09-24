@@ -141,7 +141,6 @@
 		552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */; };
 		552BECC92DDEDBB900A5BDBB /* PTLazyViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552BECC82DDEDBB900A5BDBB /* PTLazyViewContainer.swift */; };
 		552C4D642D9B87FA00B0CE53 /* PTSnapKitEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */; };
-		B52500000000000000000001 /* PTRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500000000000000000002 /* PTRichText.swift */; };
 		552CCF4B2E82BA2200646943 /* PTBaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CCF4A2E82BA2200646943 /* PTBaseButton.swift */; };
 		552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */; };
 		552F07A02B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */; };
@@ -949,6 +948,7 @@
 		55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */; };
 		55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */; };
 		55FA6CBF2B02860D00BC464B /* icon_cycle_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */; };
+		55FE61B13064F19A00AEC9CD /* UISctckView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FE61B03064F19A00AEC9CD /* UISctckView+PTEX.swift */; };
 		55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */; };
 		55FF406E2B2AFFBD00CD3906 /* PTVideoEditorVideoTimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FF406D2B2AFFBD00CD3906 /* PTVideoEditorVideoTimeLineView.swift */; };
 		55FF40702B2AFFCE00CD3906 /* PTVideoEditorVideoTimeLineGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FF406F2B2AFFCD00CD3906 /* PTVideoEditorVideoTimeLineGenerator.swift */; };
@@ -1010,6 +1010,7 @@
 		B52400000000000000000008 /* PTSymbols+iOS26.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000018 /* PTSymbols+iOS26.swift */; };
 		B52400000000000000000009 /* PTSymbols+Semantic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52400000000000000000019 /* PTSymbols+Semantic.swift */; };
 		B5240000000000000000000A /* SFSymbolCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = B5240000000000000000001A /* SFSymbolCatalog.json */; };
+		B52500000000000000000001 /* PTRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500000000000000000002 /* PTRichText.swift */; };
 		CB55590C25D04EBCA6C02E8E /* Network+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F3C2B183334E31ABE12A02 /* Network+Download.swift */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
@@ -1173,7 +1174,6 @@
 		552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserModel.swift; sourceTree = "<group>"; };
 		552BECC82DDEDBB900A5BDBB /* PTLazyViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLazyViewContainer.swift; sourceTree = "<group>"; };
 		552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapKitEX.swift; sourceTree = "<group>"; };
-		B52500000000000000000002 /* PTRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTRichText.swift; path = PooToolsSource/PToolsUIFoundation/PTRichText.swift; sourceTree = SOURCE_ROOT; };
 		552CCF4A2E82BA2200646943 /* PTBaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseButton.swift; sourceTree = "<group>"; };
 		552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHAsset+PTEX.swift"; sourceTree = "<group>"; };
 		552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGraphicsImageRenderer+PTEX.swift"; sourceTree = "<group>"; };
@@ -1990,6 +1990,7 @@
 		55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModePickerView.swift; sourceTree = "<group>"; };
 		55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_selected@3x.png"; sourceTree = "<group>"; };
 		55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_unselected@3x.png"; sourceTree = "<group>"; };
+		55FE61B03064F19A00AEC9CD /* UISctckView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISctckView+PTEX.swift"; sourceTree = "<group>"; };
 		55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorFilterControl.swift; sourceTree = "<group>"; };
 		55FF406D2B2AFFBD00CD3906 /* PTVideoEditorVideoTimeLineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoTimeLineView.swift; sourceTree = "<group>"; };
 		55FF406F2B2AFFCD00CD3906 /* PTVideoEditorVideoTimeLineGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoTimeLineGenerator.swift; sourceTree = "<group>"; };
@@ -2057,6 +2058,7 @@
 		B52400000000000000000018 /* PTSymbols+iOS26.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+iOS26.swift"; sourceTree = "<group>"; };
 		B52400000000000000000019 /* PTSymbols+Semantic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTSymbols+Semantic.swift"; sourceTree = "<group>"; };
 		B5240000000000000000001A /* SFSymbolCatalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SFSymbolCatalog.json; sourceTree = "<group>"; };
+		B52500000000000000000002 /* PTRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTRichText.swift; path = PooToolsSource/PToolsUIFoundation/PTRichText.swift; sourceTree = SOURCE_ROOT; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2129,8 +2131,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				B52400000000000000000010 /* PToolsSymbols */,
-				B52500000000000000000010 /* PToolsUIFoundation */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2227,6 +2227,8 @@
 				55B3F49F2B6AD3D400A7CC66 /* Pinyin */,
 				555818B62AFA48E70051C0AA /* ProgressBar */,
 				55025E4029FA54B60024A960 /* Protocol */,
+				B52400000000000000000010 /* PToolsSymbols */,
+				B52500000000000000000010 /* PToolsUIFoundation */,
 				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
 				55B4FA1D2AE0FF8E006D35F3 /* RemindersPermission */,
@@ -2356,6 +2358,7 @@
 				55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */,
 				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
 				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
+				55FE61B03064F19A00AEC9CD /* UISctckView+PTEX.swift */,
 				555818C92AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift */,
 				55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */,
 				9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */,
@@ -3884,14 +3887,6 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		B52500000000000000000010 /* PToolsUIFoundation */ = {
-			isa = PBXGroup;
-			children = (
-				B52500000000000000000002 /* PTRichText.swift */,
-			);
-			path = PToolsUIFoundation;
-			sourceTree = "<group>";
-		};
 		55DD936D2B938C1A00F65872 /* SideMenuControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -4311,6 +4306,14 @@
 				B5240000000000000000001A /* SFSymbolCatalog.json */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		B52500000000000000000010 /* PToolsUIFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				B52500000000000000000002 /* PTRichText.swift */,
+			);
+			path = PToolsUIFoundation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -5301,6 +5304,7 @@
 				55AA10F92C00000100000001 /* PTUtils+SceneConcurrency.swift in Sources */,
 				557451282C09B12C0008FCAD /* PTMenuSheetButtonView.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
+				55FE61B13064F19A00AEC9CD /* UISctckView+PTEX.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
 				556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */,

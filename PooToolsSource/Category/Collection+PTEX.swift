@@ -23,4 +23,18 @@ public extension RangeReplaceableCollection {
         guard let index = try firstIndex(where: predicate) else { return nil }
         return remove(at: index)
     }
+    
+    /// Remove all duplicate elements using KeyPath to compare.
+    ///
+    /// - Parameter path: Key path to compare, the value must be Equatable.
+    mutating func removeDuplicates(keyPath path: KeyPath<Element, some Equatable>) {
+        var items = [Element]()
+        removeAll { element -> Bool in
+            guard items.contains(where: { $0[keyPath: path] == element[keyPath: path] }) else {
+                items.append(element)
+                return false
+            }
+            return true
+        }
+    }
 }

@@ -563,40 +563,78 @@ public extension UIImage {
                          size: CGSize,
                          direction: Imagegradien) -> UIImage? {
             
-            guard !colors.isEmpty,
-                  size.width > 0,
-                  size.height > 0 else {
-                return nil
-            }
-            
-            let renderer = UIGraphicsImageRenderer(size: size)
-            
-            return renderer.image { context in
-                let gradientLayer = CAGradientLayer()
-                gradientLayer.frame = CGRect(origin: .zero, size: size)
-                gradientLayer.colors = colors.map(\.cgColor)
-                
-                switch direction {
-                case .LeftToRight:
-                    gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-                    gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-                    
-                case .TopToBottom:
-                    gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-                    gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-                    
-                case .RightToLeft:
-                    gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
-                    gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
-                    
-                case .BottomToTop:
-                    gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
-                    gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
-                }
-                
-                gradientLayer.render(in: context.cgContext)
-            }
+        guard !colors.isEmpty,
+              size.width > 0,
+              size.height > 0 else {
+            return nil
         }
+        
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        return renderer.image { context in
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.frame = CGRect(origin: .zero, size: size)
+            gradientLayer.colors = colors.map(\.cgColor)
+            
+            switch direction {
+            case .LeftToRight:
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+                gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+                
+            case .TopToBottom:
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+                
+            case .RightToLeft:
+                gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
+                
+            case .BottomToTop:
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
+            }
+            
+            gradientLayer.render(in: context.cgContext)
+        }
+    }
+    
+    /// - Returns: Base 64 encoded PNG data of the image as a String.
+    func pngBase64String() -> String? {
+        return pngData()?.base64EncodedString()
+    }
+    
+    /// UIImage with rounded corners.
+    ///
+    /// - Parameters:
+    ///   - radius: corner radius (optional), resulting image will be round if unspecified.
+    /// - Returns: UIImage with all corners rounded.
+    func withRoundedCorners(radius: CGFloat? = nil) -> UIImage? {
+        let maxRadius = min(size.width, size.height) / 2
+        let cornerRadius: CGFloat = if let radius, radius > 0, radius <= maxRadius {
+            radius
+        } else {
+            maxRadius
+        }
+
+        let actions = {
+            let rect = CGRect(origin: .zero, size: self.size)
+            UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius).addClip()
+            self.draw(in: rect)
+        }
+
+        #if os(watchOS)
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        actions()
+        return UIGraphicsGetImageFromCurrentImageContext()
+        #else
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            actions()
+        }
+        #endif
+    }
 }
 
 public extension PTPOP where Base: UIImage {

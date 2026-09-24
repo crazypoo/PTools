@@ -58,12 +58,6 @@ extension PTGifParseError: LocalizedError {
     }
 }
 
-extension String {
-    func pathExtension() -> String {
-        return (self as NSString).pathExtension
-    }
-}
-
 @MainActor
 open class PTGifManager {
     
