@@ -29,6 +29,10 @@ public final class PTFusionContentView: UIView {
     
     public var switchValueChangeBlock: PTCellSwitchBlock?
 
+    public var textActionRegistry: PTTextActionRegistry?
+
+    public var textInteractionMode: PTTextInteractionMode = .hybrid
+    
     // MARK: - View Pool（一次创建）
     private var cellModel = PTFusionCellModel()
     private let leftIcon = UIImageView()
@@ -410,9 +414,17 @@ extension PTFusionContentView {
     }
     
     private func applyData(_ model: PTFusionCellModel) {
-        titleLabel.attributedText = model.cachedTitleAttr.value
+        titleLabel.pt_apply(
+            richText: model.cachedTitleAttr,
+            actionRegistry: textActionRegistry,
+            interactionMode: textInteractionMode
+        )
         contentLabel.numberOfLines = model.contentNumberOfLines
-        contentLabel.attributedText = model.cachedContentAttr.value
+        contentLabel.pt_apply(
+            richText: model.cachedContentAttr,
+            actionRegistry: textActionRegistry,
+            interactionMode: textInteractionMode
+        )
         
         leftIcon.contentMode = .scaleAspectFit
         applyImage(model.leftImage, to: leftIcon, iCloudDocumentName: model.iCloudDocument)
