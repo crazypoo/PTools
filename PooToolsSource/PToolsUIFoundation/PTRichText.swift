@@ -263,6 +263,36 @@ public struct PTTextAttribute {
         Self.image(image, .custom(size: image.size))
     }
 
+    // English: Keep the convenient URL syntax while rendering the placeholder synchronously.
+    // Español: Conserva la sintaxis cómoda con URL y muestra el marcador de posición de forma síncrona.
+    // 中文：保留便捷的 URL 写法，并同步显示占位图。
+    public static func image(_ url: URL,
+                             _ style: PTTextAttachmentStyle,
+                             placeholder: UIImage? = nil,
+                             id: String? = nil) -> Self {
+        remoteImage(url, style, placeholder: placeholder, id: id)
+    }
+
+    // English: Describe a remote image without starting network work while building the value.
+    // Español: Describe una imagen remota sin iniciar trabajo de red al construir el valor.
+    // 中文：描述远程图片，但在创建富文本值时不启动网络任务。
+    public static func remoteImage(_ url: URL,
+                                   _ style: PTTextAttachmentStyle,
+                                   placeholder: UIImage? = nil,
+                                   id: String? = nil) -> Self {
+        let size: CGSize
+        switch style {
+        case .custom(let value):
+            size = ptNormalizedAttachmentSize(value)
+        }
+        let identifier = id ?? "remote:\(url.absoluteString):\(size.width):\(size.height)"
+        let attachment = PTRemoteImageTextAttachment(identifier: identifier,
+                                                      url: url,
+                                                      size: size,
+                                                      placeholder: placeholder)
+        return Self(values: [.attachment: attachment])
+    }
+
     public static func action(_ id: PTTextActionID) -> Self {
         Self(values: [PTRichText.actionAttributeKey: id.rawValue])
     }
@@ -486,6 +516,41 @@ public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable {
     }
 }
 
+// English: Store a typed remote URL beside its placeholder attachment for later MainActor replacement.
+// Español: Guarda una URL remota tipada junto al adjunto de marcador para reemplazarlo después en MainActor.
+// 中文：在占位附件旁保存类型化远程 URL，稍后由 MainActor 替换真实图片。
+public final class PTRemoteImageTextAttachment: NSTextAttachment {
+    public let identifier: String
+    public let remoteURL: URL
+    public let attachmentSize: CGSize
+
+    public init(identifier: String,
+                url: URL,
+                size: CGSize,
+                placeholder: UIImage? = nil) {
+        self.identifier = identifier
+        self.remoteURL = url
+        self.attachmentSize = ptNormalizedAttachmentSize(size)
+        super.init(data: nil, ofType: nil)
+        image = placeholder ?? UIImage(systemName: "photo")
+        bounds = CGRect(origin: .zero, size: attachmentSize)
+    }
+
+    required init?(coder: NSCoder) {
+        return nil
+    }
+
+    // English: Return a plain attachment so a resolved image never starts another remote load.
+    // Español: Devuelve un adjunto normal para que una imagen resuelta no vuelva a iniciar una carga remota.
+    // 中文：返回普通附件，避免真实图片设置后再次触发远程加载。
+    public func resolvedAttachment(with image: UIImage) -> NSTextAttachment {
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        attachment.bounds = CGRect(origin: .zero, size: attachmentSize)
+        return attachment
+    }
+}
+
 // English: Keep every attachment dimension finite and positive before it reaches TextKit.
 // Español: Mantiene cada dimensión del adjunto finita y positiva antes de llegar a TextKit.
 // 中文：在进入 TextKit 前确保附件尺寸始终有限且为正数。
@@ -575,6 +640,12 @@ public protocol PTTextImageLoader: Sendable {
     func image(for url: URL) async throws -> UIImage
 }
 
+// English: Keep the Core image pipeline injectable without making UI Foundation depend on Core.
+// Español: Mantiene inyectable el canal de imágenes de Core sin hacer que UI Foundation dependa de Core.
+// 中文：让 Core 图片管线可以注入，同时避免 UI Foundation 反向依赖 Core。
+public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL,
+                                                                 _ targetSize: CGSize) async throws -> UIImage
+
 public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable {
     public init() {}
 
@@ -594,12 +665,21 @@ public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable {
 // 中文：按标识符管理远程附件任务，并在复用时丢弃过期 generation 的结果。
 @MainActor
 public final class PTTextAttachmentCoordinator {
-    private let loader: any PTTextImageLoader
+    private let imageLoader: PTTextImageLoadHandler
     private var tasks: [String: Task<Void, Never>] = [:]
     private var generations: [String: UInt64] = [:]
 
     public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) {
-        self.loader = loader
+        imageLoader = { url, _ in
+            try await loader.image(for: url)
+        }
+    }
+
+    // English: Allow Core to inject PTLoadImageFunction without coupling UI Foundation back to Core.
+    // Español: Permite que Core inyecte PTLoadImageFunction sin acoplar UI Foundation de vuelta a Core.
+    // 中文：允许 Core 注入 PTLoadImageFunction，避免 UI Foundation 反向依赖 Core。
+    public init(imageLoader: @escaping PTTextImageLoadHandler) {
+        self.imageLoader = imageLoader
     }
 
     @discardableResult
@@ -610,9 +690,11 @@ public final class PTTextAttachmentCoordinator {
         let generation = (generations[descriptor.id] ?? 0) &+ 1
         generations[descriptor.id] = generation
         let identifier = descriptor.id
-        let task = Task { @MainActor [weak self, loader, url, identifier, generation] in
+        let imageLoader = self.imageLoader
+        let targetSize = descriptor.size
+        let task = Task { @MainActor [weak self, imageLoader, url, identifier, generation, targetSize] in
             do {
-                let image = try await loader.image(for: url)
+                let image = try await imageLoader(url, targetSize)
                 guard !Task.isCancelled,
                       let self,
                       self.generations[identifier] == generation else { return }
@@ -1396,14 +1478,95 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
 // Español: Mantiene un solo controlador asociado al host UIKit, no dentro del almacenamiento PTRichText.
 // 中文：交互控制器只关联在 UIKit 宿主上，不写入 PTRichText 存储。
 @MainActor private var ptRichTextInteractionAssociationKey: UInt8 = 0
+@MainActor private var ptRichTextRemoteImageAssociationKey: UInt8 = 0
+
+// English: Resolve remote attachments after the placeholder has been rendered, with reuse-safe cancellation.
+// Español: Resuelve los adjuntos remotos después de mostrar el marcador y cancela de forma segura al reutilizar.
+// 中文：先渲染占位图，再异步解析远程附件，并在复用时安全取消任务。
+@MainActor
+private final class PTRichTextRemoteImageController: NSObject {
+    private weak var label: UILabel?
+    private weak var textView: UITextView?
+    private let richText: PTRichText
+    private let coordinator: PTTextAttachmentCoordinator
+
+    init(richText: PTRichText,
+         label: UILabel? = nil,
+         textView: UITextView? = nil,
+         coordinator: PTTextAttachmentCoordinator) {
+        self.richText = richText
+        self.label = label
+        self.textView = textView
+        self.coordinator = coordinator
+        super.init()
+    }
+
+    func start() {
+        var identifiers = Set<String>()
+        richText.value.enumerateAttribute(.attachment,
+                                          in: NSRange(location: 0, length: richText.value.length),
+                                          options: []) { value, _, _ in
+            guard let attachment = value as? PTRemoteImageTextAttachment,
+                  identifiers.insert(attachment.identifier).inserted else {
+                return
+            }
+
+            let descriptor = PTTextAttachmentDescriptor(id: attachment.identifier,
+                                                        kind: .remote(attachment.remoteURL),
+                                                        size: attachment.attachmentSize)
+            coordinator.loadRemote(descriptor) { [weak self] result in
+                guard let self else { return }
+                guard case .success(let image) = result else { return }
+                self.apply(image, for: attachment.identifier)
+            }
+        }
+    }
+
+    func cancel() {
+        coordinator.cancelAll()
+    }
+
+    private func apply(_ image: UIImage, for identifier: String) {
+        let updated = NSMutableAttributedString(attributedString: richText.value)
+        let range = NSRange(location: 0, length: updated.length)
+        updated.enumerateAttribute(.attachment, in: range, options: []) { value, subrange, _ in
+            guard let attachment = value as? PTRemoteImageTextAttachment,
+                  attachment.identifier == identifier else {
+                return
+            }
+            updated.addAttribute(.attachment,
+                                 value: attachment.resolvedAttachment(with: image),
+                                 range: subrange)
+        }
+
+        label?.attributedText = updated
+        textView?.attributedText = updated
+    }
+}
 
 @MainActor
 public enum PTRichTextRenderer {
     public static func apply(_ richText: PTRichText,
                              to label: UILabel,
                              actionRegistry: PTTextActionRegistry? = nil,
-                             interactionMode: PTTextInteractionMode = .hybrid) {
+                             interactionMode: PTTextInteractionMode = .hybrid,
+                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
         label.attributedText = richText.value
+        (objc_getAssociatedObject(label, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
+        objc_setAssociatedObject(label,
+                                 &ptRichTextRemoteImageAssociationKey,
+                                 nil,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        if let attachmentCoordinator {
+            let controller = PTRichTextRemoteImageController(richText: richText,
+                                                              label: label,
+                                                              coordinator: attachmentCoordinator)
+            objc_setAssociatedObject(label,
+                                     &ptRichTextRemoteImageAssociationKey,
+                                     controller,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            controller.start()
+        }
         (objc_getAssociatedObject(label, &ptRichTextInteractionAssociationKey) as? PTRichTextInteractionController)?.detach()
         guard let actionRegistry else {
             objc_setAssociatedObject(label, &ptRichTextInteractionAssociationKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -1419,11 +1582,27 @@ public enum PTRichTextRenderer {
     public static func apply(_ richText: PTRichText,
                              to textView: UITextView,
                              interactionMode: PTTextInteractionMode = .hybrid,
-                             actionRegistry: PTTextActionRegistry? = nil) {
+                             actionRegistry: PTTextActionRegistry? = nil,
+                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
         textView.attributedText = richText.value
         textView.isEditable = false
         textView.isSelectable = interactionMode != .actionsOnly
         textView.isScrollEnabled = true
+        (objc_getAssociatedObject(textView, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
+        objc_setAssociatedObject(textView,
+                                 &ptRichTextRemoteImageAssociationKey,
+                                 nil,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        if let attachmentCoordinator {
+            let controller = PTRichTextRemoteImageController(richText: richText,
+                                                              textView: textView,
+                                                              coordinator: attachmentCoordinator)
+            objc_setAssociatedObject(textView,
+                                     &ptRichTextRemoteImageAssociationKey,
+                                     controller,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            controller.start()
+        }
         (objc_getAssociatedObject(textView, &ptRichTextInteractionAssociationKey) as? PTRichTextInteractionController)?.detach()
         guard let actionRegistry else {
             objc_setAssociatedObject(textView, &ptRichTextInteractionAssociationKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -1441,11 +1620,13 @@ public enum PTRichTextRenderer {
 public extension UILabel {
     func pt_apply(richText: PTRichText,
                   actionRegistry: PTTextActionRegistry? = nil,
-                  interactionMode: PTTextInteractionMode = .hybrid) {
+                  interactionMode: PTTextInteractionMode = .hybrid,
+                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
         PTRichTextRenderer.apply(richText,
                                  to: self,
                                  actionRegistry: actionRegistry,
-                                 interactionMode: interactionMode)
+                                 interactionMode: interactionMode,
+                                 attachmentCoordinator: attachmentCoordinator)
     }
 }
 
@@ -1453,10 +1634,12 @@ public extension UILabel {
 public extension UITextView {
     func pt_apply(richText: PTRichText,
                   interactionMode: PTTextInteractionMode = .hybrid,
-                  actionRegistry: PTTextActionRegistry? = nil) {
+                  actionRegistry: PTTextActionRegistry? = nil,
+                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
         PTRichTextRenderer.apply(richText,
                                  to: self,
                                  interactionMode: interactionMode,
-                                 actionRegistry: actionRegistry)
+                                 actionRegistry: actionRegistry,
+                                 attachmentCoordinator: attachmentCoordinator)
     }
 }

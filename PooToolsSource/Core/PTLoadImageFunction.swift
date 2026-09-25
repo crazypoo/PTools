@@ -13,6 +13,7 @@ import Kingfisher
 import ImageIO
 import os
 
+
 public enum PTImageType : Sendable {
     case jpeg
     case png
@@ -781,5 +782,25 @@ public class PTLoadImageFunction: NSObject {
         for url in urls.compactMap({ $0 }) {
             try? FileManager.default.removeItem(at: url)
         }
+    }
+}
+
+// English: Bridge PTRichText remote attachments to the canonical Core image loader.
+// Español: Conecta los adjuntos remotos de PTRichText con el cargador de imágenes canónico de Core.
+// 中文：将 PTRichText 远程附件接入 Core 的统一图片加载入口。
+@MainActor
+public extension PTLoadImageFunction {
+    // English: Use PTLoadImageFunction for remote text images and keep UIKit work on MainActor.
+    // Español: Usa PTLoadImageFunction para imágenes remotas de texto y mantiene UIKit en MainActor.
+    // 中文：远程文本图片统一使用 PTLoadImageFunction，并保证 UIKit 工作在 MainActor。
+    static func makeTextAttachmentCoordinator() -> PTTextAttachmentCoordinator {
+        PTTextAttachmentCoordinator(imageLoader: { url, targetSize in
+            let result = await PTLoadImageFunction.loadImage(source: .url(url),
+                                                              targetSize: targetSize)
+            guard let image = result.firstImage else {
+                throw PTImageLoadingError.invalidResponse
+            }
+            return image
+        })
     }
 }
