@@ -10,7 +10,6 @@ import MapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import SwiftDate
 import SmartCodable
 
 public extension UIImage {
@@ -56,7 +55,7 @@ public class PTChatConfig: NSObject {
 
     class public func timeExp(expTime:Date) -> Bool {
         
-        let newExpTime = expTime + PTChatConfig.share.messageExpTime.seconds
+        let newExpTime = expTime.addingTimeInterval(TimeInterval(PTChatConfig.share.messageExpTime))
         let current = Date()
         if current >= newExpTime {
             return true

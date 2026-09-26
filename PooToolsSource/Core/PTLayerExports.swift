@@ -14,6 +14,10 @@
 @_exported import PToolsCore
 #endif
 
+#if canImport(PToolsDate)
+@_exported import PToolsDate
+#endif
+
 #if canImport(PToolsUIFoundation)
 @_exported import PToolsUIFoundation
 #endif

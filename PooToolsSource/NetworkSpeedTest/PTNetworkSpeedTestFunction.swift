@@ -150,7 +150,7 @@ extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @
                             historyModel.upload = String(format: "%.2f", self.uploadValue)
                             historyModel.latency = String(format: "%.2f", self.latencyValue)
                             historyModel.networkType = self.netWorkName
-                            historyModel.date = Date().toString()
+                            historyModel.date = Date().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
                             
                             let jsonString = historyModel.toJSONString(prettyPrint: true) ?? ""
                             PTNSLogConsole(jsonString,levelType: .notice,loggerType: .network)

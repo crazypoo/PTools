@@ -168,7 +168,7 @@ public class PTChatView: UIView {
                     }
                     cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.timeTopSpace * 3 + readStatusHeight + PTChatConfig.share.userIconTopSpacing
                 case .SystemMessage:
-                    let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().toFormat("yyyy-MM-dd HH:MM:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
+                    let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                     var contentHeight:CGFloat = 0
                     if let contentString = cellModel.msgContent as? String {
                         contentHeight = UIView.sizeFor(string: contentString, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height

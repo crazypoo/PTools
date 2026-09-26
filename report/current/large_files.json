@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
-  "generated_at": "2026-09-26T14:07:56Z",
+  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
+  "generated_at": "2026-09-26T14:53:09Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -531,7 +531,7 @@
     },
     {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "lines": 460,
+      "lines": 462,
       "classification": "ok"
     },
     {
@@ -646,12 +646,12 @@
     },
     {
       "path": "PooToolsSource/Category/Date+PTEX.swift",
-      "lines": 298,
+      "lines": 248,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Category/DateFormatter+PTEX.swift",
-      "lines": 26,
+      "lines": 28,
       "classification": "ok"
     },
     {
@@ -821,12 +821,12 @@
     },
     {
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "lines": 1861,
+      "lines": 1878,
       "classification": "architecture_exception"
     },
     {
       "path": "PooToolsSource/Category/TimeInterval+PTEX.swift",
-      "lines": 137,
+      "lines": 140,
       "classification": "ok"
     },
     {
@@ -1211,7 +1211,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLayerExports.swift",
-      "lines": 23,
+      "lines": 27,
       "classification": "ok"
     },
     {
@@ -1416,7 +1416,7 @@
     },
     {
       "path": "PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift",
-      "lines": 27,
+      "lines": 41,
       "classification": "ok"
     },
     {
@@ -1461,7 +1461,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashDetailModel.swift",
-      "lines": 92,
+      "lines": 91,
       "classification": "ok"
     },
     {
@@ -1491,7 +1491,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashViewModel.swift",
-      "lines": 44,
+      "lines": 43,
       "classification": "ok"
     },
     {
@@ -1546,7 +1546,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "lines": 470,
+      "lines": 469,
       "classification": "ok"
     },
     {
@@ -1756,7 +1756,7 @@
     },
     {
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "lines": 179,
+      "lines": 182,
       "classification": "ok"
     },
     {
@@ -3716,7 +3716,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "lines": 220,
+      "lines": 219,
       "classification": "ok"
     },
     {
@@ -3907,6 +3907,21 @@
     {
       "path": "PooToolsSource/PToolsCore/PTURLParser.swift",
       "lines": 56,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "lines": 206,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDate/PTDateParser.swift",
+      "lines": 86,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "lines": 264,
       "classification": "ok"
     },
     {

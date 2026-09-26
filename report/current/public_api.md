@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
-Generated at: 2026-09-26T14:07:37Z
+Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
+Generated at: 2026-09-26T14:52:53Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1379,15 +1379,15 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/C7Collector/PTHarBethFilter.swift:306 | func | public | public func filterValue(_ value: Float) -> Float { |
 | PooToolsSource/C7Collector/PTTakePictureReviewer.swift:16 | class | public | public class PTTakePictureReviewer:UIView { |
 | PooToolsSource/C7Collector/PTTakePictureReviewer.swift:59 | init | public | public init(screenShotImage:UIImage,dismiss: PTActionTask? = nil) { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:17 | struct | public | public struct PTSendableEventArrayBox: @unchecked Sendable { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:18 | let | public | public let events: [EKEvent] |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:20 | init | public | public init(_ events: [EKEvent]) { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:25 | struct | public | public struct PTSendableReminderArrayBox: @unchecked Sendable { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:26 | let | public | public let reminder: [EKReminder] |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:28 | init | public | public init(_ reminder: [EKReminder]) { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:34 | class | public | public class PTEventOnCalendar: NSObject { |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:91 | class | public | public class func createEvent(startDate:DateInRegion, |
-| PooToolsSource/Calendar/PTEventOnCalendar.swift:107 | class | public | public class func createEvent(startDate:DateInRegion, |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:19 | struct | public | public struct PTSendableEventArrayBox: @unchecked Sendable { |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:20 | let | public | public let events: [EKEvent] |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:22 | init | public | public init(_ events: [EKEvent]) { |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:27 | struct | public | public struct PTSendableReminderArrayBox: @unchecked Sendable { |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:28 | let | public | public let reminder: [EKReminder] |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:30 | init | public | public init(_ reminder: [EKReminder]) { |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:36 | class | public | public class PTEventOnCalendar: NSObject { |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:93 | class | public | public class func createEvent(startDate: PTZonedDate, |
+| PooToolsSource/Calendar/PTEventOnCalendar.swift:109 | class | public | public class func createEvent(startDate: PTZonedDate, |
 | PooToolsSource/CalendarPermission/PTPermissionCalendar.swift:22 | class | public | public class PTPermissionCalendar: PTPermission { |
 | PooToolsSource/CalendarPermission/PTPermissionCalendar.swift:33 | var | open | open var usageDescriptionKey: String? { |
 | PooToolsSource/CallMessageMail/PTCallMessageMailFunction.swift:13 | typealias | public | public typealias MessageResultBlock = (_ sendResult: MessageComposeResult) -> Void |
@@ -1431,9 +1431,8 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/Category/CLGeocoder+PTEX.swift:13 | typealias | public | public typealias InHMTCallback = @Sendable (_ errMsg: String?, _ inHMT: Bool) -> Void |
 | PooToolsSource/Category/CLGeocoder+PTEX.swift:14 | typealias | public | public typealias CLPlacemarkCallback = @Sendable (_ errMsg: String?, _ placemark: CLPlacemark?) -> Void |
 | PooToolsSource/Category/CLGeocoder+PTEX.swift:16 | enum | public | public enum IsoCountryCode: String { |
-| PooToolsSource/Category/Date+PTEX.swift:15 | enum | public | public enum PTTimestampType: Int { |
-| PooToolsSource/Category/Date+PTEX.swift:24 | enum | public | @objc public enum CheckContractTimeRelationships: Int { |
-| PooToolsSource/Category/DateFormatter+PTEX.swift:14 | let | public | public let jx_formatter = DateFormatter() |
+| PooToolsSource/Category/Date+PTEX.swift:14 | enum | public | public enum PTTimestampType: Int { |
+| PooToolsSource/Category/Date+PTEX.swift:23 | enum | public | @objc public enum CheckContractTimeRelationships: Int { |
 | PooToolsSource/Category/Device+PTEX.swift:17 | enum | public | public enum UIDeviceApplePencilSupportType { |
 | PooToolsSource/Category/Device+PTEX.swift:358 | enum | public | public enum SystemSoundIDShockType: Int64 { |
 | PooToolsSource/Category/Double+PTEX.swift:142 | typealias | public | public typealias PTNumberValueAdapterType = Double |
@@ -1508,11 +1507,11 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/Category/PTVideoThumbnailService.swift:64 | enum | public | public enum PTVideoThumbnailService { |
 | PooToolsSource/Category/String+PTEX+Crypto.swift:27 | enum | public | public enum DDYSCAType { |
 | PooToolsSource/Category/String+PTEX+Crypto.swift:120 | enum | public | public enum DDYSHAType { |
-| PooToolsSource/Category/String+PTEX.swift:151 | enum | public | public enum PStrengthLevel { |
-| PooToolsSource/Category/String+PTEX.swift:159 | enum | public | public enum UTF8StringType:Int { |
-| PooToolsSource/Category/String+PTEX.swift:165 | enum | public | public enum StringTypeLength { |
-| PooToolsSource/Category/String+PTEX.swift:180 | enum | public | public enum PTHashType { |
-| PooToolsSource/Category/String+PTEX.swift:189 | enum | public | public enum PTConstellationType { |
+| PooToolsSource/Category/String+PTEX.swift:150 | enum | public | public enum PStrengthLevel { |
+| PooToolsSource/Category/String+PTEX.swift:158 | enum | public | public enum UTF8StringType:Int { |
+| PooToolsSource/Category/String+PTEX.swift:164 | enum | public | public enum StringTypeLength { |
+| PooToolsSource/Category/String+PTEX.swift:179 | enum | public | public enum PTHashType { |
+| PooToolsSource/Category/String+PTEX.swift:188 | enum | public | public enum PTConstellationType { |
 | PooToolsSource/Category/UIButton+PTEX.swift:17 | typealias | public | public typealias TouchedBlock = (_ sender:UIButton) -> Void |
 | PooToolsSource/Category/UIButton+PTEX.swift:293 | class | public | public class ConsoleMenuButton: UIButton { } |
 | PooToolsSource/Category/UIColor+PTEX.swift:11 | enum | public | public enum PTColorTone { |
@@ -2401,14 +2400,14 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/DebugFile/PTFileBrowserViewController.swift:309 | func | public | public func numberOfPreviewItems(in controller: QLPreviewController) -> Int { |
 | PooToolsSource/DebugFile/PTFileBrowserViewController.swift:313 | func | public | public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem { |
 | PooToolsSource/DebugFile/PTFileModel.swift:12 | enum | public | public enum PTFileType: String { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:417 | actor | public | public actor PTNetworkSpeedMonitor { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:428 | func | public | public func getDownloadSpeeds() -> [Double] { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:433 | func | public | public func getUploadSpeeds() -> [Double] { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:438 | func | public | public func addDownloadSpeed(_ speed: Double) { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:446 | func | public | public func addUploadSpeed(_ speed: Double) { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:454 | func | public | public func averageDownloadSpeed() -> Double { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:460 | func | public | public func averageUploadSpeed() -> Double { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:466 | func | public | public func clearSpeeds() { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:416 | actor | public | public actor PTNetworkSpeedMonitor { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:427 | func | public | public func getDownloadSpeeds() -> [Double] { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:432 | func | public | public func getUploadSpeeds() -> [Double] { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:437 | func | public | public func addDownloadSpeed(_ speed: Double) { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:445 | func | public | public func addUploadSpeed(_ speed: Double) { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:453 | func | public | public func averageDownloadSpeed() -> Double { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:459 | func | public | public func averageUploadSpeed() -> Double { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:465 | func | public | public func clearSpeeds() { |
 | PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift:254 | actor | public | public actor PTNetworkSpeedTestMonitor { |
 | PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift:266 | init | public | public init() {} |
 | PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift:268 | func | public | public func startMonitoring() { |
@@ -2582,14 +2581,14 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/Guide/PTGuidePageHUD.swift:376 | func | public | public func guideShow() { |
 | PooToolsSource/Guide/PTGuidePageHUD.swift:415 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
 | PooToolsSource/Guide/PTGuidePageHUD.swift:421 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:13 | typealias | public | public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void |
-| PooToolsSource/HealthKit/PTHealthKit.swift:16 | class | public | public class PTHealthKit: NSObject { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:29 | var | public | public var loadBlock:StepBlock? |
-| PooToolsSource/HealthKit/PTHealthKit.swift:39 | func | public | public func start() { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:45 | func | public | public func stop() { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:53 | func | public | public func invalidate() { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:126 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
-| PooToolsSource/HealthKit/PTHealthKit.swift:159 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:12 | typealias | public | public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void |
+| PooToolsSource/HealthKit/PTHealthKit.swift:15 | class | public | public class PTHealthKit: NSObject { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:28 | var | public | public var loadBlock:StepBlock? |
+| PooToolsSource/HealthKit/PTHealthKit.swift:38 | func | public | public func start() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:44 | func | public | public func stop() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:52 | func | public | public func invalidate() { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:129 | func | public | public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
+| PooToolsSource/HealthKit/PTHealthKit.swift:162 | func | public | public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:22 | class | public | public class PTPermissionHealth: PTPermission { |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:26 | var | open | open var readingUsageDescriptionKey: String? { "NSHealthUpdateUsageDescription" } |
 | PooToolsSource/HealthPermission/PTPermissionHealth.swift:27 | var | open | open var writingUsageDescriptionKey: String? { "NSHealthShareUsageDescription" } |
@@ -3648,92 +3647,92 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/MessageKit/PTChatBaseCell.swift:224 | func | open | open func stopWaitAnimation() { |
 | PooToolsSource/MessageKit/PTChatBubbleCircle.swift:10 | class | public | public class PTChatBubbleCircle: UIView { |
 | PooToolsSource/MessageKit/PTChatBubbleCircle.swift:16 | func | open | open func roundedMask(corners: UIRectCorner, radius: CGFloat) -> CAShapeLayer { |
-| PooToolsSource/MessageKit/PTChatConfig.swift:33 | class | public | public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol { |
-| PooToolsSource/MessageKit/PTChatConfig.swift:35 | var | public | public var tag:String = "" |
-| PooToolsSource/MessageKit/PTChatConfig.swift:36 | var | public | @SmartAny public var tagColor:DynamicColor = .systemGray |
-| PooToolsSource/MessageKit/PTChatConfig.swift:37 | var | public | @SmartAny public var tagSelectedColor:DynamicColor = .systemGray |
-| PooToolsSource/MessageKit/PTChatConfig.swift:43 | class | public | public class PTChatConfig: NSObject { |
-| PooToolsSource/MessageKit/PTChatConfig.swift:54 | var | public | public var imOwnerId:String = "" |
-| PooToolsSource/MessageKit/PTChatConfig.swift:55 | var | public | @PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:69 | var | public | public var chatTopFixel:CGFloat = 0 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:71 | var | public | public var chatBottomFixel:CGFloat = 0 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:74 | var | public | public var chatTimeFont:UIFont = .appfont(size: 13) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:76 | var | public | public var chatTimeColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
-| PooToolsSource/MessageKit/PTChatConfig.swift:78 | var | public | @PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:80 | var | public | public var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca") ?? .tertiarySystemFill |
-| PooToolsSource/MessageKit/PTChatConfig.swift:82 | var | public | public var chatSystemMessageFont:UIFont = .appfont(size: 13) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:84 | var | public | public var chatSystemMessageColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
-| PooToolsSource/MessageKit/PTChatConfig.swift:86 | var | public | public var chatSystemTimeLineSpace:NSNumber = 2 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:88 | var | public | public var chatSystemContentLineSpace:NSNumber = 2 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:93 | var | open | @PTClampedPropertyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:95 | var | public | public var showTimeLabel:Bool = true |
-| PooToolsSource/MessageKit/PTChatConfig.swift:97 | var | public | public var showSenderName:Bool = true |
-| PooToolsSource/MessageKit/PTChatConfig.swift:99 | var | public | public var senderNameFont:UIFont = .appfont(size: 13) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:101 | var | public | public var senderNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
-| PooToolsSource/MessageKit/PTChatConfig.swift:102 | var | public | public var senderNameBackgroundColor:UIColor = .clear |
-| PooToolsSource/MessageKit/PTChatConfig.swift:103 | var | public | public var receiverNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
-| PooToolsSource/MessageKit/PTChatConfig.swift:104 | var | public | public var receiverNameBackgroundColor:UIColor = .clear |
-| PooToolsSource/MessageKit/PTChatConfig.swift:105 | var | public | public var userIconTopSpacing:CGFloat = 0 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:107 | var | public | public var userIconFixelSpace:CGFloat = 10 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:109 | var | public | public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:111 | var | public | public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:113 | var | public | public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:115 | var | public | public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:117 | var | public | public var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:119 | var | public | public var chatWaitErrorImage:UIImage = "‼️".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:121 | var | public | public var showReadStatus:Bool = true |
-| PooToolsSource/MessageKit/PTChatConfig.swift:123 | var | public | public var readStatusFont:UIFont = .appfont(size: 13) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:125 | var | public | public var readStatusColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
-| PooToolsSource/MessageKit/PTChatConfig.swift:126 | var | public | public var readStatusName:String = "Read" |
-| PooToolsSource/MessageKit/PTChatConfig.swift:127 | var | public | public var unreadStatusName:String = "unread" |
-| PooToolsSource/MessageKit/PTChatConfig.swift:129 | var | open | @PTClampedPropertyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:133 | var | public | public var textMeMessageColor:UIColor = .black |
-| PooToolsSource/MessageKit/PTChatConfig.swift:135 | var | public | public var textMeMessageFont:UIFont = .appfont(size: 15) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:137 | var | public | public var textOtherMessageColor:UIColor = .black |
-| PooToolsSource/MessageKit/PTChatConfig.swift:139 | var | public | public var textOtherMessageFont:UIFont = .appfont(size: 15) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:141 | var | public | public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:143 | var | public | public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:145 | var | public | public var textLineSpace:CGFloat = 2 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:147 | var | public | @PTClampedPropertyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:149 | var | public | public var hashtagColor:DynamicColor = .systemBlue |
-| PooToolsSource/MessageKit/PTChatConfig.swift:150 | var | public | public var hashtagSelectedColor:DynamicColor = .systemBlue |
-| PooToolsSource/MessageKit/PTChatConfig.swift:152 | var | public | public var chinaCellPhoneColor:DynamicColor = .BurntOrangeColor |
-| PooToolsSource/MessageKit/PTChatConfig.swift:153 | var | public | public var chinaCellPhoneSelectedColor:DynamicColor = .BurntOrangeColor |
-| PooToolsSource/MessageKit/PTChatConfig.swift:155 | var | public | public var urlColor:DynamicColor = .SteelBlueColor |
-| PooToolsSource/MessageKit/PTChatConfig.swift:156 | var | public | public var urlSelectedColor:DynamicColor = .SteelBlueColor |
-| PooToolsSource/MessageKit/PTChatConfig.swift:158 | var | public | public var mentionColor:DynamicColor = .systemRed |
-| PooToolsSource/MessageKit/PTChatConfig.swift:159 | var | public | public var mentionSelectedColor:DynamicColor = .systemRed |
-| PooToolsSource/MessageKit/PTChatConfig.swift:161 | var | public | public var customerTagModels:[PTMessageTextCustomAttTagModel] = [] |
-| PooToolsSource/MessageKit/PTChatConfig.swift:165 | var | public | @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:167 | var | public | @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:169 | var | public | @PTClampedPropertyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:171 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:173 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:174 | var | public | public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:175 | var | public | public var mediaDownloadImage:UIImage = "⏬️".emojiToImage(emojiFont: .appfont(size: 40)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:176 | var | public | public var mediaDownloadPauseImage:UIImage = "🔁".emojiToImage(emojiFont: .appfont(size: 40)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:177 | var | public | public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:181 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:183 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:185 | var | public | @PTClampedPropertyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:187 | var | public | public var showBuilding:Bool = true |
-| PooToolsSource/MessageKit/PTChatConfig.swift:189 | var | public | public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:191 | var | public | public var showsPointsOfInterest: Bool = false |
-| PooToolsSource/MessageKit/PTChatConfig.swift:193 | var | public | public var mapCellPinImage:UIImage = "🧭".emojiToImage(emojiFont: .appfont(size: 40)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:197 | var | public | @PTClampedPropertyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:199 | var | public | public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:201 | var | public | public var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:203 | var | public | public var durationFont:UIFont = .appfont(size: 14) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:205 | var | public | public var durationColor:UIColor = .systemBlue |
-| PooToolsSource/MessageKit/PTChatConfig.swift:207 | var | public | public var progressColor:UIColor = .systemBlue |
-| PooToolsSource/MessageKit/PTChatConfig.swift:210 | var | public | public var dotColor:UIColor = .lightGray |
-| PooToolsSource/MessageKit/PTChatConfig.swift:213 | var | public | public var fileNameFont:UIFont = .appfont(size: 18,bold: true) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:214 | var | public | public var fileNameColor:UIColor = .black |
-| PooToolsSource/MessageKit/PTChatConfig.swift:215 | var | public | public var fileSizeFont:UIFont = .appfont(size: 13) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:216 | var | public | public var fileSizeColor:UIColor = .lightGray |
-| PooToolsSource/MessageKit/PTChatConfig.swift:217 | var | public | @PTClampedPropertyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:218 | var | public | public var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40)) |
-| PooToolsSource/MessageKit/PTChatConfig.swift:219 | var | public | public var yesterDayName:String = "昨天" |
+| PooToolsSource/MessageKit/PTChatConfig.swift:32 | class | public | public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol { |
+| PooToolsSource/MessageKit/PTChatConfig.swift:34 | var | public | public var tag:String = "" |
+| PooToolsSource/MessageKit/PTChatConfig.swift:35 | var | public | @SmartAny public var tagColor:DynamicColor = .systemGray |
+| PooToolsSource/MessageKit/PTChatConfig.swift:36 | var | public | @SmartAny public var tagSelectedColor:DynamicColor = .systemGray |
+| PooToolsSource/MessageKit/PTChatConfig.swift:42 | class | public | public class PTChatConfig: NSObject { |
+| PooToolsSource/MessageKit/PTChatConfig.swift:53 | var | public | public var imOwnerId:String = "" |
+| PooToolsSource/MessageKit/PTChatConfig.swift:54 | var | public | @PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:68 | var | public | public var chatTopFixel:CGFloat = 0 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:70 | var | public | public var chatBottomFixel:CGFloat = 0 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:73 | var | public | public var chatTimeFont:UIFont = .appfont(size: 13) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:75 | var | public | public var chatTimeColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
+| PooToolsSource/MessageKit/PTChatConfig.swift:77 | var | public | @PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:79 | var | public | public var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca") ?? .tertiarySystemFill |
+| PooToolsSource/MessageKit/PTChatConfig.swift:81 | var | public | public var chatSystemMessageFont:UIFont = .appfont(size: 13) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:83 | var | public | public var chatSystemMessageColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
+| PooToolsSource/MessageKit/PTChatConfig.swift:85 | var | public | public var chatSystemTimeLineSpace:NSNumber = 2 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:87 | var | public | public var chatSystemContentLineSpace:NSNumber = 2 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:92 | var | open | @PTClampedPropertyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:94 | var | public | public var showTimeLabel:Bool = true |
+| PooToolsSource/MessageKit/PTChatConfig.swift:96 | var | public | public var showSenderName:Bool = true |
+| PooToolsSource/MessageKit/PTChatConfig.swift:98 | var | public | public var senderNameFont:UIFont = .appfont(size: 13) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:100 | var | public | public var senderNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
+| PooToolsSource/MessageKit/PTChatConfig.swift:101 | var | public | public var senderNameBackgroundColor:UIColor = .clear |
+| PooToolsSource/MessageKit/PTChatConfig.swift:102 | var | public | public var receiverNameColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
+| PooToolsSource/MessageKit/PTChatConfig.swift:103 | var | public | public var receiverNameBackgroundColor:UIColor = .clear |
+| PooToolsSource/MessageKit/PTChatConfig.swift:104 | var | public | public var userIconTopSpacing:CGFloat = 0 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:106 | var | public | public var userIconFixelSpace:CGFloat = 10 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:108 | var | public | public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:110 | var | public | public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:112 | var | public | public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:114 | var | public | public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:116 | var | public | public var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:118 | var | public | public var chatWaitErrorImage:UIImage = "‼️".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:120 | var | public | public var showReadStatus:Bool = true |
+| PooToolsSource/MessageKit/PTChatConfig.swift:122 | var | public | public var readStatusFont:UIFont = .appfont(size: 13) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:124 | var | public | public var readStatusColor:UIColor = UIColor(hexString: "919191") ?? .secondaryLabel |
+| PooToolsSource/MessageKit/PTChatConfig.swift:125 | var | public | public var readStatusName:String = "Read" |
+| PooToolsSource/MessageKit/PTChatConfig.swift:126 | var | public | public var unreadStatusName:String = "unread" |
+| PooToolsSource/MessageKit/PTChatConfig.swift:128 | var | open | @PTClampedPropertyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:132 | var | public | public var textMeMessageColor:UIColor = .black |
+| PooToolsSource/MessageKit/PTChatConfig.swift:134 | var | public | public var textMeMessageFont:UIFont = .appfont(size: 15) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:136 | var | public | public var textOtherMessageColor:UIColor = .black |
+| PooToolsSource/MessageKit/PTChatConfig.swift:138 | var | public | public var textOtherMessageFont:UIFont = .appfont(size: 15) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:140 | var | public | public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:142 | var | public | public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:144 | var | public | public var textLineSpace:CGFloat = 2 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:146 | var | public | @PTClampedPropertyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:148 | var | public | public var hashtagColor:DynamicColor = .systemBlue |
+| PooToolsSource/MessageKit/PTChatConfig.swift:149 | var | public | public var hashtagSelectedColor:DynamicColor = .systemBlue |
+| PooToolsSource/MessageKit/PTChatConfig.swift:151 | var | public | public var chinaCellPhoneColor:DynamicColor = .BurntOrangeColor |
+| PooToolsSource/MessageKit/PTChatConfig.swift:152 | var | public | public var chinaCellPhoneSelectedColor:DynamicColor = .BurntOrangeColor |
+| PooToolsSource/MessageKit/PTChatConfig.swift:154 | var | public | public var urlColor:DynamicColor = .SteelBlueColor |
+| PooToolsSource/MessageKit/PTChatConfig.swift:155 | var | public | public var urlSelectedColor:DynamicColor = .SteelBlueColor |
+| PooToolsSource/MessageKit/PTChatConfig.swift:157 | var | public | public var mentionColor:DynamicColor = .systemRed |
+| PooToolsSource/MessageKit/PTChatConfig.swift:158 | var | public | public var mentionSelectedColor:DynamicColor = .systemRed |
+| PooToolsSource/MessageKit/PTChatConfig.swift:160 | var | public | public var customerTagModels:[PTMessageTextCustomAttTagModel] = [] |
+| PooToolsSource/MessageKit/PTChatConfig.swift:164 | var | public | @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:166 | var | public | @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:168 | var | public | @PTClampedPropertyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:170 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:172 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:173 | var | public | public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:174 | var | public | public var mediaDownloadImage:UIImage = "⏬️".emojiToImage(emojiFont: .appfont(size: 40)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:175 | var | public | public var mediaDownloadPauseImage:UIImage = "🔁".emojiToImage(emojiFont: .appfont(size: 40)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:176 | var | public | public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:180 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:182 | var | public | @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:184 | var | public | @PTClampedPropertyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:186 | var | public | public var showBuilding:Bool = true |
+| PooToolsSource/MessageKit/PTChatConfig.swift:188 | var | public | public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:190 | var | public | public var showsPointsOfInterest: Bool = false |
+| PooToolsSource/MessageKit/PTChatConfig.swift:192 | var | public | public var mapCellPinImage:UIImage = "🧭".emojiToImage(emojiFont: .appfont(size: 40)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:196 | var | public | @PTClampedPropertyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:198 | var | public | public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:200 | var | public | public var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:202 | var | public | public var durationFont:UIFont = .appfont(size: 14) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:204 | var | public | public var durationColor:UIColor = .systemBlue |
+| PooToolsSource/MessageKit/PTChatConfig.swift:206 | var | public | public var progressColor:UIColor = .systemBlue |
+| PooToolsSource/MessageKit/PTChatConfig.swift:209 | var | public | public var dotColor:UIColor = .lightGray |
+| PooToolsSource/MessageKit/PTChatConfig.swift:212 | var | public | public var fileNameFont:UIFont = .appfont(size: 18,bold: true) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:213 | var | public | public var fileNameColor:UIColor = .black |
+| PooToolsSource/MessageKit/PTChatConfig.swift:214 | var | public | public var fileSizeFont:UIFont = .appfont(size: 13) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:215 | var | public | public var fileSizeColor:UIColor = .lightGray |
+| PooToolsSource/MessageKit/PTChatConfig.swift:216 | var | public | @PTClampedPropertyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:217 | var | public | public var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40)) |
+| PooToolsSource/MessageKit/PTChatConfig.swift:218 | var | public | public var yesterDayName:String = "昨天" |
 | PooToolsSource/MessageKit/PTChatFileCell.swift:15 | class | public | public class PTChatFileCell: PTChatBaseCell { |
 | PooToolsSource/MessageKit/PTChatFileCell.swift:24 | var | public | public var cellModel: PTChatListModel! { |
 | PooToolsSource/MessageKit/PTChatListModel.swift:11 | enum | public | public enum PTChatMessageType:Int,SmartCaseDefaultable { |
@@ -4210,6 +4209,88 @@ Generated at: 2026-09-26T14:07:37Z
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:71 | init | public | public init(_ type: T?) { |
 | PooToolsSource/PToolsCore/PTMainActorBridge.swift:12 | enum | public | public enum PTMainActorBridge { |
 | PooToolsSource/PToolsCore/PTURLParser.swift:15 | enum | public | public enum PTURLParser { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:15 | struct | public | public struct PTDateContext: Hashable, Sendable, Codable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:16 | let | public | public let calendar: Calendar |
+| PooToolsSource/PToolsDate/PTDateContext.swift:17 | let | public | public let timeZone: TimeZone |
+| PooToolsSource/PToolsDate/PTDateContext.swift:18 | let | public | public let locale: Locale |
+| PooToolsSource/PToolsDate/PTDateContext.swift:20 | init | public | public init(calendar: Calendar = .current, |
+| PooToolsSource/PToolsDate/PTDateContext.swift:73 | protocol | public | public protocol PTDateReadable: Sendable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:81 | struct | public | public struct PTDateComponentsView: Sendable, Hashable, Codable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:82 | let | public | public let year: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:83 | let | public | public let month: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:84 | let | public | public let day: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:85 | let | public | public let hour: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:86 | let | public | public let minute: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:87 | let | public | public let second: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:88 | let | public | public let weekday: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:89 | let | public | public let weekOfYear: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:90 | let | public | public let weekOfMonth: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:91 | let | public | public let yearForWeekOfYear: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:92 | let | public | public let quarter: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:94 | init | public | public init(date: Date, context: PTDateContext) { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:116 | struct | public | public struct PTDateOffset: Hashable, Sendable, Codable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:117 | let | public | public let years: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:118 | let | public | public let months: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:119 | let | public | public let weeks: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:120 | let | public | public let days: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:121 | let | public | public let hours: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:122 | let | public | public let minutes: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:123 | let | public | public let seconds: Int |
+| PooToolsSource/PToolsDate/PTDateContext.swift:125 | init | public | public init(years: Int = 0, |
+| PooToolsSource/PToolsDate/PTDateContext.swift:149 | var | public | public var dateComponents: DateComponents { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:165 | struct | public | public struct PTDateResolutionPolicy: Sendable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:166 | let | public | public let matchingPolicy: Calendar.MatchingPolicy |
+| PooToolsSource/PToolsDate/PTDateContext.swift:167 | let | public | public let repeatedTimePolicy: Calendar.RepeatedTimePolicy |
+| PooToolsSource/PToolsDate/PTDateContext.swift:168 | let | public | public let direction: Calendar.SearchDirection |
+| PooToolsSource/PToolsDate/PTDateContext.swift:170 | init | public | public init(matchingPolicy: Calendar.MatchingPolicy = .nextTime, |
+| PooToolsSource/PToolsDate/PTDateContext.swift:182 | enum | public | public enum PTTimestampUnit: String, Sendable, Codable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:190 | enum | public | public enum PTDateSymbolStyle: Sendable { |
+| PooToolsSource/PToolsDate/PTDateContext.swift:199 | enum | public | public enum PTDateFormat: Sendable { |
+| PooToolsSource/PToolsDate/PTDateParser.swift:12 | enum | public | public enum PTDateParsingStrategy: Sendable { |
+| PooToolsSource/PToolsDate/PTDateParser.swift:19 | enum | public | public enum PTDateParsingError: Error, Sendable, Equatable { |
+| PooToolsSource/PToolsDate/PTDateParser.swift:26 | enum | public | public enum PTDateParser { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:15 | struct | public | public struct PTZonedDate: PTDateReadable, Hashable, Codable, Comparable { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:16 | let | public | public let date: Date |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:17 | let | public | public let context: PTDateContext |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:19 | init | public | public init(date: Date, context: PTDateContext = .autoupdatingCurrent) { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:31 | func | public | public func `in`(_ context: PTDateContext) -> PTZonedDate { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:39 | var | public | public var components: PTDateComponentsView { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:43 | var | public | public var year: Int { components.year } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:44 | var | public | public var month: Int { components.month } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:45 | var | public | public var day: Int { components.day } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:46 | var | public | public var hour: Int { components.hour } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:47 | var | public | public var minute: Int { components.minute } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:48 | var | public | public var second: Int { components.second } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:49 | var | public | public var weekday: Int { components.weekday } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:50 | var | public | public var weekOfYear: Int { components.weekOfYear } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:51 | var | public | public var weekOfMonth: Int { components.weekOfMonth } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:52 | var | public | public var yearForWeekOfYear: Int { components.yearForWeekOfYear } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:53 | var | public | public var quarter: Int { components.quarter } |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:58 | func | public | public func formatted(date dateStyle: Date.FormatStyle.DateStyle? = .abbreviated, |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:71 | func | public | public func formatted(pattern: String) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:80 | func | public | public func formatted(_ format: PTDateFormat) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:97 | func | public | public func iso8601String(includingFractionalSeconds: Bool = false) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:103 | func | public | public func monthName(_ style: PTDateSymbolStyle = .full) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:118 | func | public | public func weekdayName(_ style: PTDateSymbolStyle = .full) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:136 | func | public | public func relativeDescription(to reference: Date = Date(), |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:148 | func | public | public func intervalDescription(to other: PTZonedDate) -> String { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:159 | func | public | public func adding(_ offset: PTDateOffset) -> PTZonedDate { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:164 | func | public | public func subtracting(_ offset: PTDateOffset) -> PTZonedDate { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:174 | func | public | public func components(to other: PTZonedDate, |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:179 | func | public | public func next(matching components: DateComponents, |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:191 | var | public | public var startOfDay: PTZonedDate { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:195 | var | public | public var dayInterval: DateInterval? { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:199 | var | public | public var weekInterval: DateInterval? { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:203 | var | public | public var monthInterval: DateInterval? { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:207 | var | public | public var yearInterval: DateInterval? { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:211 | var | public | public var isToday: Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:215 | var | public | public var isYesterday: Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:219 | var | public | public var isTomorrow: Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:223 | var | public | public var isWeekend: Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:227 | func | public | public func isSameDay(as other: PTZonedDate) -> Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:231 | func | public | public func isSame(_ component: Calendar.Component, as other: PTZonedDate) -> Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:235 | func | public | public func isInPast(relativeTo reference: Date = Date()) -> Bool { |
+| PooToolsSource/PToolsDate/PTZonedDate.swift:239 | func | public | public func isInFuture(relativeTo reference: Date = Date()) -> Bool { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:12 | enum | public | public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:26 | struct | public | public struct PTLogCategory: RawRepresentable, Hashable, Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:27 | let | public | public let rawValue: String |

@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SwiftDate
 
 final class PTCrashDetailModel: NSObject {
 

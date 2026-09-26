@@ -24,6 +24,8 @@
     {"name":"Slider","spm_product":"PooToolsSlider","spm_target":"PooToolsSlider","pod_subspec":"Slider","source_path":"PooToolsSource/Slider","dependencies":["PToolsUIFoundation","SnapKit"],"compile_flags":["POOTOOLS_SLIDER"],"resources":[],"category":"ui-leaf"}
   ],
   "known_module_only": [
+	{"kind":"spm_only","module":"PToolsDate","reason":"SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility.","owner":"architecture","expiration":"2026-12-31"},
+	{"kind":"pod_only","module":"Date","reason":"CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"pod_only","module":"Appz","reason":"CocoaPods aggregate subspec without a standalone SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"pod_only","module":"FilterCamera","reason":"CocoaPods-only feature entry without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"pod_only","module":"Flag","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},

@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
-  "generated_at": "2026-09-26T14:07:37Z",
+  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
+  "generated_at": "2026-09-26T14:52:53Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -10938,7 +10938,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|struct|public struct PTSendableEventArrayBox: @unchecked Sendable",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 17,
+      "line": 19,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTSendableEventArrayBox: @unchecked Sendable {"
@@ -10946,7 +10946,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|let|public let events: [EKEvent]",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 18,
+      "line": 20,
       "access": "public",
       "kind": "let",
       "declaration": "public let events: [EKEvent]"
@@ -10954,7 +10954,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|init|public init(_ events: [EKEvent])",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 20,
+      "line": 22,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ events: [EKEvent]) {"
@@ -10962,7 +10962,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|struct|public struct PTSendableReminderArrayBox: @unchecked Sendable",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 25,
+      "line": 27,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTSendableReminderArrayBox: @unchecked Sendable {"
@@ -10970,7 +10970,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|let|public let reminder: [EKReminder]",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 26,
+      "line": 28,
       "access": "public",
       "kind": "let",
       "declaration": "public let reminder: [EKReminder]"
@@ -10978,7 +10978,7 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|init|public init(_ reminder: [EKReminder])",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 28,
+      "line": 30,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ reminder: [EKReminder]) {"
@@ -10986,26 +10986,26 @@
     {
       "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|class|public class PTEventOnCalendar: NSObject",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 34,
+      "line": 36,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTEventOnCalendar: NSObject {"
     },
     {
-      "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|class|public class func createEvent(startDate:DateInRegion,",
+      "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|class|public class func createEvent(startDate: PTZonedDate,",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 91,
+      "line": 93,
       "access": "public",
       "kind": "class",
-      "declaration": "public class func createEvent(startDate:DateInRegion,"
+      "declaration": "public class func createEvent(startDate: PTZonedDate,"
     },
     {
-      "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|class|public class func createEvent(startDate:DateInRegion,",
+      "key": "PooToolsSource/Calendar/PTEventOnCalendar.swift|public|class|public class func createEvent(startDate: PTZonedDate,",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 107,
+      "line": 109,
       "access": "public",
       "kind": "class",
-      "declaration": "public class func createEvent(startDate:DateInRegion,"
+      "declaration": "public class func createEvent(startDate: PTZonedDate,"
     },
     {
       "key": "PooToolsSource/CalendarPermission/PTPermissionCalendar.swift|public|class|public class PTPermissionCalendar: PTPermission",
@@ -11354,7 +11354,7 @@
     {
       "key": "PooToolsSource/Category/Date+PTEX.swift|public|enum|public enum PTTimestampType: Int",
       "path": "PooToolsSource/Category/Date+PTEX.swift",
-      "line": 15,
+      "line": 14,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTimestampType: Int {"
@@ -11362,18 +11362,10 @@
     {
       "key": "PooToolsSource/Category/Date+PTEX.swift|public|enum|@objc public enum CheckContractTimeRelationships: Int",
       "path": "PooToolsSource/Category/Date+PTEX.swift",
-      "line": 24,
+      "line": 23,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum CheckContractTimeRelationships: Int {"
-    },
-    {
-      "key": "PooToolsSource/Category/DateFormatter+PTEX.swift|public|let|public let jx_formatter = DateFormatter()",
-      "path": "PooToolsSource/Category/DateFormatter+PTEX.swift",
-      "line": 14,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let jx_formatter = DateFormatter()"
     },
     {
       "key": "PooToolsSource/Category/Device+PTEX.swift|public|enum|public enum UIDeviceApplePencilSupportType",
@@ -11970,7 +11962,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PStrengthLevel",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 151,
+      "line": 150,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PStrengthLevel {"
@@ -11978,7 +11970,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum UTF8StringType:Int",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 159,
+      "line": 158,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum UTF8StringType:Int {"
@@ -11986,7 +11978,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum StringTypeLength",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 165,
+      "line": 164,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum StringTypeLength {"
@@ -11994,7 +11986,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PTHashType",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 180,
+      "line": 179,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTHashType {"
@@ -12002,7 +11994,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PTConstellationType",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 189,
+      "line": 188,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTConstellationType {"
@@ -19114,7 +19106,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|actor|public actor PTNetworkSpeedMonitor",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 417,
+      "line": 416,
       "access": "public",
       "kind": "actor",
       "declaration": "public actor PTNetworkSpeedMonitor {"
@@ -19122,7 +19114,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func getDownloadSpeeds() -> [Double]",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 428,
+      "line": 427,
       "access": "public",
       "kind": "func",
       "declaration": "public func getDownloadSpeeds() -> [Double] {"
@@ -19130,7 +19122,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func getUploadSpeeds() -> [Double]",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 433,
+      "line": 432,
       "access": "public",
       "kind": "func",
       "declaration": "public func getUploadSpeeds() -> [Double] {"
@@ -19138,7 +19130,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func addDownloadSpeed(_ speed: Double)",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 438,
+      "line": 437,
       "access": "public",
       "kind": "func",
       "declaration": "public func addDownloadSpeed(_ speed: Double) {"
@@ -19146,7 +19138,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func addUploadSpeed(_ speed: Double)",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 446,
+      "line": 445,
       "access": "public",
       "kind": "func",
       "declaration": "public func addUploadSpeed(_ speed: Double) {"
@@ -19154,7 +19146,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func averageDownloadSpeed() -> Double",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 454,
+      "line": 453,
       "access": "public",
       "kind": "func",
       "declaration": "public func averageDownloadSpeed() -> Double {"
@@ -19162,7 +19154,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func averageUploadSpeed() -> Double",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 460,
+      "line": 459,
       "access": "public",
       "kind": "func",
       "declaration": "public func averageUploadSpeed() -> Double {"
@@ -19170,7 +19162,7 @@
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|func|public func clearSpeeds()",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 466,
+      "line": 465,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearSpeeds() {"
@@ -20562,7 +20554,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|typealias|public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 13,
+      "line": 12,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void"
@@ -20570,7 +20562,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|class|public class PTHealthKit: NSObject",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 16,
+      "line": 15,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTHealthKit: NSObject {"
@@ -20578,7 +20570,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|var|public var loadBlock:StepBlock?",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 29,
+      "line": 28,
       "access": "public",
       "kind": "var",
       "declaration": "public var loadBlock:StepBlock?"
@@ -20586,7 +20578,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func start()",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 39,
+      "line": 38,
       "access": "public",
       "kind": "func",
       "declaration": "public func start() {"
@@ -20594,7 +20586,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func stop()",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 45,
+      "line": 44,
       "access": "public",
       "kind": "func",
       "declaration": "public func stop() {"
@@ -20602,7 +20594,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func invalidate()",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 53,
+      "line": 52,
       "access": "public",
       "kind": "func",
       "declaration": "public func invalidate() {"
@@ -20610,7 +20602,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 126,
+      "line": 129,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -20618,7 +20610,7 @@
     {
       "key": "PooToolsSource/HealthKit/PTHealthKit.swift|public|func|public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void)",
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 159,
+      "line": 162,
       "access": "public",
       "kind": "func",
       "declaration": "public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {"
@@ -29090,7 +29082,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|class|public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 33,
+      "line": 32,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol {"
@@ -29098,7 +29090,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var tag:String = \"\"",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 35,
+      "line": 34,
       "access": "public",
       "kind": "var",
       "declaration": "public var tag:String = \"\""
@@ -29106,7 +29098,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@SmartAny public var tagColor:DynamicColor = .systemGray",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 36,
+      "line": 35,
       "access": "public",
       "kind": "var",
       "declaration": "@SmartAny public var tagColor:DynamicColor = .systemGray"
@@ -29114,7 +29106,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@SmartAny public var tagSelectedColor:DynamicColor = .systemGray",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 37,
+      "line": 36,
       "access": "public",
       "kind": "var",
       "declaration": "@SmartAny public var tagSelectedColor:DynamicColor = .systemGray"
@@ -29122,7 +29114,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|class|public class PTChatConfig: NSObject",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 43,
+      "line": 42,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTChatConfig: NSObject {"
@@ -29130,7 +29122,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var imOwnerId:String = \"\"",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 54,
+      "line": 53,
       "access": "public",
       "kind": "var",
       "declaration": "public var imOwnerId:String = \"\""
@@ -29138,7 +29130,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 55,
+      "line": 54,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60"
@@ -29146,7 +29138,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatTopFixel:CGFloat = 0",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 69,
+      "line": 68,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatTopFixel:CGFloat = 0"
@@ -29154,7 +29146,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatBottomFixel:CGFloat = 0",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 71,
+      "line": 70,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatBottomFixel:CGFloat = 0"
@@ -29162,7 +29154,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatTimeFont:UIFont = .appfont(size: 13)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 74,
+      "line": 73,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatTimeFont:UIFont = .appfont(size: 13)"
@@ -29170,7 +29162,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatTimeColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 76,
+      "line": 75,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatTimeColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel"
@@ -29178,7 +29170,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 78,
+      "line": 77,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5"
@@ -29186,7 +29178,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatTimeBackgroundColor:UIColor = UIColor(hexString: \"cacaca\") ?? .tertiarySystemFill",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 80,
+      "line": 79,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatTimeBackgroundColor:UIColor = UIColor(hexString: \"cacaca\") ?? .tertiarySystemFill"
@@ -29194,7 +29186,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatSystemMessageFont:UIFont = .appfont(size: 13)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 82,
+      "line": 81,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatSystemMessageFont:UIFont = .appfont(size: 13)"
@@ -29202,7 +29194,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatSystemMessageColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 84,
+      "line": 83,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatSystemMessageColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel"
@@ -29210,7 +29202,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatSystemTimeLineSpace:NSNumber = 2",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 86,
+      "line": 85,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatSystemTimeLineSpace:NSNumber = 2"
@@ -29218,7 +29210,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatSystemContentLineSpace:NSNumber = 2",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 88,
+      "line": 87,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatSystemContentLineSpace:NSNumber = 2"
@@ -29226,7 +29218,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|open|var|@PTClampedPropertyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 93,
+      "line": 92,
       "access": "open",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44"
@@ -29234,7 +29226,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var showTimeLabel:Bool = true",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 95,
+      "line": 94,
       "access": "public",
       "kind": "var",
       "declaration": "public var showTimeLabel:Bool = true"
@@ -29242,7 +29234,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var showSenderName:Bool = true",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 97,
+      "line": 96,
       "access": "public",
       "kind": "var",
       "declaration": "public var showSenderName:Bool = true"
@@ -29250,7 +29242,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var senderNameFont:UIFont = .appfont(size: 13)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 99,
+      "line": 98,
       "access": "public",
       "kind": "var",
       "declaration": "public var senderNameFont:UIFont = .appfont(size: 13)"
@@ -29258,7 +29250,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var senderNameColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 101,
+      "line": 100,
       "access": "public",
       "kind": "var",
       "declaration": "public var senderNameColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel"
@@ -29266,7 +29258,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var senderNameBackgroundColor:UIColor = .clear",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 102,
+      "line": 101,
       "access": "public",
       "kind": "var",
       "declaration": "public var senderNameBackgroundColor:UIColor = .clear"
@@ -29274,7 +29266,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var receiverNameColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 103,
+      "line": 102,
       "access": "public",
       "kind": "var",
       "declaration": "public var receiverNameColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel"
@@ -29282,7 +29274,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var receiverNameBackgroundColor:UIColor = .clear",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 104,
+      "line": 103,
       "access": "public",
       "kind": "var",
       "declaration": "public var receiverNameBackgroundColor:UIColor = .clear"
@@ -29290,7 +29282,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var userIconTopSpacing:CGFloat = 0",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 105,
+      "line": 104,
       "access": "public",
       "kind": "var",
       "declaration": "public var userIconTopSpacing:CGFloat = 0"
@@ -29298,7 +29290,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var userIconFixelSpace:CGFloat = 10",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 107,
+      "line": 106,
       "access": "public",
       "kind": "var",
       "declaration": "public var userIconFixelSpace:CGFloat = 10"
@@ -29306,7 +29298,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 109,
+      "line": 108,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
@@ -29314,7 +29306,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 111,
+      "line": 110,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
@@ -29322,7 +29314,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 113,
+      "line": 112,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
@@ -29330,7 +29322,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 115,
+      "line": 114,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
@@ -29338,7 +29330,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatWaitImage:UIImage = \"📀\".emojiToImage(emojiFont: .appfont(size: 20))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 117,
+      "line": 116,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatWaitImage:UIImage = \"📀\".emojiToImage(emojiFont: .appfont(size: 20))"
@@ -29346,7 +29338,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chatWaitErrorImage:UIImage = \"‼️\".emojiToImage(emojiFont: .appfont(size: 20))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 119,
+      "line": 118,
       "access": "public",
       "kind": "var",
       "declaration": "public var chatWaitErrorImage:UIImage = \"‼️\".emojiToImage(emojiFont: .appfont(size: 20))"
@@ -29354,7 +29346,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var showReadStatus:Bool = true",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 121,
+      "line": 120,
       "access": "public",
       "kind": "var",
       "declaration": "public var showReadStatus:Bool = true"
@@ -29362,7 +29354,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var readStatusFont:UIFont = .appfont(size: 13)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 123,
+      "line": 122,
       "access": "public",
       "kind": "var",
       "declaration": "public var readStatusFont:UIFont = .appfont(size: 13)"
@@ -29370,7 +29362,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var readStatusColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 125,
+      "line": 124,
       "access": "public",
       "kind": "var",
       "declaration": "public var readStatusColor:UIColor = UIColor(hexString: \"919191\") ?? .secondaryLabel"
@@ -29378,7 +29370,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var readStatusName:String = \"Read\"",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 126,
+      "line": 125,
       "access": "public",
       "kind": "var",
       "declaration": "public var readStatusName:String = \"Read\""
@@ -29386,7 +29378,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var unreadStatusName:String = \"unread\"",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 127,
+      "line": 126,
       "access": "public",
       "kind": "var",
       "declaration": "public var unreadStatusName:String = \"unread\""
@@ -29394,7 +29386,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|open|var|@PTClampedPropertyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 129,
+      "line": 128,
       "access": "open",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5"
@@ -29402,7 +29394,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textMeMessageColor:UIColor = .black",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 133,
+      "line": 132,
       "access": "public",
       "kind": "var",
       "declaration": "public var textMeMessageColor:UIColor = .black"
@@ -29410,7 +29402,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textMeMessageFont:UIFont = .appfont(size: 15)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 135,
+      "line": 134,
       "access": "public",
       "kind": "var",
       "declaration": "public var textMeMessageFont:UIFont = .appfont(size: 15)"
@@ -29418,7 +29410,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textOtherMessageColor:UIColor = .black",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 137,
+      "line": 136,
       "access": "public",
       "kind": "var",
       "declaration": "public var textOtherMessageColor:UIColor = .black"
@@ -29426,7 +29418,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textOtherMessageFont:UIFont = .appfont(size: 15)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 139,
+      "line": 138,
       "access": "public",
       "kind": "var",
       "declaration": "public var textOtherMessageFont:UIFont = .appfont(size: 15)"
@@ -29434,7 +29426,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 141,
+      "line": 140,
       "access": "public",
       "kind": "var",
       "declaration": "public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)"
@@ -29442,7 +29434,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 143,
+      "line": 142,
       "access": "public",
       "kind": "var",
       "declaration": "public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)"
@@ -29450,7 +29442,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var textLineSpace:CGFloat = 2",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 145,
+      "line": 144,
       "access": "public",
       "kind": "var",
       "declaration": "public var textLineSpace:CGFloat = 2"
@@ -29458,7 +29450,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 147,
+      "line": 146,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38"
@@ -29466,7 +29458,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var hashtagColor:DynamicColor = .systemBlue",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 149,
+      "line": 148,
       "access": "public",
       "kind": "var",
       "declaration": "public var hashtagColor:DynamicColor = .systemBlue"
@@ -29474,7 +29466,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var hashtagSelectedColor:DynamicColor = .systemBlue",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 150,
+      "line": 149,
       "access": "public",
       "kind": "var",
       "declaration": "public var hashtagSelectedColor:DynamicColor = .systemBlue"
@@ -29482,7 +29474,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chinaCellPhoneColor:DynamicColor = .BurntOrangeColor",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 152,
+      "line": 151,
       "access": "public",
       "kind": "var",
       "declaration": "public var chinaCellPhoneColor:DynamicColor = .BurntOrangeColor"
@@ -29490,7 +29482,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var chinaCellPhoneSelectedColor:DynamicColor = .BurntOrangeColor",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 153,
+      "line": 152,
       "access": "public",
       "kind": "var",
       "declaration": "public var chinaCellPhoneSelectedColor:DynamicColor = .BurntOrangeColor"
@@ -29498,7 +29490,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var urlColor:DynamicColor = .SteelBlueColor",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 155,
+      "line": 154,
       "access": "public",
       "kind": "var",
       "declaration": "public var urlColor:DynamicColor = .SteelBlueColor"
@@ -29506,7 +29498,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var urlSelectedColor:DynamicColor = .SteelBlueColor",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 156,
+      "line": 155,
       "access": "public",
       "kind": "var",
       "declaration": "public var urlSelectedColor:DynamicColor = .SteelBlueColor"
@@ -29514,7 +29506,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mentionColor:DynamicColor = .systemRed",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 158,
+      "line": 157,
       "access": "public",
       "kind": "var",
       "declaration": "public var mentionColor:DynamicColor = .systemRed"
@@ -29522,7 +29514,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mentionSelectedColor:DynamicColor = .systemRed",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 159,
+      "line": 158,
       "access": "public",
       "kind": "var",
       "declaration": "public var mentionSelectedColor:DynamicColor = .systemRed"
@@ -29530,7 +29522,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var customerTagModels:[PTMessageTextCustomAttTagModel] = []",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 161,
+      "line": 160,
       "access": "public",
       "kind": "var",
       "declaration": "public var customerTagModels:[PTMessageTextCustomAttTagModel] = []"
@@ -29538,7 +29530,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 165,
+      "line": 164,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200"
@@ -29546,7 +29538,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 167,
+      "line": 166,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200"
@@ -29554,7 +29546,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 169,
+      "line": 168,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5"
@@ -29562,7 +29554,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 171,
+      "line": 170,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200"
@@ -29570,7 +29562,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 173,
+      "line": 172,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200"
@@ -29578,7 +29570,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mediaPlayButton:UIImage = \"▶️\".emojiToImage(emojiFont: .appfont(size: 40))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 174,
+      "line": 173,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaPlayButton:UIImage = \"▶️\".emojiToImage(emojiFont: .appfont(size: 40))"
@@ -29586,7 +29578,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mediaDownloadImage:UIImage = \"⏬️\".emojiToImage(emojiFont: .appfont(size: 40))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 175,
+      "line": 174,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaDownloadImage:UIImage = \"⏬️\".emojiToImage(emojiFont: .appfont(size: 40))"
@@ -29594,7 +29586,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mediaDownloadPauseImage:UIImage = \"🔁\".emojiToImage(emojiFont: .appfont(size: 40))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 176,
+      "line": 175,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaDownloadPauseImage:UIImage = \"🔁\".emojiToImage(emojiFont: .appfont(size: 40))"
@@ -29602,7 +29594,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 177,
+      "line": 176,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)"
@@ -29610,7 +29602,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 181,
+      "line": 180,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200"
@@ -29618,7 +29610,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 183,
+      "line": 182,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200"
@@ -29626,7 +29618,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 185,
+      "line": 184,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5"
@@ -29634,7 +29626,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var showBuilding:Bool = true",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 187,
+      "line": 186,
       "access": "public",
       "kind": "var",
       "declaration": "public var showBuilding:Bool = true"
@@ -29642,7 +29634,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 189,
+      "line": 188,
       "access": "public",
       "kind": "var",
       "declaration": "public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)"
@@ -29650,7 +29642,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var showsPointsOfInterest: Bool = false",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 191,
+      "line": 190,
       "access": "public",
       "kind": "var",
       "declaration": "public var showsPointsOfInterest: Bool = false"
@@ -29658,7 +29650,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var mapCellPinImage:UIImage = \"🧭\".emojiToImage(emojiFont: .appfont(size: 40))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 193,
+      "line": 192,
       "access": "public",
       "kind": "var",
       "declaration": "public var mapCellPinImage:UIImage = \"🧭\".emojiToImage(emojiFont: .appfont(size: 40))"
@@ -29666,7 +29658,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 197,
+      "line": 196,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250"
@@ -29674,7 +29666,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 199,
+      "line": 198,
       "access": "public",
       "kind": "var",
       "declaration": "public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue)"
@@ -29682,7 +29674,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 201,
+      "line": 200,
       "access": "public",
       "kind": "var",
       "declaration": "public var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue)"
@@ -29690,7 +29682,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var durationFont:UIFont = .appfont(size: 14)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 203,
+      "line": 202,
       "access": "public",
       "kind": "var",
       "declaration": "public var durationFont:UIFont = .appfont(size: 14)"
@@ -29698,7 +29690,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var durationColor:UIColor = .systemBlue",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 205,
+      "line": 204,
       "access": "public",
       "kind": "var",
       "declaration": "public var durationColor:UIColor = .systemBlue"
@@ -29706,7 +29698,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var progressColor:UIColor = .systemBlue",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 207,
+      "line": 206,
       "access": "public",
       "kind": "var",
       "declaration": "public var progressColor:UIColor = .systemBlue"
@@ -29714,7 +29706,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var dotColor:UIColor = .lightGray",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 210,
+      "line": 209,
       "access": "public",
       "kind": "var",
       "declaration": "public var dotColor:UIColor = .lightGray"
@@ -29722,7 +29714,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var fileNameFont:UIFont = .appfont(size: 18,bold: true)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 213,
+      "line": 212,
       "access": "public",
       "kind": "var",
       "declaration": "public var fileNameFont:UIFont = .appfont(size: 18,bold: true)"
@@ -29730,7 +29722,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var fileNameColor:UIColor = .black",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 214,
+      "line": 213,
       "access": "public",
       "kind": "var",
       "declaration": "public var fileNameColor:UIColor = .black"
@@ -29738,7 +29730,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var fileSizeFont:UIFont = .appfont(size: 13)",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 215,
+      "line": 214,
       "access": "public",
       "kind": "var",
       "declaration": "public var fileSizeFont:UIFont = .appfont(size: 13)"
@@ -29746,7 +29738,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var fileSizeColor:UIColor = .lightGray",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 216,
+      "line": 215,
       "access": "public",
       "kind": "var",
       "declaration": "public var fileSizeColor:UIColor = .lightGray"
@@ -29754,7 +29746,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|@PTClampedPropertyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 217,
+      "line": 216,
       "access": "public",
       "kind": "var",
       "declaration": "@PTClampedPropertyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2"
@@ -29762,7 +29754,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var fileImage:UIImage = \"📁\".emojiToImage(emojiFont: .appfont(size: 40))",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 218,
+      "line": 217,
       "access": "public",
       "kind": "var",
       "declaration": "public var fileImage:UIImage = \"📁\".emojiToImage(emojiFont: .appfont(size: 40))"
@@ -29770,7 +29762,7 @@
     {
       "key": "PooToolsSource/MessageKit/PTChatConfig.swift|public|var|public var yesterDayName:String = \"昨天\"",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 219,
+      "line": 218,
       "access": "public",
       "kind": "var",
       "declaration": "public var yesterDayName:String = \"昨天\""
@@ -33582,6 +33574,662 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTURLParser {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|struct|public struct PTDateContext: Hashable, Sendable, Codable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDateContext: Hashable, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let calendar: Calendar",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let calendar: Calendar"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let timeZone: TimeZone",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let timeZone: TimeZone"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let locale: Locale",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let locale: Locale"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|init|public init(calendar: Calendar = .current,",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(calendar: Calendar = .current,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|protocol|public protocol PTDateReadable: Sendable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTDateReadable: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|struct|public struct PTDateComponentsView: Sendable, Hashable, Codable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDateComponentsView: Sendable, Hashable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let year: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 82,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let year: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let month: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let month: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let day: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let day: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let hour: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hour: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let minute: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let minute: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let second: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let second: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let weekday: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let weekday: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let weekOfYear: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let weekOfYear: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let weekOfMonth: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let weekOfMonth: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let yearForWeekOfYear: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let yearForWeekOfYear: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let quarter: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let quarter: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|init|public init(date: Date, context: PTDateContext)",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(date: Date, context: PTDateContext) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|struct|public struct PTDateOffset: Hashable, Sendable, Codable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 116,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDateOffset: Hashable, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let years: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 117,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let years: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let months: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 118,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let months: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let weeks: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 119,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let weeks: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let days: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 120,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let days: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let hours: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 121,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hours: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let minutes: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 122,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let minutes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let seconds: Int",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 123,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let seconds: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|init|public init(years: Int = 0,",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 125,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(years: Int = 0,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|var|public var dateComponents: DateComponents",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dateComponents: DateComponents {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|struct|public struct PTDateResolutionPolicy: Sendable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 165,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDateResolutionPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let matchingPolicy: Calendar.MatchingPolicy",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 166,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let matchingPolicy: Calendar.MatchingPolicy"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let repeatedTimePolicy: Calendar.RepeatedTimePolicy",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 167,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let repeatedTimePolicy: Calendar.RepeatedTimePolicy"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|let|public let direction: Calendar.SearchDirection",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 168,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let direction: Calendar.SearchDirection"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|init|public init(matchingPolicy: Calendar.MatchingPolicy = .nextTime,",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 170,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(matchingPolicy: Calendar.MatchingPolicy = .nextTime,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|enum|public enum PTTimestampUnit: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTTimestampUnit: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|enum|public enum PTDateSymbolStyle: Sendable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 190,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateSymbolStyle: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateContext.swift|public|enum|public enum PTDateFormat: Sendable",
+      "path": "PooToolsSource/PToolsDate/PTDateContext.swift",
+      "line": 199,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateFormat: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateParser.swift|public|enum|public enum PTDateParsingStrategy: Sendable",
+      "path": "PooToolsSource/PToolsDate/PTDateParser.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateParsingStrategy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateParser.swift|public|enum|public enum PTDateParsingError: Error, Sendable, Equatable",
+      "path": "PooToolsSource/PToolsDate/PTDateParser.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateParsingError: Error, Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTDateParser.swift|public|enum|public enum PTDateParser",
+      "path": "PooToolsSource/PToolsDate/PTDateParser.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateParser {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|struct|public struct PTZonedDate: PTDateReadable, Hashable, Codable, Comparable",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTZonedDate: PTDateReadable, Hashable, Codable, Comparable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|let|public let date: Date",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let date: Date"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|let|public let context: PTDateContext",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let context: PTDateContext"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|init|public init(date: Date, context: PTDateContext = .autoupdatingCurrent)",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(date: Date, context: PTDateContext = .autoupdatingCurrent) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func `in`(_ context: PTDateContext) -> PTZonedDate",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func `in`(_ context: PTDateContext) -> PTZonedDate {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var components: PTDateComponentsView",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var components: PTDateComponentsView {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var year: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 43,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var year: Int { components.year }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var month: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 44,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var month: Int { components.month }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var day: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 45,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var day: Int { components.day }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var hour: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 46,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hour: Int { components.hour }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var minute: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 47,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var minute: Int { components.minute }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var second: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 48,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var second: Int { components.second }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var weekday: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var weekday: Int { components.weekday }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var weekOfYear: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 50,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var weekOfYear: Int { components.weekOfYear }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var weekOfMonth: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var weekOfMonth: Int { components.weekOfMonth }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var yearForWeekOfYear: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var yearForWeekOfYear: Int { components.yearForWeekOfYear }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var quarter: Int",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var quarter: Int { components.quarter }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func formatted(date dateStyle: Date.FormatStyle.DateStyle? = .abbreviated,",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func formatted(date dateStyle: Date.FormatStyle.DateStyle? = .abbreviated,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func formatted(pattern: String) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func formatted(pattern: String) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func formatted(_ format: PTDateFormat) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func formatted(_ format: PTDateFormat) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func iso8601String(includingFractionalSeconds: Bool = false) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func iso8601String(includingFractionalSeconds: Bool = false) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func monthName(_ style: PTDateSymbolStyle = .full) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func monthName(_ style: PTDateSymbolStyle = .full) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func weekdayName(_ style: PTDateSymbolStyle = .full) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 118,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func weekdayName(_ style: PTDateSymbolStyle = .full) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func relativeDescription(to reference: Date = Date(),",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 136,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func relativeDescription(to reference: Date = Date(),"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func intervalDescription(to other: PTZonedDate) -> String",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func intervalDescription(to other: PTZonedDate) -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func adding(_ offset: PTDateOffset) -> PTZonedDate",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func adding(_ offset: PTDateOffset) -> PTZonedDate {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func subtracting(_ offset: PTDateOffset) -> PTZonedDate",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 164,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func subtracting(_ offset: PTDateOffset) -> PTZonedDate {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func components(to other: PTZonedDate,",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 174,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func components(to other: PTZonedDate,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func next(matching components: DateComponents,",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 179,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func next(matching components: DateComponents,"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var startOfDay: PTZonedDate",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 191,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var startOfDay: PTZonedDate {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var dayInterval: DateInterval?",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 195,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dayInterval: DateInterval? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var weekInterval: DateInterval?",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 199,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var weekInterval: DateInterval? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var monthInterval: DateInterval?",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 203,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var monthInterval: DateInterval? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var yearInterval: DateInterval?",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 207,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var yearInterval: DateInterval? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var isToday: Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 211,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isToday: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var isYesterday: Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 215,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isYesterday: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var isTomorrow: Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 219,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isTomorrow: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|var|public var isWeekend: Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 223,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isWeekend: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func isSameDay(as other: PTZonedDate) -> Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 227,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func isSameDay(as other: PTZonedDate) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func isSame(_ component: Calendar.Component, as other: PTZonedDate) -> Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 231,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func isSame(_ component: Calendar.Component, as other: PTZonedDate) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func isInPast(relativeTo reference: Date = Date()) -> Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 235,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func isInPast(relativeTo reference: Date = Date()) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDate/PTZonedDate.swift|public|func|public func isInFuture(relativeTo reference: Date = Date()) -> Bool",
+      "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
+      "line": 239,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func isInFuture(relativeTo reference: Date = Date()) -> Bool {"
     },
     {
       "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|enum|public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable",

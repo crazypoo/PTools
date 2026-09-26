@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
-  "generated_at": "2026-09-26T14:09:16Z",
+  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
+  "generated_at": "2026-09-26T14:52:59Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -195,6 +195,17 @@
       ]
     },
     {
+      "name": "PToolsDate",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDate"
+      ]
+    },
+    {
       "name": "PToolsLogging",
       "type": {
         "library": [
@@ -272,6 +283,7 @@
         "PTSiriPermission",
         "PTSpeechPermission",
         "PTTrackingPermission",
+        "PToolsDate",
         "PToolsLogging",
         "PToolsPermissionCore",
         "PToolsPermissionUI",
@@ -1676,36 +1688,11 @@
           ]
         }
       ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "swiftdate",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/malcommac/SwiftDate.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "exact": [
-              "7.0.0"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
     }
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 9,
+    "direct_third_party_count": 8,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -2474,6 +2461,57 @@
           "declaration": {
             "byName": [
               "PToolsCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsDate",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDate",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDateTests",
+      "type": "test",
+      "path": "Tests/PToolsDateTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDate",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDate",
               null
             ]
           }
@@ -6355,6 +6393,17 @@
           }
         },
         {
+          "name": "PToolsDate",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDate",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsLogging",
           "kind": "internal",
           "package": null,
@@ -6490,17 +6539,6 @@
           "declaration": {
             "byName": [
               "SnapKit",
-              null
-            ]
-          }
-        },
-        {
-          "name": "SwiftDate",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SwiftDate",
               null
             ]
           }

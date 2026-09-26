@@ -8,7 +8,6 @@
 
 import UIKit
 import HealthKit
-import SwiftDate
 
 public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void
 
@@ -104,8 +103,12 @@ public class PTHealthKit: NSObject {
                 PTNSLogConsole("*** An error occurred while calculating the statistics: \(error!.localizedDescription) ***",levelType: .error,loggerType: .health)
             }
                         
-            let todayDate = String.currentDate().toDate()!.date
-            let endDate = String.currentDate().toDate()!.dateAtEndOf(.day).date
+            // English: Use Calendar boundaries instead of parsing a formatted string.
+            // Español: Usa los límites del calendario en lugar de analizar una cadena formateada.
+            // 中文：直接使用日历边界，避免先格式化字符串再解析。
+            let calendar = Calendar.autoupdatingCurrent
+            let todayDate = calendar.startOfDay(for: Date())
+            let endDate = calendar.date(byAdding: .day, value: 1, to: todayDate) ?? todayDate
 
             results?.enumerateStatistics(from: todayDate, to: endDate, with: { result, stop in
                 Task { @MainActor in

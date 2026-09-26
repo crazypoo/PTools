@@ -10,8 +10,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(21|22|23|24|25)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.21–5.25 logging gate requires a 5.21.x through 5.25.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(21|22|23|24|25|26)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.21–5.26 logging gate requires a 5.21.x through 5.26.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -64,4 +64,4 @@ for requirement in "${required_patterns[@]}"; do
   }
 done
 
-printf 'PASS: PTools 5.21–5.25 logging migration, memory diagnostics and privacy contracts\n'
+printf 'PASS: PTools 5.21–5.26 logging migration, memory diagnostics and privacy contracts\n'

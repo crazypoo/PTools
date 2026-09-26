@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftDate
 
 public extension TimeInterval {
     var formattedString: String? {
@@ -17,9 +16,12 @@ public extension TimeInterval {
     }
 
     //MARK: 時間戳轉換成Date
-    ///時間戳轉換成Date
+    /// English: Converts a Unix timestamp to an absolute Date; the time zone only affects later formatting.
+    /// Español: Convierte una marca Unix en un Date absoluto; la zona solo afecta al formato posterior.
+    /// 中文：将 Unix 时间戳转换为绝对 Date，时区只影响后续格式化。
     func timeToDate(timeZone:TimeZone = TimeZone.current) -> Date {
-        Date(timeIntervalSince1970: self).addingTimeInterval(TimeInterval(timeZone.secondsFromGMT()))
+        _ = timeZone
+        return Date(timeIntervalSince1970: self)
     }
 
     func timeToDateWithFormatter(timeZone: TimeZone = TimeZone.current) -> Date {
@@ -110,18 +112,19 @@ public extension TimeInterval {
         }
         let ret = timeInterval.timeToDate()
 
-        if ret.isToday {
-            return ret.dateFormat(formatString: "HH:mm")
-        } else if ret.isInCurrentWeek {
-            if ret.isYesterday {
-                return yesterdayString + " " + ret.dateFormat(formatString: "HH:mm")
+        let zonedDate = ret.zoned(in: .autoupdatingCurrent)
+        if zonedDate.isToday {
+            return zonedDate.formatted(pattern: "HH:mm")
+        } else if zonedDate.context.calendar.isDate(ret, equalTo: Date(), toGranularity: .weekOfYear) {
+            if zonedDate.isYesterday {
+                return yesterdayString + " " + zonedDate.formatted(pattern: "HH:mm")
             } else {
-                return ret.weekdayName(.default,locale: Locales.current)
+                return zonedDate.weekdayName(.abbreviated)
             }
-        } else if ret.isInCurrentYear {
-            return ret.dateFormat(formatString: "MM-dd")
+        } else if zonedDate.context.calendar.isDate(ret, equalTo: Date(), toGranularity: .year) {
+            return zonedDate.formatted(pattern: "MM-dd")
         } else {
-            return ret.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
+            return zonedDate.formatted(pattern: "yyyy-MM-dd HH:mm:ss")
         }
     }
     

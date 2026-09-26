@@ -33,6 +33,14 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the Foundation-only date context without a third-party date dependency.
+    # Español: Publica el contexto de fechas basado solo en Foundation sin una dependencia de terceros.
+    # 中文：公开仅依赖 Foundation 的日期语境，移除第三方日期依赖。
+    s.subspec 'Date' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsDate/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+    end
+
     # English: Publish the logging contract without importing UIKit or legacy logging dependencies.
     # Español: Publica el contrato de logging sin importar UIKit ni las dependencias de logging heredadas.
     # 中文：发布不引入 UIKit 和旧日志依赖的日志契约。
@@ -84,10 +92,10 @@ Pod::Spec.new do |s|
 
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
+        subspec.dependency 'PooTools/Date'
         subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PooTools/Logging'
         subspec.dependency 'PooTools/Symbols'
-        subspec.dependency 'SwiftDate'
         subspec.dependency 'SnapKit'
         subspec.dependency 'DeviceKit'
         subspec.dependency 'IQKeyboardToolbarManager'

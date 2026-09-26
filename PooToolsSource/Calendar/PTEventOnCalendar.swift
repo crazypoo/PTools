@@ -8,7 +8,9 @@
 
 import UIKit
 @preconcurrency import EventKit
-@preconcurrency import SwiftDate
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 private struct PTSendableEventStoreBox: @unchecked Sendable {
     let store: EKEventStore
@@ -88,8 +90,8 @@ public class PTEventOnCalendar: NSObject {
     ///   - eventType: 提醒类型
     ///   - remindTime: 大于0是开始后提醒,小于0就开始时间前提醒
     ///   - handle: 成功回调
-    public class func createEvent(startDate:DateInRegion,
-                                  endDate:DateInRegion,
+    public class func createEvent(startDate: PTZonedDate,
+                                  endDate: PTZonedDate,
                                   eventTitle:String,
                                   location:String,
                                   notes:String,
@@ -104,8 +106,8 @@ public class PTEventOnCalendar: NSObject {
         }
     }
     
-    public class func createEvent(startDate:DateInRegion,
-                                  endDate:DateInRegion,
+    public class func createEvent(startDate: PTZonedDate,
+                                  endDate: PTZonedDate,
                                   eventTitle:String,
                                   location:String,
                                   notes:String,
@@ -280,8 +282,8 @@ extension PTEventOnCalendar {
     ///   - remindTime:
     ///   - handle: 成功回调
     class func eventCreateFunction(eventStore:EKEventStore,
-                                   startDate:DateInRegion,
-                                   endDate:DateInRegion,
+                                   startDate: PTZonedDate,
+                                   endDate: PTZonedDate,
                                    eventTitle:String,
                                    location:String,
                                    notes:String,
@@ -430,8 +432,8 @@ extension PTEventOnCalendar {
     ///   - remindTime:
     ///   - handle: 成功回调
     class func remindCreateFunction(eventStore:EKEventStore,
-                                    startDate:DateInRegion,
-                                    endDate:DateInRegion,
+                                    startDate: PTZonedDate,
+                                    endDate: PTZonedDate,
                                     eventTitle:String,
                                     location:String,
                                     notes:String,
@@ -440,11 +442,11 @@ extension PTEventOnCalendar {
         let event = EKReminder(eventStore: eventStore)
         event.title = eventTitle
         event.location = location
-        event.startDateComponents = startDate.date.dateComponents
-        event.dueDateComponents = endDate.date.dateComponents
+        event.startDateComponents = startDate.context.calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: startDate.date)
+        event.dueDateComponents = endDate.context.calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: endDate.date)
         event.notes = notes
         event.priority = 1
-        event.addAlarm(EKAlarm(absoluteDate: (startDate - abs(remindTime).int.seconds).date))
+        event.addAlarm(EKAlarm(absoluteDate: startDate.date.addingTimeInterval(-abs(remindTime))))
         event.calendar = eventStore.defaultCalendarForNewReminders()
         do {
             try eventStore.save(event, commit: true)

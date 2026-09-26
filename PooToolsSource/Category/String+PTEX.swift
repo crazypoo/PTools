@@ -17,7 +17,6 @@ import AppKit
 import CommonCrypto
 import AVFoundation
 import Foundation
-import SwiftDate
 import CryptoKit
 import CoreLocation
 
@@ -704,36 +703,46 @@ public extension String {
     }
     
     func timeStringChange() -> String {
-        guard let ret = self.toDate("yyyy-MM-dd HH:mm:ss")?.date else { return "" }
-        if ret.compare(.isThisYear) {
-            if ret.compare(.isThisWeek) {
-                if ret.compare(.isYesterday) {
-                    return "昨天" + " " + ret.toFormat("HH:mm", locale: Locales.chinese)
-                } else if ret.compare(.isToday) {
-                    return ret.dateFormat(formatString: "HH:mm")
+        let context = PTDateContext.autoupdatingCurrent
+        guard let date = try? PTDateParser.parse(self,
+                                                 strategy: .pattern("yyyy-MM-dd HH:mm:ss"),
+                                                 context: context) else { return "" }
+        let ret = date.zoned(in: context)
+        if ret.isSame(.year, as: PTZonedDate.now(in: context)) {
+            if ret.isSame(.weekOfYear, as: PTZonedDate.now(in: context)) {
+                if ret.isYesterday {
+                    return "昨天" + " " + ret.formatted(pattern: "HH:mm")
+                } else if ret.isToday {
+                    return ret.formatted(pattern: "HH:mm")
                 } else {
-                    return ret.weekdayName(.default,locale: Locales.chinese)
+                    return ret.weekdayName(.full)
                 }
             } else {
-                return ret.dateFormat(formatString: "MM-dd")
+                return ret.formatted(pattern: "MM-dd")
             }
         } else {
-            return ret.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
+            return ret.formatted(pattern: "yyyy-MM-dd HH:mm:ss")
         }
     }
     
     func timeStringChangeEX() -> String {
-        let regions = Region(zone: Zones.asiaHongKong)
-        guard let ret = self.toDate("yyyy-MM-dd HH:mm:ss",region: regions)?.date else { return "" }
+        let context = PTDateContext(calendar: Calendar(identifier: .gregorian),
+                                    timeZone: TimeZone(identifier: "Asia/Hong_Kong") ?? .current,
+                                    locale: .autoupdatingCurrent)
+        guard let date = try? PTDateParser.parse(self,
+                                                 strategy: .pattern("yyyy-MM-dd HH:mm:ss"),
+                                                 context: context) else { return "" }
+        let ret = date.zoned(in: context)
                 
-        var timeInterval = ret.timeIntervalSinceNow
+        var timeInterval = ret.date.timeIntervalSinceNow
         timeInterval = -timeInterval
         let hours = timeInterval / (60 * 60)
         let minites = timeInterval / 60
         let seconds = timeInterval
 
-        if !ret.compare(.isThisYear) {
-            return ret.toFormat("yyyy-MM-dd")
+        let now = PTZonedDate.now(in: context)
+        if !ret.isSame(.year, as: now) {
+            return ret.formatted(pattern: "yyyy-MM-dd")
         } else {
             if hours > 0 {
                 if hours >= 1 && hours <= 24 {
@@ -747,7 +756,7 @@ public extension String {
                         return "3天前"
                     }
                 } else if hours > 96 {
-                    return ret.toFormat("yyyy-MM-dd")
+                    return ret.formatted(pattern: "yyyy-MM-dd")
                 } else if hours < 1 {
                     if hours < 1 && minites < 1 {
                         return "\(String(format: "%.0f", seconds))秒前"
@@ -1100,24 +1109,25 @@ public extension String {
                                       completion: closure)
     }
     
-    func timeConvert(timeTimeZone:Zones,
-                     locale:LocaleConvertible = Locales.current,
-                     timeFormatter:String = "yyyy-MM-dd HH:mm:ss") -> DateInRegion? {
-        let currentRegion = Region(calendar: Calendars.gregorian, zone: Zones.current, locale: Locales.current)
-        let khRegion = Region(calendar: Calendars.gregorian, zone: timeTimeZone, locale: locale)
-                
-        if let khSwiftDate = self.toDate(timeFormatter,region: khRegion) {
-            let currentDate = khSwiftDate.date.convertTo(region: currentRegion)
-            return currentDate
+    func timeConvert(timeTimeZone: TimeZone,
+                     locale: Locale = .autoupdatingCurrent,
+                     timeFormatter: String = "yyyy-MM-dd HH:mm:ss") -> PTZonedDate? {
+        let sourceContext = PTDateContext(calendar: Calendar(identifier: .gregorian),
+                                          timeZone: timeTimeZone,
+                                          locale: locale)
+        guard let date = try? PTDateParser.parse(self,
+                                                 strategy: .pattern(timeFormatter),
+                                                 context: sourceContext) else {
+            return nil
         }
-        return nil
+        return date.zoned(in: .autoupdatingCurrent)
     }
     
-    func timeConverToString(timeTimeZone:Zones,
+    func timeConverToString(timeTimeZone: TimeZone,
                             formatter:String = "yyyy-MM-dd HH:mm:ss",
                             toFormatter:String = "yyyy-MM-dd HH:mm:ss") -> String {
         if let date = self.timeConvert(timeTimeZone:timeTimeZone,timeFormatter: formatter) {
-            return date.toString(.custom(toFormatter))
+            return date.formatted(pattern: toFormatter)
         } else {
             return ""
         }
@@ -1365,9 +1375,13 @@ public extension String {
     //MARK: 根據日期字符串獲取星座名稱
     ///根據日期字符串獲取星座名稱
     func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss") -> PTConstellationType {
-        guard let getDate = self.toDate(format)?.date else { return .Unknown }
-        let month = getDate.month
-        let day = getDate.day
+        let context = PTDateContext.posixUTC
+        guard let getDate = try? PTDateParser.parse(self,
+                                                    strategy: .pattern(format),
+                                                    context: context) else { return .Unknown }
+        let components = PTDateComponentsView(date: getDate, context: context)
+        let month = components.month
+        let day = components.day
         
         switch (month, day) {
         case (1, 20...31), (2, 1...18):
@@ -1438,12 +1452,15 @@ public extension String {
     
     //MARK: 格式化時間字符串
     ///格式化時間字符串
-    func dateStringFormat(calendar:Calendars = Calendars.republicOfChina,
-                          zone:Zones = Zones.asiaShanghai,
-                          local:Locales = Locales.chineseChina,
+    func dateStringFormat(calendar: Calendar = Calendar(identifier: .republicOfChina),
+                          zone: TimeZone = TimeZone(identifier: "Asia/Shanghai") ?? .current,
+                          local: Locale = Locale(identifier: "zh_CN"),
                           formatString:String = "yyyy-MM-dd") -> String {
-        let regions = Region(calendar: calendar, zone: zone, locale: local)
-        return self.toDate(formatString,region: regions)?.toString() ?? ""
+        let context = PTDateContext(calendar: calendar, timeZone: zone, locale: local)
+        guard let date = try? PTDateParser.parse(self,
+                                                 strategy: .pattern(formatString),
+                                                 context: context) else { return "" }
+        return date.zoned(in: context).formatted(pattern: formatString)
     }
     
     //MARK: JavaUnicode转苹果可以用的String

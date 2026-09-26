@@ -57,7 +57,7 @@ class SceneDelegate: PTWindowSceneDelegate {
             adModel.time = 10
             adModel.tapURL = ["123":"https://www.qq.com"]
             
-            PTLaunchAdMonitor.share.showAd(adModels: [adModel], onView: window,skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
+            PTLaunchAdMonitor.share.showAd(adModels: [adModel], onView: window,skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().zoned(in: .autoupdatingCurrent).year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
                 Task { @MainActor in
                     let guideModel = PTGuidePageModel()
                     guideModel.mainView = window

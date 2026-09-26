@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T08:08:55Z",
+  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
+  "generated_at": "2026-09-26T14:31:30Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -20,6 +20,7 @@
     "PTSpeechPermission",
     "PTTrackingPermission",
     "PToolsCore",
+    "PToolsDate",
     "PToolsLogging",
     "PToolsPermissionCore",
     "PToolsPermissionUI",
@@ -197,9 +198,12 @@
     "WhatsNewsKit",
     "iOS17Tips"
   ],
-  "spm_only": [],
+  "spm_only": [
+    "PToolsDate"
+  ],
   "pod_only": [
     "Appz",
+    "Date",
     "FilterCamera",
     "Flag",
     "GCDWebServer",
@@ -264,11 +268,13 @@
       "spm": [
         "Logging",
         "PToolsCore",
+        "PToolsDate",
         "PToolsPermissionCore",
         "PToolsUIFoundation",
         "Symbols"
       ],
       "cocoapods": [
+        "Date",
         "Logging",
         "PToolsCore",
         "PToolsUIFoundation",
@@ -286,7 +292,6 @@
         "NotificationBanner",
         "SmartCodable",
         "SnapKit",
-        "SwiftDate",
         "lottie-ios"
       ],
       "cocoapods": [
@@ -298,7 +303,6 @@
         "SmartCodable",
         "SmartCodable/Inherit",
         "SnapKit",
-        "SwiftDate",
         "lottie-ios"
       ]
     },
@@ -836,5 +840,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "26cf38df210b3947f6d23beaf61bc61e173c32020f9062d2f5f88b40a8274220"
+  "fingerprint": "d5510e75f6dfabf036f45010e4874e3b95945ad3a8168007c862ceb15f3df7a2"
 }

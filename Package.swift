@@ -23,6 +23,10 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the Foundation-only date context and calendar-aware value types.
+        // Español: Publica el contexto de fechas y los tipos conscientes del calendario basados solo en Foundation.
+        // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
+        .library(name: "PToolsDate", targets: ["PToolsDate"]),
         .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
         // English: Publish the typed SF Symbols runtime independently from the UIKit umbrella.
         // Español: Publica el runtime tipado de SF Symbols de forma independiente del umbrella UIKit.
@@ -152,7 +156,7 @@ let package = Package(
         // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
         // ==========================================
         .library(name: "PooToolsAll", targets: [
-            "ptools", "PToolsLogging", "PToolsSymbols",
+            "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
             "PToolsPermissionCore", "PToolsPermissionUI",
             "PooToolsMediaCore",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
@@ -179,7 +183,6 @@ let package = Package(
     ],
     dependencies: [
         // Core 依赖
-        .package(url: "https://github.com/malcommac/SwiftDate.git", exact: "7.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.7.1"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
@@ -233,6 +236,17 @@ let package = Package(
         .target(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep date semantics independent from UIKit and third-party date libraries.
+        // Español: Mantiene la semántica de fechas independiente de UIKit y de bibliotecas de terceros.
+        // 中文：让日期语义独立于 UIKit 和第三方日期库。
+        .target(
+            name: "PToolsDate",
+            path: "PooToolsSource/PToolsDate",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
@@ -306,9 +320,9 @@ let package = Package(
             dependencies: [
                 "PToolsLogging",
                 "PToolsCore",
+                "PToolsDate",
                 "PToolsUIFoundation",
                 "PToolsPermissionCore",
-                "SwiftDate",
                 "SnapKit",
                 "DeviceKit",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
@@ -482,6 +496,14 @@ let package = Package(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore"],
             path: "Tests/PooToolsCoreTests"
+        ),
+        // English: Keep calendar, timezone, locale, parsing, and timestamp regressions isolated from UIKit targets.
+        // Español: Mantiene aisladas las regresiones de calendario, zona horaria, región, análisis y timestamps de los objetivos UIKit.
+        // 中文：将日历、时区、区域、解析和时间戳回归与 UIKit 目标隔离。
+        .testTarget(
+            name: "PToolsDateTests",
+            dependencies: ["PToolsDate"],
+            path: "Tests/PToolsDateTests"
         ),
         .testTarget(
             name: "PToolsUIFoundationTests",

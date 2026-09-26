@@ -1013,6 +1013,9 @@
 		B52500000000000000000001 /* PTRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500000000000000000002 /* PTRichText.swift */; };
 		B52500000000000000000003 /* PTRichTextMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500000000000000000004 /* PTRichTextMedia.swift */; };
 		B52500000000000000000005 /* PTRichTextMediaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52500000000000000000006 /* PTRichTextMediaController.swift */; };
+		B52600000000000000000001 /* PTDateContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52600000000000000000002 /* PTDateContext.swift */; };
+		B52600000000000000000003 /* PTZonedDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52600000000000000000004 /* PTZonedDate.swift */; };
+		B52600000000000000000005 /* PTDateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52600000000000000000006 /* PTDateParser.swift */; };
 		CB55590C25D04EBCA6C02E8E /* Network+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F3C2B183334E31ABE12A02 /* Network+Download.swift */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
@@ -2063,6 +2066,9 @@
 		B52500000000000000000002 /* PTRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTRichText.swift; path = PooToolsSource/PToolsUIFoundation/PTRichText.swift; sourceTree = SOURCE_ROOT; };
 		B52500000000000000000004 /* PTRichTextMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTRichTextMedia.swift; path = PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift; sourceTree = SOURCE_ROOT; };
 		B52500000000000000000006 /* PTRichTextMediaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTRichTextMediaController.swift; path = PooToolsSource/PToolsUIFoundation/PTRichTextMediaController.swift; sourceTree = SOURCE_ROOT; };
+		B52600000000000000000002 /* PTDateContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTDateContext.swift; path = PooToolsSource/PToolsDate/PTDateContext.swift; sourceTree = SOURCE_ROOT; };
+		B52600000000000000000004 /* PTZonedDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTZonedDate.swift; path = PooToolsSource/PToolsDate/PTZonedDate.swift; sourceTree = SOURCE_ROOT; };
+		B52600000000000000000006 /* PTDateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PTDateParser.swift; path = PooToolsSource/PToolsDate/PTDateParser.swift; sourceTree = SOURCE_ROOT; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2232,6 +2238,7 @@
 				555818B62AFA48E70051C0AA /* ProgressBar */,
 				55025E4029FA54B60024A960 /* Protocol */,
 				B52400000000000000000010 /* PToolsSymbols */,
+				B52600000000000000000010 /* PToolsDate */,
 				B52500000000000000000010 /* PToolsUIFoundation */,
 				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
@@ -4322,6 +4329,16 @@
 			path = PToolsUIFoundation;
 			sourceTree = "<group>";
 		};
+		B52600000000000000000010 /* PToolsDate */ = {
+			isa = PBXGroup;
+			children = (
+				B52600000000000000000002 /* PTDateContext.swift */,
+				B52600000000000000000004 /* PTZonedDate.swift */,
+				B52600000000000000000006 /* PTDateParser.swift */,
+			);
+			path = PToolsDate;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4663,6 +4680,9 @@
 				B52500000000000000000001 /* PTRichText.swift in Sources */,
 				B52500000000000000000003 /* PTRichTextMedia.swift in Sources */,
 				B52500000000000000000005 /* PTRichTextMediaController.swift in Sources */,
+				B52600000000000000000001 /* PTDateContext.swift in Sources */,
+				B52600000000000000000003 /* PTZonedDate.swift in Sources */,
+				B52600000000000000000005 /* PTDateParser.swift in Sources */,
 				55BA8FBD2D29A7D70065FBD0 /* LayerAttributesSectionDataSource.swift in Sources */,
 				55BA8FBE2D29A7D70065FBD0 /* ElementInspectorPanelViewController.swift in Sources */,
 				55BA8FBF2D29A7D70065FBD0 /* String+InspectorEX.swift in Sources */,

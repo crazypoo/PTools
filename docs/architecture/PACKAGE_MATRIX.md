@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
-Generated at: 2026-09-26T13:47:34Z
-Version source: 5.25.5
+Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
+Generated at: 2026-09-26T14:31:37Z
+Version source: 5.26.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -105,6 +105,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `WhatsNewsKit` | A | `PooTools/WhatsNewsKit` | `PooToolsWhatsNewsKit` | Keep; review drift |
 | `iOS17Tips` | A | `PooTools/iOS17Tips` | `PooToolsiOS17Tips` | Keep; review drift |
 | `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
+| `Date` | B | `PooTools/Date` | — | Parity decision before 6.0 |
 | `FilterCamera` | B | `PooTools/FilterCamera` | — | Parity decision before 6.0 |
 | `Flag` | B | `PooTools/Flag` | — | Parity decision before 6.0 |
 | `GCDWebServer` | B | `PooTools/GCDWebServer` | — | Parity decision before 6.0 |
@@ -119,6 +120,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `VideoCache` | B | `PooTools/VideoCache` | — | Parity decision before 6.0 |
 | `WebKit` | B | `PooTools/WebKit` | — | Parity decision before 6.0 |
 | `ZipArchive` | B | `PooTools/ZipArchive` | — | Parity decision before 6.0 |
+| `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |
 
 ## Compatibility entries
 

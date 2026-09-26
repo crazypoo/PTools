@@ -1,0 +1,12 @@
+# English: These nine symbols are inherited reviewed removals from the 5.25.0 dependency absorption baseline; 5.26.0 keeps the API gate deterministic while removing SwiftDate separately through the migration guide.
+# Español: Estos nueve símbolos son eliminaciones heredadas revisadas desde la absorción de dependencias 5.25.0; 5.26.0 mantiene determinista la puerta de API y elimina SwiftDate por separado mediante la guía de migración.
+# 中文：这九个符号是 5.25.0 依赖吸收基线中已审阅的历史删除项；5.26.0 继续保持 API 门禁确定性，并通过迁移指南单独完成 SwiftDate 移除。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink

@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.25.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.26.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.25.5` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.26.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -19,6 +19,16 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - Swift 6 并发边界、例外和后台工作分类写入 [`docs/architecture/CONCURRENCY.md`](docs/architecture/CONCURRENCY.md)。
 - 单次扫描、构建和基准结果写入 `report/`，不混入长期架构文档。
 - 新版本不再创建 `ARCHITECTURE_5_12.md`、`PERFORMANCE_BASELINE_5_12.md` 等版本化长期文档。
+
+## 5.26.0 SwiftDate 吸收与日期层收口
+
+- ✅ 完成 SwiftDate 使用审计，区分生产调用、兼容入口、测试与历史 API 基线。
+- ✅ 新增 Foundation-only 的 `PToolsDate` SwiftPM product/target 与 CocoaPods `Date` subspec，Core 统一依赖日期层。
+- ✅ 以 `PTDateContext`、`PTZonedDate`、`PTDateParser` 和显式 `PTTimestampUnit` 替换 SwiftDate 的区域、格式化、解析和日历运算入口。
+- ✅ 迁移 Calendar、Date Category、String、TimeInterval、HTTP 日期头、HealthKit、MessageKit 和 NetworkSpeedTest 的生产路径。
+- ✅ 移除全局可变 `jx_formatter`，修复 Unix timestamp 重复时区偏移，并为 DST、locale、calendar、parsing、relative 和 boundary 增加回归矩阵。
+- ✅ 增加 SwiftDate 移除门禁和 5.26.0 迁移文档；保留历史 API 报告作为不可修改的演进记录。
+- [ ] 完成真实宿主、真机、多语言、设备时区切换和跨 DST 日期场景回归后，再决定是否创建 `5.26.0` 正式 tag。
 
 ## 5.23.0 SwifterSwift 一次性移除与 Category 收口
 

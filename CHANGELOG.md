@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.25.x
+## Unreleased — 5.26.x
 
-当前开发基线为 `5.25.5`；版本唯一来源为根目录 `VERSION`，`5.25.4` 是上一版正式基线。
+当前开发基线为 `5.26.0`；版本唯一来源为根目录 `VERSION`，`5.25.5` 是上一版开发基线。
+
+## 5.26.0 — 2026-09-26
+
+- 移除 SwiftDate 的 SwiftPM、CocoaPods、锁文件和生产源码依赖，新增 Foundation-only 的 `PToolsDate` 模块。
+- 新增 `PTDateContext`、`PTZonedDate`、`PTDateParser`、显式秒/毫秒时间戳、日历计算、DST、区域设置和边界时间 API。
+- 迁移 Core 日期、日历、网络调试、HealthKit、MessageKit 和网络测速入口，消除全局可变 `jx_formatter` 并修复时间戳重复时区偏移。
+- 新增 SwiftDate 使用审计、迁移指南、日期架构指南、时区/DST 测试矩阵和 5.26.0 依赖移除质量门禁。
 
 ## 5.25.5 — 2026-09-26
 

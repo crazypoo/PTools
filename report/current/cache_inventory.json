@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
-  "generated_at": "2026-09-26T14:07:57Z",
+  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
+  "generated_at": "2026-09-26T14:53:10Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -456,7 +456,7 @@
     },
     {
       "path": "PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift",
-      "line": 14,
+      "line": 13,
       "kind": "disk or custom cache",
       "text": "if let cc = (allHeaderFields[\"Cache-Control\"] as? String)?.lowercased(),"
     },
@@ -546,67 +546,67 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 34,
+      "line": 33,
       "kind": "URLCache",
       "text": "URLCache.customHttp.removeAllCachedResponses()"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 78,
+      "line": 77,
       "kind": "URLCache",
       "text": "private var cachePolicy: URLCache.StoragePolicy = .notAllowed"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 110,
+      "line": 109,
       "kind": "disk or custom cache",
       "text": "private func use(_ cache: CachedURLResponse) {"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 112,
+      "line": 111,
       "kind": "disk or custom cache",
       "text": "client?.urlProtocol(self, didReceive: cache.response, cacheStoragePolicy: .allowed)"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 113,
+      "line": 112,
       "kind": "disk or custom cache",
       "text": "client?.urlProtocol(self, didLoad: cache.data)"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 131,
+      "line": 130,
       "kind": "URLCache",
       "text": "if let cache = URLCache.customHttp.validCache(for: request) {"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 132,
+      "line": 131,
       "kind": "disk or custom cache",
       "text": "use(cache)"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 133,
+      "line": 132,
       "kind": "disk or custom cache",
       "text": "PTNSLogConsole(\"Use disk cache for \\(request.url?.lastPathComponent ?? \"\")\")"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 163,
+      "line": 162,
       "kind": "disk or custom cache",
       "text": "PTNSLogConsole(\"Use Business API Cache for \\(originalRequest.url?.path ?? \"\")\")"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 232,
+      "line": 231,
       "kind": "disk or custom cache",
       "text": "model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: \"Cache-Policy\")"
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 410,
+      "line": 409,
       "kind": "URLCache",
       "text": "URLCache.customHttp.storeIfNeeded(for: task, data: self.data)"
     },

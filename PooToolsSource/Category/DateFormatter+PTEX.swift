@@ -8,19 +8,21 @@
 
 import UIKit
 
-/*
- DateFormatter 创建实例很耗时，如果多次创建 DateFormatter 实例，它可能会减慢app 响应速度，甚至更快地耗尽手机电池的电量。
- */
-public let jx_formatter = DateFormatter()
-
 // MARK: 基本扩展
 public extension DateFormatter {
 
     // MARK: 格式化快捷方式
-    /// 格式化快捷方式
-    /// - Parameter format: 格式
-    convenience init(format: String) {
+    /// English: Creates a formatter with an explicit PTools date context.
+    /// Español: Crea un formateador con un contexto de fecha explícito de PTools.
+    /// 中文：使用 PTools 显式日期语境创建格式化器。
+    /// - Parameters:
+    ///   - format: 日期格式 / date pattern / patrón de fecha
+    ///   - context: 日期语境 / date context / contexto de fecha
+    convenience init(format: String, context: PTDateContext = .current) {
         self.init()
+        calendar = context.calendar
+        timeZone = context.timeZone
+        locale = context.locale
         dateFormat = format
     }
 }

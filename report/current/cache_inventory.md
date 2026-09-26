@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
-Generated at: 2026-09-26T14:07:57Z
+Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
+Generated at: 2026-09-26T14:53:10Z
 -->
 
 # PTools 当前缓存盘点
@@ -88,7 +88,7 @@ Generated at: 2026-09-26T14:07:57Z
 | PooToolsSource/Debug/CwlDemangle.swift:3548 | disk or custom cache | case .typeMetadataInstantiationCache: printFirstChild(name, prefix: "type metadata instantiation cache for ") |
 | PooToolsSource/Debug/CwlDemangle.swift:3549 | disk or custom cache | case .typeMetadataInstantiationFunction: printFirstChild(name, prefix: "type metadata instantiation cache for ") |
 | PooToolsSource/Debug/CwlDemangle.swift:3551 | disk or custom cache | case .typeMetadataLazyCache: printFirstChild(name, prefix: "lazy cache variable for type metadata for ") |
-| PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift:14 | disk or custom cache | if let cc = (allHeaderFields["Cache-Control"] as? String)?.lowercased(), |
+| PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift:13 | disk or custom cache | if let cc = (allHeaderFields["Cache-Control"] as? String)?.lowercased(), |
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:2 | URLCache | //  URLCache+PTDebugEX.swift |
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:11 | URLCache | extension URLCache { |
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:13 | URLCache | static let customHttp: URLCache = { |
@@ -103,17 +103,17 @@ Generated at: 2026-09-26T14:07:57Z
 | PooToolsSource/DebugNetwork/PTCacheStoragePolicy.swift:18 | URLCache | static func cacheStoragePolicy(for request: URLRequest, and response: HTTPURLResponse) -> URLCache.StoragePolicy { |
 | PooToolsSource/DebugNetwork/PTCacheStoragePolicy.swift:39 | disk or custom cache | if let respCC = (response.allHeaderFields["Cache-Control"] as? String)?.lowercased(), respCC.contains("no-store") { |
 | PooToolsSource/DebugNetwork/PTCacheStoragePolicy.swift:45 | disk or custom cache | if let reqCC = request.allHTTPHeaderFields?["Cache-Control"]?.lowercased(), (reqCC.contains("no-store") \|\| reqCC.contains("no-cache")) { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:34 | URLCache | URLCache.customHttp.removeAllCachedResponses() |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:78 | URLCache | private var cachePolicy: URLCache.StoragePolicy = .notAllowed |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:110 | disk or custom cache | private func use(_ cache: CachedURLResponse) { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:112 | disk or custom cache | client?.urlProtocol(self, didReceive: cache.response, cacheStoragePolicy: .allowed) |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:113 | disk or custom cache | client?.urlProtocol(self, didLoad: cache.data) |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:131 | URLCache | if let cache = URLCache.customHttp.validCache(for: request) { |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:132 | disk or custom cache | use(cache) |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:133 | disk or custom cache | PTNSLogConsole("Use disk cache for \(request.url?.lastPathComponent ?? "")") |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:163 | disk or custom cache | PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")") |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:232 | disk or custom cache | model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy") |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:410 | URLCache | URLCache.customHttp.storeIfNeeded(for: task, data: self.data) |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:33 | URLCache | URLCache.customHttp.removeAllCachedResponses() |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:77 | URLCache | private var cachePolicy: URLCache.StoragePolicy = .notAllowed |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:109 | disk or custom cache | private func use(_ cache: CachedURLResponse) { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:111 | disk or custom cache | client?.urlProtocol(self, didReceive: cache.response, cacheStoragePolicy: .allowed) |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:112 | disk or custom cache | client?.urlProtocol(self, didLoad: cache.data) |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:130 | URLCache | if let cache = URLCache.customHttp.validCache(for: request) { |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:131 | disk or custom cache | use(cache) |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:132 | disk or custom cache | PTNSLogConsole("Use disk cache for \(request.url?.lastPathComponent ?? "")") |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:162 | disk or custom cache | PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")") |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:231 | disk or custom cache | model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy") |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:409 | URLCache | URLCache.customHttp.storeIfNeeded(for: task, data: self.data) |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1420 | NSCache | private lazy var filterCache: NSCache<NSString, UIImage> = { |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1421 | NSCache | let cache = NSCache<NSString, UIImage>() |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1422 | disk or custom cache | cache.countLimit = 6 |

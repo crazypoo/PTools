@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftDate
 import os.lock
 
 private enum PTNetworkCaptureState {
