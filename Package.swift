@@ -214,7 +214,6 @@ let package = Package(
         .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
-        .package(url: "https://github.com/robnadin/SocketRocket.git", revision: "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0")
 
     ],
@@ -457,7 +456,7 @@ let package = Package(
         .target(name: "PooToolsChinesePinyin", dependencies: ["ptools"], path: "PooToolsSource/Pinyin", swiftSettings: [.define("POOTOOLS_CHINESEPINYIN"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCircle", dependencies: ["ptools"], path: "PooToolsSource/Circle", swiftSettings: [.define("POOTOOLS_CIRCLE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMessageKit", dependencies: ["ptools", "PToolsSymbols", "PooToolsCustomerLabel"], path: "PooToolsSource/MessageKit", swiftSettings: [.define("POOTOOLS_MESSAGEKIT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSocketKit", dependencies: ["ptools", "SocketRocket"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSocketKit", dependencies: ["ptools", "PToolsLogging"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsIAP", dependencies: ["ptools"], path: "PooToolsSource/IAP", swiftSettings: [.define("POOTOOLS_IAP"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsTipsView", dependencies: ["ptools"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPicker", dependencies: ["ptools", "SnapKit"], path: "PooToolsSource/Picker", swiftSettings: [.define("POOTOOLS_PICKER"), .define("POOTOOLS_COCOAPODS")]),
@@ -552,6 +551,14 @@ let package = Package(
             name: "PToolsSymbolsTests",
             dependencies: ["PToolsSymbols"],
             path: "Tests/PToolsSymbolsTests"
+        ),
+        // English: Keep native WebSocket contract tests independent from live network services.
+        // Español: Mantén las pruebas del contrato WebSocket nativo independientes de servicios de red reales.
+        // 中文：原生 WebSocket 契约测试不依赖真实网络服务。
+        .testTarget(
+            name: "PToolsSocketKitTests",
+            dependencies: ["PooToolsSocketKit"],
+            path: "Tests/PToolsSocketKitTests"
         )
     ],
     swiftLanguageModes: [.v6]

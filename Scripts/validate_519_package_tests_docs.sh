@@ -2,15 +2,15 @@
 
 set -euo pipefail
 
-# English: Gate the 5.19–5.25 package, dependency, API, test, and documentation contracts.
-# Español: Protege los contratos de paquetes, dependencias, API, pruebas y documentación de 5.19–5.25.
-# 中文：统一门禁 5.19–5.25 的包、依赖、API、测试和文档契约。
+# English: Gate the 5.19–5.27 package, dependency, API, test, and documentation contracts.
+# Español: Protege los contratos de paquetes, dependencias, API, pruebas y documentación de 5.19–5.27.
+# 中文：统一门禁 5.19–5.27 的包、依赖、API、测试和文档契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(19|20|21|22|23|24|25|26)\.[0-9]+$ ]] || { printf 'FAIL: package/docs gate requires a 5.19.x through 5.26.x VERSION, got %s\n' "$version" >&2; exit 1; }
+[[ "$version" =~ ^5\.(19|20|21|22|23|24|25|26|27)\.[0-9]+$ ]] || { printf 'FAIL: package/docs gate requires a 5.19.x through 5.27.x VERSION, got %s\n' "$version" >&2; exit 1; }
 
 required_files=(
   docs/architecture/PACKAGE_MATRIX.md

@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.26.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.27.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.26.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.27.0` 为当前开发基线，尚未创建正式 tag。
 
 ## 范围与约束
 
@@ -19,6 +19,15 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - Swift 6 并发边界、例外和后台工作分类写入 [`docs/architecture/CONCURRENCY.md`](docs/architecture/CONCURRENCY.md)。
 - 单次扫描、构建和基准结果写入 `report/`，不混入长期架构文档。
 - 新版本不再创建 `ARCHITECTURE_5_12.md`、`PERFORMANCE_BASELINE_5_12.md` 等版本化长期文档。
+
+## 5.27.0 SocketRocket 移除与原生 WebSocket 收口
+
+- ✅ 从 SwiftPM、CocoaPods、`Package.resolved`、`Podfile.lock` 和交付源码移除 SocketRocket；历史报告只保留不可修改的演进记录。
+- ✅ 以 `URLSessionWebSocketTask` 建立 `PTWebSocketTransport`、原生传输、actor 状态机、代际令牌和终止事件去重。
+- ✅ 增加有界 FIFO 发送缓冲、拒绝/丢弃策略、指数退避抖动、稳定连接后重置、原生 ping/pong 超时和连接指标。
+- ✅ 增加系统信任、证书 pinning、公钥 pinning 和备份 pin 支持；不提供 trust-all 生产入口。
+- ✅ `PTSocketManager` 保留旧公开入口，单例、通知、delegate、连接配置和消息类型转换均代理到原生客户端。
+- ✅ 增加 SocketRocket 审计、迁移、架构、测试矩阵和移除门禁；完成 Xcode Debug/Release 后再决定是否创建正式 tag。
 
 ## 5.26.0 SwiftDate 吸收与日期层收口
 

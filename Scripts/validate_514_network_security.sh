@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# English: Validate the 5.14 Network, Socket, and Security source contract.
-# Español: Valida el contrato de código fuente de Network, Socket y Security de 5.14.
-# 中文：校验 5.14 Network、Socket 和 Security 的源码契约。
+# English: Validate the current Network, Socket, and Security source contract.
+# Español: Valida el contrato actual de código fuente de Network, Socket y Security.
+# 中文：校验当前 Network、Socket 和 Security 的源码契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
@@ -24,11 +24,11 @@ require_text() {
     fi
 }
 
-require_text PooTools.podspec "s.version[[:space:]]*=[[:space:]]*'5\\.14\\.0'" "podspec version is 5.14.0"
-require_text README.md '当前开发基线为 `5\.14\.0`' "README version is 5.14.0"
-require_text ROADMAP.md '当前代码基线：`5\.14\.0`' "roadmap version is 5.14.0"
-require_text CHANGELOG.md "## 5\\.14\\.0" "changelog contains 5.14.0"
-require_text Podfile.lock "PooTools/Security \\(5\\.14\\.0\\)" "Podfile.lock contains Security 5.14.0"
+version="$(tr -d '[:space:]' < VERSION)"
+require_text README.md '当前开发基线为 `'$version'`' "README version matches VERSION"
+require_text ROADMAP.md '当前代码基线：`'$version'`' "roadmap version matches VERSION"
+require_text CHANGELOG.md "## $version" "changelog contains current version"
+require_text Podfile.lock "PooTools/Security \\($version\\)" "Podfile.lock contains current Security version"
 
 require_text PooToolsSource/NetWork/PTNetworkArchitecture.swift "public struct PTNetworkRequest" "typed Network request contract"
 require_text PooToolsSource/NetWork/PTNetworkArchitecture.swift "public actor PTNetworkExecutor" "canonical Network executor"
@@ -59,10 +59,13 @@ if rg -n "CryptoSwift|IOSSecuritySuite|SocketRocket|Alamofire|KakaJSON" PooTools
     fail "PTSecurity exposes a legacy third-party type"
 fi
 
-# English: SocketRocket and CryptoSwift remain only in compatibility implementations during 5.x.
-# Español: SocketRocket y CryptoSwift permanecen solo en implementaciones de compatibilidad durante 5.x.
-# 中文：5.x 期间 SocketRocket 和 CryptoSwift 只允许存在于兼容实现中。
-require_text PooToolsSource/SocketKit/PTSocketManager.swift "SocketRocket" "legacy SocketRocket compatibility entry"
+# English: SocketKit is native in 5.27; CryptoSwift remains only behind its legacy adapter.
+# Español: SocketKit es nativo en 5.27; CryptoSwift solo permanece detrás de su adaptador heredado.
+# 中文：5.27 的 SocketKit 已原生化，CryptoSwift 仅保留在旧适配器之后。
+if rg -n "SocketRocket|SRWebSocket|SRReadyState" Package.swift Package.resolved PooTools.podspec Podfile.lock PooToolsSource Tests >/dev/null; then
+    fail "SocketRocket remains in an active delivery path"
+fi
+require_text PooToolsSource/SocketKit/PTWebSocketClient.swift "public actor PTWebSocketClient" "native WebSocket client"
 require_text PooToolsSource/AESAndDES/PTDataEncryption.swift "CryptoSwift" "legacy CryptoSwift compatibility entry"
 
 if ! git diff --check; then

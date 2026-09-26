@@ -474,6 +474,7 @@
 		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
 		55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55BA093D2BBD0C0F00F58126 /* sound1.m4a */; };
 		55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09402BBD597C00F58126 /* PTSocketManager.swift */; };
+		55BA09422BBD597C00F58126 /* PTWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09432BBD597C00F58126 /* PTWebSocketClient.swift */; };
 		55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */; };
 		55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09492BC0623500F58126 /* Collection+PTEX.swift */; };
 		55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */; };
@@ -1518,6 +1519,7 @@
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
 		55BA093D2BBD0C0F00F58126 /* sound1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound1.m4a; sourceTree = "<group>"; };
 		55BA09402BBD597C00F58126 /* PTSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSocketManager.swift; sourceTree = "<group>"; };
+		55BA09432BBD597C00F58126 /* PTWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWebSocketClient.swift; sourceTree = "<group>"; };
 		55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLGeocoder+PTEX.swift"; sourceTree = "<group>"; };
 		55BA09492BC0623500F58126 /* Collection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+PTEX.swift"; sourceTree = "<group>"; };
 		55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AutoScale+PTEX.swift"; sourceTree = "<group>"; };
@@ -3274,6 +3276,7 @@
 			isa = PBXGroup;
 			children = (
 				55BA09402BBD597C00F58126 /* PTSocketManager.swift */,
+				55BA09432BBD597C00F58126 /* PTWebSocketClient.swift */,
 			);
 			path = SocketKit;
 			sourceTree = "<group>";
@@ -5036,6 +5039,7 @@
 				554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */,
+				55BA09422BBD597C00F58126 /* PTWebSocketClient.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* PTLayoutButton.swift in Sources */,
 				550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */,
 				557E3A762C038E26002466A0 /* PTPerformanceChartCell.swift in Sources */,

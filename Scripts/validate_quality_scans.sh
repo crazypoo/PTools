@@ -83,6 +83,7 @@ bash Scripts/validate_swifterswift_removal.sh
 bash Scripts/validate_symbols_5_24.sh
 bash Scripts/validate_attributedstring_absorption_5_25.sh
 bash Scripts/validate_swiftdate_removal_5_26.sh
+bash Scripts/validate_socketrocket_removal_5_27.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_current_summaries.rb >/dev/null
 
@@ -158,7 +159,10 @@ fi
 # Una migración de protocolo puede añadir el nuevo nombre de protocolo Codable a una línea
 # existente de un wrapper legado del SDK sin añadir un nuevo límite unchecked.
 # 仅协议迁移可能会把新的 Codable 协议名加入既有 SDK 兼容包装器行，这不代表新增 unchecked 边界。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache' || true)"
+# English: The URLSession delegate proxy is the only newly approved system callback bridge.
+# Español: El proxy delegado de URLSession es el único puente nuevo de callbacks del sistema aprobado.
+# 中文：URLSession 委托代理是本轮唯一批准新增的系统回调桥接点。
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache|PTURLSessionWebSocketDelegateProxy' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

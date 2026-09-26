@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
-  "generated_at": "2026-09-26T14:52:59Z",
+  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
+  "generated_at": "2026-09-26T16:05:38Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1617,31 +1617,6 @@
     {
       "sourceControl": [
         {
-          "identity": "socketrocket",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/robnadin/SocketRocket.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "revision": [
-              "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "swift-jwt",
           "location": {
             "remote": [
@@ -2780,6 +2755,29 @@
           "declaration": {
             "byName": [
               "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsSocketKitTests",
+      "type": "test",
+      "path": "Tests/PToolsSocketKitTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsSocketKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSocketKit",
               null
             ]
           }
@@ -5856,6 +5854,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsLogging",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsLogging",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -5867,19 +5876,7 @@
           }
         }
       ],
-      "third_party_dependencies": [
-        {
-          "name": "SocketRocket",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "SocketRocket",
-              null
-            ]
-          }
-        }
-      ],
+      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
-Generated at: 2026-09-26T14:52:59Z
+Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
+Generated at: 2026-09-26T16:05:38Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,7 +13,7 @@ Generated at: 2026-09-26T14:52:59Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `102`
+- Target count: `103`
 - Core direct third-party dependencies: `8` (baseline `18`)
 
 ## Products
@@ -147,6 +147,7 @@ Generated at: 2026-09-26T14:52:59Z
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsRichTextTests` | `Tests/PToolsRichTextTests` | PToolsUIFoundation | — | 0 source entries / 0 resources |
+| `PToolsSocketKitTests` | `Tests/PToolsSocketKitTests` | PooToolsSocketKit | — | 0 source entries / 0 resources |
 | `PToolsSymbols` | `PooToolsSource/PToolsSymbols` | — | — | 0 source entries / 1 resources |
 | `PToolsSymbolsTests` | `Tests/PToolsSymbolsTests` | PToolsSymbols | — | 0 source entries / 0 resources |
 | `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
@@ -209,7 +210,7 @@ Generated at: 2026-09-26T14:52:59Z
 | `PooToolsShare` | `PooToolsSource/Share` | PooToolsCustomerLabel | — | 0 source entries / 0 resources |
 | `PooToolsSlider` | `PooToolsSource/Slider` | — | SnapKit | 0 source entries / 0 resources |
 | `PooToolsSmartScreenshot` | `PooToolsSource/ScreenShot` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsSocketKit` | `PooToolsSource/SocketKit` | ptools | SocketRocket | 0 source entries / 0 resources |
+| `PooToolsSocketKit` | `PooToolsSource/SocketKit` | PToolsLogging, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSpeedPanel` | `PooToolsSource/SpeedPanel` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsStepCount` | `PooToolsSource/HealthKit` | PTHealthPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsStepper` | `PooToolsSource/Stepper` | ptools | — | 0 source entries / 0 resources |

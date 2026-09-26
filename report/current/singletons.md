@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
-Generated at: 2026-09-26T14:52:54Z
+Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
+Generated at: 2026-09-26T15:41:55Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1533**
+- .shared / .share 调用文本计数：**1532**
 - 单例声明计数：**103**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -111,7 +111,7 @@ Generated at: 2026-09-26T14:52:54Z
 | PooToolsSource/ScrollBanner/PTBannerMediaManager.swift:16 | shared | C Shared mutable service | static let shared = PTBannerVideoManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/ScrollBanner/PTBannerMediaManager.swift:52 | shared | C Shared mutable service | public static let shared = PTBannerPlayerManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/ScrollBanner/PTBannerView.swift:19 | shared | D Shared mutable UI or scene state | public static let shared = PTBannerScheduler() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/SocketKit/PTSocketManager.swift:45 | share | C Shared mutable service | public static let share = PTSocketManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/SocketKit/PTSocketManager.swift:36 | share | C Shared mutable service | public static let share = PTSocketManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Speech/PTSpeech.swift:25 | share | C Shared mutable service | public static let share = PTSpeech() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/StatusBar/StatusBarManager.swift:35 | shared | D Shared mutable UI or scene state | public static let shared = StatusBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/VideoEditor/PTVideoEditorConfig.swift:17 | share | C Shared mutable service | public static let share = PTVideoEditorConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

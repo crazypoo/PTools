@@ -917,7 +917,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'SocketKit' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'SocketRocket'
+        subspec.dependency 'PooTools/Logging'
         subspec.source_files = 'PooToolsSource/SocketKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SOCKETKIT POOTOOLS_COCOAPODS"

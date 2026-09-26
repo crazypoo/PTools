@@ -61,5 +61,8 @@ PooToolsSource/Router/PTRouterServiceManager.swift
 PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift
 PooToolsSource/SegmentControl/PTMainSegmentModel.swift
 PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift
-PooToolsSource/SocketKit/PTSocketManager.swift
+# URLSession delegate proxy only: immutable trust policy and Sendable event closure cross the Foundation callback boundary; Socket state remains actor-owned.
+# Proxy del delegado de URLSession únicamente: solo cruzan la frontera de callbacks una política de confianza inmutable y un cierre de eventos Sendable; el estado queda en el actor.
+# 仅用于 URLSession 委托代理：跨 Foundation 回调边界的只有不可变信任策略和 Sendable 事件闭包，Socket 状态仍由 actor 独占。
+PooToolsSource/SocketKit/PTWebSocketClient.swift
 PooToolsSource/TouchInspector/TouchInspectorWindow.swift

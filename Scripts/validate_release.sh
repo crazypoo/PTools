@@ -39,6 +39,7 @@ bash Scripts/validate_logging_5_22.sh
 bash Scripts/validate_519_package_tests_docs.sh
 bash Scripts/report_duplicate_entries.sh >/dev/null
 bash Scripts/validate_network_security.sh
+bash Scripts/validate_socketrocket_removal_5_27.sh
 bash Scripts/validate_515_media.sh
 bash Scripts/validate_516_permission.sh
 bash Scripts/validate_517_ui.sh

@@ -63,7 +63,7 @@
     {"path":"PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift","category":"LEGACY_MODEL"},
     {"path":"PooToolsSource/SegmentControl/PTMainSegmentModel.swift","category":"LEGACY_MODEL"},
     {"path":"PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift","category":"LEGACY_MODEL"},
-    {"path":"PooToolsSource/SocketKit/PTSocketManager.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/SocketKit/PTWebSocketClient.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/TouchInspector/TouchInspectorWindow.swift","category":"MAIN_ACTOR_ONLY"},
     {"path":"PooToolsSource/VideoEditor/CompositionInstruction.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/VideoEditor/Compositor.swift","category":"SYSTEM_WRAPPER"},

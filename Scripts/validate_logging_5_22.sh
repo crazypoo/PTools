@@ -10,8 +10,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(22|23|24|25|26)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.22+ logging closure requires a 5.22.x through 5.26.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(22|23|24|25|26|27)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.22+ logging closure requires a 5.22.x through 5.27.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -78,4 +78,4 @@ done
 # 中文：历史文件管理器符号只能作为仅调用 PTLogger 的兼容适配器保留。
 
 git diff --check
-printf 'PASS: PTools 5.22+ logging dependency removal, compatibility closure and backend parity through 5.26\n'
+printf 'PASS: PTools 5.22+ logging dependency removal, compatibility closure and backend parity through 5.27\n'

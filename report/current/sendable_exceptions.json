@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
-  "generated_at": "2026-09-26T14:52:53Z",
+  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
+  "generated_at": "2026-09-26T15:41:54Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -45,7 +45,7 @@
     "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
     "PooToolsSource/SegmentControl/PTMainSegmentModel.swift",
     "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
-    "PooToolsSource/SocketKit/PTSocketManager.swift",
+    "PooToolsSource/SocketKit/PTWebSocketClient.swift",
     "PooToolsSource/TouchInspector/TouchInspectorWindow.swift"
   ],
   "declarations": [
@@ -434,15 +434,9 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 40,
-      "declaration": "// 4. 声明 @unchecked Sendable。我们通过内部的 socketQueue 串行队列手动保证了线程安全",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 42,
-      "declaration": "public final class PTSocketManager: NSObject, @unchecked Sendable {",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 363,
+      "declaration": "private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {",
       "allowlisted": true
     },
     {

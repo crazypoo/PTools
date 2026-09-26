@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.26.x
+## Unreleased — 5.27.x
 
-当前开发基线为 `5.26.0`；版本唯一来源为根目录 `VERSION`，`5.25.5` 是上一版开发基线。
+当前开发基线为 `5.27.0`；版本唯一来源为根目录 `VERSION`，`5.26.0` 是上一版开发基线。
+
+## 5.27.0 — 2026-09-26
+
+- 移除 SocketRocket 的 SwiftPM、CocoaPods、锁文件和生产源码依赖，改用 Foundation `URLSessionWebSocketTask` 原生传输。
+- 新增 actor 隔离的 WebSocket 状态机、代际校验、终止事件去重、FIFO 发送缓冲、指数退避抖动、原生 ping/pong、信任校验和连接指标。
+- 将 `PTSocketManager` 保留为兼容门面，旧单例、通知、delegate、`socketSet`、发送和重连入口继续代理到原生客户端。
+- 新增 SocketRocket 使用审计、迁移指南、架构说明、测试矩阵和移除门禁；不创建正式 Git tag，等待完整宿主与真机回归。
 
 ## 5.26.0 — 2026-09-26
 

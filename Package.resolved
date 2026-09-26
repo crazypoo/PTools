@@ -272,14 +272,6 @@
       }
     },
     {
-      "identity" : "socketrocket",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/robnadin/SocketRocket.git",
-      "state" : {
-        "revision" : "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"
-      }
-    },
-    {
       "identity" : "swift-jwt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Kitura/Swift-JWT.git",

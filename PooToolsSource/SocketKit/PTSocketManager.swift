@@ -1,20 +1,22 @@
-//
-//  PTSocketManager.swift
-//  PooTools_Example
-//
-//  Created by 邓杰豪 on 2024/4/3.
-//  Copyright © 2024 crazypoo. All rights reserved.
-//
+// English: Compatibility facade backed by the native PTWebSocketClient.
+// Español: Fachada de compatibilidad respaldada por PTWebSocketClient nativo.
+// 中文：由原生 PTWebSocketClient 支撑的兼容门面。
 
+import Foundation
 import UIKit
-@preconcurrency import SocketRocket
 
-public let nNetworkStatesChangeNotification = Notification.Name("nNetworkStatesChangeNotification")
-public let nWebSocketDidReceiveMessageNotification = Notification.Name("nWebSocketDidReceiveMessageNotification")
-public let nWebSocketDidConnect = Notification.Name("nWebSocketDidConnect")
-public let nWebSocketDidDisconnect = Notification.Name("nWebSocketDidDisconnect")
+public extension Notification.Name {
+    static let ptNetworkStatesChange = Notification.Name("nNetworkStatesChangeNotification")
+    static let ptWebSocketDidReceiveMessage = Notification.Name("nWebSocketDidReceiveMessageNotification")
+    static let ptWebSocketDidConnect = Notification.Name("nWebSocketDidConnect")
+    static let ptWebSocketDidDisconnect = Notification.Name("nWebSocketDidDisconnect")
+}
 
-// 枚举遵守 Sendable，确保跨线程传递安全
+public let nNetworkStatesChangeNotification = Notification.Name.ptNetworkStatesChange
+public let nWebSocketDidReceiveMessageNotification = Notification.Name.ptWebSocketDidReceiveMessage
+public let nWebSocketDidConnect = Notification.Name.ptWebSocketDidConnect
+public let nWebSocketDidDisconnect = Notification.Name.ptWebSocketDidDisconnect
+
 public enum SocketConnectionState: Sendable {
     case connected
     case disconnected
@@ -22,376 +24,185 @@ public enum SocketConnectionState: Sendable {
     case reconnecting
 }
 
-// 内部使用的线程安全消息类型
-private enum SocketMessage: Sendable {
-    case string(String)
-    case data(Data)
-}
-
-// 3. Delegate 强制绑定 MainActor，确保业务层的 UI 更新绝对安全
 @MainActor
-public protocol PTSocketManagerDelegate: AnyObject,Sendable {
+public protocol PTSocketManagerDelegate: AnyObject, Sendable {
     func socketDidConnect()
     func socketDidDisconnect()
-    // 限制抛出的 message 必须是 Sendable 的 (通常是 String 或 Data)
     func socketDidReceiveMessage(_ message: Sendable)
 }
 
-// 4. 声明 @unchecked Sendable。我们通过内部的 socketQueue 串行队列手动保证了线程安全
-@objcMembers
-public final class PTSocketManager: NSObject, @unchecked Sendable {
-
-    // MARK: - Singleton
+@MainActor
+public final class PTSocketManager: NSObject {
     public static let share = PTSocketManager()
-    
-    // MARK: - Delegates
+
     private var delegates = NSHashTable<AnyObject>.weakObjects()
-
-    // 内部串行队列，所有核心逻辑均在此队列执行
-    private let socketQueue = DispatchQueue(label: "com.ptsocket.queue", qos: .default)
-
-    // MARK: - Public Config (线程安全改造)
-    private var _maxReConnectCount: Int = 10
-    public var maxReConnectCount: Int {
-        get { socketQueue.sync { _maxReConnectCount } }
-        set { socketQueue.async { [weak self] in self?._maxReConnectCount = newValue } }
-    }
-    
+    private var client: PTWebSocketClient?
+    private var eventTask: Task<Void, Never>?
+    private var socketURL: URL?
     private var _socketState: SocketConnectionState = .disconnected
-    public var socketState: SocketConnectionState {
-        socketQueue.sync { _socketState }
-    }
-    
     private var _networkStatus: NetworkStatus = .unknown
+    private var _maxReConnectCount = 10
+    private var heartbeatEnabled = true
+
+    public var maxReConnectCount: Int {
+        get { _maxReConnectCount }
+        set { _maxReConnectCount = max(0, newValue) }
+    }
+
+    public var socketState: SocketConnectionState { _socketState }
+
     public var networkStatus: NetworkStatus {
-        get { socketQueue.sync { _networkStatus } }
+        get { _networkStatus }
         set {
-            socketQueue.async { [weak self] in
-                guard let self = self else { return }
-                self._networkStatus = newValue
-                // 此时调用的 networkIsNotReachable 内部使用的是 _networkStatus，安全！
-                if self.networkIsNotReachable() {
-                    self.disConnect(clearQueue: false)
-                } else {
-                    self.reConnect()
-                }
-            }
+            _networkStatus = newValue
+            let isAvailable: Bool
+            if case .notReachable = newValue { isAvailable = false } else { isAvailable = true }
+            guard let client else { return }
+            Task { await client.updateConnectivity(isAvailable: isAvailable) }
         }
     }
-
-    // MARK: - Private Properties
-    // 弃用 NSMutableURLRequest，改用原生 Sendable 的 URLRequest
-    private var request: URLRequest?
-    private var webSocket: SRWebSocket?
-    private var reOpenCount: Int = 0
-    private var messageQueue: [SocketMessage] = []
-    
-    // 心跳与超时 (使用现代 Task 架构)
-    private var heartBeatTask: Task<Void, Never>?
-    private let heartBeatInterval: TimeInterval = 30
-    private var lastReceiveMessageTime: TimeInterval = 0
-    private let timeoutThreshold: TimeInterval = 90
 
     private override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(onNetworkStatusChange(_:)), name: nNetworkStatesChangeNotification, object: nil)
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
-        disConnect()
+        eventTask?.cancel()
+        if let client {
+            Task { await client.disconnect(clearQueue: true) }
+        }
     }
 
-    // MARK: - Delegate Management
     public func addDelegate(_ delegate: PTSocketManagerDelegate) {
-        socketQueue.async { [weak self] in
-            self?.delegates.add(delegate as AnyObject)
-        }
+        delegates.add(delegate)
     }
 
     public func removeDelegate(_ delegate: PTSocketManagerDelegate) {
-        socketQueue.async { [weak self] in
-            self?.delegates.remove(delegate as AnyObject)
-        }
+        delegates.remove(delegate)
     }
 
-    // MARK: - State Check
-    private var isConnectingOrConnected: Bool {
-        guard let socket = webSocket else { return false }
-        return socket.readyState == .OPEN || socket.readyState == .CONNECTING
-    }
-
-    private var isClosed: Bool {
-        guard let socket = webSocket else { return true }
-        return socket.readyState == .CLOSED || socket.readyState == .CLOSING
-    }
-
-    // MARK: - Setup
-    // 5. 闭包参数增加 @Sendable 约束
     public func socketSet(completion: @escaping @Sendable (Bool) -> Void) {
-        Task {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
             let urlString = await Network.socketGlobalURL()
-            guard let url = URL(string: urlString) else {
-                Task { @MainActor in completion(false) }
+            guard let url = URL(string: urlString), let scheme = url.scheme?.lowercased(), scheme == "ws" || scheme == "wss" else {
+                completion(false)
                 return
             }
-
-            let req = URLRequest(
-                url: url,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                timeoutInterval: 10
-            )
-            
-            self.socketQueue.async { [weak self = self] in
-                self?.request = req
-                Task { @MainActor in completion(true) }
-            }
+            socketURL = url
+            eventTask?.cancel()
+            if let oldClient = client { Task { await oldClient.disconnect(clearQueue: true) } }
+            let configuration = PTWebSocketConfiguration(url: url,
+                                                          maxReconnectAttempts: maxReConnectCount,
+                                                          automaticallyReconnect: true,
+                                                          heartbeat: PTWebSocketHeartbeatConfiguration(enabled: heartbeatEnabled))
+            let newClient = PTWebSocketClient(configuration: configuration)
+            client = newClient
+            startEventBridge(for: newClient)
+            completion(true)
         }
     }
 
-    // MARK: - Connect Control
     public func connect() {
-        socketQueue.async { [weak self] in
-            guard let self = self, let request = self.request else { return }
-            guard !self.isConnectingOrConnected else { return }
-
-            self._socketState = .connecting
-            
-            let socket = SRWebSocket(urlRequest: request)
-            socket.delegateDispatchQueue = self.socketQueue
-            socket.delegate = self
-            socket.open()
-            self.webSocket = socket
+        guard let client else { return }
+        _socketState = .connecting
+        Task { @MainActor [weak self, client] in
+            do {
+                try await client.connect()
+            } catch {
+                self?._socketState = .disconnected
+            }
         }
     }
 
     public func disConnect(clearQueue: Bool = true) {
-        socketQueue.async { [weak self] in
-            guard let self = self, let socket = self.webSocket else { return }
-
-            socket.delegate = nil
-            socket.close()
-            self.webSocket = nil
-
-            self.stopHeartBeat()
-            self._socketState = .disconnected
-            
-            if clearQueue {
-                self.messageQueue.removeAll()
-            }
+        guard let client else {
+            _socketState = .disconnected
+            return
         }
+        _socketState = .disconnected
+        Task { await client.disconnect(clearQueue: clearQueue) }
     }
 
     public func reConnect() {
-        socketQueue.async { [weak self] in
-            // 1. 确保 self 存在
-            guard let self = self else { return }
-            
-            // 2. 修复点：直接通过底层的 _networkStatus 判断网络状态
-            // 避免在 async 闭包中调用额外的实例方法，消除编译器的并发检查报错
-            let isReachable: Bool
-            switch self._networkStatus {
-            case .notReachable:
-                isReachable = false
-            default:
-                isReachable = true
-            }
-            
-            // 3. 如果网络不可用，直接拦截并退出重连
-            guard isReachable else {
-                PTNSLogConsole("PTSocketManager: 当前网络不可用，取消重连")
-                return
-            }
-            
-            // 4. 确保当前确实是处于关闭状态才进行重连
-            guard self.isClosed else { return }
-
-            // 5. 判断是否达到最大重连次数
-            if self.reOpenCount >= self._maxReConnectCount {
-                self.reOpenCount = 0
-                PTNSLogConsole("PTSocketManager: 重连次数达到上限")
-                return
-            }
-
-            // 6. 更新状态并增加重连计数
-            self._socketState = .reconnecting
-            self.reOpenCount += 1
-
-            // 7. 计算退避延迟时间（指数退避算法：2, 4, 8, 16... 最大 60秒）
-            let delay = min(pow(2.0, Double(self.reOpenCount)), 60.0)
-            
-            // 8. 断开之前的残余连接（清理底层 socket，但不清理未发送的消息队列）
-            self.disConnect(clearQueue: false)
-
-            // 9. 使用现代并发 Task 发起延迟重连
-            Task {
-                // 等待指定的秒数
-                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-                // 重新调用连接方法
-                self.connect()
+        guard let client else { return }
+        _socketState = .reconnecting
+        Task { @MainActor [weak self, client] in
+            do {
+                try await client.reconnect()
+            } catch {
+                self?._socketState = .disconnected
             }
         }
     }
 
-    // MARK: - Network
-    @objc private func onNetworkStatusChange(_ notifi: Notification) -> Bool {
-        switch _networkStatus {
-        case .notReachable: return true
-        default: return false
-        }
-    }
-
-    private func networkIsNotReachable() -> Bool {
-        switch networkStatus {
-        case .notReachable: return true
-        default: return false
-        }
-    }
-
-    // MARK: - Send
-    // 继续支持 Any 传参（避免破坏现有业务代码），但在内部安全剥离为 Sendable
     public func sendMessage(_ msg: Sendable) {
-        socketQueue.async { [weak self] in
-            guard let self = self else { return }
-            
-            let socketMsg: SocketMessage
-            if let stringMsg = msg as? String {
-                socketMsg = .string(stringMsg)
-            } else if let dataMsg = msg as? Data {
-                socketMsg = .data(dataMsg)
-            } else {
-                print("PTSocketManager: 发送失败，不支持的消息类型")
-                return
-            }
-            
-            self.handleSend(socketMsg)
-        }
-    }
-    
-    private func handleSend(_ msg: SocketMessage) {
-        if self.webSocket?.readyState == .OPEN {
-            switch msg {
-            case .string(let str): try? self.webSocket?.send(string: str)
-            case .data(let data): try? self.webSocket?.send(data: data)
-            }
-        } else {
-            if self.messageQueue.count < 1000 {
-                self.messageQueue.append(msg)
-            }
-        }
-    }
-    
-    private func flushMessageQueue() {
-        guard !messageQueue.isEmpty else { return }
-        for msg in messageQueue {
-            switch msg {
-            case .string(let str): try? self.webSocket?.send(string: str)
-            case .data(let data): try? self.webSocket?.send(data: data)
-            }
-        }
-        messageQueue.removeAll()
-    }
-
-    // MARK: - HeartBeat & Timeout Detection
-    public func startHeartBeat() {
-        stopHeartBeat()
-        lastReceiveMessageTime = Date().timeIntervalSince1970
-        
-        // 7. 使用 Task 实现心跳循环，不仅代码清晰，且避免了 Timer 的内存泄漏风险
-        heartBeatTask = Task { [weak self] in
-            while !Task.isCancelled {
-                do {
-                    // 每隔 interval 秒执行一次
-                    guard let manager = self else { break }
-                    try await Task.sleep(nanoseconds: UInt64(manager.heartBeatInterval * 1_000_000_000))
-                    guard !Task.isCancelled else { break }
-                    
-                    manager.socketQueue.async { [weak manager] in
-                        PTGCDManager.shared.runOnMain { [weak manager] in
-                            guard let manager = manager else { return }
-                            try? manager.webSocket?.sendPing(nil)
-                            
-                            let currentTime = Date().timeIntervalSince1970
-                            if currentTime - manager.lastReceiveMessageTime > manager.timeoutThreshold {
-                                PTNSLogConsole("PTSocketManager: 心跳超时，判定为假死，准备重连")
-                                manager.reConnect()
-                            }
-                        }
-                    }
-                } catch {
-                    break // 休眠被取消时直接退出循环
-                }
-            }
-        }
-    }
-
-    public func stopHeartBeat() {
-        heartBeatTask?.cancel()
-        heartBeatTask = nil
-    }
-}
-
-// MARK: - SRWebSocketDelegate
-extension PTSocketManager: SRWebSocketDelegate {
-
-    public func webSocketDidOpen(_ webSocket: SRWebSocket) {
-        _socketState = .connected
-        reOpenCount = 0
-        lastReceiveMessageTime = Date().timeIntervalSince1970
-        
-        flushMessageQueue()
-        startHeartBeat()
-
-        // 8. 先在串行队列安全提取 delegates 数组，再推送到主线程执行（完美避开数据竞争）
-        let currentDelegates = self.delegates.allObjects
-        Task { @MainActor in
-            NotificationCenter.default.post(name: nWebSocketDidConnect, object: nil)
-            for delegate in currentDelegates {
-                (delegate as? PTSocketManagerDelegate)?.socketDidConnect()
-            }
-        }
-    }
-
-    public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) {
-        lastReceiveMessageTime = Date().timeIntervalSince1970
-        
-        // 解析合法的 Sendable 类型再抛出
-        let sendableMessage: Sendable
-        if let str = message as? String {
-            sendableMessage = str
-        } else if let data = message as? Data {
-            sendableMessage = data
+        let message: PTWebSocketMessage
+        if let value = msg as? String {
+            message = .text(value)
+        } else if let value = msg as? Data {
+            message = .data(value)
         } else {
             return
         }
-        
-        let currentDelegates = self.delegates.allObjects
-        Task { @MainActor in
-            NotificationCenter.default.post(name: nWebSocketDidReceiveMessageNotification, object: sendableMessage)
-            for delegate in currentDelegates {
-                (delegate as? PTSocketManagerDelegate)?.socketDidReceiveMessage(sendableMessage)
+        guard let client else { return }
+        Task { try? await client.send(message) }
+    }
+
+    public func startHeartBeat() {
+        heartbeatEnabled = true
+        guard let client else { return }
+        Task { await client.setHeartbeatEnabled(true) }
+    }
+
+    public func stopHeartBeat() {
+        heartbeatEnabled = false
+        guard let client else { return }
+        Task { await client.setHeartbeatEnabled(false) }
+    }
+
+    private func startEventBridge(for client: PTWebSocketClient) {
+        eventTask = Task { @MainActor [weak self, client] in
+            guard let self else { return }
+            for await event in client.events {
+                guard !Task.isCancelled else { return }
+                consume(event)
             }
         }
     }
-    
-    public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?) {
-        lastReceiveMessageTime = Date().timeIntervalSince1970
-    }
 
-    public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error) {
-        reConnect()
-    }
-
-    public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) {
-        _socketState = .disconnected
-
-        let currentDelegates = self.delegates.allObjects
-        Task { @MainActor in
-            NotificationCenter.default.post(name: nWebSocketDidDisconnect, object: nil)
-            for delegate in currentDelegates {
+    private func consume(_ event: PTWebSocketEvent) {
+        switch event {
+        case .connecting:
+            _socketState = .connecting
+        case .connected:
+            _socketState = .connected
+            NotificationCenter.default.post(name: .ptWebSocketDidConnect, object: nil)
+            for delegate in delegates.allObjects {
+                (delegate as? PTSocketManagerDelegate)?.socketDidConnect()
+            }
+        case .message(let message):
+            let value: Sendable
+            switch message {
+            case .text(let text): value = text
+            case .data(let data): value = data
+            }
+            NotificationCenter.default.post(name: .ptWebSocketDidReceiveMessage, object: value)
+            for delegate in delegates.allObjects {
+                (delegate as? PTSocketManagerDelegate)?.socketDidReceiveMessage(value)
+            }
+        case .reconnecting:
+            _socketState = .reconnecting
+        case .disconnected:
+            _socketState = .disconnected
+            NotificationCenter.default.post(name: .ptWebSocketDidDisconnect, object: nil)
+            for delegate in delegates.allObjects {
                 (delegate as? PTSocketManagerDelegate)?.socketDidDisconnect()
             }
+        case .failed:
+            _socketState = .disconnected
+        case .pong:
+            break
         }
-        reConnect()
     }
 }

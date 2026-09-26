@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
-  "generated_at": "2026-09-26T14:52:58Z",
+  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
+  "generated_at": "2026-09-26T16:05:39Z",
   "name": "PooTools",
-  "version": "5.26.0",
+  "version": "5.27.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -2089,11 +2089,10 @@
       "name": "PooTools/SocketKit",
       "short_name": "SocketKit",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/Core",
+        "PooTools/Logging"
       ],
-      "third_party_dependencies": [
-        "SocketRocket"
-      ],
+      "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/SocketKit/*.{h,m,swift}"
       ],

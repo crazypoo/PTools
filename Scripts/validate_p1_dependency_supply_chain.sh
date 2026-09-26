@@ -13,12 +13,17 @@ if rg -n 'branch:' Package.swift; then
   exit 1
 fi
 
-for required in 'Swift-JWT.git", exact:' 'KakaJSON.git", exact:' 'SocketRocket.git", revision:'; do
+for required in 'Swift-JWT.git", exact:' 'KakaJSON.git", exact:'; do
   rg -n -- "$required" Package.swift >/dev/null || {
     printf 'FAIL: missing reproducible dependency policy for %s\n' "$required" >&2
     exit 1
   }
 done
+
+if rg -n -i 'SocketRocket|SRWebSocket|SRReadyState' Package.swift Package.resolved PooTools.podspec Podfile.lock PooToolsSource Tests >/dev/null; then
+  printf 'FAIL: SocketRocket remains in an active manifest or shipped source path\n' >&2
+  exit 1
+fi
 
 [[ -f docs/architecture/DEPENDENCIES.md ]] || {
   printf 'FAIL: dependency ownership document is missing\n' >&2

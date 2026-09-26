@@ -10,8 +10,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(20|21|22|23|24|25|26)\.[0-9]+$ ]] || {
-  printf 'FAIL: logging foundation gate requires a 5.20.x through 5.26.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(20|21|22|23|24|25|26|27)\.[0-9]+$ ]] || {
+  printf 'FAIL: logging foundation gate requires a 5.20.x through 5.27.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -65,4 +65,4 @@ if rg -n --glob '*.swift' '^(import|@_exported import) (UIKit|CocoaLumberjack|Al
   exit 1
 fi
 
-printf 'PASS: PTools 5.20–5.26 logging foundation contract\n'
+printf 'PASS: PTools 5.20–5.27 logging foundation contract\n'

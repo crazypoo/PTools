@@ -23,8 +23,11 @@ if rg -n 'branch:' Package.swift >/dev/null; then
   fail 'Package.swift contains a floating branch dependency'
 fi
 
-require_match 'SocketRocket\.git", revision: "fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"' Package.swift
-require_match '"revision"[[:space:]]*:[[:space:]]*"fe86ec01176ea3365ffa2d04a2bb6dd7a9e6c01e"' Package.resolved
+if rg -n -i 'SocketRocket|SRWebSocket|SRReadyState' Package.swift Package.resolved PooTools.podspec Podfile.lock PooToolsSource Tests >/dev/null; then
+  fail 'SocketRocket remains in an active manifest or shipped source path'
+fi
+require_match 'PTWebSocketTransport' PooToolsSource/SocketKit/PTWebSocketClient.swift
+require_match 'PTURLSessionWebSocketTransport' PooToolsSource/SocketKit/PTWebSocketClient.swift
 
 # English: Kitura cryptography packages must remain transitive through Swift-JWT until the 6.0 migration.
 # Español: Los paquetes criptográficos de Kitura deben seguir siendo transitivos mediante Swift-JWT hasta la migración 6.0.

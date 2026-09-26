@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
-Generated at: 2026-09-26T14:52:58Z
+Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
+Generated at: 2026-09-26T16:05:39Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.26.0`
+- Podspec: `PooTools` `5.27.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -112,7 +112,7 @@ Generated at: 2026-09-26T14:52:58Z
 | `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
 | `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
 | `SmartScreenshot` | `PooTools/Core` | — | `ScreenShot` | — | — |
-| `SocketKit` | `PooTools/Core` | `SocketRocket` | `SocketKit` | — | — |
+| `SocketKit` | `PooTools/Core`, `PooTools/Logging` | — | `SocketKit` | — | — |
 | `SpeechRecognizerPermission` | `PooTools/PToolsPermissionCore` | — | `SpeechPremission` | — | — |
 | `SpeedPanel` | `PooTools/Core` | — | `SpeedPanel` | — | — |
 | `StepCount` | `PooTools/Core`, `PooTools/HealthPermission` | — | `HealthKit` | HealthKit | — |

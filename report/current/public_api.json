@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "864d17a08c0444c34f1393e33bb9d37f2faf7e86",
-  "generated_at": "2026-09-26T14:52:53Z",
+  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
+  "generated_at": "2026-09-26T15:41:54Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -48072,57 +48072,57 @@
       "declaration": "public init(showTitle: Bool = false, showRawValue: Bool = false) {"
     },
     {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nNetworkStatesChangeNotification = Notification.Name(\"nNetworkStatesChangeNotification\")",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 12,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let nNetworkStatesChangeNotification = Notification.Name(\"nNetworkStatesChangeNotification\")"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidReceiveMessageNotification = Notification.Name(\"nWebSocketDidReceiveMessageNotification\")",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 13,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let nWebSocketDidReceiveMessageNotification = Notification.Name(\"nWebSocketDidReceiveMessageNotification\")"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidConnect = Notification.Name(\"nWebSocketDidConnect\")",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 14,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let nWebSocketDidConnect = Notification.Name(\"nWebSocketDidConnect\")"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidDisconnect = Notification.Name(\"nWebSocketDidDisconnect\")",
+      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nNetworkStatesChangeNotification = Notification.Name.ptNetworkStatesChange",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
       "line": 15,
       "access": "public",
       "kind": "let",
-      "declaration": "public let nWebSocketDidDisconnect = Notification.Name(\"nWebSocketDidDisconnect\")"
+      "declaration": "public let nNetworkStatesChangeNotification = Notification.Name.ptNetworkStatesChange"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidReceiveMessageNotification = Notification.Name.ptWebSocketDidReceiveMessage",
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let nWebSocketDidReceiveMessageNotification = Notification.Name.ptWebSocketDidReceiveMessage"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidConnect = Notification.Name.ptWebSocketDidConnect",
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let nWebSocketDidConnect = Notification.Name.ptWebSocketDidConnect"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|let|public let nWebSocketDidDisconnect = Notification.Name.ptWebSocketDidDisconnect",
+      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let nWebSocketDidDisconnect = Notification.Name.ptWebSocketDidDisconnect"
     },
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|enum|public enum SocketConnectionState: Sendable",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 18,
+      "line": 20,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum SocketConnectionState: Sendable {"
     },
     {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|protocol|public protocol PTSocketManagerDelegate: AnyObject,Sendable",
+      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|protocol|public protocol PTSocketManagerDelegate: AnyObject, Sendable",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 33,
+      "line": 28,
       "access": "public",
       "kind": "protocol",
-      "declaration": "public protocol PTSocketManagerDelegate: AnyObject,Sendable {"
+      "declaration": "public protocol PTSocketManagerDelegate: AnyObject, Sendable {"
     },
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|var|public var maxReConnectCount: Int",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 55,
+      "line": 47,
       "access": "public",
       "kind": "var",
       "declaration": "public var maxReConnectCount: Int {"
@@ -48130,15 +48130,15 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|var|public var socketState: SocketConnectionState",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 61,
+      "line": 52,
       "access": "public",
       "kind": "var",
-      "declaration": "public var socketState: SocketConnectionState {"
+      "declaration": "public var socketState: SocketConnectionState { _socketState }"
     },
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|var|public var networkStatus: NetworkStatus",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 66,
+      "line": 54,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkStatus: NetworkStatus {"
@@ -48146,7 +48146,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func addDelegate(_ delegate: PTSocketManagerDelegate)",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 106,
+      "line": 76,
       "access": "public",
       "kind": "func",
       "declaration": "public func addDelegate(_ delegate: PTSocketManagerDelegate) {"
@@ -48154,7 +48154,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func removeDelegate(_ delegate: PTSocketManagerDelegate)",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 112,
+      "line": 80,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeDelegate(_ delegate: PTSocketManagerDelegate) {"
@@ -48162,7 +48162,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func socketSet(completion: @escaping @Sendable (Bool) -> Void)",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 131,
+      "line": 84,
       "access": "public",
       "kind": "func",
       "declaration": "public func socketSet(completion: @escaping @Sendable (Bool) -> Void) {"
@@ -48170,7 +48170,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func connect()",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 153,
+      "line": 106,
       "access": "public",
       "kind": "func",
       "declaration": "public func connect() {"
@@ -48178,7 +48178,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func disConnect(clearQueue: Bool = true)",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 168,
+      "line": 118,
       "access": "public",
       "kind": "func",
       "declaration": "public func disConnect(clearQueue: Bool = true) {"
@@ -48186,7 +48186,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func reConnect()",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 185,
+      "line": 127,
       "access": "public",
       "kind": "func",
       "declaration": "public func reConnect() {"
@@ -48194,7 +48194,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func sendMessage(_ msg: Sendable)",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 253,
+      "line": 139,
       "access": "public",
       "kind": "func",
       "declaration": "public func sendMessage(_ msg: Sendable) {"
@@ -48202,7 +48202,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func startHeartBeat()",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 296,
+      "line": 152,
       "access": "public",
       "kind": "func",
       "declaration": "public func startHeartBeat() {"
@@ -48210,55 +48210,15 @@
     {
       "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func stopHeartBeat()",
       "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 328,
+      "line": 158,
       "access": "public",
       "kind": "func",
       "declaration": "public func stopHeartBeat() {"
     },
     {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 337,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func webSocketDidOpen(_ webSocket: SRWebSocket) {"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 355,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) {"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 377,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?) {"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 381,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error) {"
-    },
-    {
-      "key": "PooToolsSource/SocketKit/PTSocketManager.swift|public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)",
-      "path": "PooToolsSource/SocketKit/PTSocketManager.swift",
-      "line": 385,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) {"
-    },
-    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketState: Sendable, Equatable",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 9,
+      "line": 12,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTWebSocketState: Sendable, Equatable {"
@@ -48266,31 +48226,255 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketMessage: Sendable, Equatable",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 19,
+      "line": 22,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTWebSocketMessage: Sendable, Equatable {"
     },
     {
-      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketError: Error, LocalizedError, Sendable",
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketCloseCode: Sendable, Equatable",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 24,
+      "line": 27,
       "access": "public",
       "kind": "enum",
-      "declaration": "public enum PTWebSocketError: Error, LocalizedError, Sendable {"
+      "declaration": "public enum PTWebSocketCloseCode: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketCloseContext: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketCloseContext: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let code: PTWebSocketCloseCode?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let code: PTWebSocketCloseCode?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let reason: String?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 60,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let reason: String?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let wasClean: Bool",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let wasClean: Bool"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(code: PTWebSocketCloseCode?, reason: String?, wasClean: Bool)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(code: PTWebSocketCloseCode?, reason: String?, wasClean: Bool) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketPongContext: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 70,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketPongContext: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let roundTripTime: Duration?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let roundTripTime: Duration?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let receivedAt: Date",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 72,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let receivedAt: Date"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(roundTripTime: Duration?, receivedAt: Date = Date())",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(roundTripTime: Duration?, receivedAt: Date = Date()) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketReconnectContext: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketReconnectContext: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let attempt: Int",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let attempt: Int"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let delay: Duration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 82,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let delay: Duration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(attempt: Int, delay: Duration)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(attempt: Int, delay: Duration) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketEvent: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketEvent: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketError: Error, LocalizedError, Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketError: Error, LocalizedError, Sendable, Equatable {"
     },
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var errorDescription: String?",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 31,
+      "line": 113,
       "access": "public",
       "kind": "var",
       "declaration": "public var errorDescription: String? {"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketPin: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 127,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketPin: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketTrustPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 132,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketTrustPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketReconnectPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 138,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketReconnectPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketHeartbeatConfiguration: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 165,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketHeartbeatConfiguration: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let interval: Duration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 166,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let interval: Duration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let timeout: Duration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 167,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let timeout: Duration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let enabled: Bool",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 168,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let enabled: Bool"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(interval: Duration = .seconds(30), timeout: Duration = .seconds(15), enabled: Bool = true)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 170,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(interval: Duration = .seconds(30), timeout: Duration = .seconds(15), enabled: Bool = true) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketQueueOverflowPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 177,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketQueueOverflowPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketSendBufferConfiguration: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketSendBufferConfiguration: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let capacity: Int",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 183,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let capacity: Int"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let overflowPolicy: PTWebSocketQueueOverflowPolicy",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let overflowPolicy: PTWebSocketQueueOverflowPolicy"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(capacity: Int = 1000, overflowPolicy: PTWebSocketQueueOverflowPolicy = .rejectNewest)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(capacity: Int = 1000, overflowPolicy: PTWebSocketQueueOverflowPolicy = .rejectNewest) {"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketConfiguration: Sendable, Equatable",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 42,
+      "line": 192,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTWebSocketConfiguration: Sendable, Equatable {"
@@ -48298,7 +48482,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let url: URL",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 43,
+      "line": 193,
       "access": "public",
       "kind": "let",
       "declaration": "public let url: URL"
@@ -48306,7 +48490,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var headers: [String: String]",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 44,
+      "line": 194,
       "access": "public",
       "kind": "var",
       "declaration": "public var headers: [String: String]"
@@ -48314,7 +48498,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var heartbeatInterval: TimeInterval",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 45,
+      "line": 195,
       "access": "public",
       "kind": "var",
       "declaration": "public var heartbeatInterval: TimeInterval"
@@ -48322,7 +48506,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var heartbeatTimeout: TimeInterval",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 46,
+      "line": 196,
       "access": "public",
       "kind": "var",
       "declaration": "public var heartbeatTimeout: TimeInterval"
@@ -48330,7 +48514,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var maxReconnectAttempts: Int",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 47,
+      "line": 197,
       "access": "public",
       "kind": "var",
       "declaration": "public var maxReconnectAttempts: Int"
@@ -48338,7 +48522,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var reconnectBaseDelay: TimeInterval",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 48,
+      "line": 198,
       "access": "public",
       "kind": "var",
       "declaration": "public var reconnectBaseDelay: TimeInterval"
@@ -48346,7 +48530,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var maxQueuedMessages: Int",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 49,
+      "line": 199,
       "access": "public",
       "kind": "var",
       "declaration": "public var maxQueuedMessages: Int"
@@ -48354,63 +48538,415 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var automaticallyReconnect: Bool",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 50,
+      "line": 200,
       "access": "public",
       "kind": "var",
       "declaration": "public var automaticallyReconnect: Bool"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var subprotocols: [String]",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 201,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var subprotocols: [String]"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var reconnectPolicy: PTWebSocketReconnectPolicy",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 202,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var reconnectPolicy: PTWebSocketReconnectPolicy"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var heartbeat: PTWebSocketHeartbeatConfiguration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 203,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var heartbeat: PTWebSocketHeartbeatConfiguration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var sendBuffer: PTWebSocketSendBufferConfiguration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 204,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var sendBuffer: PTWebSocketSendBufferConfiguration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var trustPolicy: PTWebSocketTrustPolicy",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 205,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trustPolicy: PTWebSocketTrustPolicy"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var connectionTimeout: TimeInterval",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 206,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var connectionTimeout: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var waitsForConnectivity: Bool",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 207,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var waitsForConnectivity: Bool"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var maximumMessageSize: Int?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 208,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumMessageSize: Int?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var stabilityThreshold: TimeInterval",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 209,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var stabilityThreshold: TimeInterval"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(url: URL,",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 52,
+      "line": 211,
       "access": "public",
       "kind": "init",
       "declaration": "public init(url: URL,"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketMetrics: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 254,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketMetrics: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let sentMessageCount: UInt64",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 255,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sentMessageCount: UInt64"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let receivedMessageCount: UInt64",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 256,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let receivedMessageCount: UInt64"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let sentByteCount: UInt64",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 257,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sentByteCount: UInt64"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let receivedByteCount: UInt64",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 258,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let receivedByteCount: UInt64"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let reconnectCount: UInt64",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 259,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let reconnectCount: UInt64"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let lastPingRoundTripTime: Duration?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 260,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let lastPingRoundTripTime: Duration?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(sentMessageCount: UInt64 = 0,",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 262,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(sentMessageCount: UInt64 = 0,"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketStateMachine: Sendable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 277,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketStateMachine: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(state: PTWebSocketState = .idle)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 280,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(state: PTWebSocketState = .idle) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketSendBuffer: Sendable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 289,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketSendBuffer: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let configuration: PTWebSocketSendBufferConfiguration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 291,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let configuration: PTWebSocketSendBufferConfiguration"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(configuration: PTWebSocketSendBufferConfiguration = PTWebSocketSendBufferConfiguration())",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 293,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(configuration: PTWebSocketSendBufferConfiguration = PTWebSocketSendBufferConfiguration()) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var count: Int",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 297,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var count: Int { messages.count }"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var isEmpty: Bool",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 298,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isEmpty: Bool { messages.isEmpty }"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func snapshot() -> [PTWebSocketMessage]",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 299,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func snapshot() -> [PTWebSocketMessage] { messages }"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|enum|public enum PTWebSocketTransportEvent: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 328,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTWebSocketTransportEvent: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|struct|public struct PTWebSocketTransportConfiguration: Sendable, Equatable",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 335,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTWebSocketTransportConfiguration: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let trustPolicy: PTWebSocketTrustPolicy",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 336,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let trustPolicy: PTWebSocketTrustPolicy"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let connectionTimeout: TimeInterval",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 337,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let connectionTimeout: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let waitsForConnectivity: Bool",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 338,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let waitsForConnectivity: Bool"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let maximumMessageSize: Int?",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 339,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let maximumMessageSize: Int?"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(trustPolicy: PTWebSocketTrustPolicy,",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 341,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(trustPolicy: PTWebSocketTrustPolicy,"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|protocol|public protocol PTWebSocketTransport: Actor",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 352,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTWebSocketTransport: Actor {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|actor|public actor PTURLSessionWebSocketTransport: PTWebSocketTransport",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 436,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTURLSessionWebSocketTransport: PTWebSocketTransport {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init()",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 445,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func events() -> AsyncStream<PTWebSocketTransportEvent>",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 451,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func events() -> AsyncStream<PTWebSocketTransportEvent> {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func connect(request: URLRequest, configuration: PTWebSocketTransportConfiguration) async throws",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 455,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func connect(request: URLRequest, configuration: PTWebSocketTransportConfiguration) async throws {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func send(_ message: PTWebSocketMessage) async throws",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 484,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func send(_ message: PTWebSocketMessage) async throws {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func ping() async throws -> Duration",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 499,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func ping() async throws -> Duration {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func close(code: PTWebSocketCloseCode = .normal, reason: String? = nil)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 511,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func close(code: PTWebSocketCloseCode = .normal, reason: String? = nil) {"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|actor|public actor PTWebSocketClient",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 74,
+      "line": 574,
       "access": "public",
       "kind": "actor",
       "declaration": "public actor PTWebSocketClient {"
     },
     {
-      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public let messages: AsyncStream<PTWebSocketMessage>",
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public nonisolated let events: AsyncStream<PTWebSocketEvent>",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 75,
+      "line": 575,
       "access": "public",
       "kind": "let",
-      "declaration": "public let messages: AsyncStream<PTWebSocketMessage>"
+      "declaration": "public nonisolated let events: AsyncStream<PTWebSocketEvent>"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|let|public nonisolated let messages: AsyncStream<PTWebSocketMessage>",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 576,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public nonisolated let messages: AsyncStream<PTWebSocketMessage>"
     },
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|var|public var state: PTWebSocketState",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 94,
+      "line": 598,
       "access": "public",
       "kind": "var",
-      "declaration": "public var state: PTWebSocketState { connectionState }"
+      "declaration": "public var state: PTWebSocketState { stateMachine.state }"
     },
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|init|public init(configuration: PTWebSocketConfiguration,",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 96,
+      "line": 600,
       "access": "public",
       "kind": "init",
       "declaration": "public init(configuration: PTWebSocketConfiguration,"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func makeEventStream() -> AsyncStream<PTWebSocketEvent>",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 625,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func makeEventStream() -> AsyncStream<PTWebSocketEvent> {"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func update(headers: [String: String])",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 119,
+      "line": 631,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(headers: [String: String]) {"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func updateConnectivity(isAvailable: Bool)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 635,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func updateConnectivity(isAvailable: Bool) {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func setHeartbeatEnabled(_ enabled: Bool)",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 640,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setHeartbeatEnabled(_ enabled: Bool) {"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func connect() async throws",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 123,
+      "line": 646,
       "access": "public",
       "kind": "func",
       "declaration": "public func connect() async throws {"
@@ -48418,15 +48954,23 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func disconnect()",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 148,
+      "line": 682,
       "access": "public",
       "kind": "func",
       "declaration": "public func disconnect() {"
     },
     {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func disconnect(clearQueue: Bool) async",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 686,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func disconnect(clearQueue: Bool) async {"
+    },
+    {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func reconnect() async throws",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 163,
+      "line": 704,
       "access": "public",
       "kind": "func",
       "declaration": "public func reconnect() async throws {"
@@ -48434,7 +48978,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func send(_ message: PTWebSocketMessage) async throws",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 170,
+      "line": 711,
       "access": "public",
       "kind": "func",
       "declaration": "public func send(_ message: PTWebSocketMessage) async throws {"
@@ -48442,7 +48986,7 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func enterBackground()",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 181,
+      "line": 725,
       "access": "public",
       "kind": "func",
       "declaration": "public func enterBackground() {"
@@ -48450,10 +48994,26 @@
     {
       "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func enterForeground() async",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 186,
+      "line": 730,
       "access": "public",
       "kind": "func",
       "declaration": "public func enterForeground() async {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|func|public func metricsSnapshot() -> PTWebSocketMetrics",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 736,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func metricsSnapshot() -> PTWebSocketMetrics {"
+    },
+    {
+      "key": "PooToolsSource/SocketKit/PTWebSocketClient.swift|public|typealias|public typealias PTWebSocketCore = PTWebSocketClient",
+      "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+      "line": 968,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTWebSocketCore = PTWebSocketClient"
     },
     {
       "key": "PooToolsSource/Speech/PTSpeech.swift|public|typealias|public typealias ErrorBlock = (_ error:NSError) -> Void",

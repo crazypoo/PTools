@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
-Generated at: 2026-09-26T14:52:53Z
+Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
+Generated at: 2026-09-26T15:41:54Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -77,8 +77,7 @@ Generated at: 2026-09-26T14:52:53Z
 | `PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift` | 16 | `public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/SegmentControl/PTMainSegmentModel.swift` | 23 | `public class PTMainSegmentModel: JXSegmentedTitleItemModel,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift` | 11 | `public final class PTSegmentControlBaseModel: NSObject,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SocketKit/PTSocketManager.swift` | 40 | `// 4. 声明 @unchecked Sendable。我们通过内部的 socketQueue 串行队列手动保证了线程安全` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SocketKit/PTSocketManager.swift` | 42 | `public final class PTSocketManager: NSObject, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/SocketKit/PTWebSocketClient.swift` | 363 | `private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/TouchInspector/TouchInspectorWindow.swift` | 15 | `private struct PTTouchValueBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/VideoEditor/CompositionInstruction.swift` | 11 | `class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/Compositor.swift` | 12 | `// ⭐️ 核心改进 1：声明为 @unchecked Sendable。` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |

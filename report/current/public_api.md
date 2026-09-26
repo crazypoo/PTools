@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 864d17a08c0444c34f1393e33bb9d37f2faf7e86
-Generated at: 2026-09-26T14:52:53Z
+Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
+Generated at: 2026-09-26T15:41:54Z
 -->
 
 # PTools 当前公开 API 清单
@@ -6021,54 +6021,124 @@ Generated at: 2026-09-26T14:52:53Z
 | PooToolsSource/Slider/PTSlider.swift:55 | var | public | public var showRawValue: Bool = false { |
 | PooToolsSource/Slider/PTSlider.swift:58 | var | public | public var titleValueUnit: String = "" { |
 | PooToolsSource/Slider/PTSlider.swift:81 | init | public | public init(showTitle: Bool = false, showRawValue: Bool = false) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:12 | let | public | public let nNetworkStatesChangeNotification = Notification.Name("nNetworkStatesChangeNotification") |
-| PooToolsSource/SocketKit/PTSocketManager.swift:13 | let | public | public let nWebSocketDidReceiveMessageNotification = Notification.Name("nWebSocketDidReceiveMessageNotification") |
-| PooToolsSource/SocketKit/PTSocketManager.swift:14 | let | public | public let nWebSocketDidConnect = Notification.Name("nWebSocketDidConnect") |
-| PooToolsSource/SocketKit/PTSocketManager.swift:15 | let | public | public let nWebSocketDidDisconnect = Notification.Name("nWebSocketDidDisconnect") |
-| PooToolsSource/SocketKit/PTSocketManager.swift:18 | enum | public | public enum SocketConnectionState: Sendable { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:33 | protocol | public | public protocol PTSocketManagerDelegate: AnyObject,Sendable { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:55 | var | public | public var maxReConnectCount: Int { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:61 | var | public | public var socketState: SocketConnectionState { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:66 | var | public | public var networkStatus: NetworkStatus { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:106 | func | public | public func addDelegate(_ delegate: PTSocketManagerDelegate) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:112 | func | public | public func removeDelegate(_ delegate: PTSocketManagerDelegate) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:131 | func | public | public func socketSet(completion: @escaping @Sendable (Bool) -> Void) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:153 | func | public | public func connect() { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:168 | func | public | public func disConnect(clearQueue: Bool = true) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:185 | func | public | public func reConnect() { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:253 | func | public | public func sendMessage(_ msg: Sendable) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:296 | func | public | public func startHeartBeat() { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:328 | func | public | public func stopHeartBeat() { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:337 | func | public | public func webSocketDidOpen(_ webSocket: SRWebSocket) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:355 | func | public | public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:377 | func | public | public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:381 | func | public | public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error) { |
-| PooToolsSource/SocketKit/PTSocketManager.swift:385 | func | public | public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:9 | enum | public | public enum PTWebSocketState: Sendable, Equatable { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:19 | enum | public | public enum PTWebSocketMessage: Sendable, Equatable { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:24 | enum | public | public enum PTWebSocketError: Error, LocalizedError, Sendable { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:31 | var | public | public var errorDescription: String? { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:42 | struct | public | public struct PTWebSocketConfiguration: Sendable, Equatable { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:43 | let | public | public let url: URL |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:44 | var | public | public var headers: [String: String] |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:45 | var | public | public var heartbeatInterval: TimeInterval |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:46 | var | public | public var heartbeatTimeout: TimeInterval |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:47 | var | public | public var maxReconnectAttempts: Int |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:48 | var | public | public var reconnectBaseDelay: TimeInterval |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:49 | var | public | public var maxQueuedMessages: Int |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:50 | var | public | public var automaticallyReconnect: Bool |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:52 | init | public | public init(url: URL, |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:74 | actor | public | public actor PTWebSocketClient { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:75 | let | public | public let messages: AsyncStream<PTWebSocketMessage> |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:94 | var | public | public var state: PTWebSocketState { connectionState } |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:96 | init | public | public init(configuration: PTWebSocketConfiguration, |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:119 | func | public | public func update(headers: [String: String]) { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:123 | func | public | public func connect() async throws { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:148 | func | public | public func disconnect() { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:163 | func | public | public func reconnect() async throws { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:170 | func | public | public func send(_ message: PTWebSocketMessage) async throws { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:181 | func | public | public func enterBackground() { |
-| PooToolsSource/SocketKit/PTWebSocketClient.swift:186 | func | public | public func enterForeground() async { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:15 | let | public | public let nNetworkStatesChangeNotification = Notification.Name.ptNetworkStatesChange |
+| PooToolsSource/SocketKit/PTSocketManager.swift:16 | let | public | public let nWebSocketDidReceiveMessageNotification = Notification.Name.ptWebSocketDidReceiveMessage |
+| PooToolsSource/SocketKit/PTSocketManager.swift:17 | let | public | public let nWebSocketDidConnect = Notification.Name.ptWebSocketDidConnect |
+| PooToolsSource/SocketKit/PTSocketManager.swift:18 | let | public | public let nWebSocketDidDisconnect = Notification.Name.ptWebSocketDidDisconnect |
+| PooToolsSource/SocketKit/PTSocketManager.swift:20 | enum | public | public enum SocketConnectionState: Sendable { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:28 | protocol | public | public protocol PTSocketManagerDelegate: AnyObject, Sendable { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:47 | var | public | public var maxReConnectCount: Int { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:52 | var | public | public var socketState: SocketConnectionState { _socketState } |
+| PooToolsSource/SocketKit/PTSocketManager.swift:54 | var | public | public var networkStatus: NetworkStatus { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:76 | func | public | public func addDelegate(_ delegate: PTSocketManagerDelegate) { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:80 | func | public | public func removeDelegate(_ delegate: PTSocketManagerDelegate) { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:84 | func | public | public func socketSet(completion: @escaping @Sendable (Bool) -> Void) { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:106 | func | public | public func connect() { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:118 | func | public | public func disConnect(clearQueue: Bool = true) { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:127 | func | public | public func reConnect() { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:139 | func | public | public func sendMessage(_ msg: Sendable) { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:152 | func | public | public func startHeartBeat() { |
+| PooToolsSource/SocketKit/PTSocketManager.swift:158 | func | public | public func stopHeartBeat() { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:12 | enum | public | public enum PTWebSocketState: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:22 | enum | public | public enum PTWebSocketMessage: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:27 | enum | public | public enum PTWebSocketCloseCode: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:58 | struct | public | public struct PTWebSocketCloseContext: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:59 | let | public | public let code: PTWebSocketCloseCode? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:60 | let | public | public let reason: String? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:61 | let | public | public let wasClean: Bool |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:63 | init | public | public init(code: PTWebSocketCloseCode?, reason: String?, wasClean: Bool) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:70 | struct | public | public struct PTWebSocketPongContext: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:71 | let | public | public let roundTripTime: Duration? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:72 | let | public | public let receivedAt: Date |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:74 | init | public | public init(roundTripTime: Duration?, receivedAt: Date = Date()) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:80 | struct | public | public struct PTWebSocketReconnectContext: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:81 | let | public | public let attempt: Int |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:82 | let | public | public let delay: Duration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:84 | init | public | public init(attempt: Int, delay: Duration) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:90 | enum | public | public enum PTWebSocketEvent: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:100 | enum | public | public enum PTWebSocketError: Error, LocalizedError, Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:113 | var | public | public var errorDescription: String? { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:127 | enum | public | public enum PTWebSocketPin: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:132 | enum | public | public enum PTWebSocketTrustPolicy: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:138 | enum | public | public enum PTWebSocketReconnectPolicy: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:165 | struct | public | public struct PTWebSocketHeartbeatConfiguration: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:166 | let | public | public let interval: Duration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:167 | let | public | public let timeout: Duration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:168 | let | public | public let enabled: Bool |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:170 | init | public | public init(interval: Duration = .seconds(30), timeout: Duration = .seconds(15), enabled: Bool = true) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:177 | enum | public | public enum PTWebSocketQueueOverflowPolicy: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:182 | struct | public | public struct PTWebSocketSendBufferConfiguration: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:183 | let | public | public let capacity: Int |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:184 | let | public | public let overflowPolicy: PTWebSocketQueueOverflowPolicy |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:186 | init | public | public init(capacity: Int = 1000, overflowPolicy: PTWebSocketQueueOverflowPolicy = .rejectNewest) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:192 | struct | public | public struct PTWebSocketConfiguration: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:193 | let | public | public let url: URL |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:194 | var | public | public var headers: [String: String] |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:195 | var | public | public var heartbeatInterval: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:196 | var | public | public var heartbeatTimeout: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:197 | var | public | public var maxReconnectAttempts: Int |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:198 | var | public | public var reconnectBaseDelay: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:199 | var | public | public var maxQueuedMessages: Int |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:200 | var | public | public var automaticallyReconnect: Bool |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:201 | var | public | public var subprotocols: [String] |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:202 | var | public | public var reconnectPolicy: PTWebSocketReconnectPolicy |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:203 | var | public | public var heartbeat: PTWebSocketHeartbeatConfiguration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:204 | var | public | public var sendBuffer: PTWebSocketSendBufferConfiguration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:205 | var | public | public var trustPolicy: PTWebSocketTrustPolicy |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:206 | var | public | public var connectionTimeout: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:207 | var | public | public var waitsForConnectivity: Bool |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:208 | var | public | public var maximumMessageSize: Int? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:209 | var | public | public var stabilityThreshold: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:211 | init | public | public init(url: URL, |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:254 | struct | public | public struct PTWebSocketMetrics: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:255 | let | public | public let sentMessageCount: UInt64 |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:256 | let | public | public let receivedMessageCount: UInt64 |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:257 | let | public | public let sentByteCount: UInt64 |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:258 | let | public | public let receivedByteCount: UInt64 |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:259 | let | public | public let reconnectCount: UInt64 |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:260 | let | public | public let lastPingRoundTripTime: Duration? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:262 | init | public | public init(sentMessageCount: UInt64 = 0, |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:277 | struct | public | public struct PTWebSocketStateMachine: Sendable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:280 | init | public | public init(state: PTWebSocketState = .idle) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:289 | struct | public | public struct PTWebSocketSendBuffer: Sendable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:291 | let | public | public let configuration: PTWebSocketSendBufferConfiguration |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:293 | init | public | public init(configuration: PTWebSocketSendBufferConfiguration = PTWebSocketSendBufferConfiguration()) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:297 | var | public | public var count: Int { messages.count } |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:298 | var | public | public var isEmpty: Bool { messages.isEmpty } |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:299 | func | public | public func snapshot() -> [PTWebSocketMessage] { messages } |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:328 | enum | public | public enum PTWebSocketTransportEvent: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:335 | struct | public | public struct PTWebSocketTransportConfiguration: Sendable, Equatable { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:336 | let | public | public let trustPolicy: PTWebSocketTrustPolicy |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:337 | let | public | public let connectionTimeout: TimeInterval |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:338 | let | public | public let waitsForConnectivity: Bool |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:339 | let | public | public let maximumMessageSize: Int? |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:341 | init | public | public init(trustPolicy: PTWebSocketTrustPolicy, |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:352 | protocol | public | public protocol PTWebSocketTransport: Actor { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:436 | actor | public | public actor PTURLSessionWebSocketTransport: PTWebSocketTransport { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:445 | init | public | public init() { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:451 | func | public | public func events() -> AsyncStream<PTWebSocketTransportEvent> { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:455 | func | public | public func connect(request: URLRequest, configuration: PTWebSocketTransportConfiguration) async throws { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:484 | func | public | public func send(_ message: PTWebSocketMessage) async throws { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:499 | func | public | public func ping() async throws -> Duration { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:511 | func | public | public func close(code: PTWebSocketCloseCode = .normal, reason: String? = nil) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:574 | actor | public | public actor PTWebSocketClient { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:575 | let | public | public nonisolated let events: AsyncStream<PTWebSocketEvent> |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:576 | let | public | public nonisolated let messages: AsyncStream<PTWebSocketMessage> |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:598 | var | public | public var state: PTWebSocketState { stateMachine.state } |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:600 | init | public | public init(configuration: PTWebSocketConfiguration, |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:625 | func | public | public func makeEventStream() -> AsyncStream<PTWebSocketEvent> { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:631 | func | public | public func update(headers: [String: String]) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:635 | func | public | public func updateConnectivity(isAvailable: Bool) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:640 | func | public | public func setHeartbeatEnabled(_ enabled: Bool) { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:646 | func | public | public func connect() async throws { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:682 | func | public | public func disconnect() { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:686 | func | public | public func disconnect(clearQueue: Bool) async { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:704 | func | public | public func reconnect() async throws { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:711 | func | public | public func send(_ message: PTWebSocketMessage) async throws { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:725 | func | public | public func enterBackground() { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:730 | func | public | public func enterForeground() async { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:736 | func | public | public func metricsSnapshot() -> PTWebSocketMetrics { |
+| PooToolsSource/SocketKit/PTWebSocketClient.swift:968 | typealias | public | public typealias PTWebSocketCore = PTWebSocketClient |
 | PooToolsSource/Speech/PTSpeech.swift:13 | typealias | public | public typealias ErrorBlock = (_ error:NSError) -> Void |
 | PooToolsSource/Speech/PTSpeech.swift:14 | typealias | public | public typealias FinishBlock = (_ text:String) -> Void |
 | PooToolsSource/Speech/PTSpeech.swift:16 | enum | public | @objc public enum PTSpeechErrorType:Int { |
