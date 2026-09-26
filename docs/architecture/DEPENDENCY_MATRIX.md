@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
-Generated at: 2026-09-23T08:08:55Z
-Version source: 5.25.0
+Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
+Generated at: 2026-09-26T13:47:34Z
+Version source: 5.25.5
 -->
 
 # Direct Dependency Matrix
@@ -93,7 +93,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `SVG` | `Core`, `ptools` | `Kingfisher`, `PocketSVG`, `Protobuf`, `SVGAPlayer` | 6.0 review | Keep; review direct drift |
 | `ScanQRCode` | `CameraPermission`, `Core`, `PTCameraPermission`, `PhotoPicker`, `PooToolsImagePicker`, `PooToolsPhotoPicker`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ScrollBanner` | `Core`, `PageControl`, `PooToolsPageControl`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `Search` | `Core`, `PooToolsSearchBar`, `SearchBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `Search` | `Core`, `PToolsUIFoundation`, `PooToolsSearchBar`, `SearchBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `SearchBar` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Security` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `SecuritySuite` | `Core` | `IOSSecuritySuite` | 6.0 review | Keep; review direct drift |

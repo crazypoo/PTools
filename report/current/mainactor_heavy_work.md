@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
-Generated at: 2026-09-23T13:11:25Z
+Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
+Generated at: 2026-09-26T14:07:57Z
 -->
 
 # MainActor 重活盘点
@@ -26,19 +26,19 @@ Generated at: 2026-09-23T13:11:25Z
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 216 | `FileManager.default` | review-required | `if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),` |
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 502 | `jpegData\(` | explicit-background-or-actor-boundary | `image.jpegData(compressionQuality: 0.8)` |
 | `PooToolsSource/Base/PTVideoCoverCache.swift` | 516 | `FileManager.default` | review-required | `let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {` |
-| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 150 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))` |
-| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 217 | `loadTracks\(` | explicit-background-or-actor-boundary | `guard let track = try await asset.loadTracks(withMediaType: .video).first else {` |
-| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 272 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
-| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 287 | `generator.image` | review-required | `let result = try await generator.image(at: time)` |
-| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 298 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 95 | `Data\(contentsOf:` | dedicated-system-or-disk-boundary | `return try Data(contentsOf: url, options: .mappedIfSafe)` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 623 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 635 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 654 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 655 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 674 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 675 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
-| `PooToolsSource/Core/PTLoadImageFunction.swift` | 679 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
+| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 172 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))` |
+| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 239 | `loadTracks\(` | explicit-background-or-actor-boundary | `guard let track = try await asset.loadTracks(withMediaType: .video).first else {` |
+| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 294 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
+| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 309 | `generator.image` | review-required | `let result = try await generator.image(at: time)` |
+| `PooToolsSource/Category/PTVideoThumbnailService.swift` | 320 | `AVAssetImageGenerator` | review-required | `let generator = AVAssetImageGenerator(asset: asset)` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 96 | `Data\(contentsOf:` | dedicated-system-or-disk-boundary | `return try Data(contentsOf: url, options: .mappedIfSafe)` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 626 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 638 | `CGImageSourceCreate` | review-required | `guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 657 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailFromImageAlways as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 658 | `CGImageSourceCreate` | review-required | `kCGImageSourceCreateThumbnailWithTransform as String: true,` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 677 | `CGImageSourceCreate` | review-required | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 678 | `CGImageSourceCreate` | review-required | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
+| `PooToolsSource/Core/PTLoadImageFunction.swift` | 682 | `UIImage\(data:` | review-required | `return UIImage(data: data)` |
 | `PooToolsSource/NetWork/Network.swift` | 437 | `JSONDecoder` | review-required | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
 | `PooToolsSource/NetWork/Network.swift` | 693 | `JSONDecoder` | review-required | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
 | `PooToolsSource/NetWork/Network.swift` | 793 | `JSONSerialization` | review-required | `if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }` |

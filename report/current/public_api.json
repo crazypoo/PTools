@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T13:11:07Z",
+  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
+  "generated_at": "2026-09-26T14:07:37Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -6336,9 +6336,25 @@
       "declaration": "public var switchValueChangeBlock: PTCellSwitchBlock?"
     },
     {
+      "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var textActionRegistry: PTTextActionRegistry?",
+      "path": "PooToolsSource/Base/PTFusionCell.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textActionRegistry: PTTextActionRegistry?"
+    },
+    {
+      "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var textInteractionMode: PTTextInteractionMode = .hybrid",
+      "path": "PooToolsSource/Base/PTFusionCell.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textInteractionMode: PTTextInteractionMode = .hybrid"
+    },
+    {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var activeSwitch: UIControl?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 61,
+      "line": 65,
       "access": "public",
       "kind": "var",
       "declaration": "public var activeSwitch: UIControl? {"
@@ -6346,7 +6362,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|let|public let moreButton = PTActionLayoutButton()",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 67,
+      "line": 71,
       "access": "public",
       "kind": "let",
       "declaration": "public let moreButton = PTActionLayoutButton()"
@@ -6354,7 +6370,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|func|public func configure(model: PTFusionCellModel)",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 216,
+      "line": 220,
       "access": "public",
       "kind": "func",
       "declaration": "public func configure(model: PTFusionCellModel) {"
@@ -6362,7 +6378,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|class|open class PTFusionCell: PTBaseNormalCell, PTFusionCellProtocol",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 526,
+      "line": 538,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTFusionCell: PTBaseNormalCell, PTFusionCellProtocol {"
@@ -6370,7 +6386,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var switchValueChangeBlock: PTCellSwitchBlock?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 529,
+      "line": 541,
       "access": "public",
       "kind": "var",
       "declaration": "public var switchValueChangeBlock: PTCellSwitchBlock?"
@@ -6378,7 +6394,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var moreActionBlock: PTSectionMoreBlock?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 530,
+      "line": 542,
       "access": "public",
       "kind": "var",
       "declaration": "public var moreActionBlock: PTSectionMoreBlock?"
@@ -6386,7 +6402,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|var|open var switchValue: Bool?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 532,
+      "line": 544,
       "access": "open",
       "kind": "var",
       "declaration": "open var switchValue: Bool? {"
@@ -6394,7 +6410,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|var|open var cellModel: PTFusionCellModel?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 536,
+      "line": 548,
       "access": "open",
       "kind": "var",
       "declaration": "open var cellModel: PTFusionCellModel? {"
@@ -6402,7 +6418,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|class|open class PTFusionSwipeCell: PTBaseSwipeCell, PTFusionCellProtocol",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 559,
+      "line": 571,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTFusionSwipeCell: PTBaseSwipeCell, PTFusionCellProtocol {"
@@ -6410,7 +6426,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var switchValueChangeBlock: PTCellSwitchBlock?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 562,
+      "line": 574,
       "access": "public",
       "kind": "var",
       "declaration": "public var switchValueChangeBlock: PTCellSwitchBlock?"
@@ -6418,7 +6434,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|public|var|public var moreActionBlock: PTSectionMoreBlock?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 563,
+      "line": 575,
       "access": "public",
       "kind": "var",
       "declaration": "public var moreActionBlock: PTSectionMoreBlock?"
@@ -6426,7 +6442,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|var|open var switchValue: Bool?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 565,
+      "line": 577,
       "access": "open",
       "kind": "var",
       "declaration": "open var switchValue: Bool? {"
@@ -6434,7 +6450,7 @@
     {
       "key": "PooToolsSource/Base/PTFusionCell.swift|open|var|open var cellModel: PTFusionCellModel?",
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "line": 569,
+      "line": 581,
       "access": "open",
       "kind": "var",
       "declaration": "open var cellModel: PTFusionCellModel? {"
@@ -11378,7 +11394,7 @@
     {
       "key": "PooToolsSource/Category/Double+PTEX.swift|public|typealias|public typealias PTNumberValueAdapterType = Double",
       "path": "PooToolsSource/Category/Double+PTEX.swift",
-      "line": 138,
+      "line": 142,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTNumberValueAdapterType = Double"
@@ -11386,7 +11402,7 @@
     {
       "key": "PooToolsSource/Category/Double+PTEX.swift|public|var|public var adapter: Double",
       "path": "PooToolsSource/Category/Double+PTEX.swift",
-      "line": 139,
+      "line": 143,
       "access": "public",
       "kind": "var",
       "declaration": "public var adapter: Double {"
@@ -11402,7 +11418,7 @@
     {
       "key": "PooToolsSource/Category/Float+PTEX.swift|public|typealias|public typealias PTNumberValueAdapterType = Float",
       "path": "PooToolsSource/Category/Float+PTEX.swift",
-      "line": 93,
+      "line": 97,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTNumberValueAdapterType = Float"
@@ -11410,7 +11426,7 @@
     {
       "key": "PooToolsSource/Category/Float+PTEX.swift|public|var|public var adapter: Float",
       "path": "PooToolsSource/Category/Float+PTEX.swift",
-      "line": 94,
+      "line": 98,
       "access": "public",
       "kind": "var",
       "declaration": "public var adapter: Float {"
@@ -11426,7 +11442,7 @@
     {
       "key": "PooToolsSource/Category/Int+PTEX.swift|public|typealias|public typealias PTNumberValueAdapterType = Int",
       "path": "PooToolsSource/Category/Int+PTEX.swift",
-      "line": 101,
+      "line": 105,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTNumberValueAdapterType = Int"
@@ -11434,7 +11450,7 @@
     {
       "key": "PooToolsSource/Category/Int+PTEX.swift|public|var|public var adapter: Int",
       "path": "PooToolsSource/Category/Int+PTEX.swift",
-      "line": 102,
+      "line": 106,
       "access": "public",
       "kind": "var",
       "declaration": "public var adapter: Int {"
@@ -11954,7 +11970,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PStrengthLevel",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 118,
+      "line": 151,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PStrengthLevel {"
@@ -11962,7 +11978,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum UTF8StringType:Int",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 126,
+      "line": 159,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum UTF8StringType:Int {"
@@ -11970,7 +11986,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum StringTypeLength",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 132,
+      "line": 165,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum StringTypeLength {"
@@ -11978,7 +11994,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PTHashType",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 147,
+      "line": 180,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTHashType {"
@@ -11986,7 +12002,7 @@
     {
       "key": "PooToolsSource/Category/String+PTEX.swift|public|enum|public enum PTConstellationType",
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "line": 156,
+      "line": 189,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTConstellationType {"
@@ -12002,7 +12018,7 @@
     {
       "key": "PooToolsSource/Category/UIButton+PTEX.swift|public|class|public class ConsoleMenuButton: UIButton",
       "path": "PooToolsSource/Category/UIButton+PTEX.swift",
-      "line": 284,
+      "line": 293,
       "access": "public",
       "kind": "class",
       "declaration": "public class ConsoleMenuButton: UIButton { }"
@@ -12042,7 +12058,7 @@
     {
       "key": "PooToolsSource/Category/UIImage+PTEX.swift|public|enum|public enum CompressionMode: Sendable",
       "path": "PooToolsSource/Category/UIImage+PTEX.swift",
-      "line": 1170,
+      "line": 1208,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum CompressionMode: Sendable {"
@@ -12906,7 +12922,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|protocol|public protocol UIFadeOut",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 1872,
+      "line": 1880,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol UIFadeOut {}"
@@ -12914,7 +12930,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|func|public func fadeUpdate(duration: TimeInterval = 1,",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 1886,
+      "line": 1894,
       "access": "public",
       "kind": "func",
       "declaration": "public func fadeUpdate(duration: TimeInterval = 1,"
@@ -14770,7 +14786,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|class|open class PTGifManager",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 68,
+      "line": 62,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTGifManager {"
@@ -14778,7 +14794,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|var|open var haveCache: Bool",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 82,
+      "line": 76,
       "access": "open",
       "kind": "var",
       "declaration": "open var haveCache: Bool"
@@ -14786,7 +14802,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|var|open var remoteCache : [URL : Data] = [:]",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 83,
+      "line": 77,
       "access": "open",
       "kind": "var",
       "declaration": "open var remoteCache : [URL : Data] = [:]"
@@ -14794,7 +14810,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|public|var|public var mode: RunLoop.Mode = .common",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 84,
+      "line": 78,
       "access": "public",
       "kind": "var",
       "declaration": "public var mode: RunLoop.Mode = .common"
@@ -14802,7 +14818,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|public|init|public init(memoryLimit: Int)",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 89,
+      "line": 83,
       "access": "public",
       "kind": "init",
       "declaration": "public init(memoryLimit: Int) {"
@@ -14810,7 +14826,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|public|func|public func startTimerIfNeeded()",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 97,
+      "line": 91,
       "access": "public",
       "kind": "func",
       "declaration": "public func startTimerIfNeeded() {"
@@ -14818,7 +14834,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|public|func|public func stopTimer()",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 127,
+      "line": 121,
       "access": "public",
       "kind": "func",
       "declaration": "public func stopTimer() {"
@@ -14826,7 +14842,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func addImageView(_ imageView: PlatformImageView) -> Bool",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 139,
+      "line": 133,
       "access": "open",
       "kind": "func",
       "declaration": "open func addImageView(_ imageView: PlatformImageView) -> Bool {"
@@ -14834,7 +14850,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func deleteImageView(_ imageView: PlatformImageView)",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 154,
+      "line": 148,
       "access": "open",
       "kind": "func",
       "declaration": "open func deleteImageView(_ imageView: PlatformImageView) {"
@@ -14842,7 +14858,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func updateCacheSize(for imageView: PlatformImageView, add: Bool)",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 163,
+      "line": 157,
       "access": "open",
       "kind": "func",
       "declaration": "open func updateCacheSize(for imageView: PlatformImageView, add: Bool) {"
@@ -14850,7 +14866,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func clear()",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 172,
+      "line": 166,
       "access": "open",
       "kind": "func",
       "declaration": "open func clear() {"
@@ -14858,7 +14874,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func containsImageView(_ imageView: PlatformImageView) -> Bool",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 181,
+      "line": 175,
       "access": "open",
       "kind": "func",
       "declaration": "open func containsImageView(_ imageView: PlatformImageView) -> Bool{"
@@ -14866,7 +14882,7 @@
     {
       "key": "PooToolsSource/Core/PTGifManager.swift|open|func|open func hasCache(_ imageView: PlatformImageView) -> Bool",
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 188,
+      "line": 182,
       "access": "open",
       "kind": "func",
       "declaration": "open func hasCache(_ imageView: PlatformImageView) -> Bool {"
@@ -14906,7 +14922,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTImageType : Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 16,
+      "line": 17,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageType : Sendable {"
@@ -14914,7 +14930,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|typealias|public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 24,
+      "line": 25,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)"
@@ -14922,7 +14938,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTImageSource",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 27,
+      "line": 28,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageSource {"
@@ -14930,7 +14946,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTImageSourceDescriptor: Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 47,
+      "line": 48,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageSourceDescriptor: Sendable {"
@@ -14938,7 +14954,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTMediaResourceDescriptor: Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 57,
+      "line": 58,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTMediaResourceDescriptor: Sendable {"
@@ -14946,7 +14962,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|enum|public enum PTImageLoadingError: Error, LocalizedError, Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 64,
+      "line": 65,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageLoadingError: Error, LocalizedError, Sendable {"
@@ -14954,7 +14970,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var errorDescription: String?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 68,
+      "line": 69,
       "access": "public",
       "kind": "var",
       "declaration": "public var errorDescription: String? {"
@@ -14962,7 +14978,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|protocol|public protocol PTImageLoading: Sendable",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 79,
+      "line": 80,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTImageLoading: Sendable {"
@@ -14970,7 +14986,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|struct|public struct PTURLSessionImageLoader: PTImageLoading",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 86,
+      "line": 87,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTURLSessionImageLoader: PTImageLoading {"
@@ -14978,7 +14994,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init()",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 87,
+      "line": 88,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -14986,7 +15002,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|func|public func load(_ source: PTImageSourceDescriptor) async throws -> Data",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 89,
+      "line": 90,
       "access": "public",
       "kind": "func",
       "declaration": "public func load(_ source: PTImageSourceDescriptor) async throws -> Data {"
@@ -14994,7 +15010,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|struct|public struct PTImageLoadConfiguration",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 112,
+      "line": 113,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTImageLoadConfiguration {"
@@ -15002,7 +15018,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var iCloudDocumentName: String",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 113,
+      "line": 114,
       "access": "public",
       "kind": "var",
       "declaration": "public var iCloudDocumentName: String"
@@ -15010,7 +15026,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var radius: CGFloat",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 114,
+      "line": 115,
       "access": "public",
       "kind": "var",
       "declaration": "public var radius: CGFloat"
@@ -15018,7 +15034,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var topLeft: CGFloat",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 115,
+      "line": 116,
       "access": "public",
       "kind": "var",
       "declaration": "public var topLeft: CGFloat"
@@ -15026,7 +15042,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var topRight: CGFloat",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 116,
+      "line": 117,
       "access": "public",
       "kind": "var",
       "declaration": "public var topRight: CGFloat"
@@ -15034,7 +15050,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var bottomLeft: CGFloat",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 117,
+      "line": 118,
       "access": "public",
       "kind": "var",
       "declaration": "public var bottomLeft: CGFloat"
@@ -15042,7 +15058,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var bottomRight: CGFloat",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 118,
+      "line": 119,
       "access": "public",
       "kind": "var",
       "declaration": "public var bottomRight: CGFloat"
@@ -15050,7 +15066,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var corner: UIRectCorner",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 119,
+      "line": 120,
       "access": "public",
       "kind": "var",
       "declaration": "public var corner: UIRectCorner"
@@ -15058,7 +15074,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var capsule: Bool",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 120,
+      "line": 121,
       "access": "public",
       "kind": "var",
       "declaration": "public var capsule: Bool"
@@ -15066,7 +15082,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var borderWidth: CGFloat?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 121,
+      "line": 122,
       "access": "public",
       "kind": "var",
       "declaration": "public var borderWidth: CGFloat?"
@@ -15074,7 +15090,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var borderColor: UIColor?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 122,
+      "line": 123,
       "access": "public",
       "kind": "var",
       "declaration": "public var borderColor: UIColor?"
@@ -15082,7 +15098,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var showValueLabel: Bool?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 123,
+      "line": 124,
       "access": "public",
       "kind": "var",
       "declaration": "public var showValueLabel: Bool?"
@@ -15090,7 +15106,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var valueLabelFont: UIFont?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 124,
+      "line": 125,
       "access": "public",
       "kind": "var",
       "declaration": "public var valueLabelFont: UIFont?"
@@ -15098,7 +15114,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var valueLabelColor: UIColor?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 125,
+      "line": 126,
       "access": "public",
       "kind": "var",
       "declaration": "public var valueLabelColor: UIColor?"
@@ -15106,7 +15122,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var uniCount: Int?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 126,
+      "line": 127,
       "access": "public",
       "kind": "var",
       "declaration": "public var uniCount: Int?"
@@ -15114,7 +15130,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var emptyImage: UIImage?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 127,
+      "line": 128,
       "access": "public",
       "kind": "var",
       "declaration": "public var emptyImage: UIImage?"
@@ -15122,7 +15138,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var targetSize: CGSize?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 131,
+      "line": 132,
       "access": "public",
       "kind": "var",
       "declaration": "public var targetSize: CGSize?"
@@ -15130,7 +15146,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init(iCloudDocumentName: String = \"\",",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 133,
+      "line": 134,
       "access": "public",
       "kind": "init",
       "declaration": "public init(iCloudDocumentName: String = \"\","
@@ -15138,7 +15154,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|struct|public struct PTLoadImageResult",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 169,
+      "line": 170,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLoadImageResult {"
@@ -15146,7 +15162,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let allImages: [UIImage]?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 170,
+      "line": 171,
       "access": "public",
       "kind": "let",
       "declaration": "public let allImages: [UIImage]?"
@@ -15154,7 +15170,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let firstImage: UIImage?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 171,
+      "line": 172,
       "access": "public",
       "kind": "let",
       "declaration": "public let firstImage: UIImage?"
@@ -15162,7 +15178,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let loadTime: TimeInterval",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 172,
+      "line": 173,
       "access": "public",
       "kind": "let",
       "declaration": "public let loadTime: TimeInterval"
@@ -15170,7 +15186,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let imageType: PTImageType",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 173,
+      "line": 174,
       "access": "public",
       "kind": "let",
       "declaration": "public let imageType: PTImageType"
@@ -15178,7 +15194,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown)",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 175,
+      "line": 176,
       "access": "public",
       "kind": "init",
       "declaration": "public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown) {"
@@ -15186,7 +15202,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|class|public class PTLoadImageFunction: NSObject",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 192,
+      "line": 193,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTLoadImageFunction: NSObject {"
@@ -26034,7 +26050,7 @@
     {
       "key": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift|public|typealias|public typealias AllCases = [UIStackView.Alignment]",
       "path": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift",
-      "line": 289,
+      "line": 267,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias AllCases = [UIStackView.Alignment]"
@@ -26042,7 +26058,7 @@
     {
       "key": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift|public|var|public var description: String",
       "path": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift",
-      "line": 302,
+      "line": 280,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -26050,7 +26066,7 @@
     {
       "key": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift|public|typealias|public typealias AllCases = [UIStackView.Distribution]",
       "path": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift",
-      "line": 329,
+      "line": 307,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias AllCases = [UIStackView.Distribution]"
@@ -26058,7 +26074,7 @@
     {
       "key": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift|public|var|public var description: String",
       "path": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift",
-      "line": 341,
+      "line": 319,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -35162,7 +35178,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextActionID: Hashable, Codable, Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 14,
+      "line": 15,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextActionID: Hashable, Codable, Sendable {"
@@ -35170,7 +35186,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let rawValue: String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 15,
+      "line": 16,
       "access": "public",
       "kind": "let",
       "declaration": "public let rawValue: String"
@@ -35178,7 +35194,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ rawValue: String = UUID().uuidString)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 17,
+      "line": 18,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ rawValue: String = UUID().uuidString) {"
@@ -35186,7 +35202,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextInteractionKind: String, Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 22,
+      "line": 23,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextInteractionKind: String, Sendable {"
@@ -35194,7 +35210,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextActionEvent: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 29,
+      "line": 30,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextActionEvent: Sendable {"
@@ -35202,7 +35218,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let actionID: PTTextActionID",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 30,
+      "line": 31,
       "access": "public",
       "kind": "let",
       "declaration": "public let actionID: PTTextActionID"
@@ -35210,7 +35226,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let range: NSRange",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 31,
+      "line": 32,
       "access": "public",
       "kind": "let",
       "declaration": "public let range: NSRange"
@@ -35218,7 +35234,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let text: String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 32,
+      "line": 33,
       "access": "public",
       "kind": "let",
       "declaration": "public let text: String"
@@ -35226,7 +35242,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let interaction: PTTextInteractionKind",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 33,
+      "line": 34,
       "access": "public",
       "kind": "let",
       "declaration": "public let interaction: PTTextInteractionKind"
@@ -35234,7 +35250,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(actionID: PTTextActionID,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 35,
+      "line": 36,
       "access": "public",
       "kind": "init",
       "declaration": "public init(actionID: PTTextActionID,"
@@ -35242,7 +35258,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextActionToken: Hashable, Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 46,
+      "line": 47,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextActionToken: Hashable, Sendable {"
@@ -35250,7 +35266,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let id: PTTextActionID",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 47,
+      "line": 48,
       "access": "public",
       "kind": "let",
       "declaration": "public let id: PTTextActionID"
@@ -35258,7 +35274,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(id: PTTextActionID)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 49,
+      "line": 50,
       "access": "public",
       "kind": "init",
       "declaration": "public init(id: PTTextActionID) {"
@@ -35266,7 +35282,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextActionAttribute: CodableAttributedStringKey",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 57,
+      "line": 58,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextActionAttribute: CodableAttributedStringKey {"
@@ -35274,7 +35290,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|typealias|public typealias Value = String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 58,
+      "line": 59,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Value = String"
@@ -35282,7 +35298,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 61,
+      "line": 62,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -35290,7 +35306,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextAttachmentAttribute: CodableAttributedStringKey",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 64,
+      "line": 65,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextAttachmentAttribute: CodableAttributedStringKey {"
@@ -35298,7 +35314,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|typealias|public typealias Value = String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 65,
+      "line": 66,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Value = String"
@@ -35306,7 +35322,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 68,
+      "line": 69,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -35314,7 +35330,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextAttributes: AttributeScope",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 71,
+      "line": 72,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextAttributes: AttributeScope {"
@@ -35322,7 +35338,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let actionID: PTTextActionAttribute",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 72,
+      "line": 73,
       "access": "public",
       "kind": "let",
       "declaration": "public let actionID: PTTextActionAttribute"
@@ -35330,7 +35346,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let attachmentID: PTTextAttachmentAttribute",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 73,
+      "line": 74,
       "access": "public",
       "kind": "let",
       "declaration": "public let attachmentID: PTTextAttachmentAttribute"
@@ -35338,7 +35354,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 75,
+      "line": 76,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {"
@@ -35346,7 +35362,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextInteractionMode: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 85,
+      "line": 86,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextInteractionMode: Sendable {"
@@ -35354,7 +35370,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextFont",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 94,
+      "line": 95,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextFont {"
@@ -35362,7 +35378,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func resolve() -> UIFont",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 100,
+      "line": 101,
       "access": "public",
       "kind": "func",
       "declaration": "public func resolve() -> UIFont {"
@@ -35370,7 +35386,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextMergePolicy: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 114,
+      "line": 115,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextMergePolicy: Sendable {"
@@ -35378,7 +35394,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextInsertionStylePolicy: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 120,
+      "line": 121,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextInsertionStylePolicy: Sendable {"
@@ -35386,7 +35402,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextAttachmentStyle: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 130,
+      "line": 131,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextAttachmentStyle: Sendable {"
@@ -35394,7 +35410,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextAttachmentFailurePolicy: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 134,
+      "line": 135,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextAttachmentFailurePolicy: Sendable {"
@@ -35402,7 +35418,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextParagraphAttribute",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 140,
+      "line": 141,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextParagraphAttribute {"
@@ -35410,7 +35426,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextAttribute",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 154,
+      "line": 156,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextAttribute {"
@@ -35418,7 +35434,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextStyle",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 302,
+      "line": 372,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextStyle {"
@@ -35426,7 +35442,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let attributes: [PTTextAttribute]",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 303,
+      "line": 373,
       "access": "public",
       "kind": "let",
       "declaration": "public let attributes: [PTTextAttribute]"
@@ -35434,7 +35450,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ attributes: PTTextAttribute...)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 305,
+      "line": 375,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ attributes: PTTextAttribute...) {"
@@ -35442,7 +35458,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(attributes: [PTTextAttribute])",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 309,
+      "line": 379,
       "access": "public",
       "kind": "init",
       "declaration": "public init(attributes: [PTTextAttribute]) {"
@@ -35450,7 +35466,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextRange: Equatable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 314,
+      "line": 384,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextRange: Equatable {"
@@ -35458,7 +35474,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ value: Range<Foundation.AttributedString.Index>)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 317,
+      "line": 387,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ value: Range<Foundation.AttributedString.Index>) {"
@@ -35466,7 +35482,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextFragment: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 325,
+      "line": 395,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextFragment: Sendable {"
@@ -35474,7 +35490,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let richText: PTRichText",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 326,
+      "line": 396,
       "access": "public",
       "kind": "let",
       "declaration": "public let richText: PTRichText"
@@ -35482,7 +35498,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ richText: PTRichText)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 328,
+      "line": 398,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ richText: PTRichText) {"
@@ -35490,7 +35506,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTRichTextBuilder",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 382,
+      "line": 452,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTRichTextBuilder {"
@@ -35498,7 +35514,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextWrapMode",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 416,
+      "line": 486,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextWrapMode {"
@@ -35506,7 +35522,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextMatchRule: Sendable, Hashable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 421,
+      "line": 491,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextMatchRule: Sendable, Hashable {"
@@ -35514,7 +35530,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextMatchKind: String, Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 432,
+      "line": 502,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextMatchKind: String, Sendable {"
@@ -35522,7 +35538,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTTextMatchConflictPolicy: Sendable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 443,
+      "line": 513,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTextMatchConflictPolicy: Sendable {"
@@ -35530,7 +35546,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextMatch: Sendable, Equatable",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 451,
+      "line": 521,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTextMatch: Sendable, Equatable {"
@@ -35538,7 +35554,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let range: NSRange",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 452,
+      "line": 522,
       "access": "public",
       "kind": "let",
       "declaration": "public let range: NSRange"
@@ -35546,7 +35562,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let kind: PTTextMatchKind",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 453,
+      "line": 523,
       "access": "public",
       "kind": "let",
       "declaration": "public let kind: PTTextMatchKind"
@@ -35554,7 +35570,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let text: String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 454,
+      "line": 524,
       "access": "public",
       "kind": "let",
       "declaration": "public let text: String"
@@ -35562,199 +35578,15 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(range: NSRange, kind: PTTextMatchKind, text: String)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 456,
+      "line": 526,
       "access": "public",
       "kind": "init",
       "declaration": "public init(range: NSRange, kind: PTTextMatchKind, text: String) {"
     },
     {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 463,
-      "access": "public",
-      "kind": "struct",
-      "declaration": "public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum Kind: Codable, Hashable, Sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 464,
-      "access": "public",
-      "kind": "enum",
-      "declaration": "public enum Kind: Codable, Hashable, Sendable {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let id: String",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 471,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let id: String"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let kind: Kind",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 472,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let kind: Kind"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let size: CGSize",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 473,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let size: CGSize"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let accessibilityDescription: String?",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 474,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let accessibilityDescription: String?"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(id: String = UUID().uuidString,",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 476,
-      "access": "public",
-      "kind": "init",
-      "declaration": "public init(id: String = UUID().uuidString,"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextViewAttachmentDescriptor: Sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 498,
-      "access": "public",
-      "kind": "struct",
-      "declaration": "public struct PTTextViewAttachmentDescriptor: Sendable {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let id: String",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 499,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let id: String"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let size: CGSize",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 500,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let size: CGSize"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let accessibilityDescription: String?",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 501,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let accessibilityDescription: String?"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|let|public let makeView: @MainActor @Sendable () -> UIView",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 502,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let makeView: @MainActor @Sendable () -> UIView"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(id: String,",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 504,
-      "access": "public",
-      "kind": "init",
-      "declaration": "public init(id: String,"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func makeViewProvider(textAttachment: NSTextAttachment,",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 518,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func makeViewProvider(textAttachment: NSTextAttachment,"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(descriptor: PTTextViewAttachmentDescriptor,",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 537,
-      "access": "public",
-      "kind": "init",
-      "declaration": "public init(descriptor: PTTextViewAttachmentDescriptor,"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|protocol|public protocol PTTextImageLoader: Sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 572,
-      "access": "public",
-      "kind": "protocol",
-      "declaration": "public protocol PTTextImageLoader: Sendable {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 576,
-      "access": "public",
-      "kind": "struct",
-      "declaration": "public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init()",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 577,
-      "access": "public",
-      "kind": "init",
-      "declaration": "public init() {}"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func image(for url: URL) async throws -> UIImage",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 579,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func image(for url: URL) async throws -> UIImage {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader())",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 599,
-      "access": "public",
-      "kind": "init",
-      "declaration": "public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func loadRemote(_ descriptor: PTTextAttachmentDescriptor,",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 604,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func loadRemote(_ descriptor: PTTextAttachmentDescriptor,"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func cancel(id: String)",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 631,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func cancel(id: String) {"
-    },
-    {
-      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func cancelAll()",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 637,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func cancelAll() {"
-    },
-    {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTRichText: Sendable, Equatable, CustomStringConvertible,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 648,
+      "line": 534,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTRichText: Sendable, Equatable, CustomStringConvertible,"
@@ -35762,7 +35594,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ text: String)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 657,
+      "line": 543,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ text: String) {"
@@ -35770,7 +35602,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ attributedString: Foundation.AttributedString)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 661,
+      "line": 547,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ attributedString: Foundation.AttributedString) {"
@@ -35778,7 +35610,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ attributedString: NSAttributedString)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 665,
+      "line": 551,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ attributedString: NSAttributedString) {"
@@ -35786,7 +35618,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(string text: String, _ attributes: PTTextAttribute...)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 669,
+      "line": 555,
       "access": "public",
       "kind": "init",
       "declaration": "public init(string text: String, _ attributes: PTTextAttribute...) {"
@@ -35794,7 +35626,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(string text: String, with attributes: [PTTextAttribute] = [])",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 673,
+      "line": 559,
       "access": "public",
       "kind": "init",
       "declaration": "public init(string text: String, with attributes: [PTTextAttribute] = []) {"
@@ -35802,7 +35634,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ text: String, _ attributes: PTTextAttribute...)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 682,
+      "line": 568,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ text: String, _ attributes: PTTextAttribute...) {"
@@ -35810,7 +35642,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ text: String, with attributes: [PTTextAttribute] = [])",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 686,
+      "line": 572,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ text: String, with attributes: [PTTextAttribute] = []) {"
@@ -35818,7 +35650,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(@PTRichTextBuilder _ content: () -> PTRichText)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 690,
+      "line": 576,
       "access": "public",
       "kind": "init",
       "declaration": "public init(@PTRichTextBuilder _ content: () -> PTRichText) {"
@@ -35826,7 +35658,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ text: PTRichText, _ attributes: PTTextAttribute...)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 694,
+      "line": 580,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ text: PTRichText, _ attributes: PTTextAttribute...) {"
@@ -35834,7 +35666,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(_ text: PTRichText, with attributes: [PTTextAttribute] = [])",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 698,
+      "line": 584,
       "access": "public",
       "kind": "init",
       "declaration": "public init(_ text: PTRichText, with attributes: [PTTextAttribute] = []) {"
@@ -35842,7 +35674,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(wrap mode: PTTextWrapMode, _ attributes: PTTextAttribute...)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 707,
+      "line": 593,
       "access": "public",
       "kind": "init",
       "declaration": "public init(wrap mode: PTTextWrapMode, _ attributes: PTTextAttribute...) {"
@@ -35850,7 +35682,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(wrap mode: PTTextWrapMode, with attributes: [PTTextAttribute])",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 711,
+      "line": 597,
       "access": "public",
       "kind": "init",
       "declaration": "public init(wrap mode: PTTextWrapMode, with attributes: [PTTextAttribute]) {"
@@ -35858,7 +35690,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(markdown: String) throws",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 731,
+      "line": 617,
       "access": "public",
       "kind": "init",
       "declaration": "public init(markdown: String) throws {"
@@ -35866,7 +35698,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(localized resource: LocalizedStringResource)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 735,
+      "line": 621,
       "access": "public",
       "kind": "init",
       "declaration": "public init(localized resource: LocalizedStringResource) {"
@@ -35874,7 +35706,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var attributedString: Foundation.AttributedString",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 739,
+      "line": 625,
       "access": "public",
       "kind": "var",
       "declaration": "public var attributedString: Foundation.AttributedString {"
@@ -35882,7 +35714,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var value: NSAttributedString",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 743,
+      "line": 629,
       "access": "public",
       "kind": "var",
       "declaration": "public var value: NSAttributedString {"
@@ -35890,7 +35722,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var nsAttributedString: NSAttributedString",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 747,
+      "line": 633,
       "access": "public",
       "kind": "var",
       "declaration": "public var nsAttributedString: NSAttributedString {"
@@ -35898,7 +35730,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var plainText: String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 751,
+      "line": 637,
       "access": "public",
       "kind": "var",
       "declaration": "public var plainText: String {"
@@ -35906,7 +35738,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var characters: Foundation.AttributedString.CharacterView",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 755,
+      "line": 641,
       "access": "public",
       "kind": "var",
       "declaration": "public var characters: Foundation.AttributedString.CharacterView {"
@@ -35914,7 +35746,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var length: Int",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 759,
+      "line": 645,
       "access": "public",
       "kind": "var",
       "declaration": "public var length: Int {"
@@ -35922,7 +35754,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var isEmpty: Bool",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 763,
+      "line": 649,
       "access": "public",
       "kind": "var",
       "declaration": "public var isEmpty: Bool {"
@@ -35930,7 +35762,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var description: String",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 767,
+      "line": 653,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -35938,7 +35770,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func validatedNSRange(_ range: NSRange) -> NSRange?",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 771,
+      "line": 657,
       "access": "public",
       "kind": "func",
       "declaration": "public func validatedNSRange(_ range: NSRange) -> NSRange? {"
@@ -35946,7 +35778,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func attributedRange(from range: NSRange) -> Range<Foundation.AttributedString.Index>?",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 786,
+      "line": 672,
       "access": "public",
       "kind": "func",
       "declaration": "public func attributedRange(from range: NSRange) -> Range<Foundation.AttributedString.Index>? {"
@@ -35954,7 +35786,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func validatedRange(_ range: NSRange) -> PTTextRange?",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 806,
+      "line": 692,
       "access": "public",
       "kind": "func",
       "declaration": "public func validatedRange(_ range: NSRange) -> PTTextRange? {"
@@ -35962,7 +35794,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func nsRange(for range: PTTextRange) -> NSRange",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 811,
+      "line": 697,
       "access": "public",
       "kind": "func",
       "declaration": "public func nsRange(for range: PTTextRange) -> NSRange {"
@@ -35970,7 +35802,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func nsRange(from range: Range<Foundation.AttributedString.Index>) -> NSRange",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 815,
+      "line": 701,
       "access": "public",
       "kind": "func",
       "declaration": "public func nsRange(from range: Range<Foundation.AttributedString.Index>) -> NSRange {"
@@ -35978,7 +35810,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func range(of text: String,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 819,
+      "line": 705,
       "access": "public",
       "kind": "func",
       "declaration": "public func range(of text: String,"
@@ -35986,7 +35818,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func matches(for rule: PTTextMatchRule,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 953,
+      "line": 839,
       "access": "public",
       "kind": "func",
       "declaration": "public func matches(for rule: PTTextMatchRule,"
@@ -35994,7 +35826,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct StringInterpolation: StringInterpolationProtocol",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1041,
+      "line": 927,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct StringInterpolation: StringInterpolationProtocol {"
@@ -36002,7 +35834,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(literalCapacity: Int, interpolationCount: Int)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1044,
+      "line": 930,
       "access": "public",
       "kind": "init",
       "declaration": "public init(literalCapacity: Int, interpolationCount: Int) {"
@@ -36010,7 +35842,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(stringLiteral value: String)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1096,
+      "line": 982,
       "access": "public",
       "kind": "init",
       "declaration": "public init(stringLiteral value: String) {"
@@ -36018,7 +35850,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(stringInterpolation: StringInterpolation)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1100,
+      "line": 986,
       "access": "public",
       "kind": "init",
       "declaration": "public init(stringInterpolation: StringInterpolation) {"
@@ -36026,7 +35858,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(adaptiveImageGlyph glyph: NSAdaptiveImageGlyph)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1108,
+      "line": 994,
       "access": "public",
       "kind": "init",
       "declaration": "public init(adaptiveImageGlyph glyph: NSAdaptiveImageGlyph) {"
@@ -36034,7 +35866,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|var|public var containsAdaptiveImageGlyph: Bool",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1115,
+      "line": 1001,
       "access": "public",
       "kind": "var",
       "declaration": "public var containsAdaptiveImageGlyph: Bool {"
@@ -36042,7 +35874,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1198,
+      "line": 1110,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -36050,7 +35882,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func register(_ id: PTTextActionID,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1201,
+      "line": 1113,
       "access": "public",
       "kind": "func",
       "declaration": "public func register(_ id: PTTextActionID,"
@@ -36058,7 +35890,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func register<Owner: AnyObject>(_ id: PTTextActionID,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1208,
+      "line": 1120,
       "access": "public",
       "kind": "func",
       "declaration": "public func register<Owner: AnyObject>(_ id: PTTextActionID,"
@@ -36066,7 +35898,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func remove(_ token: PTTextActionToken)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1218,
+      "line": 1130,
       "access": "public",
       "kind": "func",
       "declaration": "public func remove(_ token: PTTextActionToken) {"
@@ -36074,7 +35906,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func removeAll()",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1222,
+      "line": 1134,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeAll() {"
@@ -36082,7 +35914,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func perform(_ event: PTTextActionEvent)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1226,
+      "line": 1138,
       "access": "public",
       "kind": "func",
       "declaration": "public func perform(_ event: PTTextActionEvent) {"
@@ -36090,7 +35922,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(richText: PTRichText,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1242,
+      "line": 1155,
       "access": "public",
       "kind": "init",
       "declaration": "public init(richText: PTRichText,"
@@ -36098,7 +35930,23 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(richText: PTRichText,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1254,
+      "line": 1169,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(richText: PTRichText,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(richText: PTRichText,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 1182,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(richText: PTRichText,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|init|public init(richText: PTRichText,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "line": 1196,
       "access": "public",
       "kind": "init",
       "declaration": "public init(richText: PTRichText,"
@@ -36106,7 +35954,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func update(richText: PTRichText)",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1266,
+      "line": 1209,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(richText: PTRichText) {"
@@ -36114,7 +35962,7 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|func|public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1387,
+      "line": 1362,
       "access": "public",
       "kind": "func",
       "declaration": "public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,"
@@ -36122,10 +35970,930 @@
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|enum|public enum PTRichTextRenderer",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 1399,
+      "line": 1441,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTRichTextRenderer {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum Kind: Codable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum Kind: Codable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let id: String",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let kind: Kind",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let kind: Kind"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let size: CGSize",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let size: CGSize"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let accessibilityDescription: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let accessibilityDescription: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(id: String = UUID().uuidString,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: String = UUID().uuidString,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextMediaKind: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextMediaKind: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextVideoPlaybackMode: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextVideoPlaybackMode: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTRichTextMediaDisplayConfiguration",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTRichTextMediaDisplayConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var preferredSize: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var preferredSize: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var maxWidth: CGFloat?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 60,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxWidth: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var maxHeight: CGFloat?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxHeight: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var contentMode: UIView.ContentMode",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentMode: UIView.ContentMode"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var cornerRadius: CGFloat",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var alignment: PTRichTextAttachmentAlignment",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var alignment: PTRichTextAttachmentAlignment"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var estimatedAspectRatio: CGFloat?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var estimatedAspectRatio: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var userInfo: [String: String]",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var userInfo: [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(preferredSize: CGSize? = nil,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 68,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(preferredSize: CGSize? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextAttachmentAlignment: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextAttachmentAlignment: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTRichTextImageConfiguration",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTRichTextImageConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var size: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 146,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var size: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var maxSize: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 147,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxSize: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var placeholder: UIImage?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placeholder: UIImage?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var failureImage: UIImage?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var failureImage: UIImage?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var contentMode: UIView.ContentMode",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 150,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentMode: UIView.ContentMode"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var cornerRadius: CGFloat",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var alignment: PTRichTextAttachmentAlignment",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var alignment: PTRichTextAttachmentAlignment"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var estimatedAspectRatio: CGFloat?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 153,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var estimatedAspectRatio: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var accessibilityLabel: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 154,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accessibilityLabel: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var userInfo: [String: String]",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 155,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var userInfo: [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(size: CGSize? = nil,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 157,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(size: CGSize? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTRichTextVideoConfiguration",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 195,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTRichTextVideoConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var size: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 196,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var size: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var maxSize: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 197,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxSize: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var posterSource: Any?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 198,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var posterSource: Any?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var placeholder: UIImage?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 199,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placeholder: UIImage?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var failureImage: UIImage?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 200,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var failureImage: UIImage?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var contentMode: UIView.ContentMode",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 201,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentMode: UIView.ContentMode"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var cornerRadius: CGFloat",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 202,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var showsPlayIcon: Bool",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 203,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var showsPlayIcon: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var showsDuration: Bool",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 204,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var showsDuration: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var thumbnailTime: CMTime?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 205,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var thumbnailTime: CMTime?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var thumbnailFrameNumber: Int",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 206,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var thumbnailFrameNumber: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var accessibilityLabel: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 207,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accessibilityLabel: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var playbackMode: PTRichTextVideoPlaybackMode",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 208,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var playbackMode: PTRichTextVideoPlaybackMode"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var estimatedAspectRatio: CGFloat?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 209,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var estimatedAspectRatio: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(size: CGSize? = nil,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 211,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(size: CGSize? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTRichTextVideoMetadata: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 255,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTRichTextVideoMetadata: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let duration: TimeInterval?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 256,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let duration: TimeInterval?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let naturalSize: CGSize?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 257,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let naturalSize: CGSize?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let isLocal: Bool?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 258,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isLocal: Bool?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(duration: TimeInterval? = nil,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 260,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(duration: TimeInterval? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextMediaError: Error, LocalizedError, Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 272,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextMediaError: Error, LocalizedError, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var errorDescription: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 279,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var errorDescription: String? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextMediaAction: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 293,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextMediaAction: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextInteraction: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 301,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextInteraction: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|typealias|public typealias PTRichTextInteractionHandler = @MainActor @Sendable (PTRichTextInteraction) -> Void",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 306,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTRichTextInteractionHandler = @MainActor @Sendable (PTRichTextInteraction) -> Void"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let id: UUID",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 313,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: UUID"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let kind: PTRichTextMediaKind",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 314,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let kind: PTRichTextMediaKind"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let source: Any",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 315,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let source: Any"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var posterSource: Any?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 316,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var posterSource: Any?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var displayConfiguration: PTRichTextMediaDisplayConfiguration",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 317,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var displayConfiguration: PTRichTextMediaDisplayConfiguration"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var metadata: PTRichTextVideoMetadata",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 318,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var metadata: PTRichTextVideoMetadata"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var failureImage: UIImage?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 319,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var failureImage: UIImage?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var videoConfiguration: PTRichTextVideoConfiguration?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 320,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var videoConfiguration: PTRichTextVideoConfiguration?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var accessibilityLabel: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 321,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accessibilityLabel: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var loadState: PTRichTextMediaLoadState = .idle",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 322,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var loadState: PTRichTextMediaLoadState = .idle"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|var|public var generation: UInt64 = 0",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 323,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var generation: UInt64 = 0"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(id: UUID = UUID(),",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 325,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: UUID = UUID(),"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextMediaLoadState: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 349,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextMediaLoadState: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTRichTextVideoLoadResult",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 361,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTRichTextVideoLoadResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let image: UIImage",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 362,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let image: UIImage"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let metadata: PTRichTextVideoMetadata",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 363,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let metadata: PTRichTextVideoMetadata"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(image: UIImage, metadata: PTRichTextVideoMetadata = .init())",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 365,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(image: UIImage, metadata: PTRichTextVideoMetadata = .init()) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let media: PTRichTextMediaAttachment",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 376,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let media: PTRichTextMediaAttachment"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let attachmentSize: CGSize",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 377,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let attachmentSize: CGSize"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(media: PTRichTextMediaAttachment,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 379,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(media: PTRichTextMediaAttachment,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func resolvedAttachment(with image: UIImage,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 393,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resolvedAttachment(with image: UIImage,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let identifier: String",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 405,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let mediaID: UUID",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 406,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let mediaID: UUID"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let remoteURL: URL",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 407,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let remoteURL: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let attachmentSize: CGSize",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 408,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let attachmentSize: CGSize"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(identifier: String,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 410,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(identifier: String,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func resolvedAttachment(with image: UIImage) -> NSTextAttachment",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 431,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resolvedAttachment(with image: UIImage) -> NSTextAttachment {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTTextViewAttachmentDescriptor: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 478,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTTextViewAttachmentDescriptor: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let id: String",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 479,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let size: CGSize",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 480,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let size: CGSize"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let accessibilityDescription: String?",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 481,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let accessibilityDescription: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|let|public let makeView: @MainActor @Sendable () -> UIView",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 482,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let makeView: @MainActor @Sendable () -> UIView"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(id: String,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 484,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: String,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func makeViewProvider(textAttachment: NSTextAttachment,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 498,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func makeViewProvider(textAttachment: NSTextAttachment,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(descriptor: PTTextViewAttachmentDescriptor,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 517,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(descriptor: PTTextViewAttachmentDescriptor,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|protocol|public protocol PTTextImageLoader: Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 552,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTTextImageLoader: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|typealias|public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 559,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|struct|public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 562,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init()",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 563,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func image(for url: URL) async throws -> UIImage",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 565,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func image(for url: URL) async throws -> UIImage {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader())",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 585,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(imageLoader: @escaping PTTextImageLoadHandler)",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 594,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(imageLoader: @escaping PTTextImageLoadHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadRemote(_ descriptor: PTTextAttachmentDescriptor,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 599,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadRemote(_ descriptor: PTTextAttachmentDescriptor,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func cancel(id: String)",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 628,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancel(id: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func cancelAll()",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 634,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancelAll() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func cancel()",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 656,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancel() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|typealias|public typealias ImageLoader = @MainActor @Sendable (_ source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 671,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias ImageLoader = @MainActor @Sendable (_ source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|typealias|public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 673,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|typealias|public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 677,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|init|public init(imageLoader: @escaping ImageLoader,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 687,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(imageLoader: @escaping ImageLoader,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func clearCache()",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 716,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func clearCache() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadImage(source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 721,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadImage(source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadVideoPoster(source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 747,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadVideoPoster(source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 783,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata {"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadImage(source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 788,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadImage(source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|func|public func loadVideoPoster(source: Any,",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 807,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func loadVideoPoster(source: Any,"
+    },
+    {
+      "key": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift|public|enum|public enum PTRichTextVideoPosterRenderer",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 859,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTRichTextVideoPosterRenderer {"
     },
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift|public|typealias|public typealias ConstraintView = UIView",

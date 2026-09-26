@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T13:11:25Z",
+  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
+  "generated_at": "2026-09-26T14:07:57Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -76,91 +76,91 @@
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 150,
+      "line": 172,
       "operation": "AVAssetImageGenerator",
       "classification": "review-required",
       "text": "let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 217,
+      "line": 239,
       "operation": "loadTracks\\(",
       "classification": "explicit-background-or-actor-boundary",
       "text": "guard let track = try await asset.loadTracks(withMediaType: .video).first else {"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 272,
+      "line": 294,
       "operation": "AVAssetImageGenerator",
       "classification": "review-required",
       "text": "let generator = AVAssetImageGenerator(asset: asset)"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 287,
+      "line": 309,
       "operation": "generator.image",
       "classification": "review-required",
       "text": "let result = try await generator.image(at: time)"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "line": 298,
+      "line": 320,
       "operation": "AVAssetImageGenerator",
       "classification": "review-required",
       "text": "let generator = AVAssetImageGenerator(asset: asset)"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 95,
+      "line": 96,
       "operation": "Data\\(contentsOf:",
       "classification": "dedicated-system-or-disk-boundary",
       "text": "return try Data(contentsOf: url, options: .mappedIfSafe)"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 623,
+      "line": 626,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 635,
+      "line": 638,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 654,
+      "line": 657,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "kCGImageSourceCreateThumbnailFromImageAlways as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 655,
+      "line": 658,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "kCGImageSourceCreateThumbnailWithTransform as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 674,
+      "line": 677,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil),"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 675,
+      "line": 678,
       "operation": "CGImageSourceCreate",
       "classification": "review-required",
       "text": "let cgImage = CGImageSourceCreateImageAtIndex(source, 0, ["
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 679,
+      "line": 682,
       "operation": "UIImage\\(data:",
       "classification": "review-required",
       "text": "return UIImage(data: data)"

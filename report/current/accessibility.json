@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T13:11:08Z",
+  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
+  "generated_at": "2026-09-26T14:07:38Z",
   "counts": {
     "reduce_motion": 41,
-    "accessibility": 188,
+    "accessibility": 199,
     "reduce_transparency": 4,
     "dynamic_type": 11
   },
@@ -833,32 +833,87 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 474
+      "line": 277
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 479
+      "line": 326
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 483
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 25
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 501
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 30
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 506
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 34
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 510
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 154
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 165
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 175
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 207
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 222
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 236
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 321
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 333
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 342
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 481
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 486
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 490
     },
     {
       "rule": "reduce_motion",

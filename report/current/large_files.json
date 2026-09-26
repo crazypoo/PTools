@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T13:11:24Z",
+  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
+  "generated_at": "2026-09-26T14:07:56Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -316,7 +316,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTFusionCell.swift",
-      "lines": 599,
+      "lines": 611,
       "classification": "ok"
     },
     {
@@ -631,7 +631,7 @@
     },
     {
       "path": "PooToolsSource/Category/Collection+PTEX.swift",
-      "lines": 26,
+      "lines": 40,
       "classification": "ok"
     },
     {
@@ -676,7 +676,7 @@
     },
     {
       "path": "PooToolsSource/Category/Double+PTEX.swift",
-      "lines": 143,
+      "lines": 147,
       "classification": "ok"
     },
     {
@@ -686,7 +686,7 @@
     },
     {
       "path": "PooToolsSource/Category/Float+PTEX.swift",
-      "lines": 100,
+      "lines": 104,
       "classification": "ok"
     },
     {
@@ -696,7 +696,7 @@
     },
     {
       "path": "PooToolsSource/Category/Int+PTEX.swift",
-      "lines": 106,
+      "lines": 110,
       "classification": "ok"
     },
     {
@@ -806,7 +806,7 @@
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
-      "lines": 315,
+      "lines": 337,
       "classification": "ok"
     },
     {
@@ -821,7 +821,7 @@
     },
     {
       "path": "PooToolsSource/Category/String+PTEX.swift",
-      "lines": 1828,
+      "lines": 1861,
       "classification": "architecture_exception"
     },
     {
@@ -851,7 +851,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIButton+PTEX.swift",
-      "lines": 295,
+      "lines": 304,
       "classification": "ok"
     },
     {
@@ -901,7 +901,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIImage+PTEX.swift",
-      "lines": 1395,
+      "lines": 1433,
       "classification": "warning"
     },
     {
@@ -960,6 +960,11 @@
       "classification": "warning"
     },
     {
+      "path": "PooToolsSource/Category/UISctckView+PTEX.swift",
+      "lines": 38,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Category/UISegmentedControl+PTEX.swift",
       "lines": 27,
       "classification": "ok"
@@ -1016,7 +1021,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "lines": 1919,
+      "lines": 1927,
       "classification": "architecture_exception"
     },
     {
@@ -1196,7 +1201,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "lines": 220,
+      "lines": 214,
       "classification": "ok"
     },
     {
@@ -1211,7 +1216,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "lines": 785,
+      "lines": 907,
       "classification": "ok"
     },
     {
@@ -3231,7 +3236,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/UIStackView+InspectorEX.swift",
-      "lines": 372,
+      "lines": 350,
       "classification": "ok"
     },
     {
@@ -4011,8 +4016,18 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "lines": 1460,
-      "classification": "warning"
+      "lines": 1598,
+      "classification": "architecture_exception"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "lines": 980,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMediaController.swift",
+      "lines": 149,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift",
@@ -4840,7 +4855,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 16,
-  "architecture_exception_count": 9,
+  "warning_count": 15,
+  "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3
 }

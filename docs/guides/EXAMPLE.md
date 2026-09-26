@@ -24,6 +24,7 @@
 | Search | 暂无固定展厅页面 | debounce、竞态取消、History、Suggestion、分页、刷新和导航栏恢复 | `PTSearchViewController`、`PooTools/Search` |
 | Network | 网络和局域网传送示例 | 状态、请求日志、上传/下载和取消 | `PooToolsNetWork` |
 | Media | 图片、视频、签名、识字和媒体选择示例 | 图片加载、视频缩略图、保存和权限 | `PTLoadImageFunction`、`PTVideoThumbnailService`、`PTMediaSaveService` |
+| Rich Text Media | `PTRichText` 媒体示例（见下方代码） | URL/String/UIImage/Data 图片、视频封面、时长、点击和取消 | `PTRichText.image(source:)`、`PTRichText.video(source:)` |
 | Picker | 媒体选择和 `PTImageListViewController` | 系统 ImagePicker、PhotoPicker、取消和结果状态 | `PTSystemMediaPicker` 或 `PTMediaLibViewController` |
 | Alert | Alert、反馈和 Menu 示例 | 系统样式、按钮顺序、长按钮、键盘和无障碍 | `UIAlertController+PTEX`、`PTCustomerAlertController` |
 | Permission | `PTPermissionViewController`、`PTPermissionSettingViewController` | 授权、拒绝、受限和 MainActor completion | `PTPermission` |
@@ -63,6 +64,25 @@ final class ExampleListViewController: PTListViewController {
 
 轻量单媒体选择使用 `PTSystemMediaPicker`；多选、原图、Live Photo、编辑和 iCloud 进度使用
 `PTMediaLibViewController`。两条路径都必须在页面退出时处理取消和结果生命周期。
+
+### Rich Text Media
+
+```swift
+@MainActor
+func configureRichTextMedia() {
+    let richText = PTRichText("图片：")
+        .appendingImage(source: imageSource)
+        .appendingVideo(source: videoURL,
+                        configuration: .init(estimatedAspectRatio: 16.0 / 9.0))
+    let loader = PTLoadImageFunction.makeRichTextMediaLoader()
+    titleLabel.pt_apply(richText: richText, mediaLoader: loader) { interaction in
+        guard case .media(.video(let id)) = interaction else { return }
+        presentVideo(id: id)
+    }
+}
+```
+
+`PTRichText` 只渲染占位图和封面，不创建 `AVPlayer`。宿主负责播放；页面复用或替换内容时，渲染器会取消旧媒体请求并忽略过期结果。
 
 ### Search
 

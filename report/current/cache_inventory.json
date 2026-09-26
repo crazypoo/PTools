@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "2b964e7eca56f981a67713025d2204d61165f8cb",
-  "generated_at": "2026-09-23T13:11:25Z",
+  "source_revision": "fb33a71e17c7112c3bf511e03440cbc6acbb4bd1",
+  "generated_at": "2026-09-26T14:07:57Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -396,25 +396,25 @@
     },
     {
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 185,
+      "line": 179,
       "kind": "disk or custom cache",
       "text": "/// Check if this manager has cache for an imageView"
     },
     {
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 186,
+      "line": 180,
       "kind": "disk or custom cache",
       "text": "/// - Parameter imageView: The image view we're searching cache for"
     },
     {
       "path": "PooToolsSource/Core/PTGifManager.swift",
-      "line": 187,
+      "line": 181,
       "kind": "disk or custom cache",
       "text": "/// - Returns : a boolean for wether we have cache for the imageView"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 547,
+      "line": 550,
       "kind": "disk or custom cache",
       "text": "// Prefer Kingfisher's embedded original bytes before asking the cache serializer for data."
     },
@@ -864,21 +864,57 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 336,
+      "line": 406,
       "kind": "disk or custom cache",
       "text": "// English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock."
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 341,
+      "line": 411,
       "kind": "NSCache",
       "text": "private let regexCache = NSCache<NSString, NSRegularExpression>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 342,
+      "line": 412,
       "kind": "NSCache",
       "text": "private let detectorCache = NSCache<NSNumber, NSDataDetector>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 682,
+      "kind": "NSCache",
+      "text": "private let imageCache = NSCache<NSString, UIImage>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 683,
+      "kind": "NSCache",
+      "text": "private let posterCache = NSCache<NSString, UIImage>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 860,
+      "kind": "NSCache",
+      "text": "private static let cache = NSCache<NSString, UIImage>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 872,
+      "kind": "disk or custom cache",
+      "text": "cache.removeAllObjects()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 881,
+      "kind": "disk or custom cache",
+      "text": "if let cached = cache.object(forKey: key as NSString) {"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 941,
+      "kind": "disk or custom cache",
+      "text": "cache.setObject(rendered, forKey: key as NSString)"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
@@ -917,5 +953,5 @@
       "text": "open func cache(viewController: UIViewController, with identifier: String) {"
     }
   ],
-  "bounded_memory_caches": 20
+  "bounded_memory_caches": 23
 }

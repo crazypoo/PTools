@@ -9,6 +9,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 import ObjectiveC
 
 public struct PTTextActionID: Hashable, Codable, Sendable {
@@ -263,6 +264,23 @@ public struct PTTextAttribute {
         Self.image(image, .custom(size: image.size))
     }
 
+    // English: Accept the same dynamic image sources as the canonical Core loader at the UI boundary.
+    // Español: Acepta las mismas fuentes dinámicas que el cargador canónico de Core en el límite de UI.
+    // 中文：在 UI 边界接受与 Core 统一加载器相同的动态图片来源。
+    @MainActor
+    public static func image(source: Any,
+                             configuration: PTRichTextImageConfiguration = .init()) -> Self {
+        let media = PTRichTextMediaAttachment(kind: .image,
+                                               source: source,
+                                               displayConfiguration: configuration.display,
+                                               failureImage: configuration.failureImage,
+                                               accessibilityLabel: configuration.accessibilityLabel)
+        let attachment = PTRichTextMediaTextAttachment(media: media,
+                                                        image: configuration.placeholder ?? PTRichTextMediaPlaceholder.image(video: false),
+                                                        size: configuration.display.placeholderSize())
+        return Self(values: [.attachment: attachment])
+    }
+
     // English: Keep the convenient URL syntax while rendering the placeholder synchronously.
     // Español: Conserva la sintaxis cómoda con URL y muestra el marcador de posición de forma síncrona.
     // 中文：保留便捷的 URL 写法，并同步显示占位图。
@@ -290,6 +308,26 @@ public struct PTTextAttribute {
                                                       url: url,
                                                       size: size,
                                                       placeholder: placeholder)
+        return Self(values: [.attachment: attachment])
+    }
+
+    // English: Describe a video poster without creating AVPlayer or downloading media during value construction.
+    // Español: Describe un póster de vídeo sin crear AVPlayer ni descargar medios al construir el valor.
+    // 中文：描述视频封面，创建富文本值时不创建 AVPlayer，也不下载媒体。
+    @MainActor
+    public static func video(source: Any,
+                             configuration: PTRichTextVideoConfiguration = .init()) -> Self {
+        let media = PTRichTextMediaAttachment(kind: .video,
+                                               source: source,
+                                               posterSource: configuration.posterSource,
+                                               displayConfiguration: configuration.display,
+                                               failureImage: configuration.failureImage,
+                                               videoConfiguration: configuration,
+                                               accessibilityLabel: configuration.accessibilityLabel)
+        let placeholder = configuration.placeholder ?? PTRichTextMediaPlaceholder.image(video: true)
+        let attachment = PTRichTextMediaTextAttachment(media: media,
+                                                        image: placeholder,
+                                                        size: configuration.display.placeholderSize(fallback: CGSize(width: 160, height: 90)))
         return Self(values: [.attachment: attachment])
     }
 
@@ -492,242 +530,6 @@ public struct PTTextMatch: Sendable, Equatable {
     }
 }
 
-public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable {
-    public enum Kind: Codable, Hashable, Sendable {
-        case imageData(Data)
-        case file(URL)
-        case remote(URL)
-        case viewProvider(String)
-    }
-
-    public let id: String
-    public let kind: Kind
-    public let size: CGSize
-    public let accessibilityDescription: String?
-
-    public init(id: String = UUID().uuidString,
-                kind: Kind,
-                size: CGSize,
-                accessibilityDescription: String? = nil) {
-        self.id = id
-        self.kind = kind
-        self.size = ptNormalizedAttachmentSize(size)
-        self.accessibilityDescription = accessibilityDescription
-    }
-}
-
-// English: Store a typed remote URL beside its placeholder attachment for later MainActor replacement.
-// Español: Guarda una URL remota tipada junto al adjunto de marcador para reemplazarlo después en MainActor.
-// 中文：在占位附件旁保存类型化远程 URL，稍后由 MainActor 替换真实图片。
-public final class PTRemoteImageTextAttachment: NSTextAttachment {
-    public let identifier: String
-    public let remoteURL: URL
-    public let attachmentSize: CGSize
-
-    public init(identifier: String,
-                url: URL,
-                size: CGSize,
-                placeholder: UIImage? = nil) {
-        self.identifier = identifier
-        self.remoteURL = url
-        self.attachmentSize = ptNormalizedAttachmentSize(size)
-        super.init(data: nil, ofType: nil)
-        image = placeholder ?? UIImage(systemName: "photo")
-        bounds = CGRect(origin: .zero, size: attachmentSize)
-    }
-
-    required init?(coder: NSCoder) {
-        return nil
-    }
-
-    // English: Return a plain attachment so a resolved image never starts another remote load.
-    // Español: Devuelve un adjunto normal para que una imagen resuelta no vuelva a iniciar una carga remota.
-    // 中文：返回普通附件，避免真实图片设置后再次触发远程加载。
-    public func resolvedAttachment(with image: UIImage) -> NSTextAttachment {
-        let attachment = NSTextAttachment()
-        attachment.image = image
-        attachment.bounds = CGRect(origin: .zero, size: attachmentSize)
-        return attachment
-    }
-}
-
-// English: Keep every attachment dimension finite and positive before it reaches TextKit.
-// Español: Mantiene cada dimensión del adjunto finita y positiva antes de llegar a TextKit.
-// 中文：在进入 TextKit 前确保附件尺寸始终有限且为正数。
-private func ptNormalizedAttachmentSize(_ size: CGSize) -> CGSize {
-    CGSize(width: size.width.isFinite && size.width > 0 ? size.width : 1,
-           height: size.height.isFinite && size.height > 0 ? size.height : 1)
-}
-
-// English: The descriptor is a Sendable value; only its view factory executes on MainActor.
-// Español: El descriptor es un valor Sendable; solo su fábrica de vistas se ejecuta en MainActor.
-// 中文：描述符是 Sendable 值类型，只有 View 工厂在 MainActor 上执行。
-public struct PTTextViewAttachmentDescriptor: Sendable {
-    public let id: String
-    public let size: CGSize
-    public let accessibilityDescription: String?
-    public let makeView: @MainActor @Sendable () -> UIView
-
-    public init(id: String,
-                size: CGSize,
-                accessibilityDescription: String? = nil,
-                makeView: @escaping @MainActor @Sendable () -> UIView) {
-        self.id = id
-        self.size = ptNormalizedAttachmentSize(size)
-        self.accessibilityDescription = accessibilityDescription
-        self.makeView = makeView
-    }
-
-    // English: Create a TextKit view provider only when the layout manager requests the attachment view.
-    // Español: Crea el proveedor de vista TextKit solo cuando el gestor de layout solicita la vista del adjunto.
-    // 中文：仅在 TextKit 布局管理器请求附件视图时创建 View Provider。
-    @available(iOS 15.0, *)
-    public func makeViewProvider(textAttachment: NSTextAttachment,
-                                 parentView: UIView?,
-                                 textLayoutManager: NSTextLayoutManager?,
-                                 location: NSTextLocation) -> PTTextAttachmentViewProvider {
-        PTTextAttachmentViewProvider(descriptor: self,
-                                     textAttachment: textAttachment,
-                                     parentView: parentView,
-                                     textLayoutManager: textLayoutManager,
-                                     location: location)
-    }
-}
-
-// English: Keep custom attachment views lazy and sized by the immutable descriptor.
-// Español: Mantiene las vistas de adjuntos personalizadas perezosas y dimensionadas por el descriptor inmutable.
-// 中文：让自定义附件视图按需创建，并使用不可变描述符确定尺寸。
-@available(iOS 15.0, *)
-public final class PTTextAttachmentViewProvider: NSTextAttachmentViewProvider {
-    private let descriptor: PTTextViewAttachmentDescriptor
-
-    public init(descriptor: PTTextViewAttachmentDescriptor,
-                textAttachment: NSTextAttachment,
-                parentView: UIView?,
-                textLayoutManager: NSTextLayoutManager?,
-                location: NSTextLocation) {
-        self.descriptor = descriptor
-        super.init(textAttachment: textAttachment,
-                   parentView: parentView,
-                   textLayoutManager: textLayoutManager,
-                   location: location)
-        tracksTextAttachmentViewBounds = true
-    }
-
-    // English: UIKit invokes this callback on the main thread, but the SDK declaration is nonisolated.
-    // Español: UIKit invoca este callback en el hilo principal, aunque la declaración del SDK no está aislada.
-    // 中文：UIKit 会在主线程调用此回调，但 SDK 声明本身没有 MainActor 隔离。
-    public override func loadView() {
-        let descriptor = self.descriptor
-        let attachmentView: UIView = MainActor.assumeIsolated {
-            let attachmentView = descriptor.makeView()
-            attachmentView.frame = CGRect(origin: .zero, size: descriptor.size)
-            return attachmentView
-        }
-        view = attachmentView
-    }
-
-    public override func attachmentBounds(for attributes: [NSAttributedString.Key: Any],
-                                          location: NSTextLocation,
-                                          textContainer: NSTextContainer?,
-                                          proposedLineFragment lineFrag: CGRect,
-                                          position: CGPoint) -> CGRect {
-        CGRect(origin: .zero, size: descriptor.size)
-    }
-}
-
-public protocol PTTextImageLoader: Sendable {
-    func image(for url: URL) async throws -> UIImage
-}
-
-// English: Keep the Core image pipeline injectable without making UI Foundation depend on Core.
-// Español: Mantiene inyectable el canal de imágenes de Core sin hacer que UI Foundation dependa de Core.
-// 中文：让 Core 图片管线可以注入，同时避免 UI Foundation 反向依赖 Core。
-public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL,
-                                                                 _ targetSize: CGSize) async throws -> UIImage
-
-public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable {
-    public init() {}
-
-    public func image(for url: URL) async throws -> UIImage {
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200..<300).contains(httpResponse.statusCode),
-              let image = UIImage(data: data) else {
-            throw URLError(.cannotDecodeContentData)
-        }
-        return image
-    }
-}
-
-// English: Own remote attachment tasks by identifier and discard stale generations on reuse.
-// Español: Posee las tareas de adjuntos remotos por identificador y descarta generaciones obsoletas al reutilizar.
-// 中文：按标识符管理远程附件任务，并在复用时丢弃过期 generation 的结果。
-@MainActor
-public final class PTTextAttachmentCoordinator {
-    private let imageLoader: PTTextImageLoadHandler
-    private var tasks: [String: Task<Void, Never>] = [:]
-    private var generations: [String: UInt64] = [:]
-
-    public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) {
-        imageLoader = { url, _ in
-            try await loader.image(for: url)
-        }
-    }
-
-    // English: Allow Core to inject PTLoadImageFunction without coupling UI Foundation back to Core.
-    // Español: Permite que Core inyecte PTLoadImageFunction sin acoplar UI Foundation de vuelta a Core.
-    // 中文：允许 Core 注入 PTLoadImageFunction，避免 UI Foundation 反向依赖 Core。
-    public init(imageLoader: @escaping PTTextImageLoadHandler) {
-        self.imageLoader = imageLoader
-    }
-
-    @discardableResult
-    public func loadRemote(_ descriptor: PTTextAttachmentDescriptor,
-                           completion: @escaping @MainActor @Sendable (Result<UIImage, Error>) -> Void) -> UInt64 {
-        guard case .remote(let url) = descriptor.kind else { return 0 }
-        cancel(id: descriptor.id)
-        let generation = (generations[descriptor.id] ?? 0) &+ 1
-        generations[descriptor.id] = generation
-        let identifier = descriptor.id
-        let imageLoader = self.imageLoader
-        let targetSize = descriptor.size
-        let task = Task { @MainActor [weak self, imageLoader, url, identifier, generation, targetSize] in
-            do {
-                let image = try await imageLoader(url, targetSize)
-                guard !Task.isCancelled,
-                      let self,
-                      self.generations[identifier] == generation else { return }
-                self.tasks[identifier] = nil
-                completion(.success(image))
-            } catch {
-                guard !Task.isCancelled,
-                      let self,
-                      self.generations[identifier] == generation else { return }
-                self.tasks[identifier] = nil
-                completion(.failure(error))
-            }
-        }
-        tasks[descriptor.id] = task
-        return generation
-    }
-
-    public func cancel(id: String) {
-        tasks[id]?.cancel()
-        tasks[id] = nil
-        generations[id, default: 0] &+= 1
-    }
-
-    public func cancelAll() {
-        tasks.values.forEach { $0.cancel() }
-        tasks.removeAll(keepingCapacity: false)
-        generations.removeAll(keepingCapacity: false)
-    }
-
-    deinit {
-        tasks.values.forEach { $0.cancel() }
-    }
-}
 
 public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                           ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
@@ -1275,6 +1077,32 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     }
 }
 
+// English: Offer additive value builders while preserving the existing interpolation-first DSL.
+// Español: Ofrece constructores de valor aditivos y conserva el DSL existente basado en interpolación.
+// 中文：增加值类型构建入口，同时保留现有以插值为主的 DSL。
+@MainActor
+public extension PTRichText {
+    static func image(source: Any,
+                      configuration: PTRichTextImageConfiguration = .init()) -> Self {
+        PTRichText(string: "\u{FFFC}", with: [.image(source: source, configuration: configuration)])
+    }
+
+    static func video(source: Any,
+                      configuration: PTRichTextVideoConfiguration = .init()) -> Self {
+        PTRichText(string: "\u{FFFC}", with: [.video(source: source, configuration: configuration)])
+    }
+
+    func appendingImage(source: Any,
+                        configuration: PTRichTextImageConfiguration = .init()) -> Self {
+        self + .image(source: source, configuration: configuration)
+    }
+
+    func appendingVideo(source: Any,
+                        configuration: PTRichTextVideoConfiguration = .init()) -> Self {
+        self + .video(source: source, configuration: configuration)
+    }
+}
+
 @MainActor
 public final class PTTextActionRegistry {
     private var handlers: [PTTextActionID: (PTTextActionEvent) -> Void] = [:]
@@ -1316,8 +1144,9 @@ public final class PTTextActionRegistry {
 public final class PTRichTextInteractionController: NSObject, UIGestureRecognizerDelegate {
     private weak var label: UILabel?
     private weak var textView: UITextView?
-    private let registry: PTTextActionRegistry
+    private let registry: PTTextActionRegistry?
     private let interactionMode: PTTextInteractionMode
+    private let onInteraction: PTRichTextInteractionHandler?
     private var richText: PTRichText
     private lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
     private lazy var longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
@@ -1326,11 +1155,26 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     public init(richText: PTRichText,
                 label: UILabel,
                 registry: PTTextActionRegistry,
-                interactionMode: PTTextInteractionMode = .hybrid) {
+                interactionMode: PTTextInteractionMode = .hybrid,
+                onInteraction: PTRichTextInteractionHandler? = nil) {
         self.richText = richText
         self.label = label
         self.registry = registry
         self.interactionMode = interactionMode
+        self.onInteraction = onInteraction
+        super.init()
+        install(on: label)
+    }
+
+    public init(richText: PTRichText,
+                label: UILabel,
+                interactionMode: PTTextInteractionMode = .hybrid,
+                onInteraction: PTRichTextInteractionHandler? = nil) {
+        self.richText = richText
+        self.label = label
+        self.registry = nil
+        self.interactionMode = interactionMode
+        self.onInteraction = onInteraction
         super.init()
         install(on: label)
     }
@@ -1338,11 +1182,26 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     public init(richText: PTRichText,
                 textView: UITextView,
                 registry: PTTextActionRegistry,
-                interactionMode: PTTextInteractionMode = .hybrid) {
+                interactionMode: PTTextInteractionMode = .hybrid,
+                onInteraction: PTRichTextInteractionHandler? = nil) {
         self.richText = richText
         self.textView = textView
         self.registry = registry
         self.interactionMode = interactionMode
+        self.onInteraction = onInteraction
+        super.init()
+        install(on: textView)
+    }
+
+    public init(richText: PTRichText,
+                textView: UITextView,
+                interactionMode: PTTextInteractionMode = .hybrid,
+                onInteraction: PTRichTextInteractionHandler? = nil) {
+        self.richText = richText
+        self.textView = textView
+        self.registry = nil
+        self.interactionMode = interactionMode
+        self.onInteraction = onInteraction
         super.init()
         install(on: textView)
     }
@@ -1377,7 +1236,13 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         guard interactionMode != .selectionAndLinks,
               gesture.state == .ended,
-              let hit = hit(at: gesture.location(in: gesture.view)) else { return }
+              let point = gesture.view.map({ gesture.location(in: $0) }) else { return }
+        if let interaction = interaction(at: point) {
+            onInteraction?(interaction)
+            if case .media = interaction { return }
+        }
+        guard let hit = hit(at: point),
+              let registry else { return }
         registry.perform(PTTextActionEvent(actionID: hit.id,
                                            range: hit.range,
                                            text: hit.text,
@@ -1388,7 +1253,9 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
         switch gesture.state {
         case .began:
             guard interactionMode != .selectionAndLinks,
-                  let hit = hit(at: gesture.location(in: gesture.view)) else { return }
+                  let point = gesture.view.map({ gesture.location(in: $0) }),
+                  let hit = hit(at: point),
+                  let registry else { return }
             highlightedRange = hit.range
             applyTemporaryHighlight(hit.range)
             registry.perform(PTTextActionEvent(actionID: hit.id,
@@ -1417,6 +1284,30 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
         _ = attributedText.attribute(PTRichText.actionAttributeKey, at: index, effectiveRange: &range)
         guard range.length > 0 else { return nil }
         return (id, range, attributedText.attributedSubstring(from: range).string)
+    }
+
+    private func interaction(at point: CGPoint) -> PTRichTextInteraction? {
+        let attributedText = richText.value
+        guard attributedText.length > 0,
+              let index = characterIndex(at: point, attributedText: attributedText) else {
+            return nil
+        }
+        if let attachment = attributedText.attribute(.attachment,
+                                                      at: index,
+                                                      effectiveRange: nil) as? PTRichTextMediaTextAttachment {
+            return .media(attachment.media.kind == .image
+                          ? .image(id: attachment.media.id)
+                          : .video(id: attachment.media.id))
+        }
+        if let attachment = attributedText.attribute(.attachment,
+                                                      at: index,
+                                                      effectiveRange: nil) as? PTRemoteImageTextAttachment {
+            return .media(.image(id: attachment.mediaID))
+        }
+        if let url = attributedText.attribute(.link, at: index, effectiveRange: nil) as? URL {
+            return .link(url)
+        }
+        return nil
     }
 
     private func characterIndex(at point: CGPoint,
@@ -1477,8 +1368,9 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
 // English: Keep the single controller associated with the UIKit host, not in PTRichText storage.
 // Español: Mantiene un solo controlador asociado al host UIKit, no dentro del almacenamiento PTRichText.
 // 中文：交互控制器只关联在 UIKit 宿主上，不写入 PTRichText 存储。
-@MainActor private var ptRichTextInteractionAssociationKey: UInt8 = 0
-@MainActor private var ptRichTextRemoteImageAssociationKey: UInt8 = 0
+@MainActor var ptRichTextInteractionAssociationKey: UInt8 = 0
+@MainActor var ptRichTextRemoteImageAssociationKey: UInt8 = 0
+@MainActor var ptRichTextMediaAssociationKey: UInt8 = 0
 
 // English: Resolve remote attachments after the placeholder has been rendered, with reuse-safe cancellation.
 // Español: Resuelve los adjuntos remotos después de mostrar el marcador y cancela de forma segura al reutilizar.
@@ -1544,17 +1436,25 @@ private final class PTRichTextRemoteImageController: NSObject {
     }
 }
 
+
 @MainActor
 public enum PTRichTextRenderer {
     public static func apply(_ richText: PTRichText,
                              to label: UILabel,
                              actionRegistry: PTTextActionRegistry? = nil,
                              interactionMode: PTTextInteractionMode = .hybrid,
-                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
+                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
+                             mediaLoader: PTRichTextMediaLoader? = nil,
+                             onInteraction: PTRichTextInteractionHandler? = nil) {
         label.attributedText = richText.value
         (objc_getAssociatedObject(label, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
         objc_setAssociatedObject(label,
                                  &ptRichTextRemoteImageAssociationKey,
+                                 nil,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        (objc_getAssociatedObject(label, &ptRichTextMediaAssociationKey) as? PTRichTextMediaController)?.cancel()
+        objc_setAssociatedObject(label,
+                                 &ptRichTextMediaAssociationKey,
                                  nil,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         if let attachmentCoordinator {
@@ -1567,15 +1467,34 @@ public enum PTRichTextRenderer {
                                      .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             controller.start()
         }
+        if let mediaLoader {
+            let controller = PTRichTextMediaController(richText: richText,
+                                                        label: label,
+                                                        loader: mediaLoader)
+            objc_setAssociatedObject(label,
+                                     &ptRichTextMediaAssociationKey,
+                                     controller,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            controller.start()
+        }
         (objc_getAssociatedObject(label, &ptRichTextInteractionAssociationKey) as? PTRichTextInteractionController)?.detach()
-        guard let actionRegistry else {
+        guard actionRegistry != nil || onInteraction != nil else {
             objc_setAssociatedObject(label, &ptRichTextInteractionAssociationKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return
         }
-        let controller = PTRichTextInteractionController(richText: richText,
+        let controller: PTRichTextInteractionController
+        if let actionRegistry {
+            controller = PTRichTextInteractionController(richText: richText,
                                                          label: label,
                                                          registry: actionRegistry,
-                                                         interactionMode: interactionMode)
+                                                         interactionMode: interactionMode,
+                                                         onInteraction: onInteraction)
+        } else {
+            controller = PTRichTextInteractionController(richText: richText,
+                                                         label: label,
+                                                         interactionMode: interactionMode,
+                                                         onInteraction: onInteraction)
+        }
         objc_setAssociatedObject(label, &ptRichTextInteractionAssociationKey, controller, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 
@@ -1583,7 +1502,9 @@ public enum PTRichTextRenderer {
                              to textView: UITextView,
                              interactionMode: PTTextInteractionMode = .hybrid,
                              actionRegistry: PTTextActionRegistry? = nil,
-                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
+                             attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
+                             mediaLoader: PTRichTextMediaLoader? = nil,
+                             onInteraction: PTRichTextInteractionHandler? = nil) {
         textView.attributedText = richText.value
         textView.isEditable = false
         textView.isSelectable = interactionMode != .actionsOnly
@@ -1591,6 +1512,11 @@ public enum PTRichTextRenderer {
         (objc_getAssociatedObject(textView, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
         objc_setAssociatedObject(textView,
                                  &ptRichTextRemoteImageAssociationKey,
+                                 nil,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        (objc_getAssociatedObject(textView, &ptRichTextMediaAssociationKey) as? PTRichTextMediaController)?.cancel()
+        objc_setAssociatedObject(textView,
+                                 &ptRichTextMediaAssociationKey,
                                  nil,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         if let attachmentCoordinator {
@@ -1603,15 +1529,34 @@ public enum PTRichTextRenderer {
                                      .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             controller.start()
         }
+        if let mediaLoader {
+            let controller = PTRichTextMediaController(richText: richText,
+                                                        textView: textView,
+                                                        loader: mediaLoader)
+            objc_setAssociatedObject(textView,
+                                     &ptRichTextMediaAssociationKey,
+                                     controller,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            controller.start()
+        }
         (objc_getAssociatedObject(textView, &ptRichTextInteractionAssociationKey) as? PTRichTextInteractionController)?.detach()
-        guard let actionRegistry else {
+        guard actionRegistry != nil || onInteraction != nil else {
             objc_setAssociatedObject(textView, &ptRichTextInteractionAssociationKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return
         }
-        let controller = PTRichTextInteractionController(richText: richText,
+        let controller: PTRichTextInteractionController
+        if let actionRegistry {
+            controller = PTRichTextInteractionController(richText: richText,
                                                          textView: textView,
                                                          registry: actionRegistry,
-                                                         interactionMode: interactionMode)
+                                                         interactionMode: interactionMode,
+                                                         onInteraction: onInteraction)
+        } else {
+            controller = PTRichTextInteractionController(richText: richText,
+                                                         textView: textView,
+                                                         interactionMode: interactionMode,
+                                                         onInteraction: onInteraction)
+        }
         objc_setAssociatedObject(textView, &ptRichTextInteractionAssociationKey, controller, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
@@ -1621,12 +1566,16 @@ public extension UILabel {
     func pt_apply(richText: PTRichText,
                   actionRegistry: PTTextActionRegistry? = nil,
                   interactionMode: PTTextInteractionMode = .hybrid,
-                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
+                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
+                  mediaLoader: PTRichTextMediaLoader? = nil,
+                  onInteraction: PTRichTextInteractionHandler? = nil) {
         PTRichTextRenderer.apply(richText,
                                  to: self,
                                  actionRegistry: actionRegistry,
                                  interactionMode: interactionMode,
-                                 attachmentCoordinator: attachmentCoordinator)
+                                 attachmentCoordinator: attachmentCoordinator,
+                                 mediaLoader: mediaLoader,
+                                 onInteraction: onInteraction)
     }
 }
 
@@ -1635,11 +1584,15 @@ public extension UITextView {
     func pt_apply(richText: PTRichText,
                   interactionMode: PTTextInteractionMode = .hybrid,
                   actionRegistry: PTTextActionRegistry? = nil,
-                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil) {
+                  attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
+                  mediaLoader: PTRichTextMediaLoader? = nil,
+                  onInteraction: PTRichTextInteractionHandler? = nil) {
         PTRichTextRenderer.apply(richText,
                                  to: self,
                                  interactionMode: interactionMode,
                                  actionRegistry: actionRegistry,
-                                 attachmentCoordinator: attachmentCoordinator)
+                                 attachmentCoordinator: attachmentCoordinator,
+                                 mediaLoader: mediaLoader,
+                                 onInteraction: onInteraction)
     }
 }

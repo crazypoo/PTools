@@ -76,6 +76,43 @@ final class PTRichTextCoreTests: XCTestCase {
         XCTAssertEqual(descriptor.size, CGSize(width: 1, height: 1))
     }
 
+    // English: Keep image and video media sources on stable placeholder attachments before async loading.
+    // Español: Mantiene las fuentes de imagen y vídeo en adjuntos de marcador estables antes de la carga asíncrona.
+    // 中文：验证异步加载前图片和视频来源都保存在稳定的占位附件中。
+    @MainActor
+    func testRichMediaSourcesCreateStablePlaceholders() {
+        let imageText = PTRichText.image(source: URL(string: "https://example.com/image.png")!,
+                                         configuration: .init(estimatedAspectRatio: 1))
+        let videoText = PTRichText.video(source: URL(fileURLWithPath: "/tmp/example.mp4"),
+                                         configuration: .init(estimatedAspectRatio: 16.0 / 9.0))
+
+        let imageAttachment = imageText.value.attribute(.attachment,
+                                                         at: 0,
+                                                         effectiveRange: nil) as? PTRichTextMediaTextAttachment
+        let videoAttachment = videoText.value.attribute(.attachment,
+                                                         at: 0,
+                                                         effectiveRange: nil) as? PTRichTextMediaTextAttachment
+
+        XCTAssertEqual(imageAttachment?.media.kind, .image)
+        XCTAssertEqual(videoAttachment?.media.kind, .video)
+        XCTAssertEqual(imageAttachment?.attachmentSize, CGSize(width: 1, height: 1))
+        XCTAssertEqual(videoAttachment?.attachmentSize, CGSize(width: 160, height: 90))
+        XCTAssertEqual(videoAttachment?.media.videoConfiguration?.thumbnailFrameNumber, 10)
+    }
+
+    // English: Verify one media action carries a stable ID instead of a non-Sendable source object.
+    // Español: Verifica que una acción multimedia transporte un ID estable y no una fuente no Sendable.
+    // 中文：验证媒体动作传递稳定 ID，而不是跨并发边界传递不可 Sendable 的来源对象。
+    func testRichMediaActionIsValueTyped() {
+        let id = UUID()
+        let action = PTRichTextMediaAction.video(id: id)
+
+        guard case .video(let receivedID) = action else {
+            return XCTFail("Expected a video media action")
+        }
+        XCTAssertEqual(receivedID, id)
+    }
+
     func testTenThousandActionRunsCanBeBuilt() {
         measure {
             var value = PTRichText("")

@@ -2,7 +2,18 @@
 
 ## Unreleased — 5.25.x
 
-当前开发基线为 `5.25.0`；版本唯一来源为根目录 `VERSION`，`5.24.0` 是上一版正式基线。
+当前开发基线为 `5.25.5`；版本唯一来源为根目录 `VERSION`，`5.25.4` 是上一版正式基线。
+
+## 5.25.5 — 2026-09-26
+
+- `PTRichText` 新增统一 Rich Media Attachment，图片 source 与 `PTLoadImageFunction.loadImage(source:)` 对齐，支持 URL、String、UIImage、Data、AVAsset 等兼容来源。
+- 新增本地/网络视频封面、自定义 poster、自动缩略图、播放图标、时长标记和统一媒体点击回调；播放器生命周期仍由宿主负责。
+- 接入 `PTVideoThumbnailService`，增加媒体加载取消、generation 防串图、占位/失败图片和有界渲染缓存；UILabel 与 UITextView 保持兼容。
+- 保留现有 URL 图片 API，旧入口继续作为兼容包装器；新增使用说明、Example 片段和富媒体回归测试。
+
+## 5.25.4 — 2026-09-26
+
+- 作为 5.25.5 富文本媒体增强的稳定兼容基线，保留既有 `PTRichText` 与 Foundation `AttributedString` API。
 
 ## 5.25.0 — 2026-09-23
 

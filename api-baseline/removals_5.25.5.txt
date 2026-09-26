@@ -1,0 +1,11 @@
+# English: These removals were reviewed during the 5.25.0 AttributedString absorption and remain acknowledged for 5.25.5.
+# Español: Estas eliminaciones se revisaron durante la absorción de AttributedString 5.25.0 y siguen reconocidas para 5.25.5.
+# 中文：这些删除项已在 5.25.0 AttributedString 吸收阶段完成审阅，并在 5.25.5 继续登记。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|struct|PTLogSink

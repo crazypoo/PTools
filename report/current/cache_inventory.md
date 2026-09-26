@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: 2b964e7eca56f981a67713025d2204d61165f8cb
-Generated at: 2026-09-23T13:11:25Z
+Source revision: fb33a71e17c7112c3bf511e03440cbc6acbb4bd1
+Generated at: 2026-09-26T14:07:57Z
 -->
 
 # PTools 当前缓存盘点
@@ -78,10 +78,10 @@ Generated at: 2026-09-23T13:11:25Z
 | PooToolsSource/Category/UIImageView+PTEX.swift:579 | disk or custom cache | set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) } |
 | PooToolsSource/Core/BorderManager.swift:19 | disk or custom cache | // Previous configuration cache. |
 | PooToolsSource/Core/PTGCDManager.swift:51 | NSCache | // 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer |
-| PooToolsSource/Core/PTGifManager.swift:185 | disk or custom cache | /// Check if this manager has cache for an imageView |
-| PooToolsSource/Core/PTGifManager.swift:186 | disk or custom cache | /// - Parameter imageView: The image view we're searching cache for |
-| PooToolsSource/Core/PTGifManager.swift:187 | disk or custom cache | /// - Returns : a boolean for wether we have cache for the imageView |
-| PooToolsSource/Core/PTLoadImageFunction.swift:547 | disk or custom cache | // Prefer Kingfisher's embedded original bytes before asking the cache serializer for data. |
+| PooToolsSource/Core/PTGifManager.swift:179 | disk or custom cache | /// Check if this manager has cache for an imageView |
+| PooToolsSource/Core/PTGifManager.swift:180 | disk or custom cache | /// - Parameter imageView: The image view we're searching cache for |
+| PooToolsSource/Core/PTGifManager.swift:181 | disk or custom cache | /// - Returns : a boolean for wether we have cache for the imageView |
+| PooToolsSource/Core/PTLoadImageFunction.swift:550 | disk or custom cache | // Prefer Kingfisher's embedded original bytes before asking the cache serializer for data. |
 | PooToolsSource/Core/PTMediaCache.swift:8 | disk or custom cache | // English: Cache variants are part of the key so originals, thumbnails, GIF frames, and Live Photo resources never collide. |
 | PooToolsSource/Core/PTMediaCache.swift:21 | disk or custom cache | // English: A stable cache key is derived from media identity and rendering intent, not Swift's randomized hashValue. |
 | PooToolsSource/Debug/CwlDemangle.swift:3481 | disk or custom cache | _ = printOptional(name.children.at(0), prefix: "lazy protocol witness table cache variable for type ") |
@@ -156,9 +156,15 @@ Generated at: 2026-09-23T13:11:25Z
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:45 | disk or custom cache | if let logger = cache[key] { |
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:49 | disk or custom cache | cache[key] = logger |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:187 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
-| PooToolsSource/PToolsUIFoundation/PTRichText.swift:336 | disk or custom cache | // English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock. |
-| PooToolsSource/PToolsUIFoundation/PTRichText.swift:341 | NSCache | private let regexCache = NSCache<NSString, NSRegularExpression>() |
-| PooToolsSource/PToolsUIFoundation/PTRichText.swift:342 | NSCache | private let detectorCache = NSCache<NSNumber, NSDataDetector>() |
+| PooToolsSource/PToolsUIFoundation/PTRichText.swift:406 | disk or custom cache | // English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock. |
+| PooToolsSource/PToolsUIFoundation/PTRichText.swift:411 | NSCache | private let regexCache = NSCache<NSString, NSRegularExpression>() |
+| PooToolsSource/PToolsUIFoundation/PTRichText.swift:412 | NSCache | private let detectorCache = NSCache<NSNumber, NSDataDetector>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:682 | NSCache | private let imageCache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:683 | NSCache | private let posterCache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:860 | NSCache | private static let cache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:872 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:881 | disk or custom cache | if let cached = cache.object(forKey: key as NSString) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:941 | disk or custom cache | cache.setObject(rendered, forKey: key as NSString) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:630 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:668 | disk or custom cache | // MARK: - Cache Helper |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:682 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |

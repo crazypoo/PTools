@@ -254,6 +254,8 @@ public class PTLoadImageFunction: NSObject {
                                             targetSize: CGSize? = nil) async -> PTLoadImageResult {
         let source: PTImageSource
         switch contentData {
+        case let typedSource as PTImageSource:
+            source = typedSource
         case let image as UIImage:
             source = .image(image)
         case let dataString as String:
@@ -790,6 +792,105 @@ public class PTLoadImageFunction: NSObject {
 // 中文：将 PTRichText 远程附件接入 Core 的统一图片加载入口。
 @MainActor
 public extension PTLoadImageFunction {
+    // English: Keep dynamic rich-text sources on the existing typed image pipeline.
+    // Español: Mantiene las fuentes dinámicas de texto enriquecido en el canal de imágenes tipado existente.
+    // 中文：让富文本动态来源统一进入现有的类型化图片加载管线。
+    static func loadImage(source: Any,
+                          iCloudDocumentName: String = "",
+                          progressHandle: PTLoadImageProgressBlock? = nil,
+                          targetSize: CGSize? = nil) async -> PTLoadImageResult {
+        await loadImage(contentData: source,
+                        iCloudDocumentName: iCloudDocumentName,
+                        progressHandle: progressHandle,
+                        targetSize: targetSize)
+    }
+
+    // English: Resolve only the video source forms supported by the rich-text adapter.
+    // Español: Resuelve únicamente las fuentes de vídeo admitidas por el adaptador de texto enriquecido.
+    // 中文：只解析富文本适配器明确支持的视频来源。
+    static func videoAsset(for source: Any) -> AVAsset? {
+        switch source {
+        case let asset as AVAsset:
+            return asset
+        case let typedSource as PTImageSource:
+            switch typedSource {
+            case .avAsset(let asset, _, _): return asset
+            case .videoURL(let url, _, _): return AVURLAsset(url: url)
+            default: return nil
+            }
+        case let url as URL:
+            return AVURLAsset(url: url)
+        case let string as String:
+            if let url = URL(string: string), url.scheme != nil {
+                return AVURLAsset(url: url)
+            }
+            let url = URL(fileURLWithPath: string)
+            return FileManager.default.fileExists(atPath: url.path) ? AVURLAsset(url: url) : nil
+        default:
+            return nil
+        }
+    }
+
+    // English: Build the Core-backed loader so PTRichText never creates a second download or thumbnail pipeline.
+    // Español: Construye el cargador respaldado por Core para que PTRichText no cree otro canal de descarga o miniaturas.
+    // 中文：创建由 Core 支持的加载器，避免 PTRichText 再造一套下载或缩略图管线。
+    static func makeRichTextMediaLoader() -> PTRichTextMediaLoader {
+        PTRichTextMediaLoader(imageLoader: { source, targetSize in
+            let result = await Self.loadImage(source: source, targetSize: targetSize)
+            guard let image = result.firstImage else {
+                throw PTRichTextMediaError.imageLoadFailed
+            }
+            return image
+        }, videoPosterLoader: { source, frameNumber, time, targetSize in
+            let image: UIImage?
+            if let time,
+               time.isNumeric,
+               let asset = Self.videoAsset(for: source) {
+                image = await PTVideoThumbnailService.image(for: asset,
+                                                            at: time,
+                                                            maximumSize: targetSize)
+            } else {
+                image = await Self.loadImage(source: source, targetSize: targetSize).firstImage
+            }
+            guard let image else {
+                throw PTRichTextMediaError.thumbnailGenerationFailed
+            }
+
+            let metadata = await Self.richTextVideoMetadata(for: source)
+            return PTRichTextVideoLoadResult(image: image, metadata: metadata)
+        }, videoMetadataLoader: { source in
+            await Self.richTextVideoMetadata(for: source)
+        })
+    }
+
+    // English: Read only the small video metadata needed by the rich-text poster renderer.
+    // Español: Lee solo los metadatos de vídeo necesarios para el renderizador de póster enriquecido.
+    // 中文：只读取富文本封面渲染所需的少量视频元数据。
+    private static func richTextVideoMetadata(for source: Any) async -> PTRichTextVideoMetadata {
+        guard let asset = videoAsset(for: source) else { return .init() }
+
+        let duration: TimeInterval?
+        if let loadedDuration = try? await asset.load(.duration),
+           loadedDuration.seconds.isFinite,
+           loadedDuration.seconds >= 0 {
+            duration = loadedDuration.seconds
+        } else {
+            duration = nil
+        }
+
+        let naturalSize: CGSize?
+        if let track = try? await asset.loadTracks(withMediaType: .video).first {
+            naturalSize = try? await track.load(.naturalSize)
+        } else {
+            naturalSize = nil
+        }
+
+        let isLocal = (asset as? AVURLAsset)?.url.isFileURL
+        return PTRichTextVideoMetadata(duration: duration,
+                                       naturalSize: naturalSize,
+                                       isLocal: isLocal)
+    }
+
     // English: Use PTLoadImageFunction for remote text images and keep UIKit work on MainActor.
     // Español: Usa PTLoadImageFunction para imágenes remotas de texto y mantiene UIKit en MainActor.
     // 中文：远程文本图片统一使用 PTLoadImageFunction，并保证 UIKit 工作在 MainActor。

@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.25.0`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.25.5`。
 
 ## Requirements
 
@@ -93,7 +93,32 @@ let title: PTRichText = "欢迎 \(userName, .foreground(.secondaryLabel))"
 titleLabel.pt_apply(richText: title)
 ```
 
-Action、链接、匹配、Markdown、本地化和附件描述都保持为值数据；点击行为通过
+图片和视频附件通过 `PTLoadImageFunction` 的统一 source 入口加载；Core 模块只负责封面、播放标记、
+时长和点击事件，不在富文本内持有播放器：
+
+```swift
+@MainActor
+func applyMedia() {
+    let text = PTRichText("封面：")
+        .appendingImage(source: imageSource,
+                        configuration: .init(estimatedAspectRatio: 1))
+        .appendingVideo(source: videoURL,
+                        configuration: .init(estimatedAspectRatio: 16.0 / 9.0))
+
+    let loader = PTLoadImageFunction.makeRichTextMediaLoader()
+    titleLabel.pt_apply(richText: text,
+                        mediaLoader: loader) { interaction in
+        if case .media(.video(let id)) = interaction {
+            // 交给宿主播放器或 PTMediaBrowser 处理，不在 PTRichText 内创建 AVPlayer。
+            print("播放视频附件：\(id)")
+        }
+    }
+}
+```
+
+`imageSource` 可以直接使用 URL、String、UIImage、Data、AVAsset 或其他
+`PTLoadImageFunction.loadImage(source:)` 支持的来源。下载中的内容先显示占位图，复用或替换富文本时旧请求会取消，
+避免异步结果串写。Action、链接、匹配、Markdown、本地化和附件描述仍保持为值数据；点击行为通过
 `PTTextActionRegistry` 或控件回调注册，不把闭包写进富文本模型。
 
 ### 搜索页面

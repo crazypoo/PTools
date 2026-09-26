@@ -93,6 +93,28 @@ public enum PTVideoThumbnailService {
         }
     }
 
+    /// English: Generates a thumbnail at an explicit time for rich-text poster rendering.
+    /// Español: Genera una miniatura en un instante explícito para renderizar pósteres de texto enriquecido.
+    /// 中文：按显式时间点生成缩略图，供富文本视频封面使用。
+    @MainActor
+    public static func image(for asset: AVAsset,
+                             at time: CMTime,
+                             maximumSize: CGSize? = defaultMaximumSize,
+                             appliesPreferredTrackTransform: Bool = true) async -> UIImage? {
+        guard time.isNumeric, time.seconds >= 0, !Task.isCancelled else { return nil }
+        do {
+            return try await generateImage(for: asset,
+                                           at: time,
+                                           maximumSize: maximumSize,
+                                           appliesPreferredTrackTransform: appliesPreferredTrackTransform,
+                                           requiresExactTime: false)
+        } catch is CancellationError {
+            return nil
+        } catch {
+            return nil
+        }
+    }
+
     /// Creates a video asset and generates the requested one-based frame.
     /// Crea un recurso de vídeo y genera el fotograma solicitado, empezando en uno.
     /// 创建视频资源并生成从 1 开始计数的指定帧。
