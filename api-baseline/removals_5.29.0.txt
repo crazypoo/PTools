@@ -1,0 +1,17 @@
+# English: These removals are previously reviewed compatibility closures carried into 5.29.0; Banner adds no new PooTools API removal.
+# Español: Estas eliminaciones son cierres de compatibilidad revisados heredados en 5.29.0; Banner no elimina ninguna API nueva de PooTools.
+# 中文：这些删除项是已审阅并延续到 5.29.0 的历史兼容层收口；Banner 没有新增 PooTools 公开 API 删除。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)
+public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink

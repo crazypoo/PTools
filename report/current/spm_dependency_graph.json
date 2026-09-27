@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:14:33Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:15:41Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -239,6 +239,17 @@
       ]
     },
     {
+      "name": "PToolsOverlay",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsOverlay"
+      ]
+    },
+    {
       "name": "PToolsPermissionCore",
       "type": {
         "library": [
@@ -309,10 +320,12 @@
         "PToolsHTTPFilePortal",
         "PToolsHTTPServer",
         "PToolsLogging",
+        "PToolsOverlay",
         "PToolsPermissionCore",
         "PToolsPermissionUI",
         "PToolsSymbols",
         "PooToolsBankCard",
+        "PooToolsBanner",
         "PooToolsBioID",
         "PooToolsCalendar",
         "PooToolsCheckBox",
@@ -392,6 +405,17 @@
       },
       "targets": [
         "PooToolsBankCard"
+      ]
+    },
+    {
+      "name": "PooToolsBanner",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsBanner"
       ]
     },
     {
@@ -1479,59 +1503,6 @@
     {
       "sourceControl": [
         {
-          "identity": "marqueelabel",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/cbpowell/MarqueeLabel.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "4.5.3",
-                "upperBound": "5.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "notificationbanner",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/Daltron/NotificationBanner.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "exact": [
-              "3.2.0"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "phonenumberkit",
           "location": {
             "remote": [
@@ -1691,7 +1662,7 @@
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 8,
+    "direct_third_party_count": 7,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -2419,6 +2390,29 @@
       ]
     },
     {
+      "name": "PToolsBannerTests",
+      "type": "test",
+      "path": "Tests/PToolsBannerTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsBanner",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsBanner",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
       "name": "PToolsCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsCore",
@@ -2787,6 +2781,84 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsOverlay",
+      "type": "regular",
+      "path": "PooToolsSource/Overlay",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsLogging",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsLogging",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_OVERLAY"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsPermissionCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsPermissionCore",
@@ -3101,6 +3173,84 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsBanner",
+      "type": "regular",
+      "path": "PooToolsSource/Banner",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsLogging",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsLogging",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_BANNER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
             }
           },
           "tool": "swift"
@@ -3619,6 +3769,17 @@
       ],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsSymbols",
           "kind": "internal",
@@ -6653,19 +6814,6 @@
           }
         },
         {
-          "name": "NotificationBannerSwift",
-          "kind": "third_party",
-          "package": "NotificationBanner",
-          "declaration": {
-            "product": [
-              "NotificationBannerSwift",
-              "NotificationBanner",
-              null,
-              null
-            ]
-          }
-        },
-        {
           "name": "SmartCodable",
           "kind": "third_party",
           "package": null,
@@ -6710,14 +6858,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_LAUNCHTIMEPROFILER"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_NOTIFICATIONBANNER"
             }
           },
           "tool": "swift"

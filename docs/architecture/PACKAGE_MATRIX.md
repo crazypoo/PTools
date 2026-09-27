@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: b1a7b3d5f2078229c465f45f32764a2be140cac0
-Generated at: 2026-09-27T00:14:17Z
-Version source: 5.28.0
+Source revision: f488ac68c8436f300013168073d215950107a6a2
+Generated at: 2026-09-27T03:06:23Z
+Version source: 5.29.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -15,6 +15,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | Module | Status | CocoaPods | SwiftPM | 6.0 action |
 | --- | --- | --- | --- | --- |
 | `BankCard` | A | `PooTools/BankCard` | `PooToolsBankCard` | Keep; review drift |
+| `Banner` | A | `PooTools/Banner` | `PooToolsBanner` | Keep; review drift |
 | `BilogyID` | A | `PooTools/BilogyID` / `PooTools/BioID` | `PooToolsBioID` | Keep; review drift |
 | `BluetoothPermission` | A | `PooTools/BluetoothPermission` | `PTBluetoothPermission` | Keep; review drift |
 | `Calendar` | A | `PooTools/Calendar` | `PooToolsCalendar` | Keep; review drift |
@@ -67,6 +68,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `NetworkSpeedTest` | A | `PooTools/NetworkSpeedTest` | `PooToolsNetworkSpeedTest` | Keep; review drift |
 | `NotificationPermission` | A | `PooTools/NotificationPermission` | `PTNotificationPermission` | Keep; review drift |
 | `OSSKitSpeech` | A | `PooTools/OSSKitSpeech` | `PooToolsOSSKitSpeech` | Keep; review drift |
+| `Overlay` | A | `PooTools/Overlay` | — | Keep; review drift |
 | `PDF` | A | `PooTools/PDF` | `PooToolsPDF` | Keep; review drift |
 | `PToolsCore` | A | `PooTools/PToolsCore` | `PToolsCore` | Keep; review drift |
 | `PToolsPermissionCore` | A | `PooTools/PToolsPermissionCore` | `PToolsPermissionCore` | Keep; review drift |

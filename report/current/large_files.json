@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:14:06Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:15:12Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -197,6 +197,31 @@
     {
       "path": "PooToolsSource/BankCard/PTBankCardSearch.swift",
       "lines": 92,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "lines": 275,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Banner/PTBannerHandle.swift",
+      "lines": 66,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "lines": 553,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "lines": 72,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "lines": 326,
       "classification": "ok"
     },
     {
@@ -1026,7 +1051,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "lines": 546,
+      "lines": 525,
       "classification": "ok"
     },
     {
@@ -3591,7 +3616,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1820,
+      "lines": 1826,
       "classification": "architecture_exception"
     },
     {
@@ -3857,6 +3882,26 @@
     {
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "lines": 86,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "lines": 84,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "lines": 197,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayLifecycle.swift",
+      "lines": 45,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "lines": 187,
       "classification": "ok"
     },
     {

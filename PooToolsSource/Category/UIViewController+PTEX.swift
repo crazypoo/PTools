@@ -11,9 +11,6 @@ import SnapKit
 import AVKit
 import Photos
 import Dispatch
-#if POOTOOLS_NOTIFICATIONBANNER
-import NotificationBannerSwift
-#endif
 
 @objc public enum PTSheetPresentType:Int {
     case large
@@ -309,27 +306,45 @@ public extension UIViewController {
                                 bannerBackgroundColor:UIColor = .white,
                                 notifiTap:PTActionTask? = nil,
                                 notifiDismiss:PTActionTask? = nil) {
-        let titleStr = title
-        let subTitleStr = subTitle
-#if POOTOOLS_NOTIFICATIONBANNER
-        let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
-        banner.duration = duration
-        banner.backgroundColor = bannerBackgroundColor
-        banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
-        banner.subtitleLabel?.font = subTitleFont
-        banner.subtitleLabel?.textColor = subTitleColor
-        banner.titleLabel?.textAlignment = UIView.sizeFor(string: titleStr, font: titleFont, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
-        banner.titleLabel?.font = titleFont
-        banner.titleLabel?.textColor = titleColor
-        banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
-        banner.onTap = {
-            notifiTap?()
-        }
-        PTGCDManager.shared.delayOnMain(time: duration) {
-            notifiDismiss?()
+#if POOTOOLS_BANNER
+        // English: Route the legacy notification API through the native Banner implementation when it is linked.
+        // Español: Dirige la API de notificación heredada a la implementación nativa de Banner cuando está enlazada.
+        // 中文：当 Banner 模块被链接时，将旧通知 API 转发到原生 Banner 实现。
+        let content = PTBannerContent(
+            title: title.isEmpty ? nil : .attributed(NSAttributedString(string: title, attributes: [
+                .font: titleFont,
+                .foregroundColor: titleColor
+            ])),
+            subtitle: subTitle.isEmpty ? nil : .attributed(NSAttributedString(string: subTitle, attributes: [
+                .font: subTitleFont,
+                .foregroundColor: subTitleColor
+            ]))
+        )
+        var configuration = PooToolsBannerConfiguration()
+        configuration.duration = duration > 0 ? .seconds(TimeInterval(duration)) : .persistent
+        configuration.backgroundColor = bannerBackgroundColor
+        configuration.allowsTapToDismiss = true
+
+        let tap = notifiTap
+        let dismiss = notifiDismiss
+        let banner = PTBanner(content: content,
+                               style: .neutral,
+                               configuration: configuration,
+                               onTap: {
+                                   tap?()
+                               })
+        let handle = PTBannerCenter.shared.show(banner,
+                                                 context: .automatic,
+                                                 enqueuePosition: .front)
+        Task { @MainActor in
+            _ = await handle.result()
+            dismiss?()
         }
 #else
+        let titleStr = title
+        let subTitleStr = subTitle
         UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "PT Button comfirm".localized()) {
+            notifiTap?()
             notifiDismiss?()
         }
 #endif

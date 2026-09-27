@@ -20,6 +20,9 @@ import CoreLocation
 #if canImport(PToolsLogging)
 import PToolsLogging
 #endif
+#if canImport(PToolsOverlay)
+import PToolsOverlay
+#endif
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
@@ -152,7 +155,10 @@ final class PTConsoleWindow: UIWindow {
     private static var windowsBySceneID: [String: PTConsoleWindow] = [:]
     private static var sceneDisconnectObserver: NSObjectProtocol?
 
-    static let debugWindowLevel:UIWindow.Level = .alert + 200
+    // English: Reuse the shared overlay z-order so debug windows stay above feature overlays.
+    // Español: Reutiliza el orden Z compartido para que las ventanas de depuración queden sobre los overlays.
+    // 中文：复用统一浮层层级，确保调试窗口始终位于功能浮层之上。
+    static let debugWindowLevel: UIWindow.Level = PTOverlayZOrder.windowLevel(for: .debug)
     
     private weak var debugView: UIView?
 

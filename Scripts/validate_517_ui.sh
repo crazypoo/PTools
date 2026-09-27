@@ -17,7 +17,7 @@ checklist="docs/ui/UI_COMPONENTS_5_17.md"
 modules=(
   CustomerLabel ProgressBar PageControl Loading HUD Share SearchBar Stepper BankCard
   CheckBox CodeView Country Guide Input Keyboard RateView ScrollBanner Segmented HandSign
-  Slider Layout PagingControl Picker TipsView Circle MessageKit NotificationBanner PopoverKit
+  Slider Layout PagingControl Picker TipsView Circle MessageKit PooToolsBanner PopoverKit
   Tabbar Instructions Appz Flag WhatsNewsKit iOS17Tips ChinesePinyin DirtyWord Speech Router
   SpeedPanel ZipArchive GCDWebServer WebKit
 )

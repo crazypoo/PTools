@@ -11,6 +11,8 @@
 | 能力 | CocoaPods | Swift Package Manager | 典型用途 |
 | --- | --- | --- | --- |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | Base、Category、Theme、列表和基础权限 |
+| Overlay 基础设施 | `PooTools/Overlay` | `PToolsOverlay` | 多 Scene 浮层、Host、Window、命中测试和层级 |
+| Banner 通知条 | `PooTools/Banner` | `PooToolsBanner` | 原生 UIKit 顶部/底部通知条、队列和无障碍 |
 | MediaCore | `PooTools/MediaCore` | `PooToolsMediaCore` | 媒体值类型、来源、元数据和并发契约 |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Codable、上传、下载、缓存和取消 |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Keychain、CryptoKit 摘要、HMAC、AES-GCM、签名和验签 |
@@ -72,7 +74,7 @@ MetricKit 和 GPS 会释放各自的观察者、会话、查询和代理；Notif
 
 常用 UI products 包括 `PooToolsCustomerLabel`、`PooToolsProgressBar`、`PooToolsLoading`、
 `PooToolsHud`、`PooToolsSearchBar`、`PooToolsSegmented`、`PooToolsSlider`、`PooToolsStepper`、
-`PooToolsPagingControl`、`PooToolsRateView`、`PooToolsTipsView`、`PooToolsNotificationBanner`、
+`PooToolsPagingControl`、`PooToolsRateView`、`PooToolsTipsView`、`PooToolsBanner`、
 `PooToolsPopoverKit` 和 `PooToolsInput`。
 
 `PooToolsSearchBar` 只提供输入框和视觉/事件能力；`PooToolsSearch` 在其上复用

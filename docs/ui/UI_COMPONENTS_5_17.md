@@ -41,7 +41,7 @@
 | TipsView | PTools UI | Core | timer / animation / window | static + visual | PooTools Example | podspec | 收口到 overlay contract |
 | Circle | PTools UI | Core | draw / bounds | static + rotation | PooTools Example | podspec | 保留兼容入口 |
 | MessageKit | PTools UI | Core | message reuse | static + keyboard | PooTools Example | podspec | 保留兼容入口 |
-| NotificationBanner | PTools UI | Core / NotificationBannerSwift | present / dismiss | dependency + scene | PooTools Example | podspec | 外部适配器保留 |
+| PooToolsBanner | PTools UI | PToolsOverlay / PToolsSymbols | present / dismiss / queue | scene + accessibility | PooTools Example | podspec + SwiftPM | 5.29.0 原生实现 |
 | PopoverKit | PTools UI | Core / Popovers | present / dismiss | dependency + iPad | PooTools Example | podspec | 外部适配器保留 |
 | Tabbar | PTools UI | Core / Base | selection / rotation | static + multi-scene | PooTools Example | architecture docs | 保留 Base 兼容入口 |
 | Instructions | PTools UI | Core / Instructions | coachmark / dismiss | dependency + rotation | PooTools Example | podspec | 外部适配器保留 |

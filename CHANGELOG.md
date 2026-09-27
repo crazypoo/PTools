@@ -1,8 +1,16 @@
 # Changelog
 
-## Unreleased — 5.28.x
+## Unreleased — 5.29.x
 
-当前开发基线为 `5.28.0`；版本唯一来源为根目录 `VERSION`，完整 HTTP Server 验收完成后再创建正式 tag。
+当前开发基线为 `5.29.0`；版本唯一来源为根目录 `VERSION`，Banner 与 OverlayCore 验收完成后再创建正式 tag。
+
+## 5.29.0 — 2026-09-27
+
+- 新增 `PToolsOverlay`，统一 Scene 解析、附着式 Host、Overlay Window、穿透命中测试、Scene Registry、层级、转场和生命周期基础能力。
+- 新增 `PooToolsBanner`，原生吸收通知条的标准、增长、浮动、紧凑、队列、优先级、堆叠、去重、溢出、暂停恢复、原地更新、操作按钮、滑动关闭和无障碍能力。
+- `UIViewController.drop` 保留为兼容入口；新代码使用 `showBanner` 与 `PTBannerCenter`，Core 不再依赖 Banner。
+- 移除 SwiftPM、CocoaPods 和锁文件中的 NotificationBannerSwift；确认 PTools 没有直接使用 MarqueeLabel 后同步移除该依赖。
+- 新增 NotificationBanner 使用审计、迁移指南和依赖移除门禁。
 
 ## 5.28.0 — 2026-09-27
 

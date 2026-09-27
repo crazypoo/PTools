@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:13:50Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:14:55Z",
   "counts": {
-    "reduce_motion": 41,
-    "accessibility": 199,
-    "reduce_transparency": 4,
-    "dynamic_type": 11
+    "reduce_motion": 44,
+    "accessibility": 214,
+    "reduce_transparency": 5,
+    "dynamic_type": 12
   },
   "locations": [
     {
@@ -154,6 +154,96 @@
       "rule": "reduce_motion",
       "path": "PooToolsSource/Badge/UIView+BadgeEX.swift",
       "line": 392
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 138
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 384
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 388
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 391
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 1
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 66
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 60
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 76
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 83
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 148
+    },
+    {
+      "rule": "dynamic_type",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 149
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 231
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 232
+    },
+    {
+      "rule": "reduce_transparency",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 255
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 261
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 271
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 274
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 316
     },
     {
       "rule": "accessibility",
@@ -829,6 +919,16 @@
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
       "line": 162
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 26
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 58
     },
     {
       "rule": "accessibility",

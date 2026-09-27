@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T00:14:16Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T03:06:18Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -24,12 +24,14 @@
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
     "PToolsLogging",
+    "PToolsOverlay",
     "PToolsPermissionCore",
     "PToolsPermissionUI",
     "PToolsSymbols",
     "PToolsUIFoundation",
     "PooToolsAll",
     "PooToolsBankCard",
+    "PooToolsBanner",
     "PooToolsBioID",
     "PooToolsCalendar",
     "PooToolsCheckBox",
@@ -110,6 +112,7 @@
   },
   "matched": [
     "BankCard",
+    "Banner",
     "BilogyID",
     "BluetoothPermission",
     "Calendar",
@@ -162,6 +165,7 @@
     "NetworkSpeedTest",
     "NotificationPermission",
     "OSSKitSpeech",
+    "Overlay",
     "PDF",
     "PToolsCore",
     "PToolsPermissionCore",
@@ -293,7 +297,6 @@
         "IQKeyboardManager",
         "KakaJSON",
         "Kingfisher",
-        "NotificationBanner",
         "SmartCodable",
         "SnapKit",
         "lottie-ios"
@@ -445,6 +448,26 @@
   ],
   "settings_drift": [
     {
+      "module": "Banner",
+      "spm": {
+        "defines": [
+          "POOTOOLS_BANNER",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_BANNER",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "BluetoothPermission",
       "spm": {
         "defines": [
@@ -523,7 +546,6 @@
           "POOTOOLS_APPZ",
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_LAUNCHTIMEPROFILER",
-          "POOTOOLS_NOTIFICATIONBANNER",
           "POOTOOLS_PICKER",
           "POOTOOLS_SPLIT_CORE",
           "POOTOOLS_SPLIT_PERMISSION_CORE",
@@ -728,6 +750,26 @@
       }
     },
     {
+      "module": "Overlay",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_OVERLAY"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_OVERLAY"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "PToolsCore",
       "spm": {
         "defines": [],
@@ -871,5 +913,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "5f4ce78912d52069e9ad774e999c4bb6350993ad5403d0ba4c5e066b6631c0ce"
+  "fingerprint": "9cece542b9f7ea45a9cf361fe9630fac5c6f1d92481a220e349166e45ec5ff3e"
 }

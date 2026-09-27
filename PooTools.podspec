@@ -59,6 +59,34 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'UIKit','Foundation'
     end
 
+    # English: Publish the reusable scene-aware overlay infrastructure below feature modules.
+    # Español: Publica la infraestructura de overlays consciente de escenas por debajo de los módulos de funciones.
+    # 中文：将多 Scene 浮层基础设施作为功能模块之下的独立 subspec 发布。
+    s.subspec 'Overlay' do |subspec|
+        subspec.dependency 'PooTools/PToolsCore'
+        subspec.dependency 'PooTools/PToolsUIFoundation'
+        subspec.dependency 'PooTools/Logging'
+        subspec.source_files = 'PooToolsSource/Overlay/**/*.{h,m,swift}'
+        subspec.frameworks = 'UIKit', 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_OVERLAY POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Publish native UIKit banners without bringing a legacy notification dependency into Core.
+    # Español: Publica banners UIKit nativos sin introducir una dependencia de notificaciones heredada en Core.
+    # 中文：发布原生 UIKit Banner，避免旧通知依赖进入 Core。
+    s.subspec 'Banner' do |subspec|
+        subspec.dependency 'PooTools/Overlay'
+        subspec.dependency 'PooTools/Symbols'
+        subspec.dependency 'PooTools/Logging'
+        subspec.source_files = 'PooToolsSource/Banner/**/*.{h,m,swift}'
+        subspec.frameworks = 'UIKit', 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_BANNER POOTOOLS_COCOAPODS"
+        }
+    end
+
     # English: Publish typed SF Symbols and the normalized catalog as a small reusable layer.
     # Español: Publica los SF Symbols tipados y el catálogo normalizado como una capa reutilizable pequeña.
     # 中文：将类型化 SF Symbols 和标准化目录作为轻量可复用层公开。
@@ -133,11 +161,10 @@ Pod::Spec.new do |s|
     end
 
     s.subspec 'NotificationBanner' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'NotificationBannerSwift'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
-        }
+        # English: Compatibility alias only; the legacy third-party dependency is intentionally gone.
+        # Español: Solo alias de compatibilidad; la dependencia de terceros heredada se eliminó intencionadamente.
+        # 中文：仅保留兼容别名，旧第三方依赖已明确移除。
+        subspec.dependency 'PooTools/Banner'
     end
         
     s.subspec 'DataEncrypt' do |subspec|
@@ -533,6 +560,7 @@ Pod::Spec.new do |s|
         
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Overlay'
         subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/Share'
@@ -1080,7 +1108,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/DEBUG'
         subspec.dependency 'PooTools/DEBUG_TrackingEyes'
         subspec.dependency 'PooTools/Vision'
-        subspec.dependency 'PooTools/NotificationBanner'
+        subspec.dependency 'PooTools/Banner'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/Router'
         subspec.dependency 'PooTools/Ping'

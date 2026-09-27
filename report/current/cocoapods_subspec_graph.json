@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:14:33Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:15:42Z",
   "name": "PooTools",
-  "version": "5.28.0",
+  "version": "5.29.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 111,
+  "subspec_count": 113,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -50,6 +50,31 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BANKCARD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Banner",
+      "short_name": "Banner",
+      "local_dependencies": [
+        "PooTools/Logging",
+        "PooTools/Overlay",
+        "PooTools/Symbols"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Banner/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Banner"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BANNER POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -509,6 +534,7 @@
       "local_dependencies": [
         "PooTools/Core",
         "PooTools/NetWork",
+        "PooTools/Overlay",
         "PooTools/PDF",
         "PooTools/SearchBar",
         "PooTools/Share",
@@ -961,6 +987,7 @@
       "local_dependencies": [
         "PooTools/Appz",
         "PooTools/BankCard",
+        "PooTools/Banner",
         "PooTools/BilogyID",
         "PooTools/Calendar",
         "PooTools/CheckBox",
@@ -996,7 +1023,6 @@
         "PooTools/MessageKit",
         "PooTools/Motion",
         "PooTools/NetWork",
-        "PooTools/NotificationBanner",
         "PooTools/OSSKitSpeech",
         "PooTools/PDF",
         "PooTools/PageControl",
@@ -1486,19 +1512,15 @@
       "name": "PooTools/NotificationBanner",
       "short_name": "NotificationBanner",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/Banner"
       ],
-      "third_party_dependencies": [
-        "NotificationBannerSwift"
-      ],
+      "third_party_dependencies": [],
       "source_files": [],
       "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
-      }
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/NotificationPermission",
@@ -1541,6 +1563,31 @@
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Overlay",
+      "short_name": "Overlay",
+      "local_dependencies": [
+        "PooTools/Logging",
+        "PooTools/PToolsCore",
+        "PooTools/PToolsUIFoundation"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Overlay/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Overlay"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OVERLAY POOTOOLS_COCOAPODS"
       }
     },
     {

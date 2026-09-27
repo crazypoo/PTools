@@ -28,6 +28,11 @@ let package = Package(
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
         .library(name: "PToolsDate", targets: ["PToolsDate"]),
         .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
+        // English: Publish the reusable scene-aware overlay infrastructure independently from banner content.
+        // Español: Publica la infraestructura de overlays consciente de escenas separada del contenido del banner.
+        // 中文：独立公开与 Banner 内容解耦的多 Scene 浮层基础设施。
+        .library(name: "PToolsOverlay", targets: ["PToolsOverlay"]),
+        .library(name: "PooToolsBanner", targets: ["PooToolsBanner"]),
         // English: Publish the typed SF Symbols runtime independently from the UIKit umbrella.
         // Español: Publica el runtime tipado de SF Symbols de forma independiente del umbrella UIKit.
         // 中文：独立公开类型化 SF Symbols 运行时，避免必须引入完整 UIKit umbrella。
@@ -162,7 +167,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsAll", targets: [
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
-            "PToolsPermissionCore", "PToolsPermissionUI",
+            "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner",
             "PooToolsMediaCore",
             "PToolsHTTPServer", "PToolsHTTPFilePortal",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
@@ -201,12 +206,6 @@ let package = Package(
         // Español: Mantén las dependencias de funciones explícitas y reproducibles.
         // 中文：保持功能依赖显式且可复现。
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.0"),
-        .package(url: "https://github.com/Daltron/NotificationBanner.git", exact: "3.2.0"),
-        
-        // English: Declare MarqueeLabel because NotificationBanner does not expose this dependency reliably.
-        // Español: Declara MarqueeLabel porque NotificationBanner no expone esta dependencia de forma fiable.
-        // 中文：显式声明 MarqueeLabel，避免 NotificationBanner 的隐式依赖解析不稳定。
-        .package(url: "https://github.com/cbpowell/MarqueeLabel.git", from: "4.5.3"),
         // English: Swift-JWT owns its Kitura cryptography dependencies transitively; do not duplicate them in PTools.
         // Español: Swift-JWT mantiene sus dependencias criptográficas de Kitura de forma transitiva; PTools no las duplica.
         // 中文：Swift-JWT 通过传递依赖维护 Kitura 加密组件，PTools 不再重复声明它们。
@@ -265,6 +264,34 @@ let package = Package(
             dependencies: ["PToolsCore", "SnapKit"],
             path: "PooToolsSource/PToolsUIFoundation",
             swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep scene, host, window, hit-testing, and transition primitives below feature UI.
+        // Español: Mantiene escenas, hosts, ventanas, hit-testing y transiciones por debajo de la UI de funciones.
+        // 中文：将 Scene、Host、Window、命中测试和转场原语放在功能 UI 之下。
+        .target(
+            name: "PToolsOverlay",
+            dependencies: ["PToolsCore", "PToolsUIFoundation", "PToolsLogging"],
+            path: "PooToolsSource/Overlay",
+            swiftSettings: [
+                .define("POOTOOLS_OVERLAY"),
+                .define("POOTOOLS_COCOAPODS"),
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep banner content and queue behavior opt-in on top of OverlayCore.
+        // Español: Mantiene el contenido y la cola de banners como una capa opcional sobre OverlayCore.
+        // 中文：让 Banner 内容和队列能力作为 OverlayCore 之上的可选层。
+        .target(
+            name: "PooToolsBanner",
+            dependencies: ["PToolsOverlay", "PToolsSymbols", "PToolsLogging"],
+            path: "PooToolsSource/Banner",
+            swiftSettings: [
+                .define("POOTOOLS_BANNER"),
+                .define("POOTOOLS_COCOAPODS"),
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
@@ -360,7 +387,6 @@ let package = Package(
                 "SmartCodable",
                 "KakaJSON",
                 .product(name: "Lottie", package: "lottie-ios"),
-                .product(name: "NotificationBannerSwift", package: "NotificationBanner"),
                 
             ],
             path: "PooToolsSource",
@@ -378,7 +404,6 @@ let package = Package(
             swiftSettings: [
                 .define("POOTOOLS_COCOAPODS"),
                 .define("POOTOOLS_TABBAR"),
-                .define("POOTOOLS_NOTIFICATIONBANNER"),
                 .define("POOTOOLS_PICKER"),
                 .define("POOTOOLS_APPZ"),
                 .define("POOTOOLS_LAUNCHTIMEPROFILER"),
@@ -495,7 +520,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols"],
+            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay"],
             path: "PooToolsSource",
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
@@ -580,6 +605,14 @@ let package = Package(
             name: "PToolsSymbolsTests",
             dependencies: ["PToolsSymbols"],
             path: "Tests/PToolsSymbolsTests"
+        ),
+        // English: Keep banner queue and overflow behavior covered by small deterministic tests.
+        // Español: Mantiene cubiertos con pruebas deterministas la cola y el desbordamiento de banners.
+        // 中文：用小型确定性测试覆盖 Banner 队列和溢出行为。
+        .testTarget(
+            name: "PToolsBannerTests",
+            dependencies: ["PooToolsBanner"],
+            path: "Tests/PToolsBannerTests"
         ),
         // English: Keep native WebSocket contract tests independent from live network services.
         // Español: Mantén las pruebas del contrato WebSocket nativo independientes de servicios de red reales.

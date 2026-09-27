@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:13:49Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:14:54Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -2502,6 +2502,806 @@
       "access": "public",
       "kind": "class",
       "declaration": "public class PTBankCardSearch: NSObject {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerText",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerText {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PTBannerStyleID: Hashable, Sendable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBannerStyleID: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerStyle: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerStyle: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerPosition: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerPosition: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerLayoutMode: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerLayoutMode: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerPriority: Int, Sendable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 48,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerPriority: Int, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerDuration: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 55,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerDuration: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerHaptic: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerHaptic: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerKeyboardAvoidance: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 72,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerKeyboardAvoidance: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerAccessibilityAnnouncement: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 77,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerAccessibilityAnnouncement: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerTextOverflowMode: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerTextOverflowMode: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerAccessory",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerAccessory {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PTBannerContent",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 99,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBannerContent {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var title: PTBannerText?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var title: PTBannerText?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var subtitle: PTBannerText?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 101,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var subtitle: PTBannerText?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var leading: PTBannerAccessory?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 102,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leading: PTBannerAccessory?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var trailing: PTBannerAccessory?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trailing: PTBannerAccessory?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init(title: PTBannerText? = nil,",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(title: PTBannerText? = nil,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PTBannerAction",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 117,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBannerAction {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|let|public let id: String",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 118,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: String"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|let|public let title: String",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 119,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let title: String"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|let|public let handler: (@MainActor @Sendable () -> Void)?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 120,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let handler: (@MainActor @Sendable () -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init(id: String = UUID().uuidString,",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 122,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: String = UUID().uuidString,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PooToolsBannerConfiguration",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 132,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PooToolsBannerConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var position: PTBannerPosition = .top",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 133,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var position: PTBannerPosition = .top"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var layoutMode: PTBannerLayoutMode = .standard",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var layoutMode: PTBannerLayoutMode = .standard"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var duration: PTBannerDuration = .automatic",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 135,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var duration: PTBannerDuration = .automatic"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var presentationMode: PTOverlayPresentationMode = .attached",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 136,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var presentationMode: PTOverlayPresentationMode = .attached"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var haptic: PTBannerHaptic = .automatic",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 137,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var haptic: PTBannerHaptic = .automatic"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var accessibilityAnnouncement: PTBannerAccessibilityAnnouncement = .automatic",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 138,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accessibilityAnnouncement: PTBannerAccessibilityAnnouncement = .automatic"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var keyboardAvoidance: PTBannerKeyboardAvoidance = .automatic",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var keyboardAvoidance: PTBannerKeyboardAvoidance = .automatic"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var textOverflow: PTBannerTextOverflowMode = .grow",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 140,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textOverflow: PTBannerTextOverflowMode = .grow"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var maximumVisibleHeight: CGFloat = 0",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 141,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumVisibleHeight: CGFloat = 0"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var maximumWidth: CGFloat = 0",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 142,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumWidth: CGFloat = 0"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var cornerRadius: CGFloat = 14",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 143,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat = 14"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 144,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var backgroundColor: UIColor?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var backgroundColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var tintColor: UIColor?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 146,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tintColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var borderColor: UIColor?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 147,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var shadowColor: UIColor = .black",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shadowColor: UIColor = .black"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var showsShadow = true",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var showsShadow = true"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var allowsTapToDismiss = true",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 150,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsTapToDismiss = true"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init()",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PTBanner: Identifiable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 156,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBanner: Identifiable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|let|public let id: UUID",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 157,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: UUID"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var content: PTBannerContent",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 158,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var content: PTBannerContent"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var style: PTBannerStyle",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var style: PTBannerStyle"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var configuration: PooToolsBannerConfiguration",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 160,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var configuration: PooToolsBannerConfiguration"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var actions: [PTBannerAction]",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 161,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var actions: [PTBannerAction]"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var priority: PTBannerPriority",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 162,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var priority: PTBannerPriority"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var onTap: (@MainActor @Sendable () -> Void)?",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 163,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var onTap: (@MainActor @Sendable () -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init(id: UUID = UUID(),",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 165,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: UUID = UUID(),"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerResult: Sendable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 228,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerResult: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerEnqueuePosition: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 237,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerEnqueuePosition: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerInterruptionPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 242,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerInterruptionPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerDeduplicationPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 248,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerDeduplicationPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|enum|public enum PTBannerOverflowPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 254,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBannerOverflowPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|struct|public struct PTBannerQueueConfiguration: Sendable",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 260,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBannerQueueConfiguration: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var maxVisibleCount: Int",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 261,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxVisibleCount: Int"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var maxQueueCount: Int",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 262,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxQueueCount: Int"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var deduplication: PTBannerDeduplicationPolicy",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 263,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var deduplication: PTBannerDeduplicationPolicy"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|var|public var overflow: PTBannerOverflowPolicy",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 264,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var overflow: PTBannerOverflowPolicy"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBanner.swift|public|init|public init(maxVisibleCount: Int = 1,",
+      "path": "PooToolsSource/Banner/PTBanner.swift",
+      "line": 266,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(maxVisibleCount: Int = 1,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerHandle.swift|public|let|public let id: UUID",
+      "path": "PooToolsSource/Banner/PTBannerHandle.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: UUID"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerHandle.swift|public|func|public func dismiss()",
+      "path": "PooToolsSource/Banner/PTBannerHandle.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss() {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerHandle.swift|public|func|public func update(_ banner: PTBanner)",
+      "path": "PooToolsSource/Banner/PTBannerHandle.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(_ banner: PTBanner) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerHandle.swift|public|func|public func result() async -> PTBannerResult",
+      "path": "PooToolsSource/Banner/PTBannerHandle.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func result() async -> PTBannerResult {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|typealias|public typealias Completion = @MainActor @Sendable (PTBannerResult) -> Void",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias Completion = @MainActor @Sendable (PTBannerResult) -> Void"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|let|public let scene: UIWindowScene",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let scene: UIWindowScene"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|var|public var activeCount: Int",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 141,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var activeCount: Int { records.count }"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|init|public init?(context: PTOverlayPresentationContext,",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 143,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init?(context: PTOverlayPresentationContext,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func present(_ banner: PTBanner,",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(_ banner: PTBanner,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func update(_ banner: PTBanner, id: UUID)",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 198,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(_ banner: PTBanner, id: UUID) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func dismiss(id: UUID, result: PTBannerResult)",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 209,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss(id: UUID, result: PTBannerResult) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func dismissAll(result: PTBannerResult)",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 220,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismissAll(result: PTBannerResult) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func suspendLatest()",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 224,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func suspendLatest() {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func suspendAll()",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 229,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func suspendAll() {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func resumeSuspended()",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 233,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resumeSuspended() {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func close()",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 241,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func close() {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|var|public var queueConfiguration = PTBannerQueueConfiguration()",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 426,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var queueConfiguration = PTBannerQueueConfiguration()"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func show(_ banner: PTBanner,",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 433,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func show(_ banner: PTBanner,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func present(_ banner: PTBanner,",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 473,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(_ banner: PTBanner,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerPresenter.swift|public|func|public func dismissAll(context: PTOverlayPresentationContext = .automatic)",
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 484,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismissAll(context: PTOverlayPresentationContext = .automatic) {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|struct|public struct PTBannerAppearance",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTBannerAppearance {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let backgroundColor: UIColor",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let backgroundColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let tintColor: UIColor",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tintColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let titleColor: UIColor",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let titleColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let subtitleColor: UIColor",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let subtitleColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let borderColor: UIColor",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let borderColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|let|public let symbol: PTSymbol?",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let symbol: PTSymbol?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|init|public init(backgroundColor: UIColor,",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(backgroundColor: UIColor,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|protocol|public protocol PTBannerThemeProviding: AnyObject",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 35,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTBannerThemeProviding: AnyObject {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|init|public init()",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Banner/PTBannerTheme.swift|public|func|public func appearance(for style: PTBannerStyle, traits: UITraitCollection) -> PTBannerAppearance",
+      "path": "PooToolsSource/Banner/PTBannerTheme.swift",
+      "line": 43,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func appearance(for style: PTBannerStyle, traits: UITraitCollection) -> PTBannerAppearance {"
+    },
+    {
+      "key": "PooToolsSource/Banner/PooToolsBannerView.swift|public|var|public var onTapRequest: (@MainActor @Sendable () -> Void)?",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var onTapRequest: (@MainActor @Sendable () -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PooToolsBannerView.swift|public|var|public var onSwipeRequest: (@MainActor @Sendable () -> Void)?",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var onSwipeRequest: (@MainActor @Sendable () -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Banner/PooToolsBannerView.swift|public|init|public init(banner: PTBanner,",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(banner: PTBanner,"
+    },
+    {
+      "key": "PooToolsSource/Banner/PooToolsBannerView.swift|public|func|public func apply(_ banner: PTBanner)",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func apply(_ banner: PTBanner) {"
     },
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|class|public class PTAppBaseConfig: NSObject",
@@ -12930,7 +13730,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|enum|@objc public enum PTSheetPresentType:Int",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 18,
+      "line": 15,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum PTSheetPresentType:Int {"
@@ -12938,7 +13738,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 496,
+      "line": 475,
       "access": "public",
       "kind": "func",
       "declaration": "public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {"
@@ -12946,7 +13746,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 502,
+      "line": 481,
       "access": "public",
       "kind": "func",
       "declaration": "public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {"
@@ -12954,7 +13754,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|func|public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 509,
+      "line": 488,
       "access": "public",
       "kind": "func",
       "declaration": "public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {"
@@ -12962,7 +13762,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|class|public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 518,
+      "line": 497,
       "access": "public",
       "kind": "class",
       "declaration": "public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil) {"
@@ -12970,7 +13770,7 @@
     {
       "key": "PooToolsSource/Category/UIViewController+PTEX.swift|public|class|public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil)",
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "line": 535,
+      "line": 514,
       "access": "public",
       "kind": "class",
       "declaration": "public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) {"
@@ -27738,7 +28538,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMin:CGFloat = 4",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 30,
+      "line": 33,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMin:CGFloat = 4"
@@ -27746,7 +28546,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMax:CGFloat = 20",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 31,
+      "line": 34,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMax:CGFloat = 20"
@@ -27754,7 +28554,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let SystemLogViewTag = 999999",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 32,
+      "line": 35,
       "access": "public",
       "kind": "let",
       "declaration": "public let SystemLogViewTag = 999999"
@@ -27762,7 +28562,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_width:CGFloat = 240",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 33,
+      "line": 36,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_width:CGFloat = 240"
@@ -27770,7 +28570,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_height:CGFloat = 148",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 34,
+      "line": 37,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_height:CGFloat = 148"
@@ -27778,7 +28578,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let borderLine:CGFloat = 5",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 35,
+      "line": 38,
       "access": "public",
       "kind": "let",
       "declaration": "public let borderLine:CGFloat = 5"
@@ -27786,7 +28586,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let diameter:CGFloat = 28",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 36,
+      "line": 39,
       "access": "public",
       "kind": "let",
       "declaration": "public let diameter:CGFloat = 28"
@@ -27794,7 +28594,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|public enum PTLogLevel: CaseIterable, Hashable",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 272,
+      "line": 278,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLogLevel: CaseIterable, Hashable {"
@@ -27802,7 +28602,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|struct|public struct LogItem",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 291,
+      "line": 297,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct LogItem {"
@@ -27810,7 +28610,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|@objc public enum LocalConsoleActionType : Int",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 381,
+      "line": 387,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum LocalConsoleActionType : Int {"
@@ -27818,7 +28618,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|typealias|public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 391,
+      "line": 397,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void"
@@ -27826,7 +28626,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class LocalConsole: NSObject",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 395,
+      "line": 401,
       "access": "public",
       "kind": "class",
       "declaration": "public class LocalConsole: NSObject {"
@@ -27834,7 +28634,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func registerDebugPlugin(_ plugin: PTDebugPlugin)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 445,
+      "line": 451,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerDebugPlugin(_ plugin: PTDebugPlugin) {"
@@ -27842,7 +28642,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clearDebugPlugins()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 450,
+      "line": 456,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearDebugPlugins() {"
@@ -27850,7 +28650,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logCategoryFilter: Set<String> = []",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 478,
+      "line": 484,
       "access": "public",
       "kind": "var",
       "declaration": "public var logCategoryFilter: Set<String> = [] {"
@@ -27858,7 +28658,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 481,
+      "line": 487,
       "access": "public",
       "kind": "var",
       "declaration": "public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) {"
@@ -27866,7 +28666,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logKeywordFilter: String = \"\"",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 484,
+      "line": 490,
       "access": "public",
       "kind": "var",
       "declaration": "public var logKeywordFilter: String = \"\" {"
@@ -27874,7 +28674,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var closeAllOutsideFunction:PTActionTask?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 488,
+      "line": 494,
       "access": "public",
       "kind": "var",
       "declaration": "public var closeAllOutsideFunction:PTActionTask?"
@@ -27882,7 +28682,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 489,
+      "line": 495,
       "access": "public",
       "kind": "var",
       "declaration": "public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? {"
@@ -27890,7 +28690,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var networkStatus = \"\"",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 494,
+      "line": 500,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkStatus = \"\""
@@ -27898,7 +28698,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var menu: UIMenuElement? = nil",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 496,
+      "line": 502,
       "access": "public",
       "kind": "var",
       "declaration": "public var menu: UIMenuElement? = nil {"
@@ -27906,7 +28706,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|@MainActor public var isVisiable:Bool = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 504,
+      "line": 510,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var isVisiable:Bool = false {"
@@ -27914,7 +28714,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 557,
+      "line": 563,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {"
@@ -27922,7 +28722,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontColor(color:UIColor)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 562,
+      "line": 568,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontColor(color:UIColor) {"
@@ -27930,7 +28730,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var terminal:PTTerminal?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 566,
+      "line": 572,
       "access": "public",
       "kind": "var",
       "declaration": "public var terminal:PTTerminal?"
@@ -27938,7 +28738,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var maskView:PTDevMaskView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 567,
+      "line": 573,
       "access": "public",
       "kind": "var",
       "declaration": "public var maskView:PTDevMaskView?"
@@ -27946,7 +28746,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var showAllUserDefaultsKeys = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 575,
+      "line": 581,
       "access": "public",
       "kind": "var",
       "declaration": "public var showAllUserDefaultsKeys = false {"
@@ -27954,7 +28754,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func cleanSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 711,
+      "line": 717,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func cleanSystemLogView() {"
@@ -27962,7 +28762,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func createSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 875,
+      "line": 881,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func createSystemLogView() {"
@@ -27970,7 +28770,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 967,
+      "line": 973,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitDisabled = false"
@@ -27978,7 +28778,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitWarningDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 968,
+      "line": 974,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitWarningDisabled = false"
@@ -27986,7 +28786,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func print(_ items: Any, level: PTLogLevel = .info)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 970,
+      "line": 976,
       "access": "public",
       "kind": "func",
       "declaration": "public func print(_ items: Any, level: PTLogLevel = .info) {"
@@ -27994,7 +28794,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1061,
+      "line": 1067,
       "access": "public",
       "kind": "func",
       "declaration": "public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {"
@@ -28002,7 +28802,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clear()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1137,
+      "line": 1143,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -28010,7 +28810,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class PTTerminal:PFloatingButton",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1644,
+      "line": 1650,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTerminal:PFloatingButton {"
@@ -28018,7 +28818,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var systemText : PTInvertedTextView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1645,
+      "line": 1651,
       "access": "public",
       "kind": "var",
       "declaration": "public var systemText : PTInvertedTextView?"
@@ -28026,7 +28826,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttributedText(_ string: String)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1724,
+      "line": 1730,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttributedText(_ string: String) {"
@@ -28034,7 +28834,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func appendLog(_ item: PTLogBuffer.LogItem)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1741,
+      "line": 1747,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendLog(_ item: PTLogBuffer.LogItem) {"
@@ -32934,6 +33734,398 @@
       "access": "public",
       "kind": "class",
       "declaration": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayAnimation.swift|public|enum|public enum PTOverlayTransition: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayTransition: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayAnimation.swift|public|init|public init()",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayAnimation.swift|public|func|public func present(view: UIView,",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(view: UIView,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayAnimation.swift|public|func|public func dismiss(view: UIView,",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss(view: UIView,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayAnimation.swift|public|func|public func stop()",
+      "path": "PooToolsSource/Overlay/PTOverlayAnimation.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|struct|public struct PTOverlayID: Hashable, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlayID: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let rawValue: UUID",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: UUID"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(rawValue: UUID = UUID())",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: UUID = UUID()) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayState: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayState: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayLayer: Int, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayLayer: Int, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayZOrder",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayZOrder {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayPresentationContext",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayPresentationContext {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayPresentationMode: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayPresentationMode: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayHitTestPolicy: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayHitTestPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayDismissReason: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayDismissReason: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|struct|public struct PTOverlaySafeAreaContext",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlaySafeAreaContext {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let bounds: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 82,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bounds: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let safeAreaInsets: UIEdgeInsets",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let safeAreaInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let layoutDirection: UIUserInterfaceLayoutDirection",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let layoutDirection: UIUserInterfaceLayoutDirection"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(environment: UIView)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(environment: UIView) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let id: PTOverlayID",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: PTOverlayID"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func dismiss()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func update()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 113,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayDiagnosticEvent: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 127,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayDiagnosticEvent: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|var|public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)?",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func record(_ event: PTOverlayDiagnosticEvent)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 143,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func record(_ event: PTOverlayDiagnosticEvent) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|protocol|public protocol PTOverlayMetricsSink: AnyObject",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTOverlayMetricsSink: AnyObject {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 157,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func register(_ host: PTOverlayHost, id: PTOverlayID)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func register(_ host: PTOverlayHost, id: PTOverlayID) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func remove(id: PTOverlayID)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 164,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func remove(id: PTOverlayID) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func removeAll()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 169,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeAll() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func registry(for scene: UIWindowScene) -> PTOverlayRegistry",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func registry(for scene: UIWindowScene) -> PTOverlayRegistry {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func removeRegistry(for scene: UIWindowScene)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 194,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeRegistry(for scene: UIWindowScene) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayLifecycle.swift|public|enum|public enum PTOverlayLifecycleEvent: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayLifecycle.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayLifecycleEvent: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayLifecycle.swift|public|typealias|public typealias Handler = @MainActor @Sendable (PTOverlayLifecycleEvent) -> Void",
+      "path": "PooToolsSource/Overlay/PTOverlayLifecycle.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias Handler = @MainActor @Sendable (PTOverlayLifecycleEvent) -> Void"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayLifecycle.swift|public|init|public init(scene: UIWindowScene, handler: @escaping Handler)",
+      "path": "PooToolsSource/Overlay/PTOverlayLifecycle.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(scene: UIWindowScene, handler: @escaping Handler) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|enum|public enum PTOverlaySceneResolver",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlaySceneResolver {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|var|public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|var|public var interactiveContentViews: [UIView] = []",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var interactiveContentViews: [UIView] = []"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|class|public class PTOverlayPassthroughWindow: UIWindow",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public class PTOverlayPassthroughWindow: UIWindow {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|let|public let overlayContainer = PTOverlayContainerView()",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let overlayContainer = PTOverlayContainerView()"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|init|public init(windowScene: UIWindowScene, layer: PTOverlayLayer)",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(windowScene: UIWindowScene, layer: PTOverlayLayer) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|let|public let containerView: PTOverlayContainerView",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 121,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let containerView: PTOverlayContainerView"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|init|public init?(context: PTOverlayPresentationContext,",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 126,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init?(context: PTOverlayPresentationContext,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func attach()",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 153,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func attach() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func detach()",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 168,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func detach() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func addOverlayView(_ view: UIView)",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 173,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func addOverlayView(_ view: UIView) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func removeOverlayView(_ view: UIView)",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 180,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeOverlayView(_ view: UIView) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|var|public var safeAreaContext: PTOverlaySafeAreaContext",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var safeAreaContext: PTOverlaySafeAreaContext {"
     },
     {
       "key": "PooToolsSource/PDF/PTPDFManager.swift|public|enum|public enum PTPDFManager",

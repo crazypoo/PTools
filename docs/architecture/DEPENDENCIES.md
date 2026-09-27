@@ -22,6 +22,8 @@
 | --- | --- | --- | --- | --- |
 | Logging | `PooTools/Logging` | `PToolsLogging` | Foundation、OSLog、文件日志后端 | UIKit、Debug UI、外部日志后端、Network、媒体 |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | PToolsLogging、PToolsUIFoundation、SwiftDate、SnapKit、DeviceKit、IQKeyboardManager、Kingfisher、SmartCodable、KakaJSON、Lottie | Network、PhotoKit 浏览器、Debug UI |
+| Overlay | `PooTools/Overlay` | `PToolsOverlay` | Core、UIFoundation、Logging | Banner 业务、Network、媒体 |
+| Banner | `PooTools/Banner` | `PooToolsBanner` | Overlay、Symbols、Logging、UIKit | Core 反向依赖、第三方通知条 |
 | Network | `PooTools/NetWork` | `PooToolsNetWork` | Core、Loading、Alamofire | PhotoPicker、MediaViewer、VideoEditor |
 | Security | `PooTools/Security` | `PooToolsSecurity` | Foundation、CryptoKit、Security.framework | Network、Debug UI、业务模块 |
 | SocketKit | `PooTools/SocketKit` | `PooToolsSocketKit` | Core、SocketRocket（兼容入口） | PhotoPicker、VideoEditor |
@@ -58,7 +60,7 @@ Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、�
 | Lottie | UI / Debug | 动画资源播放 | 中 | UIKit / Core Animation |
 | Alamofire | Network | 上传、下载和请求适配 | 中 | URLSession 统一执行器 |
 | CryptoSwift | DataEncrypt 兼容层 | 历史 AES/DES API | 高 | `PTSecurity` 的 CryptoKit/Security.framework 入口 |
-| NotificationBanner / MarqueeLabel | UI | 提示条和滚动文本 | 中 | UIKit 自实现 |
+| PToolsOverlay / PooToolsBanner | UI | Scene-aware 浮层基础设施和原生通知条 | 低 | PTools 自有 UIKit 实现 |
 | Swift-JWT | CheckUpdate | Apple API JWT 签名 | 高 | CryptoKit/Security 窄适配器 |
 | SocketRocket | SocketKit | WebSocket 兼容 | 中 | URLSessionWebSocketTask |
 

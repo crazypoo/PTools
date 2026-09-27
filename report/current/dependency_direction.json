@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:13:55Z",
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:15:01Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
@@ -76,6 +76,18 @@
       "destination": "PToolsHTTPServer"
     },
     {
+      "source": "PToolsOverlay",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsOverlay",
+      "destination": "PToolsLogging"
+    },
+    {
+      "source": "PToolsOverlay",
+      "destination": "PToolsUIFoundation"
+    },
+    {
       "source": "PToolsPermissionUI",
       "destination": "PToolsPermissionCore"
     },
@@ -90,6 +102,18 @@
     {
       "source": "PooToolsBankCard",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsBanner",
+      "destination": "PToolsLogging"
+    },
+    {
+      "source": "PooToolsBanner",
+      "destination": "PToolsOverlay"
+    },
+    {
+      "source": "PooToolsBanner",
+      "destination": "PToolsSymbols"
     },
     {
       "source": "PooToolsBioID",
@@ -142,6 +166,10 @@
     {
       "source": "PooToolsCustomerLabel",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsOverlay"
     },
     {
       "source": "PooToolsDEBUG",

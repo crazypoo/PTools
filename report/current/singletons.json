@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
-  "generated_at": "2026-09-27T01:13:50Z",
-  "shared_call_count": 1532,
+  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
+  "generated_at": "2026-09-27T04:14:55Z",
+  "shared_call_count": 1540,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -31,6 +31,15 @@
       "category": "D",
       "scope": "Shared mutable UI or scene state",
       "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
+      "line": 411,
+      "declaration": "public static let shared = PTBannerCenter()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
@@ -556,7 +565,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 150,
+      "line": 153,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -565,7 +574,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 396,
+      "line": 402,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -729,6 +738,24 @@
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
       "line": 198,
       "declaration": "public static let shared = OSSSpeech()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 137,
+      "declaration": "public static let shared = PTOverlayDiagnostics()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 178,
+      "declaration": "public static let shared = PTOverlayRegistryStore()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

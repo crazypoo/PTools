@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.28.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.29.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.28.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.29.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.29.0 NotificationBanner 吸收与原生 PToolsBanner
+
+- ✅ 新增 `PToolsOverlay`，统一 Scene 解析、Host、Overlay Window、穿透命中测试、层级、转场和生命周期基础能力。
+- ✅ 新增 `PooToolsBanner`，提供原生 UIKit Banner、队列、优先级、堆叠、去重、溢出、暂停恢复、原地更新、操作按钮和无障碍适配。
+- ✅ `UIViewController.drop` 保留为兼容入口；新代码通过 `PTBannerCenter` 和 `showBanner` 使用原生 Banner。
+- ✅ 移除交付路径中的 NotificationBannerSwift、MarqueeLabel 依赖；CocoaPods `NotificationBanner` 保留为 `Banner` 兼容别名。
+- ✅ 增加 NotificationBanner 使用审计、迁移说明、移除门禁、模块对齐报告和 Banner 队列回归测试。
+- [ ] 完成宿主 App 真机、多 Scene、键盘、安全区、动态字体和辅助功能回归后，再创建 `5.29.0` 正式 tag。
 
 ## 5.28.0 GCDWebServer 移除与原生 HTTP Server
 
