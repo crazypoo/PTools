@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Validate the 5.20–5.30 logging foundation while the dedicated closure gate checks removal.
-# Español: Valida la base de logging de 5.20–5.30 mientras la puerta de cierre comprueba la eliminación.
-# 中文：校验 5.20–5.30 日志基础层，并由收口门禁检查依赖移除。
+# English: Validate the 5.20–5.31 logging foundation while the dedicated closure gate checks removal.
+# Español: Valida la base de logging de 5.20–5.31 mientras la puerta de cierre comprueba la eliminación.
+# 中文：校验 5.20–5.31 日志基础层，并由收口门禁检查依赖移除。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(20|21|22|23|24|25|26|27|28|29|30)\.[0-9]+$ ]] || {
-  printf 'FAIL: logging foundation gate requires a 5.20.x through 5.30.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(20|21|22|23|24|25|26|27|28|29|30|31)\.[0-9]+$ ]] || {
+  printf 'FAIL: logging foundation gate requires a 5.20.x through 5.31.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -65,4 +65,4 @@ if rg -n --glob '*.swift' '^(import|@_exported import) (UIKit|CocoaLumberjack|Al
   exit 1
 fi
 
-printf 'PASS: PTools 5.20–5.30 logging foundation contract\n'
+printf 'PASS: PTools 5.20–5.31 logging foundation contract\n'

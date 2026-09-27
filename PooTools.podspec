@@ -730,11 +730,25 @@ Pod::Spec.new do |s|
         }
     end
         
-    s.subspec 'PopoverKit' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'Popovers'
+    # English: Publish the native UIKit popover product above OverlayCore.
+    # Español: Publica el producto popover nativo de UIKit sobre OverlayCore.
+    # 中文：在 OverlayCore 之上发布 UIKit 原生 Popover 产品层。
+    s.subspec 'Popover' do |subspec|
+        subspec.dependency 'PooTools/Overlay'
+        subspec.dependency 'PooTools/Symbols'
+        subspec.source_files = 'PooToolsSource/Popover/**/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_POPOVER POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Keep PopoverKit as a source-compatible subspec alias without the removed third-party dependency.
+    # Español: Conserva PopoverKit como alias compatible sin la dependencia de terceros eliminada.
+    # 中文：保留 PopoverKit 作为兼容别名，但不再依赖已移除的第三方库。
+    s.subspec 'PopoverKit' do |subspec|
+        subspec.dependency 'PooTools/Popover'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_POPOVER POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
         }
     end
         

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
-Generated at: 2026-09-27T05:11:05Z
+Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
+Generated at: 2026-09-27T07:05:43Z
 -->
 
 # PTools 当前公开 API 清单
@@ -4303,28 +4303,130 @@ Generated at: 2026-09-27T05:11:05Z
 | PooToolsSource/Overlay/PTOverlayCore.swift:61 | enum | public | public enum PTOverlayPresentationMode: Sendable { |
 | PooToolsSource/Overlay/PTOverlayCore.swift:66 | enum | public | public enum PTOverlayHitTestPolicy: Sendable { |
 | PooToolsSource/Overlay/PTOverlayCore.swift:73 | enum | public | public enum PTOverlayDismissReason: Sendable { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:81 | struct | public | public struct PTOverlaySafeAreaContext { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:82 | let | public | public let bounds: CGRect |
-| PooToolsSource/Overlay/PTOverlayCore.swift:83 | let | public | public let safeAreaInsets: UIEdgeInsets |
-| PooToolsSource/Overlay/PTOverlayCore.swift:84 | let | public | public let layoutDirection: UIUserInterfaceLayoutDirection |
-| PooToolsSource/Overlay/PTOverlayCore.swift:86 | init | public | public init(environment: UIView) { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:94 | class | public | public final class PTOverlayHandle { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:95 | let | public | public let id: PTOverlayID |
-| PooToolsSource/Overlay/PTOverlayCore.swift:109 | func | public | public func dismiss() { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:113 | func | public | public func update() { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:127 | enum | public | public enum PTOverlayDiagnosticEvent: Sendable { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:136 | class | public | public final class PTOverlayDiagnostics { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:139 | var | public | public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)? |
-| PooToolsSource/Overlay/PTOverlayCore.swift:143 | func | public | public func record(_ event: PTOverlayDiagnosticEvent) { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:149 | protocol | public | public protocol PTOverlayMetricsSink: AnyObject { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:154 | class | public | public final class PTOverlayRegistry { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:157 | init | public | public init() {} |
-| PooToolsSource/Overlay/PTOverlayCore.swift:159 | func | public | public func register(_ host: PTOverlayHost, id: PTOverlayID) { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:164 | func | public | public func remove(id: PTOverlayID) { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:169 | func | public | public func removeAll() { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:177 | class | public | public final class PTOverlayRegistryStore { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:184 | func | public | public func registry(for scene: UIWindowScene) -> PTOverlayRegistry { |
-| PooToolsSource/Overlay/PTOverlayCore.swift:194 | func | public | public func removeRegistry(for scene: UIWindowScene) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:87 | enum | public | public enum PTOverlayExclusivityPolicy: Sendable { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:93 | struct | public | public struct PTOverlayGroupID: Hashable, Sendable { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:94 | let | public | public let rawValue: String |
+| PooToolsSource/Overlay/PTOverlayCore.swift:96 | init | public | public init(_ rawValue: String) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:101 | struct | public | public struct PTPopoverContext { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:102 | let | public | public let overlayID: PTOverlayID |
+| PooToolsSource/Overlay/PTOverlayCore.swift:103 | let | public | public let frame: CGRect |
+| PooToolsSource/Overlay/PTOverlayCore.swift:104 | let | public | public let anchorFrame: CGRect |
+| PooToolsSource/Overlay/PTOverlayCore.swift:105 | let | public | public let availableBounds: CGRect |
+| PooToolsSource/Overlay/PTOverlayCore.swift:106 | let | public | public let safeAreaInsets: UIEdgeInsets |
+| PooToolsSource/Overlay/PTOverlayCore.swift:107 | let | public | public let resolvedPlacement: PTPopoverPlacement |
+| PooToolsSource/Overlay/PTOverlayCore.swift:108 | let | public | public let arrowPoint: CGPoint? |
+| PooToolsSource/Overlay/PTOverlayCore.swift:109 | let | public | public let keyboardFrame: CGRect? |
+| PooToolsSource/Overlay/PTOverlayCore.swift:112 | init | public | public init(overlayID: PTOverlayID, |
+| PooToolsSource/Overlay/PTOverlayCore.swift:130 | struct | public | public struct PTOverlaySafeAreaContext { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:131 | let | public | public let bounds: CGRect |
+| PooToolsSource/Overlay/PTOverlayCore.swift:132 | let | public | public let safeAreaInsets: UIEdgeInsets |
+| PooToolsSource/Overlay/PTOverlayCore.swift:133 | let | public | public let layoutDirection: UIUserInterfaceLayoutDirection |
+| PooToolsSource/Overlay/PTOverlayCore.swift:135 | init | public | public init(environment: UIView) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:143 | class | public | public final class PTOverlayHandle { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:144 | let | public | public let id: PTOverlayID |
+| PooToolsSource/Overlay/PTOverlayCore.swift:151 | init | public | public init(id: PTOverlayID, |
+| PooToolsSource/Overlay/PTOverlayCore.swift:161 | func | public | public func dismiss() { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:165 | func | public | public func update() { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:169 | func | public | public func replace() { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:176 | func | public | public func setActions(dismiss: (@MainActor () -> Void)? = nil, |
+| PooToolsSource/Overlay/PTOverlayCore.swift:184 | func | public | public func setState(_ state: PTOverlayState) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:188 | func | public | public func invalidate() { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:195 | enum | public | public enum PTOverlayDiagnosticEvent: Sendable { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:204 | class | public | public final class PTOverlayDiagnostics { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:207 | var | public | public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)? |
+| PooToolsSource/Overlay/PTOverlayCore.swift:211 | func | public | public func record(_ event: PTOverlayDiagnosticEvent) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:217 | protocol | public | public protocol PTOverlayMetricsSink: AnyObject { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:222 | class | public | public final class PTOverlayRegistry { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:225 | init | public | public init() {} |
+| PooToolsSource/Overlay/PTOverlayCore.swift:227 | func | public | public func register(_ host: PTOverlayHost, id: PTOverlayID) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:232 | func | public | public func remove(id: PTOverlayID) { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:237 | func | public | public func removeAll() { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:245 | class | public | public final class PTOverlayRegistryStore { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:252 | func | public | public func registry(for scene: UIWindowScene) -> PTOverlayRegistry { |
+| PooToolsSource/Overlay/PTOverlayCore.swift:262 | func | public | public func removeRegistry(for scene: UIWindowScene) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:10 | struct | public | public struct PTAnchorID: Hashable, Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:11 | let | public | public let rawValue: String |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:13 | init | public | public init(_ rawValue: String) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:22 | enum | public | public enum PTAnchor { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:36 | class | public | public final class PTAnchorRegistry { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:53 | func | public | public func register(_ id: PTAnchorID, view: UIView, businessID: AnyHashable? = nil) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:57 | func | public | public func unregister(_ id: PTAnchorID) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:61 | func | public | public func view(for id: PTAnchorID) -> UIView? { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:69 | func | public | public func businessID(for id: PTAnchorID) -> AnyHashable? { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:74 | enum | public | public enum PTAnchorTrackingPolicy: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:80 | enum | public | public enum PTAnchorVisibilityPolicy: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:87 | enum | public | public enum PTAnchorResolver { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:88 | struct | public | public struct Resolved { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:89 | let | public | public let rect: CGRect |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:90 | let | public | public let window: UIWindow |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:91 | let | public | public let view: UIView? |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:92 | let | public | public let businessID: AnyHashable? |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:94 | init | public | public init(rect: CGRect, |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:105 | enum | public | public enum Failure: Error, Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:150 | enum | public | public enum PTAnchorIdentityValidator { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:159 | enum | public | public enum PTPopoverPlacement: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:171 | enum | public | public enum PTPopoverAlignment: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:177 | enum | public | public enum PTPopoverAttachment: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:185 | struct | public | public struct PTOverlayCollisionEdges: OptionSet, Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:186 | let | public | public let rawValue: UInt8 |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:188 | init | public | public init(rawValue: UInt8) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:198 | struct | public | public struct PTOverlayCollisionResult: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:199 | let | public | public let flipped: Bool |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:200 | let | public | public let shifted: Bool |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:201 | let | public | public let resized: Bool |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:202 | let | public | public let edges: PTOverlayCollisionEdges |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:204 | init | public | public init(flipped: Bool = false, |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:215 | struct | public | public struct PTOverlayGeometry: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:216 | let | public | public let frame: CGRect |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:217 | let | public | public let placement: PTPopoverPlacement |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:218 | let | public | public let arrowPoint: CGPoint? |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:219 | let | public | public let collision: PTOverlayCollisionResult |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:221 | init | public | public init(frame: CGRect, |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:233 | struct | public | public struct PTArrowAppearance { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:234 | var | public | public var size: CGSize |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:235 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:236 | var | public | public var fillColor: UIColor |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:237 | var | public | public var borderColor: UIColor? |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:238 | var | public | public var borderWidth: CGFloat |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:239 | var | public | public var isVisible: Bool |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:241 | init | public | public init(size: CGSize = CGSize(width: 18, height: 9), |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:256 | struct | public | public struct PTArrowPlacementResult: Sendable { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:257 | let | public | public let point: CGPoint |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:258 | let | public | public let isClamped: Bool |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:260 | init | public | public init(point: CGPoint, isClamped: Bool) { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:266 | enum | public | public enum PTArrowGeometry { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:310 | enum | public | public enum PTScreenCollisionResolver { |
+| PooToolsSource/Overlay/PTOverlayGeometry.swift:327 | enum | public | public enum PTPopoverPositioningEngine { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:7 | enum | public | public enum PTOutsideTapBehavior: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:14 | enum | public | public enum PTOutsideTapScope: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:21 | class | public | public final class PTExcludedHitRegion { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:22 | enum | public | public enum Source { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:30 | init | public | public init(_ source: Source) { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:34 | func | public | public func contains(_ point: CGPoint, in window: UIWindow) -> Bool { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:49 | enum | public | public enum PTOverlayDragBehavior: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:56 | enum | public | public enum PTOverlayDragDismissDirection: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:66 | class | public | public final class PTOverlayGestureCoordinator: NSObject, UIGestureRecognizerDelegate { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:68 | var | public | public var dragBehavior: PTOverlayDragBehavior = .disabled |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:71 | func | public | public func attachPan(to view: UIView, |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:83 | func | public | public func attachPan(to view: UIView, |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:97 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:103 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:109 | enum | public | public enum PTOverlayAccessibilityRole: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:117 | class | public | public final class PTOverlayFocusCoordinator { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:120 | init | public | public init() {} |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:122 | func | public | public func captureFocus() { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:129 | func | public | public func focus(_ view: UIView, role: PTOverlayAccessibilityRole) { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:134 | func | public | public func restoreFocus() { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:141 | enum | public | public enum PTOverlayKeyboardPolicy: Sendable { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:148 | class | public | public final class PTOverlayKeyboardCoordinator { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:149 | typealias | public | public typealias Handler = @MainActor @Sendable (CGRect?) -> Void |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:154 | init | public | public init(handler: @escaping Handler) { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:158 | func | public | public func start() { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:178 | func | public | public func stop() { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:187 | class | public | public final class PTOverlayHitRegionCoordinator { |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:188 | var | public | public var excludedRegions: [PTExcludedHitRegion] = [] |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:190 | init | public | public init() {} |
+| PooToolsSource/Overlay/PTOverlayInteraction.swift:192 | func | public | public func containsExcludedRegion(point: CGPoint, in window: UIWindow) -> Bool { |
 | PooToolsSource/Overlay/PTOverlayLifecycle.swift:7 | enum | public | public enum PTOverlayLifecycleEvent: Sendable { |
 | PooToolsSource/Overlay/PTOverlayLifecycle.swift:14 | class | public | public final class PTOverlayLifecycle: NSObject { |
 | PooToolsSource/Overlay/PTOverlayLifecycle.swift:15 | typealias | public | public typealias Handler = @MainActor @Sendable (PTOverlayLifecycleEvent) -> Void |
@@ -4333,18 +4435,19 @@ Generated at: 2026-09-27T05:11:05Z
 | PooToolsSource/Overlay/PTOverlayPresentation.swift:61 | class | public | public final class PTOverlayContainerView: UIView { |
 | PooToolsSource/Overlay/PTOverlayPresentation.swift:62 | var | public | public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent |
 | PooToolsSource/Overlay/PTOverlayPresentation.swift:64 | var | public | public var interactiveContentViews: [UIView] = [] |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:93 | class | public | public class PTOverlayPassthroughWindow: UIWindow { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:94 | let | public | public let overlayContainer = PTOverlayContainerView() |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:96 | init | public | public init(windowScene: UIWindowScene, layer: PTOverlayLayer) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:117 | class | public | public final class PTOverlayWindow: PTOverlayPassthroughWindow {} |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:120 | class | public | public final class PTOverlayHost { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:121 | let | public | public let containerView: PTOverlayContainerView |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:126 | init | public | public init?(context: PTOverlayPresentationContext, |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:153 | func | public | public func attach() { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:168 | func | public | public func detach() { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:173 | func | public | public func addOverlayView(_ view: UIView) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:180 | func | public | public func removeOverlayView(_ view: UIView) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:184 | var | public | public var safeAreaContext: PTOverlaySafeAreaContext { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:68 | var | public | public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)? |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:100 | class | public | public class PTOverlayPassthroughWindow: UIWindow { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:101 | let | public | public let overlayContainer = PTOverlayContainerView() |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:103 | init | public | public init(windowScene: UIWindowScene, layer: PTOverlayLayer) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:124 | class | public | public final class PTOverlayWindow: PTOverlayPassthroughWindow {} |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:127 | class | public | public final class PTOverlayHost { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:128 | let | public | public let containerView: PTOverlayContainerView |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:133 | init | public | public init?(context: PTOverlayPresentationContext, |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:160 | func | public | public func attach() { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:175 | func | public | public func detach() { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:180 | func | public | public func addOverlayView(_ view: UIView) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:187 | func | public | public func removeOverlayView(_ view: UIView) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:191 | var | public | public var safeAreaContext: PTOverlaySafeAreaContext { |
 | PooToolsSource/PDF/PTPDFManager.swift:13 | enum | public | public enum PTPDFManager { |
 | PooToolsSource/PDF/PTPDFManager.swift:110 | class | public | public class PDFWithImage: NSObject { |
 | PooToolsSource/PDF/PTViewToPDF.swift:12 | class | public | public class PTViewToPDF: NSObject { |
@@ -5617,6 +5720,93 @@ Generated at: 2026-09-27T05:11:05Z
 | PooToolsSource/Ping/SimplePing.swift:233 | func | public | public func sendPing(data: Data?) { |
 | PooToolsSource/Ping/SimplePing.swift:306 | func | public | public func stop() { |
 | PooToolsSource/Pinyin/PTPinyin.swift:12 | enum | public | public enum PinyinHelper { |
+| PooToolsSource/Popover/PTContextMenu.swift:11 | enum | public | public enum PTMenuImage { |
+| PooToolsSource/Popover/PTContextMenu.swift:17 | enum | public | public enum PTMenuItemState { |
+| PooToolsSource/Popover/PTContextMenu.swift:25 | struct | public | public struct PTContextMenuItem { |
+| PooToolsSource/Popover/PTContextMenu.swift:26 | let | public | public let id: AnyHashable |
+| PooToolsSource/Popover/PTContextMenu.swift:27 | var | public | public var title: String |
+| PooToolsSource/Popover/PTContextMenu.swift:28 | var | public | public var subtitle: String? |
+| PooToolsSource/Popover/PTContextMenu.swift:29 | var | public | public var image: PTMenuImage? |
+| PooToolsSource/Popover/PTContextMenu.swift:30 | var | public | public var state: PTMenuItemState |
+| PooToolsSource/Popover/PTContextMenu.swift:31 | var | public | public var action: @MainActor @Sendable () -> Void |
+| PooToolsSource/Popover/PTContextMenu.swift:33 | init | public | public init(id: AnyHashable, |
+| PooToolsSource/Popover/PTContextMenu.swift:49 | struct | public | public struct PTContextMenuSection { |
+| PooToolsSource/Popover/PTContextMenu.swift:50 | let | public | public let id: AnyHashable |
+| PooToolsSource/Popover/PTContextMenu.swift:51 | var | public | public var title: String? |
+| PooToolsSource/Popover/PTContextMenu.swift:52 | var | public | public var items: [PTContextMenuItem] |
+| PooToolsSource/Popover/PTContextMenu.swift:54 | init | public | public init(id: AnyHashable, |
+| PooToolsSource/Popover/PTContextMenu.swift:64 | struct | public | public struct PTContextMenu { |
+| PooToolsSource/Popover/PTContextMenu.swift:65 | var | public | public var sections: [PTContextMenuSection] |
+| PooToolsSource/Popover/PTContextMenu.swift:67 | init | public | public init(sections: [PTContextMenuSection]) { |
+| PooToolsSource/Popover/PTContextMenu.swift:71 | init | public | public init(items: [PTContextMenuItem]) { |
+| PooToolsSource/Popover/PTContextMenu.swift:77 | class | public | public final class PTContextMenuView: UIView, UITableViewDataSource, UITableViewDelegate { |
+| PooToolsSource/Popover/PTContextMenu.swift:91 | var | public | public var onSelect: ((PTContextMenuItem) -> Void)? |
+| PooToolsSource/Popover/PTContextMenu.swift:93 | init | public | public init(menu: PTContextMenu, maxHeight: CGFloat) { |
+| PooToolsSource/Popover/PTContextMenu.swift:125 | func | public | public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { |
+| PooToolsSource/Popover/PTContextMenu.swift:129 | func | public | public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { |
+| PooToolsSource/Popover/PTContextMenu.swift:164 | func | public | public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { |
+| PooToolsSource/Popover/PTContextMenu.swift:168 | func | public | public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { |
+| PooToolsSource/Popover/PTPopover.swift:14 | enum | public | public enum PTOverlayBackground { |
+| PooToolsSource/Popover/PTPopover.swift:21 | struct | public | public struct PTPopoverAppearance { |
+| PooToolsSource/Popover/PTPopover.swift:22 | var | public | public var background: PTOverlayBackground |
+| PooToolsSource/Popover/PTPopover.swift:23 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/Popover/PTPopover.swift:24 | var | public | public var borderColor: UIColor? |
+| PooToolsSource/Popover/PTPopover.swift:25 | var | public | public var borderWidth: CGFloat |
+| PooToolsSource/Popover/PTPopover.swift:26 | var | public | public var shadowColor: UIColor |
+| PooToolsSource/Popover/PTPopover.swift:27 | var | public | public var shadowOpacity: Float |
+| PooToolsSource/Popover/PTPopover.swift:28 | var | public | public var shadowRadius: CGFloat |
+| PooToolsSource/Popover/PTPopover.swift:29 | var | public | public var shadowOffset: CGSize |
+| PooToolsSource/Popover/PTPopover.swift:30 | var | public | public var contentInsets: UIEdgeInsets |
+| PooToolsSource/Popover/PTPopover.swift:31 | var | public | public var arrow: PTArrowAppearance |
+| PooToolsSource/Popover/PTPopover.swift:33 | init | public | public init(background: PTOverlayBackground = .material(.systemMaterial), |
+| PooToolsSource/Popover/PTPopover.swift:57 | enum | public | public enum PTPopoverSizePolicy { |
+| PooToolsSource/Popover/PTPopover.swift:66 | enum | public | public enum PTPopoverContent { |
+| PooToolsSource/Popover/PTPopover.swift:73 | struct | public | public struct PTPopoverConfiguration { |
+| PooToolsSource/Popover/PTPopover.swift:74 | var | public | public var placement: PTPopoverPlacement |
+| PooToolsSource/Popover/PTPopover.swift:75 | var | public | public var alignment: PTPopoverAlignment |
+| PooToolsSource/Popover/PTPopover.swift:76 | var | public | public var attachment: PTPopoverAttachment |
+| PooToolsSource/Popover/PTPopover.swift:77 | var | public | public var anchorInsets: UIEdgeInsets |
+| PooToolsSource/Popover/PTPopover.swift:78 | var | public | public var screenEdgeInsets: UIEdgeInsets |
+| PooToolsSource/Popover/PTPopover.swift:79 | var | public | public var sizePolicy: PTPopoverSizePolicy |
+| PooToolsSource/Popover/PTPopover.swift:80 | var | public | public var appearance: PTPopoverAppearance |
+| PooToolsSource/Popover/PTPopover.swift:81 | var | public | public var transition: PTOverlayTransition |
+| PooToolsSource/Popover/PTPopover.swift:82 | var | public | public var outsideTapBehavior: PTOutsideTapBehavior |
+| PooToolsSource/Popover/PTPopover.swift:83 | var | public | public var outsideTapScope: PTOutsideTapScope |
+| PooToolsSource/Popover/PTPopover.swift:84 | var | public | public var trackingPolicy: PTAnchorTrackingPolicy |
+| PooToolsSource/Popover/PTPopover.swift:85 | var | public | public var anchorVisibility: PTAnchorVisibilityPolicy |
+| PooToolsSource/Popover/PTPopover.swift:86 | var | public | public var keyboardPolicy: PTOverlayKeyboardPolicy |
+| PooToolsSource/Popover/PTPopover.swift:87 | var | public | public var dragBehavior: PTOverlayDragBehavior |
+| PooToolsSource/Popover/PTPopover.swift:88 | var | public | public var dragDismissDirection: PTOverlayDragDismissDirection |
+| PooToolsSource/Popover/PTPopover.swift:89 | var | public | public var accessibilityRole: PTOverlayAccessibilityRole |
+| PooToolsSource/Popover/PTPopover.swift:90 | var | public | public var overlayLayer: PTOverlayLayer |
+| PooToolsSource/Popover/PTPopover.swift:91 | var | public | public var exclusivityPolicy: PTOverlayExclusivityPolicy |
+| PooToolsSource/Popover/PTPopover.swift:92 | var | public | public var maxMenuHeight: CGFloat |
+| PooToolsSource/Popover/PTPopover.swift:93 | var | public | public var excludedHitRegions: [PTExcludedHitRegion] |
+| PooToolsSource/Popover/PTPopover.swift:95 | init | public | public init(placement: PTPopoverPlacement = .automatic, |
+| PooToolsSource/Popover/PTPopover.swift:143 | class | public | public final class PTPopover { |
+| PooToolsSource/Popover/PTPopover.swift:144 | let | public | public let id: PTOverlayID |
+| PooToolsSource/Popover/PTPopover.swift:145 | var | public | public var groupID: PTOverlayGroupID? |
+| PooToolsSource/Popover/PTPopover.swift:146 | var | public | public var content: PTPopoverContent |
+| PooToolsSource/Popover/PTPopover.swift:147 | var | public | public var configuration: PTPopoverConfiguration |
+| PooToolsSource/Popover/PTPopover.swift:148 | var | public | public var onContextChange: (@MainActor @Sendable (PTPopoverContext) -> Void)? |
+| PooToolsSource/Popover/PTPopover.swift:150 | init | public | public init(id: PTOverlayID = PTOverlayID(), |
+| PooToolsSource/Popover/PTPopover.swift:161 | enum | public | public enum PTPopoverPresentationError: Error, Sendable { |
+| PooToolsSource/Popover/PTPopover.swift:170 | class | public | public final class PTPopoverHandle { |
+| PooToolsSource/Popover/PTPopover.swift:171 | let | public | public let id: PTOverlayID |
+| PooToolsSource/Popover/PTPopover.swift:172 | var | public | public var state: PTOverlayState { overlayHandle.state } |
+| PooToolsSource/Popover/PTPopover.swift:183 | func | public | public func dismiss() { |
+| PooToolsSource/Popover/PTPopover.swift:187 | func | public | public func update(content: PTPopoverContent) { |
+| PooToolsSource/Popover/PTPopover.swift:191 | func | public | public func reposition() { |
+| PooToolsSource/Popover/PTPopover.swift:195 | func | public | public func replace(with popover: PTPopover, from anchor: PTAnchor) -> PTPopoverHandle? { |
+| PooToolsSource/Popover/PTPopover.swift:201 | class | public | public final class PTPopoverCenter { |
+| PooToolsSource/Popover/PTPopover.swift:251 | func | public | public func present(_ popover: PTPopover, |
+| PooToolsSource/Popover/PTPopover.swift:329 | func | public | public func dismiss(id: PTOverlayID, reason: PTOverlayDismissReason = .manual) { |
+| PooToolsSource/Popover/PTPopover.swift:356 | func | public | public func dismissAll() { |
+| PooToolsSource/Popover/PTPopover.swift:677 | class | public | public final class PTPopoverSurfaceView: UIView { |
+| PooToolsSource/Popover/PTPopover.swift:687 | init | public | public init(appearance: PTPopoverAppearance) { |
+| PooToolsSource/Popover/PTPopover.swift:702 | func | public | public func setContentView(_ view: UIView) { |
+| PooToolsSource/Popover/PTPopover.swift:710 | func | public | public func measuredContentSize(maximum: CGSize) -> CGSize { |
+| PooToolsSource/Popover/PTPopover.swift:723 | func | public | public func apply(geometry: PTOverlayGeometry, placement: PTPopoverPlacement) { |
 | PooToolsSource/ProgressBar/PTCircularProgressView.swift:11 | enum | public | public enum PTCircularProgressStyle { |
 | PooToolsSource/ProgressBar/PTCircularProgressView.swift:17 | class | public | public class PTCircularProgressView: UIView { |
 | PooToolsSource/ProgressBar/PTCircularProgressView.swift:19 | var | public | public var style: PTCircularProgressStyle = .loop |

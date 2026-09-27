@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:05Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:05:43Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -34328,9 +34328,121 @@
       "declaration": "public enum PTOverlayDismissReason: Sendable {"
     },
     {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayExclusivityPolicy: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayExclusivityPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|struct|public struct PTOverlayGroupID: Hashable, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlayGroupID: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|struct|public struct PTPopoverContext",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 101,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTPopoverContext {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let overlayID: PTOverlayID",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 102,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let overlayID: PTOverlayID"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let frame: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let frame: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let anchorFrame: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 104,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let anchorFrame: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let availableBounds: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let availableBounds: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let safeAreaInsets: UIEdgeInsets",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 106,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let safeAreaInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let resolvedPlacement: PTPopoverPlacement",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 107,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let resolvedPlacement: PTPopoverPlacement"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let arrowPoint: CGPoint?",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 108,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let arrowPoint: CGPoint?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let keyboardFrame: CGRect?",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let keyboardFrame: CGRect?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(overlayID: PTOverlayID,",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 112,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(overlayID: PTOverlayID,"
+    },
+    {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|struct|public struct PTOverlaySafeAreaContext",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 81,
+      "line": 130,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTOverlaySafeAreaContext {"
@@ -34338,7 +34450,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let bounds: CGRect",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 82,
+      "line": 131,
       "access": "public",
       "kind": "let",
       "declaration": "public let bounds: CGRect"
@@ -34346,7 +34458,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let safeAreaInsets: UIEdgeInsets",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 83,
+      "line": 132,
       "access": "public",
       "kind": "let",
       "declaration": "public let safeAreaInsets: UIEdgeInsets"
@@ -34354,7 +34466,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let layoutDirection: UIUserInterfaceLayoutDirection",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 84,
+      "line": 133,
       "access": "public",
       "kind": "let",
       "declaration": "public let layoutDirection: UIUserInterfaceLayoutDirection"
@@ -34362,7 +34474,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(environment: UIView)",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 86,
+      "line": 135,
       "access": "public",
       "kind": "init",
       "declaration": "public init(environment: UIView) {"
@@ -34370,7 +34482,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|class|public final class PTOverlayHandle",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 94,
+      "line": 143,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayHandle {"
@@ -34378,15 +34490,23 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|let|public let id: PTOverlayID",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 95,
+      "line": 144,
       "access": "public",
       "kind": "let",
       "declaration": "public let id: PTOverlayID"
     },
     {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init(id: PTOverlayID,",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: PTOverlayID,"
+    },
+    {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func dismiss()",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 109,
+      "line": 161,
       "access": "public",
       "kind": "func",
       "declaration": "public func dismiss() {"
@@ -34394,15 +34514,47 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func update()",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 113,
+      "line": 165,
       "access": "public",
       "kind": "func",
       "declaration": "public func update() {"
     },
     {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func replace()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 169,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func replace() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func setActions(dismiss: (@MainActor () -> Void)? = nil,",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 176,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setActions(dismiss: (@MainActor () -> Void)? = nil,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func setState(_ state: PTOverlayState)",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setState(_ state: PTOverlayState) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func invalidate()",
+      "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func invalidate() {"
+    },
+    {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|enum|public enum PTOverlayDiagnosticEvent: Sendable",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 127,
+      "line": 195,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTOverlayDiagnosticEvent: Sendable {"
@@ -34410,7 +34562,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|class|public final class PTOverlayDiagnostics",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 136,
+      "line": 204,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayDiagnostics {"
@@ -34418,7 +34570,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|var|public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)?",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 139,
+      "line": 207,
       "access": "public",
       "kind": "var",
       "declaration": "public var sink: (@MainActor @Sendable (PTOverlayDiagnosticEvent) -> Void)?"
@@ -34426,7 +34578,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func record(_ event: PTOverlayDiagnosticEvent)",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 143,
+      "line": 211,
       "access": "public",
       "kind": "func",
       "declaration": "public func record(_ event: PTOverlayDiagnosticEvent) {"
@@ -34434,7 +34586,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|protocol|public protocol PTOverlayMetricsSink: AnyObject",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 149,
+      "line": 217,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTOverlayMetricsSink: AnyObject {"
@@ -34442,7 +34594,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|class|public final class PTOverlayRegistry",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 154,
+      "line": 222,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayRegistry {"
@@ -34450,7 +34602,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|init|public init()",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 157,
+      "line": 225,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -34458,7 +34610,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func register(_ host: PTOverlayHost, id: PTOverlayID)",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 159,
+      "line": 227,
       "access": "public",
       "kind": "func",
       "declaration": "public func register(_ host: PTOverlayHost, id: PTOverlayID) {"
@@ -34466,7 +34618,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func remove(id: PTOverlayID)",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 164,
+      "line": 232,
       "access": "public",
       "kind": "func",
       "declaration": "public func remove(id: PTOverlayID) {"
@@ -34474,7 +34626,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func removeAll()",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 169,
+      "line": 237,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeAll() {"
@@ -34482,7 +34634,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|class|public final class PTOverlayRegistryStore",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 177,
+      "line": 245,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayRegistryStore {"
@@ -34490,7 +34642,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func registry(for scene: UIWindowScene) -> PTOverlayRegistry",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 184,
+      "line": 252,
       "access": "public",
       "kind": "func",
       "declaration": "public func registry(for scene: UIWindowScene) -> PTOverlayRegistry {"
@@ -34498,10 +34650,674 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayCore.swift|public|func|public func removeRegistry(for scene: UIWindowScene)",
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 194,
+      "line": 262,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeRegistry(for scene: UIWindowScene) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTAnchorID: Hashable, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTAnchorID: Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTAnchor",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTAnchor {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|class|public final class PTAnchorRegistry",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTAnchorRegistry {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|func|public func register(_ id: PTAnchorID, view: UIView, businessID: AnyHashable? = nil)",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func register(_ id: PTAnchorID, view: UIView, businessID: AnyHashable? = nil) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|func|public func unregister(_ id: PTAnchorID)",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 57,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func unregister(_ id: PTAnchorID) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|func|public func view(for id: PTAnchorID) -> UIView?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func view(for id: PTAnchorID) -> UIView? {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|func|public func businessID(for id: PTAnchorID) -> AnyHashable?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 69,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func businessID(for id: PTAnchorID) -> AnyHashable? {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTAnchorTrackingPolicy: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTAnchorTrackingPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTAnchorVisibilityPolicy: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTAnchorVisibilityPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTAnchorResolver",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTAnchorResolver {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct Resolved",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct Resolved {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let rect: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rect: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let window: UIWindow",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let window: UIWindow"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let view: UIView?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let view: UIView?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let businessID: AnyHashable?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let businessID: AnyHashable?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(rect: CGRect,",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rect: CGRect,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum Failure: Error, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum Failure: Error, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTAnchorIdentityValidator",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 150,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTAnchorIdentityValidator {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTPopoverPlacement: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverPlacement: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTPopoverAlignment: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 171,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverAlignment: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTPopoverAttachment: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 177,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverAttachment: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTOverlayCollisionEdges: OptionSet, Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 185,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlayCollisionEdges: OptionSet, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let rawValue: UInt8",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: UInt8"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(rawValue: UInt8)",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: UInt8) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTOverlayCollisionResult: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 198,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlayCollisionResult: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let flipped: Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 199,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let flipped: Bool"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let shifted: Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 200,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let shifted: Bool"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let resized: Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 201,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let resized: Bool"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let edges: PTOverlayCollisionEdges",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 202,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let edges: PTOverlayCollisionEdges"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(flipped: Bool = false,",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 204,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(flipped: Bool = false,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTOverlayGeometry: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 215,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTOverlayGeometry: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let frame: CGRect",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 216,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let frame: CGRect"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let placement: PTPopoverPlacement",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 217,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let placement: PTPopoverPlacement"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let arrowPoint: CGPoint?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 218,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let arrowPoint: CGPoint?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let collision: PTOverlayCollisionResult",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 219,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let collision: PTOverlayCollisionResult"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(frame: CGRect,",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 221,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(frame: CGRect,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTArrowAppearance",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 233,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTArrowAppearance {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var size: CGSize",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 234,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var size: CGSize"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var cornerRadius: CGFloat",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 235,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var fillColor: UIColor",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 236,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var fillColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var borderColor: UIColor?",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 237,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var borderWidth: CGFloat",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 238,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderWidth: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|var|public var isVisible: Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 239,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isVisible: Bool"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(size: CGSize = CGSize(width: 18, height: 9),",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 241,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(size: CGSize = CGSize(width: 18, height: 9),"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|struct|public struct PTArrowPlacementResult: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 256,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTArrowPlacementResult: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let point: CGPoint",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 257,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let point: CGPoint"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|let|public let isClamped: Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 258,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isClamped: Bool"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|init|public init(point: CGPoint, isClamped: Bool)",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 260,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(point: CGPoint, isClamped: Bool) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTArrowGeometry",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 266,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTArrowGeometry {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTScreenCollisionResolver",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 310,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTScreenCollisionResolver {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayGeometry.swift|public|enum|public enum PTPopoverPositioningEngine",
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 327,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverPositioningEngine {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOutsideTapBehavior: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOutsideTapBehavior: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOutsideTapScope: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOutsideTapScope: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|class|public final class PTExcludedHitRegion",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTExcludedHitRegion {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum Source",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum Source {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|init|public init(_ source: Source)",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ source: Source) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func contains(_ point: CGPoint, in window: UIWindow) -> Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func contains(_ point: CGPoint, in window: UIWindow) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOverlayDragBehavior: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayDragBehavior: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOverlayDragDismissDirection: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 56,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayDragDismissDirection: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|class|public final class PTOverlayGestureCoordinator: NSObject, UIGestureRecognizerDelegate",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTOverlayGestureCoordinator: NSObject, UIGestureRecognizerDelegate {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|var|public var dragBehavior: PTOverlayDragBehavior = .disabled",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 68,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dragBehavior: PTOverlayDragBehavior = .disabled"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func attachPan(to view: UIView,",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func attachPan(to view: UIView,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func attachPan(to view: UIView,",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func attachPan(to view: UIView,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOverlayAccessibilityRole: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayAccessibilityRole: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|class|public final class PTOverlayFocusCoordinator",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 117,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTOverlayFocusCoordinator {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|init|public init()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 120,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func captureFocus()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 122,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func captureFocus() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func focus(_ view: UIView, role: PTOverlayAccessibilityRole)",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 129,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func focus(_ view: UIView, role: PTOverlayAccessibilityRole) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func restoreFocus()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func restoreFocus() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|enum|public enum PTOverlayKeyboardPolicy: Sendable",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 141,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayKeyboardPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|class|public final class PTOverlayKeyboardCoordinator",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTOverlayKeyboardCoordinator {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|typealias|public typealias Handler = @MainActor @Sendable (CGRect?) -> Void",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias Handler = @MainActor @Sendable (CGRect?) -> Void"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|init|public init(handler: @escaping Handler)",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 154,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(handler: @escaping Handler) {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func start()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 158,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func stop()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 178,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|class|public final class PTOverlayHitRegionCoordinator",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 187,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTOverlayHitRegionCoordinator {"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|var|public var excludedRegions: [PTExcludedHitRegion] = []",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var excludedRegions: [PTExcludedHitRegion] = []"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|init|public init()",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 190,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/Overlay/PTOverlayInteraction.swift|public|func|public func containsExcludedRegion(point: CGPoint, in window: UIWindow) -> Bool",
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "line": 192,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func containsExcludedRegion(point: CGPoint, in window: UIWindow) -> Bool {"
     },
     {
       "key": "PooToolsSource/Overlay/PTOverlayLifecycle.swift|public|enum|public enum PTOverlayLifecycleEvent: Sendable",
@@ -34568,9 +35384,17 @@
       "declaration": "public var interactiveContentViews: [UIView] = []"
     },
     {
+      "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|var|public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)?",
+      "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+      "line": 68,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)?"
+    },
+    {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|class|public class PTOverlayPassthroughWindow: UIWindow",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 93,
+      "line": 100,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTOverlayPassthroughWindow: UIWindow {"
@@ -34578,7 +35402,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|let|public let overlayContainer = PTOverlayContainerView()",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 94,
+      "line": 101,
       "access": "public",
       "kind": "let",
       "declaration": "public let overlayContainer = PTOverlayContainerView()"
@@ -34586,7 +35410,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|init|public init(windowScene: UIWindowScene, layer: PTOverlayLayer)",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 96,
+      "line": 103,
       "access": "public",
       "kind": "init",
       "declaration": "public init(windowScene: UIWindowScene, layer: PTOverlayLayer) {"
@@ -34594,7 +35418,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|class|public final class PTOverlayWindow: PTOverlayPassthroughWindow",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 117,
+      "line": 124,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayWindow: PTOverlayPassthroughWindow {}"
@@ -34602,7 +35426,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|class|public final class PTOverlayHost",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 120,
+      "line": 127,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTOverlayHost {"
@@ -34610,7 +35434,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|let|public let containerView: PTOverlayContainerView",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 121,
+      "line": 128,
       "access": "public",
       "kind": "let",
       "declaration": "public let containerView: PTOverlayContainerView"
@@ -34618,7 +35442,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|init|public init?(context: PTOverlayPresentationContext,",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 126,
+      "line": 133,
       "access": "public",
       "kind": "init",
       "declaration": "public init?(context: PTOverlayPresentationContext,"
@@ -34626,7 +35450,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func attach()",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 153,
+      "line": 160,
       "access": "public",
       "kind": "func",
       "declaration": "public func attach() {"
@@ -34634,7 +35458,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func detach()",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 168,
+      "line": 175,
       "access": "public",
       "kind": "func",
       "declaration": "public func detach() {"
@@ -34642,7 +35466,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func addOverlayView(_ view: UIView)",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 173,
+      "line": 180,
       "access": "public",
       "kind": "func",
       "declaration": "public func addOverlayView(_ view: UIView) {"
@@ -34650,7 +35474,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|func|public func removeOverlayView(_ view: UIView)",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 180,
+      "line": 187,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeOverlayView(_ view: UIView) {"
@@ -34658,7 +35482,7 @@
     {
       "key": "PooToolsSource/Overlay/PTOverlayPresentation.swift|public|var|public var safeAreaContext: PTOverlaySafeAreaContext",
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "line": 184,
+      "line": 191,
       "access": "public",
       "kind": "var",
       "declaration": "public var safeAreaContext: PTOverlaySafeAreaContext {"
@@ -44838,6 +45662,702 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PinyinHelper {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|enum|public enum PTMenuImage",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTMenuImage {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|enum|public enum PTMenuItemState",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTMenuItemState {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|struct|public struct PTContextMenuItem",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTContextMenuItem {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|let|public let id: AnyHashable",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: AnyHashable"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var title: String",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var title: String"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var subtitle: String?",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var subtitle: String?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var image: PTMenuImage?",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var image: PTMenuImage?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var state: PTMenuItemState",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var state: PTMenuItemState"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var action: @MainActor @Sendable () -> Void",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var action: @MainActor @Sendable () -> Void"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|init|public init(id: AnyHashable,",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: AnyHashable,"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|struct|public struct PTContextMenuSection",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTContextMenuSection {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|let|public let id: AnyHashable",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 50,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: AnyHashable"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var title: String?",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var title: String?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var items: [PTContextMenuItem]",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var items: [PTContextMenuItem]"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|init|public init(id: AnyHashable,",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: AnyHashable,"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|struct|public struct PTContextMenu",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTContextMenu {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var sections: [PTContextMenuSection]",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var sections: [PTContextMenuSection]"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|init|public init(sections: [PTContextMenuSection])",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(sections: [PTContextMenuSection]) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|init|public init(items: [PTContextMenuItem])",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(items: [PTContextMenuItem]) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|class|public final class PTContextMenuView: UIView, UITableViewDataSource, UITableViewDelegate",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 77,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTContextMenuView: UIView, UITableViewDataSource, UITableViewDelegate {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|var|public var onSelect: ((PTContextMenuItem) -> Void)?",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var onSelect: ((PTContextMenuItem) -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|init|public init(menu: PTContextMenu, maxHeight: CGFloat)",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(menu: PTContextMenu, maxHeight: CGFloat) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|func|public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 125,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|func|public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 129,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|func|public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 164,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTContextMenu.swift|public|func|public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)",
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "line": 168,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|enum|public enum PTOverlayBackground",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTOverlayBackground {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|struct|public struct PTPopoverAppearance",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTPopoverAppearance {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var background: PTOverlayBackground",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var background: PTOverlayBackground"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var cornerRadius: CGFloat",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var borderColor: UIColor?",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var borderWidth: CGFloat",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderWidth: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var shadowColor: UIColor",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shadowColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var shadowOpacity: Float",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shadowOpacity: Float"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var shadowRadius: CGFloat",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shadowRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var shadowOffset: CGSize",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shadowOffset: CGSize"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var contentInsets: UIEdgeInsets",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var arrow: PTArrowAppearance",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var arrow: PTArrowAppearance"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|init|public init(background: PTOverlayBackground = .material(.systemMaterial),",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(background: PTOverlayBackground = .material(.systemMaterial),"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|enum|public enum PTPopoverSizePolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 57,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverSizePolicy {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|enum|public enum PTPopoverContent",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverContent {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|struct|public struct PTPopoverConfiguration",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTPopoverConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var placement: PTPopoverPlacement",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placement: PTPopoverPlacement"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var alignment: PTPopoverAlignment",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 75,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var alignment: PTPopoverAlignment"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var attachment: PTPopoverAttachment",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 76,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var attachment: PTPopoverAttachment"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var anchorInsets: UIEdgeInsets",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 77,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var anchorInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var screenEdgeInsets: UIEdgeInsets",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 78,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var screenEdgeInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var sizePolicy: PTPopoverSizePolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 79,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var sizePolicy: PTPopoverSizePolicy"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var appearance: PTPopoverAppearance",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var appearance: PTPopoverAppearance"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var transition: PTOverlayTransition",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var transition: PTOverlayTransition"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var outsideTapBehavior: PTOutsideTapBehavior",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 82,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var outsideTapBehavior: PTOutsideTapBehavior"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var outsideTapScope: PTOutsideTapScope",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var outsideTapScope: PTOutsideTapScope"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var trackingPolicy: PTAnchorTrackingPolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trackingPolicy: PTAnchorTrackingPolicy"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var anchorVisibility: PTAnchorVisibilityPolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var anchorVisibility: PTAnchorVisibilityPolicy"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var keyboardPolicy: PTOverlayKeyboardPolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var keyboardPolicy: PTOverlayKeyboardPolicy"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var dragBehavior: PTOverlayDragBehavior",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dragBehavior: PTOverlayDragBehavior"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var dragDismissDirection: PTOverlayDragDismissDirection",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dragDismissDirection: PTOverlayDragDismissDirection"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var accessibilityRole: PTOverlayAccessibilityRole",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accessibilityRole: PTOverlayAccessibilityRole"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var overlayLayer: PTOverlayLayer",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var overlayLayer: PTOverlayLayer"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var exclusivityPolicy: PTOverlayExclusivityPolicy",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var exclusivityPolicy: PTOverlayExclusivityPolicy"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var maxMenuHeight: CGFloat",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxMenuHeight: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var excludedHitRegions: [PTExcludedHitRegion]",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var excludedHitRegions: [PTExcludedHitRegion]"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|init|public init(placement: PTPopoverPlacement = .automatic,",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(placement: PTPopoverPlacement = .automatic,"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|class|public final class PTPopover",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 143,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTPopover {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|let|public let id: PTOverlayID",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 144,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: PTOverlayID"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var groupID: PTOverlayGroupID?",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var groupID: PTOverlayGroupID?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var content: PTPopoverContent",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 146,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var content: PTPopoverContent"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var configuration: PTPopoverConfiguration",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 147,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var configuration: PTPopoverConfiguration"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var onContextChange: (@MainActor @Sendable (PTPopoverContext) -> Void)?",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var onContextChange: (@MainActor @Sendable (PTPopoverContext) -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|init|public init(id: PTOverlayID = PTOverlayID(),",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 150,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: PTOverlayID = PTOverlayID(),"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|enum|public enum PTPopoverPresentationError: Error, Sendable",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 161,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPopoverPresentationError: Error, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|class|public final class PTPopoverHandle",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 170,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTPopoverHandle {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|let|public let id: PTOverlayID",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 171,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: PTOverlayID"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|var|public var state: PTOverlayState",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 172,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var state: PTOverlayState { overlayHandle.state }"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func dismiss()",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 183,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss() {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func update(content: PTPopoverContent)",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 187,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(content: PTPopoverContent) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func reposition()",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 191,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func reposition() {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func replace(with popover: PTPopover, from anchor: PTAnchor) -> PTPopoverHandle?",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 195,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func replace(with popover: PTPopover, from anchor: PTAnchor) -> PTPopoverHandle? {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|class|public final class PTPopoverCenter",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 201,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTPopoverCenter {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func present(_ popover: PTPopover,",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 251,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(_ popover: PTPopover,"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func dismiss(id: PTOverlayID, reason: PTOverlayDismissReason = .manual)",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 329,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismiss(id: PTOverlayID, reason: PTOverlayDismissReason = .manual) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func dismissAll()",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 356,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dismissAll() {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|class|public final class PTPopoverSurfaceView: UIView",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 677,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTPopoverSurfaceView: UIView {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|init|public init(appearance: PTPopoverAppearance)",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 687,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(appearance: PTPopoverAppearance) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func setContentView(_ view: UIView)",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 702,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setContentView(_ view: UIView) {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func measuredContentSize(maximum: CGSize) -> CGSize",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 710,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func measuredContentSize(maximum: CGSize) -> CGSize {"
+    },
+    {
+      "key": "PooToolsSource/Popover/PTPopover.swift|public|func|public func apply(geometry: PTOverlayGeometry, placement: PTPopoverPlacement)",
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 723,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func apply(geometry: PTOverlayGeometry, placement: PTPopoverPlacement) {"
     },
     {
       "key": "PooToolsSource/ProgressBar/PTCircularProgressView.swift|public|enum|public enum PTCircularProgressStyle",

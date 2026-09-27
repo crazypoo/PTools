@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0F1ABF302D9045FDB86F417A /* PTOverlayLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E883305C31665BFE34E8A1 /* PTOverlayLifecycle.swift */; };
+		A531100000000000000001 /* PTOverlayGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000001 /* PTOverlayGeometry.swift */; };
+		A531100000000000000002 /* PTOverlayInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000002 /* PTOverlayInteraction.swift */; };
+		A531100000000000000003 /* PTTipsOverlayIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000003 /* PTTipsOverlayIntegration.swift */; };
+		A531100000000000000004 /* PTPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000004 /* PTPopover.swift */; };
+		A531100000000000000005 /* PTContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000005 /* PTContextMenu.swift */; };
 		1DA160013337446E91723ECA /* PTCollectionViewSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7F5C66DB2E45838AC1B9F0 /* PTCollectionViewSkeleton.swift */; };
 		231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D0272CDD19003D6F62 /* PooTools.podspec */; };
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
@@ -1053,6 +1058,11 @@
 		10F3C2B183334E31ABE12A02 /* Network+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Download.swift"; sourceTree = "<group>"; };
 		130CD11039241C180C35F1B5 /* PTOverlayCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayCore.swift; sourceTree = "<group>"; };
 		15E883305C31665BFE34E8A1 /* PTOverlayLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayLifecycle.swift; sourceTree = "<group>"; };
+		A531000000000000000001 /* PTOverlayGeometry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayGeometry.swift; sourceTree = "<group>"; };
+		A531000000000000000002 /* PTOverlayInteraction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayInteraction.swift; sourceTree = "<group>"; };
+		A531000000000000000003 /* PTTipsOverlayIntegration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTTipsOverlayIntegration.swift; sourceTree = "<group>"; };
+		A531000000000000000004 /* PTPopover.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTPopover.swift; sourceTree = "<group>"; };
+		A531000000000000000005 /* PTContextMenu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTContextMenu.swift; sourceTree = "<group>"; };
 		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -2311,6 +2321,7 @@
 				FE6E2700D25668503BA26796 /* PToolsHTTPServer */,
 				2A29D1F327F09C43651B6D7B /* PToolsHTTPFilePortal */,
 				39556ADC1DF28F28AE1172D7 /* Overlay */,
+				A531200000000000000001 /* Popover */,
 				63D4AE2E5E4E3748EC259B94 /* Banner */,
 			);
 			path = PooToolsSource;
@@ -2600,6 +2611,8 @@
 				FB0F096BA2809B3E538B38A1 /* PTOverlayPresentation.swift */,
 				08EABFC776EE2CC04724EF1A /* PTOverlayAnimation.swift */,
 				15E883305C31665BFE34E8A1 /* PTOverlayLifecycle.swift */,
+				A531000000000000000001 /* PTOverlayGeometry.swift */,
+				A531000000000000000002 /* PTOverlayInteraction.swift */,
 			);
 			name = Overlay;
 			path = Overlay;
@@ -2871,8 +2884,19 @@
 			isa = PBXGroup;
 			children = (
 				554F3A112E94C21D001F4078 /* PTTipsView.swift */,
+				A531000000000000000003 /* PTTipsOverlayIntegration.swift */,
 			);
 			path = TipsView;
+			sourceTree = "<group>";
+		};
+		A531200000000000000001 /* Popover */ = {
+			isa = PBXGroup;
+			children = (
+				A531000000000000000004 /* PTPopover.swift */,
+				A531000000000000000005 /* PTContextMenu.swift */,
+			);
+			name = Popover;
+			path = Popover;
 			sourceTree = "<group>";
 		};
 		55571B362D58EEF2004134B8 /* iCloud */ = {
@@ -5603,6 +5627,11 @@
 				348965016AC474FE89DB3DAA /* PTOverlayPresentation.swift in Sources */,
 				9996F9151822FCA95058222F /* PTOverlayAnimation.swift in Sources */,
 				0F1ABF302D9045FDB86F417A /* PTOverlayLifecycle.swift in Sources */,
+				A531100000000000000001 /* PTOverlayGeometry.swift in Sources */,
+				A531100000000000000002 /* PTOverlayInteraction.swift in Sources */,
+				A531100000000000000003 /* PTTipsOverlayIntegration.swift in Sources */,
+				A531100000000000000004 /* PTPopover.swift in Sources */,
+				A531100000000000000005 /* PTContextMenu.swift in Sources */,
 				4C8B0109652F928417285599 /* PTBanner.swift in Sources */,
 				AD32F74292435EAEDC1F4596 /* PTBannerHandle.swift in Sources */,
 				529FC23AE38FCD3BB49D0721 /* PTBannerTheme.swift in Sources */,

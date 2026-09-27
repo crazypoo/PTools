@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.30.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.31.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.30.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.31.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.31.0 Popovers 吸收与 Overlay 2.0
+
+- ✅ 移除 `aheze/Popovers` 的直接依赖；`PopoverKit` 保留为原生 `PooTools/Popover` 的兼容别名。
+- ✅ 在 OverlayCore 1.0 之上增加 Anchor、Geometry、碰撞修正、箭头、点击外部、排除区域、拖拽、键盘、焦点和无障碍基础契约。
+- ✅ 新增 `PTPopover`、`PTContextMenu`、UIView/UIViewController 内容适配、菜单、更新、替换、重定位、分组和多弹层管理。
+- ✅ `PTTipsView` 增加锚点展示入口；Alert 复用统一 modal 层级，ActionSheet 保留原有语义和公开 API。
+- ✅ 增加 Popovers 使用审计、Overlay 重复实现审计、架构说明、迁移指南、Popover/Tips/ActionSheet 文档与 CI 门禁。
+- ✅ 完成 PooTools-Example Debug 全量 Xcode 构建，源码 warning/error 为零。
+- [ ] 完成 Release 全量构建、真机、多 Scene、键盘、安全区、Dynamic Type、RTL、拖拽和视觉回归后，再创建 `5.31.0` 正式 tag。
 
 ## 5.30.0 JX 分段与分页原生收口
 

@@ -86,6 +86,11 @@ bash Scripts/validate_swiftdate_removal_5_26.sh
 bash Scripts/validate_socketrocket_removal_5_27.sh
 bash Scripts/validate_gcdwebserver_removal_5_28.sh
 bash Scripts/CI/check_jx_paging_removed.sh
+# English: Keep the native Popover implementation free of the removed third-party dependency and duplicate overlay infrastructure.
+# Español: Mantén el Popover nativo libre de la dependencia eliminada y de infraestructura overlay duplicada.
+# 中文：确保原生 Popover 不重新引入已移除的第三方依赖，也不复制 Overlay 基建。
+bash Scripts/CI/check_popovers_removed.sh
+bash Scripts/CI/check_overlay_architecture.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_current_summaries.rb >/dev/null
 

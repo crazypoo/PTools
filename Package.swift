@@ -33,6 +33,10 @@ let package = Package(
         // 中文：独立公开与 Banner 内容解耦的多 Scene 浮层基础设施。
         .library(name: "PToolsOverlay", targets: ["PToolsOverlay"]),
         .library(name: "PooToolsBanner", targets: ["PooToolsBanner"]),
+        // English: Publish the native UIKit popover product on top of OverlayCore.
+        // Español: Publica el producto popover nativo de UIKit sobre OverlayCore.
+        // 中文：在 OverlayCore 之上公开 UIKit 原生 Popover 产品层。
+        .library(name: "PooToolsPopover", targets: ["PooToolsPopover"]),
         // English: Publish the typed SF Symbols runtime independently from the UIKit umbrella.
         // Español: Publica el runtime tipado de SF Symbols de forma independiente del umbrella UIKit.
         // 中文：独立公开类型化 SF Symbols 运行时，避免必须引入完整 UIKit umbrella。
@@ -167,7 +171,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsAll", targets: [
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
-            "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner",
+            "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner", "PooToolsPopover",
             "PooToolsMediaCore",
             "PToolsHTTPServer", "PToolsHTTPFilePortal",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
@@ -289,6 +293,20 @@ let package = Package(
             path: "PooToolsSource/Banner",
             swiftSettings: [
                 .define("POOTOOLS_BANNER"),
+                .define("POOTOOLS_COCOAPODS"),
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep popover product semantics separate from the shared overlay infrastructure.
+        // Español: Mantiene la semántica del producto popover separada de la infraestructura overlay compartida.
+        // 中文：让 Popover 产品语义与共享浮层基础设施保持分离。
+        .target(
+            name: "PooToolsPopover",
+            dependencies: ["PToolsOverlay", "PToolsSymbols"],
+            path: "PooToolsSource/Popover",
+            swiftSettings: [
+                .define("POOTOOLS_POPOVER"),
                 .define("POOTOOLS_COCOAPODS"),
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
@@ -513,7 +531,7 @@ let package = Package(
         .target(name: "PooToolsMessageKit", dependencies: ["ptools", "PToolsSymbols", "PooToolsCustomerLabel"], path: "PooToolsSource/MessageKit", swiftSettings: [.define("POOTOOLS_MESSAGEKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSocketKit", dependencies: ["ptools", "PToolsLogging"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsIAP", dependencies: ["ptools"], path: "PooToolsSource/IAP", swiftSettings: [.define("POOTOOLS_IAP"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsTipsView", dependencies: ["ptools"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsTipsView", dependencies: ["ptools", "PToolsOverlay"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPicker", dependencies: ["ptools", "SnapKit"], path: "PooToolsSource/Picker", swiftSettings: [.define("POOTOOLS_PICKER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================

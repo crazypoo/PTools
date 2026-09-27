@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
-Generated at: 2026-09-27T05:11:18Z
+Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
+Generated at: 2026-09-27T07:05:55Z
 -->
 
 # PTools 当前 Debug 依赖图

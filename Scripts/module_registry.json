@@ -88,6 +88,8 @@
     {"kind":"settings","module":"Logging","reason":"SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.","owner":"logging","expiration":"2026-12-31"},
     {"kind":"settings","module":"Symbols","reason":"SwiftPM enables strict concurrency for the standalone symbol target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
     {"kind":"settings","module":"Overlay","reason":"SwiftPM enables strict concurrency for the standalone overlay target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Banner","reason":"SwiftPM enables strict concurrency for the standalone banner target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-components","expiration":"2026-12-31"}
+    {"kind":"settings","module":"Banner","reason":"SwiftPM enables strict concurrency for the standalone banner target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-components","expiration":"2026-12-31"},
+    {"kind":"dependency","module":"TipsView","field":"internal_dependencies","reason":"SwiftPM now exposes the shared Overlay target directly for anchored Tips integration; CocoaPods keeps the historical Core dependency for source compatibility.","owner":"ui-components","expiration":"2026-12-31"},
+    {"kind":"settings","module":"Popover","reason":"SwiftPM enables strict concurrency and InferSendableFromCaptures for the standalone Popover target; CocoaPods receives the native source through the aggregate compiler contract.","owner":"ui-components","expiration":"2026-12-31"}
   ]
 }

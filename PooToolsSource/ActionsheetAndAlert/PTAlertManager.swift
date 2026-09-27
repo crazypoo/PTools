@@ -520,7 +520,10 @@ private extension PTAlertManager {
         let window = PTAlertWindow(windowScene: scene)
         window.frame = scene.coordinateSpace.bounds
         window.backgroundColor = .clear
-        window.windowLevel = .alert + 50
+        // English: Reuse the shared modal z-order so Alert and the native overlay stack remain deterministic.
+        // Español: Reutiliza el nivel modal compartido para mantener determinista la pila de Alert y Overlay nativo.
+        // 中文：复用统一的 modal 层级，保证 Alert 与原生 Overlay 的层级顺序一致。
+        window.windowLevel = PTOverlayZOrder.windowLevel(for: .modal)
         window.overrideUserInterfaceStyle = UIUserInterfaceStyle(
             rawValue: controller.config.userInterfaceStyleOverride.rawValue
         ) ?? .unspecified

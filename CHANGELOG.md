@@ -1,8 +1,17 @@
 # Changelog
 
-## Unreleased — 5.30.x
+## Unreleased — 5.31.x
 
-当前开发基线为 `5.30.0`；版本唯一来源为根目录 `VERSION`，原生 PagingControl 完成宿主回归后再创建正式 tag。
+当前开发基线为 `5.31.0`；版本唯一来源为根目录 `VERSION`，完成宿主弹层回归后再创建正式 tag。
+
+## 5.31.0 — 2026-09-27
+
+- 移除 `aheze/Popovers` 的 SwiftPM/CocoaPods 直接依赖；`PopoverKit` 保留为原生 `PooTools/Popover` 的兼容别名。
+- 在既有 OverlayCore 1.0 基础上增加 Anchor、自动定位、碰撞修正、箭头、点击外部、拖拽、键盘、安全区和无障碍协作能力。
+- 新增 UIKit 原生 `PTPopover`、`PTContextMenu` 和类型化内容/配置/句柄，支持 UIView、UIViewController、菜单、更新、替换、重定位、分组与多弹层。
+- `PTTipsView` 增加锚点入口并复用统一定位能力；Alert 继续保持自身语义，同时复用共享 modal 层级。
+- 增加 Popovers 使用审计、Overlay 重复基建审计、迁移、Popover/Tips/ActionSheet 指南和 CI 移除门禁。
+- 已完成 Debug 全量 Xcode 构建；Release、宿主多 Scene、键盘、动态字体、RTL、拖拽和真机视觉回归完成后再创建正式 tag。
 
 ## 5.30.0 — 2026-09-27
 

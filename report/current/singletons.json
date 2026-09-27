@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:06Z",
-  "shared_call_count": 1539,
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:05:44Z",
+  "shared_call_count": 1544,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -745,7 +745,7 @@
     },
     {
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 137,
+      "line": 205,
       "declaration": "public static let shared = PTOverlayDiagnostics()",
       "name": "shared",
       "category": "C",
@@ -754,8 +754,17 @@
     },
     {
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "line": 178,
+      "line": 246,
       "declaration": "public static let shared = PTOverlayRegistryStore()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "line": 37,
+      "declaration": "public static let shared = PTAnchorRegistry()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",
@@ -801,6 +810,15 @@
       "path": "PooToolsSource/Ping/PTPingActivityIndicator.swift",
       "line": 13,
       "declaration": "static let shared = PTPingActivityIndicator()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "line": 202,
+      "declaration": "public static let shared = PTPopoverCenter()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

@@ -74,7 +74,56 @@ public enum PTOverlayDismissReason: Sendable {
     case manual
     case sceneDisconnected
     case hostUnavailable
+    // English: The anchor no longer identifies the content that owns the overlay.
+    // Español: El anclaje ya no identifica el contenido que posee el overlay.
+    // 中文：锚点已无法继续标识当前浮层所属的内容。
+    case anchorLost
     case replaced
+}
+
+// English: These policies extend the 1.0 contracts without changing Banner defaults.
+// Español: Estas políticas amplían los contratos 1.0 sin cambiar los valores predeterminados de Banner.
+// 中文：这些策略扩展 1.0 契约，但不改变 Banner 的默认行为。
+public enum PTOverlayExclusivityPolicy: Sendable {
+    case none
+    case dismissLowerTransient
+    case dismissSameGroup
+}
+
+public struct PTOverlayGroupID: Hashable, Sendable {
+    public let rawValue: String
+
+    public init(_ rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+public struct PTPopoverContext {
+    public let overlayID: PTOverlayID
+    public let frame: CGRect
+    public let anchorFrame: CGRect
+    public let availableBounds: CGRect
+    public let safeAreaInsets: UIEdgeInsets
+    public let resolvedPlacement: PTPopoverPlacement
+    public let arrowPoint: CGPoint?
+    public let keyboardFrame: CGRect?
+
+    @MainActor
+    public init(overlayID: PTOverlayID,
+                geometry: PTOverlayGeometry,
+                anchorFrame: CGRect,
+                availableBounds: CGRect,
+                safeAreaInsets: UIEdgeInsets,
+                keyboardFrame: CGRect?) {
+        self.overlayID = overlayID
+        self.frame = geometry.frame
+        self.anchorFrame = anchorFrame
+        self.availableBounds = availableBounds
+        self.safeAreaInsets = safeAreaInsets
+        self.resolvedPlacement = geometry.placement
+        self.arrowPoint = geometry.arrowPoint
+        self.keyboardFrame = keyboardFrame
+    }
 }
 
 @MainActor
@@ -97,13 +146,16 @@ public final class PTOverlayHandle {
 
     private var dismissAction: (@MainActor () -> Void)?
     private var updateAction: (@MainActor () -> Void)?
+    private var replaceAction: (@MainActor () -> Void)?
 
-    init(id: PTOverlayID,
+    public init(id: PTOverlayID,
          dismissAction: (@MainActor () -> Void)? = nil,
-         updateAction: (@MainActor () -> Void)? = nil) {
+         updateAction: (@MainActor () -> Void)? = nil,
+         replaceAction: (@MainActor () -> Void)? = nil) {
         self.id = id
         self.dismissAction = dismissAction
         self.updateAction = updateAction
+        self.replaceAction = replaceAction
     }
 
     public func dismiss() {
@@ -114,13 +166,29 @@ public final class PTOverlayHandle {
         updateAction?()
     }
 
-    func setState(_ state: PTOverlayState) {
+    public func replace() {
+        replaceAction?()
+    }
+
+    // English: Product adapters can attach lifecycle actions after the shared handle is created.
+    // Español: Los adaptadores de producto pueden asociar acciones de ciclo de vida después de crear el handle compartido.
+    // 中文：产品适配层可以在共享句柄创建后补充生命周期操作。
+    public func setActions(dismiss: (@MainActor () -> Void)? = nil,
+                           update: (@MainActor () -> Void)? = nil,
+                           replace: (@MainActor () -> Void)? = nil) {
+        dismissAction = dismiss
+        updateAction = update
+        replaceAction = replace
+    }
+
+    public func setState(_ state: PTOverlayState) {
         self.state = state
     }
 
-    func invalidate() {
+    public func invalidate() {
         dismissAction = nil
         updateAction = nil
+        replaceAction = nil
     }
 }
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:24Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:06:00Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -31,7 +31,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "lines": 568,
+      "lines": 571,
       "classification": "ok"
     },
     {
@@ -3891,7 +3891,17 @@
     },
     {
       "path": "PooToolsSource/Overlay/PTOverlayCore.swift",
-      "lines": 197,
+      "lines": 265,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayGeometry.swift",
+      "lines": 468,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Overlay/PTOverlayInteraction.swift",
+      "lines": 195,
       "classification": "ok"
     },
     {
@@ -3901,7 +3911,7 @@
     },
     {
       "path": "PooToolsSource/Overlay/PTOverlayPresentation.swift",
-      "lines": 187,
+      "lines": 194,
       "classification": "ok"
     },
     {
@@ -4287,6 +4297,16 @@
     {
       "path": "PooToolsSource/Pinyin/PTPinyin.swift",
       "lines": 62,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Popover/PTContextMenu.swift",
+      "lines": 173,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Popover/PTPopover.swift",
+      "lines": 826,
       "classification": "ok"
     },
     {
@@ -4697,6 +4717,11 @@
     {
       "path": "PooToolsSource/Switch/PTSwitch.swift",
       "lines": 156,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/TipsView/PTTipsOverlayIntegration.swift",
+      "lines": 87,
       "classification": "ok"
     },
     {

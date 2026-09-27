@@ -3,18 +3,18 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
-Generated at: 2026-09-27T05:11:46Z
+Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
+Generated at: 2026-09-27T07:05:49Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.30.0`
+- Podspec: `PooTools` `5.31.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `113`
+- Subspec count: `114`
 
 ## Subspecs
 
@@ -99,7 +99,8 @@ Generated at: 2026-09-27T05:11:46Z
 | `PhotoPicker` | `PooTools/Core`, `PooTools/ImagePicker`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/Symbols` | `Kakapos` | `PhotoPicker` | — | — |
 | `Picker` | `PooTools/Core` | — | `Picker` | — | — |
 | `Ping` | `PooTools/Core` | — | `Ping` | — | — |
-| `PopoverKit` | `PooTools/Core` | `Popovers` | — | — | — |
+| `Popover` | `PooTools/Overlay`, `PooTools/Symbols` | — | `Popover` | — | — |
+| `PopoverKit` | `PooTools/Popover` | — | — | — | — |
 | `ProgressBar` | `PooTools/Core` | — | `ProgressBar` | — | — |
 | `RateView` | `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
 | `RemindersPermission` | `PooTools/PToolsPermissionCore` | — | `RemindersPermission` | — | — |

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:05:08Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T05:57:29Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -77,6 +77,7 @@
     "PooToolsPhotoPicker",
     "PooToolsPicker",
     "PooToolsPing",
+    "PooToolsPopover",
     "PooToolsProgressBar",
     "PooToolsRateView",
     "PooToolsRouter",
@@ -177,6 +178,7 @@
     "PhotoPicker",
     "Picker",
     "Ping",
+    "Popover",
     "ProgressBar",
     "RateView",
     "RemindersPermission",
@@ -423,6 +425,17 @@
       "spm": [],
       "cocoapods": [
         "PToolsUIFoundation"
+      ]
+    },
+    {
+      "module": "TipsView",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "Overlay"
+      ],
+      "cocoapods": [
+        "Core"
       ]
     },
     {
@@ -814,6 +827,26 @@
       }
     },
     {
+      "module": "Popover",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_POPOVER"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_POPOVER"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "RemindersPermission",
       "spm": {
         "defines": [
@@ -901,5 +934,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "a18eb17766659c587a508f065486e1bdc622b1a18ce66f0e5a44075fd1d1edd3"
+  "fingerprint": "a6348443c637014df23349f3d87bd119dc555da5c09cfa2ea0d923cec13fbffb"
 }

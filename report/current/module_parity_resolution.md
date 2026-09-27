@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
-Generated at: 2026-09-27T05:11:47Z
+Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
+Generated at: 2026-09-27T07:05:49Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `61`
+- Current exceptions: `63`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -30,6 +30,7 @@ Generated at: 2026-09-27T05:11:47Z
 | ScanQRCode | ["CameraPermission","Core","ImagePicker","PhotoPicker"] | ["CameraPermission","Core","PhotoPicker"] | SPM declares ImagePicker and PhotoPicker routes; CocoaPods uses its local graph. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | SiriPermission | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods keeps the legacy Core route for this permission alias. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Slider | [] | ["PToolsUIFoundation"] | CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |
+| TipsView | ["Core","Overlay"] | ["Core"] | SwiftPM now exposes the shared Overlay target directly for anchored Tips integration; CocoaPods keeps the historical Core dependency for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | VideoEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Appz | — | — | CocoaPods aggregate subspec without a standalone SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Date | — | — | CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
@@ -69,6 +70,7 @@ Generated at: 2026-09-27T05:11:47Z
 | PToolsPermissionCore | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | PToolsPermissionUI | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | PToolsUIFoundation | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |
+| Popover | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_POPOVER"],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_POPOVER"],"upcoming_features":[]} | SwiftPM enables strict concurrency and InferSendableFromCaptures for the standalone Popover target; CocoaPods receives the native source through the aggregate compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | RemindersPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_REMINDERS","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_REMINDERS"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | SiriPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_SIRI","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_SIRI"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | SpeechRecognizerPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_SPEECH","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_SPEECH"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |

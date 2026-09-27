@@ -62,6 +62,10 @@ public final class PTOverlayContainerView: UIView {
     public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent
     public weak var interactiveContentView: UIView?
     public var interactiveContentViews: [UIView] = []
+    // English: Product layers can provide outside-tap semantics without replacing the shared window hit-test path.
+    // Español: Las capas de producto pueden definir el tap exterior sin reemplazar el hit-test compartido de la ventana.
+    // 中文：产品层可以提供点击外部语义，而不需要替换共享的 Window 命中测试路径。
+    public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)?
 
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         switch hitTestPolicy {
@@ -78,6 +82,9 @@ public final class PTOverlayContainerView: UIView {
         case .consumeAll:
             return super.hitTest(point, with: event)
         case .custom:
+            if let customHitTest {
+                return customHitTest(point, event)
+            }
             let contentViews = interactiveContentViews.isEmpty
                 ? interactiveContentView.map { [$0] } ?? []
                 : interactiveContentViews

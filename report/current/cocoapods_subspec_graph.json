@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:46Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:05:49Z",
   "name": "PooTools",
-  "version": "5.30.0",
+  "version": "5.31.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 113,
+  "subspec_count": 114,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -1818,21 +1818,40 @@
       }
     },
     {
+      "name": "PooTools/Popover",
+      "short_name": "Popover",
+      "local_dependencies": [
+        "PooTools/Overlay",
+        "PooTools/Symbols"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Popover/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "Popover"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_POPOVER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/PopoverKit",
       "short_name": "PopoverKit",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/Popover"
       ],
-      "third_party_dependencies": [
-        "Popovers"
-      ],
+      "third_party_dependencies": [],
       "source_files": [],
       "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_POPOVER POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
       }
     },
     {

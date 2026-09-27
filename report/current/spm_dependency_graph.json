@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:46Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:05:49Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -370,6 +370,7 @@
         "PooToolsPhotoPicker",
         "PooToolsPicker",
         "PooToolsPing",
+        "PooToolsPopover",
         "PooToolsProgressBar",
         "PooToolsRateView",
         "PooToolsRouter",
@@ -911,6 +912,17 @@
       },
       "targets": [
         "PooToolsPing"
+      ]
+    },
+    {
+      "name": "PooToolsPopover",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsPopover"
       ]
     },
     {
@@ -5477,6 +5489,73 @@
       ]
     },
     {
+      "name": "PooToolsPopover",
+      "type": "regular",
+      "path": "PooToolsSource/Popover",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_POPOVER"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PooToolsProgressBar",
       "type": "regular",
       "path": "PooToolsSource/ProgressBar",
@@ -6302,6 +6381,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",

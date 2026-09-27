@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
-  "generated_at": "2026-09-27T05:11:11Z",
+  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
+  "generated_at": "2026-09-27T07:05:49Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
@@ -424,6 +424,14 @@
       "destination": "ptools"
     },
     {
+      "source": "PooToolsPopover",
+      "destination": "PToolsOverlay"
+    },
+    {
+      "source": "PooToolsPopover",
+      "destination": "PToolsSymbols"
+    },
+    {
       "source": "PooToolsProgressBar",
       "destination": "ptools"
     },
@@ -514,6 +522,10 @@
     {
       "source": "PooToolsTelephony",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsTipsView",
+      "destination": "PToolsOverlay"
     },
     {
       "source": "PooToolsTipsView",

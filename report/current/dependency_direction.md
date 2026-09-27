@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_dependency_direction.sh
-Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
-Generated at: 2026-09-27T05:11:11Z
+Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
+Generated at: 2026-09-27T07:05:49Z
 -->
 
 # Dependency Direction Gate
 
 - Status: `pass_with_legacy_allowlist`
-- Internal edges: `142`
+- Internal edges: `145`
 - Temporary allowlisted edges: `0`
 - Unallowlisted violations: `0`
 
