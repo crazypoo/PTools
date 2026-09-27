@@ -17,6 +17,7 @@ import PToolsSymbols
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+import PooTools
 
 struct UserModel: PTPickerStringModel {
     let userId: String

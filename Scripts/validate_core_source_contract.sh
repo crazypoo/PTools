@@ -137,24 +137,20 @@ unless target
 else
   xcode_paths = target.source_build_phase.files_references.compact.map(&:real_path)
   xcode_paths = relative_paths(xcode_paths, repo_root)
-  xcode_core_paths = xcode_paths.select do |path|
-    path.start_with?("PooToolsSource/") && core_dirs.any? do |directory|
-      path.start_with?("PooToolsSource/#{directory}/")
-    end
-  end.to_set
+	# English: The example consumes the library through Pods/SwiftPM; it must not compile library sources directly.
+	# Español: El ejemplo consume la biblioteca mediante Pods/SwiftPM; no debe compilar directamente sus fuentes.
+	# 中文：示例工程通过 Pods/SwiftPM 使用库，不能再直接编译库源码。
+	xcode_core_paths = xcode_paths.select do |path|
+		path.start_with?("PooToolsSource/") && core_dirs.any? do |directory|
+			path.start_with?("PooToolsSource/#{directory}/")
+		end
+	end.to_set
 
-# English: This adapter is SwiftPM-only; legacy Xcode/CocoaPods builds use their local compatibility definitions.
-# Español: Este adaptador solo pertenece a SwiftPM; Xcode/CocoaPods usan sus definiciones locales compatibles.
-# 中文：该适配器仅用于 SwiftPM；旧版 Xcode/CocoaPods 使用各自的兼容定义。
-  xcode_excluded_paths = ["PooToolsSource/Core/PTLayerExports.swift"].to_set
-  xcode_expected_paths = actual_paths - xcode_excluded_paths
-  missing = (xcode_expected_paths - xcode_core_paths).to_a.sort
-  extra = (xcode_core_paths - xcode_expected_paths).to_a.sort
-  unless missing.empty? && extra.empty?
-    failures << "Xcode Core source membership drifted; missing=#{missing.join(",")} extra=#{extra.join(",")}"
-  else
-    puts "PASS: Xcode Core source membership (#{actual_paths.length} files)"
-  end
+	unless xcode_core_paths.empty?
+		failures << "Xcode Example target must not compile Core library sources: #{xcode_core_paths.to_a.sort.join(",")}"
+	else
+		puts "PASS: Xcode Example source ownership (PooToolsSource intersection is zero)"
+	end
 end
 
 unless failures.empty?

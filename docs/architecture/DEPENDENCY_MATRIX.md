@@ -5,7 +5,7 @@ DO NOT EDIT MANUALLY.
 Generator: Scripts/generate_dependency_matrix.rb
 Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
 Generated at: 2026-09-27T10:15:07Z
-Version source: 5.31.1
+Version source: 5.32.0
 -->
 
 # Direct Dependency Matrix
@@ -55,7 +55,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `ImagePicker` | `CameraPermission`, `Core`, `PTCameraPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Input` | `Core`, `ptools` | `PhoneNumberKit` | 6.0 review | Keep; review direct drift |
 | `InputAll` | `Appz`, `BankCard`, `Banner`, `BilogyID`, `Calendar`, `CheckBox`, `CheckDirtyWord`, `CheckUpdate`, `ChinesePinyin`, `Circle`, `CodeView`, `Core`, `Country`, `CustomerLabel`, `CustomerNumberKeyboard`, `DEBUG`, `DEBUG_TrackingEyes`, `DataEncrypt`, `Flag`, `Guide`, `HTTPFilePortal`, `HarbethKit`, `HeartRate`, `Hud`, `IAP`, `ImageEditor`, `Input`, `Instructions`, `KeyChain`, `LaunchTimeProfiler`, `Layout`, `LivePhoto`, `Loading`, `Location`, `MediaViewer`, `MessageKit`, `Motion`, `NetWork`, `OSSKitSpeech`, `PDF`, `PageControl`, `PagingControl`, `PhoneInfo`, `PhotoPicker`, `Picker`, `Ping`, `PopoverKit`, `ProgressBar`, `RateView`, `Router`, `SVG`, `ScanQRCode`, `ScrollBanner`, `Search`, `SearchBar`, `Security`, `SecuritySuite`, `Segmented`, `Share`, `Slider`, `SmartScreenshot`, `SocketKit`, `Stepper`, `Tabbar`, `Telephony`, `VideoEditor`, `Vision`, `WhatsNewsKit`, `ZipArchive`, `iOS17Tips` | — | No direct third-party dependency | Keep; review direct drift |
-| `Instructions` | `Core` | `Instructions` | 6.0 review | Keep; review direct drift |
+| `Instructions` | `Core`, `Overlay`, `PToolsOverlay` | — | No direct third-party dependency | Keep; review direct drift |
 | `KeyChain` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `LaunchTimeProfiler` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Layout` | `Core`, `ptools` | `CollectionViewPagingLayout` | 6.0 review | Keep; review direct drift |

@@ -8,6 +8,7 @@
 
 import UIKit
 import SmartCodable
+import PooTools
 
 class LXSiwftBaseModel:SmartCodableX {
     var code:String = ""

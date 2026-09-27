@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
-  "generated_at": "2026-09-27T10:34:05Z",
+  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
+  "generated_at": "2026-09-27T12:26:05Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
@@ -111,7 +111,7 @@
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
       "line": 66,
-      "text": "struct PTSendableAVAsset: @unchecked Sendable {"
+      "text": "public struct PTSendableAVAsset: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",

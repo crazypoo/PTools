@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import PooTools
+import SnapKit
 
 class PTSpeechViewController: PTBaseViewController {
 
@@ -14,7 +16,7 @@ class PTSpeechViewController: PTBaseViewController {
     var isRecording:Bool = false
     var translateToText:Bool = false
     lazy var soundVisualizerMaskView:PTVoiceActionView = {
-        let view = PTVoiceActionView()
+        let view = PTVoiceActionView(frame: .zero)
         view.backgroundColor = .black.withAlphaComponent(0.65)
         return view
     }()

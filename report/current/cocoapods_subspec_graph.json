@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
-  "generated_at": "2026-09-27T10:34:09Z",
+  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
+  "generated_at": "2026-09-27T13:57:07Z",
   "name": "PooTools",
-  "version": "5.31.1",
+  "version": "5.32.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -1070,13 +1070,16 @@
       "name": "PooTools/Instructions",
       "short_name": "Instructions",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/Core",
+        "PooTools/Overlay"
       ],
-      "third_party_dependencies": [
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/Instructions/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
         "Instructions"
       ],
-      "source_files": [],
-      "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],

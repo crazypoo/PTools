@@ -1,0 +1,17 @@
+# English: Reviewed third-party API removals carried forward for the 5.32.0 dependency absorption.
+# Español: Eliminaciones revisadas de API de terceros trasladadas a la absorción de dependencias de 5.32.0.
+# 中文：为 5.32.0 依赖吸收登记已审阅的第三方 API 移除项。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)
+public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink

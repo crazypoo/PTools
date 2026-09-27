@@ -63,8 +63,8 @@ public extension PHAsset {
         }
     }
     
-    struct PTSendableAVAsset: @unchecked Sendable {
-        let asset: AVAsset
+    public struct PTSendableAVAsset: @unchecked Sendable {
+        public let asset: AVAsset
     }
 
     @MainActor var requestID: PHImageRequestID? {

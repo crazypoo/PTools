@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
-  "generated_at": "2026-09-27T10:34:06Z",
+  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
+  "generated_at": "2026-09-27T12:26:06Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -8688,6 +8688,30 @@
       "declaration": "public struct PTTabBarItemConfig {"
     },
     {
+      "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let title: String",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let title: String"
+    },
+    {
+      "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let content: PTTabBarItemContent",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let content: PTTabBarItemContent"
+    },
+    {
+      "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let viewController: UIViewController",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let viewController: UIViewController"
+    },
+    {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(title: String,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
       "line": 32,
@@ -12438,6 +12462,22 @@
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTGIFImageFailTask = (NSImageView,URL,Error?) -> Void"
+    },
+    {
+      "key": "PooToolsSource/Category/PHAsset+PTEX.swift|public|struct|public struct PTSendableAVAsset: @unchecked Sendable",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTSendableAVAsset: @unchecked Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Category/PHAsset+PTEX.swift|public|let|public let asset: AVAsset",
+      "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let asset: AVAsset"
     },
     {
       "key": "PooToolsSource/Category/PTColorRBGModel.swift|public|class|public class PTColorRBGModel: NSObject",
@@ -59232,9 +59272,17 @@
       "declaration": "public struct TestTip: Tip {"
     },
     {
+      "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|init|public init(newId: String, tipTitles: String, messageTitles: String)",
+      "path": "PooToolsSource/iOS17Tips/PTTip.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(newId: String, tipTitles: String, messageTitles: String) {"
+    },
+    {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var title: Text",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 16,
+      "line": 25,
       "access": "public",
       "kind": "var",
       "declaration": "public var title: Text {"
@@ -59242,7 +59290,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var message: Text?",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 21,
+      "line": 30,
       "access": "public",
       "kind": "var",
       "declaration": "public var message: Text? {"
@@ -59250,7 +59298,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var asset: Image?",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 26,
+      "line": 35,
       "access": "public",
       "kind": "var",
       "declaration": "public var asset: Image? {"
@@ -59258,7 +59306,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var id: String",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 30,
+      "line": 39,
       "access": "public",
       "kind": "var",
       "declaration": "public var id: String {"
@@ -59266,7 +59314,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var newId: String",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 34,
+      "line": 43,
       "access": "public",
       "kind": "var",
       "declaration": "public var newId: String"
@@ -59274,7 +59322,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var tipTitles:String",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 35,
+      "line": 44,
       "access": "public",
       "kind": "var",
       "declaration": "public var tipTitles:String"
@@ -59282,7 +59330,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var messageTitles:String",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 36,
+      "line": 45,
       "access": "public",
       "kind": "var",
       "declaration": "public var messageTitles:String"
@@ -59290,7 +59338,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var actions: [Action]",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 39,
+      "line": 48,
       "access": "public",
       "kind": "var",
       "declaration": "public var actions: [Action] {"
@@ -59298,7 +59346,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var rules: [Rule]",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 52,
+      "line": 61,
       "access": "public",
       "kind": "var",
       "declaration": "public var rules: [Rule] {"
@@ -59306,7 +59354,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var options: [TipOption]",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 64,
+      "line": 73,
       "access": "public",
       "kind": "var",
       "declaration": "public var options: [TipOption] {"
@@ -59314,15 +59362,23 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|struct|public struct Test1Tip: Tip",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 73,
+      "line": 82,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct Test1Tip: Tip {"
     },
     {
+      "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|init|public init()",
+      "path": "PooToolsSource/iOS17Tips/PTTip.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var title: Text",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 74,
+      "line": 88,
       "access": "public",
       "kind": "var",
       "declaration": "public var title: Text {"
@@ -59330,7 +59386,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var message: Text?",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 82,
+      "line": 96,
       "access": "public",
       "kind": "var",
       "declaration": "public var message: Text? {"
@@ -59338,7 +59394,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|var|public var asset: Image?",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 89,
+      "line": 103,
       "access": "public",
       "kind": "var",
       "declaration": "public var asset: Image? {"
@@ -59346,7 +59402,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|class|public class PTTip: NSObject",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 95,
+      "line": 109,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTip: NSObject {"
@@ -59354,7 +59410,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|func|public func appdelegateTipSet()",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 106,
+      "line": 120,
       "access": "public",
       "kind": "func",
       "declaration": "public func appdelegateTipSet() {"
@@ -59362,7 +59418,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|func|@MainActor public func showTip(tips: any Tip,",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 120,
+      "line": 134,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func showTip(tips: any Tip,"
@@ -59370,7 +59426,7 @@
     {
       "key": "PooToolsSource/iOS17Tips/PTTip.swift|public|func|public func showTipsInView(tips: any Tip,",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 145,
+      "line": 159,
       "access": "public",
       "kind": "func",
       "declaration": "public func showTipsInView(tips: any Tip,"

@@ -65,6 +65,22 @@ target 'PooTools_Example' do
 #https://github.com/helele90/APPAnalyze
 
   pod 'PooTools/InputAll', :path => './'
+  # English: Include the opt-in PooTools features used directly by the example target.
+  # Español: Incluye las funciones opt-in de PooTools que el target de ejemplo usa directamente.
+  # 中文：显式加入示例 Target 直接使用的 PooTools 可选功能。
+  pod 'PooTools/HandSign', :path => './'
+  pod 'PooTools/MediaPermission', :path => './'
+
+  # English: Keep modules imported directly by the example target explicit.
+  # Español: Mantén explícitos los módulos que el target de ejemplo importa directamente.
+  # 中文：示例 Target 直接导入的模块必须显式声明，不能依赖传递依赖可见性。
+  pod 'Alamofire'
+  pod 'CryptoSwift'
+  pod 'IQKeyboardToolbarManager'
+  pod 'SmartCodable'
+  pod 'SnapKit'
+  pod 'SVGAPlayer'
+
 #  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
 
 #  pod 'MetaCodable'

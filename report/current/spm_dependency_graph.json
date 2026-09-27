@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
-  "generated_at": "2026-09-27T10:34:08Z",
+  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
+  "generated_at": "2026-09-27T13:57:06Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -349,6 +349,7 @@
         "PooToolsImageEditor",
         "PooToolsImagePicker",
         "PooToolsInput",
+        "PooToolsInstructions",
         "PooToolsKeyChain",
         "PooToolsKeyboard",
         "PooToolsLaunchTimeProfiler",
@@ -670,6 +671,17 @@
       },
       "targets": [
         "PooToolsInput"
+      ]
+    },
+    {
+      "name": "PooToolsInstructions",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsInstructions"
       ]
     },
     {
@@ -1315,8 +1327,8 @@
           "requirement": {
             "range": [
               {
-                "lowerBound": "1.1.0",
-                "upperBound": "2.0.0"
+                "lowerBound": "3.0.1",
+                "upperBound": "4.0.0"
               }
             ]
           },
@@ -4452,6 +4464,62 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_INPUT"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsInstructions",
+      "type": "regular",
+      "path": "PooToolsSource/Instructions",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_INSTRUCTIONS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
             }
           },
           "tool": "swift"

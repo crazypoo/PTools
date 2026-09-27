@@ -1,8 +1,25 @@
 # Changelog
 
-## Unreleased — 5.31.x
+## Unreleased — 5.32.x
 
-当前开发基线为 `5.31.1`；版本唯一来源为根目录 `VERSION`，完成宿主分页回归后再创建正式 tag。
+当前开发基线为 `5.32.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+
+## 5.32.0 — 2026-09-27
+
+- 移除 CocoaPods 第三方 `Instructions` 依赖，新增原生 `PooToolsInstructions` SwiftPM product 和 `PooTools/Instructions` subspec。
+- 复用 Overlay 的 Scene、Anchor、定位、生命周期和命中测试能力，提供类型化 Tour、Step、目标等待、镂空遮罩、内容卡片、推进策略和持久化。
+- 新增 Instructions 使用审计、架构边界、迁移指南和 CI 移除门禁；Guide、WhatsNewsKit、TipsView 保持各自语义边界。
+- CocoaPods lock 已同步到 5.32.0；未修改第三方源码和依赖版本。
+
+## 5.31.2 — 2026-09-27
+
+- 修复 CocoaPods 示例工程与 PooTools Library 共用 `PooTools` Module Identity 的问题，恢复由构建目标自动决定 App 模块名。
+- 从 `PooTools_Example` 的 Compile Sources 移除 `PooToolsSource/**`，避免示例 App 与 Pods/PooTools 重复编译同一批库源码。
+- 移除示例工程硬编码的 `SDKROOT = iphoneos`、不必要的 Module Verifier 和错误的 Swift Generated Header 配置，保留 arm64 Simulator 架构。
+- 为示例工程直接使用的 Alamofire、CryptoSwift、IQKeyboardToolbarManager、SmartCodable、SnapKit 和 SVGAPlayer 增加显式依赖；YCSymbolTracker 改为可选 Debug 能力。
+- 为示例工程直接使用的 HandSign 和 MediaPermission 可选 subspec 增加显式依赖，并补齐公开模块边界上的初始化器与属性访问权限。
+- 新增源码归属审计、模块身份守卫以及 CocoaPods Simulator/Device 构建脚本。
+- CocoaPods workspace 已完成 Simulator/Device Debug/Release 构建；外部 Pods 警告单独记录，不修改第三方源码。
 
 ## 5.31.1 — 2026-09-27
 

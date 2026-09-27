@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.31.1`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.32.0`。
 
 ## Requirements
 
@@ -46,9 +46,15 @@ pod 'PooTools/HTTPServer'
 # pod 'PooTools/PagingControl'
 # 需要浏览器文件门户时再添加：
 # pod 'PooTools/HTTPFilePortal'
+# 需要原生 coach mark 引导时添加：
+# pod 'PooTools/Instructions'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
+
+引导提示使用 `PooToolsInstructions`（SwiftPM）或 `PooTools/Instructions`（CocoaPods）。它复用
+Overlay 的 Scene、Anchor、定位和生命周期能力，不创建第三方引导窗口。使用示例见
+[PooToolsInstructions 指南](docs/guides/PTINSTRUCTIONS_GUIDE.md)。
 
 分段和分页控件从 5.31.1 起提供稳定 ID、动态角标更新、懒加载页面、生命周期、Header/固定 Header、内外层滚动协调、刷新控件和回顶入口。旧 JX 场景迁移请阅读
 [YDShipOrder Paging 教程](docs/migrations/YD_SHIP_ORDER_PTOOLS_PAGING_TUTORIAL.md)。

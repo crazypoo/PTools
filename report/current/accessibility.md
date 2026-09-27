@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_accessibility_5_9.rb
-Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
-Generated at: 2026-09-27T10:34:07Z
+Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
+Generated at: 2026-09-27T12:26:07Z
 -->
 
 # PTools 当前 UI 适配扫描

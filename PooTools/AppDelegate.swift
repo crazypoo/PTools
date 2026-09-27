@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import PooTools
 import IQKeyboardToolbarManager
 import OSLog
-#if DEBUG
+#if DEBUG && canImport(YCSymbolTracker)
 import YCSymbolTracker
 #endif
 #if canImport(InAppViewDebugger)
@@ -23,8 +24,9 @@ import Bugly
 #endif
 import TipKit
 import MediaPlayer
-import Alamofire
+//import Alamofire
 import FamilyControls
+import PooTools
 
 //find . -type f | grep -e ".a" -e ".framework" | xargs grep -s UIWebView
 enum RequestManager {
@@ -148,7 +150,7 @@ class AppDelegate: PTAppWindowsDelegate {
 //        }, tint: .white)
         PTDarkModeOption.defaultDark()
         StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
-#if DEBUG
+#if DEBUG && canImport(YCSymbolTracker)
         let filePath = NSTemporaryDirectory().appending("/demo.order")
         YCSymbolTracker.exportSymbols(filePath: filePath)
 #endif

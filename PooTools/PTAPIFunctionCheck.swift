@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SmartCodable
+import PooTools
 
 class PTAPIFunctionCheck: NSObject {
     class func checkCode(code:String) ->Bool {

@@ -25,9 +25,9 @@ public protocol PTTabBarItemContent {
 
 @MainActor
 public struct PTTabBarItemConfig {
-    let title: String
-    let content: PTTabBarItemContent
-    let viewController: UIViewController
+    public let title: String
+    public let content: PTTabBarItemContent
+    public let viewController: UIViewController
     
     public init(title: String,
                 content: PTTabBarItemContent,

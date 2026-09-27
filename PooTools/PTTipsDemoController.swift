@@ -9,6 +9,7 @@
 import UIKit
 import TipKit
 import SnapKit
+import PooTools
 
 // MARK: - UIViewController
 class PTTipsDemoController: PTBaseViewController {

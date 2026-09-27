@@ -17,6 +17,7 @@ import CommonCrypto
 import PToolsUIFoundation
 #endif
 import PhotosUI
+import PooTools
 
 private let PTUploadFilePath: String = {
     let libraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first

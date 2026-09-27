@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
-Generated at: 2026-09-27T10:34:06Z
+Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
+Generated at: 2026-09-27T12:26:06Z
 -->
 
 # PTools 当前单例范围盘点
@@ -123,4 +123,4 @@ Generated at: 2026-09-27T10:34:06Z
 | PooToolsSource/Vision/PTVision.swift:36 | share | C Shared mutable service | public static var share: PTVision { | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/WhereIsMyEye/PTFaceEye.swift:15 | share | C Shared mutable service | public static let share = PTFaceEye() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/iCloud/PTiCloudFileManager.swift:16 | shared | C Shared mutable service | public static let shared = PTiCloudFileManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/iOS17Tips/PTTip.swift:96 | shared | C Shared mutable service | public static let shared = PTTip() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/iOS17Tips/PTTip.swift:110 | shared | C Shared mutable service | public static let shared = PTTip() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

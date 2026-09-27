@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PooTools
 
 class PTDocumentViewController: PTBaseViewController {
     public var rootDirectoryPath = FileManager.pt.getFileDirectory(type: .Directory)

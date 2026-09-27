@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PooTools
 
 struct PTRouterExampleModel:PTRoutableParams {
     typealias Target = PTRouteViewController

@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import PooTools
 
 class PTTagCell: PTBaseNormalCell {
     static let ID = "PTTagCell"

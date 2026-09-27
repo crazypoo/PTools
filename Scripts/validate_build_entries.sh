@@ -60,6 +60,8 @@ bash "$repo_root/Scripts/validate_core_source_contract.sh"
 bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"
 bash "$repo_root/Scripts/validate_permission_source_contract.sh"
 bash "$repo_root/Scripts/validate_logging_foundation_5_20.sh"
+ruby "$repo_root/Scripts/CI/check_example_source_ownership.rb"
+printf 'PASS: Example source ownership and module identity are valid\n'
 
 xcode_settings="$(xcodebuild -workspace "$repo_root/PooTools.xcworkspace" -scheme PooTools-Example -showBuildSettings 2>/dev/null)"
 if ! rg -q --fixed-strings "IPHONEOS_DEPLOYMENT_TARGET = 17.0" <<< "$xcode_settings"; then

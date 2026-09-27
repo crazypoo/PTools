@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
-Generated at: 2026-09-27T10:34:06Z
+Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
+Generated at: 2026-09-27T12:26:06Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -19,7 +19,7 @@ Generated at: 2026-09-27T10:34:06Z
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 27 | `public struct PTSendableReminderArrayBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/AVExport+PTEX.swift` | 13 | `public struct PTAssetExportResult: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/PHAsset+PTEX.swift` | 36 | `private struct PTSendableExportSession: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/Category/PHAsset+PTEX.swift` | 66 | `struct PTSendableAVAsset: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/Category/PHAsset+PTEX.swift` | 66 | `public struct PTSendableAVAsset: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 37 | `private struct PTVideoAssetSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 88 | `public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 94 | `public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |

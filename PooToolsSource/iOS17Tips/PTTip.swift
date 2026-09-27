@@ -12,6 +12,15 @@ import SnapKit
 
 // MARK: - 自定义Tip
 public struct TestTip: Tip {
+    // English: Expose the demo tip initializer so clients can configure it through the public module.
+    // Español: Expone el inicializador de demostración para que los clientes lo configuren mediante el módulo público.
+    // 中文：公开示例 Tip 的初始化方法，让外部模块可以通过公开模块配置它。
+    public init(newId: String, tipTitles: String, messageTitles: String) {
+        self.newId = newId
+        self.tipTitles = tipTitles
+        self.messageTitles = messageTitles
+    }
+
     // 标题
     public var title: Text {
         Text(tipTitles)
@@ -71,6 +80,11 @@ public struct TestTip: Tip {
 
 // MARK: - 自定义Tip
 public struct Test1Tip: Tip {
+    // English: Keep the no-argument demo tip constructible across the module boundary.
+    // Español: Mantén el Tip de demostración construible sin argumentos fuera del módulo。
+    // 中文：让无参数示例 Tip 可以跨模块创建。
+    public init() {}
+
     public var title: Text {
         Text("操作提示")
             .foregroundStyle(.red)

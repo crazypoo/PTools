@@ -532,7 +532,8 @@ Pod::Spec.new do |s|
     
     s.subspec 'Instructions' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'Instructions'
+        subspec.dependency 'PooTools/Overlay'
+        subspec.source_files = 'PooToolsSource/Instructions/**/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INSTRUCTIONS POOTOOLS_COCOAPODS"
         }

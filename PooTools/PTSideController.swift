@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import PooTools
 
 class PTSideController: PTBaseSideController {
 
@@ -64,7 +65,7 @@ class PTSideController: PTBaseSideController {
         let view = UIButton(type: .custom)
         view.backgroundColor = DynamicColor.randomColor
         view.addActionHandlers { sender in
-            Inspector.sharedInstance.present(animated: true)
+            Inspector.present(animated: true)
         }
         return view
     }()

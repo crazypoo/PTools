@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
-  "generated_at": "2026-09-27T05:57:29Z",
+  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
+  "generated_at": "2026-09-27T13:46:32Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -55,6 +55,7 @@
     "PooToolsImageEditor",
     "PooToolsImagePicker",
     "PooToolsInput",
+    "PooToolsInstructions",
     "PooToolsKeyChain",
     "PooToolsKeyboard",
     "PooToolsLaunchTimeProfiler",
@@ -147,6 +148,7 @@
     "ImageEditor",
     "ImagePicker",
     "Input",
+    "Instructions",
     "KeyChain",
     "LaunchTimeProfiler",
     "Layout",
@@ -218,7 +220,6 @@
     "Flag",
     "GCDWebServer",
     "InputAll",
-    "Instructions",
     "MXMetricManagerKit",
     "NFCKit",
     "NotificationBanner",
@@ -322,6 +323,17 @@
         "Harbeth"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "Instructions",
+      "field": "internal_dependencies",
+      "spm": [
+        "Overlay"
+      ],
+      "cocoapods": [
+        "Core",
+        "Overlay"
+      ]
     },
     {
       "module": "MeidaPermission",
@@ -633,6 +645,26 @@
       }
     },
     {
+      "module": "Instructions",
+      "spm": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_INSTRUCTIONS"
+        ],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_INSTRUCTIONS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "LocationPermission",
       "spm": {
         "defines": [
@@ -934,5 +966,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "a6348443c637014df23349f3d87bd119dc555da5c09cfa2ea0d923cec13fbffb"
+  "fingerprint": "82d85d47d75a0b8ba3837b50bda0b06fd8ce78f9d163c0af916c23884f9f0893"
 }

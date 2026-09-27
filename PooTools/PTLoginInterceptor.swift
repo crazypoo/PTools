@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PooTools
 
 @MainActor
 class PTTestGlobalFunction:NSObject {

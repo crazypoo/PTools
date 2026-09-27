@@ -5,7 +5,7 @@ DO NOT EDIT MANUALLY.
 Generator: Scripts/generate_package_matrix.rb
 Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
 Generated at: 2026-09-27T10:15:07Z
-Version source: 5.31.1
+Version source: 5.32.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -38,6 +38,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `DataEncrypt` | A | `PooTools/DataEncrypt` | `PooToolsDataEncrypt` | Keep; review drift |
 | `FaceIDPermission` | A | `PooTools/FaceIDPermission` | `PTFaceIDPermission` | Keep; review drift |
 | `Guide` | A | `PooTools/Guide` | `PooToolsGuide` | Keep; review drift |
+| `Instructions` | A | `PooTools/Instructions` | `PooToolsInstructions` | Keep; review drift |
 | `HTTPFilePortal` | A | `PooTools/HTTPFilePortal` | `PToolsHTTPFilePortal` | Keep; review drift |
 | `HTTPServer` | A | `PooTools/HTTPServer` | `PToolsHTTPServer` | Keep; review drift |
 | `HandSign` | A | `PooTools/HandSign` | `PooToolsHandSign` | Keep; review drift |
@@ -115,7 +116,6 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Flag` | B | `PooTools/Flag` | — | Parity decision before 6.0 |
 | `GCDWebServer` | B | `PooTools/GCDWebServer` | — | Parity decision before 6.0 |
 | `InputAll` | B | `PooTools/InputAll` | — | Parity decision before 6.0 |
-| `Instructions` | B | `PooTools/Instructions` | — | Parity decision before 6.0 |
 | `MXMetricManagerKit` | B | `PooTools/MXMetricManagerKit` | — | Parity decision before 6.0 |
 | `NFCKit` | B | `PooTools/NFCKit` | — | Parity decision before 6.0 |
 | `NotificationBanner` | B | `PooTools/NotificationBanner` | — | Parity decision before 6.0 |

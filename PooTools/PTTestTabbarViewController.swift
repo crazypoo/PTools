@@ -10,6 +10,7 @@ import UIKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
+import PooTools
 
 class PTTestTabbarViewController: PTBaseTabBarViewController {
     

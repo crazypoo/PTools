@@ -483,7 +483,7 @@ public extension UIViewController {
 
 extension UIViewController {
     
-    static let swizzlePresentOnce: Void = {
+    public static let swizzlePresentOnce: Void = {
         Swizzle(UIViewController.self) {
             #selector(present(_:animated:completion:)) <-> #selector(pt_swizzled_present(_:animated:completion:))
         }

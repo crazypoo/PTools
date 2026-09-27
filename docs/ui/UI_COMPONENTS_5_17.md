@@ -27,7 +27,7 @@
 | CheckBox | PTools UI | Core | control state / reuse | static + VoiceOver | PooTools Example | podspec | 保留兼容入口 |
 | CodeView | PTools UI | Core | input / focus | static + keyboard | PooTools Example | podspec | 保留兼容入口 |
 | Country | PTools UI | Core | list / selection | static + localization | PooTools Example | podspec | 保留兼容入口 |
-| Guide | PTools UI | Core / PageControl / Instructions | show / dismiss | static + rotation | PooTools Example | podspec | 外部引导适配器保留 |
+| Guide | PTools UI | Core / PageControl | show / dismiss | static + rotation | PooTools Example | podspec | onboarding / paging 语义独立 |
 | Input | PTools UI | Core / PhoneNumberKit | focus / keyboard / deinit | static + keyboard | PooTools Example | podspec | 逐步减少 IQKeyboard 依赖 |
 | Keyboard | PTools UI | Core | input accessory / dismiss | static + hardware keyboard | PooTools Example | podspec | 保留兼容入口 |
 | RateView | PTools UI | Core | value / reuse | static + Dynamic Type | PooTools Example | podspec | 保留兼容入口 |
@@ -44,7 +44,7 @@
 | PooToolsBanner | PTools UI | PToolsOverlay / PToolsSymbols | present / dismiss / queue | scene + accessibility | PooTools Example | podspec + SwiftPM | 5.29.0 原生实现 |
 | PopoverKit | PTools UI | Core / Popovers | present / dismiss | dependency + iPad | PooTools Example | podspec | 外部适配器保留 |
 | Tabbar | PTools UI | Core / Base | selection / rotation | static + multi-scene | PooTools Example | architecture docs | 保留 Base 兼容入口 |
-| Instructions | PTools UI | Core / Instructions | coachmark / dismiss | dependency + rotation | PooTools Example | podspec | 外部适配器保留 |
+| Instructions | PTools UI | Core / Overlay | coachmark / dismiss | scene + rotation | PooTools Example | podspec + SwiftPM | 5.32.0 原生 `PooToolsInstructions` |
 | Appz | PTools UI | Core / Appz | per-call | dependency + URL scheme | PooTools Example | podspec | Swift 5 外部适配器保留 |
 | Flag | PTools UI | Core / FlagKit | image / reuse | dependency + RTL | PooTools Example | podspec | 外部适配器保留 |
 | WhatsNewsKit | PTools UI | Core | feed / reuse | static + Dynamic Type | PooTools Example | podspec | 保留兼容入口 |

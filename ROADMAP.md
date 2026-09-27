@@ -1,8 +1,26 @@
 # PTools 路线图
 
-> 当前代码基线：`5.31.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.32.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.31.1` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.32.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.32.0 Instructions 原生吸收
+
+- ✅ 移除第三方 `Instructions` 依赖，新增 `PooToolsInstructions` 与 `PooTools/Instructions`。
+- ✅ 复用 Overlay 的 Host、Anchor、定位、生命周期和命中测试，不新增第二套 Window 基建。
+- ✅ 提供类型化 Tour/Step、目标等待与滚动揭示、镂空遮罩、默认内容、推进策略、取消和 UserDefaults 进度存储。
+- ✅ 增加使用审计、架构边界、迁移指南和第三方依赖移除门禁。
+- [ ] 完成宿主 App 的多 Scene、动态字体、RTL、VoiceOver、真机视觉和业务教程回归后，再创建正式 tag。
+
+## 5.31.2 Simulator 模块依赖解析修复
+
+- ✅ 修复 `PooTools_Example` 与 Pods/PooTools 共用 `PooTools` Module Identity 的配置错误。
+- ✅ 清理示例 Target 中的 `PooToolsSource/**` 直接编译成员，库源码只由 CocoaPods/SwiftPM 所属 Target 编译。
+- ✅ 移除固定 `SDKROOT = iphoneos`、不必要的 Module Verifier 和错误的 Swift Generated Header 配置，不排除 arm64 Simulator。
+- ✅ 为示例直接导入的第三方模块增加显式 CocoaPods 依赖，并将 YCSymbolTracker 降级为可选 Debug 能力。
+- ✅ 增加源码归属审计、模块身份守卫和 CocoaPods Simulator/Device 构建入口。
+- ✅ 完成 CocoaPods workspace 的 Simulator Debug/Release、Generic Device Debug/Release 构建和真实模块解析验证；构建结果记录在 [`docs/audits/SIMULATOR_BUILD_BASELINE.md`](docs/audits/SIMULATOR_BUILD_BASELINE.md)。
+- [ ] 创建 `5.31.2` 正式 tag（需显式发布操作）。
 
 ## 5.31.1 JX Paging 能力补齐与迁移稳定性
 

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
-Generated at: 2026-09-27T10:34:06Z
+Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
+Generated at: 2026-09-27T12:26:06Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1098,6 +1098,9 @@ Generated at: 2026-09-27T10:34:06Z
 | PooToolsSource/Base/PTTabBarView.swift:15 | enum | public | public enum PTTabBarLayoutStyle { |
 | PooToolsSource/Base/PTTabBarView.swift:21 | protocol | public | public protocol PTTabBarItemContent { |
 | PooToolsSource/Base/PTTabBarView.swift:27 | struct | public | public struct PTTabBarItemConfig { |
+| PooToolsSource/Base/PTTabBarView.swift:28 | let | public | public let title: String |
+| PooToolsSource/Base/PTTabBarView.swift:29 | let | public | public let content: PTTabBarItemContent |
+| PooToolsSource/Base/PTTabBarView.swift:30 | let | public | public let viewController: UIViewController |
 | PooToolsSource/Base/PTTabBarView.swift:32 | init | public | public init(title: String, |
 | PooToolsSource/Base/PTTabBarView.swift:54 | init | public | public init(normal: Any, |
 | PooToolsSource/Base/PTTabBarView.swift:82 | var | public | public var view: UIView { container } |
@@ -1567,6 +1570,8 @@ Generated at: 2026-09-27T10:34:06Z
 | PooToolsSource/Category/NSDecimalNumberHandler+PTEX.swift:32 | enum | public | public enum DecimalNumberHandlerType: String { |
 | PooToolsSource/Category/NSImageView+PTEX.swift:14 | typealias | public | public typealias PTGIFImageTask = (NSImageView) -> Void |
 | PooToolsSource/Category/NSImageView+PTEX.swift:15 | typealias | public | public typealias PTGIFImageFailTask = (NSImageView,URL,Error?) -> Void |
+| PooToolsSource/Category/PHAsset+PTEX.swift:66 | struct | public | public struct PTSendableAVAsset: @unchecked Sendable { |
+| PooToolsSource/Category/PHAsset+PTEX.swift:67 | let | public | public let asset: AVAsset |
 | PooToolsSource/Category/PTColorRBGModel.swift:12 | class | public | public class PTColorRBGModel: NSObject { |
 | PooToolsSource/Category/PTColorRBGModel.swift:13 | var | public | public var redFloat:CGFloat = 0.0 |
 | PooToolsSource/Category/PTColorRBGModel.swift:14 | var | public | public var greenFloat:CGFloat = 0.0 |
@@ -7416,24 +7421,26 @@ Generated at: 2026-09-27T10:34:06Z
 | PooToolsSource/iCloud/PTiCloudKeychainService.swift:14 | enum | public | public enum PTKeychainError: Error { |
 | PooToolsSource/iCloud/PTiCloudKeychainService.swift:20 | class | public | public class PTiCloudKeychainService { |
 | PooToolsSource/iOS17Tips/PTTip.swift:14 | struct | public | public struct TestTip: Tip { |
-| PooToolsSource/iOS17Tips/PTTip.swift:16 | var | public | public var title: Text { |
-| PooToolsSource/iOS17Tips/PTTip.swift:21 | var | public | public var message: Text? { |
-| PooToolsSource/iOS17Tips/PTTip.swift:26 | var | public | public var asset: Image? { |
-| PooToolsSource/iOS17Tips/PTTip.swift:30 | var | public | public var id: String { |
-| PooToolsSource/iOS17Tips/PTTip.swift:34 | var | public | public var newId: String |
-| PooToolsSource/iOS17Tips/PTTip.swift:35 | var | public | public var tipTitles:String |
-| PooToolsSource/iOS17Tips/PTTip.swift:36 | var | public | public var messageTitles:String |
-| PooToolsSource/iOS17Tips/PTTip.swift:39 | var | public | public var actions: [Action] { |
-| PooToolsSource/iOS17Tips/PTTip.swift:52 | var | public | public var rules: [Rule] { |
-| PooToolsSource/iOS17Tips/PTTip.swift:64 | var | public | public var options: [TipOption] { |
-| PooToolsSource/iOS17Tips/PTTip.swift:73 | struct | public | public struct Test1Tip: Tip { |
-| PooToolsSource/iOS17Tips/PTTip.swift:74 | var | public | public var title: Text { |
-| PooToolsSource/iOS17Tips/PTTip.swift:82 | var | public | public var message: Text? { |
-| PooToolsSource/iOS17Tips/PTTip.swift:89 | var | public | public var asset: Image? { |
-| PooToolsSource/iOS17Tips/PTTip.swift:95 | class | public | public class PTTip: NSObject { |
-| PooToolsSource/iOS17Tips/PTTip.swift:106 | func | public | public func appdelegateTipSet() { |
-| PooToolsSource/iOS17Tips/PTTip.swift:120 | func | public | @MainActor public func showTip(tips: any Tip, |
-| PooToolsSource/iOS17Tips/PTTip.swift:145 | func | public | public func showTipsInView(tips: any Tip, |
+| PooToolsSource/iOS17Tips/PTTip.swift:18 | init | public | public init(newId: String, tipTitles: String, messageTitles: String) { |
+| PooToolsSource/iOS17Tips/PTTip.swift:25 | var | public | public var title: Text { |
+| PooToolsSource/iOS17Tips/PTTip.swift:30 | var | public | public var message: Text? { |
+| PooToolsSource/iOS17Tips/PTTip.swift:35 | var | public | public var asset: Image? { |
+| PooToolsSource/iOS17Tips/PTTip.swift:39 | var | public | public var id: String { |
+| PooToolsSource/iOS17Tips/PTTip.swift:43 | var | public | public var newId: String |
+| PooToolsSource/iOS17Tips/PTTip.swift:44 | var | public | public var tipTitles:String |
+| PooToolsSource/iOS17Tips/PTTip.swift:45 | var | public | public var messageTitles:String |
+| PooToolsSource/iOS17Tips/PTTip.swift:48 | var | public | public var actions: [Action] { |
+| PooToolsSource/iOS17Tips/PTTip.swift:61 | var | public | public var rules: [Rule] { |
+| PooToolsSource/iOS17Tips/PTTip.swift:73 | var | public | public var options: [TipOption] { |
+| PooToolsSource/iOS17Tips/PTTip.swift:82 | struct | public | public struct Test1Tip: Tip { |
+| PooToolsSource/iOS17Tips/PTTip.swift:86 | init | public | public init() {} |
+| PooToolsSource/iOS17Tips/PTTip.swift:88 | var | public | public var title: Text { |
+| PooToolsSource/iOS17Tips/PTTip.swift:96 | var | public | public var message: Text? { |
+| PooToolsSource/iOS17Tips/PTTip.swift:103 | var | public | public var asset: Image? { |
+| PooToolsSource/iOS17Tips/PTTip.swift:109 | class | public | public class PTTip: NSObject { |
+| PooToolsSource/iOS17Tips/PTTip.swift:120 | func | public | public func appdelegateTipSet() { |
+| PooToolsSource/iOS17Tips/PTTip.swift:134 | func | public | @MainActor public func showTip(tips: any Tip, |
+| PooToolsSource/iOS17Tips/PTTip.swift:159 | func | public | public func showTipsInView(tips: any Tip, |
 
 ## 兼容规则
 

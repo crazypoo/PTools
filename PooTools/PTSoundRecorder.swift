@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import PooTools
 
 @MainActor
 final class PTSoundRecorder: NSObject, AVAudioRecorderDelegate {

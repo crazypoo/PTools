@@ -124,6 +124,7 @@ let package = Package(
         .library(name: "PooToolsCodeView", targets: ["PooToolsCodeView"]),
         .library(name: "PooToolsCountry", targets: ["PooToolsCountry"]),
         .library(name: "PooToolsGuide", targets: ["PooToolsGuide"]),
+        .library(name: "PooToolsInstructions", targets: ["PooToolsInstructions"]),
         .library(name: "PooToolsInput", targets: ["PooToolsInput"]),
         .library(name: "PooToolsKeyboard", targets: ["PooToolsKeyboard"]),
         .library(name: "PooToolsKeyChain", targets: ["PooToolsKeyChain"]),
@@ -185,7 +186,7 @@ let package = Package(
             "PooToolsMediaViewer", "PooToolsImagePicker", "PooToolsPhotoPicker", "PooToolsHarbethKit",
             "PooToolsImageEditor", "PooToolsVideoEditor", "PooToolsCheckDirtyWord", "PooToolsStepper",
             "PooToolsBankCard", "PooToolsBioID", "PooToolsCalendar", "PooToolsTelephony", "PooToolsCheckBox",
-            "PooToolsCodeView", "PooToolsCountry", "PooToolsGuide", "PooToolsInput", "PooToolsKeyboard",
+            "PooToolsCodeView", "PooToolsCountry", "PooToolsGuide", "PooToolsInstructions", "PooToolsInput", "PooToolsKeyboard",
             "PooToolsKeyChain", "PooToolsMotion", "PooToolsPhoneInfo", "PooToolsRateView", "PooToolsScrollBanner",
             "PooToolsSegmented", "PooToolsHandSign", "PooToolsSlider", "PooToolsCheckUpdate", "PooToolsLayout",
             "PooToolsLocation", "PooToolsSmartScreenshot", "PooToolsPagingControl", "PooToolsScanQRCode",
@@ -496,6 +497,10 @@ let package = Package(
         .target(name: "PooToolsCodeView", dependencies: ["ptools"], path: "PooToolsSource/CodeView", swiftSettings: [.define("POOTOOLS_CODEVIEW"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCountry", dependencies: ["ptools"], path: "PooToolsSource/Country", swiftSettings: [.define("POOTOOLS_COUNTRY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsGuide", dependencies: ["ptools", "PooToolsPageControl"], path: "PooToolsSource/Guide", swiftSettings: [.define("POOTOOLS_GUIDE"), .define("POOTOOLS_COCOAPODS")]),
+        // English: Instructions uses the shared overlay host instead of a third-party coach-mark window.
+        // Español: Instructions usa el host de overlay compartido en lugar de una ventana de terceros.
+        // 中文：Instructions 使用共享 Overlay 容器，不再创建第三方引导窗口。
+        .target(name: "PooToolsInstructions", dependencies: ["PToolsOverlay"], path: "PooToolsSource/Instructions", swiftSettings: [.define("POOTOOLS_INSTRUCTIONS"), .define("POOTOOLS_COCOAPODS"), .enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]),
         .target(name: "PooToolsInput", dependencies: ["ptools", "PhoneNumberKit"], path: "PooToolsSource/Input", swiftSettings: [.define("POOTOOLS_INPUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyboard", dependencies: ["ptools"], path: "PooToolsSource/Keyboard", swiftSettings: [.define("POOTOOLS_CUSTOMERNUMBERKEYWORD"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyChain", dependencies: [], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
