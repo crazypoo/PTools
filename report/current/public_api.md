@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
-Generated at: 2026-09-27T07:05:43Z
+Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
+Generated at: 2026-09-27T10:34:06Z
 -->
 
 # PTools 当前公开 API 清单
@@ -6411,10 +6411,10 @@ Generated at: 2026-09-27T07:05:43Z
 | PooToolsSource/SegmentControl/PTMainSegmentCell.swift:15 | let | public | public let titleLabel = UILabel() |
 | PooToolsSource/SegmentControl/PTMainSegmentCell.swift:16 | let | public | public let subTitleLabel = UILabel() |
 | PooToolsSource/SegmentControl/PTMainSegmentCell.swift:17 | let | public | public let imageIcon = UIImageView() |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:38 | func | open | open func commonInit() { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:75 | func | public | public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:106 | func | public | public func applySelection(_ selected: Bool, style: PTSegmentStyle) { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:233 | func | public | public func reloadData(model: PTMainSegmentModel, selected: Bool) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:44 | func | open | open func commonInit() { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:85 | func | public | public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:126 | func | public | public func applySelection(_ selected: Bool, style: PTSegmentStyle) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:272 | func | public | public func reloadData(model: PTMainSegmentModel, selected: Bool) { |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:9 | class | public | public class PTMainSegmentDataSource: NSObject { |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:10 | var | open | open var dataSourceData = [PTSegmentControlBaseModel]() |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:11 | var | open | open var change: PTSegmentControlModelType? = .ImageTitle(type: .Normal) |
@@ -6469,82 +6469,92 @@ Generated at: 2026-09-27T07:05:43Z
 | PooToolsSource/SegmentControl/PTPaging.swift:65 | var | public | public var onSelectionChanged: ((PTPageSelectionEvent) -> Void)? |
 | PooToolsSource/SegmentControl/PTPaging.swift:66 | var | public | public var onTransition: ((PTPageTransition) -> Void)? |
 | PooToolsSource/SegmentControl/PTPaging.swift:67 | var | public | public var onLifecycle: ((AnyHashable, PTPageLifecycle) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:117 | func | public | public func apply(pages newPages: [PTPageDescriptor], |
-| PooToolsSource/SegmentControl/PTPaging.swift:149 | func | public | public func select(id: AnyHashable, |
-| PooToolsSource/SegmentControl/PTPaging.swift:184 | var | public | public var selectedIndex: Int? { |
-| PooToolsSource/SegmentControl/PTPaging.swift:270 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:289 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:293 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:309 | enum | public | public enum PTPagingDimension { |
-| PooToolsSource/SegmentControl/PTPaging.swift:319 | struct | public | public struct PTPagingHeader { |
-| PooToolsSource/SegmentControl/PTPaging.swift:320 | let | public | public let viewProvider: @MainActor () -> UIView |
-| PooToolsSource/SegmentControl/PTPaging.swift:321 | var | public | public var height: PTPagingDimension |
-| PooToolsSource/SegmentControl/PTPaging.swift:323 | init | public | public init(height: PTPagingDimension = .automatic, |
-| PooToolsSource/SegmentControl/PTPaging.swift:334 | struct | public | public struct PTPagingPinnedHeader { |
-| PooToolsSource/SegmentControl/PTPaging.swift:335 | let | public | public let viewProvider: @MainActor () -> UIView |
-| PooToolsSource/SegmentControl/PTPaging.swift:336 | var | public | public var height: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:338 | init | public | public init(height: CGFloat = 44, |
-| PooToolsSource/SegmentControl/PTPaging.swift:349 | struct | public | public struct PTPagingLayoutEngine { |
-| PooToolsSource/SegmentControl/PTPaging.swift:350 | var | public | public var safeAreaTop: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:351 | var | public | public var headerHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:352 | var | public | public var pinnedHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:353 | var | public | public var pageHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:355 | init | public | public init(safeAreaTop: CGFloat = 0, |
-| PooToolsSource/SegmentControl/PTPaging.swift:365 | var | public | public var contentHeight: CGFloat { headerHeight + pinnedHeight + pageHeight } |
-| PooToolsSource/SegmentControl/PTPaging.swift:366 | var | public | public var collapseLimit: CGFloat { max(0, headerHeight) } |
-| PooToolsSource/SegmentControl/PTPaging.swift:373 | enum | public | public enum PTScrollOwnership { |
-| PooToolsSource/SegmentControl/PTPaging.swift:383 | enum | public | public enum PTPagingRefreshPolicy { |
-| PooToolsSource/SegmentControl/PTPaging.swift:394 | protocol | public | public protocol PTRefreshAdapter: AnyObject { |
-| PooToolsSource/SegmentControl/PTPaging.swift:404 | class | public | public final class PTUIRefreshAdapter: PTRefreshAdapter { |
-| PooToolsSource/SegmentControl/PTPaging.swift:405 | let | public | public let control: UIRefreshControl |
-| PooToolsSource/SegmentControl/PTPaging.swift:407 | init | public | public init(control: UIRefreshControl = UIRefreshControl()) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:411 | var | public | public var isRefreshing: Bool { control.isRefreshing } |
-| PooToolsSource/SegmentControl/PTPaging.swift:412 | func | public | public func beginRefreshing() { control.beginRefreshing() } |
-| PooToolsSource/SegmentControl/PTPaging.swift:413 | func | public | public func endRefreshing() { control.endRefreshing() } |
-| PooToolsSource/SegmentControl/PTPaging.swift:420 | class | open | open class PTNestedScrollCoordinator { |
-| PooToolsSource/SegmentControl/PTPaging.swift:423 | var | public | public var collapseLimit: CGFloat = 0 |
-| PooToolsSource/SegmentControl/PTPaging.swift:424 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:428 | var | public | public var activePageID: AnyHashable? |
-| PooToolsSource/SegmentControl/PTPaging.swift:433 | init | public | public init() {} |
-| PooToolsSource/SegmentControl/PTPaging.swift:435 | func | public | public func bind(outer: UIScrollView, |
-| PooToolsSource/SegmentControl/PTPaging.swift:456 | func | public | public func handleOuterScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:472 | func | public | public func handleInnerScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:494 | func | public | public func settle() { |
-| PooToolsSource/SegmentControl/PTPaging.swift:549 | struct | public | public struct PTGestureDirectionResolver { |
-| PooToolsSource/SegmentControl/PTPaging.swift:550 | var | public | public var threshold: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:552 | init | public | public init(threshold: CGFloat = 1.15) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:556 | func | public | public func resolve(velocity: CGPoint) -> PTGestureDirection { |
-| PooToolsSource/SegmentControl/PTPaging.swift:568 | enum | public | public enum PTGestureDirection { |
-| PooToolsSource/SegmentControl/PTPaging.swift:578 | class | public | public final class PTGestureArena { |
-| PooToolsSource/SegmentControl/PTPaging.swift:579 | var | public | public var resolver = PTGestureDirectionResolver() |
-| PooToolsSource/SegmentControl/PTPaging.swift:580 | var | public | public var allowsSimultaneousNavigationPop = true |
-| PooToolsSource/SegmentControl/PTPaging.swift:582 | init | public | public init() {} |
-| PooToolsSource/SegmentControl/PTPaging.swift:584 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
-| PooToolsSource/SegmentControl/PTPaging.swift:597 | class | public | public final class PTNavigationGestureAdapter { |
-| PooToolsSource/SegmentControl/PTPaging.swift:599 | var | public | public var isEnabledAtFirstPage = true |
-| PooToolsSource/SegmentControl/PTPaging.swift:601 | init | public | public init(navigationController: UINavigationController? = nil) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:605 | func | public | public func shouldBegin(pageIndex: Int) -> Bool { |
-| PooToolsSource/SegmentControl/PTPaging.swift:616 | class | open | open class PTPagingView: UIView, UIScrollViewDelegate { |
-| PooToolsSource/SegmentControl/PTPaging.swift:617 | let | public | public let outerScrollView = UIScrollView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:618 | let | public | public let pageContainer: PTPageContainer |
-| PooToolsSource/SegmentControl/PTPaging.swift:619 | let | public | public let headerHost = UIView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:620 | let | public | public let pinnedHeaderHost = UIView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:621 | let | public | public let nestedScrollCoordinator = PTNestedScrollCoordinator() |
-| PooToolsSource/SegmentControl/PTPaging.swift:622 | let | public | public let gestureArena = PTGestureArena() |
-| PooToolsSource/SegmentControl/PTPaging.swift:623 | var | public | public var refreshPolicy: PTPagingRefreshPolicy = .perPage |
-| PooToolsSource/SegmentControl/PTPaging.swift:624 | var | public | public var collapseProgress: CGFloat { currentCollapseProgress } |
-| PooToolsSource/SegmentControl/PTPaging.swift:625 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:626 | var | public | public var onStretchProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:634 | init | public | public init(pageContainer: PTPageContainer = PTPageContainer(frame: .zero)) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:693 | func | public | public func setHeader(_ header: PTPagingHeader?) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:707 | func | public | public func setPinnedHeader(_ header: PTPagingPinnedHeader?) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:722 | func | public | public func invalidateHeaderLayout(animated: Bool = false) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:751 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:760 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:764 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:805 | class | public | public final class PTSegmentedPagingCoordinator { |
-| PooToolsSource/SegmentControl/PTPaging.swift:810 | init | public | public init(segmentedView: PTSegmentedView, pageContainer: PTPageContainer) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:838 | func | public | public func apply(items: [PTSegmentItem], pages: [PTPageDescriptor], animated: Bool = true) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:71 | var | public | public var isListHorizontalScrollEnabled: Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:126 | func | public | public func apply(pages newPages: [PTPageDescriptor], |
+| PooToolsSource/SegmentControl/PTPaging.swift:171 | func | public | public func select(id: AnyHashable, |
+| PooToolsSource/SegmentControl/PTPaging.swift:180 | func | public | public func select(index: Int, |
+| PooToolsSource/SegmentControl/PTPaging.swift:223 | var | public | public var selectedIndex: Int? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:231 | var | public | public var currentPageScrollView: UIScrollView? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:333 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:370 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:374 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:407 | enum | public | public enum PTPagingDimension { |
+| PooToolsSource/SegmentControl/PTPaging.swift:417 | struct | public | public struct PTPagingHeader { |
+| PooToolsSource/SegmentControl/PTPaging.swift:418 | let | public | public let viewProvider: @MainActor () -> UIView |
+| PooToolsSource/SegmentControl/PTPaging.swift:419 | var | public | public var height: PTPagingDimension |
+| PooToolsSource/SegmentControl/PTPaging.swift:421 | init | public | public init(height: PTPagingDimension = .automatic, |
+| PooToolsSource/SegmentControl/PTPaging.swift:432 | struct | public | public struct PTPagingPinnedHeader { |
+| PooToolsSource/SegmentControl/PTPaging.swift:433 | let | public | public let viewProvider: @MainActor () -> UIView |
+| PooToolsSource/SegmentControl/PTPaging.swift:434 | var | public | public var height: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:436 | init | public | public init(height: CGFloat = 44, |
+| PooToolsSource/SegmentControl/PTPaging.swift:447 | struct | public | public struct PTPagingLayoutEngine { |
+| PooToolsSource/SegmentControl/PTPaging.swift:448 | var | public | public var safeAreaTop: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:449 | var | public | public var headerHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:450 | var | public | public var pinnedHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:451 | var | public | public var pageHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:453 | init | public | public init(safeAreaTop: CGFloat = 0, |
+| PooToolsSource/SegmentControl/PTPaging.swift:463 | var | public | public var contentHeight: CGFloat { headerHeight + pinnedHeight + pageHeight } |
+| PooToolsSource/SegmentControl/PTPaging.swift:464 | var | public | public var collapseLimit: CGFloat { max(0, headerHeight) } |
+| PooToolsSource/SegmentControl/PTPaging.swift:471 | enum | public | public enum PTScrollOwnership { |
+| PooToolsSource/SegmentControl/PTPaging.swift:481 | enum | public | public enum PTPagingRefreshPolicy { |
+| PooToolsSource/SegmentControl/PTPaging.swift:492 | protocol | public | public protocol PTRefreshAdapter: AnyObject { |
+| PooToolsSource/SegmentControl/PTPaging.swift:502 | class | public | public final class PTUIRefreshAdapter: PTRefreshAdapter { |
+| PooToolsSource/SegmentControl/PTPaging.swift:503 | let | public | public let control: UIRefreshControl |
+| PooToolsSource/SegmentControl/PTPaging.swift:505 | init | public | public init(control: UIRefreshControl = UIRefreshControl()) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:509 | var | public | public var isRefreshing: Bool { control.isRefreshing } |
+| PooToolsSource/SegmentControl/PTPaging.swift:510 | func | public | public func beginRefreshing() { control.beginRefreshing() } |
+| PooToolsSource/SegmentControl/PTPaging.swift:511 | func | public | public func endRefreshing() { control.endRefreshing() } |
+| PooToolsSource/SegmentControl/PTPaging.swift:518 | class | open | open class PTNestedScrollCoordinator { |
+| PooToolsSource/SegmentControl/PTPaging.swift:521 | var | public | public var collapseLimit: CGFloat = 0 |
+| PooToolsSource/SegmentControl/PTPaging.swift:522 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:526 | var | public | public var activePageID: AnyHashable? |
+| PooToolsSource/SegmentControl/PTPaging.swift:531 | init | public | public init() {} |
+| PooToolsSource/SegmentControl/PTPaging.swift:533 | func | public | public func bind(outer: UIScrollView, |
+| PooToolsSource/SegmentControl/PTPaging.swift:560 | func | public | public func handleOuterScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:579 | func | public | public func handleInnerScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:607 | func | public | public func settle() { |
+| PooToolsSource/SegmentControl/PTPaging.swift:723 | struct | public | public struct PTGestureDirectionResolver { |
+| PooToolsSource/SegmentControl/PTPaging.swift:724 | var | public | public var threshold: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:726 | init | public | public init(threshold: CGFloat = 1.15) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:730 | func | public | public func resolve(velocity: CGPoint) -> PTGestureDirection { |
+| PooToolsSource/SegmentControl/PTPaging.swift:742 | enum | public | public enum PTGestureDirection { |
+| PooToolsSource/SegmentControl/PTPaging.swift:752 | class | public | public final class PTGestureArena { |
+| PooToolsSource/SegmentControl/PTPaging.swift:753 | var | public | public var resolver = PTGestureDirectionResolver() |
+| PooToolsSource/SegmentControl/PTPaging.swift:754 | var | public | public var allowsSimultaneousNavigationPop = true |
+| PooToolsSource/SegmentControl/PTPaging.swift:758 | var | public | public var allowsSimultaneousPanGestures = false |
+| PooToolsSource/SegmentControl/PTPaging.swift:764 | init | public | public init() {} |
+| PooToolsSource/SegmentControl/PTPaging.swift:766 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
+| PooToolsSource/SegmentControl/PTPaging.swift:796 | class | public | public final class PTNavigationGestureAdapter { |
+| PooToolsSource/SegmentControl/PTPaging.swift:798 | var | public | public var isEnabledAtFirstPage = true |
+| PooToolsSource/SegmentControl/PTPaging.swift:800 | init | public | public init(navigationController: UINavigationController? = nil) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:804 | func | public | public func shouldBegin(pageIndex: Int) -> Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:815 | class | open | open class PTPagingView: UIView, UIScrollViewDelegate { |
+| PooToolsSource/SegmentControl/PTPaging.swift:816 | let | public | public let outerScrollView = UIScrollView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:817 | let | public | public let pageContainer: PTPageContainer |
+| PooToolsSource/SegmentControl/PTPaging.swift:821 | var | public | public var listContainerView: PTPageContainer { pageContainer } |
+| PooToolsSource/SegmentControl/PTPaging.swift:825 | var | public | public var mainScrollView: UIScrollView { outerScrollView } |
+| PooToolsSource/SegmentControl/PTPaging.swift:835 | var | public | public var refreshControl: UIRefreshControl? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:842 | var | public | public var isListHorizontalScrollEnabled: Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:846 | let | public | public let headerHost = UIView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:847 | let | public | public let pinnedHeaderHost = UIView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:848 | let | public | public let nestedScrollCoordinator = PTNestedScrollCoordinator() |
+| PooToolsSource/SegmentControl/PTPaging.swift:849 | let | public | public let gestureArena = PTGestureArena() |
+| PooToolsSource/SegmentControl/PTPaging.swift:850 | var | public | public var refreshPolicy: PTPagingRefreshPolicy = .perPage |
+| PooToolsSource/SegmentControl/PTPaging.swift:851 | var | public | public var collapseProgress: CGFloat { currentCollapseProgress } |
+| PooToolsSource/SegmentControl/PTPaging.swift:852 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:853 | var | public | public var onStretchProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:861 | init | public | public init(pageContainer: PTPageContainer = PTPageContainer(frame: .zero)) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:925 | func | public | public func setHeader(_ header: PTPagingHeader?) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:939 | func | public | public func setPinnedHeader(_ header: PTPagingPinnedHeader?) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:954 | func | public | public func invalidateHeaderLayout(animated: Bool = false) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:983 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:993 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:997 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1039 | func | public | public func scrollCurrentPageToTop(animated: Bool = true) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1051 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
+| PooToolsSource/SegmentControl/PTPaging.swift:1061 | class | public | public final class PTSegmentedPagingCoordinator { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1066 | init | public | public init(segmentedView: PTSegmentedView, pageContainer: PTPageContainer) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1094 | func | public | public func apply(items: [PTSegmentItem], pages: [PTPageDescriptor], animated: Bool = true) { |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:8 | class | public | public final class PTSegmentControlBaseModel: NSObject { |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:9 | var | public | public var categoryName: String = "" |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:10 | var | public | public var subTitle: String = "" |
@@ -6622,19 +6632,20 @@ Generated at: 2026-09-27T07:05:43Z
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:374 | class | public | public final class PTViewPage: PTPage { |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:375 | let | public | public let pageView: UIView |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:377 | init | public | public init(view: UIView) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:386 | class | public | public final class PTViewControllerPage: PTPage, PTScrollablePage { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:386 | class | public | public final class PTViewControllerPage: PTPage, PTScrollablePage, PTPageLifecycleObserving { |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:387 | let | public | public let viewController: UIViewController |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:388 | var | public | public var pageView: UIView { viewController.view } |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:389 | var | public | public var pageScrollView: UIScrollView { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:389 | var | public | public var pageView: UIView { viewController.view } |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:390 | var | public | public var pageScrollView: UIScrollView { |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:394 | init | public | public init(viewController: UIViewController) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:406 | enum | public | public enum PTNavigationOwnership { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:416 | enum | public | public enum PTViewControllerEmbeddingContext { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:425 | struct | public | public struct PTNavigationBarPreference { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:426 | var | public | public var isHidden: Bool? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:427 | var | public | public var tintColor: UIColor? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:428 | var | public | public var backgroundColor: UIColor? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:430 | init | public | public init(isHidden: Bool? = nil, |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:443 | enum | public | public enum PTChildNavigationPolicy { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:401 | func | public | public func pageContainer(_ container: PTPageContainer, didChange lifecycle: PTPageLifecycle) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:432 | enum | public | public enum PTNavigationOwnership { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:442 | enum | public | public enum PTViewControllerEmbeddingContext { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:451 | struct | public | public struct PTNavigationBarPreference { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:452 | var | public | public var isHidden: Bool? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:453 | var | public | public var tintColor: UIColor? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:454 | var | public | public var backgroundColor: UIColor? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:456 | init | public | public init(isHidden: Bool? = nil, |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:469 | enum | public | public enum PTChildNavigationPolicy { |
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:51 | class | open | open class PTBaseSegmentIndicator: UIView, PTSegmentIndicator { |
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:52 | var | public | public var view: UIView { self } |
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:53 | var | open | open var color: UIColor = .systemBlue |
@@ -6662,21 +6673,24 @@ Generated at: 2026-09-27T07:05:43Z
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:330 | class | open | open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate { |
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:336 | let | public | public let collectionView: UICollectionView |
 | PooToolsSource/SegmentControl/PTSegmentedView.swift:337 | var | public | public var style = PTSegmentStyle() { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:344 | var | public | public var indicators: [any PTSegmentIndicator] = [] { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:349 | var | public | public var onSelectionChanged: ((PTSegmentSelectionEvent) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:350 | var | public | public var onTransition: ((PTSegmentTransition) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:351 | var | public | public var allowsReselect = true |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:352 | var | public | public var automaticallyScrollsToSelectedItem = true |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:353 | var | public | public var selectionAnimationDuration: TimeInterval = 0.25 |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:416 | func | public | public func apply(items newItems: [PTSegmentItem], |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:468 | func | public | public func select(id: AnyHashable, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:484 | func | public | public func select(index: Int, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:494 | func | public | public func update(transition: PTSegmentTransition) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:548 | func | public | public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:553 | func | public | public func collectionView(_ collectionView: UICollectionView, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:575 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:594 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:598 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:348 | var | public | public var indicators: [any PTSegmentIndicator] = [] { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:353 | var | public | public var onSelectionChanged: ((PTSegmentSelectionEvent) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:354 | var | public | public var onTransition: ((PTSegmentTransition) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:358 | var | public | public var onItemSelected: ((Int, PTSegmentSelectionOrigin) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:359 | var | public | public var onReselected: ((Int) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:360 | var | public | public var onScrolling: ((Int, Int, CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:361 | var | public | public var allowsReselect = true |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:362 | var | public | public var automaticallyScrollsToSelectedItem = true |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:363 | var | public | public var selectionAnimationDuration: TimeInterval = 0.25 |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:443 | func | public | public func apply(items newItems: [PTSegmentItem], |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:487 | func | public | public func select(id: AnyHashable, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:503 | func | public | public func select(index: Int, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:513 | func | public | public func update(transition: PTSegmentTransition) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:593 | func | public | public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:598 | func | public | public func collectionView(_ collectionView: UICollectionView, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:620 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:639 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:643 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
 | PooToolsSource/Segmented/PTSegmentView.swift:13 | enum | public | @objc public enum PTSegmentSelectedType : Int { |
 | PooToolsSource/Segmented/PTSegmentView.swift:21 | class | public | public class PTSegmentConfig: NSObject { |
 | PooToolsSource/Segmented/PTSegmentView.swift:23 | var | public | public var selectedFont:UIFont = .systemFont(ofSize: 16) |

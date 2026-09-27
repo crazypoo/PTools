@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.31.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.31.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.31.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.31.1` 为当前开发基线，尚未创建正式 tag。
+
+## 5.31.1 JX Paging 能力补齐与迁移稳定性
+
+- ✅ 对照 `YDShipOrderControl.swift` 完成分段、分页、懒加载、动态角标、刷新、回顶和手势场景映射。
+- ✅ 修复稳定 ID 更新、反向分页过渡、Indicator 层级、页面生命周期、Header 尺寸和网络图片占位槽位问题。
+- ✅ 增加 `PTPagingView` 迁移适配入口、内部观察者机制和旧业务完整使用教程。
+- [ ] 完成宿主 App 的真机、多 Scene、横竖屏、Dynamic Type、RTL、刷新库、导航返回和视觉回归后，再创建 `5.31.1` 正式 tag。
 
 ## 5.31.0 Popovers 吸收与 Overlay 2.0
 

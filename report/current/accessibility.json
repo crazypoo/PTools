@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility_5_9.rb",
-  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
-  "generated_at": "2026-09-27T07:05:44Z",
+  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
+  "generated_at": "2026-09-27T10:34:07Z",
   "counts": {
     "reduce_motion": 45,
     "accessibility": 228,
@@ -1218,22 +1218,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 102
+      "line": 122
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 103
+      "line": 123
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 114
+      "line": 134
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 202
+      "line": 241
     },
     {
       "rule": "accessibility",

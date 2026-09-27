@@ -65,10 +65,19 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
     public var onSelectionChanged: ((PTPageSelectionEvent) -> Void)?
     public var onTransition: ((PTPageTransition) -> Void)?
     public var onLifecycle: ((AnyHashable, PTPageLifecycle) -> Void)?
+    /// English: Mirrors the old list-container switch while keeping the native scroll view public.
+    /// Español: Equivale al interruptor antiguo del contenedor y mantiene público el scroll nativo.
+    /// 中文：提供旧列表容器的横向滚动开关，同时保留原生 ScrollView 的公开访问。
+    public var isListHorizontalScrollEnabled: Bool {
+        get { scrollView.isScrollEnabled }
+        set { scrollView.isScrollEnabled = newValue }
+    }
 
     private var loadedPages: [AnyHashable: PTLoadedPage] = [:]
     private var isApplyingOffset = false
     private var isApplyingDescriptors = false
+    private var selectionObservers = [((PTPageSelectionEvent) -> Void)]()
+    private var transitionObservers = [((PTPageTransition) -> Void)]()
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -118,26 +127,39 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
                       selectedID preferredID: AnyHashable? = nil,
                       animated: Bool = false,
                       completion: (() -> Void)? = nil) {
-        var seen = Set<AnyHashable>()
-        descriptors = newPages.filter { seen.insert($0.id).inserted }
         let oldID = selectedID
-        let nextID = preferredID.flatMap { id in descriptors.contains(where: { $0.id == id }) ? id : nil }
-            ?? (selectedID.flatMap { id in descriptors.contains(where: { $0.id == id }) ? id : nil })
-            ?? descriptors.first?.id
-        isApplyingDescriptors = true
-        for id in loadedPages.keys where !descriptors.contains(where: { $0.id == id }) {
+        var seen = Set<AnyHashable>()
+        let nextDescriptors = newPages.filter { seen.insert($0.id).inserted }
+        let nextIDs = Set(nextDescriptors.map(\.id))
+        let nextID = preferredID.flatMap { id in nextIDs.contains(id) ? id : nil }
+            ?? (oldID.flatMap { id in nextIDs.contains(id) ? id : nil })
+            ?? nextDescriptors.first?.id
+
+        if let oldID, oldID != nextID {
+            sendLifecycle(.willDisappear, for: oldID)
+            sendLifecycle(.didDisappear, for: oldID)
+        }
+        for id in Array(loadedPages.keys) where !nextIDs.contains(id) {
             unload(id: id)
         }
-        selectedID = nextID
-        currentPage = nil
-        updateLoadedPages()
+
+        descriptors = nextDescriptors
+        isApplyingDescriptors = true
+        if let nextID, nextID == oldID {
+            selectedID = nextID
+            currentPage = loadedPages[nextID]?.page
+            updateLoadedPages()
+        } else {
+            selectedID = nil
+            currentPage = nil
+        }
         setNeedsLayout()
         layoutIfNeeded()
-        if let nextID {
+        if let nextID, nextID != oldID {
             select(id: nextID,
                    animated: animated,
                    origin: oldID == nil ? .restoration : .programmatic,
-                   notify: oldID != nextID)
+                   notify: true)
         }
         isApplyingDescriptors = false
         completion?()
@@ -152,12 +174,27 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
         select(id: id, animated: animated, origin: origin, notify: true)
     }
 
+    /// English: Selects a page by index while preserving the stable identifier as the source of truth.
+    /// Español: Selecciona una página por índice conservando el identificador estable como fuente de verdad.
+    /// 中文：按索引选择页面，但仍以稳定 ID 作为唯一状态来源。
+    public func select(index: Int,
+                       animated: Bool = true,
+                       origin: PTSegmentSelectionOrigin = .programmatic) {
+        guard descriptors.indices.contains(index) else { return }
+        select(id: descriptors[index].id, animated: animated, origin: origin)
+    }
+
     private func select(id: AnyHashable,
                         animated: Bool,
                         origin: PTSegmentSelectionOrigin,
                         notify: Bool) {
         guard let index = descriptors.firstIndex(where: { $0.id == id }) else { return }
         let oldID = selectedID
+        let didChange = oldID != id
+        if didChange, let oldID {
+            sendLifecycle(.willDisappear, for: oldID)
+            sendLifecycle(.didDisappear, for: oldID)
+        }
         selectedID = id
         load(id: id)
         updateLoadedPages()
@@ -168,12 +205,14 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
             if !animated { isApplyingOffset = false }
         }
         currentPage = loadedPages[id]?.page
-        if oldID != id || notify {
-            if let oldID, oldID != id { sendLifecycle(.willDisappear, for: oldID) }
+        if didChange {
             sendLifecycle(.willAppear, for: id)
-            if let oldID, oldID != id { sendLifecycle(.didDisappear, for: oldID) }
             sendLifecycle(.didAppear, for: id)
-            onSelectionChanged?(PTPageSelectionEvent(oldID: oldID, newID: id, origin: origin))
+        }
+        if didChange || notify {
+            let event = PTPageSelectionEvent(oldID: oldID, newID: id, origin: origin)
+            onSelectionChanged?(event)
+            selectionObservers.forEach { $0(event) }
         }
         if !animated { isApplyingOffset = false }
     }
@@ -184,6 +223,17 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
     public var selectedIndex: Int? {
         guard let selectedID else { return nil }
         return descriptors.firstIndex(where: { $0.id == selectedID })
+    }
+
+    /// English: Returns the current page's scroll view for status-bar taps and refresh coordination.
+    /// Español: Devuelve el scroll de la página actual para el toque de la barra de estado y el refresco.
+    /// 中文：返回当前页面的 ScrollView，供状态栏回顶和刷新协调使用。
+    public var currentPageScrollView: UIScrollView? {
+        guard let page = currentPage else { return nil }
+        if let scrollable = page as? PTScrollablePage {
+            return scrollable.pageScrollView
+        }
+        return firstScrollView(in: page.pageView)
     }
 
     private func load(id: AnyHashable) {
@@ -230,14 +280,13 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
             load(id: descriptors[index].id)
         }
         let keepIDs = Set(wanted.compactMap { descriptors.indices.contains($0) ? descriptors[$0].id : nil })
-        for id in loadedPages.keys where !keepIDs.contains(id) {
+        for id in Array(loadedPages.keys) where !keepIDs.contains(id) {
             unload(id: id)
         }
     }
 
     private func unload(id: AnyHashable) {
         guard let loaded = loadedPages.removeValue(forKey: id) else { return }
-        sendLifecycle(.willDisappear, for: id)
         if let pageController = loaded.page as? PTViewControllerPage,
            pageController.viewController.parent === hostViewController {
             pageController.viewController.willMove(toParent: nil)
@@ -246,7 +295,7 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
         } else {
             loaded.page.pageView.removeFromSuperview()
         }
-        sendLifecycle(.didUnload, for: id)
+        sendLifecycle(.didUnload, for: id, page: loaded.page)
     }
 
     private func attachLoadedViewControllers() {
@@ -260,30 +309,62 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
     }
 
     private func sendLifecycle(_ lifecycle: PTPageLifecycle, for id: AnyHashable) {
-        guard let page = loadedPages[id]?.page else { return }
+        sendLifecycle(lifecycle, for: id, page: nil)
+    }
+
+    private func sendLifecycle(_ lifecycle: PTPageLifecycle,
+                               for id: AnyHashable,
+                               page explicitPage: (any PTPage)?) {
+        guard let page = explicitPage ?? loadedPages[id]?.page else { return }
         if let observing = page as? PTPageLifecycleObserving {
             observing.pageContainer(self, didChange: lifecycle)
         }
         onLifecycle?(id, lifecycle)
     }
 
+    private func firstScrollView(in view: UIView) -> UIScrollView? {
+        if let scrollView = view as? UIScrollView { return scrollView }
+        for subview in view.subviews.reversed() {
+            if let scrollView = firstScrollView(in: subview) { return scrollView }
+        }
+        return nil
+    }
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard !isApplyingOffset,
+              !isApplyingDescriptors,
               let selectedIndex,
               bounds.width > 0,
-              let fromID = descriptors.indices.contains(selectedIndex) ? descriptors[selectedIndex].id : nil else { return }
+              descriptors.indices.contains(selectedIndex),
+              descriptors.count > 1 else { return }
         let raw = max(0, min(CGFloat(max(0, descriptors.count - 1)), scrollView.contentOffset.x / bounds.width))
-        let targetIndex = min(descriptors.count - 1, max(0, Int(raw.rounded(.down))))
-        let nextIndex = min(descriptors.count - 1, targetIndex + 1)
-        guard targetIndex != nextIndex,
-              descriptors.indices.contains(nextIndex) else { return }
-        let progress = raw - CGFloat(targetIndex)
-        let toID = descriptors[nextIndex].id
-        let direction: PTPageDirection = nextIndex >= selectedIndex ? .forward : .backward
-        onTransition?(PTPageTransition(fromID: fromID,
-                                       toID: toID,
-                                       progress: progress,
-                                       direction: direction))
+        let lowerIndex = min(descriptors.count - 1, max(0, Int(floor(raw))))
+        let upperIndex = min(descriptors.count - 1, max(0, Int(ceil(raw))))
+        guard lowerIndex != upperIndex else { return }
+
+        let fromIndex: Int
+        let toIndex: Int
+        let progress: CGFloat
+        let direction: PTPageDirection
+        if selectedIndex == lowerIndex {
+            fromIndex = lowerIndex
+            toIndex = upperIndex
+            progress = raw - CGFloat(lowerIndex)
+            direction = .forward
+        } else if selectedIndex == upperIndex {
+            fromIndex = upperIndex
+            toIndex = lowerIndex
+            progress = CGFloat(upperIndex) - raw
+            direction = .backward
+        } else {
+            return
+        }
+        let transition = PTPageTransition(fromID: descriptors[fromIndex].id,
+                                           toID: descriptors[toIndex].id,
+                                           progress: progress,
+                                           direction: direction)
+        onTransition?(transition)
+        transitionObservers.forEach { $0(transition) }
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -297,8 +378,25 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
 
     private func commitScrollSelection(origin: PTSegmentSelectionOrigin) {
         guard bounds.width > 0,
-              let index = descriptors.indices.contains(Int((scrollView.contentOffset.x / bounds.width).rounded())) ? Int((scrollView.contentOffset.x / bounds.width).rounded()) : nil else { return }
+              !descriptors.isEmpty else { return }
+        let rawIndex = Int((scrollView.contentOffset.x / bounds.width).rounded())
+        guard descriptors.indices.contains(rawIndex) else { return }
+        let index = rawIndex
         select(id: descriptors[index].id, animated: false, origin: origin, notify: true)
+    }
+
+    /// English: Adds an internal observer used by paging hosts without replacing the public callback.
+    /// Español: Añade un observador interno para hosts de paginación sin reemplazar el callback público.
+    /// 中文：增加供分页宿主使用的内部观察者，不覆盖业务公开回调。
+    fileprivate func addSelectionObserver(_ observer: @escaping (PTPageSelectionEvent) -> Void) {
+        selectionObservers.append(observer)
+    }
+
+    /// English: Adds an internal transition observer without replacing the public transition callback.
+    /// Español: Añade un observador interno de transición sin reemplazar el callback público。
+    /// 中文：增加内部过渡观察者，不覆盖业务公开过渡回调。
+    fileprivate func addTransitionObserver(_ observer: @escaping (PTPageTransition) -> Void) {
+        transitionObservers.append(observer)
     }
 }
 
@@ -443,9 +541,15 @@ open class PTNestedScrollCoordinator {
         self.collapseLimit = max(0, collapseLimit)
         ownership = .outer
         if let inner {
-            let proxy = PTScrollDelegateProxy(original: inner.delegate)
+            let proxy = PTScrollDelegateProxy(scrollView: inner, original: inner.delegate)
             proxy.onDidScroll = { [weak self] scrollView in
                 self?.handleInnerScroll(scrollView)
+            }
+            proxy.onDidEndDragging = { [weak self] _, decelerate in
+                if !decelerate { self?.settle() }
+            }
+            proxy.onDidEndDecelerating = { [weak self] _ in
+                self?.settle()
             }
             inner.delegate = proxy
             innerProxy = proxy
@@ -455,12 +559,15 @@ open class PTNestedScrollCoordinator {
 
     public func handleOuterScroll(_ scrollView: UIScrollView) {
         guard !isApplyingCorrection else { return }
-        let y = max(0, scrollView.contentOffset.y)
+        let topInset = scrollView.adjustedContentInset.top
+        let y = max(0, scrollView.contentOffset.y + topInset)
         let progress = collapseLimit == 0 ? 1 : min(1, y / collapseLimit)
         onCollapseProgress?(progress)
-        if let innerScrollView, innerScrollView.contentOffset.y > 0, y < collapseLimit {
+        if let innerScrollView,
+           innerScrollView.contentOffset.y + innerScrollView.adjustedContentInset.top > 0,
+           y < collapseLimit {
             isApplyingCorrection = true
-            scrollView.contentOffset.y = collapseLimit
+            scrollView.contentOffset.y = collapseLimit - topInset
             isApplyingCorrection = false
             ownership = .inner(pageID: activePageID ?? AnyHashable(""))
         } else if y < collapseLimit {
@@ -474,17 +581,23 @@ open class PTNestedScrollCoordinator {
         let y = max(0, scrollView.contentOffset.y + scrollView.adjustedContentInset.top)
         if y > 0 {
             ownership = .inner(pageID: activePageID ?? AnyHashable(""))
-            if let outerScrollView, outerScrollView.contentOffset.y < collapseLimit {
+            if let outerScrollView,
+               outerScrollView.contentOffset.y + outerScrollView.adjustedContentInset.top < collapseLimit {
                 isApplyingCorrection = true
-                outerScrollView.contentOffset.y = collapseLimit
+                outerScrollView.contentOffset.y = collapseLimit - outerScrollView.adjustedContentInset.top
                 scrollView.contentOffset.y = -scrollView.adjustedContentInset.top
                 isApplyingCorrection = false
             }
-        } else if let outerScrollView, outerScrollView.contentOffset.y > 0 {
+        } else if let outerScrollView,
+                  outerScrollView.contentOffset.y + outerScrollView.adjustedContentInset.top > 0 {
             ownership = .transitioning
             isApplyingCorrection = true
-            outerScrollView.contentOffset.y = max(0, outerScrollView.contentOffset.y - abs(scrollView.panGestureRecognizer.velocity(in: scrollView).y) * 0.001)
+            let outerTopInset = outerScrollView.adjustedContentInset.top
+            let outerY = max(0, outerScrollView.contentOffset.y + outerTopInset)
+            let nextY = max(0, outerY - abs(scrollView.panGestureRecognizer.velocity(in: scrollView).y) * 0.001)
+            outerScrollView.contentOffset.y = nextY - outerTopInset
             isApplyingCorrection = false
+            isTransferringMomentum = true
         } else {
             ownership = .outer
         }
@@ -499,10 +612,13 @@ open class PTNestedScrollCoordinator {
 
     private func normalize() {
         guard let outerScrollView else { return }
-        let y = min(max(0, outerScrollView.contentOffset.y), collapseLimit)
-        if abs(outerScrollView.contentOffset.y - y) > 0.5, !isApplyingCorrection {
+        let topInset = outerScrollView.adjustedContentInset.top
+        let currentY = outerScrollView.contentOffset.y + topInset
+        let y = min(max(0, currentY), collapseLimit)
+        let normalizedOffset = y - topInset
+        if abs(outerScrollView.contentOffset.y - normalizedOffset) > 0.5, !isApplyingCorrection {
             isApplyingCorrection = true
-            outerScrollView.contentOffset.y = y
+            outerScrollView.contentOffset.y = normalizedOffset
             isApplyingCorrection = false
         }
         let progress = collapseLimit == 0 ? 1 : min(1, y / collapseLimit)
@@ -512,15 +628,25 @@ open class PTNestedScrollCoordinator {
 
 @MainActor
 private final class PTScrollDelegateProxy: NSObject, UIScrollViewDelegate {
+    weak var scrollView: UIScrollView?
     weak var original: UIScrollViewDelegate?
     var onDidScroll: ((UIScrollView) -> Void)?
+    var onDidEndDragging: ((UIScrollView, Bool) -> Void)?
+    var onDidEndDecelerating: ((UIScrollView) -> Void)?
 
-    init(original: UIScrollViewDelegate?) {
+    init(scrollView: UIScrollView, original: UIScrollViewDelegate?) {
+        self.scrollView = scrollView
         self.original = original
     }
 
     func detach() {
+        if scrollView?.delegate === self {
+            scrollView?.delegate = original
+        }
         onDidScroll = nil
+        onDidEndDragging = nil
+        onDidEndDecelerating = nil
+        scrollView = nil
         original = nil
     }
 
@@ -534,11 +660,59 @@ private final class PTScrollDelegateProxy: NSObject, UIScrollViewDelegate {
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        onDidEndDragging?(scrollView, decelerate)
         original?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
 
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                   withVelocity velocity: CGPoint,
+                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        original?.scrollViewWillEndDragging?(scrollView,
+                                              withVelocity: velocity,
+                                              targetContentOffset: targetContentOffset)
+    }
+
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        original?.scrollViewWillBeginDecelerating?(scrollView)
+    }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        onDidEndDecelerating?(scrollView)
         original?.scrollViewDidEndDecelerating?(scrollView)
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        original?.scrollViewDidEndScrollingAnimation?(scrollView)
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        original?.viewForZooming?(in: scrollView)
+    }
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        original?.scrollViewWillBeginZooming?(scrollView, with: view)
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView,
+                                 with view: UIView?,
+                                 atScale scale: CGFloat) {
+        original?.scrollViewDidEndZooming?(scrollView, with: view, atScale: scale)
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        original?.scrollViewDidZoom?(scrollView)
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        original?.scrollViewShouldScrollToTop?(scrollView) ?? true
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        original?.scrollViewDidScrollToTop?(scrollView)
+    }
+
+    func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
+        original?.scrollViewDidChangeAdjustedContentInset?(scrollView)
     }
 }
 
@@ -578,15 +752,40 @@ public enum PTGestureDirection {
 public final class PTGestureArena {
     public var resolver = PTGestureDirectionResolver()
     public var allowsSimultaneousNavigationPop = true
+    /// English: Keep unrelated pan gestures independent so table-cell swipe actions keep priority.
+    /// Español: Mantiene independientes los gestos de paneo no relacionados para que las acciones de las celdas con deslizamiento tengan prioridad.
+    /// 中文：让无关的 Pan 手势保持独立，确保列表 Cell 的侧滑操作优先响应。
+    public var allowsSimultaneousPanGestures = false
+    public weak var navigationController: UINavigationController?
+    public weak var outerScrollView: UIScrollView?
+    public weak var innerScrollView: UIScrollView?
+    public weak var horizontalScrollView: UIScrollView?
 
     public init() {}
 
     public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer,
                                               _ second: UIGestureRecognizer) -> Bool {
-        guard allowsSimultaneousNavigationPop else { return false }
-        let firstIsNavigation = first === first.view?.window?.rootViewController?.navigationController?.interactivePopGestureRecognizer
-        let secondIsNavigation = second === second.view?.window?.rootViewController?.navigationController?.interactivePopGestureRecognizer
-        return firstIsNavigation || secondIsNavigation
+        if allowsSimultaneousNavigationPop {
+            let popGesture = navigationController?.interactivePopGestureRecognizer
+            if first === popGesture || second === popGesture {
+                return true
+            }
+        }
+
+        let firstIsOuter = first === outerScrollView?.panGestureRecognizer
+        let secondIsOuter = second === outerScrollView?.panGestureRecognizer
+        let firstIsInner = first === innerScrollView?.panGestureRecognizer
+        let secondIsInner = second === innerScrollView?.panGestureRecognizer
+        let firstIsHorizontal = first === horizontalScrollView?.panGestureRecognizer
+        let secondIsHorizontal = second === horizontalScrollView?.panGestureRecognizer
+        let isNestedScrollPair = (firstIsOuter && secondIsInner) || (firstIsInner && secondIsOuter)
+        let isKnownPagingPair = isNestedScrollPair || (firstIsOuter && secondIsHorizontal) || (firstIsHorizontal && secondIsOuter)
+        if isKnownPagingPair {
+            return true
+        }
+
+        let bothArePan = first is UIPanGestureRecognizer && second is UIPanGestureRecognizer
+        return allowsSimultaneousPanGestures && bothArePan
     }
 }
 
@@ -616,6 +815,34 @@ public final class PTNavigationGestureAdapter {
 open class PTPagingView: UIView, UIScrollViewDelegate {
     public let outerScrollView = UIScrollView()
     public let pageContainer: PTPageContainer
+    /// English: Compatibility name for callers migrating from a list-container property.
+    /// Español: Nombre compatible para llamadas que migran desde una propiedad de contenedor de listas.
+    /// 中文：兼容旧列表容器属性的命名入口。
+    public var listContainerView: PTPageContainer { pageContainer }
+    /// English: Compatibility name for the outer paging scroll view.
+    /// Español: Nombre compatible para el scroll exterior de paginación.
+    /// 中文：外层分页 ScrollView 的兼容命名入口。
+    public var mainScrollView: UIScrollView { outerScrollView }
+    public weak var hostViewController: UIViewController? {
+        didSet {
+            pageContainer.hostViewController = hostViewController
+            gestureArena.navigationController = hostViewController?.navigationController
+        }
+    }
+    /// English: Forwards the native refresh control to the outer scroll view.
+    /// Español: Reenvía el control de refresco nativo al scroll exterior.
+    /// 中文：将原生刷新控件转发到外层 ScrollView。
+    public var refreshControl: UIRefreshControl? {
+        get { outerScrollView.refreshControl }
+        set { outerScrollView.refreshControl = newValue }
+    }
+    /// English: Controls horizontal page scrolling without exposing a third-party list container.
+    /// Español: Controla el desplazamiento horizontal sin exponer un contenedor de terceros.
+    /// 中文：控制横向页面滚动，不暴露第三方列表容器。
+    public var isListHorizontalScrollEnabled: Bool {
+        get { pageContainer.isListHorizontalScrollEnabled }
+        set { pageContainer.isListHorizontalScrollEnabled = newValue }
+    }
     public let headerHost = UIView()
     public let pinnedHeaderHost = UIView()
     public let nestedScrollCoordinator = PTNestedScrollCoordinator()
@@ -656,12 +883,15 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         outerScrollView.alwaysBounceHorizontal = false
         outerScrollView.showsVerticalScrollIndicator = false
         outerScrollView.contentInsetAdjustmentBehavior = .never
+        outerScrollView.scrollsToTop = true
+        gestureArena.outerScrollView = outerScrollView
+        gestureArena.horizontalScrollView = pageContainer.scrollView
         addSubview(outerScrollView)
         outerScrollView.addSubview(headerHost)
         outerScrollView.addSubview(pageContainer)
         addSubview(pinnedHeaderHost)
         pinnedHeaderHost.isHidden = true
-        pageContainer.onSelectionChanged = { [weak self] _ in self?.bindCurrentPageScroll() }
+        pageContainer.addSelectionObserver { [weak self] _ in self?.bindCurrentPageScroll() }
     }
 
     open override func layoutSubviews() {
@@ -672,6 +902,7 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         headerHeight = resolvedHeaderHeight()
         let pinnedHeight = pinnedConfiguration?.height ?? 0
         headerHost.frame = CGRect(x: 0, y: 0, width: bounds.width, height: headerHeight)
+        headerHost.subviews.first?.frame = headerHost.bounds
         pageContainer.frame = CGRect(x: 0,
                                      y: headerHeight + pinnedHeight,
                                      width: bounds.width,
@@ -682,6 +913,7 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
                                         y: safeAreaInsets.top,
                                         width: bounds.width,
                                         height: pinnedHeight)
+        pinnedHeaderHost.subviews.first?.frame = pinnedHeaderHost.bounds
         nestedScrollCoordinator.collapseLimit = headerHeight
         updatePinnedVisibility()
         isUpdatingLayout = false
@@ -752,8 +984,9 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         guard scrollView === outerScrollView else { return }
         nestedScrollCoordinator.handleOuterScroll(scrollView)
         updatePinnedVisibility()
-        if scrollView.contentOffset.y < 0, headerHeight > 0 {
-            onStretchProgress?(min(1, abs(scrollView.contentOffset.y) / headerHeight))
+        let logicalOffset = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
+        if logicalOffset < 0, headerHeight > 0 {
+            onStretchProgress?(min(1, abs(logicalOffset) / headerHeight))
         }
     }
 
@@ -766,7 +999,8 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
     }
 
     private func updatePinnedVisibility() {
-        let progress = headerHeight == 0 ? 1 : min(1, max(0, outerScrollView.contentOffset.y / headerHeight))
+        let logicalOffset = outerScrollView.contentOffset.y + outerScrollView.adjustedContentInset.top
+        let progress = headerHeight == 0 ? 1 : min(1, max(0, logicalOffset / headerHeight))
         currentCollapseProgress = progress
         pinnedHeaderHost.isHidden = pinnedConfiguration == nil || progress == 0
         pinnedHeaderHost.alpha = progress
@@ -783,6 +1017,8 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         } else {
             scrollView = findScrollView(in: page.pageView)
         }
+        scrollView?.scrollsToTop = false
+        gestureArena.innerScrollView = scrollView
         nestedScrollCoordinator.bind(outer: outerScrollView,
                                      inner: scrollView,
                                      pageID: pageContainer.selectedID,
@@ -795,6 +1031,26 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
             if let scrollView = findScrollView(in: subview) { return scrollView }
         }
         return nil
+    }
+
+    /// English: Scrolls the outer header and the active list to their top positions.
+    /// Español: Desplaza la cabecera exterior y la lista activa hasta sus posiciones superiores.
+    /// 中文：将外层 Header 和当前列表滚动到顶部。
+    public func scrollCurrentPageToTop(animated: Bool = true) {
+        let outerY = -outerScrollView.adjustedContentInset.top
+        outerScrollView.setContentOffset(CGPoint(x: outerScrollView.contentOffset.x, y: outerY), animated: animated)
+        if let innerScrollView = pageContainer.currentPageScrollView {
+            let innerY = -innerScrollView.adjustedContentInset.top
+            innerScrollView.setContentOffset(CGPoint(x: innerScrollView.contentOffset.x, y: innerY), animated: animated)
+        }
+    }
+
+    /// English: Host-facing gesture policy for nested paging and navigation-pop gestures.
+    /// Español: Política de gestos expuesta al host para paginación anidada y retorno de navegación.
+    /// 中文：提供给宿主的嵌套分页和导航返回手势协作策略。
+    public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer,
+                                               _ second: UIGestureRecognizer) -> Bool {
+        gestureArena.shouldRecognizeSimultaneously(first, second)
     }
 }
 
@@ -810,19 +1066,19 @@ public final class PTSegmentedPagingCoordinator {
     public init(segmentedView: PTSegmentedView, pageContainer: PTPageContainer) {
         self.segmentedView = segmentedView
         self.pageContainer = pageContainer
-        segmentedView.onSelectionChanged = { [weak self] event in
+        segmentedView.addSelectionObserver { [weak self] event in
             guard let self, !self.isSynchronizing, let id = event.newSelection.selectedID else { return }
             self.isSynchronizing = true
             self.pageContainer?.select(id: id, animated: true, origin: event.origin)
             self.isSynchronizing = false
         }
-        pageContainer.onSelectionChanged = { [weak self] event in
+        pageContainer.addSelectionObserver { [weak self] event in
             guard let self, !self.isSynchronizing else { return }
             self.isSynchronizing = true
             self.segmentedView?.select(id: event.newID, animated: true, origin: event.origin == .programmatic ? .programmatic : .swipe)
             self.isSynchronizing = false
         }
-        pageContainer.onTransition = { [weak self] transition in
+        pageContainer.addTransitionObserver { [weak self] transition in
             guard let self,
                   let segmentedView = self.segmentedView else { return }
             segmentedView.update(transition: PTSegmentTransition(fromID: transition.fromID,
@@ -838,7 +1094,8 @@ public final class PTSegmentedPagingCoordinator {
     public func apply(items: [PTSegmentItem], pages: [PTPageDescriptor], animated: Bool = true) {
         let pageIDs = Set(pages.map(\.id))
         let safeItems = items.filter { pageIDs.contains($0.id) }
+        let preferredID = segmentedView?.selectionState.selectedID ?? pageContainer?.selectedID ?? safeItems.first?.id
         segmentedView?.apply(items: safeItems, animatingDifferences: animated)
-        pageContainer?.apply(pages: pages, selectedID: safeItems.first?.id, animated: animated)
+        pageContainer?.apply(pages: pages, selectedID: preferredID, animated: animated)
     }
 }

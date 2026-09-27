@@ -217,7 +217,7 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
-        .package(url: "https://github.com/yangKJ/Harbeth.git", from: "1.1.0"),
+        .package(url: "https://github.com/yangKJ/Harbeth.git", from: "3.0.1"),
         .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),

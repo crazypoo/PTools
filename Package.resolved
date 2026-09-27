@@ -1,5 +1,5 @@
 {
-  "originHash" : "ef00557eaee66c498986cc265a58b1f0e9e44c0002f5585e1ff6c8a307182704",
+  "originHash" : "2e2f5fa23869b71237d5cd1d02d65840b9a7b1ad7d4ce3f66e9d38f4fdab986c",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yangKJ/Harbeth.git",
       "state" : {
-        "revision" : "075029b3d87cca4a17e32947287064a25d74c033",
-        "version" : "1.3.1"
+        "revision" : "b2e6ce60ee63bc611e484b36a14b15b969a0e8f2",
+        "version" : "3.0.1"
       }
     },
     {

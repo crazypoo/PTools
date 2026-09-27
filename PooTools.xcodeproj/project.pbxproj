@@ -8,11 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0F1ABF302D9045FDB86F417A /* PTOverlayLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E883305C31665BFE34E8A1 /* PTOverlayLifecycle.swift */; };
-		A531100000000000000001 /* PTOverlayGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000001 /* PTOverlayGeometry.swift */; };
-		A531100000000000000002 /* PTOverlayInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000002 /* PTOverlayInteraction.swift */; };
-		A531100000000000000003 /* PTTipsOverlayIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000003 /* PTTipsOverlayIntegration.swift */; };
-		A531100000000000000004 /* PTPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000004 /* PTPopover.swift */; };
-		A531100000000000000005 /* PTContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000005 /* PTContextMenu.swift */; };
 		1DA160013337446E91723ECA /* PTCollectionViewSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7F5C66DB2E45838AC1B9F0 /* PTCollectionViewSkeleton.swift */; };
 		231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D0272CDD19003D6F62 /* PooTools.podspec */; };
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
@@ -74,9 +69,6 @@
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
 		5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */; };
-		A530000000000000000011 /* PTSegmentedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000001 /* PTSegmentedTypes.swift */; };
-		A530000000000000000012 /* PTSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000002 /* PTSegmentedView.swift */; };
-		A530000000000000000013 /* PTPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000003 /* PTPaging.swift */; };
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
@@ -1017,6 +1009,14 @@
 		A51700000000000000000001 /* PTMediaRequestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000001 /* PTMediaRequestCoordinator.swift */; };
 		A51700000000000000000002 /* PTMediaSaveUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000002 /* PTMediaSaveUI.swift */; };
 		A51700000000000000000003 /* PTVideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000003 /* PTVideoThumbnailService.swift */; };
+		A530000000000000000011 /* PTSegmentedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000001 /* PTSegmentedTypes.swift */; };
+		A530000000000000000012 /* PTSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000002 /* PTSegmentedView.swift */; };
+		A530000000000000000013 /* PTPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000003 /* PTPaging.swift */; };
+		A531100000000000000001 /* PTOverlayGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000001 /* PTOverlayGeometry.swift */; };
+		A531100000000000000002 /* PTOverlayInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000002 /* PTOverlayInteraction.swift */; };
+		A531100000000000000003 /* PTTipsOverlayIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000003 /* PTTipsOverlayIntegration.swift */; };
+		A531100000000000000004 /* PTPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000004 /* PTPopover.swift */; };
+		A531100000000000000005 /* PTContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531000000000000000005 /* PTContextMenu.swift */; };
 		A57F00000000000000000001 /* PTListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F00000000000000000002 /* PTListViewController.swift */; };
 		AD32F74292435EAEDC1F4596 /* PTBannerHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0810F8057DC62FF41AC4F0 /* PTBannerHandle.swift */; };
 		B51700000000000000000005 /* PTNavigationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51700000000000000000004 /* PTNavigationConfiguration.swift */; };
@@ -1058,12 +1058,7 @@
 		10F3C2B183334E31ABE12A02 /* Network+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Download.swift"; sourceTree = "<group>"; };
 		130CD11039241C180C35F1B5 /* PTOverlayCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayCore.swift; sourceTree = "<group>"; };
 		15E883305C31665BFE34E8A1 /* PTOverlayLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayLifecycle.swift; sourceTree = "<group>"; };
-		A531000000000000000001 /* PTOverlayGeometry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayGeometry.swift; sourceTree = "<group>"; };
-		A531000000000000000002 /* PTOverlayInteraction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayInteraction.swift; sourceTree = "<group>"; };
-		A531000000000000000003 /* PTTipsOverlayIntegration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTTipsOverlayIntegration.swift; sourceTree = "<group>"; };
-		A531000000000000000004 /* PTPopover.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTPopover.swift; sourceTree = "<group>"; };
-		A531000000000000000005 /* PTContextMenu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTContextMenu.swift; sourceTree = "<group>"; };
-		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
@@ -1123,9 +1118,6 @@
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
 		5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentControlBaseModel.swift; sourceTree = "<group>"; };
-		A530000000000000000001 /* PTSegmentedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedTypes.swift; sourceTree = "<group>"; };
-		A530000000000000000002 /* PTSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedView.swift; sourceTree = "<group>"; };
-		A530000000000000000003 /* PTPaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPaging.swift; sourceTree = "<group>"; };
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
@@ -2087,6 +2079,14 @@
 		9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDrakModeOption.swift; sourceTree = "<group>"; };
 		9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTThemeProvider.swift; sourceTree = "<group>"; };
 		9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+PTEX.swift"; sourceTree = "<group>"; };
+		A530000000000000000001 /* PTSegmentedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedTypes.swift; sourceTree = "<group>"; };
+		A530000000000000000002 /* PTSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedView.swift; sourceTree = "<group>"; };
+		A530000000000000000003 /* PTPaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPaging.swift; sourceTree = "<group>"; };
+		A531000000000000000001 /* PTOverlayGeometry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayGeometry.swift; sourceTree = "<group>"; };
+		A531000000000000000002 /* PTOverlayInteraction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTOverlayInteraction.swift; sourceTree = "<group>"; };
+		A531000000000000000003 /* PTTipsOverlayIntegration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTTipsOverlayIntegration.swift; sourceTree = "<group>"; };
+		A531000000000000000004 /* PTPopover.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTPopover.swift; sourceTree = "<group>"; };
+		A531000000000000000005 /* PTContextMenu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PTContextMenu.swift; sourceTree = "<group>"; };
 		A57F00000000000000000002 /* PTListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListViewController.swift; sourceTree = "<group>"; };
 		AE5B50A9E9BF0978D1FD79BF /* PooToolsBannerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PooToolsBannerView.swift; sourceTree = "<group>"; };
 		B51700000000000000000001 /* PTMediaRequestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaRequestCoordinator.swift; sourceTree = "<group>"; };
@@ -2600,7 +2600,6 @@
 			children = (
 				7A6D7E3B0EDBA0F9BAD9E7DB /* PTHTTPFilePortal.swift */,
 			);
-			name = PToolsHTTPFilePortal;
 			path = PToolsHTTPFilePortal;
 			sourceTree = "<group>";
 		};
@@ -2614,7 +2613,6 @@
 				A531000000000000000001 /* PTOverlayGeometry.swift */,
 				A531000000000000000002 /* PTOverlayInteraction.swift */,
 			);
-			name = Overlay;
 			path = Overlay;
 			sourceTree = "<group>";
 		};
@@ -2887,16 +2885,6 @@
 				A531000000000000000003 /* PTTipsOverlayIntegration.swift */,
 			);
 			path = TipsView;
-			sourceTree = "<group>";
-		};
-		A531200000000000000001 /* Popover */ = {
-			isa = PBXGroup;
-			children = (
-				A531000000000000000004 /* PTPopover.swift */,
-				A531000000000000000005 /* PTContextMenu.swift */,
-			);
-			name = Popover;
-			path = Popover;
 			sourceTree = "<group>";
 		};
 		55571B362D58EEF2004134B8 /* iCloud */ = {
@@ -4366,7 +4354,6 @@
 				AE5B50A9E9BF0978D1FD79BF /* PooToolsBannerView.swift */,
 				0F54A944E8054CB5F813D545 /* PTBannerPresenter.swift */,
 			);
-			name = Banner;
 			path = Banner;
 			sourceTree = "<group>";
 		};
@@ -4378,6 +4365,15 @@
 				55DD936B2B932A0400F65872 /* Logger+PTEX.swift */,
 			);
 			path = Log;
+			sourceTree = "<group>";
+		};
+		A531200000000000000001 /* Popover */ = {
+			isa = PBXGroup;
+			children = (
+				A531000000000000000004 /* PTPopover.swift */,
+				A531000000000000000005 /* PTContextMenu.swift */,
+			);
+			path = Popover;
 			sourceTree = "<group>";
 		};
 		B52400000000000000000010 /* PToolsSymbols */ = {
@@ -4449,7 +4445,6 @@
 				CDF14F2C118515F911819F8F /* PTHTTPServer.swift */,
 				D5B97C292A0F93BE5B886934 /* PTHTTPTypes.swift */,
 			);
-			name = PToolsHTTPServer;
 			path = PToolsHTTPServer;
 			sourceTree = "<group>";
 		};
@@ -4579,7 +4574,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4589,9 +4585,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4606,9 +4606,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -5827,9 +5831,9 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) POOTOOLS_BANNER";
 				SWIFT_OBJC_BRIDGING_HEADER = "PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) POOTOOLS_BANNER";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5882,10 +5886,10 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) POOTOOLS_BANNER";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) POOTOOLS_BANNER";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)";

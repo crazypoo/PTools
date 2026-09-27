@@ -21,6 +21,12 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private let badgeLabel = UILabel()
     private let badgeDot = UIView()
     private var imageTask: Task<Void, Never>?
+    private var imageWidthConstraint: NSLayoutConstraint?
+    private var imageHeightConstraint: NSLayoutConstraint?
+    private var contentLeadingConstraint: NSLayoutConstraint?
+    private var contentTrailingConstraint: NSLayoutConstraint?
+    private var contentTopConstraint: NSLayoutConstraint?
+    private var contentBottomConstraint: NSLayoutConstraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,12 +55,16 @@ public class PTMainSegmentCell: UICollectionViewCell {
         contentStack.spacing = 6
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(contentStack)
+        contentLeadingConstraint = contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+        contentTrailingConstraint = contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        contentTopConstraint = contentStack.topAnchor.constraint(equalTo: contentView.topAnchor)
+        contentBottomConstraint = contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+            contentLeadingConstraint,
+            contentTrailingConstraint,
+            contentTopConstraint,
+            contentBottomConstraint
+        ].compactMap { $0 })
         lineView.backgroundColor = .separator
         lineView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(lineView)
@@ -78,6 +88,11 @@ public class PTMainSegmentCell: UICollectionViewCell {
         representedID = item.id
         removeStackContent()
         applySelection(selected, style: style)
+        contentLeadingConstraint?.constant = style.itemInsets.left
+        contentTrailingConstraint?.constant = -style.itemInsets.right
+        contentTopConstraint?.constant = style.itemInsets.top
+        contentBottomConstraint?.constant = -style.itemInsets.bottom
+        contentStack.spacing = style.imageSpacing
         switch item.content {
         case .title(let title):
             addTitle(title, style: style, selected: selected)
@@ -90,10 +105,15 @@ public class PTMainSegmentCell: UICollectionViewCell {
         case .titleImage(let title, let image, let placement):
             addTitleImage(title: title, image: image, placement: placement, style: style, selected: selected)
         case .imageSource(let source, let placeholder):
-            addImage(placeholder, style: style)
+            addImage(placeholder, style: style, reservesSpace: true)
             loadImage(source: source, placeholder: placeholder, identifier: item.id, style: style)
         case .titleImageSource(let title, let source, let placement, let placeholder):
-            addTitleImage(title: title, image: placeholder, placement: placement, style: style, selected: selected)
+            addTitleImage(title: title,
+                          image: placeholder,
+                          placement: placement,
+                          style: style,
+                          selected: selected,
+                          reservesImageSpace: true)
             loadImage(source: source, placeholder: placeholder, identifier: item.id, style: style)
         case .custom(let custom):
             contentStack.addArrangedSubview(custom.makeView())
@@ -121,11 +141,14 @@ public class PTMainSegmentCell: UICollectionViewCell {
         }
         titleLabel.text = nil
         titleLabel.attributedText = nil
+        titleLabel.numberOfLines = 1
         imageIcon.image = nil
         subTitleLabel.isHidden = true
         badgeLabel.removeFromSuperview()
         badgeDot.removeFromSuperview()
         contentStack.axis = .horizontal
+        imageWidthConstraint?.isActive = false
+        imageHeightConstraint?.isActive = false
     }
 
     private func addTitle(_ title: String, style: PTSegmentStyle, selected: Bool) {
@@ -134,12 +157,11 @@ public class PTMainSegmentCell: UICollectionViewCell {
         contentStack.addArrangedSubview(titleLabel)
     }
 
-    private func addImage(_ image: UIImage?, style: PTSegmentStyle) {
+    private func addImage(_ image: UIImage?, style: PTSegmentStyle, reservesSpace: Bool = false) {
         imageIcon.image = image
-        if image != nil {
+        if image != nil || reservesSpace {
             contentStack.addArrangedSubview(imageIcon)
-            imageIcon.widthAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
-            imageIcon.heightAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
+            updateImageSizeConstraints(style: style)
         }
     }
 
@@ -147,22 +169,39 @@ public class PTMainSegmentCell: UICollectionViewCell {
                                image: UIImage?,
                                placement: PTImagePlacement,
                                style: PTSegmentStyle,
-                               selected: Bool) {
+                               selected: Bool,
+                               reservesImageSpace: Bool = false) {
         titleLabel.text = title
         titleLabel.font = selected ? style.selectedFont : style.normalFont
         imageIcon.image = image
         contentStack.axis = (placement == .top || placement == .bottom) ? .vertical : .horizontal
         if placement == .trailing || placement == .bottom {
             contentStack.addArrangedSubview(titleLabel)
-            if image != nil { contentStack.addArrangedSubview(imageIcon) }
+            if image != nil || reservesImageSpace { contentStack.addArrangedSubview(imageIcon) }
         } else {
-            if image != nil { contentStack.addArrangedSubview(imageIcon) }
+            if image != nil || reservesImageSpace { contentStack.addArrangedSubview(imageIcon) }
             contentStack.addArrangedSubview(titleLabel)
         }
-        if image != nil {
-            imageIcon.widthAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
-            imageIcon.heightAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
+        if image != nil || reservesImageSpace {
+            updateImageSizeConstraints(style: style)
         }
+    }
+
+    /// English: Reuses one width and height pair so cell reuse never accumulates conflicting constraints.
+    /// Español: Reutiliza un único par de restricciones para que la reutilización no acumule conflictos.
+    /// 中文：复用同一组宽高约束，避免 Cell 重用时不断累积冲突约束。
+    private func updateImageSizeConstraints(style: PTSegmentStyle) {
+        if imageWidthConstraint == nil {
+            imageWidthConstraint = imageIcon.widthAnchor.constraint(equalToConstant: 1)
+        }
+        if imageHeightConstraint == nil {
+            imageHeightConstraint = imageIcon.heightAnchor.constraint(equalToConstant: 1)
+        }
+        let size = max(1, style.itemHeight - 12)
+        imageWidthConstraint?.constant = size
+        imageHeightConstraint?.constant = size
+        imageWidthConstraint?.isActive = true
+        imageHeightConstraint?.isActive = true
     }
 
     private func loadImage(source: PTImageSource,

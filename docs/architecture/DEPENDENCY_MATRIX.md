@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
-Generated at: 2026-09-27T05:56:54Z
-Version source: 5.31.0
+Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
+Generated at: 2026-09-27T10:15:07Z
+Version source: 5.31.1
 -->
 
 # Direct Dependency Matrix
@@ -91,7 +91,8 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `Symbols`, `ptools` | `Kakapos` | 6.0 review | Keep; review direct drift |
 | `Picker` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `Ping` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `PopoverKit` | `Core` | `Popovers` | 6.0 review | Keep; review direct drift |
+| `Popover` | `Overlay`, `PToolsOverlay`, `PToolsSymbols`, `Symbols` | — | No direct third-party dependency | Keep; review direct drift |
+| `PopoverKit` | `Popover` | — | No direct third-party dependency | Keep; review direct drift |
 | `ProgressBar` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `RateView` | `PToolsUIFoundation` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `RemindersPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
@@ -116,7 +117,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Symbols` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `Tabbar` | `Core` | — | No direct third-party dependency | Keep; review direct drift |
 | `Telephony` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `TipsView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `TipsView` | `Core`, `PToolsOverlay`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `TrackingPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `VideoCache` | `Core` | `KTVHTTPCache` | 6.0 review | Keep; review direct drift |
 | `VideoEditor` | `Core`, `HarbethKit`, `Loading`, `MediaCore`, `PToolsSymbols`, `PooToolsHarbethKit`, `PooToolsLoading`, `PooToolsMediaCore`, `PooToolsProgressBar`, `ProgressBar`, `Symbols`, `ptools` | `Harbeth` | 6.0 review | Keep; review direct drift |

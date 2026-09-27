@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 326abb63a0ad6e918f65a5ec3b29c3bc2c285d17
-Generated at: 2026-09-27T05:56:54Z
-Version source: 5.31.0
+Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
+Generated at: 2026-09-27T10:15:07Z
+Version source: 5.31.1
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -80,6 +80,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `PhotoPicker` | A | `PooTools/PhotoPicker` | `PooToolsPhotoPicker` | Keep; review drift |
 | `Picker` | A | `PooTools/Picker` | `PooToolsPicker` | Keep; review drift |
 | `Ping` | A | `PooTools/Ping` | `PooToolsPing` | Keep; review drift |
+| `Popover` | A | `PooTools/Popover` | `PooToolsPopover` | Keep; review drift |
 | `ProgressBar` | A | `PooTools/ProgressBar` | `PooToolsProgressBar` | Keep; review drift |
 | `RateView` | A | `PooTools/RateView` | `PooToolsRateView` | Keep; review drift |
 | `RemindersPermission` | A | `PooTools/RemindersPermission` | `PTRemindersPermission` | Keep; review drift |

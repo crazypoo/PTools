@@ -330,12 +330,16 @@ public final class PTImageIndicator: PTBaseSegmentIndicator {
 open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     private enum Section { case main }
     private struct SnapshotID: Hashable, Sendable {
-        let raw: String
+        let value: Int
     }
 
     public let collectionView: UICollectionView
     public var style = PTSegmentStyle() {
         didSet {
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.minimumInteritemSpacing = style.itemSpacing
+                layout.minimumLineSpacing = style.itemSpacing
+            }
             collectionView.collectionViewLayout.invalidateLayout()
             collectionView.reloadData()
             setNeedsLayout()
@@ -348,6 +352,12 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     public private(set) var selectionState = PTSegmentSelectionState()
     public var onSelectionChanged: ((PTSegmentSelectionEvent) -> Void)?
     public var onTransition: ((PTSegmentTransition) -> Void)?
+    /// English: Optional legacy-style selection callbacks without taking ownership of the data source.
+    /// Español: Callbacks opcionales de selección al estilo legado sin apropiarse de la fuente de datos.
+    /// 中文：提供类似旧版代理的可选选择回调，但不接管数据源。
+    public var onItemSelected: ((Int, PTSegmentSelectionOrigin) -> Void)?
+    public var onReselected: ((Int) -> Void)?
+    public var onScrolling: ((Int, Int, CGFloat) -> Void)?
     public var allowsReselect = true
     public var automaticallyScrollsToSelectedItem = true
     public var selectionAnimationDuration: TimeInterval = 0.25
@@ -355,7 +365,11 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     private let indicatorHost = UIView()
     private var dataSource: UICollectionViewDiffableDataSource<Section, SnapshotID>!
     private var snapshotItems = [SnapshotID: PTSegmentItem]()
+    private var snapshotIDsByBusinessID = [AnyHashable: SnapshotID]()
+    private var nextSnapshotID = 0
     private var isApplyingSnapshot = false
+    private var selectionObservers = [((PTSegmentSelectionEvent) -> Void)]()
+    private var transitionObservers = [((PTSegmentTransition) -> Void)]()
 
     public override init(frame: CGRect) {
         let layout = UICollectionViewFlowLayout()
@@ -386,8 +400,8 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         collectionView.alwaysBounceHorizontal = true
         collectionView.delegate = self
         collectionView.register(PTMainSegmentCell.self, forCellWithReuseIdentifier: PTMainSegmentCell.reuseIdentifier)
-        addSubview(indicatorHost)
         addSubview(collectionView)
+        addSubview(indicatorHost)
         dataSource = UICollectionViewDiffableDataSource<Section, SnapshotID>(collectionView: collectionView) { [weak self] collectionView, indexPath, identifier in
             guard let self,
                   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PTMainSegmentCell.reuseIdentifier,
@@ -400,6 +414,19 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
                            selected: item.id == self.selectionState.selectedID)
             return cell
         }
+    }
+
+    /// English: Converts a public business ID into a private Sendable diffable-data-source ID.
+    /// Español: Convierte un ID público de negocio en un ID privado y Sendable para el origen diffable.
+    /// 中文：将公开的业务 ID 转换为私有且满足 Sendable 的 Diffable 数据源 ID。
+    private func snapshotID(for businessID: AnyHashable) -> SnapshotID {
+        if let existingID = snapshotIDsByBusinessID[businessID] {
+            return existingID
+        }
+        let identifier = SnapshotID(value: nextSnapshotID)
+        nextSnapshotID += 1
+        snapshotIDsByBusinessID[businessID] = identifier
+        return identifier
     }
 
     open override func layoutSubviews() {
@@ -429,18 +456,10 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         }
 
         snapshotItems.removeAll(keepingCapacity: true)
-        var usedKeys = Set<SnapshotID>()
         let snapshotIDs: [SnapshotID] = items.map { item in
-            let base = String(reflecting: item.id.base)
-            var candidate = SnapshotID(raw: base)
-            var suffix = 1
-            while usedKeys.contains(candidate) {
-                candidate = SnapshotID(raw: "\(base)#\(suffix)")
-                suffix += 1
-            }
-            usedKeys.insert(candidate)
-            snapshotItems[candidate] = item
-            return candidate
+            let identifier = snapshotID(for: item.id)
+            snapshotItems[identifier] = item
+            return identifier
         }
         var snapshot = NSDiffableDataSourceSnapshot<Section, SnapshotID>()
         snapshot.appendSections([.main])
@@ -494,6 +513,11 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     public func update(transition: PTSegmentTransition) {
         indicators.forEach { $0.update(transition: transition) }
         onTransition?(transition)
+        transitionObservers.forEach { $0(transition) }
+        if let fromIndex = items.firstIndex(where: { $0.id == transition.fromID }),
+           let toIndex = items.firstIndex(where: { $0.id == transition.toID }) {
+            onScrolling?(fromIndex, toIndex, transition.progress)
+        }
     }
 
     private func emitSelectionChange(from old: PTSegmentSelectionState,
@@ -501,7 +525,28 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
                                      origin: PTSegmentSelectionOrigin) {
         let event = PTSegmentSelectionEvent(oldSelection: old, newSelection: new, origin: origin)
         onSelectionChanged?(event)
+        selectionObservers.forEach { $0(event) }
+        if let selectedIndex = new.selectedIndex {
+            onItemSelected?(selectedIndex, origin)
+            if origin == .tap, old.selectedID == new.selectedID {
+                onReselected?(selectedIndex)
+            }
+        }
         indicators.forEach { $0.select(item: new) }
+    }
+
+    /// English: Adds an internal observer used by coordinators while preserving the public callback.
+    /// Español: Añade un observador interno para coordinadores sin reemplazar el callback público.
+    /// 中文：增加供协调器使用的内部观察者，同时保留业务公开回调。
+    internal func addSelectionObserver(_ observer: @escaping (PTSegmentSelectionEvent) -> Void) {
+        selectionObservers.append(observer)
+    }
+
+    /// English: Adds an internal transition observer without replacing the public transition callback.
+    /// Español: Añade un observador interno de transición sin reemplazar el callback público。
+    /// 中文：增加内部过渡观察者，不覆盖业务公开过渡回调。
+    internal func addTransitionObserver(_ observer: @escaping (PTSegmentTransition) -> Void) {
+        transitionObservers.append(observer)
     }
 
     private func scrollTo(id: AnyHashable, animated: Bool) {

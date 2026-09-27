@@ -383,16 +383,42 @@ public final class PTViewPage: PTPage {
 /// Español: Adaptador respaldado por UIViewController que conserva el containment.
 /// 中文：基于 UIViewController 的页面适配器，并正确维护控制器容器关系。
 @MainActor
-public final class PTViewControllerPage: PTPage, PTScrollablePage {
+public final class PTViewControllerPage: PTPage, PTScrollablePage, PTPageLifecycleObserving {
     public let viewController: UIViewController
+    private let fallbackScrollView = PTPageFallbackScrollView()
     public var pageView: UIView { viewController.view }
     public var pageScrollView: UIScrollView {
-        if let scrollView = viewController.view as? UIScrollView { return scrollView }
-        return viewController.view.subviews.compactMap { $0 as? UIScrollView }.first ?? PTPageFallbackScrollView()
+        findScrollView(in: viewController.view) ?? fallbackScrollView
     }
 
     public init(viewController: UIViewController) {
         self.viewController = viewController
+    }
+
+    /// English: Forwards page visibility events to an embedded view controller.
+    /// Español: Reenvía los eventos de visibilidad de la página al controlador incrustado.
+    /// 中文：将页面可见性事件转发给内嵌的 ViewController。
+    public func pageContainer(_ container: PTPageContainer, didChange lifecycle: PTPageLifecycle) {
+        switch lifecycle {
+        case .willAppear:
+            viewController.beginAppearanceTransition(true, animated: false)
+        case .didAppear:
+            viewController.endAppearanceTransition()
+        case .willDisappear:
+            viewController.beginAppearanceTransition(false, animated: false)
+        case .didDisappear:
+            viewController.endAppearanceTransition()
+        case .willLoad, .didLoad, .didUnload:
+            break
+        }
+    }
+
+    private func findScrollView(in view: UIView) -> UIScrollView? {
+        if let scrollView = view as? UIScrollView { return scrollView }
+        for subview in view.subviews.reversed() {
+            if let scrollView = findScrollView(in: subview) { return scrollView }
+        }
+        return nil
     }
 }
 

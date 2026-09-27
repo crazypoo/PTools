@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
-  "generated_at": "2026-09-27T07:06:00Z",
+  "source_revision": "b0d1947bfb14224c36be452aeb2df33569a41c55",
+  "generated_at": "2026-09-27T10:34:05Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -4566,7 +4566,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "lines": 264,
+      "lines": 303,
       "classification": "ok"
     },
     {
@@ -4581,8 +4581,8 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTPaging.swift",
-      "lines": 844,
-      "classification": "ok"
+      "lines": 1101,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
@@ -4591,12 +4591,12 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "lines": 447,
+      "lines": 473,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedView.swift",
-      "lines": 610,
+      "lines": 655,
       "classification": "ok"
     },
     {
@@ -4980,7 +4980,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 15,
+  "warning_count": 16,
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3
 }

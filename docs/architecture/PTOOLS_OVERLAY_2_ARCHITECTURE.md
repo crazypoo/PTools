@@ -2,7 +2,7 @@
 
 ## 边界
 
-5.31.0 在 5.29.0 的 OverlayCore 1.0 上增量扩展，不重新创建 Scene Resolver、Window、Host、Registry 或 Z-order。Banner 继续只使用它需要的基础能力；Popover、Tips、Alert 和 ActionSheet 通过产品层表达各自语义。
+5.31.0 在 5.29.0 的 OverlayCore 1.0 上增量扩展，不重新创建 Scene Resolver、Window、Host、Registry 或 Z-order。Banner 继续只使用它需要的基础能力；Popover、Tips、Alert 和 ActionSheet 通过产品层表达各自语义。5.31.1 的分页补齐不改变 OverlayCore 边界。
 
 ## 分层
 
@@ -33,4 +33,3 @@ ActionsheetAndAlert  modal decision and action semantics
 ## 失败处理
 
 Anchor 不在 Window、Scene 不可用或 Host 创建失败时返回失败结果，不随机选择其他 Scene，也不使用强制解包。
-

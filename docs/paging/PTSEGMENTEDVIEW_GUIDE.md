@@ -1,4 +1,4 @@
-# PTSegmentedView 使用指南
+# PTSegmentedView 使用指南（5.31.1）
 
 ## 基础标题
 
@@ -12,6 +12,16 @@ segmentedView.apply(items: [
 ])
 segmentedView.onSelectionChanged = { event in
     print(event.newSelection.selectedID as Any)
+}
+
+// English: Receive final selections by origin when migrating from a delegate.
+// Español: Recibe la selección final por origen al migrar desde un delegate.
+// 中文：从旧 delegate 迁移时，可以按来源接收最终选中项。
+segmentedView.onItemSelected = { index, origin in
+    print(index, origin)
+}
+segmentedView.onReselected = { index in
+    print("reselected", index)
 }
 ```
 
@@ -46,3 +56,5 @@ segmentedView.indicators = [
 - `allowsReselect` 控制重复点击行为。
 - `onTransition` 只描述相邻页面之间的进度，不作为业务数据源。
 - RTL、Dynamic Type、Reduce Motion 和无障碍名称应由宿主在真实页面中回归验证。
+- Indicator 会位于分段 Cell 之上；`PTSegmentedView` 会保留稳定 ID，不要使用带角标的显示文本作为 ID。
+- `imageSource` 与 `titleImageSource` 即使没有 placeholder 也会预留图片位置，下载完成后自动更新。
