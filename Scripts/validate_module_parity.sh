@@ -49,6 +49,13 @@ ALIASES = {
   "PToolsHTTPServer" => "HTTPServer",
   "PToolsHTTPFilePortal" => "HTTPFilePortal",
   "PToolsDevice" => "Device",
+  "PToolsConnectivity" => "Connectivity",
+  "PToolsStorageCore" => "StorageCore",
+  "PToolsStorage" => "Storage",
+  "PToolsRouteCore" => "RouteCore",
+  "PToolsDeepLink" => "DeepLink",
+  "PToolsNotifications" => "Notifications",
+  "PToolsBackgroundTasks" => "BackgroundTasks",
   "SmartScreenshot" => "SmartScreenshot"
 }.freeze
 

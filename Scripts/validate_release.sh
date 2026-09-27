@@ -32,6 +32,7 @@ else
 fi
 
 bash Scripts/validate_docs.sh
+bash Scripts/CI/check_p0_platform_modules.sh
 bash Scripts/validate_document_versions.sh
 bash Scripts/validate_logging_foundation_5_20.sh
 bash Scripts/validate_logging_5_21.sh

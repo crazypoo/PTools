@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: fa748870fa58233517734db9ad2fca99263a4865
-Generated at: 2026-09-27T16:27:16Z
+Source revision: 596295ec19eebba96ab5d834e00ae1ea06c5eea6
+Generated at: 2026-09-27T17:37:45Z
 -->
 
 # PTools 当前 Debug 依赖图
@@ -15,14 +15,14 @@ Generated at: 2026-09-27T16:27:16Z
 
 | Target | Path | Internal dependencies |
 | --- | --- | --- |
-| `PooToolsDEBUG` | `PooToolsSource` | `PToolsOverlay`, `PToolsSymbols`, `PooToolsNetWork`, `PooToolsPDF`, `PooToolsSearchBar`, `PooToolsShare`, `ptools` |
+| `PooToolsDEBUG` | `PooToolsSource` | `PToolsBackgroundTasks`, `PToolsConnectivity`, `PToolsDeepLink`, `PToolsNotifications`, `PToolsOverlay`, `PToolsRouteCore`, `PToolsStorage`, `PToolsSymbols`, `PooToolsNetWork`, `PooToolsPDF`, `PooToolsSearchBar`, `PooToolsShare`, `ptools` |
 | `PooToolsDEBUGTrackingEyes` | `PooToolsSource/WhereIsMyEye` | `PTCameraPermission`, `PooToolsDEBUG`, `ptools` |
 
 ## CocoaPods
 
 | Subspec | Local dependencies |
 | --- | --- |
-| `DEBUG` | `PooTools/Core`, `PooTools/NetWork`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Symbols` |
+| `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` |
 | `DEBUG_TrackingEyes` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/DEBUG` |
 
 Debug 运行时是否创建窗口、采样器、sink 或 observer，仍需通过真实宿主回归确认。

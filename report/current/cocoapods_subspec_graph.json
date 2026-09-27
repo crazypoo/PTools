@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
-  "generated_at": "2026-09-27T16:27:10Z",
+  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
+  "generated_at": "2026-09-27T17:43:49Z",
   "name": "PooTools",
-  "version": "5.33.0",
+  "version": "5.34.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 115,
+  "subspec_count": 122,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -30,6 +30,27 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/BackgroundTasks",
+      "short_name": "BackgroundTasks",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsBackgroundTasks/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsBackgroundTasks"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "BackgroundTasks",
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BACKGROUND_TASKS POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -323,6 +344,27 @@
       }
     },
     {
+      "name": "PooTools/Connectivity",
+      "short_name": "Connectivity",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsConnectivity/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsConnectivity"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "Network"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CONNECTIVITY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/Contact",
       "short_name": "Contact",
       "local_dependencies": [
@@ -532,12 +574,18 @@
       "name": "PooTools/DEBUG",
       "short_name": "DEBUG",
       "local_dependencies": [
+        "PooTools/BackgroundTasks",
+        "PooTools/Connectivity",
         "PooTools/Core",
+        "PooTools/DeepLink",
         "PooTools/NetWork",
+        "PooTools/Notifications",
         "PooTools/Overlay",
         "PooTools/PDF",
+        "PooTools/RouteCore",
         "PooTools/SearchBar",
         "PooTools/Share",
+        "PooTools/Storage",
         "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
@@ -643,6 +691,28 @@
         "Foundation"
       ],
       "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/DeepLink",
+      "short_name": "DeepLink",
+      "local_dependencies": [
+        "PooTools/RouteCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsDeepLink/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsDeepLink"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEEPLINK POOTOOLS_COCOAPODS"
+      }
     },
     {
       "name": "PooTools/Device",
@@ -1564,6 +1634,30 @@
       }
     },
     {
+      "name": "PooTools/Notifications",
+      "short_name": "Notifications",
+      "local_dependencies": [
+        "PooTools/RouteCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsNotifications/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsNotifications"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UniformTypeIdentifiers",
+        "UserNotifications"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NOTIFICATIONS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/OSSKitSpeech",
       "short_name": "OSSKitSpeech",
       "local_dependencies": [
@@ -1938,10 +2032,32 @@
       }
     },
     {
+      "name": "PooTools/RouteCore",
+      "short_name": "RouteCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsRouteCore/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsRouteCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ROUTE_CORE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/Router",
       "short_name": "Router",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/Core",
+        "PooTools/DeepLink",
+        "PooTools/RouteCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -2311,6 +2427,49 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPPER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Storage",
+      "short_name": "Storage",
+      "local_dependencies": [
+        "PooTools/StorageCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsStorage/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsStorage"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "Security"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STORAGE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/StorageCore",
+      "short_name": "StorageCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsStorageCore/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsStorageCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STORAGE_CORE POOTOOLS_COCOAPODS"
       }
     },
     {

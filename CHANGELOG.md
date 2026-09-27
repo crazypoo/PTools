@@ -1,8 +1,14 @@
 # Changelog
 
-## Unreleased — 5.33.x
+## Unreleased — 5.34.x
 
-当前开发基线为 `5.33.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+当前开发基线为 `5.34.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+
+## 5.34.0 — 2026-09-28
+
+- 新增 Connectivity、Storage、RouteCore/DeepLink、Notifications、BackgroundTasks 五组平台基础设施。
+- 新增类型化并发边界、存储 namespace/迁移、Scene-aware Router 2.0 和通知路由适配。
+- SwiftPM、CocoaPods 和质量门禁同步增加 5.34.0 平台模块契约。
 
 ## 5.33.0 — 2026-09-27
 

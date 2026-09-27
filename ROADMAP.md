@@ -1,8 +1,19 @@
 # PTools 路线图
 
-> 当前代码基线：`5.33.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.34.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.33.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.34.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.34.0 P0 平台基础设施
+
+- ✅ 新增 `PToolsConnectivity`，提供 `PTConnectivityMonitor`、快照、诊断和 `AsyncStream` 监听。
+- ✅ 新增 `PToolsStorageCore` / `PToolsStorage`，统一 typed key、namespace、Memory、UserDefaults、File、Keychain、Composite 后端和迁移上下文。
+- ✅ 新增 `PToolsRouteCore` / `PToolsDeepLink`，将 URL Scheme 和 Universal Link 归一化为无 UIKit 路由请求。
+- ✅ 扩展 `PooToolsRouter`，提供 MainActor、Scene-aware 的 `PooToolsRouter` 2.0 入口，并保留旧 Router。
+- ✅ 新增 `PToolsNotifications`，提供类型化通知、分类、附件、前台展示策略和通知路由适配器。
+- ✅ 新增 `PToolsBackgroundTasks`，提供 BGAppRefresh、BGProcessing、过期取消和后台 URLSession 配置入口。
+- ✅ 增加 SwiftPM/CocoaPods parity、P0 平台模块和平台契约门禁。
+- [ ] 完成宿主 App 的通知授权、后台任务标识、Universal Link Associated Domains 和真机生命周期回归后，再创建正式 `5.34.0` tag。
 
 ## 5.33.0 DeviceKit 吸收与 PToolsDevice
 

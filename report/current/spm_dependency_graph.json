@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
-  "generated_at": "2026-09-27T16:27:10Z",
+  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
+  "generated_at": "2026-09-27T17:43:49Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -204,6 +204,28 @@
       ]
     },
     {
+      "name": "PToolsBackgroundTasks",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsBackgroundTasks"
+      ]
+    },
+    {
+      "name": "PToolsConnectivity",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsConnectivity"
+      ]
+    },
+    {
       "name": "PToolsCore",
       "type": {
         "library": [
@@ -223,6 +245,17 @@
       },
       "targets": [
         "PToolsDate"
+      ]
+    },
+    {
+      "name": "PToolsDeepLink",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDeepLink"
       ]
     },
     {
@@ -270,6 +303,17 @@
       ]
     },
     {
+      "name": "PToolsNotifications",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsNotifications"
+      ]
+    },
+    {
       "name": "PToolsOverlay",
       "type": {
         "library": [
@@ -300,6 +344,39 @@
       },
       "targets": [
         "PToolsPermissionUI"
+      ]
+    },
+    {
+      "name": "PToolsRouteCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsRouteCore"
+      ]
+    },
+    {
+      "name": "PToolsStorage",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsStorage"
+      ]
+    },
+    {
+      "name": "PToolsStorageCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsStorageCore"
       ]
     },
     {
@@ -347,13 +424,20 @@
         "PTSiriPermission",
         "PTSpeechPermission",
         "PTTrackingPermission",
+        "PToolsBackgroundTasks",
+        "PToolsConnectivity",
         "PToolsDate",
+        "PToolsDeepLink",
         "PToolsHTTPFilePortal",
         "PToolsHTTPServer",
         "PToolsLogging",
+        "PToolsNotifications",
         "PToolsOverlay",
         "PToolsPermissionCore",
         "PToolsPermissionUI",
+        "PToolsRouteCore",
+        "PToolsStorage",
+        "PToolsStorageCore",
         "PToolsSymbols",
         "PooToolsBankCard",
         "PooToolsBanner",
@@ -2361,6 +2445,34 @@
       ]
     },
     {
+      "name": "PToolsBackgroundTasks",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsBackgroundTasks",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsBannerTests",
       "type": "test",
       "path": "Tests/PToolsBannerTests",
@@ -2382,6 +2494,34 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsConnectivity",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsConnectivity",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsCore",
@@ -2484,6 +2624,46 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsDeepLink",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDeepLink",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsDevice",
@@ -2803,6 +2983,46 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsNotifications",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsNotifications",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsOverlay",
       "type": "regular",
       "path": "PooToolsSource/Overlay",
@@ -2983,6 +3203,112 @@
       ]
     },
     {
+      "name": "PToolsPlatformTests",
+      "type": "test",
+      "path": "Tests/PToolsPlatformTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsBackgroundTasks",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsBackgroundTasks",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDeepLink",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDeepLink",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsNotifications",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsNotifications",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStorage",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorage",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorageCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsRichTextTests",
       "type": "test",
       "path": "Tests/PToolsRichTextTests",
@@ -3006,6 +3332,34 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsRouteCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsRouteCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsSocketKitTests",
       "type": "test",
       "path": "Tests/PToolsSocketKitTests",
@@ -3027,6 +3381,74 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsStorage",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsStorage",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorageCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsStorageCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsStorageCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsSymbols",
@@ -3792,12 +4214,78 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsBackgroundTasks",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsBackgroundTasks",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDeepLink",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDeepLink",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsNotifications",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsNotifications",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsOverlay",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
               "PToolsOverlay",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStorage",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorage",
               null
             ]
           }
@@ -5764,6 +6252,28 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsDeepLink",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDeepLink",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",

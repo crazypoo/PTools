@@ -1342,6 +1342,13 @@ extension LocalConsole {
                      attributes: PTInstrumentRecorder.shared.session == nil ? .disabled : []) { [weak self] _ in
                 self?.instrumentDashboardOpen()
             },
+            // English: Keep platform service diagnostics in one opt-in console entry.
+            // Español: Mantiene los diagnósticos de servicios de plataforma en una sola entrada opcional.
+            // 中文：将平台服务诊断统一放在一个可选的控制台入口中。
+            UIAction(title: "Platform Diagnostics", image: UIImage.performanceImage) { _ in
+                let controller = PTPlatformDiagnosticsViewController()
+                PTUtils.getCurrentVC()?.present(UINavigationController(rootViewController: controller), animated: true)
+            },
             UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { [weak self] _ in self?.colorAction() },
             UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { [weak self] _ in self?.rulerAction() },
             UIAction(title: .appDocument, image: UIImage.docImage) { [weak self] _ in self?.documentAction() },

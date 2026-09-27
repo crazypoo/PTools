@@ -126,6 +126,68 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the Foundation-first platform services as opt-in subspecs.
+    # Español: Publica los servicios de plataforma basados en Foundation como subspecs opcionales.
+    # 中文：将 Foundation-first 平台服务作为可选 subspec 发布。
+    s.subspec 'Connectivity' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsConnectivity/**/*.swift'
+        subspec.frameworks = 'Foundation', 'Network'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_CONNECTIVITY POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'StorageCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsStorageCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_STORAGE_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'Storage' do |subspec|
+        subspec.dependency 'PooTools/StorageCore'
+        subspec.source_files = 'PooToolsSource/PToolsStorage/**/*.swift'
+        subspec.frameworks = 'Foundation', 'Security'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_STORAGE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'RouteCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsRouteCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_ROUTE_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'DeepLink' do |subspec|
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.source_files = 'PooToolsSource/PToolsDeepLink/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_DEEPLINK POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'Notifications' do |subspec|
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.source_files = 'PooToolsSource/PToolsNotifications/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UserNotifications', 'UniformTypeIdentifiers'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_NOTIFICATIONS POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'BackgroundTasks' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsBackgroundTasks/**/*.swift'
+        subspec.frameworks = 'Foundation', 'BackgroundTasks'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_BACKGROUND_TASKS POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Device'
@@ -573,6 +635,12 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/PDF'
+        subspec.dependency 'PooTools/Connectivity'
+        subspec.dependency 'PooTools/Storage'
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.dependency 'PooTools/DeepLink'
+        subspec.dependency 'PooTools/Notifications'
+        subspec.dependency 'PooTools/BackgroundTasks'
         subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/DEBUGLocation/*.{h,m,swift}','PooToolsSource/Inspector/*.{h,m,swift}','PooToolsSource/DebugLibs/*.{h,m,swift}','PooToolsSource/DebugCrash/*.{h,m,swift}','PooToolsSource/DebugFile/*.{h,m,swift}','PooToolsSource/DebugColor/*.{h,m,swift}','PooToolsSource/DebugRuler/*.{h,m,swift}','PooToolsSource/DebugPerformance/*.{h,m,swift}','PooToolsSource/DebugCategory/*.{h,m,swift}','PooToolsSource/DebugUserDefault/*.{h,m,swift}','PooToolsSource/DebugNetwork/*.{h,m,swift}'
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
@@ -800,6 +868,8 @@ Pod::Spec.new do |s|
          
     s.subspec 'Router' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.dependency 'PooTools/DeepLink'
         subspec.source_files = 'PooToolsSource/Router/*.{h,m,swift}'
         subspec.public_header_files = 'PooToolsSource/Router/*.h'
         subspec.pod_target_xcconfig = {

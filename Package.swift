@@ -31,6 +31,16 @@ let package = Package(
         // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
         .library(name: "PToolsDevice", targets: ["PToolsDevice"]),
+        // English: Publish Foundation-first platform services as opt-in products.
+        // Español: Publica los servicios de plataforma basados en Foundation como productos opcionales.
+        // 中文：将 Foundation-first 平台服务作为可选产品公开。
+        .library(name: "PToolsConnectivity", targets: ["PToolsConnectivity"]),
+        .library(name: "PToolsStorageCore", targets: ["PToolsStorageCore"]),
+        .library(name: "PToolsStorage", targets: ["PToolsStorage"]),
+        .library(name: "PToolsRouteCore", targets: ["PToolsRouteCore"]),
+        .library(name: "PToolsDeepLink", targets: ["PToolsDeepLink"]),
+        .library(name: "PToolsNotifications", targets: ["PToolsNotifications"]),
+        .library(name: "PToolsBackgroundTasks", targets: ["PToolsBackgroundTasks"]),
         // English: Publish the Foundation-only date context and calendar-aware value types.
         // Español: Publica el contexto de fechas y los tipos conscientes del calendario basados solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
@@ -180,6 +190,8 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsAll", targets: [
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
+            "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
+            "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
             "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner", "PooToolsPopover",
             "PooToolsMediaCore",
             "PToolsHTTPServer", "PToolsHTTPFilePortal",
@@ -403,6 +415,71 @@ let package = Package(
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
+        // English: Keep platform infrastructure below UIKit, Network and Debug.
+        // Español: Mantiene la infraestructura de plataforma por debajo de UIKit, Network y Debug.
+        // 中文：让平台基础设施位于 UIKit、Network 与 Debug 之下。
+        .target(
+            name: "PToolsConnectivity",
+            path: "PooToolsSource/PToolsConnectivity",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        .target(
+            name: "PToolsStorageCore",
+            path: "PooToolsSource/PToolsStorageCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        .target(
+            name: "PToolsStorage",
+            dependencies: ["PToolsStorageCore"],
+            path: "PooToolsSource/PToolsStorage",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: RouteCore and DeepLink stay Foundation-only; UIKit presentation is optional.
+        // Español: RouteCore y DeepLink solo dependen de Foundation; la presentación UIKit es opcional.
+        // 中文：RouteCore 和 DeepLink 仅依赖 Foundation，UIKit 展示保持可选。
+        .target(
+            name: "PToolsRouteCore",
+            path: "PooToolsSource/PToolsRouteCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        .target(
+            name: "PToolsDeepLink",
+            dependencies: ["PToolsRouteCore"],
+            path: "PooToolsSource/PToolsDeepLink",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        .target(
+            name: "PToolsNotifications",
+            dependencies: ["PToolsRouteCore"],
+            path: "PooToolsSource/PToolsNotifications",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        .target(
+            name: "PToolsBackgroundTasks",
+            path: "PooToolsSource/PToolsBackgroundTasks",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -541,7 +618,7 @@ let package = Package(
         .target(name: "PooToolsStepCount", dependencies: ["ptools", "PTHealthPermission"], path: "PooToolsSource/HealthKit", swiftSettings: [.define("POOTOOLS_STEPCOUNT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsContact", dependencies: ["ptools", "PTContactsPermission"], path: "PooToolsSource/Contact", swiftSettings: [.define("POOTOOLS_CONTACT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVision", dependencies: ["ptools"], path: "PooToolsSource/Vision", swiftSettings: [.define("POOTOOLS_VISION"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsRouter", dependencies: ["ptools"], path: "PooToolsSource/Router", swiftSettings: [.define("POOTOOLS_ROUTER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsRouter", dependencies: ["ptools", "PToolsRouteCore", "PToolsDeepLink"], path: "PooToolsSource/Router", swiftSettings: [.define("POOTOOLS_ROUTER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPing", dependencies: ["ptools"], path: "PooToolsSource/Ping", swiftSettings: [.define("POOTOOLS_PING"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSpeedPanel", dependencies: ["ptools"], path: "PooToolsSource/SpeedPanel", swiftSettings: [.define("POOTOOLS_SPEEDPANEL"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsNetworkSpeedTest", dependencies: ["ptools"], path: "PooToolsSource/NetworkSpeedTest", swiftSettings: [.define("POOTOOLS_NETWORKSPEEDTEST"), .define("POOTOOLS_COCOAPODS")]),
@@ -562,7 +639,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay"],
+            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks"],
             path: "PooToolsSource",
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
@@ -679,6 +756,21 @@ let package = Package(
             name: "PToolsHTTPServerTests",
             dependencies: ["PToolsHTTPServer"],
             path: "Tests/PToolsHTTPServerTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Cover platform contracts without requiring live OS services.
+        // Español: Cubre los contratos de plataforma sin requerir servicios reales del sistema.
+        // 中文：在不依赖真实系统服务的情况下覆盖平台契约。
+        .testTarget(
+            name: "PToolsPlatformTests",
+            dependencies: [
+                "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage",
+                "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks"
+            ],
+            path: "Tests/PToolsPlatformTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
-  "generated_at": "2026-09-27T16:27:10Z",
+  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
+  "generated_at": "2026-09-27T17:37:40Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -72,8 +72,16 @@
       "destination": "PToolsPermissionCore"
     },
     {
+      "source": "PToolsDeepLink",
+      "destination": "PToolsRouteCore"
+    },
+    {
       "source": "PToolsHTTPFilePortal",
       "destination": "PToolsHTTPServer"
+    },
+    {
+      "source": "PToolsNotifications",
+      "destination": "PToolsRouteCore"
     },
     {
       "source": "PToolsOverlay",
@@ -94,6 +102,10 @@
     {
       "source": "PToolsPermissionUI",
       "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PToolsStorage",
+      "destination": "PToolsStorageCore"
     },
     {
       "source": "PToolsUIFoundation",
@@ -169,7 +181,31 @@
     },
     {
       "source": "PooToolsDEBUG",
+      "destination": "PToolsBackgroundTasks"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsConnectivity"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsDeepLink"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsNotifications"
+    },
+    {
+      "source": "PooToolsDEBUG",
       "destination": "PToolsOverlay"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsRouteCore"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsStorage"
     },
     {
       "source": "PooToolsDEBUG",
@@ -438,6 +474,14 @@
     {
       "source": "PooToolsProgressBar",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsRouter",
+      "destination": "PToolsDeepLink"
+    },
+    {
+      "source": "PooToolsRouter",
+      "destination": "PToolsRouteCore"
     },
     {
       "source": "PooToolsRouter",

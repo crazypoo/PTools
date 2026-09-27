@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
-  "generated_at": "2026-09-27T16:00:51Z",
+  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
+  "generated_at": "2026-09-27T17:02:08Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -19,15 +19,22 @@
     "PTSiriPermission",
     "PTSpeechPermission",
     "PTTrackingPermission",
+    "PToolsBackgroundTasks",
+    "PToolsConnectivity",
     "PToolsCore",
     "PToolsDate",
+    "PToolsDeepLink",
     "PToolsDevice",
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
     "PToolsLogging",
+    "PToolsNotifications",
     "PToolsOverlay",
     "PToolsPermissionCore",
     "PToolsPermissionUI",
+    "PToolsRouteCore",
+    "PToolsStorage",
+    "PToolsStorageCore",
     "PToolsSymbols",
     "PToolsUIFoundation",
     "PooToolsAll",
@@ -114,6 +121,7 @@
     ]
   },
   "matched": [
+    "BackgroundTasks",
     "BankCard",
     "Banner",
     "BilogyID",
@@ -127,6 +135,7 @@
     "ChinesePinyin",
     "Circle",
     "CodeView",
+    "Connectivity",
     "Contact",
     "ContactsPermission",
     "Core",
@@ -136,6 +145,7 @@
     "DEBUG",
     "DEBUG_TrackingEyes",
     "DataEncrypt",
+    "DeepLink",
     "Device",
     "FaceIDPermission",
     "Guide",
@@ -169,6 +179,7 @@
     "NetWork",
     "NetworkSpeedTest",
     "NotificationPermission",
+    "Notifications",
     "OSSKitSpeech",
     "Overlay",
     "PDF",
@@ -186,6 +197,7 @@
     "ProgressBar",
     "RateView",
     "RemindersPermission",
+    "RouteCore",
     "Router",
     "SVG",
     "ScanQRCode",
@@ -203,6 +215,8 @@
     "SpeedPanel",
     "StepCount",
     "Stepper",
+    "Storage",
+    "StorageCore",
     "Symbols",
     "Telephony",
     "TipsView",
@@ -463,6 +477,23 @@
   ],
   "settings_drift": [
     {
+      "module": "BackgroundTasks",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_BACKGROUND_TASKS",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "Banner",
       "spm": {
         "defines": [
@@ -537,6 +568,23 @@
       }
     },
     {
+      "module": "Connectivity",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_CONNECTIVITY"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "ContactsPermission",
       "spm": {
         "defines": [
@@ -578,6 +626,23 @@
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_SPLIT_CORE",
           "POOTOOLS_SPLIT_UIFOUNDATION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "DeepLink",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_DEEPLINK"
         ],
         "upcoming_features": []
       }
@@ -799,6 +864,23 @@
       }
     },
     {
+      "module": "Notifications",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_NOTIFICATIONS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "Overlay",
       "spm": {
         "defines": [
@@ -913,6 +995,23 @@
       }
     },
     {
+      "module": "RouteCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_ROUTE_CORE"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "SiriPermission",
       "spm": {
         "defines": [
@@ -944,6 +1043,40 @@
         "defines": [
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_PERMISSION_SPEECH"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Storage",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_STORAGE"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "StorageCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_STORAGE_CORE"
         ],
         "upcoming_features": []
       }
@@ -982,5 +1115,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "d0b822bb7fe48978bfa066d0067d98b70315dcff61520e9b8e6cdd49ca093d50"
+  "fingerprint": "804d0951937754216987a2bd449cd42fadd143f8d2f1a54a377d333d26bc88ba"
 }

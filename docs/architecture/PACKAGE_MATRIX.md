@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: fa748870fa58233517734db9ad2fca99263a4865
-Generated at: 2026-09-27T16:01:06Z
-Version source: 5.33.0
+Source revision: 596295ec19eebba96ab5d834e00ae1ea06c5eea6
+Generated at: 2026-09-27T17:15:03Z
+Version source: 5.34.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -14,6 +14,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 
 | Module | Status | CocoaPods | SwiftPM | 6.0 action |
 | --- | --- | --- | --- | --- |
+| `BackgroundTasks` | A | `PooTools/BackgroundTasks` | — | Keep; review drift |
 | `BankCard` | A | `PooTools/BankCard` | `PooToolsBankCard` | Keep; review drift |
 | `Banner` | A | `PooTools/Banner` | `PooToolsBanner` | Keep; review drift |
 | `BilogyID` | A | `PooTools/BilogyID` / `PooTools/BioID` | `PooToolsBioID` | Keep; review drift |
@@ -27,6 +28,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `ChinesePinyin` | A | `PooTools/ChinesePinyin` | `PooToolsChinesePinyin` | Keep; review drift |
 | `Circle` | A | `PooTools/Circle` | `PooToolsCircle` | Keep; review drift |
 | `CodeView` | A | `PooTools/CodeView` | `PooToolsCodeView` | Keep; review drift |
+| `Connectivity` | A | `PooTools/Connectivity` | — | Keep; review drift |
 | `Contact` | A | `PooTools/Contact` | `PooToolsContact` | Keep; review drift |
 | `ContactsPermission` | A | `PooTools/ContactsPermission` | `PTContactsPermission` | Keep; review drift |
 | `Core` | A | `PooTools/Core` | `ptools` | Keep; review drift |
@@ -36,6 +38,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `DEBUG` | A | `PooTools/DEBUG` | `PooToolsDEBUG` | Keep; review drift |
 | `DEBUG_TrackingEyes` | A | `PooTools/DEBUG_TrackingEyes` | `PooToolsDEBUGTrackingEyes` | Keep; review drift |
 | `DataEncrypt` | A | `PooTools/DataEncrypt` | `PooToolsDataEncrypt` | Keep; review drift |
+| `DeepLink` | A | `PooTools/DeepLink` | — | Keep; review drift |
 | `Device` | A | `PooTools/Device` | — | Keep; review drift |
 | `FaceIDPermission` | A | `PooTools/FaceIDPermission` | `PTFaceIDPermission` | Keep; review drift |
 | `Guide` | A | `PooTools/Guide` | `PooToolsGuide` | Keep; review drift |
@@ -69,6 +72,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `NetWork` | A | `PooTools/NetWork` / `PooTools/Network` | `PooToolsNetWork` | Keep; review drift |
 | `NetworkSpeedTest` | A | `PooTools/NetworkSpeedTest` | `PooToolsNetworkSpeedTest` | Keep; review drift |
 | `NotificationPermission` | A | `PooTools/NotificationPermission` | `PTNotificationPermission` | Keep; review drift |
+| `Notifications` | A | `PooTools/Notifications` | — | Keep; review drift |
 | `OSSKitSpeech` | A | `PooTools/OSSKitSpeech` | `PooToolsOSSKitSpeech` | Keep; review drift |
 | `Overlay` | A | `PooTools/Overlay` | — | Keep; review drift |
 | `PDF` | A | `PooTools/PDF` | `PooToolsPDF` | Keep; review drift |
@@ -86,6 +90,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `ProgressBar` | A | `PooTools/ProgressBar` | `PooToolsProgressBar` | Keep; review drift |
 | `RateView` | A | `PooTools/RateView` | `PooToolsRateView` | Keep; review drift |
 | `RemindersPermission` | A | `PooTools/RemindersPermission` | `PTRemindersPermission` | Keep; review drift |
+| `RouteCore` | A | `PooTools/RouteCore` | — | Keep; review drift |
 | `Router` | A | `PooTools/Router` | `PooToolsRouter` | Keep; review drift |
 | `SVG` | A | `PooTools/SVG` | `PooToolsSVG` | Keep; review drift |
 | `ScanQRCode` | A | `PooTools/ScanQRCode` | `PooToolsScanQRCode` | Keep; review drift |
@@ -103,6 +108,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `SpeedPanel` | A | `PooTools/SpeedPanel` | `PooToolsSpeedPanel` | Keep; review drift |
 | `StepCount` | A | `PooTools/StepCount` | `PooToolsStepCount` | Keep; review drift |
 | `Stepper` | A | `PooTools/Stepper` | `PooToolsStepper` | Keep; review drift |
+| `Storage` | A | `PooTools/Storage` | — | Keep; review drift |
+| `StorageCore` | A | `PooTools/StorageCore` | — | Keep; review drift |
 | `Symbols` | A | `PooTools/Symbols` | — | Keep; review drift |
 | `Telephony` | A | `PooTools/Telephony` | `PooToolsTelephony` | Keep; review drift |
 | `TipsView` | A | `PooTools/TipsView` | `PooToolsTipsView` | Keep; review drift |

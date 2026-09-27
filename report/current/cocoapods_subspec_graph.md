@@ -3,24 +3,25 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: fa748870fa58233517734db9ad2fca99263a4865
-Generated at: 2026-09-27T16:27:10Z
+Source revision: 596295ec19eebba96ab5d834e00ae1ea06c5eea6
+Generated at: 2026-09-27T17:43:49Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.33.0`
+- Podspec: `PooTools` `5.34.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `115`
+- Subspec count: `122`
 
 ## Subspecs
 
 | Subspec | Local dependencies | Third-party dependencies | Source directories | Frameworks | Resources |
 | --- | --- | --- | --- | --- | --- |
 | `Appz` | `PooTools/Core` | `Appz` | — | — | — |
+| `BackgroundTasks` | — | — | `PToolsBackgroundTasks` | BackgroundTasks, Foundation | — |
 | `BankCard` | `PooTools/Core` | — | `BankCard` | — | — |
 | `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
 | `BilogyID` | `PooTools/BioID` | — | — | — | — |
@@ -35,16 +36,18 @@ Generated at: 2026-09-27T16:27:10Z
 | `ChinesePinyin` | `PooTools/Core` | — | `Pinyin` | — | — |
 | `Circle` | `PooTools/Core` | — | `Circle` | — | — |
 | `CodeView` | `PooTools/Core` | — | `CodeView` | — | — |
+| `Connectivity` | — | — | `PToolsConnectivity` | Foundation, Network | — |
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
 | `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
-| `DEBUG` | `PooTools/Core`, `PooTools/NetWork`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Symbols` | — | `DEBUGLocation`, `Debug`, `DebugCategory`, `DebugColor`, `DebugCrash`, `DebugFile`, `DebugLibs`, `DebugNetwork`, `DebugPerformance`, `DebugRuler`, `DebugUserDefault`, `DevMask`, `Inspector`, `LocalConsole`, `TouchInspector` | — | — |
+| `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` | — | `DEBUGLocation`, `Debug`, `DebugCategory`, `DebugColor`, `DebugCrash`, `DebugFile`, `DebugLibs`, `DebugNetwork`, `DebugPerformance`, `DebugRuler`, `DebugUserDefault`, `DevMask`, `Inspector`, `LocalConsole`, `TouchInspector` | — | — |
 | `DEBUG_TrackingEyes` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/DEBUG` | — | `WhereIsMyEye` | — | — |
 | `DataEncrypt` | `PooTools/Core` | `CryptoSwift` | `AESAndDES` | — | — |
 | `Date` | — | — | `PToolsDate` | Foundation | — |
+| `DeepLink` | `PooTools/RouteCore` | — | `PToolsDeepLink` | Foundation | — |
 | `Device` | — | — | `PToolsDevice` | Foundation | — |
 | `FaceIDPermission` | `PooTools/PToolsPermissionCore` | — | `FaceIDPermission` | — | — |
 | `FilterCamera` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaViewer`, `PooTools/MicPermission` | — | `FilterCamera` | — | — |
@@ -87,6 +90,7 @@ Generated at: 2026-09-27T16:27:10Z
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |
+| `Notifications` | `PooTools/RouteCore` | — | `PToolsNotifications` | Foundation, UniformTypeIdentifiers, UserNotifications | — |
 | `OSSKitSpeech` | `PooTools/Core`, `PooTools/SpeechRecognizerPermission` | — | `OSSKit` | Speech | — |
 | `Overlay` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation` | — | `Overlay` | Foundation, UIKit | — |
 | `PDF` | `PooTools/Core` | — | `PDF` | — | — |
@@ -105,7 +109,8 @@ Generated at: 2026-09-27T16:27:10Z
 | `ProgressBar` | `PooTools/Core` | — | `ProgressBar` | — | — |
 | `RateView` | `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
 | `RemindersPermission` | `PooTools/PToolsPermissionCore` | — | `RemindersPermission` | — | — |
-| `Router` | `PooTools/Core` | — | `Router` | — | — |
+| `RouteCore` | — | — | `PToolsRouteCore` | Foundation | — |
+| `Router` | `PooTools/Core`, `PooTools/DeepLink`, `PooTools/RouteCore` | — | `Router` | — | — |
 | `SVG` | `PooTools/Core` | `PocketSVG`, `Protobuf`, `SVGAPlayer` | `KingfisherSVG` | — | — |
 | `ScanQRCode` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/PhotoPicker` | — | `QRCodeScan` | — | — |
 | `ScrollBanner` | `PooTools/Core`, `PooTools/PageControl` | — | `ScrollBanner` | — | — |
@@ -123,6 +128,8 @@ Generated at: 2026-09-27T16:27:10Z
 | `SpeedPanel` | `PooTools/Core` | — | `SpeedPanel` | — | — |
 | `StepCount` | `PooTools/Core`, `PooTools/HealthPermission` | — | `HealthKit` | HealthKit | — |
 | `Stepper` | `PooTools/Core` | — | `Stepper` | — | — |
+| `Storage` | `PooTools/StorageCore` | — | `PToolsStorage` | Foundation, Security | — |
+| `StorageCore` | — | — | `PToolsStorageCore` | Foundation | — |
 | `Symbols` | — | — | `PToolsSymbols` | Foundation, OSLog, UIKit | PooToolsSymbolsResources |
 | `Tabbar` | `PooTools/Core` | — | — | — | — |
 | `Telephony` | `PooTools/Core` | — | `CallMessageMail` | CoreTelephony, MessageUI, WebKit | — |
