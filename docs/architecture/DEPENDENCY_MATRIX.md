@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T03:06:23Z
-Version source: 5.29.0
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:05:08Z
+Version source: 5.30.0
 -->
 
 # Direct Dependency Matrix
@@ -86,7 +86,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PToolsPermissionUI` | `PToolsPermissionCore`, `PToolsUIFoundation` | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsUIFoundation` | `PToolsCore` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `PageControl` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `PagingControl` | `Core`, `ptools` | `JXPagingView`, `JXPagingView/Paging`, `JXSegmentedView` | 6.0 review | Keep; review direct drift |
+| `PagingControl` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `PhoneInfo` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `Symbols`, `ptools` | `Kakapos` | 6.0 review | Keep; review direct drift |
 | `Picker` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |

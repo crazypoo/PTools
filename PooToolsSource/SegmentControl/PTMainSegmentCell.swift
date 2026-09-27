@@ -1,194 +1,264 @@
-//
-//  MSMainSegmentCell.swift
-//  MinaTicket
-//
-//  Created by jax on 2022/6/18.
-//  Copyright © 2022 Hola. All rights reserved.
-//
+// English: Native reusable segment cell replacing the old third-party cell hierarchy.
+// Español: Celda de segmento reutilizable nativa que sustituye la jerarquía de terceros.
+// 中文：替换旧第三方 Cell 继承体系的原生可复用分段 Cell。
 
 import UIKit
-import JXSegmentedView
-import SnapKit
-#if canImport(PToolsUIFoundation)
-import PToolsUIFoundation
+
+#if canImport(ptools)
+import ptools
 #endif
-// English: Kingfisher exposes a legacy callback boundary; UI application remains isolated to this MainActor cell.
-// Español: Kingfisher expone un límite de callback heredado; la aplicación de UI permanece aislada en esta celda MainActor.
-// 中文：Kingfisher 暴露的是旧式回调边界；UI 更新仍严格隔离在这个 MainActor Cell 内。
-@preconcurrency import Kingfisher
-
-// English: This MainActor-owned weak reference crosses Kingfisher's Sendable callback without moving the cell itself.
-// Español: Esta referencia débil propiedad de MainActor cruza el callback Sendable de Kingfisher sin mover la celda.
-// 中文：这个由 MainActor 持有的弱引用只跨过 Kingfisher 的 Sendable 回调，不跨线程传递 Cell 本身。
-@MainActor
-private final class PTMainSegmentCellReference {
-    weak var cell: PTMainSegmentCell?
-
-    init(cell: PTMainSegmentCell) {
-        self.cell = cell
-    }
-}
 
 @MainActor
-public class PTMainSegmentCell: JXSegmentedBaseCell {
-    
-    open override var isSelected: Bool {
-        didSet { }
-    }
-    
-    private var cellItemModel:PTMainSegmentModel?
-    
+public class PTMainSegmentCell: UICollectionViewCell {
+    public static let reuseIdentifier = "PTMainSegmentCell"
     public let lineView = UIView()
-
     public let titleLabel = UILabel()
     public let subTitleLabel = UILabel()
-    
-    lazy var imageIcon : UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        return view
-    }()
+    public let imageIcon = UIImageView()
+    public private(set) var representedID: AnyHashable?
 
-    open override func commonInit() {
-        super.commonInit()
+    private let contentStack = UIStackView()
+    private let badgeLabel = UILabel()
+    private let badgeDot = UIView()
+    private var imageTask: Task<Void, Never>?
 
-        contentView.addSubviews([imageIcon, titleLabel, subTitleLabel])
-        
-        lineView.backgroundColor = UIColor(hexString: "#F8F8F8")
-        lineView.isHidden = true
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    /// English: Builds the cell once; subsequent reuse only updates values and constraints.
+    /// Español: Construye la celda una sola vez; las reutilizaciones solo actualizan valores y restricciones.
+    /// 中文：只创建一次 Cell；复用时只更新内容和约束。
+    open func commonInit() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 1
+        subTitleLabel.textAlignment = .center
+        subTitleLabel.numberOfLines = 1
+        imageIcon.contentMode = .scaleAspectFit
+        imageIcon.clipsToBounds = true
+        contentStack.axis = .horizontal
+        contentStack.alignment = .center
+        contentStack.spacing = 6
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(contentStack)
+        NSLayoutConstraint.activate([
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        lineView.backgroundColor = .separator
+        lineView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(lineView)
-        lineView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview()
-            make.width.equalTo(1)
-            make.top.bottom.equalToSuperview().inset(10)
+        NSLayoutConstraint.activate([
+            lineView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            lineView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            lineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            lineView.widthAnchor.constraint(equalToConstant: 1)
+        ])
+        badgeLabel.textAlignment = .center
+        badgeLabel.setContentHuggingPriority(.required, for: .horizontal)
+        badgeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    /// English: Configures content, badge and image loading from one value model.
+    /// Español: Configura contenido, insignia y carga de imagen desde un único modelo de valores.
+    /// 中文：使用一个值模型统一配置内容、徽标和图片加载。
+    public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) {
+        imageTask?.cancel()
+        imageTask = nil
+        representedID = item.id
+        removeStackContent()
+        applySelection(selected, style: style)
+        switch item.content {
+        case .title(let title):
+            addTitle(title, style: style, selected: selected)
+        case .attributed(let attributed):
+            titleLabel.attributedText = attributed
+            titleLabel.numberOfLines = 0
+            contentStack.addArrangedSubview(titleLabel)
+        case .image(let image):
+            addImage(image, style: style)
+        case .titleImage(let title, let image, let placement):
+            addTitleImage(title: title, image: image, placement: placement, style: style, selected: selected)
+        case .imageSource(let source, let placeholder):
+            addImage(placeholder, style: style)
+            loadImage(source: source, placeholder: placeholder, identifier: item.id, style: style)
+        case .titleImageSource(let title, let source, let placement, let placeholder):
+            addTitleImage(title: title, image: placeholder, placement: placement, style: style, selected: selected)
+            loadImage(source: source, placeholder: placeholder, identifier: item.id, style: style)
+        case .custom(let custom):
+            contentStack.addArrangedSubview(custom.makeView())
         }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.contentView.snp.centerY)
+        configureBadge(item.badge)
+        accessibilityLabel = item.accessibilityLabel ?? accessibilityText(for: item.content)
+        accessibilityTraits = selected ? [.button, .selected] : [.button]
+    }
+
+    public func applySelection(_ selected: Bool, style: PTSegmentStyle) {
+        titleLabel.font = selected ? style.selectedFont : style.normalFont
+        titleLabel.textColor = selected ? style.selectedColor : style.normalColor
+        subTitleLabel.font = selected ? style.selectedFont : style.normalFont
+        subTitleLabel.textColor = selected ? style.selectedColor : style.normalColor
+        contentView.backgroundColor = selected ? style.selectedBackgroundColor : style.normalBackgroundColor
+        transform = CGAffineTransform(scaleX: selected ? style.selectedScale : 1,
+                                      y: selected ? style.selectedScale : 1)
+        accessibilityTraits = selected ? [.button, .selected] : [.button]
+    }
+
+    private func removeStackContent() {
+        for view in contentStack.arrangedSubviews {
+            contentStack.removeArrangedSubview(view)
+            view.removeFromSuperview()
         }
-        
-        subTitleLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.contentView.snp.centerY)
+        titleLabel.text = nil
+        titleLabel.attributedText = nil
+        imageIcon.image = nil
+        subTitleLabel.isHidden = true
+        badgeLabel.removeFromSuperview()
+        badgeDot.removeFromSuperview()
+        contentStack.axis = .horizontal
+    }
+
+    private func addTitle(_ title: String, style: PTSegmentStyle, selected: Bool) {
+        titleLabel.text = title
+        titleLabel.font = selected ? style.selectedFont : style.normalFont
+        contentStack.addArrangedSubview(titleLabel)
+    }
+
+    private func addImage(_ image: UIImage?, style: PTSegmentStyle) {
+        imageIcon.image = image
+        if image != nil {
+            contentStack.addArrangedSubview(imageIcon)
+            imageIcon.widthAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
+            imageIcon.heightAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
         }
     }
 
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-
-        //为什么使用`sizeThatFits`，而不用`sizeToFit`呢？在numberOfLines大于0的时候，cell进行重用的时候通过`sizeToFit`，label设置成错误的size。至于原因我用尽毕生所学，没有找到为什么。但是用`sizeThatFits`可以规避掉这个问题。
-
-        switch cellItemModel!.onlyShowTitle {
-        case .OnlyTitle(type: .OnlyTitle):
-            if cellItemModel?.index == 0 {
-                lineView.isHidden = true
-            } else {
-                lineView.isHidden = false
-            }
-            titleLabel.snp.remakeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            subTitleLabel.isHidden = true
-        case .OnlyTitle(type: .Normal):
-            if cellItemModel?.index == 0 {
-                lineView.isHidden = true
-            } else {
-                lineView.isHidden = false
-            }
-            
-            PTGCDManager.shared.delayOnMain(time: 0.1) {
-                self.titleLabel.snp.remakeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.bottom.equalTo(self.contentView.snp.centerY)
-                }
-                
-                self.subTitleLabel.isHidden = false
-                self.subTitleLabel.snp.remakeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.equalTo(self.contentView.snp.centerY)
-                }
-            }
-        case .OnlyImage:
-            titleLabel.isHidden = true
-            subTitleLabel.isHidden = true
-            contentView.addSubview(imageIcon)
-            imageIcon.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        default:
-            break
-        }
-    }
-
-    open override func reloadData(itemModel: JXSegmentedBaseItemModel, selectedType: JXSegmentedViewItemSelectedType) {
-        super.reloadData(itemModel: itemModel, selectedType: selectedType )
-
-        guard let myItemModel = itemModel as? PTMainSegmentModel else {
-            return
-        }
-        cellItemModel = myItemModel        
-                    
-        if !(cellItemModel!.subTitle!).stringIsEmpty() {
-            subTitleLabel.backgroundColor = myItemModel.subTitleCurrentBGColor
-            
-            let subAtt:PTRichText =  PTRichText("\(myItemModel.subTitle!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont),.foreground(myItemModel.subTitleCurrentColor))
-            subTitleLabel.attributedText = subAtt.value
-
+    private func addTitleImage(title: String,
+                               image: UIImage?,
+                               placement: PTImagePlacement,
+                               style: PTSegmentStyle,
+                               selected: Bool) {
+        titleLabel.text = title
+        titleLabel.font = selected ? style.selectedFont : style.normalFont
+        imageIcon.image = image
+        contentStack.axis = (placement == .top || placement == .bottom) ? .vertical : .horizontal
+        if placement == .trailing || placement == .bottom {
+            contentStack.addArrangedSubview(titleLabel)
+            if image != nil { contentStack.addArrangedSubview(imageIcon) }
         } else {
-            subTitleLabel.backgroundColor = .clear
+            if image != nil { contentStack.addArrangedSubview(imageIcon) }
+            contentStack.addArrangedSubview(titleLabel)
         }
+        if image != nil {
+            imageIcon.widthAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
+            imageIcon.heightAnchor.constraint(equalToConstant: max(1, style.itemHeight - 12)).isActive = true
+        }
+    }
 
-        switch cellItemModel!.onlyShowTitle! {
+    private func loadImage(source: PTImageSource,
+                           placeholder: UIImage?,
+                           identifier: AnyHashable,
+                           style: PTSegmentStyle) {
+        imageTask = Task { @MainActor [weak self] in
+            let result = await PTLoadImageFunction.loadImage(source: source,
+                                                             targetSize: CGSize(width: style.itemHeight,
+                                                                                height: style.itemHeight))
+            guard !Task.isCancelled,
+                  let self,
+                  self.representedID == identifier else { return }
+            self.imageIcon.image = result.firstImage ?? placeholder
+        }
+    }
+
+    private func configureBadge(_ badge: PTSegmentBadge?) {
+        guard let badge else { return }
+        if let text = badge.text, !text.isEmpty {
+            badgeLabel.text = text
+            badgeLabel.font = badge.font
+            badgeLabel.textColor = badge.textColor
+            badgeLabel.backgroundColor = badge.backgroundColor
+            badgeLabel.layer.cornerRadius = 9
+            badgeLabel.layer.masksToBounds = true
+            contentStack.addArrangedSubview(badgeLabel)
+        } else if badge.showsDotWhenEmpty {
+            badgeDot.backgroundColor = badge.backgroundColor
+            badgeDot.layer.cornerRadius = 4
+            contentStack.addArrangedSubview(badgeDot)
+            badgeDot.widthAnchor.constraint(equalToConstant: 8).isActive = true
+            badgeDot.heightAnchor.constraint(equalToConstant: 8).isActive = true
+        }
+    }
+
+    private func accessibilityText(for content: PTSegmentContent) -> String? {
+        switch content {
+        case .title(let value), .titleImage(let value, _, _), .titleImageSource(let value, _, _, _): return value
+        case .attributed(let value): return value.string
+        default: return nil
+        }
+    }
+
+    private func estimatedContentWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        switch item.content {
+        case .title(let title): return title.size(withAttributes: [.font: style.normalFont]).width
+        case .attributed(let value): return value.size().width
+        case .image(let image): return image.size.width
+        case .titleImage(let title, let image, _):
+            return title.size(withAttributes: [.font: style.normalFont]).width + image.size.width + style.imageSpacing
+        case .titleImageSource(let title, _, _, let image):
+            return title.size(withAttributes: [.font: style.normalFont]).width + (image?.size.width ?? 20) + style.imageSpacing
+        case .imageSource: return max(20, style.itemHeight - 12)
+        case .custom: return 44
+        }
+    }
+
+    public static func measuredWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        let cell = PTMainSegmentCell(frame: .zero)
+        return max(1, cell.estimatedContentWidth(item: item, style: style) + style.itemInsets.left + style.itemInsets.right)
+    }
+
+    /// English: Compatibility entry for callers that still build the legacy model.
+    /// Español: Entrada de compatibilidad para llamadas que todavía crean el modelo antiguo.
+    /// 中文：兼容仍然使用旧模型的调用方。
+    @available(*, deprecated, message: "Use configure(item:style:selected:) instead.")
+    public func reloadData(model: PTMainSegmentModel, selected: Bool) {
+        let content: PTSegmentContent
+        switch model.onlyShowTitle ?? .OnlyTitle(type: .Normal) {
+        case .OnlyImage:
+            content = URL(string: model.imageURL).map { .imageSource(.url($0)) } ?? .title(model.title)
         case .ImageTitle:
-            guard let imageURL = URL(string: myItemModel.imageURL) else {
-                titleLabel.text = myItemModel.title
-                return
-            }
-            let title = myItemModel.title ?? ""
-            let titleFont = myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont
-            let titleColor = myItemModel.titleCurrentColor
-            let cellReference = PTMainSegmentCellReference(cell: self)
-            ImageDownloader.default.downloadImage(with: imageURL, options: PTAppBaseConfig.share.webImageLoadOptions()) { [cellReference] result in
-                switch result {
-                case .success(let value):
-                    let image = value.image
-                    Task { @MainActor in
-                        guard let cell = cellReference.cell else { return }
-                        let imageAtt = PTRichText(
-                            "\u{FFFC}",
-                            .image(image, .custom(size: CGSize(width: 20, height: 20))),
-                            .paragraph(.alignment(.center)),
-                            .baselineOffset(2.5)
-                        )
-                        let textAtt = PTRichText(
-                            title,
-                            .paragraph(.alignment(.center)),
-                            .font(titleFont),
-                            .foreground(titleColor)
-                        )
-                        cell.titleLabel.attributedText = (imageAtt + textAtt).value
-                    }
-                case .failure(let error):
-                    PTNSLogConsole(error,levelType: .error,loggerType: .segment)
-                }
+            if let url = URL(string: model.imageURL), !model.imageURL.isEmpty {
+                content = .titleImageSource(title: model.title, source: .url(url), placement: .leading)
+            } else {
+                content = .title(model.title)
             }
         case .OnlyTitle:
-            if myItemModel.isSelected {
-                titleLabel.font = myItemModel.titleSelectedFont
-                titleLabel.textColor = myItemModel.titleSelectedColor
-            } else {
-                titleLabel.font = myItemModel.titleNormalFont
-                titleLabel.textColor = myItemModel.titleNormalColor
-            }
-            titleLabel.text = myItemModel.title
-            titleLabel.textColor = myItemModel.titleCurrentColor
-            titleLabel.textAlignment = .center
-        case .OnlyImage:
-            imageIcon.pt_SDWebImage(imageString: myItemModel.imageURL)
+            content = .title(model.title)
         }
-                
-        startSelectedAnimationIfNeeded(itemModel: itemModel, selectedType: selectedType)
-        layoutSubviews()
+        configure(item: PTSegmentItem(id: model.index, content: content),
+                  style: PTSegmentStyle(normalFont: model.titleNormalFont,
+                                        selectedFont: model.titleSelectedFont,
+                                        normalColor: model.titleNormalColor,
+                                        selectedColor: model.titleSelectedColor,
+                                        itemHeight: 44,
+                                        itemWidths: [model.itemWidth]),
+                  selected: selected)
+    }
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        imageTask?.cancel()
+        imageTask = nil
+        representedID = nil
+        removeStackContent()
     }
 }

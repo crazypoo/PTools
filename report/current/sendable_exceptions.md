@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T04:14:54Z
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:11:05Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -76,10 +76,6 @@ Generated at: 2026-09-27T04:14:54Z
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 26 | `public struct PTSendableDictionaryBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/Router/PTRouterManager.swift` | 23 | `private struct PTServiceTypeBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Router/PTRouterServiceManager.swift` | 13 | `public final class PTLegacyRouterServiceBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift` | 12 | `// 🚀 核心终极修复：增加 @unchecked Sendable 协议。` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift` | 16 | `public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SegmentControl/PTMainSegmentModel.swift` | 23 | `public class PTMainSegmentModel: JXSegmentedTitleItemModel,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift` | 11 | `public final class PTSegmentControlBaseModel: NSObject,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/SocketKit/PTWebSocketClient.swift` | 363 | `private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/TouchInspector/TouchInspectorWindow.swift` | 15 | `private struct PTTouchValueBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/VideoEditor/CompositionInstruction.swift` | 11 | `class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |

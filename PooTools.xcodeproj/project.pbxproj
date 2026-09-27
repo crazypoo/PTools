@@ -69,6 +69,9 @@
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
 		5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */; };
+		A530000000000000000011 /* PTSegmentedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000001 /* PTSegmentedTypes.swift */; };
+		A530000000000000000012 /* PTSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000002 /* PTSegmentedView.swift */; };
+		A530000000000000000013 /* PTPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530000000000000000003 /* PTPaging.swift */; };
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
@@ -1110,6 +1113,9 @@
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
 		5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentControlBaseModel.swift; sourceTree = "<group>"; };
+		A530000000000000000001 /* PTSegmentedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedTypes.swift; sourceTree = "<group>"; };
+		A530000000000000000002 /* PTSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentedView.swift; sourceTree = "<group>"; };
+		A530000000000000000003 /* PTPaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPaging.swift; sourceTree = "<group>"; };
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
@@ -2669,6 +2675,9 @@
 		5507025F28F6A09100C48239 /* SegmentControl */ = {
 			isa = PBXGroup;
 			children = (
+				A530000000000000000003 /* PTPaging.swift */,
+				A530000000000000000002 /* PTSegmentedView.swift */,
+				A530000000000000000001 /* PTSegmentedTypes.swift */,
 				5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */,
 				5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */,
 				5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */,
@@ -5322,6 +5331,9 @@
 				550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */,
 				55FF40722B2B000C00CD3906 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
+				A530000000000000000011 /* PTSegmentedTypes.swift in Sources */,
+				A530000000000000000012 /* PTSegmentedView.swift in Sources */,
+				A530000000000000000013 /* PTPaging.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				558B77C02BBC52B300BD7AB0 /* PTChatTypingBubble.swift in Sources */,

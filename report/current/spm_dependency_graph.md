@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T04:15:41Z
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:11:46Z
 -->
 
 # SwiftPM Dependency Graph
@@ -202,7 +202,7 @@ Generated at: 2026-09-27T04:15:41Z
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsPDF` | `PooToolsSource/PDF` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsPageControl` | `PooToolsSource/PageControl` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsPagingControl` | `PooToolsSource/SegmentControl` | ptools | JXPagingView, JXSegmentedView | 0 source entries / 0 resources |
+| `PooToolsPagingControl` | `PooToolsSource/SegmentControl` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsPhoneInfo` | `PooToolsSource/PhoneInfo` | — | — | 0 source entries / 0 resources |
 | `PooToolsPhotoPicker` | `PooToolsSource` | PTCameraPermission, PToolsSymbols, PooToolsImagePicker, PooToolsLoading, PooToolsMediaCore, ptools | Kakapos | 1 source entries / 0 resources |
 | `PooToolsPicker` | `PooToolsSource/Picker` | ptools | SnapKit | 0 source entries / 0 resources |

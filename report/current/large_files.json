@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
-  "generated_at": "2026-09-27T04:15:12Z",
+  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
+  "generated_at": "2026-09-27T05:11:24Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1051,7 +1051,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
-      "lines": 525,
+      "lines": 561,
       "classification": "ok"
     },
     {
@@ -4546,22 +4546,37 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "lines": 194,
+      "lines": 264,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
-      "lines": 121,
+      "lines": 75,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentModel.swift",
-      "lines": 38,
+      "lines": 51,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTPaging.swift",
+      "lines": 844,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift",
-      "lines": 19,
+      "lines": 16,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "lines": 447,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTSegmentedView.swift",
+      "lines": 610,
       "classification": "ok"
     },
     {

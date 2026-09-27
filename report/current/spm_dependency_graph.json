@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
-  "generated_at": "2026-09-27T04:15:41Z",
+  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
+  "generated_at": "2026-09-27T05:11:46Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1331,62 +1331,6 @@
           "requirement": {
             "exact": [
               "8.0.3"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "jxpagingview",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/pujiaxin33/JXPagingView.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "2.1.0",
-                "upperBound": "3.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "jxsegmentedview",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/pujiaxin33/JXSegmentedView.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "1.3.0",
-                "upperBound": "2.0.0"
-              }
             ]
           },
           "traits": [
@@ -5282,32 +5226,7 @@
           }
         }
       ],
-      "third_party_dependencies": [
-        {
-          "name": "JXPagingView",
-          "kind": "third_party",
-          "package": "JXPagingView",
-          "declaration": {
-            "product": [
-              "JXPagingView",
-              "JXPagingView",
-              null,
-              null
-            ]
-          }
-        },
-        {
-          "name": "JXSegmentedView",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "JXSegmentedView",
-              null
-            ]
-          }
-        }
-      ],
+      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {

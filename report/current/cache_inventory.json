@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
-  "generated_at": "2026-09-27T04:15:12Z",
+  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
+  "generated_at": "2026-09-27T05:11:24Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -945,6 +945,24 @@
       "line": 157,
       "kind": "disk or custom cache",
       "text": "// MARK: - Service Clean Cache"
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+      "line": 63,
+      "kind": "disk or custom cache",
+      "text": "/// English: Refreshes the native item cache; old callers can then call apply(to:)."
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTPaging.swift",
+      "line": 50,
+      "kind": "disk or custom cache",
+      "text": "/// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy."
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "line": 321,
+      "kind": "disk or custom cache",
+      "text": "/// English: Cache policy for lazy pages."
     },
     {
       "path": "PooToolsSource/SideMenuControl/PTSideMenuControl.swift",

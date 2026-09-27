@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
-  "generated_at": "2026-09-27T04:15:12Z",
+  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
+  "generated_at": "2026-09-27T05:11:24Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",

@@ -506,8 +506,6 @@ Pod::Spec.new do |s|
                 
     s.subspec 'PagingControl' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'JXPagingView/Paging'
-        subspec.dependency 'JXSegmentedView'
         subspec.source_files = 'PooToolsSource/SegmentControl/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"

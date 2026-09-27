@@ -1,8 +1,17 @@
 # Changelog
 
-## Unreleased — 5.29.x
+## Unreleased — 5.30.x
 
-当前开发基线为 `5.29.0`；版本唯一来源为根目录 `VERSION`，Banner 与 OverlayCore 验收完成后再创建正式 tag。
+当前开发基线为 `5.30.0`；版本唯一来源为根目录 `VERSION`，原生 PagingControl 完成宿主回归后再创建正式 tag。
+
+## 5.30.0 — 2026-09-27
+
+- 移除 SwiftPM、CocoaPods、锁文件和交付源码中的 JXSegmentedView / JXPagingView 直接依赖。
+- 新增 `PTSegmentedView`、`PTSegmentItem`、Indicator 引擎、`PTPageContainer`、`PTPagingView` 和稳定 ID 的分段/页面同步协调器。
+- 增加页面懒加载、生命周期、缓存策略、Header/Pinned Header、嵌套滚动、刷新适配、方向解析和导航手势契约。
+- 旧 SegmentControl 模型保留为不依赖第三方的弃用兼容适配器；不提供 JX 类型别名，避免继续泄漏第三方 API。
+- 新增 Paging 架构、使用、嵌套滚动、手势、生命周期、迁移和使用审计文档，并增加 JX 依赖移除 CI 门禁。
+- 完整宿主项目的视觉、真机、多层 Nested Paging、刷新和性能回归仍需由集成方执行；本版本不创建正式 Git tag。
 
 ## 5.29.0 — 2026-09-27
 

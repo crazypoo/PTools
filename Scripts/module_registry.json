@@ -55,7 +55,6 @@
     {"kind":"dependency","module":"ImageEditor","field":"third_party_dependencies","reason":"SPM declares Harbeth; CocoaPods uses the local HarbethKit route.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"dependency","module":"MeidaPermission","field":"internal_dependencies","reason":"SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"dependency","module":"NetWork","field":"internal_dependencies","reason":"SPM includes extracted PToolsCore; CocoaPods keeps legacy Core.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"PagingControl","field":"third_party_dependencies","reason":"SPM uses products; CocoaPods uses subspec-qualified names.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"dependency","module":"PhotoPicker","field":"internal_dependencies","reason":"SPM adds standalone CameraPermission; CocoaPods keeps Core route.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"dependency","module":"Picker","field":"third_party_dependencies","reason":"SPM declares direct utilities; CocoaPods resolves them through Core.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"dependency","module":"SVG","field":"third_party_dependencies","reason":"SPM and CocoaPods expose different direct and transitive SVG dependencies.","owner":"packaging","expiration":"2026-12-31"},

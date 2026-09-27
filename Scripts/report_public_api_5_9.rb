@@ -9,7 +9,7 @@ source_root = File.join(repo_root, "PooToolsSource")
 report_dir = File.join(repo_root, "report", "current")
 FileUtils.mkdir_p(report_dir)
 
-pattern = /^\s*(?:(?:@[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?)\s*)*(public|open)\s+(?:(?:nonisolated)\s+)?(class|struct|enum|protocol|actor|func|init|var|let|typealias|subscript)\b/
+pattern = /^\s*(?:(?:@[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?)\s*)*(public|open)\s+(?:(?:final|nonisolated)\s+)*(class|struct|enum|protocol|actor|func|init|var|let|typealias|subscript)\b/
 declarations = []
 
 Dir.glob(File.join(source_root, "**", "*.swift")).sort.each do |file|

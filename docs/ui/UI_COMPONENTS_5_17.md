@@ -36,7 +36,7 @@
 | HandSign | PTools UI | Core | touch / reset | static + rotation | PooTools Example | podspec | 保留兼容入口 |
 | Slider | PTools UI | UIFoundation / SnapKit | value / layout | static + size class | PooTools Example | podspec | 保留兼容入口 |
 | Layout | PTools UI | Core | constraint / safeArea | static + rotation | PooTools Example | podspec | 保留兼容入口 |
-| PagingControl | PTools UI | Core / JXPagingView / JXSegmentedView | page / reuse | static + scroll | PooTools Example | podspec | 外部分页适配器保留 |
+| PagingControl | PTools UI | Core | page / reuse | static + scroll | PooTools Example | podspec | 5.30.0 原生实现，保留兼容入口 |
 | Picker | PTools UI | Core | show / embed / dismiss | static + scene | PooTools Example | `PTBasePickerView` | 保留 typed picker API |
 | TipsView | PTools UI | Core | timer / animation / window | static + visual | PooTools Example | podspec | 收口到 overlay contract |
 | Circle | PTools UI | Core | draw / bounds | static + rotation | PooTools Example | podspec | 保留兼容入口 |

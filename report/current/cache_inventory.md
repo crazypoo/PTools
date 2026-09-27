@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T04:15:12Z
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:11:24Z
 -->
 
 # PTools 当前缓存盘点
@@ -170,5 +170,8 @@ Generated at: 2026-09-27T04:15:12Z
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:668 | disk or custom cache | // MARK: - Cache Helper |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:682 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |
 | PooToolsSource/Router/PTRouterServiceManager.swift:157 | disk or custom cache | // MARK: - Service Clean Cache |
+| PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:63 | disk or custom cache | /// English: Refreshes the native item cache; old callers can then call apply(to:). |
+| PooToolsSource/SegmentControl/PTPaging.swift:50 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:321 | disk or custom cache | /// English: Cache policy for lazy pages. |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:758 | disk or custom cache | open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) { |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:762 | disk or custom cache | open func cache(viewController: UIViewController, with identifier: String) { |

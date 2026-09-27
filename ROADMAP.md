@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.29.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.30.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.29.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.30.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.30.0 JX 分段与分页原生收口
+
+- ✅ 移除 SwiftPM、CocoaPods、锁文件和交付源码中的 JXSegmentedView / JXPagingView 直接依赖。
+- ✅ 新增 `PTSegmentedView`、稳定 ID 的 `PTSegmentItem`、Indicator 引擎、`PTPageContainer`、`PTPagingView` 和双向同步 Coordinator。
+- ✅ 增加页面懒加载、生命周期、缓存策略、Header/Pinned Header、基础嵌套滚动、刷新适配和手势方向契约。
+- ✅ 旧 SegmentControl 模型保留为不依赖第三方的弃用兼容适配器，不提供 JX 类型别名。
+- ✅ 增加 Paging 架构、迁移、嵌套滚动、手势、生命周期和使用审计文档，以及交付源码依赖移除门禁。
+- [ ] 完成宿主 App 的真机、复杂 Nested Paging、刷新库、多 Scene、Dynamic Type、RTL、性能和视觉回归后，再创建 `5.30.0` 正式 tag。
 
 ## 5.29.0 NotificationBanner 吸收与原生 PToolsBanner
 

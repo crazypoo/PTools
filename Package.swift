@@ -212,8 +212,6 @@ let package = Package(
         
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
-        .package(url: "https://github.com/pujiaxin33/JXPagingView.git", from: "2.1.0"),
-        .package(url: "https://github.com/pujiaxin33/JXSegmentedView.git", from: "1.3.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
         .package(url: "https://github.com/yangKJ/Harbeth.git", from: "1.1.0"),
         .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
@@ -494,7 +492,10 @@ let package = Package(
         .target(name: "PooToolsLayout", dependencies: ["ptools", "CollectionViewPagingLayout"], path: "PooToolsSource/Layout", swiftSettings: [.define("POOTOOLS_LAYOUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsLocation", dependencies: ["ptools", "PTLocationPermission"], path: "PooToolsSource/Location", swiftSettings: [.define("POOTOOLS_LOCATION"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSmartScreenshot", dependencies: ["ptools"], path: "PooToolsSource/ScreenShot", swiftSettings: [.define("POOTOOLS_SMARTSCREENSHOT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPagingControl", dependencies: ["ptools", .product(name: "JXPagingView", package: "JXPagingView"), "JXSegmentedView"], path: "PooToolsSource/SegmentControl", swiftSettings: [.define("POOTOOLS_PAGINGCONTROL"), .define("POOTOOLS_COCOAPODS")]),
+        // English: PagingControl is now entirely native and depends only on the PTools Core contract.
+        // Español: PagingControl ahora es completamente nativo y depende solo del contrato Core de PTools.
+        // 中文：PagingControl 现在完全使用原生实现，只依赖 PTools Core 契约。
+        .target(name: "PooToolsPagingControl", dependencies: ["ptools"], path: "PooToolsSource/SegmentControl", swiftSettings: [.define("POOTOOLS_PAGINGCONTROL"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsScanQRCode", dependencies: ["ptools", "PooToolsImagePicker", "PooToolsPhotoPicker", "PTCameraPermission"], path: "PooToolsSource/QRCodeScan", swiftSettings: [.define("POOTOOLS_SCANQRCODE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsStepCount", dependencies: ["ptools", "PTHealthPermission"], path: "PooToolsSource/HealthKit", swiftSettings: [.define("POOTOOLS_STEPCOUNT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsContact", dependencies: ["ptools", "PTContactsPermission"], path: "PooToolsSource/Contact", swiftSettings: [.define("POOTOOLS_CONTACT"), .define("POOTOOLS_COCOAPODS")]),

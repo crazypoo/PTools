@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T04:15:42Z
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:11:47Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `62`
+- Current exceptions: `61`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -23,7 +23,6 @@ Generated at: 2026-09-27T04:15:42Z
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | NetWork | ["Core","Loading","PToolsCore"] | ["Core","Loading"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
-| PagingControl | ["JXPagingView","JXSegmentedView"] | ["JXPagingView/Paging","JXSegmentedView"] | SPM uses products; CocoaPods uses subspec-qualified names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | PhotoPicker | ["CameraPermission","Core","ImagePicker","Loading","MediaCore","Symbols"] | ["Core","ImagePicker","Loading","MediaCore","Symbols"] | SPM adds standalone CameraPermission; CocoaPods keeps Core route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Picker | ["SnapKit"] | [] | SPM declares direct utilities; CocoaPods resolves them through Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | RateView | [] | ["PToolsUIFoundation"] | CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |

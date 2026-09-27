@@ -1,121 +1,75 @@
-//
-//  MSMainSegmentDataSource.swift
-//  MinaTicket
-//
-//  Created by jax on 2022/6/18.
-//  Copyright © 2022 Hola. All rights reserved.
-//
+// English: Compatibility data source that converts the old model array into a native snapshot.
+// Español: Fuente de datos de compatibilidad que convierte el array antiguo en un snapshot nativo.
+// 中文：将旧模型数组转换为原生快照的兼容数据源。
 
 import UIKit
-import JXSegmentedView
 
-// 🚀 核心终极修复：增加 @unchecked Sendable 协议。
-// 结合 @MainActor，完美化解老旧第三方 UI 库与 Swift 6 严格并发检查的冲突！
 @MainActor
-@objcMembers
-public class PTMainSegmentDataSource: JXSegmentedBaseDataSource, @unchecked Sendable {
-    
-    ///MARK: 这里要先加载数据
+@available(*, deprecated, message: "Use PTSegmentedView.apply(items:) instead.")
+public class PTMainSegmentDataSource: NSObject {
     open var dataSourceData = [PTSegmentControlBaseModel]()
     open var change: PTSegmentControlModelType? = .ImageTitle(type: .Normal)
     open var titleNormalColor: UIColor = .black
     open var titleSelectedColor: UIColor = .black
-    open var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
-    
-    private var cell_width_array = [CGFloat]()
-    private var cell_width_array_sub = [CGFloat]()
-    
-    public override func reloadData(selectedIndex: Int) {
-        // 现在 self 是 Sendable 的了，可以安全地送入 assumeIsolated 闭包中
-        MainActor.assumeIsolated {
-            super.reloadData(selectedIndex: selectedIndex)
-            
-            itemWidthIncrement = 20
-            itemSpacing = 0
-            
-            // 同步组装数据，消灭旧代码的隐式生命周期 Bug
-            let newModels = self.dataSourceData.enumerated().map { (index, model) -> PTMainSegmentModel in
-                let titleModel = PTMainSegmentModel()
-                titleModel.title = model.categoryName
-                titleModel.subTitle = model.subTitle
-                titleModel.itemWidthIncrement = self.itemWidthIncrement
-                titleModel.onlyShowTitle = self.change ?? .ImageTitle(type: .Normal)
-                titleModel.index = index
-                titleModel.itemSpace = self.itemSpacing
-                titleModel.titleNormalColor = self.titleNormalColor
-                titleModel.titleCurrentColor = self.titleNormalColor
-                titleModel.titleSelectedColor = self.titleSelectedColor
-                titleModel.titleNormalFont = .appfont(size: 16)
-                titleModel.titleSelectedFont = .appfont(size: 16, bold: true)
-                titleModel.subTitleSelectedColor = self.titleNormalColor
-                titleModel.subTitleNormalColor = self.titleNormalColor
-                titleModel.subTitleCurrentColor = self.titleSelectedColor
-                titleModel.imageURL = model.imageURL
-                titleModel.itemWidth = self.itemWidths
-                return titleModel
-            }
-            
-            self.dataSource.append(contentsOf: newModels)
-            
-            for (index, model) in self.dataSource.compactMap({ $0 as? PTMainSegmentModel }).enumerated() {
-                if index == selectedIndex {
-                    model.isSelected = true
-                    model.titleCurrentColor = model.titleSelectedColor
-                    model.subTitleCurrentColor = model.subTitleSelectedColor
-                    model.subTitleCurrentBGColor = model.subTitleSelectedBGColor
-                    break
+    open var itemWidths: CGFloat = UIScreen.main.bounds.width / 4
+    open var itemWidthIncrement: CGFloat = 20
+    open var itemSpacing: CGFloat = 0
+    public private(set) var items = [PTSegmentItem]()
+
+    public override init() {
+        super.init()
+    }
+
+    /// English: Builds native items with stable integer IDs for the legacy data source.
+    /// Español: Construye elementos nativos con IDs enteros estables para la fuente antigua.
+    /// 中文：为旧数据源构建带稳定整数 ID 的原生分段项。
+    public func makeItems() -> [PTSegmentItem] {
+        dataSourceData.enumerated().map { index, model in
+            let content: PTSegmentContent
+            switch change ?? .ImageTitle(type: .Normal) {
+            case .OnlyImage:
+                if let url = URL(string: model.imageURL), !model.imageURL.isEmpty {
+                    content = .imageSource(.url(url))
+                } else {
+                    content = .title(model.categoryName)
                 }
-            }
-        }
-    }
-    
-    public override func preferredSegmentedView(_ segmentedView: JXSegmentedView, widthForItemAt index: Int) -> CGFloat {
-        return MainActor.assumeIsolated {
-            guard let firstModel = self.dataSource.first as? PTMainSegmentModel else { return self.itemWidths }
-            return firstModel.itemWidth
-        }
-    }
-    
-    //MARK: - JXSegmentedViewDataSource
-    public override func registerCellClass(in segmentedView: JXSegmentedView) {
-        MainActor.assumeIsolated {
-            segmentedView.collectionView.register(PTMainSegmentCell.self, forCellWithReuseIdentifier: "titleCell")
-        }
-    }
-    
-    public override func segmentedView(_ segmentedView: JXSegmentedView, cellForItemAt index: Int) -> JXSegmentedBaseCell {
-        return MainActor.assumeIsolated {
-            var cell: JXSegmentedBaseCell?
-            if self.dataSource[index] is PTMainSegmentModel {
-                cell = segmentedView.dequeueReusableCell(withReuseIdentifier: "titleCell", at: index)
-                if let titleCell = cell as? PTMainSegmentCell {
-                    titleCell.lineView.isHidden = (index == 0)
+            case .ImageTitle:
+                if let url = URL(string: model.imageURL), !model.imageURL.isEmpty {
+                    content = .titleImageSource(title: model.categoryName, source: .url(url), placement: .leading)
+                } else {
+                    content = .title(model.categoryName)
                 }
+            case .OnlyTitle:
+                content = .title(model.categoryName)
             }
-            return cell ?? JXSegmentedBaseCell()
+            return PTSegmentItem(id: index, content: content)
         }
     }
-    
-    // 针对不同的cell处理选中态和未选中态的刷新
-    // 针对不同的cell处理选中态和未选中态的刷新
-    public override func refreshItemModel(_ segmentedView: JXSegmentedView, currentSelectedItemModel: JXSegmentedBaseItemModel, willSelectedItemModel: JXSegmentedBaseItemModel, selectedType: JXSegmentedViewItemSelectedType) {
-        
-        // 🚀 修复核心：移除 MainActor.assumeIsolated。
-        // 因为这里我们只操作传入的 Model，不触碰 self（DataSource）里的任何受保护属性。
-        // 父类方法本身就是非隔离的，传入非 Sendable 的参数不跨越任何边界，绝对安全！
-        super.refreshItemModel(segmentedView, currentSelectedItemModel: currentSelectedItemModel, willSelectedItemModel: willSelectedItemModel, selectedType: selectedType)
-        
-        // 转化为我们自己的 Model 并安全赋值
-        guard let myCurrentSelectedItemModel = currentSelectedItemModel as? PTMainSegmentModel,
-              let myWilltSelectedItemModel = willSelectedItemModel as? PTMainSegmentModel else {
-            return
-        }
-        
-        myCurrentSelectedItemModel.titleCurrentColor = myCurrentSelectedItemModel.titleNormalColor
-        myWilltSelectedItemModel.titleCurrentColor = myWilltSelectedItemModel.titleSelectedColor
-        myCurrentSelectedItemModel.subTitleCurrentColor = myCurrentSelectedItemModel.subTitleNormalColor
-        myWilltSelectedItemModel.subTitleCurrentColor = myWilltSelectedItemModel.subTitleSelectedColor
-        myCurrentSelectedItemModel.subTitleCurrentBGColor = myCurrentSelectedItemModel.subTitleNormalBGColor
-        myWilltSelectedItemModel.subTitleCurrentBGColor = myWilltSelectedItemModel.subTitleSelectedBGColor
+
+    /// English: Applies the compatibility models to a native segmented view.
+    /// Español: Aplica los modelos de compatibilidad a una vista segmentada nativa.
+    /// 中文：将兼容模型应用到原生分段 View。
+    public func apply(to segmentedView: PTSegmentedView,
+                      selectedIndex: Int = 0,
+                      animated: Bool = true) {
+        items = makeItems()
+        segmentedView.style.normalColor = titleNormalColor
+        segmentedView.style.selectedColor = titleSelectedColor
+        segmentedView.style.itemWidths = itemWidths > 0 ? Array(repeating: itemWidths, count: items.count) : nil
+        segmentedView.apply(items: items, animatingDifferences: animated)
+        segmentedView.select(index: selectedIndex, animated: false, origin: .restoration)
+    }
+
+    /// English: Refreshes the native item cache; old callers can then call apply(to:).
+    /// Español: Actualiza la caché de elementos nativos; los llamadores antiguos pueden llamar a apply(to:).
+    /// 中文：刷新原生分段项缓存；旧调用方随后可调用 apply(to:)。
+    public func reloadData(selectedIndex: Int = 0) {
+        items = makeItems()
+        _ = selectedIndex
+    }
+
+    public func preferredItemWidth(at index: Int) -> CGFloat {
+        guard items.indices.contains(index) else { return itemWidths }
+        return itemWidths > 0 ? itemWidths : PTMainSegmentCell.measuredWidth(item: items[index], style: PTSegmentStyle())
     }
 }

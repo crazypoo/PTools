@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "f488ac68c8436f300013168073d215950107a6a2",
-  "generated_at": "2026-09-27T04:15:42Z",
+  "source_revision": "b4956e2ceb506b38d6806cbb39b7ddda1483b433",
+  "generated_at": "2026-09-27T05:11:46Z",
   "name": "PooTools",
-  "version": "5.29.0",
+  "version": "5.30.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -1717,10 +1717,7 @@
       "local_dependencies": [
         "PooTools/Core"
       ],
-      "third_party_dependencies": [
-        "JXPagingView/Paging",
-        "JXSegmentedView"
-      ],
+      "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/SegmentControl/*.{h,m,swift}"
       ],

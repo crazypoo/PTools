@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: f488ac68c8436f300013168073d215950107a6a2
-Generated at: 2026-09-27T04:15:42Z
+Source revision: b4956e2ceb506b38d6806cbb39b7ddda1483b433
+Generated at: 2026-09-27T05:11:47Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `9cece542b9f7ea45a9cf361fe9630fac5c6f1d92481a220e349166e45ec5ff3e`
+- Fingerprint: `a18eb17766659c587a508f065486e1bdc622b1a18ce66f0e5a44075fd1d1edd3`
 - Matched modules: `94`
 - SwiftPM-only modules: `1`
 - CocoaPods-only modules: `16`
 - Source-directory drift: `1`
-- Dependency drift: `17`
+- Dependency drift: `16`
 - Swift setting / macro drift: `27`
 
 ## Classification
@@ -44,7 +44,6 @@ The baseline records existing differences as explicit review items. A later mani
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `NetWork` / `internal_dependencies`: SPM=["Core", "Loading", "PToolsCore"]; CocoaPods=["Core", "Loading"]
-- `PagingControl` / `third_party_dependencies`: SPM=["JXPagingView", "JXSegmentedView"]; CocoaPods=["JXPagingView/Paging", "JXSegmentedView"]
 - `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
 - `Picker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `RateView` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
