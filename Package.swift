@@ -41,6 +41,11 @@ let package = Package(
         // Español: Publica contratos multimedia neutrales al transporte sin arrastrar UI de funciones ni Network.
         // 中文：公开与传输无关的媒体契约，避免引入功能 UI 和 Network。
         .library(name: "PooToolsMediaCore", targets: ["PooToolsMediaCore"]),
+        // English: Publish the native embedded HTTP server without UIKit or third-party server code.
+        // Español: Publica el servidor HTTP embebido nativo sin UIKit ni código de servidor de terceros.
+        // 中文：公开不依赖 UIKit 和第三方服务端代码的原生嵌入式 HTTP Server。
+        .library(name: "PToolsHTTPServer", targets: ["PToolsHTTPServer"]),
+        .library(name: "PToolsHTTPFilePortal", targets: ["PToolsHTTPFilePortal"]),
 
         // ==========================================
         // 基础 UI 与细分组件模块
@@ -159,6 +164,7 @@ let package = Package(
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
             "PToolsPermissionCore", "PToolsPermissionUI",
             "PooToolsMediaCore",
+            "PToolsHTTPServer", "PToolsHTTPFilePortal",
             "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
             "PooToolsHud", "PooToolsLivePhoto", "PooToolsShare", "PooToolsPDF",
             "PooToolsSVG",
@@ -311,6 +317,30 @@ let package = Package(
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
+        // English: Keep the HTTP core Foundation/Network-only and strictly Sendable.
+        // Español: Mantiene el núcleo HTTP basado solo en Foundation/Network y estrictamente Sendable.
+        // 中文：让 HTTP 核心仅依赖 Foundation/Network，并启用严格 Sendable 检查。
+        .target(
+            name: "PToolsHTTPServer",
+            path: "PooToolsSource/PToolsHTTPServer",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ],
+            linkerSettings: [
+                .linkedLibrary("z")
+            ]
+        ),
+        .target(
+            name: "PToolsHTTPFilePortal",
+            dependencies: ["PToolsHTTPServer"],
+            path: "PooToolsSource/PToolsHTTPFilePortal",
+            resources: [.process("Resources")],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -353,7 +383,6 @@ let package = Package(
                 .define("POOTOOLS_APPZ"),
                 .define("POOTOOLS_LAUNCHTIMEPROFILER"),
                 .define("POOTOOLS_VIDEOCACHE"),
-                .define("POOTOOLS_CGDWEBSERVER"),
                 .define("POOTOOLS_SPLIT_CORE"),
                 .define("POOTOOLS_SPLIT_UIFOUNDATION"),
                 .define("POOTOOLS_SPLIT_PERMISSION_CORE"),
@@ -559,6 +588,18 @@ let package = Package(
             name: "PToolsSocketKitTests",
             dependencies: ["PooToolsSocketKit"],
             path: "Tests/PToolsSocketKitTests"
+        ),
+        // English: Keep HTTP framing tests independent from UIKit and live network services.
+        // Español: Mantén las pruebas de framing HTTP independientes de UIKit y de servicios de red reales.
+        // 中文：HTTP framing 测试独立于 UIKit 和真实网络服务。
+        .testTarget(
+            name: "PToolsHTTPServerTests",
+            dependencies: ["PToolsHTTPServer"],
+            path: "Tests/PToolsHTTPServerTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
         )
     ],
     swiftLanguageModes: [.v6]

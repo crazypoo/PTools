@@ -55,6 +55,8 @@
     {"path":"PooToolsSource/NetWork/NetworkSupport.swift","category":"LOCK_PROTECTED"},
     {"path":"PooToolsSource/OSSKit/OSSSpeech.swift","category":"LOCK_PROTECTED"},
     {"path":"PooToolsSource/OSSKit/OSSUtterance.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift","category":"SYSTEM_WRAPPER"},
+    {"path":"PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PhotoPicker/PTFetchImageOperation.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PhotoPicker/PTMediaLibManager.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PToolsUIFoundation/PTRichText.swift","category":"LOCK_PROTECTED"},

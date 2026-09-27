@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GCDWebServer
 import Alamofire
 import SnapKit
 import Photos
@@ -19,7 +18,11 @@ import PToolsUIFoundation
 #endif
 import PhotosUI
 
-let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
+private let PTUploadFilePath: String = {
+    let libraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first
+        ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+    return libraryURL.appendingPathComponent("UploadFile", isDirectory: true).path
+}()
 
 class PTFuncDetailViewController: PTBaseViewController {
 
@@ -37,7 +40,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     fileprivate var typeString:String!
     
-    var webServer:GCDWebUploader?
+    var webServer: PTHTTPFilePortal?
     fileprivate var localNetwork:Bool = false
     var appNetWorkStatus:NetworkStatus? = .unknown
 
@@ -63,7 +66,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        webServer?.stop()
+        Task { await webServer?.stop() }
     }
     
     override func viewDidLoad() {
@@ -72,26 +75,37 @@ class PTFuncDetailViewController: PTBaseViewController {
         switch typeString {
         case String.localNetWork:
             PTGCDManager.shared.delayOnMain(time: 1) {
-                var uploadInfoString = ""
+                Task { @MainActor in
+                    var uploadInfoString = ""
                 switch self.appNetWorkStatus {
                 case .wifi:
                     self.localNetwork = !self.localNetwork
                     if self.localNetwork {
-                        FileManager.pt.createFolder(folderPath: PTUploadFilePath)
+                        try? FileManager.default.createDirectory(
+                            at: URL(fileURLWithPath: PTUploadFilePath, isDirectory: true),
+                            withIntermediateDirectories: true
+                        )
                         
-                        self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
-                        self.webServer!.delegate = self
-                        self.webServer!.allowHiddenItems = false
-                        self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
-                        
-                        if let server = self.webServer, server.start() {
-                            let address = server.serverURL?.absoluteString ?? ""
-                            uploadInfoString = "请在上传设备浏览器上输入\(address)\n端口为:\(server.port)\n例子:IP地址:端口地址"
-                        } else {
-                            uploadInfoString = "GCDWebServer not running!"
+                        let portalConfiguration = PTHTTPFilePortalConfiguration(
+                            rootDirectory: URL(fileURLWithPath: PTUploadFilePath),
+                            allowedFileExtensions: ["mp4", "mov", "doc", "docx", "xls", "xlsx", "txt", "pdf", "jpg", "jpeg", "png", "gif", "mp3"]
+                        )
+                        let serverConfiguration = PTHTTPServerConfiguration(
+                            bindScope: .localNetwork,
+                            serviceName: "PTools File Portal",
+                            serviceType: "_ptools-http._tcp"
+                        )
+                        let portal = PTHTTPFilePortal(configuration: portalConfiguration, serverConfiguration: serverConfiguration)
+                        self.webServer = portal
+                        do {
+                            let endpoint = try await portal.start()
+                            let address = endpoint.urls.first?.absoluteString ?? ""
+                            uploadInfoString = "请在上传设备浏览器上输入\(address)\n端口为:\(endpoint.port)\n例子:IP地址:端口地址"
+                        } catch {
+                            uploadInfoString = "PTools HTTP Server not running!"
                         }
                     } else {
-                        uploadInfoString = "GCDWebServer not running!"
+                        uploadInfoString = "PTools HTTP Server not running!"
                     }
                     
                     let label = UILabel()
@@ -107,7 +121,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 default:
                     UIViewController.drop(title: "请先将设备连接到WIFI上方可操作")
                     self.localNetwork = false
-                }            }
+                    }
+                }
+            }
         case String.dymanicCode:
             let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
             view.addSubview(codeView)
@@ -132,7 +148,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             let rate = PTRateView(viewConfig: rateConfig)
             rate.rateBlock = { score in
-                PTNSLogConsole(score)
+                Swift.print(score)
             }
             view.addSubview(rate)
             rate.snp.makeConstraints { make in
@@ -1090,24 +1106,6 @@ class PTFuncDetailViewController: PTBaseViewController {
 extension PTFuncDetailViewController {
     func alert(title:String,message:String) {
         UIViewController.drop(title: title,subTitle: message)
-    }
-}
-
-extension PTFuncDetailViewController:@preconcurrency GCDWebUploaderDelegate {
-    func webUploader(_ uploader: GCDWebUploader, didUploadFileAtPath path: String) {
-        PTNSLogConsole("[UPLOAD] \(path)")
-    }
-    
-    func webUploader(_ uploader: GCDWebUploader, didMoveItemFromPath fromPath: String, toPath: String) {
-        PTNSLogConsole("[MOVE] \(fromPath) -> \(toPath)")
-    }
-    
-    func webUploader(_ uploader: GCDWebUploader, didDeleteItemAtPath path: String) {
-        PTNSLogConsole("[DELETE] \(path)")
-    }
-    
-    func webUploader(_ uploader: GCDWebUploader, didCreateDirectoryAtPath path: String) {
-        PTNSLogConsole("[CREATE] \(path)")
     }
 }
 

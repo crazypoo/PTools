@@ -1,0 +1,17 @@
+# English: These reviewed removals are inherited from the 5.27.0 compatibility and SocketRocket closure; 5.28.0 adds no new public API removal.
+# Español: Estas eliminaciones revisadas se heredan del cierre de compatibilidad y SocketRocket de 5.27.0; 5.28.0 no añade eliminaciones públicas nuevas.
+# 中文：这些已审阅删除项继承自 5.27.0 的兼容层和 SocketRocket 收口；5.28.0 不新增公开 API 删除。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink
+public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)
+public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)

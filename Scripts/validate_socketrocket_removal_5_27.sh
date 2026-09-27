@@ -2,15 +2,15 @@
 
 set -euo pipefail
 
-# English: Keep SocketRocket out of every 5.27 shipped path.
-# Español: Mantén SocketRocket fuera de todas las rutas entregadas de 5.27.
-# 中文：确保 5.27 的所有交付路径都不再包含 SocketRocket。
+# English: Keep SocketRocket out of every 5.27+ shipped path.
+# Español: Mantén SocketRocket fuera de todas las rutas entregadas de 5.27+.
+# 中文：确保 5.27+ 的所有交付路径都不再包含 SocketRocket。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" == 5.27.* ]] || { printf 'FAIL: SocketRocket removal gate requires 5.27.x, got %s\n' "$version" >&2; exit 1; }
+[[ "$version" == 5.27.* || "$version" == 5.28.* ]] || { printf 'FAIL: SocketRocket removal gate requires 5.27.x or 5.28.x, got %s\n' "$version" >&2; exit 1; }
 
 active_paths=(Package.swift Package.resolved PooTools.podspec Podfile.lock PooToolsSource Tests)
 if rg -n -i 'SocketRocket|SRWebSocket|SRReadyState' "${active_paths[@]}" >/dev/null; then

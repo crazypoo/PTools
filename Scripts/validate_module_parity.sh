@@ -44,6 +44,8 @@ ALIASES = {
   "SpeechPermission" => "SpeechRecognizerPermission",
   "Keyboard" => "CustomerNumberKeyboard",
   "DEBUGTrackingEyes" => "DEBUG_TrackingEyes",
+  "PToolsHTTPServer" => "HTTPServer",
+  "PToolsHTTPFilePortal" => "HTTPFilePortal",
   "SmartScreenshot" => "SmartScreenshot"
 }.freeze
 

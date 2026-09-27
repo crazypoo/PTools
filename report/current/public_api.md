@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api_5_9.rb
-Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
-Generated at: 2026-09-26T15:41:54Z
+Source revision: b1a7b3d5f2078229c465f45f32764a2be140cac0
+Generated at: 2026-09-27T01:13:49Z
 -->
 
 # PTools 当前公开 API 清单
@@ -4291,6 +4291,217 @@ Generated at: 2026-09-26T15:41:54Z
 | PooToolsSource/PToolsDate/PTZonedDate.swift:231 | func | public | public func isSame(_ component: Calendar.Component, as other: PTZonedDate) -> Bool { |
 | PooToolsSource/PToolsDate/PTZonedDate.swift:235 | func | public | public func isInPast(relativeTo reference: Date = Date()) -> Bool { |
 | PooToolsSource/PToolsDate/PTZonedDate.swift:239 | func | public | public func isInFuture(relativeTo reference: Date = Date()) -> Bool { |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:10 | struct | public | public struct PTHTTPFilePortalConfiguration: Sendable { |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:11 | let | public | public let rootDirectory: URL |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:12 | var | public | public var allowsUpload: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:13 | var | public | public var allowsDownload: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:14 | var | public | public var allowsDelete: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:15 | var | public | public var allowsCreateDirectory: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:16 | var | public | public var allowsRename: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:17 | var | public | public var allowedFileExtensions: Set<String> |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:18 | var | public | public var maximumUploadBytes: Int64 |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:19 | var | public | public var sessionToken: String? |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:21 | init | public | public init(rootDirectory: URL, allowsUpload: Bool = true, allowsDownload: Bool = true, |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:37 | actor | public | public actor PTHTTPFilePortal { |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:38 | let | public | public let server: PTHTTPServer |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:39 | let | public | public let configuration: PTHTTPFilePortalConfiguration |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:43 | init | public | public init(configuration: PTHTTPFilePortalConfiguration, |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:52 | func | public | public func start() async throws -> PTHTTPServerEndpoint { |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:61 | func | public | public func stop() async { await server.stop() } |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:62 | func | public | public func forceStop() async { await server.forceStop() } |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:63 | func | public | public func metrics() async -> PTHTTPServerMetrics { await server.currentMetrics() } |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:221 | struct | public | public struct PTHTTPFilePortalItem: Codable, Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:222 | let | public | public let name: String |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:223 | let | public | public let path: String |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:224 | let | public | public let isDirectory: Bool |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:225 | let | public | public let byteCount: Int64 |
+| PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:227 | init | public | public init(name: String, path: String, isDirectory: Bool, byteCount: Int64) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:8 | struct | public | public struct PTHTTPHostPolicy: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:9 | let | public | public let allowedHosts: Set<String> |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:11 | init | public | public init(allowedHosts: Set<String>) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:15 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:23 | struct | public | public struct PTHTTPCORSPolicy: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:24 | let | public | public let allowedOrigins: Set<String> |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:25 | let | public | public let allowedMethods: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:26 | let | public | public let allowedHeaders: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:28 | init | public | public init(allowedOrigins: Set<String>, allowedMethods: String = "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS", |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:35 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:53 | struct | public | public struct PTHTTPBearerAuthentication: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:54 | let | public | public let token: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:56 | init | public | public init(token: String) { self.token = token } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:58 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:67 | actor | public | public actor PTHTTPRateLimiter { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:72 | init | public | public init(limit: Int = 120, interval: Duration = .seconds(60)) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:77 | func | public | public func allows(_ key: String) -> Bool { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:89 | struct | public | public struct PTHTTPRateLimitMiddleware: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:90 | let | public | public let limiter: PTHTTPRateLimiter |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:92 | init | public | public init(limiter: PTHTTPRateLimiter = PTHTTPRateLimiter()) { self.limiter = limiter } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:94 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:104 | struct | public | public struct PTHTTPCompressionMiddleware: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:105 | let | public | public let minimumBytes: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:107 | init | public | public init(minimumBytes: Int = 1_024) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift:111 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:7 | struct | public | public struct PTHTTPParserLimits: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:8 | var | public | public var maximumRequestLineBytes: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:9 | var | public | public var maximumHeaderBytes: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:10 | var | public | public var maximumHeaderCount: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:11 | var | public | public var maximumHeaderLineBytes: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:12 | var | public | public var maximumChunkCount: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:13 | var | public | public var maximumTrailerBytes: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:15 | init | public | public init(maximumRequestLineBytes: Int = 8 * 1024, maximumHeaderBytes: Int = 32 * 1024, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:27 | struct | public | public struct PTHTTPParserError: Error, LocalizedError, Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:28 | let | public | public let status: PTHTTPStatus |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:29 | let | public | public let message: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:31 | init | public | public init(status: PTHTTPStatus = .badRequest, message: String) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:36 | var | public | public var errorDescription: String? { message } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:39 | struct | public | public struct PTHTTPParser: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:70 | init | public | public init(limits: PTHTTPParserLimits = PTHTTPParserLimits(), maximumBodyBytes: Int64 = 10 * 1024 * 1024, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift:78 | var | public | public var isFailed: Bool { failed } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:133 | actor | public | public actor PTHTTPServer { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:147 | init | public | public init(configuration: PTHTTPServerConfiguration = PTHTTPServerConfiguration()) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:151 | func | public | public func get(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:155 | func | public | public func head(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:159 | func | public | public func post(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:163 | func | public | public func put(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:167 | func | public | public func patch(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:171 | func | public | public func delete(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:175 | func | public | public func options(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:179 | func | public | public func sse(_ path: String, priority: Int = 0, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:186 | func | public | public func use(_ middleware: any PTHTTPMiddleware) { middlewares.append(middleware) } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:188 | func | public | public func serveDirectory(_ path: String = "/*path", directory: URL, index: String? = "index.html", |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:197 | func | public | public func start() async throws -> PTHTTPServerEndpoint { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:236 | func | public | public func stop() async { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:247 | func | public | public func forceStop() async { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:256 | func | public | public func currentMetrics() -> PTHTTPServerMetrics { metrics } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:656 | enum | public | public enum PTHTTPSymlinkPolicy: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:661 | struct | public | public struct PTHTTPRange: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:662 | let | public | public let offset: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:663 | let | public | public let length: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:665 | init | public | public init(offset: UInt64, length: UInt64) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:686 | struct | public | public struct PTHTTPStaticFileHandler: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:687 | let | public | public let root: URL |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:688 | let | public | public let indexFile: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:689 | let | public | public let symlinkPolicy: PTHTTPSymlinkPolicy |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:691 | init | public | public init(root: URL, indexFile: String? = "index.html", symlinkPolicy: PTHTTPSymlinkPolicy = .deny) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:697 | func | public | public func handle(request: PTHTTPRequest) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:758 | struct | public | public struct PTHTTPURLEncodedForm: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:759 | let | public | public let values: [String: [String]] |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:761 | init | public | public init(values: [String: [String]]) { self.values = values } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:769 | struct | public | public struct PTHTTPMultipartPart: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:770 | let | public | public let headers: PTHTTPHeaders |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:771 | let | public | public let body: Data |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:773 | init | public | public init(headers: PTHTTPHeaders, body: Data) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift:779 | enum | public | public enum PTHTTPMultipartParser { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:8 | struct | public | public struct PTHTTPMethod: RawRepresentable, Hashable, Sendable, ExpressibleByStringLiteral { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:9 | let | public | public let rawValue: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:11 | init | public | public init(rawValue: String) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:15 | init | public | public init(stringLiteral value: String) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:28 | struct | public | public struct PTHTTPStatus: RawRepresentable, Hashable, Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:29 | let | public | public let rawValue: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:30 | let | public | public let reasonPhrase: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:32 | init | public | public init(rawValue: Int, reasonPhrase: String? = nil) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:37 | init | public | public init?(rawValue: Int) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:85 | struct | public | public struct PTHTTPHeaders: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:88 | init | public | public init(_ values: [String: String] = [:]) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:92 | init | public | public init(values: [(String, String)]) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:96 | var | public | public var all: [(String, String)] { values } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:98 | func | public | public func firstValue(for name: String) -> String? { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:102 | func | public | public func values(for name: String) -> [String] { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:106 | func | public | public func contains(_ name: String) -> Bool { firstValue(for: name) != nil } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:108 | subscript | public | public subscript(name: String) -> String? { firstValue(for: name) } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:110 | func | public | public func setting(_ value: String, for name: String) -> Self { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:116 | func | public | public func appending(_ value: String, for name: String) -> Self { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:122 | func | public | public func removing(_ name: String) -> Self { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:138 | struct | public | public struct PTHTTPQuery: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:139 | let | public | public let values: [String: [String]] |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:141 | init | public | public init(_ values: [String: [String]] = [:]) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:145 | subscript | public | public subscript(_ key: String) -> String? { values[key]?.first } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:147 | func | public | public func all(_ key: String) -> [String] { values[key] ?? [] } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:164 | enum | public | public enum PTHTTPRequestBody: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:169 | var | public | public var byteCount: Int64 { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:178 | struct | public | public struct PTHTTPRequest: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:179 | let | public | public let id: UUID |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:180 | let | public | public let method: PTHTTPMethod |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:181 | let | public | public let scheme: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:182 | let | public | public let authority: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:183 | let | public | public let path: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:184 | let | public | public let query: PTHTTPQuery |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:185 | let | public | public let headers: PTHTTPHeaders |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:186 | let | public | public let body: PTHTTPRequestBody |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:187 | let | public | public let httpVersion: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:188 | let | public | public let remoteEndpoint: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:189 | let | public | public let parameters: [String: String] |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:190 | let | public | public let trailers: PTHTTPHeaders |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:192 | init | public | public init(id: UUID = UUID(), method: PTHTTPMethod, scheme: String = "http", authority: String? = nil, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:211 | struct | public | public struct PTHTTPFileBody: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:212 | let | public | public let url: URL |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:213 | let | public | public let offset: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:214 | let | public | public let length: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:215 | let | public | public let contentType: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:216 | let | public | public let etag: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:217 | let | public | public let modificationDate: Date? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:219 | init | public | public init(url: URL, offset: UInt64 = 0, length: UInt64, contentType: String = "application/octet-stream", |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:230 | typealias | public | public typealias PTHTTPBodyStream = AsyncThrowingStream<Data, Error> |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:232 | enum | public | public enum PTHTTPResponseBody: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:241 | struct | public | public struct PTHTTPResponse: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:242 | var | public | public var status: PTHTTPStatus |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:243 | var | public | public var headers: PTHTTPHeaders |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:244 | var | public | public var body: PTHTTPResponseBody |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:246 | init | public | public init(status: PTHTTPStatus = .ok, headers: PTHTTPHeaders = PTHTTPHeaders(), body: PTHTTPResponseBody = .empty) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:273 | typealias | public | public typealias PTHTTPHandler = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:274 | typealias | public | public typealias PTHTTPNext = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:276 | protocol | public | public protocol PTHTTPMiddleware: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:280 | struct | public | public struct PTHTTPClosureMiddleware: PTHTTPMiddleware { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:283 | init | public | public init(_ closure: @escaping @Sendable (PTHTTPRequest, @escaping PTHTTPNext) async throws -> PTHTTPResponse) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:287 | func | public | public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:292 | enum | public | public enum PTHTTPBindScope: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:300 | struct | public | public struct PTTLSIdentity: @unchecked Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:303 | init | public | public init(_ value: SecIdentity) { self.value = value } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:306 | enum | public | public enum PTHTTPTLSConfiguration: @unchecked Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:311 | struct | public | public struct PTHTTPServerConfiguration: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:312 | var | public | public var bindScope: PTHTTPBindScope |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:313 | var | public | public var port: UInt16 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:314 | var | public | public var serviceName: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:315 | var | public | public var serviceType: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:316 | var | public | public var idleTimeout: Duration |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:317 | var | public | public var headerTimeout: Duration |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:318 | var | public | public var handlerTimeout: Duration? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:319 | var | public | public var maxRequestsPerConnection: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:320 | var | public | public var maxConnections: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:321 | var | public | public var maxBodyBytes: Int64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:322 | var | public | public var bodyFileThreshold: Int64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:323 | var | public | public var parserLimits: PTHTTPParserLimits |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:324 | var | public | public var tls: PTHTTPTLSConfiguration |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:325 | var | public | public var shutdownGracePeriod: Duration |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:327 | init | public | public init(bindScope: PTHTTPBindScope = .loopback, port: UInt16 = 0, serviceName: String? = nil, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:350 | struct | public | public struct PTHTTPServerEndpoint: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:351 | let | public | public let port: UInt16 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:352 | let | public | public let urls: [URL] |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:353 | let | public | public let bonjourName: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:355 | init | public | public init(port: UInt16, urls: [URL], bonjourName: String? = nil) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:362 | enum | public | public enum PTHTTPServerState: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:370 | enum | public | public enum PTHTTPServerError: Error, LocalizedError, Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:379 | var | public | public var errorDescription: String? { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:390 | struct | public | public struct PTHTTPServerMetrics: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:391 | let | public | public let activeConnections: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:392 | let | public | public let totalConnections: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:393 | let | public | public let totalRequests: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:394 | let | public | public let bytesReceived: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:395 | let | public | public let bytesSent: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:396 | let | public | public let parseErrors: UInt64 |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:397 | let | public | public let activeSSEClients: Int |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:399 | init | public | public init(activeConnections: Int = 0, totalConnections: UInt64 = 0, totalRequests: UInt64 = 0, |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:411 | struct | public | public struct PTHTTPSSEEvent: Sendable, Equatable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:412 | let | public | public let id: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:413 | let | public | public let event: String? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:414 | let | public | public let data: String |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:415 | let | public | public let retry: Duration? |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:417 | init | public | public init(data: String, id: String? = nil, event: String? = nil, retry: Duration? = nil) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:435 | struct | public | public struct PTHTTPSSEStream: Sendable { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:436 | let | public | public let stream: PTHTTPBodyStream |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:439 | init | public | public init(bufferingPolicy: AsyncThrowingStream<Data, Error>.Continuation.BufferingPolicy = .bufferingNewest(64)) { |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:445 | func | public | public func send(_ event: PTHTTPSSEEvent) { continuation.yield(event.encoded) } |
+| PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:446 | func | public | public func finish() { continuation.finish() } |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:12 | enum | public | public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:26 | struct | public | public struct PTLogCategory: RawRepresentable, Hashable, Sendable { |
 | PooToolsSource/PToolsLogging/Core/PTLogTypes.swift:27 | let | public | public let rawValue: String |

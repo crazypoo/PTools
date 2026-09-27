@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
-  "generated_at": "2026-09-26T16:05:38Z",
+  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
+  "generated_at": "2026-09-27T01:14:33Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -206,6 +206,28 @@
       ]
     },
     {
+      "name": "PToolsHTTPFilePortal",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsHTTPFilePortal"
+      ]
+    },
+    {
+      "name": "PToolsHTTPServer",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsHTTPServer"
+      ]
+    },
+    {
       "name": "PToolsLogging",
       "type": {
         "library": [
@@ -284,6 +306,8 @@
         "PTSpeechPermission",
         "PTTrackingPermission",
         "PToolsDate",
+        "PToolsHTTPFilePortal",
+        "PToolsHTTPServer",
         "PToolsLogging",
         "PToolsPermissionCore",
         "PToolsPermissionUI",
@@ -2495,6 +2519,129 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsHTTPFilePortal",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsHTTPFilePortal",
+      "sources": [],
+      "resources": [
+        {
+          "path": "Resources",
+          "rule": {
+            "process": {}
+          }
+        }
+      ],
+      "internal_dependencies": [
+        {
+          "name": "PToolsHTTPServer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsHTTPServer",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsHTTPServer",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsHTTPServer",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "linkedLibrary": {
+              "_0": "z"
+            }
+          },
+          "tool": "linker"
+        }
+      ]
+    },
+    {
+      "name": "PToolsHTTPServerTests",
+      "type": "test",
+      "path": "Tests/PToolsHTTPServerTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsHTTPServer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsHTTPServer",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsListTests",
@@ -6547,14 +6694,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_APPZ"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "define": {
-              "_0": "POOTOOLS_CGDWEBSERVER"
             }
           },
           "tool": "swift"

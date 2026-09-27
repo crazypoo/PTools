@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
-  "generated_at": "2026-09-26T15:42:09Z",
+  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
+  "generated_at": "2026-09-27T01:14:06Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3922,6 +3922,31 @@
     {
       "path": "PooToolsSource/PToolsDate/PTZonedDate.swift",
       "lines": 264,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "lines": 233,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "lines": 168,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "lines": 357,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "lines": 796,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "lines": 456,
       "classification": "ok"
     },
     {

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
-  "generated_at": "2026-09-26T15:42:09Z",
+  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
+  "generated_at": "2026-09-27T01:14:06Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -831,6 +831,12 @@
       "line": 53,
       "kind": "disk or custom cache",
       "text": "// English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free."
+    },
+    {
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 267,
+      "kind": "disk or custom cache",
+      "text": ".setting(\"no-cache\", for: \"Cache-Control\")"
     },
     {
       "path": "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift",

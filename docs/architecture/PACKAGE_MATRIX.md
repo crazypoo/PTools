@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
-Generated at: 2026-09-26T15:37:22Z
-Version source: 5.27.0
+Source revision: b1a7b3d5f2078229c465f45f32764a2be140cac0
+Generated at: 2026-09-27T00:14:17Z
+Version source: 5.28.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -37,6 +37,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `DataEncrypt` | A | `PooTools/DataEncrypt` | `PooToolsDataEncrypt` | Keep; review drift |
 | `FaceIDPermission` | A | `PooTools/FaceIDPermission` | `PTFaceIDPermission` | Keep; review drift |
 | `Guide` | A | `PooTools/Guide` | `PooToolsGuide` | Keep; review drift |
+| `HTTPFilePortal` | A | `PooTools/HTTPFilePortal` | `PToolsHTTPFilePortal` | Keep; review drift |
+| `HTTPServer` | A | `PooTools/HTTPServer` | `PToolsHTTPServer` | Keep; review drift |
 | `HandSign` | A | `PooTools/HandSign` | `PooToolsHandSign` | Keep; review drift |
 | `HarbethKit` | A | `PooTools/HarbethKit` | `PooToolsHarbethKit` | Keep; review drift |
 | `HealthPermission` | A | `PooTools/HealthPermission` | `PTHealthPermission` | Keep; review drift |

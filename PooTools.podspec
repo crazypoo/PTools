@@ -451,12 +451,29 @@ Pod::Spec.new do |s|
         }
     end
     
+    # English: Native Network.framework HTTP server; the old condition remains an internal 5.x alias.
+    # Español: Servidor HTTP nativo basado en Network.framework; la condición antigua queda como alias interno de 5.x.
+    # 中文：基于 Network.framework 的原生 HTTP Server；旧条件仅作为 5.x 内部兼容别名保留。
+    s.subspec 'HTTPServer' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsHTTPServer/**/*.swift'
+        subspec.frameworks = 'Foundation', 'Network', 'UniformTypeIdentifiers', 'Security'
+        subspec.libraries = 'z'
+    end
+
+    s.subspec 'HTTPFilePortal' do |subspec|
+        subspec.dependency 'PooTools/HTTPServer'
+        subspec.source_files = 'PooToolsSource/PToolsHTTPFilePortal/**/*.swift'
+        subspec.resources = 'PooToolsSource/PToolsHTTPFilePortal/Resources/**/*'
+        subspec.frameworks = 'Foundation'
+    end
+
+    # English: Keep the old subspec name as a dependency-free forwarding alias until 6.0.
+    # Español: Conserva el nombre antiguo del subspec como alias sin dependencias hasta 6.0.
+    # 中文：保留旧 subspec 名称作为无第三方依赖的转发别名，直到 6.0 再移除。
     s.subspec 'GCDWebServer' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'GCDWebServer'
-        subspec.dependency 'GCDWebServer/WebUploader'
+        subspec.dependency 'PooTools/HTTPFilePortal'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HTTPSERVER POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
         }
     end
                 
@@ -1047,7 +1064,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Tabbar'
         subspec.dependency 'PooTools/SmartScreenshot'
         subspec.dependency 'PooTools/ZipArchive'
-        subspec.dependency 'PooTools/GCDWebServer'
+        subspec.dependency 'PooTools/HTTPFilePortal'
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'

@@ -84,6 +84,7 @@ bash Scripts/validate_symbols_5_24.sh
 bash Scripts/validate_attributedstring_absorption_5_25.sh
 bash Scripts/validate_swiftdate_removal_5_26.sh
 bash Scripts/validate_socketrocket_removal_5_27.sh
+bash Scripts/validate_gcdwebserver_removal_5_28.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
 ruby Scripts/report_current_summaries.rb >/dev/null
 

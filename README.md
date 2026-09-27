@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.27.0`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.28.0`。
 
 ## Requirements
 
@@ -38,6 +38,9 @@ https://github.com/crazypoo/PTools.git
 pod 'PooTools/Core'
 pod 'PooTools/NetWork'
 pod 'PooTools/PhotoPicker'
+pod 'PooTools/HTTPServer'
+# 需要浏览器文件门户时再添加：
+# pod 'PooTools/HTTPFilePortal'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
@@ -47,6 +50,14 @@ pod 'PooTools/PhotoPicker'
 [DEPENDENCY_MATRIX](docs/architecture/DEPENDENCY_MATRIX.md)、
 [TEST_MATRIX](docs/maintainers/TEST_MATRIX.md) 和
 [6.0 迁移说明](docs/migration/MIGRATION_6.md)。
+
+### Native HTTP Server
+
+`PToolsHTTPServer` 基于 iOS 17+ `Network.framework` 和 Swift 6 actor，提供类型化请求/响应、
+增量 HTTP/1.1 解析、Keep-Alive、静态文件 Range、SSE、gzip、TLS、Bonjour 和可选中间件。
+文件浏览器单独位于 `PToolsHTTPFilePortal`；旧的 `PooTools/GCDWebServer` subspec 只保留为
+兼容别名，不再引入 GCDWebServer 或 WebUploader。迁移示例见
+[GCDWebServer 迁移指南](docs/migrations/GCDWEBSERVER_TO_PTOOLS_HTTP_SERVER.md)。
 
 ## Quick Start
 

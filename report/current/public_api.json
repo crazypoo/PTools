@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
-  "generated_at": "2026-09-26T15:41:54Z",
+  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
+  "generated_at": "2026-09-27T01:13:49Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -34230,6 +34230,1694 @@
       "access": "public",
       "kind": "func",
       "declaration": "public func isInFuture(relativeTo reference: Date = Date()) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|struct|public struct PTHTTPFilePortalConfiguration: Sendable",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPFilePortalConfiguration: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let rootDirectory: URL",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rootDirectory: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowsUpload: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsUpload: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowsDownload: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsDownload: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowsDelete: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsDelete: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowsCreateDirectory: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsCreateDirectory: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowsRename: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowsRename: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var allowedFileExtensions: Set<String>",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var allowedFileExtensions: Set<String>"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var maximumUploadBytes: Int64",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumUploadBytes: Int64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|var|public var sessionToken: String?",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var sessionToken: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|init|public init(rootDirectory: URL, allowsUpload: Bool = true, allowsDownload: Bool = true,",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rootDirectory: URL, allowsUpload: Bool = true, allowsDownload: Bool = true,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|actor|public actor PTHTTPFilePortal",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 37,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTHTTPFilePortal {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let server: PTHTTPServer",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 38,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let server: PTHTTPServer"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let configuration: PTHTTPFilePortalConfiguration",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let configuration: PTHTTPFilePortalConfiguration"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|init|public init(configuration: PTHTTPFilePortalConfiguration,",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 43,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(configuration: PTHTTPFilePortalConfiguration,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|func|public func start() async throws -> PTHTTPServerEndpoint",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() async throws -> PTHTTPServerEndpoint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|func|public func stop() async",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() async { await server.stop() }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|func|public func forceStop() async",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func forceStop() async { await server.forceStop() }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|func|public func metrics() async -> PTHTTPServerMetrics",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func metrics() async -> PTHTTPServerMetrics { await server.currentMetrics() }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|struct|public struct PTHTTPFilePortalItem: Codable, Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 221,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPFilePortalItem: Codable, Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let name: String",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 222,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let name: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let path: String",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 223,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let path: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let isDirectory: Bool",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 224,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isDirectory: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|let|public let byteCount: Int64",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 225,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let byteCount: Int64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|init|public init(name: String, path: String, isDirectory: Bool, byteCount: Int64)",
+      "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
+      "line": 227,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(name: String, path: String, isDirectory: Bool, byteCount: Int64) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|struct|public struct PTHTTPHostPolicy: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPHostPolicy: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let allowedHosts: Set<String>",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 9,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allowedHosts: Set<String>"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(allowedHosts: Set<String>)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(allowedHosts: Set<String>) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|struct|public struct PTHTTPCORSPolicy: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPCORSPolicy: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let allowedOrigins: Set<String>",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allowedOrigins: Set<String>"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let allowedMethods: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allowedMethods: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let allowedHeaders: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allowedHeaders: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(allowedOrigins: Set<String>, allowedMethods: String = \"GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS\",",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(allowedOrigins: Set<String>, allowedMethods: String = \"GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS\","
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 35,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|struct|public struct PTHTTPBearerAuthentication: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPBearerAuthentication: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let token: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let token: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(token: String)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 56,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(token: String) { self.token = token }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|actor|public actor PTHTTPRateLimiter",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTHTTPRateLimiter {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(limit: Int = 120, interval: Duration = .seconds(60))",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 72,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(limit: Int = 120, interval: Duration = .seconds(60)) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func allows(_ key: String) -> Bool",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 77,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func allows(_ key: String) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|struct|public struct PTHTTPRateLimitMiddleware: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPRateLimitMiddleware: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let limiter: PTHTTPRateLimiter",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let limiter: PTHTTPRateLimiter"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(limiter: PTHTTPRateLimiter = PTHTTPRateLimiter())",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(limiter: PTHTTPRateLimiter = PTHTTPRateLimiter()) { self.limiter = limiter }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|struct|public struct PTHTTPCompressionMiddleware: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 104,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPCompressionMiddleware: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|let|public let minimumBytes: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let minimumBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|init|public init(minimumBytes: Int = 1_024)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 107,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(minimumBytes: Int = 1_024) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift",
+      "line": 111,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|struct|public struct PTHTTPParserLimits: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPParserLimits: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumRequestLineBytes: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumRequestLineBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumHeaderBytes: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 9,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumHeaderBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumHeaderCount: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumHeaderCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumHeaderLineBytes: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumHeaderLineBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumChunkCount: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumChunkCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var maximumTrailerBytes: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumTrailerBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|init|public init(maximumRequestLineBytes: Int = 8 * 1024, maximumHeaderBytes: Int = 32 * 1024,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(maximumRequestLineBytes: Int = 8 * 1024, maximumHeaderBytes: Int = 32 * 1024,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|struct|public struct PTHTTPParserError: Error, LocalizedError, Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPParserError: Error, LocalizedError, Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|let|public let status: PTHTTPStatus",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let status: PTHTTPStatus"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|let|public let message: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let message: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|init|public init(status: PTHTTPStatus = .badRequest, message: String)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(status: PTHTTPStatus = .badRequest, message: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var errorDescription: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var errorDescription: String? { message }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|struct|public struct PTHTTPParser: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPParser: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|init|public init(limits: PTHTTPParserLimits = PTHTTPParserLimits(), maximumBodyBytes: Int64 = 10 * 1024 * 1024,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 70,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(limits: PTHTTPParserLimits = PTHTTPParserLimits(), maximumBodyBytes: Int64 = 10 * 1024 * 1024,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift|public|var|public var isFailed: Bool",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift",
+      "line": 78,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isFailed: Bool { failed }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|actor|public actor PTHTTPServer",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 133,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTHTTPServer {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|init|public init(configuration: PTHTTPServerConfiguration = PTHTTPServerConfiguration())",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 147,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(configuration: PTHTTPServerConfiguration = PTHTTPServerConfiguration()) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func get(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func get(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func head(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 155,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func head(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func post(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func post(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func put(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 163,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func put(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func patch(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 167,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func patch(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func delete(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 171,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func delete(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func options(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 175,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func options(_ path: String, priority: Int = 0, handler: @escaping PTHTTPHandler) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func sse(_ path: String, priority: Int = 0,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 179,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func sse(_ path: String, priority: Int = 0,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func use(_ middleware: any PTHTTPMiddleware)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func use(_ middleware: any PTHTTPMiddleware) { middlewares.append(middleware) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func serveDirectory(_ path: String = \"/*path\", directory: URL, index: String? = \"index.html\",",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func serveDirectory(_ path: String = \"/*path\", directory: URL, index: String? = \"index.html\","
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func start() async throws -> PTHTTPServerEndpoint",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 197,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func start() async throws -> PTHTTPServerEndpoint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func stop() async",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 236,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func stop() async {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func forceStop() async",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 247,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func forceStop() async {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func currentMetrics() -> PTHTTPServerMetrics",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 256,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func currentMetrics() -> PTHTTPServerMetrics { metrics }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|enum|public enum PTHTTPSymlinkPolicy: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 656,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPSymlinkPolicy: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|struct|public struct PTHTTPRange: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 661,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPRange: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let offset: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 662,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let offset: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let length: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 663,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let length: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|init|public init(offset: UInt64, length: UInt64)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 665,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(offset: UInt64, length: UInt64) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|struct|public struct PTHTTPStaticFileHandler: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 686,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPStaticFileHandler: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let root: URL",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 687,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let root: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let indexFile: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 688,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let indexFile: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let symlinkPolicy: PTHTTPSymlinkPolicy",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 689,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let symlinkPolicy: PTHTTPSymlinkPolicy"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|init|public init(root: URL, indexFile: String? = \"index.html\", symlinkPolicy: PTHTTPSymlinkPolicy = .deny)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 691,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(root: URL, indexFile: String? = \"index.html\", symlinkPolicy: PTHTTPSymlinkPolicy = .deny) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|func|public func handle(request: PTHTTPRequest) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 697,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|struct|public struct PTHTTPURLEncodedForm: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 758,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPURLEncodedForm: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let values: [String: [String]]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 759,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let values: [String: [String]]"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|init|public init(values: [String: [String]])",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 761,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(values: [String: [String]]) { self.values = values }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|struct|public struct PTHTTPMultipartPart: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 769,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPMultipartPart: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let headers: PTHTTPHeaders",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 770,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let headers: PTHTTPHeaders"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|let|public let body: Data",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 771,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let body: Data"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|init|public init(headers: PTHTTPHeaders, body: Data)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 773,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(headers: PTHTTPHeaders, body: Data) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift|public|enum|public enum PTHTTPMultipartParser",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 779,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPMultipartParser {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPMethod: RawRepresentable, Hashable, Sendable, ExpressibleByStringLiteral",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPMethod: RawRepresentable, Hashable, Sendable, ExpressibleByStringLiteral {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 9,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(rawValue: String)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(stringLiteral value: String)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(stringLiteral value: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPStatus: RawRepresentable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPStatus: RawRepresentable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let rawValue: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let reasonPhrase: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let reasonPhrase: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(rawValue: Int, reasonPhrase: String? = nil)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: Int, reasonPhrase: String? = nil) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init?(rawValue: Int)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 37,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init?(rawValue: Int) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPHeaders: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPHeaders: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(_ values: [String: String] = [:])",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ values: [String: String] = [:]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(values: [(String, String)])",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(values: [(String, String)]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var all: [(String, String)]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var all: [(String, String)] { values }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func firstValue(for name: String) -> String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func firstValue(for name: String) -> String? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func values(for name: String) -> [String]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 102,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func values(for name: String) -> [String] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func contains(_ name: String) -> Bool",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 106,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func contains(_ name: String) -> Bool { firstValue(for: name) != nil }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|subscript|public subscript(name: String) -> String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 108,
+      "access": "public",
+      "kind": "subscript",
+      "declaration": "public subscript(name: String) -> String? { firstValue(for: name) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func setting(_ value: String, for name: String) -> Self",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 110,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setting(_ value: String, for name: String) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func appending(_ value: String, for name: String) -> Self",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 116,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func appending(_ value: String, for name: String) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func removing(_ name: String) -> Self",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 122,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removing(_ name: String) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPQuery: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 138,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPQuery: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let values: [String: [String]]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let values: [String: [String]]"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(_ values: [String: [String]] = [:])",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 141,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ values: [String: [String]] = [:]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|subscript|public subscript(_ key: String) -> String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "subscript",
+      "declaration": "public subscript(_ key: String) -> String? { values[key]?.first }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func all(_ key: String) -> [String]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 147,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func all(_ key: String) -> [String] { values[key] ?? [] }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPRequestBody: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 164,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPRequestBody: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var byteCount: Int64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 169,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var byteCount: Int64 {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPRequest: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 178,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPRequest: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let id: UUID",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 179,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: UUID"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let method: PTHTTPMethod",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 180,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let method: PTHTTPMethod"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let scheme: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 181,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let scheme: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let authority: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let authority: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let path: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 183,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let path: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let query: PTHTTPQuery",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let query: PTHTTPQuery"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let headers: PTHTTPHeaders",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 185,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let headers: PTHTTPHeaders"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let body: PTHTTPRequestBody",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let body: PTHTTPRequestBody"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let httpVersion: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 187,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let httpVersion: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let remoteEndpoint: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let remoteEndpoint: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let parameters: [String: String]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 189,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let parameters: [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let trailers: PTHTTPHeaders",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 190,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let trailers: PTHTTPHeaders"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(id: UUID = UUID(), method: PTHTTPMethod, scheme: String = \"http\", authority: String? = nil,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 192,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: UUID = UUID(), method: PTHTTPMethod, scheme: String = \"http\", authority: String? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPFileBody: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 211,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPFileBody: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let url: URL",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 212,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let url: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let offset: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 213,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let offset: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let length: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 214,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let length: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let contentType: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 215,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let contentType: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let etag: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 216,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let etag: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let modificationDate: Date?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 217,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let modificationDate: Date?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(url: URL, offset: UInt64 = 0, length: UInt64, contentType: String = \"application/octet-stream\",",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 219,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(url: URL, offset: UInt64 = 0, length: UInt64, contentType: String = \"application/octet-stream\","
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|typealias|public typealias PTHTTPBodyStream = AsyncThrowingStream<Data, Error>",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 230,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTHTTPBodyStream = AsyncThrowingStream<Data, Error>"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPResponseBody: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 232,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPResponseBody: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPResponse: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 241,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPResponse: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var status: PTHTTPStatus",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 242,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var status: PTHTTPStatus"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var headers: PTHTTPHeaders",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 243,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var headers: PTHTTPHeaders"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var body: PTHTTPResponseBody",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 244,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var body: PTHTTPResponseBody"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(status: PTHTTPStatus = .ok, headers: PTHTTPHeaders = PTHTTPHeaders(), body: PTHTTPResponseBody = .empty)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 246,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(status: PTHTTPStatus = .ok, headers: PTHTTPHeaders = PTHTTPHeaders(), body: PTHTTPResponseBody = .empty) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|typealias|public typealias PTHTTPHandler = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 273,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTHTTPHandler = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|typealias|public typealias PTHTTPNext = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 274,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTHTTPNext = @Sendable (PTHTTPRequest) async throws -> PTHTTPResponse"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|protocol|public protocol PTHTTPMiddleware: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 276,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTHTTPMiddleware: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPClosureMiddleware: PTHTTPMiddleware",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 280,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPClosureMiddleware: PTHTTPMiddleware {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(_ closure: @escaping @Sendable (PTHTTPRequest, @escaping PTHTTPNext) async throws -> PTHTTPResponse)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 283,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ closure: @escaping @Sendable (PTHTTPRequest, @escaping PTHTTPNext) async throws -> PTHTTPResponse) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 287,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handle(request: PTHTTPRequest, next: @escaping PTHTTPNext) async throws -> PTHTTPResponse {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPBindScope: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 292,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPBindScope: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTTLSIdentity: @unchecked Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 300,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTTLSIdentity: @unchecked Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(_ value: SecIdentity)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 303,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ value: SecIdentity) { self.value = value }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPTLSConfiguration: @unchecked Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 306,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPTLSConfiguration: @unchecked Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPServerConfiguration: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 311,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPServerConfiguration: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var bindScope: PTHTTPBindScope",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 312,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bindScope: PTHTTPBindScope"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var port: UInt16",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 313,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var port: UInt16"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var serviceName: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 314,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var serviceName: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var serviceType: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 315,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var serviceType: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var idleTimeout: Duration",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 316,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var idleTimeout: Duration"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var headerTimeout: Duration",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 317,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var headerTimeout: Duration"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var handlerTimeout: Duration?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 318,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var handlerTimeout: Duration?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var maxRequestsPerConnection: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 319,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxRequestsPerConnection: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var maxConnections: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 320,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxConnections: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var maxBodyBytes: Int64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 321,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxBodyBytes: Int64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var bodyFileThreshold: Int64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 322,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bodyFileThreshold: Int64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var parserLimits: PTHTTPParserLimits",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 323,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var parserLimits: PTHTTPParserLimits"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var tls: PTHTTPTLSConfiguration",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 324,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tls: PTHTTPTLSConfiguration"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var shutdownGracePeriod: Duration",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 325,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shutdownGracePeriod: Duration"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(bindScope: PTHTTPBindScope = .loopback, port: UInt16 = 0, serviceName: String? = nil,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 327,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(bindScope: PTHTTPBindScope = .loopback, port: UInt16 = 0, serviceName: String? = nil,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPServerEndpoint: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 350,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPServerEndpoint: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let port: UInt16",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 351,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let port: UInt16"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let urls: [URL]",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 352,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let urls: [URL]"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let bonjourName: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 353,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bonjourName: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(port: UInt16, urls: [URL], bonjourName: String? = nil)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 355,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(port: UInt16, urls: [URL], bonjourName: String? = nil) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPServerState: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 362,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPServerState: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|enum|public enum PTHTTPServerError: Error, LocalizedError, Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 370,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTHTTPServerError: Error, LocalizedError, Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|var|public var errorDescription: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 379,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var errorDescription: String? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPServerMetrics: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 390,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPServerMetrics: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let activeConnections: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 391,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let activeConnections: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let totalConnections: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 392,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let totalConnections: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let totalRequests: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 393,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let totalRequests: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let bytesReceived: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 394,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bytesReceived: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let bytesSent: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 395,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let bytesSent: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let parseErrors: UInt64",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 396,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let parseErrors: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let activeSSEClients: Int",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 397,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let activeSSEClients: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(activeConnections: Int = 0, totalConnections: UInt64 = 0, totalRequests: UInt64 = 0,",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 399,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(activeConnections: Int = 0, totalConnections: UInt64 = 0, totalRequests: UInt64 = 0,"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPSSEEvent: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 411,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPSSEEvent: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let id: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 412,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let event: String?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 413,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let event: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let data: String",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 414,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let data: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let retry: Duration?",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 415,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let retry: Duration?"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(data: String, id: String? = nil, event: String? = nil, retry: Duration? = nil)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 417,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(data: String, id: String? = nil, event: String? = nil, retry: Duration? = nil) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|struct|public struct PTHTTPSSEStream: Sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 435,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTHTTPSSEStream: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|let|public let stream: PTHTTPBodyStream",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 436,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let stream: PTHTTPBodyStream"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|init|public init(bufferingPolicy: AsyncThrowingStream<Data, Error>.Continuation.BufferingPolicy = .bufferingNewest(64))",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 439,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(bufferingPolicy: AsyncThrowingStream<Data, Error>.Continuation.BufferingPolicy = .bufferingNewest(64)) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func send(_ event: PTHTTPSSEEvent)",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 445,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func send(_ event: PTHTTPSSEEvent) { continuation.yield(event.encoded) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift|public|func|public func finish()",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 446,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func finish() { continuation.finish() }"
     },
     {
       "key": "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift|public|enum|public enum PTLogLevel: Int, CaseIterable, Comparable, Sendable",

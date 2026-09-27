@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.27.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.28.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.27.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.28.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.28.0 GCDWebServer 移除与原生 HTTP Server
+
+- ✅ 新增 `PToolsHTTPServer` SwiftPM product/target 和 `PooTools/HTTPServer` CocoaPods subspec，底层使用 Network.framework、actor 和严格 Sendable 值类型。
+- ✅ 新增 `PToolsHTTPFilePortal` / `PooTools/HTTPFilePortal`，将静态文件、上传、下载、删除、创建目录和重命名与 HTTP 核心解耦。
+- ✅ 完成增量 HTTP/1.1 parser、Content-Length/chunked framing、Keep-Alive、Range、条件缓存、SSE、gzip、TLS、Bonjour 和安全中间件入口。
+- ✅ `PooTools/GCDWebServer` 保留为无第三方依赖的兼容别名，`PooTools/InputAll` 迁移到 `HTTPFilePortal`；交付依赖不再包含 GCDWebServer/WebUploader。
+- ✅ 示例工程本地文件分享入口迁移到 `PTHTTPFilePortal`，新增审计、迁移、安全、架构和测试文档及质量门禁。
+- [ ] 完成 Generic Device、真机局域网权限、TLS 身份、Bonjour、慢客户端背压和多客户端并发回归后，再创建 `5.28.0` 正式 tag。
 
 ## 范围与约束
 

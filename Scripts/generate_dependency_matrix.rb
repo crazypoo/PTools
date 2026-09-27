@@ -24,7 +24,9 @@ aliases = {
   "MediaPermission" => "MeidaPermission",
   "SpeechPermission" => "SpeechRecognizerPermission",
   "Keyboard" => "CustomerNumberKeyboard",
-  "DEBUGTrackingEyes" => "DEBUG_TrackingEyes"
+  "DEBUGTrackingEyes" => "DEBUG_TrackingEyes",
+  "PToolsHTTPServer" => "HTTPServer",
+  "PToolsHTTPFilePortal" => "HTTPFilePortal"
 }.freeze
 
 def canonical_name(name, aliases)

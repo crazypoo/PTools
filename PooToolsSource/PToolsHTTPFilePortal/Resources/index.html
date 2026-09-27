@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>PTools File Portal</title>
+</head>
+<body>
+  <h1>PTools File Portal</h1>
+  <input id="file" type="file">
+  <button onclick="upload()">Upload</button>
+  <ul id="list"></ul>
+  <script>
+    async function refresh() {
+      const response = await fetch('/api/files');
+      const files = await response.json();
+      document.getElementById('list').innerHTML = files.map(file =>
+        `<li><a href="/download/${encodeURIComponent(file.path)}">${file.name}</a> (${file.byteCount})</li>`
+      ).join('');
+    }
+    async function upload() {
+      const file = document.getElementById('file').files[0];
+      if (!file) return;
+      await fetch('/api/upload?name=' + encodeURIComponent(file.name), { method: 'POST', body: file });
+      refresh();
+    }
+    refresh();
+  </script>
+</body>
+</html>

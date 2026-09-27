@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 90f4cf0c5f5632a201ddc28594dc8ca793ebb592
-Generated at: 2026-09-26T16:05:39Z
+Source revision: b1a7b3d5f2078229c465f45f32764a2be140cac0
+Generated at: 2026-09-27T01:14:33Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `58`
+- Current exceptions: `60`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -52,8 +52,10 @@ Generated at: 2026-09-26T16:05:39Z
 | CalendarPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CALENDAR","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CALENDAR"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CameraPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CAMERA","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CAMERA"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | ContactsPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CONTACTS","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CONTACTS"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
-| Core | {"defines":["POOTOOLS_APPZ","POOTOOLS_CGDWEBSERVER","POOTOOLS_COCOAPODS","POOTOOLS_LAUNCHTIMEPROFILER","POOTOOLS_NOTIFICATIONBANNER","POOTOOLS_PICKER","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_PERMISSION_CORE","POOTOOLS_SPLIT_UIFOUNDATION","POOTOOLS_TABBAR","POOTOOLS_VIDEOCACHE"],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_UIFOUNDATION"],"upcoming_features":[]} | SPM carries split and optional flags plus strict concurrency features; CocoaPods is monolithic. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| Core | {"defines":["POOTOOLS_APPZ","POOTOOLS_COCOAPODS","POOTOOLS_LAUNCHTIMEPROFILER","POOTOOLS_NOTIFICATIONBANNER","POOTOOLS_PICKER","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_PERMISSION_CORE","POOTOOLS_SPLIT_UIFOUNDATION","POOTOOLS_TABBAR","POOTOOLS_VIDEOCACHE"],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_UIFOUNDATION"],"upcoming_features":[]} | SPM carries split and optional flags plus strict concurrency features; CocoaPods is monolithic. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | FaceIDPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
+| HTTPFilePortal | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | http-infrastructure | 6.0.0 | 2026-12-31 |
+| HTTPServer | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | http-infrastructure | 6.0.0 | 2026-12-31 |
 | HealthPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_HEALTH","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_HEALTH"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | LocationPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_LOCATION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_LOCATION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Logging | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_LOGGING"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | logging | 6.0.0 | 2026-12-31 |

@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased — 5.28.x
+
+当前开发基线为 `5.28.0`；版本唯一来源为根目录 `VERSION`，完整 HTTP Server 验收完成后再创建正式 tag。
+
+## 5.28.0 — 2026-09-27
+
+- 移除 GCDWebServer 和 GCDWebUploader 的 CocoaPods 运行时依赖，新增 `PToolsHTTPServer` 与 `PToolsHTTPFilePortal`。
+- 使用 Network.framework、`NWListener`、`NWConnection` 和 Swift 6 actor 建立原生 HTTP/1.1 服务，支持 Keep-Alive、连接上限、空闲超时、优雅停止、Bonjour 和可选 TLS。
+- 新增严格增量解析器，支持 Content-Length、chunked body、trailer、临时文件落盘、Range、ETag、Last-Modified、HEAD、路由参数和中间件。
+- 新增类型化 JSON、静态文件、SSE、原生 zlib gzip、CORS、Host、Bearer、限流和文件门户入口；所有公开请求/响应模型保持 Sendable 值类型。
+- `PooTools/InputAll` 改为依赖 `HTTPFilePortal`；旧 `PooTools/GCDWebServer` 名称保留为无第三方依赖的兼容别名。
+- 示例工程的本地文件分享入口已迁移到 `PTHTTPFilePortal`，并补充安全审计、迁移、测试矩阵和移除门禁。
+
 ## Unreleased — 5.27.x
 
 当前开发基线为 `5.27.0`；版本唯一来源为根目录 `VERSION`，`5.26.0` 是上一版开发基线。

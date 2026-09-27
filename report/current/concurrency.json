@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "90f4cf0c5f5632a201ddc28594dc8ca793ebb592",
-  "generated_at": "2026-09-26T15:41:54Z",
+  "source_revision": "b1a7b3d5f2078229c465f45f32764a2be140cac0",
+  "generated_at": "2026-09-27T01:13:49Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
-    "unchecked_sendable": 68,
+    "unchecked_sendable": 71,
     "as_bang": 4
   },
   "locations": [
@@ -586,6 +586,24 @@
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "line": 27,
       "text": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+      "line": 68,
+      "text": "private final class PTHTTPNetworkConnectionTransport: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 300,
+      "text": "public struct PTTLSIdentity: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+      "line": 306,
+      "text": "public enum PTHTTPTLSConfiguration: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",

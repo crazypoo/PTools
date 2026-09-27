@@ -43,6 +43,8 @@
     {"kind":"pod_only","module":"ZipArchive","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"}
   ],
   "known_drift": [
+    {"kind":"settings","module":"HTTPFilePortal","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
+    {"kind":"settings","module":"HTTPServer","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
     {"kind":"dependency","module":"BilogyID","field":"internal_dependencies","reason":"CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core.","owner":"architecture","expiration":"2026-12-31"},
     {"kind":"dependency","module":"BluetoothPermission","field":"internal_dependencies","reason":"SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.","owner":"permissions","expiration":"2026-12-31"},
     {"kind":"dependency","module":"CheckUpdate","field":"third_party_dependencies","reason":"Equivalent dependency uses different SPM and CocoaPods names.","owner":"packaging","expiration":"2026-12-31"},

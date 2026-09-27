@@ -63,4 +63,3 @@ class PTAPIFunctionCheck: NSObject {
         }
     }
 }
-
