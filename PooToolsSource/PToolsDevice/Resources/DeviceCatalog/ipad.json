@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.09.27",
+  "devices": [
+    {"id":"ipad-1","marketingName":"iPad","family":"iPad","platform":"iPadOS","identifiers":["iPad1,1"],"releaseYear":2010,"formFactor":"tablet","processorFamily":"A4"},
+    {"id":"ipad-2","marketingName":"iPad 2","family":"iPad","platform":"iPadOS","identifiers":["iPad2,1","iPad2,2","iPad2,3","iPad2,4"],"releaseYear":2011,"formFactor":"tablet","processorFamily":"A5"},
+    {"id":"ipad-mini-1","marketingName":"iPad mini","family":"iPad","platform":"iPadOS","identifiers":["iPad2,5","iPad2,6","iPad2,7"],"releaseYear":2012,"formFactor":"tablet","processorFamily":"A5"},
+    {"id":"ipad-air-1","marketingName":"iPad Air","family":"iPad","platform":"iPadOS","identifiers":["iPad4,1","iPad4,2","iPad4,3"],"releaseYear":2013,"formFactor":"tablet","processorFamily":"A7"},
+    {"id":"ipad-pro-11-1","marketingName":"iPad Pro 11-inch (1st generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad8,1","iPad8,2","iPad8,3","iPad8,4"],"releaseYear":2018,"formFactor":"tablet","processorFamily":"A12X Bionic"},
+    {"id":"ipad-pro-11-2","marketingName":"iPad Pro 11-inch (2nd generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad8,9","iPad8,10"],"releaseYear":2020,"formFactor":"tablet","processorFamily":"A12Z Bionic"},
+    {"id":"ipad-pro-12-9-1","marketingName":"iPad Pro 12.9-inch (1st generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad6,7","iPad6,8"],"releaseYear":2015,"formFactor":"tablet","processorFamily":"A9X"},
+    {"id":"ipad-pro-12-9-4","marketingName":"iPad Pro 12.9-inch (4th generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad8,11","iPad8,12"],"releaseYear":2020,"formFactor":"tablet","processorFamily":"A12Z Bionic"},
+    {"id":"ipad-pro-12-9-6","marketingName":"iPad Pro 12.9-inch (6th generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad14,5","iPad14,6"],"releaseYear":2022,"formFactor":"tablet","processorFamily":"M2"},
+    {"id":"ipad-air-5","marketingName":"iPad Air (5th generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad13,16","iPad13,17"],"releaseYear":2022,"formFactor":"tablet","processorFamily":"M1"},
+    {"id":"ipad-10","marketingName":"iPad (10th generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad13,18","iPad13,19"],"releaseYear":2022,"formFactor":"tablet","processorFamily":"A14 Bionic"},
+    {"id":"ipad-mini-6","marketingName":"iPad mini (6th generation)","family":"iPad","platform":"iPadOS","identifiers":["iPad14,1","iPad14,2"],"releaseYear":2021,"formFactor":"tablet","processorFamily":"A15 Bionic"}
+  ]
+}

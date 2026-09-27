@@ -92,6 +92,7 @@
     {"kind":"dependency","module":"TipsView","field":"internal_dependencies","reason":"SwiftPM now exposes the shared Overlay target directly for anchored Tips integration; CocoaPods keeps the historical Core dependency for source compatibility.","owner":"ui-components","expiration":"2026-12-31"},
     {"kind":"settings","module":"Popover","reason":"SwiftPM enables strict concurrency and InferSendableFromCaptures for the standalone Popover target; CocoaPods receives the native source through the aggregate compiler contract.","owner":"ui-components","expiration":"2026-12-31"},
     {"kind":"dependency","module":"Instructions","field":"internal_dependencies","reason":"SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Instructions","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings while retaining the same source contract.","owner":"ui-components","expiration":"2026-12-31"}
+    {"kind":"settings","module":"Instructions","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings while retaining the same source contract.","owner":"ui-components","expiration":"2026-12-31"},
+    {"kind":"settings","module":"Device","reason":"PToolsDevice enables strict concurrency as an independent SwiftPM target; CocoaPods compiles the same Foundation source under the aggregate Core compiler contract.","owner":"device-foundation","expiration":"2026-12-31"}
   ]
 }

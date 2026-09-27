@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T12:26:05Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:22Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -161,7 +161,7 @@
     },
     {
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "lines": 501,
+      "lines": 500,
       "classification": "ok"
     },
     {
@@ -406,7 +406,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1302,
+      "lines": 1301,
       "classification": "warning"
     },
     {
@@ -536,7 +536,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "lines": 821,
+      "lines": 820,
       "classification": "ok"
     },
     {
@@ -686,7 +686,7 @@
     },
     {
       "path": "PooToolsSource/Category/Device+PTEX.swift",
-      "lines": 396,
+      "lines": 394,
       "classification": "ok"
     },
     {
@@ -1246,7 +1246,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "lines": 94,
+      "lines": 120,
       "classification": "ok"
     },
     {
@@ -1526,7 +1526,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTDebugUserInfo.swift",
-      "lines": 96,
+      "lines": 98,
       "classification": "ok"
     },
     {
@@ -1541,7 +1541,7 @@
     },
     {
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "lines": 339,
+      "lines": 338,
       "classification": "ok"
     },
     {
@@ -1686,7 +1686,7 @@
     },
     {
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "lines": 219,
+      "lines": 218,
       "classification": "ok"
     },
     {
@@ -1796,12 +1796,12 @@
     },
     {
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "lines": 131,
+      "lines": 130,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "lines": 328,
+      "lines": 327,
       "classification": "ok"
     },
     {
@@ -3525,6 +3525,36 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "lines": 676,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "lines": 358,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "lines": 55,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "lines": 41,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionViews.swift",
+      "lines": 283,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Instructions/UIViewController+PTInstructions.swift",
+      "lines": 15,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/KeyChain/PTKeyChain.swift",
       "lines": 183,
       "classification": "ok"
@@ -3616,7 +3646,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1826,
+      "lines": 1828,
       "classification": "architecture_exception"
     },
     {
@@ -3980,6 +4010,76 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "lines": 199,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "lines": 103,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift",
+      "lines": 31,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "lines": 110,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "lines": 194,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTAppleTVCatalog.generated.swift",
+      "lines": 17,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTAppleVisionCatalog.generated.swift",
+      "lines": 14,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTAppleWatchCatalog.generated.swift",
+      "lines": 23,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTDeviceIdentifierIndex.generated.swift",
+      "lines": 22,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTHomePodCatalog.generated.swift",
+      "lines": 15,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTMacCatalog.generated.swift",
+      "lines": 14,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTiPadCatalog.generated.swift",
+      "lines": 25,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTiPhoneCatalog.generated.swift",
+      "lines": 61,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDevice/Generated/PTiPodCatalog.generated.swift",
+      "lines": 16,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
       "lines": 233,
       "classification": "ok"
@@ -4201,7 +4301,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "lines": 417,
+      "lines": 416,
       "classification": "ok"
     },
     {

@@ -13,7 +13,6 @@ import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import DeviceKit
 import Photos
 
 public class PTFilterCameraViewController: PTBaseViewController {

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T13:46:32Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:00:51Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -21,6 +21,7 @@
     "PTTrackingPermission",
     "PToolsCore",
     "PToolsDate",
+    "PToolsDevice",
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
     "PToolsLogging",
@@ -135,6 +136,7 @@
     "DEBUG",
     "DEBUG_TrackingEyes",
     "DataEncrypt",
+    "Device",
     "FaceIDPermission",
     "Guide",
     "HTTPFilePortal",
@@ -277,6 +279,7 @@
       "module": "Core",
       "field": "internal_dependencies",
       "spm": [
+        "Device",
         "Logging",
         "PToolsCore",
         "PToolsDate",
@@ -286,6 +289,7 @@
       ],
       "cocoapods": [
         "Date",
+        "Device",
         "Logging",
         "PToolsCore",
         "PToolsUIFoundation",
@@ -296,7 +300,6 @@
       "module": "Core",
       "field": "third_party_dependencies",
       "spm": [
-        "DeviceKit",
         "IQKeyboardManager",
         "KakaJSON",
         "Kingfisher",
@@ -305,7 +308,6 @@
         "lottie-ios"
       ],
       "cocoapods": [
-        "DeviceKit",
         "IQKeyboardManagerSwift",
         "IQKeyboardToolbarManager",
         "KakaJSON",
@@ -577,6 +579,20 @@
           "POOTOOLS_SPLIT_CORE",
           "POOTOOLS_SPLIT_UIFOUNDATION"
         ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Device",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
         "upcoming_features": []
       }
     },
@@ -966,5 +982,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "82d85d47d75a0b8ba3837b50bda0b06fd8ce78f9d163c0af916c23884f9f0893"
+  "fingerprint": "d0b822bb7fe48978bfa066d0067d98b70315dcff61520e9b8e6cdd49ca093d50"
 }

@@ -8,7 +8,11 @@ let package = Package(
     // 中文：旧版 .lproj 资源和 Xcode String Catalog 都需要声明默认本地化语言。
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v17),
+        .macOS(.v14),
+        .tvOS(.v17),
+        .watchOS(.v10),
+        .visionOS(.v1)
     ],
     products: [
         // ==========================================
@@ -23,6 +27,10 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the Foundation-only device identity and capability layer independently.
+        // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
+        // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
+        .library(name: "PToolsDevice", targets: ["PToolsDevice"]),
         // English: Publish the Foundation-only date context and calendar-aware value types.
         // Español: Publica el contexto de fechas y los tipos conscientes del calendario basados solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
@@ -200,7 +208,6 @@ let package = Package(
     dependencies: [
         // Core 依赖
         .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.7.1"),
-        .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", exact: "8.0.3"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.9.0"),
         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "4.0.0"),
@@ -243,6 +250,17 @@ let package = Package(
         .target(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: PToolsDevice has no PTools or third-party dependency and is safe to reuse across Apple platforms.
+        // Español: PToolsDevice no depende de PTools ni de terceros y puede reutilizarse en plataformas Apple.
+        // 中文：PToolsDevice 不依赖 PTools 或第三方库，可在 Apple 平台间复用。
+        .target(
+            name: "PToolsDevice",
+            path: "PooToolsSource/PToolsDevice",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
@@ -396,8 +414,8 @@ let package = Package(
                 "PToolsDate",
                 "PToolsUIFoundation",
                 "PToolsPermissionCore",
+                "PToolsDevice",
                 "SnapKit",
-                "DeviceKit",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 "Kingfisher",
                 "PToolsSymbols",
@@ -573,6 +591,14 @@ let package = Package(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore"],
             path: "Tests/PooToolsCoreTests"
+        ),
+        // English: Keep device catalog and resolver tests independent from UIKit-heavy targets.
+        // Español: Mantiene las pruebas del catálogo y resolvedor independientes de los objetivos UIKit.
+        // 中文：让设备目录和解析器测试独立于 UIKit 重型目标。
+        .testTarget(
+            name: "PToolsDeviceTests",
+            dependencies: ["PToolsDevice"],
+            path: "Tests/PToolsDeviceTests"
         ),
         // English: Keep calendar, timezone, locale, parsing, and timestamp regressions isolated from UIKit targets.
         // Español: Mantiene aisladas las regresiones de calendario, zona horaria, región, análisis y timestamps de los objetivos UIKit.

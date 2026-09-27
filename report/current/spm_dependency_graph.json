@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T13:57:06Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:10Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -15,6 +15,26 @@
       "options": [],
       "platformName": "ios",
       "version": "17.0"
+    },
+    {
+      "options": [],
+      "platformName": "macos",
+      "version": "14.0"
+    },
+    {
+      "options": [],
+      "platformName": "tvos",
+      "version": "17.0"
+    },
+    {
+      "options": [],
+      "platformName": "visionos",
+      "version": "1.0"
+    },
+    {
+      "options": [],
+      "platformName": "watchos",
+      "version": "10.0"
     }
   ],
   "products": [
@@ -203,6 +223,17 @@
       },
       "targets": [
         "PToolsDate"
+      ]
+    },
+    {
+      "name": "PToolsDevice",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDevice"
       ]
     },
     {
@@ -1287,34 +1318,6 @@
     {
       "sourceControl": [
         {
-          "identity": "devicekit",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/devicekit/DeviceKit.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "range": [
-              {
-                "lowerBound": "5.8.0",
-                "upperBound": "6.0.0"
-              }
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
           "identity": "harbeth",
           "location": {
             "remote": [
@@ -1630,7 +1633,7 @@
   ],
   "core_dependency_budget": {
     "target": "ptools",
-    "direct_third_party_count": 7,
+    "direct_third_party_count": 6,
     "baseline_5_8": 18,
     "target_end_5_8": 6,
     "target_end_5_9": 3,
@@ -2473,6 +2476,57 @@
           "declaration": {
             "byName": [
               "PToolsDate",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsDevice",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDevice",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDeviceTests",
+      "type": "test",
+      "path": "Tests/PToolsDeviceTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDevice",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDevice",
               null
             ]
           }
@@ -6786,6 +6840,17 @@
           }
         },
         {
+          "name": "PToolsDevice",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDevice",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsLogging",
           "kind": "internal",
           "package": null,
@@ -6831,17 +6896,6 @@
         }
       ],
       "third_party_dependencies": [
-        {
-          "name": "DeviceKit",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "DeviceKit",
-              null
-            ]
-          }
-        },
         {
           "name": "IQKeyboardManagerSwift",
           "kind": "third_party",

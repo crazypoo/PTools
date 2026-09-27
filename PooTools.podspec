@@ -118,14 +118,22 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the Foundation-only device layer as an independent subspec.
+    # Español: Publica la capa de dispositivos basada solo en Foundation como un subspec independiente.
+    # 中文：将仅依赖 Foundation 的设备层作为独立 subspec 发布。
+    s.subspec 'Device' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsDevice/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
+        subspec.dependency 'PooTools/Device'
         subspec.dependency 'PooTools/Date'
         subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PooTools/Logging'
         subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'SnapKit'
-        subspec.dependency 'DeviceKit'
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
         subspec.dependency 'Kingfisher'

@@ -1,8 +1,16 @@
 # Changelog
 
-## Unreleased — 5.32.x
+## Unreleased — 5.33.x
 
-当前开发基线为 `5.32.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+当前开发基线为 `5.33.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+
+## 5.33.0 — 2026-09-27
+
+- 移除 SwiftPM、CocoaPods、锁文件和 PooTools 生产源码中的 DeviceKit 依赖。
+- 新增无第三方依赖的 `PToolsDevice` SwiftPM product 与 `PooTools/Device` subspec，支持静态设备目录、模拟器识别、未知设备安全回退和动态能力状态。
+- 设备目录改为按平台 JSON 维护、校验并生成 Swift，增加重复 identifier、生成物漂移和 DeviceKit 回归引用门禁。
+- Core、LocalConsole 和调试设备信息迁移到 `PTDevice`；保留历史全局入口以兼容 5.x 调用方。
+- 增加 DeviceKit 迁移、架构、使用和目录维护文档；不修改第三方依赖版本和 Pods 源码。
 
 ## 5.32.0 — 2026-09-27
 

@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import DeviceKit
+#if SWIFT_PACKAGE
+import PToolsDevice
+#endif
 import CoreFoundation
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -1561,13 +1563,13 @@ extension LocalConsole {
     }
     
     private func printStaticSystemInfo() {
-        let volumeAvailableCapacityForImportantUsageString = String(describing: Device.volumeAvailableCapacityForImportantUsage)
-        let volumeAvailableCapacityForOpportunisticUsageString = String(describing: Device.volumeAvailableCapacityForOpportunisticUsage)
-        let volumesString = String(describing: Device.volumes)
-        let batteryStateString = String(describing: Device.current.batteryState)
-        let batteryLevelString = String(describing: Device.current.batteryLevel)
-        let volumeTotalCapacityString = String(describing: Device.volumeTotalCapacity)
-        let volumeAvailableCapacityString = String(describing: Device.volumeAvailableCapacity)
+        let volumeAvailableCapacityForImportantUsageString = String(describing: PTDevice.volumeAvailableCapacityForImportantUsage)
+        let volumeAvailableCapacityForOpportunisticUsageString = String(describing: PTDevice.volumeAvailableCapacityForOpportunisticUsage)
+        let volumesString = String(describing: PTDevice.volumes)
+        let batteryStateString = String(describing: PTDevice.current.batteryState)
+        let batteryLevelString = String(describing: PTDevice.current.batteryLevel)
+        let volumeTotalCapacityString = String(describing: PTDevice.volumeTotalCapacity)
+        let volumeAvailableCapacityString = String(describing: PTDevice.volumeAvailableCapacity)
 
         var hzString = ""
         hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
@@ -1588,22 +1590,22 @@ extension LocalConsole {
                 ThermalState: \(SystemReport.shared.thermalState)
                 SystemUptime: \(UIDevice.pt.systemUptime)
                 LowPowerMode: \(UIDevice.pt.lowPowerMode)
-                IsSimulator: \(Device.current.isSimulator ? "Yes" : "No")
-                IsTouchIDCapable: \(Device.current.isTouchIDCapable ? "Yes" : "No")
-                IsFaceIDCapable: \(Device.current.isFaceIDCapable ? "Yes" : "No")
-                HasBiometricSensor:\(Device.current.hasBiometricSensor ? "Yes" : "No")
-                HasSensorHousing: \(Device.current.hasSensorHousing ? "Yes" : "No")
-                HasRoundedDisplayCorners: \(Device.current.hasRoundedDisplayCorners ? "Yes" : "No")
-                Has3dTouchSupport: \(Device.current.has3dTouchSupport ? "Yes" : "No")
-                SupportsWirelessCharging: \(Device.current.supportsWirelessCharging ? "Yes" : "No")
-                HasLidarSensor: \(Device.current.hasLidarSensor ? "Yes" : "No")
-                PPI: \(Device.current.ppi ?? 0)
+                IsSimulator: \(PTDevice.current.isSimulator ? "Yes" : "No")
+                IsTouchIDCapable: \(PTDevice.current.isTouchIDCapable ? "Yes" : "No")
+                IsFaceIDCapable: \(PTDevice.current.isFaceIDCapable ? "Yes" : "No")
+                HasBiometricSensor:\(PTDevice.current.hasBiometricSensor ? "Yes" : "No")
+                HasSensorHousing: \(PTDevice.current.hasSensorHousing ? "Yes" : "No")
+                HasRoundedDisplayCorners: \(PTDevice.current.hasRoundedDisplayCorners ? "Yes" : "No")
+                Has3dTouchSupport: \(PTDevice.current.has3dTouchSupport ? "Yes" : "No")
+                SupportsWirelessCharging: \(PTDevice.current.supportsWirelessCharging ? "Yes" : "No")
+                HasLidarSensor: \(PTDevice.current.hasLidarSensor ? "Yes" : "No")
+                PPI: \(PTDevice.current.ppi ?? 0)
                 ScreenSize: \(UIScreen.main.bounds.size)
                 ScreenSafeAreaInsets: \(safeAreaInsets)
                 ScreenScale: \(UIScreen.main.scale)
                 \(hzString)
                 Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
-                IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
+                IsGuidedAccessSessionActive: \(PTDevice.current.isGuidedAccessSessionActive ? "Yes" : "No")
                 BatteryState: \(batteryStateString)
                 BatteryLevel: \(batteryLevelString)
                 VolumeTotalCapacity: \(volumeTotalCapacityString)
@@ -1612,11 +1614,11 @@ extension LocalConsole {
                 VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
                 Volumes: \(volumesString)
                 ApplePencilSupport: \(String(format: "%@", supportApplePencilString))
-                HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
-                HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
-                HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
-                HasTelephotoCamera: \(Device.current.hasTelephotoCamera ? "Yes" : "No")
-                HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
+                HasCamera: \(PTDevice.current.hasCamera ? "Yes" : "No")
+                HasNormalCamera: \(PTDevice.current.hasWideCamera ? "Yes" : "No")
+                HasWideCamera: \(PTDevice.current.hasWideCamera ? "Yes" : "No")
+                HasTelephotoCamera: \(PTDevice.current.hasTelephotoCamera ? "Yes" : "No")
+                HasUltraWideCamera: \(PTDevice.current.hasUltraWideCamera ? "Yes" : "No")
                 IsJailBroken: \(UIDevice.pt.isJailBroken ? "Yes" : "No")
                 """
 

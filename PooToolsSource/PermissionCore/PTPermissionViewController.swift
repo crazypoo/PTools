@@ -11,7 +11,6 @@ import SnapKit
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
 #endif
-import DeviceKit
 
 @MainActor
 @objcMembers

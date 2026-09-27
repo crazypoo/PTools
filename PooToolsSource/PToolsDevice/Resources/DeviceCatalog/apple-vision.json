@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.09.27",
+  "devices": [
+    {"id":"apple-vision-pro","marketingName":"Apple Vision Pro","family":"appleVision","platform":"visionOS","identifiers":["RealityDevice14,1"],"releaseYear":2024,"formFactor":"headset","processorFamily":"M2"}
+  ]
+}

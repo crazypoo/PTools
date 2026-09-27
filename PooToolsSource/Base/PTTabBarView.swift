@@ -9,7 +9,6 @@
 import UIKit
 import Lottie
 import SnapKit
-import DeviceKit
 
 @MainActor
 public enum PTTabBarLayoutStyle {

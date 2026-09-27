@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Validate the 5.21–5.32 logging migration, Debug bridge and privacy contracts.
-# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21–5.32.
-# 中文：校验 5.21–5.32 日志迁移、Debug 桥接和隐私契约。
+# English: Validate the 5.21–5.33 logging migration, Debug bridge and privacy contracts.
+# Español: Valida la migración de logging, el puente de Debug y los contratos de privacidad de 5.21–5.33.
+# 中文：校验 5.21–5.33 日志迁移、Debug 桥接和隐私契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(21|22|23|24|25|26|27|28|29|30|31|32)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.21–5.32 logging gate requires a 5.21.x through 5.32.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(21|22|23|24|25|26|27|28|29|30|31|32|33)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.21–5.33 logging gate requires a 5.21.x through 5.33.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -64,4 +64,4 @@ for requirement in "${required_patterns[@]}"; do
   }
 done
 
-printf 'PASS: PTools 5.21–5.32 logging migration, memory diagnostics and privacy contracts\n'
+printf 'PASS: PTools 5.21–5.33 logging migration, memory diagnostics and privacy contracts\n'

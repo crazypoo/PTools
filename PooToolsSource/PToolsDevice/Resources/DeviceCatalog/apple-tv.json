@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.09.27",
+  "devices": [
+    {"id":"apple-tv-hd","marketingName":"Apple TV HD","family":"appleTV","platform":"tvOS","identifiers":["AppleTV5,3"],"releaseYear":2015,"formFactor":"mediaPlayer","processorFamily":"A8"},
+    {"id":"apple-tv-4k-1","marketingName":"Apple TV 4K (1st generation)","family":"appleTV","platform":"tvOS","identifiers":["AppleTV6,2"],"releaseYear":2017,"formFactor":"mediaPlayer","processorFamily":"A10X Fusion"},
+    {"id":"apple-tv-4k-2","marketingName":"Apple TV 4K (2nd generation)","family":"appleTV","platform":"tvOS","identifiers":["AppleTV11,1"],"releaseYear":2021,"formFactor":"mediaPlayer","processorFamily":"A12 Bionic"},
+    {"id":"apple-tv-4k-3","marketingName":"Apple TV 4K (3rd generation)","family":"appleTV","platform":"tvOS","identifiers":["AppleTV14,1"],"releaseYear":2022,"formFactor":"mediaPlayer","processorFamily":"A15 Bionic"}
+  ]
+}

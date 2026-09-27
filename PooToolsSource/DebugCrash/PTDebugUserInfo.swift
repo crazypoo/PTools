@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import DeviceKit
+#if SWIFT_PACKAGE
+import PToolsDevice
+#endif
 
 enum PTDebugUserInfo {
 
@@ -75,7 +77,7 @@ enum PTDebugUserInfo {
     }
 
     static func getDeviceModelInfo() -> Info {
-        let deviceModel = Device.current.model ?? "Unknow"
+        let deviceModel = PTDevice.current.specification?.marketingName ?? PTDevice.current.identifier
         return Info(title: "Device model", detail: deviceModel)
     }
 

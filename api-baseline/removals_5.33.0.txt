@@ -1,0 +1,17 @@
+# English: These are previously reviewed historical removals carried into 5.33.0; DeviceKit absorption adds no public API removal.
+# Español: Estas son eliminaciones históricas ya revisadas que se mantienen en 5.33.0; la absorción de DeviceKit no elimina API pública.
+# 中文：这些是此前已审阅并延续到 5.33.0 的历史删除项；DeviceKit 吸收不新增公开 API 删除。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func remove(identifier: String)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)
+public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink

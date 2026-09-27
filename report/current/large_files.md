@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
-Generated at: 2026-09-27T12:26:05Z
+Source revision: fa748870fa58233517734db9ad2fca99263a4865
+Generated at: 2026-09-27T16:27:22Z
 -->
 
 # 当前文件尺寸门禁
@@ -19,7 +19,7 @@ Generated at: 2026-09-27T12:26:05Z
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1305 | warning |
 | `PooToolsSource/Base/PTCollectionView.swift` | 2216 | hard_limit_allowlisted |
-| `PooToolsSource/Base/PTTabBarView.swift` | 1302 | warning |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1301 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1448 | warning |
@@ -32,7 +32,7 @@ Generated at: 2026-09-27T12:26:05Z
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1552 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1826 | architecture_exception |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1828 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1071 | warning |
 | `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1598 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |

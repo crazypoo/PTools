@@ -8,7 +8,6 @@
 
 import UIKit
 import AVKit
-import DeviceKit
 import SnapKit
 
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"

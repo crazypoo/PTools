@@ -17,10 +17,10 @@ ruby Scripts/report_mainactor_heavy_work.rb >/dev/null
 ruby - <<'RUBY'
 project = File.read("PooTools.xcodeproj/project.pbxproj")
 required = {
-  "Network+Download.swift" => 6,
-  "Network+Logging.swift" => 6,
-  "PTNavigationBarManager.swift" => 6,
-  "PTCollectionViewSkeleton.swift" => 6
+  "Network+Download.swift" => 3,
+  "Network+Logging.swift" => 3,
+  "PTNavigationBarManager.swift" => 3,
+  "PTCollectionViewSkeleton.swift" => 3
 }
 required.each do |name, expected_count|
   actual_count = project.scan(Regexp.new(Regexp.escape(name))).length

@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api_5_9.rb",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T12:26:06Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:03Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -1866,7 +1866,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let PLaunchAdDetailDisplayNotification = \"PShowLaunchAdDetailNotification\"",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 14,
+      "line": 13,
       "access": "public",
       "kind": "let",
       "declaration": "public let PLaunchAdDetailDisplayNotification = \"PShowLaunchAdDetailNotification\""
@@ -1874,7 +1874,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let PLaunchAdSkipNotification = \"PLaunchAdSkipNotification\"",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 15,
+      "line": 14,
       "access": "public",
       "kind": "let",
       "declaration": "public let PLaunchAdSkipNotification = \"PLaunchAdSkipNotification\""
@@ -1882,7 +1882,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|class|public class PTLaunchADModel: NSObject",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 17,
+      "line": 16,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTLaunchADModel: NSObject {"
@@ -1890,7 +1890,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var image: Any?",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 18,
+      "line": 17,
       "access": "public",
       "kind": "var",
       "declaration": "public var image: Any?"
@@ -1898,7 +1898,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var time: TimeInterval = 0",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 19,
+      "line": 18,
       "access": "public",
       "kind": "var",
       "declaration": "public var time: TimeInterval = 0"
@@ -1906,7 +1906,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var tapURL: [AnyHashable: Any]?",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 20,
+      "line": 19,
       "access": "public",
       "kind": "var",
       "declaration": "public var tapURL: [AnyHashable: Any]?"
@@ -1914,7 +1914,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|struct|public struct PTLaunchADSnapshot: Sendable",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 26,
+      "line": 25,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLaunchADSnapshot: Sendable {"
@@ -1922,7 +1922,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let time: TimeInterval",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 27,
+      "line": 26,
       "access": "public",
       "kind": "let",
       "declaration": "public let time: TimeInterval"
@@ -1930,7 +1930,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let imageURL: URL?",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 28,
+      "line": 27,
       "access": "public",
       "kind": "let",
       "declaration": "public let imageURL: URL?"
@@ -1938,7 +1938,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let imageData: Data?",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 29,
+      "line": 28,
       "access": "public",
       "kind": "let",
       "declaration": "public let imageData: Data?"
@@ -1946,7 +1946,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let imageIdentifier: String?",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 30,
+      "line": 29,
       "access": "public",
       "kind": "let",
       "declaration": "public let imageIdentifier: String?"
@@ -1954,7 +1954,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let tapURL: [String: String]",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 31,
+      "line": 30,
       "access": "public",
       "kind": "let",
       "declaration": "public let tapURL: [String: String]"
@@ -1962,7 +1962,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|let|public let hasTapURL: Bool",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 32,
+      "line": 31,
       "access": "public",
       "kind": "let",
       "declaration": "public let hasTapURL: Bool"
@@ -1970,7 +1970,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|init|public init(model: PTLaunchADModel)",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 35,
+      "line": 34,
       "access": "public",
       "kind": "init",
       "declaration": "public init(model: PTLaunchADModel) {"
@@ -1978,7 +1978,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|struct|public struct CountdownItem<T: Sendable> : Sendable",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 76,
+      "line": 75,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct CountdownItem<T: Sendable> : Sendable{"
@@ -1986,7 +1986,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|class|public class PTLaunchAdMonitor: NSObject",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 89,
+      "line": 88,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTLaunchAdMonitor: NSObject {"
@@ -1994,7 +1994,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var imageContentMode: UIView.ContentMode = .scaleAspectFill",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 92,
+      "line": 91,
       "access": "public",
       "kind": "var",
       "declaration": "public var imageContentMode: UIView.ContentMode = .scaleAspectFill"
@@ -2002,7 +2002,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var adShowed: Bool = false",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 93,
+      "line": 92,
       "access": "public",
       "kind": "var",
       "declaration": "public var adShowed: Bool = false"
@@ -2010,7 +2010,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|var|public var skipName: String = \"Skip\"",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 94,
+      "line": 93,
       "access": "public",
       "kind": "var",
       "declaration": "public var skipName: String = \"Skip\""
@@ -2018,7 +2018,7 @@
     {
       "key": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift|public|func|@MainActor public func showAd(adModels: [PTLaunchADModel],",
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 167,
+      "line": 166,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func showAd(adModels: [PTLaunchADModel],"
@@ -8666,7 +8666,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|enum|public enum PTTabBarLayoutStyle",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 15,
+      "line": 14,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTabBarLayoutStyle {"
@@ -8674,7 +8674,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|protocol|public protocol PTTabBarItemContent",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 21,
+      "line": 20,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTTabBarItemContent {"
@@ -8682,7 +8682,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|struct|public struct PTTabBarItemConfig",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 27,
+      "line": 26,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTabBarItemConfig {"
@@ -8690,7 +8690,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let title: String",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 28,
+      "line": 27,
       "access": "public",
       "kind": "let",
       "declaration": "public let title: String"
@@ -8698,7 +8698,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let content: PTTabBarItemContent",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 29,
+      "line": 28,
       "access": "public",
       "kind": "let",
       "declaration": "public let content: PTTabBarItemContent"
@@ -8706,7 +8706,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let viewController: UIViewController",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 30,
+      "line": 29,
       "access": "public",
       "kind": "let",
       "declaration": "public let viewController: UIViewController"
@@ -8714,7 +8714,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(title: String,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 32,
+      "line": 31,
       "access": "public",
       "kind": "init",
       "declaration": "public init(title: String,"
@@ -8722,7 +8722,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(normal: Any,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 54,
+      "line": 53,
       "access": "public",
       "kind": "init",
       "declaration": "public init(normal: Any,"
@@ -8730,7 +8730,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var view: UIView",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 82,
+      "line": 81,
       "access": "public",
       "kind": "var",
       "declaration": "public var view: UIView { container }"
@@ -8738,7 +8738,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|@MainActor public func setSelected(_ selected: Bool, animated: Bool)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 84,
+      "line": 83,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func setSelected(_ selected: Bool, animated: Bool) {"
@@ -8746,7 +8746,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|class|public class func itemImageSize() -> CGFloat",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 190,
+      "line": 189,
       "access": "public",
       "kind": "class",
       "declaration": "public class func itemImageSize() -> CGFloat {"
@@ -8754,7 +8754,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var imageContent: UIView",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 209,
+      "line": 208,
       "access": "public",
       "kind": "var",
       "declaration": "public var imageContent: UIView {"
@@ -8762,7 +8762,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var isSelectedItem = false",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 215,
+      "line": 214,
       "access": "public",
       "kind": "var",
       "declaration": "public var isSelectedItem = false {"
@@ -8770,7 +8770,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(content: PTTabBarItemContent, title: String)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 226,
+      "line": 225,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent, title: String) {"
@@ -8778,7 +8778,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(content: PTTabBarItemContent,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 236,
+      "line": 235,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent,"
@@ -8786,7 +8786,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func restoreIconLayout()",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 298,
+      "line": 297,
       "access": "public",
       "kind": "func",
       "declaration": "public func restoreIconLayout() {"
@@ -8794,7 +8794,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var shouldSelectIndex: ((Int) -> Bool)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 353,
+      "line": 352,
       "access": "public",
       "kind": "var",
       "declaration": "public var shouldSelectIndex: ((Int) -> Bool)?"
@@ -8802,7 +8802,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var willSelectIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 355,
+      "line": 354,
       "access": "public",
       "kind": "var",
       "declaration": "public var willSelectIndex: ((Int) -> Void)?"
@@ -8810,7 +8810,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didSelectIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 357,
+      "line": 356,
       "access": "public",
       "kind": "var",
       "declaration": "public var didSelectIndex: ((Int) -> Void)?"
@@ -8818,7 +8818,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didDoubleTapIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 361,
+      "line": 360,
       "access": "public",
       "kind": "var",
       "declaration": "public var didDoubleTapIndex: ((Int) -> Void)?"
@@ -8826,7 +8826,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didTapCenter: PTActionTask?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 363,
+      "line": 362,
       "access": "public",
       "kind": "var",
       "declaration": "public var didTapCenter: PTActionTask?"
@@ -8834,7 +8834,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var badgeDragRemoveIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 365,
+      "line": 364,
       "access": "public",
       "kind": "var",
       "declaration": "public var badgeDragRemoveIndex: ((Int) -> Void)?"
@@ -8842,7 +8842,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var items: [PTTabBarItemView] = []",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 367,
+      "line": 366,
       "access": "public",
       "kind": "var",
       "declaration": "public var items: [PTTabBarItemView] = []"
@@ -8850,7 +8850,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var centerTitle:String",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 380,
+      "line": 379,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerTitle:String {"
@@ -8858,7 +8858,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var currentBarLayoutStyle : PTTabBarLayoutStyle",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 403,
+      "line": 402,
       "access": "public",
       "kind": "var",
       "declaration": "public var currentBarLayoutStyle : PTTabBarLayoutStyle {"
@@ -8866,7 +8866,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(frame: CGRect, appearance: PTTabBarAppearance)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 458,
+      "line": 457,
       "access": "public",
       "kind": "init",
       "declaration": "public init(frame: CGRect, appearance: PTTabBarAppearance) {"
@@ -8874,7 +8874,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func setup(configs: [PTTabBarItemConfig],",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 642,
+      "line": 641,
       "access": "public",
       "kind": "func",
       "declaration": "public func setup(configs: [PTTabBarItemConfig],"
@@ -8882,7 +8882,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func select(_ index: Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 784,
+      "line": 783,
       "access": "public",
       "kind": "func",
       "declaration": "public func select(_ index: Int) {"
@@ -8890,7 +8890,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 944,
+      "line": 943,
       "access": "public",
       "kind": "func",
       "declaration": "public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) {"
@@ -8898,7 +8898,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func badge(index: Int,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 950,
+      "line": 949,
       "access": "public",
       "kind": "func",
       "declaration": "public func badge(index: Int,"
@@ -8906,7 +8906,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func removeBadge(index:Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 980,
+      "line": 979,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeBadge(index:Int) {"
@@ -8914,7 +8914,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func toggleMinimize(isMinimized: Bool, selectedIndex: Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 998,
+      "line": 997,
       "access": "public",
       "kind": "func",
       "declaration": "public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {"
@@ -11730,7 +11730,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|class|public class PTFilterCameraViewController: PTBaseViewController",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 19,
+      "line": 18,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTFilterCameraViewController: PTBaseViewController {"
@@ -11738,7 +11738,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var onlyCamera:Bool = true",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 21,
+      "line": 20,
       "access": "public",
       "kind": "var",
       "declaration": "public var onlyCamera:Bool = true"
@@ -11746,7 +11746,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var useThisImageHandler:((UIImage) -> Void)?",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 22,
+      "line": 21,
       "access": "public",
       "kind": "var",
       "declaration": "public var useThisImageHandler:((UIImage) -> Void)?"
@@ -11754,7 +11754,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var mediaLibDismissCallback:PTActionTask? = nil",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 23,
+      "line": 22,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaLibDismissCallback:PTActionTask? = nil"
@@ -11762,7 +11762,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func preview(_ collector: C7Collector, fliter image: C7Image)",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 731,
+      "line": 730,
       "access": "public",
       "kind": "func",
       "declaration": "public func preview(_ collector: C7Collector, fliter image: C7Image) {"
@@ -11770,7 +11770,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 737,
+      "line": 736,
       "access": "public",
       "kind": "func",
       "declaration": "public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {"
@@ -11778,7 +11778,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func animationDidStop(_ anim: CAAnimation, finished flag: Bool)",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 750,
+      "line": 749,
       "access": "public",
       "kind": "func",
       "declaration": "public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {"
@@ -12354,7 +12354,7 @@
     {
       "key": "PooToolsSource/Category/Device+PTEX.swift|public|enum|public enum UIDeviceApplePencilSupportType",
       "path": "PooToolsSource/Category/Device+PTEX.swift",
-      "line": 17,
+      "line": 19,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum UIDeviceApplePencilSupportType {"
@@ -12362,7 +12362,7 @@
     {
       "key": "PooToolsSource/Category/Device+PTEX.swift|public|enum|public enum SystemSoundIDShockType: Int64",
       "path": "PooToolsSource/Category/Device+PTEX.swift",
-      "line": 358,
+      "line": 356,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum SystemSoundIDShockType: Int64 {"
@@ -16274,7 +16274,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let CorePodBundleName = \"PooToolsResource\"",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 12,
+      "line": 14,
       "access": "public",
       "kind": "let",
       "declaration": "public let CorePodBundleName = \"PooToolsResource\""
@@ -16282,7 +16282,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|typealias|public typealias PTBackgroundTask = @Sendable () -> Void",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 15,
+      "line": 17,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTBackgroundTask = @Sendable () -> Void"
@@ -16290,7 +16290,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|typealias|public typealias PTBoolTask = (@Sendable (Bool) -> Void)",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 17,
+      "line": 19,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTBoolTask = (@Sendable (Bool) -> Void)"
@@ -16298,71 +16298,71 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|var|@MainActor public var AppWindows: UIWindow?",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 19,
+      "line": 21,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var AppWindows: UIWindow? {"
     },
     {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let deviceInfo = Device.current",
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let deviceInfo = PTDevice.current",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 29,
+      "line": 31,
       "access": "public",
       "kind": "let",
-      "declaration": "public let deviceInfo = Device.current"
+      "declaration": "public let deviceInfo = PTDevice.current"
     },
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let deviceIsSimulator = deviceInfo.isSimulator",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 30,
+      "line": 32,
       "access": "public",
       "kind": "let",
       "declaration": "public let deviceIsSimulator = deviceInfo.isSimulator"
     },
     {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allIPadDevices: [Device] = Device.allPads",
-      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 31,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let allIPadDevices: [Device] = Device.allPads"
-    },
-    {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allPlusDevices: [Device] = Device.allPlusSizedDevices",
-      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 32,
-      "access": "public",
-      "kind": "let",
-      "declaration": "public let allPlusDevices: [Device] = Device.allPlusSizedDevices"
-    },
-    {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allProDevices: [Device] = Device.allProDevices",
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allIPadDevices: [PTDeviceModel] = PTDeviceCatalog.models(family: .iPad)",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
       "line": 33,
       "access": "public",
       "kind": "let",
-      "declaration": "public let allProDevices: [Device] = Device.allProDevices"
+      "declaration": "public let allIPadDevices: [PTDeviceModel] = PTDeviceCatalog.models(family: .iPad)"
     },
     {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allSensorHousingDevices: [Device] = Device.allDevicesWithSensorHousing",
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allPlusDevices: [PTDeviceModel] = [",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
       "line": 34,
       "access": "public",
       "kind": "let",
-      "declaration": "public let allSensorHousingDevices: [Device] = Device.allDevicesWithSensorHousing"
+      "declaration": "public let allPlusDevices: [PTDeviceModel] = ["
     },
     {
-      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allSmallDevices: [Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone6s,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.iPhone14,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini),.simulator(.iPhone14),.simulator(.iPhone15),.simulator(.iPhone16),.simulator(.iPhone17),.simulator(.iPhone16e),.iPhone17,.iPhone16e]",
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allProDevices: [PTDeviceModel] = [",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 35,
+      "line": 45,
       "access": "public",
       "kind": "let",
-      "declaration": "public let allSmallDevices: [Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone6s,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.iPhone14,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini),.simulator(.iPhone14),.simulator(.iPhone15),.simulator(.iPhone16),.simulator(.iPhone17),.simulator(.iPhone16e),.iPhone17,.iPhone16e]"
+      "declaration": "public let allProDevices: [PTDeviceModel] = ["
+    },
+    {
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allSensorHousingDevices: [PTDeviceModel] = PTDeviceCatalog.allSpecifications",
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allSensorHousingDevices: [PTDeviceModel] = PTDeviceCatalog.allSpecifications"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let allSmallDevices: [PTDeviceModel] = [",
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "line": 57,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allSmallDevices: [PTDeviceModel] = ["
     },
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_device_info = deviceInfo",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 41,
+      "line": 67,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_device_info = deviceInfo"
@@ -16370,7 +16370,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_device_isSimulator = deviceIsSimulator",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 43,
+      "line": 69,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_device_isSimulator = deviceIsSimulator"
@@ -16378,7 +16378,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_group_of_all_iPad = allIPadDevices",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 45,
+      "line": 71,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_group_of_all_iPad = allIPadDevices"
@@ -16386,7 +16386,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_group_of_all_plus_device = allPlusDevices",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 47,
+      "line": 73,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_group_of_all_plus_device = allPlusDevices"
@@ -16394,7 +16394,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_group_of_all_pro_device = allProDevices",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 49,
+      "line": 75,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_group_of_all_pro_device = allProDevices"
@@ -16402,7 +16402,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_group_of_all_X_device = allSensorHousingDevices",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 51,
+      "line": 77,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_group_of_all_X_device = allSensorHousingDevices"
@@ -16410,7 +16410,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|public let Gobal_group_of_all_small_device = allSmallDevices",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 53,
+      "line": 79,
       "access": "public",
       "kind": "let",
       "declaration": "public let Gobal_group_of_all_small_device = allSmallDevices"
@@ -16418,7 +16418,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|var|public var isXModel: Bool",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 55,
+      "line": 81,
       "access": "public",
       "kind": "var",
       "declaration": "public var isXModel: Bool {"
@@ -16426,7 +16426,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 61,
+      "line": 87,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds"
@@ -16434,7 +16434,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kSCREEN_SIZE = kSCREEN_BOUNDS.size",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 64,
+      "line": 90,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kSCREEN_SIZE = kSCREEN_BOUNDS.size"
@@ -16442,7 +16442,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kSCREEN_SCALE = UIScreen.main.scale",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 67,
+      "line": 93,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kSCREEN_SCALE = UIScreen.main.scale"
@@ -16450,7 +16450,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let infoDictionary = Bundle.main.infoDictionary",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 70,
+      "line": 96,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let infoDictionary = Bundle.main.infoDictionary"
@@ -16458,7 +16458,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kAppDisplayName: String? = infoDictionary?[\"CFBundleDisplayName\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 73,
+      "line": 99,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kAppDisplayName: String? = infoDictionary?[\"CFBundleDisplayName\"] as? String"
@@ -16466,7 +16466,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kAppName: String? = infoDictionary?[\"CFBundleName\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 76,
+      "line": 102,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kAppName: String? = infoDictionary?[\"CFBundleName\"] as? String"
@@ -16474,7 +16474,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kAppVersion: String? = infoDictionary?[\"CFBundleShortVersionString\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 79,
+      "line": 105,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kAppVersion: String? = infoDictionary?[\"CFBundleShortVersionString\"] as? String"
@@ -16482,7 +16482,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kAppBuildVersion: String? = infoDictionary?[\"CFBundleVersion\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 82,
+      "line": 108,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kAppBuildVersion: String? = infoDictionary?[\"CFBundleVersion\"] as? String"
@@ -16490,7 +16490,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kAppBundleId: String? = infoDictionary?[\"CFBundleIdentifier\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 85,
+      "line": 111,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kAppBundleId: String? = infoDictionary?[\"CFBundleIdentifier\"] as? String"
@@ -16498,7 +16498,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kPlatformName: String? = infoDictionary?[\"DTPlatformName\"] as? String",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 88,
+      "line": 114,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kPlatformName: String? = infoDictionary?[\"DTPlatformName\"] as? String"
@@ -16506,7 +16506,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kiOSVersion: String = UIDevice.current.systemVersion",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 91,
+      "line": 117,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kiOSVersion: String = UIDevice.current.systemVersion"
@@ -16514,7 +16514,7 @@
     {
       "key": "PooToolsSource/Core/PTMarcos_swift.swift|public|let|@MainActor public let kOSType: String = UIDevice.current.systemName + UIDevice.current.systemVersion",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 94,
+      "line": 120,
       "access": "public",
       "kind": "let",
       "declaration": "@MainActor public let kOSType: String = UIDevice.current.systemName + UIDevice.current.systemVersion"
@@ -20242,7 +20242,7 @@
     {
       "key": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift|public|class|public class PTFileBrowserViewController: PTBaseViewController",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 18,
+      "line": 17,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTFileBrowserViewController: PTBaseViewController {"
@@ -20250,7 +20250,7 @@
     {
       "key": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift|public|func|public func numberOfPreviewItems(in controller: QLPreviewController) -> Int",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 309,
+      "line": 308,
       "access": "public",
       "kind": "func",
       "declaration": "public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {"
@@ -20258,7 +20258,7 @@
     {
       "key": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift|public|func|public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 313,
+      "line": 312,
       "access": "public",
       "kind": "func",
       "declaration": "public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {"
@@ -20570,7 +20570,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|public|class|public class PTDevMaskConfig:NSObject",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 15,
+      "line": 14,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTDevMaskConfig:NSObject {"
@@ -20578,7 +20578,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|open var isMask:Bool = false",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 16,
+      "line": 15,
       "access": "open",
       "kind": "var",
       "declaration": "open var isMask:Bool = false"
@@ -20586,7 +20586,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|@MainActor open var maskString:String = \"PT Debug mode\".localized()",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 17,
+      "line": 16,
       "access": "open",
       "kind": "var",
       "declaration": "@MainActor open var maskString:String = \"PT Debug mode\".localized()"
@@ -20594,7 +20594,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|open var maskFont:UIFont = .appfont(size: 100,bold: true)",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 18,
+      "line": 17,
       "access": "open",
       "kind": "var",
       "declaration": "open var maskFont:UIFont = .appfont(size: 100,bold: true)"
@@ -20602,7 +20602,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|open var motionColor:UIColor = .randomColor",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 19,
+      "line": 18,
       "access": "open",
       "kind": "var",
       "declaration": "open var motionColor:UIColor = .randomColor"
@@ -20610,7 +20610,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|open var showTouch:Bool = PTDebugPreferences.shared.isTouchBubbleEnabled",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 20,
+      "line": 19,
       "access": "open",
       "kind": "var",
       "declaration": "open var showTouch:Bool = PTDebugPreferences.shared.isTouchBubbleEnabled"
@@ -20618,7 +20618,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|public|class|public class PTDevMaskView: PTBaseMaskView",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 24,
+      "line": 23,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTDevMaskView: PTBaseMaskView {"
@@ -20626,7 +20626,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|open|var|open var showTouch:Bool?",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 26,
+      "line": 25,
       "access": "open",
       "kind": "var",
       "declaration": "open var showTouch:Bool? {"
@@ -20634,7 +20634,7 @@
     {
       "key": "PooToolsSource/DevMask/PTDevMaskView.swift|public|init|public init(config:PTDevMaskConfig?)",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 94,
+      "line": 93,
       "access": "public",
       "kind": "init",
       "declaration": "public init(config:PTDevMaskConfig?) {"
@@ -21842,7 +21842,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|enum|public enum CameraType: Int",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 13,
+      "line": 12,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum CameraType: Int {"
@@ -21850,7 +21850,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|func|public func captureDevice() -> AVCaptureDevice",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 17,
+      "line": 16,
       "access": "public",
       "kind": "func",
       "declaration": "public func captureDevice() -> AVCaptureDevice {"
@@ -21858,7 +21858,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|typealias|public typealias ImageBufferHandler = (_ imageBuffer: CMSampleBuffer) -> ()",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 32,
+      "line": 31,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias ImageBufferHandler = (_ imageBuffer: CMSampleBuffer) -> ()"
@@ -21866,7 +21866,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|class|public class PTHeartRateManager: NSObject",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 34,
+      "line": 33,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTHeartRateManager: NSObject {"
@@ -21874,7 +21874,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|var|public var imageBufferHandler: ImageBufferHandler?",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 41,
+      "line": 40,
       "access": "public",
       "kind": "var",
       "declaration": "public var imageBufferHandler: ImageBufferHandler?"
@@ -21882,7 +21882,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|init|public init(cameraType: CameraType, preferredSpec: VideoSpec?, previewContainer: CALayer?)",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 43,
+      "line": 42,
       "access": "public",
       "kind": "init",
       "declaration": "public init(cameraType: CameraType, preferredSpec: VideoSpec?, previewContainer: CALayer?) {"
@@ -21890,7 +21890,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|func|public func startCapture()",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 92,
+      "line": 91,
       "access": "public",
       "kind": "func",
       "declaration": "public func startCapture() {"
@@ -21898,7 +21898,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|func|public func stopCapture()",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 105,
+      "line": 104,
       "access": "public",
       "kind": "func",
       "declaration": "public func stopCapture() {"
@@ -21906,7 +21906,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateManager.swift|public|func|public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)",
       "path": "PooToolsSource/HeartRate/PTHeartRateManager.swift",
-      "line": 121,
+      "line": 120,
       "access": "public",
       "kind": "func",
       "declaration": "public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {"
@@ -21914,7 +21914,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|typealias|public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 15,
+      "line": 14,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)"
@@ -21922,7 +21922,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|typealias|public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 16,
+      "line": 15,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)"
@@ -21930,7 +21930,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|func|public func hsv2rgb(_ hsv: HSV) -> RGB",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 18,
+      "line": 17,
       "access": "public",
       "kind": "func",
       "declaration": "public func hsv2rgb(_ hsv: HSV) -> RGB {"
@@ -21938,7 +21938,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|func|public func rgb2hsv(_ rgb: RGB) -> HSV",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 52,
+      "line": 51,
       "access": "public",
       "kind": "func",
       "declaration": "public func rgb2hsv(_ rgb: RGB) -> HSV {"
@@ -21946,7 +21946,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|class|public class PTHeartRateViewController: PTBaseViewController",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 92,
+      "line": 91,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTHeartRateViewController: PTBaseViewController {"
@@ -21954,7 +21954,7 @@
     {
       "key": "PooToolsSource/HeartRate/PTHeartRateViewController.swift|public|let|public let sessionQueue = DispatchQueue(label: \"camera.session.collector.metal\")",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 94,
+      "line": 93,
       "access": "public",
       "kind": "let",
       "declaration": "public let sessionQueue = DispatchQueue(label: \"camera.session.collector.metal\")"
@@ -27592,6 +27592,926 @@
       "declaration": "public func hash(into hasher: inout Hasher) {"
     },
     {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|class|public final class PTInstructionCoordinator: NSObject",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTInstructionCoordinator: NSObject {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func present(_ tour: PTInstructionTour,",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 49,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(_ tour: PTInstructionTour,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func next() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 172,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func next() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func previous() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 176,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func previous() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func skip() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 180,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func skip() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func skipStep() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 184,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func skipStep() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func jump(to id: PTInstructionID) async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 188,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jump(to id: PTInstructionID) async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func pause() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 192,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func pause() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func resume() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 198,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resume() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func cancel() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 204,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancel() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|class|public final class PTInstructionSessionRegistry",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 599,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTInstructionSessionRegistry {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func key(for viewController: UIViewController) -> String",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 609,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func key(for viewController: UIViewController) -> String {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func coordinator(for key: String) -> PTInstructionCoordinator?",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 617,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func coordinator(for key: String) -> PTInstructionCoordinator? {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func insert(_ coordinator: PTInstructionCoordinator, for key: String) -> Bool",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 621,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func insert(_ coordinator: PTInstructionCoordinator, for key: String) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func remove(_ coordinator: PTInstructionCoordinator, for key: String)",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 627,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func remove(_ coordinator: PTInstructionCoordinator, for key: String) {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|var|public var activeCoordinators: [PTInstructionCoordinator]",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 632,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var activeCoordinators: [PTInstructionCoordinator] {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|class|public final class PTInstructionCenter",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 638,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTInstructionCenter {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|var|public var store: PTInstructionStore = PTUserDefaultsInstructionStore.shared",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 641,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var store: PTInstructionStore = PTUserDefaultsInstructionStore.shared"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|var|public var activeCoordinator: PTInstructionCoordinator?",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 642,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var activeCoordinator: PTInstructionCoordinator? {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func present(_ tour: PTInstructionTour,",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 648,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func present(_ tour: PTInstructionTour,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func cancelActive() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 661,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func cancelActive() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func pauseActive() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 665,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func pauseActive() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func resumeActive() async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 669,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resumeActive() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionCoordinator.swift|public|func|public func reset(tour: PTInstructionTour) async",
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 673,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func reset(tour: PTInstructionTour) async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionID: Hashable, Codable, Sendable, ExpressibleByStringLiteral",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionID: Hashable, Codable, Sendable, ExpressibleByStringLiteral {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(stringLiteral value: String)",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(stringLiteral value: String) {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionState: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionState: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionResult: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionResult: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionFailure: Error, Sendable, LocalizedError",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 38,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionFailure: Error, Sendable, LocalizedError {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var errorDescription: String?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 46,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var errorDescription: String? {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionPresentationPolicy: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionPresentationPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionTouchForwardingPolicy: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionTouchForwardingPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionTargetWaitPolicy: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionTargetWaitPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionTargetRevealPolicy: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionTargetRevealPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionIdleAnimation: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionIdleAnimation: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionMessage: Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionMessage: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let title: String?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let title: String?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let message: String",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let message: String"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let nextTitle: String",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let nextTitle: String"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let previousTitle: String?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let previousTitle: String?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let skipTitle: String?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 99,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let skipTitle: String?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(title: String? = nil,",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 101,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(title: String? = nil,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionTarget",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 115,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionTarget {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionCutoutShape",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionCutoutShape {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionSpotlight",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 149,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionSpotlight {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var shape: PTInstructionCutoutShape",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 150,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var shape: PTInstructionCutoutShape"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var insets: UIEdgeInsets",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var insets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var color: UIColor",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var color: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var borderColor: UIColor?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 153,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderColor: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var borderWidth: CGFloat",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 154,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var borderWidth: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(shape: PTInstructionCutoutShape = .roundedRectangle(cornerRadius: 12),",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 156,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(shape: PTInstructionCutoutShape = .roundedRectangle(cornerRadius: 12),"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionContent",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 170,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionContent {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionAdvancePolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 177,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionAdvancePolicy {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|class|public final class PTInstructionStepContext",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 192,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTInstructionStepContext {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let tourID: PTInstructionID",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 193,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tourID: PTInstructionID"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let stepID: PTInstructionID",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 194,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let stepID: PTInstructionID"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func next() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 209,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func next() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func previous() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 213,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func previous() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func skip() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 217,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func skip() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func skipStep() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 221,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func skipStep() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func jump(to id: PTInstructionID) async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 225,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jump(to id: PTInstructionID) async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func pause() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 229,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func pause() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|func|public func resume() async",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 233,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func resume() async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionStep",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 239,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionStep {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let id: PTInstructionID",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 240,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: PTInstructionID"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let target: PTInstructionTarget",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 241,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let target: PTInstructionTarget"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let content: PTInstructionContent",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 242,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let content: PTInstructionContent"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let spotlight: PTInstructionSpotlight",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 243,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let spotlight: PTInstructionSpotlight"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let placement: PTPopoverPlacement",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 244,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let placement: PTPopoverPlacement"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let advancePolicy: PTInstructionAdvancePolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 245,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let advancePolicy: PTInstructionAdvancePolicy"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let touchForwarding: PTInstructionTouchForwardingPolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 246,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let touchForwarding: PTInstructionTouchForwardingPolicy"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let targetWaitPolicy: PTInstructionTargetWaitPolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 247,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let targetWaitPolicy: PTInstructionTargetWaitPolicy"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let targetRevealPolicy: PTInstructionTargetRevealPolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 248,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let targetRevealPolicy: PTInstructionTargetRevealPolicy"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let isSkippable: Bool",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 249,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isSkippable: Bool"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let condition: (@MainActor @Sendable () async -> Bool)?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 250,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let condition: (@MainActor @Sendable () async -> Bool)?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let beforePresent: (@MainActor @Sendable (PTInstructionStepContext) async throws -> Void)?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 251,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let beforePresent: (@MainActor @Sendable (PTInstructionStepContext) async throws -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let afterDismiss: (@MainActor @Sendable (PTInstructionStepContext) async throws -> Void)?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 252,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let afterDismiss: (@MainActor @Sendable (PTInstructionStepContext) async throws -> Void)?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(id: PTInstructionID,",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 254,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: PTInstructionID,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionTour",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 284,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionTour {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let id: PTInstructionID",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 285,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let id: PTInstructionID"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let version: String",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 286,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let version: String"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let steps: [PTInstructionStep]",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 287,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let steps: [PTInstructionStep]"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let presentationPolicy: PTInstructionPresentationPolicy",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 288,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let presentationPolicy: PTInstructionPresentationPolicy"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(id: PTInstructionID,",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 290,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(id: PTInstructionID,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionConfiguration",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 302,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionConfiguration {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var maximumContentWidth: CGFloat",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 303,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maximumContentWidth: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var contentPadding: CGFloat",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 304,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var contentPadding: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var cardCornerRadius: CGFloat",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 305,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cardCornerRadius: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var cardColor: UIColor",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 306,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var cardColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var titleColor: UIColor",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 307,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var titleColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var messageColor: UIColor",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 308,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var messageColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var accentColor: UIColor",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 309,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var accentColor: UIColor"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var idleAnimation: PTInstructionIdleAnimation",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 310,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var idleAnimation: PTInstructionIdleAnimation"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var transition: PTOverlayTransition",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 311,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var transition: PTOverlayTransition"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|var|public var dismissOnSceneDisconnect: Bool",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 312,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var dismissOnSceneDisconnect: Bool"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(maximumContentWidth: CGFloat = 320,",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 314,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(maximumContentWidth: CGFloat = 320,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|enum|public enum PTInstructionProgressStatus: String, Codable, Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 337,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTInstructionProgressStatus: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|struct|public struct PTInstructionProgressSnapshot: Codable, Sendable",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 343,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInstructionProgressSnapshot: Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let tourID: PTInstructionID",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 344,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tourID: PTInstructionID"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let version: String",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 345,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let version: String"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let lastStepID: PTInstructionID?",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 346,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let lastStepID: PTInstructionID?"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|let|public let status: PTInstructionProgressStatus",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 347,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let status: PTInstructionProgressStatus"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionModels.swift|public|init|public init(tourID: PTInstructionID,",
+      "path": "PooToolsSource/Instructions/PTInstructionModels.swift",
+      "line": 349,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(tourID: PTInstructionID,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|protocol|public protocol PTInstructionStore: AnyObject",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 8,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTInstructionStore: AnyObject {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|class|public final class PTUserDefaultsInstructionStore: PTInstructionStore",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTUserDefaultsInstructionStore: PTInstructionStore {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|init|public init(defaults: UserDefaults = .standard)",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(defaults: UserDefaults = .standard) {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|func|public func snapshot(for tour: PTInstructionTour) async -> PTInstructionProgressSnapshot?",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func snapshot(for tour: PTInstructionTour) async -> PTInstructionProgressSnapshot? {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|func|public func save(_ snapshot: PTInstructionProgressSnapshot) async",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func save(_ snapshot: PTInstructionProgressSnapshot) async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionPersistence.swift|public|func|public func removeSnapshot(for tour: PTInstructionTour) async",
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 44,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeSnapshot(for tour: PTInstructionTour) async {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift|public|class|public final class PTInstructionTargetRegistry",
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTInstructionTargetRegistry {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift|public|func|public func register(_ id: PTInstructionID,",
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func register(_ id: PTInstructionID,"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift|public|func|public func unregister(_ id: PTInstructionID)",
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func unregister(_ id: PTInstructionID) {"
+    },
+    {
+      "key": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift|public|func|public func target(_ id: PTInstructionID) -> PTInstructionTarget",
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func target(_ id: PTInstructionID) -> PTInstructionTarget {"
+    },
+    {
       "key": "PooToolsSource/KeyChain/PTKeyChain.swift|public|let|public let kAccount = \"kAccount\"",
       "path": "PooToolsSource/KeyChain/PTKeyChain.swift",
       "line": 13,
@@ -28978,7 +29898,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMin:CGFloat = 4",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 33,
+      "line": 35,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMin:CGFloat = 4"
@@ -28986,7 +29906,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let LocalConsoleFontMax:CGFloat = 20",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 34,
+      "line": 36,
       "access": "public",
       "kind": "let",
       "declaration": "public let LocalConsoleFontMax:CGFloat = 20"
@@ -28994,7 +29914,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let SystemLogViewTag = 999999",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 35,
+      "line": 37,
       "access": "public",
       "kind": "let",
       "declaration": "public let SystemLogViewTag = 999999"
@@ -29002,7 +29922,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_width:CGFloat = 240",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 36,
+      "line": 38,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_width:CGFloat = 240"
@@ -29010,7 +29930,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let systemLog_base_height:CGFloat = 148",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 37,
+      "line": 39,
       "access": "public",
       "kind": "let",
       "declaration": "public let systemLog_base_height:CGFloat = 148"
@@ -29018,7 +29938,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let borderLine:CGFloat = 5",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 38,
+      "line": 40,
       "access": "public",
       "kind": "let",
       "declaration": "public let borderLine:CGFloat = 5"
@@ -29026,7 +29946,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|let|public let diameter:CGFloat = 28",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 39,
+      "line": 41,
       "access": "public",
       "kind": "let",
       "declaration": "public let diameter:CGFloat = 28"
@@ -29034,7 +29954,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|public enum PTLogLevel: CaseIterable, Hashable",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 278,
+      "line": 280,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLogLevel: CaseIterable, Hashable {"
@@ -29042,7 +29962,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public final class PTLogBuffer",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 296,
+      "line": 298,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLogBuffer {"
@@ -29050,7 +29970,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|struct|public struct LogItem",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 297,
+      "line": 299,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct LogItem {"
@@ -29058,7 +29978,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|enum|@objc public enum LocalConsoleActionType : Int",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 387,
+      "line": 389,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum LocalConsoleActionType : Int {"
@@ -29066,7 +29986,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|typealias|public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 397,
+      "line": 399,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void"
@@ -29074,7 +29994,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class LocalConsole: NSObject",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 401,
+      "line": 403,
       "access": "public",
       "kind": "class",
       "declaration": "public class LocalConsole: NSObject {"
@@ -29082,7 +30002,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func registerDebugPlugin(_ plugin: PTDebugPlugin)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 451,
+      "line": 453,
       "access": "public",
       "kind": "func",
       "declaration": "public func registerDebugPlugin(_ plugin: PTDebugPlugin) {"
@@ -29090,7 +30010,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clearDebugPlugins()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 456,
+      "line": 458,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearDebugPlugins() {"
@@ -29098,7 +30018,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logCategoryFilter: Set<String> = []",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 484,
+      "line": 486,
       "access": "public",
       "kind": "var",
       "declaration": "public var logCategoryFilter: Set<String> = [] {"
@@ -29106,7 +30026,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 487,
+      "line": 489,
       "access": "public",
       "kind": "var",
       "declaration": "public var logLevelFilter: Set<PTLogLevel> = Set(PTLogLevel.allCases) {"
@@ -29114,7 +30034,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var logKeywordFilter: String = \"\"",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 490,
+      "line": 492,
       "access": "public",
       "kind": "var",
       "declaration": "public var logKeywordFilter: String = \"\" {"
@@ -29122,7 +30042,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var closeAllOutsideFunction:PTActionTask?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 494,
+      "line": 496,
       "access": "public",
       "kind": "var",
       "declaration": "public var closeAllOutsideFunction:PTActionTask?"
@@ -29130,7 +30050,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 495,
+      "line": 497,
       "access": "public",
       "kind": "var",
       "declaration": "public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)? {"
@@ -29138,7 +30058,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var networkStatus = \"\"",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 500,
+      "line": 502,
       "access": "public",
       "kind": "var",
       "declaration": "public var networkStatus = \"\""
@@ -29146,7 +30066,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var menu: UIMenuElement? = nil",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 502,
+      "line": 504,
       "access": "public",
       "kind": "var",
       "declaration": "public var menu: UIMenuElement? = nil {"
@@ -29154,7 +30074,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|@MainActor public var isVisiable:Bool = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 510,
+      "line": 512,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var isVisiable:Bool = false {"
@@ -29162,7 +30082,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 563,
+      "line": 565,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {"
@@ -29170,7 +30090,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttFontColor(color:UIColor)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 568,
+      "line": 570,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttFontColor(color:UIColor) {"
@@ -29178,7 +30098,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var terminal:PTTerminal?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 572,
+      "line": 574,
       "access": "public",
       "kind": "var",
       "declaration": "public var terminal:PTTerminal?"
@@ -29186,7 +30106,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var maskView:PTDevMaskView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 573,
+      "line": 575,
       "access": "public",
       "kind": "var",
       "declaration": "public var maskView:PTDevMaskView?"
@@ -29194,7 +30114,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var showAllUserDefaultsKeys = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 581,
+      "line": 583,
       "access": "public",
       "kind": "var",
       "declaration": "public var showAllUserDefaultsKeys = false {"
@@ -29202,7 +30122,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func cleanSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 717,
+      "line": 719,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func cleanSystemLogView() {"
@@ -29210,7 +30130,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func createSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 881,
+      "line": 883,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func createSystemLogView() {"
@@ -29218,7 +30138,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 973,
+      "line": 975,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitDisabled = false"
@@ -29226,7 +30146,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitWarningDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 974,
+      "line": 976,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitWarningDisabled = false"
@@ -29234,7 +30154,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func print(_ items: Any, level: PTLogLevel = .info)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 976,
+      "line": 978,
       "access": "public",
       "kind": "func",
       "declaration": "public func print(_ items: Any, level: PTLogLevel = .info) {"
@@ -29242,7 +30162,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1067,
+      "line": 1069,
       "access": "public",
       "kind": "func",
       "declaration": "public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {"
@@ -29250,7 +30170,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clear()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1143,
+      "line": 1145,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -29258,7 +30178,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class PTTerminal:PFloatingButton",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1650,
+      "line": 1652,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTerminal:PFloatingButton {"
@@ -29266,7 +30186,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var systemText : PTInvertedTextView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1651,
+      "line": 1653,
       "access": "public",
       "kind": "var",
       "declaration": "public var systemText : PTInvertedTextView?"
@@ -29274,7 +30194,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttributedText(_ string: String)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1730,
+      "line": 1732,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttributedText(_ string: String) {"
@@ -29282,7 +30202,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func appendLog(_ item: PTLogBuffer.LogItem)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1747,
+      "line": 1749,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendLog(_ item: PTLogBuffer.LogItem) {"
@@ -36864,6 +37784,750 @@
       "declaration": "public func isInFuture(relativeTo reference: Date = Date()) -> Bool {"
     },
     {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|struct|public struct PTDevice: Sendable, CustomStringConvertible, PTDeviceCapabilityProviding",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDevice: Sendable, CustomStringConvertible, PTDeviceCapabilityProviding {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|let|public let runtime: PTDeviceRuntimeInfo",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let runtime: PTDeviceRuntimeInfo"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|let|public let model: PTDeviceModel",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let model: PTDeviceModel"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|let|public let specification: PTDeviceSpecification?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let specification: PTDeviceSpecification?"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|let|public let platform: PTDevicePlatform",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let platform: PTDevicePlatform"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|let|public let family: PTDeviceFamily",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let family: PTDeviceFamily"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|init|public init(runtime: PTDeviceRuntimeInfo)",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(runtime: PTDeviceRuntimeInfo) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var identifier: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var identifier: String { runtime.identifier }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var environment: PTDeviceEnvironment",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var environment: PTDeviceEnvironment { runtime.environment }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var architecture: PTDeviceArchitecture",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var architecture: PTDeviceArchitecture { runtime.architecture }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isSimulator: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 42,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isSimulator: Bool { environment == .simulator }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isPad: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 43,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isPad: Bool { family == .iPad }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isPhone: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 44,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isPhone: Bool { family == .iPhone }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var description: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 45,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var description: String { specification?.marketingName ?? identifier }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|func|public func isOneOf(_ models: [PTDeviceModel]) -> Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 47,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func isOneOf(_ models: [PTDeviceModel]) -> Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|func|public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var batteryState: PTBatteryState",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 56,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var batteryState: PTBatteryState {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var batteryLevel: Float",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var batteryLevel: Float {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isFaceIDCapable: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isFaceIDCapable: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isTouchIDCapable: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isTouchIDCapable: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasBiometricSensor: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 104,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasBiometricSensor: Bool { isFaceIDCapable || isTouchIDCapable }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasSensorHousing: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasSensorHousing: Bool { specification?.traits.hasSensorHousing ?? false }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasRoundedDisplayCorners: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 106,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasRoundedDisplayCorners: Bool { specification?.traits.hasRoundedDisplayCorners ?? false }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var has3dTouchSupport: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 107,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var has3dTouchSupport: Bool { specification?.traits.has3dTouchSupport ?? false }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var supportsWirelessCharging: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 108,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var supportsWirelessCharging: Bool { specification?.traits.supportsWirelessCharging ?? false }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasLidarSensor: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasLidarSensor: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var ppi: Int?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 117,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var ppi: Int? { specification?.traits.ppi }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasCamera: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 119,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasCamera: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasWideCamera: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 127,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasWideCamera: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasTelephotoCamera: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 135,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasTelephotoCamera: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var hasUltraWideCamera: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 143,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var hasUltraWideCamera: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDevice.swift|public|var|public var isGuidedAccessSessionActive: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isGuidedAccessSessionActive: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift|public|enum|public enum PTDeviceCapabilityResolver",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceCapabilityResolver {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift|public|struct|public struct PTSystemDeviceCapabilityProvider: PTDeviceCapabilityProviding",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTSystemDeviceCapabilityProvider: PTDeviceCapabilityProviding {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift|public|let|public let device: PTDevice",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let device: PTDevice"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift|public|init|public init(device: PTDevice = .current)",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(device: PTDevice = .current) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift|public|func|public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift|public|enum|public enum PTDeviceCatalog",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceCatalog {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|protocol|public protocol PTDeviceRuntimeEnvironmentProviding: Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTDeviceRuntimeEnvironmentProviding: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|struct|public struct PTDeviceRuntimeEnvironment: PTDeviceRuntimeEnvironmentProviding, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDeviceRuntimeEnvironment: PTDeviceRuntimeEnvironmentProviding, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let machineIdentifier: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let machineIdentifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let simulatorModelIdentifier: String?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let simulatorModelIdentifier: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let isSimulator: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isSimulator: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let architecture: PTDeviceArchitecture",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let architecture: PTDeviceArchitecture"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let operatingSystem: OperatingSystemVersion",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let operatingSystem: OperatingSystemVersion"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let processorCount: Int",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 27,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let processorCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|let|public let physicalMemory: UInt64",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let physicalMemory: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|init|public init(",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init("
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift|public|enum|public enum PTDeviceRuntimeResolver",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceRuntimeResolver {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDevicePlatform: String, CaseIterable, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDevicePlatform: String, CaseIterable, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceFamily: String, CaseIterable, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceFamily: String, CaseIterable, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceEnvironment: String, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceEnvironment: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceArchitecture: String, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceArchitecture: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceFormFactor: String, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceFormFactor: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|struct|public struct PTDeviceModel: RawRepresentable, Hashable, Codable, Sendable, CustomStringConvertible",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDeviceModel: RawRepresentable, Hashable, Codable, Sendable, CustomStringConvertible {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|init|public init(rawValue: String)",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|var|public var description: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var description: String { rawValue }"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|var|public var isUnknown: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isUnknown: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|struct|public struct PTDeviceStaticTraits: Codable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 69,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDeviceStaticTraits: Codable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let hasSensorHousing: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 70,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hasSensorHousing: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let hasRoundedDisplayCorners: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hasRoundedDisplayCorners: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let has3dTouchSupport: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 72,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let has3dTouchSupport: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let supportsWirelessCharging: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let supportsWirelessCharging: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let hasLidarSensor: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hasLidarSensor: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let isFaceIDCapable: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 75,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isFaceIDCapable: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let isTouchIDCapable: Bool",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 76,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isTouchIDCapable: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let ppi: Int?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 77,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let ppi: Int?"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|init|public init(",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 79,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init("
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|struct|public struct PTDeviceSpecification: Codable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDeviceSpecification: Codable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let model: PTDeviceModel",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 101,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let model: PTDeviceModel"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let marketingName: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 102,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let marketingName: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let identifiers: [String]",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifiers: [String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let family: PTDeviceFamily",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 104,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let family: PTDeviceFamily"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let platform: PTDevicePlatform",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let platform: PTDevicePlatform"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let releaseYear: Int?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 106,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let releaseYear: Int?"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let formFactor: PTDeviceFormFactor",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 107,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let formFactor: PTDeviceFormFactor"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let processorFamily: String?",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 108,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let processorFamily: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let traits: PTDeviceStaticTraits",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let traits: PTDeviceStaticTraits"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|init|public init(",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 111,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init("
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|struct|public struct PTDeviceRuntimeInfo: Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTDeviceRuntimeInfo: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let identifier: String",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 135,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let environment: PTDeviceEnvironment",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 136,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let environment: PTDeviceEnvironment"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let architecture: PTDeviceArchitecture",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 137,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let architecture: PTDeviceArchitecture"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let operatingSystem: OperatingSystemVersion",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 138,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let operatingSystem: OperatingSystemVersion"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let processorCount: Int",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 139,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let processorCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|let|public let physicalMemory: UInt64",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 140,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let physicalMemory: UInt64"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|init|public init(",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 142,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init("
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTBatteryState: String, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 159,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTBatteryState: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceCapability: String, CaseIterable, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 166,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceCapability: String, CaseIterable, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|enum|public enum PTDeviceCapabilityStatus: String, Codable, Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDeviceCapabilityStatus: String, Codable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift|public|protocol|public protocol PTDeviceCapabilityProviding: Sendable",
+      "path": "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+      "line": 192,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTDeviceCapabilityProviding: Sendable {"
+    },
+    {
       "key": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift|public|struct|public struct PTHTTPFilePortalConfiguration: Sendable",
       "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
       "line": 10,
@@ -42778,7 +44442,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|class|public class PTPermissionStatic:NSObject",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 18,
+      "line": 17,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTPermissionStatic:NSObject {"
@@ -42786,7 +44450,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|var|public var permissionModels:[PTPermissionModel] = [PTPermissionModel]()",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 20,
+      "line": 19,
       "access": "public",
       "kind": "var",
       "declaration": "public var permissionModels:[PTPermissionModel] = [PTPermissionModel]()"
@@ -42794,7 +44458,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|var|public var permissionSettingFont:UIFont = .appfont(size: 16)",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 21,
+      "line": 20,
       "access": "public",
       "kind": "var",
       "declaration": "public var permissionSettingFont:UIFont = .appfont(size: 16)"
@@ -42802,7 +44466,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|class|public class PTPermissionViewController: PTListViewController",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 26,
+      "line": 25,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTPermissionViewController: PTListViewController {"
@@ -42810,7 +44474,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|var|public var viewDismissBlock:PTActionTask?",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 31,
+      "line": 30,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewDismissBlock:PTActionTask?"
@@ -42818,7 +44482,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermissionViewController.swift|public|func|public func permissionShow(vc:UIViewController)",
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 413,
+      "line": 412,
       "access": "public",
       "kind": "func",
       "declaration": "public func permissionShow(vc:UIViewController) {"

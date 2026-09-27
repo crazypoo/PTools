@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.32.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.33.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.25.4`；`5.32.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.25.4`；`5.33.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.33.0 DeviceKit 吸收与 PToolsDevice
+
+- ✅ 从 SwiftPM、CocoaPods、锁文件、生产源码 import 和 runtime 类型中移除 DeviceKit。
+- ✅ 新增无第三方依赖的 `PToolsDevice` SwiftPM product 与 `PooTools/Device` subspec。
+- ✅ 使用按平台维护的 JSON catalog 和生成 Swift 索引，支持未知设备安全回退、模拟器、Apple Silicon Mac、visionOS、watchOS、tvOS。
+- ✅ 增加基于系统 API 的动态能力查询、Swift 6 Sendable 值类型和 Core/LocalConsole 兼容迁移。
+- ✅ 增加 catalog 校验、生成物漂移、DeviceKit 引用、依赖方向和模块 parity 门禁，以及迁移、架构、使用和维护文档。
+- ✅ 完成 `PooTools-Example` iPhone 17 Simulator Debug / Release Xcode 构建；外部 Pods 警告单独记录。
+- [ ] 完成宿主 App 真机、各平台能力、未知设备、隐私和视觉回归后，再创建正式 `5.33.0` tag。
 
 ## 5.32.0 Instructions 原生吸收
 

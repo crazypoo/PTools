@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: b0d1947bfb14224c36be452aeb2df33569a41c55
-Generated at: 2026-09-27T10:15:07Z
-Version source: 5.32.0
+Source revision: fa748870fa58233517734db9ad2fca99263a4865
+Generated at: 2026-09-27T16:01:06Z
+Version source: 5.33.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -36,9 +36,9 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `DEBUG` | A | `PooTools/DEBUG` | `PooToolsDEBUG` | Keep; review drift |
 | `DEBUG_TrackingEyes` | A | `PooTools/DEBUG_TrackingEyes` | `PooToolsDEBUGTrackingEyes` | Keep; review drift |
 | `DataEncrypt` | A | `PooTools/DataEncrypt` | `PooToolsDataEncrypt` | Keep; review drift |
+| `Device` | A | `PooTools/Device` | — | Keep; review drift |
 | `FaceIDPermission` | A | `PooTools/FaceIDPermission` | `PTFaceIDPermission` | Keep; review drift |
 | `Guide` | A | `PooTools/Guide` | `PooToolsGuide` | Keep; review drift |
-| `Instructions` | A | `PooTools/Instructions` | `PooToolsInstructions` | Keep; review drift |
 | `HTTPFilePortal` | A | `PooTools/HTTPFilePortal` | `PToolsHTTPFilePortal` | Keep; review drift |
 | `HTTPServer` | A | `PooTools/HTTPServer` | `PToolsHTTPServer` | Keep; review drift |
 | `HandSign` | A | `PooTools/HandSign` | `PooToolsHandSign` | Keep; review drift |
@@ -50,6 +50,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `ImageEditor` | A | `PooTools/ImageEditor` | `PooToolsImageEditor` | Keep; review drift |
 | `ImagePicker` | A | `PooTools/ImagePicker` | `PooToolsImagePicker` | Keep; review drift |
 | `Input` | A | `PooTools/Input` | `PooToolsInput` | Keep; review drift |
+| `Instructions` | A | `PooTools/Instructions` | `PooToolsInstructions` | Keep; review drift |
 | `KeyChain` | A | `PooTools/KeyChain` | `PooToolsKeyChain` | Keep; review drift |
 | `LaunchTimeProfiler` | A | `PooTools/LaunchTimeProfiler` | `PooToolsLaunchTimeProfiler` | Keep; review drift |
 | `Layout` | A | `PooTools/Layout` | `PooToolsLayout` | Keep; review drift |

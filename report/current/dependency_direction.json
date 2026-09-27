@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "326abb63a0ad6e918f65a5ec3b29c3bc2c285d17",
-  "generated_at": "2026-09-27T07:05:49Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:10Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, and PToolsSymbols",
+    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -286,6 +286,10 @@
     {
       "source": "PooToolsInput",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsInstructions",
+      "destination": "PToolsOverlay"
     },
     {
       "source": "PooToolsKeyboard",
@@ -574,6 +578,10 @@
     {
       "source": "ptools",
       "destination": "PToolsDate"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsDevice"
     },
     {
       "source": "ptools",

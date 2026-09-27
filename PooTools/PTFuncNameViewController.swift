@@ -8,7 +8,9 @@
 
 import UIKit
 import SnapKit
-@preconcurrency import DeviceKit
+#if SWIFT_PACKAGE
+import PToolsDevice
+#endif
 import Photos
 import Combine
 #if SWIFT_PACKAGE
@@ -187,14 +189,12 @@ class PTFuncNameViewController: PTBaseViewController {
     func DeviceIdentifier() -> String {
         // 1. 如果当前已经在主线程，直接获取
         if Thread.isMainThread {
-            // 注意：这里由于 Swift 6 的静态检查，直接写 Device.identifier 可能还是会黄牌警告。
-            // 所以我们依然需要 assumeIsolated 来安抚编译器
-            return MainActor.assumeIsolated { Device.identifier }
+            // English: PTDevice identity is a Sendable value and does not require a main-thread hop.
+            // Español: La identidad de PTDevice es un valor Sendable y no necesita saltar al hilo principal.
+            // 中文：PTDevice 身份是 Sendable 值，不需要切换到主线程获取。
+            return PTDevice.current.identifier
         } else {
-            // 2. 如果在后台线程，同步阻塞当前线程，去主线程拿数据后再返回
-            return DispatchQueue.main.sync {
-                return Device.identifier
-            }
+            return PTDevice.current.identifier
         }
     }
     

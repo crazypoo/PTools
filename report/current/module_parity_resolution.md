@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
-Generated at: 2026-09-27T13:57:07Z
+Source revision: fa748870fa58233517734db9ad2fca99263a4865
+Generated at: 2026-09-27T16:27:10Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `64`
+- Current exceptions: `65`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -18,8 +18,8 @@ Generated at: 2026-09-27T13:57:07Z
 | BilogyID | ["Core","FaceIDPermission"] | ["Core","FaceIDPermission","KeyChain"] | CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | BluetoothPermission | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CheckUpdate | ["Swift-JWT"] | ["SwiftJWT"] | Equivalent dependency uses different SPM and CocoaPods names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
-| Core | ["Logging","PToolsCore","PToolsDate","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Date","Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
-| Core | ["DeviceKit","IQKeyboardManager","KakaJSON","Kingfisher","SmartCodable","SnapKit","lottie-ios"] | ["DeviceKit","IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SmartCodable","SmartCodable/Inherit","SnapKit","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| Core | ["Device","Logging","PToolsCore","PToolsDate","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Date","Device","Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| Core | ["IQKeyboardManager","KakaJSON","Kingfisher","SmartCodable","SnapKit","lottie-ios"] | ["IQKeyboardManagerSwift","IQKeyboardToolbarManager","KakaJSON","Kingfisher","SmartCodable","SmartCodable/Inherit","SnapKit","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Instructions | ["Overlay"] | ["Core","Overlay"] | SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
@@ -54,6 +54,7 @@ Generated at: 2026-09-27T13:57:07Z
 | CameraPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CAMERA","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CAMERA"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | ContactsPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CONTACTS","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_CONTACTS"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Core | {"defines":["POOTOOLS_APPZ","POOTOOLS_COCOAPODS","POOTOOLS_LAUNCHTIMEPROFILER","POOTOOLS_PICKER","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_PERMISSION_CORE","POOTOOLS_SPLIT_UIFOUNDATION","POOTOOLS_TABBAR","POOTOOLS_VIDEOCACHE"],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_SPLIT_CORE","POOTOOLS_SPLIT_UIFOUNDATION"],"upcoming_features":[]} | SPM carries split and optional flags plus strict concurrency features; CocoaPods is monolithic. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| Device | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | PToolsDevice enables strict concurrency as an independent SwiftPM target; CocoaPods compiles the same Foundation source under the aggregate Core compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | device-foundation | 6.0.0 | 2026-12-31 |
 | FaceIDPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_FACEIDPERMISSION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | HTTPFilePortal | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | http-infrastructure | 6.0.0 | 2026-12-31 |
 | HTTPServer | {"defines":[],"upcoming_features":["InferSendableFromCaptures","StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | http-infrastructure | 6.0.0 | 2026-12-31 |

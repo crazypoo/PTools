@@ -7,7 +7,9 @@
 //
 
 import UIKit
-@preconcurrency import DeviceKit
+#if SWIFT_PACKAGE
+import PToolsDevice
+#endif
 
 public let CorePodBundleName = "PooToolsResource"
 
@@ -26,13 +28,37 @@ public typealias PTBoolTask = (@Sendable (Bool) -> Void)
 // English: Expose canonical device names; the misspelled globals below remain source-compatible aliases.
 // Español: Expone nombres canónicos de dispositivos; los globales con errores de escritura siguen como alias compatibles.
 // 中文：提供规范的设备名称；下面的历史拼写全局变量继续作为兼容别名保留。
-public let deviceInfo = Device.current
+public let deviceInfo = PTDevice.current
 public let deviceIsSimulator = deviceInfo.isSimulator
-public let allIPadDevices: [Device] = Device.allPads
-public let allPlusDevices: [Device] = Device.allPlusSizedDevices
-public let allProDevices: [Device] = Device.allProDevices
-public let allSensorHousingDevices: [Device] = Device.allDevicesWithSensorHousing
-public let allSmallDevices: [Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone6s,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.iPhone14,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini),.simulator(.iPhone14),.simulator(.iPhone15),.simulator(.iPhone16),.simulator(.iPhone17),.simulator(.iPhone16e),.iPhone17,.iPhone16e]
+public let allIPadDevices: [PTDeviceModel] = PTDeviceCatalog.models(family: .iPad)
+public let allPlusDevices: [PTDeviceModel] = [
+    PTDeviceModel("iphone-6-plus"), PTDeviceModel("iphone-6s-plus"),
+    PTDeviceModel("iphone-7-plus"), PTDeviceModel("iphone-8-plus"),
+    PTDeviceModel("iphone-xr"), PTDeviceModel("iphone-xs-max"),
+    PTDeviceModel("iphone-11"), PTDeviceModel("iphone-11-pro-max"),
+    PTDeviceModel("iphone-12-pro-max"), PTDeviceModel("iphone-13-pro-max"),
+    PTDeviceModel("iphone-14-plus"), PTDeviceModel("iphone-14-pro-max"),
+    PTDeviceModel("iphone-15-plus"), PTDeviceModel("iphone-15-pro-max"),
+    PTDeviceModel("iphone-16-plus"), PTDeviceModel("iphone-16-pro-max"),
+    PTDeviceModel("iphone-17-pro-max")
+]
+public let allProDevices: [PTDeviceModel] = [
+    PTDeviceModel("iphone-11-pro"), PTDeviceModel("iphone-11-pro-max"),
+    PTDeviceModel("iphone-12-pro"), PTDeviceModel("iphone-12-pro-max"),
+    PTDeviceModel("iphone-13-pro"), PTDeviceModel("iphone-13-pro-max"),
+    PTDeviceModel("iphone-14-pro"), PTDeviceModel("iphone-14-pro-max"),
+    PTDeviceModel("iphone-15-pro"), PTDeviceModel("iphone-15-pro-max"),
+    PTDeviceModel("iphone-16-pro"), PTDeviceModel("iphone-16-pro-max"),
+    PTDeviceModel("iphone-17-pro"), PTDeviceModel("iphone-17-pro-max")
+]
+public let allSensorHousingDevices: [PTDeviceModel] = PTDeviceCatalog.allSpecifications
+    .filter { $0.traits.hasSensorHousing }
+    .map(\.model)
+public let allSmallDevices: [PTDeviceModel] = [
+    "iphone-5", "iphone-5c", "iphone-5s", "ipod-touch-5", "ipod-touch-6", "ipod-touch-7",
+    "iphone-6", "iphone-6s", "iphone-7", "iphone-8", "iphone-se-2", "iphone-se-3",
+    "iphone-12-mini", "iphone-13-mini", "iphone-14", "iphone-15", "iphone-16", "iphone-17", "iphone-16e"
+].map { PTDeviceModel($0) }
 
 // English: Deprecated aliases preserve the 5.x migration window without duplicating storage.
 // Español: Los alias obsoletos conservan la ventana de migración 5.x sin duplicar el almacenamiento.

@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import DeviceKit
+#if SWIFT_PACKAGE
+import PToolsDevice
+#endif
 import CoreTelephony
 import Foundation
 import AudioToolbox
@@ -137,7 +139,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     static var volumes : String {
-        String(Device.volumeTotalCapacity ?? 0)
+        String(PTDevice.volumeTotalCapacity ?? 0)
     }
     
     //MARK: 当前硬盘可用空间
@@ -168,13 +170,13 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 獲取可用的儲存用量(字節為單位)
     ///獲取可用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForImportantUsage : String {
-        String(Device.volumeAvailableCapacityForImportantUsage ?? 0)
+        String(PTDevice.volumeAvailableCapacityForImportantUsage ?? 0)
     }
     
     //MARK: 獲取不能用的儲存用量(字節為單位)
     ///獲取不能用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForOpportunisticUsage : String {
-        String(Device.volumeAvailableCapacityForOpportunisticUsage ?? 0)
+        String(PTDevice.volumeAvailableCapacityForOpportunisticUsage ?? 0)
     }
 
     //MARK: 获取总内存大小
@@ -221,16 +223,12 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 是否支持ApplePencil
     ///是否支持ApplePencil
     static var supportApplePencil: UIDeviceApplePencilSupportType {
-        
-        if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
-            return .Both
-        } else if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration != Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
+        guard deviceInfo.isPad else { return .BothNot }
+        let model = deviceInfo.model.rawValue
+        if model.contains("ipad-pro") || model == "ipad-air-5" || model == "ipad-mini-6" {
             return .Second
-        } else if Device.ApplePencilSupport.secondGeneration != Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
-            return .First
-        } else {
-            return .BothNot
         }
+        return .First
     }
     
     //MARK: 获取最高刷新率
@@ -325,7 +323,7 @@ public extension PTPOP where Base: UIDevice {
     ///数据业务对应的通信技术
     /// - Returns: 通信技术
     static func currentRadioAccessTechnologys() -> [String]? {
-        guard !Device.current.isSimulator else {
+        guard !PTDevice.current.isSimulator else {
             return nil
         }
         // 获取并输出运营商信息

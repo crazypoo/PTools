@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.09.27",
+  "devices": [
+    {"id":"homepod","marketingName":"HomePod","family":"homePod","platform":"iOS","identifiers":["AudioAccessory1,1","AudioAccessory1,2"],"releaseYear":2018,"formFactor":"speaker","processorFamily":"A8"},
+    {"id":"homepod-mini","marketingName":"HomePod mini","family":"homePod","platform":"iOS","identifiers":["AudioAccessory5,1"],"releaseYear":2020,"formFactor":"speaker","processorFamily":"S5"}
+  ]
+}

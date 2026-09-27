@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T12:26:06Z",
-  "shared_call_count": 1544,
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:03Z",
+  "shared_call_count": 1553,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -25,7 +25,7 @@
     },
     {
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 90,
+      "line": 89,
       "declaration": "public static let share = PTLaunchAdMonitor()",
       "name": "share",
       "category": "D",
@@ -510,6 +510,42 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 600,
+      "declaration": "public static let shared = PTInstructionSessionRegistry()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+      "line": 639,
+      "declaration": "public static let shared = PTInstructionCenter()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionPersistence.swift",
+      "line": 25,
+      "declaration": "public static let shared = PTUserDefaultsInstructionStore()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift",
+      "line": 12,
+      "declaration": "public static let shared = PTInstructionTargetRegistry()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
       "path": "PooToolsSource/Language/PTLanguage.swift",
       "line": 300,
       "declaration": "public static let share = PTLanguage()",
@@ -565,7 +601,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 153,
+      "line": 155,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -574,7 +610,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 402,
+      "line": 404,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -772,7 +808,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 19,
+      "line": 18,
       "declaration": "public static let share = PTPermissionStatic()",
       "name": "share",
       "category": "C",

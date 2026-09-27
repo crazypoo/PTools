@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.09.27",
+  "devices": [
+    {"id":"mac-generic","marketingName":"Mac","family":"mac","platform":"macOS","identifiers":["Mac14,2","Mac14,3","Mac14,5","Mac14,6","Mac15,3","Mac15,4","Mac15,5","Mac16,1"],"releaseYear":2022,"formFactor":"desktop","processorFamily":"Apple silicon"}
+  ]
+}

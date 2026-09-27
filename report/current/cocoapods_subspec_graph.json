@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T13:57:07Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:10Z",
   "name": "PooTools",
-  "version": "5.32.0",
+  "version": "5.33.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 114,
+  "subspec_count": 115,
   "subspecs": [
     {
       "name": "PooTools/Appz",
@@ -368,13 +368,13 @@
       "short_name": "Core",
       "local_dependencies": [
         "PooTools/Date",
+        "PooTools/Device",
         "PooTools/Logging",
         "PooTools/PToolsCore",
         "PooTools/PToolsUIFoundation",
         "PooTools/Symbols"
       ],
       "third_party_dependencies": [
-        "DeviceKit",
         "IQKeyboardManagerSwift",
         "IQKeyboardToolbarManager",
         "KakaJSON",
@@ -636,6 +636,24 @@
       ],
       "source_directories": [
         "PToolsDate"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/Device",
+      "short_name": "Device",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsDevice/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsDevice"
       ],
       "resource_bundles": {},
       "resources": [],

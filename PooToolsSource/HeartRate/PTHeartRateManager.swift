@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import DeviceKit
 
 public enum CameraType: Int {
     case back

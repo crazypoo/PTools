@@ -8,7 +8,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 configuration="${CONFIGURATION:-Debug}"
-derived_data_path="${DERIVED_DATA_PATH:-/tmp/PTools-5.32.0-CocoaPods-Simulator-DD}"
+derived_data_path="${DERIVED_DATA_PATH:-/tmp/PTools-5.33.0-CocoaPods-Simulator-DD}"
 
 xcodebuild \
   -workspace "$repo_root/PooTools.xcworkspace" \

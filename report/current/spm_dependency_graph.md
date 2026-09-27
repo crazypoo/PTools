@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: ce03fbefe62ed5b0729949386a7c4101dbf28d25
-Generated at: 2026-09-27T13:57:06Z
+Source revision: fa748870fa58233517734db9ad2fca99263a4865
+Generated at: 2026-09-27T16:27:10Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,8 +13,8 @@ Generated at: 2026-09-27T13:57:06Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `111`
-- Core direct third-party dependencies: `7` (baseline `18`)
+- Target count: `113`
+- Core direct third-party dependencies: `6` (baseline `18`)
 
 ## Products
 
@@ -37,6 +37,7 @@ Generated at: 2026-09-27T13:57:06Z
 | `PTTrackingPermission` | `PTTrackingPermission` |
 | `PToolsCore` | `PToolsCore` |
 | `PToolsDate` | `PToolsDate` |
+| `PToolsDevice` | `PToolsDevice` |
 | `PToolsHTTPFilePortal` | `PToolsHTTPFilePortal` |
 | `PToolsHTTPServer` | `PToolsHTTPServer` |
 | `PToolsLogging` | `PToolsLogging` |
@@ -144,6 +145,8 @@ Generated at: 2026-09-27T13:57:06Z
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsDate` | `PooToolsSource/PToolsDate` | — | — | 0 source entries / 0 resources |
 | `PToolsDateTests` | `Tests/PToolsDateTests` | PToolsDate | — | 0 source entries / 0 resources |
+| `PToolsDevice` | `PooToolsSource/PToolsDevice` | — | — | 0 source entries / 0 resources |
+| `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
 | `PToolsHTTPFilePortal` | `PooToolsSource/PToolsHTTPFilePortal` | PToolsHTTPServer | — | 0 source entries / 1 resources |
 | `PToolsHTTPServer` | `PooToolsSource/PToolsHTTPServer` | — | — | 0 source entries / 0 resources |
 | `PToolsHTTPServerTests` | `Tests/PToolsHTTPServerTests` | PToolsHTTPServer | — | 0 source entries / 0 resources |
@@ -234,7 +237,7 @@ Generated at: 2026-09-27T13:57:06Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | DeviceKit, IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, SmartCodable, SnapKit | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, SmartCodable, SnapKit | 28 source entries / 1 resources |
 
 ## Notes
 

@@ -48,6 +48,7 @@ ALIASES = {
   "DEBUGTrackingEyes" => "DEBUG_TrackingEyes",
   "PToolsHTTPServer" => "HTTPServer",
   "PToolsHTTPFilePortal" => "HTTPFilePortal",
+  "PToolsDevice" => "Device",
   "SmartScreenshot" => "SmartScreenshot"
 }.freeze
 

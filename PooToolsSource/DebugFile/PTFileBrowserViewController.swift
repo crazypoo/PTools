@@ -13,7 +13,6 @@ import QuickLook
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
-import DeviceKit
 
 public class PTFileBrowserViewController: PTBaseViewController {
 

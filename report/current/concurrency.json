@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "ce03fbefe62ed5b0729949386a7c4101dbf28d25",
-  "generated_at": "2026-09-27T12:26:05Z",
+  "source_revision": "fa748870fa58233517734db9ad2fca99263a4865",
+  "generated_at": "2026-09-27T16:27:02Z",
   "counts": {
     "main_queue_async": 28,
     "task_detached": 28,
@@ -50,7 +50,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1064,
+      "line": 1063,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -74,7 +74,7 @@
     {
       "rule": "as_bang",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 370,
+      "line": 369,
       "text": "let tap = sender as! UITapGestureRecognizer"
     },
     {
@@ -308,13 +308,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 124,
+      "line": 123,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 251,
+      "line": 250,
       "text": "DispatchQueue.main.async {"
     },
     {
