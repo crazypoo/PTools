@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Governance/audit_repository.py
-Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
+Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f -->
 # Data Asset Inventory
 
 - Version: `5.56.2`
-- Records: `227`
+- Records: `226`
 
 | path | format | category | sourceOfTruth | action | consumedBy |
 | --- | --- | --- | --- | --- | --- |
@@ -15,8 +15,8 @@ Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
 | .github/workflows/release-validation.yml | yml | ci | False | KEEP | docs/_meta/data-assets.yml |
 | .swiftlint.yml | yml | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
 | .vscode/settings.json | json | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
-| Data/registry.yml | yml | source_of_truth | True | KEEP | Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/cleanup.yml, docs/_meta/data-assets.yml |
-| Example/Extensions/extension_targets.json | json | source_of_truth | True | KEEP | Scripts/CI/check_5_36_1_finalization.sh, Scripts/CI/check_p2_modern_modules.sh, docs/_meta/data-assets.yml, docs/architecture/PTOOLS_5_36_1_FINALIZATION_MATRIX.md |
+| Data/registry.yml | yml | source_of_truth | True | KEEP | Scripts/Docs/audit_docs.py, Scripts/Governance/audit_repository.py, docs/_meta/cleanup.yml, docs/_meta/data-assets.yml |
+| Example/Extensions/extension_targets.json | json | source_of_truth | True | KEEP | Scripts/CI/check_p2_modern_modules.sh, docs/_meta/data-assets.yml, docs/architecture/PTOOLS_5_36_1_FINALIZATION_MATRIX.md |
 | PooTools/Images.xcassets/AppIcon.appiconset/Contents.json | json | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
 | PooTools/Images.xcassets/Contents.json | json | source_of_truth | True | DUPLICATE_REVIEW | docs/_meta/data-assets.yml |
 | PooTools/Images.xcassets/Day/Contents.json | json | source_of_truth | True | DUPLICATE_REVIEW | docs/_meta/data-assets.yml |
@@ -181,26 +181,26 @@ Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
 | PooToolsSource/Resource/Symbols.xcassets/Panel/Contents.json | json | source_of_truth | True | DUPLICATE_REVIEW | docs/_meta/data-assets.yml |
 | PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json | json | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
 | PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json | json | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
-| Scripts/CI/quality_gates.yml | yml | ci | False | KEEP | Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
+| Scripts/CI/quality_gates.yml | yml | ci | False | KEEP | Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
 | Scripts/concurrency_exception_registry.json | json | dev_tool | False | KEEP | Data/registry.yml, Scripts/validate_quality_scans.sh, docs/_meta/data-assets.yml, docs/architecture/CONCURRENCY.md |
-| Scripts/module_registry.json | json | dev_tool | False | KEEP | Data/registry.yml, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/generate_package_matrix.rb, Scripts/validate_module_parity.sh, Scripts/validate_swifterswift_removal.sh, docs/_meta/data-assets.yml, docs/architecture/PACKAGE_MATRIX.md … |
+| Scripts/module_registry.json | json | dev_tool | False | KEEP | Data/registry.yml, Scripts/Docs/audit_docs.py, Scripts/generate_package_matrix.rb, Scripts/validate_module_parity.sh, Scripts/validate_swifterswift_removal.sh, docs/_meta/data-assets.yml, docs/architecture/PACKAGE_MATRIX.md, docs/architecture/PTOOLS_P1_ADVANCED_CAPABILITIES.md … |
 | Scripts/naming_debt_registry.json | json | dev_tool | False | KEEP | Scripts/validate_519_package_tests_docs.sh, Scripts/validate_naming_debt.sh, docs/_meta/data-assets.yml |
 | Scripts/p1_performance_registry.json | json | dev_tool | False | KEEP | Scripts/validate_p1_performance_registry.sh, docs/_meta/data-assets.yml |
 | Scripts/p1_public_api_intent.json | json | dev_tool | False | KEEP | Scripts/validate_p1_public_api_intent.sh, docs/_meta/data-assets.yml |
-| Scripts/registry.yml | yml | dev_tool | False | KEEP | Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
-| Tests/registry.yml | yml | source_of_truth | True | KEEP | Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/cleanup.yml, docs/_meta/data-assets.yml, docs/maintainers/TEST_GOVERNANCE.md |
-| _config.yml | yml | ci | False | KEEP | ROADMAP.md, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
+| Scripts/registry.yml | yml | dev_tool | False | KEEP | Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
+| Tests/registry.yml | yml | source_of_truth | True | KEEP | Scripts/Docs/audit_docs.py, Scripts/Governance/audit_repository.py, docs/_meta/cleanup.yml, docs/_meta/data-assets.yml, docs/maintainers/TEST_GOVERNANCE.md |
+| _config.yml | yml | ci | False | KEEP | ROADMAP.md, Scripts/Docs/audit_docs.py, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml |
 | api-baseline/5.18.2/public_api.json | json | source_of_truth | True | KEEP | Scripts/validate_519_package_tests_docs.sh, docs/_meta/data-assets.yml |
 | api-baseline/5.35.0/public_api.json | json | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
 | docs/_meta/cleanup.yml | yml | source_of_truth | True | KEEP | docs/_meta/data-assets.yml |
-| docs/_meta/data-assets.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py |
+| docs/_meta/data-assets.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py |
 | docs/_meta/document-policy.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, docs/_meta/data-assets.yml |
 | docs/_meta/glossary.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, docs/_meta/data-assets.yml |
 | docs/_meta/languages.yml | yml | source_of_truth | True | KEEP | Data/registry.yml, Scripts/CI/check_5_56_1_governance.sh, docs/_meta/data-assets.yml |
-| docs/_meta/modules.yml | yml | source_of_truth | True | KEEP | Data/registry.yml, Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml |
+| docs/_meta/modules.yml | yml | source_of_truth | True | KEEP | Data/registry.yml, Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, Scripts/Governance/audit_repository.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml |
 | docs/_meta/provenance.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, docs/_meta/data-assets.yml |
-| docs/_meta/scripts.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, Scripts/README.md, docs/_meta/data-assets.yml |
-| docs/_meta/tests.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/maintainers/TEST_GOVERNANCE.md |
+| docs/_meta/scripts.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, Scripts/README.md, docs/_meta/data-assets.yml |
+| docs/_meta/tests.yml | yml | source_of_truth | True | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/maintainers/TEST_GOVERNANCE.md |
 | report/baselines/5.10/public_api.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/baselines/5.8/dependency_direction.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/baselines/5.8/file_size.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
@@ -212,8 +212,7 @@ Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
 | report/baselines/5.9/cache_inventory.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/baselines/5.9/cocoapods_subspec_graph.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/baselines/5.9/concurrency.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
-| report/baselines/5.9/public_api.json | json | report | False | DUPLICATE_REVIEW | Scripts/validate_59_contracts.sh, docs/_meta/data-assets.yml |
-| report/baselines/5.9/public_api_generated.json | json | report | False | DUPLICATE_REVIEW | docs/_meta/data-assets.yml |
+| report/baselines/5.9/public_api.json | json | report | False | KEEP | Scripts/validate_59_contracts.sh, docs/_meta/data-assets.yml |
 | report/baselines/5.9/singletons.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/current/accessibility.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/current/cache_inventory.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
@@ -227,11 +226,11 @@ Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
 | report/current/sendable_exceptions.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/current/singletons.json | json | report | False | KEEP | Scripts/validate_lifecycle_5_9.sh, docs/_meta/data-assets.yml |
 | report/current/spm_dependency_graph.json | json | report | False | KEEP | Scripts/validate_dependency_direction.sh, Scripts/validate_module_parity.sh, docs/_meta/data-assets.yml |
-| report/data/DATA_ASSET_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml |
-| report/docs/DOCUMENT_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml |
+| report/data/DATA_ASSET_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml |
+| report/docs/DOCUMENT_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml |
 | report/repository/DATA_ASSET_INVENTORY.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/repository/DUPLICATE_CANDIDATES.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/repository/SCRIPT_INVENTORY.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
 | report/repository/TEST_INVENTORY.json | json | report | False | KEEP | docs/_meta/data-assets.yml |
-| report/scripts/SCRIPT_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml |
-| report/tests/TEST_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml, docs/maintainers/TEST_GOVERNANCE.md |
+| report/scripts/SCRIPT_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml |
+| report/tests/TEST_INVENTORY.json | json | report | False | KEEP | Scripts/CI/check_5_56_1_governance.sh, Scripts/Docs/audit_docs.py, docs/_meta/data-assets.yml, docs/_meta/provenance.yml, docs/maintainers/TEST_GOVERNANCE.md |

@@ -19,9 +19,7 @@
         "Scripts/CI/check_p1_advanced_modules.sh",
         "Scripts/CI/check_p2_modern_modules.sh",
         "Scripts/CI/check_popovers_removed.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/Migration/cleanup_example_source_membership.rb",
         "Scripts/validate_514_network_security.sh",
@@ -114,31 +112,12 @@
     },
     {
       "action": "KEEP",
-      "calledByCI": false,
-      "calledByDocs": true,
-      "calledByOtherScripts": false,
-      "category": "CI",
-      "consumers": [
-        "docs/_meta/scripts.yml"
-      ],
-      "duplicateScore": 0.0,
-      "entrypoint": false,
-      "language": "sh",
-      "owner": "PTools maintainers",
-      "path": "Scripts/CI/check_5_36_1_finalization.sh",
-      "purpose": "repository automation",
-      "replacement": "",
-      "status": "LEGACY_REVIEW"
-    },
-    {
-      "action": "KEEP",
       "calledByCI": true,
       "calledByDocs": true,
       "calledByOtherScripts": true,
       "category": "CI",
       "consumers": [
         ".github/workflows/ptools-governance.yml",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/scripts.yml",
         "docs/guides/PTOOLS_5_56_2_CLOSURE.md",
@@ -383,7 +362,6 @@
       "consumers": [
         ".github/workflows/quality.yml",
         "Scripts/CI/quality_gates.yml",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml"
@@ -530,8 +508,6 @@
       "calledByOtherScripts": true,
       "category": "Docs",
       "consumers": [
-        "Scripts/Docs/__pycache__/apply_cleanup.cpython-314.pyc",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml"
@@ -559,11 +535,8 @@
         "Scripts/CI/check_5_56_1_governance.sh",
         "Scripts/CI/quality_gate.sh",
         "Scripts/CI/quality_gates.yml",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/README.md",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/README.md",
@@ -585,10 +558,9 @@
       "action": "KEEP",
       "calledByCI": false,
       "calledByDocs": true,
-      "calledByOtherScripts": true,
+      "calledByOtherScripts": false,
       "category": "Governance",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_data_assets.cpython-314.pyc",
         "docs/_meta/scripts.yml"
       ],
       "duplicateScore": 0.0,
@@ -607,10 +579,7 @@
       "calledByOtherScripts": true,
       "category": "Governance",
       "consumers": [
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/cleanup.yml",
@@ -629,10 +598,9 @@
       "action": "KEEP",
       "calledByCI": false,
       "calledByDocs": true,
-      "calledByOtherScripts": true,
+      "calledByOtherScripts": false,
       "category": "Governance",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_scripts.cpython-314.pyc",
         "docs/_meta/scripts.yml"
       ],
       "duplicateScore": 0.0,
@@ -651,8 +619,6 @@
       "calledByOtherScripts": true,
       "category": "Governance",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_tests.cpython-314.pyc",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "docs/_meta/scripts.yml"
       ],
@@ -672,8 +638,6 @@
       "calledByOtherScripts": true,
       "category": "Governance",
       "consumers": [
-        "Scripts/Governance/__pycache__/find_duplicates.cpython-314.pyc",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml"
@@ -712,9 +676,7 @@
       "calledByOtherScripts": true,
       "category": "Privacy",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml"
@@ -853,11 +815,8 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml",
         "docs/maintainers/TEST_GOVERNANCE.md",
@@ -879,7 +838,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/scripts.yml",
         "docs/maintainers/QUALITY.md",
@@ -901,7 +859,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/validate_59_contracts.sh",
         "Scripts/validate_quality_scans.sh",
@@ -923,7 +880,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/validate_59_contracts.sh",
         "Scripts/validate_p2_performance_closure.sh",
@@ -946,7 +902,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/validate_58_contracts.sh",
         "Scripts/validate_module_parity.sh",
@@ -968,7 +923,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/validate_59_contracts.sh",
         "Scripts/validate_quality_scans.sh",
@@ -1048,7 +1002,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/validate_59_contracts.sh",
         "Scripts/validate_quality_scans.sh",
@@ -1073,7 +1026,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/validate_58_contracts.sh",
         "Scripts/validate_quality_scans.sh",
@@ -1095,7 +1047,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "Scripts/validate_59_contracts.sh",
         "Scripts/validate_lifecycle_5_9.sh",
@@ -1118,7 +1069,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/validate_58_contracts.sh",
         "Scripts/validate_dependency_direction.sh",
@@ -1595,7 +1545,6 @@
       "calledByOtherScripts": true,
       "category": "Scripts",
       "consumers": [
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/validate_58_contracts.sh",
         "Scripts/validate_p2_performance_closure.sh",
@@ -2006,7 +1955,6 @@
         ".github/workflows/release-validation.yml",
         "Scripts/CI/quality_gate.sh",
         "Scripts/CI/quality_gates.yml",
-        "Scripts/__pycache__/ptools.cpython-314.pyc",
         "Scripts/ptools.py",
         "Scripts/registry.yml",
         "docs/_meta/scripts.yml",

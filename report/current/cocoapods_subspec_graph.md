@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
-Generated at: 2026-09-28T14:24:29Z
+Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
+Generated at: 2026-09-28T14:59:10Z
 -->
 
 # CocoaPods Subspec Graph

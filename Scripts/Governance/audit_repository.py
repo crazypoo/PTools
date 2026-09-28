@@ -278,6 +278,7 @@ def write_cleanup_manifests(scripts: list[dict[str, Any]], assets: list[dict[str
         {"area": "Scripts", "old": "Scripts/report_*_5_9.rb", "canonical": "Scripts/report_*.rb", "action": "MERGED_AND_REPOINTED", "consumers": "quality and lifecycle validators"},
         {"area": "Scripts", "old": "paapidetect.sh + paapi.txt", "canonical": "Scripts/Privacy/validate_privacy_accessed_api.sh + paapi.txt", "action": "MOVED_AND_REPOINTED", "consumers": "none; router entry added"},
         {"area": "Scripts", "old": "Scripts/report_public_api_5_8.rb; Scripts/generate_58_reports.sh", "canonical": "Git history and Scripts/ptools.py reports regenerate-5.8", "action": "DELETED_AFTER_CONSUMER_SCAN", "consumers": "none"},
+        {"area": "Scripts", "old": "Scripts/CI/check_5_36_1_finalization.sh", "canonical": "Git history", "action": "DELETED_AFTER_CONSUMER_SCAN", "consumers": "none; generated index only"},
     ]
     repository_rows.extend(
         {"area": "Data", "old": ", ".join(row["paths"]), "canonical": "same source pending owner review", "action": "DUPLICATE_REVIEW", "consumers": "not automatically deleted"}

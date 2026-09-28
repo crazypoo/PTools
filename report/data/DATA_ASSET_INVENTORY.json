@@ -1851,15 +1851,6 @@
       "format": "json",
       "generated": true,
       "kind": "REPORT",
-      "path": "report/baselines/5.9/public_api_generated.json",
-      "source_of_truth": false
-    },
-    {
-      "action": "KEEP",
-      "consumer": "repository",
-      "format": "json",
-      "generated": true,
-      "kind": "REPORT",
       "path": "report/baselines/5.9/singletons.json",
       "source_of_truth": false
     },
@@ -2044,8 +2035,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-09-28T21:26:17+08:00",
+  "generated_at": "2026-09-28T22:28:13+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d",
+  "source_revision": "f903ce58e855a57a32a4c867b67b22a6cb02359f",
   "version": "5.56.2"
 }

@@ -1643,14 +1643,6 @@
   consumer: "repository"
   action: "KEEP"
 -
-  path: "report/baselines/5.9/public_api_generated.json"
-  kind: "REPORT"
-  format: "json"
-  generated: true
-  source_of_truth: false
-  consumer: "repository"
-  action: "KEEP"
--
   path: "report/baselines/5.9/singletons.json"
   kind: "REPORT"
   format: "json"

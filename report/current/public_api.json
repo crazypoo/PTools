@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d",
-  "generated_at": "2026-09-28T14:24:02Z",
+  "source_revision": "f903ce58e855a57a32a4c867b67b22a6cb02359f",
+  "generated_at": "2026-09-28T14:58:44Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",

@@ -1,17 +1,16 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
-Generated at: 2026-09-28T21:26:17+08:00 -->
+Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
+Generated at: 2026-09-28T22:28:13+08:00 -->
 # Script Inventory
 
 - Version: `5.56.2`
-- Records: `101`
+- Records: `100`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
 | Scripts/CI/build_cocoapods_device.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/build_cocoapods_simulator.sh | sh | CI | ACTIVE | True | KEEP |
-| Scripts/CI/check_5_36_1_finalization.sh | sh | CI | LEGACY_REVIEW | False | KEEP |
 | Scripts/CI/check_5_56_1_governance.sh | sh | CI | LEGACY_REVIEW | False | KEEP |
 | Scripts/CI/check_devicekit_removed.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/check_example_source_ownership.rb | rb | CI | ACTIVE | True | KEEP |

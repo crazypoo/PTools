@@ -19,14 +19,6 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/CI/check_5_36_1_finalization.sh"
-  language: "sh"
-  domain: "CI"
-  status: "LEGACY_REVIEW"
-  canonical: false
-  entrypoint: false
-  action: "KEEP"
--
   path: "Scripts/CI/check_5_56_1_governance.sh"
   language: "sh"
   domain: "CI"

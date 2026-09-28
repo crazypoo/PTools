@@ -42,15 +42,6 @@
         "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CH.imageset/Contents.json",
         "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CN.imageset/Contents.json"
       ]
-    },
-    {
-      "action": "REVIEW_ONLY",
-      "category": "data",
-      "hash": "23d15884fd745b0a2a49d65025518182ce64d9cb0a39a7160088043894fab197",
-      "paths": [
-        "report/baselines/5.9/public_api.json",
-        "report/baselines/5.9/public_api_generated.json"
-      ]
     }
   ],
   "generator": "Scripts/Governance/audit_repository.py"

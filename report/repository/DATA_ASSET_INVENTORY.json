@@ -123,9 +123,7 @@
       "action": "KEEP",
       "category": "source_of_truth",
       "consumedBy": [
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/cleanup.yml",
         "docs/_meta/data-assets.yml"
@@ -145,7 +143,6 @@
       "action": "KEEP",
       "category": "source_of_truth",
       "consumedBy": [
-        "Scripts/CI/check_5_36_1_finalization.sh",
         "Scripts/CI/check_p2_modern_modules.sh",
         "docs/_meta/data-assets.yml",
         "docs/architecture/PTOOLS_5_36_1_FINALIZATION_MATRIX.md"
@@ -2959,7 +2956,6 @@
       "action": "KEEP",
       "category": "ci",
       "consumedBy": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/data-assets.yml"
       ],
@@ -2999,7 +2995,6 @@
       "category": "dev_tool",
       "consumedBy": [
         "Data/registry.yml",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "Scripts/generate_package_matrix.rb",
         "Scripts/validate_module_parity.sh",
@@ -3079,7 +3074,6 @@
       "action": "KEEP",
       "category": "dev_tool",
       "consumedBy": [
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/data-assets.yml"
       ],
@@ -3098,9 +3092,7 @@
       "action": "KEEP",
       "category": "source_of_truth",
       "consumedBy": [
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/cleanup.yml",
         "docs/_meta/data-assets.yml",
@@ -3122,9 +3114,7 @@
       "category": "ci",
       "consumedBy": [
         "ROADMAP.md",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/data-assets.yml"
       ],
@@ -3196,7 +3186,6 @@
       "category": "source_of_truth",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py"
       ],
       "duplicateScore": 0.0,
@@ -3271,9 +3260,7 @@
       "consumedBy": [
         "Data/registry.yml",
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
-        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
         "Scripts/Governance/audit_repository.py",
         "docs/_meta/data-assets.yml",
         "docs/_meta/provenance.yml"
@@ -3312,7 +3299,6 @@
       "category": "source_of_truth",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "Scripts/README.md",
         "docs/_meta/data-assets.yml"
@@ -3333,7 +3319,6 @@
       "category": "source_of_truth",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/data-assets.yml",
         "docs/maintainers/TEST_GOVERNANCE.md"
@@ -3539,34 +3524,17 @@
       "stableIDs": []
     },
     {
-      "action": "DUPLICATE_REVIEW",
+      "action": "KEEP",
       "category": "report",
       "consumedBy": [
         "Scripts/validate_59_contracts.sh",
         "docs/_meta/data-assets.yml"
       ],
-      "duplicateScore": 1.0,
+      "duplicateScore": 0.0,
       "format": "json",
       "generatedBy": "Scripts/Docs/audit_docs.py",
       "owner": "PTools maintainers",
       "path": "report/baselines/5.9/public_api.json",
-      "recordCount": null,
-      "replacement": "",
-      "schema": "",
-      "sourceOfTruth": false,
-      "stableIDs": []
-    },
-    {
-      "action": "DUPLICATE_REVIEW",
-      "category": "report",
-      "consumedBy": [
-        "docs/_meta/data-assets.yml"
-      ],
-      "duplicateScore": 1.0,
-      "format": "json",
-      "generatedBy": "Scripts/Docs/audit_docs.py",
-      "owner": "PTools maintainers",
-      "path": "report/baselines/5.9/public_api_generated.json",
       "recordCount": null,
       "replacement": "",
       "schema": "",
@@ -3811,7 +3779,6 @@
       "category": "report",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/data-assets.yml"
       ],
@@ -3831,7 +3798,6 @@
       "category": "report",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/data-assets.yml",
         "docs/_meta/provenance.yml"
@@ -3920,7 +3886,6 @@
       "category": "report",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/data-assets.yml"
       ],
@@ -3940,7 +3905,6 @@
       "category": "report",
       "consumedBy": [
         "Scripts/CI/check_5_56_1_governance.sh",
-        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
         "Scripts/Docs/audit_docs.py",
         "docs/_meta/data-assets.yml",
         "docs/_meta/provenance.yml",

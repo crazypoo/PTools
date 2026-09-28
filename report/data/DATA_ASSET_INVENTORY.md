@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
-Generated at: 2026-09-28T21:26:17+08:00 -->
+Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
+Generated at: 2026-09-28T22:28:13+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.56.2`
-- Records: `227`
+- Records: `226`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -214,7 +214,6 @@ Generated at: 2026-09-28T21:26:17+08:00 -->
 | report/baselines/5.9/cocoapods_subspec_graph.json | REPORT | json | True | False | KEEP |
 | report/baselines/5.9/concurrency.json | REPORT | json | True | False | KEEP |
 | report/baselines/5.9/public_api.json | REPORT | json | True | False | KEEP |
-| report/baselines/5.9/public_api_generated.json | REPORT | json | True | False | KEEP |
 | report/baselines/5.9/singletons.json | REPORT | json | True | False | KEEP |
 | report/current/accessibility.json | REPORT | json | True | False | KEEP |
 | report/current/cache_inventory.json | REPORT | json | True | False | KEEP |

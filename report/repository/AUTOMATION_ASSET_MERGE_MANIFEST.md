@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Governance/audit_repository.py
-Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
+Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f -->
 # Automation Asset Merge Manifest
 
 - Version: `5.56.2`
-- Records: `10`
+- Records: `9`
 
 | old | canonical | action | consumers | safe_delete_after |
 | --- | --- | --- | --- | --- |
@@ -17,4 +17,3 @@ Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d -->
 | PooTools/Images.xcassets/Day/Contents.json, PooTools/Images.xcassets/TagImage/Contents.json | none | REVIEW_ONLY | unknown | manual semantic review |
 | PooToolsSource/Resource/OSSKitImages.xcassets/nb-NO.imageset/Contents.json, PooToolsSource/Resource/OSSKitImages.xcassets/no-NO.imageset/Contents.json | none | REVIEW_ONLY | unknown | manual semantic review |
 | PooToolsSource/Resource/OSSKitImages.xcassets/zh-CH.imageset/Contents.json, PooToolsSource/Resource/OSSKitImages.xcassets/zh-CN.imageset/Contents.json | none | REVIEW_ONLY | unknown | manual semantic review |
-| report/baselines/5.9/public_api.json, report/baselines/5.9/public_api_generated.json | none | REVIEW_ONLY | unknown | manual semantic review |
