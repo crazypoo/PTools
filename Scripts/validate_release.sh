@@ -16,6 +16,15 @@ fail() {
   exit 1
 }
 
+# English: Keep release metadata checks portable when ripgrep is not installed.
+# Español: Mantiene portátiles las comprobaciones de metadatos cuando ripgrep no está instalado.
+# 中文：当环境未安装 ripgrep 时，发布元数据检查仍然保持可移植。
+contains_fixed_string() {
+  local needle="$1"
+  local file="$2"
+  grep -Fq -- "$needle" "$file"
+}
+
 metadata_only=false
 if [[ "$#" -gt 0 && "$1" == "--metadata-only" ]]; then
   metadata_only=true
@@ -32,14 +41,14 @@ fi
 [[ -n "$version" ]] || fail RELEASE_VERSION_MISSING VERSION 'semantic version' 'empty' 'release version must be readable'
 [[ "$version" == "$(tr -d '[:space:]' < VERSION)" ]] \
   || fail RELEASE_VERSION_MISMATCH VERSION "$(tr -d '[:space:]' < VERSION)" "$version" 'release input must match VERSION'
-rg -q --fixed-strings "version_path = File.join(__dir__, 'VERSION')" PooTools.podspec \
+contains_fixed_string "version_path = File.join(__dir__, 'VERSION')" PooTools.podspec \
   || fail RELEASE_PODSPEC_SOURCE PooTools.podspec 'VERSION-backed podspec' 'no VERSION source' 'podspec must use the canonical version source'
 pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("version")')"
 [[ "$pod_version" == "$version" ]] \
   || fail RELEASE_PODSPEC_MISMATCH PooTools.podspec "$version" "$pod_version" 'resolved podspec version must match VERSION'
-rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \
+contains_fixed_string "PooTools/Core ($version)" Podfile.lock \
   || fail RELEASE_LOCK_MISMATCH Podfile.lock "PooTools/Core ($version)" 'missing or different resolved version' 'lockfile must match VERSION'
-rg -q --fixed-strings "当前代码基线：\`$version\`" ROADMAP.md \
+contains_fixed_string "当前代码基线：\`$version\`" ROADMAP.md \
   || fail RELEASE_ROADMAP_MISMATCH ROADMAP.md "$version" 'current baseline is different' 'ROADMAP must match VERSION'
 
 # English: A tag-triggered release must prove that its embedded VERSION is the tag name.
@@ -55,10 +64,10 @@ if [[ "${GITHUB_REF_NAME:-}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 fi
 
 if git show-ref --tags --verify --quiet "refs/tags/$version"; then
-  rg -q --fixed-strings "## $version" CHANGELOG.md \
+  contains_fixed_string "## $version" CHANGELOG.md \
     || fail RELEASE_CHANGELOG_MISSING CHANGELOG.md "## $version" 'section not found' 'tagged releases must have a finalized changelog heading'
 else
-  rg -q --fixed-strings "Unreleased" CHANGELOG.md \
+  contains_fixed_string "Unreleased" CHANGELOG.md \
     || fail RELEASE_CHANGELOG_UNRELEASED_MISSING CHANGELOG.md 'Unreleased section' 'section not found' 'development releases must retain an Unreleased section'
 fi
 
