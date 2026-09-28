@@ -240,6 +240,75 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish P2 configuration, feedback, and audio as optional native modules.
+    # Español: Publica Configuration, Feedback y Audio de P2 como módulos nativos opcionales.
+    # 中文：将 P2 的 Configuration、Feedback 和 Audio 作为可选原生模块发布。
+    s.subspec 'Configuration' do |subspec|
+        subspec.dependency 'PooTools/Storage'
+        subspec.source_files = 'PooToolsSource/PToolsConfiguration/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_CONFIGURATION POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'Feedback' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsFeedback/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit', 'CoreHaptics'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_FEEDBACK POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'Audio' do |subspec|
+        subspec.dependency 'PooTools/MicPermission'
+        subspec.source_files = 'PooToolsSource/PToolsAudio/**/*.swift'
+        subspec.frameworks = 'Foundation', 'AVFoundation', 'AudioToolbox'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_AUDIO POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: AppIntents is extension-safe and bridges to the existing RouteCore contract.
+    # Español: AppIntents es seguro para extensiones y se conecta con el contrato RouteCore existente.
+    # 中文：AppIntents 支持扩展目标，并桥接现有 RouteCore 契约。
+    s.subspec 'AppIntents' do |subspec|
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.source_files = 'PooToolsSource/PToolsAppIntents/**/*.swift'
+        subspec.frameworks = 'Foundation', 'AppIntents'
+        subspec.pod_target_xcconfig = {
+            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_APPINTENTS POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: WidgetCore keeps shared state and WidgetKit reloads separate from SwiftUI widget UI.
+    # Español: WidgetCore separa el estado compartido y las recargas de WidgetKit de la UI SwiftUI del widget.
+    # 中文：WidgetCore 将共享状态和 WidgetKit 刷新与 Widget 的 SwiftUI UI 分离。
+    s.subspec 'WidgetCore' do |subspec|
+        subspec.dependency 'PooTools/Storage'
+        subspec.dependency 'PooTools/RouteCore'
+        subspec.dependency 'PooTools/DeepLink'
+        subspec.source_files = 'PooToolsSource/PToolsWidgetCore/**/*.swift'
+        subspec.frameworks = 'Foundation', 'WidgetKit'
+        subspec.pod_target_xcconfig = {
+            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_WIDGET_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Activities exposes lifecycle coordination without owning business ActivityAttributes UI.
+    # Español: Activities coordina el ciclo de vida sin adueñarse de la UI de ActivityAttributes de negocio.
+    # 中文：Activities 只协调生命周期，不负责业务 ActivityAttributes 的 UI 设计。
+    s.subspec 'Activities' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsActivities/**/*.swift'
+        subspec.frameworks = 'Foundation', 'ActivityKit'
+        subspec.pod_target_xcconfig = {
+            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_ACTIVITIES POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Device'
@@ -1239,6 +1308,12 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'
+        # English: Include UI-safe P2 modules only in the opt-in full bundle, never in Core.
+        # Español: Incluye los módulos P2 seguros para UI solo en el bundle completo opt-in, nunca en Core.
+        # 中文：仅将适用于普通 App Target 的 P2 模块加入可选完整功能包，不进入 Core 默认依赖。
+        subspec.dependency 'PooTools/Configuration'
+        subspec.dependency 'PooTools/Feedback'
+        subspec.dependency 'PooTools/Audio'
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
         subspec.dependency 'PooTools/HarbethKit'

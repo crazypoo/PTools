@@ -69,6 +69,7 @@ bash Scripts/validate_concurrency_5_19.sh
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/CI/check_p0_platform_modules.sh
 bash Scripts/CI/check_p1_advanced_modules.sh
+bash Scripts/CI/check_p2_modern_modules.sh
 bash Scripts/validate_logging_foundation_5_20.sh
 bash Scripts/validate_logging_5_21.sh
 bash Scripts/validate_logging_5_22.sh
@@ -171,7 +172,7 @@ fi
 # English: The URLSession delegate proxy is the only newly approved system callback bridge.
 # Español: El proxy delegado de URLSession es el único puente nuevo de callbacks del sistema aprobado.
 # 中文：URLSession 委托代理是本轮唯一批准新增的系统回调桥接点。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache|PTURLSessionWebSocketDelegateProxy' || true)"
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache|PTURLSessionWebSocketDelegateProxy|PTActivityKitSendableBox' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

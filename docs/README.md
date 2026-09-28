@@ -4,12 +4,14 @@
 
 - [模块选择与安装](guides/MODULES.md)
 - [5.17 UI Components / Utility 结账清单](ui/UI_COMPONENTS_5_17.md)
+- [5.36 P2 Modern Extensions 指南](guides/PTOOLS_P2_MODERN_EXTENSIONS.md)
 - [Example 页面与回归入口](guides/EXAMPLE.md)
 - [5.x 到 6.0 迁移](migration/MIGRATION_6.md)
 
 ## 架构
 
 - [当前架构](architecture/ARCHITECTURE.md)
+- [P2 现代系统扩展架构](architecture/PTOOLS_P2_MODERN_EXTENSIONS.md)
 - [Swift 6 并发边界](architecture/CONCURRENCY.md)
 - [Debug 与 PTInstruments](architecture/DEBUG_AND_INSTRUMENTS.md)
 - [依赖与模块边界](architecture/DEPENDENCIES.md)

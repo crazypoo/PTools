@@ -1,6 +1,6 @@
 # PTools 测试矩阵
 
-本矩阵对应 5.19.x 的领域测试计划。它区分已经存在的 SwiftPM/XCTest 契约测试、只适合
+本矩阵对应 5.x 的领域测试计划。它区分已经存在的 SwiftPM/XCTest 契约测试、只适合
 iOS 宿主或真机验证的场景，以及尚未建立独立 target 的领域。矩阵不通过创建空壳测试 target
 伪装覆盖率；缺口必须在发布前有明确的验证方式和负责人。
 
@@ -21,6 +21,18 @@ iOS 宿主或真机验证的场景，以及尚未建立独立 target 的领域�
 | `PToolsWebKitTests` | — | 源码和依赖边界扫描 | WebKit 页面、导航和 cookie | 记录为 Simulator 宿主门禁 |
 | `PToolsDebugTests` | — | Debug/LocalConsole 静态与构建检查 | 多 Scene、日志洪峰和开关生命周期 | 记录为 Debug Example 门禁 |
 | `PToolsInstrumentsTests` | — | Instruments 契约和报告结构检查 | 真机 trace、内存和长时间采样 | 记录为 Instruments 手工门禁 |
+| `PToolsP2Tests` | `Tests/PToolsP2Tests` | Configuration snapshot、flag、waveform 值契约 | ActivityKit、WidgetKit、音频设备和触觉硬件 | 保留并纳入 SwiftPM；系统行为由 Simulator/真机宿主门禁覆盖 |
+
+## 5.36 P2 system matrix
+
+| Domain | 静态/SwiftPM | Simulator / host | 真机或 Extension |
+| --- | --- | --- | --- |
+| Configuration | typed key、provider precedence、snapshot、cache、override、并发 refresh | 示例宿主读取环境和本地覆盖 | remote provider、离线恢复 |
+| Feedback | semantic event、policy、CoreHaptics capability、engine reset | 无硬件时安全跳过 | 触觉强度、快速事件和 VoiceOver 回归 |
+| Audio | waveform、Sendable snapshot、配置契约 | session/permission 编译与回调 | 中断、路由、蓝牙、media reset、录音/播放 |
+| AppIntents | route bridge、headless/hybrid contract | App open / parameter handling | AppIntent Extension、Shortcut、Siri |
+| WidgetCore | App Group key contract、timeline、reload debounce、extension-safe scan | Widget host | entitlement、TimelineProvider、deep link |
+| Activities | lifecycle policy、diagnostics schema | unavailable fallback | Live Activity start/update/end、stale/relevance、push token |
 
 ## 运行分层
 
@@ -35,4 +47,3 @@ iOS 宿主或真机验证的场景，以及尚未建立独立 target 的领域�
 - target 重命名必须先在本文件增加兼容映射，再更新 `Package.swift` 和迁移文档。
 - 质量脚本 `Scripts/validate_test_matrix.sh` 校验领域清单、现有目录和兼容映射。
 - 测试 target 不改变发布模块的 CocoaPods/SwiftPM parity。
-

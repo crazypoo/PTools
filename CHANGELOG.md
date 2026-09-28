@@ -1,8 +1,16 @@
 # Changelog
 
-## Unreleased — 5.35.x
+## Unreleased — 5.36.x
 
-当前开发基线为 `5.35.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+当前开发基线为 `5.36.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+
+## 5.36.0 — 2026-09-28
+
+- 新增可选 `PToolsConfiguration`、`PToolsFeedback`、`PToolsAudio`、`PToolsAppIntents`、`PToolsWidgetCore` 和 `PToolsActivities`。
+- 配置模块提供环境、typed key、provider、feature flag、snapshot、Storage 缓存和 Debug override；不绑定远程配置厂商。
+- 触觉和音频模块使用 UIKit/CoreHaptics/AVFoundation 原生能力，统一语义事件、AVAudioSession、录音、播放、中断、路由、电平和波形。
+- App Intents、WidgetCore 和 ActivityKit 使用 extension-safe 边界，接入 RouteCore、DeepLink、App Group、reload debounce、push token、stale/relevance 和诊断。
+- SwiftPM、CocoaPods、module parity、质量门禁、P2 合约测试、迁移说明和使用示例同步完成；P2 不进入 Core 默认依赖。
 
 ## 5.35.0 — 2026-09-28
 

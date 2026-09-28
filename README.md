@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.35.0`。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.36.0`。
 
 ## Requirements
 
@@ -59,6 +59,14 @@ pod 'PooTools/HTTPServer'
 # pod 'PooTools/Documents'
 # pod 'PooTools/Simulation'
 # pod 'PooTools/Accessibility'
+# 需要配置、触觉或音频基础设施时按需添加：
+# pod 'PooTools/Configuration'
+# pod 'PooTools/Feedback'
+# pod 'PooTools/Audio'
+# AppIntents、WidgetCore、Activities 面向扩展目标，单独添加并保持 extension-safe：
+# pod 'PooTools/AppIntents'
+# pod 'PooTools/WidgetCore'
+# pod 'PooTools/Activities'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
@@ -78,6 +86,9 @@ Overlay 的 Scene、Anchor、定位和生命周期能力，不创建第三方引
 
 5.35.0 的 P1 高阶能力使用说明见
 [P1 Advanced Capabilities 指南](docs/guides/PTOOLS_P1_ADVANCED_CAPABILITIES.md)。
+
+5.36.0 的 P2 现代系统扩展使用说明见
+[P2 Modern Extensions 指南](docs/guides/PTOOLS_P2_MODERN_EXTENSIONS.md)。
 
 ### Native HTTP Server
 

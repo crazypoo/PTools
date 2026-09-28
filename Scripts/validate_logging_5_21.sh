@@ -10,8 +10,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(21|22|23|24|25|26|27|28|29|30|31|32|33|34|35)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.21–5.35 logging gate requires a 5.21.x through 5.35.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.(21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36)\.[0-9]+$ ]] || {
+  printf 'FAIL: 5.21–5.36 logging gate requires a 5.21.x through 5.36.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -28,7 +28,7 @@ required_files=(
 )
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || {
-    printf 'FAIL: 5.21–5.35 logging file is missing: %s\n' "$file" >&2
+    printf 'FAIL: 5.21–5.36 logging file is missing: %s\n' "$file" >&2
     exit 1
   }
 done
@@ -59,9 +59,9 @@ for requirement in "${required_patterns[@]}"; do
   file="${requirement%%|*}"
   pattern="${requirement#*|}"
   rg -q --fixed-strings "$pattern" "$file" || {
-    printf 'FAIL: 5.21–5.35 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
+    printf 'FAIL: 5.21–5.36 logging marker missing: %s (%s)\n' "$file" "$pattern" >&2
     exit 1
   }
 done
 
-printf 'PASS: PTools 5.21–5.35 logging migration, memory diagnostics and privacy contracts\n'
+printf 'PASS: PTools 5.21–5.36 logging migration, memory diagnostics and privacy contracts\n'

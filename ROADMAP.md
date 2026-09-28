@@ -1,8 +1,19 @@
 # PTools 路线图
 
-> 当前代码基线：`5.35.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.36.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.35.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.36.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.36.0 P2 现代系统扩展与增强能力
+
+- ✅ 新增 `PToolsConfiguration`：环境、typed config key、provider precedence、feature flag、snapshot、Storage cache 和 Debug override。
+- ✅ 新增 `PToolsFeedback`：语义触觉事件、UIKit generator、CoreHaptics、硬件能力查询、policy 和 engine reset。
+- ✅ 新增 `PToolsAudio`：AVAudioSession coordinator、interruption/route/reset stream、录音、简单播放、metering 和 waveform。
+- ✅ 新增 `PToolsAppIntents`：原生 AppIntent/AppShortcut 声明、headless/route-to-app/hybrid 模式和 RouteCore bridge。
+- ✅ 新增 Foundation-first `PToolsWidgetCore`：App Group typed store、timeline payload、reload coalescing 和 deep-link bridge。
+- ✅ 新增 `PToolsActivities`：ActivityKit lifecycle、dedupe/throttle、stale/relevance、push token 和 diagnostics。
+- ✅ SwiftPM products、CocoaPods subspec、InputAll 普通 App 模块、module parity、P2 extension-safe 门禁、测试、示例和文档同步完成。
+- [ ] 完成 AppIntent/Widget/Live Activity 独立 Extension Target、App Group entitlement、真机音频/触觉、锁屏隐私和宿主业务回归后，再创建正式 `5.36.0` tag。
 
 ## 5.35.0 P1 高阶能力与系统整合
 

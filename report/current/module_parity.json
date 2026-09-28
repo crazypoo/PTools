@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
-  "generated_at": "2026-09-27T23:53:12Z",
+  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
+  "generated_at": "2026-09-28T02:34:23Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -20,8 +20,12 @@
     "PTSpeechPermission",
     "PTTrackingPermission",
     "PToolsAccessibility",
+    "PToolsActivities",
+    "PToolsAppIntents",
+    "PToolsAudio",
     "PToolsBackgroundTasks",
     "PToolsBluetooth",
+    "PToolsConfiguration",
     "PToolsConnectivity",
     "PToolsContentState",
     "PToolsCore",
@@ -29,6 +33,7 @@
     "PToolsDeepLink",
     "PToolsDevice",
     "PToolsDocuments",
+    "PToolsFeedback",
     "PToolsForm",
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
@@ -45,6 +50,7 @@
     "PToolsSymbols",
     "PToolsTheme",
     "PToolsUIFoundation",
+    "PToolsWidgetCore",
     "PooToolsAll",
     "PooToolsBankCard",
     "PooToolsBanner",
@@ -130,6 +136,9 @@
   },
   "matched": [
     "Accessibility",
+    "Activities",
+    "AppIntents",
+    "Audio",
     "BackgroundTasks",
     "BankCard",
     "Banner",
@@ -145,6 +154,7 @@
     "ChinesePinyin",
     "Circle",
     "CodeView",
+    "Configuration",
     "Connectivity",
     "Contact",
     "ContactsPermission",
@@ -160,6 +170,7 @@
     "Device",
     "Documents",
     "FaceIDPermission",
+    "Feedback",
     "Form",
     "Guide",
     "HTTPFilePortal",
@@ -240,6 +251,7 @@
     "VideoEditor",
     "Vision",
     "WhatsNewsKit",
+    "WidgetCore",
     "iOS17Tips"
   ],
   "spm_only": [
@@ -303,6 +315,17 @@
       ],
       "cocoapods": [
         "SwiftJWT"
+      ]
+    },
+    {
+      "module": "Configuration",
+      "field": "internal_dependencies",
+      "spm": [
+        "Storage",
+        "StorageCore"
+      ],
+      "cocoapods": [
+        "Storage"
       ]
     },
     {
@@ -489,6 +512,21 @@
         "Harbeth"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "WidgetCore",
+      "field": "internal_dependencies",
+      "spm": [
+        "DeepLink",
+        "RouteCore",
+        "Storage",
+        "StorageCore"
+      ],
+      "cocoapods": [
+        "DeepLink",
+        "RouteCore",
+        "Storage"
+      ]
     }
   ],
   "settings_drift": [
@@ -503,6 +541,57 @@
       },
       "cocoapods": {
         "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Activities",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_ACTIVITIES",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "AppIntents",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_APPINTENTS",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Audio",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_AUDIO",
+          "POOTOOLS_COCOAPODS"
+        ],
         "upcoming_features": []
       }
     },
@@ -607,6 +696,23 @@
         "defines": [
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_PERMISSION_CAMERA"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Configuration",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_CONFIGURATION"
         ],
         "upcoming_features": []
       }
@@ -747,6 +853,23 @@
         "defines": [
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_PERMISSION_FACEIDPERMISSION"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Feedback",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_FEEDBACK"
         ],
         "upcoming_features": []
       }
@@ -1240,8 +1363,25 @@
         ],
         "upcoming_features": []
       }
+    },
+    {
+      "module": "WidgetCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_WIDGET_CORE"
+        ],
+        "upcoming_features": []
+      }
     }
   ],
   "status": "baseline",
-  "fingerprint": "8f562ee83f68ee727fdcadf3fd1fe544e39b2b78446a507087398d11553a63bf"
+  "fingerprint": "7844f6139b32220a3013b4f7afc0ca195214e0615840655bb2772e9b7854769e"
 }

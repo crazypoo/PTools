@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 56aa3d05c644ae46332bb7499e9728f3b587ba7e
-Generated at: 2026-09-27T23:57:00Z
-Version source: 5.35.0
+Source revision: ac67833be8eb3a4e7c1fdf707677f98ce1722d5e
+Generated at: 2026-09-28T02:34:23Z
+Version source: 5.36.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -15,6 +15,9 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | Module | Status | CocoaPods | SwiftPM | 6.0 action |
 | --- | --- | --- | --- | --- |
 | `Accessibility` | A | `PooTools/Accessibility` | `PToolsAccessibility` | Keep; review drift |
+| `Activities` | A | `PooTools/Activities` | `PToolsActivities` | Keep; review drift |
+| `AppIntents` | A | `PooTools/AppIntents` | `PToolsAppIntents` | Keep; review drift |
+| `Audio` | A | `PooTools/Audio` | `PToolsAudio` | Keep; review drift |
 | `BackgroundTasks` | A | `PooTools/BackgroundTasks` | `PToolsBackgroundTasks` | Keep; review drift |
 | `BankCard` | A | `PooTools/BankCard` | `PooToolsBankCard` | Keep; review drift |
 | `Banner` | A | `PooTools/Banner` | `PooToolsBanner` | Keep; review drift |
@@ -30,6 +33,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `ChinesePinyin` | A | `PooTools/ChinesePinyin` | `PooToolsChinesePinyin` | Keep; review drift |
 | `Circle` | A | `PooTools/Circle` | `PooToolsCircle` | Keep; review drift |
 | `CodeView` | A | `PooTools/CodeView` | `PooToolsCodeView` | Keep; review drift |
+| `Configuration` | A | `PooTools/Configuration` | `PToolsConfiguration` | Keep; review drift |
 | `Connectivity` | A | `PooTools/Connectivity` | — | Keep; review drift |
 | `Contact` | A | `PooTools/Contact` | `PooToolsContact` | Keep; review drift |
 | `ContactsPermission` | A | `PooTools/ContactsPermission` | `PTContactsPermission` | Keep; review drift |
@@ -45,6 +49,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Device` | A | `PooTools/Device` | — | Keep; review drift |
 | `Documents` | A | `PooTools/Documents` | `PToolsDocuments` | Keep; review drift |
 | `FaceIDPermission` | A | `PooTools/FaceIDPermission` | `PTFaceIDPermission` | Keep; review drift |
+| `Feedback` | A | `PooTools/Feedback` | `PToolsFeedback` | Keep; review drift |
 | `Form` | A | `PooTools/Form` | `PToolsForm` | Keep; review drift |
 | `Guide` | A | `PooTools/Guide` | `PooToolsGuide` | Keep; review drift |
 | `HTTPFilePortal` | A | `PooTools/HTTPFilePortal` | `PToolsHTTPFilePortal` | Keep; review drift |
@@ -125,6 +130,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `VideoEditor` | A | `PooTools/VideoEditor` | `PooToolsVideoEditor` | Keep; review drift |
 | `Vision` | A | `PooTools/Vision` | `PooToolsVision` | Keep; review drift |
 | `WhatsNewsKit` | A | `PooTools/WhatsNewsKit` | `PooToolsWhatsNewsKit` | Keep; review drift |
+| `WidgetCore` | A | `PooTools/WidgetCore` | `PToolsWidgetCore` | Keep; review drift |
 | `iOS17Tips` | A | `PooTools/iOS17Tips` | `PooToolsiOS17Tips` | Keep; review drift |
 | `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
 | `Date` | B | `PooTools/Date` | — | Parity decision before 6.0 |

@@ -36,6 +36,12 @@
 | ScrollBanner / PageControl | `PooTools/ScrollBanner`、`PooTools/PageControl` | 对应 `PooToolsScrollBanner`、`PooToolsPageControl` | Core；ScrollBanner 使用 PageControl | Network、媒体模块 |
 | Search / SearchBar | `PooTools/Search`、`PooTools/SearchBar` | `PooToolsSearch`、`PooToolsSearchBar` | Search 依赖 Core、SearchBar；富文本使用 Core 提供的 `PTRichText` | Network、媒体和业务数据 |
 | Debug | `PooTools/DEBUG` | `PooToolsDEBUG` | Core、Network、Share、SearchBar、PDF | Core 反向依赖 Debug；生产不隐式启动诊断 |
+| Configuration | `PooTools/Configuration` | `PToolsConfiguration` | Storage、Foundation | Firebase、LaunchDarkly、CloudKit、Core 默认依赖 |
+| Feedback | `PooTools/Feedback` | `PToolsFeedback` | UIKit、CoreHaptics | 具体设备型号表、第三方触觉库 |
+| Audio | `PooTools/Audio` | `PToolsAudio` | AVFoundation、AudioToolbox | 完整音乐播放器、MusicKit、流媒体引擎 |
+| AppIntents | `PooTools/AppIntents` | `PToolsAppIntents` | RouteCore、AppIntents | UIKit window、业务动作执行器 |
+| WidgetCore | `PooTools/WidgetCore` | `PToolsWidgetCore` | Storage、RouteCore、DeepLink、WidgetKit | SwiftUI Widget UI、猜测 App Group |
+| Activities | `PooTools/Activities` | `PToolsActivities` | ActivityKit | 业务 ActivityAttributes UI、Push Server |
 
 ImagePicker 与 PhotoPicker 有意共存：前者负责单媒体系统选择和相机，后者负责多选、编辑、原图、
 Live Photo、自定义 Cell 和 iCloud 进度。不要因都能选择图片就合并成一条不清晰的依赖。

@@ -53,6 +53,7 @@
     {"path":"PooToolsSource/NFC/PTNFCToolKit.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/NetWork/Network.swift","category":"LOCK_PROTECTED"},
     {"path":"PooToolsSource/NetWork/NetworkSupport.swift","category":"LOCK_PROTECTED"},
+    {"path":"PooToolsSource/PToolsActivities/PTActivities.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/OSSKit/OSSSpeech.swift","category":"LOCK_PROTECTED"},
     {"path":"PooToolsSource/OSSKit/OSSUtterance.swift","category":"SYSTEM_WRAPPER"},
     {"path":"PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift","category":"SYSTEM_WRAPPER"},

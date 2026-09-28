@@ -163,6 +163,14 @@ delegate 和临时资源；不可逆 runtime hook 由 owner registry 记录，�
 Debug 与 PTInstruments 的结构、采样边界、隐私和多 Scene 规则见
 [`DEBUG_AND_INSTRUMENTS.md`](DEBUG_AND_INSTRUMENTS.md)。
 
+## 14.1 P2 Modern System Extensions
+
+5.36.0 的 Configuration、Feedback、Audio、AppIntents、WidgetCore 和 Activities 是围绕 Core
+的可选层，不进入 `default_subspec = Core`。Configuration/WidgetCore 复用 Storage，AppIntents/
+WidgetCore 复用 RouteCore/DeepLink；WidgetCore 保持 Foundation-first，不引入 SwiftUI 视图。
+AppIntents、WidgetCore 和 Activities 的 Extension Target 契约、App Group、ActivityAttributes
+以及宿主业务 UI 见 [`PTOOLS_P2_MODERN_EXTENSIONS.md`](PTOOLS_P2_MODERN_EXTENSIONS.md)。
+
 ## 15. Verification
 
 当前 module graph、source parity、API baseline、并发 allowlist 和回归结果位于 `report/`。

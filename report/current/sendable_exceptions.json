@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
-  "generated_at": "2026-09-28T00:29:04Z",
+  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
+  "generated_at": "2026-09-28T03:01:33Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -18,6 +18,7 @@
     "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+    "PooToolsSource/PToolsActivities/PTActivities.swift",
     "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
     "PooToolsSource/VideoEditor/CompositionInstruction.swift",
     "PooToolsSource/VideoEditor/Compositor.swift",
@@ -370,6 +371,12 @@
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "line": 27,
       "declaration": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
+      "line": 88,
+      "declaration": "private final class PTActivityKitSendableBox<Value>: @unchecked Sendable {",
       "allowlisted": true
     },
     {

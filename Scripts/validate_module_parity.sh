@@ -64,6 +64,12 @@ ALIASES = {
   "PToolsDocuments" => "Documents",
   "PToolsSimulationCore" => "SimulationCore",
   "PToolsSimulation" => "Simulation",
+  "PToolsConfiguration" => "Configuration",
+  "PToolsFeedback" => "Feedback",
+  "PToolsAudio" => "Audio",
+  "PToolsAppIntents" => "AppIntents",
+  "PToolsWidgetCore" => "WidgetCore",
+  "PToolsActivities" => "Activities",
   "SmartScreenshot" => "SmartScreenshot"
 }.freeze
 

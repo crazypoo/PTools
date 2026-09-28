@@ -52,6 +52,15 @@ let package = Package(
         .library(name: "PToolsDocuments", targets: ["PToolsDocuments"]),
         .library(name: "PToolsSimulationCore", targets: ["PToolsSimulationCore"]),
         .library(name: "PToolsSimulation", targets: ["PToolsSimulation"]),
+        // English: Publish the optional P2 modern system modules without pulling them into Core.
+        // Español: Publica los módulos modernos opcionales de P2 sin incorporarlos a Core.
+        // 中文：公开可选的 P2 现代系统模块，但不把它们带入 Core 默认路径。
+        .library(name: "PToolsConfiguration", targets: ["PToolsConfiguration"]),
+        .library(name: "PToolsFeedback", targets: ["PToolsFeedback"]),
+        .library(name: "PToolsAudio", targets: ["PToolsAudio"]),
+        .library(name: "PToolsAppIntents", targets: ["PToolsAppIntents"]),
+        .library(name: "PToolsWidgetCore", targets: ["PToolsWidgetCore"]),
+        .library(name: "PToolsActivities", targets: ["PToolsActivities"]),
         // English: Publish the Foundation-only date context and calendar-aware value types.
         // Español: Publica el contexto de fechas y los tipos conscientes del calendario basados solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
@@ -205,6 +214,8 @@ let package = Package(
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
             "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm",
             "PToolsBluetooth", "PToolsDocuments", "PToolsSimulationCore", "PToolsSimulation",
+            "PToolsConfiguration", "PToolsFeedback", "PToolsAudio", "PToolsAppIntents",
+            "PToolsWidgetCore", "PToolsActivities",
             "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner", "PooToolsPopover",
             "PooToolsMediaCore",
             "PToolsHTTPServer", "PToolsHTTPFilePortal",
@@ -541,6 +552,58 @@ let package = Package(
             path: "PooToolsSource/PToolsSimulation",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
         ),
+        // English: Configuration uses the existing typed storage actor and remains vendor-neutral.
+        // Español: Configuration usa el actor de almacenamiento tipado existente y permanece neutral frente a proveedores.
+        // 中文：Configuration 复用现有类型化存储 actor，并保持与厂商无关。
+        .target(
+            name: "PToolsConfiguration",
+            dependencies: ["PToolsStorage", "PToolsStorageCore"],
+            path: "PooToolsSource/PToolsConfiguration",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        // English: Feedback owns only native UIKit and CoreHaptics adapters.
+        // Español: Feedback solo contiene adaptadores nativos de UIKit y CoreHaptics.
+        // 中文：Feedback 只承载 UIKit 和 CoreHaptics 原生适配。
+        .target(
+            name: "PToolsFeedback",
+            path: "PooToolsSource/PToolsFeedback",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        // English: Audio coordinates AVFoundation without becoming a media-player replacement.
+        // Español: Audio coordina AVFoundation sin convertirse en un reemplazo de reproductor multimedia.
+        // 中文：Audio 协调 AVFoundation，但不替代完整媒体播放器。
+        .target(
+            name: "PToolsAudio",
+            dependencies: ["PTMicPermission"],
+            path: "PooToolsSource/PToolsAudio",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        // English: AppIntents bridges Apple's static declarations to the Foundation route contract.
+        // Español: AppIntents conecta las declaraciones estáticas de Apple con el contrato de rutas de Foundation.
+        // 中文：AppIntents 将 Apple 的静态声明桥接到 Foundation 路由契约。
+        .target(
+            name: "PToolsAppIntents",
+            dependencies: ["PToolsRouteCore"],
+            path: "PooToolsSource/PToolsAppIntents",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        // English: WidgetCore stays Foundation-first and uses explicit App Group storage identifiers.
+        // Español: WidgetCore prioriza Foundation y usa identificadores de almacenamiento App Group explícitos.
+        // 中文：WidgetCore 以 Foundation 为首，并要求显式传入 App Group 标识。
+        .target(
+            name: "PToolsWidgetCore",
+            dependencies: ["PToolsStorage", "PToolsStorageCore", "PToolsRouteCore", "PToolsDeepLink"],
+            path: "PooToolsSource/PToolsWidgetCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        // English: Activities contains only the ActivityKit lifecycle adapter and typed diagnostics.
+        // Español: Activities solo contiene el adaptador del ciclo de vida de ActivityKit y diagnósticos tipados.
+        // 中文：Activities 只提供 ActivityKit 生命周期适配和类型化诊断。
+        .target(
+            name: "PToolsActivities",
+            path: "PooToolsSource/PToolsActivities",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -844,6 +907,18 @@ let package = Package(
             name: "PToolsAdvancedTests",
             dependencies: ["PToolsSimulationCore", "PToolsSimulation"],
             path: "Tests/PToolsAdvancedTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep P2 value-contract checks independent from UIKit and live system services.
+        // Español: Mantiene las comprobaciones de valores P2 independientes de UIKit y de servicios reales.
+        // 中文：让 P2 值类型契约测试独立于 UIKit 和真实系统服务。
+        .testTarget(
+            name: "PToolsP2Tests",
+            dependencies: ["PToolsConfiguration", "PToolsAudio"],
+            path: "Tests/PToolsP2Tests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")

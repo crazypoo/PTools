@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
-  "generated_at": "2026-09-28T00:29:10Z",
+  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
+  "generated_at": "2026-09-28T03:01:41Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -76,6 +76,22 @@
       "destination": "PToolsUIFoundation"
     },
     {
+      "source": "PToolsAppIntents",
+      "destination": "PToolsRouteCore"
+    },
+    {
+      "source": "PToolsAudio",
+      "destination": "PTMicPermission"
+    },
+    {
+      "source": "PToolsConfiguration",
+      "destination": "PToolsStorage"
+    },
+    {
+      "source": "PToolsConfiguration",
+      "destination": "PToolsStorageCore"
+    },
+    {
       "source": "PToolsContentState",
       "destination": "PToolsAccessibility"
     },
@@ -146,6 +162,22 @@
     {
       "source": "PToolsUIFoundation",
       "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsWidgetCore",
+      "destination": "PToolsDeepLink"
+    },
+    {
+      "source": "PToolsWidgetCore",
+      "destination": "PToolsRouteCore"
+    },
+    {
+      "source": "PToolsWidgetCore",
+      "destination": "PToolsStorage"
+    },
+    {
+      "source": "PToolsWidgetCore",
+      "destination": "PToolsStorageCore"
     },
     {
       "source": "PooToolsBankCard",

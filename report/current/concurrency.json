@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
-  "generated_at": "2026-09-28T00:29:03Z",
+  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
+  "generated_at": "2026-09-28T03:01:32Z",
   "counts": {
     "main_queue_async": 28,
-    "task_detached": 28,
-    "unchecked_sendable": 68,
+    "task_detached": 29,
+    "unchecked_sendable": 69,
     "as_bang": 4
   },
   "locations": [
@@ -586,6 +586,18 @@
       "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
       "line": 27,
       "text": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
+      "line": 88,
+      "text": "private final class PTActivityKitSendableBox<Value>: @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
+      "line": 257,
+      "text": "tokenTask = Task.detached(priority: nil) { [weak self, activityBox] in"
     },
     {
       "rule": "unchecked_sendable",
