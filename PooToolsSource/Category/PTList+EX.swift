@@ -8,6 +8,42 @@
 
 import UIKit
 
+// English: Per-section layout overrides let feature modules reuse PTCollectionView without duplicating layout engines.
+// Español: Las anulaciones por sección permiten reutilizar PTCollectionView sin duplicar motores de layout.
+// 中文：逐 Section 布局覆盖让功能模块复用 PTCollectionView，而不需要重复创建布局引擎。
+@MainActor
+public final class PTSectionLayoutConfiguration {
+    public var contentInsets: NSDirectionalEdgeInsets?
+    public var interGroupSpacing: CGFloat?
+    public var topSpacing: CGFloat?
+    public var bottomSpacing: CGFloat?
+    public var headerSpacing: CGFloat?
+    public var footerSpacing: CGFloat?
+    public var itemHeight: PTSectionItemHeight?
+
+    public init(contentInsets: NSDirectionalEdgeInsets? = nil,
+                interGroupSpacing: CGFloat? = nil,
+                topSpacing: CGFloat? = nil,
+                bottomSpacing: CGFloat? = nil,
+                headerSpacing: CGFloat? = nil,
+                footerSpacing: CGFloat? = nil,
+                itemHeight: PTSectionItemHeight? = nil) {
+        self.contentInsets = contentInsets
+        self.interGroupSpacing = interGroupSpacing
+        self.topSpacing = topSpacing
+        self.bottomSpacing = bottomSpacing
+        self.headerSpacing = headerSpacing
+        self.footerSpacing = footerSpacing
+        self.itemHeight = itemHeight
+    }
+}
+
+@MainActor
+public enum PTSectionItemHeight {
+    case fixed(CGFloat)
+    case estimated(CGFloat)
+}
+
 @MainActor
 public final class PTSection: NSObject {
     
@@ -30,6 +66,7 @@ public final class PTSection: NSObject {
     public var decorationCornerRadius: CGFloat = PTAppBaseConfig.share.decorationBackgroundCornerRadius
     public var decorationBackgroundImage: UIImage?
     public var decorationShadowOpacity: Float = 0.08
+    public var layoutConfiguration: PTSectionLayoutConfiguration?
 
     public init(identifier: String = UUID().uuidString,
                 headerTitle: String? = "",

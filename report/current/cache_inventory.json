@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "f903ce58e855a57a32a4c867b67b22a6cb02359f",
-  "generated_at": "2026-09-28T14:59:37Z",
+  "source_revision": "67a31c52f68a6dcecd85b90fa713c27cc03617cd",
+  "generated_at": "2026-09-28T16:28:57Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -66,25 +66,25 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1778,
+      "line": 1813,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1779,
+      "line": 1814,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1869,
+      "line": 1907,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1870,
+      "line": 1908,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },

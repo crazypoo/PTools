@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T14:59:37Z
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T16:28:57Z
 -->
 
 # PTools 当前缓存盘点
@@ -23,10 +23,10 @@ Generated at: 2026-09-28T14:59:37Z
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
 | PooToolsSource/Base/PTCollectionView.swift:1226 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
 | PooToolsSource/Base/PTCollectionView.swift:1227 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1778 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1779 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1869 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1870 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:1813 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1814 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1907 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1908 | disk or custom cache | return (cache.items, cache.contentHeight) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |

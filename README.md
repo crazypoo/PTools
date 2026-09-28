@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.56.2`，文档治理、真机和扩展宿主回归完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.57.0`，外部依赖阻断的 Xcode 回归完成前不创建正式 tag。
 
 ## Requirements
 
@@ -70,6 +70,10 @@ pod 'PooTools/HTTPServer'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。
+
+Form 2.0 的多 Section、布局、校验、键盘、无障碍和自定义 Renderer 用法见
+[PTools Form 2.0 指南](docs/guides/PTOOLS_FORM_GUIDE.md)，从 5.56.x 迁移请阅读
+[Form 2.0 迁移说明](docs/migrations/5.57_FORM_2.md)。
 
 引导提示使用 `PooToolsInstructions`（SwiftPM）或 `PooTools/Instructions`（CocoaPods）。它复用
 Overlay 的 Scene、Anchor、定位和生命周期能力，不创建第三方引导窗口。使用示例见

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "f903ce58e855a57a32a4c867b67b22a6cb02359f",
-  "generated_at": "2026-09-28T14:59:37Z",
+  "source_revision": "67a31c52f68a6dcecd85b90fa713c27cc03617cd",
+  "generated_at": "2026-09-28T16:28:57Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -301,7 +301,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2227,
+      "lines": 2265,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -826,7 +826,7 @@
     },
     {
       "path": "PooToolsSource/Category/PTList+EX.swift",
-      "lines": 258,
+      "lines": 295,
       "classification": "ok"
     },
     {
@@ -4176,17 +4176,37 @@
     },
     {
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "lines": 599,
+      "lines": 1175,
+      "classification": "warning"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormConfiguration.swift",
+      "lines": 430,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
-      "lines": 421,
+      "lines": 507,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
+      "lines": 234,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormSnapshot.swift",
+      "lines": 217,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
       "lines": 97,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormValidation.swift",
+      "lines": 54,
       "classification": "ok"
     },
     {
@@ -5240,7 +5260,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 16,
+  "warning_count": 17,
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3
 }

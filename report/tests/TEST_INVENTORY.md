@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T22:28:13+08:00 -->
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T23:02:18+08:00 -->
 # Test Inventory
 
-- Version: `5.56.2`
+- Version: `5.57.0`
 - Records: `18`
 
 | target | path | level | file_count | canonical | action |

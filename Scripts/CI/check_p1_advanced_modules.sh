@@ -12,18 +12,23 @@ modules=(Theme Accessibility ContentState Form Bluetooth Documents SimulationCor
 for module in "${modules[@]}"; do
     directory="PTools${module}"
     [[ -d "PooToolsSource/$directory" ]] || { printf 'FAIL: missing source directory %s\n' "$directory" >&2; exit 1; }
-    rg -q --fixed-strings ".library(name: \"PTools${module}\", targets: [\"PTools${module}\"])" Package.swift \
+    grep -Fq ".library(name: \"PTools${module}\", targets: [\"PTools${module}\"]" Package.swift \
         || { printf 'FAIL: missing SwiftPM product PTools%s\n' "$module" >&2; exit 1; }
-    rg -q --fixed-strings "s.subspec '$module'" PooTools.podspec \
+    grep -Fq "s.subspec '$module'" PooTools.podspec \
         || { printf 'FAIL: missing CocoaPods subspec %s\n' "$module" >&2; exit 1; }
 done
 
-if rg -n --glob '*.swift' 'import (Alamofire|PooToolsNetWork|PooToolsDEBUG|LocalConsole)' PooToolsSource/PToolsTheme PooToolsSource/PToolsAccessibility PooToolsSource/PToolsContentState PooToolsSource/PToolsForm PooToolsSource/PToolsSimulationCore PooToolsSource/PToolsSimulation; then
+if grep -REn 'import (Alamofire|PooToolsNetWork|PooToolsDEBUG|LocalConsole)' \
+    PooToolsSource/PToolsTheme PooToolsSource/PToolsAccessibility PooToolsSource/PToolsContentState \
+    PooToolsSource/PToolsForm PooToolsSource/PToolsSimulationCore PooToolsSource/PToolsSimulation; then
     printf 'FAIL: P1 foundation/UI/simulation modules depend on Network or Debug\n' >&2
     exit 1
 fi
 
-if rg -n --glob '*.swift' '@unchecked Sendable|nonisolated\(unsafe\)' PooToolsSource/PToolsTheme PooToolsSource/PToolsAccessibility PooToolsSource/PToolsContentState PooToolsSource/PToolsForm PooToolsSource/PToolsBluetooth PooToolsSource/PToolsDocuments PooToolsSource/PToolsSimulationCore PooToolsSource/PToolsSimulation; then
+if grep -REn '@unchecked Sendable|nonisolated\(unsafe\)' \
+    PooToolsSource/PToolsTheme PooToolsSource/PToolsAccessibility PooToolsSource/PToolsContentState \
+    PooToolsSource/PToolsForm PooToolsSource/PToolsBluetooth PooToolsSource/PToolsDocuments \
+    PooToolsSource/PToolsSimulationCore PooToolsSource/PToolsSimulation; then
     printf 'FAIL: P1 modules introduce unchecked or unsafe concurrency declarations\n' >&2
     exit 1
 fi
@@ -38,6 +43,25 @@ require_pattern PooToolsSource/PToolsAccessibility/PTAccessibility.swift 'PTAcce
 require_pattern PooToolsSource/PToolsContentState/PTContentState.swift 'case offline(previous: Content?)' 'content state keeps offline previous content'
 require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public struct PTFormFieldID' 'form fields use stable typed IDs'
 require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public func validateField' 'form supports cancellable field validation'
+require_pattern PooToolsSource/PToolsForm/PTFormSnapshot.swift 'public final class PTFormCollectionAdapter' 'form has a multi-section collection adapter'
+require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public func makeSnapshot() -> PTFormSnapshot' 'form exposes a typed snapshot boundary'
+require_pattern PooToolsSource/PToolsForm/PTFormSectionRenderer.swift 'public func dequeueView' 'form supplementary views are dequeued safely'
+require_pattern docs/guides/PTOOLS_FORM_GUIDE.md '## 3. Multiple sections' 'Form 2.0 guide covers multiple sections'
+require_pattern docs/migrations/5.57_FORM_2.md 'PTFormEngine(fields:sections:)' 'Form 2.0 migration guide exists'
+require_pattern Tests/PToolsP2Tests/PTFormDocumentsFeedbackTests.swift 'testFormEnginePreservesMultipleSections' 'Form multi-section regression coverage exists'
+
+if grep -Fq 'PTSection(identifier: "form"' PooToolsSource/PToolsForm/PTForm.swift; then
+    printf 'FAIL: Form controller must not flatten sections into PTSection("form")\n' >&2
+    exit 1
+fi
+if grep -Fq 'IndexPath(item: index, section: 0)' PooToolsSource/PToolsForm/PTForm.swift; then
+    printf 'FAIL: Form keyboard navigation must not assume section zero\n' >&2
+    exit 1
+fi
+if grep -Fq 'itemHeight = 92' PooToolsSource/PToolsForm/PTForm.swift; then
+    printf 'FAIL: Form must not use a universal fixed 92 point row height\n' >&2
+    exit 1
+fi
 require_pattern PooToolsSource/PToolsBluetooth/PTBluetooth.swift 'public actor PTBluetoothCentral' 'Bluetooth central is actor isolated'
 require_pattern PooToolsSource/PToolsDocuments/PTDocuments.swift 'withSecurityScopedAccess' 'documents expose security scoped access'
 require_pattern PooToolsSource/PToolsSimulationCore/PTSimulationCore.swift 'public actor PTSimulationClock' 'simulation uses a virtual clock'

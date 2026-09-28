@@ -1,8 +1,20 @@
 # PTools 路线图
 
-> 当前代码基线：`5.56.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.57.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.56.2` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.57.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.57.0 Form 2.0
+
+- ✅ 完成 Form-level、Section-level、Field-level Sendable 配置和 `PTFormSnapshot` 快照边界。
+- ✅ `PTFormSection` 真实映射到多个 `PTSection`，移除控制器的单一 `"form"` flatten 路径。
+- ✅ 接入 Section header/footer registry、section appearance、spacing/insets、自动高度和稳定字段 ID。
+- ✅ 补齐字段 Renderer context、custom renderer、Picker option model、输入配置和 focus capability。
+- ✅ 补齐跨字段校验、校验策略、取消/stale-result 防护、runtime mutation、reset、dirty 和 revision。
+- ✅ 键盘导航改用字段位置快照，支持跨 Section 并跳过隐藏、禁用、只读和不可聚焦字段。
+- ✅ 增加 Dynamic Type、Dark Mode、High Contrast、RTL、Reduce Motion、VoiceOver 和错误反馈适配。
+- ✅ 增加 Form 2.0 指南、迁移说明、稳定 ID/多 Section/可见性/大表单测试和静态质量门禁。
+- [ ] 外部 `SmartCodable` Simulator 宏产物恢复后，重新完成 PooTools-Example Debug/Release Xcode 全量回归，再创建正式 `5.57.0` tag。
 
 ## 5.56.2 Form / Documents / Feedback / Button Loading 闭环
 

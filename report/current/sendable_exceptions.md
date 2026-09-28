@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T14:58:44Z
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T16:28:07Z
 -->
 
 # Swift 6 Sendable 例外清单

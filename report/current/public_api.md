@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T14:58:44Z
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T16:28:06Z
 -->
 
 # PTools 当前公开 API 清单
@@ -753,27 +753,27 @@ Generated at: 2026-09-28T14:58:44Z
 | PooToolsSource/Base/PTCollectionView.swift:1484 | func | public | public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) { |
 | PooToolsSource/Base/PTCollectionView.swift:1520 | func | public | public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
 | PooToolsSource/Base/PTCollectionView.swift:1570 | func | public | public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1930 | func | public | public func hideEmptyLoading(task: PTActionTask?) { |
-| PooToolsSource/Base/PTCollectionView.swift:1934 | func | public | public func showEmptyLoading() { |
-| PooToolsSource/Base/PTCollectionView.swift:1984 | func | public | public func reloadEmptyConfig() { |
-| PooToolsSource/Base/PTCollectionView.swift:1993 | func | public | public func endRefresh() { |
-| PooToolsSource/Base/PTCollectionView.swift:1997 | func | public | public func footerRefreshNoMore () { |
-| PooToolsSource/Base/PTCollectionView.swift:2002 | func | public | public func footerRefreshReset() { |
-| PooToolsSource/Base/PTCollectionView.swift:2010 | func | public | public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) { |
-| PooToolsSource/Base/PTCollectionView.swift:2014 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
-| PooToolsSource/Base/PTCollectionView.swift:2018 | func | public | public func registerNibCells(nib:[String:String]) { |
-| PooToolsSource/Base/PTCollectionView.swift:2022 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
-| PooToolsSource/Base/PTCollectionView.swift:2028 | func | public | public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2054 | func | public | public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2089 | func | public | public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2136 | func | public | public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2171 | func | public | public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2189 | func | public | public func getRow(at indexPath: IndexPath) -> PTRows? { |
-| PooToolsSource/Base/PTCollectionView.swift:2193 | func | public | public func getRows(at indexPaths: [IndexPath]) -> [PTRows] { |
-| PooToolsSource/Base/PTCollectionView.swift:2197 | func | public | public func getRow(by diffId: String) -> PTRows? { |
-| PooToolsSource/Base/PTCollectionView.swift:2202 | func | public | public func getAllRows(in section: Int) -> [PTRows] { |
-| PooToolsSource/Base/PTCollectionView.swift:2210 | func | public | public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] { |
-| PooToolsSource/Base/PTCollectionView.swift:2220 | func | public | public func getSectionIndex(byHeaderID headerID: String) -> Int? { |
+| PooToolsSource/Base/PTCollectionView.swift:1968 | func | public | public func hideEmptyLoading(task: PTActionTask?) { |
+| PooToolsSource/Base/PTCollectionView.swift:1972 | func | public | public func showEmptyLoading() { |
+| PooToolsSource/Base/PTCollectionView.swift:2022 | func | public | public func reloadEmptyConfig() { |
+| PooToolsSource/Base/PTCollectionView.swift:2031 | func | public | public func endRefresh() { |
+| PooToolsSource/Base/PTCollectionView.swift:2035 | func | public | public func footerRefreshNoMore () { |
+| PooToolsSource/Base/PTCollectionView.swift:2040 | func | public | public func footerRefreshReset() { |
+| PooToolsSource/Base/PTCollectionView.swift:2048 | func | public | public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) { |
+| PooToolsSource/Base/PTCollectionView.swift:2052 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
+| PooToolsSource/Base/PTCollectionView.swift:2056 | func | public | public func registerNibCells(nib:[String:String]) { |
+| PooToolsSource/Base/PTCollectionView.swift:2060 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
+| PooToolsSource/Base/PTCollectionView.swift:2066 | func | public | public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2092 | func | public | public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2127 | func | public | public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2174 | func | public | public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2209 | func | public | public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2227 | func | public | public func getRow(at indexPath: IndexPath) -> PTRows? { |
+| PooToolsSource/Base/PTCollectionView.swift:2231 | func | public | public func getRows(at indexPaths: [IndexPath]) -> [PTRows] { |
+| PooToolsSource/Base/PTCollectionView.swift:2235 | func | public | public func getRow(by diffId: String) -> PTRows? { |
+| PooToolsSource/Base/PTCollectionView.swift:2240 | func | public | public func getAllRows(in section: Int) -> [PTRows] { |
+| PooToolsSource/Base/PTCollectionView.swift:2248 | func | public | public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] { |
+| PooToolsSource/Base/PTCollectionView.swift:2258 | func | public | public func getSectionIndex(byHeaderID headerID: String) -> Int? { |
 | PooToolsSource/Base/PTCollectionViewSkeleton.swift:13 | typealias | public | public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows> |
 | PooToolsSource/Base/PTCollectionViewSkeleton.swift:14 | typealias | public | public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows> |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:15 | class | public | public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> { |
@@ -1592,45 +1592,56 @@ Generated at: 2026-09-28T14:58:44Z
 | PooToolsSource/Category/PTColorRBGModel.swift:22 | var | public | public var saturationFloat:CGFloat = 0.0 |
 | PooToolsSource/Category/PTColorRBGModel.swift:23 | var | public | public var brightnessFloat:CGFloat = 0.0 |
 | PooToolsSource/Category/PTColorRBGModel.swift:24 | var | public | public var alphaFloat:CGFloat = 0.0 |
-| PooToolsSource/Category/PTList+EX.swift:12 | class | public | public final class PTSection: NSObject { |
-| PooToolsSource/Category/PTList+EX.swift:15 | var | public | public var layoutVersion: Int = 0 |
-| PooToolsSource/Category/PTList+EX.swift:17 | var | public | public var headerTitle: String? |
-| PooToolsSource/Category/PTList+EX.swift:18 | var | public | public var headerID: String? |
-| PooToolsSource/Category/PTList+EX.swift:19 | var | public | public var footerID: String? |
-| PooToolsSource/Category/PTList+EX.swift:20 | var | public | public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude |
-| PooToolsSource/Category/PTList+EX.swift:21 | var | public | public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude |
-| PooToolsSource/Category/PTList+EX.swift:22 | var | public | public var rows: [PTRows]? |
-| PooToolsSource/Category/PTList+EX.swift:23 | var | public | public var headerDataModel: AnyObject? |
-| PooToolsSource/Category/PTList+EX.swift:24 | var | public | public var footerDataModel: AnyObject? |
-| PooToolsSource/Category/PTList+EX.swift:26 | var | public | public var footerClass: UICollectionReusableView.Type? |
-| PooToolsSource/Category/PTList+EX.swift:27 | var | public | public var headerClass: UICollectionReusableView.Type? |
-| PooToolsSource/Category/PTList+EX.swift:29 | var | public | public var decorationBackgroundColor: UIColor? = PTAppBaseConfig.share.decorationBackgroundColor |
-| PooToolsSource/Category/PTList+EX.swift:30 | var | public | public var decorationCornerRadius: CGFloat = PTAppBaseConfig.share.decorationBackgroundCornerRadius |
-| PooToolsSource/Category/PTList+EX.swift:31 | var | public | public var decorationBackgroundImage: UIImage? |
-| PooToolsSource/Category/PTList+EX.swift:32 | var | public | public var decorationShadowOpacity: Float = 0.08 |
-| PooToolsSource/Category/PTList+EX.swift:34 | init | public | public init(identifier: String = UUID().uuidString, |
-| PooToolsSource/Category/PTList+EX.swift:67 | func | public | public func isSameIdentity(as other: PTSection) -> Bool { |
-| PooToolsSource/Category/PTList+EX.swift:71 | var | public | public var headerReuseID: String? { |
-| PooToolsSource/Category/PTList+EX.swift:78 | var | public | public var footerReuseID: String? { |
-| PooToolsSource/Category/PTList+EX.swift:86 | func | public | public func isContentEqual(to other: PTSection) -> Bool { |
-| PooToolsSource/Category/PTList+EX.swift:109 | class | public | public final class PTRows: NSObject { |
-| PooToolsSource/Category/PTList+EX.swift:113 | var | public | public var diffHash: Int = 0 |
-| PooToolsSource/Category/PTList+EX.swift:115 | var | public | public var title = "" |
-| PooToolsSource/Category/PTList+EX.swift:116 | var | public | public var ID: String = "" |
-| PooToolsSource/Category/PTList+EX.swift:117 | var | public | public var dataModel: AnyObject? |
-| PooToolsSource/Category/PTList+EX.swift:118 | var | public | public var nibName = "" |
-| PooToolsSource/Category/PTList+EX.swift:119 | var | public | public var badge: Int = 0 |
-| PooToolsSource/Category/PTList+EX.swift:121 | var | public | public var cellClass: UICollectionViewCell.Type? |
-| PooToolsSource/Category/PTList+EX.swift:123 | init | public | public init(title: String = "", |
-| PooToolsSource/Category/PTList+EX.swift:140 | var | public | public var reuseID: String { |
-| PooToolsSource/Category/PTList+EX.swift:164 | func | public | public func isSameIdentity(as other: PTRows) -> Bool { |
-| PooToolsSource/Category/PTList+EX.swift:169 | func | public | public func isContentEqual(to other: PTRows) -> Bool { |
-| PooToolsSource/Category/PTList+EX.swift:203 | protocol | public | public protocol PTCellRegisterable { |
-| PooToolsSource/Category/PTList+EX.swift:213 | protocol | public | public protocol PTSupplementaryRegisterable { |
-| PooToolsSource/Category/PTList+EX.swift:225 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
-| PooToolsSource/Category/PTList+EX.swift:233 | func | public | public func registerNibCells(nib:[String:String]) { |
-| PooToolsSource/Category/PTList+EX.swift:241 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
-| PooToolsSource/Category/PTList+EX.swift:250 | func | public | public func registerSupplementaryView(ids:[String],viewClass:AnyClass,kind:String) { |
+| PooToolsSource/Category/PTList+EX.swift:15 | class | public | public final class PTSectionLayoutConfiguration { |
+| PooToolsSource/Category/PTList+EX.swift:16 | var | public | public var contentInsets: NSDirectionalEdgeInsets? |
+| PooToolsSource/Category/PTList+EX.swift:17 | var | public | public var interGroupSpacing: CGFloat? |
+| PooToolsSource/Category/PTList+EX.swift:18 | var | public | public var topSpacing: CGFloat? |
+| PooToolsSource/Category/PTList+EX.swift:19 | var | public | public var bottomSpacing: CGFloat? |
+| PooToolsSource/Category/PTList+EX.swift:20 | var | public | public var headerSpacing: CGFloat? |
+| PooToolsSource/Category/PTList+EX.swift:21 | var | public | public var footerSpacing: CGFloat? |
+| PooToolsSource/Category/PTList+EX.swift:22 | var | public | public var itemHeight: PTSectionItemHeight? |
+| PooToolsSource/Category/PTList+EX.swift:24 | init | public | public init(contentInsets: NSDirectionalEdgeInsets? = nil, |
+| PooToolsSource/Category/PTList+EX.swift:42 | enum | public | public enum PTSectionItemHeight { |
+| PooToolsSource/Category/PTList+EX.swift:48 | class | public | public final class PTSection: NSObject { |
+| PooToolsSource/Category/PTList+EX.swift:51 | var | public | public var layoutVersion: Int = 0 |
+| PooToolsSource/Category/PTList+EX.swift:53 | var | public | public var headerTitle: String? |
+| PooToolsSource/Category/PTList+EX.swift:54 | var | public | public var headerID: String? |
+| PooToolsSource/Category/PTList+EX.swift:55 | var | public | public var footerID: String? |
+| PooToolsSource/Category/PTList+EX.swift:56 | var | public | public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude |
+| PooToolsSource/Category/PTList+EX.swift:57 | var | public | public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude |
+| PooToolsSource/Category/PTList+EX.swift:58 | var | public | public var rows: [PTRows]? |
+| PooToolsSource/Category/PTList+EX.swift:59 | var | public | public var headerDataModel: AnyObject? |
+| PooToolsSource/Category/PTList+EX.swift:60 | var | public | public var footerDataModel: AnyObject? |
+| PooToolsSource/Category/PTList+EX.swift:62 | var | public | public var footerClass: UICollectionReusableView.Type? |
+| PooToolsSource/Category/PTList+EX.swift:63 | var | public | public var headerClass: UICollectionReusableView.Type? |
+| PooToolsSource/Category/PTList+EX.swift:65 | var | public | public var decorationBackgroundColor: UIColor? = PTAppBaseConfig.share.decorationBackgroundColor |
+| PooToolsSource/Category/PTList+EX.swift:66 | var | public | public var decorationCornerRadius: CGFloat = PTAppBaseConfig.share.decorationBackgroundCornerRadius |
+| PooToolsSource/Category/PTList+EX.swift:67 | var | public | public var decorationBackgroundImage: UIImage? |
+| PooToolsSource/Category/PTList+EX.swift:68 | var | public | public var decorationShadowOpacity: Float = 0.08 |
+| PooToolsSource/Category/PTList+EX.swift:69 | var | public | public var layoutConfiguration: PTSectionLayoutConfiguration? |
+| PooToolsSource/Category/PTList+EX.swift:71 | init | public | public init(identifier: String = UUID().uuidString, |
+| PooToolsSource/Category/PTList+EX.swift:104 | func | public | public func isSameIdentity(as other: PTSection) -> Bool { |
+| PooToolsSource/Category/PTList+EX.swift:108 | var | public | public var headerReuseID: String? { |
+| PooToolsSource/Category/PTList+EX.swift:115 | var | public | public var footerReuseID: String? { |
+| PooToolsSource/Category/PTList+EX.swift:123 | func | public | public func isContentEqual(to other: PTSection) -> Bool { |
+| PooToolsSource/Category/PTList+EX.swift:146 | class | public | public final class PTRows: NSObject { |
+| PooToolsSource/Category/PTList+EX.swift:150 | var | public | public var diffHash: Int = 0 |
+| PooToolsSource/Category/PTList+EX.swift:152 | var | public | public var title = "" |
+| PooToolsSource/Category/PTList+EX.swift:153 | var | public | public var ID: String = "" |
+| PooToolsSource/Category/PTList+EX.swift:154 | var | public | public var dataModel: AnyObject? |
+| PooToolsSource/Category/PTList+EX.swift:155 | var | public | public var nibName = "" |
+| PooToolsSource/Category/PTList+EX.swift:156 | var | public | public var badge: Int = 0 |
+| PooToolsSource/Category/PTList+EX.swift:158 | var | public | public var cellClass: UICollectionViewCell.Type? |
+| PooToolsSource/Category/PTList+EX.swift:160 | init | public | public init(title: String = "", |
+| PooToolsSource/Category/PTList+EX.swift:177 | var | public | public var reuseID: String { |
+| PooToolsSource/Category/PTList+EX.swift:201 | func | public | public func isSameIdentity(as other: PTRows) -> Bool { |
+| PooToolsSource/Category/PTList+EX.swift:206 | func | public | public func isContentEqual(to other: PTRows) -> Bool { |
+| PooToolsSource/Category/PTList+EX.swift:240 | protocol | public | public protocol PTCellRegisterable { |
+| PooToolsSource/Category/PTList+EX.swift:250 | protocol | public | public protocol PTSupplementaryRegisterable { |
+| PooToolsSource/Category/PTList+EX.swift:262 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
+| PooToolsSource/Category/PTList+EX.swift:270 | func | public | public func registerNibCells(nib:[String:String]) { |
+| PooToolsSource/Category/PTList+EX.swift:278 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
+| PooToolsSource/Category/PTList+EX.swift:287 | func | public | public func registerSupplementaryView(ids:[String],viewClass:AnyClass,kind:String) { |
 | PooToolsSource/Category/PTVideoThumbnailService.swift:17 | struct | public | public struct PTVideoThumbnailRequest: Sendable { |
 | PooToolsSource/Category/PTVideoThumbnailService.swift:18 | let | public | public let url: URL |
 | PooToolsSource/Category/PTVideoThumbnailService.swift:19 | let | public | public let frameNumber: Int |
@@ -5300,101 +5311,314 @@ Generated at: 2026-09-28T14:58:44Z
 | PooToolsSource/PToolsForm/PTForm.swift:55 | struct | public | public struct PTFormValidationIssue: Codable, Hashable, Sendable { |
 | PooToolsSource/PToolsForm/PTForm.swift:56 | let | public | public let fieldID: PTFormFieldID |
 | PooToolsSource/PToolsForm/PTForm.swift:57 | let | public | public let message: String |
-| PooToolsSource/PToolsForm/PTForm.swift:58 | init | public | public init(fieldID: PTFormFieldID, message: String) { self.fieldID = fieldID; self.message = message } |
-| PooToolsSource/PToolsForm/PTForm.swift:61 | struct | public | public struct PTFormValidationResult: Codable, Hashable, Sendable { |
-| PooToolsSource/PToolsForm/PTForm.swift:62 | let | public | public let issues: [PTFormValidationIssue] |
-| PooToolsSource/PToolsForm/PTForm.swift:63 | var | public | public var isValid: Bool { issues.isEmpty } |
-| PooToolsSource/PToolsForm/PTForm.swift:64 | init | public | public init(issues: [PTFormValidationIssue] = []) { self.issues = issues } |
-| PooToolsSource/PToolsForm/PTForm.swift:67 | struct | public | public struct PTFormDependency: Codable, Hashable, Sendable { |
-| PooToolsSource/PToolsForm/PTForm.swift:68 | let | public | public let fieldID: PTFormFieldID |
-| PooToolsSource/PToolsForm/PTForm.swift:69 | let | public | public let expectedValue: PTFormValue |
-| PooToolsSource/PToolsForm/PTForm.swift:71 | init | public | public init(fieldID: PTFormFieldID, expectedValue: PTFormValue) { |
-| PooToolsSource/PToolsForm/PTForm.swift:76 | struct | public | public struct PTFormValidator: Sendable { |
-| PooToolsSource/PToolsForm/PTForm.swift:77 | let | public | public let validate: @Sendable (PTFormValue) async -> String? |
-| PooToolsSource/PToolsForm/PTForm.swift:78 | init | public | public init(validate: @escaping @Sendable (PTFormValue) async -> String?) { self.validate = validate } |
-| PooToolsSource/PToolsForm/PTForm.swift:81 | struct | public | public struct PTFormField: Sendable { |
-| PooToolsSource/PToolsForm/PTForm.swift:82 | let | public | public let id: PTFormFieldID |
-| PooToolsSource/PToolsForm/PTForm.swift:83 | let | public | public let kind: PTFormFieldKind |
-| PooToolsSource/PToolsForm/PTForm.swift:84 | let | public | public let title: String |
-| PooToolsSource/PToolsForm/PTForm.swift:85 | var | public | public var value: PTFormValue |
-| PooToolsSource/PToolsForm/PTForm.swift:86 | var | public | public var isEnabled: Bool |
-| PooToolsSource/PToolsForm/PTForm.swift:87 | var | public | public var isReadOnly: Bool |
-| PooToolsSource/PToolsForm/PTForm.swift:88 | var | public | public var dependency: PTFormDependency? |
-| PooToolsSource/PToolsForm/PTForm.swift:89 | let | public | public let pickerOptions: [String] |
-| PooToolsSource/PToolsForm/PTForm.swift:90 | let | public | public let rules: [PTFormValidationRule] |
-| PooToolsSource/PToolsForm/PTForm.swift:91 | let | public | public let validators: [PTFormValidator] |
-| PooToolsSource/PToolsForm/PTForm.swift:93 | init | public | public init(id: PTFormFieldID, |
-| PooToolsSource/PToolsForm/PTForm.swift:109 | struct | public | public struct PTFormSection: Sendable { |
-| PooToolsSource/PToolsForm/PTForm.swift:110 | let | public | public let id: String |
-| PooToolsSource/PToolsForm/PTForm.swift:111 | let | public | public let title: String? |
-| PooToolsSource/PToolsForm/PTForm.swift:112 | let | public | public let fieldIDs: [PTFormFieldID] |
-| PooToolsSource/PToolsForm/PTForm.swift:113 | init | public | public init(id: String, title: String? = nil, fieldIDs: [PTFormFieldID]) { |
-| PooToolsSource/PToolsForm/PTForm.swift:118 | enum | public | public enum PTFormSubmission: Sendable, Equatable { |
-| PooToolsSource/PToolsForm/PTForm.swift:125 | enum | public | public enum PTFormError: Error, Sendable, Equatable { |
-| PooToolsSource/PToolsForm/PTForm.swift:131 | actor | public | public actor PTFormEngine { |
-| PooToolsSource/PToolsForm/PTForm.swift:138 | init | public | public init(fields: [PTFormField], sections: [PTFormSection] = []) { |
-| PooToolsSource/PToolsForm/PTForm.swift:145 | func | public | public func snapshot() -> [PTFormField] { order.compactMap { fields[$0] } } |
-| PooToolsSource/PToolsForm/PTForm.swift:147 | func | public | public func visibleFields() -> [PTFormField] { |
-| PooToolsSource/PToolsForm/PTForm.swift:154 | func | public | public func setValue(_ value: PTFormValue, for id: PTFormFieldID) throws { |
-| PooToolsSource/PToolsForm/PTForm.swift:163 | func | public | public func value(for id: PTFormFieldID) -> PTFormValue? { fields[id]?.value } |
-| PooToolsSource/PToolsForm/PTForm.swift:165 | func | public | public func validateField(_ id: PTFormFieldID, debounce: Duration = .milliseconds(250)) async -> PTFormValidationResult { |
-| PooToolsSource/PToolsForm/PTForm.swift:179 | func | public | public func validateAll() async -> PTFormValidationResult { |
-| PooToolsSource/PToolsForm/PTForm.swift:188 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
-| PooToolsSource/PToolsForm/PTForm.swift:243 | protocol | public | public protocol PTFormFieldRenderer: AnyObject { |
-| PooToolsSource/PToolsForm/PTForm.swift:255 | class | public | public final class PTFormFieldRendererRegistry { |
-| PooToolsSource/PToolsForm/PTForm.swift:257 | var | public | public var themeAdapter: PTFormThemeAdapter { |
-| PooToolsSource/PToolsForm/PTForm.swift:261 | init | public | public init(themeAdapter: PTFormThemeAdapter = .init()) { |
-| PooToolsSource/PToolsForm/PTForm.swift:272 | func | public | public func register(_ renderer: any PTFormFieldRenderer) { |
-| PooToolsSource/PToolsForm/PTForm.swift:277 | func | public | public func renderer(for kind: PTFormFieldKind) -> any PTFormFieldRenderer { |
-| PooToolsSource/PToolsForm/PTForm.swift:285 | class | public | public final class PTDefaultFormFieldRenderer: PTFormFieldRenderer { |
-| PooToolsSource/PToolsForm/PTForm.swift:286 | let | public | public let kind: PTFormFieldKind |
-| PooToolsSource/PToolsForm/PTForm.swift:289 | init | public | public init(kind: PTFormFieldKind = .custom) { |
-| PooToolsSource/PToolsForm/PTForm.swift:294 | func | public | public func makeView(for field: PTFormField, |
-| PooToolsSource/PToolsForm/PTForm.swift:299 | func | public | public func apply(theme: PTFormThemeAdapter) { |
-| PooToolsSource/PToolsForm/PTForm.swift:418 | class | public | public final class PTFormViewController: PTBaseViewController { |
-| PooToolsSource/PToolsForm/PTForm.swift:419 | let | public | public let form: PTFormEngine |
-| PooToolsSource/PToolsForm/PTForm.swift:420 | let | public | public let listView: PTCollectionView |
-| PooToolsSource/PToolsForm/PTForm.swift:421 | let | public | public let rendererRegistry: PTFormFieldRendererRegistry |
-| PooToolsSource/PToolsForm/PTForm.swift:422 | let | public | public let formTheme: PTFormThemeAdapter |
-| PooToolsSource/PToolsForm/PTForm.swift:429 | init | public | public init(form: PTFormEngine) { |
-| PooToolsSource/PToolsForm/PTForm.swift:438 | init | public | public init(form: PTFormEngine, |
-| PooToolsSource/PToolsForm/PTForm.swift:447 | init | public | public init(form: PTFormEngine, |
-| PooToolsSource/PToolsForm/PTForm.swift:507 | func | public | public func refresh() async { |
-| PooToolsSource/PToolsForm/PTForm.swift:538 | func | public | public func validate() async -> PTFormValidationResult { |
-| PooToolsSource/PToolsForm/PTForm.swift:549 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:58 | let | public | public let severity: PTFormValidationSeverity |
+| PooToolsSource/PToolsForm/PTForm.swift:63 | init | public | public init(fieldID: PTFormFieldID, message: String) { |
+| PooToolsSource/PToolsForm/PTForm.swift:67 | init | public | public init(fieldID: PTFormFieldID, |
+| PooToolsSource/PToolsForm/PTForm.swift:76 | struct | public | public struct PTFormValidationResult: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsForm/PTForm.swift:77 | let | public | public let issues: [PTFormValidationIssue] |
+| PooToolsSource/PToolsForm/PTForm.swift:78 | var | public | public var isValid: Bool { issues.isEmpty } |
+| PooToolsSource/PToolsForm/PTForm.swift:79 | init | public | public init(issues: [PTFormValidationIssue] = []) { self.issues = issues } |
+| PooToolsSource/PToolsForm/PTForm.swift:82 | struct | public | public struct PTFormDependency: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsForm/PTForm.swift:83 | let | public | public let fieldID: PTFormFieldID |
+| PooToolsSource/PToolsForm/PTForm.swift:84 | let | public | public let expectedValue: PTFormValue |
+| PooToolsSource/PToolsForm/PTForm.swift:86 | init | public | public init(fieldID: PTFormFieldID, expectedValue: PTFormValue) { |
+| PooToolsSource/PToolsForm/PTForm.swift:91 | struct | public | public struct PTFormValidator: Sendable { |
+| PooToolsSource/PToolsForm/PTForm.swift:92 | let | public | public let validate: @Sendable (PTFormValue) async -> String? |
+| PooToolsSource/PToolsForm/PTForm.swift:93 | init | public | public init(validate: @escaping @Sendable (PTFormValue) async -> String?) { self.validate = validate } |
+| PooToolsSource/PToolsForm/PTForm.swift:96 | struct | public | public struct PTFormField: Sendable { |
+| PooToolsSource/PToolsForm/PTForm.swift:97 | let | public | public let id: PTFormFieldID |
+| PooToolsSource/PToolsForm/PTForm.swift:98 | let | public | public let kind: PTFormFieldKind |
+| PooToolsSource/PToolsForm/PTForm.swift:99 | let | public | public let title: String |
+| PooToolsSource/PToolsForm/PTForm.swift:100 | var | public | public var subtitle: String? |
+| PooToolsSource/PToolsForm/PTForm.swift:101 | var | public | public var placeholder: String? |
+| PooToolsSource/PToolsForm/PTForm.swift:102 | var | public | public var value: PTFormValue |
+| PooToolsSource/PToolsForm/PTForm.swift:103 | var | public | public var isEnabled: Bool |
+| PooToolsSource/PToolsForm/PTForm.swift:104 | var | public | public var isReadOnly: Bool |
+| PooToolsSource/PToolsForm/PTForm.swift:105 | var | public | public var dependency: PTFormDependency? |
+| PooToolsSource/PToolsForm/PTForm.swift:109 | let | public | public let pickerOptions: [String] |
+| PooToolsSource/PToolsForm/PTForm.swift:113 | let | public | public let pickerOptionModels: [PTFormPickerOption] |
+| PooToolsSource/PToolsForm/PTForm.swift:114 | let | public | public let rules: [PTFormValidationRule] |
+| PooToolsSource/PToolsForm/PTForm.swift:115 | let | public | public let validators: [PTFormValidator] |
+| PooToolsSource/PToolsForm/PTForm.swift:116 | var | public | public var configuration: PTFormFieldConfiguration? |
+| PooToolsSource/PToolsForm/PTForm.swift:117 | var | public | public var visibility: PTFormVisibilityRule? |
+| PooToolsSource/PToolsForm/PTForm.swift:118 | var | public | public var accessibility: PTFormAccessibilityConfiguration? |
+| PooToolsSource/PToolsForm/PTForm.swift:119 | var | public | public var rendererIdentifier: String? |
+| PooToolsSource/PToolsForm/PTForm.swift:121 | init | public | public init(id: PTFormFieldID, |
+| PooToolsSource/PToolsForm/PTForm.swift:156 | init | public | public init(id: PTFormFieldID, |
+| PooToolsSource/PToolsForm/PTForm.swift:192 | struct | public | public struct PTFormSection: Sendable { |
+| PooToolsSource/PToolsForm/PTForm.swift:193 | let | public | public let id: String |
+| PooToolsSource/PToolsForm/PTForm.swift:194 | var | public | public var title: String? |
+| PooToolsSource/PToolsForm/PTForm.swift:195 | var | public | public var subtitle: String? |
+| PooToolsSource/PToolsForm/PTForm.swift:196 | var | public | public var header: PTFormSupplementaryContent? |
+| PooToolsSource/PToolsForm/PTForm.swift:197 | var | public | public var footer: PTFormSupplementaryContent? |
+| PooToolsSource/PToolsForm/PTForm.swift:198 | var | public | public var fieldIDs: [PTFormFieldID] |
+| PooToolsSource/PToolsForm/PTForm.swift:199 | var | public | public var configuration: PTFormSectionConfiguration? |
+| PooToolsSource/PToolsForm/PTForm.swift:200 | var | public | public var visibility: PTFormVisibilityRule? |
+| PooToolsSource/PToolsForm/PTForm.swift:205 | init | public | public init(id: String, title: String? = nil, fieldIDs: [PTFormFieldID]) { |
+| PooToolsSource/PToolsForm/PTForm.swift:216 | init | public | public init(id: String, |
+| PooToolsSource/PToolsForm/PTForm.swift:246 | enum | public | public enum PTFormSubmission: Sendable, Equatable { |
+| PooToolsSource/PToolsForm/PTForm.swift:253 | enum | public | public enum PTFormError: Error, Sendable, Equatable { |
+| PooToolsSource/PToolsForm/PTForm.swift:260 | actor | public | public actor PTFormEngine { |
+| PooToolsSource/PToolsForm/PTForm.swift:270 | let | public | public let configuration: PTFormConfiguration |
+| PooToolsSource/PToolsForm/PTForm.swift:271 | let | public | public let unsectionedFieldPolicy: PTFormUnsectionedFieldPolicy |
+| PooToolsSource/PToolsForm/PTForm.swift:279 | init | public | public init(fields: [PTFormField], sections: [PTFormSection] = []) { |
+| PooToolsSource/PToolsForm/PTForm.swift:283 | init | public | public init(fields: [PTFormField], |
+| PooToolsSource/PToolsForm/PTForm.swift:303 | func | public | public func snapshot() -> [PTFormField] { order.compactMap { fields[$0] } } |
+| PooToolsSource/PToolsForm/PTForm.swift:305 | func | public | public func visibleFields() -> [PTFormField] { |
+| PooToolsSource/PToolsForm/PTForm.swift:309 | func | public | public func makeSnapshot() -> PTFormSnapshot { |
+| PooToolsSource/PToolsForm/PTForm.swift:323 | func | public | public func setValue(_ value: PTFormValue, for id: PTFormFieldID) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:333 | func | public | public func value(for id: PTFormFieldID) -> PTFormValue? { fields[id]?.value } |
+| PooToolsSource/PToolsForm/PTForm.swift:335 | func | public | public func updateField(_ field: PTFormField) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:344 | func | public | public func setFieldEnabled(_ enabled: Bool, for id: PTFormFieldID) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:350 | func | public | public func setFieldReadOnly(_ readOnly: Bool, for id: PTFormFieldID) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:356 | func | public | public func updateSection(_ section: PTFormSection) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:364 | func | public | public func setSectionVisible(_ visible: Bool, for id: String) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:370 | func | public | public func performUpdates(_ mutations: [PTFormMutation]) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:382 | func | public | public func reset() { |
+| PooToolsSource/PToolsForm/PTForm.swift:392 | func | public | public func reset(field id: PTFormFieldID) throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:398 | var | public | public var isDirty: Bool { |
+| PooToolsSource/PToolsForm/PTForm.swift:402 | var | public | public var changedFieldIDs: Set<PTFormFieldID> { |
+| PooToolsSource/PToolsForm/PTForm.swift:406 | func | public | public func validateField(_ id: PTFormFieldID, debounce: Duration = .milliseconds(250)) async -> PTFormValidationResult { |
+| PooToolsSource/PToolsForm/PTForm.swift:427 | func | public | public func validateAll() async -> PTFormValidationResult { |
+| PooToolsSource/PToolsForm/PTForm.swift:443 | func | public | public func validateSection(_ id: String) async -> PTFormValidationResult { |
+| PooToolsSource/PToolsForm/PTForm.swift:452 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:597 | protocol | public | public protocol PTFormFieldRenderer: AnyObject { |
+| PooToolsSource/PToolsForm/PTForm.swift:619 | struct | public | public struct PTFormFieldRenderContext { |
+| PooToolsSource/PToolsForm/PTForm.swift:620 | let | public | public let field: PTFormField |
+| PooToolsSource/PToolsForm/PTForm.swift:621 | let | public | public let sectionID: String |
+| PooToolsSource/PToolsForm/PTForm.swift:622 | let | public | public let theme: PTFormThemeAdapter |
+| PooToolsSource/PToolsForm/PTForm.swift:623 | let | public | public let validationIssue: PTFormValidationIssue? |
+| PooToolsSource/PToolsForm/PTForm.swift:624 | let | public | public let environment: PTFormEnvironment |
+| PooToolsSource/PToolsForm/PTForm.swift:626 | init | public | public init(field: PTFormField, |
+| PooToolsSource/PToolsForm/PTForm.swift:640 | class | public | public final class PTFormFieldRendererRegistry { |
+| PooToolsSource/PToolsForm/PTForm.swift:643 | var | public | public var themeAdapter: PTFormThemeAdapter { |
+| PooToolsSource/PToolsForm/PTForm.swift:647 | init | public | public init(themeAdapter: PTFormThemeAdapter = .init()) { |
+| PooToolsSource/PToolsForm/PTForm.swift:658 | func | public | public func register(_ renderer: any PTFormFieldRenderer) { |
+| PooToolsSource/PToolsForm/PTForm.swift:663 | func | public | public func register(_ renderer: any PTFormFieldRenderer, identifier: String) { |
+| PooToolsSource/PToolsForm/PTForm.swift:668 | func | public | public func renderer(for kind: PTFormFieldKind) -> any PTFormFieldRenderer { |
+| PooToolsSource/PToolsForm/PTForm.swift:674 | func | public | public func renderer(for identifier: String?, kind: PTFormFieldKind) -> any PTFormFieldRenderer { |
+| PooToolsSource/PToolsForm/PTForm.swift:684 | class | public | public final class PTDefaultFormFieldRenderer: PTFormFieldRenderer { |
+| PooToolsSource/PToolsForm/PTForm.swift:685 | let | public | public let kind: PTFormFieldKind |
+| PooToolsSource/PToolsForm/PTForm.swift:688 | init | public | public init(kind: PTFormFieldKind = .custom) { |
+| PooToolsSource/PToolsForm/PTForm.swift:693 | func | public | public func makeView(for field: PTFormField, |
+| PooToolsSource/PToolsForm/PTForm.swift:698 | var | public | public var focusBehavior: PTFormFocusBehavior { |
+| PooToolsSource/PToolsForm/PTForm.swift:702 | func | public | public func apply(theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTForm.swift:862 | class | public | public final class PTFormViewController: PTBaseViewController { |
+| PooToolsSource/PToolsForm/PTForm.swift:863 | let | public | public let form: PTFormEngine |
+| PooToolsSource/PToolsForm/PTForm.swift:864 | let | public | public let listView: PTCollectionView |
+| PooToolsSource/PToolsForm/PTForm.swift:865 | let | public | public let rendererRegistry: PTFormFieldRendererRegistry |
+| PooToolsSource/PToolsForm/PTForm.swift:866 | let | public | public let sectionRendererRegistry: PTFormSectionRendererRegistry |
+| PooToolsSource/PToolsForm/PTForm.swift:867 | let | public | public let formTheme: PTFormThemeAdapter |
+| PooToolsSource/PToolsForm/PTForm.swift:868 | let | public | public let configuration: PTFormConfiguration |
+| PooToolsSource/PToolsForm/PTForm.swift:869 | var | public | public var onEvent: (@MainActor @Sendable (PTFormEvent) -> Void)? |
+| PooToolsSource/PToolsForm/PTForm.swift:870 | var | public | public var showsValidationSummary = false |
+| PooToolsSource/PToolsForm/PTForm.swift:882 | init | public | public init(form: PTFormEngine) { |
+| PooToolsSource/PToolsForm/PTForm.swift:893 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:910 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:923 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:1033 | func | public | public func refresh() async { |
+| PooToolsSource/PToolsForm/PTForm.swift:1064 | func | public | public func validate() async -> PTFormValidationResult { |
+| PooToolsSource/PToolsForm/PTForm.swift:1081 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:1107 | func | public | public func focusField(_ id: PTFormFieldID) { |
+| PooToolsSource/PToolsForm/PTForm.swift:1112 | func | public | public func scrollToField(_ id: PTFormFieldID, animated: Bool = true) { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:7 | struct | public | public struct PTFormInsets: Sendable, Codable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:8 | var | public | public var top: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:9 | var | public | public var leading: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:10 | var | public | public var bottom: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:11 | var | public | public var trailing: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:13 | init | public | public init(top: CGFloat = 0, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:26 | enum | public | public enum PTFormDimension: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:31 | var | public | public var fallback: CGFloat { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:39 | enum | public | public enum PTFormTitlePlacement: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:45 | enum | public | public enum PTFormFieldLayout: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:51 | enum | public | public enum PTFormBackgroundStyle: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:57 | enum | public | public enum PTFormSeparatorStyle: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:63 | struct | public | public struct PTFormShadowStyle: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:64 | var | public | public var opacity: Float |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:65 | var | public | public var radius: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:66 | var | public | public var offsetY: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:68 | init | public | public init(opacity: Float = 0.08, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:77 | struct | public | public struct PTFormSectionAppearance: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:78 | var | public | public var backgroundStyle: PTFormBackgroundStyle? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:79 | var | public | public var cornerRadius: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:80 | var | public | public var separatorStyle: PTFormSeparatorStyle? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:81 | var | public | public var shadow: PTFormShadowStyle? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:83 | init | public | public init(backgroundStyle: PTFormBackgroundStyle? = nil, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:94 | struct | public | public struct PTFormSectionConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:95 | var | public | public var contentInsets: PTFormInsets? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:96 | var | public | public var rowSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:97 | var | public | public var topSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:98 | var | public | public var bottomSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:99 | var | public | public var headerSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:100 | var | public | public var footerSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:101 | var | public | public var headerHeight: PTFormDimension? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:102 | var | public | public var footerHeight: PTFormDimension? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:103 | var | public | public var appearance: PTFormSectionAppearance? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:105 | init | public | public init(contentInsets: PTFormInsets? = nil, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:126 | struct | public | public struct PTFormFieldConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:127 | var | public | public var layout: PTFormFieldLayout? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:128 | var | public | public var contentInsets: PTFormInsets? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:129 | var | public | public var titlePlacement: PTFormTitlePlacement? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:130 | var | public | public var titleSpacing: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:131 | var | public | public var minimumHeight: CGFloat? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:132 | var | public | public var preferredHeight: PTFormDimension? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:133 | var | public | public var showsValidationMessage: Bool? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:134 | var | public | public var numeric: PTFormNumericControlConfiguration? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:135 | var | public | public var date: PTFormDateConfiguration? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:136 | var | public | public var textInput: PTFormTextInputConfiguration? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:138 | init | public | public init(layout: PTFormFieldLayout? = nil, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:161 | enum | public | public enum PTFormUpdatePolicy: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:167 | enum | public | public enum PTFormValidationTrigger: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:173 | struct | public | public struct PTFormValidationPolicy: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:174 | var | public | public var trigger: PTFormValidationTrigger |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:175 | var | public | public var debounce: Duration |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:176 | var | public | public var showsInlineIssue: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:177 | var | public | public var focusesFirstInvalidField: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:179 | init | public | public init(trigger: PTFormValidationTrigger = .onChange, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:190 | struct | public | public struct PTFormKeyboardPolicy: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:191 | var | public | public var showsToolbar: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:192 | var | public | public var allowsCrossSectionNavigation: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:194 | init | public | public init(showsToolbar: Bool = true, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:201 | enum | public | public enum PTFormSafeAreaPolicy: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:207 | enum | public | public enum PTFormInteractionMode: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:213 | enum | public | public enum PTFormSectionPresentation: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:218 | struct | public | public struct PTFormSubmissionBehavior: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:219 | var | public | public var disablesFields: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:220 | var | public | public var showsOverlay: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:221 | var | public | public var submitButtonLoading: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:223 | init | public | public init(disablesFields: Bool = true, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:232 | struct | public | public struct PTFormConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:233 | var | public | public var contentInsets: PTFormInsets |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:234 | var | public | public var sectionSpacing: CGFloat |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:235 | var | public | public var defaultSectionConfiguration: PTFormSectionConfiguration |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:236 | var | public | public var defaultFieldConfiguration: PTFormFieldConfiguration |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:237 | var | public | public var updatePolicy: PTFormUpdatePolicy |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:238 | var | public | public var validationPolicy: PTFormValidationPolicy |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:239 | var | public | public var keyboardPolicy: PTFormKeyboardPolicy |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:240 | var | public | public var safeAreaPolicy: PTFormSafeAreaPolicy |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:241 | var | public | public var interactionMode: PTFormInteractionMode |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:242 | var | public | public var sectionPresentation: PTFormSectionPresentation |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:243 | var | public | public var hideEmptySections: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:244 | var | public | public var submissionBehavior: PTFormSubmissionBehavior |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:246 | init | public | public init(contentInsets: PTFormInsets = .init(top: 16, leading: 16, bottom: 24, trailing: 16), |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:292 | struct | public | public struct PTFormAccessibilityConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:293 | var | public | public var label: String? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:294 | var | public | public var hint: String? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:296 | init | public | public init(label: String? = nil, hint: String? = nil) { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:302 | enum | public | public enum PTFormFocusBehavior: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:308 | enum | public | public enum PTFormDateMode: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:314 | enum | public | public enum PTFormTextContentType: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:324 | enum | public | public enum PTFormAutocapitalization: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:331 | struct | public | public struct PTFormNumericControlConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:332 | var | public | public var minimum: Double |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:333 | var | public | public var maximum: Double |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:334 | var | public | public var step: Double |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:336 | init | public | public init(minimum: Double = 0, maximum: Double = 1, step: Double = 1) { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:343 | struct | public | public struct PTFormDateConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:344 | var | public | public var mode: PTFormDateMode |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:345 | var | public | public var minimumDate: Date? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:346 | var | public | public var maximumDate: Date? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:348 | init | public | public init(mode: PTFormDateMode = .date, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:357 | struct | public | public struct PTFormTextInputConfiguration: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:358 | var | public | public var contentType: PTFormTextContentType? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:359 | var | public | public var capitalization: PTFormAutocapitalization? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:360 | var | public | public var autocorrection: Bool? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:361 | var | public | public var maximumLength: Int? |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:363 | init | public | public init(contentType: PTFormTextContentType? = nil, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:374 | struct | public | public struct PTFormPickerOption: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:375 | let | public | public let id: String |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:376 | let | public | public let title: String |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:377 | let | public | public let value: PTFormValue |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:379 | init | public | public init(id: String, title: String, value: PTFormValue? = nil) { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:386 | struct | public | public struct PTFormEnvironment: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:387 | var | public | public var isReduceMotionEnabled: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:388 | var | public | public var isHighContrastEnabled: Bool |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:389 | var | public | public var layoutDirection: PTFormLayoutDirection |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:391 | init | public | public init(isReduceMotionEnabled: Bool = false, |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:400 | enum | public | public enum PTFormLayoutDirection: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:405 | struct | public | public struct PTFormActionID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:406 | let | public | public let rawValue: String |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:407 | init | public | public init(rawValue: String) { self.rawValue = rawValue } |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:408 | init | public | public init(stringLiteral value: String) { self.rawValue = value } |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:411 | enum | public | public enum PTFormEvent: Sendable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:418 | enum | public | public enum PTFormUnsectionedFieldPolicy: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormConfiguration.swift:424 | enum | public | public enum PTFormMutation: Sendable { |
 | PooToolsSource/PToolsForm/PTFormRenderers.swift:38 | class | open | open class PTFormRendererBase: PTFormFieldRenderer { |
 | PooToolsSource/PToolsForm/PTFormRenderers.swift:39 | let | public | public let kind: PTFormFieldKind |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:42 | init | public | public init(kind: PTFormFieldKind) { self.kind = kind } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:44 | func | open | open func makeView(for field: PTFormField, |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:49 | func | public | public func apply(theme: PTFormThemeAdapter) { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:96 | class | public | public final class PTFormTextFieldRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:97 | init | public | public init() { super.init(kind: .text) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:105 | class | public | public final class PTFormSecureTextFieldRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:106 | init | public | public init() { super.init(kind: .secureText) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:114 | class | public | public final class PTFormNumberRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:115 | init | public | public init() { super.init(kind: .number) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:123 | class | public | public final class PTFormPhoneRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:124 | init | public | public init() { super.init(kind: .phone) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:132 | class | public | public final class PTFormBankCardRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:133 | init | public | public init() { super.init(kind: .bankCard) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:141 | class | public | public final class PTFormMultilineRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:142 | init | public | public init() { super.init(kind: .multilineText) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:171 | class | public | public final class PTFormToggleRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:172 | init | public | public init() { super.init(kind: .toggle) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:205 | class | public | public final class PTFormCheckboxRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:206 | init | public | public init() { super.init(kind: .checkbox) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:227 | class | public | public final class PTFormSliderRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:228 | init | public | public init() { super.init(kind: .slider) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:248 | class | public | public final class PTFormStepperRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:249 | init | public | public init() { super.init(kind: .stepper) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:274 | class | public | public final class PTFormDateRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:275 | init | public | public init() { super.init(kind: .date) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:305 | class | public | public final class PTFormPickerRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:306 | init | public | public init() { super.init(kind: .picker) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:333 | class | public | public final class PTFormActionButtonRenderer: PTFormRendererBase { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:334 | init | public | public init() { super.init(kind: .custom) } |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:350 | class | public | public final class PTFormMissingRendererView: UILabel { |
-| PooToolsSource/PToolsForm/PTFormRenderers.swift:351 | init | public | public init(kind: PTFormFieldKind) { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:42 | var | open | open var focusBehavior: PTFormFocusBehavior { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:51 | init | public | public init(kind: PTFormFieldKind) { self.kind = kind } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:53 | func | open | open func makeView(for field: PTFormField, |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:58 | func | public | public func apply(theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:117 | class | public | public final class PTFormTextFieldRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:118 | init | public | public init() { super.init(kind: .text) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:126 | class | public | public final class PTFormSecureTextFieldRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:127 | init | public | public init() { super.init(kind: .secureText) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:135 | class | public | public final class PTFormNumberRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:136 | init | public | public init() { super.init(kind: .number) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:144 | class | public | public final class PTFormPhoneRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:145 | init | public | public init() { super.init(kind: .phone) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:153 | class | public | public final class PTFormBankCardRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:154 | init | public | public init() { super.init(kind: .bankCard) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:162 | class | public | public final class PTFormMultilineRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:163 | init | public | public init() { super.init(kind: .multilineText) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:192 | class | public | public final class PTFormToggleRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:193 | init | public | public init() { super.init(kind: .toggle) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:226 | class | public | public final class PTFormCheckboxRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:227 | init | public | public init() { super.init(kind: .checkbox) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:248 | class | public | public final class PTFormSliderRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:249 | init | public | public init() { super.init(kind: .slider) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:273 | class | public | public final class PTFormStepperRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:274 | init | public | public init() { super.init(kind: .stepper) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:304 | class | public | public final class PTFormDateRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:305 | init | public | public init() { super.init(kind: .date) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:340 | class | public | public final class PTFormPickerRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:341 | init | public | public init() { super.init(kind: .picker) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:379 | var | public | public var pickerDisplayText: String { title } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:419 | class | public | public final class PTFormActionButtonRenderer: PTFormRendererBase { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:420 | init | public | public init() { super.init(kind: .custom) } |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:436 | class | public | public final class PTFormMissingRendererView: UILabel { |
+| PooToolsSource/PToolsForm/PTFormRenderers.swift:437 | init | public | public init(kind: PTFormFieldKind) { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:12 | struct | public | public struct PTFormSectionRenderContext { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:13 | let | public | public let sectionID: String |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:14 | let | public | public let theme: PTFormThemeAdapter |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:15 | let | public | public let environment: PTFormEnvironment |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:17 | init | public | public init(sectionID: String, |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:27 | protocol | public | public protocol PTFormSectionSupplementaryRenderer: AnyObject { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:53 | class | public | public final class PTFormSectionRendererRegistry { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:56 | init | public | public init() {} |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:58 | func | public | public func register(_ renderer: any PTFormSectionSupplementaryRenderer) { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:62 | func | public | public func renderer(for identifier: String) -> (any PTFormSectionSupplementaryRenderer)? { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:66 | func | public | public func makeView(content: PTFormSupplementaryContent, |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:82 | func | public | public func dequeueView(content: PTFormSupplementaryContent, |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:131 | class | public | public final class PTFormDefaultSectionHeader: PTBaseCollectionReusableView { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:165 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:176 | class | public | public final class PTFormDefaultSectionFooter: PTBaseCollectionReusableView { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:204 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:7 | struct | public | public struct PTFormSupplementaryText: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:8 | var | public | public var title: String? |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:9 | var | public | public var subtitle: String? |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:11 | init | public | public init(title: String? = nil, subtitle: String? = nil) { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:17 | enum | public | public enum PTFormSupplementaryContent: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:22 | struct | public | public struct PTFormSectionSnapshot: Sendable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:23 | let | public | public let section: PTFormSection |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:24 | let | public | public let fields: [PTFormField] |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:26 | init | public | public init(section: PTFormSection, fields: [PTFormField]) { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:32 | struct | public | public struct PTFormSnapshot: Sendable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:33 | let | public | public let revision: UInt64 |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:34 | let | public | public let sections: [PTFormSectionSnapshot] |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:36 | init | public | public init(revision: UInt64 = 0, sections: [PTFormSectionSnapshot]) { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:41 | var | public | public var fields: [PTFormField] { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:46 | enum | public | public enum PTFormDefinitionIssue: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:81 | class | public | public final class PTFormCollectionAdapter { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:82 | init | public | public init() {} |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:84 | func | public | public func makeSections(from snapshot: PTFormSnapshot, |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:143 | func | public | public func locations(for snapshot: PTFormSnapshot) -> [PTFormFieldLocation] { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:180 | struct | public | public struct PTFormFieldLocation: Sendable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:181 | let | public | public let fieldID: PTFormFieldID |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:182 | let | public | public let sectionID: String |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:183 | let | public | public let sectionIndex: Int |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:184 | let | public | public let itemIndex: Int |
+| PooToolsSource/PToolsForm/PTFormSnapshot.swift:186 | init | public | public init(fieldID: PTFormFieldID, |
 | PooToolsSource/PToolsForm/PTFormSupport.swift:23 | class | public | public final class PTFormThemeAdapter { |
 | PooToolsSource/PToolsForm/PTFormSupport.swift:26 | init | public | public init(resolver: PTThemeResolver? = nil) { |
 | PooToolsSource/PToolsForm/PTFormSupport.swift:30 | func | public | public func update(resolver: PTThemeResolver) { |
@@ -5412,6 +5636,19 @@ Generated at: 2026-09-28T14:58:44Z
 | PooToolsSource/PToolsForm/PTFormSupport.swift:48 | init | public | public init() {} |
 | PooToolsSource/PToolsForm/PTFormSupport.swift:50 | func | public | public func attach(to view: UIView, |
 | PooToolsSource/PToolsForm/PTFormSupport.swift:76 | enum | public | public enum PTFormAccessibilityAdapter { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:7 | enum | public | public enum PTFormValidationSeverity: Sendable, Codable, Hashable { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:13 | struct | public | public struct PTFormValidationContext: Sendable { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:14 | let | public | public let values: [PTFormFieldID: PTFormValue] |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:15 | let | public | public let revision: UInt64 |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:17 | init | public | public init(values: [PTFormFieldID: PTFormValue], revision: UInt64 = 0) { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:22 | func | public | public func value(for id: PTFormFieldID) -> PTFormValue? { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:27 | struct | public | public struct PTFormCrossValidator: Sendable { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:28 | let | public | public let fieldIDs: Set<PTFormFieldID> |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:29 | let | public | public let validate: @Sendable (PTFormValidationContext) async -> [PTFormValidationIssue] |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:31 | init | public | public init(fieldIDs: Set<PTFormFieldID>, |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:38 | struct | public | public struct PTFormValidationMessageProvider: Sendable { |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:39 | let | public | public let message: @Sendable (PTFormValidationRule) -> String |
+| PooToolsSource/PToolsForm/PTFormValidation.swift:41 | init | public | public init(message: @escaping @Sendable (PTFormValidationRule) -> String = { rule in |
 | PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:10 | struct | public | public struct PTHTTPFilePortalConfiguration: Sendable { |
 | PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:11 | let | public | public let rootDirectory: URL |
 | PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift:12 | var | public | public var allowsUpload: Bool |

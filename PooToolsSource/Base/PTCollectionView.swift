@@ -1621,6 +1621,21 @@ extension PTCollectionView {
     private func buildSection(sectionModel: PTSection,sectionIndex: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let screenWidth = environment.container.contentSize.width
         let behavior = viewConfig.collectionViewBehavior
+        let sectionLayout = sectionModel.layoutConfiguration
+        let itemHeight = sectionLayout?.itemHeight.flatMap { value -> CGFloat? in
+            switch value {
+            case .fixed(let height), .estimated(let height): return max(1, height)
+            }
+        } ?? viewConfig.itemHeight
+        let usesEstimatedItemHeight: Bool = {
+            guard let value = sectionLayout?.itemHeight else { return false }
+            if case .estimated = value { return true }
+            return false
+        }()
+        let topContentSpace = sectionLayout?.topSpacing ?? viewConfig.contentTopSpace
+        let bottomContentSpace = sectionLayout?.bottomSpacing ?? viewConfig.contentBottomSpace
+        let itemLeadingSpace = sectionLayout?.contentInsets?.leading ?? viewConfig.cellLeadingSpace
+        let itemTrailingSpace = sectionLayout?.interGroupSpacing ?? viewConfig.cellTrailingSpace
         let group: NSCollectionLayoutGroup
         
         switch viewConfig.viewType {
@@ -1628,25 +1643,37 @@ extension PTCollectionView {
             group = UICollectionView.girdCollectionLayout(
                 data: sectionModel.rows,
                 groupWidth: screenWidth,
-                itemHeight: viewConfig.itemHeight,
+                itemHeight: itemHeight,
                 cellRowCount: max(1, viewConfig.rowCount),
                 originalX: viewConfig.itemOriginalX,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                cellLeadingSpace: viewConfig.cellLeadingSpace,
-                cellTrailingSpace: viewConfig.cellTrailingSpace
+                topContentSpace: topContentSpace,
+                bottomContentSpace: bottomContentSpace,
+                cellLeadingSpace: itemLeadingSpace,
+                cellTrailingSpace: itemTrailingSpace
             )
         case .Normal:
-            group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows,
-                groupWidth: screenWidth,
-                itemHeight: viewConfig.itemHeight,
-                cellRowCount: 1,
-                originalX: viewConfig.itemOriginalX,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                cellTrailingSpace: viewConfig.cellTrailingSpace
-            )
+            if usesEstimatedItemHeight {
+                let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                  heightDimension: .estimated(itemHeight))
+                let item = NSCollectionLayoutItem(layoutSize: size)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                       heightDimension: .estimated(itemHeight))
+                let estimatedGroup = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
+                                                                       subitems: [item])
+                estimatedGroup.interItemSpacing = .fixed(itemTrailingSpace)
+                group = estimatedGroup
+            } else {
+                group = UICollectionView.girdCollectionLayout(
+                    data: sectionModel.rows,
+                    groupWidth: screenWidth,
+                    itemHeight: itemHeight,
+                    cellRowCount: 1,
+                    originalX: viewConfig.itemOriginalX,
+                    topContentSpace: topContentSpace,
+                    bottomContentSpace: bottomContentSpace,
+                    cellTrailingSpace: itemTrailingSpace
+                )
+            }
         case .WaterFall:
             if let waterFall = waterFallLayout {
                 let result = buildWaterfallItems(
@@ -1670,25 +1697,25 @@ extension PTCollectionView {
                 group = oneSquareGroup()
             }
         case .Horizontal:
-            group = UICollectionView.horizontalLayout(
-                data: sectionModel.rows,
-                itemOriginalX: viewConfig.itemOriginalX,
-                itemWidth: viewConfig.itemWidth,
-                itemHeight: viewConfig.itemHeight,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                itemLeadingSpace: viewConfig.cellLeadingSpace
-            )
+                group = UICollectionView.horizontalLayout(
+                    data: sectionModel.rows,
+                    itemOriginalX: viewConfig.itemOriginalX,
+                    itemWidth: viewConfig.itemWidth,
+                    itemHeight: itemHeight,
+                    topContentSpace: topContentSpace,
+                    bottomContentSpace: bottomContentSpace,
+                    itemLeadingSpace: itemLeadingSpace
+                )
         case .HorizontalLayoutSystem:
-            group = UICollectionView.horizontalLayoutSystem(
-                data: sectionModel.rows,
-                itemOriginalX: viewConfig.itemOriginalX,
-                itemWidth: viewConfig.itemWidth,
-                itemHeight: viewConfig.itemHeight,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                itemLeadingSpace: viewConfig.cellLeadingSpace
-            )
+                group = UICollectionView.horizontalLayoutSystem(
+                    data: sectionModel.rows,
+                    itemOriginalX: viewConfig.itemOriginalX,
+                    itemWidth: viewConfig.itemWidth,
+                    itemHeight: itemHeight,
+                    topContentSpace: topContentSpace,
+                    bottomContentSpace: bottomContentSpace,
+                    itemLeadingSpace: itemLeadingSpace
+                )
         case .Tag:
             let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
             if let tags = tagDatas as? [PTTagLayoutModel] {
@@ -1699,11 +1726,11 @@ extension PTCollectionView {
                     data: tags,
                     screenWidth: screenWidth,
                     itemOriginalX: viewConfig.itemOriginalX,
-                    itemHeight: viewConfig.itemHeight,
-                    topContentSpace: viewConfig.contentTopSpace,
-                    bottomContentSpace: viewConfig.contentBottomSpace,
-                    itemLeadingSpace: viewConfig.cellLeadingSpace,
-                    itemTrailingSpace: viewConfig.cellTrailingSpace,
+                    itemHeight: itemHeight,
+                    topContentSpace: topContentSpace,
+                    bottomContentSpace: bottomContentSpace,
+                    itemLeadingSpace: itemLeadingSpace,
+                    itemTrailingSpace: itemTrailingSpace,
                     itemContentSpace: viewConfig.tagCellContentSpace
                 )
             } else {
@@ -1717,11 +1744,19 @@ extension PTCollectionView {
             }
         }
         
-        var sectionInsets = viewConfig.sectionEdges
+        var sectionInsets = sectionLayout?.contentInsets ?? viewConfig.sectionEdges
         let sectionWidth: CGFloat
         switch viewConfig.decorationItemsType {
         case .Normal,.Corner,.NoItems:
-            sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top, leading: sectionInsets.leading, bottom: viewConfig.contentBottomSpace, trailing: sectionInsets.trailing)
+            if sectionLayout == nil {
+                sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top,
+                                                         leading: sectionInsets.leading,
+                                                         bottom: viewConfig.contentBottomSpace,
+                                                         trailing: sectionInsets.trailing)
+            } else {
+                sectionInsets.top += (sectionModel.headerHeight ?? 0) + viewConfig.decorationItemsEdges.top
+                sectionInsets.bottom += bottomContentSpace
+            }
         default:
             sectionInsets = decorationCustomLayoutInsetReset?(sectionIndex, sectionModel) ?? .zero
         }
@@ -1799,6 +1834,8 @@ extension PTCollectionView {
 
     private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
         var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
+        let headerSpacing = sectionModel.layoutConfiguration?.headerSpacing ?? 0
+        let footerSpacing = sectionModel.layoutConfiguration?.footerSpacing ?? 0
         
         if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
             let headerWidth = max(1, screenWidth - viewConfig.headerWidthOffset - sectionWidth)
@@ -1811,7 +1848,8 @@ extension PTCollectionView {
                 layoutSize: headerSize,
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .topTrailing,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading,
+                                        y: viewConfig.decorationItemsEdges.top + headerSpacing + (sectionModel.headerHeight ?? .leastNormalMagnitude))
             )
             headerItem.contentInsets = .zero
             headerItem.pinToVisibleBounds = viewConfig.pinHeaderToVisibleBounds
@@ -1829,7 +1867,7 @@ extension PTCollectionView {
                 layoutSize: footerSize,
                 elementKind: UICollectionView.elementKindSectionFooter,
                 alignment: .bottom,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: footerSpacing)
             )
             footerItem.pinToVisibleBounds = viewConfig.pinFooterToVisibleBounds
             supplementaryItems.append(footerItem)

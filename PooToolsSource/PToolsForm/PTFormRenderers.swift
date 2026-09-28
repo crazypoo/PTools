@@ -39,6 +39,15 @@ open class PTFormRendererBase: PTFormFieldRenderer {
     public let kind: PTFormFieldKind
     public private(set) var themeAdapter = PTFormThemeAdapter()
 
+    open var focusBehavior: PTFormFocusBehavior {
+        switch kind {
+        case .text, .secureText, .multilineText, .number, .phone, .bankCard:
+            return .focusable
+        default:
+            return .notFocusable
+        }
+    }
+
     public init(kind: PTFormFieldKind) { self.kind = kind }
 
     open func makeView(for field: PTFormField,
@@ -56,7 +65,7 @@ open class PTFormRendererBase: PTFormFieldRenderer {
                                      secure: Bool = false,
                                      onChange: @escaping @MainActor @Sendable (PTFormValue) -> Void) -> UITextField {
         textField.text = PTFormValueFormatter.display(field.value, kind: field.kind)
-        textField.placeholder = field.title
+        textField.placeholder = field.placeholder ?? field.title
         textField.borderStyle = .roundedRect
         textField.adjustsFontForContentSizeCategory = true
         textField.font = themeAdapter.bodyFont()
@@ -69,10 +78,22 @@ open class PTFormRendererBase: PTFormFieldRenderer {
         textField.keyboardType = keyboard
         textField.isEnabled = field.isEnabled
         textField.isUserInteractionEnabled = field.isEnabled && !field.isReadOnly
+        if let input = field.configuration?.textInput {
+            textField.textContentType = input.contentType?.uiTextContentType
+            textField.autocapitalizationType = input.capitalization?.uiAutocapitalizationType ?? textField.autocapitalizationType
+            if let autocorrection = input.autocorrection {
+                textField.autocorrectionType = autocorrection ? .yes : .no
+            }
+        }
         textField.addAction(UIAction { [weak textField] _ in
             guard let textField else { return }
-            let value = PTFormValueFormatter.value(from: textField.text ?? "", kind: field.kind)
-            let display = PTFormValueFormatter.displayString(from: textField.text ?? "", kind: field.kind)
+            var text = textField.text ?? ""
+            if let maximumLength = field.configuration?.textInput?.maximumLength {
+                text = String(text.prefix(max(0, maximumLength)))
+                textField.text = text
+            }
+            let value = PTFormValueFormatter.value(from: text, kind: field.kind)
+            let display = PTFormValueFormatter.displayString(from: text, kind: field.kind)
             if textField.text != display { textField.text = display }
             onChange(value)
         }, for: .editingChanged)
@@ -234,6 +255,10 @@ public final class PTFormSliderRenderer: PTFormRendererBase {
 #else
         let control = UISlider()
 #endif
+        if let numeric = field.configuration?.numeric {
+            control.minimumValue = Float(numeric.minimum)
+            control.maximumValue = Float(numeric.maximum)
+        }
         if case .number(let value) = field.value { control.value = Float(value) }
         control.isEnabled = field.isEnabled && !field.isReadOnly
         control.addAction(UIAction { [weak control] _ in
@@ -262,6 +287,11 @@ public final class PTFormStepperRenderer: PTFormRendererBase {
         return control
 #else
         let control = UIStepper()
+        if let numeric = field.configuration?.numeric {
+            control.minimumValue = numeric.minimum
+            control.maximumValue = numeric.maximum
+            control.stepValue = max(0.01, numeric.step)
+        }
         if case .number(let value) = field.value { control.value = value }
         control.isEnabled = field.isEnabled && !field.isReadOnly
         control.addAction(UIAction { [weak control] _ in onChange(.number(control?.value ?? 0)) }, for: .valueChanged)
@@ -293,6 +323,11 @@ public final class PTFormDateRenderer: PTFormRendererBase {
         return button
 #else
         let control = UIDatePicker()
+        if let date = field.configuration?.date {
+            control.datePickerMode = date.mode.uiDatePickerMode
+            control.minimumDate = date.minimumDate
+            control.maximumDate = date.maximumDate
+        }
         if case .date(let value) = field.value { control.date = value }
         control.isEnabled = field.isEnabled && !field.isReadOnly
         control.addAction(UIAction { [weak control] _ in if let date = control?.date { onChange(.date(date)) } }, for: .valueChanged)
@@ -313,9 +348,16 @@ public final class PTFormPickerRenderer: PTFormRendererBase {
         button.setTitle(current.isEmpty ? field.title : current, state: .normal)
         let picker = PTStringPickerView()
         button.addActionHandler(for: .touchUpInside) { (_: PTActionLayoutButton) in
-            picker.configure(title: field.title, data: field.pickerOptions)
+            let options: [PTPickerStringModel] = field.pickerOptionModels.isEmpty
+                ? field.pickerOptions
+                : field.pickerOptionModels
+            picker.configure(title: field.title, data: options)
             picker.singleResultBlock = { result in
-                onChange(.string(result.value))
+                if let option = field.pickerOptionModels.first(where: { $0.title == result.value }) {
+                    onChange(option.value)
+                } else {
+                    onChange(.string(result.value))
+                }
             }
             picker.show()
         }
@@ -326,6 +368,50 @@ public final class PTFormPickerRenderer: PTFormRendererBase {
         label.text = PTFormViewController.display(field.value).isEmpty ? field.title : PTFormViewController.display(field.value)
         return label
 #endif
+    }
+}
+
+#if canImport(PooToolsPicker)
+// English: Bridge typed Form options to the existing picker protocol without leaking UIKit into the model.
+// Español: Conecta las opciones tipadas de Form con el protocolo de picker existente sin filtrar UIKit al modelo.
+// 中文：将类型化 Form 选项桥接到现有 Picker 协议，同时避免模型依赖 UIKit。
+extension PTFormPickerOption: PTPickerStringModel {
+    public var pickerDisplayText: String { title }
+}
+#endif
+
+private extension PTFormTextContentType {
+    var uiTextContentType: UITextContentType {
+        switch self {
+        case .emailAddress: return .emailAddress
+        case .password: return .password
+        case .newPassword: return .newPassword
+        case .telephoneNumber: return .telephoneNumber
+        case .name: return .name
+        case .username: return .username
+        case .oneTimeCode: return .oneTimeCode
+        }
+    }
+}
+
+private extension PTFormAutocapitalization {
+    var uiAutocapitalizationType: UITextAutocapitalizationType {
+        switch self {
+        case .none: return .none
+        case .words: return .words
+        case .sentences: return .sentences
+        case .allCharacters: return .allCharacters
+        }
+    }
+}
+
+private extension PTFormDateMode {
+    var uiDatePickerMode: UIDatePicker.Mode {
+        switch self {
+        case .date: return .date
+        case .time: return .time
+        case .dateAndTime: return .dateAndTime
+        }
     }
 }
 

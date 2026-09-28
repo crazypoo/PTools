@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T22:28:13+08:00 -->
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T23:02:18+08:00 -->
 # Document Inventory
 
-- Version: `5.56.2`
-- Records: `841`
+- Version: `5.57.0`
+- Records: `843`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -65,6 +65,7 @@ Generated at: 2026-09-28T22:28:13+08:00 -->
 | docs/guides/PTINSTRUCTIONS_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_5_56_2_CLOSURE.md | HOW_TO | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/guides/PTOOLS_DEVICE_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
+| docs/guides/PTOOLS_FORM_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_P1_ADVANCED_CAPABILITIES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_P2_MODERN_EXTENSIONS.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_PLATFORM_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
@@ -88,6 +89,7 @@ Generated at: 2026-09-28T22:28:13+08:00 -->
 | docs/migrations/5.35_P1_ADVANCED_CAPABILITIES.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.36.1_FINALIZATION.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.36_P2_MODERN_EXTENSIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
+| docs/migrations/5.57_FORM_2.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migrations/DEVICEKIT_TO_PTOOLS_DEVICE.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/GCDWEBSERVER_TO_PTOOLS_HTTP_SERVER.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/INSTRUCTIONS_TO_PTOOLS_INSTRUCTIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |

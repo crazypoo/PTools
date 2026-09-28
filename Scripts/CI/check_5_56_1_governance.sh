@@ -44,10 +44,13 @@ required_files=(
   PooToolsSource/PToolsDocuments/PTDocumentPDFAdapters.swift
   PooToolsSource/PDF/PTPDFPreviewController.swift
   docs/guides/PTOOLS_5_56_2_CLOSURE.md
+  docs/guides/PTOOLS_FORM_GUIDE.md
+  docs/migrations/5.57_FORM_2.md
+  Tests/PToolsP2Tests/PTFormDocumentsFeedbackTests.swift
 )
 for path in "${required_files[@]}"; do
   [[ -f "$path" ]] || { printf 'FAIL: governance asset is missing: %s\n' "$path" >&2; exit 1; }
 done
 
 git diff --check
-printf 'PASS: PTools 5.56.2 documentation and repository governance\n'
+printf 'PASS: PTools %s documentation, Form 2.0, and repository governance\n' "$version"

@@ -3,22 +3,22 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: f903ce58e855a57a32a4c867b67b22a6cb02359f
-Generated at: 2026-09-28T14:59:37Z
+Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
+Generated at: 2026-09-28T16:28:57Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：16
+- Warning：17
 - Architecture exception：10
 - Hard-limit allowlisted：3
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1309 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2227 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2265 | hard_limit_allowlisted |
 | `PooToolsSource/Base/PTTabBarView.swift` | 1310 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
@@ -34,6 +34,7 @@ Generated at: 2026-09-28T14:59:37Z
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1835 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1071 | warning |
+| `PooToolsSource/PToolsForm/PTForm.swift` | 1175 | warning |
 | `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1598 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |

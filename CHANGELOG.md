@@ -1,8 +1,17 @@
 # Changelog
 
-## Unreleased — 5.57.x
+## Unreleased — 5.58.x
 
-当前开发基线为 `5.56.2`；版本唯一来源为根目录 `VERSION`，文档、脚本、数据资产和测试治理门禁通过后再创建正式 tag。
+当前开发基线为 `5.57.0`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+
+## 5.57.0 — 2026-09-29
+
+- 完成 Form 2.0：`PTFormConfiguration`、Section/Field 配置、稳定快照、可见性规则、定义诊断和运行时 mutation。
+- 修复 `PTFormViewController` 将多 Section 压成单一 `"form"` Section 的问题，改为通过 `PTFormCollectionAdapter` 映射多个真实 `PTSection`。
+- 补齐 Section header/footer、外观、间距、自动高度、字段布局、类型化 Picker、跨字段校验、取消与 stale-result 防护。
+- 键盘导航改为字段 ID 和实际 Section 位置驱动，跳过隐藏、禁用、只读和不可聚焦字段；保留旧公开构造器兼容。
+- 增加 Form 2.0 三语指南、迁移说明、稳定 ID/多 Section/可见性/dirty-reset/大表单回归测试和质量门禁。
+- 当前 Xcode Simulator 全量构建仍被外部 `SmartCodable` 宏产物阻断，未修改 Pods 源码或第三方依赖。
 
 ## 5.56.2 — 2026-09-28
 
