@@ -56,6 +56,14 @@ ALIASES = {
   "PToolsDeepLink" => "DeepLink",
   "PToolsNotifications" => "Notifications",
   "PToolsBackgroundTasks" => "BackgroundTasks",
+  "PToolsTheme" => "Theme",
+  "PToolsAccessibility" => "Accessibility",
+  "PToolsContentState" => "ContentState",
+  "PToolsForm" => "Form",
+  "PToolsBluetooth" => "Bluetooth",
+  "PToolsDocuments" => "Documents",
+  "PToolsSimulationCore" => "SimulationCore",
+  "PToolsSimulation" => "Simulation",
   "SmartScreenshot" => "SmartScreenshot"
 }.freeze
 

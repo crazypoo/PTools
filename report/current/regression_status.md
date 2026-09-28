@@ -3,17 +3,17 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 596295ec19eebba96ab5d834e00ae1ea06c5eea6
-Generated at: 2026-09-27T17:37:45Z
+Source revision: 56aa3d05c644ae46332bb7499e9728f3b587ba7e
+Generated at: 2026-09-28T00:29:15Z
 -->
 
 # PTools 当前回归状态
 
 本报告只记录当前基线和验证边界；静态通过不等于真机或真实宿主通过。
 
-- 当前 podspec 版本：`5.34.0`
-- 最新正式 Git tag：`5.33.0`
-- 当前提交：`596295ec19eebba96ab5d834e00ae1ea06c5eea6`
+- 当前 podspec 版本：`5.35.0`
+- 最新正式 Git tag：`5.34.0`
+- 当前提交：`56aa3d05c644ae46332bb7499e9728f3b587ba7e`
 - 当前状态：`static_and_build_evidence_required`
 
 ## 发布前仍需人工确认

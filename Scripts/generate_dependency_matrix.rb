@@ -26,7 +26,16 @@ aliases = {
   "Keyboard" => "CustomerNumberKeyboard",
   "DEBUGTrackingEyes" => "DEBUG_TrackingEyes",
   "PToolsHTTPServer" => "HTTPServer",
-  "PToolsHTTPFilePortal" => "HTTPFilePortal"
+  "PToolsHTTPFilePortal" => "HTTPFilePortal",
+  "PToolsBackgroundTasks" => "BackgroundTasks",
+  "PToolsTheme" => "Theme",
+  "PToolsAccessibility" => "Accessibility",
+  "PToolsContentState" => "ContentState",
+  "PToolsForm" => "Form",
+  "PToolsBluetooth" => "Bluetooth",
+  "PToolsDocuments" => "Documents",
+  "PToolsSimulationCore" => "SimulationCore",
+  "PToolsSimulation" => "Simulation"
 }.freeze
 
 def canonical_name(name, aliases)

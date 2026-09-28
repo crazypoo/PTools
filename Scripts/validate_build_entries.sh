@@ -71,6 +71,7 @@ require_pattern "PooTools.podspec" "s.subspec 'BackgroundTasks'" "CocoaPods Back
 
 bash "$repo_root/Scripts/validate_core_source_contract.sh"
 bash "$repo_root/Scripts/validate_core_boundary_5_12.sh"
+bash "$repo_root/Scripts/CI/check_p1_advanced_modules.sh"
 bash "$repo_root/Scripts/validate_permission_source_contract.sh"
 bash "$repo_root/Scripts/validate_logging_foundation_5_20.sh"
 bash "$repo_root/Scripts/CI/check_devicekit_removed.sh"

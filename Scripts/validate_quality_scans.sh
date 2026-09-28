@@ -68,6 +68,7 @@ bash Scripts/validate_concurrency_5_19.sh
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
 bash Scripts/CI/check_p0_platform_modules.sh
+bash Scripts/CI/check_p1_advanced_modules.sh
 bash Scripts/validate_logging_foundation_5_20.sh
 bash Scripts/validate_logging_5_21.sh
 bash Scripts/validate_logging_5_22.sh

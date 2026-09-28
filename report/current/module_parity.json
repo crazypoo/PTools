@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:02:08Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-27T23:53:12Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -19,12 +19,17 @@
     "PTSiriPermission",
     "PTSpeechPermission",
     "PTTrackingPermission",
+    "PToolsAccessibility",
     "PToolsBackgroundTasks",
+    "PToolsBluetooth",
     "PToolsConnectivity",
+    "PToolsContentState",
     "PToolsCore",
     "PToolsDate",
     "PToolsDeepLink",
     "PToolsDevice",
+    "PToolsDocuments",
+    "PToolsForm",
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
     "PToolsLogging",
@@ -33,9 +38,12 @@
     "PToolsPermissionCore",
     "PToolsPermissionUI",
     "PToolsRouteCore",
+    "PToolsSimulation",
+    "PToolsSimulationCore",
     "PToolsStorage",
     "PToolsStorageCore",
     "PToolsSymbols",
+    "PToolsTheme",
     "PToolsUIFoundation",
     "PooToolsAll",
     "PooToolsBankCard",
@@ -121,10 +129,12 @@
     ]
   },
   "matched": [
+    "Accessibility",
     "BackgroundTasks",
     "BankCard",
     "Banner",
     "BilogyID",
+    "Bluetooth",
     "BluetoothPermission",
     "Calendar",
     "CalendarPermission",
@@ -138,6 +148,7 @@
     "Connectivity",
     "Contact",
     "ContactsPermission",
+    "ContentState",
     "Core",
     "Country",
     "CustomerLabel",
@@ -147,7 +158,9 @@
     "DataEncrypt",
     "DeepLink",
     "Device",
+    "Documents",
     "FaceIDPermission",
+    "Form",
     "Guide",
     "HTTPFilePortal",
     "HTTPServer",
@@ -207,6 +220,8 @@
     "Security",
     "Segmented",
     "Share",
+    "Simulation",
+    "SimulationCore",
     "SiriPermission",
     "Slider",
     "SmartScreenshot",
@@ -219,6 +234,7 @@
     "StorageCore",
     "Symbols",
     "Telephony",
+    "Theme",
     "TipsView",
     "TrackingPermission",
     "VideoEditor",
@@ -477,6 +493,20 @@
   ],
   "settings_drift": [
     {
+      "module": "Accessibility",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "BackgroundTasks",
       "spm": {
         "defines": [],
@@ -510,6 +540,20 @@
           "POOTOOLS_BANNER",
           "POOTOOLS_COCOAPODS"
         ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Bluetooth",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
         "upcoming_features": []
       }
     },
@@ -603,6 +647,20 @@
       }
     },
     {
+      "module": "ContentState",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "Core",
       "spm": {
         "defines": [
@@ -662,6 +720,20 @@
       }
     },
     {
+      "module": "Documents",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "FaceIDPermission",
       "spm": {
         "defines": [
@@ -676,6 +748,20 @@
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_PERMISSION_FACEIDPERMISSION"
         ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "Form",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
         "upcoming_features": []
       }
     },
@@ -1012,6 +1098,34 @@
       }
     },
     {
+      "module": "Simulation",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "SimulationCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "SiriPermission",
       "spm": {
         "defines": [
@@ -1096,6 +1210,20 @@
       }
     },
     {
+      "module": "Theme",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "InferSendableFromCaptures",
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "TrackingPermission",
       "spm": {
         "defines": [
@@ -1115,5 +1243,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "804d0951937754216987a2bd449cd42fadd143f8d2f1a54a377d333d26bc88ba"
+  "fingerprint": "8f562ee83f68ee727fdcadf3fd1fe544e39b2b78446a507087398d11553a63bf"
 }

@@ -188,6 +188,58 @@ Pod::Spec.new do |s|
         }
     end
 
+    # English: Publish the P1 application-capability modules as opt-in subspecs.
+    # Español: Publica los módulos de capacidades P1 como subspecs opt-in.
+    # 中文：将 P1 应用能力模块作为可选 subspec 发布。
+    s.subspec 'Theme' do |subspec|
+        subspec.dependency 'PooTools/PToolsUIFoundation'
+        subspec.source_files = 'PooToolsSource/PToolsTheme/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit'
+    end
+
+    s.subspec 'Accessibility' do |subspec|
+        subspec.dependency 'PooTools/PToolsUIFoundation'
+        subspec.source_files = 'PooToolsSource/PToolsAccessibility/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit'
+    end
+
+    s.subspec 'ContentState' do |subspec|
+        subspec.dependency 'PooTools/Theme'
+        subspec.dependency 'PooTools/Accessibility'
+        subspec.source_files = 'PooToolsSource/PToolsContentState/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit'
+    end
+
+    s.subspec 'Form' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Theme'
+        subspec.dependency 'PooTools/ContentState'
+        subspec.dependency 'PooTools/Accessibility'
+        subspec.source_files = 'PooToolsSource/PToolsForm/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit'
+    end
+
+    s.subspec 'Bluetooth' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsBluetooth/**/*.swift'
+        subspec.frameworks = 'Foundation', 'CoreBluetooth'
+    end
+
+    s.subspec 'Documents' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsDocuments/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit', 'UniformTypeIdentifiers', 'QuickLook'
+    end
+
+    s.subspec 'SimulationCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsSimulationCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Simulation' do |subspec|
+        subspec.dependency 'PooTools/SimulationCore'
+        subspec.source_files = 'PooToolsSource/PToolsSimulation/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Device'

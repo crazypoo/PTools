@@ -41,6 +41,17 @@ let package = Package(
         .library(name: "PToolsDeepLink", targets: ["PToolsDeepLink"]),
         .library(name: "PToolsNotifications", targets: ["PToolsNotifications"]),
         .library(name: "PToolsBackgroundTasks", targets: ["PToolsBackgroundTasks"]),
+        // English: Publish the P1 application-capability modules as opt-in products.
+        // Español: Publica los módulos de capacidades P1 como productos opt-in.
+        // 中文：将 P1 应用能力模块作为可选产品公开。
+        .library(name: "PToolsTheme", targets: ["PToolsTheme"]),
+        .library(name: "PToolsAccessibility", targets: ["PToolsAccessibility"]),
+        .library(name: "PToolsContentState", targets: ["PToolsContentState"]),
+        .library(name: "PToolsForm", targets: ["PToolsForm"]),
+        .library(name: "PToolsBluetooth", targets: ["PToolsBluetooth"]),
+        .library(name: "PToolsDocuments", targets: ["PToolsDocuments"]),
+        .library(name: "PToolsSimulationCore", targets: ["PToolsSimulationCore"]),
+        .library(name: "PToolsSimulation", targets: ["PToolsSimulation"]),
         // English: Publish the Foundation-only date context and calendar-aware value types.
         // Español: Publica el contexto de fechas y los tipos conscientes del calendario basados solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
@@ -192,6 +203,8 @@ let package = Package(
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
             "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
+            "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm",
+            "PToolsBluetooth", "PToolsDocuments", "PToolsSimulationCore", "PToolsSimulation",
             "PToolsPermissionCore", "PToolsPermissionUI", "PToolsOverlay", "PooToolsBanner", "PooToolsPopover",
             "PooToolsMediaCore",
             "PToolsHTTPServer", "PToolsHTTPFilePortal",
@@ -479,6 +492,54 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")
             ]
+        ),
+        // English: Theme and accessibility depend on UI foundation only; no feature module is pulled upward.
+        // Español: Theme y accessibility dependen solo de UI foundation; ningún módulo de función sube hacia arriba.
+        // 中文：Theme 和 Accessibility 只依赖 UIFoundation，不向上引入功能模块。
+        .target(
+            name: "PToolsTheme",
+            dependencies: ["PToolsUIFoundation"],
+            path: "PooToolsSource/PToolsTheme",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsAccessibility",
+            dependencies: ["PToolsUIFoundation"],
+            path: "PooToolsSource/PToolsAccessibility",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsContentState",
+            dependencies: ["PToolsTheme", "PToolsAccessibility"],
+            path: "PooToolsSource/PToolsContentState",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsForm",
+            dependencies: ["ptools", "PToolsTheme", "PToolsContentState", "PToolsAccessibility"],
+            path: "PooToolsSource/PToolsForm",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsBluetooth",
+            path: "PooToolsSource/PToolsBluetooth",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsDocuments",
+            path: "PooToolsSource/PToolsDocuments",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsSimulationCore",
+            path: "PooToolsSource/PToolsSimulationCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+        ),
+        .target(
+            name: "PToolsSimulation",
+            dependencies: ["PToolsSimulationCore"],
+            path: "PooToolsSource/PToolsSimulation",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
         ),
         // ==========================================
         // 核心基座模块 (Core)
@@ -771,6 +832,18 @@ let package = Package(
                 "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks"
             ],
             path: "Tests/PToolsPlatformTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
+        // English: Keep deterministic simulation checks independent from UIKit and live system services.
+        // Español: Mantiene las comprobaciones de simulación deterministas independientes de UIKit y servicios reales.
+        // 中文：确定性模拟检查独立于 UIKit 和真实系统服务。
+        .testTarget(
+            name: "PToolsAdvancedTests",
+            dependencies: ["PToolsSimulationCore", "PToolsSimulation"],
+            path: "Tests/PToolsAdvancedTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableUpcomingFeature("InferSendableFromCaptures")

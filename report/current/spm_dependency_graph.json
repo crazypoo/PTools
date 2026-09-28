@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:43:49Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:10Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -204,6 +204,17 @@
       ]
     },
     {
+      "name": "PToolsAccessibility",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAccessibility"
+      ]
+    },
+    {
       "name": "PToolsBackgroundTasks",
       "type": {
         "library": [
@@ -215,6 +226,17 @@
       ]
     },
     {
+      "name": "PToolsBluetooth",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsBluetooth"
+      ]
+    },
+    {
       "name": "PToolsConnectivity",
       "type": {
         "library": [
@@ -223,6 +245,17 @@
       },
       "targets": [
         "PToolsConnectivity"
+      ]
+    },
+    {
+      "name": "PToolsContentState",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsContentState"
       ]
     },
     {
@@ -267,6 +300,28 @@
       },
       "targets": [
         "PToolsDevice"
+      ]
+    },
+    {
+      "name": "PToolsDocuments",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDocuments"
+      ]
+    },
+    {
+      "name": "PToolsForm",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsForm"
       ]
     },
     {
@@ -358,6 +413,28 @@
       ]
     },
     {
+      "name": "PToolsSimulation",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsSimulation"
+      ]
+    },
+    {
+      "name": "PToolsSimulationCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsSimulationCore"
+      ]
+    },
+    {
       "name": "PToolsStorage",
       "type": {
         "library": [
@@ -388,6 +465,17 @@
       },
       "targets": [
         "PToolsSymbols"
+      ]
+    },
+    {
+      "name": "PToolsTheme",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsTheme"
       ]
     },
     {
@@ -424,10 +512,15 @@
         "PTSiriPermission",
         "PTSpeechPermission",
         "PTTrackingPermission",
+        "PToolsAccessibility",
         "PToolsBackgroundTasks",
+        "PToolsBluetooth",
         "PToolsConnectivity",
+        "PToolsContentState",
         "PToolsDate",
         "PToolsDeepLink",
+        "PToolsDocuments",
+        "PToolsForm",
         "PToolsHTTPFilePortal",
         "PToolsHTTPServer",
         "PToolsLogging",
@@ -436,9 +529,12 @@
         "PToolsPermissionCore",
         "PToolsPermissionUI",
         "PToolsRouteCore",
+        "PToolsSimulation",
+        "PToolsSimulationCore",
         "PToolsStorage",
         "PToolsStorageCore",
         "PToolsSymbols",
+        "PToolsTheme",
         "PooToolsBankCard",
         "PooToolsBanner",
         "PooToolsBioID",
@@ -2445,6 +2541,97 @@
       ]
     },
     {
+      "name": "PToolsAccessibility",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAccessibility",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsAdvancedTests",
+      "type": "test",
+      "path": "Tests/PToolsAdvancedTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsSimulation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSimulation",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSimulationCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSimulationCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsBackgroundTasks",
       "type": "regular",
       "path": "PooToolsSource/PToolsBackgroundTasks",
@@ -2496,12 +2683,91 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsBluetooth",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsBluetooth",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsConnectivity",
       "type": "regular",
       "path": "PooToolsSource/PToolsConnectivity",
       "sources": [],
       "resources": [],
       "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsContentState",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsContentState",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAccessibility",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAccessibility",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsTheme",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsTheme",
+              null
+            ]
+          }
+        }
+      ],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -2715,6 +2981,107 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsDocuments",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDocuments",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsForm",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsForm",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAccessibility",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAccessibility",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsContentState",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsContentState",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsTheme",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsTheme",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsHTTPFilePortal",
@@ -3360,6 +3727,74 @@
       ]
     },
     {
+      "name": "PToolsSimulation",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsSimulation",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsSimulationCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSimulationCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsSimulationCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsSimulationCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsSocketKitTests",
       "type": "test",
       "path": "Tests/PToolsSocketKitTests",
@@ -3507,6 +3942,46 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsTheme",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsTheme",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InferSendableFromCaptures"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsUIFoundation",

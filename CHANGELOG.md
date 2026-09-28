@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.34.x
+## Unreleased — 5.35.x
 
-当前开发基线为 `5.34.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+当前开发基线为 `5.35.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+
+## 5.35.0 — 2026-09-28
+
+- 新增可选 `PToolsTheme`、`PToolsAccessibility` 和 `PToolsContentState`，统一主题 token、无障碍契约和页面状态渲染。
+- 新增 `PToolsForm`，提供稳定字段 ID、依赖字段、同步/异步校验、取消与提交状态，并提供 UIKit 表单入口。
+- 新增通用 `PToolsBluetooth`、`PToolsDocuments`、`PToolsSimulationCore` 和 `PToolsSimulation`，不绑定业务协议或宿主 App 单例。
+- SwiftPM、CocoaPods、模块 parity、质量扫描和 P1 能力门禁同步更新；现有 Core 和第三方依赖保持兼容。
 
 ## 5.34.0 — 2026-09-28
 

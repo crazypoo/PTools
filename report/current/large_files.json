@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:37:50Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:19Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3965,13 +3965,28 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsAccessibility/PTAccessibility.swift",
+      "lines": 156,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsBackgroundTasks/PTBackgroundTasks.swift",
       "lines": 217,
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsBluetooth/PTBluetooth.swift",
+      "lines": 417,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsConnectivity/PTConnectivity.swift",
       "lines": 206,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsContentState/PTContentState.swift",
+      "lines": 144,
       "classification": "ok"
     },
     {
@@ -4100,6 +4115,16 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsDocuments/PTDocuments.swift",
+      "lines": 145,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTForm.swift",
+      "lines": 260,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift",
       "lines": 233,
       "classification": "ok"
@@ -4195,6 +4220,16 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsSimulation/PTSimulation.swift",
+      "lines": 88,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSimulationCore/PTSimulationCore.swift",
+      "lines": 105,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsStorage/PTStorage.swift",
       "lines": 292,
       "classification": "ok"
@@ -4247,6 +4282,11 @@
     {
       "path": "PooToolsSource/PToolsSymbols/UIImage+PTSymbol.swift",
       "lines": 92,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTheme/PTTheme.swift",
+      "lines": 300,
       "classification": "ok"
     },
     {

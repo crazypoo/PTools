@@ -1,8 +1,20 @@
 # PTools 路线图
 
-> 当前代码基线：`5.34.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.35.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.34.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.35.0` 为当前开发基线，尚未创建正式 tag。
+
+## 5.35.0 P1 高阶能力与系统整合
+
+- ✅ 新增 `PToolsTheme`：语义颜色、字体、间距、圆角、层级、材质、动效、玻璃降级，以及 App/Scene/Controller/组件作用域。
+- ✅ 新增 `PToolsAccessibility`：VoiceOver、Dynamic Type、Reduce Motion/Transparency、RTL、焦点恢复、公告和启发式审计。
+- ✅ 新增 `PToolsContentState`：idle/loading/content/empty/error/offline、旧内容保留、重试和 UIKit 状态容器。
+- ✅ 新增 `PToolsForm`：稳定字段身份、常用字段类型、条件依赖、同步/异步校验、debounce、取消、generation 和提交状态。
+- ✅ 新增通用 `PToolsBluetooth`：扫描、过滤、连接状态机、服务/特征发现、GATT 读写/通知、取消、超时、重连和诊断快照。
+- ✅ 新增 `PToolsDocuments`：UIDocumentPicker、UTType、多选、导入导出、安全作用域、bookmark、QuickLook 和分享桥接。
+- ✅ 新增 `PToolsSimulationCore` / `PToolsSimulation`：虚拟时钟、确定性场景回放、Provider 合约、Mock Provider 和显式启用保护。
+- ✅ SwiftPM products、CocoaPods subspec、模块 parity、质量门禁、测试和迁移文档同步完成。
+- [ ] 完成宿主 App 的真实 BLE、文档权限、VoiceOver、Dynamic Type、RTL、真机和多 Scene 回归后，再创建正式 `5.35.0` tag。
 
 ## 5.34.0 P0 平台基础设施
 

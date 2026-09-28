@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:43:49Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:09Z",
   "name": "PooTools",
-  "version": "5.34.0",
+  "version": "5.35.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,8 +12,29 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 122,
+  "subspec_count": 130,
   "subspecs": [
+    {
+      "name": "PooTools/Accessibility",
+      "short_name": "Accessibility",
+      "local_dependencies": [
+        "PooTools/PToolsUIFoundation"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsAccessibility/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsAccessibility"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
+    },
     {
       "name": "PooTools/Appz",
       "short_name": "Appz",
@@ -136,6 +157,25 @@
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BIOID POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
       }
+    },
+    {
+      "name": "PooTools/Bluetooth",
+      "short_name": "Bluetooth",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsBluetooth/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsBluetooth"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "CoreBluetooth",
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/BluetoothPermission",
@@ -404,6 +444,28 @@
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CONTACTS POOTOOLS_COCOAPODS"
       }
+    },
+    {
+      "name": "PooTools/ContentState",
+      "short_name": "ContentState",
+      "local_dependencies": [
+        "PooTools/Accessibility",
+        "PooTools/Theme"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsContentState/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsContentState"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/Core",
@@ -733,6 +795,27 @@
       "pod_target_xcconfig": {}
     },
     {
+      "name": "PooTools/Documents",
+      "short_name": "Documents",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsDocuments/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsDocuments"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "QuickLook",
+        "UIKit",
+        "UniformTypeIdentifiers"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
       "name": "PooTools/FaceIDPermission",
       "short_name": "FaceIDPermission",
       "local_dependencies": [
@@ -793,6 +876,30 @@
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FLAG POOTOOLS_COCOAPODS"
       }
+    },
+    {
+      "name": "PooTools/Form",
+      "short_name": "Form",
+      "local_dependencies": [
+        "PooTools/Accessibility",
+        "PooTools/ContentState",
+        "PooTools/Core",
+        "PooTools/Theme"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsForm/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsForm"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/GCDWebServer",
@@ -2264,6 +2371,44 @@
       }
     },
     {
+      "name": "PooTools/Simulation",
+      "short_name": "Simulation",
+      "local_dependencies": [
+        "PooTools/SimulationCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsSimulation/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsSimulation"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/SimulationCore",
+      "short_name": "SimulationCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsSimulationCore/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsSimulationCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
       "name": "PooTools/SiriPermission",
       "short_name": "SiriPermission",
       "local_dependencies": [
@@ -2535,6 +2680,27 @@
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
       }
+    },
+    {
+      "name": "PooTools/Theme",
+      "short_name": "Theme",
+      "local_dependencies": [
+        "PooTools/PToolsUIFoundation"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsTheme/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsTheme"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/TipsView",

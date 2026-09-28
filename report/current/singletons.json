@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:37:35Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:04Z",
   "shared_call_count": 1560,
   "declarations": [
     {
@@ -807,9 +807,27 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
+      "path": "PooToolsSource/PToolsAccessibility/PTAccessibility.swift",
+      "line": 97,
+      "declaration": "public static let shared = PTAccessibilityFocusCoordinator()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
       "path": "PooToolsSource/PToolsBackgroundTasks/PTBackgroundTasks.swift",
       "line": 70,
       "declaration": "public static let shared = PTBackgroundTasks()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsBluetooth/PTBluetooth.swift",
+      "line": 338,
+      "declaration": "public static let shared = PTBluetoothCentral()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",
@@ -825,9 +843,36 @@
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
+      "path": "PooToolsSource/PToolsDocuments/PTDocuments.swift",
+      "line": 103,
+      "declaration": "public static let shared = PTDocumentPickerCoordinator()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
       "path": "PooToolsSource/PToolsNotifications/PTNotifications.swift",
       "line": 203,
       "declaration": "public static let shared = PTNotificationCenter()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsSimulation/PTSimulation.swift",
+      "line": 19,
+      "declaration": "public static let shared = PTSimulationRuntime(environment: .init())",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsTheme/PTTheme.swift",
+      "line": 283,
+      "declaration": "public static let shared = PTThemeRegistry()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

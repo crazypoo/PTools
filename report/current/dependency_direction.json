@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:37:40Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:10Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -72,8 +72,36 @@
       "destination": "PToolsPermissionCore"
     },
     {
+      "source": "PToolsAccessibility",
+      "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PToolsContentState",
+      "destination": "PToolsAccessibility"
+    },
+    {
+      "source": "PToolsContentState",
+      "destination": "PToolsTheme"
+    },
+    {
       "source": "PToolsDeepLink",
       "destination": "PToolsRouteCore"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PToolsAccessibility"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PToolsContentState"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PToolsTheme"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "ptools"
     },
     {
       "source": "PToolsHTTPFilePortal",
@@ -104,8 +132,16 @@
       "destination": "PToolsUIFoundation"
     },
     {
+      "source": "PToolsSimulation",
+      "destination": "PToolsSimulationCore"
+    },
+    {
       "source": "PToolsStorage",
       "destination": "PToolsStorageCore"
+    },
+    {
+      "source": "PToolsTheme",
+      "destination": "PToolsUIFoundation"
     },
     {
       "source": "PToolsUIFoundation",

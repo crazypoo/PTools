@@ -3,29 +3,31 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 596295ec19eebba96ab5d834e00ae1ea06c5eea6
-Generated at: 2026-09-27T17:43:49Z
+Source revision: 56aa3d05c644ae46332bb7499e9728f3b587ba7e
+Generated at: 2026-09-28T00:29:09Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.34.0`
+- Podspec: `PooTools` `5.35.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `122`
+- Subspec count: `130`
 
 ## Subspecs
 
 | Subspec | Local dependencies | Third-party dependencies | Source directories | Frameworks | Resources |
 | --- | --- | --- | --- | --- | --- |
+| `Accessibility` | `PooTools/PToolsUIFoundation` | — | `PToolsAccessibility` | Foundation, UIKit | — |
 | `Appz` | `PooTools/Core` | `Appz` | — | — | — |
 | `BackgroundTasks` | — | — | `PToolsBackgroundTasks` | BackgroundTasks, Foundation | — |
 | `BankCard` | `PooTools/Core` | — | `BankCard` | — | — |
 | `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
 | `BilogyID` | `PooTools/BioID` | — | — | — | — |
 | `BioID` | `PooTools/Core`, `PooTools/FaceIDPermission`, `PooTools/KeyChain` | — | `BioID` | LocalAuthentication, Security | — |
+| `Bluetooth` | — | — | `PToolsBluetooth` | CoreBluetooth, Foundation | — |
 | `BluetoothPermission` | `PooTools/Core` | — | `BluetoothPermission` | — | — |
 | `Calendar` | `PooTools/CalendarPermission`, `PooTools/Core`, `PooTools/RemindersPermission` | — | `Calendar` | EventKit | — |
 | `CalendarPermission` | `PooTools/PToolsPermissionCore` | — | `CalendarPermission` | — | — |
@@ -39,6 +41,7 @@ Generated at: 2026-09-27T17:43:49Z
 | `Connectivity` | — | — | `PToolsConnectivity` | Foundation, Network | — |
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
+| `ContentState` | `PooTools/Accessibility`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
 | `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
@@ -49,9 +52,11 @@ Generated at: 2026-09-27T17:43:49Z
 | `Date` | — | — | `PToolsDate` | Foundation | — |
 | `DeepLink` | `PooTools/RouteCore` | — | `PToolsDeepLink` | Foundation | — |
 | `Device` | — | — | `PToolsDevice` | Foundation | — |
+| `Documents` | — | — | `PToolsDocuments` | Foundation, QuickLook, UIKit, UniformTypeIdentifiers | — |
 | `FaceIDPermission` | `PooTools/PToolsPermissionCore` | — | `FaceIDPermission` | — | — |
 | `FilterCamera` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaViewer`, `PooTools/MicPermission` | — | `FilterCamera` | — | — |
 | `Flag` | `PooTools/Core` | `FlagKit` | — | — | — |
+| `Form` | `PooTools/Accessibility`, `PooTools/ContentState`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsForm` | Foundation, UIKit | — |
 | `GCDWebServer` | `PooTools/HTTPFilePortal` | — | — | — | — |
 | `Guide` | `PooTools/Core`, `PooTools/PageControl` | — | `Guide` | — | — |
 | `HTTPFilePortal` | `PooTools/HTTPServer` | — | `PToolsHTTPFilePortal` | Foundation | PooToolsSource/PToolsHTTPFilePortal/Resources/**/* |
@@ -120,6 +125,8 @@ Generated at: 2026-09-27T17:43:49Z
 | `SecuritySuite` | `PooTools/Core` | `IOSSecuritySuite` | — | — | — |
 | `Segmented` | `PooTools/Core` | — | `Segmented` | — | — |
 | `Share` | `PooTools/CustomerLabel` | — | `Share` | — | — |
+| `Simulation` | `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
+| `SimulationCore` | — | — | `PToolsSimulationCore` | Foundation | — |
 | `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
 | `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
 | `SmartScreenshot` | `PooTools/Core` | — | `ScreenShot` | — | — |
@@ -133,6 +140,7 @@ Generated at: 2026-09-27T17:43:49Z
 | `Symbols` | — | — | `PToolsSymbols` | Foundation, OSLog, UIKit | PooToolsSymbolsResources |
 | `Tabbar` | `PooTools/Core` | — | — | — | — |
 | `Telephony` | `PooTools/Core` | — | `CallMessageMail` | CoreTelephony, MessageUI, WebKit | — |
+| `Theme` | `PooTools/PToolsUIFoundation` | — | `PToolsTheme` | Foundation, UIKit | — |
 | `TipsView` | `PooTools/Core` | — | `TipsView` | — | — |
 | `TrackingPermission` | `PooTools/PToolsPermissionCore` | — | `TrackingPermission` | — | — |
 | `VideoCache` | `PooTools/Core` | `KTVHTTPCache` | — | — | — |

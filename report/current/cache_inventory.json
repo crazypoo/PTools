@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory_5_9.rb",
-  "source_revision": "596295ec19eebba96ab5d834e00ae1ea06c5eea6",
-  "generated_at": "2026-09-27T17:37:51Z",
+  "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
+  "generated_at": "2026-09-28T00:29:20Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",

@@ -1,0 +1,16 @@
+# English: These historical removals remain reviewed for 5.35.0; the P1 advanced capability modules add no public API removal.
+# Español: Estas eliminaciones históricas siguen revisadas para 5.35.0; los módulos de capacidades avanzadas P1 no eliminan API pública.
+# 中文：这些历史删除项在 5.35.0 继续沿用已审阅结果；P1 高阶能力模块不新增公开 API 删除。
+public|func|public func contentLabelAtt() -> ASAttributedString
+public|func|public func install(_ sink: PTLogSink)
+public|func|public func publish(_ event: PTLogEvent)
+public|func|public func receive(_ event: PTLogEvent)
+public|func|public func titleLabelAtt() -> ASAttributedString
+public|func|public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)
+public|func|public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?)
+public|func|public func webSocketDidOpen(_ webSocket: SRWebSocket)
+public|init|@MainActor public init(title: String, titleFont: UIFont, titleColor: UIColor?, atts: ASAttributedString?, textAlignment:NSTextAlignment)
+public|let|jx_formatter
+public|struct|PTLogSink
