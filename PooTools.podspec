@@ -147,6 +147,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Storage' do |subspec|
         subspec.dependency 'PooTools/StorageCore'
+        subspec.dependency 'PooTools/KeyChain'
         subspec.source_files = 'PooToolsSource/PToolsStorage/**/*.swift'
         subspec.frameworks = 'Foundation', 'Security'
         subspec.pod_target_xcconfig = {
@@ -173,6 +174,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Notifications' do |subspec|
         subspec.dependency 'PooTools/RouteCore'
+        subspec.dependency 'PooTools/NotificationPermission'
         subspec.source_files = 'PooToolsSource/PToolsNotifications/**/*.swift'
         subspec.frameworks = 'Foundation', 'UserNotifications', 'UniformTypeIdentifiers'
         subspec.pod_target_xcconfig = {
@@ -204,8 +206,10 @@ Pod::Spec.new do |s|
     end
 
     s.subspec 'ContentState' do |subspec|
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/Theme'
         subspec.dependency 'PooTools/Accessibility'
+        subspec.dependency 'PooTools/Connectivity'
         subspec.source_files = 'PooToolsSource/PToolsContentState/**/*.swift'
         subspec.frameworks = 'Foundation', 'UIKit'
     end
@@ -236,6 +240,10 @@ Pod::Spec.new do |s|
 
     s.subspec 'Simulation' do |subspec|
         subspec.dependency 'PooTools/SimulationCore'
+        subspec.dependency 'PooTools/Connectivity'
+        subspec.dependency 'PooTools/Bluetooth'
+        subspec.dependency 'PooTools/PToolsCore'
+        subspec.dependency 'PooTools/PToolsDevice'
         subspec.source_files = 'PooToolsSource/PToolsSimulation/**/*.swift'
         subspec.frameworks = 'Foundation'
     end
@@ -253,6 +261,7 @@ Pod::Spec.new do |s|
     end
 
     s.subspec 'Feedback' do |subspec|
+        subspec.dependency 'PooTools/PToolsCore'
         subspec.source_files = 'PooToolsSource/PToolsFeedback/**/*.swift'
         subspec.frameworks = 'Foundation', 'UIKit', 'CoreHaptics'
         subspec.pod_target_xcconfig = {

@@ -5,10 +5,7 @@
 import Foundation
 #if SWIFT_PACKAGE
 import PToolsStorageCore
-#endif
-
-#if canImport(Security)
-import Security
+import PooToolsKeyChain
 #endif
 
 public actor PTMemoryStorage: PTStorageBackend {
@@ -99,6 +96,12 @@ public actor PTFileStorage: PTStorageBackend {
     }
 }
 
+// English: Use the existing PooTools KeyChain implementation as the single Security boundary.
+// Español: Usa la implementación existente de PooTools KeyChain como único límite de Security.
+// 中文：复用现有 PooTools KeyChain 实现，保证整个仓库只有一个 Security 边界。
+// English: Keep the historical actor as the single Keychain-backed implementation.
+// Español: Mantén el actor histórico como la única implementación respaldada por Keychain.
+// 中文：保留历史 actor 作为唯一的 Keychain 存储实现。
 public actor PTKeychainStorage: PTStorageBackend {
     private let service: String
 
@@ -107,67 +110,36 @@ public actor PTKeychainStorage: PTStorageBackend {
     }
 
     public func data(for key: String) async throws -> Data? {
-#if canImport(Security)
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
-            kSecAttrAccount: key,
-            kSecReturnData: true,
-            kSecMatchLimit: kSecMatchLimitOne
-        ]
-        var result: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-        if status == errSecItemNotFound { return nil }
-        guard status == errSecSuccess else { throw PTStorageError.unavailable }
-        return result as? Data
-#else
-        throw PTStorageError.unavailable
-#endif
+        guard !service.isEmpty, !key.isEmpty else { throw PTStorageError.invalidKey }
+        guard let encoded = PTKeyChain.getPassword(service: service as NSString,
+                                                    account: key as NSString) else { return nil }
+        return Data(base64Encoded: encoded)
     }
 
     public func set(_ data: Data, for key: String) async throws {
-#if canImport(Security)
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
-            kSecAttrAccount: key
-        ]
-        let attributes: [CFString: Any] = [kSecValueData: data]
-        let updateStatus = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if updateStatus == errSecItemNotFound {
-            var item = query
-            item[kSecValueData] = data
-            guard SecItemAdd(item as CFDictionary, nil) == errSecSuccess else {
-                throw PTStorageError.unavailable
-            }
-        } else if updateStatus != errSecSuccess {
+        guard !service.isEmpty, !key.isEmpty else { throw PTStorageError.invalidKey }
+        let encoded = data.base64EncodedString()
+        guard PTKeyChain.saveAccountInfo(service: service as NSString,
+                                         account: key as NSString,
+                                         password: encoded as NSString) else {
             throw PTStorageError.unavailable
         }
-#else
-        throw PTStorageError.unavailable
-#endif
     }
 
     public func removeValue(for key: String) async throws {
-#if canImport(Security)
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
-            kSecAttrAccount: key
-        ]
-        let status = SecItemDelete(query as CFDictionary)
-        guard status == errSecSuccess || status == errSecItemNotFound else {
-            throw PTStorageError.unavailable
+        guard !service.isEmpty, !key.isEmpty else { throw PTStorageError.invalidKey }
+        var deleted = false
+        PTKeyChain.deleteAccountInfo(service: service as NSString,
+                                     account: key as NSString) { success, status in
+            deleted = success || status == .itemNotFound
         }
-#else
-        throw PTStorageError.unavailable
-#endif
+        guard deleted else { throw PTStorageError.unavailable }
     }
 }
 
-// English: Keep the plan's adapter name while preserving the shorter 5.x storage name.
-// Español: Conserva el nombre de adaptador del plan y mantiene el nombre corto de almacenamiento de 5.x.
-// 中文：保留计划要求的适配器名称，同时兼容 5.x 的简短存储名称。
+// English: Expose the canonical adapter spelling without creating a second Security implementation.
+// Español: Expone el nombre canónico del adaptador sin crear una segunda implementación de Security.
+// 中文：暴露规范的适配器名称，但不创建第二套 Security 实现。
 public typealias PTKeychainStorageAdapter = PTKeychainStorage
 
 public actor PTCompositeStorage: PTStorageBackend {

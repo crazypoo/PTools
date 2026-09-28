@@ -31,18 +31,42 @@ public struct PTConnectivitySnapshot: Codable, Sendable, Equatable {
     public let interfaces: Set<PTConnectivityInterface>
     public let isExpensive: Bool
     public let isConstrained: Bool
+    public let supportsIPv4: Bool
+    public let supportsIPv6: Bool
     public let timestamp: Date
+
+    private enum CodingKeys: String, CodingKey {
+        case status, interfaces, isExpensive, isConstrained, supportsIPv4, supportsIPv6, timestamp
+    }
 
     public init(status: PTConnectivityStatus = .unknown,
                 interfaces: Set<PTConnectivityInterface> = [],
                 isExpensive: Bool = false,
                 isConstrained: Bool = false,
+                supportsIPv4: Bool = false,
+                supportsIPv6: Bool = false,
                 timestamp: Date = Date()) {
         self.status = status
         self.interfaces = interfaces
         self.isExpensive = isExpensive
         self.isConstrained = isConstrained
+        self.supportsIPv4 = supportsIPv4
+        self.supportsIPv6 = supportsIPv6
         self.timestamp = timestamp
+    }
+
+    // English: Decode new address-family flags optionally so snapshots written by 5.36.0 remain valid.
+    // Español: Decodifica opcionalmente las nuevas banderas de familia para mantener válidos los snapshots de 5.36.0.
+    // 中文：地址族字段使用可选解码，保证 5.36.0 写入的快照仍可读取。
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        status = try container.decode(PTConnectivityStatus.self, forKey: .status)
+        interfaces = try container.decode(Set<PTConnectivityInterface>.self, forKey: .interfaces)
+        isExpensive = try container.decode(Bool.self, forKey: .isExpensive)
+        isConstrained = try container.decode(Bool.self, forKey: .isConstrained)
+        supportsIPv4 = try container.decodeIfPresent(Bool.self, forKey: .supportsIPv4) ?? false
+        supportsIPv6 = try container.decodeIfPresent(Bool.self, forKey: .supportsIPv6) ?? false
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
     }
 
     public var isReachable: Bool { status == .satisfied }
@@ -200,7 +224,9 @@ public actor PTConnectivityMonitor: PTConnectivityProviding {
         return PTConnectivitySnapshot(status: status,
                                       interfaces: interfaces,
                                       isExpensive: path.isExpensive,
-                                      isConstrained: path.isConstrained)
+                                      isConstrained: path.isConstrained,
+                                      supportsIPv4: path.supportsIPv4,
+                                      supportsIPv6: path.supportsIPv6)
     }
 #endif
 }

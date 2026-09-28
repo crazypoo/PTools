@@ -460,7 +460,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsStorage",
-            dependencies: ["PToolsStorageCore"],
+            dependencies: ["PToolsStorageCore", "PooToolsKeyChain"],
             path: "PooToolsSource/PToolsStorage",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
@@ -489,7 +489,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsNotifications",
-            dependencies: ["PToolsRouteCore"],
+            dependencies: ["PToolsRouteCore", "PTNotificationPermission"],
             path: "PooToolsSource/PToolsNotifications",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
@@ -521,7 +521,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsContentState",
-            dependencies: ["PToolsTheme", "PToolsAccessibility"],
+            dependencies: ["ptools", "PToolsTheme", "PToolsAccessibility", "PToolsConnectivity"],
             path: "PooToolsSource/PToolsContentState",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
         ),
@@ -548,7 +548,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsSimulation",
-            dependencies: ["PToolsSimulationCore"],
+            dependencies: ["PToolsSimulationCore", "PToolsConnectivity", "PToolsBluetooth", "PToolsCore", "PToolsDevice"],
             path: "PooToolsSource/PToolsSimulation",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
         ),
@@ -566,6 +566,7 @@ let package = Package(
         // 中文：Feedback 只承载 UIKit 和 CoreHaptics 原生适配。
         .target(
             name: "PToolsFeedback",
+            dependencies: ["PToolsCore"],
             path: "PooToolsSource/PToolsFeedback",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
         ),
@@ -905,7 +906,7 @@ let package = Package(
         // 中文：确定性模拟检查独立于 UIKit 和真实系统服务。
         .testTarget(
             name: "PToolsAdvancedTests",
-            dependencies: ["PToolsSimulationCore", "PToolsSimulation"],
+            dependencies: ["PToolsSimulationCore", "PToolsSimulation", "PToolsConnectivity", "PToolsBluetooth", "PToolsCore", "PToolsDevice"],
             path: "Tests/PToolsAdvancedTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
@@ -917,7 +918,7 @@ let package = Package(
         // 中文：让 P2 值类型契约测试独立于 UIKit 和真实系统服务。
         .testTarget(
             name: "PToolsP2Tests",
-            dependencies: ["PToolsConfiguration", "PToolsAudio"],
+            dependencies: ["PToolsConfiguration", "PToolsAudio", "PToolsCore", "PToolsFeedback", "PToolsAppIntents", "PToolsWidgetCore", "PToolsActivities", "PToolsRouteCore"],
             path: "Tests/PToolsP2Tests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),

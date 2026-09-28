@@ -65,10 +65,10 @@ public class PTPermissionNotification: PTPermission {
     }
 
     @MainActor
-    public func requestAuthorization() async -> PTPermissionAuthorizationState {
+    public func requestAuthorization(options: UNAuthorizationOptions = [.badge, .alert, .sound]) async -> PTPermissionAuthorizationState {
         await withCheckedContinuation { continuation in
             let gate = OSAllocatedUnfairLock(initialState: false)
-            UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound]) { _, _ in
+            UNUserNotificationCenter.current().requestAuthorization(options: options) { _, _ in
                 let shouldResume = gate.withLock { didResume in
                     guard !didResume else { return false }
                     didResume = true
@@ -79,6 +79,14 @@ public class PTPermissionNotification: PTPermission {
             }
         }
         return await refreshAuthorizationState()
+    }
+
+    // English: Keep the original no-argument permission API source compatible.
+    // Español: Mantiene compatible la API de permisos original sin argumentos.
+    // 中文：保留原有无参数权限 API 的源码兼容性。
+    @MainActor
+    public func requestAuthorization() async -> PTPermissionAuthorizationState {
+        await requestAuthorization(options: [.badge, .alert, .sound])
     }
 
     public override var authorizationState: PTPermissionAuthorizationState {

@@ -117,11 +117,20 @@ public struct PTBluetoothConnectionInfo: Sendable, Codable, Hashable {
     public init(identifier: String, state: PTBluetoothState) { self.identifier = identifier; self.state = state }
 }
 
+// English: Production Bluetooth consumers use value snapshots instead of CBPeripheral objects.
+// Español: Los consumidores Bluetooth de producción usan snapshots de valores en lugar de CBPeripheral.
+// 中文：生产蓝牙调用方只使用值快照，不跨边界传递 CBPeripheral。
+public protocol PTBluetoothProviding: Sendable {
+    func discoveredPeripherals() async -> [PTDiscoveredPeripheral]
+    func isConnected(identifier: String) async -> Bool
+}
+
 #if canImport(CoreBluetooth)
 @MainActor
 private final class PTCoreBluetoothDriver: NSObject, @preconcurrency CBCentralManagerDelegate, @preconcurrency CBPeripheralDelegate {
     private var central: CBCentralManager!
     private var peripherals: [String: CBPeripheral] = [:]
+    private var discoveredSnapshots: [String: PTDiscoveredPeripheral] = [:]
     private var connectWaiters: [String: CheckedContinuation<Void, Error>] = [:]
     private var readWaiters: [String: CheckedContinuation<Data, Error>] = [:]
     private var writeWaiters: [String: CheckedContinuation<Void, Error>] = [:]
@@ -221,6 +230,14 @@ private final class PTCoreBluetoothDriver: NSObject, @preconcurrency CBCentralMa
 
     func diagnostics(state: PTBluetoothState) -> PTBluetoothDiagnosticsSnapshot { .init(state: state, discoveredCount: peripherals.count, connectedCount: peripherals.values.filter { $0.state == .connected }.count, sentBytes: sentBytes, receivedBytes: receivedBytes, errorCount: lastErrorCount) }
 
+    func discoveredSnapshot() -> [PTDiscoveredPeripheral] {
+        discoveredSnapshots.values.sorted { $0.identifier < $1.identifier }
+    }
+
+    func isConnected(identifier: String) -> Bool {
+        peripherals[identifier]?.state == .connected
+    }
+
     func restorationSnapshot() -> PTBluetoothRestorationSnapshot {
         .init(peripheralIdentifiers: restoredPeripheralIdentifiers.sorted())
     }
@@ -242,8 +259,14 @@ private final class PTCoreBluetoothDriver: NSObject, @preconcurrency CBCentralMa
         let rssi = RSSI.intValue
         if let minimum = scanPolicy.minimumRSSI, rssi < minimum { return }
         peripherals[peripheral.identifier.uuidString] = peripheral
-        let services = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []).map { PTBluetoothUUID(rawValue: $0.uuidString) }
-        scanHandler?(.init(identifier: peripheral.identifier.uuidString, name: name, rssi: rssi, serviceUUIDs: services, manufacturerData: advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data))
+            let services = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []).map { PTBluetoothUUID(rawValue: $0.uuidString) }
+        let snapshot = PTDiscoveredPeripheral(identifier: peripheral.identifier.uuidString,
+                                              name: name,
+                                              rssi: rssi,
+                                              serviceUUIDs: services,
+                                              manufacturerData: advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data)
+        discoveredSnapshots[peripheral.identifier.uuidString] = snapshot
+        scanHandler?(snapshot)
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -334,7 +357,7 @@ public actor PTBluetoothConnection {
     #endif
 }
 
-public actor PTBluetoothCentral {
+public actor PTBluetoothCentral: PTBluetoothProviding {
     public static let shared = PTBluetoothCentral()
     private var state: PTBluetoothState = .idle
     #if canImport(CoreBluetooth)
@@ -404,6 +427,22 @@ public actor PTBluetoothCentral {
         #else
         return .init()
         #endif
+    }
+
+    public func discoveredPeripherals() async -> [PTDiscoveredPeripheral] {
+#if canImport(CoreBluetooth)
+        return await makeDriver().discoveredSnapshot()
+#else
+        return []
+#endif
+    }
+
+    public func isConnected(identifier: String) async -> Bool {
+#if canImport(CoreBluetooth)
+        return await makeDriver().isConnected(identifier: identifier)
+#else
+        return false
+#endif
     }
 
     #if canImport(CoreBluetooth)

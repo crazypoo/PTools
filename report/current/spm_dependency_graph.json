@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T03:02:13Z",
+  "source_revision": "a70742279f3bbcc589e245b963e62fdc5b2d3d37",
+  "generated_at": "2026-09-28T06:18:25Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -2688,6 +2688,50 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsBluetooth",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsBluetooth",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDevice",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDevice",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsSimulation",
           "kind": "internal",
           "package": null,
@@ -2988,12 +3032,34 @@
           }
         },
         {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsTheme",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
               "PToolsTheme",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
               null
             ]
           }
@@ -3247,7 +3313,19 @@
       "path": "PooToolsSource/PToolsFeedback",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        }
+      ],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -3616,6 +3694,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PTNotificationPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTNotificationPermission",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsRouteCore",
           "kind": "internal",
           "package": null,
@@ -3734,6 +3823,28 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsActivities",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsActivities",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsAppIntents",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAppIntents",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsAudio",
           "kind": "internal",
           "package": null,
@@ -3751,6 +3862,50 @@
           "declaration": {
             "byName": [
               "PToolsConfiguration",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsFeedback",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsFeedback",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsRouteCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRouteCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsWidgetCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsWidgetCore",
               null
             ]
           }
@@ -4044,6 +4199,50 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsBluetooth",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsBluetooth",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDevice",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDevice",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsSimulationCore",
           "kind": "internal",
           "package": null,
@@ -4141,6 +4340,17 @@
           "declaration": {
             "byName": [
               "PToolsStorageCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsKeyChain",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsKeyChain",
               null
             ]
           }

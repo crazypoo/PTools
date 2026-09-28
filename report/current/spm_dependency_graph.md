@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: ac67833be8eb3a4e7c1fdf707677f98ce1722d5e
-Generated at: 2026-09-28T03:02:13Z
+Source revision: a70742279f3bbcc589e245b963e62fdc5b2d3d37
+Generated at: 2026-09-28T06:18:25Z
 -->
 
 # SwiftPM Dependency Graph
@@ -163,7 +163,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `PTTrackingPermission` | `PooToolsSource/TrackingPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PToolsAccessibility` | `PooToolsSource/PToolsAccessibility` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsActivities` | `PooToolsSource/PToolsActivities` | — | — | 0 source entries / 0 resources |
-| `PToolsAdvancedTests` | `Tests/PToolsAdvancedTests` | PToolsSimulation, PToolsSimulationCore | — | 0 source entries / 0 resources |
+| `PToolsAdvancedTests` | `Tests/PToolsAdvancedTests` | PToolsBluetooth, PToolsConnectivity, PToolsCore, PToolsDevice, PToolsSimulation, PToolsSimulationCore | — | 0 source entries / 0 resources |
 | `PToolsAppIntents` | `PooToolsSource/PToolsAppIntents` | PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsAudio` | `PooToolsSource/PToolsAudio` | PTMicPermission | — | 0 source entries / 0 resources |
 | `PToolsBackgroundTasks` | `PooToolsSource/PToolsBackgroundTasks` | — | — | 0 source entries / 0 resources |
@@ -171,7 +171,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `PToolsBluetooth` | `PooToolsSource/PToolsBluetooth` | — | — | 0 source entries / 0 resources |
 | `PToolsConfiguration` | `PooToolsSource/PToolsConfiguration` | PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PToolsConnectivity` | `PooToolsSource/PToolsConnectivity` | — | — | 0 source entries / 0 resources |
-| `PToolsContentState` | `PooToolsSource/PToolsContentState` | PToolsAccessibility, PToolsTheme | — | 0 source entries / 0 resources |
+| `PToolsContentState` | `PooToolsSource/PToolsContentState` | PToolsAccessibility, PToolsConnectivity, PToolsTheme, ptools | — | 0 source entries / 0 resources |
 | `PToolsCore` | `PooToolsSource/PToolsCore` | — | — | 0 source entries / 0 resources |
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsDate` | `PooToolsSource/PToolsDate` | — | — | 0 source entries / 0 resources |
@@ -180,7 +180,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `PToolsDevice` | `PooToolsSource/PToolsDevice` | — | — | 0 source entries / 0 resources |
 | `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
 | `PToolsDocuments` | `PooToolsSource/PToolsDocuments` | — | — | 0 source entries / 0 resources |
-| `PToolsFeedback` | `PooToolsSource/PToolsFeedback` | — | — | 0 source entries / 0 resources |
+| `PToolsFeedback` | `PooToolsSource/PToolsFeedback` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsForm` | `PooToolsSource/PToolsForm` | PToolsAccessibility, PToolsContentState, PToolsTheme, ptools | — | 0 source entries / 0 resources |
 | `PToolsHTTPFilePortal` | `PooToolsSource/PToolsHTTPFilePortal` | PToolsHTTPServer | — | 0 source entries / 1 resources |
 | `PToolsHTTPServer` | `PooToolsSource/PToolsHTTPServer` | — | — | 0 source entries / 0 resources |
@@ -191,19 +191,19 @@ Generated at: 2026-09-28T03:02:13Z
 | `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |
-| `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PToolsRouteCore | — | 0 source entries / 0 resources |
+| `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PTNotificationPermission, PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsOverlay` | `PooToolsSource/Overlay` | PToolsCore, PToolsLogging, PToolsUIFoundation | — | 0 source entries / 0 resources |
-| `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsAudio, PToolsConfiguration | — | 0 source entries / 0 resources |
+| `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsActivities, PToolsAppIntents, PToolsAudio, PToolsConfiguration, PToolsCore, PToolsFeedback, PToolsRouteCore, PToolsWidgetCore | — | 0 source entries / 0 resources |
 | `PToolsPermissionCore` | `PooToolsSource/PToolsPermissionCore` | — | — | 0 source entries / 0 resources |
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsPlatformTests` | `Tests/PToolsPlatformTests` | PToolsBackgroundTasks, PToolsConnectivity, PToolsDeepLink, PToolsNotifications, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PToolsRichTextTests` | `Tests/PToolsRichTextTests` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsRouteCore` | `PooToolsSource/PToolsRouteCore` | — | — | 0 source entries / 0 resources |
-| `PToolsSimulation` | `PooToolsSource/PToolsSimulation` | PToolsSimulationCore | — | 0 source entries / 0 resources |
+| `PToolsSimulation` | `PooToolsSource/PToolsSimulation` | PToolsBluetooth, PToolsConnectivity, PToolsCore, PToolsDevice, PToolsSimulationCore | — | 0 source entries / 0 resources |
 | `PToolsSimulationCore` | `PooToolsSource/PToolsSimulationCore` | — | — | 0 source entries / 0 resources |
 | `PToolsSocketKitTests` | `Tests/PToolsSocketKitTests` | PooToolsSocketKit | — | 0 source entries / 0 resources |
-| `PToolsStorage` | `PooToolsSource/PToolsStorage` | PToolsStorageCore | — | 0 source entries / 0 resources |
+| `PToolsStorage` | `PooToolsSource/PToolsStorage` | PToolsStorageCore, PooToolsKeyChain | — | 0 source entries / 0 resources |
 | `PToolsStorageCore` | `PooToolsSource/PToolsStorageCore` | — | — | 0 source entries / 0 resources |
 | `PToolsSymbols` | `PooToolsSource/PToolsSymbols` | — | — | 0 source entries / 1 resources |
 | `PToolsSymbolsTests` | `Tests/PToolsSymbolsTests` | PToolsSymbols | — | 0 source entries / 0 resources |

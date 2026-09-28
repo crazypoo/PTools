@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T03:02:13Z",
+  "source_revision": "a70742279f3bbcc589e245b963e62fdc5b2d3d37",
+  "generated_at": "2026-09-28T06:18:26Z",
   "name": "PooTools",
-  "version": "5.36.0",
+  "version": "5.36.1",
   "platforms": {
     "ios": "17.0"
   },
@@ -542,6 +542,8 @@
       "short_name": "ContentState",
       "local_dependencies": [
         "PooTools/Accessibility",
+        "PooTools/Connectivity",
+        "PooTools/Core",
         "PooTools/Theme"
       ],
       "third_party_dependencies": [],
@@ -930,7 +932,9 @@
     {
       "name": "PooTools/Feedback",
       "short_name": "Feedback",
-      "local_dependencies": [],
+      "local_dependencies": [
+        "PooTools/PToolsCore"
+      ],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/PToolsFeedback/**/*.swift"
@@ -1861,6 +1865,7 @@
       "name": "PooTools/Notifications",
       "short_name": "Notifications",
       "local_dependencies": [
+        "PooTools/NotificationPermission",
         "PooTools/RouteCore"
       ],
       "third_party_dependencies": [],
@@ -2491,6 +2496,10 @@
       "name": "PooTools/Simulation",
       "short_name": "Simulation",
       "local_dependencies": [
+        "PooTools/Bluetooth",
+        "PooTools/Connectivity",
+        "PooTools/PToolsCore",
+        "PooTools/PToolsDevice",
         "PooTools/SimulationCore"
       ],
       "third_party_dependencies": [],
@@ -2695,6 +2704,7 @@
       "name": "PooTools/Storage",
       "short_name": "Storage",
       "local_dependencies": [
+        "PooTools/KeyChain",
         "PooTools/StorageCore"
       ],
       "third_party_dependencies": [],

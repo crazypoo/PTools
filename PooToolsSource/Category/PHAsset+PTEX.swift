@@ -14,6 +14,15 @@ import os.lock
 
 extension PHAsset: PTProtocolCompatible {}
 
+// English: Keep the public wrapper explicit outside the public extension to preserve the API inventory without a redundant-access warning.
+// Español: Mantén explícito el wrapper público fuera de la extensión pública para conservar el inventario API sin una advertencia de acceso redundante.
+// 中文：将公开包装器放在公开扩展之外，保留 API 清单并消除冗余访问级别警告。
+extension PHAsset {
+    public struct PTSendableAVAsset: @unchecked Sendable {
+        public let asset: AVAsset
+    }
+}
+
 // English: This lock protects the PhotoKit request ID and continuation until either result or cancellation wins.
 // Español: Este bloqueo protege el ID de PhotoKit y la continuación hasta que gane el resultado o la cancelación.
 // 中文：这个锁保护 PhotoKit 请求 ID 和 continuation，确保结果与取消只有一个能够完成请求。
@@ -63,10 +72,6 @@ public extension PHAsset {
         }
     }
     
-    public struct PTSendableAVAsset: @unchecked Sendable {
-        public let asset: AVAsset
-    }
-
     @MainActor var requestID: PHImageRequestID? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.requestID) as? PHImageRequestID

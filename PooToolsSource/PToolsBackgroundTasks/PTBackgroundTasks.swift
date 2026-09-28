@@ -24,6 +24,25 @@ public struct PTBackgroundTaskRegistration: Codable, Sendable, Hashable {
     }
 }
 
+// English: Host-owned configuration keeps identifiers and lifecycle wiring next to the app target.
+// Español: La configuración del host mantiene los identificadores y el ciclo de vida junto al target de la app.
+// 中文：由宿主持有配置，让任务标识和生命周期接近 App target 管理。
+public struct PTBackgroundTaskHostConfiguration: Codable, Sendable, Hashable {
+    public let registrations: [PTBackgroundTaskRegistration]
+    public let backgroundURLSessionIdentifiers: [String]
+
+    public init(registrations: [PTBackgroundTaskRegistration] = [],
+                backgroundURLSessionIdentifiers: [String] = []) {
+        self.registrations = registrations
+        self.backgroundURLSessionIdentifiers = backgroundURLSessionIdentifiers
+    }
+
+    public var isValid: Bool {
+        let identifiers = registrations.map(\.identifier) + backgroundURLSessionIdentifiers
+        return identifiers.allSatisfy { !$0.isEmpty } && Set(identifiers).count == identifiers.count
+    }
+}
+
 public enum PTBackgroundTaskError: Error, Sendable, Equatable {
     case invalidIdentifier
     case unavailable
@@ -213,5 +232,66 @@ public final class PTBackgroundTransferCoordinator {
     public func completeRestoredEvents() {
         eventsCompletion?()
         eventsCompletion = nil
+    }
+}
+
+@MainActor
+public final class PTBackgroundTaskHostCoordinator {
+    public let configuration: PTBackgroundTaskHostConfiguration
+    private let tasks: PTBackgroundTasks
+    private var transferCoordinators: [String: PTBackgroundTransferCoordinator] = [:]
+
+    public init(configuration: PTBackgroundTaskHostConfiguration,
+                tasks: PTBackgroundTasks = .shared) {
+        self.configuration = configuration
+        self.tasks = tasks
+    }
+
+    // English: Register before the scene finishes launching; invalid host configuration fails closed.
+    // Español: Registra antes de terminar el lanzamiento de la escena; una configuración inválida falla de forma segura.
+    // 中文：在 Scene 启动完成前注册；宿主配置非法时安全失败。
+    @discardableResult
+    public func register(_ operations: [String: PTBackgroundTasks.Operation]) -> Bool {
+        guard configuration.isValid else { return false }
+        var registeredAll = true
+        for registration in configuration.registrations {
+            guard let operation = operations[registration.identifier] else {
+                registeredAll = false
+                continue
+            }
+            registeredAll = tasks.register(registration, operation: operation) && registeredAll
+        }
+        return registeredAll
+    }
+
+    public func scheduleAll(earliestBeginDate: Date? = nil,
+                            requiresNetworkConnectivity: Bool = false,
+                            requiresExternalPower: Bool = false) {
+        for registration in configuration.registrations {
+            _ = try? tasks.schedule(registration,
+                                    earliestBeginDate: earliestBeginDate,
+                                    requiresNetworkConnectivity: requiresNetworkConnectivity,
+                                    requiresExternalPower: requiresExternalPower)
+        }
+    }
+
+    public func cancelAll() {
+        configuration.registrations.forEach { tasks.cancel(identifier: $0.identifier) }
+    }
+
+    public func makeTransferCoordinators() -> [PTBackgroundTransferCoordinator] {
+        configuration.backgroundURLSessionIdentifiers.map { identifier in
+            if let coordinator = transferCoordinators[identifier] { return coordinator }
+            let coordinator = PTBackgroundTransferCoordinator(sessionIdentifier: identifier)
+            transferCoordinators[identifier] = coordinator
+            return coordinator
+        }
+    }
+
+    // English: Restore one background URLSession callback through the retained host coordinator.
+    // Español: Restaura un callback de URLSession en segundo plano mediante el coordinador retenido del host.
+    // 中文：通过宿主持有的协调器恢复一次后台 URLSession 回调。
+    public func completeRestoredEvents(for sessionIdentifier: String) {
+        transferCoordinators[sessionIdentifier]?.completeRestoredEvents()
     }
 }

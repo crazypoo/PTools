@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.36.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.36.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.36.0` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.36.1` 为当前开发基线，尚未创建正式 tag。
+
+## 5.36.1 P0/P1/P2 收口
+
+- ✅ P0：补齐 IPv4/IPv6 连通性快照、单一 Keychain 适配、类型化位置通知、统一权限、Scene-aware 路由和后台任务宿主配置。
+- ✅ P1：补齐 ContentState 网络适配、PTBaseViewController 可选状态宿主、PTCollectionView 表单、字段 Renderer、无障碍/键盘边界、PDF 桥接和生产/模拟 Provider 合同。
+- ✅ P2：补齐 Core 语义反馈钩子、AppIntent/Widget/Live Activity 扩展示例、App Group/隐私/真机验收文档和统一质量门禁。
+- [ ] 真实设备和宿主验收：BLE 扫描/连接/通知/恢复、通知与后台生命周期、音频/触觉、Widget/Live Activity、锁屏隐私、扩展 target 构建和多 Scene 回归完成后，再创建不带 `v` 的 `5.36.1` tag。
 
 ## 5.36.0 P2 现代系统扩展与增强能力
 

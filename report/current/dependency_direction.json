@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T03:01:41Z",
+  "source_revision": "a70742279f3bbcc589e245b963e62fdc5b2d3d37",
+  "generated_at": "2026-09-28T05:55:06Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -97,11 +97,23 @@
     },
     {
       "source": "PToolsContentState",
+      "destination": "PToolsConnectivity"
+    },
+    {
+      "source": "PToolsContentState",
       "destination": "PToolsTheme"
+    },
+    {
+      "source": "PToolsContentState",
+      "destination": "ptools"
     },
     {
       "source": "PToolsDeepLink",
       "destination": "PToolsRouteCore"
+    },
+    {
+      "source": "PToolsFeedback",
+      "destination": "PToolsCore"
     },
     {
       "source": "PToolsForm",
@@ -122,6 +134,10 @@
     {
       "source": "PToolsHTTPFilePortal",
       "destination": "PToolsHTTPServer"
+    },
+    {
+      "source": "PToolsNotifications",
+      "destination": "PTNotificationPermission"
     },
     {
       "source": "PToolsNotifications",
@@ -149,11 +165,31 @@
     },
     {
       "source": "PToolsSimulation",
+      "destination": "PToolsBluetooth"
+    },
+    {
+      "source": "PToolsSimulation",
+      "destination": "PToolsConnectivity"
+    },
+    {
+      "source": "PToolsSimulation",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsSimulation",
+      "destination": "PToolsDevice"
+    },
+    {
+      "source": "PToolsSimulation",
       "destination": "PToolsSimulationCore"
     },
     {
       "source": "PToolsStorage",
       "destination": "PToolsStorageCore"
+    },
+    {
+      "source": "PToolsStorage",
+      "destination": "PooToolsKeyChain"
     },
     {
       "source": "PToolsTheme",

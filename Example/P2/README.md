@@ -49,3 +49,15 @@ try await recorder.record(to: outputURL)
 协调器拒绝过期回写；`PTActivityBackgroundAdapter` 可接入宿主已有的 BackgroundTasks 调度。
 不要将订单隐私或用户凭据写入锁屏内容。Widget 的实际 SwiftUI UI 和 Live Activity 的
 `ActivityAttributes` 必须位于宿主自己的 Extension Target，不复制进 PTools。
+
+## SemanticFeedbackDemo
+
+Core 只负责发出语义信号，触觉模块按需安装为适配器：
+
+```swift
+PTHapticEngine.shared.installAsDefault()
+PTFeedbackCenter.shared.emit(.actionConfirmed)
+```
+
+业务 UI 不直接创建触觉生成器；测试或无障碍场景可以设置
+`PTHapticEngine.shared.policy = .disabled`。

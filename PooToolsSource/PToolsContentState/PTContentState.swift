@@ -4,6 +4,10 @@
 
 import Foundation
 
+#if SWIFT_PACKAGE
+import PToolsConnectivity
+#endif
+
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -58,6 +62,17 @@ public extension PTContentState {
         case .offline: .offline
         }
     }
+
+    // English: Expose the last usable value for offline and loading recovery UI.
+    // Español: Expone el último valor utilizable para la recuperación offline y de carga.
+    // 中文：暴露 loading/offline 恢复界面需要的最近可用内容。
+    var previousContent: Content? {
+        switch self {
+        case .content(let content): content
+        case .loading(let content), .offline(let content): content
+        case .idle, .empty, .error: nil
+        }
+    }
 }
 
 #if canImport(UIKit)
@@ -109,7 +124,7 @@ public final class PTContentStateView: UIView {
 
     public func render(_ state: PTContentStateDisplay) {
         displayState = state
-        contentHost.isHidden = state != .content
+        contentHost.isHidden = state == .idle || state == .loading || state == .empty || state == .error
         activityIndicator.isHidden = state != .loading
         titleLabel.isHidden = true; messageLabel.isHidden = true; retryButton.isHidden = true; offlineLabel.isHidden = true
         switch state {
@@ -124,6 +139,7 @@ public final class PTContentStateView: UIView {
             titleLabel.text = "Error"; messageLabel.text = error.message; retryButton.setTitle("Retry", for: .normal)
             titleLabel.isHidden = false; messageLabel.isHidden = false; retryButton.isHidden = !error.retryable
         case .offline:
+            offlineLabel.text = "Offline"
             offlineLabel.isHidden = false
         }
         if state != .loading { activityIndicator.stopAnimating() }
@@ -140,5 +156,55 @@ public final class PTContentStateController<Content: Sendable> {
     public init() {}
 
     public func set(_ state: PTContentState<Content>) { self.state = state }
+}
+
+// English: Opt-in bridge that maps connectivity changes to an existing content-state controller.
+// Español: Puente opt-in que convierte cambios de conectividad en estados del controlador existente.
+// 中文：可选桥接器，把网络状态变化映射到现有内容状态控制器。
+@MainActor
+public final class PTContentConnectivityAdapter<Content: Sendable> {
+    private let provider: any PTConnectivityProviding
+    private let controller: PTContentStateController<Content>
+    private var observationTask: Task<Void, Never>?
+
+    public var onReconnect: (@MainActor @Sendable () -> Void)?
+
+    public init(provider: any PTConnectivityProviding,
+                controller: PTContentStateController<Content>) {
+        self.provider = provider
+        self.controller = controller
+    }
+
+    public func start() {
+        guard observationTask == nil else { return }
+        let provider = self.provider
+        observationTask = Task { @MainActor [weak self] in
+            let stream = await provider.snapshots()
+            for await snapshot in stream {
+                guard let self, !Task.isCancelled else { return }
+                self.apply(snapshot)
+            }
+        }
+    }
+
+    public func stop() {
+        observationTask?.cancel()
+        observationTask = nil
+    }
+
+    private func apply(_ snapshot: PTConnectivitySnapshot) {
+        guard !snapshot.isReachable else {
+            if case .offline(let previous) = controller.state, let previous {
+                controller.set(.content(previous))
+                onReconnect?()
+            }
+            return
+        }
+        switch controller.state {
+        case .content(let content): controller.set(.offline(previous: content))
+        case .loading(let previous): controller.set(.offline(previous: previous))
+        case .offline, .idle, .empty, .error: break
+        }
+    }
 }
 #endif

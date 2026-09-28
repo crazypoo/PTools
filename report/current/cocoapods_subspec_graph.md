@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: ac67833be8eb3a4e7c1fdf707677f98ce1722d5e
-Generated at: 2026-09-28T03:02:13Z
+Source revision: a70742279f3bbcc589e245b963e62fdc5b2d3d37
+Generated at: 2026-09-28T06:18:26Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.36.0`
+- Podspec: `PooTools` `5.36.1`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -45,7 +45,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `Connectivity` | — | — | `PToolsConnectivity` | Foundation, Network | — |
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
-| `ContentState` | `PooTools/Accessibility`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
+| `ContentState` | `PooTools/Accessibility`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
 | `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
@@ -58,7 +58,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `Device` | — | — | `PToolsDevice` | Foundation | — |
 | `Documents` | — | — | `PToolsDocuments` | Foundation, QuickLook, UIKit, UniformTypeIdentifiers | — |
 | `FaceIDPermission` | `PooTools/PToolsPermissionCore` | — | `FaceIDPermission` | — | — |
-| `Feedback` | — | — | `PToolsFeedback` | CoreHaptics, Foundation, UIKit | — |
+| `Feedback` | `PooTools/PToolsCore` | — | `PToolsFeedback` | CoreHaptics, Foundation, UIKit | — |
 | `FilterCamera` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaViewer`, `PooTools/MicPermission` | — | `FilterCamera` | — | — |
 | `Flag` | `PooTools/Core` | `FlagKit` | — | — | — |
 | `Form` | `PooTools/Accessibility`, `PooTools/ContentState`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsForm` | Foundation, UIKit | — |
@@ -100,7 +100,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |
-| `Notifications` | `PooTools/RouteCore` | — | `PToolsNotifications` | Foundation, UniformTypeIdentifiers, UserNotifications | — |
+| `Notifications` | `PooTools/NotificationPermission`, `PooTools/RouteCore` | — | `PToolsNotifications` | Foundation, UniformTypeIdentifiers, UserNotifications | — |
 | `OSSKitSpeech` | `PooTools/Core`, `PooTools/SpeechRecognizerPermission` | — | `OSSKit` | Speech | — |
 | `Overlay` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation` | — | `Overlay` | Foundation, UIKit | — |
 | `PDF` | `PooTools/Core` | — | `PDF` | — | — |
@@ -130,7 +130,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `SecuritySuite` | `PooTools/Core` | `IOSSecuritySuite` | — | — | — |
 | `Segmented` | `PooTools/Core` | — | `Segmented` | — | — |
 | `Share` | `PooTools/CustomerLabel` | — | `Share` | — | — |
-| `Simulation` | `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
+| `Simulation` | `PooTools/Bluetooth`, `PooTools/Connectivity`, `PooTools/PToolsCore`, `PooTools/PToolsDevice`, `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
 | `SimulationCore` | — | — | `PToolsSimulationCore` | Foundation | — |
 | `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
 | `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
@@ -140,7 +140,7 @@ Generated at: 2026-09-28T03:02:13Z
 | `SpeedPanel` | `PooTools/Core` | — | `SpeedPanel` | — | — |
 | `StepCount` | `PooTools/Core`, `PooTools/HealthPermission` | — | `HealthKit` | HealthKit | — |
 | `Stepper` | `PooTools/Core` | — | `Stepper` | — | — |
-| `Storage` | `PooTools/StorageCore` | — | `PToolsStorage` | Foundation, Security | — |
+| `Storage` | `PooTools/KeyChain`, `PooTools/StorageCore` | — | `PToolsStorage` | Foundation, Security | — |
 | `StorageCore` | — | — | `PToolsStorageCore` | Foundation | — |
 | `Symbols` | — | — | `PToolsSymbols` | Foundation, OSLog, UIKit | PooToolsSymbolsResources |
 | `Tabbar` | `PooTools/Core` | — | — | — | — |

@@ -172,7 +172,7 @@ fi
 # English: The URLSession delegate proxy is the only newly approved system callback bridge.
 # Español: El proxy delegado de URLSession es el único puente nuevo de callbacks del sistema aprobado.
 # 中文：URLSession 委托代理是本轮唯一批准新增的系统回调桥接点。
-new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache|PTURLSessionWebSocketDelegateProxy|PTActivityKitSendableBox' || true)"
+new_unchecked="$(git diff --unified=0 -- '*.swift' | rg '^\+[^+].*@unchecked Sendable' | rg -v 'PTSystemPixelBufferBox|PTSystemAVAssetBox|PTLegacyModelTypeBox|PTCodableModelProtocol.*@unchecked Sendable|PTVideoAssetSendableBox|PTTextMatcherCache|PTURLSessionWebSocketDelegateProxy|PTActivityKitSendableBox|PTSendableAVAsset' || true)"
 if [[ -n "$new_unchecked" ]]; then
   printf '%s\n' "$new_unchecked" >&2
   printf 'FAIL: this change introduces a new @unchecked Sendable declaration\n' >&2

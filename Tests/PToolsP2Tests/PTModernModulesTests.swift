@@ -3,8 +3,14 @@
 // 中文：P2 配置和音频值类型契约的确定性测试。
 
 import XCTest
+@testable import PToolsActivities
+@testable import PToolsAppIntents
 @testable import PToolsConfiguration
 @testable import PToolsAudio
+@testable import PToolsCore
+@testable import PToolsFeedback
+@testable import PToolsRouteCore
+@testable import PToolsWidgetCore
 
 final class PTModernModulesTests: XCTestCase {
     func testConfigurationLayersKeepSnapshotStable() async throws {
@@ -39,5 +45,33 @@ final class PTModernModulesTests: XCTestCase {
     func testWaveformUsesBoundedSamples() {
         let waveform = PTAudioWaveform.from(amplitudes: [-2, 0.25, 2], sampleCount: 2)
         XCTAssertEqual(waveform.samples, [1, 1])
+    }
+
+    @MainActor
+    func testFeedbackSignalUsesOneCoreHook() {
+        var received: PTFeedbackSignal?
+        PTFeedbackCenter.shared.handler = { received = $0 }
+        PTFeedbackCenter.shared.emit(.success)
+        XCTAssertEqual(received, .success)
+        PTFeedbackCenter.shared.handler = nil
+    }
+
+    func testWidgetStoreRequiresExplicitAppGroup() {
+        XCTAssertThrowsError(try PTWidgetSharedStore(appGroupIdentifier: ""))
+    }
+
+    func testAppIntentDescriptorPreservesRouteSource() {
+        let descriptor = PTAppIntentRouteDescriptor(route: PTRoute(id: "orders"))
+        XCTAssertEqual(descriptor.request().source, .appIntent)
+    }
+
+    func testActivityDiagnosticsAreCodableValueState() throws {
+        let diagnostics = PTActivityDiagnostics(identifier: "order-1",
+                                                 lifecycle: .active,
+                                                 generation: 2,
+                                                 pushTokenAvailable: true)
+        let roundTrip = try JSONDecoder().decode(PTActivityDiagnostics.self,
+                                                 from: JSONEncoder().encode(diagnostics))
+        XCTAssertEqual(roundTrip, diagnostics)
     }
 }

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T03:01:33Z",
+  "source_revision": "a70742279f3bbcc589e245b963e62fdc5b2d3d37",
+  "generated_at": "2026-09-28T05:54:59Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -81,14 +81,14 @@
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 36,
-      "declaration": "private struct PTSendableExportSession: @unchecked Sendable {",
+      "line": 21,
+      "declaration": "public struct PTSendableAVAsset: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 66,
-      "declaration": "public struct PTSendableAVAsset: @unchecked Sendable {",
+      "line": 45,
+      "declaration": "private struct PTSendableExportSession: @unchecked Sendable {",
       "allowlisted": true
     },
     {

@@ -46,6 +46,23 @@ public struct PTResponseMetadata: Sendable, Equatable {
     }
 }
 
+// English: Location provider contracts carry only coordinates across actors.
+// Español: Los contratos de ubicación solo transportan coordenadas entre actores.
+// 中文：定位 Provider 只通过坐标值跨 actor 传递数据。
+public struct PTLocationSnapshot: Codable, Hashable, Sendable {
+    public let latitude: Double
+    public let longitude: Double
+
+    public init(latitude: Double, longitude: Double) {
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+}
+
+public protocol PTLocationProviding: Sendable {
+    func currentLocation() async -> PTLocationSnapshot?
+}
+
 // English: Preserve the legacy erased model while keeping new value types typed.
 // Español: Conserva el modelo borrado heredado y mantiene tipados los nuevos valores.
 // 中文：保留旧版擦除模型，同时让新的值类型保持明确类型。

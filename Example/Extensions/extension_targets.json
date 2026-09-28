@@ -1,0 +1,23 @@
+{
+  "version": "5.36.1",
+  "targets": [
+    {
+      "name": "PToolsExampleIntentsExtension",
+      "source": "PToolsExampleIntentsExtension.swift",
+      "product": "PToolsAppIntents",
+      "requires": ["AppIntents", "APPLICATION_EXTENSION_API_ONLY=YES"]
+    },
+    {
+      "name": "PToolsExampleWidgetExtension",
+      "source": "PToolsExampleWidgetExtension.swift",
+      "product": "PToolsWidgetCore",
+      "requires": ["WidgetKit", "SwiftUI", "App Group entitlement"]
+    },
+    {
+      "name": "PToolsExampleLiveActivityExtension",
+      "source": "PToolsExampleLiveActivity.swift",
+      "product": "PToolsActivities",
+      "requires": ["ActivityKit", "WidgetKit", "SwiftUI"]
+    }
+  ]
+}

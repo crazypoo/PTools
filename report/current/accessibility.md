@@ -3,16 +3,16 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_accessibility_5_9.rb
-Source revision: ac67833be8eb3a4e7c1fdf707677f98ce1722d5e
-Generated at: 2026-09-28T03:01:34Z
+Source revision: a70742279f3bbcc589e245b963e62fdc5b2d3d37
+Generated at: 2026-09-28T05:55:00Z
 -->
 
 # PTools 当前 UI 适配扫描
 
 | 能力 | 命中数 |
 | --- | ---: |
-| accessibility | 244 |
-| dynamic_type | 13 |
+| accessibility | 247 |
+| dynamic_type | 19 |
 | reduce_motion | 52 |
 | reduce_transparency | 12 |
 

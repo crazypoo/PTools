@@ -5,6 +5,10 @@
 import Foundation
 #if SWIFT_PACKAGE
 import PToolsSimulationCore
+import PToolsConnectivity
+import PToolsBluetooth
+import PToolsCore
+import PToolsDevice
 #endif
 
 public enum PTSimulationError: Error, LocalizedError, Sendable, Equatable {
@@ -61,28 +65,57 @@ public actor PTSimulationRuntime {
     }
 }
 
-public actor PTMockConnectivityProvider: PTSimulationConnectivityProviding {
+public actor PTMockConnectivityProvider: PTSimulationConnectivityProviding, PTConnectivityProviding {
     private var online: Bool
-    public init(online: Bool = true) { self.online = online }
+    private var snapshot: PTConnectivitySnapshot
+    public init(online: Bool = true) {
+        self.online = online
+        snapshot = PTConnectivitySnapshot(status: online ? .satisfied : .unsatisfied)
+    }
     public func isOnline() async -> Bool { online }
-    public func setOnline(_ value: Bool) { online = value }
+    public func setOnline(_ value: Bool) {
+        online = value
+        snapshot = PTConnectivitySnapshot(status: value ? .satisfied : .unsatisfied)
+    }
+    public func current() async -> PTConnectivitySnapshot { snapshot }
+    public func diagnostics() async -> PTConnectivityDiagnosticsSnapshot { .init(current: snapshot, transitionCount: 0, lastOfflineDate: nil, lastRecoveryDate: nil) }
+    public func snapshots() async -> AsyncStream<PTConnectivitySnapshot> { AsyncStream { $0.yield(snapshot) } }
 }
 
-public actor PTMockLocationProvider: PTSimulationLocationProviding {
+public actor PTMockLocationProvider: PTSimulationLocationProviding, PTLocationProviding {
     private var value: (latitude: Double, longitude: Double)?
     public init(location: (latitude: Double, longitude: Double)? = nil) { self.value = location }
     public func location() async -> (latitude: Double, longitude: Double)? { value }
+    public func currentLocation() async -> PTLocationSnapshot? { value.map { .init(latitude: $0.latitude, longitude: $0.longitude) } }
     public func setLocation(latitude: Double, longitude: Double) { value = (latitude, longitude) }
 }
 
-public actor PTMockBluetoothProvider: PTSimulationBluetoothProviding {
+public actor PTMockBluetoothProvider: PTSimulationBluetoothProviding, PTBluetoothProviding {
     private var discoveredIdentifiers: [String] = []
     private var connected: Set<String> = []
     public init() {}
     public func discovered() async -> [String] { discoveredIdentifiers }
     public func isConnected(identifier: String) async -> Bool { connected.contains(identifier) }
+    public func discoveredPeripherals() async -> [PTDiscoveredPeripheral] {
+        discoveredIdentifiers.map { PTDiscoveredPeripheral(identifier: $0, rssi: 0) }
+    }
     public func setDiscovered(_ identifiers: [String]) { discoveredIdentifiers = identifiers }
     public func setConnected(_ value: Bool, identifier: String) {
         if value { connected.insert(identifier) } else { connected.remove(identifier) }
+    }
+}
+
+public actor PTMockDeviceProvider: PTSimulationDeviceProviding, PTDeviceCapabilityProviding {
+    private var values: [String: String] = [:]
+    private var capabilities: [PTDeviceCapability: PTDeviceCapabilityStatus] = [:]
+
+    public init() {}
+    public func value(for key: String) async -> String? { values[key] }
+    public func setValue(_ value: String?, for key: String) { values[key] = value }
+    public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus {
+        capabilities[capability] ?? .unknown
+    }
+    public func setStatus(_ status: PTDeviceCapabilityStatus, for capability: PTDeviceCapability) {
+        capabilities[capability] = status
     }
 }

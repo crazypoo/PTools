@@ -5,11 +5,15 @@
 import Foundation
 #if SWIFT_PACKAGE
 import PToolsRouteCore
+import PTNotificationPermission
 #endif
 
 #if canImport(UserNotifications)
 import UserNotifications
 import UniformTypeIdentifiers
+#if (os(iOS) || os(watchOS)) && canImport(CoreLocation)
+import CoreLocation
+#endif
 
 public struct PTNotificationID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral {
     public let rawValue: String
@@ -75,9 +79,33 @@ public struct PTNotificationCalendarComponents: Codable, Sendable, Equatable {
     public init(values: [String: Int]) { self.values = values }
 }
 
+// English: Value-only location trigger input; Core Location objects stay inside scheduling.
+// Español: Entrada de trigger de ubicación basada solo en valores; los objetos de Core Location quedan dentro del scheduling.
+// 中文：位置触发器只暴露值类型，Core Location 对象限制在调度实现内部。
+public struct PTNotificationLocationTrigger: Codable, Sendable, Equatable {
+    public let identifier: String
+    public let latitude: Double
+    public let longitude: Double
+    public let radius: Double
+    public let repeats: Bool
+
+    public init(identifier: String = "PTools.Notification.Location",
+                latitude: Double,
+                longitude: Double,
+                radius: Double = 100,
+                repeats: Bool = false) {
+        self.identifier = identifier
+        self.latitude = latitude
+        self.longitude = longitude
+        self.radius = radius
+        self.repeats = repeats
+    }
+}
+
 public enum PTNotificationTrigger: Codable, Sendable, Equatable {
     case timeInterval(TimeInterval, repeats: Bool)
     case calendar(PTNotificationCalendarComponents, repeats: Bool)
+    case location(PTNotificationLocationTrigger)
     case remote
 }
 
@@ -217,6 +245,7 @@ public final class PTNotificationCenter: NSObject {
 
     private let center: UNUserNotificationCenter
     private let delegateProxy = PTNotificationDelegate()
+    private let permission = PTPermissionNotification()
 
     public init(center: UNUserNotificationCenter = .current()) {
         self.center = center
@@ -229,11 +258,23 @@ public final class PTNotificationCenter: NSObject {
     }
 
     public func requestAuthorization(options: UNAuthorizationOptions = [.alert, .sound, .badge]) async throws -> Bool {
-        try await center.requestAuthorization(options: options)
+        _ = await permission.requestAuthorization(options: options)
+        return permission.authorizationState.isGranted
     }
 
     public func authorizationStatus() async -> UNAuthorizationStatus {
-        await center.notificationSettings().authorizationStatus
+        _ = await permission.refreshAuthorizationState()
+        switch permission.authorizationState {
+        case .authorized, .limited: return .authorized
+        case .provisional: return .provisional
+        case .notDetermined: return .notDetermined
+        case .denied, .restricted, .unavailable: return .denied
+#if os(iOS)
+        case .ephemeral: return .ephemeral
+#else
+        case .ephemeral: return .authorized
+#endif
+        }
     }
 
     public func register(categories: [PTNotificationCategory]) {
@@ -291,6 +332,22 @@ public final class PTNotificationCenter: NSObject {
                 }
             }
             notificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
+        case .location(let location):
+#if (os(iOS) || os(watchOS)) && canImport(CoreLocation)
+            guard !location.identifier.isEmpty,
+                  (-90...90).contains(location.latitude),
+                  (-180...180).contains(location.longitude),
+                  location.radius > 0 else { throw PTNotificationError.invalidTrigger }
+            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: location.latitude,
+                                                                          longitude: location.longitude),
+                                          radius: location.radius,
+                                          identifier: location.identifier)
+            region.notifyOnEntry = true
+            region.notifyOnExit = false
+            notificationTrigger = UNLocationNotificationTrigger(region: region, repeats: location.repeats)
+#else
+            throw PTNotificationError.locationUnavailable
+#endif
         }
 
         try await center.add(UNNotificationRequest(identifier: request.id.rawValue,
@@ -326,6 +383,7 @@ public final class PTNotificationCenter: NSObject {
 
 public enum PTNotificationError: Error, Sendable, Equatable {
     case invalidTrigger
+    case locationUnavailable
 }
 
 #else

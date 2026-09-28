@@ -1,4 +1,4 @@
-# PTools 5.36.0 P2 现代系统扩展指南
+# PTools 5.36.1 P2 现代系统扩展指南
 
 这些能力都是可选模块，Core 默认不携带。所有示例面向 iOS 17+ / Swift 6+；涉及 AppIntent、
 Widget 或 Live Activity 时，宿主还必须配置对应的 Extension Target 和 entitlements。
@@ -33,7 +33,7 @@ pod 'PooTools/Activities'
 ```swift
 let checkoutEnabled = PTConfigKey(name: "checkout.enabled", defaultValue: false)
 let store = PTConfigurationStore(
-    context: .init(environment: .staging, appVersion: "5.36.0"),
+    context: .init(environment: .staging, appVersion: "5.36.1"),
     defaults: [checkoutEnabled.name: try JSONEncoder().encode(false)]
 )
 
@@ -49,9 +49,9 @@ override 仅在 Debug 编译中可见。
 ## Feedback / Haptics
 
 ```swift
-await PTHapticEngine.shared.prepare()
-await PTHapticEngine.shared.play(.selectionChanged)
-await PTHapticEngine.shared.play(.success)
+PTHapticEngine.shared.installAsDefault()
+PTFeedbackCenter.shared.emit(.selectionChanged)
+PTFeedbackCenter.shared.emit(.success)
 ```
 
 自定义 CoreHaptics 模式通过 `PTHapticPattern`，硬件不支持时会安全跳过；业务层使用语义事件，
@@ -119,6 +119,8 @@ PTools 不会在 Activities 内部创建循环依赖。`generation` 可用于丢
 
 ## 示例与验证
 
-最小示例片段位于 [`Example/P2/README.md`](../../Example/P2/README.md)。脚本
+最小示例片段位于 [`Example/P0/README.md`](../../Example/P0/README.md)、
+[`Example/P1/README.md`](../../Example/P1/README.md)、[`Example/P2/README.md`](../../Example/P2/README.md)
+和 [`Example/Extensions`](../../Example/Extensions)。脚本
 `Scripts/CI/check_p2_modern_modules.sh` 检查产品、subspec、并发边界和 extension-safe 规则；
 完整 UIKit 验证使用 Xcode Simulator，而不是 macOS `swift build` 代替。

@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.36.x
+## Unreleased — 5.37.x
 
-当前开发基线为 `5.36.0`；版本唯一来源为根目录 `VERSION`，完成 Simulator/Device 构建验证后再创建正式 tag。
+当前开发基线为 `5.36.1`；版本唯一来源为根目录 `VERSION`，真机和扩展宿主回归完成后再创建正式 tag。
+
+## 5.36.1 — 2026-09-28
+
+- 收口 P0 平台契约：连通性快照增加 IPv4/IPv6 能力、Keychain 复用既有 `PTKeyChain`、通知位置触发器和统一通知权限入口。
+- 补齐 Scene-aware 路由宿主、后台任务宿主配置、内容状态/网络适配器、稳定表单字段渲染、PDF 专用桥接和生产 Provider 合同。
+- 增加 Core 语义反馈钩子、AppIntent/Widget/Live Activity 扩展示例、P0/P1/P2 验证脚本、测试和迁移文档。
+- 仍需集成方完成真实 BLE、通知/后台生命周期、音频/触觉、Widget/Live Activity、锁屏隐私和扩展宿主回归；未完成前不创建 `5.36.1` tag。
 
 ## 5.36.0 — 2026-09-28
 

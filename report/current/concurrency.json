@@ -2,10 +2,10 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T03:01:32Z",
+  "source_revision": "a70742279f3bbcc589e245b963e62fdc5b2d3d37",
+  "generated_at": "2026-09-28T05:54:58Z",
   "counts": {
-    "main_queue_async": 28,
+    "main_queue_async": 29,
     "task_detached": 29,
     "unchecked_sendable": 69,
     "as_bang": 4
@@ -104,31 +104,31 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 36,
-      "text": "private struct PTSendableExportSession: @unchecked Sendable {"
+      "line": 21,
+      "text": "public struct PTSendableAVAsset: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 66,
-      "text": "public struct PTSendableAVAsset: @unchecked Sendable {"
+      "line": 45,
+      "text": "private struct PTSendableExportSession: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 142,
+      "line": 147,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 289,
+      "line": 294,
       "text": "DispatchQueue.main.async { completion(nil) }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 304,
+      "line": 309,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -598,6 +598,12 @@
       "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
       "line": 257,
       "text": "tokenTask = Task.detached(priority: nil) { [weak self, activityBox] in"
+    },
+    {
+      "rule": "main_queue_async",
+      "path": "PooToolsSource/PToolsForm/PTForm.swift",
+      "line": 579,
+      "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
       "rule": "unchecked_sendable",

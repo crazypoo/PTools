@@ -1,6 +1,6 @@
 # P2 现代系统扩展架构
 
-5.36.0 新增六个可选产品。它们围绕 Core 扩展，但不进入 `PooTools.podspec` 的
+5.36.1 收口六个可选产品。它们围绕 Core 扩展，但不进入 `PooTools.podspec` 的
 `default_subspec = Core`，宿主必须按功能显式选择。
 
 | Product | CocoaPods | 责任 | 平台边界 |

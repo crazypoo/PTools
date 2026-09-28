@@ -54,6 +54,7 @@ require_pattern PooToolsSource/PToolsConfiguration/PTConfiguration.swift 'public
 require_pattern PooToolsSource/PToolsConfiguration/PTConfiguration.swift 'public protocol PTConfigurationProvider' 'remote provider is vendor-neutral'
 require_pattern PooToolsSource/PToolsConfiguration/PTConfiguration.swift 'public struct PTConfigurationSnapshot' 'configuration snapshot exists'
 require_pattern PooToolsSource/PToolsFeedback/PTFeedback.swift 'public enum PTFeedbackEvent' 'semantic feedback events exist'
+require_pattern PooToolsSource/PToolsCore/PTFeedbackCenter.swift 'public final class PTFeedbackCenter' 'Core semantic feedback hook exists'
 require_pattern PooToolsSource/PToolsFeedback/PTFeedback.swift 'CHHapticEngine.capabilitiesForHardware' 'haptic capability uses CoreHaptics'
 require_pattern PooToolsSource/PToolsAudio/PTAudio.swift 'public final class PTAudioSessionCoordinator' 'audio session coordinator exists'
 require_pattern PooToolsSource/PToolsAudio/PTAudio.swift 'public final class PTAudioRecorder' 'audio recorder exists'
@@ -65,5 +66,9 @@ require_pattern PooToolsSource/PToolsWidgetCore/PTWidgetCore.swift 'WidgetCenter
 require_pattern PooToolsSource/PToolsActivities/PTActivities.swift 'public final class PTActivityCoordinator' 'Activity lifecycle coordinator exists'
 require_pattern PooToolsSource/PToolsActivities/PTActivities.swift 'PTActivityUpdatePolicy' 'Activity update policy exists'
 require_pattern PooTools.podspec 'APPLICATION_EXTENSION_API_ONLY' 'extension-safe CocoaPods settings are declared'
+for example in Example/Extensions/PToolsExampleIntentsExtension.swift Example/Extensions/PToolsExampleWidgetExtension.swift Example/Extensions/PToolsExampleLiveActivity.swift; do
+    [[ -f "$example" ]] || { printf 'FAIL: extension example is missing: %s\n' "$example" >&2; exit 1; }
+done
+python3 -m json.tool Example/Extensions/extension_targets.json >/dev/null
 
 printf 'P2 modern system module contract OK\n'

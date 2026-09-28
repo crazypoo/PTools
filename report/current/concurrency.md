@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_concurrency_5_9.rb
-Source revision: ac67833be8eb3a4e7c1fdf707677f98ce1722d5e
-Generated at: 2026-09-28T03:01:32Z
+Source revision: a70742279f3bbcc589e245b963e62fdc5b2d3d37
+Generated at: 2026-09-28T05:54:58Z
 -->
 
 # PTools 当前 Swift 6 并发扫描
@@ -14,7 +14,7 @@ Generated at: 2026-09-28T03:01:32Z
 | 规则 | 数量 |
 | --- | ---: |
 | as_bang | 4 |
-| main_queue_async | 28 |
+| main_queue_async | 29 |
 | task_detached | 29 |
 | unchecked_sendable | 69 |
 

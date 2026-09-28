@@ -12,6 +12,10 @@ import UIKit
 import CoreHaptics
 #endif
 
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
+
 public struct PTFeedbackPatternID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral {
     public let rawValue: String
 
@@ -71,6 +75,8 @@ public final class PTHapticEngine {
     private var impactGenerator: UIImpactFeedbackGenerator?
 #endif
 
+    private var isDefaultFeedbackHandlerInstalled = false
+
 #if canImport(CoreHaptics)
     private var engine: CHHapticEngine?
 #endif
@@ -103,6 +109,26 @@ public final class PTHapticEngine {
         if case .custom(let identifier) = event {
             play(identifier: identifier, pattern: .init())
         }
+    }
+
+    // English: Install the optional haptic adapter behind the Core semantic hook.
+    // Español: Instala el adaptador háptico opcional detrás del hook semántico del núcleo.
+    // 中文：将可选触觉适配器安装到 Core 的语义反馈钩子之后。
+    public func installAsDefault() {
+        guard !isDefaultFeedbackHandlerInstalled else { return }
+        PTFeedbackCenter.shared.handler = { signal in
+            PTHapticEngine.shared.play(PTFeedbackEvent(signal: signal))
+        }
+        isDefaultFeedbackHandlerInstalled = true
+    }
+
+    // English: Remove only the handler installed by this engine instance.
+    // Español: Elimina solo el handler instalado por esta instancia del motor.
+    // 中文：只移除当前引擎实例安装的处理器。
+    public func uninstallAsDefault() {
+        guard isDefaultFeedbackHandlerInstalled else { return }
+        PTFeedbackCenter.shared.handler = nil
+        isDefaultFeedbackHandlerInstalled = false
     }
 
     public func play(identifier: PTFeedbackPatternID,
@@ -177,5 +203,18 @@ public final class PTHapticEngine {
         engine = try? CHHapticEngine()
         try? engine?.start()
 #endif
+    }
+}
+
+private extension PTFeedbackEvent {
+    init(signal: PTFeedbackSignal) {
+        switch signal {
+        case .selectionChanged: self = .selectionChanged
+        case .actionConfirmed: self = .actionConfirmed
+        case .actionRejected: self = .actionRejected
+        case .warning: self = .warning
+        case .success: self = .success
+        case .destructive: self = .destructive
+        }
     }
 }

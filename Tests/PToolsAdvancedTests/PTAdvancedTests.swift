@@ -3,6 +3,10 @@
 // 中文：P1 模拟契约的确定性检查。
 
 import XCTest
+@testable import PToolsBluetooth
+@testable import PToolsConnectivity
+@testable import PToolsCore
+@testable import PToolsDevice
 @testable import PToolsSimulationCore
 @testable import PToolsSimulation
 
@@ -35,5 +39,21 @@ final class PTAdvancedTests: XCTestCase {
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
+    }
+
+    func testSimulationProvidersMatchProductionContracts() async {
+        let connectivity: any PTConnectivityProviding = PTMockConnectivityProvider(online: true)
+        let location: any PTLocationProviding = PTMockLocationProvider(location: (31.2, 121.5))
+        let bluetooth: any PTBluetoothProviding = PTMockBluetoothProvider()
+        let device: any PTDeviceCapabilityProviding = PTMockDeviceProvider()
+
+        let connectivityStatus = await connectivity.current().status
+        let locationLatitude = await location.currentLocation()?.latitude
+        let discoveredPeripherals = await bluetooth.discoveredPeripherals()
+        let cameraStatus = await device.status(for: .camera)
+        XCTAssertEqual(connectivityStatus, .satisfied)
+        XCTAssertEqual(locationLatitude, 31.2)
+        XCTAssertTrue(discoveredPeripherals.isEmpty)
+        XCTAssertEqual(cameraStatus, .unknown)
     }
 }

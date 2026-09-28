@@ -17,7 +17,19 @@ pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(S
   exit 1
 }
 
-latest_tag="$(git tag --list | ruby -e 'require "rubygems"; tags = STDIN.readlines(chomp: true).select { |tag| tag.match?("\\A\\d+\\.\\d+\\.\\d+\\z") }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")')"
+# English: Ignore a future or malformed repository tag while validating the current development line.
+# Español: Ignora una etiqueta futura o mal formada al validar la línea de desarrollo actual.
+# 中文：校验当前开发线时忽略未来版本或仓库中的错误标签。
+latest_tag="$(ruby - "$version" <<'RUBY'
+require "rubygems"
+
+version = Gem::Version.new(ARGV.fetch(0))
+tags = IO.popen(["git", "tag", "--list"], &:read).lines(chomp: true)
+  .select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }
+  .select { |tag| Gem::Version.new(tag) <= version }
+puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")
+RUBY
+)"
 [[ -n "$latest_tag" ]] || { printf 'FAIL: no semantic release tag is available\n' >&2; exit 1; }
 
 rg -q --fixed-strings "PooTools/Core ($version)" Podfile.lock \

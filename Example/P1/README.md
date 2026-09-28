@@ -1,13 +1,11 @@
-# PTools 5.35.0 P1 示例入口
+# P1 宿主回归示例
 
-示例按能力分为：
+P1 的 Provider 合同由生产模块定义，模拟模块只提供替身：
 
-- `ThemeGallery`
-- `ContentStateDemo`
-- `FormDemo`
-- `BluetoothDemo`
-- `DocumentsDemo`
-- `SimulationDemo`
-- `AccessibilityDemo`
+- `PTConnectivityProviding`：测试断网、恢复和内容状态切换。
+- `PTBluetoothProviding`：测试扫描、连接和通知状态，不替代真实 BLE 回归。
+- `PTLocationProviding`、`PTDeviceCapabilityProviding`：测试权限和设备能力分支。
+- `PTDocumentPDFBridge`：只将 PDF 交给 Quick Look 或 PDFKit，其他文件继续走文档入口。
 
-这些目录只描述宿主集成边界，不把演示代码编译进发布模块。需要真实 UI、系统权限或 BLE 时，应在 `PooTools-Example` 中按需挂载对应 CocoaPods subspec，并使用真实 Simulator/Device 场景验证。
+表单页面直接使用 `PTFormViewController` 的 `PTCollectionView`，字段 ID 必须稳定；生产宿主还
+需要覆盖 VoiceOver、Dynamic Type、RTL、Reduce Motion、键盘遍历和多 Scene。

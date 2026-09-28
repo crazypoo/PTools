@@ -31,7 +31,7 @@ public class PTKeyChain: NSObject {
     ///   - service: 保存到哪個域
     ///   - account: 帳號
     ///   - password: 密碼
-    class func saveAccountInfo(service: NSString,
+    public class func saveAccountInfo(service: NSString,
                                account: NSString,
                                password: NSString,
                                context: LAContext? = nil,
@@ -72,7 +72,7 @@ public class PTKeyChain: NSObject {
         }
     }
     
-    class func saveAccountInfoCallback(service: NSString,
+    public class func saveAccountInfoCallback(service: NSString,
                                        account: NSString,
                                        password: NSString,
                                        handle: PTKeyChainBlock?) {
@@ -81,7 +81,7 @@ public class PTKeyChain: NSObject {
     }
     
     // MARK: 2. 根據帳號查詢密碼
-    class func getPassword(service: NSString,
+    public class func getPassword(service: NSString,
                            account: NSString,
                            context: LAContext? = nil) -> String? {
         
@@ -112,7 +112,7 @@ public class PTKeyChain: NSObject {
     
     // MARK: 3. 獲取儲存域的多個帳號密碼
     /// 返回原生的 [ [String: String] ] 更加 Swift 友好，如果业务强依赖 NSMutableDictionary 可自行桥接转换。
-    class func getAccountInfo(service: NSString) -> [[String: String]] {
+    public class func getAccountInfo(service: NSString) -> [[String: String]] {
         let queryDic: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecReturnAttributes: kCFBooleanTrue!,
@@ -146,7 +146,7 @@ public class PTKeyChain: NSObject {
     }
     
     // MARK: 4. 刪除域的帳號密碼 (性能优化)
-    class func deleteAccountInfo(service: NSString,
+    public class func deleteAccountInfo(service: NSString,
                                  account: NSString?,
                                  handle: PTKeyChainStatusBlock?) {
         

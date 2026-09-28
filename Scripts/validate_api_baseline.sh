@@ -11,16 +11,21 @@ cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
 
-latest_tag="$(git tag --list | ruby -e 'require "rubygems"; tags = STDIN.readlines(chomp: true).select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")')"
+# English: Ignore malformed or future tags so a development release is compared with a real prior baseline.
+# Español: Ignora etiquetas inválidas o futuras para comparar con una línea base anterior real.
+# 中文：忽略异常或高于当前版本的标签，避免开发版本被错误的未来标签污染。
+latest_tag="$(git tag --list | ruby -e 'require "rubygems"; current = Gem::Version.new(ARGV.fetch(0)); tags = STDIN.readlines(chomp: true).select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }.select { |tag| Gem::Version.new(tag) <= current }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")' "$version")"
 [[ -n "$latest_tag" ]] || { printf 'FAIL: no semantic release tag is available\n' >&2; exit 1; }
 
 baseline_tag="$(ruby - "$repo_root" <<'RUBY'
 require "rubygems"
 
 repo_root = ARGV.fetch(0)
+current_version = Gem::Version.new(File.read(File.join(repo_root, "VERSION")).strip)
 tags = IO.popen(["git", "-C", repo_root, "tag", "--list"], &:read)
   .lines(chomp: true)
   .select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }
+  .select { |tag| Gem::Version.new(tag) <= current_version }
 available = tags.select do |tag|
   File.file?(File.join(repo_root, "api-baseline", tag, "public_api.json"))
 end
