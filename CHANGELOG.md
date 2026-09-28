@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased — 5.37.x
+## Unreleased — 5.57.x
 
-当前开发基线为 `5.36.1`；版本唯一来源为根目录 `VERSION`，真机和扩展宿主回归完成后再创建正式 tag。
+当前开发基线为 `5.56.1`；版本唯一来源为根目录 `VERSION`，文档、脚本、数据资产和测试治理门禁通过后再创建正式 tag。
+
+## 5.56.1 — 2026-09-28
+
+- 建立 `Scripts/Docs/audit_docs.py` 统一盘点文档、模块、脚本、JSON/YAML 数据资产和测试 target。
+- 新增 canonical module/script/data/test registry、三语文档索引、模块使用指南和生成报告，来源对齐 `Package.swift` 与 `PooTools.podspec`。
+- 增加 ACTIVE / ARCHIVED / GENERATED / DELETED 生命周期规则、术语表、provenance、测试执行分层和 GitHub Governance workflow。
+- 版本事实推进到 `5.56.1`；不复制历史计划，不修改第三方源码，正式 tag 仍需完成完整宿主与真机验收。
 
 ## 5.36.1 — 2026-09-28
 

@@ -1,0 +1,20 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Shared technical terminology.
+-
+  term: "canonical"
+  zh-Hans: "唯一实现/事实来源"
+  es: "fuente canónica"
+-
+  term: "host"
+  zh-Hans: "宿主 App 或扩展目标"
+  es: "app o extensión anfitriona"
+-
+  term: "Sendable"
+  zh-Hans: "可安全跨并发域传递的值"
+  es: "valor seguro entre dominios de concurrencia"
+-
+  term: "subspec"
+  zh-Hans: "CocoaPods 子规格"
+  es: "subspec de CocoaPods"

@@ -1,0 +1,845 @@
+{
+  "generated_at": "2026-09-28T14:23:07+08:00",
+  "generator": "Scripts/Docs/audit_docs.py",
+  "scripts": [
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/build_cocoapods_device.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/build_cocoapods_simulator.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_5_36_1_finalization.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "CI",
+      "entrypoint": true,
+      "language": "sh",
+      "path": "Scripts/CI/check_5_56_1_governance.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_devicekit_removed.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/CI/check_example_source_ownership.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_instructions_architecture.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_instructions_removed.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_jx_paging_removed.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_notification_banner_removed.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_overlay_architecture.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_p0_platform_modules.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_p1_advanced_modules.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_p2_modern_modules.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/check_popovers_removed.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Device",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Device/check_unknown_identifiers.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Device",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Device/diff_device_catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Device",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Device/generate_device_catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Device",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Device/update_device_catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Device",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Device/validate_device_catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Docs",
+      "entrypoint": true,
+      "language": "py",
+      "path": "Scripts/Docs/audit_docs.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Migration",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/Migration/cleanup_example_source_membership.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Symbols",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Symbols/symbol-diff.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Symbols",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Symbols/update-symbols.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Symbols",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Symbols/verify-generated-symbols.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/compare_public_api.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/generate_58_reports.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/generate_dependency_matrix.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/generate_package_matrix.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_accessibility_5_9.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_cache_inventory_5_9.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_cocoapods_subspec_graph.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_concurrency_5_9.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_current_summaries.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/report_duplicate_entries.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_mainactor_heavy_work.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_public_api_5_8.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_public_api_5_9.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_sendable_exceptions.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_singletons_5_9.rb",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/report_spm_dependency_graph.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_514_network_security.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_515_media.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_516_permission.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_517_ui.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_519_package_tests_docs.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_58_contracts.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_592_quality.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_59_contracts.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_api_baseline.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_attributedstring_absorption_5_25.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_branch_dependencies.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_build_entries.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_concurrency_5_19.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_core_boundary_5_12.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_core_source_contract.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_debug_foundation_5_10.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_debug_instruments_5_18.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_dependencies_5_9_6.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_dependency_direction.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_deprecated_inventory.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_docs.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_document_versions.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_file_size_gate.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_gcdwebserver_removal_5_28.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_instruments_5_11.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_lifecycle_5_9.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_localizations.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_logging_5_21.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_logging_5_22.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_logging_foundation_5_20.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_migration_5_9_7.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_module_parity.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_naming_debt.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_network_security.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p1_architecture_closure.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p1_dependency_supply_chain.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p1_performance_registry.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p1_public_api_intent.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p1_standalone_modules.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_p2_performance_closure.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_permission_source_contract.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_quality_scans.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_release.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_search_5_18_1.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_socketrocket_removal_5_27.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_swiftdate_removal_5_26.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_swifterswift_removal.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_symbols_5_24.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_test_matrix.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_ui_5_13_contract.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_xcode_source_warnings.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP_REVIEW",
+      "canonical": true,
+      "domain": "root",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "paapidetect.sh",
+      "status": "ACTIVE"
+    }
+  ],
+  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
+  "version": "5.56.1"
+}

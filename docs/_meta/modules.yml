@@ -1,0 +1,2986 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Canonical module registry; compare against Package.swift and PooTools.podspec.
+-
+  id: "appz"
+  name: "Appz"
+  swiftpm_product: ""
+  cocoapods_subspec: "Appz"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "background-tasks"
+  name: "BackgroundTasks"
+  swiftpm_product: ""
+  cocoapods_subspec: "BackgroundTasks"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "bank-card"
+  name: "BankCard"
+  swiftpm_product: ""
+  cocoapods_subspec: "BankCard"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "bilogy-id"
+  name: "BilogyID"
+  swiftpm_product: ""
+  cocoapods_subspec: "BilogyID"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "bio-id"
+  name: "BioID"
+  swiftpm_product: ""
+  cocoapods_subspec: "BioID"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "bluetooth-permission"
+  name: "BluetoothPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "BluetoothPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "calendar"
+  name: "Calendar"
+  swiftpm_product: ""
+  cocoapods_subspec: "Calendar"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "calendar-permission"
+  name: "CalendarPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "CalendarPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "camera-permission"
+  name: "CameraPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "CameraPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "check-dirty-word"
+  name: "CheckDirtyWord"
+  swiftpm_product: ""
+  cocoapods_subspec: "CheckDirtyWord"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "check-update"
+  name: "CheckUpdate"
+  swiftpm_product: ""
+  cocoapods_subspec: "CheckUpdate"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "chinese-pinyin"
+  name: "ChinesePinyin"
+  swiftpm_product: ""
+  cocoapods_subspec: "ChinesePinyin"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "circle"
+  name: "Circle"
+  swiftpm_product: ""
+  cocoapods_subspec: "Circle"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "code-view"
+  name: "CodeView"
+  swiftpm_product: ""
+  cocoapods_subspec: "CodeView"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "connectivity"
+  name: "Connectivity"
+  swiftpm_product: ""
+  cocoapods_subspec: "Connectivity"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "contact"
+  name: "Contact"
+  swiftpm_product: ""
+  cocoapods_subspec: "Contact"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "contacts-permission"
+  name: "ContactsPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "ContactsPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "core"
+  name: "Core"
+  swiftpm_product: ""
+  cocoapods_subspec: "Core"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "country"
+  name: "Country"
+  swiftpm_product: ""
+  cocoapods_subspec: "Country"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "customer-label"
+  name: "CustomerLabel"
+  swiftpm_product: ""
+  cocoapods_subspec: "CustomerLabel"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "customer-number-keyboard"
+  name: "CustomerNumberKeyboard"
+  swiftpm_product: ""
+  cocoapods_subspec: "CustomerNumberKeyboard"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "data-encrypt"
+  name: "DataEncrypt"
+  swiftpm_product: ""
+  cocoapods_subspec: "DataEncrypt"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "date"
+  name: "Date"
+  swiftpm_product: ""
+  cocoapods_subspec: "Date"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "debug"
+  name: "DEBUG"
+  swiftpm_product: ""
+  cocoapods_subspec: "DEBUG"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "debug-tracking-eyes"
+  name: "DEBUG_TrackingEyes"
+  swiftpm_product: ""
+  cocoapods_subspec: "DEBUG_TrackingEyes"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "deep-link"
+  name: "DeepLink"
+  swiftpm_product: ""
+  cocoapods_subspec: "DeepLink"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "device"
+  name: "Device"
+  swiftpm_product: ""
+  cocoapods_subspec: "Device"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "face-idpermission"
+  name: "FaceIDPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "FaceIDPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "filter-camera"
+  name: "FilterCamera"
+  swiftpm_product: ""
+  cocoapods_subspec: "FilterCamera"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "flag"
+  name: "Flag"
+  swiftpm_product: ""
+  cocoapods_subspec: "Flag"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "gcdweb-server"
+  name: "GCDWebServer"
+  swiftpm_product: ""
+  cocoapods_subspec: "GCDWebServer"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "guide"
+  name: "Guide"
+  swiftpm_product: ""
+  cocoapods_subspec: "Guide"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "hand-sign"
+  name: "HandSign"
+  swiftpm_product: ""
+  cocoapods_subspec: "HandSign"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "harbeth-kit"
+  name: "HarbethKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "HarbethKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "health-permission"
+  name: "HealthPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "HealthPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "heart-rate"
+  name: "HeartRate"
+  swiftpm_product: ""
+  cocoapods_subspec: "HeartRate"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "httpfile-portal"
+  name: "HTTPFilePortal"
+  swiftpm_product: ""
+  cocoapods_subspec: "HTTPFilePortal"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "httpserver"
+  name: "HTTPServer"
+  swiftpm_product: ""
+  cocoapods_subspec: "HTTPServer"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "hud"
+  name: "Hud"
+  swiftpm_product: ""
+  cocoapods_subspec: "Hud"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "i-os17-tips"
+  name: "iOS17Tips"
+  swiftpm_product: ""
+  cocoapods_subspec: "iOS17Tips"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "iap"
+  name: "IAP"
+  swiftpm_product: ""
+  cocoapods_subspec: "IAP"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "image-picker"
+  name: "ImagePicker"
+  swiftpm_product: ""
+  cocoapods_subspec: "ImagePicker"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "input"
+  name: "Input"
+  swiftpm_product: ""
+  cocoapods_subspec: "Input"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "input-all"
+  name: "InputAll"
+  swiftpm_product: ""
+  cocoapods_subspec: "InputAll"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "launch-time-profiler"
+  name: "LaunchTimeProfiler"
+  swiftpm_product: ""
+  cocoapods_subspec: "LaunchTimeProfiler"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "layout"
+  name: "Layout"
+  swiftpm_product: ""
+  cocoapods_subspec: "Layout"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "live-photo"
+  name: "LivePhoto"
+  swiftpm_product: ""
+  cocoapods_subspec: "LivePhoto"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "loading"
+  name: "Loading"
+  swiftpm_product: ""
+  cocoapods_subspec: "Loading"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "location"
+  name: "Location"
+  swiftpm_product: ""
+  cocoapods_subspec: "Location"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "location-permission"
+  name: "LocationPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "LocationPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "logging"
+  name: "Logging"
+  swiftpm_product: ""
+  cocoapods_subspec: "Logging"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "media-permission"
+  name: "MediaPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "MediaPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "meida-permission"
+  name: "MeidaPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "MeidaPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "message-kit"
+  name: "MessageKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "MessageKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "mic-permission"
+  name: "MicPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "MicPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "motion"
+  name: "Motion"
+  swiftpm_product: ""
+  cocoapods_subspec: "Motion"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "motion-permission"
+  name: "MotionPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "MotionPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "mxmetric-manager-kit"
+  name: "MXMetricManagerKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "MXMetricManagerKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "net-work"
+  name: "NetWork"
+  swiftpm_product: ""
+  cocoapods_subspec: "NetWork"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "network-speed-test"
+  name: "NetworkSpeedTest"
+  swiftpm_product: ""
+  cocoapods_subspec: "NetworkSpeedTest"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "nfckit"
+  name: "NFCKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "NFCKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "notification-banner"
+  name: "NotificationBanner"
+  swiftpm_product: ""
+  cocoapods_subspec: "NotificationBanner"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "notification-permission"
+  name: "NotificationPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "NotificationPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "notifications"
+  name: "Notifications"
+  swiftpm_product: ""
+  cocoapods_subspec: "Notifications"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "osskit-speech"
+  name: "OSSKitSpeech"
+  swiftpm_product: ""
+  cocoapods_subspec: "OSSKitSpeech"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "page-control"
+  name: "PageControl"
+  swiftpm_product: ""
+  cocoapods_subspec: "PageControl"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "paging-control"
+  name: "PagingControl"
+  swiftpm_product: ""
+  cocoapods_subspec: "PagingControl"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "pdf"
+  name: "PDF"
+  swiftpm_product: ""
+  cocoapods_subspec: "PDF"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "picker"
+  name: "Picker"
+  swiftpm_product: ""
+  cocoapods_subspec: "Picker"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ping"
+  name: "Ping"
+  swiftpm_product: ""
+  cocoapods_subspec: "Ping"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-all"
+  name: "PooToolsAll"
+  swiftpm_product: "PooToolsAll"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-bank-card"
+  name: "PooToolsBankCard"
+  swiftpm_product: "PooToolsBankCard"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-banner"
+  name: "PooToolsBanner"
+  swiftpm_product: "PooToolsBanner"
+  cocoapods_subspec: "Banner"
+  source: "PooToolsSource/Banner"
+  category: "ui-leaf"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsOverlay"
+    - "PToolsSymbols"
+    - "PToolsLogging"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-bio-id"
+  name: "PooToolsBioID"
+  swiftpm_product: "PooToolsBioID"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-calendar"
+  name: "PooToolsCalendar"
+  swiftpm_product: "PooToolsCalendar"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-check-box"
+  name: "PooToolsCheckBox"
+  swiftpm_product: "PooToolsCheckBox"
+  cocoapods_subspec: "CheckBox"
+  source: "PooToolsSource/CheckBox"
+  category: "ui-leaf"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-check-dirty-word"
+  name: "PooToolsCheckDirtyWord"
+  swiftpm_product: "PooToolsCheckDirtyWord"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-check-update"
+  name: "PooToolsCheckUpdate"
+  swiftpm_product: "PooToolsCheckUpdate"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-chinese-pinyin"
+  name: "PooToolsChinesePinyin"
+  swiftpm_product: "PooToolsChinesePinyin"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-circle"
+  name: "PooToolsCircle"
+  swiftpm_product: "PooToolsCircle"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-code-view"
+  name: "PooToolsCodeView"
+  swiftpm_product: "PooToolsCodeView"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-contact"
+  name: "PooToolsContact"
+  swiftpm_product: "PooToolsContact"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-country"
+  name: "PooToolsCountry"
+  swiftpm_product: "PooToolsCountry"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-customer-label"
+  name: "PooToolsCustomerLabel"
+  swiftpm_product: "PooToolsCustomerLabel"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-data-encrypt"
+  name: "PooToolsDataEncrypt"
+  swiftpm_product: "PooToolsDataEncrypt"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-debug"
+  name: "PooToolsDEBUG"
+  swiftpm_product: "PooToolsDEBUG"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-debugtracking-eyes"
+  name: "PooToolsDEBUGTrackingEyes"
+  swiftpm_product: "PooToolsDEBUGTrackingEyes"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-guide"
+  name: "PooToolsGuide"
+  swiftpm_product: "PooToolsGuide"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-hand-sign"
+  name: "PooToolsHandSign"
+  swiftpm_product: "PooToolsHandSign"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-harbeth-kit"
+  name: "PooToolsHarbethKit"
+  swiftpm_product: "PooToolsHarbethKit"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-heart-rate"
+  name: "PooToolsHeartRate"
+  swiftpm_product: "PooToolsHeartRate"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-hud"
+  name: "PooToolsHud"
+  swiftpm_product: "PooToolsHud"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-iap"
+  name: "PooToolsIAP"
+  swiftpm_product: "PooToolsIAP"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-image-editor"
+  name: "PooToolsImageEditor"
+  swiftpm_product: "PooToolsImageEditor"
+  cocoapods_subspec: "ImageEditor"
+  source: "PooToolsSource/ImageEditor"
+  category: "media-ui"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "MediaCore"
+    - "Harbeth"
+    - "PooToolsHarbethKit"
+    - "PooToolsPhotoPicker"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-image-picker"
+  name: "PooToolsImagePicker"
+  swiftpm_product: "PooToolsImagePicker"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-input"
+  name: "PooToolsInput"
+  swiftpm_product: "PooToolsInput"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-instructions"
+  name: "PooToolsInstructions"
+  swiftpm_product: "PooToolsInstructions"
+  cocoapods_subspec: "Instructions"
+  source: "PooToolsSource/Instructions"
+  category: "ui-leaf"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsOverlay"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-key-chain"
+  name: "PooToolsKeyChain"
+  swiftpm_product: "PooToolsKeyChain"
+  cocoapods_subspec: "KeyChain"
+  source: "PooToolsSource/KeyChain"
+  category: "foundation-adapter"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-keyboard"
+  name: "PooToolsKeyboard"
+  swiftpm_product: "PooToolsKeyboard"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-launch-time-profiler"
+  name: "PooToolsLaunchTimeProfiler"
+  swiftpm_product: "PooToolsLaunchTimeProfiler"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-layout"
+  name: "PooToolsLayout"
+  swiftpm_product: "PooToolsLayout"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-live-photo"
+  name: "PooToolsLivePhoto"
+  swiftpm_product: "PooToolsLivePhoto"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-loading"
+  name: "PooToolsLoading"
+  swiftpm_product: "PooToolsLoading"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-location"
+  name: "PooToolsLocation"
+  swiftpm_product: "PooToolsLocation"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-media-core"
+  name: "PooToolsMediaCore"
+  swiftpm_product: "PooToolsMediaCore"
+  cocoapods_subspec: "MediaCore"
+  source: "PooToolsSource/PToolsMediaCore"
+  category: "media-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-media-viewer"
+  name: "PooToolsMediaViewer"
+  swiftpm_product: "PooToolsMediaViewer"
+  cocoapods_subspec: "MediaViewer"
+  source: "PooToolsSource/MediaViewer"
+  category: "media-ui"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "MediaCore"
+    - "PooToolsProgressBar"
+    - "PooToolsPageControl"
+    - "PooToolsLivePhoto"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-message-kit"
+  name: "PooToolsMessageKit"
+  swiftpm_product: "PooToolsMessageKit"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-motion"
+  name: "PooToolsMotion"
+  swiftpm_product: "PooToolsMotion"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-net-work"
+  name: "PooToolsNetWork"
+  swiftpm_product: "PooToolsNetWork"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-network"
+  name: "PooToolsNetwork"
+  swiftpm_product: "PooToolsNetwork"
+  cocoapods_subspec: "Network"
+  source: "PooToolsSource/NetWork"
+  category: "network"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "PToolsCore"
+    - "PooToolsLoading"
+    - "Alamofire"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-network-speed-test"
+  name: "PooToolsNetworkSpeedTest"
+  swiftpm_product: "PooToolsNetworkSpeedTest"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-osskit-speech"
+  name: "PooToolsOSSKitSpeech"
+  swiftpm_product: "PooToolsOSSKitSpeech"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-page-control"
+  name: "PooToolsPageControl"
+  swiftpm_product: "PooToolsPageControl"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-paging-control"
+  name: "PooToolsPagingControl"
+  swiftpm_product: "PooToolsPagingControl"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-pdf"
+  name: "PooToolsPDF"
+  swiftpm_product: "PooToolsPDF"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-phone-info"
+  name: "PooToolsPhoneInfo"
+  swiftpm_product: "PooToolsPhoneInfo"
+  cocoapods_subspec: "PhoneInfo"
+  source: "PooToolsSource/PhoneInfo"
+  category: "foundation-adapter"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-photo-picker"
+  name: "PooToolsPhotoPicker"
+  swiftpm_product: "PooToolsPhotoPicker"
+  cocoapods_subspec: "PhotoPicker"
+  source: "PooToolsSource/PhotoPicker"
+  category: "media-ui"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "MediaCore"
+    - "PooToolsImagePicker"
+    - "PTCameraPermission"
+    - "PooToolsLoading"
+    - "Kakapos"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-picker"
+  name: "PooToolsPicker"
+  swiftpm_product: "PooToolsPicker"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-ping"
+  name: "PooToolsPing"
+  swiftpm_product: "PooToolsPing"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-popover"
+  name: "PooToolsPopover"
+  swiftpm_product: "PooToolsPopover"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-progress-bar"
+  name: "PooToolsProgressBar"
+  swiftpm_product: "PooToolsProgressBar"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-rate-view"
+  name: "PooToolsRateView"
+  swiftpm_product: "PooToolsRateView"
+  cocoapods_subspec: "RateView"
+  source: "PooToolsSource/RateView"
+  category: "ui-leaf"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsUIFoundation"
+    - "SnapKit"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-router"
+  name: "PooToolsRouter"
+  swiftpm_product: "PooToolsRouter"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-scan-qrcode"
+  name: "PooToolsScanQRCode"
+  swiftpm_product: "PooToolsScanQRCode"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-scroll-banner"
+  name: "PooToolsScrollBanner"
+  swiftpm_product: "PooToolsScrollBanner"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-search"
+  name: "PooToolsSearch"
+  swiftpm_product: "PooToolsSearch"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-search-bar"
+  name: "PooToolsSearchBar"
+  swiftpm_product: "PooToolsSearchBar"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-security"
+  name: "PooToolsSecurity"
+  swiftpm_product: "PooToolsSecurity"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-segmented"
+  name: "PooToolsSegmented"
+  swiftpm_product: "PooToolsSegmented"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-share"
+  name: "PooToolsShare"
+  swiftpm_product: "PooToolsShare"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-slider"
+  name: "PooToolsSlider"
+  swiftpm_product: "PooToolsSlider"
+  cocoapods_subspec: "Slider"
+  source: "PooToolsSource/Slider"
+  category: "ui-leaf"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsUIFoundation"
+    - "SnapKit"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-smart-screenshot"
+  name: "PooToolsSmartScreenshot"
+  swiftpm_product: "PooToolsSmartScreenshot"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-socket-kit"
+  name: "PooToolsSocketKit"
+  swiftpm_product: "PooToolsSocketKit"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-speed-panel"
+  name: "PooToolsSpeedPanel"
+  swiftpm_product: "PooToolsSpeedPanel"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-step-count"
+  name: "PooToolsStepCount"
+  swiftpm_product: "PooToolsStepCount"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-stepper"
+  name: "PooToolsStepper"
+  swiftpm_product: "PooToolsStepper"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-svg"
+  name: "PooToolsSVG"
+  swiftpm_product: "PooToolsSVG"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-telephony"
+  name: "PooToolsTelephony"
+  swiftpm_product: "PooToolsTelephony"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-tips-view"
+  name: "PooToolsTipsView"
+  swiftpm_product: "PooToolsTipsView"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-video-editor"
+  name: "PooToolsVideoEditor"
+  swiftpm_product: "PooToolsVideoEditor"
+  cocoapods_subspec: "VideoEditor"
+  source: "PooToolsSource/VideoEditor"
+  category: "media-ui"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "MediaCore"
+    - "Harbeth"
+    - "PooToolsHarbethKit"
+    - "PooToolsProgressBar"
+    - "PooToolsLoading"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-vision"
+  name: "PooToolsVision"
+  swiftpm_product: "PooToolsVision"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-tools-whats-news-kit"
+  name: "PooToolsWhatsNewsKit"
+  swiftpm_product: "PooToolsWhatsNewsKit"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "poo-toolsi-os17-tips"
+  name: "PooToolsiOS17Tips"
+  swiftpm_product: "PooToolsiOS17Tips"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "popover"
+  name: "Popover"
+  swiftpm_product: ""
+  cocoapods_subspec: "Popover"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "popover-kit"
+  name: "PopoverKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "PopoverKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "progress-bar"
+  name: "ProgressBar"
+  swiftpm_product: ""
+  cocoapods_subspec: "ProgressBar"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptbluetooth-permission"
+  name: "PTBluetoothPermission"
+  swiftpm_product: "PTBluetoothPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptcalendar-permission"
+  name: "PTCalendarPermission"
+  swiftpm_product: "PTCalendarPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptcamera-permission"
+  name: "PTCameraPermission"
+  swiftpm_product: "PTCameraPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptcontacts-permission"
+  name: "PTContactsPermission"
+  swiftpm_product: "PTContactsPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptface-idpermission"
+  name: "PTFaceIDPermission"
+  swiftpm_product: "PTFaceIDPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "pthealth-permission"
+  name: "PTHealthPermission"
+  swiftpm_product: "PTHealthPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptlocation-permission"
+  name: "PTLocationPermission"
+  swiftpm_product: "PTLocationPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptmedia-permission"
+  name: "PTMediaPermission"
+  swiftpm_product: "PTMediaPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptmic-permission"
+  name: "PTMicPermission"
+  swiftpm_product: "PTMicPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptmotion-permission"
+  name: "PTMotionPermission"
+  swiftpm_product: "PTMotionPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptnotification-permission"
+  name: "PTNotificationPermission"
+  swiftpm_product: "PTNotificationPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools"
+  name: "ptools"
+  swiftpm_product: "ptools"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-accessibility"
+  name: "PToolsAccessibility"
+  swiftpm_product: "PToolsAccessibility"
+  cocoapods_subspec: "Accessibility"
+  source: "PooToolsSource/PToolsAccessibility"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsUIFoundation"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-activities"
+  name: "PToolsActivities"
+  swiftpm_product: "PToolsActivities"
+  cocoapods_subspec: "Activities"
+  source: "PooToolsSource/PToolsActivities"
+  category: "p2-extension"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-app-intents"
+  name: "PToolsAppIntents"
+  swiftpm_product: "PToolsAppIntents"
+  cocoapods_subspec: "AppIntents"
+  source: "PooToolsSource/PToolsAppIntents"
+  category: "p2-extension"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsRouteCore"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-audio"
+  name: "PToolsAudio"
+  swiftpm_product: "PToolsAudio"
+  cocoapods_subspec: "Audio"
+  source: "PooToolsSource/PToolsAudio"
+  category: "p2-audio"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PTMicPermission"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-background-tasks"
+  name: "PToolsBackgroundTasks"
+  swiftpm_product: "PToolsBackgroundTasks"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-bluetooth"
+  name: "PToolsBluetooth"
+  swiftpm_product: "PToolsBluetooth"
+  cocoapods_subspec: "Bluetooth"
+  source: "PooToolsSource/PToolsBluetooth"
+  category: "system-service"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-configuration"
+  name: "PToolsConfiguration"
+  swiftpm_product: "PToolsConfiguration"
+  cocoapods_subspec: "Configuration"
+  source: "PooToolsSource/PToolsConfiguration"
+  category: "p2-configuration"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsStorage"
+    - "PToolsStorageCore"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-connectivity"
+  name: "PToolsConnectivity"
+  swiftpm_product: "PToolsConnectivity"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-content-state"
+  name: "PToolsContentState"
+  swiftpm_product: "PToolsContentState"
+  cocoapods_subspec: "ContentState"
+  source: "PooToolsSource/PToolsContentState"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsTheme"
+    - "PToolsAccessibility"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-core"
+  name: "PToolsCore"
+  swiftpm_product: "PToolsCore"
+  cocoapods_subspec: "PToolsCore"
+  source: "PooToolsSource/PToolsCore"
+  category: "foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-date"
+  name: "PToolsDate"
+  swiftpm_product: "PToolsDate"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-deep-link"
+  name: "PToolsDeepLink"
+  swiftpm_product: "PToolsDeepLink"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-device"
+  name: "PToolsDevice"
+  swiftpm_product: "PToolsDevice"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-documents"
+  name: "PToolsDocuments"
+  swiftpm_product: "PToolsDocuments"
+  cocoapods_subspec: "Documents"
+  source: "PooToolsSource/PToolsDocuments"
+  category: "system-service"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-feedback"
+  name: "PToolsFeedback"
+  swiftpm_product: "PToolsFeedback"
+  cocoapods_subspec: "Feedback"
+  source: "PooToolsSource/PToolsFeedback"
+  category: "p2-feedback"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-form"
+  name: "PToolsForm"
+  swiftpm_product: "PToolsForm"
+  cocoapods_subspec: "Form"
+  source: "PooToolsSource/PToolsForm"
+  category: "ui-components"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "ptools"
+    - "PToolsTheme"
+    - "PToolsContentState"
+    - "PToolsAccessibility"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-httpfile-portal"
+  name: "PToolsHTTPFilePortal"
+  swiftpm_product: "PToolsHTTPFilePortal"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-httpserver"
+  name: "PToolsHTTPServer"
+  swiftpm_product: "PToolsHTTPServer"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-logging"
+  name: "PToolsLogging"
+  swiftpm_product: "PToolsLogging"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-notifications"
+  name: "PToolsNotifications"
+  swiftpm_product: "PToolsNotifications"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-overlay"
+  name: "PToolsOverlay"
+  swiftpm_product: "PToolsOverlay"
+  cocoapods_subspec: "Overlay"
+  source: "PooToolsSource/Overlay"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsCore"
+    - "PToolsUIFoundation"
+    - "PToolsLogging"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-permission-core"
+  name: "PToolsPermissionCore"
+  swiftpm_product: "PToolsPermissionCore"
+  cocoapods_subspec: "PToolsPermissionCore"
+  source: "PooToolsSource/PToolsPermissionCore"
+  category: "permission-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-permission-ui"
+  name: "PToolsPermissionUI"
+  swiftpm_product: "PToolsPermissionUI"
+  cocoapods_subspec: "PToolsPermissionUI"
+  source: "PooToolsSource/PToolsPermissionUI"
+  category: "permission-ui"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsPermissionCore"
+    - "PToolsUIFoundation"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-route-core"
+  name: "PToolsRouteCore"
+  swiftpm_product: "PToolsRouteCore"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-simulation"
+  name: "PToolsSimulation"
+  swiftpm_product: "PToolsSimulation"
+  cocoapods_subspec: "Simulation"
+  source: "PooToolsSource/PToolsSimulation"
+  category: "simulation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsSimulationCore"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-simulation-core"
+  name: "PToolsSimulationCore"
+  swiftpm_product: "PToolsSimulationCore"
+  cocoapods_subspec: "SimulationCore"
+  source: "PooToolsSource/PToolsSimulationCore"
+  category: "simulation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-storage"
+  name: "PToolsStorage"
+  swiftpm_product: "PToolsStorage"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-storage-core"
+  name: "PToolsStorageCore"
+  swiftpm_product: "PToolsStorageCore"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-symbols"
+  name: "PToolsSymbols"
+  swiftpm_product: "PToolsSymbols"
+  cocoapods_subspec: "Symbols"
+  source: "PooToolsSource/PToolsSymbols"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-theme"
+  name: "PToolsTheme"
+  swiftpm_product: "PToolsTheme"
+  cocoapods_subspec: "Theme"
+  source: "PooToolsSource/PToolsTheme"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsUIFoundation"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-uifoundation"
+  name: "PToolsUIFoundation"
+  swiftpm_product: "PToolsUIFoundation"
+  cocoapods_subspec: "PToolsUIFoundation"
+  source: "PooToolsSource/PToolsUIFoundation"
+  category: "ui-foundation"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "SnapKit"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-widget-core"
+  name: "PToolsWidgetCore"
+  swiftpm_product: "PToolsWidgetCore"
+  cocoapods_subspec: "WidgetCore"
+  source: "PooToolsSource/PToolsWidgetCore"
+  category: "p2-extension"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsStorage"
+    - "PToolsStorageCore"
+    - "PToolsRouteCore"
+    - "PToolsDeepLink"
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptreminders-permission"
+  name: "PTRemindersPermission"
+  swiftpm_product: "PTRemindersPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptsiri-permission"
+  name: "PTSiriPermission"
+  swiftpm_product: "PTSiriPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptspeech-permission"
+  name: "PTSpeechPermission"
+  swiftpm_product: "PTSpeechPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "pttracking-permission"
+  name: "PTTrackingPermission"
+  swiftpm_product: "PTTrackingPermission"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "reminders-permission"
+  name: "RemindersPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "RemindersPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "route-core"
+  name: "RouteCore"
+  swiftpm_product: ""
+  cocoapods_subspec: "RouteCore"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "router"
+  name: "Router"
+  swiftpm_product: ""
+  cocoapods_subspec: "Router"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "scan-qrcode"
+  name: "ScanQRCode"
+  swiftpm_product: ""
+  cocoapods_subspec: "ScanQRCode"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "scroll-banner"
+  name: "ScrollBanner"
+  swiftpm_product: ""
+  cocoapods_subspec: "ScrollBanner"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "search"
+  name: "Search"
+  swiftpm_product: ""
+  cocoapods_subspec: "Search"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "search-bar"
+  name: "SearchBar"
+  swiftpm_product: ""
+  cocoapods_subspec: "SearchBar"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "security"
+  name: "Security"
+  swiftpm_product: ""
+  cocoapods_subspec: "Security"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "security-suite"
+  name: "SecuritySuite"
+  swiftpm_product: ""
+  cocoapods_subspec: "SecuritySuite"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "segmented"
+  name: "Segmented"
+  swiftpm_product: ""
+  cocoapods_subspec: "Segmented"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "share"
+  name: "Share"
+  swiftpm_product: ""
+  cocoapods_subspec: "Share"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "siri-permission"
+  name: "SiriPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "SiriPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "smart-screenshot"
+  name: "SmartScreenshot"
+  swiftpm_product: ""
+  cocoapods_subspec: "SmartScreenshot"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "socket-kit"
+  name: "SocketKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "SocketKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "speech-recognizer-permission"
+  name: "SpeechRecognizerPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "SpeechRecognizerPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "speed-panel"
+  name: "SpeedPanel"
+  swiftpm_product: ""
+  cocoapods_subspec: "SpeedPanel"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "step-count"
+  name: "StepCount"
+  swiftpm_product: ""
+  cocoapods_subspec: "StepCount"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "stepper"
+  name: "Stepper"
+  swiftpm_product: ""
+  cocoapods_subspec: "Stepper"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "storage"
+  name: "Storage"
+  swiftpm_product: ""
+  cocoapods_subspec: "Storage"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "storage-core"
+  name: "StorageCore"
+  swiftpm_product: ""
+  cocoapods_subspec: "StorageCore"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "svg"
+  name: "SVG"
+  swiftpm_product: ""
+  cocoapods_subspec: "SVG"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "svga"
+  name: "SVGA"
+  swiftpm_product: ""
+  cocoapods_subspec: "SVGA"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "tabbar"
+  name: "Tabbar"
+  swiftpm_product: ""
+  cocoapods_subspec: "Tabbar"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "telephony"
+  name: "Telephony"
+  swiftpm_product: ""
+  cocoapods_subspec: "Telephony"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "tips-view"
+  name: "TipsView"
+  swiftpm_product: ""
+  cocoapods_subspec: "TipsView"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "tracking-permission"
+  name: "TrackingPermission"
+  swiftpm_product: ""
+  cocoapods_subspec: "TrackingPermission"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "video-cache"
+  name: "VideoCache"
+  swiftpm_product: ""
+  cocoapods_subspec: "VideoCache"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "vision"
+  name: "Vision"
+  swiftpm_product: ""
+  cocoapods_subspec: "Vision"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "web-kit"
+  name: "WebKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "WebKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "whats-news-kit"
+  name: "WhatsNewsKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "WhatsNewsKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "zip-archive"
+  name: "ZipArchive"
+  swiftpm_product: ""
+  cocoapods_subspec: "ZipArchive"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true

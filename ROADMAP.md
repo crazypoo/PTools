@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.36.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.56.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.36.1` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.56.1` 为当前开发基线，尚未创建正式 tag。
+
+## 5.56.1 文档、脚本、数据资产与测试治理
+
+- ✅ 以 `Scripts/Docs/audit_docs.py` 建立文档、模块、脚本、JSON/YAML 数据资产和测试 target 的统一盘点入口。
+- ✅ 建立 `docs/_meta` canonical registry、三语文档索引、正式模块三语使用指南和 `report/*` 生成清单。
+- ✅ 建立 ACTIVE / ARCHIVED / GENERATED / DELETED 生命周期、术语表、provenance、测试执行 lane 和 GitHub Governance workflow。
+- ✅ 保留历史计划的 Git 追溯能力，不机械复制或删除；版本推进到 `5.56.1`。
+- [ ] 完成真实宿主、扩展 target、真机和远程 CI 的最终验收后，再创建 `5.56.1` 正式 tag。
 
 ## 5.36.1 P0/P1/P2 收口
 

@@ -1,8 +1,13 @@
 # PTools 文档导航
 
+当前版本：`5.56.1`。文档、模块、脚本、数据资产和测试清单的唯一治理入口是
+[三语文档索引](index/README.zh-Hans.md) 与 `Scripts/Docs/audit_docs.py`。
+
 ## 使用者
 
 - [模块选择与安装](guides/MODULES.md)
+- [三语文档索引](index/README.zh-Hans.md)
+- [三语模块索引](index/MODULES.zh-Hans.md)
 - [5.17 UI Components / Utility 结账清单](ui/UI_COMPONENTS_5_17.md)
 - [5.36 P2 Modern Extensions 指南](guides/PTOOLS_P2_MODERN_EXTENSIONS.md)
 - [Example 页面与回归入口](guides/EXAMPLE.md)
@@ -24,6 +29,8 @@
 - [质量与验收方法](maintainers/QUALITY.md)
 - [测试矩阵](maintainers/TEST_MATRIX.md)
 - [模块结账清单](maintainers/MODULE_CHECKLIST.md)
+- [测试架构治理](maintainers/TEST_GOVERNANCE.md)
+- [文档与仓库资产治理](maintenance/DOCUMENTATION_AND_ASSET_GOVERNANCE.md)
 - [Public API baseline](../api-baseline/README.md)
 
 ## 项目入口

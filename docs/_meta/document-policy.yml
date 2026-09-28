@@ -1,0 +1,16 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Document lifecycle policy.
+-
+  status: "ACTIVE"
+  meaning: "Current guidance that must be maintained"
+-
+  status: "ARCHIVED"
+  meaning: "Historical decision material kept outside the active index"
+-
+  status: "GENERATED"
+  meaning: "Produced by a canonical script and not edited by hand"
+-
+  status: "DELETED"
+  meaning: "Removed after consumer and history review"

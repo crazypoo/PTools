@@ -1,0 +1,25 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Generated asset provenance and stable command contract.
+-
+  generator: "Scripts/Docs/audit_docs.py"
+  outputs:
+    - "docs/_meta"
+    - "docs/index"
+    - "docs/modules"
+    - "report/docs"
+    - "report/scripts"
+    - "report/data"
+    - "report/tests"
+-
+  source: "Package.swift"
+  consumers:
+    - "docs/_meta/modules.yml"
+    - "report/docs/DOCUMENT_INVENTORY.json"
+    - "report/tests/TEST_INVENTORY.json"
+-
+  source: "PooTools.podspec"
+  consumers:
+    - "docs/_meta/modules.yml"
+    - "report/docs/DOCUMENT_INVENTORY.json"

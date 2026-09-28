@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.36.1`，真机和扩展宿主回归完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.56.1`，文档治理、真机和扩展宿主回归完成前不创建正式 tag。
 
 ## Requirements
 
@@ -78,10 +78,11 @@ Overlay 的 Scene、Anchor、定位和生命周期能力，不创建第三方引
 分段和分页控件从 5.31.1 起提供稳定 ID、动态角标更新、懒加载页面、生命周期、Header/固定 Header、内外层滚动协调、刷新控件和回顶入口。旧 JX 场景迁移请阅读
 [YDShipOrder Paging 教程](docs/migrations/YD_SHIP_ORDER_PTOOLS_PAGING_TUTORIAL.md)。
 
-包入口、直接依赖、测试领域和公开 API 迁移分别见
+包入口、直接依赖、测试领域、文档治理和公开 API 迁移分别见
 [PACKAGE_MATRIX](docs/architecture/PACKAGE_MATRIX.md)、
 [DEPENDENCY_MATRIX](docs/architecture/DEPENDENCY_MATRIX.md)、
-[TEST_MATRIX](docs/maintainers/TEST_MATRIX.md) 和
+[TEST_MATRIX](docs/maintainers/TEST_MATRIX.md)、
+[PTools 文档索引](docs/index/README.zh-Hans.md) 和
 [6.0 迁移说明](docs/migration/MIGRATION_6.md)。
 
 5.35.0 的 P1 高阶能力使用说明见

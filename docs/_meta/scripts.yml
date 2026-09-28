@@ -1,0 +1,748 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Canonical script inventory generated from Scripts/ and root compatibility scripts.
+-
+  path: "Scripts/CI/build_cocoapods_device.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/build_cocoapods_simulator.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_5_36_1_finalization.sh"
+  language: "sh"
+  domain: "CI"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_5_56_1_governance.sh"
+  language: "sh"
+  domain: "CI"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: true
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_devicekit_removed.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_example_source_ownership.rb"
+  language: "rb"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_instructions_architecture.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_instructions_removed.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_jx_paging_removed.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_notification_banner_removed.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_overlay_architecture.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_p0_platform_modules.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_p1_advanced_modules.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_p2_modern_modules.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/check_popovers_removed.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Device/check_unknown_identifiers.py"
+  language: "py"
+  domain: "Device"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Device/diff_device_catalog.py"
+  language: "py"
+  domain: "Device"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Device/generate_device_catalog.py"
+  language: "py"
+  domain: "Device"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Device/update_device_catalog.py"
+  language: "py"
+  domain: "Device"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Device/validate_device_catalog.py"
+  language: "py"
+  domain: "Device"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Docs/audit_docs.py"
+  language: "py"
+  domain: "Docs"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: true
+  action: "KEEP"
+-
+  path: "Scripts/Migration/cleanup_example_source_membership.rb"
+  language: "rb"
+  domain: "Migration"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Symbols/symbol-diff.sh"
+  language: "sh"
+  domain: "Symbols"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Symbols/update-symbols.sh"
+  language: "sh"
+  domain: "Symbols"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Symbols/verify-generated-symbols.sh"
+  language: "sh"
+  domain: "Symbols"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/compare_public_api.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/generate_58_reports.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/generate_dependency_matrix.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/generate_package_matrix.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_accessibility_5_9.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_cache_inventory_5_9.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_cocoapods_subspec_graph.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_concurrency_5_9.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_current_summaries.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_duplicate_entries.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_mainactor_heavy_work.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_public_api_5_8.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_public_api_5_9.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_sendable_exceptions.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_singletons_5_9.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_spm_dependency_graph.rb"
+  language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_514_network_security.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_515_media.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_516_permission.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_517_ui.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_519_package_tests_docs.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_58_contracts.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_592_quality.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_59_contracts.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_api_baseline.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_attributedstring_absorption_5_25.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_branch_dependencies.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_build_entries.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_concurrency_5_19.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_core_boundary_5_12.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_core_source_contract.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_debug_foundation_5_10.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_debug_instruments_5_18.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_dependencies_5_9_6.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_dependency_direction.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_deprecated_inventory.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_docs.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_document_versions.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_file_size_gate.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_gcdwebserver_removal_5_28.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_instruments_5_11.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_lifecycle_5_9.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_localizations.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_logging_5_21.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_logging_5_22.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_logging_foundation_5_20.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_migration_5_9_7.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_module_parity.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_naming_debt.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_network_security.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p1_architecture_closure.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p1_dependency_supply_chain.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p1_performance_registry.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p1_public_api_intent.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p1_standalone_modules.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_p2_performance_closure.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_permission_source_contract.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_quality_scans.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_release.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_search_5_18_1.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_socketrocket_removal_5_27.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_swiftdate_removal_5_26.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_swifterswift_removal.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_symbols_5_24.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_test_matrix.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_ui_5_13_contract.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_xcode_source_warnings.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "paapidetect.sh"
+  language: "sh"
+  domain: "root"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP_REVIEW"

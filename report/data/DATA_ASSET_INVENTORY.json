@@ -1,0 +1,1970 @@
+{
+  "assets": [
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "CI",
+      "path": ".github/FUNDING.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "CI",
+      "path": ".github/workflows/device-catalog-watch.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "CI",
+      "path": ".github/workflows/ptools-governance.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "CI",
+      "path": ".github/workflows/quality.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": ".swiftlint.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": ".vscode/settings.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "Example/Extensions/extension_targets.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/AppIcon.appiconset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_1.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_2.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_3.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_4.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_5.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_6.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_7.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_1.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_2.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_3.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_4.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_5.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_6.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_7.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/DemoImage.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/DemoImageDark.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_aircondition.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_aircondition_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_bed.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_bed_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_closet.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_closet_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_fridge.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_fridge_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_gas.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_gas_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_heater.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_heater_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_sofa.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_sofa_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_televition.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_televition_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_washer.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_washer_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_web.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TagImage/image_web_gray.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/TextImage.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/Images.xcassets/icon_clear.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooTools/camera.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-vision.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-watch.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/homepod.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipad.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/iphone.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipod.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/mac.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/PToolsSymbols/Resources/SFSymbolCatalog.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/NSObject.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Button-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIButton_32-Dark_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIDatePicker_32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Dark_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISlider_32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/BackgroundView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DatePicker-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DropShadow-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/HStack-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Hidden-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/ImageView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Key-UIWindow-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/NavigationBar-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabItem-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabbedView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextField-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Toggle-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIActivityIndicator_32_Dark_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIControl-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UILabel_32-Dark_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIScrollView_32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIToolbar-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UITransitionView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/EmptyView-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/filled-view-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/missing-view-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIWindow-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/VStack-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Webview-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Window-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/app-icon-template.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/keyboardShortcut-32_Normal.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UICollectionViewController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UINavigationController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UIPageViewController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UISearchController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UITabBarController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UITableViewController.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ar-SA.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/bg-BG.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ca-ES.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/cs-CZ.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/da-DK.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/de-DE.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/el-GR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-AU.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-GB.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-IE.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-IN.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-US.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-ZA.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/es-ES.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/es-MX.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fi-FI.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fr-CA.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fr-FR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/he-IL.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hi-IN.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hr-HR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hu-HU.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/id-ID.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/it-IT.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ja-JP.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ko-KR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ms-MY.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nb-NO.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nl-BE.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nl-NL.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/no-NO.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pl-PL.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pt-BR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pt-PT.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ro-RO.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ru-RU.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/sk-SK.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/sv-SE.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/th-TH.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/tr-TR.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/uk-UA.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/vi-VN.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CH.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CN.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-HK.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-TW.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/binoculars.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/binocularsFill.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse-mirrored.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircle.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircleFill.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/exclamationmark.triangle.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/expand.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/info.circle.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-empty.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hidden.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hide-all.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-show-all.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-visible.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Panel/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/concurrency_exception_registry.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/module_registry.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/naming_debt_registry.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/p1_performance_registry.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/p1_public_api_intent.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "CI",
+      "path": "_config.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "api-baseline/5.18.2/public_api.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "api-baseline/5.35.0/public_api.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/cleanup.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/data-assets.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/document-policy.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/glossary.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/languages.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/modules.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/provenance.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/scripts.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "governance-audit",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "docs/_meta/tests.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.10/public_api.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/dependency_direction.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/file_size.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/module_parity.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/public_api.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/public_api_generated.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.8/sendable_exceptions.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/accessibility.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/cache_inventory.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/cocoapods_subspec_graph.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/concurrency.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/public_api.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/public_api_generated.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/baselines/5.9/singletons.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/accessibility.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/cache_inventory.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/cocoapods_subspec_graph.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/concurrency.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/dependency_direction.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/large_files.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/mainactor_heavy_work.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/module_parity.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/public_api.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/sendable_exceptions.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/singletons.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/spm_dependency_graph.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/data/DATA_ASSET_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/docs/DOCUMENT_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/scripts/SCRIPT_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/tests/TEST_INVENTORY.json",
+      "source_of_truth": false
+    }
+  ],
+  "generated_at": "2026-09-28T14:23:07+08:00",
+  "generator": "Scripts/Docs/audit_docs.py",
+  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
+  "version": "5.56.1"
+}

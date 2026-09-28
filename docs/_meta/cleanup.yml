@@ -1,0 +1,16 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Conservative cleanup manifest; destructive actions require a reviewed consumer map.
+-
+  path: "docs/"
+  action: "KEEP_ACTIVE_OR_ARCHIVE"
+  reason: "Move historical plans only after inventory and decision extraction"
+-
+  path: "Scripts/validate_*_5_*.sh"
+  action: "LEGACY_REVIEW"
+  reason: "Keep until canonical governance checks cover their contracts"
+-
+  path: "report/"
+  action: "GENERATED"
+  reason: "Regenerate from stable scripts; do not hand edit"

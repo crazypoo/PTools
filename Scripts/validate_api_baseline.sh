@@ -14,7 +14,28 @@ version="$(tr -d '[:space:]' < VERSION)"
 # English: Ignore malformed or future tags so a development release is compared with a real prior baseline.
 # Español: Ignora etiquetas inválidas o futuras para comparar con una línea base anterior real.
 # 中文：忽略异常或高于当前版本的标签，避免开发版本被错误的未来标签污染。
-latest_tag="$(git tag --list | ruby -e 'require "rubygems"; current = Gem::Version.new(ARGV.fetch(0)); tags = STDIN.readlines(chomp: true).select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }.select { |tag| Gem::Version.new(tag) <= current }; puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")' "$version")"
+latest_tag="$(ruby - "$version" <<'RUBY'
+require "rubygems"
+require "open3"
+
+version = Gem::Version.new(ARGV.fetch(0))
+tags = IO.popen(["git", "tag", "--list"], &:read).lines(chomp: true)
+  .select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }
+  .select { |tag| Gem::Version.new(tag) <= version }
+  .select do |tag|
+    # English: Ignore tags whose embedded VERSION disagrees with the tag name.
+    # Español: Ignora etiquetas cuyo VERSION interno no coincide con el nombre.
+    # 中文：忽略标签名与标签内部 VERSION 不一致的异常标签。
+    begin
+      content, status = Open3.capture2e("git", "show", "#{tag}:VERSION")
+      status.success? && content.strip == tag
+    rescue SystemCallError
+      false
+    end
+  end
+puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")
+RUBY
+)"
 [[ -n "$latest_tag" ]] || { printf 'FAIL: no semantic release tag is available\n' >&2; exit 1; }
 
 baseline_tag="$(ruby - "$repo_root" <<'RUBY'

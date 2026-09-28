@@ -1,0 +1,22 @@
+name: PTools Governance
+
+# English: Keep documentation and repository assets aligned with the manifests.
+# Español: Mantiene la documentación y los activos alineados con los manifests.
+# 中文：保证文档和仓库资产与 manifest 保持一致。
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  governance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit documentation and repository assets
+        run: python3 Scripts/Docs/audit_docs.py --check
+      - name: Run governance gate
+        run: bash Scripts/CI/check_5_56_1_governance.sh
+      - name: Validate SwiftPM manifest
+        run: swift package dump-package > /dev/null

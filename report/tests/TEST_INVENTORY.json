@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-09-28T14:23:07+08:00",
+  "generator": "Scripts/Docs/audit_docs.py",
+  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
+  "tests": [
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsAdvancedTests/PTAdvancedTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsAdvancedTests",
+      "target": "PToolsAdvancedTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsBannerTests/PTBannerQueueTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsBannerTests",
+      "target": "PToolsBannerTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PooToolsCoreTests/PTCoreContractTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PooToolsCoreTests",
+      "target": "PToolsCoreTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsDateTests/PTDateTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsDateTests",
+      "target": "PToolsDateTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsDeviceTests/PTDeviceTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsDeviceTests",
+      "target": "PToolsDeviceTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsHTTPServerTests/PTHTTPParserTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsHTTPServerTests",
+      "target": "PToolsHTTPServerTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsListTests/PTListQualityTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsListTests",
+      "target": "PToolsListTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 2,
+      "files": [
+        "Tests/PToolsLoggingTests/PTLoggingFoundationTests.swift",
+        "Tests/PToolsLoggingTests/PTLoggingPerformanceTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsLoggingTests",
+      "target": "PToolsLoggingTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsMediaTests/PTMediaQualityTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsMediaTests",
+      "target": "PToolsMediaTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsNavigationTests",
+      "target": "PToolsNavigationTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsNetworkTests",
+      "target": "PToolsNetworkTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsP2Tests/PTModernModulesTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsP2Tests",
+      "target": "PToolsP2Tests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsPermissionTests/PTPermissionQualityTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsPermissionTests",
+      "target": "PToolsPermissionTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsPlatformTests/PTPlatformTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsPlatformTests",
+      "target": "PToolsPlatformTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsRichTextTests",
+      "target": "PToolsRichTextTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsSocketKitTests/PTWebSocketContractTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsSocketKitTests",
+      "target": "PToolsSocketKitTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 1,
+      "files": [
+        "Tests/PToolsSymbolsTests/PTSymbolTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsSymbolsTests",
+      "target": "PToolsSymbolsTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 2,
+      "files": [
+        "Tests/PToolsUIFoundationTests/PTCategoryCompatibilityTests.swift",
+        "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsUIFoundationTests",
+      "target": "PToolsUIFoundationTests"
+    }
+  ],
+  "version": "5.56.1"
+}

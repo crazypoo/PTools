@@ -1,0 +1,16 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Technical documentation language policy.
+-
+  code: "zh-Hans"
+  name: "简体中文"
+  role: "translation"
+-
+  code: "en"
+  name: "English"
+  role: "canonical technical source"
+-
+  code: "es"
+  name: "Español"
+  role: "translation"

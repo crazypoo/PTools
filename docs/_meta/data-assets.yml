@@ -1,0 +1,1748 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Repository data asset inventory generated from JSON/YAML assets.
+-
+  path: ".github/FUNDING.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: ".github/workflows/device-catalog-watch.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: ".github/workflows/ptools-governance.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: ".github/workflows/quality.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: ".swiftlint.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: ".vscode/settings.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Example/Extensions/extension_targets.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/AppIcon.appiconset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_1.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_2.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_3.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_4.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_5.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_6.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_normal_7.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_1.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_2.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_3.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_4.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_5.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_6.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/Day/image_day_select_7.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/DemoImage.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/DemoImageDark.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_aircondition.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_aircondition_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_bed.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_bed_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_closet.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_closet_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_fridge.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_fridge_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_gas.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_gas_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_heater.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_heater_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_sofa.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_sofa_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_televition.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_televition_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_washer.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_washer_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_web.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TagImage/image_web_gray.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/TextImage.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/Images.xcassets/icon_clear.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooTools/camera.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-vision.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-watch.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/homepod.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipad.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/iphone.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipod.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/mac.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/PToolsSymbols/Resources/SFSymbolCatalog.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/NSObject.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Button-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIButton_32-Dark_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIDatePicker_32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Dark_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISlider_32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/BackgroundView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DatePicker-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DropShadow-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/HStack-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Hidden-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/ImageView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Key-UIWindow-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/NavigationBar-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabItem-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabbedView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextField-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Toggle-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIActivityIndicator_32_Dark_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIControl-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UILabel_32-Dark_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIScrollView_32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIToolbar-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UITransitionView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/EmptyView-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/filled-view-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/missing-view-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIWindow-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/VStack-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Webview-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Window-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/app-icon-template.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/keyboardShortcut-32_Normal.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UICollectionViewController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UINavigationController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UIPageViewController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UISearchController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UITabBarController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/ElementLibrary.xcassets/UITableViewController.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ar-SA.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/bg-BG.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ca-ES.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/cs-CZ.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/da-DK.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/de-DE.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/el-GR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-AU.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-GB.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-IE.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-IN.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-US.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/en-ZA.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/es-ES.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/es-MX.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/fi-FI.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/fr-CA.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/fr-FR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/he-IL.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/hi-IN.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/hr-HR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/hu-HU.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/id-ID.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/it-IT.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ja-JP.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ko-KR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ms-MY.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/nb-NO.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/nl-BE.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/nl-NL.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/no-NO.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/pl-PL.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/pt-BR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/pt-PT.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ro-RO.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/ru-RU.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/sk-SK.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/sv-SE.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/th-TH.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/tr-TR.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/uk-UA.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/vi-VN.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CH.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CN.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/zh-HK.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/OSSKitImages.xcassets/zh-TW.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/binoculars.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/binocularsFill.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse-mirrored.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircle.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircleFill.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/exclamationmark.triangle.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/expand.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Generic/info.circle.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-empty.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hidden.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hide-all.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-show-all.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-visible.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Panel/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/concurrency_exception_registry.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/module_registry.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/naming_debt_registry.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/p1_performance_registry.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/p1_public_api_intent.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "_config.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "api-baseline/5.18.2/public_api.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "api-baseline/5.35.0/public_api.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "docs/_meta/cleanup.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/data-assets.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/document-policy.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/glossary.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/languages.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/modules.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/provenance.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/scripts.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "docs/_meta/tests.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "governance-audit"
+  action: "KEEP"
+-
+  path: "report/baselines/5.10/public_api.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/dependency_direction.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/file_size.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/module_parity.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/public_api.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/public_api_generated.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.8/sendable_exceptions.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/accessibility.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/cache_inventory.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/cocoapods_subspec_graph.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/concurrency.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/public_api.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/public_api_generated.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/baselines/5.9/singletons.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/accessibility.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/cache_inventory.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/cocoapods_subspec_graph.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/concurrency.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/dependency_direction.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/large_files.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/mainactor_heavy_work.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/module_parity.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/public_api.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/sendable_exceptions.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/singletons.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/spm_dependency_graph.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/data/DATA_ASSET_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/docs/DOCUMENT_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/scripts/SCRIPT_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/tests/TEST_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"

@@ -1,0 +1,168 @@
+# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+# Canonical test target registry generated from Package.swift.
+-
+  target: "PToolsAdvancedTests"
+  path: "Tests/PToolsAdvancedTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsAdvancedTests/PTAdvancedTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsBannerTests"
+  path: "Tests/PToolsBannerTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsBannerTests/PTBannerQueueTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsCoreTests"
+  path: "Tests/PooToolsCoreTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PooToolsCoreTests/PTCoreContractTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsDateTests"
+  path: "Tests/PToolsDateTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsDateTests/PTDateTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsDeviceTests"
+  path: "Tests/PToolsDeviceTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsDeviceTests/PTDeviceTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsHTTPServerTests"
+  path: "Tests/PToolsHTTPServerTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsHTTPServerTests/PTHTTPParserTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsListTests"
+  path: "Tests/PToolsListTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsListTests/PTListQualityTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsLoggingTests"
+  path: "Tests/PToolsLoggingTests"
+  level: "CONTRACT"
+  file_count: 2
+  files:
+    - "Tests/PToolsLoggingTests/PTLoggingFoundationTests.swift"
+    - "Tests/PToolsLoggingTests/PTLoggingPerformanceTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsMediaTests"
+  path: "Tests/PToolsMediaTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsMediaTests/PTMediaQualityTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsNavigationTests"
+  path: "Tests/PToolsNavigationTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsNetworkTests"
+  path: "Tests/PToolsNetworkTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsP2Tests"
+  path: "Tests/PToolsP2Tests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsP2Tests/PTModernModulesTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsPermissionTests"
+  path: "Tests/PToolsPermissionTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsPermissionTests/PTPermissionQualityTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsPlatformTests"
+  path: "Tests/PToolsPlatformTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsPlatformTests/PTPlatformTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsRichTextTests"
+  path: "Tests/PToolsRichTextTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsSocketKitTests"
+  path: "Tests/PToolsSocketKitTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsSocketKitTests/PTWebSocketContractTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsSymbolsTests"
+  path: "Tests/PToolsSymbolsTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsSymbolsTests/PTSymbolTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsUIFoundationTests"
+  path: "Tests/PToolsUIFoundationTests"
+  level: "CONTRACT"
+  file_count: 2
+  files:
+    - "Tests/PToolsUIFoundationTests/PTCategoryCompatibilityTests.swift"
+    - "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift"
+  canonical: true
+  action: "KEEP"

@@ -22,11 +22,23 @@ pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(S
 # 中文：校验当前开发线时忽略未来版本或仓库中的错误标签。
 latest_tag="$(ruby - "$version" <<'RUBY'
 require "rubygems"
+require "open3"
 
 version = Gem::Version.new(ARGV.fetch(0))
 tags = IO.popen(["git", "tag", "--list"], &:read).lines(chomp: true)
   .select { |tag| tag.match?(%r{\A\d+\.\d+\.\d+\z}) }
   .select { |tag| Gem::Version.new(tag) <= version }
+  .select do |tag|
+    # English: A formal tag must contain the same VERSION as its tag name.
+    # Español: Una etiqueta formal debe contener el mismo VERSION que su nombre.
+    # 中文：正式标签必须与标签内部的 VERSION 完全一致。
+    begin
+      content, status = Open3.capture2e("git", "show", "#{tag}:VERSION")
+      status.success? && content.strip == tag
+    rescue SystemCallError
+      false
+    end
+  end
 puts(tags.max_by { |tag| Gem::Version.new(tag) } || "")
 RUBY
 )"

@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-# English: Enforce the final 5.22+ logging dependency and compatibility boundary through 5.35.
-# Español: Refuerza el límite final de dependencias y compatibilidad de logging desde 5.22 hasta 5.35.
-# 中文：强制执行 5.22 至 5.35 日志依赖和兼容层的最终边界。
+# English: Enforce the final logging dependency and compatibility boundary across 5.x.
+# Español: Refuerza el límite final de dependencias y compatibilidad de logging en 5.x.
+# 中文：强制执行 5.x 日志依赖和兼容层的最终边界。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 version="$(tr -d '[:space:]' < VERSION)"
-[[ "$version" =~ ^5\.(22|23|24|25|26|27|28|29|30|31|32|33|34|35|36)\.[0-9]+$ ]] || {
-  printf 'FAIL: 5.22+ logging closure requires a 5.22.x through 5.36.x VERSION, got %s\n' "$version" >&2
+[[ "$version" =~ ^5\.[0-9]+\.[0-9]+$ ]] || {
+  printf 'FAIL: logging closure requires a 5.x VERSION, got %s\n' "$version" >&2
   exit 1
 }
 
@@ -78,4 +78,4 @@ done
 # 中文：历史文件管理器符号只能作为仅调用 PTLogger 的兼容适配器保留。
 
 git diff --check
-printf 'PASS: PTools 5.22+ logging dependency removal, compatibility closure and backend parity through 5.36\n'
+printf 'PASS: PTools 5.x logging dependency removal, compatibility closure and backend parity\n'
