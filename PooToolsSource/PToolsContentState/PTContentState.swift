@@ -124,14 +124,23 @@ public final class PTContentStateView: UIView {
 
     public func render(_ state: PTContentStateDisplay) {
         displayState = state
-        contentHost.isHidden = state == .idle || state == .loading || state == .empty || state == .error
-        activityIndicator.isHidden = state != .loading
+        switch state {
+        case .idle, .loading, .empty, .error:
+            contentHost.isHidden = true
+        case .content, .offline:
+            contentHost.isHidden = false
+        }
+        if case .loading = state {
+            activityIndicator.isHidden = false
+        } else {
+            activityIndicator.isHidden = true
+        }
         titleLabel.isHidden = true; messageLabel.isHidden = true; retryButton.isHidden = true; offlineLabel.isHidden = true
         switch state {
         case .idle, .content:
             break
         case .loading:
-            activityIndicator.startAnimating()
+            break
         case .empty(let empty):
             titleLabel.text = empty.title; messageLabel.text = empty.message; retryButton.setTitle(empty.actionTitle, for: .normal)
             titleLabel.isHidden = false; messageLabel.isHidden = empty.message == nil; retryButton.isHidden = empty.actionTitle == nil
@@ -142,7 +151,11 @@ public final class PTContentStateView: UIView {
             offlineLabel.text = "Offline"
             offlineLabel.isHidden = false
         }
-        if state != .loading { activityIndicator.stopAnimating() }
+        if case .loading = state {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
     }
 
     public func render<Content: Sendable>(_ state: PTContentState<Content>) { render(state.display) }

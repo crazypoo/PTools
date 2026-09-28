@@ -2,10 +2,10 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency_5_9.rb",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:02:14Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:32:07Z",
   "counts": {
-    "main_queue_async": 29,
+    "main_queue_async": 27,
     "task_detached": 29,
     "unchecked_sendable": 69,
     "as_bang": 4
@@ -43,14 +43,8 @@
     },
     {
       "rule": "main_queue_async",
-      "path": "PooToolsSource/Base/PTPlayerViewController.swift",
-      "line": 141,
-      "text": "DispatchQueue.main.async {"
-    },
-    {
-      "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1063,
+      "line": 1072,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -122,13 +116,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 294,
+      "line": 297,
       "text": "DispatchQueue.main.async { completion(nil) }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "line": 309,
+      "line": 312,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -598,12 +592,6 @@
       "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
       "line": 257,
       "text": "tokenTask = Task.detached(priority: nil) { [weak self, activityBox] in"
-    },
-    {
-      "rule": "main_queue_async",
-      "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 579,
-      "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
       "rule": "unchecked_sendable",

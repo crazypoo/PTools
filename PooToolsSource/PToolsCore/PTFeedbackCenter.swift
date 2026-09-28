@@ -8,8 +8,13 @@ public enum PTFeedbackSignal: String, Codable, Hashable, Sendable {
     case selectionChanged
     case actionConfirmed
     case actionRejected
+    case navigation
+    case toggle
+    case submit
+    case validationFailure
     case warning
     case success
+    case error
     case destructive
 }
 

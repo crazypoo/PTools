@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:02:46Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:32:41Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -16,7 +16,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift",
-      "lines": 569,
+      "lines": 574,
       "classification": "ok"
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "lines": 1305,
+      "lines": 1309,
       "classification": "warning"
     },
     {
@@ -211,7 +211,7 @@
     },
     {
       "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
-      "lines": 553,
+      "lines": 555,
       "classification": "ok"
     },
     {
@@ -236,7 +236,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseButton.swift",
-      "lines": 95,
+      "lines": 124,
       "classification": "ok"
     },
     {
@@ -261,7 +261,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseNavControl.swift",
-      "lines": 165,
+      "lines": 171,
       "classification": "ok"
     },
     {
@@ -396,7 +396,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTPlayerViewController.swift",
-      "lines": 245,
+      "lines": 249,
       "classification": "ok"
     },
     {
@@ -406,7 +406,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 1301,
+      "lines": 1310,
       "classification": "warning"
     },
     {
@@ -466,7 +466,7 @@
     },
     {
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "lines": 649,
+      "lines": 713,
       "classification": "ok"
     },
     {
@@ -801,7 +801,7 @@
     },
     {
       "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
-      "lines": 438,
+      "lines": 451,
       "classification": "ok"
     },
     {
@@ -1211,7 +1211,12 @@
     },
     {
       "path": "PooToolsSource/Core/PTBaseModel.swift",
-      "lines": 141,
+      "lines": 148,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Core/PTControlLoadingCoordinator.swift",
+      "lines": 79,
       "classification": "ok"
     },
     {
@@ -1986,7 +1991,7 @@
     },
     {
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "lines": 124,
+      "lines": 125,
       "classification": "ok"
     },
     {
@@ -3951,12 +3956,17 @@
     },
     {
       "path": "PooToolsSource/PDF/PTPDFManager.swift",
-      "lines": 169,
+      "lines": 172,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PDF/PTPDFPreviewController.swift",
+      "lines": 49,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PDF/PTViewToPDF.swift",
-      "lines": 56,
+      "lines": 59,
       "classification": "ok"
     },
     {
@@ -4006,12 +4016,12 @@
     },
     {
       "path": "PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift",
-      "lines": 37,
+      "lines": 46,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsContentState/PTContentState.swift",
-      "lines": 210,
+      "lines": 223,
       "classification": "ok"
     },
     {
@@ -4041,7 +4051,7 @@
     },
     {
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
-      "lines": 30,
+      "lines": 35,
       "classification": "ok"
     },
     {
@@ -4145,23 +4155,38 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsDocuments/PTDocumentPDFAdapters.swift",
+      "lines": 54,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsDocuments/PTDocumentPDFBridge.swift",
       "lines": 58,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsDocuments/PTDocuments.swift",
-      "lines": 145,
+      "lines": 265,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "lines": 220,
+      "lines": 233,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "lines": 588,
+      "lines": 599,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "lines": 421,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
+      "lines": 97,
       "classification": "ok"
     },
     {
@@ -4326,7 +4351,7 @@
     },
     {
       "path": "PooToolsSource/PToolsTheme/PTTheme.swift",
-      "lines": 300,
+      "lines": 302,
       "classification": "ok"
     },
     {
@@ -4406,7 +4431,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionSettingCell.swift",
-      "lines": 169,
+      "lines": 167,
       "classification": "ok"
     },
     {
@@ -4491,7 +4516,7 @@
     },
     {
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "lines": 1389,
+      "lines": 1399,
       "classification": "warning"
     },
     {
@@ -4531,7 +4556,7 @@
     },
     {
       "path": "PooToolsSource/Popover/PTPopover.swift",
-      "lines": 826,
+      "lines": 832,
       "classification": "ok"
     },
     {
@@ -4896,7 +4921,7 @@
     },
     {
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "lines": 681,
+      "lines": 683,
       "classification": "ok"
     },
     {

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "ac67833be8eb3a4e7c1fdf707677f98ce1722d5e",
-  "generated_at": "2026-09-28T02:34:23Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:31:55Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -372,6 +372,32 @@
       ]
     },
     {
+      "module": "Form",
+      "field": "internal_dependencies",
+      "spm": [
+        "Accessibility",
+        "CheckBox",
+        "ContentState",
+        "Core",
+        "PToolsCore",
+        "Picker",
+        "Slider",
+        "Theme"
+      ],
+      "cocoapods": [
+        "Accessibility",
+        "CheckBox",
+        "ContentState",
+        "Core",
+        "Input",
+        "PToolsCore",
+        "Picker",
+        "Slider",
+        "Stepper",
+        "Theme"
+      ]
+    },
+    {
       "module": "ImageEditor",
       "field": "third_party_dependencies",
       "spm": [
@@ -439,6 +465,19 @@
         "SnapKit"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "Popover",
+      "field": "internal_dependencies",
+      "spm": [
+        "Overlay",
+        "PToolsCore",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "Overlay",
+        "Symbols"
+      ]
     },
     {
       "module": "RateView",
@@ -535,7 +574,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -549,7 +587,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -566,7 +603,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -583,7 +619,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -600,7 +635,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -620,7 +654,6 @@
           "POOTOOLS_COCOAPODS"
         ],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -637,7 +670,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -705,7 +737,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -722,7 +753,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -757,7 +787,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -781,7 +810,6 @@
           "POOTOOLS_VIDEOCACHE"
         ],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -799,7 +827,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -816,7 +843,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -830,7 +856,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -862,7 +887,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -879,7 +903,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -893,7 +916,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -907,7 +929,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -942,7 +963,6 @@
           "POOTOOLS_INSTRUCTIONS"
         ],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -977,7 +997,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -994,7 +1013,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1077,7 +1095,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1097,7 +1114,6 @@
           "POOTOOLS_OVERLAY"
         ],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1114,7 +1130,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1128,7 +1143,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1142,7 +1156,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1156,7 +1169,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1173,7 +1185,6 @@
           "POOTOOLS_POPOVER"
         ],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1208,7 +1219,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1225,7 +1235,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1239,7 +1248,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1289,7 +1297,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1306,7 +1313,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1323,7 +1329,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1337,7 +1342,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1369,7 +1373,6 @@
       "spm": {
         "defines": [],
         "upcoming_features": [
-          "InferSendableFromCaptures",
           "StrictConcurrency"
         ]
       },
@@ -1383,5 +1386,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "7844f6139b32220a3013b4f7afc0ca195214e0615840655bb2772e9b7854769e"
+  "fingerprint": "91ed851f55bd3779906738d99589edcc75ba0e74d1597edbf1e1810e70cfb0f3"
 }

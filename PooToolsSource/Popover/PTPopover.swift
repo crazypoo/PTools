@@ -3,6 +3,9 @@
 // 中文：基于共享 OverlayCore 2.0 的 UIKit 原生锚点浮层。
 
 import UIKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 #if canImport(PToolsOverlay)
 import PToolsOverlay
 #endif
@@ -430,7 +433,10 @@ public final class PTPopoverCenter {
         case let .menu(menu):
             let view = PTContextMenuView(menu: menu,
                                          maxHeight: record.popover.configuration.maxMenuHeight)
-            view.onSelect = { item in item.action() }
+            view.onSelect = { item in
+                PTFeedbackCenter.shared.emit(item.state == .destructive ? .destructive : .selectionChanged)
+                item.action()
+            }
             record.surface.setContentView(view)
         }
         return record.surface.contentView != nil

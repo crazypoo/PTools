@@ -12,7 +12,7 @@ category: "permission-ui"
 last_reviewed: "2026-09-28"
 canonical: false
 canonical_source: "README.en.md"
-documentation_version: "5.56.1"
+documentation_version: "5.56.2"
 ---
 
 # PToolsPermissionUI

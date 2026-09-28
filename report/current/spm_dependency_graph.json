@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:03:22Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:33:28Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -2637,14 +2637,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -2662,14 +2654,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -2760,14 +2744,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -2797,14 +2773,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -2840,14 +2808,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -2865,14 +2825,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -2919,14 +2871,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -2970,14 +2914,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -2995,14 +2931,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3071,14 +2999,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -3096,14 +3016,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3147,14 +3059,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3213,14 +3117,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -3238,14 +3134,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3285,18 +3173,22 @@
       "path": "PooToolsSource/PToolsDocuments",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsPDF",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPDF",
+              null
+            ]
+          }
+        }
+      ],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3329,14 +3221,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3377,12 +3261,56 @@
           }
         },
         {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsTheme",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
               "PToolsTheme",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsCheckBox",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsCheckBox",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsPicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsSlider",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSlider",
               null
             ]
           }
@@ -3402,14 +3330,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3452,14 +3372,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -3477,14 +3389,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3528,14 +3432,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -3576,14 +3472,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3722,14 +3610,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -3793,14 +3673,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_OVERLAY"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
             }
           },
           "tool": "swift"
@@ -3878,12 +3750,34 @@
           }
         },
         {
+          "name": "PToolsDocuments",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDocuments",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsFeedback",
           "kind": "internal",
           "package": null,
           "declaration": {
             "byName": [
               "PToolsFeedback",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsForm",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsForm",
               null
             ]
           }
@@ -3909,19 +3803,22 @@
               null
             ]
           }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
         }
       ],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -3942,14 +3839,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4016,14 +3905,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4125,14 +4006,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -4173,14 +4046,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4260,14 +4125,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -4285,14 +4142,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4362,14 +4211,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -4387,14 +4228,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4422,14 +4255,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4488,14 +4313,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -4537,14 +4354,6 @@
       ],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -4636,14 +4445,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -4699,6 +4500,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsLogging",
           "kind": "internal",
           "package": null,
@@ -4747,14 +4559,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_COCOAPODS"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
             }
           },
           "tool": "swift"
@@ -6121,14 +5925,6 @@
         {
           "kind": {
             "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
               "_0": "StrictConcurrency"
             }
           },
@@ -6437,14 +6233,6 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
-            }
-          },
-          "tool": "swift"
-        },
         {
           "kind": {
             "enableUpcomingFeature": {
@@ -7174,6 +6962,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsOverlay",
           "kind": "internal",
           "package": null,
@@ -7211,14 +7010,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_POPOVER"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
             }
           },
           "tool": "swift"
@@ -8615,14 +8406,6 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_VIDEOCACHE"
-            }
-          },
-          "tool": "swift"
-        },
-        {
-          "kind": {
-            "enableUpcomingFeature": {
-              "_0": "InferSendableFromCaptures"
             }
           },
           "tool": "swift"

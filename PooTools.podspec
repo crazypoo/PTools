@@ -80,6 +80,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Overlay'
         subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/Logging'
+        subspec.dependency 'PooTools/PToolsCore'
         subspec.source_files = 'PooToolsSource/Banner/**/*.{h,m,swift}'
         subspec.frameworks = 'UIKit', 'Foundation'
         subspec.pod_target_xcconfig = {
@@ -216,9 +217,15 @@ Pod::Spec.new do |s|
 
     s.subspec 'Form' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Theme'
         subspec.dependency 'PooTools/ContentState'
         subspec.dependency 'PooTools/Accessibility'
+        subspec.dependency 'PooTools/Input'
+        subspec.dependency 'PooTools/Picker'
+        subspec.dependency 'PooTools/CheckBox'
+        subspec.dependency 'PooTools/Slider'
+        subspec.dependency 'PooTools/Stepper'
         subspec.source_files = 'PooToolsSource/PToolsForm/**/*.swift'
         subspec.frameworks = 'Foundation', 'UIKit'
     end
@@ -229,6 +236,7 @@ Pod::Spec.new do |s|
     end
 
     s.subspec 'Documents' do |subspec|
+        subspec.dependency 'PooTools/PDF'
         subspec.source_files = 'PooToolsSource/PToolsDocuments/**/*.swift'
         subspec.frameworks = 'Foundation', 'UIKit', 'UniformTypeIdentifiers', 'QuickLook'
     end
@@ -953,6 +961,7 @@ Pod::Spec.new do |s|
     # Español: Conserva PopoverKit como alias compatible sin la dependencia de terceros eliminada.
     # 中文：保留 PopoverKit 作为兼容别名，但不再依赖已移除的第三方库。
     s.subspec 'PopoverKit' do |subspec|
+        subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Popover'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_POPOVER POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"

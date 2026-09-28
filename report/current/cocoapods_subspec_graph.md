@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: f9b7ba9b774404c88e4e33dd26e4128c43bbbe28
-Generated at: 2026-09-28T07:03:23Z
+Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
+Generated at: 2026-09-28T11:33:29Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.56.1`
+- Podspec: `PooTools` `5.56.2`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -27,7 +27,7 @@ Generated at: 2026-09-28T07:03:23Z
 | `Audio` | `PooTools/MicPermission` | — | `PToolsAudio` | AVFoundation, AudioToolbox, Foundation | — |
 | `BackgroundTasks` | — | — | `PToolsBackgroundTasks` | BackgroundTasks, Foundation | — |
 | `BankCard` | `PooTools/Core` | — | `BankCard` | — | — |
-| `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
+| `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/PToolsCore`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
 | `BilogyID` | `PooTools/BioID` | — | — | — | — |
 | `BioID` | `PooTools/Core`, `PooTools/FaceIDPermission`, `PooTools/KeyChain` | — | `BioID` | LocalAuthentication, Security | — |
 | `Bluetooth` | — | — | `PToolsBluetooth` | CoreBluetooth, Foundation | — |
@@ -56,12 +56,12 @@ Generated at: 2026-09-28T07:03:23Z
 | `Date` | — | — | `PToolsDate` | Foundation | — |
 | `DeepLink` | `PooTools/RouteCore` | — | `PToolsDeepLink` | Foundation | — |
 | `Device` | — | — | `PToolsDevice` | Foundation | — |
-| `Documents` | — | — | `PToolsDocuments` | Foundation, QuickLook, UIKit, UniformTypeIdentifiers | — |
+| `Documents` | `PooTools/PDF` | — | `PToolsDocuments` | Foundation, QuickLook, UIKit, UniformTypeIdentifiers | — |
 | `FaceIDPermission` | `PooTools/PToolsPermissionCore` | — | `FaceIDPermission` | — | — |
 | `Feedback` | `PooTools/PToolsCore` | — | `PToolsFeedback` | CoreHaptics, Foundation, UIKit | — |
 | `FilterCamera` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaViewer`, `PooTools/MicPermission` | — | `FilterCamera` | — | — |
 | `Flag` | `PooTools/Core` | `FlagKit` | — | — | — |
-| `Form` | `PooTools/Accessibility`, `PooTools/ContentState`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsForm` | Foundation, UIKit | — |
+| `Form` | `PooTools/Accessibility`, `PooTools/CheckBox`, `PooTools/ContentState`, `PooTools/Core`, `PooTools/Input`, `PooTools/PToolsCore`, `PooTools/Picker`, `PooTools/Slider`, `PooTools/Stepper`, `PooTools/Theme` | — | `PToolsForm` | Foundation, UIKit | — |
 | `GCDWebServer` | `PooTools/HTTPFilePortal` | — | — | — | — |
 | `Guide` | `PooTools/Core`, `PooTools/PageControl` | — | `Guide` | — | — |
 | `HTTPFilePortal` | `PooTools/HTTPServer` | — | `PToolsHTTPFilePortal` | Foundation | PooToolsSource/PToolsHTTPFilePortal/Resources/**/* |
@@ -115,7 +115,7 @@ Generated at: 2026-09-28T07:03:23Z
 | `Picker` | `PooTools/Core` | — | `Picker` | — | — |
 | `Ping` | `PooTools/Core` | — | `Ping` | — | — |
 | `Popover` | `PooTools/Overlay`, `PooTools/Symbols` | — | `Popover` | — | — |
-| `PopoverKit` | `PooTools/Popover` | — | — | — | — |
+| `PopoverKit` | `PooTools/PToolsCore`, `PooTools/Popover` | — | — | — | — |
 | `ProgressBar` | `PooTools/Core` | — | `ProgressBar` | — | — |
 | `RateView` | `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
 | `RemindersPermission` | `PooTools/PToolsPermissionCore` | — | `RemindersPermission` | — | — |

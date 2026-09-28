@@ -27,8 +27,13 @@ public enum PTFeedbackEvent: Sendable, Hashable {
     case selectionChanged
     case actionConfirmed
     case actionRejected
+    case navigation
+    case toggle
+    case submit
+    case validationFailure
     case warning
     case success
+    case error
     case destructive
     case custom(PTFeedbackPatternID)
 }
@@ -176,17 +181,20 @@ public final class PTHapticEngine {
     private func playUIKit(_ event: PTFeedbackEvent) -> Bool {
 #if canImport(UIKit)
         switch event {
-        case .selectionChanged:
+        case .selectionChanged, .toggle:
             selectionGenerator?.selectionChanged()
             return true
-        case .actionConfirmed, .success:
+        case .actionConfirmed, .submit, .success:
             notificationGenerator?.notificationOccurred(.success)
             return true
-        case .actionRejected, .warning:
+        case .actionRejected, .warning, .validationFailure:
             notificationGenerator?.notificationOccurred(.warning)
             return true
-        case .destructive:
+        case .error, .destructive:
             notificationGenerator?.notificationOccurred(.error)
+            return true
+        case .navigation:
+            impactGenerator?.impactOccurred()
             return true
         case .custom:
             return false
@@ -212,8 +220,13 @@ private extension PTFeedbackEvent {
         case .selectionChanged: self = .selectionChanged
         case .actionConfirmed: self = .actionConfirmed
         case .actionRejected: self = .actionRejected
+        case .navigation: self = .navigation
+        case .toggle: self = .toggle
+        case .submit: self = .submit
+        case .validationFailure: self = .validationFailure
         case .warning: self = .warning
         case .success: self = .success
+        case .error: self = .error
         case .destructive: self = .destructive
         }
     }

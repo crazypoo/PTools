@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:02:33Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:32:29Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -112,6 +112,10 @@
       "destination": "PToolsRouteCore"
     },
     {
+      "source": "PToolsDocuments",
+      "destination": "PooToolsPDF"
+    },
+    {
       "source": "PToolsFeedback",
       "destination": "PToolsCore"
     },
@@ -125,7 +129,23 @@
     },
     {
       "source": "PToolsForm",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsForm",
       "destination": "PToolsTheme"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PooToolsCheckBox"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PooToolsPicker"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PooToolsSlider"
     },
     {
       "source": "PToolsForm",
@@ -218,6 +238,10 @@
     {
       "source": "PooToolsBankCard",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsBanner",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsBanner",
@@ -566,6 +590,10 @@
     {
       "source": "PooToolsPing",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPopover",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsPopover",

@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons_5_9.rb
-Source revision: f9b7ba9b774404c88e4e33dd26e4128c43bbbe28
-Generated at: 2026-09-28T07:02:16Z
+Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
+Generated at: 2026-09-28T11:32:09Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1568**
+- .shared / .share 调用文本计数：**1595**
 - 单例声明计数：**128**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -19,7 +19,7 @@ Generated at: 2026-09-28T07:02:16Z
 | PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:15 | shared | D Shared mutable UI or scene state | public static let shared = PTAlertConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift:147 | shared | D Shared mutable UI or scene state | public static let shared = PTAlertManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift:89 | share | D Shared mutable UI or scene state | public static let share = PTLaunchAdMonitor() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Banner/PTBannerPresenter.swift:411 | shared | C Shared mutable service | public static let shared = PTBannerCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/Banner/PTBannerPresenter.swift:413 | shared | C Shared mutable service | public static let shared = PTBannerCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Base/PTAppBaseConfig.swift:18 | share | D Shared mutable UI or scene state | public static let share = PTAppBaseConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTAudioCache.swift:129 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTAudioCache.swift:197 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
@@ -112,9 +112,9 @@ Generated at: 2026-09-28T07:02:16Z
 | PooToolsSource/PToolsBackgroundTasks/PTBackgroundTasks.swift:89 | shared | C Shared mutable service | public static let shared = PTBackgroundTasks() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PToolsBluetooth/PTBluetooth.swift:361 | shared | C Shared mutable service | public static let shared = PTBluetoothCentral() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PToolsConnectivity/PTConnectivity.swift:102 | shared | C Shared mutable service | public static let shared = PTConnectivityMonitor() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/PToolsCore/PTFeedbackCenter.swift:21 | shared | C Shared mutable service | public static let shared = PTFeedbackCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/PToolsDocuments/PTDocuments.swift:103 | shared | C Shared mutable service | public static let shared = PTDocumentPickerCoordinator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/PToolsFeedback/PTFeedback.swift:67 | shared | C Shared mutable service | public static let shared = PTHapticEngine() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/PToolsCore/PTFeedbackCenter.swift:26 | shared | C Shared mutable service | public static let shared = PTFeedbackCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/PToolsDocuments/PTDocuments.swift:134 | shared | C Shared mutable service | public static let shared = PTDocumentPickerCoordinator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/PToolsFeedback/PTFeedback.swift:72 | shared | C Shared mutable service | public static let shared = PTHapticEngine() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PToolsNotifications/PTNotifications.swift:231 | shared | C Shared mutable service | public static let shared = PTNotificationCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PToolsSimulation/PTSimulation.swift:23 | shared | C Shared mutable service | public static let shared = PTSimulationRuntime(environment: .init()) | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PToolsTheme/PTTheme.swift:283 | shared | C Shared mutable service | public static let shared = PTThemeRegistry() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
@@ -122,9 +122,9 @@ Generated at: 2026-09-28T07:02:16Z
 | PooToolsSource/PermissionCore/PTPermissionViewController.swift:18 | share | C Shared mutable service | public static let share = PTPermissionStatic() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/PhotoPicker/PTMediaLibConfig.swift:206 | share | D Shared mutable UI or scene state | public static let share = PTMediaLibConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/PhotoPicker/PTMediaLibConfig.swift:365 | share | D Shared mutable UI or scene state | public static let share = PTMediaLibUIConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/Picker/PTBasePickerView.swift:129 | shared | D Shared mutable UI or scene state | public static var shared = PTPickerStyle() | 按 Scene 或控制器实例保存；保留兼容入口 |
+| PooToolsSource/Picker/PTBasePickerView.swift:132 | shared | D Shared mutable UI or scene state | public static var shared = PTPickerStyle() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Ping/PTPingActivityIndicator.swift:13 | shared | C Shared mutable service | static let shared = PTPingActivityIndicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Popover/PTPopover.swift:202 | shared | C Shared mutable service | public static let shared = PTPopoverCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/Popover/PTPopover.swift:205 | shared | C Shared mutable service | public static let shared = PTPopoverCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Protocol/PTProtocol.swift:96 | shared | A Stateless convenience or immutable utility | public static let shared = PTAdapterConfig() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Protocol/PTProtocol.swift:122 | share | A Stateless convenience or immutable utility | public static let share = PTNumberValueAdapter() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/Rotation/PTRotationManager.swift:34 | shared | D Shared mutable UI or scene state | public static let shared = PTRotationManager() | 按 Scene 或控制器实例保存；保留兼容入口 |

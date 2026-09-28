@@ -12,6 +12,7 @@ import PToolsUIFoundation
 #endif
 import SnapKit
 
+@MainActor
 public class PTActionLayoutButton: UIControl {
 
     public var actionMargin:CGFloat = 10
@@ -106,6 +107,21 @@ public class PTActionLayoutButton: UIControl {
     private var needsConstraintUpdate: Bool = true
     private var renderedImageToken: String?
     private var isImageLoading = false
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.hidesWhenStopped = true
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    private var loadingIndicatorColor: UIColor = .white
+    private lazy var loadingCoordinator = PTControlLoadingCoordinator(
+        isInteractionEnabled: { [weak self] in self?.isUserInteractionEnabled ?? false },
+        setInteractionEnabled: { [weak self] isEnabled in self?.isUserInteractionEnabled = isEnabled },
+        beginPresentation: { [weak self] in self?.applyLoadingPresentation() },
+        endPresentation: { [weak self] in self?.restoreLoadingPresentation() }
+    )
+
+    public var isLoading: Bool { loadingCoordinator.isLoading }
     
     public override var intrinsicContentSize: CGSize {
         let titleSize = getKitTitleSize(lineSpacing: labelLineSpace)
@@ -145,7 +161,55 @@ public class PTActionLayoutButton: UIControl {
         accessibilityTraits = .button
         updateAppearance()
     }
-    
+
+    /// English: Hides only the action content and keeps the existing layout constraints intact.
+    /// Español: Oculta solo el contenido de acción y conserva las restricciones existentes.
+    /// 中文：只隐藏动作内容，保持现有布局约束不变。
+    private func applyLoadingPresentation() {
+        if loadingIndicator.superview == nil {
+            addSubview(loadingIndicator)
+            loadingIndicator.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
+        }
+        imageView.alpha = 0
+        titleLabel.alpha = 0
+        loadingIndicator.color = loadingIndicatorColor
+        loadingIndicator.startAnimating()
+        accessibilityValue = "Loading"
+        accessibilityTraits.insert(.notEnabled)
+    }
+
+    private func restoreLoadingPresentation() {
+        loadingIndicator.stopAnimating()
+        imageView.alpha = 1
+        titleLabel.alpha = 1
+        accessibilityValue = nil
+        accessibilityTraits.remove(.notEnabled)
+    }
+
+    /// English: Starts loading without changing the UIControl inheritance contract.
+    /// Español: Inicia la carga sin cambiar el contrato de herencia de UIControl.
+    /// 中文：在不改变 UIControl 继承关系的前提下开始加载。
+    public func startLoading(indicatorColor: UIColor = .white) {
+        loadingIndicatorColor = indicatorColor
+        _ = loadingCoordinator.start()
+    }
+
+    public func stopLoading() {
+        loadingCoordinator.stop()
+    }
+
+    @discardableResult
+    public func performAsync(_ operation: @escaping @MainActor @Sendable () async throws -> Void,
+                             completion: @escaping @MainActor @Sendable (Bool) -> Void = { _ in }) -> Task<Void, Never> {
+        loadingCoordinator.perform(operation, completion: completion)
+    }
+
+    public func cancelLoading() {
+        loadingCoordinator.cancel()
+    }
+
     private func setNeedsConstraintUpdate() {
         needsConstraintUpdate = true
         invalidateIntrinsicContentSize()

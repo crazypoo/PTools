@@ -12,7 +12,7 @@ category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: true
 canonical_source: "self"
-documentation_version: "5.56.1"
+documentation_version: "5.56.2"
 ---
 
 # BluetoothPermission

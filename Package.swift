@@ -276,8 +276,7 @@ let package = Package(
             name: "PToolsLogging",
             path: "PooToolsSource/PToolsLogging",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: PToolsCore contains only value types, URL parsing, and Foundation/Objective-C compatibility helpers.
@@ -287,8 +286,7 @@ let package = Package(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: PToolsDevice has no PTools or third-party dependency and is safe to reuse across Apple platforms.
@@ -298,8 +296,7 @@ let package = Package(
             name: "PToolsDevice",
             path: "PooToolsSource/PToolsDevice",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep date semantics independent from UIKit and third-party date libraries.
@@ -309,8 +306,7 @@ let package = Package(
             name: "PToolsDate",
             path: "PooToolsSource/PToolsDate",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: PToolsUIFoundation owns the standalone SnapKit UI helper without changing legacy source paths.
@@ -321,8 +317,7 @@ let package = Package(
             dependencies: ["PToolsCore", "SnapKit"],
             path: "PooToolsSource/PToolsUIFoundation",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep scene, host, window, hit-testing, and transition primitives below feature UI.
@@ -335,8 +330,7 @@ let package = Package(
             swiftSettings: [
                 .define("POOTOOLS_OVERLAY"),
                 .define("POOTOOLS_COCOAPODS"),
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep banner content and queue behavior opt-in on top of OverlayCore.
@@ -344,13 +338,12 @@ let package = Package(
         // 中文：让 Banner 内容和队列能力作为 OverlayCore 之上的可选层。
         .target(
             name: "PooToolsBanner",
-            dependencies: ["PToolsOverlay", "PToolsSymbols", "PToolsLogging"],
+            dependencies: ["PToolsOverlay", "PToolsSymbols", "PToolsLogging", "PToolsCore"],
             path: "PooToolsSource/Banner",
             swiftSettings: [
                 .define("POOTOOLS_BANNER"),
                 .define("POOTOOLS_COCOAPODS"),
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep popover product semantics separate from the shared overlay infrastructure.
@@ -358,13 +351,12 @@ let package = Package(
         // 中文：让 Popover 产品语义与共享浮层基础设施保持分离。
         .target(
             name: "PooToolsPopover",
-            dependencies: ["PToolsOverlay", "PToolsSymbols"],
+            dependencies: ["PToolsOverlay", "PToolsSymbols", "PToolsCore"],
             path: "PooToolsSource/Popover",
             swiftSettings: [
                 .define("POOTOOLS_POPOVER"),
                 .define("POOTOOLS_COCOAPODS"),
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: PToolsSymbols contains only Foundation/UIKit adapters and checked-in catalog data.
@@ -377,8 +369,7 @@ let package = Package(
                 .process("Resources")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep permission state, errors, and request protocols independent from UIKit and feature modules.
@@ -388,8 +379,7 @@ let package = Package(
             name: "PToolsPermissionCore",
             path: "PooToolsSource/PToolsPermissionCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep UIKit-only settings presentation optional and isolated from system permission services.
@@ -400,8 +390,7 @@ let package = Package(
             dependencies: ["PToolsPermissionCore", "PToolsUIFoundation"],
             path: "PooToolsSource/PToolsPermissionUI",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: MediaCore contains only Foundation value contracts and never imports a concrete media framework.
@@ -411,8 +400,7 @@ let package = Package(
             name: "PooToolsMediaCore",
             path: "PooToolsSource/PToolsMediaCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep the HTTP core Foundation/Network-only and strictly Sendable.
@@ -422,8 +410,7 @@ let package = Package(
             name: "PToolsHTTPServer",
             path: "PooToolsSource/PToolsHTTPServer",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ],
             linkerSettings: [
                 .linkedLibrary("z")
@@ -435,8 +422,7 @@ let package = Package(
             path: "PooToolsSource/PToolsHTTPFilePortal",
             resources: [.process("Resources")],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep platform infrastructure below UIKit, Network and Debug.
@@ -446,16 +432,14 @@ let package = Package(
             name: "PToolsConnectivity",
             path: "PooToolsSource/PToolsConnectivity",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         .target(
             name: "PToolsStorageCore",
             path: "PooToolsSource/PToolsStorageCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         .target(
@@ -463,8 +447,7 @@ let package = Package(
             dependencies: ["PToolsStorageCore", "PooToolsKeyChain"],
             path: "PooToolsSource/PToolsStorage",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: RouteCore and DeepLink stay Foundation-only; UIKit presentation is optional.
@@ -474,8 +457,7 @@ let package = Package(
             name: "PToolsRouteCore",
             path: "PooToolsSource/PToolsRouteCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         .target(
@@ -483,8 +465,7 @@ let package = Package(
             dependencies: ["PToolsRouteCore"],
             path: "PooToolsSource/PToolsDeepLink",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         .target(
@@ -492,16 +473,14 @@ let package = Package(
             dependencies: ["PToolsRouteCore", "PTNotificationPermission"],
             path: "PooToolsSource/PToolsNotifications",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         .target(
             name: "PToolsBackgroundTasks",
             path: "PooToolsSource/PToolsBackgroundTasks",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Theme and accessibility depend on UI foundation only; no feature module is pulled upward.
@@ -511,46 +490,47 @@ let package = Package(
             name: "PToolsTheme",
             dependencies: ["PToolsUIFoundation"],
             path: "PooToolsSource/PToolsTheme",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsAccessibility",
             dependencies: ["PToolsUIFoundation"],
             path: "PooToolsSource/PToolsAccessibility",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsContentState",
             dependencies: ["ptools", "PToolsTheme", "PToolsAccessibility", "PToolsConnectivity"],
             path: "PooToolsSource/PToolsContentState",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsForm",
-            dependencies: ["ptools", "PToolsTheme", "PToolsContentState", "PToolsAccessibility"],
+            dependencies: ["ptools", "PToolsCore", "PToolsTheme", "PToolsContentState", "PToolsAccessibility", "PooToolsPicker", "PooToolsCheckBox", "PooToolsSlider"],
             path: "PooToolsSource/PToolsForm",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsBluetooth",
             path: "PooToolsSource/PToolsBluetooth",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsDocuments",
+            dependencies: ["PooToolsPDF"],
             path: "PooToolsSource/PToolsDocuments",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsSimulationCore",
             path: "PooToolsSource/PToolsSimulationCore",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "PToolsSimulation",
             dependencies: ["PToolsSimulationCore", "PToolsConnectivity", "PToolsBluetooth", "PToolsCore", "PToolsDevice"],
             path: "PooToolsSource/PToolsSimulation",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: Configuration uses the existing typed storage actor and remains vendor-neutral.
         // Español: Configuration usa el actor de almacenamiento tipado existente y permanece neutral frente a proveedores.
@@ -559,7 +539,7 @@ let package = Package(
             name: "PToolsConfiguration",
             dependencies: ["PToolsStorage", "PToolsStorageCore"],
             path: "PooToolsSource/PToolsConfiguration",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: Feedback owns only native UIKit and CoreHaptics adapters.
         // Español: Feedback solo contiene adaptadores nativos de UIKit y CoreHaptics.
@@ -568,7 +548,7 @@ let package = Package(
             name: "PToolsFeedback",
             dependencies: ["PToolsCore"],
             path: "PooToolsSource/PToolsFeedback",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: Audio coordinates AVFoundation without becoming a media-player replacement.
         // Español: Audio coordina AVFoundation sin convertirse en un reemplazo de reproductor multimedia.
@@ -577,7 +557,7 @@ let package = Package(
             name: "PToolsAudio",
             dependencies: ["PTMicPermission"],
             path: "PooToolsSource/PToolsAudio",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: AppIntents bridges Apple's static declarations to the Foundation route contract.
         // Español: AppIntents conecta las declaraciones estáticas de Apple con el contrato de rutas de Foundation.
@@ -586,7 +566,7 @@ let package = Package(
             name: "PToolsAppIntents",
             dependencies: ["PToolsRouteCore"],
             path: "PooToolsSource/PToolsAppIntents",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: WidgetCore stays Foundation-first and uses explicit App Group storage identifiers.
         // Español: WidgetCore prioriza Foundation y usa identificadores de almacenamiento App Group explícitos.
@@ -595,7 +575,7 @@ let package = Package(
             name: "PToolsWidgetCore",
             dependencies: ["PToolsStorage", "PToolsStorageCore", "PToolsRouteCore", "PToolsDeepLink"],
             path: "PooToolsSource/PToolsWidgetCore",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: Activities contains only the ActivityKit lifecycle adapter and typed diagnostics.
         // Español: Activities solo contiene el adaptador del ciclo de vida de ActivityKit y diagnósticos tipados.
@@ -603,7 +583,7 @@ let package = Package(
         .target(
             name: "PToolsActivities",
             path: "PooToolsSource/PToolsActivities",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // ==========================================
         // 核心基座模块 (Core)
@@ -648,8 +628,7 @@ let package = Package(
                 .define("POOTOOLS_SPLIT_CORE"),
                 .define("POOTOOLS_SPLIT_UIFOUNDATION"),
                 .define("POOTOOLS_SPLIT_PERMISSION_CORE"),
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
 
@@ -720,7 +699,7 @@ let package = Package(
         // English: Instructions uses the shared overlay host instead of a third-party coach-mark window.
         // Español: Instructions usa el host de overlay compartido en lugar de una ventana de terceros.
         // 中文：Instructions 使用共享 Overlay 容器，不再创建第三方引导窗口。
-        .target(name: "PooToolsInstructions", dependencies: ["PToolsOverlay"], path: "PooToolsSource/Instructions", swiftSettings: [.define("POOTOOLS_INSTRUCTIONS"), .define("POOTOOLS_COCOAPODS"), .enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("InferSendableFromCaptures")]),
+        .target(name: "PooToolsInstructions", dependencies: ["PToolsOverlay"], path: "PooToolsSource/Instructions", swiftSettings: [.define("POOTOOLS_INSTRUCTIONS"), .define("POOTOOLS_COCOAPODS"), .enableUpcomingFeature("StrictConcurrency")]),
         .target(name: "PooToolsInput", dependencies: ["ptools", "PhoneNumberKit"], path: "PooToolsSource/Input", swiftSettings: [.define("POOTOOLS_INPUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyboard", dependencies: ["ptools"], path: "PooToolsSource/Keyboard", swiftSettings: [.define("POOTOOLS_CUSTOMERNUMBERKEYWORD"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyChain", dependencies: [], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
@@ -882,8 +861,7 @@ let package = Package(
             dependencies: ["PToolsHTTPServer"],
             path: "Tests/PToolsHTTPServerTests",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Cover platform contracts without requiring live OS services.
@@ -897,8 +875,7 @@ let package = Package(
             ],
             path: "Tests/PToolsPlatformTests",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep deterministic simulation checks independent from UIKit and live system services.
@@ -909,8 +886,7 @@ let package = Package(
             dependencies: ["PToolsSimulationCore", "PToolsSimulation", "PToolsConnectivity", "PToolsBluetooth", "PToolsCore", "PToolsDevice"],
             path: "Tests/PToolsAdvancedTests",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // English: Keep P2 value-contract checks independent from UIKit and live system services.
@@ -918,11 +894,10 @@ let package = Package(
         // 中文：让 P2 值类型契约测试独立于 UIKit 和真实系统服务。
         .testTarget(
             name: "PToolsP2Tests",
-            dependencies: ["PToolsConfiguration", "PToolsAudio", "PToolsCore", "PToolsFeedback", "PToolsAppIntents", "PToolsWidgetCore", "PToolsActivities", "PToolsRouteCore"],
+            dependencies: ["ptools", "PToolsConfiguration", "PToolsAudio", "PToolsCore", "PToolsFeedback", "PToolsForm", "PToolsDocuments", "PToolsAppIntents", "PToolsWidgetCore", "PToolsActivities", "PToolsRouteCore"],
             path: "Tests/PToolsP2Tests",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures")
+                .enableUpcomingFeature("StrictConcurrency")
             ]
         )
     ],

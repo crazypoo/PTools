@@ -29,6 +29,7 @@ open class PTPlayerViewController: PTBaseViewController {
     }()
     
     private var timeObserverToken: Any?
+    private var playerStatusObservation: NSKeyValueObservation?
     
     // MARK: - Public
     public var videoPlayer: AVPlayer?
@@ -68,6 +69,7 @@ open class PTPlayerViewController: PTBaseViewController {
     }
     
     deinit {
+        playerStatusObservation?.invalidate()
         videoPlayer?.pause()
         videoPlayer = nil
     }
@@ -135,18 +137,20 @@ open class PTPlayerViewController: PTBaseViewController {
         
 #if POOTOOLS_VIDEOCACHE
         if PTAppBaseConfig.share.videoCache {
-            var observer: NSKeyValueObservation?
-            observer = player.currentItem?.observe(\.status, options: [.new, .initial]) { item, _ in
-                if item.status == .readyToPlay {
-                    DispatchQueue.main.async {
+            let observation = player.currentItem?.observe(\.status, options: [.new, .initial]) { [weak self] item, _ in
+                let status = item.status
+                guard status == .readyToPlay || status == .failed else { return }
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    if status == .readyToPlay, let player = self.videoPlayer {
                         self.playerPlay(player: player)
                         player.play()
                     }
-                    observer?.invalidate()
-                } else if item.status == .failed {
-                    observer?.invalidate()
+                    self.playerStatusObservation?.invalidate()
+                    self.playerStatusObservation = nil
                 }
             }
+            playerStatusObservation = observation
         } else {
             playerPlay(player: player)
         }

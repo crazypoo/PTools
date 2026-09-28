@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 @objcMembers
 @MainActor
@@ -58,6 +61,7 @@ open class PTBaseNavControl: UINavigationController {
     open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         topViewController?.addSubStatusBar(for: viewController)
         super.pushViewController(viewController, animated: animated)
+        PTFeedbackCenter.shared.emit(.navigation)
     }
     
     open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -73,8 +77,10 @@ open class PTBaseNavControl: UINavigationController {
     
     @objc public func back() {
         if viewControllers.count > 1 {
+            PTFeedbackCenter.shared.emit(.navigation)
             popViewController(animated: true)
         } else if self.presentingViewController != nil {
+            PTFeedbackCenter.shared.emit(.navigation)
             self.dismiss(animated: true, completion: nil)
         }
     }

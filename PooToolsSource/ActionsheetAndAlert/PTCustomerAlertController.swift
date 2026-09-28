@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 public typealias PTCustomerCustomerBlock = (_ alertCustomerView: UIView) -> Void
 
@@ -831,6 +834,7 @@ public class PTCustomerAlertController: PTAlertController {
 
         isHandlingAction = true
         actionButtons.forEach { $0.isEnabled = false }
+        PTFeedbackCenter.shared.emit(.actionConfirmed)
 
         dismissSelf { [weak self] in
             Task { @MainActor [weak self] in

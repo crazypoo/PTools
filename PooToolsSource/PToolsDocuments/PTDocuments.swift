@@ -20,11 +20,11 @@ public struct PTDocumentRequest: Sendable, Codable, Hashable {
     }
 
     #if canImport(UniformTypeIdentifiers)
-    public init(allowedContentTypes: [UTType] = [.item], allowsMultipleSelection: Bool = false, shouldCopyImportedFiles: Bool = false) {
+    public init(allowedContentTypes: [UTType], allowsMultipleSelection: Bool = false, shouldCopyImportedFiles: Bool = false) {
         self.init(allowedTypeIdentifiers: allowedContentTypes.map(\.identifier), allowsMultipleSelection: allowsMultipleSelection, shouldCopyImportedFiles: shouldCopyImportedFiles)
     }
 
-    public var allowedContentTypes: [UTType] { allowedTypeIdentifiers.compactMap(UTType.init(identifier:)) }
+    public var allowedContentTypes: [UTType] { allowedTypeIdentifiers.compactMap { UTType($0) } }
     #endif
 }
 
@@ -63,13 +63,23 @@ public enum PTDocumentAccess {
 
     public static func makeBookmark(for url: URL, identifier: String = UUID().uuidString) throws -> PTDocumentBookmark {
         guard url.isFileURL else { throw PTDocumentError.invalidURL }
-        let data = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+        #if os(macOS)
+        let options: URL.BookmarkCreationOptions = [.withSecurityScope]
+        #else
+        let options: URL.BookmarkCreationOptions = []
+        #endif
+        let data = try url.bookmarkData(options: options, includingResourceValuesForKeys: nil, relativeTo: nil)
         return PTDocumentBookmark(identifier: identifier, data: data, originalURL: url)
     }
 
     public static func resolve(_ bookmark: PTDocumentBookmark) throws -> (url: URL, isStale: Bool) {
         var stale = false
-        let url = try URL(resolvingBookmarkData: bookmark.data, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &stale)
+        #if os(macOS)
+        let options: URL.BookmarkResolutionOptions = [.withSecurityScope]
+        #else
+        let options: URL.BookmarkResolutionOptions = []
+        #endif
+        let url = try URL(resolvingBookmarkData: bookmark.data, options: options, relativeTo: nil, bookmarkDataIsStale: &stale)
         return (url, stale)
     }
 }
@@ -99,6 +109,27 @@ public enum PTDocumentExport {
 
 #if canImport(UIKit)
 @MainActor
+public final class PTDocumentAccessLease {
+    public let url: URL
+    private var isAccessing = false
+
+    public init(url: URL) {
+        self.url = url
+        if url.isFileURL { isAccessing = url.startAccessingSecurityScopedResource() }
+    }
+
+    public func stop() {
+        guard isAccessing else { return }
+        url.stopAccessingSecurityScopedResource()
+        isAccessing = false
+    }
+
+    deinit {
+        if isAccessing { url.stopAccessingSecurityScopedResource() }
+    }
+}
+
+@MainActor
 public final class PTDocumentPickerCoordinator: NSObject, UIDocumentPickerDelegate {
     public static let shared = PTDocumentPickerCoordinator()
     private weak var presenter: UIViewController?
@@ -126,20 +157,109 @@ public final class PTDocumentPickerCoordinator: NSObject, UIDocumentPickerDelega
 @MainActor
 public final class PTDocumentPreviewController: QLPreviewController, QLPreviewControllerDataSource {
     private let urls: [URL]
-    public init(urls: [URL]) { self.urls = urls; super.init(nibName: nil, bundle: nil); dataSource = self }
-    public required init?(coder: NSCoder) { urls = []; super.init(coder: coder); dataSource = self }
+    private let accessLeases: [PTDocumentAccessLease]
+    public init(urls: [URL]) {
+        self.urls = urls
+        self.accessLeases = urls.map(PTDocumentAccessLease.init)
+        super.init(nibName: nil, bundle: nil)
+        dataSource = self
+    }
+    public required init?(coder: NSCoder) {
+        urls = []
+        accessLeases = []
+        super.init(coder: coder)
+        dataSource = self
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        accessLeases.forEach { $0.stop() }
+    }
     public func numberOfPreviewItems(in controller: QLPreviewController) -> Int { urls.count }
     public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem { urls[index] as NSURL }
 }
 
 @MainActor
+public enum PTDocumentShareResult: Sendable, Equatable {
+    case completed(String?)
+    case cancelled
+    case failed(String)
+}
+
+@MainActor
 public enum PTDocumentShareBridge {
     public static func present(items: [Any], from presenter: UIViewController, sourceView: UIView? = nil) {
+        present(items: items, from: presenter, sourceView: sourceView, sourceRect: nil, barButtonItem: nil, completion: nil)
+    }
+
+    public static func present(items: [Any],
+                               from presenter: UIViewController,
+                               sourceView: UIView? = nil,
+                               sourceRect: CGRect? = nil,
+                               barButtonItem: UIBarButtonItem? = nil,
+                               completion: (@MainActor @Sendable (PTDocumentShareResult) -> Void)? = nil) {
         let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
         if let popover = controller.popoverPresentationController {
-            popover.sourceView = sourceView ?? presenter.view; popover.sourceRect = (sourceView ?? presenter.view).bounds
+            popover.barButtonItem = barButtonItem
+            if barButtonItem == nil {
+                if let view = sourceView ?? presenter.view {
+                    popover.sourceView = view
+                    popover.sourceRect = sourceRect ?? view.bounds
+                } else {
+                    completion?(.failed("分享缺少有效的弹出锚点"))
+                    return
+                }
+            }
+        }
+        controller.completionWithItemsHandler = { activityType, completed, _, error in
+            let result: PTDocumentShareResult
+            if let error { result = .failed(error.localizedDescription) }
+            else if completed { result = .completed(activityType?.rawValue) }
+            else { result = .cancelled }
+            Task { @MainActor in completion?(result) }
         }
         presenter.present(controller, animated: true)
+    }
+
+    public static func present(documents: [PTDocumentSelection],
+                               from presenter: UIViewController,
+                               sourceView: UIView? = nil,
+                               sourceRect: CGRect? = nil,
+                               barButtonItem: UIBarButtonItem? = nil,
+                               completion: (@MainActor @Sendable (PTDocumentShareResult) -> Void)? = nil) {
+        let leases = documents.map { PTDocumentAccessLease(url: $0.url) }
+        let controller = UIActivityViewController(activityItems: documents.map(\.url), applicationActivities: nil)
+        if let popover = controller.popoverPresentationController {
+            popover.barButtonItem = barButtonItem
+            if barButtonItem == nil {
+                if let view = sourceView ?? presenter.view {
+                    popover.sourceView = view
+                    popover.sourceRect = sourceRect ?? view.bounds
+                } else {
+                    completion?(.failed("分享缺少有效的弹出锚点"))
+                    leases.forEach { $0.stop() }
+                    return
+                }
+            }
+        }
+        controller.completionWithItemsHandler = { activityType, completed, _, error in
+            let result: PTDocumentShareResult
+            if let error { result = .failed(error.localizedDescription) }
+            else if completed { result = .completed(activityType?.rawValue) }
+            else { result = .cancelled }
+            Task { @MainActor in
+                completion?(result)
+                leases.forEach { $0.stop() }
+            }
+        }
+        presenter.present(controller, animated: true)
+    }
+
+    public static func present(document: PTDocumentSelection,
+                               from presenter: UIViewController,
+                               sourceView: UIView? = nil,
+                               completion: (@MainActor @Sendable (PTDocumentShareResult) -> Void)? = nil) {
+        present(documents: [document], from: presenter, sourceView: sourceView, completion: completion)
     }
 }
 #endif

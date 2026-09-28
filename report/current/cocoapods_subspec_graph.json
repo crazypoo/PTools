@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:03:23Z",
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:33:29Z",
   "name": "PooTools",
-  "version": "5.56.1",
+  "version": "5.56.2",
   "platforms": {
     "ios": "17.0"
   },
@@ -170,6 +170,7 @@
       "local_dependencies": [
         "PooTools/Logging",
         "PooTools/Overlay",
+        "PooTools/PToolsCore",
         "PooTools/Symbols"
       ],
       "third_party_dependencies": [],
@@ -891,7 +892,9 @@
     {
       "name": "PooTools/Documents",
       "short_name": "Documents",
-      "local_dependencies": [],
+      "local_dependencies": [
+        "PooTools/PDF"
+      ],
       "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/PToolsDocuments/**/*.swift"
@@ -1000,8 +1003,14 @@
       "short_name": "Form",
       "local_dependencies": [
         "PooTools/Accessibility",
+        "PooTools/CheckBox",
         "PooTools/ContentState",
         "PooTools/Core",
+        "PooTools/Input",
+        "PooTools/PToolsCore",
+        "PooTools/Picker",
+        "PooTools/Slider",
+        "PooTools/Stepper",
         "PooTools/Theme"
       ],
       "third_party_dependencies": [],
@@ -2186,6 +2195,7 @@
       "name": "PooTools/PopoverKit",
       "short_name": "PopoverKit",
       "local_dependencies": [
+        "PooTools/PToolsCore",
         "PooTools/Popover"
       ],
       "third_party_dependencies": [],

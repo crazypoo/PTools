@@ -2,7 +2,15 @@
 
 ## Unreleased — 5.57.x
 
-当前开发基线为 `5.56.1`；版本唯一来源为根目录 `VERSION`，文档、脚本、数据资产和测试治理门禁通过后再创建正式 tag。
+当前开发基线为 `5.56.2`；版本唯一来源为根目录 `VERSION`，文档、脚本、数据资产和测试治理门禁通过后再创建正式 tag。
+
+## 5.56.2 — 2026-09-28
+
+- 收口 Form：按字段语义拆分 renderer，复用现有 PTools 输入、Picker、Switch、CheckBox、Slider 和 ActionLayoutButton；补齐键盘导航、主题、无障碍、校验反馈和动态主题刷新。
+- 新增 `PTControlLoadingCoordinator`，由 `PTBaseButton` 和保持 `UIControl` 继承关系的 `PTActionLayoutButton` 组合复用异步 loading 状态机。
+- 完善 Documents：增加 PooToolsPDF 适配、PDFKit fallback、单/多文档分享、Scene-aware iPad popover 和 security-scoped 生命周期管理。
+- 将 Alert、ActionSheet、Banner、Popover、TabBar、Picker、Form 和 Navigation 的语义反馈统一接入 `PTFeedbackCenter`，避免重复创建本地反馈生成器。
+- 修复 SwiftPM iOS 17 / Swift 6 下 ContentState 宿主与状态渲染兼容问题；新增本版本闭环文档和静态治理门禁。
 
 ## 5.56.1 — 2026-09-28
 

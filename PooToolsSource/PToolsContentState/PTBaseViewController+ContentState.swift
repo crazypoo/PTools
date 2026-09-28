@@ -14,18 +14,27 @@ public extension PTBaseViewController {
     func installContentStateHost(_ host: PTContentStateView,
                                  in container: UIView? = nil,
                                  useSafeArea: Bool = true) -> PTContentStateView {
-        let target = container ?? view
+        guard let target = container ?? view else { return host }
         guard host.superview !== target else { return host }
         host.removeFromSuperview()
         target.addSubview(host)
         host.translatesAutoresizingMaskIntoConstraints = false
-        let guide = useSafeArea && container == nil ? target.safeAreaLayoutGuide : target
-        NSLayoutConstraint.activate([
-            host.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            host.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            host.topAnchor.constraint(equalTo: guide.topAnchor),
-            host.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
-        ])
+        if useSafeArea && container == nil {
+            let guide = target.safeAreaLayoutGuide
+            NSLayoutConstraint.activate([
+                host.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+                host.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+                host.topAnchor.constraint(equalTo: guide.topAnchor),
+                host.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                host.leadingAnchor.constraint(equalTo: target.leadingAnchor),
+                host.trailingAnchor.constraint(equalTo: target.trailingAnchor),
+                host.topAnchor.constraint(equalTo: target.topAnchor),
+                host.bottomAnchor.constraint(equalTo: target.bottomAnchor)
+            ])
+        }
         return host
     }
 

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 import SnapKit
 import Foundation
 #if SWIFT_PACKAGE
@@ -453,6 +456,7 @@ open class PTBasePickerView: UIView {
     /// 子类需重写此方法以处理确定逻辑
     @objc open func confirmAction() {
         guard canConfirm else { return }
+        PTFeedbackCenter.shared.emit(.actionConfirmed)
         dismiss()
     }
     
@@ -647,6 +651,7 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
         selectedRows[component] = safeRow
         pickerView.selectRow(safeRow, inComponent: component, animated: animated)
         updateConfirmButtonState()
+        PTFeedbackCenter.shared.emit(.selectionChanged)
         if notifySelectionChanged { onSelectionChanged?(currentResults) }
     }
 
@@ -702,6 +707,7 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
         guard safeRow >= 0 else { return }
         selectedRows[component] = safeRow
         updateConfirmButtonState()
+        PTFeedbackCenter.shared.emit(.selectionChanged)
         onSelectionChanged?(currentResults)
     }
 }
@@ -1191,6 +1197,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         // 最後校驗邊界，如果越界會自動動畫回彈！
         validateBoundary()
         updateConfirmButtonState()
+        PTFeedbackCenter.shared.emit(.selectionChanged)
         guard let selectedDate = currentSelectedDate else { return }
         onSelectionChanged?(selectedDate, formattedSelection())
     }
@@ -1349,7 +1356,10 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         }
 
         updateConfirmButtonState()
-        if notifySelectionChanged { onSelectionChanged?(currentResults) }
+        if notifySelectionChanged {
+            PTFeedbackCenter.shared.emit(.selectionChanged)
+            onSelectionChanged?(currentResults)
+        }
     }
 
     private func updateConfirmButtonState() {

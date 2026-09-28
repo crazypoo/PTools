@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f9b7ba9b774404c88e4e33dd26e4128c43bbbe28
-Generated at: 2026-09-28T14:23:07+08:00 -->
+Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
+Generated at: 2026-09-28T16:09:01+08:00 -->
 # Document Inventory
 
-- Version: `5.56.1`
-- Records: `833`
+- Version: `5.56.2`
+- Records: `834`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -63,6 +63,7 @@ Generated at: 2026-09-28T14:23:07+08:00 -->
 | docs/guides/MIGRATION_5_22_LOGGING.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/MODULES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTINSTRUCTIONS_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
+| docs/guides/PTOOLS_5_56_2_CLOSURE.md | HOW_TO | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/guides/PTOOLS_DEVICE_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_P1_ADVANCED_CAPABILITIES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_P2_MODERN_EXTENSIONS.md | HOW_TO | zh-Hans | ACTIVE | KEEP |

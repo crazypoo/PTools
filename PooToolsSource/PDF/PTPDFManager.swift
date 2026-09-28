@@ -8,6 +8,9 @@
 
 import UIKit
 import PDFKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // MARK: - 第一部分：生成报表类型的 PDF
 public enum PTPDFManager {

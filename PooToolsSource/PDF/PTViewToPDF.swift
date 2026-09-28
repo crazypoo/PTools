@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreGraphics
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public class PTViewToPDF: NSObject {
     

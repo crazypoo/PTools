@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory_5_9.rb
-Source revision: f9b7ba9b774404c88e4e33dd26e4128c43bbbe28
-Generated at: 2026-09-28T07:02:47Z
+Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
+Generated at: 2026-09-28T11:32:42Z
 -->
 
 # PTools 当前缓存盘点
@@ -47,7 +47,7 @@ Generated at: 2026-09-28T07:02:47Z
 | PooToolsSource/Base/PTVideoCoverCache.swift:473 | disk or custom cache | /// Writes a JPEG cache entry atomically on a utility task. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:495 | disk or custom cache | // English: Encode generated thumbnails away from UI work before writing the disk cache. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:510 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
-| PooToolsSource/Button/PTActionLayoutButton.swift:102 | disk or custom cache | // English: Cache the last layout size to avoid rebuilding identical constraints. |
+| PooToolsSource/Button/PTActionLayoutButton.swift:103 | disk or custom cache | // English: Cache the last layout size to avoid rebuilding identical constraints. |
 | PooToolsSource/Category/FileManager+PTEX.swift:24 | disk or custom cache | - 3.1、Library/Cache |
 | PooToolsSource/Category/FileManager+PTEX.swift:27 | disk or custom cache | - 系统不会清理 cache 目录中的文件 |
 | PooToolsSource/Category/FileManager+PTEX.swift:28 | disk or custom cache | - 就要求程序开发时, "必须提供 cache 目录的清理解决方案" |

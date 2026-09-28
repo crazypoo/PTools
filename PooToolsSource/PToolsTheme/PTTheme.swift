@@ -292,8 +292,10 @@ public final class PTThemeRegistry {
                          component: String? = nil) -> PTThemeResolver {
         if let component, let theme = scopedThemes[.component(component)] { return PTThemeResolver(theme: theme) }
         if let viewController, let theme = scopedThemes[.viewController(String(describing: type(of: viewController)))] { return PTThemeResolver(theme: theme) }
-        if let scene, let identifier = scene.session.persistentIdentifier,
-           let theme = scopedThemes[.scene(identifier)] { return PTThemeResolver(theme: theme) }
+        if let scene {
+            let identifier = scene.session.persistentIdentifier
+            if let theme = scopedThemes[.scene(identifier)] { return PTThemeResolver(theme: theme) }
+        }
         return PTThemeResolver(theme: scopedThemes[.app] ?? appTheme)
     }
 }

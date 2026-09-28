@@ -8,6 +8,18 @@ import Foundation
 import UIKit
 #if SWIFT_PACKAGE
 import ptools
+import PToolsCore
+import PToolsTheme
+import PToolsAccessibility
+#endif
+#if canImport(PToolsCore) && !SWIFT_PACKAGE
+import PToolsCore
+#endif
+#if canImport(PToolsTheme) && !SWIFT_PACKAGE
+import PToolsTheme
+#endif
+#if canImport(PToolsAccessibility) && !SWIFT_PACKAGE
+import PToolsAccessibility
 #endif
 #endif
 
@@ -72,7 +84,9 @@ public struct PTFormField: Sendable {
     public let title: String
     public var value: PTFormValue
     public var isEnabled: Bool
+    public var isReadOnly: Bool
     public var dependency: PTFormDependency?
+    public let pickerOptions: [String]
     public let rules: [PTFormValidationRule]
     public let validators: [PTFormValidator]
 
@@ -83,9 +97,12 @@ public struct PTFormField: Sendable {
                 isEnabled: Bool = true,
                 dependency: PTFormDependency? = nil,
                 rules: [PTFormValidationRule] = [],
-                validators: [PTFormValidator] = []) {
+                validators: [PTFormValidator] = [],
+                isReadOnly: Bool = false,
+                pickerOptions: [String] = []) {
         self.id = id; self.kind = kind; self.title = title; self.value = value; self.isEnabled = isEnabled
-        self.dependency = dependency; self.rules = rules; self.validators = validators
+        self.isReadOnly = isReadOnly; self.dependency = dependency; self.pickerOptions = pickerOptions
+        self.rules = rules; self.validators = validators
     }
 }
 
@@ -227,158 +244,60 @@ public protocol PTFormFieldRenderer: AnyObject {
     var kind: PTFormFieldKind { get }
     func makeView(for field: PTFormField,
                   onChange: @escaping @MainActor @Sendable (PTFormValue) -> Void) -> UIView
+    func apply(theme: PTFormThemeAdapter)
+}
+
+public extension PTFormFieldRenderer {
+    func apply(theme: PTFormThemeAdapter) {}
 }
 
 @MainActor
 public final class PTFormFieldRendererRegistry {
     private var renderers: [PTFormFieldKind: any PTFormFieldRenderer] = [:]
+    public var themeAdapter: PTFormThemeAdapter {
+        didSet { renderers.values.forEach { $0.apply(theme: themeAdapter) } }
+    }
 
-    public init() {}
+    public init(themeAdapter: PTFormThemeAdapter = .init()) {
+        self.themeAdapter = themeAdapter
+        let defaults: [any PTFormFieldRenderer] = [
+            PTFormTextFieldRenderer(), PTFormSecureTextFieldRenderer(), PTFormMultilineRenderer(),
+            PTFormNumberRenderer(), PTFormPhoneRenderer(), PTFormBankCardRenderer(), PTFormToggleRenderer(),
+            PTFormCheckboxRenderer(), PTFormSliderRenderer(), PTFormStepperRenderer(), PTFormDateRenderer(),
+            PTFormPickerRenderer()
+        ]
+        defaults.forEach(register)
+    }
 
     public func register(_ renderer: any PTFormFieldRenderer) {
+        renderer.apply(theme: themeAdapter)
         renderers[renderer.kind] = renderer
     }
 
     public func renderer(for kind: PTFormFieldKind) -> any PTFormFieldRenderer {
-        renderers[kind] ?? PTDefaultFormFieldRenderer()
+        let renderer = renderers[kind] ?? PTDefaultFormFieldRenderer(kind: kind)
+        renderer.apply(theme: themeAdapter)
+        return renderer
     }
 }
 
 @MainActor
 public final class PTDefaultFormFieldRenderer: PTFormFieldRenderer {
     public let kind: PTFormFieldKind
+    private let routedRenderer: any PTFormFieldRenderer
 
     public init(kind: PTFormFieldKind = .custom) {
         self.kind = kind
+        routedRenderer = PTFormRendererFactory.make(kind: kind)
     }
 
     public func makeView(for field: PTFormField,
                          onChange: @escaping @MainActor @Sendable (PTFormValue) -> Void) -> UIView {
-        switch field.kind {
-        case .text, .secureText, .number, .phone, .bankCard:
-            let textField = UITextField()
-            textField.text = PTFormViewController.display(field.value)
-            textField.placeholder = field.title
-            textField.borderStyle = .roundedRect
-            textField.adjustsFontForContentSizeCategory = true
-            textField.font = .preferredFont(forTextStyle: .body)
-            textField.isSecureTextEntry = field.kind == .secureText
-            textField.keyboardType = field.kind == .number ? .decimalPad : (field.kind == .phone ? .phonePad : .default)
-            textField.isEnabled = field.isEnabled
-            textField.addAction(UIAction { [weak textField] _ in
-                guard let textField else { return }
-                let value: PTFormValue = field.kind == .number
-                    ? .number(Double(textField.text ?? "") ?? 0)
-                    : .string(textField.text ?? "")
-                onChange(value)
-            }, for: .editingChanged)
-            return textField
-
-        case .multilineText:
-            let textView = PTFormTextView()
-            textView.text = PTFormViewController.display(field.value)
-            textView.font = .preferredFont(forTextStyle: .body)
-            textView.adjustsFontForContentSizeCategory = true
-            textView.isEditable = field.isEnabled
-            textView.layer.borderWidth = 1
-            textView.layer.borderColor = UIColor.separator.cgColor
-            textView.layer.cornerRadius = 8
-            textView.onTextChange = { text in onChange(.string(text)) }
-            return textView
-
-        case .toggle:
-            let control = UISwitch()
-            if case .boolean(let value) = field.value { control.isOn = value }
-            control.isEnabled = field.isEnabled
-            control.addAction(UIAction { [weak control] _ in
-                onChange(.boolean(control?.isOn ?? false))
-            }, for: .valueChanged)
-            return control
-
-        case .checkbox:
-            let control = UIButton(type: .system)
-            control.configuration = .bordered
-            control.configuration?.title = field.title
-            control.isSelected = field.value == .boolean(true)
-            control.isEnabled = field.isEnabled
-            control.addAction(UIAction { [weak control] _ in
-                guard let control else { return }
-                control.isSelected.toggle()
-                onChange(.boolean(control.isSelected))
-            }, for: .touchUpInside)
-            return control
-
-        case .slider:
-            let control = UISlider()
-            if case .number(let value) = field.value { control.value = Float(value) }
-            control.isEnabled = field.isEnabled
-            control.addAction(UIAction { [weak control] _ in
-                onChange(.number(Double(control?.value ?? 0)))
-            }, for: .valueChanged)
-            return control
-
-        case .stepper:
-            let container = UIStackView()
-            container.axis = .horizontal
-            container.spacing = 8
-            let valueLabel = UILabel()
-            valueLabel.font = .preferredFont(forTextStyle: .body)
-            valueLabel.adjustsFontForContentSizeCategory = true
-            let control = UIStepper()
-            if case .number(let value) = field.value {
-                control.value = value
-                valueLabel.text = String(value)
-            }
-            control.isEnabled = field.isEnabled
-            control.addAction(UIAction { [weak control, weak valueLabel] _ in
-                let value = control?.value ?? 0
-                valueLabel?.text = String(value)
-                onChange(.number(value))
-            }, for: .valueChanged)
-            container.addArrangedSubview(valueLabel)
-            container.addArrangedSubview(control)
-            return container
-
-        case .date:
-            let control = UIDatePicker()
-            control.datePickerMode = .dateAndTime
-            if case .date(let value) = field.value { control.date = value }
-            control.isEnabled = field.isEnabled
-            control.addAction(UIAction { [weak control] _ in
-                if let date = control?.date { onChange(.date(date)) }
-            }, for: .valueChanged)
-            return control
-
-        case .picker, .custom:
-            let label = UILabel()
-            label.text = PTFormViewController.display(field.value).isEmpty ? field.title : PTFormViewController.display(field.value)
-            label.textColor = .secondaryLabel
-            label.font = .preferredFont(forTextStyle: .body)
-            label.adjustsFontForContentSizeCategory = true
-            label.numberOfLines = 0
-            return label
-        }
-    }
-}
-
-@MainActor
-private final class PTFormTextView: UITextView, UITextViewDelegate {
-    var onTextChange: ((String) -> Void)?
-
-    override init(frame: CGRect, textContainer: NSTextContainer?) {
-        super.init(frame: frame, textContainer: textContainer)
-        delegate = self
-        isScrollEnabled = false
+        routedRenderer.makeView(for: field, onChange: onChange)
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        delegate = self
-        isScrollEnabled = false
-    }
-
-    func textViewDidChange(_ textView: UITextView) {
-        onTextChange?(textView.text)
+    public func apply(theme: PTFormThemeAdapter) {
+        routedRenderer.apply(theme: theme)
     }
 }
 
@@ -396,7 +315,7 @@ private final class PTFormFieldCell: UICollectionViewCell {
     private let fieldContainer = UIView()
     private let issueLabel = UILabel()
     private var renderedView: UIView?
-    var onReturn: (() -> Void)?
+    private var onReturn: (@MainActor @Sendable () -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -439,9 +358,16 @@ private final class PTFormFieldCell: UICollectionViewCell {
     func configure(field: PTFormField,
                    renderer: any PTFormFieldRenderer,
                    issue: String?,
+                   themeAdapter: PTFormThemeAdapter,
+                   keyboardCoordinator: PTFormKeyboardCoordinator,
+                   hasPrevious: Bool,
+                   hasNext: Bool,
                    onChange: @escaping @MainActor @Sendable (PTFormValue) -> Void,
-                   onReturn: @escaping () -> Void) {
+                   onPrevious: @escaping @MainActor @Sendable () -> Void,
+                   onNext: @escaping @MainActor @Sendable () -> Void,
+                   onDone: @escaping @MainActor @Sendable () -> Void) {
         renderedView?.removeFromSuperview()
+        renderer.apply(theme: themeAdapter)
         let view = renderer.makeView(for: field, onChange: onChange)
         renderedView = view
         fieldContainer.addSubview(view)
@@ -453,14 +379,32 @@ private final class PTFormFieldCell: UICollectionViewCell {
             view.bottomAnchor.constraint(equalTo: fieldContainer.bottomAnchor)
         ])
         titleLabel.text = field.title
+        titleLabel.textColor = themeAdapter.primaryTextColor()
+        titleLabel.font = themeAdapter.titleFont()
         issueLabel.text = issue
+        issueLabel.textColor = issue == nil ? themeAdapter.secondaryTextColor() : themeAdapter.errorColor()
         isUserInteractionEnabled = field.isEnabled
-        accessibilityLabel = field.title
-        accessibilityValue = PTFormViewController.display(field.value)
-        self.onReturn = onReturn
+        PTFormAccessibilityAdapter.apply(field: field,
+                                         value: PTFormViewController.display(field.value),
+                                         issue: issue,
+                                         to: self)
+        self.onReturn = hasNext ? onNext : onDone
         if let textField = view as? UITextField {
-            textField.returnKeyType = .next
+            textField.returnKeyType = hasNext ? .next : .done
             textField.addAction(UIAction { [weak self] _ in self?.onReturn?() }, for: .editingDidEndOnExit)
+            keyboardCoordinator.attach(to: textField,
+                                       previous: onPrevious,
+                                       next: onNext,
+                                       done: onDone,
+                                       hasPrevious: hasPrevious,
+                                       hasNext: hasNext)
+        } else if let textView = view as? UITextView {
+            keyboardCoordinator.attach(to: textView,
+                                       previous: onPrevious,
+                                       next: onNext,
+                                       done: onDone,
+                                       hasPrevious: hasPrevious,
+                                       hasNext: hasNext)
         }
     }
 
@@ -475,18 +419,38 @@ public final class PTFormViewController: PTBaseViewController {
     public let form: PTFormEngine
     public let listView: PTCollectionView
     public let rendererRegistry: PTFormFieldRendererRegistry
+    public let formTheme: PTFormThemeAdapter
+    private let keyboardCoordinator = PTFormKeyboardCoordinator()
     private var cachedFields: [PTFormFieldID: PTFormField] = [:]
     private var visibleFieldIDs: [PTFormFieldID] = []
     private var validationIssues: [PTFormFieldID: String] = [:]
+    private var announcedIssueIDs: Set<PTFormFieldID> = []
 
     public init(form: PTFormEngine) {
-        self.init(form: form, rendererRegistry: .init())
+        let registry = PTFormFieldRendererRegistry()
+        self.form = form
+        self.rendererRegistry = registry
+        self.formTheme = registry.themeAdapter
+        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
+        super.init(nibName: nil, bundle: nil)
     }
 
     public init(form: PTFormEngine,
                 rendererRegistry: PTFormFieldRendererRegistry) {
+        self.formTheme = rendererRegistry.themeAdapter
         self.form = form
         self.rendererRegistry = rendererRegistry
+        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public init(form: PTFormEngine,
+                rendererRegistry: PTFormFieldRendererRegistry,
+                themeAdapter: PTFormThemeAdapter) {
+        self.form = form
+        self.rendererRegistry = rendererRegistry
+        self.formTheme = themeAdapter
+        self.rendererRegistry.themeAdapter = themeAdapter
         self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
         super.init(nibName: nil, bundle: nil)
     }
@@ -494,12 +458,18 @@ public final class PTFormViewController: PTBaseViewController {
     public required init?(coder: NSCoder) {
         form = PTFormEngine(fields: [])
         rendererRegistry = PTFormFieldRendererRegistry()
+        formTheme = rendererRegistry.themeAdapter
         listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
         super.init(coder: coder)
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { [weak self] (_: PTFormViewController, _: UITraitCollection) in
+            guard let self else { return }
+            self.rendererRegistry.themeAdapter = self.formTheme
+            self.listView.contentCollectionView.reloadData()
+        }
         view.addSubview(listView)
         listView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -519,10 +489,16 @@ public final class PTFormViewController: PTBaseViewController {
             cell.configure(field: box.field,
                            renderer: self.rendererRegistry.renderer(for: box.field.kind),
                            issue: self.validationIssues[box.field.id],
+                           themeAdapter: self.formTheme,
+                           keyboardCoordinator: self.keyboardCoordinator,
+                           hasPrevious: self.focusableIndex(for: box.field.id, step: -1) != nil,
+                           hasNext: self.focusableIndex(for: box.field.id, step: 1) != nil,
                            onChange: { [weak self] value in
                 self?.setValue(value, for: box.field.id)
             },
-                           onReturn: { [weak self] in self?.focusNext(after: box.field.id) })
+                           onPrevious: { [weak self] in self?.focusPrevious(after: box.field.id) },
+                           onNext: { [weak self] in self?.focusNext(after: box.field.id) },
+                           onDone: { [weak self] in self?.view.endEditing(true) })
             return cell
         }
         Task { await refresh() }
@@ -549,6 +525,12 @@ public final class PTFormViewController: PTBaseViewController {
             try? await form.setValue(value, for: id)
             let result = await form.validateField(id)
             validationIssues[id] = result.issues.first?.message
+            if let issue = result.issues.first, announcedIssueIDs.insert(id).inserted {
+                PTFormAccessibilityAdapter.announceValidationFailure(issue)
+                PTFeedbackCenter.shared.emit(.validationFailure)
+            } else if result.issues.isEmpty {
+                announcedIssueIDs.remove(id)
+            }
             await refresh()
         }
     }
@@ -556,6 +538,10 @@ public final class PTFormViewController: PTBaseViewController {
     public func validate() async -> PTFormValidationResult {
         let result = await form.validateAll()
         validationIssues = Dictionary(uniqueKeysWithValues: result.issues.map { ($0.fieldID, $0.message) })
+        if let issue = result.issues.first {
+            PTFormAccessibilityAdapter.announceValidationFailure(issue)
+            PTFeedbackCenter.shared.emit(.validationFailure)
+        }
         await refresh()
         return result
     }
@@ -563,25 +549,50 @@ public final class PTFormViewController: PTBaseViewController {
     public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws {
         let result = await validate()
         guard result.isValid else { throw PTFormError.invalid(result) }
-        try await form.submit(operation)
+        do {
+            try await form.submit(operation)
+            PTFeedbackCenter.shared.emit(.success)
+        } catch {
+            PTFeedbackCenter.shared.emit(.error)
+            throw error
+        }
     }
 
     private func focusNext(after id: PTFormFieldID) {
-        guard let index = visibleFieldIDs.firstIndex(of: id), visibleFieldIDs.indices.contains(index + 1) else {
+        guard let index = focusableIndex(for: id, step: 1) else {
             view.endEditing(true)
             return
         }
-        let nextID = visibleFieldIDs[index + 1]
-        guard let rowIndex = listView.contentCollectionView.indexPathsForVisibleItems.first(where: { indexPath in
-            listView.getRow(at: indexPath)?.diffId == nextID
-        }) else { return }
+        let rowIndex = IndexPath(item: index, section: 0)
         listView.contentCollectionView.scrollToItem(at: rowIndex, at: .centeredVertically, animated: true)
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
+            await Task.yield()
             (self?.listView.contentCollectionView.cellForItem(at: rowIndex) as? PTFormFieldCell)?.focusField()
         }
     }
 
-    fileprivate static func display(_ value: PTFormValue) -> String {
+    private func focusPrevious(after id: PTFormFieldID) {
+        guard let index = focusableIndex(for: id, step: -1) else { return }
+        let rowIndex = IndexPath(item: index, section: 0)
+        listView.contentCollectionView.scrollToItem(at: rowIndex, at: .centeredVertically, animated: true)
+        Task { @MainActor [weak self] in
+            await Task.yield()
+            (self?.listView.contentCollectionView.cellForItem(at: rowIndex) as? PTFormFieldCell)?.focusField()
+        }
+    }
+
+    private func focusableIndex(for id: PTFormFieldID, step: Int) -> Int? {
+        guard let start = visibleFieldIDs.firstIndex(of: id) else { return nil }
+        var index = start + step
+        while visibleFieldIDs.indices.contains(index) {
+            let candidate = visibleFieldIDs[index]
+            if let field = cachedFields[candidate], field.isEnabled, !field.isReadOnly { return index }
+            index += step
+        }
+        return nil
+    }
+
+    static func display(_ value: PTFormValue) -> String {
         switch value { case .empty: ""; case .string(let v): v; case .number(let v): String(v); case .boolean(let v): v ? "On" : "Off"; case .date(let v): v.formatted(); case .data: "Data" }
     }
 }

@@ -248,20 +248,23 @@ public extension PHAsset {
     }
     
     // MARK: - PHAsset 转换为图片
-    @available(*, deprecated, message: "Use PTMediaLibManager.requestImage(for:targetSize:completion:) instead")
+    @available(*, deprecated, message: "Use the PhotoPicker request API when that optional module is installed")
     func fetchImage(targetSize: CGSize = PHImageManagerMaximumSize,
                     contentMode: PHImageContentMode = .aspectFit,
                     deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat,
                     version: PHImageRequestOptionsVersion = .current,
                     supportIcloud: Bool  = true,
                     completion: @escaping @Sendable (UIImage?) -> Void) {
-        PTMediaLibManager.requestImage(for: self,
-                                       targetSize: targetSize,
-                                       contentMode: contentMode,
-                                       deliveryMode: deliveryMode,
-                                       version: version,
-                                       supportIcloud: supportIcloud) { result in
-            completion(result.image)
+        let options = PHImageRequestOptions()
+        options.deliveryMode = deliveryMode
+        options.version = version
+        options.isNetworkAccessAllowed = supportIcloud
+        options.resizeMode = .fast
+        PHImageManager.default().requestImage(for: self,
+                                              targetSize: targetSize,
+                                              contentMode: contentMode,
+                                              options: options) { image, _ in
+            completion(image)
         }
     }
     
@@ -331,7 +334,7 @@ public extension PHAsset {
         let state = OSAllocatedUnfairLock(initialState: PTAsyncImageRequestState())
 
         return await withTaskCancellationHandler(operation: {
-            await withCheckedContinuation { continuation in
+            await withCheckedContinuation { (continuation: CheckedContinuation<UIImage?, Never>) in
                 let shouldResumeImmediately = state.withLock { state -> Bool in
                     guard !state.didFinish else { return true }
                     state.continuation = continuation
@@ -342,8 +345,18 @@ public extension PHAsset {
                     return
                 }
 
-                let requestID = PTMediaLibManager.requestImage(for: self,
-                                                               targetSize: PHImageManagerMaximumSize) { result in
+                let options = PHImageRequestOptions()
+                options.deliveryMode = .highQualityFormat
+                options.version = .current
+                options.isNetworkAccessAllowed = true
+                options.resizeMode = .fast
+                let requestID = PHImageManager.default().requestImage(for: self,
+                                                                       targetSize: PHImageManagerMaximumSize,
+                                                                       contentMode: .aspectFit,
+                                                                       options: options) { image, info in
+                    let isCancelled = info?[PHImageCancelledKey] as? Bool ?? false
+                    let isDegraded = info?[PHImageResultIsDegradedKey] as? Bool ?? false
+                    guard isCancelled || !isDegraded else { return }
                     let continuation = state.withLock { state -> CheckedContinuation<UIImage?, Never>? in
                         guard !state.didFinish else { return nil }
                         state.didFinish = true
@@ -352,7 +365,7 @@ public extension PHAsset {
                         state.continuation = nil
                         return continuation
                     }
-                    continuation?.resume(returning: result.isCancelled || result.error != nil ? nil : result.image)
+                    continuation?.resume(returning: isCancelled ? nil : image)
                 }
 
                 let shouldCancelImmediately = state.withLock { state -> Bool in

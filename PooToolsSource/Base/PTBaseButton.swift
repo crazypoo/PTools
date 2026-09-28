@@ -24,6 +24,16 @@ open class PTBaseButton: UIButton {
         return indicator
     }()
 
+    private var loadingIndicatorColor: UIColor = .white
+    private lazy var loadingCoordinator = PTControlLoadingCoordinator(
+        isInteractionEnabled: { [weak self] in self?.isUserInteractionEnabled ?? false },
+        setInteractionEnabled: { [weak self] isEnabled in self?.isUserInteractionEnabled = isEnabled },
+        beginPresentation: { [weak self] in self?.applyLoadingPresentation() },
+        endPresentation: { [weak self] in self?.restoreLoadingPresentation() }
+    )
+
+    public var isLoading: Bool { loadingCoordinator.isLoading }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.expandClickEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -43,17 +53,20 @@ open class PTBaseButton: UIButton {
     /// 开始等待动画
     /// - Parameter indicatorColor: 菊花的颜色（仅在非 Configuration 模式下生效）
     public func startLoading(indicatorColor: UIColor = .white) {
-        // 阻断交互，防止重复点击触发多次网络请求
-        self.isUserInteractionEnabled = false
-        
-        // 现代方案：如果检测到按钮正在使用 iOS 15+ 的 Configuration
-        if var currentConfig = self.configuration {
+        loadingIndicatorColor = indicatorColor
+        _ = loadingCoordinator.start()
+    }
+
+    private func applyLoadingPresentation() {
+        // English: Prefer UIButton.Configuration when the caller already uses it.
+        // Español: Usa UIButton.Configuration cuando el botón ya la tiene configurada.
+        // 中文：如果调用方已经使用 UIButton.Configuration，则优先使用系统指示器。
+        if var currentConfig = configuration {
             currentConfig.showsActivityIndicator = true
-            self.configuration = currentConfig
+            configuration = currentConfig
             return
         }
-        
-        // 传统方案：手动居中注入菊花指示器
+
         if activityIndicator.superview == nil {
             addSubview(activityIndicator)
             NSLayoutConstraint.activate([
@@ -62,7 +75,7 @@ open class PTBaseButton: UIButton {
             ])
         }
         
-        activityIndicator.color = indicatorColor
+        activityIndicator.color = loadingIndicatorColor
         activityIndicator.startAnimating()
         
         // 柔和地隐藏原有内容，避免与菊花重叠重影
@@ -74,17 +87,19 @@ open class PTBaseButton: UIButton {
     
     /// 停止等待动画，恢复常态
     public func stopLoading() {
-        // 恢复交互
-        self.isUserInteractionEnabled = true
-        
-        // 现代方案：关闭原生指示器
-        if var currentConfig = self.configuration {
+        loadingCoordinator.stop()
+    }
+
+    private func restoreLoadingPresentation() {
+        // English: Restore the same presentation path that started loading.
+        // Español: Restaura la misma ruta de presentación que inició la carga.
+        // 中文：沿用进入 loading 时的展示路径恢复按钮内容。
+        if var currentConfig = configuration {
             currentConfig.showsActivityIndicator = false
-            self.configuration = currentConfig
+            configuration = currentConfig
             return
         }
-        
-        // 3. 传统方案：停止动画并恢复原有文字和图片的透明度
+
         activityIndicator.stopAnimating()
         
         UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.2)) {
@@ -92,4 +107,18 @@ open class PTBaseButton: UIButton {
             self.imageView?.alpha = 1
         }
     }
+
+    /// English: Runs one cancellable MainActor operation while preventing duplicate taps.
+    /// Español: Ejecuta una operación cancelable en MainActor y evita toques duplicados.
+    /// 中文：在 MainActor 中执行可取消操作，并防止重复点击。
+    @discardableResult
+    public func performAsync(_ operation: @escaping @MainActor @Sendable () async throws -> Void,
+                             completion: @escaping @MainActor @Sendable (Bool) -> Void = { _ in }) -> Task<Void, Never> {
+        loadingCoordinator.perform(operation, completion: completion)
+    }
+
+    public func cancelLoading() {
+        loadingCoordinator.cancel()
+    }
+
 }

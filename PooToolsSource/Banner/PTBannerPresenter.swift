@@ -3,6 +3,9 @@
 // 中文：负责 Scene、堆叠布局、定时器和生命周期的 Banner Presenter。
 
 import UIKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 #if canImport(PToolsOverlay)
 import PToolsOverlay
 #endif
@@ -358,14 +361,13 @@ public final class PTBannerPresenter {
         case .none:
             break
         case .light:
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            PTFeedbackCenter.shared.emit(.selectionChanged)
         case .medium:
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            PTFeedbackCenter.shared.emit(.selectionChanged)
         case .heavy:
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            PTFeedbackCenter.shared.emit(.selectionChanged)
         case .success, .warning, .error:
-            let type: UINotificationFeedbackGenerator.FeedbackType = resolved == .success ? .success : resolved == .warning ? .warning : .error
-            UINotificationFeedbackGenerator().notificationOccurred(type)
+            PTFeedbackCenter.shared.emit(resolved == .success ? .success : resolved == .warning ? .warning : .error)
         case .automatic:
             break
         }

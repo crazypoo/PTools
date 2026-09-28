@@ -9,6 +9,9 @@
 import UIKit
 import Lottie
 import SnapKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 @MainActor
 public enum PTTabBarLayoutStyle {
@@ -781,6 +784,10 @@ final public class PTTabBarView: UIView {
     }
     
     public func select(_ index: Int) {
+        select(index, userInitiated: false)
+    }
+
+    public func select(_ index: Int, userInitiated: Bool = false) {
         guard index >= 0, index < items.count else { return }
 
         // 如果是重复点击
@@ -790,6 +797,7 @@ final public class PTTabBarView: UIView {
             }
             didSelectIndex?(index)
             didSelectInsideIndex?(index)
+            if userInitiated { PTFeedbackCenter.shared.emit(.selectionChanged) }
             return
         }
 
@@ -812,6 +820,7 @@ final public class PTTabBarView: UIView {
         // 4️⃣ 已选中
         didSelectIndex?(index)
         didSelectInsideIndex?(index)
+        if userInitiated { PTFeedbackCenter.shared.emit(.selectionChanged) }
     }
     
     // 🌟 新增核心算法：追踪目标 Item 并执行 Frame 平移动画
@@ -885,7 +894,7 @@ final public class PTTabBarView: UIView {
         )
 
         item.addAction(UIAction { [weak self] _ in
-            self?.select(index)
+            self?.select(index, userInitiated: true)
         }, for: .touchUpInside)
 
         // 🌟 新增：2. 实例化并配置双击手势

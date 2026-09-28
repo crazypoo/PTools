@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons_5_9.rb",
-  "source_revision": "f9b7ba9b774404c88e4e33dd26e4128c43bbbe28",
-  "generated_at": "2026-09-28T07:02:16Z",
-  "shared_call_count": 1568,
+  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "generated_at": "2026-09-28T11:32:09Z",
+  "shared_call_count": 1595,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -34,7 +34,7 @@
     },
     {
       "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
-      "line": 411,
+      "line": 413,
       "declaration": "public static let shared = PTBannerCenter()",
       "name": "shared",
       "category": "C",
@@ -871,7 +871,7 @@
     },
     {
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
-      "line": 21,
+      "line": 26,
       "declaration": "public static let shared = PTFeedbackCenter()",
       "name": "shared",
       "category": "C",
@@ -880,7 +880,7 @@
     },
     {
       "path": "PooToolsSource/PToolsDocuments/PTDocuments.swift",
-      "line": 103,
+      "line": 134,
       "declaration": "public static let shared = PTDocumentPickerCoordinator()",
       "name": "shared",
       "category": "C",
@@ -889,7 +889,7 @@
     },
     {
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 67,
+      "line": 72,
       "declaration": "public static let shared = PTHapticEngine()",
       "name": "shared",
       "category": "C",
@@ -961,7 +961,7 @@
     },
     {
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 129,
+      "line": 132,
       "declaration": "public static var shared = PTPickerStyle()",
       "name": "shared",
       "category": "D",
@@ -979,7 +979,7 @@
     },
     {
       "path": "PooToolsSource/Popover/PTPopover.swift",
-      "line": 202,
+      "line": 205,
       "declaration": "public static let shared = PTPopoverCenter()",
       "name": "shared",
       "category": "C",

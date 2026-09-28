@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.56.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.56.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.56.1` 为当前开发基线，尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.56.2` 为当前开发基线，尚未创建正式 tag。
+
+## 5.56.2 Form / Documents / Feedback / Button Loading 闭环
+
+- ✅ Form renderer 按字段语义拆分，复用现有 PTools 输入、Picker、Switch、CheckBox、Slider 和 ActionLayoutButton。
+- ✅ 补齐 Form 键盘 Previous/Next/Done、屏幕外聚焦滚动、主题 token、动态主题刷新、校验无障碍和语义反馈。
+- ✅ 从 `PTBaseButton` 抽取 `PTControlLoadingCoordinator`，由 `PTBaseButton` 和 `PTActionLayoutButton` 组合复用，保留两者原有继承关系和展示方式。
+- ✅ Documents 增加 PooToolsPDF adapter、PDFKit fallback、单/多文档分享、Scene-aware iPad popover 和 security-scoped 生命周期。
+- ✅ Alert、ActionSheet、Banner、Popover、TabBar、Picker、Form 和 Navigation 接入 `PTFeedbackCenter`，避免重复本地反馈生成器。
+- ✅ 修复 SwiftPM iOS 17 / Swift 6 下 ContentState 宿主与关联值状态判断，完成 5.56.2 文档、Pod 锁文件和治理门禁同步。
+- [ ] 完成真实宿主、真机、扩展 target 和远程 CI 的最终回归后，再创建正式 `5.56.2` tag。
 
 ## 5.56.1 文档、脚本、数据资产与测试治理
 

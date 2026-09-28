@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -298,6 +301,7 @@ public class PTActionSheetController: PTAlertController {
                     self?.dismissSelf { [weak self] in
                         guard let self else { return }
                         PTGCDManager.shared.runOnMain {
+                            PTFeedbackCenter.shared.emit(.destructive)
                             self.actionSheetDestructiveSelectBlock?(self, index, destructiveTitle)
                         }
                     }
@@ -441,6 +445,7 @@ public class PTActionSheetController: PTAlertController {
         self.dismissSelf { [weak self] in
             guard let self else { return }
             PTGCDManager.shared.runOnMain {
+                PTFeedbackCenter.shared.emit(.selectionChanged)
                 self.actionSheetSelectBlock?(self, index, title)
             }
         }

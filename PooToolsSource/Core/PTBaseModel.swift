@@ -41,7 +41,14 @@ extension PTBaseModel: PTDiffableModel {
 // Codable-only models do not carry list-diff identity.
 // Los modelos que solo codifican no transportan identidad para diffs de listas.
 // 仅用于 Codable 的模型不再携带列表 Diffable 身份。
+#if SWIFT_PACKAGE
+// English: SwiftPM ships the native SmartCodable protocol name; CocoaPods keeps its SmartCodableX compatibility name.
+// Español: SwiftPM publica el nombre nativo SmartCodable; CocoaPods conserva el nombre compatible SmartCodableX.
+// 中文：SwiftPM 使用原生 SmartCodable 协议名，CocoaPods 保留兼容的 SmartCodableX 名称。
+public protocol PTCodableModelProtocol: SmartCodable {}
+#else
 public protocol PTCodableModelProtocol: SmartCodableX {}
+#endif
 
 // 🌟 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
 public struct PTDummyModel: PTCodableModelProtocol, Sendable {

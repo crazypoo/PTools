@@ -2,15 +2,15 @@
 
 set -euo pipefail
 
-# English: Enforce the 5.56.1 documentation, script, data, and test governance contract.
-# Español: Aplica el contrato de gobernanza de documentación, scripts, datos y tests de 5.56.1.
-# 中文：执行 5.56.1 文档、脚本、数据资产和测试治理契约。
+# English: Enforce the 5.56.2 documentation, script, data, and test governance contract.
+# Español: Aplica el contrato de gobernanza de documentación, scripts, datos y tests de 5.56.2.
+# 中文：执行 5.56.2 文档、脚本、数据资产和测试治理契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$repo_root"
 
-[[ "$(tr -d '[:space:]' < VERSION)" == "5.56.1" ]] || {
-  printf 'FAIL: VERSION must be 5.56.1\n' >&2
+[[ "$(tr -d '[:space:]' < VERSION)" == "5.56.2" ]] || {
+  printf 'FAIL: VERSION must be 5.56.2\n' >&2
   exit 1
 }
 
@@ -37,10 +37,16 @@ required_files=(
   report/scripts/SCRIPT_INVENTORY.json
   report/data/DATA_ASSET_INVENTORY.json
   report/tests/TEST_INVENTORY.json
+  PooToolsSource/Core/PTControlLoadingCoordinator.swift
+  PooToolsSource/PToolsForm/PTFormRenderers.swift
+  PooToolsSource/PToolsForm/PTFormSupport.swift
+  PooToolsSource/PToolsDocuments/PTDocumentPDFAdapters.swift
+  PooToolsSource/PDF/PTPDFPreviewController.swift
+  docs/guides/PTOOLS_5_56_2_CLOSURE.md
 )
 for path in "${required_files[@]}"; do
   [[ -f "$path" ]] || { printf 'FAIL: governance asset is missing: %s\n' "$path" >&2; exit 1; }
 done
 
 git diff --check
-printf 'PASS: PTools 5.56.1 documentation and repository governance\n'
+printf 'PASS: PTools 5.56.2 documentation and repository governance\n'

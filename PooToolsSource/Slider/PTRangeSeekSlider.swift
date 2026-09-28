@@ -331,8 +331,10 @@ open class PTRangeSeekSlider: UIControl {
 
         guard isTouchingLeftHandle || isTouchingRightHandle else { return false }
 
-        let distanceFromLeftHandle = touchLocation.distance(to: leftHandle.frame.center)
-        let distanceFromRightHandle = touchLocation.distance(to: rightHandle.frame.center)
+        let leftHandleCenter = CGPoint(x: leftHandle.frame.midX, y: leftHandle.frame.midY)
+        let rightHandleCenter = CGPoint(x: rightHandle.frame.midX, y: rightHandle.frame.midY)
+        let distanceFromLeftHandle = sqrt(pow(touchLocation.x - leftHandleCenter.x, 2) + pow(touchLocation.y - leftHandleCenter.y, 2))
+        let distanceFromRightHandle = sqrt(pow(touchLocation.x - rightHandleCenter.x, 2) + pow(touchLocation.y - rightHandleCenter.y, 2))
 
         if distanceFromLeftHandle < distanceFromRightHandle && !disableRange {
             handleTracking = .left

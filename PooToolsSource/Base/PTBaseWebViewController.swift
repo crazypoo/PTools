@@ -21,7 +21,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     public var vcDismiss:PTActionTask?
     
     public var webHeight: ((CGFloat) -> Void)?
-    public var backImage:UIImage = UIColor.random.createImageWithColor().transformImage(size: CGSizeMake(24, 24))
+    public var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSizeMake(24, 24))
     
     public var hiddenNav = false {
         didSet {

@@ -43,8 +43,6 @@ class PTPermissionSettingCell: PTBaseNormalCell {
             case .notSupported:
                 statusText = "PT Permission Not support".localized()
                 statusColor = .systemYellow
-            default:
-                break
             }
             infoLabel.text = cellModel.desc
             let statusAtt:PTRichText = """
