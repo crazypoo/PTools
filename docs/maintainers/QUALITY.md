@@ -105,3 +105,23 @@ Simulator 结果只能证明功能回归和构建，不替代真实设备的性�
 | 发布流程 | `docs/maintainers/RELEASE.md` |
 
 自动报告必须包含 `AUTO-GENERATED`、Generator、Source revision 和 Generated at 元数据。
+
+## Quality Gate 划分
+
+本地和 GitHub Actions 共用 Scripts/quality.sh。完整门禁执行：
+
+    ./Scripts/quality.sh all
+
+也可以只执行一个领域：version、docs、architecture、tests、concurrency、pods 或 xcode。
+Gate 并行执行，最终 summary 只汇总 JSON artifact，不重复执行检查。质量报告包含
+quality-report.json 和 quality-report.md；失败日志统一打印 Gate、failure code、Expected、
+Actual、File 和 Rule。开发版本不要求等于最新正式 tag；只有 tag 内 VERSION 与 tag 名称
+一致的标签才是正式标签，异常历史标签会被忽略并记录。
+
+Tests Gate 使用 SwiftPM 的独立 test product 执行 Platform / Advanced XCTest；P2 与 Media
+测试 target 在 iOS Simulator triple 下编译。SwiftPM 当前不能直接从 macOS 主机运行
+iOS-simulator XCTest bundle，因此 Simulator 行为由 Xcode Build Gate 和手工/宿主回归覆盖，
+不会把 macOS 主机运行结果冒充为 iOS 测试结果。
+
+MediaViewer 的 dynamic background 需要在 status bar / Dynamic Island 后方连续铺满；它的
+分页列表使用 edge-to-edge 的 never inset 策略，普通 PTCollectionView 仍保持 automatic。

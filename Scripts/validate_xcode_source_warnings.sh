@@ -40,6 +40,13 @@ snapkit_swift_version="$(read_build_setting SnapKit SWIFT_VERSION)"
 run_build() {
   local configuration="$1"
   local build_log="$build_log_dir/$configuration.log"
+  local strict_args=""
+  if [[ "$(printenv PTOOLS_STRICT_CONCURRENCY || true)" == "1" ]]; then
+    # English: Keep strict concurrency opt-in so legacy Pods retain their declared Swift mode.
+    # Español: Mantiene la concurrencia estricta como opción para que los Pods heredados conserven su modo Swift declarado.
+    # 中文：严格并发只在专用门禁中启用，避免改变旧 Pods 自身声明的 Swift 模式。
+    strict_args="SWIFT_STRICT_CONCURRENCY=complete SWIFT_TREAT_WARNINGS_AS_ERRORS=YES"
+  fi
 
   set +e
   xcodebuild \
@@ -48,6 +55,7 @@ run_build() {
     -configuration "$configuration" \
     -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath "$derived_data" \
+    $strict_args \
     CODE_SIGNING_ALLOWED=NO \
     ARCHS=arm64 \
     ONLY_ACTIVE_ARCH=YES \
@@ -68,13 +76,15 @@ run_build() {
 
   if [[ -n "$source_errors" ]]; then
     printf '%s\n' "$source_errors" >&2
-    printf 'FAIL: PooTools source compiler errors remain in %s\n' "$configuration" >&2
+    printf 'FAIL [PTOOLS_SOURCE_COMPILER_ERROR] File %s Expected no PooTools source compiler errors Actual source errors in %s Rule PooTools source diagnostics must be zero\n' \
+      "$build_log" "$configuration" >&2
     return 1
   fi
 
   if [[ -n "$source_warnings" ]]; then
     printf '%s\n' "$source_warnings" >&2
-    printf 'FAIL: PooTools source compiler warnings remain in %s\n' "$configuration" >&2
+    printf 'FAIL [PTOOLS_SOURCE_COMPILER_WARNING] File %s Expected no PooTools source compiler warnings Actual source warnings in %s Rule PooTools source diagnostics must be zero\n' \
+      "$build_log" "$configuration" >&2
     return 1
   fi
 
@@ -101,21 +111,28 @@ run_build() {
       if [[ -z "$direct_source_errors" ]]; then
         printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
         rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
+        printf 'FAIL [XCODE_EXTERNAL_DEPENDENCY] File %s Expected external dependencies build without blocking diagnostics Actual dependency diagnostics in %s Rule classify Pods and toolchain failures separately from PooTools source diagnostics\n' \
+          "$build_log" "$configuration" >&2
         return 2
       fi
     fi
     if rg -q "$dependency_blockers" "$build_log" && [[ -z "$source_errors" ]]; then
       printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
       rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
+      printf 'FAIL [XCODE_EXTERNAL_DEPENDENCY] File %s Expected external dependencies build without blocking diagnostics Actual dependency diagnostics in %s Rule classify Pods and toolchain failures separately from PooTools source diagnostics\n' \
+        "$build_log" "$configuration" >&2
       return 2
     fi
     if rg -qi "$configuration_blockers" "$build_log"; then
       printf 'BLOCKED: project configuration or linker setup failed in %s.\n' "$configuration" >&2
       rg -ni "$configuration_blockers" "$build_log" | head -40 >&2 || true
+      printf 'FAIL [XCODE_CONFIGURATION_BLOCKER] File %s Expected workspace and linker configuration to resolve Actual configuration diagnostics in %s Rule classify project setup failures separately from PooTools source diagnostics\n' \
+        "$build_log" "$configuration" >&2
       return 3
     fi
     tail -80 "$build_log" >&2
-    printf 'FAIL: Xcode %s build failed without a classified dependency blocker\n' "$configuration" >&2
+    printf 'FAIL [XCODE_BUILD_FAILURE] File %s Expected Xcode build success Actual unclassified build failure in %s Rule every non-dependency build failure must remain visible\n' \
+      "$build_log" "$configuration" >&2
     return "$build_exit"
   fi
 

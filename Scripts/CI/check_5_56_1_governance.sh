@@ -2,15 +2,16 @@
 
 set -euo pipefail
 
-# English: Enforce the 5.56.2 documentation, script, data, and test governance contract.
-# Español: Aplica el contrato de gobernanza de documentación, scripts, datos y tests de 5.56.2.
-# 中文：执行 5.56.2 文档、脚本、数据资产和测试治理契约。
+# English: Enforce the current documentation, script, data, and test governance contract.
+# Español: Aplica el contrato actual de gobernanza de documentación, scripts, datos y tests.
+# 中文：执行当前版本的文档、脚本、数据资产和测试治理契约。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$repo_root"
 
-[[ "$(tr -d '[:space:]' < VERSION)" == "5.56.2" ]] || {
-  printf 'FAIL: VERSION must be 5.56.2\n' >&2
+version="$(tr -d '[:space:]' < VERSION)"
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+  printf 'FAIL [VERSION_SOURCE_INVALID]: VERSION must be semantic, got %s\n' "$version" >&2
   exit 1
 }
 

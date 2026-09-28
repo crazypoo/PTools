@@ -120,6 +120,7 @@ public class PTCollectionView: UIView {
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     private var lastPrefetchItemCount: Int?
     private var indexPanGesture: UIPanGestureRecognizer?
+    private var lastLayoutBoundsSize: CGSize = .zero
     
     private let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
     private var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
@@ -165,6 +166,7 @@ public class PTCollectionView: UIView {
         }
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
+        view.contentInsetAdjustmentBehavior = self.viewConfig.contentInsetAdjustmentBehavior
         
         refreshCoordinator.configure(view,
                                      config: self.viewConfig,
@@ -287,6 +289,7 @@ public class PTCollectionView: UIView {
             let view = collectionView
             view.showsVerticalScrollIndicator = config.showsVerticalScrollIndicator
             view.showsHorizontalScrollIndicator = config.showsHorizontalScrollIndicator
+            view.contentInsetAdjustmentBehavior = config.contentInsetAdjustmentBehavior
             view.contentOffSetZero = config.contentOffSetZero
             view.dragInteractionEnabled = config.canMoveItem
             view.prefetchDataSource = config.viewForPhoto ? self : nil
@@ -414,6 +417,14 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        let layoutSize = collectionView.bounds.size
+        if layoutSize != .zero, layoutSize != lastLayoutBoundsSize {
+            lastLayoutBoundsSize = layoutSize
+            // English: Rebuild custom groups only when the real container size changes.
+            // Español: Reconstruye los grupos personalizados solo cuando cambia el tamaño real del contenedor.
+            // 中文：仅在真实容器尺寸变化时重新生成自定义布局分组。
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
         updateSkeletonLayout()
     }
 

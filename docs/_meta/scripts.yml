@@ -123,6 +123,22 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/CI/quality_gate.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/version_facts.rb"
+  language: "rb"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Device/check_unknown_identifiers.py"
   language: "py"
   domain: "Device"
@@ -229,6 +245,14 @@
 -
   path: "Scripts/generate_package_matrix.rb"
   language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/quality.sh"
+  language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
   canonical: true

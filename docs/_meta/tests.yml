@@ -106,8 +106,9 @@
   target: "PToolsP2Tests"
   path: "Tests/PToolsP2Tests"
   level: "CONTRACT"
-  file_count: 1
+  file_count: 2
   files:
+    - "Tests/PToolsP2Tests/PTFormDocumentsFeedbackTests.swift"
     - "Tests/PToolsP2Tests/PTModernModulesTests.swift"
   canonical: true
   action: "KEEP"

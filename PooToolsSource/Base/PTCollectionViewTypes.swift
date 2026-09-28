@@ -288,6 +288,10 @@ public class PTCollectionViewConfig: NSObject {
     open var showsVerticalScrollIndicator: Bool = true
     ///CollectionView水平滑动条
     open var showsHorizontalScrollIndicator: Bool = true
+    // English: Let edge-to-edge callers opt out of UIKit's automatic safe-area content inset.
+    // Español: Permite que los consumidores edge-to-edge desactiven el inset automático del área segura de UIKit.
+    // 中文：允许全屏边缘布局调用方关闭 UIKit 自动添加的安全区内容 inset。
+    open var contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .automatic
     ///CollectionView展示的样式类型
     open var viewType: PTCollectionViewType = .Normal
     ///每行多少个(仅在瀑布流和Gird样式中使用)

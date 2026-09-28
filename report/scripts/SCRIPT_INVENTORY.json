@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T16:09:01+08:00",
+  "generated_at": "2026-09-28T19:47:36+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
   "scripts": [
     {
@@ -140,6 +140,24 @@
     {
       "action": "KEEP",
       "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/quality_gate.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "rb",
+      "path": "Scripts/CI/version_facts.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
       "domain": "Device",
       "entrypoint": false,
       "language": "py",
@@ -261,6 +279,15 @@
       "entrypoint": false,
       "language": "rb",
       "path": "Scripts/generate_package_matrix.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/quality.sh",
       "status": "ACTIVE"
     },
     {
@@ -840,6 +867,6 @@
       "status": "ACTIVE"
     }
   ],
-  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "source_revision": "17d503f178439beb767137d2a3cfd6cd2908c40f",
   "version": "5.56.2"
 }

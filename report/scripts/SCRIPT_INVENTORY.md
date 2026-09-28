@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
-Generated at: 2026-09-28T16:09:01+08:00 -->
+Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
+Generated at: 2026-09-28T19:47:36+08:00 -->
 # Script Inventory
 
 - Version: `5.56.2`
-- Records: `93`
+- Records: `96`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -24,6 +24,8 @@ Generated at: 2026-09-28T16:09:01+08:00 -->
 | Scripts/CI/check_p1_advanced_modules.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/check_p2_modern_modules.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/check_popovers_removed.sh | sh | CI | ACTIVE | True | KEEP |
+| Scripts/CI/quality_gate.sh | sh | CI | ACTIVE | True | KEEP |
+| Scripts/CI/version_facts.rb | rb | CI | ACTIVE | True | KEEP |
 | Scripts/Device/check_unknown_identifiers.py | py | Device | ACTIVE | True | KEEP |
 | Scripts/Device/diff_device_catalog.py | py | Device | ACTIVE | True | KEEP |
 | Scripts/Device/generate_device_catalog.py | py | Device | ACTIVE | True | KEEP |
@@ -38,6 +40,7 @@ Generated at: 2026-09-28T16:09:01+08:00 -->
 | Scripts/generate_58_reports.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/generate_dependency_matrix.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/generate_package_matrix.rb | rb | Scripts | ACTIVE | True | KEEP |
+| Scripts/quality.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_accessibility_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/report_cache_inventory_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/report_cocoapods_subspec_graph.rb | rb | Scripts | ACTIVE | True | KEEP |

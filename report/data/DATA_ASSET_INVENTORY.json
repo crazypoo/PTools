@@ -41,6 +41,15 @@
       "consumer": "repository",
       "format": "yml",
       "generated": false,
+      "kind": "CI",
+      "path": ".github/workflows/release-validation.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
       "kind": "SOURCE_OF_TRUTH",
       "path": ".swiftlint.yml",
       "source_of_truth": true
@@ -1542,6 +1551,15 @@
     {
       "action": "KEEP",
       "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/CI/quality_gates.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
       "format": "json",
       "generated": false,
       "kind": "DEV_TOOL",
@@ -1963,8 +1981,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-09-28T16:09:01+08:00",
+  "generated_at": "2026-09-28T19:47:36+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
+  "source_revision": "17d503f178439beb767137d2a3cfd6cd2908c40f",
   "version": "5.56.2"
 }

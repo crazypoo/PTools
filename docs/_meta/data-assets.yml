@@ -35,6 +35,14 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: ".github/workflows/release-validation.yml"
+  kind: "CI"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
   path: ".swiftlint.yml"
   kind: "SOURCE_OF_TRUTH"
   format: "yml"
@@ -1368,6 +1376,14 @@
   format: "json"
   generated: false
   source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/CI/quality_gates.yml"
+  kind: "DEV_TOOL"
+  format: "yml"
+  generated: false
+  source_of_truth: false
   consumer: "repository"
   action: "KEEP"
 -

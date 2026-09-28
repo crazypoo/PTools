@@ -5,26 +5,157 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  build-contract:
+  version-governance:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate documentation structure
-        run: bash Scripts/validate_docs.sh
-      - name: Validate document versions
-        run: bash Scripts/validate_document_versions.sh
-      - name: Validate build contract
-        run: bash Scripts/validate_build_entries.sh
-      - name: Validate release metadata
-        run: bash Scripts/validate_release.sh
-      - name: Scan unsafe Swift constructs
-        run: bash Scripts/validate_quality_scans.sh
-      - name: Scan Xcode source warnings
-        run: bash Scripts/validate_xcode_source_warnings.sh
-      - name: Validate patch formatting
-        run: git diff --check
-      - name: CocoaPods lint
-        run: pod lib lint PooTools.podspec --allow-warnings --skip-tests
-      - name: Build iOS Simulator entry
-        run: xcodebuild -workspace PooTools.xcworkspace -scheme PooTools -destination 'generic/platform=iOS Simulator' -configuration Release CODE_SIGNING_ALLOWED=NO build
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Version Governance
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh version
+      - name: Upload Version Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-version
+          path: .quality-report
+
+  docs-governance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Documentation Governance
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh docs
+      - name: Upload Docs Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-docs
+          path: .quality-report
+
+  architecture-governance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Architecture Governance
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh architecture
+      - name: Upload Architecture Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-architecture
+          path: .quality-report
+
+  unit-tests:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Unit Tests
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh tests
+      - name: Upload Tests Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-tests
+          path: .quality-report
+
+  strict-concurrency:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Strict Concurrency
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh concurrency
+      - name: Upload Concurrency Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-concurrency
+          path: .quality-report
+
+  cocoapods:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: CocoaPods
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh pods
+      - name: Upload CocoaPods Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-pods
+          path: .quality-report
+
+  xcode-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Xcode Build
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh xcode
+      - name: Upload Xcode Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-xcode
+          path: .quality-report
+
+  release-metadata:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Release Metadata
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh release
+      - name: Upload Release Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-release
+          path: .quality-report
+
+  quality-summary:
+    if: always()
+    needs:
+      - version-governance
+      - docs-governance
+      - architecture-governance
+      - unit-tests
+      - strict-concurrency
+      - cocoapods
+      - xcode-build
+      - release-metadata
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Download Gate reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: quality-*
+          path: .quality-reports
+          merge-multiple: false
+      - name: Final Quality Summary
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-reports" bash Scripts/CI/quality_gate.sh summary
+      - name: Upload Quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-final-report
+          path: .quality-reports

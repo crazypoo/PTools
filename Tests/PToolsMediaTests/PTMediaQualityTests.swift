@@ -55,4 +55,15 @@ final class PTMediaQualityTests: XCTestCase {
             }
         }
     }
+
+    func testMediaPagingUsesExplicitEdgeToEdgeInsetPolicy() {
+        let config = PTCollectionViewConfig()
+        config.contentInsetAdjustmentBehavior = .never
+        let list = PTCollectionView(viewConfig: config)
+        list.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        list.layoutIfNeeded()
+
+        XCTAssertEqual(list.contentCollectionView.contentInsetAdjustmentBehavior, .never)
+        XCTAssertEqual(list.contentCollectionView.frame, list.bounds)
+    }
 }

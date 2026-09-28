@@ -1,0 +1,30 @@
+# English: Keep the visible CI gate names and their canonical local commands together.
+# Español: Mantiene juntos los nombres visibles de las puertas CI y sus comandos locales canónicos.
+# 中文：集中维护 CI 可见门禁名称及其本地 canonical 命令。
+
+schemaVersion: 1
+gates:
+  - id: VERSION
+    script: Scripts/validate_document_versions.sh
+    workflowJob: version-governance
+  - id: DOCS
+    script: Scripts/Docs/audit_docs.py
+    workflowJob: docs-governance
+  - id: ARCHITECTURE
+    script: Scripts/validate_quality_scans.sh
+    workflowJob: architecture-governance
+  - id: TESTS
+    script: Scripts/CI/quality_gate.sh tests
+    workflowJob: unit-tests
+  - id: CONCURRENCY
+    script: Scripts/validate_xcode_source_warnings.sh
+    workflowJob: strict-concurrency
+  - id: PODS
+    script: pod lib lint
+    workflowJob: cocoapods
+  - id: XCODE
+    script: xcodebuild
+    workflowJob: xcode-build
+  - id: RELEASE
+    script: Scripts/validate_release.sh
+    workflowJob: release-metadata

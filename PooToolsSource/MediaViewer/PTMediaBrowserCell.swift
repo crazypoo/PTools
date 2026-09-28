@@ -52,13 +52,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     lazy var effectView: UIVisualEffectView = {
       let effect = UIBlurEffect(style: .dark)
       let view = UIVisualEffectView(effect: effect)
-      view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       return view
     }()
 
     lazy var backgroundImageView: UIImageView = {
       let view = UIImageView()
-      view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       return view
     }()
 

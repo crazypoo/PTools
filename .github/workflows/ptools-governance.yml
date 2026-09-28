@@ -13,7 +13,9 @@ jobs:
   governance:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Audit documentation and repository assets
         run: python3 Scripts/Docs/audit_docs.py --check
       - name: Run governance gate

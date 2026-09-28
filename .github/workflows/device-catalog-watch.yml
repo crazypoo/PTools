@@ -9,7 +9,9 @@ jobs:
   validate-catalog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Validate source catalog
         run: python3 Scripts/Device/validate_device_catalog.py
       - name: Check generated catalog

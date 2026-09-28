@@ -71,7 +71,7 @@ final class PTRichTextCoreTests: XCTestCase {
 
     func testInvalidAttachmentSizeFallsBackToFiniteBounds() {
         let descriptor = PTTextAttachmentDescriptor(kind: .remote(URL(string: "https://example.com/image")!),
-                                                     size: CGSize(width: .nan, height: .infinity))
+                                                     size: CGSize(width: CGFloat.nan, height: CGFloat.infinity))
 
         XCTAssertEqual(descriptor.size, CGSize(width: 1, height: 1))
     }

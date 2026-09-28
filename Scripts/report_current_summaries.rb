@@ -2,6 +2,7 @@
 
 require "fileutils"
 require "json"
+require "open3"
 require "rubygems"
 require "time"
 
@@ -103,10 +104,13 @@ write_markdown(
 )
 
 version = File.read(File.join(repo_root, "VERSION")).strip
-tags = `git -C "#{repo_root}" tag --list`.lines(chomp: true).filter_map do |tag|
-  tag if tag.match?(/\A\d+\.\d+\.\d+\z/)
-end
-latest_tag = tags.max_by { |tag| Gem::Version.new(tag) }
+latest_tag, latest_tag_status = Open3.capture2(
+  "ruby",
+  File.join(repo_root, "Scripts", "CI", "version_facts.rb"),
+  "latest-formal-tag"
+)
+latest_tag = latest_tag.strip if latest_tag_status.success?
+latest_tag = nil unless latest_tag_status.success? && !latest_tag.empty?
 
 write_markdown(
   File.join(current_dir, "regression_status.md"),

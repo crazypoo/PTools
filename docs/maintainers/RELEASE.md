@@ -65,6 +65,13 @@ swift package dump-package
 - 将已发布版本从 CHANGELOG 的 Unreleased 移到正式章节。
 - 不把临时构建产物、DerivedData、Pods 修改或密钥提交到仓库。
 
+发布候选前先执行统一 Quality Gate：
+
+    ./Scripts/quality.sh all
+
+它会生成独立 Gate 结果和 quality-report.json / quality-report.md；随后再执行本文件中的
+完整发布演练和版本候选检查。
+
 ## Rollback
 
 若 tag 已创建但发布验收失败：

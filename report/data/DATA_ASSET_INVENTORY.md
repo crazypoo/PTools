@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 6a267fc683d4d02768b0bf442da1e06c55cbb6de
-Generated at: 2026-09-28T16:09:01+08:00 -->
+Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
+Generated at: 2026-09-28T19:47:36+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.56.2`
-- Records: `218`
+- Records: `220`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -13,6 +13,7 @@ Generated at: 2026-09-28T16:09:01+08:00 -->
 | .github/workflows/device-catalog-watch.yml | CI | yml | False | False | KEEP |
 | .github/workflows/ptools-governance.yml | CI | yml | False | False | KEEP |
 | .github/workflows/quality.yml | CI | yml | False | False | KEEP |
+| .github/workflows/release-validation.yml | CI | yml | False | False | KEEP |
 | .swiftlint.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | .vscode/settings.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | Example/Extensions/extension_targets.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -180,6 +181,7 @@ Generated at: 2026-09-28T16:09:01+08:00 -->
 | PooToolsSource/Resource/Symbols.xcassets/Panel/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| Scripts/CI/quality_gates.yml | DEV_TOOL | yml | False | False | KEEP |
 | Scripts/concurrency_exception_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/module_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/naming_debt_registry.json | DEV_TOOL | json | False | False | KEEP |

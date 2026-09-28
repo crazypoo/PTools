@@ -104,11 +104,13 @@ public class PTMediaBrowserController: PTBaseViewController {
     }()
     
     fileprivate lazy var newCollectionView : PTCollectionView = {
-        let cellHeight = CGFloat.kSCREEN_HEIGHT
-        let cellWidth = CGFloat.kSCREEN_WIDTH
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
         cConfig.collectionViewBehavior = .paging
+        // English: Media paging is a fullscreen background layer, so UIKit must not inset the first cell.
+        // Español: La paginación multimedia es una capa de fondo a pantalla completa; UIKit no debe insertar el primer cell.
+        // 中文：媒体分页属于全屏背景层，UIKit 不应为首个 Cell 自动添加安全区 inset。
+        cConfig.contentInsetAdjustmentBehavior = .never
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
         
@@ -184,8 +186,17 @@ public class PTMediaBrowserController: PTBaseViewController {
             return nil
         }
         
-        collectionView.customerLayout = { sectionIndex, sectionModel in
-            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows, itemOriginalX: 0, itemWidth: cellWidth, itemHeight: cellHeight, topContentSpace: 0, bottomContentSpace: 0, itemLeadingSpace: 0)
+        collectionView.customerLayout = { [weak collectionView] _, sectionModel in
+            let effectiveSize = collectionView?.contentCollectionView.bounds.size ?? .zero
+            let width = effectiveSize.width > 0 ? effectiveSize.width : CGFloat.kSCREEN_WIDTH
+            let height = effectiveSize.height > 0 ? effectiveSize.height : CGFloat.kSCREEN_HEIGHT
+            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,
+                                                           itemOriginalX: 0,
+                                                           itemWidth: width,
+                                                           itemHeight: height,
+                                                           topContentSpace: 0,
+                                                           bottomContentSpace: 0,
+                                                           itemLeadingSpace: 0)
         }
         
         collectionView.collectionDidEndDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
