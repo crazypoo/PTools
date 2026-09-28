@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T19:47:36+08:00 -->
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T21:26:17+08:00 -->
 # Script Inventory
 
 - Version: `5.56.2`
-- Records: `96`
+- Records: `101`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -31,27 +31,33 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | Scripts/Device/generate_device_catalog.py | py | Device | ACTIVE | True | KEEP |
 | Scripts/Device/update_device_catalog.py | py | Device | ACTIVE | True | KEEP |
 | Scripts/Device/validate_device_catalog.py | py | Device | ACTIVE | True | KEEP |
+| Scripts/Docs/apply_cleanup.py | py | Docs | ACTIVE | True | KEEP |
 | Scripts/Docs/audit_docs.py | py | Docs | ACTIVE | True | KEEP |
+| Scripts/Governance/audit_data_assets.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/audit_repository.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/audit_scripts.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/audit_tests.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/find_duplicates.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Migration/cleanup_example_source_membership.rb | rb | Migration | ACTIVE | True | KEEP |
+| Scripts/Privacy/validate_privacy_accessed_api.sh | sh | Privacy | ACTIVE | True | KEEP |
 | Scripts/Symbols/symbol-diff.sh | sh | Symbols | ACTIVE | True | KEEP |
 | Scripts/Symbols/update-symbols.sh | sh | Symbols | ACTIVE | True | KEEP |
 | Scripts/Symbols/verify-generated-symbols.sh | sh | Symbols | ACTIVE | True | KEEP |
 | Scripts/compare_public_api.rb | rb | Scripts | ACTIVE | True | KEEP |
-| Scripts/generate_58_reports.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/generate_dependency_matrix.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/generate_package_matrix.rb | rb | Scripts | ACTIVE | True | KEEP |
+| Scripts/ptools.py | py | Scripts | ACTIVE | True | KEEP |
 | Scripts/quality.sh | sh | Scripts | ACTIVE | True | KEEP |
-| Scripts/report_accessibility_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
-| Scripts/report_cache_inventory_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/report_accessibility.rb | rb | Scripts | ACTIVE | True | KEEP |
+| Scripts/report_cache_inventory.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_cocoapods_subspec_graph.rb | rb | Scripts | ACTIVE | True | KEEP |
-| Scripts/report_concurrency_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/report_concurrency.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_current_summaries.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_duplicate_entries.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_mainactor_heavy_work.rb | rb | Scripts | ACTIVE | True | KEEP |
-| Scripts/report_public_api_5_8.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
-| Scripts/report_public_api_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/report_public_api.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_sendable_exceptions.rb | rb | Scripts | ACTIVE | True | KEEP |
-| Scripts/report_singletons_5_9.rb | rb | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/report_singletons.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_spm_dependency_graph.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_514_network_security.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_515_media.sh | sh | Scripts | ACTIVE | True | KEEP |
@@ -104,4 +110,3 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | Scripts/validate_test_matrix.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_ui_5_13_contract.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_xcode_source_warnings.sh | sh | Scripts | ACTIVE | True | KEEP |
-| paapidetect.sh | sh | root | ACTIVE | True | KEEP_REVIEW |

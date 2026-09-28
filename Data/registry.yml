@@ -1,0 +1,34 @@
+# English: Canonical structured-data ownership and generation registry.
+# Español: Registro canónico de propiedad y generación de datos estructurados.
+# 中文：结构化数据的 canonical 所有权与生成 registry。
+assets:
+  - id: docs.modules
+    path: docs/_meta/modules.yml
+    kind: source_of_truth
+    generator: Scripts/Docs/audit_docs.py
+    owner: docs
+  - id: docs.languages
+    path: docs/_meta/languages.yml
+    kind: source_of_truth
+    generator: Scripts/Docs/audit_docs.py
+    owner: docs
+  - id: package.dependencies
+    path: Package.resolved
+    kind: source_of_truth
+    generator: package-manager
+    owner: build
+  - id: pods.dependencies
+    path: Podfile.lock
+    kind: source_of_truth
+    generator: cocoapods
+    owner: build
+  - id: module.compatibility
+    path: Scripts/module_registry.json
+    kind: source_of_truth
+    generator: maintainers
+    owner: modules
+  - id: concurrency.exceptions
+    path: Scripts/concurrency_exception_registry.json
+    kind: source_of_truth
+    generator: maintainers
+    owner: concurrency

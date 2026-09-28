@@ -2,16 +2,16 @@
 AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
-Generator: Scripts/report_singletons_5_9.rb
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T12:49:22Z
+Generator: Scripts/report_singletons.rb
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T14:24:56Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1595**
+- .shared / .share 调用文本计数：**1594**
 - 单例声明计数：**128**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |

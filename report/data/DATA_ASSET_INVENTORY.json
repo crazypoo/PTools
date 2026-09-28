@@ -66,6 +66,15 @@
     {
       "action": "KEEP",
       "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "Data/registry.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
       "format": "json",
       "generated": false,
       "kind": "SOURCE_OF_TRUTH",
@@ -1607,6 +1616,24 @@
       "consumer": "repository",
       "format": "yml",
       "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/registry.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "Tests/registry.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
       "kind": "CI",
       "path": "_config.yml",
       "source_of_truth": false
@@ -1968,6 +1995,42 @@
       "format": "json",
       "generated": true,
       "kind": "REPORT",
+      "path": "report/repository/DATA_ASSET_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/repository/DUPLICATE_CANDIDATES.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/repository/SCRIPT_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/repository/TEST_INVENTORY.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
       "path": "report/scripts/SCRIPT_INVENTORY.json",
       "source_of_truth": false
     },
@@ -1981,8 +2044,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-09-28T19:47:36+08:00",
+  "generated_at": "2026-09-28T21:26:17+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "17d503f178439beb767137d2a3cfd6cd2908c40f",
+  "source_revision": "7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d",
   "version": "5.56.2"
 }

@@ -32,7 +32,7 @@ end
 
 payload = {
   "schema_version" => 1,
-  "generator" => "Scripts/report_cache_inventory_5_9.rb",
+  "generator" => "Scripts/report_cache_inventory.rb",
   "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
   "generated_at" => Time.now.utc.iso8601,
   "entries" => entries,

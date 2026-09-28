@@ -1,4 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# English: Resolve privacy inputs from this script's repository location instead of the caller's working directory.
+# Español: Resuelve las entradas de privacidad desde la ubicación del repositorio y no desde el directorio del llamador.
+# 中文：从脚本所在仓库位置解析隐私输入，不再依赖调用方当前目录。
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$repo_root"
 
 # PrivacyInfo.xcprivacy file path
 privacy_info_file_path=""
@@ -19,7 +27,7 @@ done
 
 # Specify the current directory as the search directory
 search_directory="."
-api_file_path="paapi.txt"
+api_file_path="$repo_root/Scripts/Privacy/paapi.txt"
 
 # Check if the file exists
 if [ ! -f "$api_file_path" ]; then
@@ -51,7 +59,7 @@ while IFS= read -r search_text; do
       # Use find command to search and grep to match the search string
       result=$(find "$search_directory" \( -path "./Pods" -o -path "./Tests" \) -prune -o \
       -type f \( -name "*.h" -o -name "*.m" -o -name "*.mm" -o -name "*.swift" \) \
-      -print0 | xargs -0 -P 4 -n 10 grep -wH "$search_text")
+      -print0 | xargs -0 -P 4 -n 10 grep -wH "$search_text" || true)
       if [ -n "$result" ]; then
         # Check if the corresponding Type is in the PrivacyInfo.xcprivacy file
         if [ -z "$privacy_info_file_path" ]; then
@@ -97,4 +105,3 @@ done < "$api_file_path"
 if [ "$error_found" -eq 1 ]; then
   exit 1
 fi
-

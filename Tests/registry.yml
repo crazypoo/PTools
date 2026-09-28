@@ -1,0 +1,130 @@
+# English: Canonical test-target identity and execution ownership.
+# Español: Identidad canónica y propiedad de ejecución de los test targets.
+# 中文：测试 target 的 canonical 身份和执行归属。
+targets:
+  - id: core
+    target: PToolsCoreTests
+    path: Tests/PooToolsCoreTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: platform
+    target: PToolsPlatformTests
+    path: Tests/PToolsPlatformTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: advanced
+    target: PToolsAdvancedTests
+    path: Tests/PToolsAdvancedTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: media
+    target: PToolsMediaTests
+    path: Tests/PToolsMediaTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: ui-foundation
+    target: PToolsUIFoundationTests
+    path: Tests/PToolsUIFoundationTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: navigation
+    target: PToolsNavigationTests
+    path: Tests/PToolsNavigationTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: list
+    target: PToolsListTests
+    path: Tests/PToolsListTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: device
+    target: PToolsDeviceTests
+    path: Tests/PToolsDeviceTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: date
+    target: PToolsDateTests
+    path: Tests/PToolsDateTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: rich-text
+    target: PToolsRichTextTests
+    path: Tests/PToolsRichTextTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: network
+    target: PToolsNetworkTests
+    path: Tests/PToolsNetworkTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: permission
+    target: PToolsPermissionTests
+    path: Tests/PToolsPermissionTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: logging
+    target: PToolsLoggingTests
+    path: Tests/PToolsLoggingTests
+    type: [contract, performance]
+    pr: true
+    nightly: true
+    release: true
+  - id: symbols
+    target: PToolsSymbolsTests
+    path: Tests/PToolsSymbolsTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: banner
+    target: PToolsBannerTests
+    path: Tests/PToolsBannerTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: socket-kit
+    target: PToolsSocketKitTests
+    path: Tests/PToolsSocketKitTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: http-server
+    target: PToolsHTTPServerTests
+    path: Tests/PToolsHTTPServerTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
+  - id: p2
+    target: PToolsP2Tests
+    path: Tests/PToolsP2Tests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true

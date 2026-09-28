@@ -1,15 +1,27 @@
 # English: Generated from the repository's canonical governance inputs.
 # Español: Generado a partir de las entradas canónicas de gobernanza.
 # 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
-# Conservative cleanup manifest; destructive actions require a reviewed consumer map.
+# Cleanup actions require a generated consumer map; destructive apply is explicit and reviewable.
 -
   path: "docs/"
   action: "KEEP_ACTIVE_OR_ARCHIVE"
-  reason: "Move historical plans only after inventory and decision extraction"
+  reason: "Historical plans are classified by the repository cleanup manifest"
 -
-  path: "Scripts/validate_*_5_*.sh"
-  action: "LEGACY_REVIEW"
-  reason: "Keep until canonical governance checks cover their contracts"
+  path: "Scripts/"
+  action: "CLASSIFY_AND_REPOINT"
+  reason: "Use Scripts/Governance/audit_repository.py before moving or deleting an entry"
+-
+  path: "Data/"
+  action: "SOURCE_OF_TRUTH"
+  reason: "Data/registry.yml defines ownership and generator boundaries"
+-
+  path: "Tests/"
+  action: "CLASSIFY_BEFORE_MERGE"
+  reason: "Tests/registry.yml is the target identity; merge only with dependency and timing evidence"
+-
+  path: "report/repository/"
+  action: "GENERATED"
+  reason: "Regenerate cleanup, duplicate, script, data, and test reports from the repository audit"
 -
   path: "report/"
   action: "GENERATED"

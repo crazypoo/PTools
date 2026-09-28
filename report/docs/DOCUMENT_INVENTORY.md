@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T19:47:36+08:00 -->
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T21:26:17+08:00 -->
 # Document Inventory
 
 - Version: `5.56.2`
-- Records: `834`
+- Records: `841`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -841,5 +841,12 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | report/current/spm_dependency_graph.md | GENERATED | en | GENERATED | KEEP |
 | report/data/DATA_ASSET_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/docs/DOCUMENT_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/AUTOMATION_ASSET_MERGE_MANIFEST.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/DATA_ASSET_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/DUPLICATE_CANDIDATES.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/REPOSITORY_CLEANUP_MANIFEST.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/SCRIPT_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/TEST_CLEANUP_MANIFEST.md | GENERATED | en | GENERATED | KEEP |
+| report/repository/TEST_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/scripts/SCRIPT_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/tests/TEST_INVENTORY.md | GENERATED | en | GENERATED | KEEP |

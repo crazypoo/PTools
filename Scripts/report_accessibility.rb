@@ -30,7 +30,7 @@ end
 
 payload = {
   "schema_version" => 1,
-  "generator" => "Scripts/report_accessibility_5_9.rb",
+  "generator" => "Scripts/report_accessibility.rb",
   "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
   "generated_at" => Time.now.utc.iso8601,
   "counts" => counts,

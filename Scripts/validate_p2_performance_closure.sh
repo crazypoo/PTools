@@ -11,7 +11,7 @@ cd "$repo_root"
 
 bash Scripts/validate_p1_performance_registry.sh
 bash Scripts/validate_file_size_gate.sh >/dev/null
-ruby Scripts/report_cache_inventory_5_9.rb >/dev/null
+ruby Scripts/report_cache_inventory.rb >/dev/null
 ruby Scripts/report_mainactor_heavy_work.rb >/dev/null
 
 ruby - <<'RUBY'

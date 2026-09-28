@@ -3,7 +3,7 @@
   "baseline": "current source inventory",
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
-  "generator": "Scripts/report_public_api_5_9.rb",
+  "generator": "Scripts/report_public_api.rb",
   "source_revision": "56aa3d05c644ae46332bb7499e9728f3b587ba7e",
   "generated_at": "2026-09-28T00:29:03Z",
   "declarations": [

@@ -179,6 +179,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Docs/apply_cleanup.py"
+  language: "py"
+  domain: "Docs"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Docs/audit_docs.py"
   language: "py"
   domain: "Docs"
@@ -187,9 +195,57 @@
   entrypoint: true
   action: "KEEP"
 -
+  path: "Scripts/Governance/audit_data_assets.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/audit_repository.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/audit_scripts.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/audit_tests.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/find_duplicates.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Migration/cleanup_example_source_membership.rb"
   language: "rb"
   domain: "Migration"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Privacy/validate_privacy_accessed_api.sh"
+  language: "sh"
+  domain: "Privacy"
   status: "ACTIVE"
   canonical: true
   entrypoint: false
@@ -227,14 +283,6 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/generate_58_reports.sh"
-  language: "sh"
-  domain: "Scripts"
-  status: "ACTIVE"
-  canonical: true
-  entrypoint: false
-  action: "KEEP"
--
   path: "Scripts/generate_dependency_matrix.rb"
   language: "rb"
   domain: "Scripts"
@@ -251,6 +299,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/ptools.py"
+  language: "py"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/quality.sh"
   language: "sh"
   domain: "Scripts"
@@ -259,19 +315,19 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/report_accessibility_5_9.rb"
+  path: "Scripts/report_accessibility.rb"
   language: "rb"
   domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/report_cache_inventory_5_9.rb"
+  path: "Scripts/report_cache_inventory.rb"
   language: "rb"
   domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -283,11 +339,11 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/report_concurrency_5_9.rb"
+  path: "Scripts/report_concurrency.rb"
   language: "rb"
   domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -315,19 +371,11 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/report_public_api_5_8.rb"
+  path: "Scripts/report_public_api.rb"
   language: "rb"
   domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
-  entrypoint: false
-  action: "KEEP"
--
-  path: "Scripts/report_public_api_5_9.rb"
-  language: "rb"
-  domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -339,11 +387,11 @@
   entrypoint: false
   action: "KEEP"
 -
-  path: "Scripts/report_singletons_5_9.rb"
+  path: "Scripts/report_singletons.rb"
   language: "rb"
   domain: "Scripts"
-  status: "LEGACY_REVIEW"
-  canonical: false
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -762,11 +810,3 @@
   canonical: true
   entrypoint: false
   action: "KEEP"
--
-  path: "paapidetect.sh"
-  language: "sh"
-  domain: "root"
-  status: "ACTIVE"
-  canonical: true
-  entrypoint: false
-  action: "KEEP_REVIEW"

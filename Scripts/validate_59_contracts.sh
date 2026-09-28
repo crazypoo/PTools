@@ -8,11 +8,11 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_root"
 
-ruby Scripts/report_public_api_5_9.rb
-ruby Scripts/report_concurrency_5_9.rb
-ruby Scripts/report_singletons_5_9.rb
-ruby Scripts/report_cache_inventory_5_9.rb
-ruby Scripts/report_accessibility_5_9.rb
+ruby Scripts/report_public_api.rb
+ruby Scripts/report_concurrency.rb
+ruby Scripts/report_singletons.rb
+ruby Scripts/report_cache_inventory.rb
+ruby Scripts/report_accessibility.rb
 bash Scripts/validate_branch_dependencies.sh
 bash Scripts/validate_dependencies_5_9_6.sh
 bash Scripts/validate_migration_5_9_7.sh

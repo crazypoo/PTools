@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T12:50:14Z
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T14:24:52Z
 -->
 
 # 当前文件尺寸门禁

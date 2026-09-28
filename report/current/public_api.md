@@ -2,14 +2,14 @@
 AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
-Generator: Scripts/report_public_api_5_9.rb
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T12:49:21Z
+Generator: Scripts/report_public_api.rb
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T14:24:02Z
 -->
 
 # PTools 当前公开 API 清单
 
-本报告由 Scripts/report_public_api_5_9.rb 生成，记录源码级声明，不宣称 ABI 稳定。
+本报告由 Scripts/report_public_api.rb 生成，记录源码级声明，不宣称 ABI 稳定。
 
 | 位置 | 类型 | 访问级别 | 声明 |
 | --- | --- | --- | --- |
@@ -4572,22 +4572,22 @@ Generated at: 2026-09-28T12:49:21Z
 | PooToolsSource/Overlay/PTOverlayLifecycle.swift:15 | typealias | public | public typealias Handler = @MainActor @Sendable (PTOverlayLifecycleEvent) -> Void |
 | PooToolsSource/Overlay/PTOverlayLifecycle.swift:20 | init | public | public init(scene: UIWindowScene, handler: @escaping Handler) { |
 | PooToolsSource/Overlay/PTOverlayPresentation.swift:8 | enum | public | public enum PTOverlaySceneResolver { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:61 | class | public | public final class PTOverlayContainerView: UIView { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:62 | var | public | public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:64 | var | public | public var interactiveContentViews: [UIView] = [] |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:68 | var | public | public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)? |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:100 | class | public | public class PTOverlayPassthroughWindow: UIWindow { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:101 | let | public | public let overlayContainer = PTOverlayContainerView() |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:103 | init | public | public init(windowScene: UIWindowScene, layer: PTOverlayLayer) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:124 | class | public | public final class PTOverlayWindow: PTOverlayPassthroughWindow {} |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:127 | class | public | public final class PTOverlayHost { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:128 | let | public | public let containerView: PTOverlayContainerView |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:133 | init | public | public init?(context: PTOverlayPresentationContext, |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:160 | func | public | public func attach() { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:175 | func | public | public func detach() { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:180 | func | public | public func addOverlayView(_ view: UIView) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:187 | func | public | public func removeOverlayView(_ view: UIView) { |
-| PooToolsSource/Overlay/PTOverlayPresentation.swift:191 | var | public | public var safeAreaContext: PTOverlaySafeAreaContext { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:59 | class | public | public final class PTOverlayContainerView: UIView { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:60 | var | public | public var hitTestPolicy: PTOverlayHitTestPolicy = .passthroughOutsideContent |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:62 | var | public | public var interactiveContentViews: [UIView] = [] |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:66 | var | public | public var customHitTest: (@MainActor (CGPoint, UIEvent?) -> UIView?)? |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:98 | class | public | public class PTOverlayPassthroughWindow: UIWindow { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:99 | let | public | public let overlayContainer = PTOverlayContainerView() |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:101 | init | public | public init(windowScene: UIWindowScene, layer: PTOverlayLayer) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:122 | class | public | public final class PTOverlayWindow: PTOverlayPassthroughWindow {} |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:125 | class | public | public final class PTOverlayHost { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:126 | let | public | public let containerView: PTOverlayContainerView |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:131 | init | public | public init?(context: PTOverlayPresentationContext, |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:158 | func | public | public func attach() { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:173 | func | public | public func detach() { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:178 | func | public | public func addOverlayView(_ view: UIView) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:185 | func | public | public func removeOverlayView(_ view: UIView) { |
+| PooToolsSource/Overlay/PTOverlayPresentation.swift:189 | var | public | public var safeAreaContext: PTOverlaySafeAreaContext { |
 | PooToolsSource/PDF/PTPDFManager.swift:16 | enum | public | public enum PTPDFManager { |
 | PooToolsSource/PDF/PTPDFManager.swift:113 | class | public | public class PDFWithImage: NSObject { |
 | PooToolsSource/PDF/PTPDFPreviewController.swift:11 | class | public | public final class PTPDFPreviewController: UIViewController { |

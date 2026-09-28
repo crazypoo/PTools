@@ -50,7 +50,7 @@ end
 
 payload = {
   "schema_version" => 2,
-  "generator" => "Scripts/report_singletons_5_9.rb",
+  "generator" => "Scripts/report_singletons.rb",
   "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
   "generated_at" => Time.now.utc.iso8601,
   "shared_call_count" => shared_calls,

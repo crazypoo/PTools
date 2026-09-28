@@ -40,7 +40,7 @@ end
 payload = {
   "schema_version" => 1,
   "baseline" => "current working-tree scan",
-  "generator" => "Scripts/report_concurrency_5_9.rb",
+  "generator" => "Scripts/report_concurrency.rb",
   "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
   "generated_at" => Time.now.utc.iso8601,
   "counts" => counts,

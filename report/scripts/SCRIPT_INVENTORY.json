@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T19:47:36+08:00",
+  "generated_at": "2026-09-28T21:26:17+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
   "scripts": [
     {
@@ -204,9 +204,63 @@
       "action": "KEEP",
       "canonical": true,
       "domain": "Docs",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Docs/apply_cleanup.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Docs",
       "entrypoint": true,
       "language": "py",
       "path": "Scripts/Docs/audit_docs.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/audit_data_assets.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/audit_repository.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/audit_scripts.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/audit_tests.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/find_duplicates.py",
       "status": "ACTIVE"
     },
     {
@@ -216,6 +270,15 @@
       "entrypoint": false,
       "language": "rb",
       "path": "Scripts/Migration/cleanup_example_source_membership.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Privacy",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Privacy/validate_privacy_accessed_api.sh",
       "status": "ACTIVE"
     },
     {
@@ -259,15 +322,6 @@
       "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
-      "language": "sh",
-      "path": "Scripts/generate_58_reports.sh",
-      "status": "ACTIVE"
-    },
-    {
-      "action": "KEEP",
-      "canonical": true,
-      "domain": "Scripts",
-      "entrypoint": false,
       "language": "rb",
       "path": "Scripts/generate_dependency_matrix.rb",
       "status": "ACTIVE"
@@ -286,27 +340,36 @@
       "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/ptools.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
       "language": "sh",
       "path": "Scripts/quality.sh",
       "status": "ACTIVE"
     },
     {
       "action": "KEEP",
-      "canonical": false,
+      "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "rb",
-      "path": "Scripts/report_accessibility_5_9.rb",
-      "status": "LEGACY_REVIEW"
+      "path": "Scripts/report_accessibility.rb",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
-      "canonical": false,
+      "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "rb",
-      "path": "Scripts/report_cache_inventory_5_9.rb",
-      "status": "LEGACY_REVIEW"
+      "path": "Scripts/report_cache_inventory.rb",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -319,12 +382,12 @@
     },
     {
       "action": "KEEP",
-      "canonical": false,
+      "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "rb",
-      "path": "Scripts/report_concurrency_5_9.rb",
-      "status": "LEGACY_REVIEW"
+      "path": "Scripts/report_concurrency.rb",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -355,21 +418,12 @@
     },
     {
       "action": "KEEP",
-      "canonical": false,
+      "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "rb",
-      "path": "Scripts/report_public_api_5_8.rb",
-      "status": "LEGACY_REVIEW"
-    },
-    {
-      "action": "KEEP",
-      "canonical": false,
-      "domain": "Scripts",
-      "entrypoint": false,
-      "language": "rb",
-      "path": "Scripts/report_public_api_5_9.rb",
-      "status": "LEGACY_REVIEW"
+      "path": "Scripts/report_public_api.rb",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -382,12 +436,12 @@
     },
     {
       "action": "KEEP",
-      "canonical": false,
+      "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "rb",
-      "path": "Scripts/report_singletons_5_9.rb",
-      "status": "LEGACY_REVIEW"
+      "path": "Scripts/report_singletons.rb",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -856,17 +910,8 @@
       "language": "sh",
       "path": "Scripts/validate_xcode_source_warnings.sh",
       "status": "ACTIVE"
-    },
-    {
-      "action": "KEEP_REVIEW",
-      "canonical": true,
-      "domain": "root",
-      "entrypoint": false,
-      "language": "sh",
-      "path": "paapidetect.sh",
-      "status": "ACTIVE"
     }
   ],
-  "source_revision": "17d503f178439beb767137d2a3cfd6cd2908c40f",
+  "source_revision": "7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d",
   "version": "5.56.2"
 }

@@ -2,9 +2,9 @@
 AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
-Generator: Scripts/report_accessibility_5_9.rb
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T12:49:23Z
+Generator: Scripts/report_accessibility.rb
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T14:24:03Z
 -->
 
 # PTools 当前 UI 适配扫描

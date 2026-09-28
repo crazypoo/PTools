@@ -36,7 +36,7 @@ payload = {
   "baseline" => "current source inventory",
   "abi_claim" => false,
   "generated_from" => "PooToolsSource/**/*.swift",
-  "generator" => "Scripts/report_public_api_5_9.rb",
+  "generator" => "Scripts/report_public_api.rb",
   "source_revision" => `git -C "#{repo_root}" rev-parse HEAD`.strip,
   "generated_at" => Time.now.utc.iso8601,
   "declarations" => declarations
@@ -58,7 +58,7 @@ markdown << "-->"
 markdown << ""
 markdown << "# PTools 当前公开 API 清单"
 markdown << ""
-markdown << "本报告由 Scripts/report_public_api_5_9.rb 生成，记录源码级声明，不宣称 ABI 稳定。"
+markdown << "本报告由 Scripts/report_public_api.rb 生成，记录源码级声明，不宣称 ABI 稳定。"
 markdown << ""
 markdown << "| 位置 | 类型 | 访问级别 | 声明 |"
 markdown << "| --- | --- | --- | --- |"

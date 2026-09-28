@@ -55,12 +55,12 @@ bash Scripts/validate_file_size_gate.sh >/dev/null
 # English: Refresh current concurrency and compatibility inventories as part of every quality run.
 # Español: Actualiza los inventarios actuales de concurrencia y compatibilidad en cada ejecución de calidad.
 # 中文：每次质量扫描都刷新当前并发和兼容性清单。
-ruby Scripts/report_concurrency_5_9.rb >/dev/null
-ruby Scripts/report_public_api_5_9.rb >/dev/null
+ruby Scripts/report_concurrency.rb >/dev/null
+ruby Scripts/report_public_api.rb >/dev/null
 ruby Scripts/report_sendable_exceptions.rb >/dev/null
-ruby Scripts/report_cache_inventory_5_9.rb >/dev/null
-ruby Scripts/report_singletons_5_9.rb >/dev/null
-ruby Scripts/report_accessibility_5_9.rb >/dev/null
+ruby Scripts/report_cache_inventory.rb >/dev/null
+ruby Scripts/report_singletons.rb >/dev/null
+ruby Scripts/report_accessibility.rb >/dev/null
 bash Scripts/validate_concurrency_5_19.sh
 
 # English: Keep the SPM/CocoaPods parity and dependency-direction baselines in the regular quality gate.

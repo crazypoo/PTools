@@ -1,0 +1,3962 @@
+{
+  "assets": [
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".github/FUNDING.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".github/workflows/device-catalog-watch.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".github/workflows/ptools-governance.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".github/workflows/quality.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".github/workflows/release-validation.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".swiftlint.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": ".vscode/settings.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/cleanup.yml",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Data/registry.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_36_1_finalization.sh",
+        "Scripts/CI/check_p2_modern_modules.sh",
+        "docs/_meta/data-assets.yml",
+        "docs/architecture/PTOOLS_5_36_1_FINALIZATION_MATRIX.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Example/Extensions/extension_targets.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/AppIcon.appiconset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_1.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_2.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_3.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_4.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_5.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_6.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_normal_7.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_1.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_2.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_3.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_4.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_5.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_6.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/Day/image_day_select_7.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/DemoImage.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/DemoImageDark.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_aircondition.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_aircondition_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_bed.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_bed_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_closet.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_closet_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_fridge.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_fridge_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_gas.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_gas_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_heater.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_heater_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_sofa.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_sofa_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_televition.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_televition_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_washer.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_washer_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_web.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TagImage/image_web_gray.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/TextImage.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/Images.xcassets/icon_clear.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml",
+        "docs/audits/EXAMPLE_SOURCE_OWNERSHIP_AUDIT.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooTools/camera.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-vision.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-watch.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/homepod.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipad.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/iphone.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/ipod.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/mac.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/Symbols/symbol-diff.sh",
+        "Scripts/Symbols/update-symbols.sh",
+        "Scripts/Symbols/verify-generated-symbols.sh",
+        "docs/_meta/data-assets.yml",
+        "docs/audits/EXAMPLE_SOURCE_OWNERSHIP_AUDIT.md",
+        "docs/reports/SYMBOL_CATALOG_DIFF.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/PToolsSymbols/Resources/SFSymbolCatalog.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/NSObject.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Button-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIButton_32-Dark_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UIDatePicker_32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Dark_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISegmentedControl_32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Originals/UISlider_32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/BackgroundView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DatePicker-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/DropShadow-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/HStack-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Hidden-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/ImageView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Key-UIWindow-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/NavigationBar-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabItem-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TabbedView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextField-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/TextView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Toggle-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIActivityIndicator_32_Dark_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIControl-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UILabel_32-Dark_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIScrollView_32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIToolbar-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UITransitionView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/EmptyView-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/filled-view-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIView/missing-view-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/UIWindow-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/VStack-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Webview-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/Window-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/app-icon-template.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/Templates/keyboardShortcut-32_Normal.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UICollectionViewController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UINavigationController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UIPageViewController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UISearchController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UITabBarController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/ElementLibrary.xcassets/UITableViewController.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ar-SA.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/bg-BG.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ca-ES.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/cs-CZ.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/da-DK.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/de-DE.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/el-GR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-AU.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-GB.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-IE.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-IN.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-US.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/en-ZA.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/es-ES.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/es-MX.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fi-FI.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fr-CA.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/fr-FR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/he-IL.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hi-IN.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hr-HR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/hu-HU.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/id-ID.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/it-IT.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ja-JP.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ko-KR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ms-MY.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nb-NO.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nl-BE.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/nl-NL.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/no-NO.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pl-PL.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pt-BR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/pt-PT.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ro-RO.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/ru-RU.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/sk-SK.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/sv-SE.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/th-TH.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/tr-TR.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/uk-UA.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/vi-VN.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CH.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-CN.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-HK.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/OSSKitImages.xcassets/zh-TW.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/binoculars.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/binocularsFill.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse-mirrored.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/collapse.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircle.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/ellipsisCircleFill.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/exclamationmark.triangle.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/expand.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Generic/info.circle.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-empty.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hidden.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-hide-all.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-show-all.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Layer Actions/LayerAction-visible.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Panel/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/CI/quality_gates.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Data/registry.yml",
+        "Scripts/validate_quality_scans.sh",
+        "docs/_meta/data-assets.yml",
+        "docs/architecture/CONCURRENCY.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/concurrency_exception_registry.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Data/registry.yml",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/generate_package_matrix.rb",
+        "Scripts/validate_module_parity.sh",
+        "Scripts/validate_swifterswift_removal.sh",
+        "docs/_meta/data-assets.yml",
+        "docs/architecture/PACKAGE_MATRIX.md",
+        "docs/architecture/PTOOLS_P1_ADVANCED_CAPABILITIES.md",
+        "docs/audits/SWIFTERSWIFT_USAGE_AUDIT.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/module_registry.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Scripts/validate_519_package_tests_docs.sh",
+        "Scripts/validate_naming_debt.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/naming_debt_registry.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Scripts/validate_p1_performance_registry.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/p1_performance_registry.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Scripts/validate_p1_public_api_intent.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/p1_public_api_intent.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "dev_tool",
+      "consumedBy": [
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Scripts/registry.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/cleanup.yml",
+        "docs/_meta/data-assets.yml",
+        "docs/maintainers/TEST_GOVERNANCE.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "Tests/registry.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "ci",
+      "consumedBy": [
+        "ROADMAP.md",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "_config.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/validate_519_package_tests_docs.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "api-baseline/5.18.2/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "api-baseline/5.35.0/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/cleanup.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/data-assets.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/document-policy.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/glossary.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Data/registry.yml",
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/languages.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Data/registry.yml",
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/Governance/__pycache__/audit_repository.cpython-314.pyc",
+        "Scripts/Governance/audit_repository.py",
+        "docs/_meta/data-assets.yml",
+        "docs/_meta/provenance.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/modules.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/provenance.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "Scripts/README.md",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/scripts.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "source_of_truth",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "docs/_meta/data-assets.yml",
+        "docs/maintainers/TEST_GOVERNANCE.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "yml",
+      "generatedBy": "",
+      "owner": "PTools maintainers",
+      "path": "docs/_meta/tests.yml",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": true,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.10/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/dependency_direction.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/file_size.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/module_parity.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_58_contracts.sh",
+        "Scripts/validate_59_contracts.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/public_api_generated.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.8/sendable_exceptions.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/accessibility.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/cache_inventory.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/cocoapods_subspec_graph.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/concurrency.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_59_contracts.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "DUPLICATE_REVIEW",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 1.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/public_api_generated.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/baselines/5.9/singletons.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/accessibility.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/cache_inventory.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_module_parity.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/cocoapods_subspec_graph.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/concurrency.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_dependency_direction.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/dependency_direction.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/large_files.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/mainactor_heavy_work.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_module_parity.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/module_parity.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/p1_public_api_intent.json",
+        "Scripts/validate_59_contracts.sh",
+        "Scripts/validate_api_baseline.sh",
+        "Scripts/validate_deprecated_inventory.sh",
+        "Scripts/validate_docs.sh",
+        "Scripts/validate_p1_public_api_intent.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/public_api.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/sendable_exceptions.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_lifecycle_5_9.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/singletons.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/validate_dependency_direction.sh",
+        "Scripts/validate_module_parity.sh",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/current/spm_dependency_graph.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/data/DATA_ASSET_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "docs/_meta/data-assets.yml",
+        "docs/_meta/provenance.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/docs/DOCUMENT_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/repository/DATA_ASSET_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/repository/DUPLICATE_CANDIDATES.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/repository/SCRIPT_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/repository/TEST_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "docs/_meta/data-assets.yml"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/scripts/SCRIPT_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    },
+    {
+      "action": "KEEP",
+      "category": "report",
+      "consumedBy": [
+        "Scripts/CI/check_5_56_1_governance.sh",
+        "Scripts/Docs/__pycache__/audit_docs.cpython-314.pyc",
+        "Scripts/Docs/audit_docs.py",
+        "docs/_meta/data-assets.yml",
+        "docs/_meta/provenance.yml",
+        "docs/maintainers/TEST_GOVERNANCE.md"
+      ],
+      "duplicateScore": 0.0,
+      "format": "json",
+      "generatedBy": "Scripts/Docs/audit_docs.py",
+      "owner": "PTools maintainers",
+      "path": "report/tests/TEST_INVENTORY.json",
+      "recordCount": null,
+      "replacement": "",
+      "schema": "",
+      "sourceOfTruth": false,
+      "stableIDs": []
+    }
+  ],
+  "generator": "Scripts/Governance/audit_repository.py"
+}

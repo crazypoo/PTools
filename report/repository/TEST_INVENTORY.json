@@ -1,0 +1,458 @@
+{
+  "generator": "Scripts/Governance/audit_repository.py",
+  "tests": [
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "advanced",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsAdvancedTests/PTAdvancedTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsAdvancedTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsAdvancedTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "banner",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsBannerTests/PTBannerQueueTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsBannerTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsBannerTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "core",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PooToolsCoreTests/PTCoreContractTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PooToolsCoreTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsCoreTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "date",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsDateTests/PTDateTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsDateTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsDateTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "device",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsDeviceTests/PTDeviceTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsDeviceTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsDeviceTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "httpserver",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsHTTPServerTests/PTHTTPParserTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsHTTPServerTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsHTTPServerTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "list",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsListTests/PTListQualityTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsListTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsListTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "logging",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsLoggingTests/PTLoggingFoundationTests.swift",
+        "Tests/PToolsLoggingTests/PTLoggingPerformanceTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsLoggingTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsLoggingTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "media",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsMediaTests/PTMediaQualityTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsMediaTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsMediaTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "navigation",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsNavigationTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsNavigationTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "network",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsNetworkTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsNetworkTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "p2",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsP2Tests/PTFormDocumentsFeedbackTests.swift",
+        "Tests/PToolsP2Tests/PTModernModulesTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsP2Tests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsP2Tests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "permission",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsPermissionTests/PTPermissionQualityTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsPermissionTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsPermissionTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "platform",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsPlatformTests/PTPlatformTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsPlatformTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsPlatformTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "richtext",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsRichTextTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsRichTextTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "socketkit",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsSocketKitTests/PTWebSocketContractTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsSocketKitTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsSocketKitTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "symbols",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsSymbolsTests/PTSymbolTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsSymbolsTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsSymbolsTests",
+      "testType": [
+        "contract"
+      ]
+    },
+    {
+      "action": "KEEP",
+      "ciJobs": [
+        "tests"
+      ],
+      "dependencies": [],
+      "deviceRequired": false,
+      "domain": "uifoundation",
+      "duplicateScore": 0.0,
+      "estimatedDuration": "unmeasured",
+      "files": [
+        "Tests/PToolsUIFoundationTests/PTCategoryCompatibilityTests.swift",
+        "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift"
+      ],
+      "fixtureUsage": [],
+      "hostRequired": false,
+      "mockUsage": [],
+      "modulesCovered": [],
+      "path": "Tests/PToolsUIFoundationTests",
+      "platform": "host-or-simulator",
+      "status": "ACTIVE",
+      "target": "PToolsUIFoundationTests",
+      "testType": [
+        "contract"
+      ]
+    }
+  ]
+}

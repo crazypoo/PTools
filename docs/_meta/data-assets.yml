@@ -59,6 +59,14 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Data/registry.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Example/Extensions/extension_targets.json"
   kind: "SOURCE_OF_TRUTH"
   format: "json"
@@ -1427,6 +1435,22 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Scripts/registry.yml"
+  kind: "DEV_TOOL"
+  format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Tests/registry.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "_config.yml"
   kind: "CI"
   format: "yml"
@@ -1740,6 +1764,38 @@
   action: "KEEP"
 -
   path: "report/docs/DOCUMENT_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/repository/DATA_ASSET_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/repository/DUPLICATE_CANDIDATES.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/repository/SCRIPT_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/repository/TEST_INVENTORY.json"
   kind: "REPORT"
   format: "json"
   generated: true

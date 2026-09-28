@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 17d503f178439beb767137d2a3cfd6cd2908c40f
-Generated at: 2026-09-28T19:47:36+08:00 -->
+Source revision: 7ee78f9cf3dde1cb7f796febd2d7aa45d024ef9d
+Generated at: 2026-09-28T21:26:17+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.56.2`
-- Records: `220`
+- Records: `227`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -16,6 +16,7 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | .github/workflows/release-validation.yml | CI | yml | False | False | KEEP |
 | .swiftlint.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | .vscode/settings.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| Data/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | Example/Extensions/extension_targets.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooTools/Images.xcassets/AppIcon.appiconset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooTools/Images.xcassets/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -187,6 +188,8 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | Scripts/naming_debt_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_performance_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_public_api_intent.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/registry.yml | DEV_TOOL | yml | False | False | KEEP |
+| Tests/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | _config.yml | CI | yml | False | False | KEEP |
 | api-baseline/5.18.2/public_api.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | api-baseline/5.35.0/public_api.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -227,5 +230,9 @@ Generated at: 2026-09-28T19:47:36+08:00 -->
 | report/current/spm_dependency_graph.json | REPORT | json | True | False | KEEP |
 | report/data/DATA_ASSET_INVENTORY.json | REPORT | json | True | False | KEEP |
 | report/docs/DOCUMENT_INVENTORY.json | REPORT | json | True | False | KEEP |
+| report/repository/DATA_ASSET_INVENTORY.json | REPORT | json | True | False | KEEP |
+| report/repository/DUPLICATE_CANDIDATES.json | REPORT | json | True | False | KEEP |
+| report/repository/SCRIPT_INVENTORY.json | REPORT | json | True | False | KEEP |
+| report/repository/TEST_INVENTORY.json | REPORT | json | True | False | KEEP |
 | report/scripts/SCRIPT_INVENTORY.json | REPORT | json | True | False | KEEP |
 | report/tests/TEST_INVENTORY.json | REPORT | json | True | False | KEEP |

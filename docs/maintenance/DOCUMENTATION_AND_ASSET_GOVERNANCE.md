@@ -7,6 +7,9 @@
 ```bash
 python3 Scripts/Docs/audit_docs.py --write-all
 python3 Scripts/Docs/audit_docs.py --check
+python3 Scripts/ptools.py repo audit
+python3 Scripts/ptools.py repo duplicates
+python3 Scripts/ptools.py tests audit
 bash Scripts/CI/check_5_56_1_governance.sh
 ```
 
@@ -17,6 +20,8 @@ English is the canonical technical source. Chinese and Spanish module guides sha
 `Scripts/Docs/audit_docs.py` 是文档、模块、脚本、数据资产和测试清单的唯一本地治理入口。
 
 执行 `--write-all` 生成 registry、三语模块指南和报告，执行 `--check` 校验 manifest 漂移、三语文件完整性、链接和生成资产。历史计划只有在盘点和决策提炼后才进入 `docs/archive/`，禁止为了减少文件数量直接删除。
+
+清理流程固定为 `Classification → Cleanup Manifest → Consumer Repoint → Merge/Move/Delete → Verification`。清理结果写入 `report/repository/`；脚本、数据和测试 target 没有消费者重定向证据时只能标记为候选，不能直接删除。
 
 ## Español
 
@@ -36,3 +41,5 @@ English es la fuente técnica canónica; las guías en chino y español mantiene
 ## Version and review
 
 The current documentation version comes from `VERSION`. The generator records the source revision and a deterministic commit timestamp. Formal module names come from `Package.swift` and `PooTools.podspec`; registry drift fails CI.
+
+The applied repository cleanup is recorded in `report/repository/REPOSITORY_CLEANUP_MANIFEST.md`; duplicate candidates remain review-only until their semantic ownership is confirmed.

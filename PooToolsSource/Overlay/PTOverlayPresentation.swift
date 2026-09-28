@@ -46,14 +46,12 @@ public enum PTOverlaySceneResolver {
     }
 
     public static var activeScenes: [UIWindowScene] {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .filter { $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive }
-            .sorted { lhs, rhs in
-                let lhsActive = lhs.activationState == .foregroundActive
-                let rhsActive = rhs.activationState == .foregroundActive
-                return lhsActive && !rhsActive
-            }
+        // English: Reuse the canonical scene boundary instead of duplicating global scene discovery.
+        // Español: Reutiliza el límite canónico de escenas en lugar de duplicar el descubrimiento global.
+        // 中文：复用统一的场景边界，避免重复执行全局场景发现。
+        PTSceneContext.connectedWindowScenes().filter {
+            $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive
+        }
     }
 }
 

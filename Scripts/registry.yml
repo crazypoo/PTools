@@ -1,0 +1,49 @@
+# English: Canonical repository automation registry.
+# Español: Registro canónico de automatización del repositorio.
+# 中文：仓库自动化 canonical registry。
+scripts:
+  - id: docs.audit
+    path: Scripts/Docs/audit_docs.py
+    category: audit
+    owner: docs
+    status: active
+  - id: repository.audit
+    path: Scripts/Governance/audit_repository.py
+    category: audit
+    owner: maintainers
+    status: active
+  - id: repository.duplicates
+    path: Scripts/Governance/find_duplicates.py
+    category: audit
+    owner: maintainers
+    status: active
+  - id: repository.cleanup.apply
+    path: Scripts/Docs/apply_cleanup.py
+    category: migration
+    owner: maintainers
+    status: active
+  - id: repository.router
+    path: Scripts/ptools.py
+    category: router
+    owner: maintainers
+    status: active
+  - id: device.validate
+    path: Scripts/Device/validate_device_catalog.py
+    category: validation
+    owner: device
+    status: active
+  - id: ci.quality
+    path: Scripts/CI/quality_gate.sh
+    category: gate
+    owner: ci
+    status: active
+  - id: release.verify
+    path: Scripts/validate_release.sh
+    category: release
+    owner: release
+    status: active
+  - id: privacy.validate
+    path: Scripts/Privacy/validate_privacy_accessed_api.sh
+    category: validation
+    owner: privacy
+    status: active

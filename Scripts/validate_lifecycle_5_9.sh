@@ -28,7 +28,7 @@ while IFS= read -r file; do
   esac
 done <<< "$scene_scan_files"
 
-ruby Scripts/report_singletons_5_9.rb >/dev/null
+ruby Scripts/report_singletons.rb >/dev/null
 ruby -rjson -e '
   report = JSON.parse(File.read("report/current/singletons.json"))
   entries = report.fetch("declarations")

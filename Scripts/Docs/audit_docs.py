@@ -28,6 +28,7 @@ EXCLUDED_PARTS = {".git", "Pods", ".build", "build", "DerivedData"}
 DOC_SUFFIXES = {".md", ".markdown", ".mdx"}
 DATA_SUFFIXES = {".json", ".jsonl", ".yml", ".yaml"}
 LANGUAGES = ("zh-Hans", "en", "es")
+_FILE_CACHE: dict[tuple[str, ...], list[Path]] = {}
 
 
 def git(*arguments: str) -> str:
@@ -62,6 +63,26 @@ def relative(path: Path) -> str:
 
 def excluded(path: Path) -> bool:
     return any(part in EXCLUDED_PARTS for part in path.parts)
+
+
+def repository_files(suffixes: set[str]) -> list[Path]:
+    """English: Walk governed repository directories and cache each suffix set.
+    Español: Recorre los directorios gobernados y almacena cada conjunto de sufijos en caché.
+    中文：遍历受治理的仓库目录，并按后缀集合缓存结果。
+    """
+
+    key = tuple(sorted(suffixes))
+    if key in _FILE_CACHE:
+        return _FILE_CACHE[key]
+    result: list[Path] = []
+    for directory, directory_names, file_names in os.walk(ROOT):
+        directory_names[:] = [name for name in directory_names if name not in EXCLUDED_PARTS]
+        for name in file_names:
+            path = Path(directory) / name
+            if path.suffix.lower() in suffixes:
+                result.append(path)
+    _FILE_CACHE[key] = sorted(result)
+    return _FILE_CACHE[key]
 
 
 def json_text(value: Any) -> str:
@@ -444,10 +465,7 @@ def markdown_links(text: str) -> list[str]:
 
 
 def markdown_inventory() -> list[dict[str, Any]]:
-    files = [
-        path for path in ROOT.rglob("*")
-        if path.is_file() and path.suffix.lower() in DOC_SUFFIXES and not excluded(path)
-    ]
+    files = repository_files(DOC_SUFFIXES)
     outgoing: dict[str, list[str]] = {}
     records: list[dict[str, Any]] = []
     hashes: dict[str, list[str]] = {}
@@ -523,10 +541,7 @@ def data_kind(path: str) -> str:
 
 
 def data_inventory() -> list[dict[str, Any]]:
-    files = [
-        path for path in ROOT.rglob("*")
-        if path.is_file() and path.suffix.lower() in DATA_SUFFIXES and not excluded(path)
-    ]
+    files = repository_files(DATA_SUFFIXES)
     return [
         {
             "path": relative(path),
@@ -544,9 +559,8 @@ def data_inventory() -> list[dict[str, Any]]:
 def script_inventory() -> list[dict[str, Any]]:
     suffixes = {".sh", ".rb", ".py", ".swift"}
     files = [
-        path for path in ROOT.rglob("*")
-        if path.is_file() and path.suffix.lower() in suffixes and not excluded(path)
-        and (path.parts[-2] == "Scripts" or "Scripts" in path.parts or path.name == "paapidetect.sh")
+        path for path in repository_files(suffixes)
+        if path.parts[-2] == "Scripts" or "Scripts" in path.parts
     ]
     records = []
     for path in sorted(files):
@@ -562,7 +576,7 @@ def script_inventory() -> list[dict[str, Any]]:
                 "status": "LEGACY_REVIEW" if legacy else "ACTIVE",
                 "canonical": not legacy,
                 "entrypoint": rel in {"Scripts/Docs/audit_docs.py", "Scripts/CI/check_5_56_1_governance.sh"},
-                "action": "KEEP_REVIEW" if rel == "paapidetect.sh" else "KEEP",
+                "action": "KEEP",
             }
         )
     return records
@@ -650,10 +664,13 @@ def write_meta(modules: list[dict[str, Any]], scripts: list[dict[str, Any]], ass
         {"term": "subspec", "zh-Hans": "CocoaPods 子规格", "es": "subspec de CocoaPods"},
     ], "Shared technical terminology.")
     write_yaml(meta / "cleanup.yml", [
-        {"path": "docs/", "action": "KEEP_ACTIVE_OR_ARCHIVE", "reason": "Move historical plans only after inventory and decision extraction"},
-        {"path": "Scripts/validate_*_5_*.sh", "action": "LEGACY_REVIEW", "reason": "Keep until canonical governance checks cover their contracts"},
+        {"path": "docs/", "action": "KEEP_ACTIVE_OR_ARCHIVE", "reason": "Historical plans are classified by the repository cleanup manifest"},
+        {"path": "Scripts/", "action": "CLASSIFY_AND_REPOINT", "reason": "Use Scripts/Governance/audit_repository.py before moving or deleting an entry"},
+        {"path": "Data/", "action": "SOURCE_OF_TRUTH", "reason": "Data/registry.yml defines ownership and generator boundaries"},
+        {"path": "Tests/", "action": "CLASSIFY_BEFORE_MERGE", "reason": "Tests/registry.yml is the target identity; merge only with dependency and timing evidence"},
+        {"path": "report/repository/", "action": "GENERATED", "reason": "Regenerate cleanup, duplicate, script, data, and test reports from the repository audit"},
         {"path": "report/", "action": "GENERATED", "reason": "Regenerate from stable scripts; do not hand edit"},
-    ], "Conservative cleanup manifest; destructive actions require a reviewed consumer map.")
+    ], "Cleanup actions require a generated consumer map; destructive apply is explicit and reviewable.")
     write_yaml(meta / "provenance.yml", [
         {"generator": "Scripts/Docs/audit_docs.py", "outputs": ["docs/_meta", "docs/index", "docs/modules", "report/docs", "report/scripts", "report/data", "report/tests"]},
         {"source": "Package.swift", "consumers": ["docs/_meta/modules.yml", "report/docs/DOCUMENT_INVENTORY.json", "report/tests/TEST_INVENTORY.json"]},
@@ -673,6 +690,9 @@ def write_governance_docs() -> None:
 ```bash
 python3 Scripts/Docs/audit_docs.py --write-all
 python3 Scripts/Docs/audit_docs.py --check
+python3 Scripts/ptools.py repo audit
+python3 Scripts/ptools.py repo duplicates
+python3 Scripts/ptools.py tests audit
 bash Scripts/CI/check_5_56_1_governance.sh
 ```
 
@@ -683,6 +703,8 @@ English is the canonical technical source. Chinese and Spanish module guides sha
 `Scripts/Docs/audit_docs.py` 是文档、模块、脚本、数据资产和测试清单的唯一本地治理入口。
 
 执行 `--write-all` 生成 registry、三语模块指南和报告，执行 `--check` 校验 manifest 漂移、三语文件完整性、链接和生成资产。历史计划只有在盘点和决策提炼后才进入 `docs/archive/`，禁止为了减少文件数量直接删除。
+
+清理流程固定为 `Classification → Cleanup Manifest → Consumer Repoint → Merge/Move/Delete → Verification`。清理结果写入 `report/repository/`；脚本、数据和测试 target 没有消费者重定向证据时只能标记为候选，不能直接删除。
 
 ## Español
 
@@ -702,6 +724,8 @@ English es la fuente técnica canónica; las guías en chino y español mantiene
 ## Version and review
 
 The current documentation version comes from `VERSION`. The generator records the source revision and a deterministic commit timestamp. Formal module names come from `Package.swift` and `PooTools.podspec`; registry drift fails CI.
+
+The applied repository cleanup is recorded in `report/repository/REPOSITORY_CLEANUP_MANIFEST.md`; duplicate candidates remain review-only until their semantic ownership is confirmed.
 """,
         encoding="utf-8",
     )
