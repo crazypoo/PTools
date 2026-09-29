@@ -16,6 +16,10 @@ import CoreHaptics
 import PToolsCore
 #endif
 
+#if canImport(AudioToolbox) && os(iOS)
+import AudioToolbox
+#endif
+
 public struct PTFeedbackPatternID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral {
     public let rawValue: String
 
@@ -211,6 +215,40 @@ public final class PTHapticEngine {
         engine = try? CHHapticEngine()
         try? engine?.start()
 #endif
+    }
+        
+    /// 触发系统传统震动。
+    ///
+    /// 与 UIImpactFeedbackGenerator / CoreHaptics 不同，
+    /// 这是系统级长震动效果。
+    public func playSystemVibration() {
+        guard policy == .enabled else {
+            return
+        }
+
+        #if canImport(AudioToolbox) && os(iOS)
+        AudioServicesPlaySystemSound(
+            kSystemSoundID_Vibrate
+        )
+        #endif
+    }
+}
+
+@MainActor
+public extension PTHapticEngine {
+
+    func impact(style: UIImpactFeedbackGenerator.FeedbackStyle, intensity: CGFloat? = nil) {
+        guard policy == .enabled else {
+            return
+        }
+
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        if let intensity {
+            generator.impactOccurred(intensity: min(max(intensity, 0), 1))
+        } else {
+            generator.impactOccurred()
+        }
     }
 }
 

@@ -182,9 +182,7 @@ open class PTRefreshComponent: UIView {
         didSet {
             guard oldValue != state else { return }
             if state == .pulling && isHapticEnabled {
-                let generator = UIImpactFeedbackGenerator(style: .medium)
-                generator.prepare()
-                generator.impactOccurred()
+                PTFeedbackCenter.shared.emit(.selectionChanged)
             }
             stateDidChanged(from: oldValue, to: state)
             stateChangedHandler?(state)

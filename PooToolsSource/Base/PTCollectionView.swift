@@ -102,19 +102,11 @@ public class PTCollectionView: UIView {
     fileprivate var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
-                impactFeedbackGenerator.prepare()
-                impactFeedbackGenerator.impactOccurred()
+                PTFeedbackCenter.shared.emit(.selectionChanged)
             }
         }
     }
-    
-    // 懒加载震动反馈
-    fileprivate lazy var impactFeedbackGenerator : UIImpactFeedbackGenerator = {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.prepare()
-        return generator
-    }()
-    
+        
     // 使用 NSKeyValueObservation 替代手动 KVO
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps

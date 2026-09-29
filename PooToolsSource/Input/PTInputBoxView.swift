@@ -316,8 +316,7 @@ public class PTInputBoxView: UIView {
         
         // 触觉震动反馈
         if config.enableHapticFeedback {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
+            PTFeedbackCenter.shared.emit(.toggle)
         }
         
         finishBlock?(self, text)

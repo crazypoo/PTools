@@ -652,8 +652,8 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
         }
 
         removeTimer()
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        
+        PTFeedbackCenter.shared.emit(.success)
+
         AudioServicesPlaySystemSound(1108)
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         

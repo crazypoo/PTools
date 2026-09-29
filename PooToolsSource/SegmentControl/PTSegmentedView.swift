@@ -361,10 +361,7 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     public let collectionView: UICollectionView
     public var style = PTSegmentStyle() {
         didSet {
-            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.minimumInteritemSpacing = style.itemSpacing
-                layout.minimumLineSpacing = style.itemSpacing
-            }
+            updateFlowLayoutSpacing()
             collectionView.collectionViewLayout.invalidateLayout()
             collectionView.reloadData()
             setNeedsLayout()
@@ -383,6 +380,10 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     public var onItemSelected: ((Int, PTSegmentSelectionOrigin) -> Void)?
     public var onReselected: ((Int) -> Void)?
     public var onScrolling: ((Int, Int, CGFloat) -> Void)?
+    /// English: Reports an inline badge removal so the owner can update its source model.
+    /// Español: Informa de la eliminación de una insignia integrada para que el propietario actualice su modelo.
+    /// 中文：通知业务方内嵌角标已移除，由业务方更新数据源模型。
+    public var onBadgeRemoved: ((AnyHashable) -> Void)?
     public var allowsReselect = true
     public var automaticallyScrollsToSelectedItem = true
     public var selectionAnimationDuration: TimeInterval = 0.25
@@ -396,6 +397,8 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     private var selectionObservers = [((PTSegmentSelectionEvent) -> Void)]()
     private var transitionObservers = [((PTSegmentTransition) -> Void)]()
     private var scrollIntent = PTSegmentScrollIntent.idle
+    private var selectionAnimator: UIViewPropertyAnimator?
+    private var cachedResolvedSpacing: CGFloat?
 
     public override init(frame: CGRect) {
         let layout = UICollectionViewFlowLayout()
@@ -438,8 +441,12 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
             cell.configure(item: item,
                            style: self.style,
                            selected: item.id == self.selectionState.selectedID)
+            cell.onBadgeRemoved = { [weak self] id in
+                self?.onBadgeRemoved?(id)
+            }
             return cell
         }
+        updateFlowLayoutSpacing()
     }
 
     /// English: Converts a public business ID into a private Sendable diffable-data-source ID.
@@ -459,6 +466,7 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         super.layoutSubviews()
         indicatorHost.frame = bounds
         collectionView.frame = bounds
+        updateFlowLayoutSpacing()
         collectionView.collectionViewLayout.invalidateLayout()
         updateIndicatorContext()
     }
@@ -491,6 +499,8 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         snapshot.appendSections([.main])
         snapshot.appendItems(snapshotIDs, toSection: .main)
         collectionView.collectionViewLayout.invalidateLayout()
+        cachedResolvedSpacing = nil
+        updateFlowLayoutSpacing()
         isApplyingSnapshot = true
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
             guard let self else { return }
@@ -519,8 +529,18 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
         let oldSelection = selectionState
         if oldSelection.selectedID == id, !allowsReselect { return }
+        selectionAnimator?.stopAnimation(true)
+        selectionAnimator = nil
         selectionState = PTSegmentSelectionState(selectedID: id, selectedIndex: index)
         updateVisibleCells()
+        let shouldAnimate = oldSelection.selectedID != id
+            && animated
+            && origin != .swipe
+            && style.selectionTransition == .animated
+            && !UIAccessibility.isReduceMotionEnabled
+        if shouldAnimate {
+            animateSelection(from: oldSelection.selectedID, to: id)
+        }
         if automaticallyScrollsToSelectedItem {
             scrollTo(id: id, animated: animated && !UIAccessibility.isReduceMotionEnabled)
         }
@@ -542,7 +562,10 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     /// Español: Actualiza los indicadores mientras un contenedor de páginas se desplaza de forma interactiva.
     /// 中文：页面容器交互滚动时更新指示器。
     public func update(transition: PTSegmentTransition) {
+        selectionAnimator?.stopAnimation(true)
+        selectionAnimator = nil
         updateIndicatorContext()
+        applyInteractiveTransition(transition)
         indicators.forEach { $0.update(transition: transition) }
         onTransition?(transition)
         transitionObservers.forEach { $0(transition) }
@@ -599,6 +622,99 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         }
     }
 
+    /// English: Interpolates only the two cells participating in a page transition.
+    /// Español: Interpola solo las dos celdas que participan en la transición de página.
+    /// 中文：只插值参与页面过渡的两个 Cell。
+    private func applyInteractiveTransition(_ transition: PTSegmentTransition) {
+        let progress = transition.progress
+        for cell in collectionView.visibleCells.compactMap({ $0 as? PTMainSegmentCell }) {
+            guard let id = cell.representedID else { continue }
+            if id == transition.fromID {
+                cell.applyTransition(selectedProgress: 1 - progress, style: style)
+            } else if id == transition.toID {
+                cell.applyTransition(selectedProgress: progress, style: style)
+            } else {
+                cell.applySelection(id == selectionState.selectedID, style: style)
+            }
+        }
+    }
+
+    private func animateSelection(from oldID: AnyHashable?, to newID: AnyHashable) {
+        let duration = selectionAnimationDuration.isFinite
+            ? min(max(selectionAnimationDuration, 0.01), 2)
+            : 0.25
+        let cells = collectionView.visibleCells.compactMap { $0 as? PTMainSegmentCell }
+        for cell in cells {
+            guard let id = cell.representedID else { continue }
+            if id == oldID {
+                cell.applyTransition(selectedProgress: 1, style: style)
+            } else if id == newID {
+                cell.applyTransition(selectedProgress: 0, style: style)
+            }
+        }
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+            for cell in cells {
+                guard let id = cell.representedID else { continue }
+                if id == oldID {
+                    cell.applyTransition(selectedProgress: 0, style: self.style)
+                } else if id == newID {
+                    cell.applyTransition(selectedProgress: 1, style: self.style)
+                }
+            }
+        }
+        selectionAnimator = animator
+        animator.addCompletion { [weak self] _ in
+            guard let self, self.selectionAnimator === animator else { return }
+            self.selectionAnimator = nil
+            self.updateVisibleCells()
+        }
+        animator.startAnimation()
+    }
+
+    private func updateFlowLayoutSpacing() {
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        let resolved = resolvedItemSpacing(availableWidth: availableLayoutWidth(layout: layout))
+        guard cachedResolvedSpacing != resolved else { return }
+        cachedResolvedSpacing = resolved
+        layout.minimumInteritemSpacing = resolved
+        layout.minimumLineSpacing = resolved
+    }
+
+    /// English: Resolves the width available after flow-layout and safe-area insets.
+    /// Español: Resuelve el ancho disponible después de los insets del layout y del área segura.
+    /// 中文：计算扣除 Flow Layout 和安全区域内边距后的可用宽度。
+    private func availableLayoutWidth(layout: UICollectionViewFlowLayout) -> CGFloat {
+        let sectionInsets = layout.sectionInset.left + layout.sectionInset.right
+        let contentInsets = collectionView.adjustedContentInset.left + collectionView.adjustedContentInset.right
+        return max(0, bounds.width - sectionInsets - contentInsets)
+    }
+
+    private func resolvedItemSpacing(availableWidth: CGFloat) -> CGFloat {
+        let minimum = style.itemSpacing.isFinite ? max(0, style.itemSpacing) : 0
+        guard style.spacingDistribution == .averageWhenPossible,
+              style.distribution != .equal,
+              items.count > 1,
+              availableWidth.isFinite,
+              availableWidth > 0 else {
+            return minimum
+        }
+
+        let widths: [CGFloat]
+        if let itemWidths = style.itemWidths {
+            widths = items.indices.map { index in
+                guard itemWidths.indices.contains(index), itemWidths[index].isFinite else {
+                    return PTMainSegmentCell.measuredWidth(item: items[index], style: style)
+                }
+                return max(1, itemWidths[index])
+            }
+        } else {
+            widths = items.map { PTMainSegmentCell.measuredWidth(item: $0, style: style) }
+        }
+        let total = widths.reduce(0, +)
+        let average = (availableWidth - total) / CGFloat(items.count - 1)
+        return average.isFinite && average > minimum ? average : minimum
+    }
+
     private func rebuildIndicators() {
         indicatorHost.subviews.forEach { $0.removeFromSuperview() }
         indicators.forEach { indicatorHost.addSubview($0.view) }
@@ -647,19 +763,24 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard items.indices.contains(indexPath.item) else { return CGSize(width: 1, height: style.itemHeight) }
+        let availableWidth = (collectionViewLayout as? UICollectionViewFlowLayout).map {
+            availableLayoutWidth(layout: $0)
+        } ?? max(0, bounds.width)
         let width: CGFloat
         if let itemWidths = style.itemWidths, itemWidths.indices.contains(indexPath.item) {
-            width = itemWidths[indexPath.item]
+            width = max(1, itemWidths[indexPath.item].isFinite ? itemWidths[indexPath.item] : 1)
+        } else if style.spacingDistribution == .averageWhenPossible && style.distribution != .equal {
+            width = PTMainSegmentCell.measuredWidth(item: items[indexPath.item], style: style)
         } else {
             let intrinsic = PTMainSegmentCell.measuredWidth(item: items[indexPath.item], style: style)
             switch style.distribution {
             case .intrinsic:
                 width = intrinsic
             case .equal:
-                width = bounds.width / CGFloat(max(items.count, 1))
+                width = availableWidth / CGFloat(max(items.count, 1))
             case .adaptive:
                 let total = items.reduce(CGFloat.zero) { $0 + PTMainSegmentCell.measuredWidth(item: $1, style: style) }
-                width = total <= bounds.width ? bounds.width / CGFloat(max(items.count, 1)) : intrinsic
+                width = total <= availableWidth ? availableWidth / CGFloat(max(items.count, 1)) : intrinsic
             }
         }
         return CGSize(width: max(1, width), height: max(1, style.itemHeight))

@@ -37,24 +37,28 @@ open class TapticEngine {
         }
 
         private var style: ImpactStyle = .light
-        private var generator: UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .light)
 
         private func updateGeneratorIfNeeded(_ style: ImpactStyle) {
             guard self.style != style else { return }
-            generator = UIImpactFeedbackGenerator(style: style.feedbackStyle)
-            generator?.prepare()
             self.style = style
         }
 
         public func feedback(_ style: ImpactStyle) {
             updateGeneratorIfNeeded(style)
-            generator?.impactOccurred()
-            generator?.prepare()
+            switch style.feedbackStyle {
+            case .light:
+                PTFeedbackCenter.shared.emit(.selectionChanged)
+            case .medium:
+                PTFeedbackCenter.shared.emit(.submit)
+            case .heavy:
+                PTFeedbackCenter.shared.emit(.toggle)
+            default:
+                PTFeedbackCenter.shared.emit(.success)
+            }
         }
 
         public func prepare(_ style: ImpactStyle) {
             updateGeneratorIfNeeded(style)
-            generator?.prepare()
         }
     }
 

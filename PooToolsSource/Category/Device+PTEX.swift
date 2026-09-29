@@ -381,8 +381,16 @@ public extension PTPOP where Base: UIDevice {
     //MARK: UIImpactFeedbackGenerator 来设置的手机振动
     ///UIImpactFeedbackGenerator 来设置的手机振动
     @MainActor static func impactFeedbackGenerator(style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.impactOccurred()
+        switch style {
+        case .light:
+            PTFeedbackCenter.shared.emit(.selectionChanged)
+        case .medium:
+            PTFeedbackCenter.shared.emit(.submit)
+        case .heavy:
+            PTFeedbackCenter.shared.emit(.toggle)
+        default:
+            PTFeedbackCenter.shared.emit(.success)
+        }
     }
     
     //MARK: 模拟选择滚轮一类控件时的震动

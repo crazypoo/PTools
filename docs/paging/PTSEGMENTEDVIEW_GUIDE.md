@@ -8,7 +8,7 @@ let segmentedView = PTSegmentedView(frame: .zero)
 segmentedView.style = PTSegmentStyle(distribution: .adaptive)
 segmentedView.apply(items: [
     .title(id: "home", "首页"),
-    .title(id: "profile", "我的", badge: PTSegmentBadge(text: "3"))
+    .title(id: "profile", "我的", badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(3)))
 ])
 segmentedView.onSelectionChanged = { event in
     print(event.newSelection.selectedID as Any)
@@ -67,3 +67,49 @@ Badge 的文字、内边距、圆点和 normal/selected 字体都会参与 Item 
 - RTL、Dynamic Type、Reduce Motion 和无障碍名称应由宿主在真实页面中回归验证。
 - Indicator 会位于分段 Cell 之上；`PTSegmentedView` 会保留稳定 ID，不要使用带角标的显示文本作为 ID。
 - `imageSource` 与 `titleImageSource` 即使没有 placeholder 也会预留图片位置，下载完成后自动更新。
+
+## JX 视觉迁移配置
+
+`PTSegmentStyle` 提供 JX 常用的四项兼容开关，同时保留枚举作为规范入口：
+
+```swift
+var style = PTSegmentStyle(distribution: .adaptive,
+                           selectedScale: 1.12,
+                           titleColorTransition: .gradient,
+                           titleZoomTransition: .selectedScale,
+                           selectionTransition: .animated,
+                           spacingDistribution: .averageWhenPossible)
+style.isTitleColorGradientEnabled = true
+style.isTitleZoomEnabled = true
+style.isSelectedAnimable = true
+style.isItemSpacingAverageEnabled = true
+segmentedView.style = style
+```
+
+- `titleColorTransition` 只由分页 `PTSegmentTransition` 驱动，动态颜色会先按当前 Trait 解析再插值。
+- `titleZoomTransition` 只缩放标题，不缩放角标、图片或整个 Cell；`selectedScale` 继续作为缩放比例。
+- `selectionTransition` 控制点击和程序选择动画；分页交互始终直接使用 progress，快速点击时最后一次选择优先。
+- `spacingDistribution = .averageWhenPossible` 保留真实 Item 宽度，只在容器有剩余空间时平均增加内部 Gap；放不下时恢复 `itemSpacing` 并允许横向滚动。
+
+## 类型化角标
+
+新代码使用 `PTSegmentBadgeDescriptor`，角标尺寸、`99+`、边框、圆角、动画、Reduce Motion
+和拖拽删除均复用 Core Badge：
+
+```swift
+var badge = PTBadgeConfiguration()
+badge.animType = .scale
+badge.canDragToDelete = true
+badge.maximumNumber = 99
+
+let item = PTSegmentItem.title(
+    id: "orders",
+    "订单",
+    badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(120), configuration: badge)
+)
+segmentedView.onBadgeRemoved = { id in
+    // 业务方按稳定 ID 更新自己的 items，再调用 apply(items:)，控件不修改数据源。
+}
+```
+
+`PTSegmentBadge` 和 `badge:` 参数仍保留为兼容入口，但新代码不要再把数字字符串当作隐含协议。

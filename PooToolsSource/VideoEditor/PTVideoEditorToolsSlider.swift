@@ -79,16 +79,11 @@ class PTVideoEditorToolsSlider: UIControl {
     private lazy var trackerOutterCircleLayer: CALayer = makeTrackerOutterCircleLayer()
     private lazy var currentValueLabel: UILabel = makeCurrentValueLabel()
     private lazy var valuesStackView: UIStackView = makeValuesStackView()
-
-    private let hapticGenerator = UIImpactFeedbackGenerator()
     
     // MARK: Init
     
     public init() {
         super.init(frame: .zero)
-
-        hapticGenerator.prepare()
-        
         PTGCDManager.shared.delayOnMain(time: 0.1) {
             self.internalValue = self.value
             self.xPosition = self.xPosition(forValue: self.value)
@@ -142,7 +137,7 @@ class PTVideoEditorToolsSlider: UIControl {
 fileprivate extension PTVideoEditorToolsSlider {
     func generateHapticFeedbackIfNeeded(for value: Double) {
         if range.values.contains(value) {
-            hapticGenerator.impactOccurred()
+            PTFeedbackCenter.shared.emit(.toggle)
         }
     }
 }

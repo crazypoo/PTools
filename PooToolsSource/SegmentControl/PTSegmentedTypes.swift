@@ -19,10 +19,11 @@ public enum PTImagePlacement {
     case bottom
 }
 
-/// English: A small badge rendered by the default segment cell.
-/// Español: Una insignia pequeña renderizada por la celda de segmento predeterminada.
-/// 中文：默认分段 Cell 使用的小徽标。
+/// English: Legacy badge configuration kept as a source-compatible bridge.
+/// Español: Configuración de insignia heredada conservada como puente compatible.
+/// 中文：保留旧版角标配置，作为源码兼容桥接。
 @MainActor
+@available(*, deprecated, message: "Use PTSegmentBadgeDescriptor with PTBadgeContent and PTBadgeConfiguration.")
 public struct PTSegmentBadge {
     public var text: String?
     public var backgroundColor: UIColor
@@ -40,6 +41,37 @@ public struct PTSegmentBadge {
         self.textColor = textColor
         self.font = font
         self.showsDotWhenEmpty = showsDotWhenEmpty
+    }
+
+    /// English: Converts the legacy badge without guessing numeric content.
+    /// Español: Convierte la insignia heredada sin adivinar contenido numérico.
+    /// 中文：转换旧版角标，不猜测数字内容。
+    public var descriptor: PTSegmentBadgeDescriptor? {
+        var configuration = PTBadgeConfiguration()
+        configuration.bgColor = backgroundColor
+        configuration.textColor = textColor
+        configuration.font = font
+        if let text, !text.isEmpty {
+            return PTSegmentBadgeDescriptor(content: .text(text), configuration: configuration)
+        }
+        return showsDotWhenEmpty
+            ? PTSegmentBadgeDescriptor(content: .redDot, configuration: configuration)
+            : nil
+    }
+}
+
+/// English: Typed inline badge content and optional visual configuration.
+/// Español: Contenido tipado de insignia integrada y configuración visual opcional.
+/// 中文：类型化的内嵌角标内容及可选视觉配置。
+@MainActor
+public struct PTSegmentBadgeDescriptor {
+    public let content: PTBadgeContent
+    public let configuration: PTBadgeConfiguration?
+
+    public init(content: PTBadgeContent,
+                configuration: PTBadgeConfiguration? = nil) {
+        self.content = content
+        self.configuration = configuration
     }
 }
 
@@ -76,17 +108,31 @@ public enum PTSegmentContent {
 public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
     public let id: AnyHashable
     public var content: PTSegmentContent
+    /// English: Legacy badge property retained until the next major release.
+    /// Español: Propiedad heredada conservada hasta la próxima versión principal.
+    /// 中文：保留旧角标属性至下一个大版本。
+    @available(*, deprecated, message: "Use badgeDescriptor instead.")
     public var badge: PTSegmentBadge?
+    public var badgeDescriptor: PTSegmentBadgeDescriptor?
     public var accessibilityLabel: String?
 
     public init(id: AnyHashable,
                 content: PTSegmentContent,
                 badge: PTSegmentBadge? = nil,
-                accessibilityLabel: String? = nil) {
+                accessibilityLabel: String? = nil,
+                badgeDescriptor: PTSegmentBadgeDescriptor? = nil) {
         self.id = id
         self.content = content
         self.badge = badge
+        self.badgeDescriptor = badgeDescriptor
         self.accessibilityLabel = accessibilityLabel
+    }
+
+    /// English: The canonical badge descriptor, with legacy bridging as fallback.
+    /// Español: Descriptor canónico de insignia, con puente heredado como respaldo.
+    /// 中文：角标的规范描述，旧版配置作为回退。
+    public var resolvedBadgeDescriptor: PTSegmentBadgeDescriptor? {
+        badgeDescriptor ?? badge?.descriptor
     }
 
     public static func == (lhs: PTSegmentItem, rhs: PTSegmentItem) -> Bool {
@@ -101,8 +147,20 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
         Self(id: id, content: .title(title), badge: badge)
     }
 
+    public static func title(id: AnyHashable,
+                             _ title: String,
+                             badgeDescriptor: PTSegmentBadgeDescriptor?) -> Self {
+        Self(id: id, content: .title(title), badgeDescriptor: badgeDescriptor)
+    }
+
     public static func image(id: AnyHashable, _ image: UIImage, badge: PTSegmentBadge? = nil) -> Self {
         Self(id: id, content: .image(image), badge: badge)
+    }
+
+    public static func image(id: AnyHashable,
+                             _ image: UIImage,
+                             badgeDescriptor: PTSegmentBadgeDescriptor?) -> Self {
+        Self(id: id, content: .image(image), badgeDescriptor: badgeDescriptor)
     }
 
     public static func titleImage(id: AnyHashable,
@@ -111,6 +169,16 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
                                   placement: PTImagePlacement = .leading,
                                   badge: PTSegmentBadge? = nil) -> Self {
         Self(id: id, content: .titleImage(title: title, image: image, placement: placement), badge: badge)
+    }
+
+    public static func titleImage(id: AnyHashable,
+                                  title: String,
+                                  image: UIImage,
+                                  placement: PTImagePlacement = .leading,
+                                  badgeDescriptor: PTSegmentBadgeDescriptor?) -> Self {
+        Self(id: id,
+             content: .titleImage(title: title, image: image, placement: placement),
+             badgeDescriptor: badgeDescriptor)
     }
 }
 
@@ -122,6 +190,42 @@ public enum PTSegmentDistribution {
     case intrinsic
     case equal
     case adaptive
+}
+
+/// English: Controls whether unused width becomes larger gaps between items.
+/// Español: Controla si el ancho libre se convierte en espacios mayores entre elementos.
+/// 中文：控制剩余宽度是否转换为更大的项间距。
+@MainActor
+public enum PTSegmentSpacingDistribution: Equatable {
+    case fixed
+    case averageWhenPossible
+}
+
+/// English: Title color behavior during a page transition.
+/// Español: Comportamiento del color del título durante una transición de página.
+/// 中文：页面过渡期间的标题颜色行为。
+@MainActor
+public enum PTSegmentTitleColorTransition: Equatable {
+    case none
+    case gradient
+}
+
+/// English: Title scale behavior during a page transition.
+/// Español: Comportamiento de escala del título durante una transición de página.
+/// 中文：页面过渡期间的标题缩放行为。
+@MainActor
+public enum PTSegmentTitleZoomTransition: Equatable {
+    case none
+    case selectedScale
+}
+
+/// English: Programmatic and tap selection animation policy.
+/// Español: Política de animación para selección programática y por toque.
+/// 中文：程序选择和点击选择的动画策略。
+@MainActor
+public enum PTSegmentSelectionTransition: Equatable {
+    case none
+    case animated
 }
 
 /// English: Width policy for a segment indicator.
@@ -163,6 +267,11 @@ public struct PTSegmentStyle {
     public var distribution: PTSegmentDistribution
     public var imageSpacing: CGFloat
     public var selectedScale: CGFloat
+    public var titleColorTransition: PTSegmentTitleColorTransition
+    public var titleZoomTransition: PTSegmentTitleZoomTransition
+    public var selectionTransition: PTSegmentSelectionTransition
+    public var spacingDistribution: PTSegmentSpacingDistribution
+    public var badgeConfiguration: PTBadgeConfiguration
 
     public init(normalFont: UIFont = .systemFont(ofSize: 15),
                 selectedFont: UIFont = .systemFont(ofSize: 15, weight: .semibold),
@@ -176,7 +285,12 @@ public struct PTSegmentStyle {
                 itemWidths: [CGFloat]? = nil,
                 distribution: PTSegmentDistribution = .adaptive,
                 imageSpacing: CGFloat = 6,
-                selectedScale: CGFloat = 1) {
+                selectedScale: CGFloat = 1,
+                titleColorTransition: PTSegmentTitleColorTransition = .none,
+                titleZoomTransition: PTSegmentTitleZoomTransition = .none,
+                selectionTransition: PTSegmentSelectionTransition = .none,
+                spacingDistribution: PTSegmentSpacingDistribution = .fixed,
+                badgeConfiguration: PTBadgeConfiguration = PTBadgeConfiguration()) {
         self.normalFont = normalFont
         self.selectedFont = selectedFont
         self.normalColor = normalColor
@@ -189,7 +303,44 @@ public struct PTSegmentStyle {
         self.itemWidths = itemWidths
         self.distribution = distribution
         self.imageSpacing = imageSpacing
-        self.selectedScale = selectedScale
+        self.selectedScale = selectedScale.isFinite && selectedScale > 0 ? selectedScale : 1
+        self.titleColorTransition = titleColorTransition
+        self.titleZoomTransition = titleZoomTransition
+        self.selectionTransition = selectionTransition
+        self.spacingDistribution = spacingDistribution
+        self.badgeConfiguration = badgeConfiguration
+    }
+
+    /// English: JX-compatible title color switch backed by the canonical enum.
+    /// Español: Interruptor de color compatible con JX respaldado por el enum canónico.
+    /// 中文：基于规范枚举的 JX 兼容标题颜色开关。
+    public var isTitleColorGradientEnabled: Bool {
+        get { titleColorTransition == .gradient }
+        set { titleColorTransition = newValue ? .gradient : .none }
+    }
+
+    /// English: JX-compatible title zoom switch backed by the canonical enum.
+    /// Español: Interruptor de zoom compatible con JX respaldado por el enum canónico.
+    /// 中文：基于规范枚举的 JX 兼容标题缩放开关。
+    public var isTitleZoomEnabled: Bool {
+        get { titleZoomTransition == .selectedScale }
+        set { titleZoomTransition = newValue ? .selectedScale : .none }
+    }
+
+    /// English: JX-compatible selection animation switch backed by the canonical enum.
+    /// Español: Interruptor de animación compatible con JX respaldado por el enum canónico.
+    /// 中文：基于规范枚举的 JX 兼容选择动画开关。
+    public var isSelectedAnimable: Bool {
+        get { selectionTransition == .animated }
+        set { selectionTransition = newValue ? .animated : .none }
+    }
+
+    /// English: JX-compatible average-spacing switch backed by the canonical enum.
+    /// Español: Interruptor de espaciado promedio compatible con JX respaldado por el enum canónico.
+    /// 中文：基于规范枚举的 JX 兼容平均间距开关。
+    public var isItemSpacingAverageEnabled: Bool {
+        get { spacingDistribution == .averageWhenPossible }
+        set { spacingDistribution = newValue ? .averageWhenPossible : .fixed }
     }
 }
 

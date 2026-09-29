@@ -275,13 +275,26 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 segView.setSegBadge(indexView: 1, badgePosition: .BottomRight,badgeShowType: .new,badgeValue: "11")
             }
 
-        // English: Runs the native segmented/paging regression scenario used by the 5.57.3 demo catalog.
-        // Español: Ejecuta el escenario de regresión nativo de segmentos/paginación del catálogo 5.57.3.
-        // 中文：运行 5.57.3 Demo Catalog 使用的原生分段/分页回归场景。
+        // English: Demonstrates JX-compatible title transitions, average spacing, and typed badges.
+        // Español: Demuestra transiciones de título compatibles con JX, espaciado promedio e insignias tipadas.
+        // 中文：演示 JX 兼容标题过渡、平均间距和类型化角标。
         case String.segmentPagingRegression:
             let segmentedView = PTSegmentedView(frame: .zero)
-            segmentedView.style = PTSegmentStyle(itemInsets: .init(top: 0, left: 12, bottom: 0, right: 12),
-                                                  distribution: .adaptive)
+            var segmentStyle = PTSegmentStyle(itemInsets: .init(top: 0, left: 12, bottom: 0, right: 12),
+                                              distribution: .adaptive,
+                                              selectedScale: 1.12,
+                                              titleColorTransition: .gradient,
+                                              titleZoomTransition: .selectedScale,
+                                              selectionTransition: .animated,
+                                              spacingDistribution: .averageWhenPossible)
+            segmentStyle.isTitleColorGradientEnabled = true
+            segmentStyle.isTitleZoomEnabled = true
+            segmentStyle.isSelectedAnimable = true
+            segmentStyle.isItemSpacingAverageEnabled = true
+            segmentStyle.badgeConfiguration.borderColor = .systemBlue
+            segmentStyle.badgeConfiguration.borderWidth = 1
+            segmentStyle.badgeConfiguration.animType = .breathe
+            segmentedView.style = segmentStyle
             segmentedView.indicators = [PTLineIndicator(color: .systemBlue, height: 2, widthPolicy: .content)]
 
             let pagingView = PTPagingView()
@@ -299,11 +312,32 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
 
             let ids = ["all", "pending", "shipping", "delivered", "problem"]
             let titles = ["全部", "待付款", "采购中", "已发货", "问题订单"]
-            let badges = [nil, "21", "999+", "3", nil]
-            let items = zip(ids.indices, ids).map { index, id in
-                PTSegmentItem.title(id: id,
-                                    titles[index],
-                                    badge: badges[index].map { PTSegmentBadge(text: $0) })
+            var items = [
+                PTSegmentItem.title(id: ids[0], titles[0]),
+                PTSegmentItem.title(id: ids[1],
+                                    titles[1],
+                                    badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(21))),
+                PTSegmentItem.title(id: ids[2],
+                                    titles[2],
+                                    badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(999))),
+                PTSegmentItem.title(id: ids[3],
+                                    titles[3],
+                                    badgeDescriptor: PTSegmentBadgeDescriptor(content: .text("NEW"))),
+                PTSegmentItem.title(id: ids[4],
+                                    titles[4],
+                                    badgeDescriptor: PTSegmentBadgeDescriptor(content: .redDot))
+            ]
+            items[1].badgeDescriptor = PTSegmentBadgeDescriptor(content: .number(21), configuration: {
+                var configuration = PTBadgeConfiguration()
+                configuration.canDragToDelete = true
+                configuration.longPressTime = 0.35
+                configuration.animType = .scale
+                return configuration
+            }())
+            segmentedView.onBadgeRemoved = { id in
+                guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+                items[index].badgeDescriptor = nil
+                segmentedView.apply(items: items, animatingDifferences: false)
             }
             let pages = zip(ids, titles).map { id, title in
                 PTPageDescriptor(id: id, view: {

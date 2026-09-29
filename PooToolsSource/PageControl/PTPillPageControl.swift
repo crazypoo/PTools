@@ -144,8 +144,7 @@ open class PTPillPageControl: PTBasePageControl {
         let targetPage = getTargetPage(for: touch.location(in: self), totalWidth: totalWidth, unitWidth: unitWidth)
         
         if targetPage != currentPage {
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
+            PTFeedbackCenter.shared.emit(.selectionChanged)
             
             // 🚀 触发！启用动画引擎平滑滑到指定页
             setProgress(CGFloat(targetPage), animated: true)

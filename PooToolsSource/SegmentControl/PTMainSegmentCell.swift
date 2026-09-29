@@ -13,12 +13,6 @@ import ptools
 // 中文：集中维护 Cell 与布局共用的实际渲染宽度契约。
 @MainActor
 internal enum PTSegmentMeasurement {
-    static let badgeHorizontalPadding: CGFloat = 6
-    static let badgeVerticalPadding: CGFloat = 2
-    static let badgeMinimumHeight: CGFloat = 18
-    static let badgeMinimumWidth: CGFloat = 18
-    static let badgeDotDiameter: CGFloat = 8
-
     static func renderedImageSide(style: PTSegmentStyle) -> CGFloat {
         max(1, style.itemHeight - 12)
     }
@@ -33,76 +27,98 @@ internal enum PTSegmentMeasurement {
 
     static func bodyWidth(item: PTSegmentItem,
                           style: PTSegmentStyle,
-                          font: UIFont) -> CGFloat {
+                          font: UIFont,
+                          titleScale: CGFloat = 1) -> CGFloat {
+        let safeScale = titleScale.isFinite && titleScale > 0 ? titleScale : 1
         switch item.content {
         case .title(let title):
-            return textWidth(title, font: font)
+            return textWidth(title, font: font) * safeScale
         case .attributed(let attributed):
-            return attributedWidth(attributed)
+            return attributedWidth(attributed) * safeScale
         case .image, .imageSource:
             return renderedImageSide(style: style)
         case .titleImage(let title, _, _):
-            return textWidth(title, font: font) + renderedImageSide(style: style) + style.imageSpacing
+            return textWidth(title, font: font) * safeScale + renderedImageSide(style: style) + style.imageSpacing
         case .titleImageSource(let title, _, _, _):
-            return textWidth(title, font: font) + renderedImageSide(style: style) + style.imageSpacing
+            return textWidth(title, font: font) * safeScale + renderedImageSide(style: style) + style.imageSpacing
         case .custom:
             return 44
         }
     }
 
-    static func badgeWidth(_ badge: PTSegmentBadge?) -> CGFloat? {
-        guard let badge else { return nil }
-        if let text = badge.text, !text.isEmpty {
-            let textWidth = textWidth(text, font: badge.font)
-            return max(badgeMinimumWidth, textWidth + badgeHorizontalPadding * 2)
-        }
-        return badge.showsDotWhenEmpty ? badgeDotDiameter : nil
+    static func badgeWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        guard let descriptor = item.resolvedBadgeDescriptor else { return 0 }
+        let configuration = descriptor.configuration ?? style.badgeConfiguration
+        return PTBadgeLayoutMetrics.size(for: descriptor.content, configuration: configuration).width
     }
 
     static func contentWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
-        let normalWidth = bodyWidth(item: item, style: style, font: style.normalFont)
-        let selectedWidth = bodyWidth(item: item, style: style, font: style.selectedFont)
-        return ceil(max(normalWidth, selectedWidth * max(1, style.selectedScale)))
+        let normalBodyWidth = bodyWidth(item: item, style: style, font: style.normalFont)
+        let selectedBodyWidth = bodyWidth(item: item,
+                                          style: style,
+                                          font: style.selectedFont,
+                                          titleScale: style.titleZoomTransition == .selectedScale || abs(style.selectedScale - 1) > .ulpOfOne
+                                              ? safeSelectedScale(style.selectedScale)
+                                              : 1)
+        let badgeWidth = badgeWidth(item: item, style: style)
+        let badgeSpacing = badgeWidth > 0 && max(normalBodyWidth, selectedBodyWidth) > 0 ? style.imageSpacing : 0
+        return ceil(max(normalBodyWidth, selectedBodyWidth) + badgeWidth + badgeSpacing)
     }
 
     static func measuredWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
         let normalBodyWidth = bodyWidth(item: item, style: style, font: style.normalFont)
-        let selectedBodyWidth = bodyWidth(item: item, style: style, font: style.selectedFont)
-        let badgeWidth = badgeWidth(item.badge) ?? 0
+        let selectedBodyWidth = bodyWidth(item: item,
+                                          style: style,
+                                          font: style.selectedFont,
+                                          titleScale: style.titleZoomTransition == .selectedScale || abs(style.selectedScale - 1) > .ulpOfOne
+                                              ? safeSelectedScale(style.selectedScale)
+                                              : 1)
+        let badgeWidth = badgeWidth(item: item, style: style)
         let badgeSpacing = badgeWidth > 0 && normalBodyWidth > 0 ? style.imageSpacing : 0
         let normalWidth = normalBodyWidth + badgeWidth + badgeSpacing
-        let selectedWidth = (selectedBodyWidth + badgeWidth + badgeSpacing) * max(1, style.selectedScale)
+        let selectedWidth = selectedBodyWidth + badgeWidth + badgeSpacing
         return max(1, ceil(max(normalWidth, selectedWidth) + style.itemInsets.left + style.itemInsets.right))
     }
 
-    static func badgeAccessibilityValue(_ badge: PTSegmentBadge?) -> String? {
-        guard let badge, let text = badge.text, !text.isEmpty else { return nil }
-        return text
+    static func badgeAccessibilityValue(item: PTSegmentItem, style: PTSegmentStyle) -> String? {
+        guard let descriptor = item.resolvedBadgeDescriptor else { return nil }
+        return PTBadgeLayoutMetrics.displayText(for: descriptor.content,
+                                                configuration: descriptor.configuration ?? style.badgeConfiguration)
+    }
+
+    private static func safeSelectedScale(_ value: CGFloat) -> CGFloat {
+        value.isFinite && value > 0 ? value : 1
     }
 }
 
-// English: Adds stable padding and minimum dimensions to a badge label.
-// Español: Añade relleno estable y dimensiones mínimas a una etiqueta de insignia.
-// 中文：为徽标文本提供稳定内边距和最小尺寸。
+// English: Interpolates resolved colors so dynamic system colors work in light and dark mode.
+// Español: Interpola colores resueltos para que los colores dinámicos funcionen en ambos modos.
+// 中文：先解析动态颜色再插值，确保浅色和深色模式都正确。
 @MainActor
-private final class PTSegmentBadgeLabel: UILabel {
-    var contentInsets = UIEdgeInsets(top: PTSegmentMeasurement.badgeVerticalPadding,
-                                      left: PTSegmentMeasurement.badgeHorizontalPadding,
-                                      bottom: PTSegmentMeasurement.badgeVerticalPadding,
-                                      right: PTSegmentMeasurement.badgeHorizontalPadding) {
-        didSet { invalidateIntrinsicContentSize() }
-    }
-
-    override var intrinsicContentSize: CGSize {
-        let size = super.intrinsicContentSize
-        return CGSize(width: max(PTSegmentMeasurement.badgeMinimumWidth,
-                                 size.width + contentInsets.left + contentInsets.right),
-                      height: max(PTSegmentMeasurement.badgeMinimumHeight,
-                                  size.height + contentInsets.top + contentInsets.bottom))
-    }
-
-    override func drawText(in rect: CGRect) {
-        super.drawText(in: rect.inset(by: contentInsets))
+internal enum PTSegmentColorInterpolator {
+    static func interpolate(from: UIColor,
+                            to: UIColor,
+                            progress: CGFloat,
+                            traitCollection: UITraitCollection) -> UIColor {
+        let value = min(max(progress, 0), 1)
+        let resolvedFrom = from.resolvedColor(with: traitCollection)
+        let resolvedTo = to.resolvedColor(with: traitCollection)
+        var fromRed: CGFloat = 0
+        var fromGreen: CGFloat = 0
+        var fromBlue: CGFloat = 0
+        var fromAlpha: CGFloat = 0
+        var toRed: CGFloat = 0
+        var toGreen: CGFloat = 0
+        var toBlue: CGFloat = 0
+        var toAlpha: CGFloat = 0
+        guard resolvedFrom.getRed(&fromRed, green: &fromGreen, blue: &fromBlue, alpha: &fromAlpha),
+              resolvedTo.getRed(&toRed, green: &toGreen, blue: &toBlue, alpha: &toAlpha) else {
+            return value < 0.5 ? from : to
+        }
+        return UIColor(red: fromRed + (toRed - fromRed) * value,
+                       green: fromGreen + (toGreen - fromGreen) * value,
+                       blue: fromBlue + (toBlue - fromBlue) * value,
+                       alpha: fromAlpha + (toAlpha - fromAlpha) * value)
     }
 }
 
@@ -115,10 +131,10 @@ public class PTMainSegmentCell: UICollectionViewCell {
     public let imageIcon = UIImageView()
     public private(set) var representedID: AnyHashable?
     internal private(set) var indicatorContentFrame = CGRect.zero
+    internal var onBadgeRemoved: ((AnyHashable) -> Void)?
 
     private let contentStack = UIStackView()
-    private let badgeLabel = PTSegmentBadgeLabel()
-    private let badgeDot = UIView()
+    private let badgeView = PTInlineBadgeView()
     private var imageTask: Task<Void, Never>?
     private var imageWidthConstraint: NSLayoutConstraint?
     private var imageHeightConstraint: NSLayoutConstraint?
@@ -126,8 +142,6 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private var contentTrailingConstraint: NSLayoutConstraint?
     private var contentTopConstraint: NSLayoutConstraint?
     private var contentBottomConstraint: NSLayoutConstraint?
-    private var badgeDotWidthConstraint: NSLayoutConstraint?
-    private var badgeDotHeightConstraint: NSLayoutConstraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -175,11 +189,8 @@ public class PTMainSegmentCell: UICollectionViewCell {
             lineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             lineView.widthAnchor.constraint(equalToConstant: 1)
         ])
-        badgeLabel.textAlignment = .center
-        badgeLabel.setContentHuggingPriority(.required, for: .horizontal)
-        badgeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        badgeDotWidthConstraint = badgeDot.widthAnchor.constraint(equalToConstant: PTSegmentMeasurement.badgeDotDiameter)
-        badgeDotHeightConstraint = badgeDot.heightAnchor.constraint(equalToConstant: PTSegmentMeasurement.badgeDotDiameter)
+        badgeView.setContentHuggingPriority(.required, for: .horizontal)
+        badgeView.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     /// English: Configures content, badge and image loading from one value model.
@@ -221,21 +232,48 @@ public class PTMainSegmentCell: UICollectionViewCell {
         case .custom(let custom):
             contentStack.addArrangedSubview(custom.makeView())
         }
-        configureBadge(item.badge)
+        configureBadge(item.resolvedBadgeDescriptor, style: style)
         accessibilityLabel = item.accessibilityLabel ?? accessibilityText(for: item.content)
-        accessibilityValue = PTSegmentMeasurement.badgeAccessibilityValue(item.badge)
+        accessibilityValue = PTSegmentMeasurement.badgeAccessibilityValue(item: item, style: style)
         accessibilityTraits = selected ? [.button, .selected] : [.button]
     }
 
     public func applySelection(_ selected: Bool, style: PTSegmentStyle) {
-        titleLabel.font = selected ? style.selectedFont : style.normalFont
-        titleLabel.textColor = selected ? style.selectedColor : style.normalColor
-        subTitleLabel.font = selected ? style.selectedFont : style.normalFont
-        subTitleLabel.textColor = selected ? style.selectedColor : style.normalColor
-        contentView.backgroundColor = selected ? style.selectedBackgroundColor : style.normalBackgroundColor
-        transform = CGAffineTransform(scaleX: selected ? style.selectedScale : 1,
-                                      y: selected ? style.selectedScale : 1)
+        applyTransition(selectedProgress: selected ? 1 : 0, style: style)
         accessibilityTraits = selected ? [.button, .selected] : [.button]
+    }
+
+    /// English: Applies the page-driven visual progress without scaling the badge or cell.
+    /// Español: Aplica el progreso visual de página sin escalar la insignia ni la celda.
+    /// 中文：应用页面驱动的视觉进度，但不缩放角标或整个 Cell。
+    internal func applyTransition(selectedProgress: CGFloat, style: PTSegmentStyle) {
+        let progress = min(max(selectedProgress, 0), 1)
+        let titleColor: UIColor
+        if style.titleColorTransition == .gradient {
+            titleColor = PTSegmentColorInterpolator.interpolate(from: style.normalColor,
+                                                                to: style.selectedColor,
+                                                                progress: progress,
+                                                                traitCollection: traitCollection)
+        } else {
+            titleColor = progress >= 1 ? style.selectedColor : style.normalColor
+        }
+        let backgroundColor = PTSegmentColorInterpolator.interpolate(from: style.normalBackgroundColor,
+                                                                      to: style.selectedBackgroundColor,
+                                                                      progress: progress,
+                                                                      traitCollection: traitCollection)
+        let titleScale = style.titleZoomTransition == .selectedScale || abs(style.selectedScale - 1) > .ulpOfOne
+            ? 1 + (safeSelectedScale(style.selectedScale) - 1) * progress
+            : 1
+        titleLabel.font = progress >= 0.5 ? style.selectedFont : style.normalFont
+        titleLabel.textColor = titleColor
+        titleLabel.transform = CGAffineTransform(scaleX: titleScale, y: titleScale)
+        subTitleLabel.font = progress >= 0.5 ? style.selectedFont : style.normalFont
+        subTitleLabel.textColor = titleColor
+        contentView.backgroundColor = backgroundColor
+    }
+
+    private func safeSelectedScale(_ value: CGFloat) -> CGFloat {
+        value.isFinite && value > 0 ? value : 1
     }
 
     private func removeStackContent() {
@@ -248,10 +286,8 @@ public class PTMainSegmentCell: UICollectionViewCell {
         titleLabel.numberOfLines = 1
         imageIcon.image = nil
         subTitleLabel.isHidden = true
-        badgeLabel.removeFromSuperview()
-        badgeDot.removeFromSuperview()
-        badgeDotWidthConstraint?.isActive = false
-        badgeDotHeightConstraint?.isActive = false
+        badgeView.reset()
+        badgeView.removeFromSuperview()
         contentStack.axis = .horizontal
         imageWidthConstraint?.isActive = false
         imageHeightConstraint?.isActive = false
@@ -326,23 +362,15 @@ public class PTMainSegmentCell: UICollectionViewCell {
         }
     }
 
-    private func configureBadge(_ badge: PTSegmentBadge?) {
-        guard let badge else { return }
-        if let text = badge.text, !text.isEmpty {
-            badgeLabel.text = text
-            badgeLabel.font = badge.font
-            badgeLabel.textColor = badge.textColor
-            badgeLabel.backgroundColor = badge.backgroundColor
-            badgeLabel.layer.cornerRadius = 9
-            badgeLabel.layer.masksToBounds = true
-            contentStack.addArrangedSubview(badgeLabel)
-        } else if badge.showsDotWhenEmpty {
-            badgeDot.backgroundColor = badge.backgroundColor
-            badgeDot.layer.cornerRadius = PTSegmentMeasurement.badgeDotDiameter / 2
-            contentStack.addArrangedSubview(badgeDot)
-            badgeDotWidthConstraint?.isActive = true
-            badgeDotHeightConstraint?.isActive = true
+    private func configureBadge(_ descriptor: PTSegmentBadgeDescriptor?, style: PTSegmentStyle) {
+        guard let descriptor else { return }
+        let configuration = descriptor.configuration ?? style.badgeConfiguration
+        badgeView.apply(content: descriptor.content,
+                        configuration: configuration) { [weak self] in
+            guard let self, let id = self.representedID else { return }
+            self.onBadgeRemoved?(id)
         }
+        contentStack.addArrangedSubview(badgeView)
     }
 
     private func accessibilityText(for content: PTSegmentContent) -> String? {
@@ -360,8 +388,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
     open override func layoutSubviews() {
         super.layoutSubviews()
         contentStack.layoutIfNeeded()
-        badgeLabel.layer.cornerRadius = badgeLabel.bounds.height / 2
-        let contentViews = contentStack.arrangedSubviews.filter { $0 !== badgeLabel && $0 !== badgeDot }
+        let contentViews = contentStack.arrangedSubviews.filter { $0 !== badgeView }
         guard let firstFrame = contentViews.first?.frame else {
             indicatorContentFrame = .zero
             return
@@ -403,6 +430,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         imageTask?.cancel()
         imageTask = nil
         representedID = nil
+        onBadgeRemoved = nil
         removeStackContent()
     }
 }

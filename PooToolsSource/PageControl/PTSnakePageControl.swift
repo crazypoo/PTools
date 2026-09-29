@@ -139,9 +139,8 @@ open class PTSnakePageControl: PTBasePageControl {
         let targetPage = getTargetPage(for: touch.location(in: self), totalWidth: totalWidth, unitWidth: unitWidth)
         
         if targetPage != currentPage {
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-            
+            PTFeedbackCenter.shared.emit(.selectionChanged)
+
             setProgress(CGFloat(targetPage), animated: true)
             self.sendActions(for: .valueChanged)
         }

@@ -1,5 +1,6 @@
 import UIKit
 import XCTest
+import ptools
 @testable import PooToolsPagingControl
 
 @MainActor
@@ -10,7 +11,9 @@ final class PTSegmentedPagingTests: XCTestCase {
                                     itemInsets: .zero,
                                     distribution: .intrinsic)
         let title = PTSegmentItem.title(id: "orders", "待付款")
-        let withBadge = PTSegmentItem.title(id: "orders", "待付款", badge: PTSegmentBadge(text: "999+"))
+        let withBadge = PTSegmentItem.title(id: "orders",
+                                            "待付款",
+                                            badgeDescriptor: PTSegmentBadgeDescriptor(content: .text("999+")))
 
         let titleWidth = PTMainSegmentCell.measuredWidth(item: title, style: style)
         let badgeWidth = PTMainSegmentCell.measuredWidth(item: withBadge, style: style)
@@ -31,7 +34,7 @@ final class PTSegmentedPagingTests: XCTestCase {
 
         let measured = PTMainSegmentCell.measuredWidth(item: item, style: style)
         let title = "收藏".size(withAttributes: [.font: style.selectedFont]).width
-        let expectedMinimum = ceil((title + style.itemHeight - 12 + style.imageSpacing) * style.selectedScale)
+        let expectedMinimum = ceil(title * style.selectedScale + style.itemHeight - 12 + style.imageSpacing)
 
         XCTAssertGreaterThanOrEqual(measured, expectedMinimum)
     }
@@ -98,8 +101,12 @@ final class PTSegmentedPagingTests: XCTestCase {
 
     func testDynamicBadgeKeepsStableSelectionID() {
         let segmentedView = PTSegmentedView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
-        let initial = PTSegmentItem.title(id: "orders", "待付款", badge: PTSegmentBadge(text: "1"))
-        let updated = PTSegmentItem.title(id: "orders", "待付款", badge: PTSegmentBadge(text: "999+"))
+        let initial = PTSegmentItem.title(id: "orders",
+                                          "待付款",
+                                          badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(1)))
+        let updated = PTSegmentItem.title(id: "orders",
+                                          "待付款",
+                                          badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(999)))
         let style = PTSegmentStyle(itemInsets: .zero, distribution: .intrinsic)
 
         segmentedView.style = style
@@ -126,5 +133,120 @@ final class PTSegmentedPagingTests: XCTestCase {
 
         XCTAssertEqual(eventCount, 1)
         XCTAssertEqual(segmentedView.selectionState.selectedID, AnyHashable("b"))
+    }
+
+    func testJXCompatibilitySwitchesUseCanonicalPolicies() {
+        var style = PTSegmentStyle()
+        style.isTitleColorGradientEnabled = true
+        style.isTitleZoomEnabled = true
+        style.isSelectedAnimable = true
+        style.isItemSpacingAverageEnabled = true
+
+        XCTAssertEqual(style.titleColorTransition, .gradient)
+        XCTAssertEqual(style.titleZoomTransition, .selectedScale)
+        XCTAssertEqual(style.selectionTransition, .animated)
+        XCTAssertEqual(style.spacingDistribution, .averageWhenPossible)
+    }
+
+    func testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules() {
+        var configuration = PTBadgeConfiguration()
+        configuration.maximumNumber = 99
+        let item = PTSegmentItem.title(
+            id: "orders",
+            "订单",
+            badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(120), configuration: configuration)
+        )
+        let style = PTSegmentStyle(itemInsets: .zero, distribution: .intrinsic)
+
+        XCTAssertEqual(PTBadgeLayoutMetrics.displayText(for: .number(120), configuration: configuration), "99+")
+        XCTAssertGreaterThan(PTMainSegmentCell.measuredWidth(item: item, style: style), 0)
+    }
+
+    func testInlineBadgeUsesTheSameMetricsAsOverlayBadge() {
+        var configuration = PTBadgeConfiguration()
+        configuration.maximumNumber = 99
+        configuration.borderWidth = 1
+        let inlineBadge = PTInlineBadgeView()
+        inlineBadge.apply(content: .number(120), configuration: configuration, onRemove: nil)
+
+        XCTAssertEqual(inlineBadge.intrinsicContentSize,
+                       PTBadgeLayoutMetrics.size(for: .number(120), configuration: configuration))
+        XCTAssertEqual(PTBadgeLayoutMetrics.displayText(for: .number(120), configuration: configuration), "99+")
+    }
+
+    func testAverageSpacingPreservesIntrinsicItemWidths() {
+        let segmentedView = PTSegmentedView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        segmentedView.style = PTSegmentStyle(itemInsets: .zero,
+                                              itemSpacing: 8,
+                                              distribution: .intrinsic,
+                                              spacingDistribution: .averageWhenPossible)
+        let items = [
+            PTSegmentItem.title(id: "a", "A"),
+            PTSegmentItem.title(id: "b", "BBBB"),
+            PTSegmentItem.title(id: "c", "CCCCCC")
+        ]
+        segmentedView.apply(items: items, animatingDifferences: false)
+        segmentedView.layoutIfNeeded()
+
+        guard let layout = segmentedView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
+            XCTFail("Expected a flow layout")
+            return
+        }
+        let widths = items.indices.map {
+            segmentedView.collectionView(segmentedView.collectionView,
+                                         layout: layout,
+                                         sizeForItemAt: IndexPath(item: $0, section: 0)).width
+        }
+        XCTAssertGreaterThan(layout.minimumLineSpacing, 8)
+        XCTAssertNotEqual(widths[0], widths[1])
+        XCTAssertNotEqual(widths[1], widths[2])
+    }
+
+    func testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit() {
+        let segmentedView = PTSegmentedView(frame: CGRect(x: 0, y: 0, width: 80, height: 44))
+        segmentedView.style = PTSegmentStyle(itemInsets: .zero,
+                                              itemSpacing: 7,
+                                              distribution: .intrinsic,
+                                              spacingDistribution: .averageWhenPossible)
+        segmentedView.apply(items: [
+            .title(id: "a", "A very long title"),
+            .title(id: "b", "Another long title")
+        ], animatingDifferences: false)
+        segmentedView.layoutIfNeeded()
+
+        guard let layout = segmentedView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
+            XCTFail("Expected a flow layout")
+            return
+        }
+        XCTAssertEqual(layout.minimumLineSpacing, 7, accuracy: 0.001)
+    }
+
+    func testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem() {
+        let equalView = PTSegmentedView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        equalView.style = PTSegmentStyle(itemInsets: .zero,
+                                         itemSpacing: 5,
+                                         distribution: .equal,
+                                         spacingDistribution: .averageWhenPossible)
+        equalView.apply(items: [
+            .title(id: "a", "A"),
+            .title(id: "b", "B")
+        ], animatingDifferences: false)
+        equalView.layoutIfNeeded()
+
+        let singleView = PTSegmentedView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        singleView.style = PTSegmentStyle(itemInsets: .zero,
+                                          itemSpacing: 6,
+                                          distribution: .intrinsic,
+                                          spacingDistribution: .averageWhenPossible)
+        singleView.apply(items: [.title(id: "single", "Single")], animatingDifferences: false)
+        singleView.layoutIfNeeded()
+
+        guard let equalLayout = equalView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout,
+              let singleLayout = singleView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
+            XCTFail("Expected flow layouts")
+            return
+        }
+        XCTAssertEqual(equalLayout.minimumLineSpacing, 5, accuracy: 0.001)
+        XCTAssertEqual(singleLayout.minimumLineSpacing, 6, accuracy: 0.001)
     }
 }

@@ -48,6 +48,9 @@ coordinator.apply(items: items, pages: pages)
 浏览不会伪造页面过渡，也不会偷偷修改 `selectedID`。需要改变页面时调用 Coordinator、
 `PTPageContainer.select(id:)` 或 `PTSegmentedView.select(id:)`。
 
+`PTSegmentedView.style` 的标题颜色、标题缩放和选中动画都接收同一条页面 transition；不要在
+Segment 的 `scrollViewDidScroll` 中重复计算颜色或缩放。平均间距只属于布局阶段，不参与页面进度。
+
 ## 刷新和缓存
 
 `PTRefreshAdapter` 只定义刷新契约，`PTUIRefreshAdapter` 提供系统实现。复杂刷新库可以在宿主层实现该协议，并根据 `PTPagingRefreshPolicy` 决定外层、内层或每页独立拥有刷新状态。

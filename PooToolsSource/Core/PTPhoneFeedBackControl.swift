@@ -10,6 +10,7 @@ import UIKit
 import AudioToolbox
 
 /// 统一的设备震动与触觉反馈控制工具
+@available(*, deprecated, message: "Use PTFeedbackCenter or PTHapticEngine instead.")
 public enum PTPhoneFeedbackControl {
     
     // MARK: - 传统系统震动

@@ -324,7 +324,6 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 内部依赖
     
     private weak var context: PTEditImageEngineContext?
-    private var impactFeedback: UIImpactFeedbackGenerator?
     private var committedDrawingImage: UIImage?
     private var hasActiveStroke = false
     static let maxDrawLineImageWidth: CGFloat = 600
@@ -337,9 +336,6 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     public init(context: PTEditImageEngineContext) {
         self.context = context
         super.init()
-        if PTImageEditorConfig.share.tools.contains(.draw) {
-            impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        }
     }
     
     public func toolDidActivate() {
@@ -370,7 +366,6 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         
         if pan.state == .began {
             onInteractStateChanged?(true)
-            impactFeedback?.prepare()
             committedDrawingImage = drawingImageView.image
             hasActiveStroke = true
             
@@ -401,7 +396,9 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
                 // 🌟 一行代码拿到橡皮擦矩阵
                 let transform = context.calculateEraserTransform(viewTransform: drawingImageView.transform, viewSize: drawingImageView.frame.size)
                 context.engineEraserCircleView.center = point.applying(transform)
-                impactFeedback?.impactOccurred()
+                if PTImageEditorConfig.share.tools.contains(.draw) {
+                    PTFeedbackCenter.shared.emit(.selectionChanged)
+                }
             }
             
         } else if pan.state == .changed {
@@ -504,7 +501,6 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     public var isEraserMode: Bool = false
     
     private weak var context: PTEditImageEngineContext?
-    private var impactFeedback: UIImpactFeedbackGenerator?
     private var committedMaskImage: UIImage?
     private var hasActiveStroke = false
     private var mosaicSourceImage: UIImage?
@@ -513,9 +509,6 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     public init(context: PTEditImageEngineContext) {
         self.context = context
         super.init()
-        if PTImageEditorConfig.share.tools.contains(.mosaic) {
-            impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        }
     }
     
     public func toolDidActivate() {
@@ -560,7 +553,6 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         
         if pan.state == .began {
             onInteractStateChanged?(true)
-            impactFeedback?.prepare()
             committedMaskImage = maskImageView.image
             hasActiveStroke = true
             
@@ -591,7 +583,9 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
                 // 🌟 一行代码拿到橡皮擦矩阵
                 let transform = context.calculateEraserTransform(viewTransform: mosaicContainerView.transform, viewSize: mosaicContainerView.frame.size)
                 context.engineEraserCircleView.center = point.applying(transform)
-                impactFeedback?.impactOccurred()
+                if PTImageEditorConfig.share.tools.contains(.mosaic) {
+                    PTFeedbackCenter.shared.emit(.selectionChanged)
+                }
             }
             
         } else if pan.state == .changed {

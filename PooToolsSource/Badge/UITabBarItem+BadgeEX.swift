@@ -72,7 +72,6 @@ extension UITabBarItem: @MainActor PTBadgeProtocol {
         state.content = content
         state.hasContent = true
         state.isVisible = PTBadgeMetrics.size(for: content, configuration: state.configuration) != .zero
-        state.didNotifyRemoval = false
         state.configuration.animType = animation
 
         if let host = actualBadgeSuperView {

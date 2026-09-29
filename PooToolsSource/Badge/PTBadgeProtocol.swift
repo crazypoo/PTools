@@ -99,10 +99,10 @@ internal final class PTBadgeState {
     var isVisible = false
     var label: UILabel?
     var removeCallback: (() -> Void)?
-    var gesture: UILongPressGestureRecognizer?
-    var dragOriginCenter: CGPoint = .zero
-    var dragOriginTouch: CGPoint = .zero
-    var didNotifyRemoval = false
+    // English: Reuses the shared drag controller for overlay and inline badge renderers.
+    // Español: Reutiliza el controlador de arrastre compartido para renderizadores superpuestos e integrados.
+    // 中文：为覆盖层和内嵌角标渲染器复用统一的拖拽控制器。
+    var interactionController: PTBadgeInteractionController?
     weak var hostView: UIView?
     var operationID: Int = 0
 }

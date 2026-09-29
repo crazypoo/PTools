@@ -77,7 +77,8 @@ extension UIView: @MainActor PTBadgeProtocol {
             }
 
             state.label?.removeFromSuperview()
-            state.gesture = nil
+            state.interactionController?.invalidate()
+            state.interactionController = nil
             state.label = newValue
 
             guard let newValue else {
@@ -162,7 +163,6 @@ extension UIView: @MainActor PTBadgeProtocol {
         state.content = content
         state.hasContent = true
         state.isVisible = PTBadgeMetrics.size(for: content, configuration: state.configuration) != .zero
-        state.didNotifyRemoval = false
         state.operationID &+= 1
         state.configuration.animType = animation
 
@@ -175,6 +175,7 @@ extension UIView: @MainActor PTBadgeProtocol {
         let state = ptBadgeState
         state.isVisible = false
         state.operationID &+= 1
+        state.interactionController?.invalidate()
         state.label?.isHidden = true
         state.label?.alpha = 1
         state.label?.transform = .identity
@@ -275,16 +276,6 @@ extension UIView: @MainActor PTBadgeProtocol {
         frame.origin.x.isFinite && frame.origin.y.isFinite && frame.width > 0 && frame.height > 0 && frame.width.isFinite && frame.height.isFinite
     }
 
-    private func resetBadgePosition() {
-        guard let label = ptBadgeState.label else { return }
-        let configuration = ptBadgeState.configuration
-        if hasValidBadgeFrame(configuration.frame) {
-            label.frame = configuration.frame
-        } else {
-            label.center = safeBadgeCenter(configuration.centerOffset)
-        }
-    }
-
     private func safeBadgeCenter(_ center: CGPoint) -> CGPoint {
         guard center.x.isFinite, center.y.isFinite else { return .zero }
         return center
@@ -295,119 +286,37 @@ extension UIView: @MainActor PTBadgeProtocol {
     private func updateBadgeGesture() {
         let state = ptBadgeState
         guard let label = state.label else { return }
-
-        if let oldGesture = state.gesture {
-            label.removeGestureRecognizer(oldGesture)
-            state.gesture = nil
-        }
-
         label.isUserInteractionEnabled = state.configuration.canDragToDelete
-        guard state.configuration.canDragToDelete else { return }
-
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleBadgeLongPress(_:)))
-        let duration = state.configuration.longPressTime.isFinite ? state.configuration.longPressTime : 0.5
-        gesture.minimumPressDuration = min(max(0.1, duration), 10)
-        gesture.cancelsTouchesInView = false
-        label.addGestureRecognizer(gesture)
-        state.gesture = gesture
-    }
-
-    @objc private func handleBadgeLongPress(_ gesture: UILongPressGestureRecognizer) {
-        let state = ptBadgeState
-        guard let label = state.label, state.isVisible else { return }
-
-        switch gesture.state {
-        case .began:
-            state.dragOriginCenter = label.center
-            state.dragOriginTouch = gesture.location(in: self)
-            removeBadgeAnimations()
-        case .changed:
-            let location = gesture.location(in: self)
-            let delta = CGPoint(x: location.x - state.dragOriginTouch.x, y: location.y - state.dragOriginTouch.y)
-            label.center = CGPoint(x: state.dragOriginCenter.x + delta.x, y: state.dragOriginCenter.y + delta.y)
-        case .ended:
-            let badgeFrame = label.convert(label.bounds, to: self)
-            if bounds.intersects(badgeFrame) {
-                restoreBadgeAfterDrag()
-            } else {
-                deleteBadgeAfterDrag()
-            }
-        case .cancelled, .failed:
-            restoreBadgeAfterDrag()
-        default:
-            break
+        if state.interactionController == nil {
+            state.interactionController = PTBadgeInteractionController(hostView: self,
+                                                                        draggableView: label,
+                                                                        removesViewOnDelete: true)
         }
-    }
-
-    private func restoreBadgeAfterDrag() {
-        let state = ptBadgeState
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5) {
-            self.resetBadgePosition()
-        } completion: { _ in
-            guard state.isVisible else { return }
+        state.interactionController?.onRemove = { [weak self, weak state, weak label] in
+            guard let self, let state, let label, state.label === label else { return }
+            state.isVisible = false
+            state.hasContent = false
+            state.label = nil
+            state.interactionController = nil
+            state.removeCallback?()
             self.applyBadgeAnimation()
         }
-    }
-
-    private func deleteBadgeAfterDrag() {
-        let state = ptBadgeState
-        guard let label = state.label, !state.didNotifyRemoval else { return }
-
-        state.didNotifyRemoval = true
-        state.isVisible = false
-        state.operationID &+= 1
-        let operationID = state.operationID
-        UIView.animate(withDuration: 0.2, animations: {
-            label.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-            label.alpha = 0
-        }) { _ in
-            guard state.operationID == operationID, state.label === label else { return }
-            label.removeFromSuperview()
-            state.label = nil
-            state.gesture = nil
-            state.hasContent = false
-            state.removeCallback?()
-        }
+        state.interactionController?.update(hostView: self,
+                                            isEnabled: state.configuration.canDragToDelete && state.isVisible,
+                                            longPressTime: state.configuration.longPressTime)
     }
 
     // MARK: - 动画
 
     private func removeBadgeAnimations() {
-        guard let layer = ptBadgeState.label?.layer else { return }
-        for animationType in [PTBadgeAnimType.scale, .shake, .bounce, .breathe] {
-            layer.removeAnimation(forKey: animationType.animationKey)
-        }
+        PTBadgeAnimationDriver.remove(from: ptBadgeState.label?.layer)
     }
 
     private func applyBadgeAnimation() {
         let state = ptBadgeState
-        guard let layer = state.label?.layer, state.isVisible else {
-            removeBadgeAnimations()
-            return
-        }
-
-        removeBadgeAnimations()
-        guard state.label?.isHidden == false,
-              state.label?.window != nil,
-              !UIAccessibility.isReduceMotionEnabled else {
-            return
-        }
-
-        let animationType = state.configuration.animType
-        guard animationType != .none else { return }
-        let key = animationType.animationKey
-
-        switch animationType {
-        case .none:
-            break
-        case .scale:
-            layer.add(CAAnimation.scale(fromScale: 1.4, toScale: 0.6, duration: 1, repeatCount: .infinity), forKey: key)
-        case .shake:
-            layer.add(CAAnimation.shakeAnimation(repeatTimes: .infinity, duration: 1, offset: 5), forKey: key)
-        case .bounce:
-            layer.add(CAAnimation.bounceAnimation(repeatTimes: .infinity, duration: 1, offset: 5), forKey: key)
-        case .breathe:
-            layer.add(CAAnimation.opacityForeverAnimation(time: 1), forKey: key)
-        }
+        PTBadgeAnimationDriver.apply(to: state.label?.layer,
+                                     animation: state.configuration.animType,
+                                     isVisible: state.isVisible && state.label?.isHidden == false,
+                                     isAttachedToWindow: state.label?.window != nil)
     }
 }

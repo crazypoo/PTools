@@ -194,9 +194,8 @@ open class PTImagePageControl: PTBasePageControl {
         }
         
         if targetPage != currentPage {
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-            
+            PTFeedbackCenter.shared.emit(.selectionChanged)
+
             // 🚀 触发！启用原生动画引擎
             setProgress(CGFloat(targetPage), animated: true)
             self.sendActions(for: .valueChanged)

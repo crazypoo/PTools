@@ -78,9 +78,7 @@ public class PTAdjustSliderView: UIView {
     }()
     
     lazy var pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
-    
-    private var impactFeedback: UIImpactFeedbackGenerator?
-    
+        
     private var valueForPanBegan: Float = 0
     
     var value: Float = 0 {
@@ -101,12 +99,7 @@ public class PTAdjustSliderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        
-        let editConfig = PTImageEditorConfig.share
-        if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
-            impactFeedback = UIImpactFeedbackGenerator(style: editConfig.impactFeedbackStyle)
-        }
-        
+                
         addGestureRecognizer(pan)
     }
     
@@ -168,7 +161,6 @@ public class PTAdjustSliderView: UIView {
         if pan.state == .began {
             valueForPanBegan = value
             beginAdjust?()
-            impactFeedback?.prepare()
         } else if pan.state == .changed {
             let transValue = isVertical ? -translation.y : translation.x
             let totalLength = isVertical ? pt.jx_height / 2 : pt.jx_width / 2
@@ -189,7 +181,19 @@ public class PTAdjustSliderView: UIView {
             valueChanged?(value)
             
             if value == 0 {
-                impactFeedback?.impactOccurred()
+                let editConfig = PTImageEditorConfig.share
+                if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
+                    switch editConfig.impactFeedbackStyle {
+                    case .light:
+                        PTFeedbackCenter.shared.emit(.selectionChanged)
+                    case .medium:
+                        PTFeedbackCenter.shared.emit(.submit)
+                    case .heavy:
+                        PTFeedbackCenter.shared.emit(.toggle)
+                    default:
+                        PTFeedbackCenter.shared.emit(.success)
+                    }
+                }
             }
         } else {
             valueForPanBegan = value

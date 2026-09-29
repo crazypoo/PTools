@@ -1,6 +1,6 @@
 # 旧 JX 分段分页场景迁移到 PTools
 
-本教程把 `YDShipOrderControl.swift` 中的“固定分段栏 + 多个订单列表 + 懒加载 + 动态角标 + 外层刷新”迁移到 PTools 5.31.1。PTools 不再暴露第三方类型，页面与分段都使用稳定 ID。
+本教程把 `YDShipOrderControl.swift` 中的“固定分段栏 + 多个订单列表 + 懒加载 + 动态角标 + 外层刷新”迁移到 PTools。PTools 不再暴露第三方类型，页面与分段都使用稳定 ID。
 
 ## 1. 组件对应关系
 
@@ -80,8 +80,8 @@ private func reloadSegmentAndPages() {
         PTSegmentItem.title(
             id: model.id,
             model.name,
-            badge: model.badge > 0
-                ? PTSegmentBadge(text: String(model.badge))
+            badgeDescriptor: model.badge > 0
+                ? PTSegmentBadgeDescriptor(content: .number(model.badge))
                 : nil
         )
     }
@@ -165,28 +165,33 @@ for controller in loadedControllers {
 
 `loadedPageIDs` 只返回当前缓存真正持有的页面，并按照 `descriptors` 顺序返回。`discardOffscreen`、`adjacent`、`limit` 和 `keepAllLoaded` 的结果完全遵循容器现有 `cachePolicy`；页面卸载后，所有对应查询都会返回 `nil` 或不再包含该 ID。
 
-## 6.2 订单状态分段回归（5.57.3）
+## 6.2 订单状态分段回归
 
 订单状态页通常同时包含短中文标题、较长本地化标题和动态数量角标。更新角标时保持订单状态
-的稳定 ID 不变，只替换 `PTSegmentItem` 的 `content` 或 `badge`：
+的稳定 ID 不变，只替换 `PTSegmentItem` 的 `content` 或 `badgeDescriptor`：
 
 ```swift
 let items = orderModels.map { model in
     PTSegmentItem.title(
         id: model.id,
         model.localizedName,
-        badge: model.pendingCount > 0
-            ? PTSegmentBadge(text: String(model.pendingCount))
+        badgeDescriptor: model.pendingCount > 0
+            ? PTSegmentBadgeDescriptor(content: .number(model.pendingCount))
             : nil
     )
 }
 coordinator.apply(items: items, pages: pages, animated: false)
 ```
 
-`PTSegmentedView` 会按 normal/selected 字体、角标内边距和 selectedScale 重新测量宽度。用户
+`PTSegmentedView` 会按 normal/selected 字体、Core Badge 尺寸和 selectedScale 重新测量宽度。用户
 拖动标题条时只浏览分段并更新 Indicator 的 viewport 位置，不会改变当前订单页；订单页面的
 左右滑动才会通过 Coordinator 产生 Indicator transition。建议在中文、英文、西班牙语、RTL、
 Dynamic Type 和 Reduce Motion 环境分别验证首项、末项、100 个状态项以及快速点击/快速滑页。
+
+当需要 JX 的视觉效果时，在 `PTSegmentStyle` 开启 `isTitleColorGradientEnabled`、
+`isTitleZoomEnabled`、`isSelectedAnimable` 和 `isItemSpacingAverageEnabled`；平均间距只扩大
+真实 Item 之间的 Gap，不会把不同宽度的订单状态强制变成等宽。角标删除通过
+`onBadgeRemoved` 回调后由业务重新生成同一批稳定 ID。
 
 外层刷新和页面自己的刷新状态应分开管理；不要把同一个 `UIRefreshControl` 同时安装到外层和每个内层列表。页面需要独立下拉刷新时，使用页面自己的刷新控件，并把外层策略设置为 `.perPage` 或由宿主自行协调。
 

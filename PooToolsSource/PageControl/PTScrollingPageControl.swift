@@ -223,9 +223,8 @@ open class PTScrollingPageControl: PTBasePageControl {
         targetPage = max(0, min(targetPage, pageCount - 1))
         
         if targetPage != currentPage {
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-            
+            PTFeedbackCenter.shared.emit(.selectionChanged)
+
             // 🚀 触发！启用动画引擎平滑滚动到指定页
             setProgress(CGFloat(targetPage), animated: true)
             self.sendActions(for: .valueChanged)
