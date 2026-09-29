@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
-Generated at: 2026-09-29T00:51:56+08:00 -->
+Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
+Generated at: 2026-09-29T13:28:00+08:00 -->
 # Document Inventory
 
-- Version: `5.57.0`
+- Version: `5.57.3`
 - Records: `844`
 
 | path | documentType | language | status | action |

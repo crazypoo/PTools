@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
-Generated at: 2026-09-29T05:16:10Z
+Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
+Generated at: 2026-09-29T06:52:44Z
 -->
 
 # PTools 当前公开 API 清单
@@ -7797,15 +7797,15 @@ Generated at: 2026-09-29T05:16:10Z
 | PooToolsSource/Security/PTSecurity.swift:59 | let | public | public let requiresBiometry: Bool |
 | PooToolsSource/Security/PTSecurity.swift:61 | init | public | public init(service: String, |
 | PooToolsSource/Security/PTSecurity.swift:72 | enum | public | public enum PTSecurity { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:12 | class | public | public class PTMainSegmentCell: UICollectionViewCell { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:14 | let | public | public let lineView = UIView() |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:15 | let | public | public let titleLabel = UILabel() |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:16 | let | public | public let subTitleLabel = UILabel() |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:17 | let | public | public let imageIcon = UIImageView() |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:44 | func | open | open func commonInit() { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:85 | func | public | public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:126 | func | public | public func applySelection(_ selected: Bool, style: PTSegmentStyle) { |
-| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:272 | func | public | public func reloadData(model: PTMainSegmentModel, selected: Bool) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:110 | class | public | public class PTMainSegmentCell: UICollectionViewCell { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:112 | let | public | public let lineView = UIView() |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:113 | let | public | public let titleLabel = UILabel() |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:114 | let | public | public let subTitleLabel = UILabel() |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:115 | let | public | public let imageIcon = UIImageView() |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:145 | func | open | open func commonInit() { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:188 | func | public | public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:230 | func | public | public func applySelection(_ selected: Bool, style: PTSegmentStyle) { |
+| PooToolsSource/SegmentControl/PTMainSegmentCell.swift:377 | func | public | public func reloadData(model: PTMainSegmentModel, selected: Bool) { |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:9 | class | public | public class PTMainSegmentDataSource: NSObject { |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:10 | var | open | open var dataSourceData = [PTSegmentControlBaseModel]() |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:11 | var | open | open var change: PTSegmentControlModelType? = .ImageTitle(type: .Normal) |
@@ -8014,84 +8014,87 @@ Generated at: 2026-09-29T05:16:10Z
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:266 | struct | public | public struct PTSegmentIndicatorContext { |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:267 | let | public | public let bounds: CGRect |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:268 | let | public | public let itemFrames: [AnyHashable: CGRect] |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:269 | let | public | public let selectedID: AnyHashable? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:270 | let | public | public let placement: PTSegmentIndicatorPlacement |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:271 | let | public | public let widthPolicy: PTIndicatorWidthPolicy |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:273 | init | public | public init(bounds: CGRect, |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:290 | protocol | public | public protocol PTSegmentIndicator: AnyObject { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:301 | struct | public | public struct PTPageDescriptor { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:302 | let | public | public let id: AnyHashable |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:303 | let | public | public let makePage: @MainActor () -> any PTPage |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:305 | init | public | public init(id: AnyHashable, makePage: @escaping @MainActor () -> any PTPage) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:310 | init | public | public init(id: AnyHashable, viewController: @escaping @MainActor () -> UIViewController) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:315 | init | public | public init(id: AnyHashable, view: @escaping @MainActor () -> UIView) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:325 | enum | public | public enum PTPageCachePolicy { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:336 | enum | public | public enum PTPageLifecycle { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:350 | protocol | public | public protocol PTPage: AnyObject { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:358 | protocol | public | public protocol PTScrollablePage: PTPage { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:366 | protocol | public | public protocol PTPageLifecycleObserving: PTPage { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:374 | class | public | public final class PTViewPage: PTPage { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:375 | let | public | public let pageView: UIView |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:377 | init | public | public init(view: UIView) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:386 | class | public | public final class PTViewControllerPage: PTPage, PTScrollablePage, PTPageLifecycleObserving { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:387 | let | public | public let viewController: UIViewController |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:389 | var | public | public var pageView: UIView { viewController.view } |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:390 | var | public | public var pageScrollView: UIScrollView { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:394 | init | public | public init(viewController: UIViewController) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:401 | func | public | public func pageContainer(_ container: PTPageContainer, didChange lifecycle: PTPageLifecycle) { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:432 | enum | public | public enum PTNavigationOwnership { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:442 | enum | public | public enum PTViewControllerEmbeddingContext { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:451 | struct | public | public struct PTNavigationBarPreference { |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:452 | var | public | public var isHidden: Bool? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:453 | var | public | public var tintColor: UIColor? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:454 | var | public | public var backgroundColor: UIColor? |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:456 | init | public | public init(isHidden: Bool? = nil, |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:469 | enum | public | public enum PTChildNavigationPolicy { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:51 | class | open | open class PTBaseSegmentIndicator: UIView, PTSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:52 | var | public | public var view: UIView { self } |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:53 | var | open | open var color: UIColor = .systemBlue |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:54 | var | open | open var height: CGFloat = 2 |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:55 | var | open | open var placement: PTSegmentIndicatorPlacement = .bottom |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:56 | var | open | open var widthPolicy: PTIndicatorWidthPolicy = .content |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:71 | func | open | open func prepare(context: PTSegmentIndicatorContext) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:83 | func | open | open func update(transition: PTSegmentTransition) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:94 | func | open | open func select(item: PTSegmentSelectionState) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:107 | class | open | open class PTLineIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:108 | init | public | public init(color: UIColor = .systemBlue, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:128 | class | public | public final class PTStretchLineIndicator: PTLineIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:140 | class | public | public final class PTDotIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:141 | init | public | public init(color: UIColor = .systemBlue, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:165 | class | public | public final class PTDoubleLineIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:168 | init | public | public init(color: UIColor = .systemBlue, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:198 | class | public | public final class PTTriangleIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:201 | init | public | public init(color: UIColor = .systemBlue, size: CGSize = .init(width: 12, height: 6)) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:230 | class | open | open class PTBackgroundIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:233 | init | public | public init(color: UIColor = .secondarySystemBackground, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:277 | class | public | public final class PTGradientIndicator: PTBackgroundIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:280 | init | public | public init(colors: [UIColor], cornerRadius: CGFloat = 8, inset: UIEdgeInsets = .zero) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:302 | class | public | public final class PTImageIndicator: PTBaseSegmentIndicator { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:305 | init | public | public init(image: UIImage, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:330 | class | open | open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:336 | let | public | public let collectionView: UICollectionView |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:337 | var | public | public var style = PTSegmentStyle() { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:348 | var | public | public var indicators: [any PTSegmentIndicator] = [] { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:353 | var | public | public var onSelectionChanged: ((PTSegmentSelectionEvent) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:354 | var | public | public var onTransition: ((PTSegmentTransition) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:358 | var | public | public var onItemSelected: ((Int, PTSegmentSelectionOrigin) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:359 | var | public | public var onReselected: ((Int) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:360 | var | public | public var onScrolling: ((Int, Int, CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:361 | var | public | public var allowsReselect = true |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:362 | var | public | public var automaticallyScrollsToSelectedItem = true |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:363 | var | public | public var selectionAnimationDuration: TimeInterval = 0.25 |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:443 | func | public | public func apply(items newItems: [PTSegmentItem], |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:487 | func | public | public func select(id: AnyHashable, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:503 | func | public | public func select(index: Int, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:513 | func | public | public func update(transition: PTSegmentTransition) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:593 | func | public | public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:598 | func | public | public func collectionView(_ collectionView: UICollectionView, |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:620 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:639 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTSegmentedView.swift:643 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:272 | let | public | public let contentFrames: [AnyHashable: CGRect] |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:273 | let | public | public let selectedID: AnyHashable? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:274 | let | public | public let placement: PTSegmentIndicatorPlacement |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:275 | let | public | public let widthPolicy: PTIndicatorWidthPolicy |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:277 | init | public | public init(bounds: CGRect, |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:296 | protocol | public | public protocol PTSegmentIndicator: AnyObject { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:307 | struct | public | public struct PTPageDescriptor { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:308 | let | public | public let id: AnyHashable |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:309 | let | public | public let makePage: @MainActor () -> any PTPage |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:311 | init | public | public init(id: AnyHashable, makePage: @escaping @MainActor () -> any PTPage) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:316 | init | public | public init(id: AnyHashable, viewController: @escaping @MainActor () -> UIViewController) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:321 | init | public | public init(id: AnyHashable, view: @escaping @MainActor () -> UIView) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:331 | enum | public | public enum PTPageCachePolicy { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:342 | enum | public | public enum PTPageLifecycle { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:356 | protocol | public | public protocol PTPage: AnyObject { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:364 | protocol | public | public protocol PTScrollablePage: PTPage { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:372 | protocol | public | public protocol PTPageLifecycleObserving: PTPage { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:380 | class | public | public final class PTViewPage: PTPage { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:381 | let | public | public let pageView: UIView |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:383 | init | public | public init(view: UIView) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:392 | class | public | public final class PTViewControllerPage: PTPage, PTScrollablePage, PTPageLifecycleObserving { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:393 | let | public | public let viewController: UIViewController |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:395 | var | public | public var pageView: UIView { viewController.view } |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:396 | var | public | public var pageScrollView: UIScrollView { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:400 | init | public | public init(viewController: UIViewController) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:407 | func | public | public func pageContainer(_ container: PTPageContainer, didChange lifecycle: PTPageLifecycle) { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:438 | enum | public | public enum PTNavigationOwnership { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:448 | enum | public | public enum PTViewControllerEmbeddingContext { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:457 | struct | public | public struct PTNavigationBarPreference { |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:458 | var | public | public var isHidden: Bool? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:459 | var | public | public var tintColor: UIColor? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:460 | var | public | public var backgroundColor: UIColor? |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:462 | init | public | public init(isHidden: Bool? = nil, |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:475 | enum | public | public enum PTChildNavigationPolicy { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:60 | class | open | open class PTBaseSegmentIndicator: UIView, PTSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:61 | var | public | public var view: UIView { self } |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:62 | var | open | open var color: UIColor = .systemBlue |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:63 | var | open | open var height: CGFloat = 2 |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:64 | var | open | open var placement: PTSegmentIndicatorPlacement = .bottom |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:65 | var | open | open var widthPolicy: PTIndicatorWidthPolicy = .content |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:89 | func | open | open func prepare(context: PTSegmentIndicatorContext) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:102 | func | open | open func update(transition: PTSegmentTransition) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:113 | func | open | open func select(item: PTSegmentSelectionState) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:126 | class | open | open class PTLineIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:127 | init | public | public init(color: UIColor = .systemBlue, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:147 | class | public | public final class PTStretchLineIndicator: PTLineIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:159 | class | public | public final class PTDotIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:160 | init | public | public init(color: UIColor = .systemBlue, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:184 | class | public | public final class PTDoubleLineIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:187 | init | public | public init(color: UIColor = .systemBlue, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:217 | class | public | public final class PTTriangleIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:220 | init | public | public init(color: UIColor = .systemBlue, size: CGSize = .init(width: 12, height: 6)) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:249 | class | open | open class PTBackgroundIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:252 | init | public | public init(color: UIColor = .secondarySystemBackground, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:297 | class | public | public final class PTGradientIndicator: PTBackgroundIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:300 | init | public | public init(colors: [UIColor], cornerRadius: CGFloat = 8, inset: UIEdgeInsets = .zero) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:322 | class | public | public final class PTImageIndicator: PTBaseSegmentIndicator { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:325 | init | public | public init(image: UIImage, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:350 | class | open | open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:361 | let | public | public let collectionView: UICollectionView |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:362 | var | public | public var style = PTSegmentStyle() { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:373 | var | public | public var indicators: [any PTSegmentIndicator] = [] { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:378 | var | public | public var onSelectionChanged: ((PTSegmentSelectionEvent) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:379 | var | public | public var onTransition: ((PTSegmentTransition) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:383 | var | public | public var onItemSelected: ((Int, PTSegmentSelectionOrigin) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:384 | var | public | public var onReselected: ((Int) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:385 | var | public | public var onScrolling: ((Int, Int, CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:386 | var | public | public var allowsReselect = true |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:387 | var | public | public var automaticallyScrollsToSelectedItem = true |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:388 | var | public | public var selectionAnimationDuration: TimeInterval = 0.25 |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:469 | func | public | public func apply(items newItems: [PTSegmentItem], |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:516 | func | public | public func select(id: AnyHashable, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:534 | func | public | public func select(index: Int, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:544 | func | public | public func update(transition: PTSegmentTransition) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:641 | func | public | public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:646 | func | public | public func collectionView(_ collectionView: UICollectionView, |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:668 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:673 | func | public | public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:679 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:685 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTSegmentedView.swift:691 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
 | PooToolsSource/Segmented/PTSegmentView.swift:13 | enum | public | @objc public enum PTSegmentSelectedType : Int { |
 | PooToolsSource/Segmented/PTSegmentView.swift:21 | class | public | public class PTSegmentConfig: NSObject { |
 | PooToolsSource/Segmented/PTSegmentView.swift:23 | var | public | public var selectedFont:UIFont = .systemFont(ofSize: 16) |

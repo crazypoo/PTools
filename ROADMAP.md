@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.57.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.57.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.57.2` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.57.3` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.57.3 PTSegmentedView / PTPagingView 运行时稳定性
+
+- ✅ 统一 Segment 宽度测量，Badge、选中字体、selectedScale、图片渲染尺寸和 adaptive 阈值使用同一实现。
+- ✅ 修复 Badge Label 内边距与 Dot 约束复用，并补充动态角标和 Badge 无障碍值。
+- ✅ 将 Indicator 的 Item/Content frame 统一投影到 viewport 坐标，横向滚动和离屏选中项均可正确更新。
+- ✅ 修复内置 Indicator 的 `widthPolicy` / `placement` 配置被默认上下文覆盖的问题，保留旧 Context 初始化调用兼容。
+- ✅ Segment 标题条滚动只负责浏览，不再修改业务选择或伪造页面 transition；Reduce Motion 下取消程序化滚动动画。
+- ✅ 增加现有 UIFoundation 测试 Target 的测量、Indicator、手动滚动回归测试，补齐 Paging、JX 迁移、YD 订单和 Demo Catalog 文档。
+- [ ] 完成 YD 订单真实宿主在 100 项、动态角标、三语、RTL、Dynamic Type、Reduce Motion、快速点击和快速滑页下的真机回归后，再创建正式 `5.57.3` tag。
 
 ## 5.57.2 PTPageContainer 已加载页面查询 API
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "e175526c43421ccc7d09cb9e4bf1ae9580353e88",
-  "generated_at": "2026-09-29T05:17:01Z",
+  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
+  "generated_at": "2026-09-29T06:53:37Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -4846,7 +4846,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "lines": 303,
+      "lines": 408,
       "classification": "ok"
     },
     {
@@ -4871,12 +4871,12 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "lines": 473,
+      "lines": 479,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedView.swift",
-      "lines": 655,
+      "lines": 696,
       "classification": "ok"
     },
     {

@@ -100,6 +100,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
     fileprivate var typeString:String!
     private let descriptor: PTDemoDescriptor?
     private var observationTask: Task<Void, Never>?
+    private var segmentedPagingCoordinator: PTSegmentedPagingCoordinator?
     
     var webServer: PTHTTPFilePortal?
     fileprivate var localNetwork:Bool = false
@@ -273,6 +274,51 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             segView.segTapBlock = { index in
                 segView.setSegBadge(indexView: 1, badgePosition: .BottomRight,badgeShowType: .new,badgeValue: "11")
             }
+
+        // English: Runs the native segmented/paging regression scenario used by the 5.57.3 demo catalog.
+        // Español: Ejecuta el escenario de regresión nativo de segmentos/paginación del catálogo 5.57.3.
+        // 中文：运行 5.57.3 Demo Catalog 使用的原生分段/分页回归场景。
+        case String.segmentPagingRegression:
+            let segmentedView = PTSegmentedView(frame: .zero)
+            segmentedView.style = PTSegmentStyle(itemInsets: .init(top: 0, left: 12, bottom: 0, right: 12),
+                                                  distribution: .adaptive)
+            segmentedView.indicators = [PTLineIndicator(color: .systemBlue, height: 2, widthPolicy: .content)]
+
+            let pagingView = PTPagingView()
+            pagingView.hostViewController = self
+            pagingView.pageContainer.cachePolicy = .keepAllLoaded
+            view.addSubview(pagingView)
+            pagingView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                pagingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                pagingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                pagingView.topAnchor.constraint(equalTo: view.topAnchor),
+                pagingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+            pagingView.setPinnedHeader(PTPagingPinnedHeader(height: 44) { segmentedView })
+
+            let ids = ["all", "pending", "shipping", "delivered", "problem"]
+            let titles = ["全部", "待付款", "采购中", "已发货", "问题订单"]
+            let badges = [nil, "21", "999+", "3", nil]
+            let items = zip(ids.indices, ids).map { index, id in
+                PTSegmentItem.title(id: id,
+                                    titles[index],
+                                    badge: badges[index].map { PTSegmentBadge(text: $0) })
+            }
+            let pages = zip(ids, titles).map { id, title in
+                PTPageDescriptor(id: id, view: {
+                    let label = UILabel()
+                    label.text = title
+                    label.textAlignment = .center
+                    label.font = .preferredFont(forTextStyle: .title2)
+                    label.textColor = .label
+                    label.backgroundColor = .systemBackground
+                    return label
+                })
+            }
+            segmentedPagingCoordinator = PTSegmentedPagingCoordinator(segmentedView: segmentedView,
+                                                                       pageContainer: pagingView.pageContainer)
+            segmentedPagingCoordinator?.apply(items: items, pages: pages, animated: false)
             
         case String.countLabel:
             let countLabel = PTCountingLabel()

@@ -31,6 +31,7 @@ Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescr
 |---|---|---|---|
 | Core | `PTFuncNameViewController`、`PTFuncDetailViewController` | Base、Utils、语言、状态栏、Category | `PooTools/Core` / `ptools` |
 | Navigation | `PTTestTabbarViewController`、`PTTestVC`、`PTRouteViewController` | push/pop、interactive-pop、场景解析 | `PTBaseNavControl`、`PTSceneContext` |
+| Segmented / Paging Regression | `PTDemoCatalog` → `Segmented / Paging Regression` | Badge、长标题、动态角标、Indicator、手动标题滚动和页面滑动 | `PTSegmentedView`、`PTPagingView`、`PTSegmentedPagingCoordinator` |
 | TabBar | `PTTestTabbarViewController`、`PTTabBarTestOneViewController` | 外观快照、徽标、Accessory 和选择 | `PTBaseTabBarViewController` |
 | Collection | `PTFuncNameViewController`、`PTImageListViewController`、`PTTestVC` | Diffable、预取、骨架、空状态和分页 | `PTCollectionView`、`PTListViewController` |
 | Search | 暂无固定展厅页面 | debounce、竞态取消、History、Suggestion、分页、刷新和导航栏恢复 | `PTSearchViewController`、`PooTools/Search` |

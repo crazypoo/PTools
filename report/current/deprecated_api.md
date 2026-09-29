@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
-Generated at: 2026-09-29T05:16:45Z
+Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
+Generated at: 2026-09-29T06:53:20Z
 -->
 
 # PTools 当前弃用入口清单
@@ -143,7 +143,7 @@ Generated at: 2026-09-29T05:16:45Z
 | `PooToolsSource/Router/PTRouter.swift:906` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Router/PTRouter.swift:925` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ScrollBanner/PTCycleScrollView.swift:36` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/SegmentControl/PTMainSegmentCell.swift:271` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/SegmentControl/PTMainSegmentCell.swift:376` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:8` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTMainSegmentModel.swift:22` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:30` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |

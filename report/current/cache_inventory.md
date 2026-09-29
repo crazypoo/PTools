@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
-Generated at: 2026-09-29T05:17:02Z
+Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
+Generated at: 2026-09-29T06:53:37Z
 -->
 
 # PTools 当前缓存盘点
@@ -173,6 +173,6 @@ Generated at: 2026-09-29T05:17:02Z
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:63 | disk or custom cache | /// English: Refreshes the native item cache; old callers can then call apply(to:). |
 | PooToolsSource/SegmentControl/PTPaging.swift:50 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
 | PooToolsSource/SegmentControl/PTPaging.swift:250 | disk or custom cache | /// English: Returns whether a page is currently held by the container cache. |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:321 | disk or custom cache | /// English: Cache policy for lazy pages. |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:327 | disk or custom cache | /// English: Cache policy for lazy pages. |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:758 | disk or custom cache | open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) { |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:762 | disk or custom cache | open func cache(viewController: UIViewController, with identifier: String) { |

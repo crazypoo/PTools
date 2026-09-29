@@ -44,6 +44,10 @@ coordinator.apply(items: items, pages: pages)
 
 两侧必须使用相同的稳定 ID。Coordinator 只做同步，不拥有任一 View；页面与分段 View 的销毁由宿主层级决定。
 
+页面容器是分页过渡的唯一来源：页面交互滑动会驱动 Indicator 插值，Segment 标题条自身的横向
+浏览不会伪造页面过渡，也不会偷偷修改 `selectedID`。需要改变页面时调用 Coordinator、
+`PTPageContainer.select(id:)` 或 `PTSegmentedView.select(id:)`。
+
 ## 刷新和缓存
 
 `PTRefreshAdapter` 只定义刷新契约，`PTUIRefreshAdapter` 提供系统实现。复杂刷新库可以在宿主层实现该协议，并根据 `PTPagingRefreshPolicy` 决定外层、内层或每页独立拥有刷新状态。

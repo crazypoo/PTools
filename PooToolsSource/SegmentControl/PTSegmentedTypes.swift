@@ -266,6 +266,10 @@ public struct PTSegmentTransition {
 public struct PTSegmentIndicatorContext {
     public let bounds: CGRect
     public let itemFrames: [AnyHashable: CGRect]
+    /// English: Content frames in the same viewport coordinate space as itemFrames.
+    /// Español: Marcos de contenido en el mismo espacio de coordenadas de viewport que itemFrames.
+    /// 中文：与 itemFrames 相同视口坐标系中的内容区域。
+    public let contentFrames: [AnyHashable: CGRect]
     public let selectedID: AnyHashable?
     public let placement: PTSegmentIndicatorPlacement
     public let widthPolicy: PTIndicatorWidthPolicy
@@ -274,9 +278,11 @@ public struct PTSegmentIndicatorContext {
                 itemFrames: [AnyHashable: CGRect],
                 selectedID: AnyHashable?,
                 placement: PTSegmentIndicatorPlacement = .bottom,
-                widthPolicy: PTIndicatorWidthPolicy = .content) {
+                widthPolicy: PTIndicatorWidthPolicy = .content,
+                contentFrames: [AnyHashable: CGRect] = [:]) {
         self.bounds = bounds
         self.itemFrames = itemFrames
+        self.contentFrames = contentFrames
         self.selectedID = selectedID
         self.placement = placement
         self.widthPolicy = widthPolicy

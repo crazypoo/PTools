@@ -2,7 +2,15 @@
 
 ## Unreleased — 5.58.x
 
-当前开发基线为 `5.57.2`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+当前开发基线为 `5.57.3`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+
+## 5.57.3 — 2026-09-29
+
+- 修复 `PTSegmentedView` 的宽度测量：Badge、内边距、normal/selected 字体、selectedScale 和实际图片尺寸现在使用同一套测量契约。
+- 修复 Badge Label 内边距、Badge Dot 约束复用、动态角标更新和无障碍值，避免 Cell 复用后约束累积或标题被截断。
+- 修复 Indicator 坐标：所有 Item/Content frame 统一转换到 viewport，横向滚动时实时更新，离屏选中项也能保持正确位置。
+- 修复 Indicator 自身 `widthPolicy` / `placement` 被上下文默认值覆盖的问题；Segment 标题条滚动不再伪造页面选择或 transition。
+- 增加分段/分页测量、Indicator、手动滚动和稳定 ID 回归测试，并补充 5.57.3 Paging、JX 迁移和 YD 订单场景文档与 Demo。
 
 ## 5.57.2 — 2026-09-29
 

@@ -18,9 +18,18 @@ private enum PTIndicatorLayout {
         case .item:
             width = itemFrame.width
         case .content:
-            width = defaultWidth ?? min(itemFrame.width, max(1, itemFrame.width - 12))
+            let contentFrame = context.contentFrames[id] ?? itemFrame
+            width = defaultWidth ?? min(itemFrame.width, max(1, contentFrame.width))
         }
-        let x = itemFrame.midX - width / 2
+        let contentFrame = context.contentFrames[id] ?? itemFrame
+        let centerX: CGFloat
+        switch context.widthPolicy {
+        case .content:
+            centerX = contentFrame.midX
+        case .fixed, .item:
+            centerX = itemFrame.midX
+        }
+        let x = centerX - width / 2
         let y: CGFloat
         switch context.placement {
         case .top:
@@ -68,14 +77,24 @@ open class PTBaseSegmentIndicator: UIView, PTSegmentIndicator {
         isUserInteractionEnabled = false
     }
 
+    fileprivate func resolvedContext(from context: PTSegmentIndicatorContext) -> PTSegmentIndicatorContext {
+        PTSegmentIndicatorContext(bounds: context.bounds,
+                                  itemFrames: context.itemFrames,
+                                  selectedID: context.selectedID,
+                                  placement: placement,
+                                  widthPolicy: widthPolicy,
+                                  contentFrames: context.contentFrames)
+    }
+
     open func prepare(context: PTSegmentIndicatorContext) {
-        self.context = context
-        guard let selectedID = context.selectedID else {
+        let effectiveContext = resolvedContext(from: context)
+        self.context = effectiveContext
+        guard let selectedID = effectiveContext.selectedID else {
             frame = .zero
             return
         }
         frame = PTIndicatorLayout.frame(for: selectedID,
-                                        context: context,
+                                        context: effectiveContext,
                                         height: height)
         backgroundColor = color
     }
@@ -244,8 +263,9 @@ open class PTBackgroundIndicator: PTBaseSegmentIndicator {
     }
 
     public override func prepare(context: PTSegmentIndicatorContext) {
-        self.context = context
-        guard let id = context.selectedID, let itemFrame = context.itemFrames[id] else {
+        let effectiveContext = resolvedContext(from: context)
+        self.context = effectiveContext
+        guard let id = effectiveContext.selectedID, let itemFrame = effectiveContext.itemFrames[id] else {
             frame = .zero
             return
         }
@@ -329,6 +349,11 @@ public final class PTImageIndicator: PTBaseSegmentIndicator {
 @MainActor
 open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     private enum Section { case main }
+    private enum PTSegmentScrollIntent {
+        case idle
+        case centeringSelectedItem
+        case userBrowsingSegments
+    }
     private struct SnapshotID: Hashable, Sendable {
         let value: Int
     }
@@ -370,6 +395,7 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     private var isApplyingSnapshot = false
     private var selectionObservers = [((PTSegmentSelectionEvent) -> Void)]()
     private var transitionObservers = [((PTSegmentTransition) -> Void)]()
+    private var scrollIntent = PTSegmentScrollIntent.idle
 
     public override init(frame: CGRect) {
         let layout = UICollectionViewFlowLayout()
@@ -464,10 +490,13 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         var snapshot = NSDiffableDataSourceSnapshot<Section, SnapshotID>()
         snapshot.appendSections([.main])
         snapshot.appendItems(snapshotIDs, toSection: .main)
+        collectionView.collectionViewLayout.invalidateLayout()
         isApplyingSnapshot = true
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
             guard let self else { return }
             self.isApplyingSnapshot = false
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView.layoutIfNeeded()
             self.updateVisibleCells()
             self.updateIndicatorContext()
             if oldSelection.selectedID != self.selectionState.selectedID,
@@ -492,7 +521,9 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
         if oldSelection.selectedID == id, !allowsReselect { return }
         selectionState = PTSegmentSelectionState(selectedID: id, selectedIndex: index)
         updateVisibleCells()
-        if automaticallyScrollsToSelectedItem { scrollTo(id: id, animated: animated) }
+        if automaticallyScrollsToSelectedItem {
+            scrollTo(id: id, animated: animated && !UIAccessibility.isReduceMotionEnabled)
+        }
         updateIndicatorContext()
         emitSelectionChange(from: oldSelection, to: selectionState, origin: origin)
     }
@@ -511,6 +542,7 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     /// Español: Actualiza los indicadores mientras un contenedor de páginas se desplaza de forma interactiva.
     /// 中文：页面容器交互滚动时更新指示器。
     public func update(transition: PTSegmentTransition) {
+        updateIndicatorContext()
         indicators.forEach { $0.update(transition: transition) }
         onTransition?(transition)
         transitionObservers.forEach { $0(transition) }
@@ -552,16 +584,17 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     private func scrollTo(id: AnyHashable, animated: Bool) {
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
         guard collectionView.numberOfItems(inSection: 0) > index else { return }
+        scrollIntent = animated ? .centeringSelectedItem : .idle
         collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
                                      at: .centeredHorizontally,
                                      animated: animated)
+        if !animated { updateIndicatorContext() }
     }
 
     private func updateVisibleCells() {
         for cell in collectionView.visibleCells.compactMap({ $0 as? PTMainSegmentCell }) {
             guard let id = cell.representedID,
                   let item = items.first(where: { $0.id == id }) else { continue }
-            cell.applySelection(id == selectionState.selectedID, style: style)
             cell.configure(item: item, style: style, selected: id == selectionState.selectedID)
         }
     }
@@ -574,15 +607,30 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
 
     private func updateIndicatorContext() {
         guard !bounds.isEmpty else { return }
-        let attributes = collectionView.collectionViewLayout.layoutAttributesForElements(in: collectionView.bounds) ?? []
-        let frames = Dictionary(uniqueKeysWithValues: attributes.compactMap { attribute -> (AnyHashable, CGRect)? in
-            guard attribute.representedElementCategory == .cell,
-                  items.indices.contains(attribute.indexPath.item) else { return nil }
-            return (items[attribute.indexPath.item].id, attribute.frame)
-        })
-        let context = PTSegmentIndicatorContext(bounds: bounds,
-                                                 itemFrames: frames,
-                                                 selectedID: selectionState.selectedID)
+        var itemFrames = [AnyHashable: CGRect](minimumCapacity: items.count)
+        var contentFrames = [AnyHashable: CGRect](minimumCapacity: items.count)
+        for index in items.indices {
+            let indexPath = IndexPath(item: index, section: 0)
+            guard let attribute = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { continue }
+            let id = items[index].id
+            let itemFrame = collectionView.convert(attribute.frame, to: indicatorHost)
+            itemFrames[id] = itemFrame
+
+            if let cell = collectionView.cellForItem(at: indexPath) as? PTMainSegmentCell,
+               !cell.indicatorContentFrame.isEmpty {
+                contentFrames[id] = cell.convert(cell.indicatorContentFrame, to: indicatorHost)
+            } else {
+                let width = min(itemFrame.width, PTSegmentMeasurement.contentWidth(item: items[index], style: style))
+                contentFrames[id] = CGRect(x: itemFrame.midX - width / 2,
+                                           y: itemFrame.minY,
+                                           width: max(1, width),
+                                           height: itemFrame.height)
+            }
+        }
+        let context = PTSegmentIndicatorContext(bounds: indicatorHost.bounds,
+                                                 itemFrames: itemFrames,
+                                                 selectedID: selectionState.selectedID,
+                                                 contentFrames: contentFrames)
         indicators.forEach { $0.prepare(context: context) }
         if let selectedID = selectionState.selectedID {
             indicators.forEach { $0.select(item: PTSegmentSelectionState(selectedID: selectedID,
@@ -618,38 +666,31 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard !isApplyingSnapshot, items.count > 1 else { return }
-        let center = scrollView.bounds.midX + scrollView.contentOffset.x
-        let attributes = collectionView.collectionViewLayout.layoutAttributesForElements(in: scrollView.bounds.insetBy(dx: -bounds.width, dy: 0)) ?? []
-        let sorted = attributes.filter { $0.representedElementCategory == .cell }.sorted { abs($0.center.x - center) < abs($1.center.x - center) }
-        guard let nearest = sorted.first,
-              let currentIndex = selectionState.selectedIndex,
-              nearest.indexPath.item != currentIndex,
-              items.indices.contains(currentIndex),
-              items.indices.contains(nearest.indexPath.item) else { return }
-        let direction: PTPageDirection = nearest.indexPath.item > currentIndex ? .forward : .backward
-        let distance = max(1, abs(nearest.center.x - (attributes.first(where: { $0.indexPath.item == currentIndex })?.center.x ?? nearest.center.x)))
-        let progress = min(1, abs(center - (attributes.first(where: { $0.indexPath.item == currentIndex })?.center.x ?? center)) / distance)
-        update(transition: PTSegmentTransition(fromID: items[currentIndex].id,
-                                                toID: items[nearest.indexPath.item].id,
-                                                progress: progress,
-                                                direction: direction))
+        guard scrollView === collectionView, !isApplyingSnapshot else { return }
+        updateIndicatorContext()
+    }
+
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        guard scrollView === collectionView else { return }
+        if case .centeringSelectedItem = scrollIntent { return }
+        scrollIntent = .userBrowsingSegments
+    }
+
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView === collectionView, !decelerate else { return }
+        scrollIntent = .idle
+        updateIndicatorContext()
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        commitCenteredItem(origin: .swipe)
+        guard scrollView === collectionView else { return }
+        scrollIntent = .idle
+        updateIndicatorContext()
     }
 
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        commitCenteredItem(origin: .programmatic)
-    }
-
-    private func commitCenteredItem(origin: PTSegmentSelectionOrigin) {
-        let center = collectionView.bounds.midX + collectionView.contentOffset.x
-        guard let attribute = collectionView.collectionViewLayout.layoutAttributesForElements(in: collectionView.bounds.insetBy(dx: -bounds.width, dy: 0))?
-            .filter({ $0.representedElementCategory == .cell })
-            .min(by: { abs($0.center.x - center) < abs($1.center.x - center) }),
-              items.indices.contains(attribute.indexPath.item) else { return }
-        select(index: attribute.indexPath.item, animated: false, origin: origin)
+        guard scrollView === collectionView else { return }
+        scrollIntent = .idle
+        updateIndicatorContext()
     }
 }

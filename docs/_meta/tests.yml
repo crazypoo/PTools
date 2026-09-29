@@ -161,10 +161,11 @@
   target: "PToolsUIFoundationTests"
   path: "Tests/PToolsUIFoundationTests"
   level: "CONTRACT"
-  file_count: 3
+  file_count: 4
   files:
     - "Tests/PToolsUIFoundationTests/PTCategoryCompatibilityTests.swift"
     - "Tests/PToolsUIFoundationTests/PTPagingTests.swift"
+    - "Tests/PToolsUIFoundationTests/PTSegmentedPagingTests.swift"
     - "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift"
   canonical: true
   action: "KEEP"

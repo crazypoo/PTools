@@ -1,6 +1,6 @@
 # PTools Paging Architecture
 
-> 5.30.0 / iOS 17+ / Swift 6+
+> 5.57.3 / iOS 17+ / Swift 6+
 
 ## 目标
 
@@ -52,6 +52,13 @@ let pages = [
     PTPageDescriptor(id: "saved") { SavedViewController() }
 ]
 ```
+
+## 5.57.3 的 Segment / Indicator 边界
+
+`PTSegmentedView` 的宽度由统一测量契约计算，包含 Badge 内边距、normal/selected 字体、
+selectedScale 和实际图片尺寸。`PTSegmentIndicatorContext.itemFrames` 与 `contentFrames`
+都属于 Segment viewport 坐标；标题条滚动只更新几何投影，页面滑动才产生 transition。
+因此 Segment、Page、Indicator 和稳定 ID 的职责不会互相污染。
 
 ## 并发和生命周期边界
 

@@ -145,7 +145,7 @@ pagingView.refreshControl?.endRefreshing()
 let currentList = pagingView.pageContainer.currentPageScrollView
 ```
 
-## 6.1 查询已加载页面（5.57.2）
+## 6.1 查询已加载页面（5.57.3）
 
 `PTPageContainer` 现在提供只读查询 API，业务不需要再访问旧的 `validListDict`。所有查询都使用稳定 ID，并且不会创建尚未加载的页面、改变选中状态或触发生命周期回调。
 
@@ -164,6 +164,29 @@ for controller in loadedControllers {
 ```
 
 `loadedPageIDs` 只返回当前缓存真正持有的页面，并按照 `descriptors` 顺序返回。`discardOffscreen`、`adjacent`、`limit` 和 `keepAllLoaded` 的结果完全遵循容器现有 `cachePolicy`；页面卸载后，所有对应查询都会返回 `nil` 或不再包含该 ID。
+
+## 6.2 订单状态分段回归（5.57.3）
+
+订单状态页通常同时包含短中文标题、较长本地化标题和动态数量角标。更新角标时保持订单状态
+的稳定 ID 不变，只替换 `PTSegmentItem` 的 `content` 或 `badge`：
+
+```swift
+let items = orderModels.map { model in
+    PTSegmentItem.title(
+        id: model.id,
+        model.localizedName,
+        badge: model.pendingCount > 0
+            ? PTSegmentBadge(text: String(model.pendingCount))
+            : nil
+    )
+}
+coordinator.apply(items: items, pages: pages, animated: false)
+```
+
+`PTSegmentedView` 会按 normal/selected 字体、角标内边距和 selectedScale 重新测量宽度。用户
+拖动标题条时只浏览分段并更新 Indicator 的 viewport 位置，不会改变当前订单页；订单页面的
+左右滑动才会通过 Coordinator 产生 Indicator transition。建议在中文、英文、西班牙语、RTL、
+Dynamic Type 和 Reduce Motion 环境分别验证首项、末项、100 个状态项以及快速点击/快速滑页。
 
 外层刷新和页面自己的刷新状态应分开管理；不要把同一个 `UIRefreshControl` 同时安装到外层和每个内层列表。页面需要独立下拉刷新时，使用页面自己的刷新控件，并把外层策略设置为 `.perPage` 或由宿主自行协调。
 

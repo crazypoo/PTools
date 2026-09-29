@@ -672,6 +672,7 @@ modules:
   canonical_module_id: null
   demos:
     - "navigation.segment"
+    - "navigation.segment-paging-regression"
 -
   module_id: "poo-tools-share"
   coverage: "runnable"

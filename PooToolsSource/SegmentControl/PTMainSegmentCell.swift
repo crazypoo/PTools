@@ -8,6 +8,104 @@ import UIKit
 import ptools
 #endif
 
+// English: Centralizes the rendered width contract shared by cells and layouts.
+// Español: Centraliza el contrato de anchura renderizada compartido por celdas y diseños.
+// 中文：集中维护 Cell 与布局共用的实际渲染宽度契约。
+@MainActor
+internal enum PTSegmentMeasurement {
+    static let badgeHorizontalPadding: CGFloat = 6
+    static let badgeVerticalPadding: CGFloat = 2
+    static let badgeMinimumHeight: CGFloat = 18
+    static let badgeMinimumWidth: CGFloat = 18
+    static let badgeDotDiameter: CGFloat = 8
+
+    static func renderedImageSide(style: PTSegmentStyle) -> CGFloat {
+        max(1, style.itemHeight - 12)
+    }
+
+    static func textWidth(_ value: String, font: UIFont) -> CGFloat {
+        ceil(value.size(withAttributes: [.font: font]).width)
+    }
+
+    static func attributedWidth(_ value: NSAttributedString) -> CGFloat {
+        ceil(value.size().width)
+    }
+
+    static func bodyWidth(item: PTSegmentItem,
+                          style: PTSegmentStyle,
+                          font: UIFont) -> CGFloat {
+        switch item.content {
+        case .title(let title):
+            return textWidth(title, font: font)
+        case .attributed(let attributed):
+            return attributedWidth(attributed)
+        case .image, .imageSource:
+            return renderedImageSide(style: style)
+        case .titleImage(let title, _, _):
+            return textWidth(title, font: font) + renderedImageSide(style: style) + style.imageSpacing
+        case .titleImageSource(let title, _, _, _):
+            return textWidth(title, font: font) + renderedImageSide(style: style) + style.imageSpacing
+        case .custom:
+            return 44
+        }
+    }
+
+    static func badgeWidth(_ badge: PTSegmentBadge?) -> CGFloat? {
+        guard let badge else { return nil }
+        if let text = badge.text, !text.isEmpty {
+            let textWidth = textWidth(text, font: badge.font)
+            return max(badgeMinimumWidth, textWidth + badgeHorizontalPadding * 2)
+        }
+        return badge.showsDotWhenEmpty ? badgeDotDiameter : nil
+    }
+
+    static func contentWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        let normalWidth = bodyWidth(item: item, style: style, font: style.normalFont)
+        let selectedWidth = bodyWidth(item: item, style: style, font: style.selectedFont)
+        return ceil(max(normalWidth, selectedWidth * max(1, style.selectedScale)))
+    }
+
+    static func measuredWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        let normalBodyWidth = bodyWidth(item: item, style: style, font: style.normalFont)
+        let selectedBodyWidth = bodyWidth(item: item, style: style, font: style.selectedFont)
+        let badgeWidth = badgeWidth(item.badge) ?? 0
+        let badgeSpacing = badgeWidth > 0 && normalBodyWidth > 0 ? style.imageSpacing : 0
+        let normalWidth = normalBodyWidth + badgeWidth + badgeSpacing
+        let selectedWidth = (selectedBodyWidth + badgeWidth + badgeSpacing) * max(1, style.selectedScale)
+        return max(1, ceil(max(normalWidth, selectedWidth) + style.itemInsets.left + style.itemInsets.right))
+    }
+
+    static func badgeAccessibilityValue(_ badge: PTSegmentBadge?) -> String? {
+        guard let badge, let text = badge.text, !text.isEmpty else { return nil }
+        return text
+    }
+}
+
+// English: Adds stable padding and minimum dimensions to a badge label.
+// Español: Añade relleno estable y dimensiones mínimas a una etiqueta de insignia.
+// 中文：为徽标文本提供稳定内边距和最小尺寸。
+@MainActor
+private final class PTSegmentBadgeLabel: UILabel {
+    var contentInsets = UIEdgeInsets(top: PTSegmentMeasurement.badgeVerticalPadding,
+                                      left: PTSegmentMeasurement.badgeHorizontalPadding,
+                                      bottom: PTSegmentMeasurement.badgeVerticalPadding,
+                                      right: PTSegmentMeasurement.badgeHorizontalPadding) {
+        didSet { invalidateIntrinsicContentSize() }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: max(PTSegmentMeasurement.badgeMinimumWidth,
+                                 size.width + contentInsets.left + contentInsets.right),
+                      height: max(PTSegmentMeasurement.badgeMinimumHeight,
+                                  size.height + contentInsets.top + contentInsets.bottom))
+    }
+
+    override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: contentInsets))
+    }
+}
+
 @MainActor
 public class PTMainSegmentCell: UICollectionViewCell {
     public static let reuseIdentifier = "PTMainSegmentCell"
@@ -16,9 +114,10 @@ public class PTMainSegmentCell: UICollectionViewCell {
     public let subTitleLabel = UILabel()
     public let imageIcon = UIImageView()
     public private(set) var representedID: AnyHashable?
+    internal private(set) var indicatorContentFrame = CGRect.zero
 
     private let contentStack = UIStackView()
-    private let badgeLabel = UILabel()
+    private let badgeLabel = PTSegmentBadgeLabel()
     private let badgeDot = UIView()
     private var imageTask: Task<Void, Never>?
     private var imageWidthConstraint: NSLayoutConstraint?
@@ -27,6 +126,8 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private var contentTrailingConstraint: NSLayoutConstraint?
     private var contentTopConstraint: NSLayoutConstraint?
     private var contentBottomConstraint: NSLayoutConstraint?
+    private var badgeDotWidthConstraint: NSLayoutConstraint?
+    private var badgeDotHeightConstraint: NSLayoutConstraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,6 +178,8 @@ public class PTMainSegmentCell: UICollectionViewCell {
         badgeLabel.textAlignment = .center
         badgeLabel.setContentHuggingPriority(.required, for: .horizontal)
         badgeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        badgeDotWidthConstraint = badgeDot.widthAnchor.constraint(equalToConstant: PTSegmentMeasurement.badgeDotDiameter)
+        badgeDotHeightConstraint = badgeDot.heightAnchor.constraint(equalToConstant: PTSegmentMeasurement.badgeDotDiameter)
     }
 
     /// English: Configures content, badge and image loading from one value model.
@@ -120,6 +223,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         }
         configureBadge(item.badge)
         accessibilityLabel = item.accessibilityLabel ?? accessibilityText(for: item.content)
+        accessibilityValue = PTSegmentMeasurement.badgeAccessibilityValue(item.badge)
         accessibilityTraits = selected ? [.button, .selected] : [.button]
     }
 
@@ -146,9 +250,12 @@ public class PTMainSegmentCell: UICollectionViewCell {
         subTitleLabel.isHidden = true
         badgeLabel.removeFromSuperview()
         badgeDot.removeFromSuperview()
+        badgeDotWidthConstraint?.isActive = false
+        badgeDotHeightConstraint?.isActive = false
         contentStack.axis = .horizontal
         imageWidthConstraint?.isActive = false
         imageHeightConstraint?.isActive = false
+        indicatorContentFrame = .zero
     }
 
     private func addTitle(_ title: String, style: PTSegmentStyle, selected: Bool) {
@@ -197,7 +304,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         if imageHeightConstraint == nil {
             imageHeightConstraint = imageIcon.heightAnchor.constraint(equalToConstant: 1)
         }
-        let size = max(1, style.itemHeight - 12)
+        let size = PTSegmentMeasurement.renderedImageSide(style: style)
         imageWidthConstraint?.constant = size
         imageHeightConstraint?.constant = size
         imageWidthConstraint?.isActive = true
@@ -231,10 +338,10 @@ public class PTMainSegmentCell: UICollectionViewCell {
             contentStack.addArrangedSubview(badgeLabel)
         } else if badge.showsDotWhenEmpty {
             badgeDot.backgroundColor = badge.backgroundColor
-            badgeDot.layer.cornerRadius = 4
+            badgeDot.layer.cornerRadius = PTSegmentMeasurement.badgeDotDiameter / 2
             contentStack.addArrangedSubview(badgeDot)
-            badgeDot.widthAnchor.constraint(equalToConstant: 8).isActive = true
-            badgeDot.heightAnchor.constraint(equalToConstant: 8).isActive = true
+            badgeDotWidthConstraint?.isActive = true
+            badgeDotHeightConstraint?.isActive = true
         }
     }
 
@@ -246,23 +353,21 @@ public class PTMainSegmentCell: UICollectionViewCell {
         }
     }
 
-    private func estimatedContentWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
-        switch item.content {
-        case .title(let title): return title.size(withAttributes: [.font: style.normalFont]).width
-        case .attributed(let value): return value.size().width
-        case .image(let image): return image.size.width
-        case .titleImage(let title, let image, _):
-            return title.size(withAttributes: [.font: style.normalFont]).width + image.size.width + style.imageSpacing
-        case .titleImageSource(let title, _, _, let image):
-            return title.size(withAttributes: [.font: style.normalFont]).width + (image?.size.width ?? 20) + style.imageSpacing
-        case .imageSource: return max(20, style.itemHeight - 12)
-        case .custom: return 44
-        }
+    public static func measuredWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
+        PTSegmentMeasurement.measuredWidth(item: item, style: style)
     }
 
-    public static func measuredWidth(item: PTSegmentItem, style: PTSegmentStyle) -> CGFloat {
-        let cell = PTMainSegmentCell(frame: .zero)
-        return max(1, cell.estimatedContentWidth(item: item, style: style) + style.itemInsets.left + style.itemInsets.right)
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        contentStack.layoutIfNeeded()
+        badgeLabel.layer.cornerRadius = badgeLabel.bounds.height / 2
+        let contentViews = contentStack.arrangedSubviews.filter { $0 !== badgeLabel && $0 !== badgeDot }
+        guard let firstFrame = contentViews.first?.frame else {
+            indicatorContentFrame = .zero
+            return
+        }
+        let contentFrame = contentViews.dropFirst().reduce(firstFrame) { $0.union($1.frame) }
+        indicatorContentFrame = contentStack.convert(contentFrame, to: self)
     }
 
     /// English: Compatibility entry for callers that still build the legacy model.

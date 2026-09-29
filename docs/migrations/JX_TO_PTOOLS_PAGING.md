@@ -1,6 +1,8 @@
 # JX 到 PTools Paging 迁移指南
 
-5.30.0 移除了交付路径中的 `JXSegmentedView` 和 `JXPagingView` 依赖；5.31.1 补齐真实业务迁移中的动态刷新、页面生命周期、反向分页过渡、无占位图网络图片、内外层刷新和安全区偏移处理。PTools 不提供 JX 类型别名，也不要求业务继续导入第三方库；迁移时请按能力改写，而不是只替换类型名。
+5.30.0 移除了交付路径中的 `JXSegmentedView` 和 `JXPagingView` 依赖；5.57.3 继续收口真实业务迁移中的
+Badge 宽度、Indicator 坐标、稳定 ID 和手势语义。PTools 不提供 JX 类型别名，也不要求业务继续导入第三方库；
+迁移时请按能力改写，而不是只替换类型名。
 
 ## 类型映射
 
@@ -38,6 +40,9 @@
 - 页面回收会完整发送 `willDisappear`、`didDisappear` 和 `didUnload`；UIViewController 页面会转发 appearance 生命周期。
 - 外层和内层滚动统一按 `adjustedContentInset` 计算，适配自定义 `contentInset` 与安全区。
 - `PTSegmentedView` 的 Indicator 位于 Cell 之上，反向分页同样会产生过渡进度。
+- Segment 标题条横向滚动只负责浏览和 Indicator viewport 投影，不会像旧的“滚到中心即选择”逻辑那样切换业务页面。
+- `PTSegmentStyle` 的 intrinsic/adaptive 宽度会计入 Badge、选中字体、选中缩放和实际图片尺寸。
+- `PTSegmentIndicatorContext` 的 `itemFrames` 与 `contentFrames` 都使用 viewport 坐标；`fixed`、`item`、`content` 和自定义 placement 均可组合。
 - 无 placeholder 的 `imageSource` / `titleImageSource` 会保留图片槽位，网络图片加载完成后能正确显示。
 
 官方 JX 组件仍有一个需要在迁移时明确处理的手势边界：当横向分页容器持续参与手势识别时，列表 Cell 的侧滑操作可能失效（见 [JXSegmentedView Issue #303](https://github.com/pujiaxin33/JXSegmentedView/issues/303)）。PTools 默认只允许外层、当前内层和分页 ScrollView 的必要协作，不把无关 Pan 手势全部设为 simultaneous；需要列表侧滑时应保持 `isListHorizontalScrollEnabled = false`，或只在宿主确认不会与 Cell 手势冲突时打开更宽松的手势策略。
