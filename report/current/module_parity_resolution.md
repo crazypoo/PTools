@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
-Generated at: 2026-09-29T13:03:55Z
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:15:47Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `90`
+- Current exceptions: `92`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -82,6 +82,8 @@ Generated at: 2026-09-29T13:03:55Z
 | MediaCore | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | media | 6.0.0 | 2026-12-31 |
 | MeidaPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MEDIA","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":[],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | MicPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MIC","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MIC"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
+| Model | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_MODEL"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the model facade; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
+| ModelCore | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_MODEL_CORE"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the Foundation-only model core; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | MotionPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MOTION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_MOTION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | NotificationPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_NOTIFICATION","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_NOTIFICATION"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Notifications | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_NOTIFICATIONS"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the notification target; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | platform-infrastructure | 6.0.0 | 2026-12-31 |

@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
-Generated at: 2026-09-29T13:02:51Z
-Version source: 5.57.4
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:08:02Z
+Version source: 5.58.0
 -->
 
 # Direct Dependency Matrix
@@ -84,6 +84,8 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `MeidaPermission` | `MediaPermission`, `PToolsPermissionCore` | — | No direct third-party dependency | Deprecate alias |
 | `MessageKit` | `Core`, `CustomerLabel`, `PToolsSymbols`, `PooToolsCustomerLabel`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MicPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
+| `Model` | `ModelCore`, `PToolsModelCore` | — | No direct third-party dependency | Keep; review direct drift |
+| `ModelCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `Motion` | `Core`, `MotionPermission`, `PTMotionPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MotionPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `NFCKit` | `Core` | — | No direct third-party dependency | Keep; review direct drift |

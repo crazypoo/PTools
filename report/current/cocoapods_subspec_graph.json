@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
-  "generated_at": "2026-09-29T13:03:55Z",
+  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
+  "generated_at": "2026-09-29T15:15:47Z",
   "name": "PooTools",
-  "version": "5.57.4",
+  "version": "5.58.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 136,
+  "subspec_count": 138,
   "subspecs": [
     {
       "name": "PooTools/Accessibility",
@@ -1714,6 +1714,48 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MIC POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/Model",
+      "short_name": "Model",
+      "local_dependencies": [
+        "PooTools/ModelCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsModel/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModel"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MODEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ModelCore",
+      "short_name": "ModelCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsModelCore/**/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModelCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MODEL_CORE POOTOOLS_COCOAPODS"
       }
     },
     {

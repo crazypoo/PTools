@@ -3,18 +3,18 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
-Generated at: 2026-09-29T13:03:55Z
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:15:47Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.57.4`
+- Podspec: `PooTools` `5.58.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `136`
+- Subspec count: `138`
 
 ## Subspecs
 
@@ -92,6 +92,8 @@ Generated at: 2026-09-29T13:03:55Z
 | `MeidaPermission` | `PooTools/MediaPermission` | — | — | — | — |
 | `MessageKit` | `PooTools/Core`, `PooTools/CustomerLabel`, `PooTools/Symbols` | — | `MessageKit` | — | — |
 | `MicPermission` | `PooTools/PToolsPermissionCore` | — | `MicPermission` | — | — |
+| `Model` | `PooTools/ModelCore` | — | `PToolsModel` | Foundation | — |
+| `ModelCore` | — | — | `PToolsModelCore` | Foundation | — |
 | `Motion` | `PooTools/Core`, `PooTools/MotionPermission` | — | `Motion` | CoreMotion | — |
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |

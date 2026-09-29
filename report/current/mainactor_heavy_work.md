@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T06:53:37Z
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:12:38Z
 -->
 
 # MainActor 重活盘点

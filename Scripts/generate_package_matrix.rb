@@ -42,7 +42,9 @@ aliases = {
   "PToolsAudio" => "Audio",
   "PToolsAppIntents" => "AppIntents",
   "PToolsWidgetCore" => "WidgetCore",
-  "PToolsActivities" => "Activities"
+  "PToolsActivities" => "Activities",
+  "PToolsModelCore" => "ModelCore",
+  "PToolsModel" => "Model"
 }.freeze
 
 def canonical_name(name, aliases)

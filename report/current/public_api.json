@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
-  "generated_at": "2026-09-29T13:17:16Z",
+  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
+  "generated_at": "2026-09-29T15:11:47Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -13280,12 +13280,12 @@
       "declaration": "public var adapter: UIFont {"
     },
     {
-      "key": "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift|public|typealias|public typealias TapedBlock = (_ sender: AnyObject) -> Void",
+      "key": "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift|public|typealias|public typealias TapedBlock = (_ sender:AnyObject) -> Void",
       "path": "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift",
       "line": 12,
       "access": "public",
       "kind": "typealias",
-      "declaration": "public typealias TapedBlock = (_ sender: AnyObject) -> Void"
+      "declaration": "public typealias TapedBlock = (_ sender:AnyObject) -> Void"
     },
     {
       "key": "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift|public|class|public final class PTGestureActionToken: @MainActor Hashable",
@@ -47830,6 +47830,550 @@
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTMediaCancellationToken: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|struct|public struct PTJSONNumber: Sendable, Hashable, Codable, Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTJSONNumber: Sendable, Hashable, Codable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|let|public let rawRepresentation: String",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawRepresentation: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|init|public init(_ rawRepresentation: String) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawRepresentation: String) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|var|public var int64Value: Int64?",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var int64Value: Int64? { Int64(rawRepresentation) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|var|public var uint64Value: UInt64?",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var uint64Value: UInt64? { UInt64(rawRepresentation) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|var|public var decimalValue: Decimal?",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var decimalValue: Decimal? { Decimal(string: rawRepresentation, locale: Locale(identifier: \"en_US_POSIX\")) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|var|public var doubleValue: Double?",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var doubleValue: Double? { Double(rawRepresentation) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|init|public init(from decoder: Decoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(from decoder: Decoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|func|public func encode(to encoder: Encoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func encode(to encoder: Encoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|enum|public enum PTJSONValue: Sendable, Equatable, Hashable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 48,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTJSONValue: Sendable, Equatable, Hashable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|init|public init(data: Data,",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 56,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(data: Data,"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|init|public init(jsonString: String,",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(jsonString: String,"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|var|public var foundationObject: Any",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 73,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var foundationObject: Any {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|func|public func jsonData(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> Data",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jsonData(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> Data {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|func|public func jsonString(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> String",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jsonString(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|init|public init(from decoder: Decoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 105,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(from decoder: Decoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTJSONValue.swift|public|func|public func encode(to encoder: Encoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "line": 126,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func encode(to encoder: Encoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|struct|public struct PTModelDecoder: Sendable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTModelDecoder: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let policy: PTDecodePolicy",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let policy: PTDecodePolicy"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let duplicateKeyPolicy: PTDuplicateKeyPolicy",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let duplicateKeyPolicy: PTDuplicateKeyPolicy"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let limits: PTModelLimits",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let limits: PTModelLimits"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let dateStrategy: PTDateDecodingStrategy",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let dateStrategy: PTDateDecodingStrategy"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let context: PTModelContext",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 16,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let context: PTModelContext"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|init|public init(policy: PTDecodePolicy = .compatible,",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(policy: PTDecodePolicy = .compatible,"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func decode<T: Decodable, Source: PTModelSource>(_ type: T.Type, from source: Source) throws -> T",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func decode<T: Decodable, Source: PTModelSource>(_ type: T.Type, from source: Source) throws -> T {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|struct|public struct PTModelEncoder: Sendable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTModelEncoder: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let prettyPrinted: Bool",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 60,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let prettyPrinted: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let sortedKeys: Bool",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sortedKeys: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let nilStrategy: PTNilEncodingStrategy",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let nilStrategy: PTNilEncodingStrategy"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|let|public let dateStrategy: PTDateEncodingStrategy",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let dateStrategy: PTDateEncodingStrategy"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|init|public init(prettyPrinted: Bool = false,",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(prettyPrinted: Bool = false,"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func encode<T: Encodable>(_ value: T) throws -> Data",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 75,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func encode<T: Encodable>(_ value: T) throws -> Data {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func encode(_ value: PTJSONValue) throws -> Data",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func encode(_ value: PTJSONValue) throws -> Data {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func jsonValue<T: Encodable>(_ value: T) throws -> PTJSONValue",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jsonValue<T: Encodable>(_ value: T) throws -> PTJSONValue {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func jsonString<T: Encodable>(_ value: T) throws -> String",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func jsonString<T: Encodable>(_ value: T) throws -> String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func dictionary<T: Encodable>(_ value: T) throws -> [String: Any]",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 102,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dictionary<T: Encodable>(_ value: T) throws -> [String: Any] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelCodec.swift|public|func|public func array<T: Encodable>(_ value: T) throws -> [Any]",
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "line": 109,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func array<T: Encodable>(_ value: T) throws -> [Any] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTDecodePolicy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDecodePolicy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTNilEncodingStrategy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 17,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTNilEncodingStrategy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTDuplicateKeyPolicy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDuplicateKeyPolicy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTNumericOverflowPolicy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTNumericOverflowPolicy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTStringifiedJSONPolicy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTStringifiedJSONPolicy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTDictionaryKeyStrategy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDictionaryKeyStrategy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTDateDecodingStrategy: Sendable, Codable, Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 47,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateDecodingStrategy: Sendable, Codable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTDateEncodingStrategy: Sendable, Codable, Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTDateEncodingStrategy: Sendable, Codable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|struct|public struct PTModelLimits: Sendable, Codable, Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTModelLimits: Sendable, Codable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var maxInputBytes: Int",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxInputBytes: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var maxDepth: Int",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var maxDepth: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|init|public init(maxInputBytes: Int = 16 * 1024 * 1024, maxDepth: Int = 128)",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(maxInputBytes: Int = 16 * 1024 * 1024, maxDepth: Int = 128) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTCodableInteropPolicy: String, Sendable, Codable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTCodableInteropPolicy: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTModelError: Error, LocalizedError, Sendable, Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 78,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTModelError: Error, LocalizedError, Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var errorDescription: String?",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var errorDescription: String? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|protocol|public protocol PTModelSource",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 129,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTModelSource {}"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|protocol|public protocol PTModelContextKey",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 138,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTModelContextKey {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|struct|public struct PTModelContext: Sendable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTModelContext: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|init|public init()",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 148,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|subscript|public subscript<Key: PTModelContextKey>(key: Key.Type) -> Key.Value?",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "subscript",
+      "declaration": "public subscript<Key: PTModelContextKey>(key: Key.Type) -> Key.Value? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var jsonValues: [String: PTJSONValue]",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 169,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var jsonValues: [String: PTJSONValue] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|typealias|public typealias PTDecodingContext = PTModelContext",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 174,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTDecodingContext = PTModelContext"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|typealias|public typealias PTEncodingContext = PTModelContext",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 175,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTEncodingContext = PTModelContext"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|enum|public enum PTPresence<Value: Codable & Sendable>: Sendable, Codable, Equatable where Value: Equatable",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 177,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTPresence<Value: Codable & Sendable>: Sendable, Codable, Equatable where Value: Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|init|public init(_ value: Value)",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ value: Value) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var value: Value?",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 186,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var value: Value? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|var|public var isMissing: Bool",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 191,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isMissing: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|init|public init(from decoder: Decoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 196,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(from decoder: Decoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|func|public func encode(to encoder: Encoder) throws",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 205,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func encode(to encoder: Encoder) throws {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|struct|public struct PTModelNamespace<Model>",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 221,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTModelNamespace<Model> {"
+    },
+    {
+      "key": "PooToolsSource/PToolsModelCore/PTModelTypes.swift|public|init|public init()",
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "line": 224,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {"
     },
     {
       "key": "PooToolsSource/PToolsNotifications/PTNotifications.swift|public|struct|public struct PTNotificationID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral",

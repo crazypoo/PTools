@@ -9,7 +9,7 @@
 import UIKit
 import ObjectiveC
 
-public typealias TapedBlock = (_ sender: AnyObject) -> Void
+public typealias TapedBlock = (_ sender:AnyObject) -> Void
 
 // MARK: - PTProtocolCompatible
 
@@ -188,7 +188,9 @@ public extension PTPOP where Base: UIGestureRecognizer {
 
 public extension UIGestureRecognizer {
 
-    /// 保留旧 PTools / SwifterSwift 风格初始化方式。
+    /// English: Keep the legacy PTools-style initializer for source compatibility.
+    /// Español: Conserva el inicializador heredado de estilo PTools para compatibilidad de código.
+    /// 中文：保留旧版 PTools 风格初始化方法，确保现有源码兼容。
     ///
     /// 旧代码可以继续：
     ///

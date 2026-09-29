@@ -1,8 +1,17 @@
 # Changelog
 
-## Unreleased — 5.58.x
+## Unreleased
 
-当前开发基线为 `5.57.4`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+
+## 5.58.0 — 2026-09-29
+
+- 新增 Foundation-only 的 `PToolsModelCore` 与 `PToolsModel` SwiftPM 产品，以及 `PooTools/ModelCore`、`PooTools/Model` CocoaPods subspec。
+- 新增 `PTJSONValue` / `PTJSONNumber`，保留数字原始字面量，支持顶层标量、数组、对象、重复键策略和输入深度/大小限制。
+- 新增统一 `PTModelSource`、`PTModelDecoder`、`PTModelEncoder`、`PTPresence` 和类型化 `PTModelContext`，提供 JSON、Data、Foundation 容器和 Codable 双向转换入口。
+- 提供 `Model.pt.model(from:)`、`Model.pt.models(from:)`、`model.pt.jsonData()`、`jsonString()`、`dictionary()` 和 `jsonArray()` 一行式兼容体验。
+- SmartCodable、SmartCodable/Inherit 和 KakaJSON 继续保留在旧 Core 兼容路径，本版本不删除第三方依赖，也不改变现有 `PTBaseModel` 公开 API。
+- 补充模型能力矩阵、Codable 互操作约定、迁移指南、回归测试和可复现基准清单。
 
 ## 5.57.4 — 2026-09-29
 

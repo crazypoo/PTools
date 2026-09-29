@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
-Generated at: 2026-09-29T13:02:19Z
-Version source: 5.57.4
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:08:02Z
+Version source: 5.58.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -77,6 +77,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `MeidaPermission` | A | `PooTools/MediaPermission` / `PooTools/MeidaPermission` | `PTMediaPermission` | Keep; review drift |
 | `MessageKit` | A | `PooTools/MessageKit` | `PooToolsMessageKit` | Keep; review drift |
 | `MicPermission` | A | `PooTools/MicPermission` | `PTMicPermission` | Keep; review drift |
+| `Model` | A | `PooTools/Model` | `PToolsModel` | Keep; review drift |
+| `ModelCore` | A | `PooTools/ModelCore` | `PToolsModelCore` | Keep; review drift |
 | `Motion` | A | `PooTools/Motion` | `PooToolsMotion` | Keep; review drift |
 | `MotionPermission` | A | `PooTools/MotionPermission` | `PTMotionPermission` | Keep; review drift |
 | `NetWork` | A | `PooTools/NetWork` / `PooTools/Network` | `PooToolsNetWork` | Keep; review drift |

@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.57.4`，外部依赖阻断的 Xcode 回归完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.58.0`，外部依赖阻断的 Xcode 回归完成前不创建正式 tag。
 
 ## Requirements
 
@@ -32,6 +32,15 @@ https://github.com/crazypoo/PTools.git
 最常用的 product 是 `ptools`（Core）。其他功能 product 和 CocoaPods subspec 的对应关系见
 [模块选择与安装指南](docs/guides/MODULES.md)。
 
+模型转换可以单独使用 Foundation-only 的 `PToolsModelCore` / `PToolsModel`，不需要引入
+SmartCodable 或 KakaJSON：
+
+```swift
+struct User: Codable { let id: Int; let name: String }
+let user = try User.pt.model(from: #"{"id":1,"name":"Jax"}"#)
+let json = try user.pt.jsonString()
+```
+
 设备身份与系统能力可单独使用 SwiftPM `PToolsDevice` 或 CocoaPods `PooTools/Device`，迁移方式见
 [DeviceKit 迁移指南](docs/migrations/DEVICEKIT_TO_PTOOLS_DEVICE.md)。
 
@@ -39,6 +48,7 @@ https://github.com/crazypoo/PTools.git
 
 ```ruby
 pod 'PooTools/Core'
+pod 'PooTools/ModelCore' # 不依赖 SmartCodable / KakaJSON 的模型核心
 pod 'PooTools/NetWork'
 pod 'PooTools/PhotoPicker'
 pod 'PooTools/Banner'

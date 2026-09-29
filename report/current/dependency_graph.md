@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T06:53:20Z
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:12:21Z
 -->
 
 # PTools 当前依赖图
 
 本报告合并当前 SwiftPM target 图和 CocoaPods subspec 图；详细机器数据保留在同目录的 JSON 报告。
 
-- SwiftPM target 数量：`137`
-- SwiftPM product 数量：`121`
-- CocoaPods subspec 数量：`136`
+- SwiftPM target 数量：`140`
+- SwiftPM product 数量：`123`
+- CocoaPods subspec 数量：`138`
 - CocoaPods 默认 subspec：`Core`
-- 当前 podspec 版本：`5.57.3`
+- 当前 podspec 版本：`5.58.0`
 
 ## 机器报告
 

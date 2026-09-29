@@ -27,6 +27,11 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the dependency-free PTModel contracts and conversion core.
+        // Español: Publica los contratos y el núcleo de conversión PTModel sin dependencias de terceros.
+        // 中文：公开不依赖第三方的 PTModel 契约和转换核心。
+        .library(name: "PToolsModelCore", targets: ["PToolsModelCore"]),
+        .library(name: "PToolsModel", targets: ["PToolsModel"]),
         // English: Publish the Foundation-only device identity and capability layer independently.
         // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
@@ -209,7 +214,7 @@ let package = Package(
         // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
         // ==========================================
         .library(name: "PooToolsAll", targets: [
-            "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols",
+            "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols", "PToolsModelCore", "PToolsModel",
             "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
             "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm",
@@ -285,6 +290,27 @@ let package = Package(
         .target(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: PTModelCore has no UIKit, SmartCodable, KakaJSON, or runtime reflection dependency.
+        // Español: PTModelCore no depende de UIKit, SmartCodable, KakaJSON ni reflexión en tiempo de ejecución.
+        // 中文：PTModelCore 不依赖 UIKit、SmartCodable、KakaJSON 或运行时反射。
+        .target(
+            name: "PToolsModelCore",
+            path: "PooToolsSource/PToolsModelCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: PToolsModel is the high-level product and currently re-exports PTModelCore.
+        // Español: PToolsModel es el producto de alto nivel y actualmente reexporta PTModelCore.
+        // 中文：PToolsModel 是高级产品层，目前重新导出 PTModelCore。
+        .target(
+            name: "PToolsModel",
+            dependencies: ["PToolsModelCore"],
+            path: "PooToolsSource/PToolsModel",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
@@ -772,6 +798,17 @@ let package = Package(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore"],
             path: "Tests/PooToolsCoreTests"
+        ),
+        // English: Keep model conversion tests independent from UIKit and legacy model frameworks.
+        // Español: Mantiene las pruebas de conversión independientes de UIKit y de los frameworks heredados.
+        // 中文：模型转换测试独立于 UIKit 和旧版模型框架。
+        .testTarget(
+            name: "PToolsModelTests",
+            dependencies: ["PToolsModelCore", "PToolsModel"],
+            path: "Tests/PToolsModelTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
         ),
         // English: Keep device catalog and resolver tests independent from UIKit-heavy targets.
         // Español: Mantiene las pruebas del catálogo y resolvedor independientes de los objetivos UIKit.

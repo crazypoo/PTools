@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "6a267fc683d4d02768b0bf442da1e06c55cbb6de",
-  "generated_at": "2026-09-28T11:31:55Z",
+  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
+  "generated_at": "2026-09-29T15:06:39Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -38,6 +38,8 @@
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
     "PToolsLogging",
+    "PToolsModel",
+    "PToolsModelCore",
     "PToolsNotifications",
     "PToolsOverlay",
     "PToolsPermissionCore",
@@ -198,6 +200,8 @@
     "MeidaPermission",
     "MessageKit",
     "MicPermission",
+    "Model",
+    "ModelCore",
     "Motion",
     "MotionPermission",
     "NetWork",
@@ -1055,6 +1059,38 @@
       }
     },
     {
+      "module": "Model",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_MODEL"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "ModelCore",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_MODEL_CORE"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "MotionPermission",
       "spm": {
         "defines": [
@@ -1386,5 +1422,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "91ed851f55bd3779906738d99589edcc75ba0e74d1597edbf1e1810e70cfb0f3"
+  "fingerprint": "13c85a354c1e476ed802c9ddcc5851bf9e3769710d806e5046680f9cea5a9672"
 }

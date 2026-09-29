@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
-  "generated_at": "2026-09-29T13:03:52Z",
+  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
+  "generated_at": "2026-09-29T15:12:37Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -916,7 +916,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift",
-      "lines": 221,
+      "lines": 223,
       "classification": "ok"
     },
     {
@@ -4285,6 +4285,26 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsModel/PTModelExports.swift",
+      "lines": 11,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
+      "lines": 502,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
+      "lines": 234,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "lines": 239,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsNotifications/PTNotifications.swift",
       "lines": 393,
       "classification": "ok"
@@ -4856,7 +4876,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "lines": 559,
+      "lines": 565,
       "classification": "ok"
     },
     {

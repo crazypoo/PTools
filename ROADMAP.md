@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.57.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.58.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.57.4` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.58.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.58.0 PTModel 基础融合入口
+
+- ✅ 新增不依赖 SmartCodable、KakaJSON、UIKit 和运行时反射的 `PToolsModelCore`，并由 `PToolsModel` 提供高级产品入口。
+- ✅ 新增 `PTJSONValue` / `PTJSONNumber`、有界 JSON Reader/Writer、顶层 JSON fragment、重复键策略和 Foundation/Objective-C 输入桥接。
+- ✅ 新增 `PTModelSource`、`PTModelDecoder`、`PTModelEncoder`、`PTPresence`、`PTModelContext` 和 Codable 互操作策略契约。
+- ✅ 保留 KakaJSON 一行式转换体验：`Model.pt.model`、`Model.pt.models`、`model.pt.jsonData/jsonString/dictionary/jsonArray`。
+- ✅ SmartCodable/KakaJSON 旧 Core 路径保持不变；本版本不删除第三方依赖，不迁移 `PTBaseModel`，避免破坏现有业务。
+- ✅ 增加模型能力矩阵、Codable 互操作约定、迁移文档、模型测试和基准 manifest。
+- [ ] 后续 5.58.x 继续按计划实现宏继承、完整容错/策略矩阵、Network decoder bridge、streaming 和性能门禁；未完成项不得标记为 6.0 parity。
 
 ## 5.57.4 PTSegmentedView Item Separator 配置
 

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "module": "PToolsModelCore",
+  "baselineVersion": "5.58.0",
+  "platform": "iOS 17+",
+  "swift": "6.0",
+  "scenarios": [
+    "single_model_decode",
+    "model_array_decode",
+    "decimal_round_trip",
+    "dirty_json_compatibility",
+    "model_encode"
+  ],
+  "warmupIterations": 5,
+  "measuredIterations": 30,
+  "metrics": ["wall_clock", "p50", "p95", "p99", "allocations", "peak_rss"],
+  "releaseClaim": "No faster-than-competitor claim until a real-device comparison passes the plan gate."
+}

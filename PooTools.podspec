@@ -33,6 +33,29 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the Foundation-only PTModel core without SmartCodable or KakaJSON.
+    # Español: Publica el núcleo PTModel basado solo en Foundation sin SmartCodable ni KakaJSON.
+    # 中文：公开仅依赖 Foundation 的 PTModel 核心，不引入 SmartCodable 或 KakaJSON。
+    s.subspec 'ModelCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsModelCore/**/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_MODEL_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Keep the high-level PTModel product as a thin compatibility layer over ModelCore.
+    # Español: Mantiene el producto PTModel como una capa de compatibilidad delgada sobre ModelCore.
+    # 中文：将高级 PTModel 产品保持为 ModelCore 之上的轻量兼容层。
+    s.subspec 'Model' do |subspec|
+        subspec.dependency 'PooTools/ModelCore'
+        subspec.source_files = 'PooToolsSource/PToolsModel/**/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_MODEL POOTOOLS_COCOAPODS"
+        }
+    end
+
     # English: Publish the Foundation-only date context without a third-party date dependency.
     # Español: Publica el contexto de fechas basado solo en Foundation sin una dependencia de terceros.
     # 中文：公开仅依赖 Foundation 的日期语境，移除第三方日期依赖。

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
-  "generated_at": "2026-09-29T13:03:52Z",
+  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
+  "generated_at": "2026-09-29T15:11:46Z",
   "counts": {
     "main_queue_async": 27,
     "task_detached": 29,

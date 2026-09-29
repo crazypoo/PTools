@@ -132,6 +132,8 @@
     {"kind":"settings","module":"Audio","reason":"SwiftPM enables strict concurrency for the audio target; CocoaPods inherits the aggregate target compiler contract.","owner":"p2-audio","expiration":"2027-03-31"},
     {"kind":"settings","module":"AppIntents","reason":"SwiftPM enables strict concurrency for the App Intents route bridge; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
     {"kind":"settings","module":"WidgetCore","reason":"SwiftPM enables strict concurrency for the extension-safe WidgetKit core; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Activities","reason":"SwiftPM enables strict concurrency for the ActivityKit lifecycle bridge; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"}
+    {"kind":"settings","module":"Activities","reason":"SwiftPM enables strict concurrency for the ActivityKit lifecycle bridge; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
+    {"kind":"settings","module":"ModelCore","reason":"SwiftPM enables strict concurrency for the Foundation-only model core; CocoaPods inherits the aggregate target compiler contract.","owner":"model-core","expiration":"2027-03-31"},
+    {"kind":"settings","module":"Model","reason":"SwiftPM enables strict concurrency for the model facade; CocoaPods inherits the aggregate target compiler contract.","owner":"model-core","expiration":"2027-03-31"}
   ]
 }

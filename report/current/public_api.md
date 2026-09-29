@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
-Generated at: 2026-09-29T13:17:16Z
+Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
+Generated at: 2026-09-29T15:11:47Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1672,7 +1672,7 @@ Generated at: 2026-09-29T13:17:16Z
 | PooToolsSource/Category/UIColor+PTEX.swift:11 | enum | public | public enum PTColorTone { |
 | PooToolsSource/Category/UIFont+PTEX.swift:207 | typealias | public | public typealias PTNumberValueAdapterType = UIFont |
 | PooToolsSource/Category/UIFont+PTEX.swift:208 | var | public | public var adapter: UIFont { |
-| PooToolsSource/Category/UIGestureRecognizer+PTEX.swift:12 | typealias | public | public typealias TapedBlock = (_ sender: AnyObject) -> Void |
+| PooToolsSource/Category/UIGestureRecognizer+PTEX.swift:12 | typealias | public | public typealias TapedBlock = (_ sender:AnyObject) -> Void |
 | PooToolsSource/Category/UIGestureRecognizer+PTEX.swift:21 | class | public | public final class PTGestureActionToken: @MainActor Hashable { |
 | PooToolsSource/Category/UIGestureRecognizer+PTEX.swift:34 | func | public | public func cancel() { |
 | PooToolsSource/Category/UIGestureRecognizer+PTEX.swift:42 | func | public | public func hash(into hasher: inout Hasher) { |
@@ -5991,6 +5991,74 @@ Generated at: 2026-09-29T13:17:16Z
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:181 | protocol | public | public protocol PTThumbnailProviding: Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:190 | protocol | public | public protocol PTMediaCaching: Sendable { |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:199 | protocol | public | public protocol PTMediaCancellationToken: Sendable { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:11 | struct | public | public struct PTJSONNumber: Sendable, Hashable, Codable, Equatable { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:12 | let | public | public let rawRepresentation: String |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:14 | init | public | public init(_ rawRepresentation: String) throws { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:21 | var | public | public var int64Value: Int64? { Int64(rawRepresentation) } |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:22 | var | public | public var uint64Value: UInt64? { UInt64(rawRepresentation) } |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:23 | var | public | public var decimalValue: Decimal? { Decimal(string: rawRepresentation, locale: Locale(identifier: "en_US_POSIX")) } |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:24 | var | public | public var doubleValue: Double? { Double(rawRepresentation) } |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:26 | init | public | public init(from decoder: Decoder) throws { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:39 | func | public | public func encode(to encoder: Encoder) throws { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:48 | enum | public | public enum PTJSONValue: Sendable, Equatable, Hashable, Codable { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:56 | init | public | public init(data: Data, |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:65 | init | public | public init(jsonString: String, |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:73 | var | public | public var foundationObject: Any { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:93 | func | public | public func jsonData(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> Data { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:97 | func | public | public func jsonString(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> String { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:105 | init | public | public init(from decoder: Decoder) throws { |
+| PooToolsSource/PToolsModelCore/PTJSONValue.swift:126 | func | public | public func encode(to encoder: Encoder) throws { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:11 | struct | public | public struct PTModelDecoder: Sendable { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:12 | let | public | public let policy: PTDecodePolicy |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:13 | let | public | public let duplicateKeyPolicy: PTDuplicateKeyPolicy |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:14 | let | public | public let limits: PTModelLimits |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:15 | let | public | public let dateStrategy: PTDateDecodingStrategy |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:16 | let | public | public let context: PTModelContext |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:18 | init | public | public init(policy: PTDecodePolicy = .compatible, |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:30 | func | public | public func decode<T: Decodable, Source: PTModelSource>(_ type: T.Type, from source: Source) throws -> T { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:59 | struct | public | public struct PTModelEncoder: Sendable { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:60 | let | public | public let prettyPrinted: Bool |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:61 | let | public | public let sortedKeys: Bool |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:62 | let | public | public let nilStrategy: PTNilEncodingStrategy |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:63 | let | public | public let dateStrategy: PTDateEncodingStrategy |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:65 | init | public | public init(prettyPrinted: Bool = false, |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:75 | func | public | public func encode<T: Encodable>(_ value: T) throws -> Data { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:88 | func | public | public func encode(_ value: PTJSONValue) throws -> Data { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:92 | func | public | public func jsonValue<T: Encodable>(_ value: T) throws -> PTJSONValue { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:98 | func | public | public func jsonString<T: Encodable>(_ value: T) throws -> String { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:102 | func | public | public func dictionary<T: Encodable>(_ value: T) throws -> [String: Any] { |
+| PooToolsSource/PToolsModelCore/PTModelCodec.swift:109 | func | public | public func array<T: Encodable>(_ value: T) throws -> [Any] { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:11 | enum | public | public enum PTDecodePolicy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:17 | enum | public | public enum PTNilEncodingStrategy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:22 | enum | public | public enum PTDuplicateKeyPolicy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:28 | enum | public | public enum PTNumericOverflowPolicy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:34 | enum | public | public enum PTStringifiedJSONPolicy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:40 | enum | public | public enum PTDictionaryKeyStrategy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:47 | enum | public | public enum PTDateDecodingStrategy: Sendable, Codable, Equatable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:54 | enum | public | public enum PTDateEncodingStrategy: Sendable, Codable, Equatable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:61 | struct | public | public struct PTModelLimits: Sendable, Codable, Equatable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:62 | var | public | public var maxInputBytes: Int |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:63 | var | public | public var maxDepth: Int |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:65 | init | public | public init(maxInputBytes: Int = 16 * 1024 * 1024, maxDepth: Int = 128) { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:71 | enum | public | public enum PTCodableInteropPolicy: String, Sendable, Codable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:78 | enum | public | public enum PTModelError: Error, LocalizedError, Sendable, Equatable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:94 | var | public | public var errorDescription: String? { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:129 | protocol | public | public protocol PTModelSource {} |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:138 | protocol | public | public protocol PTModelContextKey { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:145 | struct | public | public struct PTModelContext: Sendable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:148 | init | public | public init() { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:152 | subscript | public | public subscript<Key: PTModelContextKey>(key: Key.Type) -> Key.Value? { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:169 | var | public | public var jsonValues: [String: PTJSONValue] { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:174 | typealias | public | public typealias PTDecodingContext = PTModelContext |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:175 | typealias | public | public typealias PTEncodingContext = PTModelContext |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:177 | enum | public | public enum PTPresence<Value: Codable & Sendable>: Sendable, Codable, Equatable where Value: Equatable { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:182 | init | public | public init(_ value: Value) { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:186 | var | public | public var value: Value? { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:191 | var | public | public var isMissing: Bool { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:196 | init | public | public init(from decoder: Decoder) throws { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:205 | func | public | public func encode(to encoder: Encoder) throws { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:221 | struct | public | public struct PTModelNamespace<Model> { |
+| PooToolsSource/PToolsModelCore/PTModelTypes.swift:224 | init | public | public init() { |
 | PooToolsSource/PToolsNotifications/PTNotifications.swift:18 | struct | public | public struct PTNotificationID: RawRepresentable, Codable, Hashable, Sendable, ExpressibleByStringLiteral { |
 | PooToolsSource/PToolsNotifications/PTNotifications.swift:19 | let | public | public let rawValue: String |
 | PooToolsSource/PToolsNotifications/PTNotifications.swift:20 | init | public | public init(rawValue: String) { self.rawValue = rawValue } |
