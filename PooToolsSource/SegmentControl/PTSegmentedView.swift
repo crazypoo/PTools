@@ -440,7 +440,9 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
             }
             cell.configure(item: item,
                            style: self.style,
-                           selected: item.id == self.selectionState.selectedID)
+                           selected: item.id == self.selectionState.selectedID,
+                           layoutContext: PTSegmentCellLayoutContext(index: indexPath.item,
+                                                                     itemCount: self.items.count))
             cell.onBadgeRemoved = { [weak self] id in
                 self?.onBadgeRemoved?(id)
             }
@@ -615,10 +617,17 @@ open class PTSegmentedView: UIView, UICollectionViewDelegateFlowLayout, UIScroll
     }
 
     private func updateVisibleCells() {
+        let indexByID = Dictionary(uniqueKeysWithValues: items.enumerated().map { ($0.element.id, $0.offset) })
+        let itemByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
         for cell in collectionView.visibleCells.compactMap({ $0 as? PTMainSegmentCell }) {
             guard let id = cell.representedID,
-                  let item = items.first(where: { $0.id == id }) else { continue }
-            cell.configure(item: item, style: style, selected: id == selectionState.selectedID)
+                  let item = itemByID[id],
+                  let index = indexByID[id] else { continue }
+            cell.configure(item: item,
+                           style: style,
+                           selected: id == selectionState.selectedID,
+                           layoutContext: PTSegmentCellLayoutContext(index: index,
+                                                                     itemCount: items.count))
         }
     }
 

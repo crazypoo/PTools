@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T06:53:37Z
+Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
+Generated at: 2026-09-29T13:03:52Z
 -->
 
 # 当前文件尺寸门禁
@@ -18,17 +18,17 @@ Generated at: 2026-09-29T06:53:37Z
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1309 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2269 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2261 | hard_limit_allowlisted |
 | `PooToolsSource/Base/PTTabBarView.swift` | 1310 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
-| `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1448 | warning |
+| `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
 | `PooToolsSource/Category/UIView+PTEX.swift` | 1927 | architecture_exception |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
 | `PooToolsSource/Debug/PTInstruments.swift` | 1459 | warning |
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |
 | `PooToolsSource/ImageEditor/PTCutViewController.swift` | 1100 | warning |
-| `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1701 | architecture_exception |
+| `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1695 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1586 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |

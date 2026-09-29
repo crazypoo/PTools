@@ -353,6 +353,70 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             segmentedPagingCoordinator = PTSegmentedPagingCoordinator(segmentedView: segmentedView,
                                                                        pageContainer: pagingView.pageContainer)
             segmentedPagingCoordinator?.apply(items: items, pages: pages, animated: false)
+
+        // English: Shows the supported separator styles, placement rules, spacing policies, badges and RTL.
+        // Español: Muestra los estilos, posiciones, políticas de espaciado, insignias y RTL compatibles.
+        // 中文：演示支持的分隔线样式、位置规则、间距策略、角标和 RTL。
+        case String.segmentItemSeparator:
+            let scrollView = UIScrollView()
+            let stackView = UIStackView()
+            stackView.axis = .vertical
+            stackView.spacing = 8
+            stackView.alignment = .fill
+            view.addSubview(scrollView)
+            scrollView.addSubview(stackView)
+            scrollView.snp.makeConstraints { make in
+                make.edges.equalTo(view.safeAreaLayoutGuide)
+            }
+            stackView.snp.makeConstraints { make in
+                make.edges.equalToSuperview().inset(12)
+                make.width.equalTo(scrollView.snp.width).offset(-24)
+            }
+
+            let items = [
+                PTSegmentItem.title(id: "home", "首页"),
+                PTSegmentItem.title(id: "orders", "订单"),
+                PTSegmentItem.title(id: "profile", "我的")
+            ]
+            var badgeConfiguration = PTBadgeConfiguration()
+            badgeConfiguration.maximumNumber = 99
+            let badgeItems = [
+                PTSegmentItem.title(id: "home", "首页"),
+                PTSegmentItem.title(id: "orders", "订单", badgeDescriptor: PTSegmentBadgeDescriptor(content: .number(120), configuration: badgeConfiguration)),
+                PTSegmentItem.title(id: "profile", "我的")
+            ]
+            let dynamicSeparatorColor = UIColor { trait in
+                trait.userInterfaceStyle == .dark ? .systemGray3 : .systemGray5
+            }
+            let cases: [(String, PTSegmentItemSeparatorStyle, PTSegmentDistribution, PTSegmentSpacingDistribution, [PTSegmentItem], UISemanticContentAttribute)] = [
+                ("Legacy default / 全部兼容", .legacyDefault, .adaptive, .fixed, items, .unspecified),
+                ("None / 关闭", .none, .adaptive, .fixed, items, .unspecified),
+                ("Between items / Leading", .line(.init(visibility: .betweenItems)), .adaptive, .fixed, items, .unspecified),
+                ("Between items / Trailing", .line(.init(color: .systemBlue, placement: .trailing, visibility: .betweenItems)), .adaptive, .fixed, items, .unspecified),
+                ("Hairline / 细线", .line(.init(thickness: 1 / UIScreen.main.scale, topInset: 8, bottomInset: 8)), .adaptive, .fixed, items, .unspecified),
+                ("Dynamic color + 2pt", .line(.init(color: dynamicSeparatorColor, thickness: 2, topInset: 6, bottomInset: 6, placement: .trailing, visibility: .allItems)), .adaptive, .fixed, items, .unspecified),
+                ("Average spacing + badge", .line(.init(color: .systemBlue, visibility: .betweenItems)), .intrinsic, .averageWhenPossible, badgeItems, .unspecified),
+                ("Equal + RTL", .line(.init(color: .systemOrange, visibility: .betweenItems)), .equal, .fixed, items, .forceRightToLeft)
+            ]
+            for (title, separatorStyle, distribution, spacingDistribution, rowItems, semanticAttribute) in cases {
+                let label = UILabel()
+                label.text = title
+                label.font = .preferredFont(forTextStyle: .footnote)
+                label.textColor = .secondaryLabel
+                let row = PTSegmentedView(frame: .zero)
+                var style = PTSegmentStyle(itemInsets: .init(top: 0, left: 12, bottom: 0, right: 12),
+                                            distribution: distribution,
+                                            spacingDistribution: spacingDistribution)
+                style.itemSeparatorStyle = separatorStyle
+                row.style = style
+                row.semanticContentAttribute = semanticAttribute
+                row.apply(items: rowItems, animatingDifferences: false)
+                stackView.addArrangedSubview(label)
+                stackView.addArrangedSubview(row)
+                row.snp.makeConstraints { make in
+                    make.height.equalTo(44)
+                }
+            }
             
         case String.countLabel:
             let countLabel = PTCountingLabel()

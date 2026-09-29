@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
-  "generated_at": "2026-09-29T06:52:43Z",
+  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
+  "generated_at": "2026-09-29T13:03:52Z",
   "counts": {
     "main_queue_async": 27,
     "task_detached": 29,
@@ -362,7 +362,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 929,
+      "line": 923,
       "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
     },
     {

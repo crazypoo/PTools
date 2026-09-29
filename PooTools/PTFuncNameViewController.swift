@@ -66,6 +66,7 @@ public extension String {
     static let rate = "评价星星"
     static let segment = "分选栏目"
     static let segmentPagingRegression = "SegmentedPagingRegression"
+    static let segmentItemSeparator = "SegmentedItemSeparator"
     static let countLabel = "跳动Label"
     static let throughLabel = "划线Label"
     static let twitterLabel = "推文Label"

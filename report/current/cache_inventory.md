@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T06:53:37Z
+Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
+Generated at: 2026-09-29T13:03:53Z
 -->
 
 # PTools 当前缓存盘点
@@ -21,12 +21,12 @@ Generated at: 2026-09-29T06:53:37Z
 | PooToolsSource/Base/PTAudioCache.swift:215 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
 | PooToolsSource/Base/PTAudioCache.swift:255 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
-| PooToolsSource/Base/PTCollectionView.swift:1226 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1227 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1817 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1818 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1911 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1912 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:1218 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1219 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1809 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1810 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1903 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1904 | disk or custom cache | return (cache.items, cache.contentHeight) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |
@@ -114,11 +114,11 @@ Generated at: 2026-09-29T06:53:37Z
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:162 | disk or custom cache | PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")") |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:231 | disk or custom cache | model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy") |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:409 | URLCache | URLCache.customHttp.storeIfNeeded(for: task, data: self.data) |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1420 | NSCache | private lazy var filterCache: NSCache<NSString, UIImage> = { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1421 | NSCache | let cache = NSCache<NSString, UIImage>() |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1422 | disk or custom cache | cache.countLimit = 6 |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1423 | disk or custom cache | cache.totalCostLimit = 96 * 1024 * 1024 |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1424 | disk or custom cache | return cache |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1414 | NSCache | private lazy var filterCache: NSCache<NSString, UIImage> = { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1415 | NSCache | let cache = NSCache<NSString, UIImage>() |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1416 | disk or custom cache | cache.countLimit = 6 |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1417 | disk or custom cache | cache.totalCostLimit = 96 * 1024 * 1024 |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1418 | disk or custom cache | return cache |
 | PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift:17 | disk or custom cache | // It will be used when storing and retrieving the image to/from cache. |
 | PooToolsSource/NetWork/Network.swift:54 | disk or custom cache | case cache(String) |
 | PooToolsSource/NetWork/Network.swift:82 | disk or custom cache | case .cache(let message): return "PT Network cache failed: \(message)" |
@@ -173,6 +173,6 @@ Generated at: 2026-09-29T06:53:37Z
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:63 | disk or custom cache | /// English: Refreshes the native item cache; old callers can then call apply(to:). |
 | PooToolsSource/SegmentControl/PTPaging.swift:50 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
 | PooToolsSource/SegmentControl/PTPaging.swift:250 | disk or custom cache | /// English: Returns whether a page is currently held by the container cache. |
-| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:327 | disk or custom cache | /// English: Cache policy for lazy pages. |
+| PooToolsSource/SegmentControl/PTSegmentedTypes.swift:555 | disk or custom cache | /// English: Cache policy for lazy pages. |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:758 | disk or custom cache | open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) { |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:762 | disk or custom cache | open func cache(viewController: UIViewController, with identifier: String) { |

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
-  "generated_at": "2026-09-29T06:53:37Z",
+  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
+  "generated_at": "2026-09-29T13:03:53Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -54,37 +54,37 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1226,
+      "line": 1218,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1227,
+      "line": 1219,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1817,
+      "line": 1809,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1818,
+      "line": 1810,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1911,
+      "line": 1903,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1912,
+      "line": 1904,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -612,31 +612,31 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1420,
+      "line": 1414,
       "kind": "NSCache",
       "text": "private lazy var filterCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1421,
+      "line": 1415,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1422,
+      "line": 1416,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 6"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1423,
+      "line": 1417,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 96 * 1024 * 1024"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1424,
+      "line": 1418,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
@@ -966,7 +966,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 327,
+      "line": 555,
       "kind": "disk or custom cache",
       "text": "/// English: Cache policy for lazy pages."
     },

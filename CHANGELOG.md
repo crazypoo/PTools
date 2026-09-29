@@ -2,7 +2,14 @@
 
 ## Unreleased — 5.58.x
 
-当前开发基线为 `5.57.3`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+当前开发基线为 `5.57.4`；版本唯一来源为根目录 `VERSION`，外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
+
+## 5.57.4 — 2026-09-29
+
+- 新增 `PTSegmentStyle.itemSeparatorStyle`，支持关闭、颜色、线宽、上下内边距、leading/trailing 和 allItems/betweenItems 配置。
+- 保留 `lineView` 作为 5.x 兼容入口并标记弃用；Cell 只复用一个分隔线 View 和一组约束，避免重用时残留或累积约束。
+- 分隔线不参与宽度测量、平均间距、等宽/自适应布局、Indicator、标题缩放和选择动画；补齐首尾、单项、RTL、动态颜色和非法参数保护。
+- 增加分隔线回归测试、Segmented Item Separator Demo、使用指南和 JX 迁移说明。
 
 ## 5.57.3 — 2026-09-29
 

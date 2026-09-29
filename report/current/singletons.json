@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
-  "generated_at": "2026-09-29T06:52:45Z",
-  "shared_call_count": 1595,
+  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
+  "generated_at": "2026-09-29T13:03:53Z",
+  "shared_call_count": 1619,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -889,7 +889,7 @@
     },
     {
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 72,
+      "line": 76,
       "declaration": "public static let shared = PTHapticEngine()",
       "name": "shared",
       "category": "C",

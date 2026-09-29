@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
-  "generated_at": "2026-09-29T06:52:45Z",
+  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
+  "generated_at": "2026-09-29T13:03:54Z",
   "counts": {
-    "reduce_motion": 57,
-    "accessibility": 263,
+    "reduce_motion": 60,
+    "accessibility": 264,
     "reduce_transparency": 12,
     "dynamic_type": 21
   },
@@ -146,14 +146,24 @@
       "line": 104
     },
     {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Badge/UIView+BadgeEX.swift",
-      "line": 243
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Badge/PTBadgeCore.swift",
+      "line": 39
     },
     {
       "rule": "reduce_motion",
+      "path": "PooToolsSource/Badge/PTBadgeCore.swift",
+      "line": 187
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Badge/PTBadgeCore.swift",
+      "line": 221
+    },
+    {
+      "rule": "accessibility",
       "path": "PooToolsSource/Badge/UIView+BadgeEX.swift",
-      "line": 392
+      "line": 244
     },
     {
       "rule": "accessibility",
@@ -1518,47 +1528,57 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 225
+      "line": 206
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 226
+      "line": 283
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 227
+      "line": 284
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 238
+      "line": 285
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 348
+      "line": 290
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
+      "line": 495
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 80
+      "line": 117
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 85
+      "line": 122
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 89
+      "line": 128
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/SegmentControl/PTSegmentedView.swift",
-      "line": 525
+      "line": 542
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/SegmentControl/PTSegmentedView.swift",
+      "line": 547
     },
     {
       "rule": "accessibility",
@@ -1613,27 +1633,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 285
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 287
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 288
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
       "line": 289
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 290
     },
     {
       "rule": "accessibility",
@@ -1643,17 +1643,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 296
+      "line": 292
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 298
+      "line": 293
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 299
+      "line": 294
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 295
     },
     {
       "rule": "accessibility",
@@ -1663,42 +1668,47 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 301
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
       "line": 302
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 387
+      "line": 303
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 388
+      "line": 304
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 656
+      "line": 305
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 657
+      "line": 306
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 659
+      "line": 391
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 662
+      "line": 392
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 660
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 661
     },
     {
       "rule": "accessibility",
@@ -1708,17 +1718,17 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 665
+      "line": 666
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 670
+      "line": 667
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 671
+      "line": 669
     },
     {
       "rule": "accessibility",
@@ -1728,7 +1738,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 677
+      "line": 675
     },
     {
       "rule": "accessibility",
@@ -1739,6 +1749,16 @@
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
       "line": 681
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 682
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 685
     },
     {
       "rule": "accessibility",

@@ -122,10 +122,22 @@ internal enum PTSegmentColorInterpolator {
     }
 }
 
+// English: Keeps first/last-item knowledge in the renderer instead of the business item model.
+// Español: Mantiene la posición inicial/final en el renderizador y no en el modelo de negocio.
+// 中文：将首尾位置保留在渲染器中，不污染业务分段模型。
+internal struct PTSegmentCellLayoutContext {
+    let index: Int
+    let itemCount: Int
+}
+
 @MainActor
 public class PTMainSegmentCell: UICollectionViewCell {
     public static let reuseIdentifier = "PTMainSegmentCell"
-    public let lineView = UIView()
+    /// English: Legacy separator view kept for 5.x source compatibility.
+    /// Español: Vista separadora heredada conservada para la compatibilidad de código fuente 5.x.
+    /// 中文：保留旧版分隔线 View，维持 5.x 源码兼容。
+    @available(*, deprecated, message: "Configure item separators through PTSegmentStyle.itemSeparatorStyle.")
+    public let lineView: UIView
     public let titleLabel = UILabel()
     public let subTitleLabel = UILabel()
     public let imageIcon = UIImageView()
@@ -133,6 +145,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
     internal private(set) var indicatorContentFrame = CGRect.zero
     internal var onBadgeRemoved: ((AnyHashable) -> Void)?
 
+    private let separatorView: UIView
     private let contentStack = UIStackView()
     private let badgeView = PTInlineBadgeView()
     private var imageTask: Task<Void, Never>?
@@ -142,13 +155,27 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private var contentTrailingConstraint: NSLayoutConstraint?
     private var contentTopConstraint: NSLayoutConstraint?
     private var contentBottomConstraint: NSLayoutConstraint?
+    private var separatorLeadingConstraint: NSLayoutConstraint?
+    private var separatorTrailingConstraint: NSLayoutConstraint?
+    private var separatorTopConstraint: NSLayoutConstraint?
+    private var separatorBottomConstraint: NSLayoutConstraint?
+    private var separatorWidthConstraint: NSLayoutConstraint?
+    private var separatorHeightConstraint: NSLayoutConstraint?
+    private var separatorStyle: PTSegmentItemSeparatorStyle = .legacyDefault
+    private var separatorLayoutContext = PTSegmentCellLayoutContext(index: 0, itemCount: 1)
 
     public override init(frame: CGRect) {
+        let separator = UIView()
+        lineView = separator
+        separatorView = separator
         super.init(frame: frame)
         commonInit()
     }
 
     public required init?(coder: NSCoder) {
+        let separator = UIView()
+        lineView = separator
+        separatorView = separator
         super.init(coder: coder)
         commonInit()
     }
@@ -180,15 +207,27 @@ public class PTMainSegmentCell: UICollectionViewCell {
             contentTopConstraint,
             contentBottomConstraint
         ].compactMap { $0 })
-        lineView.backgroundColor = .separator
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(lineView)
+        separatorView.backgroundColor = .separator
+        separatorView.isAccessibilityElement = false
+        separatorView.accessibilityElementsHidden = true
+        separatorView.isUserInteractionEnabled = false
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(separatorView)
+        separatorLeadingConstraint = separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+        separatorTrailingConstraint = separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        separatorTopConstraint = separatorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10)
+        separatorBottomConstraint = separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        separatorWidthConstraint = separatorView.widthAnchor.constraint(equalToConstant: 1)
+        separatorHeightConstraint = separatorView.heightAnchor.constraint(equalToConstant: 0)
+        separatorBottomConstraint?.priority = .defaultHigh
         NSLayoutConstraint.activate([
-            lineView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            lineView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            lineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            lineView.widthAnchor.constraint(equalToConstant: 1)
-        ])
+            separatorLeadingConstraint,
+            separatorTopConstraint,
+            separatorBottomConstraint,
+            separatorWidthConstraint,
+            separatorHeightConstraint
+        ].compactMap { $0 })
+        applySeparator(style: separatorStyle, context: separatorLayoutContext)
         badgeView.setContentHuggingPriority(.required, for: .horizontal)
         badgeView.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
@@ -197,9 +236,23 @@ public class PTMainSegmentCell: UICollectionViewCell {
     /// Español: Configura contenido, insignia y carga de imagen desde un único modelo de valores.
     /// 中文：使用一个值模型统一配置内容、徽标和图片加载。
     public func configure(item: PTSegmentItem, style: PTSegmentStyle, selected: Bool) {
+        configure(item: item,
+                  style: style,
+                  selected: selected,
+                  layoutContext: PTSegmentCellLayoutContext(index: 0, itemCount: 1))
+    }
+
+    /// English: Configures a cell with snapshot-local position context for separator visibility.
+    /// Español: Configura la celda con la posición local del snapshot para decidir la visibilidad del separador.
+    /// 中文：使用当前 Snapshot 的位置上下文配置 Cell，从而正确判断分隔线是否显示。
+    internal func configure(item: PTSegmentItem,
+                            style: PTSegmentStyle,
+                            selected: Bool,
+                            layoutContext: PTSegmentCellLayoutContext) {
         imageTask?.cancel()
         imageTask = nil
         representedID = item.id
+        applySeparator(style: style.itemSeparatorStyle, context: layoutContext)
         removeStackContent()
         applySelection(selected, style: style)
         contentLeadingConstraint?.constant = style.itemInsets.left
@@ -373,6 +426,78 @@ public class PTMainSegmentCell: UICollectionViewCell {
         contentStack.addArrangedSubview(badgeView)
     }
 
+    /// English: Resolves separator visibility once from the current snapshot position.
+    /// Español: Resuelve una sola vez la visibilidad según la posición del snapshot actual.
+    /// 中文：根据当前 Snapshot 位置集中计算分隔线可见性。
+    private func resolveSeparatorVisibility(style: PTSegmentItemSeparatorStyle,
+                                            context: PTSegmentCellLayoutContext) -> Bool {
+        guard case .line(let configuration) = style,
+              context.itemCount > 0,
+              context.index >= 0,
+              context.index < context.itemCount else {
+            return false
+        }
+        switch configuration.visibility {
+        case .allItems:
+            return true
+        case .betweenItems:
+            switch configuration.placement {
+            case .leading:
+                return context.index > 0
+            case .trailing:
+                return context.index < context.itemCount - 1
+            }
+        }
+    }
+
+    /// English: Applies one reusable separator view and one reusable constraint set.
+    /// Español: Aplica una sola vista separadora reutilizable y un único conjunto de restricciones.
+    /// 中文：复用一个分隔线 View 和一组约束，避免 Cell 重用时不断创建对象。
+    private func applySeparator(style: PTSegmentItemSeparatorStyle,
+                                context: PTSegmentCellLayoutContext) {
+        separatorStyle = style
+        separatorLayoutContext = context
+        guard case .line(let rawConfiguration) = style else {
+            separatorView.isHidden = true
+            separatorView.backgroundColor = .clear
+            separatorLeadingConstraint?.isActive = true
+            separatorTrailingConstraint?.isActive = false
+            separatorTopConstraint?.constant = 0
+            separatorBottomConstraint?.constant = 0
+            separatorWidthConstraint?.constant = 1
+            separatorHeightConstraint?.constant = 0
+            return
+        }
+
+        let configuration = rawConfiguration.normalized
+        separatorView.isHidden = !resolveSeparatorVisibility(style: .line(configuration), context: context)
+        separatorView.backgroundColor = configuration.color
+        separatorTopConstraint?.constant = configuration.topInset
+        separatorBottomConstraint?.constant = -configuration.bottomInset
+        separatorWidthConstraint?.constant = configuration.thickness
+        switch configuration.placement {
+        case .leading:
+            separatorLeadingConstraint?.isActive = true
+            separatorTrailingConstraint?.isActive = false
+        case .trailing:
+            separatorLeadingConstraint?.isActive = false
+            separatorTrailingConstraint?.isActive = true
+        }
+        updateSeparatorHeight(configuration: configuration)
+    }
+
+    /// English: Clamps the rendered height so oversized insets never create a negative constraint.
+    /// Español: Limita la altura para que unos insets excesivos nunca creen una restricción negativa.
+    /// 中文：限制分隔线高度，避免上下内边距过大时生成负高度约束。
+    private func updateSeparatorHeight(configuration: PTSegmentItemSeparatorConfiguration? = nil) {
+        guard case .line(let rawConfiguration) = separatorStyle else {
+            separatorHeightConstraint?.constant = 0
+            return
+        }
+        let value = (configuration ?? rawConfiguration).normalized
+        separatorHeightConstraint?.constant = max(0, bounds.height - value.topInset - value.bottomInset)
+    }
+
     private func accessibilityText(for content: PTSegmentContent) -> String? {
         switch content {
         case .title(let value), .titleImage(let value, _, _), .titleImageSource(let value, _, _, _): return value
@@ -387,6 +512,9 @@ public class PTMainSegmentCell: UICollectionViewCell {
 
     open override func layoutSubviews() {
         super.layoutSubviews()
+        if case .line(let configuration) = separatorStyle {
+            updateSeparatorHeight(configuration: configuration)
+        }
         contentStack.layoutIfNeeded()
         let contentViews = contentStack.arrangedSubviews.filter { $0 !== badgeView }
         guard let firstFrame = contentViews.first?.frame else {
@@ -431,6 +559,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         imageTask = nil
         representedID = nil
         onBadgeRemoved = nil
+        applySeparator(style: .none, context: PTSegmentCellLayoutContext(index: 0, itemCount: 0))
         removeStackContent()
     }
 }

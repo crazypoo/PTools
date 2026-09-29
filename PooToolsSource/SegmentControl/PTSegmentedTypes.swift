@@ -201,6 +201,80 @@ public enum PTSegmentSpacingDistribution: Equatable {
     case averageWhenPossible
 }
 
+/// English: Defines the semantic edge used by an item separator.
+/// Español: Define el borde semántico usado por el separador del elemento.
+/// 中文：定义分段项分隔线使用的语义边缘。
+@MainActor
+public enum PTSegmentItemSeparatorPlacement {
+    case leading
+    case trailing
+}
+
+/// English: Defines whether a separator is rendered for every item or only between items.
+/// Español: Define si el separador se muestra en todos los elementos o solo entre elementos.
+/// 中文：定义分隔线显示在所有项上，还是只显示在项之间。
+@MainActor
+public enum PTSegmentItemSeparatorVisibility {
+    case allItems
+    case betweenItems
+}
+
+/// English: Immutable-at-render-time values used to draw the existing cell separator view.
+/// Español: Valores usados durante el renderizado para dibujar la vista separadora existente de la celda.
+/// 中文：用于渲染现有 Cell 分隔线 View 的配置值。
+@MainActor
+public struct PTSegmentItemSeparatorConfiguration {
+    public var color: UIColor
+    public var thickness: CGFloat
+    public var topInset: CGFloat
+    public var bottomInset: CGFloat
+    public var placement: PTSegmentItemSeparatorPlacement
+    public var visibility: PTSegmentItemSeparatorVisibility
+
+    public init(color: UIColor = .separator,
+                thickness: CGFloat = 1,
+                topInset: CGFloat = 10,
+                bottomInset: CGFloat = 10,
+                placement: PTSegmentItemSeparatorPlacement = .leading,
+                visibility: PTSegmentItemSeparatorVisibility = .betweenItems) {
+        self.color = color
+        self.thickness = thickness
+        self.topInset = topInset
+        self.bottomInset = bottomInset
+        self.placement = placement
+        self.visibility = visibility
+    }
+
+    /// English: Normalizes layout inputs at the UIKit boundary instead of creating invalid constraints.
+    /// Español: Normaliza las entradas de diseño en el límite de UIKit para no crear restricciones inválidas.
+    /// 中文：在 UIKit 边界统一清洗布局参数，避免生成无效约束。
+    internal var normalized: Self {
+        var value = self
+        value.thickness = thickness.isFinite && thickness > 0 ? thickness : 1
+        value.topInset = topInset.isFinite && topInset >= 0 ? topInset : 0
+        value.bottomInset = bottomInset.isFinite && bottomInset >= 0 ? bottomInset : 0
+        return value
+    }
+}
+
+/// English: Canonical item-separator style owned by PTSegmentStyle.
+/// Español: Estilo canónico del separador de elementos propiedad de PTSegmentStyle.
+/// 中文：由 PTSegmentStyle 持有的规范分段项分隔线样式。
+@MainActor
+public enum PTSegmentItemSeparatorStyle {
+    case none
+    case line(PTSegmentItemSeparatorConfiguration)
+}
+
+public extension PTSegmentItemSeparatorStyle {
+    /// English: Preserves the hard-coded separator appearance from earlier 5.x releases.
+    /// Español: Conserva la apariencia del separador codificada en versiones 5.x anteriores.
+    /// 中文：保持早期 5.x 版本中硬编码分隔线的视觉效果。
+    static var legacyDefault: Self {
+        .line(PTSegmentItemSeparatorConfiguration(visibility: .allItems))
+    }
+}
+
 /// English: Title color behavior during a page transition.
 /// Español: Comportamiento del color del título durante una transición de página.
 /// 中文：页面过渡期间的标题颜色行为。
@@ -272,6 +346,7 @@ public struct PTSegmentStyle {
     public var selectionTransition: PTSegmentSelectionTransition
     public var spacingDistribution: PTSegmentSpacingDistribution
     public var badgeConfiguration: PTBadgeConfiguration
+    public var itemSeparatorStyle: PTSegmentItemSeparatorStyle
 
     public init(normalFont: UIFont = .systemFont(ofSize: 15),
                 selectedFont: UIFont = .systemFont(ofSize: 15, weight: .semibold),
@@ -290,7 +365,8 @@ public struct PTSegmentStyle {
                 titleZoomTransition: PTSegmentTitleZoomTransition = .none,
                 selectionTransition: PTSegmentSelectionTransition = .none,
                 spacingDistribution: PTSegmentSpacingDistribution = .fixed,
-                badgeConfiguration: PTBadgeConfiguration = PTBadgeConfiguration()) {
+                badgeConfiguration: PTBadgeConfiguration = PTBadgeConfiguration(),
+                itemSeparatorStyle: PTSegmentItemSeparatorStyle = .legacyDefault) {
         self.normalFont = normalFont
         self.selectedFont = selectedFont
         self.normalColor = normalColor
@@ -309,6 +385,7 @@ public struct PTSegmentStyle {
         self.selectionTransition = selectionTransition
         self.spacingDistribution = spacingDistribution
         self.badgeConfiguration = badgeConfiguration
+        self.itemSeparatorStyle = itemSeparatorStyle
     }
 
     /// English: JX-compatible title color switch backed by the canonical enum.

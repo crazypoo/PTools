@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.57.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.57.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.57.3` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.57.4` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.57.4 PTSegmentedView Item Separator 配置
+
+- ✅ 在 `PTSegmentStyle` 增加 `.none`、`.line`、颜色、线宽、上下内边距、leading/trailing 和可见性配置。
+- ✅ 通过内部布局上下文处理首项、末项、单项、Diffable 重排和 Cell reuse，不把布局位置写入业务 Item。
+- ✅ 使用一套可复用约束，清洗非法尺寸，适配 RTL、动态颜色、无障碍和超大内边距，不影响测量、间距、Indicator 或选择动画。
+- ✅ 增加 PTSegmentedPagingTests 回归、Demo Catalog 示例、Paging 指南和 JX 迁移说明。
+- [ ] 完成真实宿主在 RTL、动态颜色、快速重排和不同 Cell 高度下的真机视觉回归后，再创建正式 `5.57.4` tag。
 
 ## 5.57.3 PTSegmentedView / PTPagingView 运行时稳定性
 

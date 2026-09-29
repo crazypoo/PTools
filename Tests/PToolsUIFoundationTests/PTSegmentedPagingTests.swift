@@ -249,4 +249,115 @@ final class PTSegmentedPagingTests: XCTestCase {
         XCTAssertEqual(equalLayout.minimumLineSpacing, 5, accuracy: 0.001)
         XCTAssertEqual(singleLayout.minimumLineSpacing, 6, accuracy: 0.001)
     }
+
+    func testItemSeparatorDefaultKeepsLegacyAppearance() {
+        let style = PTSegmentStyle()
+        guard case .line(let configuration) = style.itemSeparatorStyle else {
+            return XCTFail("The default separator must preserve the legacy line")
+        }
+        XCTAssertEqual(configuration.thickness, 1)
+        XCTAssertEqual(configuration.topInset, 10)
+        XCTAssertEqual(configuration.bottomInset, 10)
+        if case .leading = configuration.placement {} else { XCTFail("Legacy placement must be leading") }
+        if case .allItems = configuration.visibility {} else { XCTFail("Legacy visibility must be allItems") }
+
+        let cell = PTMainSegmentCell(frame: CGRect(x: 0, y: 0, width: 100, height: 44))
+        cell.configure(item: .title(id: "item", "标题"),
+                       style: style,
+                       selected: false,
+                       layoutContext: PTSegmentCellLayoutContext(index: 0, itemCount: 3))
+        cell.layoutIfNeeded()
+        XCTAssertFalse(cell.lineView.isHidden)
+    }
+
+    func testItemSeparatorNoneAndBetweenItemsVisibility() {
+        var noneStyle = PTSegmentStyle()
+        noneStyle.itemSeparatorStyle = .none
+        let noneCell = configuredSeparatorCell(style: noneStyle, index: 0, itemCount: 3)
+        XCTAssertTrue(noneCell.lineView.isHidden)
+
+        var leadingStyle = PTSegmentStyle()
+        leadingStyle.itemSeparatorStyle = .line(.init(visibility: .betweenItems))
+        XCTAssertTrue(configuredSeparatorCell(style: leadingStyle, index: 0, itemCount: 3).lineView.isHidden)
+        XCTAssertFalse(configuredSeparatorCell(style: leadingStyle, index: 1, itemCount: 3).lineView.isHidden)
+        XCTAssertFalse(configuredSeparatorCell(style: leadingStyle, index: 2, itemCount: 3).lineView.isHidden)
+        XCTAssertTrue(configuredSeparatorCell(style: leadingStyle, index: 0, itemCount: 1).lineView.isHidden)
+
+        var trailingStyle = PTSegmentStyle()
+        trailingStyle.itemSeparatorStyle = .line(.init(placement: .trailing, visibility: .betweenItems))
+        XCTAssertFalse(configuredSeparatorCell(style: trailingStyle, index: 0, itemCount: 3).lineView.isHidden)
+        XCTAssertFalse(configuredSeparatorCell(style: trailingStyle, index: 1, itemCount: 3).lineView.isHidden)
+        XCTAssertTrue(configuredSeparatorCell(style: trailingStyle, index: 2, itemCount: 3).lineView.isHidden)
+    }
+
+    func testItemSeparatorGeometryAndInvalidValuesAreSafe() {
+        var style = PTSegmentStyle()
+        style.itemSeparatorStyle = .line(.init(color: .systemRed,
+                                               thickness: 2,
+                                               topInset: 4,
+                                               bottomInset: 8,
+                                               placement: .trailing,
+                                               visibility: .allItems))
+        let cell = configuredSeparatorCell(style: style, index: 1, itemCount: 3)
+        XCTAssertEqual(cell.lineView.backgroundColor, .systemRed)
+        XCTAssertEqual(cell.lineView.frame.width, 2, accuracy: 0.001)
+        XCTAssertEqual(cell.lineView.frame.minY, 4, accuracy: 0.001)
+        XCTAssertEqual(cell.lineView.frame.height, 32, accuracy: 0.001)
+        XCTAssertEqual(cell.lineView.frame.maxX, cell.contentView.bounds.maxX, accuracy: 0.001)
+
+        var invalidStyle = PTSegmentStyle()
+        invalidStyle.itemSeparatorStyle = .line(.init(thickness: .nan,
+                                                       topInset: -.infinity,
+                                                       bottomInset: .infinity))
+        let invalidCell = PTMainSegmentCell(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
+        invalidCell.configure(item: .title(id: "invalid", "异常"),
+                              style: invalidStyle,
+                              selected: false,
+                              layoutContext: PTSegmentCellLayoutContext(index: 0, itemCount: 1))
+        invalidCell.layoutIfNeeded()
+        XCTAssertEqual(invalidCell.lineView.frame.width, 1, accuracy: 0.001)
+        XCTAssertEqual(invalidCell.lineView.frame.minY, 0, accuracy: 0.001)
+        XCTAssertEqual(invalidCell.lineView.frame.height, 20, accuracy: 0.001)
+    }
+
+    func testItemSeparatorDoesNotAffectMeasurementOrTitleTransition() {
+        let item = PTSegmentItem.title(id: "item", "标题")
+        var lineStyle = PTSegmentStyle(itemInsets: .zero, distribution: .intrinsic)
+        lineStyle.itemSeparatorStyle = .line(.init(thickness: 2))
+        var noneStyle = lineStyle
+        noneStyle.itemSeparatorStyle = .none
+
+        XCTAssertEqual(PTMainSegmentCell.measuredWidth(item: item, style: lineStyle),
+                       PTMainSegmentCell.measuredWidth(item: item, style: noneStyle))
+
+        let cell = configuredSeparatorCell(style: lineStyle, index: 0, itemCount: 2)
+        cell.applyTransition(selectedProgress: 1, style: lineStyle)
+        XCTAssertEqual(cell.lineView.transform, .identity)
+    }
+
+    func testItemSeparatorReuseClearsPreviousStyle() {
+        var style = PTSegmentStyle()
+        style.itemSeparatorStyle = .line(.init(color: .systemRed,
+                                               thickness: 2,
+                                               placement: .trailing,
+                                               visibility: .allItems))
+        let cell = configuredSeparatorCell(style: style, index: 0, itemCount: 2)
+        cell.prepareForReuse()
+
+        XCTAssertTrue(cell.lineView.isHidden)
+        XCTAssertEqual(cell.lineView.backgroundColor, .clear)
+        XCTAssertEqual(cell.lineView.transform, .identity)
+    }
+
+    private func configuredSeparatorCell(style: PTSegmentStyle,
+                                         index: Int,
+                                         itemCount: Int) -> PTMainSegmentCell {
+        let cell = PTMainSegmentCell(frame: CGRect(x: 0, y: 0, width: 100, height: 44))
+        cell.configure(item: .title(id: "item-\(index)", "标题"),
+                       style: style,
+                       selected: false,
+                       layoutContext: PTSegmentCellLayoutContext(index: index, itemCount: itemCount))
+        cell.layoutIfNeeded()
+        return cell
+    }
 }

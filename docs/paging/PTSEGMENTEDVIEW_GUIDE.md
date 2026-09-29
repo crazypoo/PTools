@@ -1,4 +1,4 @@
-# PTSegmentedView 使用指南（5.57.3）
+# PTSegmentedView 使用指南（5.57.4）
 
 ## 基础标题
 
@@ -67,6 +67,37 @@ Badge 的文字、内边距、圆点和 normal/selected 字体都会参与 Item 
 - RTL、Dynamic Type、Reduce Motion 和无障碍名称应由宿主在真实页面中回归验证。
 - Indicator 会位于分段 Cell 之上；`PTSegmentedView` 会保留稳定 ID，不要使用带角标的显示文本作为 ID。
 - `imageSource` 与 `titleImageSource` 即使没有 placeholder 也会预留图片位置，下载完成后自动更新。
+
+## Item Separator
+
+分隔线是 `PTSegmentStyle` 的 Cell 装饰配置，不参与 Item 宽度测量、平均间距、等宽布局、Indicator、标题缩放或选择动画。
+默认值 `PTSegmentItemSeparatorStyle.legacyDefault` 保留 5.x 之前每个 Item 左侧的系统分隔线；新页面推荐使用
+`.betweenItems`，避免单独的首项或末项分隔线。
+
+```swift
+var style = PTSegmentStyle()
+style.itemSeparatorStyle = .line(
+    .init(
+        color: .separator,
+        thickness: 1 / UIScreen.main.scale,
+        topInset: 10,
+        bottomInset: 10,
+        placement: .leading,
+        visibility: .betweenItems
+    )
+)
+segmentedView.style = style
+```
+
+关闭分隔线：
+
+```swift
+style.itemSeparatorStyle = .none
+```
+
+`placement` 使用语义化的 `.leading` / `.trailing`，因此会随 RTL 自动对应左右边缘；不要通过反转业务数组来适配 RTL。
+`visibility = .allItems` 会显示全部 Cell 的分隔线，`visibility = .betweenItems` 会隐藏首项（leading）或末项（trailing）。
+颜色可以使用 `.separator` 或动态 `UIColor`，Cell 复用时会重置颜色、宽度、位置和隐藏状态。
 
 ## JX 视觉迁移配置
 

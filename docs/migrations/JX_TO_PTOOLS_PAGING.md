@@ -81,6 +81,28 @@ let item = PTSegmentItem.title(
 `PTSegmentedView.onBadgeRemoved` 通知业务，业务更新稳定 ID 对应的数组后重新 `apply(items:)`。
 旧 `PTSegmentBadge` 仍可用，但只是兼容桥接，不再继续扩展第二套角标逻辑。
 
+## Item Separator 迁移
+
+分隔线现在由 `PTSegmentStyle.itemSeparatorStyle` 统一管理。它只负责 Cell 边缘装饰，不改变 Item 测量、间距、Indicator 或分页状态。
+新代码可以关闭旧的默认分隔线，或使用只显示在 Item 之间的语义化配置：
+
+```swift
+var style = PTSegmentStyle()
+style.itemSeparatorStyle = .line(
+    .init(
+        color: .separator,
+        thickness: 1 / UIScreen.main.scale,
+        topInset: 10,
+        bottomInset: 10,
+        placement: .leading,
+        visibility: .betweenItems
+    )
+)
+segmentedView.style = style
+```
+
+`placement` 使用 `.leading` / `.trailing`，可直接适配 RTL；`.none` 用于完全关闭分隔线，`.legacyDefault` 用于保持 5.x 旧视觉。
+
 官方 JX 组件仍有一个需要在迁移时明确处理的手势边界：当横向分页容器持续参与手势识别时，列表 Cell 的侧滑操作可能失效（见 [JXSegmentedView Issue #303](https://github.com/pujiaxin33/JXSegmentedView/issues/303)）。PTools 默认只允许外层、当前内层和分页 ScrollView 的必要协作，不把无关 Pan 手势全部设为 simultaneous；需要列表侧滑时应保持 `isListHorizontalScrollEnabled = false`，或只在宿主确认不会与 Cell 手势冲突时打开更宽松的手势策略。
 
 对应旧业务的完整示例见 [YDShipOrder PTools Paging 教程](YD_SHIP_ORDER_PTOOLS_PAGING_TUTORIAL.md)。

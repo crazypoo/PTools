@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Example/validate_demo_coverage.py
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T13:28:00+08:00 -->
+Source revision: e0490984d243f6f5c7cb3f92c5994bd9777a95e0
+Generated at: 2026-09-29T17:04:26+08:00 -->
 # PTools Demo Coverage
 
-- Version: `5.57.3`
+- Version: `5.57.4`
 - Modules: `225`
 - Factory: `@MainActor registry + compatibility detail host fallback`
 

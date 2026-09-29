@@ -673,6 +673,7 @@ modules:
   demos:
     - "navigation.segment"
     - "navigation.segment-paging-regression"
+    - "navigation.segment-item-separator"
 -
   module_id: "poo-tools-share"
   coverage: "runnable"
