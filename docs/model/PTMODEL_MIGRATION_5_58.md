@@ -23,5 +23,6 @@ let payload = try profile.pt.jsonData()
 ## 当前不迁移的内容
 
 `@PTModel` / `@PTSubclass` 宏、SmartCodable wrapper parity、KakaJSON dynamic model、
-Network canonical decoder、streaming 和 Fast Path benchmark 按计划的后续 5.58.x/5.59.x
-阶段实施。
+Network 旧 request API 全量迁移、streaming 和 Fast Path benchmark 仍按计划的后续
+5.58.x/5.59.x 阶段实施。5.58.0 已提供独立的 `PTNetworkResponsePayload` 和
+`PTNetworkResponseDecoder` 作为新代码的类型化适配入口。

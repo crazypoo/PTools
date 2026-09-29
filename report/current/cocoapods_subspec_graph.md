@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
-Generated at: 2026-09-29T15:15:47Z
+Source revision: e245c1361852ddf8b0552564fc74196f6b45325c
+Generated at: 2026-09-29T17:02:08Z
 -->
 
 # CocoaPods Subspec Graph
@@ -98,7 +98,7 @@ Generated at: 2026-09-29T15:15:47Z
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |
 | `NetWork` | `PooTools/Network` | — | — | — | — |
-| `Network` | `PooTools/Core`, `PooTools/Loading` | `Alamofire` | `NetWork` | — | — |
+| `Network` | `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore` | `Alamofire` | `NetWork` | — | — |
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |

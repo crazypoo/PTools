@@ -12,14 +12,17 @@ import Foundation
 // English: Preserve JSON shape without exposing Foundation containers or dynamic dictionaries.
 // Español: Conserva la forma JSON sin exponer contenedores de Foundation ni diccionarios dinámicos.
 // 中文：保留 JSON 结构，同时不暴露 Foundation 容器或动态字典。
-public enum PTJSONValue: Sendable, Equatable, Codable {
+// English: ModelCore owns the canonical PTJSONValue when the unified CocoaPods target is present.
+// Español: ModelCore posee el PTJSONValue canónico cuando está presente el target unificado de CocoaPods.
+// 中文：统一 CocoaPods target 存在时，由 ModelCore 提供唯一的 PTJSONValue。
+public enum PTCoreJSONValue: Sendable, Equatable, Codable {
     case null
     case bool(Bool)
     case integer(Int64)
     case number(Double)
     case string(String)
-    case array([PTJSONValue])
-    case object([String: PTJSONValue])
+    case array([PTCoreJSONValue])
+    case object([String: PTCoreJSONValue])
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -33,13 +36,13 @@ public enum PTJSONValue: Sendable, Equatable, Codable {
             self = .number(value)
         } else if let value = try? container.decode(String.self) {
             self = .string(value)
-        } else if let value = try? container.decode([PTJSONValue].self) {
+        } else if let value = try? container.decode([PTCoreJSONValue].self) {
             self = .array(value)
-        } else if let value = try? container.decode([String: PTJSONValue].self) {
+        } else if let value = try? container.decode([String: PTCoreJSONValue].self) {
             self = .object(value)
         } else {
             throw DecodingError.typeMismatch(
-                PTJSONValue.self,
+                PTCoreJSONValue.self,
                 DecodingError.Context(codingPath: decoder.codingPath,
                                       debugDescription: "Unsupported JSON value")
             )
@@ -66,3 +69,7 @@ public enum PTJSONValue: Sendable, Equatable, Codable {
         }
     }
 }
+
+#if !POOTOOLS_MODEL_CORE
+public typealias PTJSONValue = PTCoreJSONValue
+#endif

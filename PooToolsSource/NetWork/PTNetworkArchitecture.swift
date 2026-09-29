@@ -135,6 +135,13 @@ public struct PTNetworkResponse: Sendable {
         self.headers = headers
         self.data = data
     }
+
+    public var payload: PTNetworkResponsePayload? {
+        guard let data else { return nil }
+        return PTNetworkResponsePayload(url: request.url, data: data,
+                                        metadata: PTResponseMetadata(statusCode: statusCode,
+                                                                      headers: headers))
+    }
 }
 
 // English: A refresh provider is the only authentication capability the transport layer needs to know.
@@ -199,5 +206,14 @@ public actor PTNetworkExecutor {
         } catch {
             throw PTNetworkError.typed(from: error)
         }
+    }
+
+    public func execute<Output: Sendable>(_ request: PTNetworkRequest,
+                                          decoder: PTNetworkResponseDecoder<Output>) async throws -> (PTNetworkResponse, Output) {
+        let response = try await execute(request)
+        guard let payload = response.payload else {
+            throw PTNetworkDecodeError.emptyPayload
+        }
+        return (response, try decoder.decode(payload))
     }
 }

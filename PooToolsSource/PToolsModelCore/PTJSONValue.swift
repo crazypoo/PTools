@@ -12,7 +12,7 @@ public struct PTJSONNumber: Sendable, Hashable, Codable, Equatable {
     public let rawRepresentation: String
 
     public init(_ rawRepresentation: String) throws {
-        guard !rawRepresentation.isEmpty else {
+        guard Self.isValidJSONNumber(rawRepresentation) else {
             throw PTModelError.invalidJSON("Empty number")
         }
         self.rawRepresentation = rawRepresentation
@@ -42,6 +42,33 @@ public struct PTJSONNumber: Sendable, Hashable, Codable, Equatable {
         }
         var container = encoder.singleValueContainer()
         try container.encode(decimalValue)
+    }
+
+    private static func isValidJSONNumber(_ value: String) -> Bool {
+        let bytes = Array(value.utf8)
+        guard !bytes.isEmpty else { return false }
+        var index = 0
+        if bytes[index] == 0x2D { index += 1 }
+        guard index < bytes.count else { return false }
+        if bytes[index] == 0x30 {
+            index += 1
+            if index < bytes.count, (0x30...0x39).contains(bytes[index]) { return false }
+        } else {
+            guard index < bytes.count, (0x31...0x39).contains(bytes[index]) else { return false }
+            while index < bytes.count, (0x30...0x39).contains(bytes[index]) { index += 1 }
+        }
+        if index < bytes.count, bytes[index] == 0x2E {
+            index += 1
+            guard index < bytes.count, (0x30...0x39).contains(bytes[index]) else { return false }
+            while index < bytes.count, (0x30...0x39).contains(bytes[index]) { index += 1 }
+        }
+        if index < bytes.count, bytes[index] == 0x65 || bytes[index] == 0x45 {
+            index += 1
+            if index < bytes.count, bytes[index] == 0x2B || bytes[index] == 0x2D { index += 1 }
+            guard index < bytes.count, (0x30...0x39).contains(bytes[index]) else { return false }
+            while index < bytes.count, (0x30...0x39).contains(bytes[index]) { index += 1 }
+        }
+        return index == bytes.count
     }
 }
 
@@ -146,13 +173,13 @@ public enum PTJSONValue: Sendable, Equatable, Hashable, Codable {
 }
 
 private struct PTJSONParser {
-    private let bytes: [UInt8]
+    private let data: Data
     private var index: Int = 0
     private let duplicateKeyPolicy: PTDuplicateKeyPolicy
     private let limits: PTModelLimits
 
     init(data: Data, duplicateKeyPolicy: PTDuplicateKeyPolicy, limits: PTModelLimits) {
-        bytes = Array(data)
+        self.data = data
         self.duplicateKeyPolicy = duplicateKeyPolicy
         self.limits = limits
     }
@@ -162,7 +189,7 @@ private struct PTJSONParser {
         parser.skipWhitespace()
         let value = try parser.parseValue(depth: 0)
         parser.skipWhitespace()
-        guard parser.index == parser.bytes.count else {
+        guard parser.index == parser.data.count else {
             throw PTModelError.invalidJSON("Trailing characters at byte \(parser.index)")
         }
         return value
@@ -204,6 +231,9 @@ private struct PTJSONParser {
             return .array(values)
         }
         while true {
+            guard values.count < limits.maxCollectionCount else {
+                throw PTModelError.collectionLimitExceeded
+            }
             values.append(try parseValue(depth: depth))
             skipWhitespace()
             if currentByte == 0x5D {
@@ -218,12 +248,17 @@ private struct PTJSONParser {
         try consume(0x7B)
         skipWhitespace()
         var values: [String: PTJSONValue] = [:]
+        var keyCount = 0
         if currentByte == 0x7D {
             index += 1
             return .object(values)
         }
         while true {
             guard currentByte == 0x22 else { throw PTModelError.invalidJSON("Object key must be a string") }
+            guard keyCount < limits.maxObjectKeyCount else {
+                throw PTModelError.objectKeyLimitExceeded
+            }
+            keyCount += 1
             let key = try parseString()
             skipWhitespace()
             try consume(0x3A)
@@ -272,8 +307,7 @@ private struct PTJSONParser {
                 case 0x72: output.append(0x0D)
                 case 0x74: output.append(0x09)
                 case 0x75:
-                    let scalar = try parseUnicodeScalar()
-                    output.append(contentsOf: String(scalar).utf8)
+                    output.append(contentsOf: try parseUnicodeEscape().utf8)
                 default:
                     throw PTModelError.invalidJSON("Unknown escape")
                 }
@@ -282,20 +316,45 @@ private struct PTJSONParser {
             default:
                 output.append(byte)
             }
+            guard output.count <= limits.maxStringBytes else {
+                throw PTModelError.stringLimitExceeded
+            }
         }
         throw PTModelError.invalidJSON("Unterminated string")
     }
 
-    private mutating func parseUnicodeScalar() throws -> UnicodeScalar {
-        guard index + 4 <= bytes.count else { throw PTModelError.invalidJSON("Incomplete unicode escape") }
-        var value: UInt32 = 0
+    private mutating func parseUnicodeEscape() throws -> String {
+        let first = try parseUnicodeCodeUnit()
+        if (0xD800...0xDBFF).contains(first) {
+            guard index + 2 <= data.count, data[index] == 0x5C, data[index + 1] == 0x75 else {
+                throw PTModelError.invalidJSON("High surrogate is missing its pair")
+            }
+            index += 2
+            let second = try parseUnicodeCodeUnit()
+            guard (0xDC00...0xDFFF).contains(second) else {
+                throw PTModelError.invalidJSON("Invalid low surrogate")
+            }
+            let scalarValue = 0x10000 + ((UInt32(first) - 0xD800) << 10) + (UInt32(second) - 0xDC00)
+            guard let scalar = UnicodeScalar(scalarValue) else {
+                throw PTModelError.invalidJSON("Invalid unicode scalar")
+            }
+            return String(scalar)
+        }
+        guard !(0xDC00...0xDFFF).contains(first), let scalar = UnicodeScalar(UInt32(first)) else {
+            throw PTModelError.invalidJSON("Invalid unicode scalar")
+        }
+        return String(scalar)
+    }
+
+    private mutating func parseUnicodeCodeUnit() throws -> UInt16 {
+        guard index + 4 <= data.count else { throw PTModelError.invalidJSON("Incomplete unicode escape") }
+        var value: UInt16 = 0
         for _ in 0..<4 {
-            guard let digit = hexValue(bytes[index]) else { throw PTModelError.invalidJSON("Invalid unicode escape") }
-            value = value * 16 + UInt32(digit)
+            guard let digit = hexValue(data[index]) else { throw PTModelError.invalidJSON("Invalid unicode escape") }
+            value = value * 16 + UInt16(digit)
             index += 1
         }
-        guard let scalar = UnicodeScalar(value) else { throw PTModelError.invalidJSON("Invalid unicode scalar") }
-        return scalar
+        return value
     }
 
     private mutating func parseNumber() throws -> PTJSONNumber {
@@ -325,7 +384,13 @@ private struct PTJSONParser {
             }
             while let byte = currentByte, (0x30...0x39).contains(byte) { index += 1 }
         }
-        let raw = String(decoding: bytes[start..<index], as: UTF8.self)
+        let digitCount = data[start..<index].reduce(into: 0) { count, byte in
+            if (0x30...0x39).contains(byte) { count += 1 }
+        }
+        guard digitCount <= limits.maxNumberDigits else {
+            throw PTModelError.numberDigitLimitExceeded
+        }
+        let raw = String(decoding: data[start..<index], as: UTF8.self)
         return try PTJSONNumber(raw)
     }
 
@@ -335,9 +400,9 @@ private struct PTJSONParser {
     }
 
     private mutating func consumeLiteral(_ literal: String) throws {
-        let literalBytes = Array(literal.utf8)
-        guard index + literalBytes.count <= bytes.count,
-              Array(bytes[index..<(index + literalBytes.count)]) == literalBytes else {
+        let literalBytes = Data(literal.utf8)
+        guard index + literalBytes.count <= data.count,
+              data[index..<(index + literalBytes.count)] == literalBytes else {
             throw PTModelError.invalidJSON("Invalid literal")
         }
         index += literalBytes.count
@@ -350,8 +415,8 @@ private struct PTJSONParser {
     }
 
     private var currentByte: UInt8? {
-        guard index < bytes.count else { return nil }
-        return bytes[index]
+        guard index < data.count else { return nil }
+        return data[index]
     }
 
     private func hexValue(_ byte: UInt8) -> UInt8? {
@@ -449,19 +514,21 @@ enum PTFoundationJSONBridge {
         guard depth <= limits.maxDepth else { throw PTModelError.depthLimitExceeded }
         if object is NSNull { return .null }
         if let value = object as? PTJSONValue { return value }
-        if let value = object as? String { return .string(value) }
-        if let value = object as? NSString { return .string(String(value)) }
-        if let value = object as? Bool { return .bool(value) }
+        if let value = object as? String { return try string(value, limits: limits) }
+        if let value = object as? NSString { return try string(String(value), limits: limits) }
+        // English: Check the exact Swift Bool type before NSNumber bridging, because NSNumber(1) can cast to Bool on Apple platforms.
+        // Español: Comprueba el tipo Swift Bool exacto antes del puente NSNumber, porque NSNumber(1) puede convertirse a Bool en Apple.
+        // 中文：先检查确切的 Swift Bool 类型，避免 Apple 平台上 NSNumber(1) 被桥接成 Bool。
+        if type(of: object) == Bool.self, let value = object as? Bool { return .bool(value) }
+        if let value = object as? NSDecimalNumber {
+            return .number(try PTJSONNumber(value.stringValue))
+        }
         if let value = object as? NSNumber {
-            let type = String(cString: value.objCType)
-            if type == "c" { return .bool(value.boolValue) }
+            if CFGetTypeID(value) == CFBooleanGetTypeID() { return .bool(value.boolValue) }
             return .number(try PTJSONNumber(value.stringValue))
         }
         if let value = object as? Decimal {
             return .number(try PTJSONNumber(NSDecimalNumber(decimal: value).stringValue))
-        }
-        if let value = object as? NSDecimalNumber {
-            return .number(try PTJSONNumber(value.stringValue))
         }
         if let value = object as? URL { return .string(value.absoluteString) }
         if let value = object as? NSURL { return .string(value.absoluteString ?? "") }
@@ -472,31 +539,45 @@ enum PTFoundationJSONBridge {
             return .string(value.base64EncodedString())
         }
         if let value = object as? [String: Any] {
+            guard value.count <= limits.maxObjectKeyCount else { throw PTModelError.objectKeyLimitExceeded }
             var result: [String: PTJSONValue] = [:]
             for (key, nested) in value {
+                guard Data(key.utf8).count <= limits.maxStringBytes else { throw PTModelError.stringLimitExceeded }
                 result[key] = try self.value(from: nested, depth: depth + 1, limits: limits)
             }
             return .object(result)
         }
         if let value = object as? [Any] {
+            guard value.count <= limits.maxCollectionCount else { throw PTModelError.collectionLimitExceeded }
             return .array(try value.map { try self.value(from: $0, depth: depth + 1, limits: limits) })
         }
         if let value = object as? NSDictionary {
+            guard value.count <= limits.maxObjectKeyCount else { throw PTModelError.objectKeyLimitExceeded }
             var result: [String: PTJSONValue] = [:]
             for (key, nested) in value {
                 guard let key = key as? String else {
                     throw PTModelError.conversionFailed("Dictionary key is not String")
                 }
+                guard Data(key.utf8).count <= limits.maxStringBytes else { throw PTModelError.stringLimitExceeded }
                 result[key] = try self.value(from: nested, depth: depth + 1, limits: limits)
             }
             return .object(result)
         }
         if let value = object as? NSArray {
+            guard value.count <= limits.maxCollectionCount else { throw PTModelError.collectionLimitExceeded }
             return .array(try value.map { try self.value(from: $0, depth: depth + 1, limits: limits) })
         }
         if let value = object as? NSSet {
+            guard value.count <= limits.maxCollectionCount else { throw PTModelError.collectionLimitExceeded }
             return .array(try value.allObjects.map { try self.value(from: $0, depth: depth + 1, limits: limits) })
         }
         throw PTModelError.unsupportedSource(String(reflecting: type(of: object)))
+    }
+
+    private static func string(_ value: String, limits: PTModelLimits) throws -> PTJSONValue {
+        guard Data(value.utf8).count <= limits.maxStringBytes else {
+            throw PTModelError.stringLimitExceeded
+        }
+        return .string(value)
     }
 }

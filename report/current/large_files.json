@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
-  "generated_at": "2026-09-29T15:12:37Z",
+  "source_revision": "e245c1361852ddf8b0552564fc74196f6b45325c",
+  "generated_at": "2026-09-29T17:02:13Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3901,7 +3901,12 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
-      "lines": 203,
+      "lines": 219,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/PTNetworkModelBridge.swift",
+      "lines": 141,
       "classification": "ok"
     },
     {
@@ -4036,7 +4041,7 @@
     },
     {
       "path": "PooToolsSource/PToolsCore/PTCoreCodable.swift",
-      "lines": 68,
+      "lines": 75,
       "classification": "ok"
     },
     {
@@ -4290,18 +4295,28 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsModelCore/PTJSONByteSink.swift",
+      "lines": 43,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsModelCore/PTJSONValue.swift",
-      "lines": 502,
+      "lines": 583,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
-      "lines": 234,
+      "lines": 520,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelSemantics.swift",
+      "lines": 215,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
-      "lines": 239,
+      "lines": 350,
       "classification": "ok"
     },
     {

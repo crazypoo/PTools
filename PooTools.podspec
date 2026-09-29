@@ -383,6 +383,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Network' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/ModelCore'
         subspec.dependency 'PooTools/Loading'
         subspec.dependency 'Alamofire'
         subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}'

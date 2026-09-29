@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
-  "generated_at": "2026-09-29T15:06:39Z",
+  "source_revision": "e245c1361852ddf8b0552564fc74196f6b45325c",
+  "generated_at": "2026-09-29T16:56:54Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -436,11 +436,13 @@
       "spm": [
         "Core",
         "Loading",
+        "ModelCore",
         "PToolsCore"
       ],
       "cocoapods": [
         "Core",
-        "Loading"
+        "Loading",
+        "ModelCore"
       ]
     },
     {
@@ -1422,5 +1424,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "13c85a354c1e476ed802c9ddcc5851bf9e3769710d806e5046680f9cea5a9672"
+  "fingerprint": "8e8d510ca15f3eef501f48830a00d7059d5c9dabe3e62d66a8773228d6d2ff22"
 }

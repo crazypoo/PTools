@@ -44,6 +44,11 @@ public enum PTDictionaryKeyStrategy: String, Sendable, Codable {
     case keyValuePairs
 }
 
+public enum PTSetDuplicatePolicy: String, Sendable, Codable {
+    case keepFirst
+    case reject
+}
+
 public enum PTDateDecodingStrategy: Sendable, Codable, Equatable {
     case deferredToDate
     case secondsSince1970
@@ -61,10 +66,48 @@ public enum PTDateEncodingStrategy: Sendable, Codable, Equatable {
 public struct PTModelLimits: Sendable, Codable, Equatable {
     public var maxInputBytes: Int
     public var maxDepth: Int
+    public var maxStringBytes: Int
+    public var maxCollectionCount: Int
+    public var maxObjectKeyCount: Int
+    public var maxNumberDigits: Int
 
-    public init(maxInputBytes: Int = 16 * 1024 * 1024, maxDepth: Int = 128) {
+    // English: Limits protect the parser from oversized values before they reach application models.
+    // Español: Los límites protegen el analizador de valores excesivos antes de llegar a los modelos.
+    // 中文：这些限制在数据进入业务模型前保护解析器，避免超大输入消耗资源。
+    public init(maxInputBytes: Int = 16 * 1024 * 1024,
+                maxDepth: Int = 128,
+                maxStringBytes: Int = 4 * 1024 * 1024,
+                maxCollectionCount: Int = 100_000,
+                maxObjectKeyCount: Int = 100_000,
+                maxNumberDigits: Int = 1_000) {
         self.maxInputBytes = max(1, maxInputBytes)
         self.maxDepth = max(1, maxDepth)
+        self.maxStringBytes = max(1, maxStringBytes)
+        self.maxCollectionCount = max(1, maxCollectionCount)
+        self.maxObjectKeyCount = max(1, maxObjectKeyCount)
+        self.maxNumberDigits = max(1, maxNumberDigits)
+    }
+
+    // English: Decode older persisted limit values with safe defaults for the new resource guards.
+    // Español: Decodifica valores de límites persistidos antiguos usando valores seguros para las nuevas protecciones.
+    // 中文：读取旧版持久化限制配置时，为新增资源保护字段使用安全默认值。
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(maxInputBytes: try container.decodeIfPresent(Int.self, forKey: .maxInputBytes) ?? 16 * 1024 * 1024,
+                  maxDepth: try container.decodeIfPresent(Int.self, forKey: .maxDepth) ?? 128,
+                  maxStringBytes: try container.decodeIfPresent(Int.self, forKey: .maxStringBytes) ?? 4 * 1024 * 1024,
+                  maxCollectionCount: try container.decodeIfPresent(Int.self, forKey: .maxCollectionCount) ?? 100_000,
+                  maxObjectKeyCount: try container.decodeIfPresent(Int.self, forKey: .maxObjectKeyCount) ?? 100_000,
+                  maxNumberDigits: try container.decodeIfPresent(Int.self, forKey: .maxNumberDigits) ?? 1_000)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case maxInputBytes
+        case maxDepth
+        case maxStringBytes
+        case maxCollectionCount
+        case maxObjectKeyCount
+        case maxNumberDigits
     }
 }
 
@@ -86,6 +129,14 @@ public enum PTModelError: Error, LocalizedError, Sendable, Equatable {
     case duplicateKey(String)
     case depthLimitExceeded
     case inputTooLarge
+    case stringLimitExceeded
+    case collectionLimitExceeded
+    case objectKeyLimitExceeded
+    case numberDigitLimitExceeded
+    case invalidJSONPath(String)
+    case pathTypeMismatch(String)
+    case requiredValue(String)
+    case invalidCollectionElement(String)
     case rootIsNotObject
     case rootIsNotArray
     case conversionFailed(String)
@@ -113,6 +164,22 @@ public enum PTModelError: Error, LocalizedError, Sendable, Equatable {
             return "The JSON nesting depth exceeds the configured limit."
         case .inputTooLarge:
             return "The model input exceeds the configured size limit."
+        case .stringLimitExceeded:
+            return "A JSON string exceeds the configured size limit."
+        case .collectionLimitExceeded:
+            return "A JSON collection exceeds the configured item limit."
+        case .objectKeyLimitExceeded:
+            return "A JSON object exceeds the configured key limit."
+        case .numberDigitLimitExceeded:
+            return "A JSON number exceeds the configured digit limit."
+        case .invalidJSONPath(let path):
+            return "Invalid JSON path: \(path)"
+        case .pathTypeMismatch(let path):
+            return "JSON path cannot traverse the value at \(path)."
+        case .requiredValue(let path):
+            return "Required value is missing at \(path)."
+        case .invalidCollectionElement(let path):
+            return "Invalid collection element at \(path)."
         case .rootIsNotObject:
             return "The JSON root is not an object."
         case .rootIsNotArray:
@@ -174,6 +241,12 @@ public struct PTModelContext: Sendable {
 public typealias PTDecodingContext = PTModelContext
 public typealias PTEncodingContext = PTModelContext
 
+// English: Separate names make decoder and encoder session ownership explicit without duplicating the value-type implementation.
+// Español: Los nombres separados hacen explícita la propiedad de las sesiones sin duplicar la implementación de tipo valor.
+// 中文：通过分开的名称明确 decoder/encoder session 的归属，同时复用同一个值类型实现。
+public typealias PTDecodingSession = PTModelCodingSession
+public typealias PTEncodingSession = PTModelCodingSession
+
 public enum PTPresence<Value: Codable & Sendable>: Sendable, Codable, Equatable where Value: Equatable {
     case missing
     case null
@@ -210,6 +283,44 @@ public enum PTPresence<Value: Codable & Sendable>: Sendable, Codable, Equatable 
         case .value(let value):
             try container.encode(value)
         }
+    }
+}
+
+public extension KeyedEncodingContainer {
+    // English: Missing fields are omitted; null fields remain explicit in keyed model encoding.
+    // Español: Los campos ausentes se omiten y los nulos permanecen explícitos en modelos con claves.
+    // 中文：键控模型编码时 missing 会省略，null 会保留为显式 null。
+    mutating func encode<Value: Codable & Sendable>(_ value: PTPresence<Value>, forKey key: Key) throws {
+        switch value {
+        case .missing:
+            return
+        case .null:
+            try encodeNil(forKey: key)
+        case .value(let value):
+            try encode(value, forKey: key)
+        }
+    }
+
+    // English: The nil strategy is explicit at the field boundary so legacy Encodable models stay source-compatible.
+    // Español: La estrategia nil es explícita en el límite del campo y mantiene compatibles los modelos heredados.
+    // 中文：在字段边界显式传入 nil 策略，保持旧 Encodable 模型的源码兼容。
+    mutating func encode<Value: Encodable>(_ value: Value?, forKey key: Key, nilStrategy: PTNilEncodingStrategy) throws {
+        guard let value else {
+            if nilStrategy == .null { try encodeNil(forKey: key) }
+            return
+        }
+        try encode(value, forKey: key)
+    }
+}
+
+public extension KeyedDecodingContainer {
+    // English: Keyed decoding distinguishes a missing key from an explicit JSON null.
+    // Español: La decodificación con claves distingue una clave ausente de un null JSON explícito.
+    // 中文：键控解码区分缺少字段和显式 JSON null。
+    func decodePresence<Value: Codable & Sendable>(_ type: Value.Type, forKey key: Key) throws -> PTPresence<Value> {
+        guard contains(key) else { return .missing }
+        if try decodeNil(forKey: key) { return .null }
+        return .value(try decode(Value.self, forKey: key))
     }
 }
 

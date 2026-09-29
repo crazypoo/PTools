@@ -692,7 +692,7 @@ let package = Package(
         // ==========================================
         // 核心中上层依赖模块
         // ==========================================
-        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),

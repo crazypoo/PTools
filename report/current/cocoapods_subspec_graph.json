@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "4a9dfe8a69da258e4f5c28799816ef2212bd4015",
-  "generated_at": "2026-09-29T15:15:47Z",
+  "source_revision": "e245c1361852ddf8b0552564fc74196f6b45325c",
+  "generated_at": "2026-09-29T17:02:08Z",
   "name": "PooTools",
   "version": "5.58.0",
   "platforms": {
@@ -1840,7 +1840,8 @@
       "short_name": "Network",
       "local_dependencies": [
         "PooTools/Core",
-        "PooTools/Loading"
+        "PooTools/Loading",
+        "PooTools/ModelCore"
       ],
       "third_party_dependencies": [
         "Alamofire"

@@ -9,6 +9,8 @@
 - 新增 Foundation-only 的 `PToolsModelCore` 与 `PToolsModel` SwiftPM 产品，以及 `PooTools/ModelCore`、`PooTools/Model` CocoaPods subspec。
 - 新增 `PTJSONValue` / `PTJSONNumber`，保留数字原始字面量，支持顶层标量、数组、对象、重复键策略和输入深度/大小限制。
 - 新增统一 `PTModelSource`、`PTModelDecoder`、`PTModelEncoder`、`PTPresence` 和类型化 `PTModelContext`，提供 JSON、Data、Foundation 容器和 Codable 双向转换入口。
+- 完成 77.5 Core Hardening：Missing / Null / Value、nil 策略辅助编码、重复键归一化、Bool/NSNumber 区分、Unicode surrogate pair、字符串/集合/对象键/数字位数限制、类型化路径、别名、字段状态、lossy 集合、空对象策略和独立 coding session。
+- 补齐可选根值、字典 key strategy、Set 确定性输出、Data/File ByteSink，以及 `PTNetworkResponsePayload` / `PTNetworkResponseDecoder` 的 `.ptModel`、`.smartCodable`、`.kakaJSON`、`.codable` 适配入口；旧 Network API 和第三方依赖保持兼容。
 - 提供 `Model.pt.model(from:)`、`Model.pt.models(from:)`、`model.pt.jsonData()`、`jsonString()`、`dictionary()` 和 `jsonArray()` 一行式兼容体验。
 - SmartCodable、SmartCodable/Inherit 和 KakaJSON 继续保留在旧 Core 兼容路径，本版本不删除第三方依赖，也不改变现有 `PTBaseModel` 公开 API。
 - 补充模型能力矩阵、Codable 互操作约定、迁移指南、回归测试和可复现基准清单。
