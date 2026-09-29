@@ -130,6 +130,16 @@ public class PTImageEditorConfig: NSObject {
             pri_tools = newValue
         }
     }
+
+    // English: Override the normal icon for each editing tool without subclassing the editor.
+    // Español: Permite reemplazar el icono normal de cada herramienta sin crear una subclase del editor.
+    // 中文：无需继承编辑器即可为每个编辑工具配置普通状态图标。
+    public var toolNormalImages: [PTImageEditorConfig.EditTool: UIImage] = [:]
+
+    // English: Override the selected icon for each editing tool; nil keeps the default selection behavior.
+    // Español: Permite reemplazar el icono seleccionado; nil conserva el comportamiento predeterminado.
+    // 中文：为每个编辑工具配置选中状态图标；nil 保留默认的选中行为。
+    public var toolSelectedImages: [PTImageEditorConfig.EditTool: UIImage] = [:]
     
     //MARK: Filter
     private var pri_filters: [PTHarBethFilter] = [.cigaussian,.hueBlend,.alphaBlend,.luminosityBlend,.zoomBlur,.vignette,.pixellated,.crosshatch,.polkadot,.posterize,.monochrome,.voronoioverlay,.monochromedilation,.motionblur,.meanblur,.gaussianblur,.bilateralblur,.mpsgaussian,.colormatrix4x4,.convolution3x3,.sharpen3x3,.sepia,.granularity,.comicstrip,.oilpainting,.sketch]

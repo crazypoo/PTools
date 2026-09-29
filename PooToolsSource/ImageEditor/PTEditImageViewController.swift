@@ -64,34 +64,42 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
     
     func toolModelsBase() -> [PTEditImageToolModel] {
-        let cellModels: [PTEditImageToolModel] = PTImageEditorConfig.share.tools.map { tool in
+        let config = PTImageEditorConfig.share
+        let cellModels: [PTEditImageToolModel] = config.tools.map { tool in
             let model = PTEditImageToolModel()
-            switch tool {
-            case .draw:
-                model.normalImage = UIImage(.hand.draw)
-                model.selectedImage = UIImage(.hand.drawFill)
-            case .clip:
-                model.normalImage = UIImage(.scissors)
-            case .textSticker:
-                model.normalImage = UIImage(.pencil)
-            case .mosaic:
-                model.normalImage = UIImage(.square.grid_2x2)
-                model.selectedImage = UIImage(.square.grid_2x2Fill)
-                
-            case .filter:
-                model.normalImage = UIImage(.line._3HorizontalDecreaseCircle)
-                model.selectedImage = UIImage(.line._3HorizontalDecreaseCircleFill)
-
-            case .adjust:
-                model.normalImage = UIImage(.ellipsis.rectangle)
-                model.selectedImage = UIImage(.ellipsis.rectangleFill)
-            case .imageSticker:
-                model.normalImage = UIImage(.photo.fill)
-            }
+            let defaultImages = defaultToolImages(for: tool)
+            model.normalImage = config.toolNormalImages[tool] ?? defaultImages.normal
+            model.selectedImage = config.toolSelectedImages[tool] ?? defaultImages.selected
             model.currentType = tool
             return model
         }
         return cellModels
+    }
+
+    // English: Keep built-in icons separate from caller overrides and apply one default rendering policy.
+    // Español: Separa los iconos integrados de las anulaciones del consumidor y aplica una sola política de renderizado.
+    // 中文：将内置图标与调用方覆盖配置分离，并统一应用默认渲染策略。
+    private func defaultToolImages(for tool: PTImageEditorConfig.EditTool) -> (normal: UIImage, selected: UIImage?) {
+        func tinted(_ image: UIImage) -> UIImage {
+            image.withTintColor(.white, renderingMode: .alwaysOriginal)
+        }
+
+        switch tool {
+        case .draw:
+            return (tinted(UIImage(.hand.draw)), tinted(UIImage(.hand.drawFill)))
+        case .clip:
+            return (tinted(UIImage(.scissors)), nil)
+        case .textSticker:
+            return (tinted(UIImage(.pencil)), nil)
+        case .mosaic:
+            return (tinted(UIImage(.square.grid_2x2)), tinted(UIImage(.square.grid_2x2Fill)))
+        case .filter:
+            return (tinted(UIImage(.line._3HorizontalDecreaseCircle)), tinted(UIImage(.line._3HorizontalDecreaseCircleFill)))
+        case .adjust:
+            return (tinted(UIImage(.ellipsis.rectangle)), tinted(UIImage(.ellipsis.rectangleFill)))
+        case .imageSticker:
+            return (tinted(UIImage(.photo.fill)), nil)
+        }
     }
     
     let toolCollectionHeight:CGFloat = 54
@@ -411,6 +419,10 @@ public class PTEditImageViewController: PTBaseViewController {
     public lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
+        // English: The editor calculates its own canvas inset for stable standalone centering.
+        // Español: El editor calcula su propio inset del lienzo para centrarlo de forma estable e independiente.
+        // 中文：编辑器自行计算画布 inset，保证独立使用时稳定居中。
+        view.contentInsetAdjustmentBehavior = .never
         view.minimumZoomScale = PTImageEditorConfig.share.minimumZoomScale
         view.maximumZoomScale = 3
         view.delegate = self
@@ -783,6 +795,7 @@ public class PTEditImageViewController: PTBaseViewController {
         lastContainerScrollSize = scrollViewSize
         lastContainerEditRect = editRect
         lastContainerAngle = currentClipStatus.angle
+        let shouldResetContentOffset = needsLayout
         shouldLayout = false
         let shouldResetZoom = isFirstSetContainerFrame
         isFirstSetContainerFrame = false
@@ -796,8 +809,7 @@ public class PTEditImageViewController: PTBaseViewController {
         let w = ratio * editSize.width * mainScrollView.zoomScale
         let h = ratio * editSize.height * mainScrollView.zoomScale
         
-        let y: CGFloat = max(0, (scrollViewSize.height - h) / 2)
-        containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: y, width: w, height: h)
+        containerView.frame = CGRect(origin: .zero, size: CGSize(width: w, height: h))
         mainScrollView.contentSize = containerView.frame.size
         if currentClipStatus.ratio?.isCircle == true {
             let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
@@ -824,8 +836,31 @@ public class PTEditImageViewController: PTBaseViewController {
         } else if editRect.width / editRect.height > 1 {
             mainScrollView.maximumZoomScale = h > 0 ? max(3, view.frame.height / h) : 3
         }
+        updateContainerCentering(resetContentOffset: shouldResetContentOffset)
         originalFrame = view.convert(containerView.frame, from: mainScrollView)
         isScrolling = false
+    }
+
+    // English: Center the zoomable canvas from the scroll view's visible bounds instead of shifting its frame.
+    // Español: Centra el lienzo ampliable según los límites visibles del scroll view, sin desplazar su frame.
+    // 中文：根据滚动视图可视区域居中可缩放画布，不再通过偏移 frame 实现居中。
+    private func updateContainerCentering(resetContentOffset: Bool = false) {
+        let viewportSize = mainScrollView.bounds.size
+        let contentSize = mainScrollView.contentSize
+        guard viewportSize.width > 0, viewportSize.height > 0,
+              contentSize.width > 0, contentSize.height > 0 else { return }
+
+        let insets = UIEdgeInsets(
+            top: max(0, (viewportSize.height - contentSize.height) / 2),
+            left: max(0, (viewportSize.width - contentSize.width) / 2),
+            bottom: max(0, (viewportSize.height - contentSize.height) / 2),
+            right: max(0, (viewportSize.width - contentSize.width) / 2)
+        )
+        if mainScrollView.contentInset != insets {
+            mainScrollView.contentInset = insets
+        }
+        guard resetContentOffset else { return }
+        mainScrollView.setContentOffset(CGPoint(x: -insets.left, y: -insets.top), animated: false)
     }
 
     func createToolsBar() {
@@ -1288,9 +1323,8 @@ extension PTEditImageViewController {
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        let offsetX = (scrollView.frame.width > scrollView.contentSize.width) ? (scrollView.frame.width - scrollView.contentSize.width) * 0.5 : 0
-        let offsetY = (scrollView.frame.height > scrollView.contentSize.height) ? (scrollView.frame.height - scrollView.contentSize.height) * 0.5 : 0
-        containerView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
+        guard scrollView == mainScrollView else { return }
+        updateContainerCentering()
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
