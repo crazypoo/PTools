@@ -78,7 +78,11 @@ run_gate() {
 
   end_time="$(date +%s)"
   duration=$((end_time - start_time))
-  failure_code="$(rg -o 'FAIL \[[A-Z0-9_]+\]' "$log_path" | head -1 | sed -E 's/.*\[([^]]+)\].*/\1/' || true)"
+  if command -v rg >/dev/null 2>&1; then
+    failure_code="$(rg -o 'FAIL \[[A-Z0-9_]+\]' "$log_path" | head -1 | sed -E 's/.*\[([^]]+)\].*/\1/' || true)"
+  else
+    failure_code="$(grep -Eo 'FAIL \[[A-Z0-9_]+\]' "$log_path" | head -1 | sed -E 's/.*\[([^]]+)\].*/\1/' || true)"
+  fi
   if [[ -z "$failure_code" ]]; then
     failure_code="$gate_id"_FAILURE
   fi
@@ -115,6 +119,9 @@ run_named_gate() {
       ;;
     docs)
       run_gate DOCS bash -c 'bash Scripts/validate_docs.sh && python3 Scripts/Docs/audit_docs.py --check'
+      ;;
+    example)
+      run_gate EXAMPLE python3 Scripts/Example/validate_demo_coverage.py --check
       ;;
     architecture)
       run_gate ARCHITECTURE bash -c 'bash Scripts/validate_build_entries.sh && bash Scripts/validate_quality_scans.sh && git diff --check'
@@ -189,7 +196,7 @@ require "fileutils"
 # 中文：汇总独立任务结果，不重复执行检查。
 
 report_dir, version_path = ARGV
-required = %w[VERSION DOCS ARCHITECTURE TESTS CONCURRENCY PODS XCODE RELEASE]
+required = %w[VERSION DOCS EXAMPLE ARCHITECTURE TESTS CONCURRENCY PODS XCODE RELEASE]
 results = Dir.glob(File.join(report_dir, "**", "*.json")).filter_map do |path|
   next if File.basename(path) == "quality-report.json"
   JSON.parse(File.read(path))
@@ -232,7 +239,7 @@ case "$gate" in
   all)
     export QUALITY_REPORT_DIR="$report_dir"
     overall_status=0
-    for gate_name in version docs architecture tests concurrency pods xcode release; do
+    for gate_name in version docs example architecture tests concurrency pods xcode release; do
       if ! "$0" "$gate_name"; then
         overall_status=1
       fi
@@ -253,11 +260,11 @@ case "$gate" in
       exit 1
     fi
     ;;
-  version|docs|architecture|tests|concurrency|pods|xcode|release)
+  version|docs|example|architecture|tests|concurrency|pods|xcode|release)
     run_named_gate "$gate"
     ;;
   *)
-    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|architecture|tests|concurrency|pods|xcode|release|all|summary]\n' >&2
+    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|example|architecture|tests|concurrency|pods|xcode|release|all|summary]\n' >&2
     exit 64
     ;;
 esac

@@ -7,6 +7,16 @@ scripts:
     category: audit
     owner: docs
     status: active
+  - id: example.demo_coverage
+    path: Scripts/Example/validate_demo_coverage.py
+    category: validation
+    owner: example
+    status: active
+  - id: docs.version_source_stability
+    path: Scripts/Docs/test_version_source_stability.py
+    category: test
+    owner: docs
+    status: active
   - id: repository.audit
     path: Scripts/Governance/audit_repository.py
     category: audit

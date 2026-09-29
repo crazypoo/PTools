@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
-Generated at: 2026-09-28T23:02:18+08:00 -->
+Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
+Generated at: 2026-09-29T00:51:56+08:00 -->
 # Document Inventory
 
 - Version: `5.57.0`
-- Records: `843`
+- Records: `844`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -843,6 +843,7 @@ Generated at: 2026-09-28T23:02:18+08:00 -->
 | report/current/spm_dependency_graph.md | GENERATED | en | GENERATED | KEEP |
 | report/data/DATA_ASSET_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/docs/DOCUMENT_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
+| report/example/DEMO_COVERAGE.md | GENERATED | en | GENERATED | KEEP |
 | report/repository/AUTOMATION_ASSET_MERGE_MANIFEST.md | GENERATED | en | GENERATED | KEEP |
 | report/repository/DATA_ASSET_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/repository/DUPLICATE_CANDIDATES.md | GENERATED | en | GENERATED | KEEP |

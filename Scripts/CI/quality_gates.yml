@@ -10,6 +10,9 @@ gates:
   - id: DOCS
     script: Scripts/Docs/audit_docs.py
     workflowJob: docs-governance
+  - id: EXAMPLE
+    script: Scripts/Example/validate_demo_coverage.py --check
+    workflowJob: example-governance
   - id: ARCHITECTURE
     script: Scripts/validate_quality_scans.sh
     workflowJob: architecture-governance

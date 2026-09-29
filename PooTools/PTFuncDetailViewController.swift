@@ -25,7 +25,65 @@ private let PTUploadFilePath: String = {
     return libraryURL.appendingPathComponent("UploadFile", isDirectory: true).path
 }()
 
+// English: The catalog detail host owns metadata and embeds the compatibility renderer only when needed.
+// Español: El host de detalle del catálogo gestiona los metadatos y solo incrusta el renderizador compatible cuando hace falta.
+// 中文：目录详情容器负责元数据，仅在需要时嵌入兼容渲染器。
 class PTFuncDetailViewController: PTBaseViewController {
+
+    private let descriptor: PTDemoDescriptor?
+    private let legacyRoute: String?
+    private var legacyController: PTLegacyDemoDetailViewController?
+
+    init(typeString: String!) {
+        let resolvedDescriptor = PTDemoRegistry.descriptor(forLegacyRoute: typeString)
+        descriptor = resolvedDescriptor
+        legacyRoute = resolvedDescriptor?.legacyRoute ?? typeString
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    init(descriptor: PTDemoDescriptor) {
+        self.descriptor = descriptor
+        legacyRoute = descriptor.legacyRoute
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        descriptor = nil
+        legacyRoute = nil
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = descriptor?.titleKey ?? legacyRoute
+
+        guard let legacyRoute, !legacyRoute.isEmpty else {
+            let metadataLabel = UILabel()
+            metadataLabel.text = descriptor?.moduleID
+            metadataLabel.textAlignment = .center
+            metadataLabel.numberOfLines = 0
+            view.addSubview(metadataLabel)
+            metadataLabel.snp.makeConstraints { make in
+                make.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            }
+            return
+        }
+
+        let legacyController = PTLegacyDemoDetailViewController(typeString: legacyRoute)
+        self.legacyController = legacyController
+        addChild(legacyController)
+        view.addSubview(legacyController.view)
+        legacyController.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        legacyController.didMove(toParent: self)
+    }
+}
+
+// English: Legacy renderer retained only for compatibility with the original Example routes.
+// Español: Renderizador heredado conservado solo para compatibilidad con las rutas originales del Example.
+// 中文：旧渲染器仅作为 Example 原有路由的兼容实现保留。
+private final class PTLegacyDemoDetailViewController: PTBaseViewController {
 
     var pickedPhoto: UIImage?
     var pickedVideoURL: URL?
@@ -40,26 +98,38 @@ class PTFuncDetailViewController: PTBaseViewController {
     }
     
     fileprivate var typeString:String!
+    private let descriptor: PTDemoDescriptor?
+    private var observationTask: Task<Void, Never>?
     
     var webServer: PTHTTPFilePortal?
     fileprivate var localNetwork:Bool = false
     var appNetWorkStatus:NetworkStatus? = .unknown
 
     init(typeString: String!) {
+        descriptor = nil
         super.init(nibName: nil, bundle: nil)
         self.typeString = typeString
     }
+
+    init(descriptor: PTDemoDescriptor) {
+        self.descriptor = descriptor
+        super.init(nibName: nil, bundle: nil)
+        self.typeString = descriptor.legacyRoute ?? descriptor.id.rawValue
+    }
     
     required init?(coder: NSCoder) {
+        descriptor = nil
         fatalError("init(coder:) has not been implemented")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        Task {
+        observationTask?.cancel()
+        observationTask = Task { [weak self] in
             // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
             for await currentStatus in PTNetWorkStatus.shared.statusStream {
+                guard let self else { return }
                 self.appNetWorkStatus = currentStatus
             }
         }
@@ -67,11 +137,17 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        observationTask?.cancel()
+        observationTask = nil
         Task { await webServer?.stop() }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let descriptor {
+            navigationItem.title = descriptor.titleKey
+        }
         
         switch typeString {
         case String.localNetWork:
@@ -1104,15 +1180,15 @@ class PTFuncDetailViewController: PTBaseViewController {
     }
 }
 
-extension PTFuncDetailViewController {
+extension PTLegacyDemoDetailViewController {
     func alert(title:String,message:String) {
         UIViewController.drop(title: title,subTitle: message)
     }
 }
 
-extension PTFuncDetailViewController : PHLivePhotoViewDelegate { }
+extension PTLegacyDemoDetailViewController : PHLivePhotoViewDelegate { }
 
-extension PTFuncDetailViewController : PTFlexibleSteppedProgressBarDelegate {
+extension PTLegacyDemoDetailViewController : PTFlexibleSteppedProgressBarDelegate {
     func progressBar(_ progressBar: PTFlexibleSteppedProgressBar,
                  didSelectItemAtIndex index: Int) {
         PTNSLogConsole("Index selected!")

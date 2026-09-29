@@ -1,7 +1,18 @@
 # PTools Example 页面与回归索引
 
 `PooTools-Example` 是一个可运行的模块展厅，不把每个功能复制成独立 App。本文件只维护当前
-页面入口、模块覆盖和回归重点；一次构建或人工测试的结果写入 `report/`。
+页面入口、Catalog Registry、模块覆盖和回归重点；一次构建或人工测试的结果写入 `report/`。
+
+## Demo Catalog 2.0
+
+Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescriptor` 提供，展示标题不再承担路由或 Diffable 身份。`Data/demo-registry.yml` 记录 canonical module 的覆盖状态，`Scripts/Example/validate_demo_coverage.py` 生成 `report/example/DEMO_COVERAGE.*`。
+
+新 Demo 的最小流程：
+
+1. 在 `PTDemoRegistry.descriptors` 增加稳定 ID、模块 ID、需求和展示方式。
+2. 如需独立控制器，在 `PTDemoFactoryRegistry` 注册 `@MainActor` factory；旧标题入口只作为兼容路由。
+3. 在 `Data/demo-registry.yml` 给 canonical module 登记 coverage，不为兼容 alias 重复创建 Demo。
+4. 执行 `python3 Scripts/Example/validate_demo_coverage.py --check`，确认没有重复 ID、未知模块或缺失覆盖。
 
 ## 示例工程入口
 
@@ -10,7 +21,8 @@
 | Scene | `PooTools/SceneDelegate.swift` | 创建 `PTSideMenuControl`、TabBar 和菜单页 |
 | TabBar | `PooTools/PTTestTabbarViewController.swift` | 创建多个 `PTBaseNavControl`，验证 TabBar 和导航栏 |
 | 主页面 | `PooTools/PTFuncNameViewController.swift` | 以 `PTCollectionView` 展示功能分组 |
-| 详情页 | `PooTools/PTFuncDetailViewController.swift` | 按示例名称加载具体功能页面 |
+| Catalog / Coordinator | `PooTools/PTDemoCatalog.swift` | Stable ID、元数据、Factory 和兼容路由 |
+| 详情页 | `PooTools/PTFuncDetailViewController.swift` | 通过 Descriptor 加载示例；旧字符串入口仅用于兼容 |
 | 菜单页 | `PooTools/PTSideController.swift` | 验证 SideMenu、LocalConsole、Inspector 和 Sheet |
 
 ## 逻辑模块页面
@@ -108,6 +120,7 @@ console.isVisiable = true
 - [ ] Language、DarkMode、Reduce Motion、Reduce Transparency 和 Dynamic Type 即时生效。
 - [ ] LocalConsole、Inspector 和 PTInstruments 在多 Scene 显示到发起它们的窗口。
 - [ ] Release 不输出 token、Cookie、Authorization 或完整响应体。
+- [ ] Demo Coverage 报告为 `Missing = 0`，硬件和 Extension 需求在入口处可见。
 
 ## 宿主边界
 

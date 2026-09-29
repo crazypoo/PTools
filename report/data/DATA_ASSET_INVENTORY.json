@@ -69,6 +69,15 @@
       "format": "yml",
       "generated": false,
       "kind": "SOURCE_OF_TRUTH",
+      "path": "Data/demo-registry.yml",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "yml",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
       "path": "Data/registry.yml",
       "source_of_truth": true
     },
@@ -1986,6 +1995,15 @@
       "format": "json",
       "generated": true,
       "kind": "REPORT",
+      "path": "report/example/DEMO_COVERAGE.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
       "path": "report/repository/DATA_ASSET_INVENTORY.json",
       "source_of_truth": false
     },
@@ -2035,8 +2053,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-09-28T23:02:18+08:00",
+  "generated_at": "2026-09-29T00:51:56+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "67a31c52f68a6dcecd85b90fa713c27cc03617cd",
+  "source_revision": "2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90",
   "version": "5.57.0"
 }

@@ -23,3 +23,10 @@
   consumers:
     - "docs/_meta/modules.yml"
     - "report/docs/DOCUMENT_INVENTORY.json"
+-
+  source: "VERSION"
+  consumers:
+    - "Scripts/Docs/audit_docs.py"
+    - "report/docs/DOCUMENT_INVENTORY.json"
+    - "docs/modules/**/README.*.md"
+    - "docs/index/*.md"

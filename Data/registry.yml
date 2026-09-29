@@ -12,6 +12,11 @@ assets:
     kind: source_of_truth
     generator: Scripts/Docs/audit_docs.py
     owner: docs
+  - id: example.demo_registry
+    path: Data/demo-registry.yml
+    kind: source_of_truth
+    generator: Scripts/Example/validate_demo_coverage.py
+    owner: example
   - id: package.dependencies
     path: Package.resolved
     kind: source_of_truth

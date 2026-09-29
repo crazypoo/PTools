@@ -104,7 +104,7 @@ class YDSWhiteDecorationView: UICollectionReusableView {
     public static let ID = "YDSWhiteDecorationView"
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = DynamicColor.randomColor
+        backgroundColor = .secondarySystemBackground
         Task { @MainActor in
             self.viewCornerRectCorner(radius: 8,corner: [.allCorners])
         }
@@ -123,14 +123,13 @@ class PTFuncNameViewController: PTBaseViewController {
     }
 
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-//        return .solid(.random)
-        return .gradient(type: .TopToBottom, colors: [DynamicColor.randomColor,DynamicColor.randomColor])
+        return .solid(.systemBackground)
     }
 
     var cacheSize = ""
     
     lazy var currentSelectedLanguage : String = {
-        let string = LanguageKey(rawValue: PTLanguage.share.language)!.desc
+        let string = LanguageKey(rawValue: PTLanguage.share.language)?.desc ?? LanguageKey.ChineseHans.desc
         return string
     }()
 
@@ -167,6 +166,10 @@ class PTFuncNameViewController: PTBaseViewController {
     }
 
     fileprivate var vcEmpty:Bool = false
+    // English: Keep catalog filtering state separate from the stable Demo identity.
+    // Español: Mantén el estado del filtro separado de la identidad estable del Demo.
+    // 中文：将目录筛选状态与稳定 Demo 身份分开保存。
+    private var demoSearchText = ""
     
     fileprivate lazy var outputURL :URL = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -198,257 +201,55 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
     
+    // English: Build the catalog from stable Demo IDs instead of display strings.
+    // Español: Construye el catálogo con IDs estables en lugar de textos visibles.
+    // 中文：使用稳定 Demo ID 构建目录，不再使用展示文本作为身份。
     func cSections() -> [PTSection] {
-        let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
-        let sectionTitleFont:UIFont = .appfont(size: 18,bold: true)
-        /**
-            网络
-         */
-        let localNet = self.rowBaseModel(name: .localNetWork)
-        localNet.leftImage = "🌐".emojiToImage(emojiFont: .appfont(size: 24))
-        localNet.contentIcon = "🌠".emojiToImage(emojiFont: .appfont(size: 24))
-        localNet.content = "12312312312312312312312312312312312312312312321"
-        localNet.cellClass = PTFusionCell.self
-        localNet.cellID = PTFusionCell.ID
-        let netArrs = [localNet]
-                
-        let sectionModel_net = PTFusionCellModel()
-        sectionModel_net.name = "网络"
-        sectionModel_net.cellFont = sectionTitleFont
-        sectionModel_net.accessoryType = .More
-        sectionModel_net.disclosureIndicatorImage = disclosureIndicatorImage
-        sectionModel_net.moreLayoutStyle = .leftTitleRightImage
-        sectionModel_net.moreDisclosureIndicator = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-
-        let netSection = PTSection.init(headerTitle: sectionModel_net.name,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
-        netSection.headerClass = PTFusionHeader.self
-        netSection.footerClass = PTTestFooter.self
-        /**
-            图片
-         */
-        let imageReview = self.rowBaseModel(name: .imageReview)
-        
-        let videoEditor = self.rowBaseModel(name: .videoEditor)
-
-        let sign = self.rowBaseModel(name: .sign)
-
-        let dymanicCode = self.rowBaseModel(name: .dymanicCode)
-
-        let oss = self.rowBaseModel(name: .osskit)
-
-        let vision = self.rowBaseModel(name: .vision)
-        
-        let mediaSelect = self.rowBaseModel(name: .mediaSelect)
-        
-        let mediaArrs = [imageReview,videoEditor,sign,dymanicCode,oss,vision,mediaSelect]
-        
-        var mediaRows = [PTRows]()
-        mediaArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,dataModel: value)
-            row.cellClass = PTFusionCell.self
-            mediaRows.append(row)
-        }
-        
-        let sectionModel_media = PTFusionCellModel()
-        sectionModel_media.name = "多媒体"
-        sectionModel_media.cellFont = sectionTitleFont
-        sectionModel_media.accessoryType = .Switch(type: .Framework)
-        sectionModel_media.switchControlWidth = 51
-
-        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerID: "1111111",footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
-        mediaSection.headerClass = PTFusionHeader.self
-        mediaSection.footerClass = PTTestFooter.self
-        /**
-            本机
-         */
-        let jailBroken = PTFusionCellModel()
-        jailBroken.name = .phoneSimpleInfo
-        jailBroken.cellDescFont = .appfont(size: 12)
-        jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(DeviceIdentifier()),运营商: Can not get"
-        jailBroken.accessoryType = .NoneAccessoryView
-        
-        let callPhone = self.rowBaseModel(name: .phoneCall)
-        callPhone.cellDescFont = .appfont(size: 12)
-        callPhone.desc = "打电话到13800138000"
-
-        let cleanCaches = self.rowBaseModel(name: .cleanCache)
-        cleanCaches.cellDescFont = .appfont(size: 12)
-        cleanCaches.desc = "缓存:\(String(format: "%@", cacheSize))"
-        
-        let touchID = self.rowBaseModel(name: .touchID)
-
-        let rotation = self.rowBaseModel(name: .rotation)
-
-        let share = self.rowBaseModel(name: .share)
-
-        let checkUpdate = self.rowBaseModel(name: .checkUpdate)
-        
-        let language = self.rowBaseModel(name: .language)
-        
-        let darkMode = self.rowBaseModel(name: .darkMode)
-        
-        let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation,share,checkUpdate,language,darkMode]
-        
-        var phoneRows = [PTRows]()
-        phoneArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,dataModel: value)
-            row.cellClass = PTFusionCell.self
-            phoneRows.append(row)
-        }
-        
-        let sectionModel_phone = PTFusionCellModel()
-        sectionModel_phone.name = "本机"
-        sectionModel_phone.cellFont = sectionTitleFont
-        sectionModel_phone.accessoryType = .More
-        sectionModel_phone.disclosureIndicatorImage = disclosureIndicatorImage
-        sectionModel_phone.moreLayoutStyle = .leftTitleRightImage
-
-        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
-        phoneSection.headerClass = PTFusionHeader.self
-        phoneSection.footerClass = PTTestFooter.self
-
-        /**
-            UIKIT
-         */
-        let slider = self.rowBaseModel(name: .slider)
-        
-        let rate = self.rowBaseModel(name: .rate)
-
-        let segment = self.rowBaseModel(name: .segment)
-
-        let countLabel = self.rowBaseModel(name: .countLabel)
-        
-        let throughLabel = self.rowBaseModel(name: .throughLabel)
-        
-        let twitterLabel = self.rowBaseModel(name: .twitterLabel)
-        
-        let movieCutOutput = self.rowBaseModel(name: .movieCutOutput)
-        
-        let progressBar = self.rowBaseModel(name: .progressBar)
-        
-        let asTips = self.rowBaseModel(name: .alert)
-        
-        let menu = self.rowBaseModel(name: .menu)
-        
-        let loading = self.rowBaseModel(name: .loading)
-
-        let permission = self.rowBaseModel(name: .permission)
-        
-        let permissionSetting = self.rowBaseModel(name: .permissionSetting)
-
-        let tipkit = self.rowBaseModel(name: .tipkit)
-        
-        let document = self.rowBaseModel(name: .document)
-        
-        let svga = self.rowBaseModel(name: .svga)
-        
-        let swipe = self.rowBaseModel(name: .swipe)
-        
-        let scanQR = self.rowBaseModel(name: .scanQR)
-        
-        let filtercamera = self.rowBaseModel(name: .filtercamera)
-        
-        let editimage = self.rowBaseModel(name: .editimage)
-        
-        let sortButton = self.rowBaseModel(name: .sortButton)
-        
-        let messageKit = self.rowBaseModel(name: .messageKit)
-
-        let blurImageList = self.rowBaseModel(name: .BlurImageList)
-
-        let cycleBanner = self.rowBaseModel(name: .CycleBanner)
-        
-        let CollectionTag = self.rowBaseModel(name: .CollectionTag)
-
-        let InputBox = self.rowBaseModel(name: .InputBox)
-        
-        let Stepper = self.rowBaseModel(name: .Stepper)
-
-        let LoginDesc = self.rowBaseModel(name: .LoginDesc)
-        
-        let StepperList = self.rowBaseModel(name: .StepperList)
-
-        let LivePhoto = self.rowBaseModel(name: .LivePhoto)
-
-        let LivePhotoDisassemble = self.rowBaseModel(name: .LivePhotoDisassemble)
-        
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc,StepperList,LivePhoto,LivePhotoDisassemble]
-        
-        var uikitRows = [PTRows]()
-        uikitRows = uikitArrs.map {
-            switch $0.name {
-                case .swipe:
-                let row = PTRows(title:$0.name,dataModel: $0)
-                row.cellClass = PTFusionSwipeCell.self
-                return row
-            default:
-                let row = PTRows(title:$0.name,dataModel: $0)
+        let keyword = demoSearchText.trimmingCharacters(in: .whitespacesAndNewlines).localizedLowercase
+        return PTDemoRegistry.sections.compactMap { section -> PTSection? in
+            let rows = section.demos.filter { descriptor in
+                guard !keyword.isEmpty else { return true }
+                let searchableText = [
+                    descriptor.id.rawValue,
+                    descriptor.moduleID,
+                    descriptor.titleKey,
+                    descriptor.category.displayTitle,
+                    descriptor.tags.joined(separator: " ")
+                ].joined(separator: " ").localizedLowercase
+                return searchableText.contains(keyword)
+            }.map { descriptor in
+                let model = rowBaseModel(name: descriptor.titleKey)
+                let row = PTRows(
+                    title: descriptor.titleKey,
+                    ID: PTFusionCell.ID,
+                    diffId: descriptor.id.rawValue,
+                    dataModel: model
+                )
                 row.cellClass = PTFusionCell.self
                 return row
             }
+            guard !rows.isEmpty else { return nil }
+            let headerModel = PTFusionCellModel(diffIdentifier: "demo-section.\(section.id)")
+            headerModel.name = section.title
+            headerModel.cellFont = .appfont(size: 18, bold: true)
+            headerModel.accessoryType = .NoneAccessoryView
+            let result = PTSection(
+                identifier: "demo-section.\(section.id)",
+                headerTitle: section.title,
+                headerID: "demo-header.\(section.id)",
+                footerHeight: 44,
+                headerHeight: 44,
+                rows: rows,
+                headerDataModel: headerModel
+            )
+            result.headerClass = PTFusionHeader.self
+            result.footerClass = PTTestFooter.self
+            return result
         }
-        
-        let sectionModel_uikit = PTFusionCellModel()
-        sectionModel_uikit.name = "UIKIT"
-        sectionModel_uikit.cellFont = sectionTitleFont
-        sectionModel_uikit.accessoryType = .More
-        sectionModel_uikit.disclosureIndicatorImage = disclosureIndicatorImage
-        sectionModel_uikit.moreLayoutStyle = .upTitleDownImage
-
-        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
-        uikitSection.headerClass = PTFusionHeader.self
-        uikitSection.footerClass = PTTestFooter.self
-
-        /**
-            Route
-         */
-        let route = self.rowBaseModel(name: .route)
-
-        let routeArrs = [route]
-        
-        var routeRows = [PTRows]()
-        routeArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,dataModel: value)
-            row.cellClass = PTFusionCell.self
-            routeRows.append(row)
-        }
-        
-        let sectionModel_route = PTFusionCellModel()
-        sectionModel_route.name = "Route"
-        sectionModel_route.cellFont = sectionTitleFont
-        sectionModel_route.accessoryType = .NoneAccessoryView
-
-        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
-        routeSection.headerClass = PTFusionHeader.self
-        routeSection.footerClass = PTTestFooter.self
-
-        /**
-            Encryption
-         */
-        let encryption = self.rowBaseModel(name: .encryption)
-
-        let encryptionArrs = [encryption]
-        
-        var encryptionRows = [PTRows]()
-        encryptionArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,dataModel: value)
-            row.cellClass = PTFusionCell.self
-            encryptionRows.append(row)
-        }
-        
-        let sectionModel_encryption = PTFusionCellModel()
-        sectionModel_encryption.name = "Encryption"
-        sectionModel_encryption.cellFont = sectionTitleFont
-        sectionModel_encryption.accessoryType = .NoneAccessoryView
-
-        let encryptionSection = PTSection(headerTitle: sectionModel_encryption.name,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
-        encryptionSection.headerClass = PTFusionHeader.self
-        encryptionSection.footerClass = PTVersionFooter.self
-
-        return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }
-    
-    var aaaaaaa:PTCollectionView!
+
+
+    var catalogCollectionView:PTCollectionView!
     
     func collectionViewConfig() -> PTCollectionViewConfig {
 
@@ -472,24 +273,19 @@ class PTFuncNameViewController: PTBaseViewController {
         let emptyConfig = PTEmptyDataViewConfig()
         
         let emptyView = UIView(frame: CGRectMake(0, 0, 100, 100))
-        emptyView.backgroundColor = .randomColor
+        emptyView.backgroundColor = .secondarySystemBackground
         emptyView.isUserInteractionEnabled = true
         emptyView.clipsToBounds = true
         
         
         
-        let aaaaaaaaaaaa = UIButton(type: .custom)
-        aaaaaaaaaaaa.addActionHandlers { sender in
-//            self.aaaaaaa.viewConfig = cConfig
-//            self.aaaaaaa.clearAllData { cView in
-//                self.aaaaaaa.reloadEmptyConfig()
-//            }
-            emptyView.backgroundColor = .randomColor
-//            PTNSLogConsole("123123123123123123")
+        let emptyReloadButton = UIButton(type: .custom)
+        emptyReloadButton.addActionHandlers { _ in
+            emptyView.backgroundColor = .systemGray5
             self.showCollectionViewData()
         }
-        emptyView.addSubviews([aaaaaaaaaaaa])
-        aaaaaaaaaaaa.snp.makeConstraints { make in
+        emptyView.addSubviews([emptyReloadButton])
+        emptyReloadButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -499,17 +295,17 @@ class PTFuncNameViewController: PTBaseViewController {
 //        emptyConfig.backgroundColor = .systemRed
 //        emptyConfig.mainTitleAtt = """
 //                \(wrap: .embedding("""
-//                \("沒數據",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+//                \("暂无数据",.foreground(.label),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
 //                """))
 //                """
 //        emptyConfig.secondaryEmptyAtt = """
 //                \(wrap: .embedding("""
-//                \("111111111111",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+//                \("请点击重试",.foreground(.secondaryLabel),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
 //                """))
 //                """
 //        emptyConfig.buttonTitle = "點擊"
 //        emptyConfig.buttonFont = .appfont(size: 14)
-//        emptyConfig.buttonTextColor = .randomColor
+//        emptyConfig.buttonTextColor = .label
         cConfig.emptyViewConfig = emptyConfig
         
         return cConfig
@@ -538,32 +334,33 @@ class PTFuncNameViewController: PTBaseViewController {
 //    }
     
     lazy var collectionView : PTCollectionView = {
-        aaaaaaa = PTCollectionView(viewConfig: self.collectionViewConfig())
-        aaaaaaa.registerSupplementaryView(classs: ["1111111":PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
-//        aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
-        aaaaaaa.layoutSubviews()
-        aaaaaaa.decorationInCollectionView = { index,sectionModel in
+        catalogCollectionView = PTCollectionView(viewConfig: self.collectionViewConfig())
+        catalogCollectionView.layoutSubviews()
+        catalogCollectionView.decorationInCollectionView = { index,sectionModel in
             let backItemId = YDSWhiteDecorationView.ID
             let topSpace:CGFloat = 10
             let backItem = NSCollectionLayoutDecorationItem.background(elementKind: backItemId)
             backItem.contentInsets = NSDirectionalEdgeInsets.init(top: topSpace, leading: 12, bottom: 0, trailing: 12)
             return [backItem]
         }
-        aaaaaaa.decorationCustomLayoutInsetReset = { index,sectionModel in
+        catalogCollectionView.decorationCustomLayoutInsetReset = { index,sectionModel in
             let topSpace:CGFloat = 10
             return NSDirectionalEdgeInsets.init(top: (sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude) + topSpace, leading: 12, bottom: 0, trailing: 12)
         }
-        aaaaaaa.headerInCollection = { kind,collectionView,model,index in
+        catalogCollectionView.headerInCollection = { kind,collectionView,model,index in
             if let headerID = model.headerReuseID,let sectionModel = model.headerDataModel as? PTFusionCellModel {
                 let baseHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index)
                 switch baseHeader {
                 case let header as PTFusionHeader:
                     header.sectionModel = sectionModel
-                    if sectionModel.name == "网络" {
+                    // English: Use the stable section identifier because display titles are localized.
+                    // Español: Usa el identificador estable porque los títulos visibles se localizan.
+                    // 中文：使用稳定的分组标识，避免本地化标题变化导致行为失效。
+                    if headerID == "demo-header.network-connectivity" {
                         header.moreActionBlock = { text,sender in
                             PTNSLogConsole("点击了More")
                         }
-                    } else if sectionModel.name == "多媒体" {
+                    } else if headerID == "demo-header.media-graphics" {
                         header.switchValue = true
                         header.switchValueChangeBlock = { text,sender in
                             PTNSLogConsole("点击了Switch")
@@ -576,7 +373,7 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             return nil
         }
-        aaaaaaa.footerInCollection = { kind,collectionView,model,index in
+        catalogCollectionView.footerInCollection = { kind,collectionView,model,index in
             if let footerID = model.footerReuseID {
                 let baseFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerID, for: index)
                 switch baseFooter {
@@ -590,7 +387,7 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             return nil
         }
-        aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
+        catalogCollectionView.cellInCollection = { collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
                 switch baseCell {
@@ -608,483 +405,39 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             return nil
         }
-        aaaaaaa.indexPathSwipe = { model,indxPath in
+        catalogCollectionView.indexPathSwipe = { model,indxPath in
             return true
         }
-        aaaaaaa.swipeLeftHandler = { collection,sectionModel,indexPath in
-            let swipeAction = PTSwipeAction(name: "1111111", image: nil, backgroundColor: DynamicColor.randomColor) { sender in
-                PTNSLogConsole("123123123123123")
+        catalogCollectionView.swipeLeftHandler = { _, _, _ in
+            let swipeAction = PTSwipeAction(name: "Action", image: nil, backgroundColor: .systemBlue) { _ in
+                PTNSLogConsole("Left swipe action")
             }
             return [swipeAction]
         }
-        aaaaaaa.swipeRightHandler = { collection,sectionModel,indexPath in
-            let swipeAction = PTSwipeAction(name: "333333", image: nil, backgroundColor: DynamicColor.randomColor) { sender in
-                PTNSLogConsole("4444444")
+        catalogCollectionView.swipeRightHandler = { _, _, _ in
+            let swipeAction = PTSwipeAction(name: "More", image: nil, backgroundColor: .systemGray) { _ in
+                PTNSLogConsole("Right swipe action")
             }
             return [swipeAction]
         }
-        aaaaaaa.collectionDidSelect = { collectionViews,sModel,indexPath in
-            if let itemRow = sModel.rows?[indexPath.row], let cellModel = (itemRow.dataModel as? PTFusionCellModel) {
-                if itemRow.title == .imageReview {
-                    PTGCDManager.shared.runOnMain {
-                        let model1 = PTMediaBrowserModel()
-                        model1.imageURL = "https://i-blog.csdnimg.cn/blog_migrate/becd8bdd2845791b0f9b28ba58a27bac.jpeg"
-                        model1.imageInfo = "56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551312333444444"
-                        
-                        let model2 = PTMediaBrowserModel()
-                        model2.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-                        model2.imageInfo = "123"
-
-                        let model3 = PTMediaBrowserModel()
-                        model3.imageURL = "https://imgservice.appsmartnet.com/bab1688/after/1770799498649A9178A4122E547D39B72A55A6950BE84_mmexport1749953776009 2.mp4"
-                        model3.imageInfo = "MP4"
-
-                        let model4 = PTMediaBrowserModel()
-                        model4.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-                        model4.imageInfo = "GIF"
-                        
-                        let mediaConfig = PTMediaBrowserConfig.share
-                        mediaConfig.dismissY = 200
-                        mediaConfig.actionType = .All
-                        mediaConfig.pageControlOption = .snake
-                        mediaConfig.imageLongTapAction = true
-                        mediaConfig.dynamicBackground = true
-                        mediaConfig.pageControlShow = true
-                        let browser = PTMediaBrowserController(mediaData: [model3,model1,model2,model4])
-                        browser.mediasShow()
-                    }
-                } else if itemRow.title == .phoneCall {
-                    PTGCDManager.shared.runOnMain {
-                        PTPhoneBlock.callPhoneNumber(phoneNumber: "13800138000", call: { duration in
-                        }, cancel: {
-                            
-                        }, canCall: { finish in
-                            
-                        })
-                    }
-                } else if itemRow.title == .cleanCache {
-                    PTGCDManager.shared.runOnBackground(priority: .background) {
-                        Task { @MainActor in
-                            let isCleared = await PCleanCache.clearCaches()
-                            if isCleared {
-                                    UIAlertController.drop(title: "清理成功")
-                                self.showCollectionViewData()
-                            } else {
-                                    UIAlertController.drop(title: "暂时没有缓存了")
-                            }
-                        }
-                    }
-                } else if itemRow.title == .touchID {
-                    
-                    Task { @MainActor in
-                        let biometricsManager = PTBiometricsManager.shared
-                            
-                        // 1. 获取设备支持状态 (对应以前的 biologyStatusBlock)
-                        // 现在变成了一个同步属性，直接读取即可，不用等回调！
-                        let supportType = biometricsManager.currentBiometryStatus
-                        PTNSLogConsole("设备支持的生物识别类型: \(supportType)")
-                        // 2. 发起验证并等待结果 (对应以前的 biologyStart + biologyVerifyStatusBlock)
-                        // 使用 Task 包装异步任务
-                        PTNSLogConsole("开始验证...")
-                        
-                        // 使用 await 等待验证结果，代码会在这里暂停，直到用户验证完成才往下走
-                        let verifyStatus = await biometricsManager.startAuthentication(alertTitle: "Test")
-                        
-                        // 拿到结果后直接处理
-                        PTNSLogConsole("验证结果: \(verifyStatus)")
-                        
-                        // 你可以根据具体状态进行业务处理，例如：
-                        if verifyStatus == .success {
-                            PTNSLogConsole("✅ 验证成功，可以进入下一步了！")
-                        } else if verifyStatus == .domainStateChanged {
-                            PTNSLogConsole("⚠️ 警告：检测到用户录入了新的指纹/面容，需要重新登录！")
-                        } else {
-                            PTNSLogConsole("❌ 验证失败或取消")
-                        }
-                    }
-                } else if itemRow.title == .videoEditor {
-                    PTGCDManager.shared.runOnMain {
-                        let pickerConfig = PTMediaLibConfig.share
-                        pickerConfig.allowSelectImage = false
-                        pickerConfig.allowSelectVideo = true
-                        pickerConfig.allowSelectGif = false
-                        pickerConfig.allowEditVideo = false
-                        pickerConfig.maxSelectCount = 1
-                        pickerConfig.maxVideoSelectCount = 1
-                        pickerConfig.useCustomCamera = false
-                        
-                        let vc = PTMediaLibViewController()
-                        vc.mediaLibShow()
-                        vc.selectedHudStatusBlock = { result in
-                            Task { @MainActor in
-                                if result {
-                                    PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
-                                } else {
-                                    PTAlertTipsViewController.tipsAlertShow(icon: .Done)
-                                }
-                            }
-                        }
-                        vc.selectImageBlock = { result, isOriginal in
-                            PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
-                            if let resultFirst = result.first {
-                                resultFirst.asset.convertPHAssetToAVAsset { progress in
-                                    PTNSLogConsole("progress:>>>>>>>>>>>>>\(progress)")
-
-                                } completion: { avAsset in
-                                    if let getAv = avAsset {
-                                        Task { @MainActor in
-                                            let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv.asset)
-                                            controller.videoEditorShow(vc: self)
-                                            controller.onEditCompleteHandler = { url in
-                                                PTAlertTipsViewController.tipsAlertShow(title:"我好了\(url)",icon: .Done)
-                                            }
-                                        }
-                                    } else {
-                                        Task { @MainActor in
-                                            PTAlertTipsViewController.tipsAlertShow(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon: .Error)
-                                        }
-                                    }
-                                }
-                            } else {
-                                Task { @MainActor in
-                                    PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇Video",icon: .Error)
-                                }
-                            }
-                        }
-                    }
-                } else if itemRow.title == .sign {
-                    PTGCDManager.shared.runOnMain {
-                        let signConfig = PTSignatureConfig()
-                        
-                        let sign = PTSignView(viewConfig: signConfig)
-                        sign.showView()
-                        sign.doneBlock = { image in
-                            let newImage = UIImageView(image: image)
-                            self.view.addSubview(newImage)
-                            newImage.snp.makeConstraints { make in
-                                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                                make.top.equalTo(self.collectionView)
-                                make.height.equalTo(150)
-                            }
-                            
-                            PTGCDManager.shared.delayOnMain(time: 5) {
-                                newImage.removeFromSuperview()
-                            }
-                        }
-                        sign.dismissBlock = {
-                            
-                        }
-                    }
-                } else if itemRow.title == .rotation {
-                    PTGCDManager.shared.runOnMain {
-                        PTRotationManager.shared.toggleOrientation()
-                    }
-    //                let r:Int = Int(arc4random_uniform(2))
-    //                PTRotationManager.shared.rotation(to: PTRotationManager.Orientation.allCases[r])
-                } else if itemRow.title == .osskit {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTSpeechViewController()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .share {
-                    PTGCDManager.shared.runOnMain {
-                        guard let url = URL(string: shareURLString) else {
-                            return
-                        }
-
-                        let share = PTShareCustomActivity()
-                        share.text = shareText
-                        share.url = url
-                        share.image = UIImage(named: "DemoImage")
-                        share.customActivityTitle = "测试Title"
-                        share.customActivityImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 54))
-
-                        let items: [Any] = [shareText, url, UIImage(named: "DemoImage")!]
-
-                        let vc = PTActivityViewController(activityItems: items,applicationActivities: [share])
-                        vc.previewNumberOfLines = 10
-                        if let cell = self.aaaaaaa.contentCollectionView.cellForItem(at: indexPath) {
-                            vc.presentActionSheet(self, from: cell)
-                        }
-                    }
-                } else if itemRow.title == .checkUpdate {
-                    PTGCDManager.shared.runOnMain {
-                        PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6596749489", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
-                    }
-                } else if itemRow.title == .route {
-                    PTGCDManager.shared.runOnMain {
-                        UIAlertController.baseActionSheet(title: "Route", titles: ["example"], otherBlock: { sheet,index,title in
-                            switch index {
-                            case 0:
-                                PTGCDManager.shared.runOnMain(block: {
-                                    self.routeFunction()
-                                })
-                            default:
-                                break
-                            }
-                        })
-                    }
-                } else if itemRow.title == .alert {
-                    PTGCDManager.shared.runOnMain {
-                        UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet","Like system"], otherBlock: { sheet,index,title in
-                            switch index {
-                            case 0:
-                                let tips = PTAlertTipsViewController(title: "Job Done!", subtitle: "WOW", icon: .Done)
-                                PTAlertManager.show(tips)
-                            case 1:
-                                let tips = PTAlertTipsViewController(title: "Hola!", subtitle: "Que?", icon: .Error,style: .SupportVisionOS)
-                                PTAlertManager.show(tips)
-                            case 2:
-                                UIAlertController.alertSendFeedBack { title, content in
-                                UIAlertController.drop(title: title,subTitle: content) {
-                                        Task { @MainActor in
-                                            UIAlertController.base_textfield_alertVC(okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), placeHolders: ["placeholder"], textFieldTexts: ["Test"], keyboardType: [.default], textFieldDelegate: self) { result in
-                                                
-                                            }
-                                        }
-                                    } notifiDismiss: {
-                                        Task { @MainActor in
-                                            UIAlertController.alertVC(title: "notifi消失之后", msg: "哦", cancel: "PT Button cancel".localized(), cancelBlock: {
-                                            })
-                                        }
-                                    }
-                                }
-                            case 3:
-                                UIAlertController.baseActionSheet(title: "Title",subTitle: "SubTitle",cancelButtonName: "Cancel",destructiveButtons: ["Destructive","Destructive1","Destructive2"], titles: ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"], destructiveBlock: { sheet, index, title in
-                                    
-                                },otherBlock: { sheet,index,title in
-                                })
-                            case 4:
-                                let title = PTActionSheetTitleItem(title: "Title", subTitle: "SubTitle")
-                                
-                                let cancelItem = PTActionSheetItem(title: "取消",image: UIImage(named: "DemoImage"),itemAlignment:.leading,itemLayout: .leftImageRightTitle)
-
-                                let deItem = PTActionSheetItem(title: "其他",titleColor:.systemRed,image: "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif",itemAlignment:.trailing,itemLayout: .leftTitleRightImage)
-
-                                let content1 = PTActionSheetItem(title: "1",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.left,itemLayout: .leftTitleRightImage)
-                                let content2 = PTActionSheetItem(title: "2",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.right,itemLayout: .leftTitleRightImage)
-                                let content3 = PTActionSheetItem(title: "3",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.fill,itemLayout: .leftTitleRightImage)
-
-                                let actionSheet = PTActionSheetController(titleItem:title,cancelItem:cancelItem,destructiveItems: [deItem],contentItems: [content1,content2,content3])
-                                PTAlertManager.show(actionSheet)
-
-                            case 5:
-                                let newAlertController = PTCustomerAlertController(title: "",customerViewHeight:0,buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
-                                PTAlertManager.show(newAlertController)
-                            case 6:
-                                let titleItem = PTActionSheetTitleItem(title: "Title",subTitle: "SubTitle")
-
-                                var destructiveItems = [PTActionSheetItem]()
-                                ["Destructive","Destructive1","Destructive2"].enumerated().forEach { index,value in
-                                    let item = PTActionSheetItem(title: value)
-                                    item.titleColor = .systemRed
-                                    destructiveItems.append(item)
-                                }
-                                
-                                var contentItems = [PTActionSheetItem]()
-                                ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"].enumerated().forEach { index,value in
-                                    let item = PTActionSheetItem(title: value)
-                                    contentItems.append(item)
-                                }
-                                
-                                let newAlertController = PTActionSheetController(titleItem:titleItem,destructiveItems: destructiveItems,contentItems: contentItems)
-                                PTAlertManager.show(newAlertController)
-                            case 7:
-                                UIAlertController.base_alertVC(title:"1",msg:"8888888888888",cancelBtn:"33333")
-                            default:
-                                break
-                            }
-                        })
-                    }
-                } else if itemRow.title == .loading {
-                    PTGCDManager.shared.runOnMain {
-                        UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading","TextHub","ButtonHud","Progress1","Progress2","Progress3"], otherBlock: { sheet,index,title in
-                            switch index {
-                            case 0:
-                                let hud = PTHudView()
-                                hud.hudShow()
-                                PTGCDManager.shared.delayOnMain(time: 5) {
-                                    hud.hide { }
-                                }
-                            case 1:
-                                let cycle = PTCycleLoadingView()
-                                self.view.addSubviews([cycle])
-                                cycle.snp.makeConstraints { make in
-                                    make.size.equalTo(100)
-                                    make.centerX.centerY.equalToSuperview()
-                                }
-                                cycle.startAnimation()
-                                PTGCDManager.shared.delayOnMain(time: 5) {
-                                    cycle.stopAnimation {
-                                        Task { @MainActor in
-                                            cycle.removeFromSuperview()
-                                        }
-                                    }
-                                }
-                            case 2:
-                                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                                    PTProgressHUD.show(text: "12312312312312312312")
-                                })
-                            case 3:
-                                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                                    PTProgressHUD.showLogo(text: "123123123123", image: UIImage(named: "DemoImage"))
-                                })
-                            case 4:
-                                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                                    PTProgressHUD.showProgress(text:"111111111",progressMode: .determinateBar)
-                                })
-                            case 5:
-                                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                                    PTProgressHUD.showProgress(text:"2222222222222",progressMode: .determinatePie)
-                                })
-                            case 6:
-                                PTGCDManager.shared.delayOnMain(time: 1, block: {
-                                    PTProgressHUD.showProgress(text:"333333333333",progressMode: .determinateRing)
-                                })
-                            default:
-                                break
-                            }
-                        })
-                    }
-                } else if itemRow.title == .permission {
-                    PTGCDManager.shared.runOnMain {
-                        let permissionVC = PTPermissionViewController()
-                        permissionVC.permissionShow(vc: self)
-                        permissionVC.viewDismissBlock = {
-                        }
-                    }
-                } else if itemRow.title == .permissionSetting {
-                    PTGCDManager.shared.runOnMain {
-                        let permissionVC = PTPermissionSettingViewController()
-                        permissionVC.permissionShow(vc: self)
-                    }
-                } else if itemRow.title == .language {
-                    PTGCDManager.shared.runOnMain {
-                        UIAlertController.baseActionSheet(title: .language,subTitle: self.currentSelectedLanguage, titles: LanguageKey.allNames, otherBlock: { sheet,index,title in
-                            self.currentSelectedLanguage = LanguageKey.allValues[index].desc
-                            PTLanguage.share.language = LanguageKey.allValues[index].rawValue
-                        })
-                    }
-                } else if itemRow.title == .darkMode {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTDarkModeControl()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .tipkit {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTTipsDemoController()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .document {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTDocumentViewController()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .svga {
-    //                let vc = PTSVGAViewController()
-    //                self.navigationController?.pushViewController(vc)
-                } else if itemRow.title == .scanQR {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTScanQRController(viewConfig: PTScanQRConfig())
-                        vc.resultBlock = { result,error in
-                            PTNSLogConsole("\(result)")
-                        }
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .filtercamera {
-                    PTGCDManager.shared.runOnMain {
-                        let cameraConfig = PTCameraFilterConfig.share
-                        cameraConfig.allowRecordVideo = true
-                        let pointFont = UIFont.appfont(size: 20)
-
-                        cameraConfig.backImage = "❌".emojiToImage(emojiFont: pointFont)
-                        cameraConfig.flashImage = UIImage(.flashlight.offFill).withTintColor(.white)
-                        cameraConfig.flashImageSelected = UIImage(.flashlight.onFill).withTintColor(.white)
-                        
-                        cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
-                        cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
-
-                        let vc = PTFilterCameraViewController()
-                        vc.onlyCamera = false
-                        vc.modalPresentationStyle = .fullScreen
-                        self.showDetailViewController(vc, sender: nil)
-                    }
-                } else if itemRow.title == .editimage {
-                    PTGCDManager.shared.runOnMain {
-                        let image = UIImage(named: "DemoImage")!
-                        
-                        let vc = PTEditImageViewController(readyEditImage: image)
-                        vc.editFinishBlock = { ei ,editImageModel in
-                            PTMediaSaveService.save(image: ei) { result in
-                                if case .failure = result {
-                                    PTAlertTipsViewController.tipsAlertShow(title:"Opps",subtitle: "保存图片失败",icon: .Error)
-                                }
-                            }
-                        }
-                        let nav = PTBaseNavControl(rootViewController: vc)
-                        nav.view.backgroundColor = .black
-                        nav.modalPresentationStyle = .fullScreen
-                        self.showDetailViewController(nav, sender: nil)
-                    }
-                } else if itemRow.title == .messageKit {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTTestChatViewController()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .BlurImageList {
-                    PTGCDManager.shared.runOnMain {
-                        let vc = PTImageListViewController()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                } else if itemRow.title == .mediaSelect {
-                    PTGCDManager.shared.runOnMain {
-                        PTMediaLibConfig.share.allowEditImage = true
-                        PTMediaLibConfig.share.maxSelectCount = 9
-                        PTMediaLibConfig.share.allowSelectImage = true
-                        PTMediaLibConfig.share.allowSelectVideo = true
-                        PTMediaLibConfig.share.allowMixSelect = true
-                        PTMediaLibConfig.share.maxVideoSelectCount = 1
-                        PTMediaLibConfig.share.allowEditVideo = true
-                        PTMediaLibConfig.share.useCustomCamera = true
-
-                        let vc = PTMediaLibViewController()
-                        vc.mediaLibShow()
-                        vc.selectImageBlock = { result,isOriginal in
-                            if result.count > 0 {
-                                PTNSLogConsole("\(result)")
-                            } else {
-                                PTAlertTipsViewController.tipsAlertShow(title:"失败",subtitle: "",icon: .Error)
-                            }
-                        }
-                    }
-                } else {
-                    PTGCDManager.shared.runOnMain {
-                        var sheetSize = [PTSheetSize]()
-                        if itemRow.title == .StepperList || itemRow.title == .LivePhoto  || itemRow.title == .LivePhotoDisassemble || itemRow.title == .CycleBanner {
-                            sheetSize = [.percent(0.9)]
-                        } else {
-                            sheetSize = [.percent(0.5)]
-                        }
-                        let vc = PTFuncDetailViewController(typeString: itemRow.title)
-                        self.currentPresentToSheet(vc: vc,sizes: sheetSize)
-                    }
-                }
-            }
-
+        catalogCollectionView.collectionDidSelect = { [weak self] _, section, indexPath in
+            guard let self else { return }
+            PTDemoSelectionCoordinator.select(section: section, indexPath: indexPath, from: self)
         }
-        aaaaaaa.headerRefreshTask = { [weak self] in
+
+        catalogCollectionView.headerRefreshTask = { [weak self] in
             PTGCDManager.shared.runOnMain {
                 self?.collectionView.clearAllData { collectionview in
                     self?.collectionView.endRefresh()
                 }
             }
         }
-        aaaaaaa.footRefreshTask = {
+        catalogCollectionView.footRefreshTask = {
             PTGCDManager.shared.delayOnMain(time: 5, block: {
                 self.collectionView.endRefresh()
             })
         }
-        aaaaaaa.emptyTap = { sender in
+        catalogCollectionView.emptyTap = { sender in
             self.collectionView.showEmptyLoading()
             PTGCDManager.shared.delayOnMain(time: 1, block: {
                 self.collectionView.hideEmptyLoading(task: {
@@ -1094,20 +447,20 @@ class PTFuncNameViewController: PTBaseViewController {
                 })
             })
         }
-        aaaaaaa.emptyButtonTap = { sender in
-            PTNSLogConsole("12312312312312312")
+        catalogCollectionView.emptyButtonTap = { _ in
+            PTNSLogConsole("Empty state action")
         }
-        aaaaaaa.forceController = { cView,index,model in
+        catalogCollectionView.forceController = { cView,index,model in
             return PTBaseViewController()
         }
-        aaaaaaa.orthogonalDidScroll = { index,point in
+        catalogCollectionView.orthogonalDidScroll = { index,point in
             var scale = (abs(point.y) / 101)
             if scale > 1 {
                 scale = 1
             }
             PTNavigationBarManager.shared.setAlpha(scale)
         }
-        return aaaaaaa
+        return catalogCollectionView
     }()
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -1129,10 +482,17 @@ class PTFuncNameViewController: PTBaseViewController {
         searchBarConfig.clearTopSpace = 2
         searchBarConfig.clearImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         searchBarConfig.clearAction = {
-            PTNSLogConsole("1231231231")
+            PTNSLogConsole("Search clear action")
         }
         
         let searchBar = PTSearchBar()
+        // English: Rebuild only the catalog snapshot when the user changes the search text.
+        // Español: Reconstruye solo el snapshot del catálogo cuando cambia el texto de búsqueda.
+        // 中文：搜索文本变化时只重建目录快照，不触碰 Demo 的业务状态。
+        searchBar.textChangeHandler = { [weak self] text in
+            self?.demoSearchText = text
+            self?.collectionView.showCollectionDetail(collectionData: self?.cSections() ?? [])
+        }
         searchBar.clearConfig = searchBarConfig
         searchBar.searchBarImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         return searchBar
@@ -1157,7 +517,7 @@ class PTFuncNameViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         
         let more = UIButton(type: .custom)
-        more.setTitleColor(DynamicColor.randomColor, for: .normal)
+        more.setTitleColor(.label, for: .normal)
         more.setTitle("More", for: .normal)
         more.frame = CGRect(x: 0, y: 0, width: 54, height: 40)
 
@@ -1166,7 +526,7 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.layoutStyle = .leftImageRightTitle
         popover.midSpacing = 0
         popover.setTitleFont(.appfont(size: 12), state: .normal)
-        popover.setTitleColor(DynamicColor.randomColor, state: .normal)
+        popover.setTitleColor(.label, state: .normal)
         popover.setTitle("Popover", state: .normal)
         popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
         popover.isUserInteractionEnabled = true
@@ -1175,14 +535,14 @@ class PTFuncNameViewController: PTBaseViewController {
         searchBarConfig.clearTopSpace = 20
         searchBarConfig.clearImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         searchBarConfig.clearAction = {
-            PTNSLogConsole("1231231231")
+            PTNSLogConsole("Popover search clear action")
         }
         
         setCustomTitleView(navTitleView)
 
         setCustomBackButtonView(popover,size: CGSizeMake(64, 34))
         popover.addActionHandlers(handler: { sender in
-            PTNSLogConsole("123123123")
+            PTNSLogConsole("Reveal side menu")
             self.sideMenuController?.revealMenu()
         })
         
@@ -1190,7 +550,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var config = PTBadgeConfiguration()
         config.centerOffset = CGPointMake(20, 0)
-        config.bgColor = DynamicColor.randomColor
+        config.bgColor = .systemBlue
         config.canDragToDelete = true
         more.badgeConfig = config
         more.showBadge(style: .new, value: "我愛你", aniType: .none)
@@ -1198,7 +558,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
         let popoverButton = UIButton(type: .custom)
-        popoverButton.backgroundColor = DynamicColor.randomColor
+        popoverButton.backgroundColor = .secondarySystemBackground
         
         popoverContent.view.addSubview(popoverButton)
         popoverButton.snp.makeConstraints { make in
@@ -1226,7 +586,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
 
         let testButton = UIButton(type: .custom)
-        testButton.backgroundColor = DynamicColor.randomColor
+        testButton.backgroundColor = .tertiarySystemBackground
         popoverContent.view.addSubview(testButton)
         testButton.snp.makeConstraints { make in
             make.size.equalTo(50)
@@ -1262,7 +622,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
-        collectionView.backgroundColor = DynamicColor.randomColor
+        collectionView.backgroundColor = .systemBackground
         
         let collectionInset:CGFloat = CGFloat.kTabbarHeight_Total
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
@@ -1278,6 +638,11 @@ class PTFuncNameViewController: PTBaseViewController {
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
+
+        // English: Populate the initial snapshot so every registered Demo is visible without an extra tap.
+        // Español: Carga el snapshot inicial para mostrar todos los Demos registrados sin otro toque.
+        // 中文：主动填充首个快照，让所有已登记 Demo 无需额外点击即可显示。
+        showCollectionViewData()
                 
         if vcEmpty {
             let emptyConfig = PTEmptyDataViewConfig()
@@ -1285,12 +650,12 @@ class PTFuncNameViewController: PTBaseViewController {
             emptyConfig.image = UIImage(.exclamationmark.triangle)
             emptyConfig.mainTitleAtt = """
                 \(wrap: .embedding("""
-                \("PT Alert Opps".localized(),.foreground(DynamicColor.randomColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+                \("PT Alert Opps".localized(),.foreground(.label),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
                 """))
                 """
             emptyConfig.secondaryEmptyAtt = """
                 \(wrap: .embedding("""
-                \("PT Photo picker empty media".localized(),.foreground(DynamicColor.randomColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+                \("PT Photo picker empty media".localized(),.foreground(.secondaryLabel),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
                 """))
                 """
 
@@ -1334,7 +699,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
                 let item5 = PTWhatsNewsItem()
                 item5.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
-                item5.title = "11111111"
+                item5.title = "Example item"
                 
                 let iKnowItem = PTWhatsNewsIKnowItem()
                 iKnowItem.privacy = "Privacy"
@@ -1347,7 +712,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         PTGCDManager.shared.delayOnMain(time: 5) {
             let vvvvv = PTDynamicNotificationView(showTimes: 3, canTap: true) { view in
-                view.backgroundColor = DynamicColor.randomColor
+                view.backgroundColor = .systemBackground
             }
             vvvvv.showNotification()
             vvvvv.hideHandler = {
@@ -1425,7 +790,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let buttonSize = CGSize.init(width: 60, height: 60)
         let buttonView = PTMenuSheetButtonView(baseSize: buttonSize, direction: .right, items: items)
-        buttonView.backgroundColor = .randomColor
+        buttonView.backgroundColor = .secondarySystemBackground
         buttonView.arrowWidth = 2
         buttonView.separatorWidth = 2
         buttonView.separatorInset = 12
@@ -1437,19 +802,16 @@ class PTFuncNameViewController: PTBaseViewController {
             make.centerY.equalToSuperview()
         }
         
-        PTGCDManager.shared.delayOnMain(time: 10, block: {
-            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: self.aaaaaaa.getSectionIndex(byHeaderID: "1111111")))")
-        })
-        
-        pt_observerLanguage(didChanged: {
-            PTNSLogConsole("123123123123123123123123")
+
+       pt_observerLanguage(didChanged: {
+            PTNSLogConsole("Language changed")
         })
     }
     
     override func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {
         PTNSLogConsole(">>>>>>>>>>>>>??>>>>>>>>>>>>>>>>>>>\(orientationMask)")
         PTGCDManager.shared.delayOnMain(time: 0.3) {
-            self.aaaaaaa.reloadAllData()
+            self.catalogCollectionView.reloadAllData()
         }
     }
     
@@ -1484,16 +846,11 @@ class PTFuncNameViewController: PTBaseViewController {
     }
 
     func flashAd(notifi:Notification) {
-        let obj = notifi.object as! [String:Any]
-        obj.allKeys().enumerated().forEach { index,value in
-            let keyValue = obj[value]
-            if keyValue is String {
-                if (keyValue as! String).isURL() {
-                    let vc = PTBaseWebViewController(showString: (keyValue as! String))
-                    self.navigationController?.pushViewController(vc, animated: true)
-//                    PTAppStoreFunction.jumpLink(url: URL(string: (keyValue as! String))!)
-                }
-            }
+        guard let values = notifi.object as? [String: Any] else { return }
+        for value in values.values {
+            guard let string = value as? String, string.isURL() else { continue }
+            let viewController = PTBaseWebViewController(showString: string)
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
     

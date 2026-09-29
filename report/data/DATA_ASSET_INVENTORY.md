@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
-Generated at: 2026-09-28T23:02:18+08:00 -->
+Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
+Generated at: 2026-09-29T00:51:56+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.57.0`
-- Records: `226`
+- Records: `228`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -16,6 +16,7 @@ Generated at: 2026-09-28T23:02:18+08:00 -->
 | .github/workflows/release-validation.yml | CI | yml | False | False | KEEP |
 | .swiftlint.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | .vscode/settings.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| Data/demo-registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | Data/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | Example/Extensions/extension_targets.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooTools/Images.xcassets/AppIcon.appiconset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -229,6 +230,7 @@ Generated at: 2026-09-28T23:02:18+08:00 -->
 | report/current/spm_dependency_graph.json | REPORT | json | True | False | KEEP |
 | report/data/DATA_ASSET_INVENTORY.json | REPORT | json | True | False | KEEP |
 | report/docs/DOCUMENT_INVENTORY.json | REPORT | json | True | False | KEEP |
+| report/example/DEMO_COVERAGE.json | REPORT | json | True | False | KEEP |
 | report/repository/DATA_ASSET_INVENTORY.json | REPORT | json | True | False | KEEP |
 | report/repository/DUPLICATE_CANDIDATES.json | REPORT | json | True | False | KEEP |
 | report/repository/SCRIPT_INVENTORY.json | REPORT | json | True | False | KEEP |

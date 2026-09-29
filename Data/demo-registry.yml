@@ -1,0 +1,1180 @@
+# English: Demo coverage source of truth for the Example Catalog 2.0.
+# Español: Fuente canónica de cobertura de demos para el catálogo Example 2.0.
+# 中文：Example Catalog 2.0 的 Demo 覆盖率事实源。
+schema_version: 1
+modules:
+-
+  module_id: "appz"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "background-tasks"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "bank-card"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "bilogy-id"
+  coverage: "compatibility_alias"
+  canonical_module_id: "poo-tools-bio-id"
+  demos: []
+-
+  module_id: "bio-id"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "bluetooth-permission"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "calendar"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "calendar-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "camera-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "check-dirty-word"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "check-update"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "chinese-pinyin"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "circle"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "code-view"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "connectivity"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "contact"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "contacts-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "country"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "customer-label"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "customer-number-keyboard"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "data-encrypt"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "date"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "debug"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "debug-tracking-eyes"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "deep-link"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "device"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "face-idpermission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "filter-camera"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "flag"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "gcdweb-server"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "guide"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "hand-sign"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "harbeth-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "health-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "heart-rate"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "httpfile-portal"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "httpserver"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "hud"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "i-os17-tips"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "iap"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "image-picker"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "input"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "input-all"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "launch-time-profiler"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "layout"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "live-photo"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "loading"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "location"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "location-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "logging"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "media-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "meida-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "message-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "mic-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "motion"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "motion-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "mxmetric-manager-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "net-work"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "network-speed-test"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "nfckit"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "notification-banner"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "notification-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "notifications"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "osskit-speech"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "page-control"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "paging-control"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "pdf"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "picker"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ping"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-all"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-bank-card"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-banner"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.alert"
+-
+  module_id: "poo-tools-bio-id"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "security.biometrics"
+-
+  module_id: "poo-tools-calendar"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-check-box"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-check-dirty-word"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-check-update"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "network.check-update"
+-
+  module_id: "poo-tools-chinese-pinyin"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-circle"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-code-view"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.dynamic-code"
+-
+  module_id: "poo-tools-contact"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-country"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-customer-label"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-data-encrypt"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "security.encryption"
+-
+  module_id: "poo-tools-debug"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-debugtracking-eyes"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-guide"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-hand-sign"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.signature"
+-
+  module_id: "poo-tools-harbeth-kit"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.filter-camera"
+-
+  module_id: "poo-tools-heart-rate"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-hud"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-iap"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-image-editor"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.image-editor"
+-
+  module_id: "poo-tools-image-picker"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-input"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-instructions"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-key-chain"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-keyboard"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-launch-time-profiler"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-layout"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-live-photo"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.live-photo"
+    - "media.live-photo-disassemble"
+-
+  module_id: "poo-tools-loading"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.loading"
+-
+  module_id: "poo-tools-location"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-media-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-media-viewer"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.image-review"
+    - "media.blur-image-list"
+-
+  module_id: "poo-tools-message-kit"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.message-kit"
+-
+  module_id: "poo-tools-motion"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-net-work"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-network"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "network.local-network"
+-
+  module_id: "poo-tools-network-speed-test"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-osskit-speech"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-page-control"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-paging-control"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-pdf"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-phone-info"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "device.phone-info"
+-
+  module_id: "poo-tools-photo-picker"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.photo-picker"
+-
+  module_id: "poo-tools-picker"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-ping"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-popover"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-progress-bar"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.movie-cut-output"
+    - "ui.progress-bar"
+-
+  module_id: "poo-tools-rate-view"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.rate"
+-
+  module_id: "poo-tools-router"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "navigation.route"
+-
+  module_id: "poo-tools-scan-qrcode"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "device.scan-qr"
+-
+  module_id: "poo-tools-scroll-banner"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.cycle-banner"
+-
+  module_id: "poo-tools-search"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-search-bar"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-security"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-segmented"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "navigation.segment"
+-
+  module_id: "poo-tools-share"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.share"
+-
+  module_id: "poo-tools-slider"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-smart-screenshot"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-socket-kit"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-speed-panel"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-step-count"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-stepper"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-svg"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.svga"
+-
+  module_id: "poo-tools-telephony"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "device.phone-call"
+-
+  module_id: "poo-tools-tips-view"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-tools-video-editor"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.video-editor"
+-
+  module_id: "poo-tools-vision"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "media.vision"
+-
+  module_id: "poo-tools-whats-news-kit"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "poo-toolsi-os17-tips"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "modern.tipkit"
+-
+  module_id: "popover"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "popover-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "progress-bar"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptbluetooth-permission"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptcalendar-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptcamera-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptcontacts-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptface-idpermission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "pthealth-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptlocation-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptmedia-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptmic-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptmotion-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptnotification-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-accessibility"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-activities"
+  coverage: "extension_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-app-intents"
+  coverage: "extension_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-audio"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos:
+    - "audio.speech"
+-
+  module_id: "ptools-background-tasks"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-bluetooth"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-configuration"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-connectivity"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-content-state"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "theme.language"
+-
+  module_id: "ptools-date"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-deep-link"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-device"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos:
+    - "device.rotation"
+-
+  module_id: "ptools-documents"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "documents.uidocument"
+-
+  module_id: "ptools-feedback"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-form"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "input.input-box"
+    - "input.stepper"
+    - "ui.collection-tag"
+    - "input.stepper-list"
+    - "input.login-description"
+-
+  module_id: "ptools-httpfile-portal"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-httpserver"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-logging"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-notifications"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-overlay"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-permission-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-permission-ui"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "permissions.overview"
+    - "permissions.settings"
+-
+  module_id: "ptools-route-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-simulation"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-simulation-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-storage"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "storage.clear-cache"
+-
+  module_id: "ptools-storage-core"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-symbols"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-theme"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "theme.dark-mode"
+-
+  module_id: "ptools-uifoundation"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "ui.slider"
+    - "ui.count-label"
+    - "ui.through-label"
+    - "ui.twitter-label"
+    - "ui.menu"
+    - "ui.sort-button"
+    - "ui.swipe"
+-
+  module_id: "ptools-widget-core"
+  coverage: "extension_required"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptreminders-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptsiri-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptspeech-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "pttracking-permission"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "reminders-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "route-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "router"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "scan-qrcode"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "scroll-banner"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "search"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "search-bar"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "security"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "security-suite"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "segmented"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "share"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "siri-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "smart-screenshot"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "socket-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "speech-recognizer-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "speed-panel"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "step-count"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "stepper"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "storage"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "storage-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "svg"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "svga"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "tabbar"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "telephony"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "tips-view"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "tracking-permission"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "video-cache"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "vision"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "web-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "whats-news-kit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "zip-archive"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []

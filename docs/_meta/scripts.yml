@@ -187,6 +187,22 @@
   entrypoint: true
   action: "KEEP"
 -
+  path: "Scripts/Docs/test_version_source_stability.py"
+  language: "py"
+  domain: "Docs"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Example/validate_demo_coverage.py"
+  language: "py"
+  domain: "Example"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: true
+  action: "KEEP"
+-
   path: "Scripts/Governance/audit_data_assets.py"
   language: "py"
   domain: "Governance"

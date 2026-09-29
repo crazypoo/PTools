@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
-Generated at: 2026-09-28T23:02:18+08:00 -->
+Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
+Generated at: 2026-09-29T00:51:56+08:00 -->
 # Script Inventory
 
 - Version: `5.57.0`
-- Records: `100`
+- Records: `102`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -32,6 +32,8 @@ Generated at: 2026-09-28T23:02:18+08:00 -->
 | Scripts/Device/validate_device_catalog.py | py | Device | ACTIVE | True | KEEP |
 | Scripts/Docs/apply_cleanup.py | py | Docs | ACTIVE | True | KEEP |
 | Scripts/Docs/audit_docs.py | py | Docs | ACTIVE | True | KEEP |
+| Scripts/Docs/test_version_source_stability.py | py | Docs | ACTIVE | True | KEEP |
+| Scripts/Example/validate_demo_coverage.py | py | Example | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_data_assets.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_repository.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_scripts.py | py | Governance | ACTIVE | True | KEEP |

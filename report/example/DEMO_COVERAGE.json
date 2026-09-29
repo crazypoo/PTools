@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "compatibility_alias": 1,
+    "documentation": 100,
+    "extension_required": 3,
+    "physical_device_required": 7,
+    "runnable": 114
+  },
+  "factoryCoverage": {
+    "descriptorCount": 50,
+    "policy": "main_actor_registry_or_compatibility_host",
+    "unresolved": []
+  },
+  "failures": [],
+  "generated_at": "2026-09-29T00:51:56+08:00",
+  "generator": "Scripts/Example/validate_demo_coverage.py",
+  "missing": [],
+  "moduleCount": 225,
+  "schemaVersion": 1,
+  "source_revision": "2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90",
+  "version": "5.57.0"
+}

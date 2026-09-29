@@ -23,6 +23,8 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+VERSION_SOURCE = "repository:VERSION"
+DOCUMENT_SCHEMA_VERSION = 1
 GENERATED_AT = ""
 EXCLUDED_PARTS = {".git", "Pods", ".build", "build", "DerivedData"}
 DOC_SUFFIXES = {".md", ".markdown", ".mdx"}
@@ -97,6 +99,14 @@ def yaml_scalar(value: Any) -> str:
     if isinstance(value, (int, float)):
         return str(value)
     return json.dumps(str(value), ensure_ascii=False)
+
+
+def resolve_version_source(source: str) -> str:
+    """Resolve a documented product-version source without copying it into guides."""
+
+    if source == VERSION_SOURCE:
+        return VERSION
+    raise ValueError(f"unsupported product version source: {source}")
 
 
 def write_yaml(path: Path, records: Iterable[dict[str, Any]], header: str) -> None:
@@ -270,7 +280,8 @@ def front_matter(item: dict[str, Any], language: str, canonical: bool) -> str:
         "last_reviewed": "2026-09-28",
         "canonical": canonical,
         "canonical_source": "README.en.md" if not canonical else "self",
-        "documentation_version": VERSION,
+        "product_version_source": VERSION_SOURCE,
+        "document_schema_version": DOCUMENT_SCHEMA_VERSION,
     }
     return "---\n" + "\n".join(f"{key}: {yaml_scalar(value)}" for key, value in values.items()) + "\n---\n"
 
@@ -388,7 +399,8 @@ def write_module_index(modules: list[dict[str, Any]]) -> None:
         lines = [
             "---",
             f"language: {yaml_scalar(language)}",
-            f"documentation_version: {yaml_scalar(VERSION)}",
+            f"product_version_source: {yaml_scalar(VERSION_SOURCE)}",
+            f"document_schema_version: {DOCUMENT_SCHEMA_VERSION}",
             "status: ACTIVE",
             "generated: true",
             "---",
@@ -489,6 +501,8 @@ def markdown_inventory() -> list[dict[str, Any]]:
                 "documentType": document_type(rel),
                 "module": next((part for part in Path(rel).parts if part in module_ids), ""),
                 "version": versions[0] if versions else "",
+                "productVersionSource": VERSION_SOURCE if rel.startswith(("docs/modules/", "docs/index/")) else "",
+                "resolvedProductVersion": resolve_version_source(VERSION_SOURCE) if rel.startswith(("docs/modules/", "docs/index/")) else "",
                 "language": language_of(text, rel),
                 "status": "ARCHIVED" if rel.startswith("docs/archive/") else ("GENERATED" if rel.startswith("report/") else "ACTIVE"),
                 "incomingLinks": [],
@@ -575,7 +589,7 @@ def script_inventory() -> list[dict[str, Any]]:
                 "domain": domain,
                 "status": "LEGACY_REVIEW" if legacy else "ACTIVE",
                 "canonical": not legacy,
-                "entrypoint": rel in {"Scripts/Docs/audit_docs.py", "Scripts/CI/check_5_56_1_governance.sh"},
+                "entrypoint": rel in {"Scripts/Docs/audit_docs.py", "Scripts/Example/validate_demo_coverage.py", "Scripts/CI/check_5_56_1_governance.sh"},
                 "action": "KEEP",
             }
         )
@@ -651,12 +665,30 @@ def write_meta(modules: list[dict[str, Any]], scripts: list[dict[str, Any]], ass
         {"code": "en", "name": "English", "role": "canonical technical source"},
         {"code": "es", "name": "Español", "role": "translation"},
     ], "Technical documentation language policy.")
-    write_yaml(meta / "document-policy.yml", [
-        {"status": "ACTIVE", "meaning": "Current guidance that must be maintained"},
-        {"status": "ARCHIVED", "meaning": "Historical decision material kept outside the active index"},
-        {"status": "GENERATED", "meaning": "Produced by a canonical script and not edited by hand"},
-        {"status": "DELETED", "meaning": "Removed after consumer and history review"},
-    ], "Document lifecycle policy.")
+    (meta / "document-policy.yml").write_text(
+        """# English: Generated from the repository's canonical governance inputs.
+# Español: Generado a partir de las entradas canónicas de gobernanza.
+# 中文：由仓库治理的 canonical 输入生成，请勿手工修改生成字段。
+current_product_version:
+  source: VERSION
+long_lived_docs:
+  store_resolved_product_version: false
+reports:
+  store_resolved_product_version: true
+migration_docs:
+  allow_historical_versions: true
+lifecycle:
+  - status: ACTIVE
+    meaning: Current guidance that must be maintained
+  - status: ARCHIVED
+    meaning: Historical decision material kept outside the active index
+  - status: GENERATED
+    meaning: Produced by a canonical script and not edited by hand
+  - status: DELETED
+    meaning: Removed after consumer and history review
+""",
+        encoding="utf-8",
+    )
     write_yaml(meta / "glossary.yml", [
         {"term": "canonical", "zh-Hans": "唯一实现/事实来源", "es": "fuente canónica"},
         {"term": "host", "zh-Hans": "宿主 App 或扩展目标", "es": "app o extensión anfitriona"},
@@ -675,6 +707,7 @@ def write_meta(modules: list[dict[str, Any]], scripts: list[dict[str, Any]], ass
         {"generator": "Scripts/Docs/audit_docs.py", "outputs": ["docs/_meta", "docs/index", "docs/modules", "report/docs", "report/scripts", "report/data", "report/tests"]},
         {"source": "Package.swift", "consumers": ["docs/_meta/modules.yml", "report/docs/DOCUMENT_INVENTORY.json", "report/tests/TEST_INVENTORY.json"]},
         {"source": "PooTools.podspec", "consumers": ["docs/_meta/modules.yml", "report/docs/DOCUMENT_INVENTORY.json"]},
+        {"source": "VERSION", "consumers": ["Scripts/Docs/audit_docs.py", "report/docs/DOCUMENT_INVENTORY.json", "docs/modules/**/README.*.md", "docs/index/*.md"]},
     ], "Generated asset provenance and stable command contract.")
 
 
@@ -685,7 +718,7 @@ def write_governance_docs() -> None:
 
 ## English
 
-`Scripts/Docs/audit_docs.py` is the canonical local entry point for documentation, module, script, data-asset, and test inventories.
+`Scripts/Docs/audit_docs.py` is the canonical local entry point for documentation, module, script, data-asset, and test inventories. `VERSION` is resolved through `product_version_source: repository:VERSION`; long-lived module guides do not copy the current number.
 
 ```bash
 python3 Scripts/Docs/audit_docs.py --write-all
@@ -693,6 +726,7 @@ python3 Scripts/Docs/audit_docs.py --check
 python3 Scripts/ptools.py repo audit
 python3 Scripts/ptools.py repo duplicates
 python3 Scripts/ptools.py tests audit
+bash Scripts/Example/validate_demo_coverage.py --check
 bash Scripts/CI/check_5_56_1_governance.sh
 ```
 
@@ -702,7 +736,7 @@ English is the canonical technical source. Chinese and Spanish module guides sha
 
 `Scripts/Docs/audit_docs.py` 是文档、模块、脚本、数据资产和测试清单的唯一本地治理入口。
 
-执行 `--write-all` 生成 registry、三语模块指南和报告，执行 `--check` 校验 manifest 漂移、三语文件完整性、链接和生成资产。历史计划只有在盘点和决策提炼后才进入 `docs/archive/`，禁止为了减少文件数量直接删除。
+执行 `--write-all` 生成 registry、三语模块指南和报告，执行 `--check` 校验 manifest 漂移、三语文件完整性、链接、版本来源和生成资产。Demo 覆盖率由 `Data/demo-registry.yml` 与 `Scripts/Example/validate_demo_coverage.py` 独立校验。历史计划只有在盘点和决策提炼后才进入 `docs/archive/`，禁止为了减少文件数量直接删除。
 
 清理流程固定为 `Classification → Cleanup Manifest → Consumer Repoint → Merge/Move/Delete → Verification`。清理结果写入 `report/repository/`；脚本、数据和测试 target 没有消费者重定向证据时只能标记为候选，不能直接删除。
 
@@ -710,7 +744,7 @@ English is the canonical technical source. Chinese and Spanish module guides sha
 
 `Scripts/Docs/audit_docs.py` es la entrada canónica local para los inventarios de documentación, módulos, scripts, datos y tests.
 
-English es la fuente técnica canónica; las guías en chino y español mantienen la misma estructura. Los informes y guías generados no se editan manualmente: se modifica el registro o el generador.
+English es la fuente técnica canónica; las guías en chino y español mantienen la misma estructura. `VERSION` es la única fuente de la versión actual y los README guardan su referencia, no el número resuelto. Los informes y guías generados no se editan manualmente: se modifica el registro o el generador.
 
 ## Lifecycle
 
@@ -723,7 +757,7 @@ English es la fuente técnica canónica; las guías en chino y español mantiene
 
 ## Version and review
 
-The current documentation version comes from `VERSION`. The generator records the source revision and a deterministic commit timestamp. Formal module names come from `Package.swift` and `PooTools.podspec`; registry drift fails CI.
+The current documentation version comes from `VERSION`. The generator records the source revision and a deterministic commit timestamp. Formal module names come from `Package.swift` and `PooTools.podspec`; registry drift fails CI. Example coverage comes from `Data/demo-registry.yml`, while UIKit factories stay in `PooTools/PTDemoCatalog.swift`.
 
 The applied repository cleanup is recorded in `report/repository/REPOSITORY_CLEANUP_MANIFEST.md`; duplicate candidates remain review-only until their semantic ownership is confirmed.
 """,
@@ -758,7 +792,7 @@ def write_indexes() -> None:
     ):
         (ROOT / "docs/index").mkdir(parents=True, exist_ok=True)
         (ROOT / "docs/index" / f"README.{language}.md").write_text(
-            f"---\nlanguage: {language}\ndocumentation_version: {VERSION}\nstatus: ACTIVE\n---\n# {title}\n\n{body}\n\n- [Module index](MODULES.{language}.md)\n- [Architecture](../architecture/ARCHITECTURE.md)\n- [Migration](../migration/MIGRATION_6.md)\n- [Quality](../maintainers/QUALITY.md)\n- [Documentation and asset governance](../maintenance/DOCUMENTATION_AND_ASSET_GOVERNANCE.md)\n",
+            f"---\nlanguage: {language}\nproduct_version_source: {yaml_scalar(VERSION_SOURCE)}\ndocument_schema_version: {DOCUMENT_SCHEMA_VERSION}\nstatus: ACTIVE\n---\n# {title}\n\n{body}\n\n- [Module index](MODULES.{language}.md)\n- [Architecture](../architecture/ARCHITECTURE.md)\n- [Migration](../migration/MIGRATION_6.md)\n- [Quality](../maintainers/QUALITY.md)\n- [Documentation and asset governance](../maintenance/DOCUMENTATION_AND_ASSET_GOVERNANCE.md)\n",
             encoding="utf-8",
         )
 
@@ -824,6 +858,20 @@ def check() -> int:
             path = ROOT / "docs/modules" / item["id"] / f"README.{language}.md"
             if not path.is_file():
                 failures.append(f"module guide missing {path.relative_to(ROOT)}")
+            else:
+                text = path.read_text(encoding="utf-8")
+                if "documentation_version:" in text:
+                    failures.append(f"current product version copied into {path.relative_to(ROOT)}")
+                if f"product_version_source: {yaml_scalar(VERSION_SOURCE)}" not in text:
+                    failures.append(f"version source missing from {path.relative_to(ROOT)}")
+                if f"document_schema_version: {DOCUMENT_SCHEMA_VERSION}" not in text:
+                    failures.append(f"document schema missing from {path.relative_to(ROOT)}")
+    for path in sorted((ROOT / "docs/index").glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        if "documentation_version:" in text:
+            failures.append(f"current product version copied into {path.relative_to(ROOT)}")
+        if path.name.startswith(("README.", "MODULES.")) and f"product_version_source: {yaml_scalar(VERSION_SOURCE)}" not in text:
+            failures.append(f"version source missing from {path.relative_to(ROOT)}")
     required = [
         ROOT / "report/docs/DOCUMENT_INVENTORY.json",
         ROOT / "report/scripts/SCRIPT_INVENTORY.json",

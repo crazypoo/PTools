@@ -1238,10 +1238,10 @@ extension PTCollectionView  {
     private func autoRegisterIfNeeded(sections: [PTSection]) {
         for section in sections {
             if let headerClass = section.headerClass as? PTSupplementaryRegisterable.Type {
-                registerSupplementaryIfNeeded(headerClass)
+                registerSupplementaryIfNeeded(headerClass, reuseID: section.headerReuseID)
             }
             if let footerClass = section.footerClass as? PTSupplementaryRegisterable.Type {
-                registerSupplementaryIfNeeded(footerClass)
+                registerSupplementaryIfNeeded(footerClass, reuseID: section.footerReuseID)
             }
             section.rows?.forEach { row in
                 if let cellClass = row.cellClass, !row.reuseID.isEmpty {
@@ -1258,14 +1258,18 @@ extension PTCollectionView  {
         registeredCells.insert(reuseID)
     }
     
-    private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type) {
-        let reuseID = viewClass.reuseID
-        let registrationKey = "\(viewClass.kind)|\(reuseID)"
-        guard !reuseID.isEmpty, !registeredSupplementary.contains(registrationKey),
+    // English: Register the section's effective identifier so custom header and footer IDs can be dequeued safely.
+    // Español: Registra el identificador efectivo de cada sección para poder reutilizar de forma segura headers y footers personalizados.
+    // 中文：使用 Section 的实际复用标识注册视图，确保自定义 header/footer ID 能够安全出队。
+    private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type,
+                                               reuseID: String? = nil) {
+        let resolvedReuseID = (reuseID?.isEmpty == false ? reuseID : nil) ?? viewClass.reuseID
+        let registrationKey = "\(viewClass.kind)|\(resolvedReuseID)"
+        guard !resolvedReuseID.isEmpty, !registeredSupplementary.contains(registrationKey),
               let reusableViewClass = viewClass as? UICollectionReusableView.Type else { return }
         collectionView.register(reusableViewClass,
                                 forSupplementaryViewOfKind: viewClass.kind,
-                                withReuseIdentifier: reuseID)
+                                withReuseIdentifier: resolvedReuseID)
         registeredSupplementary.insert(registrationKey)
     }
 }

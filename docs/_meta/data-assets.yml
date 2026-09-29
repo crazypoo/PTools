@@ -59,6 +59,14 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Data/demo-registry.yml"
+  kind: "SOURCE_OF_TRUTH"
+  format: "yml"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Data/registry.yml"
   kind: "SOURCE_OF_TRUTH"
   format: "yml"
@@ -1756,6 +1764,14 @@
   action: "KEEP"
 -
   path: "report/docs/DOCUMENT_INVENTORY.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/example/DEMO_COVERAGE.json"
   kind: "REPORT"
   format: "json"
   generated: true

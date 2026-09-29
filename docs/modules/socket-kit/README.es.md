@@ -12,7 +12,8 @@ category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
 canonical_source: "README.en.md"
-documentation_version: "5.57.0"
+product_version_source: "repository:VERSION"
+document_schema_version: 1
 ---
 
 # SocketKit
