@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
-Generated at: 2026-09-29T00:47:20Z
+Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
+Generated at: 2026-09-29T05:16:38Z
 -->
 
 # SwiftPM Dependency Graph
@@ -209,7 +209,7 @@ Generated at: 2026-09-29T00:47:20Z
 | `PToolsSymbolsTests` | `Tests/PToolsSymbolsTests` | PToolsSymbols | — | 0 source entries / 0 resources |
 | `PToolsTheme` | `PooToolsSource/PToolsTheme` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
-| `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | PooToolsPagingControl, ptools | — | 0 source entries / 0 resources |
 | `PToolsWidgetCore` | `PooToolsSource/PToolsWidgetCore` | PToolsDeepLink, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBanner` | `PooToolsSource/Banner` | PToolsCore, PToolsLogging, PToolsOverlay, PToolsSymbols | — | 0 source entries / 0 resources |

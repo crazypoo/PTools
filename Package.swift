@@ -791,7 +791,10 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsUIFoundationTests",
-            dependencies: ["ptools"],
+            // English: Reuse the existing iOS UI test target for paging query regressions.
+            // Español: Reutiliza el objetivo de pruebas UI iOS existente para las regresiones de consultas de paginación.
+            // 中文：复用现有 iOS UI 测试目标覆盖分页查询回归。
+            dependencies: ["ptools", "PooToolsPagingControl"],
             path: "Tests/PToolsUIFoundationTests"
         ),
         // English: Keep rich-text value, range, matcher, and bridge regressions isolated from feature targets.

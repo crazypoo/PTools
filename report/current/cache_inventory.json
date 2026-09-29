@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90",
-  "generated_at": "2026-09-29T00:47:40Z",
+  "source_revision": "e175526c43421ccc7d09cb9e4bf1ae9580353e88",
+  "generated_at": "2026-09-29T05:17:02Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -66,25 +66,25 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1813,
+      "line": 1817,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1814,
+      "line": 1818,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1907,
+      "line": 1911,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1908,
+      "line": 1912,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
@@ -957,6 +957,12 @@
       "line": 50,
       "kind": "disk or custom cache",
       "text": "/// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy."
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTPaging.swift",
+      "line": 250,
+      "kind": "disk or custom cache",
+      "text": "/// English: Returns whether a page is currently held by the container cache."
     },
     {
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",

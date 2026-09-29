@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90",
-  "generated_at": "2026-09-29T00:47:20Z",
+  "source_revision": "e175526c43421ccc7d09cb9e4bf1ae9580353e88",
+  "generated_at": "2026-09-29T05:16:38Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -4371,6 +4371,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PooToolsPagingControl",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPagingControl",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",

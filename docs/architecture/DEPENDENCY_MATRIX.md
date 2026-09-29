@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 67a31c52f68a6dcecd85b90fa713c27cc03617cd
-Generated at: 2026-09-28T16:22:54Z
-Version source: 5.57.0
+Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
+Generated at: 2026-09-29T05:04:14Z
+Version source: 5.57.2
 -->
 
 # Direct Dependency Matrix

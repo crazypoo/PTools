@@ -1,4 +1,4 @@
-# PTPagingView 使用指南（5.31.1）
+# PTPagingView 使用指南
 
 ## 页面容器
 
@@ -56,3 +56,31 @@ coordinator.apply(items: items, pages: pages)
 - `pagingView.shouldRecognizeSimultaneously(_:_:)` 可在宿主已有手势代理中复用，不能替换 UIKit 自己管理的 ScrollView pan delegate。
 - 内层列表可以实现 `PTScrollablePage` 显式提供 ScrollView；未实现时 PTools 会递归查找页面层级中的第一个 ScrollView。
 - `gestureArena` 默认只允许分页所需的 ScrollView 协作，不会让所有 Pan 手势同时识别；需要列表 Cell 侧滑时，保持 `isListHorizontalScrollEnabled = false`。
+
+## 查询已加载页面
+
+`PTPageContainer` 的查询入口是只读的，稳定 ID 是唯一查询依据：
+
+```swift
+let ids = pageContainer.loadedPageIDs
+let isLoaded = pageContainer.isPageLoaded(id: model.id)
+let page = pageContainer.loadedPage(for: model.id)
+let controller = pageContainer.loadedViewController(
+    for: model.id,
+    as: OrderListViewController.self
+)
+let current = pageContainer.currentViewController(
+    as: OrderListViewController.self
+)
+```
+
+查询不会调用页面工厂，不会改变 `selectedID`、`cachePolicy` 或生命周期；未加载、已卸载或类型不匹配时安全返回 `nil`。`loadedPageIDs` 和 `loadedViewControllers` 按页面描述顺序返回，而不是按内部字典顺序返回。
+
+`PTViewPage` 只提供 `loadedPage(for:)`，它不是 ViewController-backed page，因此 `loadedViewController(for:)` 返回 `nil`。需要批量刷新已缓存的控制器时使用：
+
+```swift
+let controllers = pageContainer.loadedViewControllers(of: OrderListViewController.self)
+controllers.forEach { $0.reloadMainList(showHud: false) }
+```
+
+查询结果受现有 `cachePolicy` 约束，不会为了满足查询而扩大缓存。页面卸载后，相关查询立即返回空结果。

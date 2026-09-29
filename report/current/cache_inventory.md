@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
-Generated at: 2026-09-29T00:47:40Z
+Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
+Generated at: 2026-09-29T05:17:02Z
 -->
 
 # PTools 当前缓存盘点
@@ -23,10 +23,10 @@ Generated at: 2026-09-29T00:47:40Z
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
 | PooToolsSource/Base/PTCollectionView.swift:1226 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
 | PooToolsSource/Base/PTCollectionView.swift:1227 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1813 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1814 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1907 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1908 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:1817 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1818 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1911 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1912 | disk or custom cache | return (cache.items, cache.contentHeight) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |
@@ -172,6 +172,7 @@ Generated at: 2026-09-29T00:47:40Z
 | PooToolsSource/Router/PTRouterServiceManager.swift:157 | disk or custom cache | // MARK: - Service Clean Cache |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:63 | disk or custom cache | /// English: Refreshes the native item cache; old callers can then call apply(to:). |
 | PooToolsSource/SegmentControl/PTPaging.swift:50 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
+| PooToolsSource/SegmentControl/PTPaging.swift:250 | disk or custom cache | /// English: Returns whether a page is currently held by the container cache. |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:321 | disk or custom cache | /// English: Cache policy for lazy pages. |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:758 | disk or custom cache | open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) { |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:762 | disk or custom cache | open func cache(viewController: UIViewController, with identifier: String) { |

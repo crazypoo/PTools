@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
-Generated at: 2026-09-29T00:46:55Z
+Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
+Generated at: 2026-09-29T05:16:10Z
 -->
 
 # PTools 当前公开 API 清单
@@ -745,35 +745,35 @@ Generated at: 2026-09-29T00:46:55Z
 | PooToolsSource/Base/PTCollectionView.swift:877 | func | public | public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) { |
 | PooToolsSource/Base/PTCollectionView.swift:958 | func | public | public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) { |
 | PooToolsSource/Base/PTCollectionView.swift:966 | func | public | public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) { |
-| PooToolsSource/Base/PTCollectionView.swift:1282 | func | public | @MainActor public func showCollectionDetail(collectionData:[PTSection], |
-| PooToolsSource/Base/PTCollectionView.swift:1327 | func | public | public func clearAllData(finishTask:PTCollectionCallback? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1351 | func | public | public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1406 | func | public | public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1436 | func | public | public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1484 | func | public | public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1520 | func | public | public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1570 | func | public | public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:1968 | func | public | public func hideEmptyLoading(task: PTActionTask?) { |
-| PooToolsSource/Base/PTCollectionView.swift:1972 | func | public | public func showEmptyLoading() { |
-| PooToolsSource/Base/PTCollectionView.swift:2022 | func | public | public func reloadEmptyConfig() { |
-| PooToolsSource/Base/PTCollectionView.swift:2031 | func | public | public func endRefresh() { |
-| PooToolsSource/Base/PTCollectionView.swift:2035 | func | public | public func footerRefreshNoMore () { |
-| PooToolsSource/Base/PTCollectionView.swift:2040 | func | public | public func footerRefreshReset() { |
-| PooToolsSource/Base/PTCollectionView.swift:2048 | func | public | public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) { |
-| PooToolsSource/Base/PTCollectionView.swift:2052 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
-| PooToolsSource/Base/PTCollectionView.swift:2056 | func | public | public func registerNibCells(nib:[String:String]) { |
-| PooToolsSource/Base/PTCollectionView.swift:2060 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
-| PooToolsSource/Base/PTCollectionView.swift:2066 | func | public | public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2092 | func | public | public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2127 | func | public | public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2174 | func | public | public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2209 | func | public | public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) { |
-| PooToolsSource/Base/PTCollectionView.swift:2227 | func | public | public func getRow(at indexPath: IndexPath) -> PTRows? { |
-| PooToolsSource/Base/PTCollectionView.swift:2231 | func | public | public func getRows(at indexPaths: [IndexPath]) -> [PTRows] { |
-| PooToolsSource/Base/PTCollectionView.swift:2235 | func | public | public func getRow(by diffId: String) -> PTRows? { |
-| PooToolsSource/Base/PTCollectionView.swift:2240 | func | public | public func getAllRows(in section: Int) -> [PTRows] { |
-| PooToolsSource/Base/PTCollectionView.swift:2248 | func | public | public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] { |
-| PooToolsSource/Base/PTCollectionView.swift:2258 | func | public | public func getSectionIndex(byHeaderID headerID: String) -> Int? { |
+| PooToolsSource/Base/PTCollectionView.swift:1286 | func | public | @MainActor public func showCollectionDetail(collectionData:[PTSection], |
+| PooToolsSource/Base/PTCollectionView.swift:1331 | func | public | public func clearAllData(finishTask:PTCollectionCallback? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1355 | func | public | public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1410 | func | public | public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1440 | func | public | public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1488 | func | public | public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1524 | func | public | public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1574 | func | public | public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:1972 | func | public | public func hideEmptyLoading(task: PTActionTask?) { |
+| PooToolsSource/Base/PTCollectionView.swift:1976 | func | public | public func showEmptyLoading() { |
+| PooToolsSource/Base/PTCollectionView.swift:2026 | func | public | public func reloadEmptyConfig() { |
+| PooToolsSource/Base/PTCollectionView.swift:2035 | func | public | public func endRefresh() { |
+| PooToolsSource/Base/PTCollectionView.swift:2039 | func | public | public func footerRefreshNoMore () { |
+| PooToolsSource/Base/PTCollectionView.swift:2044 | func | public | public func footerRefreshReset() { |
+| PooToolsSource/Base/PTCollectionView.swift:2052 | func | public | public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) { |
+| PooToolsSource/Base/PTCollectionView.swift:2056 | func | public | public func registerClassCells(classs:[String:AnyClass]) { |
+| PooToolsSource/Base/PTCollectionView.swift:2060 | func | public | public func registerNibCells(nib:[String:String]) { |
+| PooToolsSource/Base/PTCollectionView.swift:2064 | func | public | public func registerSupplementaryView(classs:[String:AnyClass],kind:String) { |
+| PooToolsSource/Base/PTCollectionView.swift:2070 | func | public | public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2096 | func | public | public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2131 | func | public | public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2178 | func | public | public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2213 | func | public | public func softReloadAllData(animated: Bool = false, completion: PTActionTask? = nil) { |
+| PooToolsSource/Base/PTCollectionView.swift:2231 | func | public | public func getRow(at indexPath: IndexPath) -> PTRows? { |
+| PooToolsSource/Base/PTCollectionView.swift:2235 | func | public | public func getRows(at indexPaths: [IndexPath]) -> [PTRows] { |
+| PooToolsSource/Base/PTCollectionView.swift:2239 | func | public | public func getRow(by diffId: String) -> PTRows? { |
+| PooToolsSource/Base/PTCollectionView.swift:2244 | func | public | public func getAllRows(in section: Int) -> [PTRows] { |
+| PooToolsSource/Base/PTCollectionView.swift:2252 | func | public | public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] { |
+| PooToolsSource/Base/PTCollectionView.swift:2262 | func | public | public func getSectionIndex(byHeaderID headerID: String) -> Int? { |
 | PooToolsSource/Base/PTCollectionViewSkeleton.swift:13 | typealias | public | public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows> |
 | PooToolsSource/Base/PTCollectionViewSkeleton.swift:14 | typealias | public | public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows> |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:15 | class | public | public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> { |
@@ -2952,36 +2952,36 @@ Generated at: 2026-09-29T00:46:55Z
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:28 | var | public | public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)? |
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:32 | var | public | public var editResultBlock: (@MainActor @Sendable (PTImageEditorResult) -> Void)? |
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:33 | var | public | public var backHandler:PTActionTask? |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:612 | init | public | public init(readyEditImage: UIImage) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:956 | func | public | public func editImageShow(vc:UIViewController) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1286 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1290 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1296 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1316 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1323 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1333 | func | public | public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1360 | func | public | public func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction]) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1365 | func | public | public func editorManager(_ manager: PTMediaEditManager, undoAction action: PTMediaEditorAction) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1384 | func | public | public func editorManager(_ manager: PTMediaEditManager, redoAction action: PTMediaEditorAction) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1489 | var | public | public var engineScrollView: UIScrollView { mainScrollView } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1490 | var | public | public var engineOriginalImageSize: CGSize { originalImage.size } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1491 | var | public | public var engineEditImageSize: CGSize { editImage.size } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1492 | var | public | public var engineEditRect: CGRect { currentClipStatus.editRect } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1493 | var | public | public var engineShouldSwapSize: Bool { shouldSwapSize } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1494 | var | public | public var engineCurrentAngle: CGFloat { currentClipStatus.angle } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1495 | var | public | public var engineEditorManager: PTMediaEditManager { editorManager } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1496 | var | public | public var engineEraserCircleView: UIImageView { eraserCircleView } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1498 | var | public | public var engineOriginalImage: UIImage { originalImage } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1499 | var | public | public var engineCurrentEditImage: UIImage { editImage } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1502 | func | public | public func engineUpdateEditImage(_ newImage: UIImage) { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1507 | var | public | public var engineMainView: UIView { view } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1508 | var | public | public var engineViewController: UIViewController { self } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1509 | var | public | public var engineAshbinView: UIView { ashbinView } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1510 | var | public | public var engineAshbinImgView: UIImageView { ashbinImgView } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1512 | var | public | public var engineImageWithoutAdjust: UIImage { editImageWithoutAdjust } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1515 | func | public | public func engineRequestAdjustReferenceImage() -> UIImage { |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1524 | var | public | public var engineThumbnailImage: UIImage? { thumbnailImage } |
-| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1527 | func | public | public func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:624 | init | public | public init(readyEditImage: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:991 | func | public | public func editImageShow(vc:UIViewController) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1321 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1325 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1330 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1350 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1357 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1367 | func | public | public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1394 | func | public | public func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction]) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1399 | func | public | public func editorManager(_ manager: PTMediaEditManager, undoAction action: PTMediaEditorAction) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1418 | func | public | public func editorManager(_ manager: PTMediaEditManager, redoAction action: PTMediaEditorAction) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1523 | var | public | public var engineScrollView: UIScrollView { mainScrollView } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1524 | var | public | public var engineOriginalImageSize: CGSize { originalImage.size } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1525 | var | public | public var engineEditImageSize: CGSize { editImage.size } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1526 | var | public | public var engineEditRect: CGRect { currentClipStatus.editRect } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1527 | var | public | public var engineShouldSwapSize: Bool { shouldSwapSize } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1528 | var | public | public var engineCurrentAngle: CGFloat { currentClipStatus.angle } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1529 | var | public | public var engineEditorManager: PTMediaEditManager { editorManager } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1530 | var | public | public var engineEraserCircleView: UIImageView { eraserCircleView } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1532 | var | public | public var engineOriginalImage: UIImage { originalImage } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1533 | var | public | public var engineCurrentEditImage: UIImage { editImage } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1536 | func | public | public func engineUpdateEditImage(_ newImage: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1541 | var | public | public var engineMainView: UIView { view } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1542 | var | public | public var engineViewController: UIViewController { self } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1543 | var | public | public var engineAshbinView: UIView { ashbinView } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1544 | var | public | public var engineAshbinImgView: UIImageView { ashbinImgView } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1546 | var | public | public var engineImageWithoutAdjust: UIImage { editImageWithoutAdjust } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1549 | func | public | public func engineRequestAdjustReferenceImage() -> UIImage { |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1558 | var | public | public var engineThumbnailImage: UIImage? { thumbnailImage } |
+| PooToolsSource/ImageEditor/PTEditImageViewController.swift:1561 | func | public | public func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage) { |
 | PooToolsSource/ImageEditor/PTEditInputProtocol.swift:13 | protocol | public | public protocol PTTextEditorConfigurable: UIViewController { |
 | PooToolsSource/ImageEditor/PTEditInputViewController.swift:22 | class | public | public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigurable { |
 | PooToolsSource/ImageEditor/PTEditInputViewController.swift:45 | var | public | public var endInput: ((String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void)? |
@@ -3037,33 +3037,35 @@ Generated at: 2026-09-29T00:46:55Z
 | PooToolsSource/ImageEditor/PTImageEditorConfig.swift:103 | var | public | public var dimClippedAreaDuringAdjustments = false |
 | PooToolsSource/ImageEditor/PTImageEditorConfig.swift:107 | enum | public | @objc public enum EditTool: Int, CaseIterable,Sendable { |
 | PooToolsSource/ImageEditor/PTImageEditorConfig.swift:121 | var | public | public var tools: [PTImageEditorConfig.EditTool] { |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:137 | var | public | public var filters: [PTHarBethFilter] { |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:151 | var | public | public var minimumZoomScale = 1.0 |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:154 | var | public | public var adjust_tools: [PTHarBethFilter.FiltersTool] { |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:171 | var | public | public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:172 | var | public | public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:173 | var | public | public var undoNormal:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:174 | var | public | public var undoDisable:UIImage = "⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:175 | var | public | public var redoNormal:UIImage = "↪️".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:176 | var | public | public var redoDisable:UIImage = "⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:177 | var | public | public var doingAlertTitle:String = "PT Alert Doning".localized() |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:178 | var | public | public var deleteAlertTitle:String = "PT Photo picker drop delete".localized() |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:182 | var | public | public var cutBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:183 | var | public | public var cutSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:184 | var | public | public var cutUndoImage:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:185 | var | public | public var cutRotateImage:UIImage = "🔄".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:186 | var | public | public var cutTitleFont:UIFont = .appfont(size: 12) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:190 | var | public | public var textBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:191 | var | public | public var textSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:195 | var | public | public var colorPickerBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:199 | var | public | public var adjustSliderFont:UIFont = .appfont(size: 12) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:200 | var | public | public var adjustSliderCellFont:UIFont = .appfont(size: 12) |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:201 | var | public | public var adjustBrightnessString:String = "PT Photo picker brightness".localized() |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:202 | var | public | public var adjustSaturationString:String = "PT Photo picker saturation".localized() |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:203 | var | public | public var adjustContrastString:String = "PT Photo picker contrast".localized() |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:205 | var | public | public var drawLineWidth:CGFloat = 6 |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:206 | var | public | public var mosaicLineWidth:CGFloat = 25 |
-| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:208 | var | public | public var staticEdgeInset:CGFloat = 20 |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:137 | var | public | public var toolNormalImages: [PTImageEditorConfig.EditTool: UIImage] = [:] |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:142 | var | public | public var toolSelectedImages: [PTImageEditorConfig.EditTool: UIImage] = [:] |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:147 | var | public | public var filters: [PTHarBethFilter] { |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:161 | var | public | public var minimumZoomScale = 1.0 |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:164 | var | public | public var adjust_tools: [PTHarBethFilter.FiltersTool] { |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:181 | var | public | public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:182 | var | public | public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:183 | var | public | public var undoNormal:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:184 | var | public | public var undoDisable:UIImage = "⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:185 | var | public | public var redoNormal:UIImage = "↪️".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:186 | var | public | public var redoDisable:UIImage = "⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:187 | var | public | public var doingAlertTitle:String = "PT Alert Doning".localized() |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:188 | var | public | public var deleteAlertTitle:String = "PT Photo picker drop delete".localized() |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:192 | var | public | public var cutBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:193 | var | public | public var cutSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:194 | var | public | public var cutUndoImage:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:195 | var | public | public var cutRotateImage:UIImage = "🔄".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:196 | var | public | public var cutTitleFont:UIFont = .appfont(size: 12) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:200 | var | public | public var textBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:201 | var | public | public var textSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:205 | var | public | public var colorPickerBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20)) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:209 | var | public | public var adjustSliderFont:UIFont = .appfont(size: 12) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:210 | var | public | public var adjustSliderCellFont:UIFont = .appfont(size: 12) |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:211 | var | public | public var adjustBrightnessString:String = "PT Photo picker brightness".localized() |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:212 | var | public | public var adjustSaturationString:String = "PT Photo picker saturation".localized() |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:213 | var | public | public var adjustContrastString:String = "PT Photo picker contrast".localized() |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:215 | var | public | public var drawLineWidth:CGFloat = 6 |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:216 | var | public | public var mosaicLineWidth:CGFloat = 25 |
+| PooToolsSource/ImageEditor/PTImageEditorConfig.swift:218 | var | public | public var staticEdgeInset:CGFloat = 20 |
 | PooToolsSource/ImageEditor/PTImageEditorSticker.swift:11 | class | public | public class PTBaseStickertState: NSObject { |
 | PooToolsSource/ImageEditor/PTImageEditorSticker.swift:12 | let | public | public let id: String |
 | PooToolsSource/ImageEditor/PTImageEditorSticker.swift:13 | let | public | public let image: UIImage |
@@ -7864,86 +7866,96 @@ Generated at: 2026-09-29T00:46:55Z
 | PooToolsSource/SegmentControl/PTPaging.swift:180 | func | public | public func select(index: Int, |
 | PooToolsSource/SegmentControl/PTPaging.swift:223 | var | public | public var selectedIndex: Int? { |
 | PooToolsSource/SegmentControl/PTPaging.swift:231 | var | public | public var currentPageScrollView: UIScrollView? { |
-| PooToolsSource/SegmentControl/PTPaging.swift:333 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:370 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:374 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:407 | enum | public | public enum PTPagingDimension { |
-| PooToolsSource/SegmentControl/PTPaging.swift:417 | struct | public | public struct PTPagingHeader { |
-| PooToolsSource/SegmentControl/PTPaging.swift:418 | let | public | public let viewProvider: @MainActor () -> UIView |
-| PooToolsSource/SegmentControl/PTPaging.swift:419 | var | public | public var height: PTPagingDimension |
-| PooToolsSource/SegmentControl/PTPaging.swift:421 | init | public | public init(height: PTPagingDimension = .automatic, |
-| PooToolsSource/SegmentControl/PTPaging.swift:432 | struct | public | public struct PTPagingPinnedHeader { |
-| PooToolsSource/SegmentControl/PTPaging.swift:433 | let | public | public let viewProvider: @MainActor () -> UIView |
-| PooToolsSource/SegmentControl/PTPaging.swift:434 | var | public | public var height: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:436 | init | public | public init(height: CGFloat = 44, |
-| PooToolsSource/SegmentControl/PTPaging.swift:447 | struct | public | public struct PTPagingLayoutEngine { |
-| PooToolsSource/SegmentControl/PTPaging.swift:448 | var | public | public var safeAreaTop: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:449 | var | public | public var headerHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:450 | var | public | public var pinnedHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:451 | var | public | public var pageHeight: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:453 | init | public | public init(safeAreaTop: CGFloat = 0, |
-| PooToolsSource/SegmentControl/PTPaging.swift:463 | var | public | public var contentHeight: CGFloat { headerHeight + pinnedHeight + pageHeight } |
-| PooToolsSource/SegmentControl/PTPaging.swift:464 | var | public | public var collapseLimit: CGFloat { max(0, headerHeight) } |
-| PooToolsSource/SegmentControl/PTPaging.swift:471 | enum | public | public enum PTScrollOwnership { |
-| PooToolsSource/SegmentControl/PTPaging.swift:481 | enum | public | public enum PTPagingRefreshPolicy { |
-| PooToolsSource/SegmentControl/PTPaging.swift:492 | protocol | public | public protocol PTRefreshAdapter: AnyObject { |
-| PooToolsSource/SegmentControl/PTPaging.swift:502 | class | public | public final class PTUIRefreshAdapter: PTRefreshAdapter { |
-| PooToolsSource/SegmentControl/PTPaging.swift:503 | let | public | public let control: UIRefreshControl |
-| PooToolsSource/SegmentControl/PTPaging.swift:505 | init | public | public init(control: UIRefreshControl = UIRefreshControl()) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:509 | var | public | public var isRefreshing: Bool { control.isRefreshing } |
-| PooToolsSource/SegmentControl/PTPaging.swift:510 | func | public | public func beginRefreshing() { control.beginRefreshing() } |
-| PooToolsSource/SegmentControl/PTPaging.swift:511 | func | public | public func endRefreshing() { control.endRefreshing() } |
-| PooToolsSource/SegmentControl/PTPaging.swift:518 | class | open | open class PTNestedScrollCoordinator { |
-| PooToolsSource/SegmentControl/PTPaging.swift:521 | var | public | public var collapseLimit: CGFloat = 0 |
-| PooToolsSource/SegmentControl/PTPaging.swift:522 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:526 | var | public | public var activePageID: AnyHashable? |
-| PooToolsSource/SegmentControl/PTPaging.swift:531 | init | public | public init() {} |
-| PooToolsSource/SegmentControl/PTPaging.swift:533 | func | public | public func bind(outer: UIScrollView, |
-| PooToolsSource/SegmentControl/PTPaging.swift:560 | func | public | public func handleOuterScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:579 | func | public | public func handleInnerScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:607 | func | public | public func settle() { |
-| PooToolsSource/SegmentControl/PTPaging.swift:723 | struct | public | public struct PTGestureDirectionResolver { |
-| PooToolsSource/SegmentControl/PTPaging.swift:724 | var | public | public var threshold: CGFloat |
-| PooToolsSource/SegmentControl/PTPaging.swift:726 | init | public | public init(threshold: CGFloat = 1.15) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:730 | func | public | public func resolve(velocity: CGPoint) -> PTGestureDirection { |
-| PooToolsSource/SegmentControl/PTPaging.swift:742 | enum | public | public enum PTGestureDirection { |
-| PooToolsSource/SegmentControl/PTPaging.swift:752 | class | public | public final class PTGestureArena { |
-| PooToolsSource/SegmentControl/PTPaging.swift:753 | var | public | public var resolver = PTGestureDirectionResolver() |
-| PooToolsSource/SegmentControl/PTPaging.swift:754 | var | public | public var allowsSimultaneousNavigationPop = true |
-| PooToolsSource/SegmentControl/PTPaging.swift:758 | var | public | public var allowsSimultaneousPanGestures = false |
-| PooToolsSource/SegmentControl/PTPaging.swift:764 | init | public | public init() {} |
-| PooToolsSource/SegmentControl/PTPaging.swift:766 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
-| PooToolsSource/SegmentControl/PTPaging.swift:796 | class | public | public final class PTNavigationGestureAdapter { |
-| PooToolsSource/SegmentControl/PTPaging.swift:798 | var | public | public var isEnabledAtFirstPage = true |
-| PooToolsSource/SegmentControl/PTPaging.swift:800 | init | public | public init(navigationController: UINavigationController? = nil) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:804 | func | public | public func shouldBegin(pageIndex: Int) -> Bool { |
-| PooToolsSource/SegmentControl/PTPaging.swift:815 | class | open | open class PTPagingView: UIView, UIScrollViewDelegate { |
-| PooToolsSource/SegmentControl/PTPaging.swift:816 | let | public | public let outerScrollView = UIScrollView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:817 | let | public | public let pageContainer: PTPageContainer |
-| PooToolsSource/SegmentControl/PTPaging.swift:821 | var | public | public var listContainerView: PTPageContainer { pageContainer } |
-| PooToolsSource/SegmentControl/PTPaging.swift:825 | var | public | public var mainScrollView: UIScrollView { outerScrollView } |
-| PooToolsSource/SegmentControl/PTPaging.swift:835 | var | public | public var refreshControl: UIRefreshControl? { |
-| PooToolsSource/SegmentControl/PTPaging.swift:842 | var | public | public var isListHorizontalScrollEnabled: Bool { |
-| PooToolsSource/SegmentControl/PTPaging.swift:846 | let | public | public let headerHost = UIView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:847 | let | public | public let pinnedHeaderHost = UIView() |
-| PooToolsSource/SegmentControl/PTPaging.swift:848 | let | public | public let nestedScrollCoordinator = PTNestedScrollCoordinator() |
-| PooToolsSource/SegmentControl/PTPaging.swift:849 | let | public | public let gestureArena = PTGestureArena() |
-| PooToolsSource/SegmentControl/PTPaging.swift:850 | var | public | public var refreshPolicy: PTPagingRefreshPolicy = .perPage |
-| PooToolsSource/SegmentControl/PTPaging.swift:851 | var | public | public var collapseProgress: CGFloat { currentCollapseProgress } |
-| PooToolsSource/SegmentControl/PTPaging.swift:852 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:853 | var | public | public var onStretchProgress: ((CGFloat) -> Void)? |
-| PooToolsSource/SegmentControl/PTPaging.swift:861 | init | public | public init(pageContainer: PTPageContainer = PTPageContainer(frame: .zero)) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:925 | func | public | public func setHeader(_ header: PTPagingHeader?) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:939 | func | public | public func setPinnedHeader(_ header: PTPagingPinnedHeader?) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:954 | func | public | public func invalidateHeaderLayout(animated: Bool = false) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:983 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:993 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:997 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:1039 | func | public | public func scrollCurrentPageToTop(animated: Bool = true) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:1051 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
-| PooToolsSource/SegmentControl/PTPaging.swift:1061 | class | public | public final class PTSegmentedPagingCoordinator { |
-| PooToolsSource/SegmentControl/PTPaging.swift:1066 | init | public | public init(segmentedView: PTSegmentedView, pageContainer: PTPageContainer) { |
-| PooToolsSource/SegmentControl/PTPaging.swift:1094 | func | public | public func apply(items: [PTSegmentItem], pages: [PTPageDescriptor], animated: Bool = true) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:244 | var | public | public var loadedPageIDs: [AnyHashable] { |
+| PooToolsSource/SegmentControl/PTPaging.swift:253 | func | public | public func isPageLoaded(id: AnyHashable) -> Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:260 | func | public | public func loadedPage(for id: AnyHashable) -> (any PTPage)? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:267 | func | public | public func loadedPage<Page: PTPage>(for id: AnyHashable, as type: Page.Type) -> Page? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:274 | func | public | public func loadedViewController(for id: AnyHashable) -> UIViewController? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:281 | func | public | public func loadedViewController<T: UIViewController>(for id: AnyHashable, as type: T.Type) -> T? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:288 | var | public | public var loadedViewControllers: [UIViewController] { |
+| PooToolsSource/SegmentControl/PTPaging.swift:295 | func | public | public func loadedViewControllers<T: UIViewController>(of type: T.Type) -> [T] { |
+| PooToolsSource/SegmentControl/PTPaging.swift:302 | var | public | public var currentViewController: UIViewController? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:310 | func | public | public func currentViewController<T: UIViewController>(as type: T.Type) -> T? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:408 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:445 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:449 | func | public | public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:482 | enum | public | public enum PTPagingDimension { |
+| PooToolsSource/SegmentControl/PTPaging.swift:492 | struct | public | public struct PTPagingHeader { |
+| PooToolsSource/SegmentControl/PTPaging.swift:493 | let | public | public let viewProvider: @MainActor () -> UIView |
+| PooToolsSource/SegmentControl/PTPaging.swift:494 | var | public | public var height: PTPagingDimension |
+| PooToolsSource/SegmentControl/PTPaging.swift:496 | init | public | public init(height: PTPagingDimension = .automatic, |
+| PooToolsSource/SegmentControl/PTPaging.swift:507 | struct | public | public struct PTPagingPinnedHeader { |
+| PooToolsSource/SegmentControl/PTPaging.swift:508 | let | public | public let viewProvider: @MainActor () -> UIView |
+| PooToolsSource/SegmentControl/PTPaging.swift:509 | var | public | public var height: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:511 | init | public | public init(height: CGFloat = 44, |
+| PooToolsSource/SegmentControl/PTPaging.swift:522 | struct | public | public struct PTPagingLayoutEngine { |
+| PooToolsSource/SegmentControl/PTPaging.swift:523 | var | public | public var safeAreaTop: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:524 | var | public | public var headerHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:525 | var | public | public var pinnedHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:526 | var | public | public var pageHeight: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:528 | init | public | public init(safeAreaTop: CGFloat = 0, |
+| PooToolsSource/SegmentControl/PTPaging.swift:538 | var | public | public var contentHeight: CGFloat { headerHeight + pinnedHeight + pageHeight } |
+| PooToolsSource/SegmentControl/PTPaging.swift:539 | var | public | public var collapseLimit: CGFloat { max(0, headerHeight) } |
+| PooToolsSource/SegmentControl/PTPaging.swift:546 | enum | public | public enum PTScrollOwnership { |
+| PooToolsSource/SegmentControl/PTPaging.swift:556 | enum | public | public enum PTPagingRefreshPolicy { |
+| PooToolsSource/SegmentControl/PTPaging.swift:567 | protocol | public | public protocol PTRefreshAdapter: AnyObject { |
+| PooToolsSource/SegmentControl/PTPaging.swift:577 | class | public | public final class PTUIRefreshAdapter: PTRefreshAdapter { |
+| PooToolsSource/SegmentControl/PTPaging.swift:578 | let | public | public let control: UIRefreshControl |
+| PooToolsSource/SegmentControl/PTPaging.swift:580 | init | public | public init(control: UIRefreshControl = UIRefreshControl()) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:584 | var | public | public var isRefreshing: Bool { control.isRefreshing } |
+| PooToolsSource/SegmentControl/PTPaging.swift:585 | func | public | public func beginRefreshing() { control.beginRefreshing() } |
+| PooToolsSource/SegmentControl/PTPaging.swift:586 | func | public | public func endRefreshing() { control.endRefreshing() } |
+| PooToolsSource/SegmentControl/PTPaging.swift:593 | class | open | open class PTNestedScrollCoordinator { |
+| PooToolsSource/SegmentControl/PTPaging.swift:596 | var | public | public var collapseLimit: CGFloat = 0 |
+| PooToolsSource/SegmentControl/PTPaging.swift:597 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:601 | var | public | public var activePageID: AnyHashable? |
+| PooToolsSource/SegmentControl/PTPaging.swift:606 | init | public | public init() {} |
+| PooToolsSource/SegmentControl/PTPaging.swift:608 | func | public | public func bind(outer: UIScrollView, |
+| PooToolsSource/SegmentControl/PTPaging.swift:635 | func | public | public func handleOuterScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:654 | func | public | public func handleInnerScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:682 | func | public | public func settle() { |
+| PooToolsSource/SegmentControl/PTPaging.swift:798 | struct | public | public struct PTGestureDirectionResolver { |
+| PooToolsSource/SegmentControl/PTPaging.swift:799 | var | public | public var threshold: CGFloat |
+| PooToolsSource/SegmentControl/PTPaging.swift:801 | init | public | public init(threshold: CGFloat = 1.15) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:805 | func | public | public func resolve(velocity: CGPoint) -> PTGestureDirection { |
+| PooToolsSource/SegmentControl/PTPaging.swift:817 | enum | public | public enum PTGestureDirection { |
+| PooToolsSource/SegmentControl/PTPaging.swift:827 | class | public | public final class PTGestureArena { |
+| PooToolsSource/SegmentControl/PTPaging.swift:828 | var | public | public var resolver = PTGestureDirectionResolver() |
+| PooToolsSource/SegmentControl/PTPaging.swift:829 | var | public | public var allowsSimultaneousNavigationPop = true |
+| PooToolsSource/SegmentControl/PTPaging.swift:833 | var | public | public var allowsSimultaneousPanGestures = false |
+| PooToolsSource/SegmentControl/PTPaging.swift:839 | init | public | public init() {} |
+| PooToolsSource/SegmentControl/PTPaging.swift:841 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
+| PooToolsSource/SegmentControl/PTPaging.swift:871 | class | public | public final class PTNavigationGestureAdapter { |
+| PooToolsSource/SegmentControl/PTPaging.swift:873 | var | public | public var isEnabledAtFirstPage = true |
+| PooToolsSource/SegmentControl/PTPaging.swift:875 | init | public | public init(navigationController: UINavigationController? = nil) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:879 | func | public | public func shouldBegin(pageIndex: Int) -> Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:890 | class | open | open class PTPagingView: UIView, UIScrollViewDelegate { |
+| PooToolsSource/SegmentControl/PTPaging.swift:891 | let | public | public let outerScrollView = UIScrollView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:892 | let | public | public let pageContainer: PTPageContainer |
+| PooToolsSource/SegmentControl/PTPaging.swift:896 | var | public | public var listContainerView: PTPageContainer { pageContainer } |
+| PooToolsSource/SegmentControl/PTPaging.swift:900 | var | public | public var mainScrollView: UIScrollView { outerScrollView } |
+| PooToolsSource/SegmentControl/PTPaging.swift:910 | var | public | public var refreshControl: UIRefreshControl? { |
+| PooToolsSource/SegmentControl/PTPaging.swift:917 | var | public | public var isListHorizontalScrollEnabled: Bool { |
+| PooToolsSource/SegmentControl/PTPaging.swift:921 | let | public | public let headerHost = UIView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:922 | let | public | public let pinnedHeaderHost = UIView() |
+| PooToolsSource/SegmentControl/PTPaging.swift:923 | let | public | public let nestedScrollCoordinator = PTNestedScrollCoordinator() |
+| PooToolsSource/SegmentControl/PTPaging.swift:924 | let | public | public let gestureArena = PTGestureArena() |
+| PooToolsSource/SegmentControl/PTPaging.swift:925 | var | public | public var refreshPolicy: PTPagingRefreshPolicy = .perPage |
+| PooToolsSource/SegmentControl/PTPaging.swift:926 | var | public | public var collapseProgress: CGFloat { currentCollapseProgress } |
+| PooToolsSource/SegmentControl/PTPaging.swift:927 | var | public | public var onCollapseProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:928 | var | public | public var onStretchProgress: ((CGFloat) -> Void)? |
+| PooToolsSource/SegmentControl/PTPaging.swift:936 | init | public | public init(pageContainer: PTPageContainer = PTPageContainer(frame: .zero)) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1000 | func | public | public func setHeader(_ header: PTPagingHeader?) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1014 | func | public | public func setPinnedHeader(_ header: PTPagingPinnedHeader?) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1029 | func | public | public func invalidateHeaderLayout(animated: Bool = false) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1058 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1068 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1072 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1114 | func | public | public func scrollCurrentPageToTop(animated: Bool = true) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1126 | func | public | public func shouldRecognizeSimultaneously(_ first: UIGestureRecognizer, |
+| PooToolsSource/SegmentControl/PTPaging.swift:1136 | class | public | public final class PTSegmentedPagingCoordinator { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1141 | init | public | public init(segmentedView: PTSegmentedView, pageContainer: PTPageContainer) { |
+| PooToolsSource/SegmentControl/PTPaging.swift:1169 | func | public | public func apply(items: [PTSegmentItem], pages: [PTPageDescriptor], animated: Bool = true) { |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:8 | class | public | public final class PTSegmentControlBaseModel: NSObject { |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:9 | var | public | public var categoryName: String = "" |
 | PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift:10 | var | public | public var subTitle: String = "" |

@@ -15,6 +15,27 @@ PTPagingView           -> 负责 Header、Pinned Header、外层滚动和嵌套�
 PTSegmentedPagingCoordinator -> 负责稳定 ID 的双向同步
 ```
 
+## 已加载页面查询层（5.57.2）
+
+`PTPageContainer` 将可变缓存留在内部，只通过只读查询 API 对外提供事实：
+
+```text
+private loadedPages
+        │
+        ├── load / unload / cachePolicy
+        │
+        └── public read-only query
+                ├── loadedPageIDs
+                ├── loadedPage(for:)
+                ├── loadedViewController(for:)
+                ├── loadedViewControllers(of:)
+                └── currentViewController
+```
+
+查询层只接受稳定 ID，不公开内部字典，也不提供 `validListDict` 兼容副本。读取未加载的 ID 不会调用 `makePage()`，不会改变 `selectedID`、缓存策略或生命周期。`loadedPageIDs` 使用 descriptor 顺序，避免把 Dictionary 的内部顺序变成业务契约。
+
+`PTViewPage` 与 `PTViewControllerPage` 保持明确区别：前者可以通过 `loadedPage(for:)` 查询，后者才可以通过 `loadedViewController(for:)` 查询。缓存回收仍完全由 `PTPageCachePolicy` 决定。
+
 ## 稳定 ID
 
 `PTSegmentItem.id` 与 `PTPageDescriptor.id` 是同步的唯一依据。业务不要用数组下标或每次读取都会变化的 UUID 作为 Diffable 身份。插入、删除、移动和恢复选择时，先保持 ID 稳定，再调用 `apply`。

@@ -16,6 +16,10 @@
 | `listViewDidScrollCallback` | `PTScrollablePage.pageScrollView`，或由 PTools 自动查找页面内 ScrollView |
 | `mainTableView.refreshControl` | `pagingView.refreshControl` |
 | `listContainerView.scrollView.isScrollEnabled = false` | `pagingView.isListHorizontalScrollEnabled = false` |
+| `validListDict.keys` | `pagingView.pageContainer.loadedPageIDs` |
+| `validListDict[index]` | `loadedPage(for:)` 或 `loadedViewController(for:)` |
+| 当前已加载 Controller | `pagingView.pageContainer.currentViewController` |
+| 遍历已加载 Controller | `pagingView.pageContainer.loadedViewControllers(of:)` |
 
 ## 2. 基础初始化
 
@@ -140,6 +144,26 @@ pagingView.refreshControl?.endRefreshing()
 // 中文：获取当前列表，用于单页刷新、分页加载或自定义协调。
 let currentList = pagingView.pageContainer.currentPageScrollView
 ```
+
+## 6.1 查询已加载页面（5.57.2）
+
+`PTPageContainer` 现在提供只读查询 API，业务不需要再访问旧的 `validListDict`。所有查询都使用稳定 ID，并且不会创建尚未加载的页面、改变选中状态或触发生命周期回调。
+
+```swift
+let currentListController = pagingView.pageContainer.currentViewController(
+    as: YDShipOrderListViewController.self
+)
+
+let loadedControllers = pagingView.pageContainer.loadedViewControllers(
+    of: YDShipOrderListViewController.self
+)
+
+for controller in loadedControllers {
+    controller.reloadMainList(showHud: false)
+}
+```
+
+`loadedPageIDs` 只返回当前缓存真正持有的页面，并按照 `descriptors` 顺序返回。`discardOffscreen`、`adjacent`、`limit` 和 `keepAllLoaded` 的结果完全遵循容器现有 `cachePolicy`；页面卸载后，所有对应查询都会返回 `nil` 或不再包含该 ID。
 
 外层刷新和页面自己的刷新状态应分开管理；不要把同一个 `UIRefreshControl` 同时安装到外层和每个内层列表。页面需要独立下拉刷新时，使用页面自己的刷新控件，并把外层策略设置为 `.perPage` 或由宿主自行协调。
 

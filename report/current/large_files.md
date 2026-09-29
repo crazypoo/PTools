@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90
-Generated at: 2026-09-29T00:47:39Z
+Source revision: e175526c43421ccc7d09cb9e4bf1ae9580353e88
+Generated at: 2026-09-29T05:17:01Z
 -->
 
 # 当前文件尺寸门禁
@@ -18,7 +18,7 @@ Generated at: 2026-09-29T00:47:39Z
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1309 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2265 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2269 | hard_limit_allowlisted |
 | `PooToolsSource/Base/PTTabBarView.swift` | 1310 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
@@ -29,7 +29,7 @@ Generated at: 2026-09-29T00:47:39Z
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |
 | `PooToolsSource/ImageEditor/PTCutViewController.swift` | 1100 | warning |
 | `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1701 | architecture_exception |
-| `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1552 | architecture_exception |
+| `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1586 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1835 | architecture_exception |
@@ -40,7 +40,7 @@ Generated at: 2026-09-29T00:47:39Z
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1172 | warning |
-| `PooToolsSource/SegmentControl/PTPaging.swift` | 1101 | warning |
+| `PooToolsSource/SegmentControl/PTPaging.swift` | 1176 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
 | `PooToolsSource/TipsView/PTTipsView.swift` | 1248 | warning |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1639 | architecture_exception |

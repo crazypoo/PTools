@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "2931a95cbc3957e0a3787e6d61c4dfd41bf2bb90",
-  "generated_at": "2026-09-29T00:47:39Z",
+  "source_revision": "e175526c43421ccc7d09cb9e4bf1ae9580353e88",
+  "generated_at": "2026-09-29T05:17:01Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -301,7 +301,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2265,
+      "lines": 2269,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -1851,7 +1851,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageViewController.swift",
-      "lines": 1552,
+      "lines": 1586,
       "classification": "architecture_exception"
     },
     {
@@ -1891,7 +1891,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTImageEditorConfig.swift",
-      "lines": 209,
+      "lines": 219,
       "classification": "ok"
     },
     {
@@ -4861,7 +4861,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTPaging.swift",
-      "lines": 1101,
+      "lines": 1176,
       "classification": "warning"
     },
     {

@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.57.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.57.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.57.1` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.57.2` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.57.2 PTPageContainer 已加载页面查询 API
+
+- ✅ 增加 `loadedPageIDs`、`isPageLoaded(id:)`、`loadedPage(for:)` 和类型化页面查询。
+- ✅ 增加 `loadedViewController(for:)`、批量控制器查询和 `currentViewController` 类型化入口。
+- ✅ 查询保持无副作用：不创建未加载页面、不改变选择、不改变缓存策略、不触发生命周期。
+- ✅ 保持私有缓存封装，按 descriptor 顺序返回结果，并覆盖 `keepAllLoaded`、`adjacent`、`limit` 和 `discardOffscreen`。
+- ✅ 补充 JX 迁移、分页指南、生命周期和架构文档，以及现有 UI 测试目标中的分页回归测试。
+- [ ] 完成宿主项目对已加载页面批量刷新和各缓存策略的真机回归后，再创建正式 `5.57.2` tag。
 
 ## 5.57.1 ImageEditor 独立使用修复
 

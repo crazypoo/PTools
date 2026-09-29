@@ -236,6 +236,81 @@ open class PTPageContainer: UIView, UIScrollViewDelegate {
         return firstScrollView(in: page.pageView)
     }
 
+    // MARK: - Loaded Page Queries
+
+    /// English: Returns cached page IDs in descriptor order without creating unloaded pages.
+    /// Español: Devuelve los IDs de las páginas almacenadas en el orden de los descriptores sin crear páginas no cargadas.
+    /// 中文：按描述顺序返回当前缓存中的页面 ID，不会创建尚未加载的页面。
+    public var loadedPageIDs: [AnyHashable] {
+        descriptors.compactMap { descriptor in
+            loadedPages[descriptor.id] == nil ? nil : descriptor.id
+        }
+    }
+
+    /// English: Returns whether a page is currently held by the container cache.
+    /// Español: Indica si la caché del contenedor conserva actualmente una página.
+    /// 中文：判断页面是否仍由容器缓存持有。
+    public func isPageLoaded(id: AnyHashable) -> Bool {
+        loadedPages[id] != nil
+    }
+
+    /// English: Returns a cached page without triggering loading or lifecycle callbacks.
+    /// Español: Devuelve una página almacenada sin activar la carga ni callbacks del ciclo de vida.
+    /// 中文：读取已缓存页面，不触发加载或生命周期回调；未加载时返回 nil。
+    public func loadedPage(for id: AnyHashable) -> (any PTPage)? {
+        loadedPages[id]?.page
+    }
+
+    /// English: Returns a cached page cast to the requested type without triggering loading.
+    /// Español: Devuelve una página almacenada convertida al tipo solicitado sin activar la carga.
+    /// 中文：将已缓存页面安全转换为指定类型，不触发加载；类型不匹配时返回 nil。
+    public func loadedPage<Page: PTPage>(for id: AnyHashable, as type: Page.Type) -> Page? {
+        loadedPage(for: id) as? Page
+    }
+
+    /// English: Returns the cached view controller for a controller-backed page without loading it.
+    /// Español: Devuelve el controlador de una página respaldada por controlador sin cargarla.
+    /// 中文：返回基于控制器页面的已缓存 ViewController，不会触发页面加载。
+    public func loadedViewController(for id: AnyHashable) -> UIViewController? {
+        (loadedPage(for: id) as? PTViewControllerPage)?.viewController
+    }
+
+    /// English: Returns the cached view controller cast to the requested type without loading it.
+    /// Español: Devuelve el controlador almacenado convertido al tipo solicitado sin cargarlo.
+    /// 中文：将已缓存 ViewController 安全转换为指定类型，不触发加载；类型不匹配时返回 nil。
+    public func loadedViewController<T: UIViewController>(for id: AnyHashable, as type: T.Type) -> T? {
+        loadedViewController(for: id) as? T
+    }
+
+    /// English: Returns cached view controllers in descriptor order without creating pages.
+    /// Español: Devuelve los controladores almacenados en el orden de los descriptores sin crear páginas.
+    /// 中文：按描述顺序返回已缓存的 ViewController，不会创建尚未加载的页面。
+    public var loadedViewControllers: [UIViewController] {
+        loadedPageIDs.compactMap { loadedViewController(for: $0) }
+    }
+
+    /// English: Returns cached view controllers of the requested type without triggering loading.
+    /// Español: Devuelve los controladores almacenados del tipo solicitado sin activar la carga.
+    /// 中文：按类型返回已缓存的 ViewController，不触发页面加载。
+    public func loadedViewControllers<T: UIViewController>(of type: T.Type) -> [T] {
+        loadedViewControllers.compactMap { $0 as? T }
+    }
+
+    /// English: Returns the cached view controller for the selected page without triggering loading.
+    /// Español: Devuelve el controlador almacenado de la página seleccionada sin activar la carga.
+    /// 中文：返回当前选中页面的已缓存 ViewController，不触发页面加载。
+    public var currentViewController: UIViewController? {
+        guard let selectedID else { return nil }
+        return loadedViewController(for: selectedID)
+    }
+
+    /// English: Returns the selected cached view controller cast to the requested type.
+    /// Español: Devuelve el controlador seleccionado almacenado convertido al tipo solicitado.
+    /// 中文：将当前选中的已缓存 ViewController 安全转换为指定类型。
+    public func currentViewController<T: UIViewController>(as type: T.Type) -> T? {
+        currentViewController as? T
+    }
+
     private func load(id: AnyHashable) {
         guard loadedPages[id] == nil,
               let descriptor = descriptors.first(where: { $0.id == id }) else { return }
