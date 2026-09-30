@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "e245c1361852ddf8b0552564fc74196f6b45325c",
-  "generated_at": "2026-09-29T17:02:13Z",
+  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
+  "generated_at": "2026-09-30T03:34:01Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -3906,7 +3906,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkModelBridge.swift",
-      "lines": 141,
+      "lines": 190,
       "classification": "ok"
     },
     {
@@ -4291,12 +4291,17 @@
     },
     {
       "path": "PooToolsSource/PToolsModel/PTModelExports.swift",
-      "lines": 11,
+      "lines": 27,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTJSONByteSink.swift",
       "lines": 43,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTJSONScanner.swift",
+      "lines": 190,
       "classification": "ok"
     },
     {
@@ -4306,7 +4311,27 @@
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
-      "lines": 520,
+      "lines": 655,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelFoundationCodecs.swift",
+      "lines": 149,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelPolicy.swift",
+      "lines": 220,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelRuntime.swift",
+      "lines": 273,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelSchema.swift",
+      "lines": 156,
       "classification": "ok"
     },
     {
@@ -4315,8 +4340,23 @@
       "classification": "ok"
     },
     {
-      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "path": "PooToolsSource/PToolsModelCore/PTModelStreaming.swift",
+      "lines": 244,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelTreeDecoder.swift",
+      "lines": 423,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelTreeEncoder.swift",
       "lines": 350,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsModelCore/PTModelTypes.swift",
+      "lines": 479,
       "classification": "ok"
     },
     {

@@ -37,6 +37,42 @@ public enum PTStringifiedJSONPolicy: String, Sendable, Codable {
     case collectionsAndModels
 }
 
+// English: Field policies make missing, null, invalid, and encoding behavior explicit for static PTModel schemas.
+// Español: Las políticas de campo hacen explícito el comportamiento de ausente, nulo, inválido y codificación en los esquemas PTModel estáticos.
+// 中文：字段策略明确静态 PTModel Schema 对缺失、空值、无效值和编码的处理方式。
+public enum PTFieldEncodingPolicy: String, Sendable, Codable {
+    case inherit
+    case omit
+    case null
+    case required
+}
+
+public enum PTMissingPolicy: String, Sendable, Codable {
+    case useDefault
+    case useNil
+    case ignore
+    case error
+}
+
+public enum PTNullPolicy: String, Sendable, Codable {
+    case useDefault
+    case useNil
+    case ignore
+    case error
+}
+
+public enum PTInvalidValuePolicy: String, Sendable, Codable {
+    case useDefault
+    case useNil
+    case ignore
+    case error
+}
+
+public enum PTSetOrdering: String, Sendable, Codable {
+    case canonicalJSON
+    case insertionOrderUnavailable
+}
+
 public enum PTDictionaryKeyStrategy: String, Sendable, Codable {
     case stringOnly
     case losslessStringConvertible
@@ -61,6 +97,28 @@ public enum PTDateEncodingStrategy: Sendable, Codable, Equatable {
     case secondsSince1970
     case millisecondsSince1970
     case iso8601
+}
+
+public enum PTDataDecodingStrategy: String, Sendable, Codable, Equatable {
+    case deferredToData
+    case base64
+    case utf8
+}
+
+public enum PTDataEncodingStrategy: String, Sendable, Codable, Equatable {
+    case deferredToData
+    case base64
+    case utf8
+}
+
+public enum PTFloatingPointStrategy: String, Sendable, Codable, Equatable {
+    case rejectNonConforming
+    case convertToString
+}
+
+public enum PTURLCodingStrategy: String, Sendable, Codable, Equatable {
+    case deferredToURL
+    case absoluteString
 }
 
 public struct PTModelLimits: Sendable, Codable, Equatable {
@@ -137,6 +195,12 @@ public enum PTModelError: Error, LocalizedError, Sendable, Equatable {
     case pathTypeMismatch(String)
     case requiredValue(String)
     case invalidCollectionElement(String)
+    case validationFailed(String)
+    case migrationFailed(String)
+    case patchFailed(String)
+    case streamInvalidRoot
+    case streamElementFailed(Int, String)
+    case unsupportedFeature(String)
     case rootIsNotObject
     case rootIsNotArray
     case conversionFailed(String)
@@ -180,6 +244,18 @@ public enum PTModelError: Error, LocalizedError, Sendable, Equatable {
             return "Required value is missing at \(path)."
         case .invalidCollectionElement(let path):
             return "Invalid collection element at \(path)."
+        case .validationFailed(let message):
+            return "Validation failed: \(message)"
+        case .migrationFailed(let message):
+            return "Migration failed: \(message)"
+        case .patchFailed(let message):
+            return "Patch failed: \(message)"
+        case .streamInvalidRoot:
+            return "Streaming JSON input must contain a top-level array."
+        case .streamElementFailed(let index, let message):
+            return "Streaming element \(index) failed: \(message)"
+        case .unsupportedFeature(let feature):
+            return "Unsupported PTModel feature: \(feature)"
         case .rootIsNotObject:
             return "The JSON root is not an object."
         case .rootIsNotArray:
@@ -235,6 +311,49 @@ public struct PTModelContext: Sendable {
 
     public var jsonValues: [String: PTJSONValue] {
         storage
+    }
+}
+
+// English: A default provider is a typed, Sendable alternative to reflection-based property defaults.
+// Español: Un proveedor de valores predeterminados es una alternativa tipada y Sendable a los valores por reflexión.
+// 中文：默认值提供器是类型安全且 Sendable 的属性默认值方案，不依赖反射。
+public protocol PTDefaultValueProvider: Sendable {
+    associatedtype Value: Sendable
+    static var defaultValue: Value { get }
+}
+
+// English: Field descriptors are serializable metadata used by manual schemas and future macro-generated schemas.
+// Español: Los descriptores de campo son metadatos serializables para esquemas manuales y futuros esquemas generados por macros.
+// 中文：字段描述符是手写 Schema 和未来宏生成 Schema 共用的可序列化元数据。
+public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
+    public let name: String
+    public let mapping: PTModelKeyMapping
+    public let encoding: PTFieldEncodingPolicy
+    public let nilStrategy: PTNilEncodingStrategy?
+    public let missing: PTMissingPolicy
+    public let null: PTNullPolicy
+    public let invalid: PTInvalidValuePolicy
+    public let required: Bool
+    public let flattened: Bool
+
+    public init(name: String,
+                mapping: PTModelKeyMapping? = nil,
+                encoding: PTFieldEncodingPolicy = .inherit,
+                nilStrategy: PTNilEncodingStrategy? = nil,
+                missing: PTMissingPolicy = .useDefault,
+                null: PTNullPolicy = .useNil,
+                invalid: PTInvalidValuePolicy = .error,
+                required: Bool = false,
+                flattened: Bool = false) {
+        self.name = name
+        self.mapping = mapping ?? PTModelKeyMapping(decodeKeys: [name], encodeKey: name)
+        self.encoding = encoding
+        self.nilStrategy = nilStrategy
+        self.missing = missing
+        self.null = null
+        self.invalid = invalid
+        self.required = required
+        self.flattened = flattened
     }
 }
 
@@ -295,7 +414,7 @@ public extension KeyedEncodingContainer {
         case .missing:
             return
         case .null:
-            try encodeNil(forKey: key)
+            try encode(PTModelExplicitNull(), forKey: key)
         case .value(let value):
             try encode(value, forKey: key)
         }
@@ -306,10 +425,20 @@ public extension KeyedEncodingContainer {
     // 中文：在字段边界显式传入 nil 策略，保持旧 Encodable 模型的源码兼容。
     mutating func encode<Value: Encodable>(_ value: Value?, forKey key: Key, nilStrategy: PTNilEncodingStrategy) throws {
         guard let value else {
-            if nilStrategy == .null { try encodeNil(forKey: key) }
+            if nilStrategy == .null { try encode(PTModelExplicitNull(), forKey: key) }
             return
         }
         try encode(value, forKey: key)
+    }
+}
+
+// English: This marker preserves an explicitly requested null without changing the encoder's ordinary optional policy.
+// Español: Este marcador conserva un null solicitado explícitamente sin cambiar la política normal de opcionales.
+// 中文：这个标记保留显式请求的 null，同时不改变普通 Optional 的编码策略。
+private struct PTModelExplicitNull: Encodable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encodeNil()
     }
 }
 

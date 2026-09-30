@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: e245c1361852ddf8b0552564fc74196f6b45325c
-Generated at: 2026-09-29T17:02:09Z
+Source revision: b9c7b523e410aa5499b8138b73fc26e7135aeaec
+Generated at: 2026-09-30T03:35:42Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `92`
+- Current exceptions: `95`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -25,6 +25,7 @@ Generated at: 2026-09-29T17:02:09Z
 | ImageEditor | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Instructions | ["Overlay"] | ["Core","Overlay"] | SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | MeidaPermission | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
+| Model | ["ModelCore","PToolsModelMacroPlugin"] | ["ModelCore"] | SwiftPM adds the compiler-only PTModel macro plugin; CocoaPods intentionally keeps the runtime facade on the manual schema fallback. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | NetWork | ["Core","Loading","ModelCore","PToolsCore"] | ["Core","Loading","ModelCore"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | PhotoPicker | ["CameraPermission","Core","ImagePicker","Loading","MediaCore","Symbols"] | ["Core","ImagePicker","Loading","MediaCore","Symbols"] | SPM adds standalone CameraPermission; CocoaPods keeps Core route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Picker | ["SnapKit"] | [] | SPM declares direct utilities; CocoaPods resolves them through Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
@@ -106,4 +107,6 @@ Generated at: 2026-09-29T17:02:09Z
 | TrackingPermission | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_TRACKING","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_TRACKING"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | WidgetCore | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_WIDGET_CORE"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the extension-safe WidgetKit core; CocoaPods keeps the extension-safe subspec compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p2-extension | 6.0.0 | 2027-03-31 |
 | MeidaPermission | ["MeidaLibraryPermission"] | [] | The 5.x CocoaPods spelling alias intentionally contains no source files and forwards to MediaPermission. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| PTModelBenchmark | — | — | Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsDate | — | — | SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| PToolsModelMacroPlugin | — | — | SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |

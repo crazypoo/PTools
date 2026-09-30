@@ -1,5 +1,6 @@
 // swift-tools-version: 6.0
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "ptools",
@@ -32,6 +33,10 @@ let package = Package(
         // 中文：公开不依赖第三方的 PTModel 契约和转换核心。
         .library(name: "PToolsModelCore", targets: ["PToolsModelCore"]),
         .library(name: "PToolsModel", targets: ["PToolsModel"]),
+        // English: Publish a small reproducible PTModel benchmark runner without UIKit dependencies.
+        // Español: Publica un runner reproducible de benchmarks PTModel sin dependencias de UIKit.
+        // 中文：公开一个不依赖 UIKit 的可复现 PTModel 基准测试入口。
+        .executable(name: "PTModelBenchmark", targets: ["PTModelBenchmark"]),
         // English: Publish the Foundation-only device identity and capability layer independently.
         // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
@@ -270,7 +275,11 @@ let package = Package(
         .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
-        .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0")
+        .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0"),
+        // English: Keep SwiftSyntax isolated to the SwiftPM macro product; Core remains Foundation-only.
+        // Español: Mantiene SwiftSyntax aislado en el producto de macros SwiftPM; Core sigue usando solo Foundation.
+        // 中文：仅让 SwiftPM 宏产品依赖 SwiftSyntax，Core 继续保持 Foundation-only。
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0")
 
     ],
     targets: [
@@ -304,13 +313,35 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
+        // English: Keep macro implementation isolated from the Foundation-only runtime and CocoaPods source target.
+        // Español: Mantiene la implementación de macros aislada del runtime Foundation-only y del target de CocoaPods.
+        // 中文：将宏实现与 Foundation-only runtime 和 CocoaPods 源码 target 隔离。
+        .macro(
+            name: "PToolsModelMacroPlugin",
+            dependencies: [
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ],
+            path: "PToolsModelMacros",
+            sources: ["PTModelMacros.swift"]
+        ),
         // English: PToolsModel is the high-level product and currently re-exports PTModelCore.
         // Español: PToolsModel es el producto de alto nivel y actualmente reexporta PTModelCore.
         // 中文：PToolsModel 是高级产品层，目前重新导出 PTModelCore。
         .target(
             name: "PToolsModel",
-            dependencies: ["PToolsModelCore"],
+            dependencies: ["PToolsModelCore", "PToolsModelMacroPlugin"],
             path: "PooToolsSource/PToolsModel",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        .executableTarget(
+            name: "PTModelBenchmark",
+            dependencies: ["PToolsModel"],
+            path: "Benchmarks/PTModel/Runner",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]

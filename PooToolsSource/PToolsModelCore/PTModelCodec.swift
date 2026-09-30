@@ -13,24 +13,64 @@ public struct PTModelDecoder: Sendable {
     public let duplicateKeyPolicy: PTDuplicateKeyPolicy
     public let limits: PTModelLimits
     public let dateStrategy: PTDateDecodingStrategy
+    public let dataStrategy: PTDataDecodingStrategy
+    public let floatingPointStrategy: PTFloatingPointStrategy
+    public let urlStrategy: PTURLCodingStrategy
     public let context: PTModelContext
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
     public let coercionPolicy: PTValueCoercionPolicy
+    public let session: PTModelCodingSession
 
     public init(policy: PTDecodePolicy = .compatible,
                 duplicateKeyPolicy: PTDuplicateKeyPolicy = .keepLast,
                 limits: PTModelLimits = .init(),
                 dateStrategy: PTDateDecodingStrategy = .deferredToDate,
+                dataStrategy: PTDataDecodingStrategy = .base64,
+                floatingPointStrategy: PTFloatingPointStrategy = .rejectNonConforming,
+                urlStrategy: PTURLCodingStrategy = .deferredToURL,
                 context: PTModelContext = .init(),
                 dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
-                coercionPolicy: PTValueCoercionPolicy = .init()) {
+                coercionPolicy: PTValueCoercionPolicy = .init(),
+                session: PTModelCodingSession = .init()) {
         self.policy = policy
         self.duplicateKeyPolicy = duplicateKeyPolicy
         self.limits = limits
         self.dateStrategy = dateStrategy
+        self.dataStrategy = dataStrategy
+        self.floatingPointStrategy = floatingPointStrategy
+        self.urlStrategy = urlStrategy
         self.context = context
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
         self.coercionPolicy = coercionPolicy
+        self.session = session
+    }
+
+    // English: Each public decode starts with an isolated value session; nested calls receive scoped copies.
+    // Español: Cada decode público empieza con una sesión de valor aislada; las llamadas anidadas reciben copias delimitadas.
+    // 中文：每次公开 decode 都从独立值会话开始，嵌套调用使用带作用域的副本。
+    public func scoped(to path: PTJSONPath) -> PTModelDecoder {
+        var scopedSession = session
+        scopedSession.push(path)
+        return PTModelDecoder(policy: policy,
+                               duplicateKeyPolicy: duplicateKeyPolicy,
+                               limits: limits,
+                               dateStrategy: dateStrategy,
+                               dataStrategy: dataStrategy,
+                               floatingPointStrategy: floatingPointStrategy,
+                               urlStrategy: urlStrategy,
+                               context: context,
+                               dictionaryKeyStrategy: dictionaryKeyStrategy,
+                               coercionPolicy: coercionPolicy,
+                               session: scopedSession)
+    }
+
+    public func jsonValue<Source: PTModelSource>(from source: Source) throws -> PTJSONValue {
+        let data = try PTModelSourceBridge.data(from: source,
+                                                duplicateKeyPolicy: duplicateKeyPolicy,
+                                                limits: limits)
+        return try PTJSONValue(data: data,
+                               duplicateKeyPolicy: duplicateKeyPolicy,
+                               limits: limits)
     }
 
     public func decode<T: Decodable, Source: PTModelSource>(_ type: T.Type, from source: Source) throws -> T {
@@ -43,6 +83,16 @@ public struct PTModelDecoder: Sendable {
         let parsedValue = try PTJSONValue(data: data,
                                           duplicateKeyPolicy: duplicateKeyPolicy,
                                           limits: limits)
+        // English: Decode the bounded tree first; JSONDecoder remains the compatibility fallback for custom Codable containers.
+        // Español: Primero decodifica el árbol limitado; JSONDecoder queda como compatibilidad para contenedores Codable personalizados.
+        // 中文：优先直接解码受限 JSON 树；自定义 Codable 容器仍由 JSONDecoder 作为兼容回退。
+        do {
+            return try treeDecode(type, from: parsedValue)
+        } catch {
+            // English: Keep the established Codable escape hatch for unsupported custom decoding implementations.
+            // Español: Conserva la salida Codable existente para implementaciones de decodificación personalizadas no compatibles.
+            // 中文：保留既有 Codable 逃生口，兼容暂不支持的自定义解码实现。
+        }
         // English: Re-encode the normalized tree so JSONDecoder cannot silently reapply its own duplicate-key policy.
         // Español: Re-encode el árbol normalizado para que JSONDecoder no aplique silenciosamente otra política de claves duplicadas.
         // 中文：重新编码归一化后的树，避免 JSONDecoder 悄悄使用另一套重复键策略。
@@ -53,6 +103,16 @@ public struct PTModelDecoder: Sendable {
         case .secondsSince1970: decoder.dateDecodingStrategy = .secondsSince1970
         case .millisecondsSince1970: decoder.dateDecodingStrategy = .millisecondsSince1970
         case .iso8601: decoder.dateDecodingStrategy = .iso8601
+        }
+        switch dataStrategy {
+        case .deferredToData: decoder.dataDecodingStrategy = .deferredToData
+        case .base64: decoder.dataDecodingStrategy = .base64
+        case .utf8: decoder.dataDecodingStrategy = .base64
+        }
+        if floatingPointStrategy == .convertToString {
+            decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "inf",
+                                                                              negativeInfinity: "-inf",
+                                                                              nan: "nan")
         }
         do {
             return try decoder.decode(T.self, from: normalizedData)
@@ -272,29 +332,105 @@ public struct PTModelEncoder: Sendable {
     public let sortedKeys: Bool
     public let nilStrategy: PTNilEncodingStrategy
     public let dateStrategy: PTDateEncodingStrategy
+    public let dataStrategy: PTDataEncodingStrategy
+    public let floatingPointStrategy: PTFloatingPointStrategy
+    public let urlStrategy: PTURLCodingStrategy
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
+    public let canonical: Bool
+    public let session: PTModelCodingSession
 
     public init(prettyPrinted: Bool = false,
                 sortedKeys: Bool = true,
                 nilStrategy: PTNilEncodingStrategy = .omit,
                 dateStrategy: PTDateEncodingStrategy = .deferredToDate,
-                dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly) {
+                dataStrategy: PTDataEncodingStrategy = .base64,
+                floatingPointStrategy: PTFloatingPointStrategy = .rejectNonConforming,
+                urlStrategy: PTURLCodingStrategy = .deferredToURL,
+                dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
+                canonical: Bool = false,
+                session: PTModelCodingSession = .init()) {
         self.prettyPrinted = prettyPrinted
         self.sortedKeys = sortedKeys
         self.nilStrategy = nilStrategy
         self.dateStrategy = dateStrategy
+        self.dataStrategy = dataStrategy
+        self.floatingPointStrategy = floatingPointStrategy
+        self.urlStrategy = urlStrategy
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
+        self.canonical = canonical
+        self.session = session
+    }
+
+    // English: Static-schema encoders use this decision before inserting a field into an object.
+    // Español: Los encoders de esquema estático usan esta decisión antes de insertar un campo en un objeto.
+    // 中文：静态 Schema 编码器在把字段写入对象前统一使用这个决策。
+    public func encodedField(_ value: PTJSONValue?,
+                             for field: PTModelFieldDescriptor) throws -> (String, PTJSONValue)? {
+        guard let value else {
+            let strategy: PTNilEncodingStrategy
+            switch field.encoding {
+            case .omit: strategy = .omit
+            case .null: strategy = .null
+            case .required: throw PTModelError.requiredValue(field.name)
+            case .inherit: strategy = field.nilStrategy ?? nilStrategy
+            }
+            return strategy == .null ? (field.mapping.encodeKey, .null) : nil
+        }
+        return (field.mapping.encodeKey, value)
+    }
+
+    // English: Nested static schemas inherit the current encoder path instead of starting a shared mutable frame.
+    // Español: Los esquemas estáticos anidados heredan la ruta actual del encoder sin compartir un frame mutable.
+    // 中文：嵌套静态 Schema 继承当前 encoder 路径，不共享可变 frame。
+    public func scoped(to path: PTJSONPath) -> PTModelEncoder {
+        var scopedSession = session
+        scopedSession.push(path)
+        return PTModelEncoder(prettyPrinted: prettyPrinted,
+                              sortedKeys: sortedKeys,
+                              nilStrategy: nilStrategy,
+                              dateStrategy: dateStrategy,
+                              dataStrategy: dataStrategy,
+                              floatingPointStrategy: floatingPointStrategy,
+                              urlStrategy: urlStrategy,
+                              dictionaryKeyStrategy: dictionaryKeyStrategy,
+                              canonical: canonical,
+                              session: scopedSession)
+    }
+
+    public func object(fields: [(PTModelFieldDescriptor, PTJSONValue?)]) throws -> PTJSONValue {
+        var values: [String: PTJSONValue] = [:]
+        values.reserveCapacity(fields.count)
+        for (field, value) in fields {
+            guard let (key, encoded) = try encodedField(value, for: field) else { continue }
+            if values[key] != nil { throw PTModelError.duplicateKey(key) }
+            values[key] = encoded
+        }
+        return .object(values)
     }
 
     public func encode<T: Encodable>(_ value: T) throws -> Data {
+        if canonical || dataStrategy == .utf8 {
+            return try treeJSONValue(value).jsonData(prettyPrinted: prettyPrinted,
+                                                     sortedKeys: sortedKeys || canonical)
+        }
         let encoder = JSONEncoder()
         if prettyPrinted { encoder.outputFormatting.insert(.prettyPrinted) }
-        if sortedKeys { encoder.outputFormatting.insert(.sortedKeys) }
+        if sortedKeys || canonical { encoder.outputFormatting.insert(.sortedKeys) }
         switch dateStrategy {
         case .deferredToDate: encoder.dateEncodingStrategy = .deferredToDate
         case .secondsSince1970: encoder.dateEncodingStrategy = .secondsSince1970
         case .millisecondsSince1970: encoder.dateEncodingStrategy = .millisecondsSince1970
         case .iso8601: encoder.dateEncodingStrategy = .iso8601
+        }
+        switch dataStrategy {
+        case .deferredToData: encoder.dataEncodingStrategy = .deferredToData
+        case .base64: encoder.dataEncodingStrategy = .base64
+        case .utf8: break
+        }
+        if floatingPointStrategy == .convertToString {
+            encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: "inf",
+                                                                           negativeInfinity: "-inf",
+                                                                           nan: "nan")
         }
         return try encoder.encode(value)
     }
@@ -305,8 +441,15 @@ public struct PTModelEncoder: Sendable {
 
     public func jsonValue<T: Encodable>(_ value: T) throws -> PTJSONValue {
         if let value = value as? PTJSONValue { return value }
-        return try PTJSONValue(data: encode(value),
-                               duplicateKeyPolicy: .reject)
+        return try PTJSONValue(data: encode(value), duplicateKeyPolicy: .reject)
+    }
+
+    // English: Preserve an absent optional so static schemas can apply omit/null at the field boundary.
+    // Español: Conserva el opcional ausente para que los esquemas estáticos apliquen omit/null en el campo.
+    // 中文：保留缺失的 Optional，让静态 Schema 在字段边界统一应用 omit/null 策略。
+    public func optionalJSONValue<T: Encodable>(_ value: T?) throws -> PTJSONValue? {
+        guard let value else { return nil }
+        return try jsonValue(value)
     }
 
     public func jsonString<T: Encodable>(_ value: T) throws -> String {

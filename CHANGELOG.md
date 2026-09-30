@@ -14,6 +14,9 @@
 - 提供 `Model.pt.model(from:)`、`Model.pt.models(from:)`、`model.pt.jsonData()`、`jsonString()`、`dictionary()` 和 `jsonArray()` 一行式兼容体验。
 - SmartCodable、SmartCodable/Inherit 和 KakaJSON 继续保留在旧 Core 兼容路径，本版本不删除第三方依赖，也不改变现有 `PTBaseModel` 公开 API。
 - 补充模型能力矩阵、Codable 互操作约定、迁移指南、回归测试和可复现基准清单。
+- 完成剩余 PTModel 主路径：字段缺失/空值/无效值恢复、诊断 Sink、静态 Schema、宏入口、稳定 key hash、Patch/Diff/Clone/Converter、Schema migration、Extras、JSON Schema 导出、Foundation Date/Data/URL codec、bounded streaming decode/encode 和 JSON skip scanner。
+- 新增 `PTModelBenchmark` 与 `Scripts/PTModel/run_benchmarks.sh`，输出真实 encode/decode P50/P95、字节数、models/sec 和 bytes/sec；新增依赖审计脚本，旧 Network 模型通过 MainActor legacy decoder 隔离。
+- SwiftPM 的 `PToolsModel` 使用独立 SwiftSyntax 宏 target；CocoaPods `ModelCore` / `Model` 保持 Foundation-only fallback，不把宏实现带入 CocoaPods target。
 
 ## 5.57.4 — 2026-09-29
 

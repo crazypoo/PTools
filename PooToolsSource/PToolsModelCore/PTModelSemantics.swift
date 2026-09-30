@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct PTJSONPath: Sendable, Hashable, ExpressibleByStringLiteral {
-    public enum Component: Sendable, Hashable {
+public struct PTJSONPath: Sendable, Hashable, Codable, ExpressibleByStringLiteral {
+    public enum Component: Sendable, Hashable, Codable {
         case key(String)
         case index(Int)
     }

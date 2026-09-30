@@ -1,0 +1,106 @@
+//
+//  PTModel benchmark runner
+//
+// English: Measure real PTModel encode/decode throughput with a reproducible JSON output.
+// Español: Mide el rendimiento real de codificación/decodificación PTModel con JSON reproducible.
+// 中文：用可复现的 JSON 输出测量真实 PTModel 编码和解码吞吐量。
+//
+
+import Foundation
+import PToolsModel
+
+@PTModel
+public struct BenchmarkModel: Codable, Sendable {
+    public let id: Int
+    public let name: String
+    public let tags: [String]
+    public let nested: Nested
+
+    public struct Nested: Codable, Sendable {
+        public let active: Bool
+        public let score: Double
+    }
+}
+
+private struct BenchmarkResult: Codable, Sendable {
+    let count: Int
+    let iterations: Int
+    let encodedBytes: Int
+    let encodeP50Milliseconds: Double
+    let encodeP95Milliseconds: Double
+    let decodeP50Milliseconds: Double
+    let decodeP95Milliseconds: Double
+    let modelsPerSecond: Double
+    let bytesPerSecond: Double
+}
+
+private func percentile(_ values: [Double], fraction: Double) -> Double {
+    guard !values.isEmpty else { return 0 }
+    let sorted = values.sorted()
+    let position = min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))
+    return sorted[position]
+}
+
+private func elapsedMilliseconds(_ operation: () throws -> Void) rethrows -> Double {
+    let start = DispatchTime.now().uptimeNanoseconds
+    try operation()
+    let end = DispatchTime.now().uptimeNanoseconds
+    return Double(end - start) / 1_000_000
+}
+
+private func argument(named name: String, default defaultValue: Int) -> Int {
+    guard let index = CommandLine.arguments.firstIndex(of: name),
+          let next = CommandLine.arguments.dropFirst(index + 1).first,
+          let value = Int(next), value > 0 else {
+        return defaultValue
+    }
+    return value
+}
+
+do {
+    let count = argument(named: "--count", default: 1_000)
+    let iterations = argument(named: "--iterations", default: 5)
+    let models = (0..<count).map { index in
+        BenchmarkModel(id: index,
+                       name: "model-\(index)",
+                       tags: ["ptmodel", "benchmark", "\(index % 8)"],
+                       nested: .init(active: index.isMultiple(of: 2),
+                                     score: Double(index) / 10))
+    }
+    // English: Measure the default compatibility path; canonical mode is a separate opt-in contract.
+    // Español: Mide la ruta de compatibilidad predeterminada; el modo canónico es un contrato opt-in separado.
+    // 中文：基准测试默认兼容路径；canonical 模式是单独的显式选择契约。
+    let encoder = PTModelEncoder(sortedKeys: true)
+    let decoder = PTModelDecoder(policy: .strict)
+    var encodeMeasurements: [Double] = []
+    var decodeMeasurements: [Double] = []
+    var encodedData = Data()
+
+    for _ in 0..<iterations {
+        encodeMeasurements.append(try elapsedMilliseconds {
+            encodedData = try encoder.encode(models)
+        })
+        decodeMeasurements.append(try elapsedMilliseconds {
+            _ = try decoder.decode([BenchmarkModel].self, from: encodedData)
+        })
+    }
+
+    let totalSeconds = (encodeMeasurements.reduce(0, +) + decodeMeasurements.reduce(0, +)) / 1_000
+    let result = BenchmarkResult(count: count,
+                                 iterations: iterations,
+                                 encodedBytes: encodedData.count,
+                                 encodeP50Milliseconds: percentile(encodeMeasurements, fraction: 0.50),
+                                 encodeP95Milliseconds: percentile(encodeMeasurements, fraction: 0.95),
+                                 decodeP50Milliseconds: percentile(decodeMeasurements, fraction: 0.50),
+                                 decodeP95Milliseconds: percentile(decodeMeasurements, fraction: 0.95),
+                                 modelsPerSecond: totalSeconds > 0 ? Double(count * iterations * 2) / totalSeconds : 0,
+                                 bytesPerSecond: totalSeconds > 0 ? Double(encodedData.count * iterations) / totalSeconds : 0)
+    let output = try JSONEncoder().encode(result)
+    guard let string = String(data: output, encoding: .utf8) else {
+        throw PTModelError.conversionFailed("Benchmark result is not UTF-8")
+    }
+    print(string)
+} catch {
+    FileHandle.standardError.write(Data("PTModelBenchmark failed: \(error.localizedDescription)\n".utf8))
+    exit(1)
+}

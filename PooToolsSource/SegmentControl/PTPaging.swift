@@ -1075,10 +1075,22 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
 
     private func updatePinnedVisibility() {
         let logicalOffset = outerScrollView.contentOffset.y + outerScrollView.adjustedContentInset.top
-        let progress = headerHeight == 0 ? 1 : min(1, max(0, logicalOffset / headerHeight))
+        let clampedOffset = max(0, logicalOffset)
+        let progress = headerHeight == 0 ? 1 : min(1, max(0, clampedOffset / headerHeight))
         currentCollapseProgress = progress
-        pinnedHeaderHost.isHidden = pinnedConfiguration == nil || progress == 0
-        pinnedHeaderHost.alpha = progress
+        guard pinnedConfiguration != nil else {
+            pinnedHeaderHost.isHidden = true
+            onCollapseProgress?(progress)
+            return
+        }
+        pinnedHeaderHost.isHidden = false
+        pinnedHeaderHost.alpha = 1
+        let pinnedHeight = pinnedConfiguration?.height ?? 0
+        // 初始：Header 下方
+        // Header 收起后：固定在顶部
+        let y = safeAreaInsets.top + max(0, headerHeight - clampedOffset)
+        pinnedHeaderHost.frame = CGRect(x: 0, y: y, width: bounds.width, height: pinnedHeight)
+        pinnedHeaderHost.subviews.first?.frame = pinnedHeaderHost.bounds
         onCollapseProgress?(progress)
     }
 

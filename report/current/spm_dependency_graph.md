@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: e245c1361852ddf8b0552564fc74196f6b45325c
-Generated at: 2026-09-29T17:02:09Z
+Source revision: b9c7b523e410aa5499b8138b73fc26e7135aeaec
+Generated at: 2026-09-30T03:35:41Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,7 +13,7 @@ Generated at: 2026-09-29T17:02:09Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `140`
+- Target count: `142`
 - Core direct third-party dependencies: `6` (baseline `18`)
 
 ## Products
@@ -29,6 +29,7 @@ Generated at: 2026-09-29T17:02:09Z
 | `PTLocationPermission` | `PTLocationPermission` |
 | `PTMediaPermission` | `PTMediaPermission` |
 | `PTMicPermission` | `PTMicPermission` |
+| `PTModelBenchmark` | `PTModelBenchmark` |
 | `PTMotionPermission` | `PTMotionPermission` |
 | `PTNotificationPermission` | `PTNotificationPermission` |
 | `PTRemindersPermission` | `PTRemindersPermission` |
@@ -157,6 +158,7 @@ Generated at: 2026-09-29T17:02:09Z
 | `PTLocationPermission` | `PooToolsSource/LocationPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTMediaPermission` | `PooToolsSource/MeidaLibraryPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTMicPermission` | `PooToolsSource/MicPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
+| `PTModelBenchmark` | `Benchmarks/PTModel/Runner` | PToolsModel | — | 0 source entries / 0 resources |
 | `PTMotionPermission` | `PooToolsSource/MotionPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTNotificationPermission` | `PooToolsSource/NotificationPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTRemindersPermission` | `PooToolsSource/RemindersPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
@@ -191,8 +193,9 @@ Generated at: 2026-09-29T17:02:09Z
 | `PToolsLogging` | `PooToolsSource/PToolsLogging` | — | — | 0 source entries / 0 resources |
 | `PToolsLoggingTests` | `Tests/PToolsLoggingTests` | PToolsLogging | — | 0 source entries / 0 resources |
 | `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
-| `PToolsModel` | `PooToolsSource/PToolsModel` | PToolsModelCore | — | 0 source entries / 0 resources |
+| `PToolsModel` | `PooToolsSource/PToolsModel` | PToolsModelCore, PToolsModelMacroPlugin | — | 0 source entries / 0 resources |
 | `PToolsModelCore` | `PooToolsSource/PToolsModelCore` | — | — | 0 source entries / 0 resources |
+| `PToolsModelMacroPlugin` | `PToolsModelMacros` | — | SwiftCompilerPlugin, SwiftSyntax, SwiftSyntaxBuilder, SwiftSyntaxMacros | 1 source entries / 0 resources |
 | `PToolsModelTests` | `Tests/PToolsModelTests` | PToolsModel, PToolsModelCore | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |

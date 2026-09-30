@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "e245c1361852ddf8b0552564fc74196f6b45325c",
-  "generated_at": "2026-09-29T17:02:09Z",
+  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
+  "generated_at": "2026-09-30T03:35:41Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -135,6 +135,15 @@
       },
       "targets": [
         "PTMicPermission"
+      ]
+    },
+    {
+      "name": "PTModelBenchmark",
+      "type": {
+        "executable": null
+      },
+      "targets": [
+        "PTModelBenchmark"
       ]
     },
     {
@@ -1905,6 +1914,34 @@
           ]
         }
       ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-syntax",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/swiftlang/swift-syntax.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "600.0.0",
+                "upperBound": "601.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
     }
   ],
   "core_dependency_budget": {
@@ -2342,6 +2379,38 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SPLIT_PERMISSION_CORE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PTModelBenchmark",
+      "type": "executable",
+      "path": "Benchmarks/PTModel/Runner",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsModel",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModel",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
             }
           },
           "tool": "swift"
@@ -3569,6 +3638,17 @@
               null
             ]
           }
+        },
+        {
+          "name": "PToolsModelMacroPlugin",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelMacroPlugin",
+              null
+            ]
+          }
         }
       ],
       "third_party_dependencies": [],
@@ -3603,6 +3683,72 @@
           "tool": "swift"
         }
       ]
+    },
+    {
+      "name": "PToolsModelMacroPlugin",
+      "type": "macro",
+      "path": "PToolsModelMacros",
+      "sources": [
+        "PTModelMacros.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SwiftCompilerPlugin",
+          "kind": "third_party",
+          "package": "swift-syntax",
+          "declaration": {
+            "product": [
+              "SwiftCompilerPlugin",
+              "swift-syntax",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwiftSyntax",
+          "kind": "third_party",
+          "package": "swift-syntax",
+          "declaration": {
+            "product": [
+              "SwiftSyntax",
+              "swift-syntax",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwiftSyntaxBuilder",
+          "kind": "third_party",
+          "package": "swift-syntax",
+          "declaration": {
+            "product": [
+              "SwiftSyntaxBuilder",
+              "swift-syntax",
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "name": "SwiftSyntaxMacros",
+          "kind": "third_party",
+          "package": "swift-syntax",
+          "declaration": {
+            "product": [
+              "SwiftSyntaxMacros",
+              "swift-syntax",
+              null,
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsModelTests",

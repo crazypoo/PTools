@@ -132,6 +132,55 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
     }
 }
 
+// English: Legacy reference models are decoded on the caller's MainActor and never cross the transport actor.
+// Español: Los modelos de referencia heredados se decodifican en el MainActor del llamador y nunca cruzan el actor de transporte.
+// 中文：旧版引用模型只在调用方 MainActor 解码，不跨越 Network transport actor。
+@MainActor
+public struct PTNetworkLegacyResponseDecoder<Output> {
+    private let closure: (PTNetworkResponsePayload) throws -> Output
+
+    public init(decode: @escaping (PTNetworkResponsePayload) throws -> Output) {
+        self.closure = decode
+    }
+
+    public func decode(_ payload: PTNetworkResponsePayload) throws -> Output {
+        guard !payload.data.isEmpty else { throw PTNetworkDecodeError.emptyPayload }
+        return try closure(payload)
+    }
+
+#if SWIFT_PACKAGE
+    public static func smartCodable<T: SmartCodable>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
+        PTNetworkLegacyResponseDecoder<T> { payload in
+            guard let string = payload.string,
+                  let model = T.deserialize(from: string) else {
+                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
+            }
+            return model
+        }
+    }
+#else
+    public static func smartCodable<T: SmartCodableX>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
+        PTNetworkLegacyResponseDecoder<T> { payload in
+            guard let string = payload.string,
+                  let model = T.deserialize(from: string) else {
+                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
+            }
+            return model
+        }
+    }
+#endif
+
+    public static func kakaJSON<T: Convertible>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
+        PTNetworkLegacyResponseDecoder<T> { payload in
+            guard let string = payload.string,
+                  let model = string.kj.model(type) else {
+                throw PTNetworkDecodeError.underlying("KakaJSON could not decode the response.")
+            }
+            return model
+        }
+    }
+}
+
 extension PTNetworkResponsePayload {
     init(snapshot: PTNetworkResponseSnapshot) {
         self.init(url: URL(string: snapshot.url),

@@ -4,6 +4,8 @@
 
 `PToolsModelCore` 是 iOS 17+ / Swift 6 的 Foundation-only 模型边界。它不依赖
 SmartCodable、KakaJSON、UIKit 或运行时反射，现阶段与旧 Core 并存，方便逐步迁移。
+SwiftPM 用户还可以通过 `PToolsModel` 使用 `@PTModel` / `@PTSubclass`；CocoaPods
+使用 `ModelCore` 时采用同一套手写 `PTModelSchema`，不把 SwiftSyntax 带入业务 target。
 
 ## 一行式转换
 
@@ -73,6 +75,27 @@ let values = try decoder.decodeArray(String.self,
 
 解析限制失败会抛出类型化 `PTModelError`，不会使用 `fatalError` 或 `precondition`。`PTLossyCollectionStrategy.preserveIndexAsNil` 应配合 `decodeOptionalArray` 使用。
 
+## 字段恢复、诊断和校验
+
+静态 Schema 可以把 missing、null、invalid 和 value 分开处理，避免把缺失字段
+误判成默认值或把无效值静默吞掉：
+
+```swift
+let field = PTModelFieldDescriptor(name: "count", required: false)
+let recovery = PTFieldRecovery<Int>(defaultValue: 0,
+                                    missingPolicy: .useDefault,
+                                    nullPolicy: .useDefault,
+                                    invalidPolicy: .useDefault)
+let count = try decoder.resolveField(Int.self,
+                                    from: object,
+                                    field: field,
+                                    recovery: recovery)
+```
+
+`PTModelDiagnosticSink` 用于收集字段诊断；并发场景可使用
+`PTModelDiagnosticStore` 的 `sink` 适配器。校验逻辑放入 `PTModelValidator`，不会
+依赖全局可变日志状态。
+
 ### 字典、Set 和别名
 
 ```swift
@@ -90,6 +113,61 @@ let id = try decoder.decodeAliased(Int.self, from: object,
 ```
 
 Set 的 JSON 表示是数组；编码结果使用 canonical JSON 字符串排序以保证可复现，但业务层不应依赖 Set 的语义顺序。
+
+## 静态 Schema、Patch 和迁移
+
+不希望依赖运行时反射时，可以把字段策略写进静态 Schema：
+
+```swift
+struct Profile: Codable, Sendable, PTStaticModel {
+    let id: Int
+    let nickname: String?
+
+    static let idField = PTModelFieldDescriptor(name: "id", required: true)
+    static let nicknameField = PTModelFieldDescriptor(name: "nickname")
+
+    static var ptSchema: PTModelSchema<Profile> {
+        PTModelSchema(fields: [idField, nicknameField],
+                      decode: { value, decoder in
+                          try decoder.decode(Profile.self, from: value)
+                      },
+                      encode: { model, encoder in
+                          try encoder.object(fields: [
+                              (idField, encoder.jsonValue(model.id)),
+                              (nicknameField, try encoder.optionalJSONValue(model.nickname))
+                          ])
+                      })
+    }
+}
+
+let json = try PTStaticCodec.jsonValue(Profile(id: 1, nickname: nil))
+```
+
+`PTModelPatch`、`PTModelDiff`、`PTModelClone`、`PTModelConverter` 和
+`PTModelMigrationChain` 都使用 `PTJSONValue`，因此可以在不跨 actor 传递 `Any`
+的情况下完成更新、差异和版本迁移。Patch 中没有出现的字段保持不变，`null`
+是显式清空，Diff 的对象键按字典序生成。
+
+普通 `Codable` 模型继续保留 Foundation 的兼容行为；静态 Schema 可以使用
+`PTModelEncoder.object(fields:)` 和 `optionalJSONValue(_:)` 进入字段级策略；SwiftPM
+的 `@PTModel` 生成 Schema 也会沿用同一套 Optional 字段策略。`canonical: true` 会使用
+Foundation-only 的 PTJSON 树编码路径，并对输出键排序；默认基准仍使用兼容编码路径。
+
+## 流式数组
+
+大数组可以使用 `PTModelStreamDecoder` 逐项消费，或使用
+`PTModelStreamEncoder` 写入 `PTAsyncJSONByteSink` / `PTAsyncFileByteSink`：
+
+```swift
+let stream = PTModelStreamDecoder<Profile>(data: data)
+for try await profile in stream {
+    consume(profile)
+}
+```
+
+流式入口只接受顶层数组，逐项检查取消并在单项失败时返回带索引的
+`PTModelError.streamElementFailed`。它不会生成完整的 `PTJSONValue` 树；输入 `Data`
+仍由调用方持有，若需要真正的网络分块，应让上层按块写入文件 sink 后再启动消费。
 
 ### Network 类型化响应
 
@@ -129,9 +207,23 @@ let user = try decoder.decode(User.self, from: data)
 
 - `strict`：解析失败直接返回错误。
 - `compatible`：保留 Codable 主路径，并对顶层基础类型提供安全容错转换。
-- `lossy`：保留策略契约，集合丢弃和字段级恢复将在后续 5.58.x 阶段接入静态 Schema。
+- `lossy`：集合可以选择跳过无效项或替换为默认值；静态 Schema 还可以配置字段级恢复。
 
 ## 迁移边界
 
 5.58.0 不修改 `PTBaseModel`、Network 旧入口或 SmartCodable/KakaJSON 依赖。新代码可先依赖
 `PToolsModelCore`，确认行为后再迁移业务模型；旧模型继续通过原有 Core 路径运行。
+Network 的 `PTNetworkResponseDecoder` 继续提供 `Sendable` 泛型路径；
+`PTNetworkLegacyResponseDecoder` 明确标记为 MainActor 兼容层，让旧的引用模型不跨
+transport actor 传播。
+
+## 基准与迁移清单
+
+`Scripts/PTModel/run_benchmarks.sh` 运行包内的 `PTModelBenchmark`，输出可复现的
+JSON 编码/解码指标。`Scripts/PTModel/benchmark_models.swift` 是同一 runner 的
+Swift 脚本入口，不维护第二套基准实现。
+
+`Scripts/PTModel/migrate_smartcodable.swift` 和
+`Scripts/PTModel/migrate_kakajson.swift` 只生成文件、行号和匹配类型的 JSON 清单，
+不会自动改写源码。审阅清单后，将调用方迁移到 `PToolsModelCore`/`PToolsModel`，
+或明确登记为 legacy adapter，再重新运行清单。
