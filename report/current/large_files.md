@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: b9c7b523e410aa5499b8138b73fc26e7135aeaec
-Generated at: 2026-09-30T03:34:01Z
+Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
+Generated at: 2026-09-30T15:19:31Z
 -->
 
 # 当前文件尺寸门禁
@@ -33,14 +33,14 @@ Generated at: 2026-09-30T03:34:01Z
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1835 | architecture_exception |
-| `PooToolsSource/NetWork/Network.swift` | 1071 | warning |
+| `PooToolsSource/NetWork/Network.swift` | 1096 | warning |
 | `PooToolsSource/PToolsForm/PTForm.swift` | 1175 | warning |
 | `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1598 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |
 | `PooToolsSource/Router/PTRouter.swift` | 1056 | warning |
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1172 | warning |
-| `PooToolsSource/SegmentControl/PTPaging.swift` | 1176 | warning |
+| `PooToolsSource/SegmentControl/PTPaging.swift` | 1188 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
 | `PooToolsSource/TipsView/PTTipsView.swift` | 1248 | warning |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1639 | architecture_exception |

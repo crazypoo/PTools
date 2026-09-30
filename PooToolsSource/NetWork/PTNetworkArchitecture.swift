@@ -117,9 +117,9 @@ public struct PTNetworkRequest: Sendable, Hashable {
     }
 }
 
-// English: PTNetworkResponse contains only immutable values returned by the canonical executor.
-// Español: PTNetworkResponse solo contiene valores inmutables devueltos por el ejecutor canónico.
-// 中文：PTNetworkResponse 只包含统一执行器返回的不可变值。
+// English: PTNetworkResponse preserves the original transport API with immutable response values.
+// Español: PTNetworkResponse conserva la API de transporte original con valores de respuesta inmutables.
+// 中文：PTNetworkResponse 保留原有传输 API，并只暴露不可变响应值。
 public struct PTNetworkResponse: Sendable {
     public let request: PTNetworkRequest
     public let statusCode: Int?

@@ -19,6 +19,7 @@ public struct PTModelDecoder: Sendable {
     public let context: PTModelContext
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
     public let coercionPolicy: PTValueCoercionPolicy
+    public let numericOverflowPolicy: PTNumericOverflowPolicy
     public let session: PTModelCodingSession
 
     public init(policy: PTDecodePolicy = .compatible,
@@ -31,6 +32,7 @@ public struct PTModelDecoder: Sendable {
                 context: PTModelContext = .init(),
                 dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
                 coercionPolicy: PTValueCoercionPolicy = .init(),
+                numericOverflowPolicy: PTNumericOverflowPolicy = .error,
                 session: PTModelCodingSession = .init()) {
         self.policy = policy
         self.duplicateKeyPolicy = duplicateKeyPolicy
@@ -42,6 +44,7 @@ public struct PTModelDecoder: Sendable {
         self.context = context
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
         self.coercionPolicy = coercionPolicy
+        self.numericOverflowPolicy = numericOverflowPolicy
         self.session = session
     }
 
@@ -61,6 +64,7 @@ public struct PTModelDecoder: Sendable {
                                context: context,
                                dictionaryKeyStrategy: dictionaryKeyStrategy,
                                coercionPolicy: coercionPolicy,
+                               numericOverflowPolicy: numericOverflowPolicy,
                                session: scopedSession)
     }
 
@@ -83,11 +87,15 @@ public struct PTModelDecoder: Sendable {
         let parsedValue = try PTJSONValue(data: data,
                                           duplicateKeyPolicy: duplicateKeyPolicy,
                                           limits: limits)
+        let lifecycle = T.self as? any PTModelLifecycle.Type
+        let lifecycleValue = try lifecycle?.ptWillDecode(parsedValue, using: self) ?? parsedValue
         // English: Decode the bounded tree first; JSONDecoder remains the compatibility fallback for custom Codable containers.
         // Español: Primero decodifica el árbol limitado; JSONDecoder queda como compatibilidad para contenedores Codable personalizados.
         // 中文：优先直接解码受限 JSON 树；自定义 Codable 容器仍由 JSONDecoder 作为兼容回退。
         do {
-            return try treeDecode(type, from: parsedValue)
+            let model = try treeDecode(type, from: lifecycleValue)
+            try lifecycle?.ptDidDecode(lifecycleValue, using: self)
+            return model
         } catch {
             // English: Keep the established Codable escape hatch for unsupported custom decoding implementations.
             // Español: Conserva la salida Codable existente para implementaciones de decodificación personalizadas no compatibles.
@@ -96,13 +104,18 @@ public struct PTModelDecoder: Sendable {
         // English: Re-encode the normalized tree so JSONDecoder cannot silently reapply its own duplicate-key policy.
         // Español: Re-encode el árbol normalizado para que JSONDecoder no aplique silenciosamente otra política de claves duplicadas.
         // 中文：重新编码归一化后的树，避免 JSONDecoder 悄悄使用另一套重复键策略。
-        let normalizedData = try parsedValue.jsonData(sortedKeys: false)
+        let normalizedData = try lifecycleValue.jsonData(sortedKeys: false)
         let decoder = JSONDecoder()
         switch dateStrategy {
         case .deferredToDate: decoder.dateDecodingStrategy = .deferredToDate
         case .secondsSince1970: decoder.dateDecodingStrategy = .secondsSince1970
         case .millisecondsSince1970: decoder.dateDecodingStrategy = .millisecondsSince1970
         case .iso8601: decoder.dateDecodingStrategy = .iso8601
+        case .custom, .fallback:
+            // English: The custom strategy already ran in the tree decoder; keep the fallback deterministic if custom Codable is used.
+            // Español: La estrategia personalizada ya se ejecutó en el tree decoder; el fallback Codable conserva un comportamiento determinista.
+            // 中文：自定义策略已由 Tree Decoder 执行；进入 Codable 回退时使用确定的默认策略。
+            decoder.dateDecodingStrategy = .deferredToDate
         }
         switch dataStrategy {
         case .deferredToData: decoder.dataDecodingStrategy = .deferredToData
@@ -253,38 +266,74 @@ public struct PTModelDecoder: Sendable {
 
     public func decodeDictionary<Key: Hashable & Decodable, Value: Decodable>(_ keyType: Key.Type,
                                                                                 _ valueType: Value.Type,
-                                                                                from value: PTJSONValue) throws -> [Key: Value] {
+                                                                                from value: PTJSONValue,
+                                                                                strategy: PTLossyCollectionStrategy = .fail,
+                                                                                defaultValue: Value? = nil) throws -> [Key: Value] {
         switch dictionaryKeyStrategy {
         case .keyValuePairs:
             guard case .array(let pairs) = value else { throw PTModelError.rootIsNotArray }
             var result: [Key: Value] = [:]
-            for pair in pairs {
-                guard case .object(let object) = pair,
-                      let keyValue = object["key"],
-                      let itemValue = object["value"] else {
-                    throw PTModelError.conversionFailed("Invalid key-value pair")
+            for (index, pair) in pairs.enumerated() {
+                do {
+                    guard case .object(let object) = pair,
+                          let keyValue = object["key"],
+                          let itemValue = object["value"] else {
+                        throw PTModelError.conversionFailed("Invalid key-value pair")
+                    }
+                    let key = try decodeValue(keyType, from: keyValue)
+                    result[key] = try decodeValue(valueType, from: itemValue)
+                } catch {
+                    switch strategy {
+                    case .fail: throw error
+                    case .skipInvalid: continue
+                    case .replaceWithDefault:
+                        guard let defaultValue else {
+                            throw PTModelError.invalidCollectionElement("[\(index)]")
+                        }
+                        guard case .object(let object) = pair,
+                              let keyValue = object["key"] else {
+                            throw PTModelError.invalidCollectionElement("[\(index)]")
+                        }
+                        result[try decodeValue(keyType, from: keyValue)] = defaultValue
+                    case .preserveIndexAsNil:
+                        throw PTModelError.invalidCollectionElement("[\(index)] requires an optional dictionary value")
+                    }
                 }
-                let key = try decodeValue(keyType, from: keyValue)
-                result[key] = try decodeValue(valueType, from: itemValue)
             }
             return result
         case .stringOnly, .losslessStringConvertible, .rawRepresentable:
             guard case .object(let object) = value else { throw PTModelError.rootIsNotObject }
             var result: [Key: Value] = [:]
             for (rawKey, itemValue) in object {
-                let key: Key
-                if dictionaryKeyStrategy == .stringOnly {
-                    guard let string = rawKey as? Key else {
-                        throw PTModelError.conversionFailed("Dictionary key is not String")
+                do {
+                    let key: Key
+                    if dictionaryKeyStrategy == .stringOnly {
+                        guard let string = rawKey as? Key else {
+                            throw PTModelError.conversionFailed("Dictionary key is not String")
+                        }
+                        key = string
+                    } else if let type = Key.self as? any LosslessStringConvertible.Type,
+                              let parsed = type.init(rawKey) as? Key {
+                        key = parsed
+                    } else {
+                        throw PTModelError.conversionFailed("Dictionary key cannot be decoded: \(rawKey)")
                     }
-                    key = string
-                } else if let type = Key.self as? any LosslessStringConvertible.Type,
-                          let parsed = type.init(rawKey) as? Key {
-                    key = parsed
-                } else {
-                    throw PTModelError.conversionFailed("Dictionary key cannot be decoded: \(rawKey)")
+                    result[key] = try decodeValue(valueType, from: itemValue)
+                } catch {
+                    switch strategy {
+                    case .fail: throw error
+                    case .skipInvalid: continue
+                    case .replaceWithDefault:
+                        guard let defaultValue,
+                              let type = Key.self as? any LosslessStringConvertible.Type,
+                              let key = type.init(rawKey) as? Key else {
+                            throw PTModelError.invalidCollectionElement(rawKey)
+                        }
+                        result[key] = defaultValue
+                    case .preserveIndexAsNil:
+                        throw PTModelError.invalidCollectionElement("\(rawKey) requires an optional dictionary value")
+                    }
                 }
-                result[key] = try decodeValue(valueType, from: itemValue)
             }
             return result
         }
@@ -320,6 +369,47 @@ public struct PTModelDecoder: Sendable {
         return result
     }
 
+    // English: RawRepresentable dictionary keys are decoded through the configured strategy instead of a side API.
+    // Español: Las claves RawRepresentable se decodifican mediante la estrategia configurada y no por una API paralela.
+    // 中文：RawRepresentable 字典 key 通过统一策略解码，不再依赖旁路 API。
+    public func decodeDictionary<Key: RawRepresentable & Hashable & Decodable, Value: Decodable>(
+        _ keyType: Key.Type,
+        _ valueType: Value.Type,
+        from value: PTJSONValue,
+        strategy: PTLossyCollectionStrategy = .fail,
+        defaultValue: Value? = nil
+    ) throws -> [Key: Value]
+    where Key.RawValue: LosslessStringConvertible {
+        guard dictionaryKeyStrategy == .rawRepresentable else {
+            return try decodeRawDictionary(keyType, valueType, from: value)
+        }
+        guard case .object(let object) = value else { throw PTModelError.rootIsNotObject }
+        var result: [Key: Value] = [:]
+        for (rawKey, itemValue) in object {
+            do {
+                guard let rawValue = Key.RawValue(rawKey), let key = Key(rawValue: rawValue) else {
+                    throw PTModelError.conversionFailed("Dictionary key cannot be decoded: \(rawKey)")
+                }
+                result[key] = try decodeValue(valueType, from: itemValue)
+            } catch {
+                switch strategy {
+                case .fail: throw error
+                case .skipInvalid: continue
+                case .replaceWithDefault:
+                    guard let defaultValue,
+                          let rawValue = Key.RawValue(rawKey),
+                          let key = Key(rawValue: rawValue) else {
+                        throw PTModelError.invalidCollectionElement(rawKey)
+                    }
+                    result[key] = defaultValue
+                case .preserveIndexAsNil:
+                    throw PTModelError.invalidCollectionElement(rawKey)
+                }
+            }
+        }
+        return result
+    }
+
     public static func decode<T: Decodable, Source: PTModelSource>(_ type: T.Type,
                                                                     from source: Source,
                                                                     policy: PTDecodePolicy = .compatible) throws -> T {
@@ -337,6 +427,7 @@ public struct PTModelEncoder: Sendable {
     public let urlStrategy: PTURLCodingStrategy
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
     public let canonical: Bool
+    public let canonicalPolicy: PTCanonicalJSONPolicy
     public let session: PTModelCodingSession
 
     public init(prettyPrinted: Bool = false,
@@ -348,6 +439,7 @@ public struct PTModelEncoder: Sendable {
                 urlStrategy: PTURLCodingStrategy = .deferredToURL,
                 dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
                 canonical: Bool = false,
+                canonicalPolicy: PTCanonicalJSONPolicy = .ptModel,
                 session: PTModelCodingSession = .init()) {
         self.prettyPrinted = prettyPrinted
         self.sortedKeys = sortedKeys
@@ -358,6 +450,7 @@ public struct PTModelEncoder: Sendable {
         self.urlStrategy = urlStrategy
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
         self.canonical = canonical
+        self.canonicalPolicy = canonicalPolicy
         self.session = session
     }
 
@@ -394,6 +487,7 @@ public struct PTModelEncoder: Sendable {
                               urlStrategy: urlStrategy,
                               dictionaryKeyStrategy: dictionaryKeyStrategy,
                               canonical: canonical,
+                              canonicalPolicy: canonicalPolicy,
                               session: scopedSession)
     }
 
@@ -402,6 +496,25 @@ public struct PTModelEncoder: Sendable {
         values.reserveCapacity(fields.count)
         for (field, value) in fields {
             guard let (key, encoded) = try encodedField(value, for: field) else { continue }
+            if field.flattened {
+                guard case .object(let flattenedValues) = encoded else {
+                    let actual: String
+                    switch encoded {
+                    case .null: actual = "null"
+                    case .bool: actual = "bool"
+                    case .number: actual = "number"
+                    case .string: actual = "string"
+                    case .array: actual = "array"
+                    case .object: actual = "object"
+                    }
+                    throw PTModelError.typeMismatch(expected: "object for flattened field", actual: actual)
+                }
+                for (flattenedKey, flattenedValue) in flattenedValues {
+                    if values[flattenedKey] != nil { throw PTModelError.duplicateKey(flattenedKey) }
+                    values[flattenedKey] = flattenedValue
+                }
+                continue
+            }
             if values[key] != nil { throw PTModelError.duplicateKey(key) }
             values[key] = encoded
         }
@@ -409,9 +522,21 @@ public struct PTModelEncoder: Sendable {
     }
 
     public func encode<T: Encodable>(_ value: T) throws -> Data {
+        if let lifecycle = T.self as? any PTModelLifecycle.Type {
+            // English: Lifecycle-enabled models use the same normalized PTJSONValue for both hooks and output.
+            // Español: Los modelos con ciclo de vida usan el mismo PTJSONValue normalizado para hooks y salida.
+            // 中文：启用生命周期的模型统一使用同一个规范化 PTJSONValue 供钩子和输出使用。
+            let prepared = try lifecycle.ptWillEncode(treeJSONValue(value), using: self)
+            let data = try prepared.jsonData(prettyPrinted: prettyPrinted,
+                                             sortedKeys: sortedKeys || canonical,
+                                             canonicalPolicy: canonicalPolicy)
+            try lifecycle.ptDidEncode(prepared, using: self)
+            return data
+        }
         if canonical || dataStrategy == .utf8 {
             return try treeJSONValue(value).jsonData(prettyPrinted: prettyPrinted,
-                                                     sortedKeys: sortedKeys || canonical)
+                                                     sortedKeys: sortedKeys || canonical,
+                                                     canonicalPolicy: canonical ? canonicalPolicy : nil)
         }
         let encoder = JSONEncoder()
         if prettyPrinted { encoder.outputFormatting.insert(.prettyPrinted) }
@@ -421,6 +546,13 @@ public struct PTModelEncoder: Sendable {
         case .secondsSince1970: encoder.dateEncodingStrategy = .secondsSince1970
         case .millisecondsSince1970: encoder.dateEncodingStrategy = .millisecondsSince1970
         case .iso8601: encoder.dateEncodingStrategy = .iso8601
+        case .custom:
+            // English: Custom date formats are handled by the PTJSONValue path, not by JSONEncoder's fixed strategies.
+            // Español: Los formatos de fecha personalizados usan la ruta PTJSONValue, no las estrategias fijas de JSONEncoder.
+            // 中文：自定义日期格式走 PTJSONValue 路径，不交给 JSONEncoder 的固定策略。
+            return try treeJSONValue(value).jsonData(prettyPrinted: prettyPrinted,
+                                                     sortedKeys: sortedKeys || canonical,
+                                                     canonicalPolicy: canonicalPolicy)
         }
         switch dataStrategy {
         case .deferredToData: encoder.dataEncodingStrategy = .deferredToData
@@ -436,7 +568,9 @@ public struct PTModelEncoder: Sendable {
     }
 
     public func encode(_ value: PTJSONValue) throws -> Data {
-        try value.jsonData(prettyPrinted: prettyPrinted, sortedKeys: sortedKeys)
+        try value.jsonData(prettyPrinted: prettyPrinted,
+                           sortedKeys: sortedKeys || canonical,
+                           canonicalPolicy: canonical ? canonicalPolicy : nil)
     }
 
     public func jsonValue<T: Encodable>(_ value: T) throws -> PTJSONValue {
@@ -453,7 +587,9 @@ public struct PTModelEncoder: Sendable {
     }
 
     public func jsonString<T: Encodable>(_ value: T) throws -> String {
-        try jsonValue(value).jsonString(prettyPrinted: prettyPrinted, sortedKeys: sortedKeys)
+        try jsonValue(value).jsonString(prettyPrinted: prettyPrinted,
+                                        sortedKeys: sortedKeys || canonical,
+                                        canonicalPolicy: canonical ? canonicalPolicy : nil)
     }
 
     public func dictionary<T: Encodable>(_ value: T) throws -> [String: Any] {
@@ -493,10 +629,25 @@ public struct PTModelEncoder: Sendable {
         case .rawRepresentable:
             throw PTModelError.conversionFailed("Use encodeRawDictionary for RawRepresentable keys")
         case .keyValuePairs:
-            return .array(try dictionary.map { key, value in
-                .object(["key": try jsonValue(key), "value": try jsonValue(value)])
-            })
+            var pairs: [(String, PTJSONValue)] = []
+            pairs.reserveCapacity(dictionary.count)
+            for (key, value) in dictionary {
+                let pair: PTJSONValue = .object(["key": try jsonValue(key), "value": try jsonValue(value)])
+                pairs.append((try pair.jsonString(sortedKeys: true), pair))
+            }
+            return .array(pairs.sorted { $0.0 < $1.0 }.map(\.1))
         }
+    }
+
+    // English: RawRepresentable keys use the same strategy entry point as String and LosslessStringConvertible keys.
+    // Español: Las claves RawRepresentable usan el mismo punto de entrada que String y LosslessStringConvertible.
+    // 中文：RawRepresentable key 与 String、LosslessStringConvertible 共用同一个策略入口。
+    public func jsonValue<Key: RawRepresentable & Hashable & Encodable, Value: Encodable>(dictionary: [Key: Value]) throws -> PTJSONValue
+    where Key.RawValue: LosslessStringConvertible {
+        guard dictionaryKeyStrategy == .rawRepresentable else {
+            return try jsonValue(rawDictionary: dictionary)
+        }
+        return try jsonValue(rawDictionary: dictionary)
     }
 
     public func jsonValue<Key: RawRepresentable & Hashable & Encodable, Value: Encodable>(rawDictionary: [Key: Value]) throws -> PTJSONValue

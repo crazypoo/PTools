@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
-  "generated_at": "2026-09-30T03:33:38Z",
+  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
+  "generated_at": "2026-09-30T15:19:08Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
@@ -166,6 +166,10 @@
     {
       "source": "PToolsModel",
       "destination": "PToolsModelMacroPlugin"
+    },
+    {
+      "source": "PToolsModelUIKit",
+      "destination": "PToolsModelCore"
     },
     {
       "source": "PToolsNotifications",

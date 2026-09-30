@@ -33,6 +33,16 @@ let package = Package(
         // 中文：公开不依赖第三方的 PTModel 契约和转换核心。
         .library(name: "PToolsModelCore", targets: ["PToolsModelCore"]),
         .library(name: "PToolsModel", targets: ["PToolsModel"]),
+        // English: Keep legacy model adapters optional so new clients do not pull third-party codecs.
+        // Español: Mantiene opcionales los adaptadores heredados para que los clientes nuevos no arrastren codecs de terceros.
+        // 中文：将旧模型适配器保持为可选，避免新项目被迫引入第三方 codec。
+        .library(name: "PToolsModelLegacySmartCodable", targets: ["PToolsModelLegacySmartCodable"]),
+        .library(name: "PToolsModelLegacyKakaJSON", targets: ["PToolsModelLegacyKakaJSON"]),
+        // English: Keep UIKit and Combine model adapters optional and out of the Foundation-only core.
+        // Español: Mantiene opcionales los adaptadores de UIKit y Combine, fuera del núcleo Foundation-only.
+        // 中文：将 UIKit 和 Combine 模型适配器保持为可选产品，不进入 Foundation-only Core。
+        .library(name: "PToolsModelUIKit", targets: ["PToolsModelUIKit"]),
+        .library(name: "PToolsModelCombine", targets: ["PToolsModelCombine"]),
         // English: Publish a small reproducible PTModel benchmark runner without UIKit dependencies.
         // Español: Publica un runner reproducible de benchmarks PTModel sin dependencias de UIKit.
         // 中文：公开一个不依赖 UIKit 的可复现 PTModel 基准测试入口。
@@ -220,6 +230,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsAll", targets: [
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols", "PToolsModelCore", "PToolsModel",
+            "PToolsModelUIKit", "PToolsModelCombine",
             "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
             "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm",
@@ -337,6 +348,29 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .target(
+            name: "PToolsModelLegacySmartCodable",
+            dependencies: ["SmartCodable"],
+            path: "PooToolsSource/PToolsModelLegacySmartCodable",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsModelLegacyKakaJSON",
+            dependencies: ["KakaJSON"],
+            path: "PooToolsSource/PToolsModelLegacyKakaJSON",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsModelUIKit",
+            dependencies: ["PToolsModelCore"],
+            path: "PooToolsSource/PToolsModelUIKit",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsModelCombine",
+            path: "PooToolsSource/PToolsModelCombine",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .executableTarget(
             name: "PTModelBenchmark",

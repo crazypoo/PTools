@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: b9c7b523e410aa5499b8138b73fc26e7135aeaec
-Generated at: 2026-09-30T03:35:42Z
+Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
+Generated at: 2026-09-30T15:19:07Z
 -->
 
 # CocoaPods Subspec Graph
@@ -14,7 +14,7 @@ Generated at: 2026-09-30T03:35:42Z
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `138`
+- Subspec count: `142`
 
 ## Subspecs
 
@@ -94,6 +94,8 @@ Generated at: 2026-09-30T03:35:42Z
 | `MicPermission` | `PooTools/PToolsPermissionCore` | — | `MicPermission` | — | — |
 | `Model` | `PooTools/ModelCore` | — | `PToolsModel` | Foundation | — |
 | `ModelCore` | — | — | `PToolsModelCore` | Foundation | — |
+| `ModelLegacyKakaJSON` | — | `KakaJSON` | `PToolsModelLegacyKakaJSON` | Foundation | — |
+| `ModelLegacySmartCodable` | — | `SmartCodable` | `PToolsModelLegacySmartCodable` | Foundation | — |
 | `Motion` | `PooTools/Core`, `PooTools/MotionPermission` | — | `Motion` | CoreMotion | — |
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |
@@ -107,6 +109,8 @@ Generated at: 2026-09-30T03:35:42Z
 | `Overlay` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation` | — | `Overlay` | Foundation, UIKit | — |
 | `PDF` | `PooTools/Core` | — | `PDF` | — | — |
 | `PToolsCore` | — | — | `PToolsCore` | Foundation | — |
+| `PToolsModelCombine` | — | — | `PToolsModelCombine` | Combine, Foundation | — |
+| `PToolsModelUIKit` | `PooTools/ModelCore` | — | `PToolsModelUIKit` | Foundation, UIKit | — |
 | `PToolsPermissionCore` | — | — | `PToolsPermissionCore` | Foundation | — |
 | `PToolsPermissionUI` | `PooTools/PToolsPermissionCore`, `PooTools/PToolsUIFoundation` | — | `PToolsPermissionUI` | Foundation, UIKit | — |
 | `PToolsUIFoundation` | `PooTools/PToolsCore` | `SnapKit` | `PToolsUIFoundation` | Foundation, UIKit | — |

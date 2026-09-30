@@ -56,6 +56,38 @@ Pod::Spec.new do |s|
         }
     end
 
+    # English: Keep UIKit model codecs optional and outside the Foundation-only model core.
+    # Español: Mantiene opcionales los codecs de modelos UIKit y fuera del núcleo basado solo en Foundation.
+    # 中文：将 UIKit 模型 codec 作为可选层，保持在仅 Foundation 的模型核心之外。
+    s.subspec 'PToolsModelUIKit' do |subspec|
+        subspec.dependency 'PooTools/ModelCore'
+        subspec.source_files = 'PooToolsSource/PToolsModelUIKit/*.{h,m,swift}'
+        subspec.frameworks = 'UIKit', 'Foundation'
+    end
+
+    # English: Keep Combine and Observation bridges optional so Core clients do not import UI observation frameworks.
+    # Español: Mantiene opcionales los puentes Combine y Observation para que Core no importe frameworks de observación UI.
+    # 中文：将 Combine 与 Observation 桥接作为可选层，避免 Core 客户端引入 UI 观察框架。
+    s.subspec 'PToolsModelCombine' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsModelCombine/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation', 'Combine'
+    end
+
+    # English: Legacy model codecs are explicit opt-in adapters and never part of the new Model default path.
+    # Español: Los codecs heredados son adaptadores opt-in explícitos y nunca forman parte de la ruta Model nueva.
+    # 中文：旧模型 codec 只能显式 opt-in，不进入新的 Model 默认路径。
+    s.subspec 'ModelLegacySmartCodable' do |subspec|
+        subspec.dependency 'SmartCodable'
+        subspec.source_files = 'PooToolsSource/PToolsModelLegacySmartCodable/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'ModelLegacyKakaJSON' do |subspec|
+        subspec.dependency 'KakaJSON'
+        subspec.source_files = 'PooToolsSource/PToolsModelLegacyKakaJSON/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+    end
+
     # English: Publish the Foundation-only date context without a third-party date dependency.
     # Español: Publica el contexto de fechas basado solo en Foundation sin una dependencia de terceros.
     # 中文：公开仅依赖 Foundation 的日期语境，移除第三方日期依赖。

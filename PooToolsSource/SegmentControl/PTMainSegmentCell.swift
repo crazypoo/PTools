@@ -136,7 +136,6 @@ public class PTMainSegmentCell: UICollectionViewCell {
     /// English: Legacy separator view kept for 5.x source compatibility.
     /// Español: Vista separadora heredada conservada para la compatibilidad de código fuente 5.x.
     /// 中文：保留旧版分隔线 View，维持 5.x 源码兼容。
-    @available(*, deprecated, message: "Configure item separators through PTSegmentStyle.itemSeparatorStyle.")
     public let lineView: UIView
     public let titleLabel = UILabel()
     public let subTitleLabel = UILabel()

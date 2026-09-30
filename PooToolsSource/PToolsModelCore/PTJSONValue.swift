@@ -117,12 +117,20 @@ public enum PTJSONValue: Sendable, Equatable, Hashable, Codable {
         }
     }
 
-    public func jsonData(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> Data {
-        try PTJSONWriter(prettyPrinted: prettyPrinted, sortedKeys: sortedKeys).write(self)
+    public func jsonData(prettyPrinted: Bool = false,
+                         sortedKeys: Bool = true,
+                         canonicalPolicy: PTCanonicalJSONPolicy? = nil) throws -> Data {
+        try PTJSONWriter(prettyPrinted: prettyPrinted,
+                         sortedKeys: sortedKeys,
+                         canonicalPolicy: canonicalPolicy).write(self)
     }
 
-    public func jsonString(prettyPrinted: Bool = false, sortedKeys: Bool = true) throws -> String {
-        let data = try jsonData(prettyPrinted: prettyPrinted, sortedKeys: sortedKeys)
+    public func jsonString(prettyPrinted: Bool = false,
+                           sortedKeys: Bool = true,
+                           canonicalPolicy: PTCanonicalJSONPolicy? = nil) throws -> String {
+        let data = try jsonData(prettyPrinted: prettyPrinted,
+                                sortedKeys: sortedKeys,
+                                canonicalPolicy: canonicalPolicy)
         guard let string = String(data: data, encoding: .utf8) else {
             throw PTModelError.conversionFailed("JSON is not valid UTF-8")
         }
@@ -432,6 +440,7 @@ private struct PTJSONParser {
 private struct PTJSONWriter {
     let prettyPrinted: Bool
     let sortedKeys: Bool
+    let canonicalPolicy: PTCanonicalJSONPolicy?
 
     func write(_ value: PTJSONValue) throws -> Data {
         var bytes: [UInt8] = []
@@ -447,7 +456,10 @@ private struct PTJSONWriter {
             bytes.append(contentsOf: Array((value ? "true" : "false").utf8))
         case .number(let value):
             guard !value.rawRepresentation.isEmpty else { throw PTModelError.invalidJSON("Empty number") }
-            bytes.append(contentsOf: Array(value.rawRepresentation.utf8))
+            let number = canonicalPolicy?.normalizeNumbers == true
+                ? Self.normalizedNumber(value.rawRepresentation)
+                : value.rawRepresentation
+            bytes.append(contentsOf: Array(number.utf8))
         case .string(let value):
             appendString(value, to: &bytes)
         case .array(let values):
@@ -481,6 +493,8 @@ private struct PTJSONWriter {
             switch byte {
             case 0x22: bytes.append(contentsOf: Array("\\\"".utf8))
             case 0x5C: bytes.append(contentsOf: Array("\\\\".utf8))
+            case 0x2F where canonicalPolicy?.escapeSlashes == true:
+                bytes.append(contentsOf: Array("\\/".utf8))
             case 0x08: bytes.append(contentsOf: Array("\\b".utf8))
             case 0x0C: bytes.append(contentsOf: Array("\\f".utf8))
             case 0x0A: bytes.append(contentsOf: Array("\\n".utf8))
@@ -493,6 +507,16 @@ private struct PTJSONWriter {
             }
         }
         bytes.append(0x22)
+    }
+
+    // English: Decimal normalization is conservative; unrepresentable exact lexemes remain unchanged.
+    // Español: La normalización Decimal es conservadora; los lexemas exactos no representables permanecen intactos.
+    // 中文：Decimal 数字规范化保持保守，无法精确表示的字面量原样保留。
+    private static func normalizedNumber(_ raw: String) -> String {
+        if raw == "-0" || raw == "-0.0" { return "0" }
+        guard raw.contains(".") || raw.contains("e") || raw.contains("E") else { return raw }
+        guard let decimal = Decimal(string: raw, locale: Locale(identifier: "en_US_POSIX")) else { return raw }
+        return NSDecimalNumber(decimal: decimal).stringValue
     }
 
     private func appendIndent(to bytes: inout [UInt8], depth: Int, first: Bool) {

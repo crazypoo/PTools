@@ -57,7 +57,10 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
 
     public func decode(from value: PTJSONValue,
                        using decoder: PTModelDecoder = .init()) throws -> Model {
-        let model = try decodeClosure(value, decoder.scoped(to: .root))
+        let lifecycle = Model.self as? any PTModelLifecycle.Type
+        let input = try lifecycle?.ptWillDecode(value, using: decoder) ?? value
+        let model = try decodeClosure(input, decoder.scoped(to: .root))
+        try lifecycle?.ptDidDecode(input, using: decoder)
         try validator?.validate(model,
                                 context: PTModelValidationContext(path: .root,
                                                                     session: decoder.session))
@@ -67,21 +70,31 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
     public func encode(_ model: Model,
                        using encoder: PTModelEncoder = .init()) throws -> PTJSONValue {
         let value = try encodeClosure(model, encoder)
+        let lifecycle = Model.self as? any PTModelLifecycle.Type
+        let output = try lifecycle?.ptWillEncode(value, using: encoder) ?? value
+        try lifecycle?.ptDidEncode(output, using: encoder)
         try validator?.validate(model,
                                 context: PTModelValidationContext(path: .root,
                                                                     session: encoder.session))
-        return value
+        return output
     }
 
     public func jsonSchema() -> PTJSONValue {
         var properties: [String: PTJSONValue] = [:]
         for field in metadata.fields {
-            properties[field.mapping.encodeKey] = .object([
+            var descriptor: [String: PTJSONValue] = [
                 "type": .string("object"),
                 "x-pt-field": .string(field.name),
                 "x-pt-required": .bool(field.required),
                 "x-pt-flattened": .bool(field.flattened)
-            ])
+            ]
+            if let path = field.path {
+                descriptor["x-pt-path"] = .string(path.description)
+            }
+            if !field.annotations.isEmpty {
+                descriptor["x-pt-annotations"] = .array(field.annotations.sorted().map(PTJSONValue.string))
+            }
+            properties[field.mapping.encodeKey] = .object(descriptor)
         }
         let required = metadata.fields.filter(\.required).map { PTJSONValue.string($0.mapping.encodeKey) }
         var result: [String: PTJSONValue] = [
@@ -100,23 +113,204 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
 
 public protocol PTStaticModel: Codable & Sendable {
     static var ptSchema: PTModelSchema<Self> { get }
+
+    // English: Class hierarchies opt out until their superclass schema is explicitly composed.
+    // Español: Las jerarquías de clases se excluyen hasta componer explícitamente el esquema de la superclase.
+    // 中文：类继承层级在显式合并父类 Schema 前，必须退出直接 Fast Path。
+    static var ptUsesDirectPath: Bool { get }
+
+    // English: A generated or hand-written schema may construct a model directly from scanned fields.
+    // Español: Un esquema generado o escrito a mano puede construir el modelo directamente desde campos escaneados.
+    // 中文：生成或手写 Schema 可以直接根据扫描字段构造模型，避免再次建立完整对象树。
+    static func ptDirectDecode(_ fields: [String: PTJSONValue],
+                               using decoder: PTModelDecoder) throws -> Self?
+
+    // English: Generated schemas may provide field values for direct byte writing; manual schemas keep the tree fallback.
+    // Español: Los esquemas generados pueden entregar valores para escritura directa; los esquemas manuales conservan el fallback de árbol.
+    // 中文：生成的 Schema 可以提供字段值用于直接写字节，手写 Schema 继续使用树编码回退。
+    static func ptDirectFieldValues(_ model: Self,
+                                    using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]?
+}
+
+public extension PTStaticModel {
+    static var ptUsesDirectPath: Bool { true }
+
+    static func ptDirectDecode(_ fields: [String: PTJSONValue],
+                               using decoder: PTModelDecoder) throws -> Self? {
+        nil
+    }
+
+    static func ptDirectFieldValues(_ model: Self,
+                                    using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]? {
+        nil
+    }
+}
+
+// English: Normalize wire keys and annotated paths before Codable sees a macro-generated model.
+// Español: Normaliza las claves de transporte y rutas anotadas antes de entregar el modelo a Codable.
+// 中文：在 Codable 解码宏生成模型前，先统一转换网络字段名和注解路径。
+public enum PTModelSchemaSupport {
+    public static func normalizedInput(_ value: PTJSONValue,
+                                       fields: [PTModelFieldDescriptor]) -> PTJSONValue {
+        guard case .object(var object) = value else { return value }
+        var consumedKeys = Set<String>()
+        for field in fields {
+            consumedKeys.formUnion(field.mapping.decodeKeys)
+            if let path = field.path {
+                var foundAtPath = false
+                for candidate in pathCandidates(for: path, mapping: field.mapping) {
+                    if let nested = try? value.value(at: candidate) {
+                        object[field.name] = nested
+                        foundAtPath = true
+                        break
+                    }
+                }
+                if foundAtPath { continue }
+            }
+            guard object[field.name] == nil,
+                  let source = field.mapping.decodeKeys.lazy.compactMap({ object[$0] }).first else { continue }
+            object[field.name] = source
+        }
+
+        // English: Rebuild flattened nested objects from keys not claimed by ordinary fields.
+        // Español: Reconstruye objetos anidados aplanados con las claves no reclamadas por campos normales.
+        // 中文：使用普通字段未消费的 key 重建 Flat 字段对应的嵌套对象。
+        for field in fields where field.flattened {
+            if object[field.name] != nil { continue }
+            let nested = object.filter { key, _ in
+                !consumedKeys.contains(key) && key != field.name
+            }
+            guard !nested.isEmpty else { continue }
+            object[field.name] = .object(nested)
+            for key in nested.keys {
+                object.removeValue(forKey: key)
+            }
+        }
+        return .object(object)
+    }
+
+    // English: Alias lookup at a path changes only the final key and keeps the parent path typed.
+    // Español: La búsqueda de alias en una ruta solo cambia la clave final y conserva tipado el camino padre.
+    // 中文：路径别名只替换末级 key，父路径仍由类型化路径控制。
+    private static func pathCandidates(for path: PTJSONPath,
+                                      mapping: PTModelKeyMapping) -> [PTJSONPath] {
+        guard let last = path.components.last,
+              case .key = last else { return [path] }
+        let prefix = Array(path.components.dropLast())
+        return mapping.decodeKeys.map { PTJSONPath(prefix + [.key($0)]) }
+    }
+
+    public static func encodedOutput(_ value: PTJSONValue,
+                                     fields: [PTModelFieldDescriptor]) throws -> PTJSONValue {
+        guard case .object(var object) = value else { return value }
+        for field in fields {
+            guard let path = field.path,
+                  let fieldValue = object.removeValue(forKey: field.mapping.encodeKey) else { continue }
+            guard case .object(let nestedObject) = try placing(fieldValue,
+                                                                at: path,
+                                                                in: .object(object)) else {
+                throw PTModelError.rootIsNotObject
+            }
+            object = nestedObject
+        }
+        return .object(object)
+    }
+
+    private static func placing(_ replacement: PTJSONValue,
+                                at path: PTJSONPath,
+                                in value: PTJSONValue) throws -> PTJSONValue {
+        guard let component = path.components.first else { return replacement }
+        let tail = PTJSONPath(Array(path.components.dropFirst()))
+        switch (component, value) {
+        case (.key(let key), .object(var object)):
+            let current = object[key] ?? .object([:])
+            object[key] = try placing(replacement, at: tail, in: current)
+            return .object(object)
+        case (.index(let index), .array(var array)):
+            guard array.indices.contains(index) else {
+                throw PTModelError.patchFailed("Array index out of bounds: \(index)")
+            }
+            array[index] = try placing(replacement, at: tail, in: array[index])
+            return .array(array)
+        default:
+            throw PTModelError.pathTypeMismatch(path.description)
+        }
+    }
 }
 
 public enum PTStaticCodec {
+    // English: Expose the byte-scanner contract so generated schemas can opt into direct field dispatch incrementally.
+    // Español: Expone el contrato de escaneo de bytes para que los esquemas generados adopten el dispatch directo gradualmente.
+    // 中文：暴露字节 Scanner 契约，让生成的 Schema 可以渐进接入直接字段分发。
+    public static func decodeFields(_ data: Data,
+                                   fields: [PTModelFieldDescriptor],
+                                   using decoder: PTModelDecoder = .init()) throws -> [String: PTJSONValue] {
+        try PTStaticFieldDispatcher.decodeValues(from: data, fields: fields, decoder: decoder)
+    }
+
     public static func decode<Model: PTStaticModel, Source: PTModelSource>(
         _ type: Model.Type,
         from source: Source,
         using decoder: PTModelDecoder = .init()
     ) throws -> Model {
-        try Model.ptSchema.decode(from: decoder.jsonValue(from: source), using: decoder)
+        if Model.ptUsesDirectPath,
+           let data = source as? Data,
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
+            let values = try decodeFields(data,
+                                          fields: Model.ptSchema.metadata.fields,
+                                          using: decoder)
+            if (Model.self as? any PTModelLifecycle.Type) == nil,
+               let model = try Model.ptDirectDecode(values, using: decoder) {
+                return model
+            }
+            return try Model.ptSchema.decode(from: .object(values), using: decoder)
+        }
+        if Model.ptUsesDirectPath,
+           let string = source as? String,
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
+            let values = try decodeFields(Data(string.utf8),
+                                          fields: Model.ptSchema.metadata.fields,
+                                          using: decoder)
+            if (Model.self as? any PTModelLifecycle.Type) == nil,
+               let model = try Model.ptDirectDecode(values, using: decoder) {
+                return model
+            }
+            return try Model.ptSchema.decode(from: .object(values), using: decoder)
+        }
+        return try Model.ptSchema.decode(from: decoder.jsonValue(from: source), using: decoder)
     }
 
     public static func encode<Model: PTStaticModel>(
         _ model: Model,
         using encoder: PTModelEncoder = .init()
     ) throws -> Data {
-        try Model.ptSchema.encode(model, using: encoder).jsonData(prettyPrinted: encoder.prettyPrinted,
-                                                                  sortedKeys: encoder.sortedKeys || encoder.canonical)
+        if !encoder.prettyPrinted,
+           Model.ptUsesDirectPath,
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields),
+           let fields = try Model.ptDirectFieldValues(model, using: encoder) {
+            return try PTStaticJSONWriter.data(fields: fields, using: encoder)
+        }
+        return try Model.ptSchema.encode(model, using: encoder).jsonData(prettyPrinted: encoder.prettyPrinted,
+                                                                         sortedKeys: encoder.sortedKeys || encoder.canonical,
+                                                                         canonicalPolicy: encoder.canonical ? encoder.canonicalPolicy : nil)
+    }
+
+    // English: Stream one static model directly to a sink when the generated schema exposes field values.
+    // Español: Envía un modelo estático directamente a un sink cuando el esquema generado expone sus valores.
+    // 中文：当生成的 Schema 提供字段值时，直接把单个静态模型写入 Sink。
+    public static func write<Model: PTStaticModel, Sink: PTJSONByteSink>(
+        _ model: Model,
+        using encoder: PTModelEncoder = .init(),
+        to sink: inout Sink
+    ) throws {
+        if !encoder.prettyPrinted,
+           Model.ptUsesDirectPath,
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields),
+           let fields = try Model.ptDirectFieldValues(model, using: encoder) {
+            try PTStaticJSONWriter.write(fields: fields, using: encoder, to: &sink)
+            return
+        }
+        try sink.write(try encode(model, using: encoder))
     }
 
     public static func jsonValue<Model: PTStaticModel>(
@@ -124,6 +318,10 @@ public enum PTStaticCodec {
         using encoder: PTModelEncoder = .init()
     ) throws -> PTJSONValue {
         try Model.ptSchema.encode(model, using: encoder)
+    }
+
+    private static func canUseDirectObjectPath(for fields: [PTModelFieldDescriptor]) -> Bool {
+        fields.allSatisfy { $0.path == nil && !$0.flattened }
     }
 }
 

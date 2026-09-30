@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
-  "generated_at": "2026-09-30T03:35:41Z",
+  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
+  "generated_at": "2026-09-30T15:19:08Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -433,6 +433,17 @@
       ]
     },
     {
+      "name": "PToolsModelCombine",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsModelCombine"
+      ]
+    },
+    {
       "name": "PToolsModelCore",
       "type": {
         "library": [
@@ -441,6 +452,39 @@
       },
       "targets": [
         "PToolsModelCore"
+      ]
+    },
+    {
+      "name": "PToolsModelLegacyKakaJSON",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsModelLegacyKakaJSON"
+      ]
+    },
+    {
+      "name": "PToolsModelLegacySmartCodable",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsModelLegacySmartCodable"
+      ]
+    },
+    {
+      "name": "PToolsModelUIKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsModelUIKit"
       ]
     },
     {
@@ -627,7 +671,9 @@
         "PToolsHTTPServer",
         "PToolsLogging",
         "PToolsModel",
+        "PToolsModelCombine",
         "PToolsModelCore",
+        "PToolsModelUIKit",
         "PToolsNotifications",
         "PToolsOverlay",
         "PToolsPermissionCore",
@@ -3665,6 +3711,26 @@
       ]
     },
     {
+      "name": "PToolsModelCombine",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsModelCombine",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsModelCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsModelCore",
@@ -3672,6 +3738,70 @@
       "resources": [],
       "internal_dependencies": [],
       "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsModelLegacyKakaJSON",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsModelLegacyKakaJSON",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "KakaJSON",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "KakaJSON",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsModelLegacySmartCodable",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsModelLegacySmartCodable",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SmartCodable",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SmartCodable",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -3768,6 +3898,38 @@
             ]
           }
         },
+        {
+          "name": "PToolsModelCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsModelUIKit",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsModelUIKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
         {
           "name": "PToolsModelCore",
           "kind": "internal",

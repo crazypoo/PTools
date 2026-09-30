@@ -965,6 +965,31 @@ public final class Network: @unchecked Sendable {
                                                      jsonRequest: jsonRequest)
         return try parseCodableResponse(snapshot, modelType: modelType)
     }
+
+    // English: New callers receive typed bytes, metadata, and a PTModel value without the legacy string wrapper.
+    // Español: Los nuevos llamadores reciben bytes, metadatos y un modelo PTModel tipado sin el wrapper de texto heredado.
+    // 中文：新调用方直接获得类型化字节、元数据和 PTModel，不再依赖旧的字符串包装器。
+    public class func requestPTModel<T: Decodable & Sendable>(needGobal: Bool = true,
+                                                                urlStr: URLConvertible,
+                                                                method: HTTPMethod = .post,
+                                                                header: HTTPHeaders? = nil,
+                                                                parameters: Parameters? = nil,
+                                                                cachePolicy: PTNetworkCachePolicy? = nil,
+                                                                modelType: T.Type,
+                                                                encoder: ParameterEncoding = URLEncoding.default,
+                                                                jsonRequest: Bool = false) async throws -> PTModelNetworkResponse<T> {
+        let snapshot = try await _internalRequestApi(needGobal: needGobal,
+                                                     urlStr: urlStr,
+                                                     method: method,
+                                                     header: header,
+                                                     parameters: parameters,
+                                                     cachePolicy: cachePolicy,
+                                                     encoder: encoder,
+                                                     jsonRequest: jsonRequest)
+        let payload = PTNetworkResponsePayload(snapshot: snapshot)
+        let model = try PTNetworkResponseDecoder<T>.ptModel(modelType).decode(payload)
+        return PTModelNetworkResponse(payload: payload, model: model)
+    }
     
     public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,
                                                                          cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil) async throws -> PTBaseStructModel<T> {
@@ -1016,7 +1041,7 @@ public final class Network: @unchecked Sendable {
         return result
     }
     
-    @available(*, deprecated, message: "Use requestCodableBodyAPI(_:body:modelType:) with a Sendable model instead")
+    @available(*, deprecated, message: "Use requestPTModel(_:modelType:) with a Sendable model instead")
     public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel<Any> {
         let snapshot = try await _internalLegacyRequestBodyAPI(needGobal: needGobal,
                                                                urlStr: urlStr,
@@ -1027,7 +1052,7 @@ public final class Network: @unchecked Sendable {
         return try parseResponse(snapshot, modelType: modelType)
     }
     
-    @available(*, deprecated, message: "Use requestCodableApi(_:modelType:) with a Sendable model instead")
+    @available(*, deprecated, message: "Use requestPTModel(_:modelType:) with a Sendable model instead")
     class public func requestApi(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil,
                                  cachePolicy: PTNetworkCachePolicy? = nil, modelType: Convertible.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<Any> {
         let snapshot = try await _internalLegacyRequestApi(needGobal: needGobal,

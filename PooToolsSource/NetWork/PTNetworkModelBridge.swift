@@ -38,6 +38,19 @@ public struct PTNetworkResponsePayload: Sendable {
     public var utf8String: String? { string }
 }
 
+// English: Typed model responses keep raw bytes separate from model decoding and legacy wrappers.
+// Español: Las respuestas tipadas separan los bytes sin procesar de la decodificación y los wrappers heredados.
+// 中文：类型化模型响应把原始字节与模型解码、旧版包装器彻底分开。
+public struct PTModelNetworkResponse<Model: Sendable>: Sendable {
+    public let payload: PTNetworkResponsePayload
+    public let model: Model
+
+    public init(payload: PTNetworkResponsePayload, model: Model) {
+        self.payload = payload
+        self.model = model
+    }
+}
+
 public enum PTNetworkDecoderKind: String, Sendable, Codable {
     case ptModel
     case smartCodable

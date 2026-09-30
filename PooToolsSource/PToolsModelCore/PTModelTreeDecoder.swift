@@ -15,6 +15,7 @@ private struct PTTreeDecodingOptions: Sendable {
     let floatingPointStrategy: PTFloatingPointStrategy
     let urlStrategy: PTURLCodingStrategy
     let coercion: PTValueCoercionPolicy
+    let numericOverflowPolicy: PTNumericOverflowPolicy
 }
 
 private final class PTModelTreeDecoder: Decoder {
@@ -148,55 +149,56 @@ private final class PTModelTreeDecoder: Decoder {
     }
 
     private func exactInt(_ raw: String) throws -> Int {
-        guard let value = Int64(raw), let result = Int(exactly: value) else {
-            throw PTModelError.numericOverflow(raw)
-        }
-        return result
+        try exactInteger(Int.self, raw: raw)
     }
 
     private func exactInt8(_ raw: String) throws -> Int8 {
-        guard let value = Int64(raw), let result = Int8(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(Int8.self, raw: raw)
     }
 
     private func exactInt16(_ raw: String) throws -> Int16 {
-        guard let value = Int64(raw), let result = Int16(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(Int16.self, raw: raw)
     }
 
     private func exactInt32(_ raw: String) throws -> Int32 {
-        guard let value = Int64(raw), let result = Int32(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(Int32.self, raw: raw)
     }
 
     private func exactInt64(_ raw: String) throws -> Int64 {
-        guard let value = Int64(raw) else { throw PTModelError.numericOverflow(raw) }
-        return value
+        try exactInteger(Int64.self, raw: raw)
     }
 
     private func exactUInt(_ raw: String) throws -> UInt {
-        guard let value = UInt64(raw), let result = UInt(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(UInt.self, raw: raw)
     }
 
     private func exactUInt8(_ raw: String) throws -> UInt8 {
-        guard let value = UInt64(raw), let result = UInt8(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(UInt8.self, raw: raw)
     }
 
     private func exactUInt16(_ raw: String) throws -> UInt16 {
-        guard let value = UInt64(raw), let result = UInt16(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(UInt16.self, raw: raw)
     }
 
     private func exactUInt32(_ raw: String) throws -> UInt32 {
-        guard let value = UInt64(raw), let result = UInt32(exactly: value) else { throw PTModelError.numericOverflow(raw) }
-        return result
+        try exactInteger(UInt32.self, raw: raw)
     }
 
     private func exactUInt64(_ raw: String) throws -> UInt64 {
-        guard let value = UInt64(raw) else { throw PTModelError.numericOverflow(raw) }
-        return value
+        try exactInteger(UInt64.self, raw: raw)
+    }
+
+    private func exactInteger<T: FixedWidthInteger>(_ type: T.Type, raw: String) throws -> T {
+        if let value = T(raw) { return value }
+        guard options.numericOverflowPolicy == .clamp,
+              let decimal = Decimal(string: raw, locale: Locale(identifier: "en_US_POSIX")),
+              let minimum = Decimal(string: String(T.min), locale: Locale(identifier: "en_US_POSIX")),
+              let maximum = Decimal(string: String(T.max), locale: Locale(identifier: "en_US_POSIX")) else {
+            throw PTModelError.numericOverflow(raw)
+        }
+        if decimal < minimum { return T.min }
+        if decimal > maximum { return T.max }
+        throw PTModelError.numericOverflow(raw)
     }
 }
 
@@ -417,7 +419,8 @@ extension PTModelDecoder {
                                             dataStrategy: dataStrategy,
                                             floatingPointStrategy: floatingPointStrategy,
                                             urlStrategy: urlStrategy,
-                                            coercion: coercionPolicy)
+                                            coercion: coercionPolicy,
+                                            numericOverflowPolicy: numericOverflowPolicy)
         return try PTModelTreeDecoder(value: value, options: options).decode(type)
     }
 }

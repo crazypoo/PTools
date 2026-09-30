@@ -20,6 +20,15 @@ public enum PTModelFoundationCodec {
             return .number(try PTJSONNumber(String(value.timeIntervalSince1970 * 1_000)))
         case .iso8601:
             return .string(ISO8601DateFormatter().string(from: value))
+        case .custom(let format):
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.calendar = Calendar(identifier: .gregorian)
+            formatter.dateFormat = format
+            guard let string = formatter.string(for: value) else {
+                throw PTModelError.conversionFailed("Unable to encode date with format: \(format)")
+            }
+            return .string(string)
         }
     }
 
@@ -42,6 +51,28 @@ public enum PTModelFoundationCodec {
                 throw PTModelError.typeMismatch(expected: "ISO8601 date", actual: "invalid string")
             }
             return date
+        case .custom(let format):
+            guard case .string(let string) = value else {
+                throw PTModelError.typeMismatch(expected: "custom date string", actual: value.ptTypeName)
+            }
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.calendar = Calendar(identifier: .gregorian)
+            formatter.dateFormat = format
+            guard let date = formatter.date(from: string) else {
+                throw PTModelError.typeMismatch(expected: "custom date string", actual: string)
+            }
+            return date
+        case .fallback(let strategies):
+            var lastError: Error?
+            for strategy in strategies {
+                do {
+                    return try date(from: value, strategy: strategy)
+                } catch {
+                    lastError = error
+                }
+            }
+            throw lastError ?? PTModelError.typeMismatch(expected: "date", actual: value.ptTypeName)
         case .deferredToDate:
             guard case .number(let number) = value,
                   let seconds = number.doubleValue else {
@@ -145,5 +176,21 @@ public enum PTModelFoundationCodec {
             throw PTModelError.unsupportedFeature("Stringified JSON is disabled")
         }
         return .string(try encoder.jsonString(value))
+    }
+}
+
+private extension PTJSONValue {
+    // English: Keep error rendering local so Foundation codecs do not depend on decoder implementation details.
+    // Español: Mantiene el texto de errores local para que los codecs de Foundation no dependan del decoder.
+    // 中文：错误类型描述在本文件内完成，避免 Foundation codec 依赖 decoder 的实现细节。
+    var ptTypeName: String {
+        switch self {
+        case .null: return "null"
+        case .bool: return "bool"
+        case .number: return "number"
+        case .string: return "string"
+        case .array: return "array"
+        case .object: return "object"
+        }
     }
 }

@@ -85,11 +85,29 @@ public enum PTSetDuplicatePolicy: String, Sendable, Codable {
     case reject
 }
 
-public enum PTDateDecodingStrategy: Sendable, Codable, Equatable {
+// English: PTModel canonical JSON is a documented stable contract, not an implicit RFC 8785 claim.
+// Español: El JSON canónico de PTModel es un contrato estable documentado, no una afirmación implícita de RFC 8785.
+// 中文：PTModel Canonical JSON 是明确文档化的稳定契约，不隐含声称等同 RFC 8785。
+public struct PTCanonicalJSONPolicy: Sendable, Codable, Hashable, Equatable {
+    public let normalizeNumbers: Bool
+    public let escapeSlashes: Bool
+
+    public init(normalizeNumbers: Bool = true,
+                escapeSlashes: Bool = false) {
+        self.normalizeNumbers = normalizeNumbers
+        self.escapeSlashes = escapeSlashes
+    }
+
+    public static let ptModel = Self()
+}
+
+public indirect enum PTDateDecodingStrategy: Sendable, Codable, Equatable {
     case deferredToDate
     case secondsSince1970
     case millisecondsSince1970
     case iso8601
+    case custom(String)
+    case fallback([PTDateDecodingStrategy])
 }
 
 public enum PTDateEncodingStrategy: Sendable, Codable, Equatable {
@@ -97,6 +115,7 @@ public enum PTDateEncodingStrategy: Sendable, Codable, Equatable {
     case secondsSince1970
     case millisecondsSince1970
     case iso8601
+    case custom(String)
 }
 
 public enum PTDataDecodingStrategy: String, Sendable, Codable, Equatable {
@@ -314,12 +333,47 @@ public struct PTModelContext: Sendable {
     }
 }
 
-// English: A default provider is a typed, Sendable alternative to reflection-based property defaults.
-// Español: Un proveedor de valores predeterminados es una alternativa tipada y Sendable a los valores por reflexión.
-// 中文：默认值提供器是类型安全且 Sendable 的属性默认值方案，不依赖反射。
-public protocol PTDefaultValueProvider: Sendable {
+// English: A default provider can calculate a value from immutable decoding context without reflection.
+// Español: Un proveedor puede calcular un valor desde un contexto de decodificación inmutable sin reflexión.
+// 中文：默认值提供器可以基于不可变解码上下文计算值，不依赖反射。
+public struct PTDefaultValueProvider<Value: Sendable>: Sendable {
+    public let value: @Sendable (PTModelContext) throws -> Value
+
+    public init(_ value: @escaping @Sendable (PTModelContext) throws -> Value) {
+        self.value = value
+    }
+
+    public init(_ value: Value) {
+        self.value = { _ in value }
+    }
+
+    public func resolve(using context: PTModelContext = .init()) throws -> Value {
+        try value(context)
+    }
+}
+
+// English: Keep the old provider shape available under an explicit compatibility name.
+// Español: Conserva la forma antigua del proveedor bajo un nombre de compatibilidad explícito.
+// 中文：通过明确的兼容名称保留旧版 provider 形态。
+public protocol PTLegacyDefaultValueProviding: Sendable {
     associatedtype Value: Sendable
     static var defaultValue: Value { get }
+}
+
+public extension PTLegacyDefaultValueProviding {
+    static var ptDefaultValueProvider: PTDefaultValueProvider<Value> {
+        PTDefaultValueProvider(Self.defaultValue)
+    }
+}
+
+// English: Recovery reasons are stable values for diagnostics, metrics, and migration reports.
+// Español: Las razones de recuperación son valores estables para diagnósticos, métricas e informes de migración.
+// 中文：恢复原因是稳定值，可用于诊断、指标和迁移报告。
+public enum PTFieldRecoveryReason: Sendable, Codable, Hashable, Equatable {
+    case missing
+    case null
+    case invalid(String)
+    case overflow
 }
 
 // English: Field descriptors are serializable metadata used by manual schemas and future macro-generated schemas.
@@ -335,6 +389,8 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
     public let invalid: PTInvalidValuePolicy
     public let required: Bool
     public let flattened: Bool
+    public let path: PTJSONPath?
+    public let annotations: Set<String>
 
     public init(name: String,
                 mapping: PTModelKeyMapping? = nil,
@@ -344,7 +400,9 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
                 null: PTNullPolicy = .useNil,
                 invalid: PTInvalidValuePolicy = .error,
                 required: Bool = false,
-                flattened: Bool = false) {
+                flattened: Bool = false,
+                path: PTJSONPath? = nil,
+                annotations: Set<String> = []) {
         self.name = name
         self.mapping = mapping ?? PTModelKeyMapping(decodeKeys: [name], encodeKey: name)
         self.encoding = encoding
@@ -354,6 +412,8 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
         self.invalid = invalid
         self.required = required
         self.flattened = flattened
+        self.path = path
+        self.annotations = annotations
     }
 }
 

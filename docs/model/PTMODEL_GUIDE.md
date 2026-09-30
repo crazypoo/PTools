@@ -169,6 +169,41 @@ for try await profile in stream {
 `PTModelError.streamElementFailed`。它不会生成完整的 `PTJSONValue` 树；输入 `Data`
 仍由调用方持有，若需要真正的网络分块，应让上层按块写入文件 sink 后再启动消费。
 
+### 任意 Data 分块
+
+网络或文件读取可以直接把任意大小的 `Data` 分块交给 `PTModelChunkStreamDecoder`；分块
+边界不需要对齐 JSON token，取消会在每次读取前检查：
+
+```swift
+let chunks: AsyncStream<Data> = makeChunks()
+let stream = PTModelChunkStreamDecoder<AsyncStream<Data>, Profile>(source: chunks)
+for try await profile in stream {
+    consume(profile)
+}
+```
+
+它要求根值是数组，未知字段会被跳过，单项失败会包含数组索引；完整输入不会先拼成一份
+大 `Data` 或完整对象树。生成 `PTStaticModel` 的普通对象还可以使用
+`PTStaticCodec.encode`，在非 pretty-print 模式下直接写字段到 `PTJSONByteSink`。
+
+## 默认值、诊断和兼容边界
+
+需要动态默认值时使用 `PTDefaultValueProvider`，闭包只接收不可变 `PTModelContext`：
+
+```swift
+let recovery = PTFieldRecovery<Int>(
+    provider: PTDefaultValueProvider { context in
+        context.jsonValues["tenant"] == nil ? 0 : 1
+    },
+    missingPolicy: .useDefault,
+    invalidPolicy: .useDefault
+)
+```
+
+`PTDecodeTrace` 记录 missing、null、invalid、default 和 ignored 决策；需要长期保存时可以
+使用 actor-backed `PTModelDiagnosticStore`。Core 不接收 UIKit、Combine 或第三方 model
+codec；SmartCodable、KakaJSON 只通过显式 Legacy adapter 产品接入。
+
 ### Network 类型化响应
 
 新请求管线可以保留原始 `Data`，按调用方选择 decoder：

@@ -14,9 +14,34 @@ import PToolsModel
 #if SWIFT_PACKAGE
 @PTModel
 public struct PTMacroFixture: Codable, Sendable, Equatable {
+    @PTRequired
     public let id: Int
+    @PTKey("display_name")
     public let name: String
+    @PTPath("$.meta.note")
     public let note: String?
+}
+
+@PTModel
+public struct PTDirectMacroFixture: Codable, Sendable, Equatable {
+    public let id: Int
+    public let title: String?
+}
+
+@PTModel
+public struct PTMacroPolicyFixture: Codable, Sendable, Equatable {
+    @PTDefault(7)
+    public let count: Int
+    @PTLossy
+    public let values: [Int]
+    @PTStringified
+    public let nested: PTMacroFixture?
+}
+
+@PTModel
+public struct PTInferredMacroFixture: Codable, Sendable, Equatable {
+    public let count = 1
+    public let enabled = true
 }
 #endif
 
@@ -74,11 +99,51 @@ final class PTModelCoreTests: XCTestCase {
                                   (noteField, model.note.map { try encoder.jsonValue($0) })
                               ])
                           })
+            }
+        static func ptDirectFieldValues(_ model: StaticEnvelope,
+                                        using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]? {
+            [
+                (idField, try encoder.optionalJSONValue(model.id)),
+                (noteField, try encoder.optionalJSONValue(model.note))
+            ]
         }
     }
 
     private struct StreamItem: Codable, Equatable, Sendable {
         let id: Int
+    }
+
+    private enum TestStatus: String, Codable, Sendable, PTUnknownCaseRepresentable {
+        case ready
+        case unknown
+
+        static let ptUnknownCase = Self.unknown
+    }
+
+    private protocol TestAnimal: Sendable {
+        var name: String { get }
+    }
+
+    private struct TestDog: Codable, Sendable, TestAnimal {
+        let name: String
+    }
+
+    private struct LifecycleItem: Codable, Sendable, Equatable, PTModelLifecycle {
+        let id: Int
+
+        static func ptWillDecode(_ value: PTJSONValue,
+                                 using decoder: PTModelDecoder) throws -> PTJSONValue {
+            guard case .object(var object) = value, object["id"] == nil else { return value }
+            object["id"] = .number(try PTJSONNumber("5"))
+            return .object(object)
+        }
+
+        static func ptWillEncode(_ value: PTJSONValue,
+                                 using encoder: PTModelEncoder) throws -> PTJSONValue {
+            guard case .object(var object) = value else { return value }
+            object["lifecycle"] = .string("ok")
+            return .object(object)
+        }
     }
 
     func testTopLevelModelAndArrayConversion() throws {
@@ -232,6 +297,16 @@ final class PTModelCoreTests: XCTestCase {
         }
     }
 
+    func testStaticSchemaDirectBytePath() throws {
+        let model = StaticEnvelope(id: 7, note: nil)
+        let encoder = PTModelEncoder(canonical: true)
+        XCTAssertEqual(String(data: try PTStaticCodec.encode(model, using: encoder), encoding: .utf8), #"{"id":7}"#)
+
+        let decoded = try PTStaticCodec.decode(StaticEnvelope.self,
+                                               from: Data(#"{"unknown":{"nested":true},"id":7,"note":null}"#.utf8))
+        XCTAssertEqual(decoded, model)
+    }
+
     private var decoderForTests: PTModelDecoder {
         PTModelDecoder(policy: .compatible, dictionaryKeyStrategy: .losslessStringConvertible)
     }
@@ -282,6 +357,74 @@ final class PTModelCoreTests: XCTestCase {
         for _ in 0..<4 { await Task.yield() }
         let diagnostics = await store.diagnostics()
         XCTAssertEqual(diagnostics.map(\.code), ["fixture"])
+    }
+
+    func testDefaultProviderOverflowCanonicalAndStringifiedContracts() throws {
+        let provider = PTDefaultValueProvider<Int> { context in
+            context.jsonValues.isEmpty ? 7 : 8
+        }
+        let recovery = PTFieldRecovery<Int>(provider: provider,
+                                            missingPolicy: .useDefault,
+                                            nullPolicy: .useDefault,
+                                            invalidPolicy: .useDefault)
+        let descriptor = PTModelFieldDescriptor(name: "count")
+        XCTAssertEqual(try recovery.resolve(.missing, descriptor: descriptor), 7)
+
+        let clamped = try PTModelDecoder(policy: .strict, numericOverflowPolicy: .clamp)
+            .decode(Int.self, from: Data("9223372036854775808".utf8))
+        XCTAssertEqual(clamped, Int.max)
+        XCTAssertThrowsError(try PTModelDecoder(policy: .strict).decode(Int.self,
+                                                                        from: Data("9223372036854775808".utf8)))
+
+        let date = Date(timeIntervalSince1970: 1_700_000_000)
+        let dateValue = try PTModelFoundationCodec.date(date, strategy: .custom("yyyy/MM/dd HH:mm:ss"))
+        XCTAssertEqual(try PTModelFoundationCodec.date(from: dateValue,
+                                                       strategy: .custom("yyyy/MM/dd HH:mm:ss")), date)
+
+        let stringified = PTStringifiedValue(User(id: 4, name: "stringified"))
+        let stringifiedData = try PTModelEncoder().encode(stringified)
+        let decodedStringified = try PTModelDecoder().decode(PTStringifiedValue<User>.self,
+                                                              from: stringifiedData)
+        XCTAssertEqual(decodedStringified.value, stringified.value)
+
+        XCTAssertEqual(try PTAnyJSONValueBridge.jsonValue(["value": 3]),
+                       .object(["value": .number(try PTJSONNumber("3"))]))
+        XCTAssertEqual(try PTJSONValue(jsonString: #"{"n":-0.0}"#)
+                           .jsonString(canonicalPolicy: .ptModel), #"{"n":0}"#)
+    }
+
+    func testPathAliasFlatAndDirectFieldScannerContracts() throws {
+        let path = try PTJSONPath.parse("$.meta.legacy_note")
+        let field = PTModelFieldDescriptor(name: "note",
+                                           mapping: PTModelKeyMapping(decodeKeys: ["legacy_note", "note"],
+                                                                      encodeKey: "note"),
+                                           path: path)
+        let input: PTJSONValue = .object(["meta": .object(["legacy_note": .string("kept")])])
+        XCTAssertEqual(PTModelSchemaSupport.normalizedInput(input, fields: [field]),
+                       .object(["meta": .object(["legacy_note": .string("kept")]),
+                                "note": .string("kept")]))
+
+        let flatField = PTModelFieldDescriptor(name: "profile", flattened: true)
+        let normalizedFlat = PTModelSchemaSupport.normalizedInput(
+            .object(["id": .number(try PTJSONNumber("1")),
+                     "city": .string("Shanghai")]),
+            fields: [PTModelFieldDescriptor(name: "id"), flatField])
+        XCTAssertEqual(normalizedFlat,
+                       .object(["id": .number(try PTJSONNumber("1")),
+                                "profile": .object(["city": .string("Shanghai")])]))
+        let encoded = try PTModelEncoder().object(fields: [
+            (flatField, .object(["city": .string("Shanghai"), "zip": .string("200000")]))
+        ])
+        XCTAssertEqual(encoded, .object(["city": .string("Shanghai"), "zip": .string("200000")]))
+
+        var scanner = try PTJSONFieldScanner(data: Data(#"{"known":1,"unknown":{"deep":[1,2]},"name":"PTools"}"#.utf8))
+        var names: [String] = []
+        while let field = try scanner.next() { names.append(field.key) }
+        XCTAssertEqual(names, ["known", "unknown", "name"])
+        let values = try PTStaticFieldDispatcher.decodeValues(
+            from: Data(#"{"known":1,"unknown":{"deep":[1,2]},"name":"PTools"}"#.utf8),
+            fields: [PTModelFieldDescriptor(name: "name")])
+        XCTAssertEqual(values["name"], .string("PTools"))
     }
 
     func testStaticSchemaNilPoliciesAndJSONSchema() throws {
@@ -396,6 +539,92 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertThrowsError(try PTModelDecoder().decode(StreamItem.self, from: Data("bad".utf8)))
     }
 
+    func testChunkStreamingAcrossEveryByteBoundary() async throws {
+        let input = Array(Data("[{\"id\":1},{\"id\":2},{\"id\":3}]".utf8))
+        let source = AsyncStream<Data> { continuation in
+            for byte in input { continuation.yield(Data([byte])) }
+            continuation.finish()
+        }
+        var result: [StreamItem] = []
+        for try await item in PTModelChunkStreamDecoder<AsyncStream<Data>, StreamItem>(source: source) {
+            result.append(item)
+        }
+        XCTAssertEqual(result.map(\.id), [1, 2, 3])
+
+        let invalid = AsyncStream<Data> { continuation in
+            continuation.yield(Data("[1,]".utf8))
+            continuation.finish()
+        }
+        var iterator = PTModelChunkStreamDecoder<AsyncStream<Data>, Int>(source: invalid).makeAsyncIterator()
+        let first = try await iterator.next()
+        XCTAssertEqual(first, 1)
+        do {
+            _ = try await iterator.next()
+            XCTFail("Expected trailing comma failure")
+        } catch {
+            XCTAssertTrue(error.localizedDescription.contains("Trailing comma"))
+        }
+    }
+
+    func testChunkStreamingLimitsAndFlushBoundary() async throws {
+        let source = AsyncStream<Data> { continuation in
+            continuation.yield(Data("[1,2]".utf8))
+            continuation.finish()
+        }
+        let limited = PTModelDecoder(limits: PTModelLimits(maxInputBytes: 3))
+        var iterator = PTModelChunkStreamDecoder<AsyncStream<Data>, Int>(source: source,
+                                                                          decoder: limited).makeAsyncIterator()
+        do {
+            _ = try await iterator.next()
+            XCTFail("Expected the chunk source to enforce its input limit")
+        } catch let error as PTModelError {
+            XCTAssertEqual(error, .inputTooLarge)
+        }
+
+        let values = AsyncStream<Int> { continuation in
+            continuation.yield(1)
+            continuation.yield(2)
+            continuation.finish()
+        }
+        let sink = PTAsyncDataByteSink()
+        try await PTModelStreamEncoder<Int>().write(values,
+                                                    to: sink,
+                                                    flushPolicy: .everyElement)
+        let flushedData = await sink.value()
+        XCTAssertEqual(flushedData, Data("[1,2]".utf8))
+    }
+
+    func testAdvancedContracts() async throws {
+        let decodedStatus = try PTEnumCodec.decode(TestStatus.self,
+                                                   from: "future",
+                                                   unknownCase: nil)
+        XCTAssertEqual(decodedStatus, .unknown)
+
+        let registry = PTPolymorphicRegistry<any TestAnimal>()
+            .registering(TestDog.self, discriminator: "dog")
+        let dog = try registry.decode(.object([
+            "type": .string("dog"),
+            "name": .string("PTools")
+        ]))
+        XCTAssertEqual(dog.name, "PTools")
+        let encodedDog = try registry.encode(dog)
+        XCTAssertEqual(try encodedDog.requiredValue(at: PTJSONPath.parse("$.type")), .string("dog"))
+
+        let lifecycle = try PTModelDecoder().decode(LifecycleItem.self, from: Data("{}".utf8))
+        XCTAssertEqual(lifecycle, LifecycleItem(id: 5))
+        XCTAssertEqual(try PTModelEncoder().jsonString(lifecycle), #"{"id":5,"lifecycle":"ok"}"#)
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ptmodel-\(UUID().uuidString).json")
+        let store = PTModelFileStore<User>(url: url)
+        try await store.save(User(id: 11, name: "stored"))
+        let stored = try await store.load()
+        XCTAssertEqual(stored, User(id: 11, name: "stored"))
+        try await store.remove()
+        let removed = try await store.load()
+        XCTAssertNil(removed)
+    }
+
     func testConcurrentSessionsStayIndependent() async throws {
         let decoder = PTModelDecoder(policy: .strict)
         let encoder = PTModelEncoder()
@@ -417,21 +646,86 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertTrue(values.allSatisfy { $0 })
     }
 
+    func testDeterministicRoundTripAndPatchProperties() throws {
+        for id in 0..<100 {
+            let source = User(id: id, name: "user-\(id)")
+            let data = try PTModelEncoder(canonical: true).encode(source)
+            let decoded = try PTModelDecoder(policy: .strict).decode(User.self, from: data)
+            XCTAssertEqual(decoded, source)
+
+            let changed = User(id: id, name: "changed-\(id)")
+            let patch = try PTModelDiff.make(from: source, to: changed)
+            XCTAssertEqual(try patch.applying(to: source), changed)
+        }
+    }
+
+    func testMalformedAndChunkBoundaryCorpus() async throws {
+        let malformed = [
+            "",
+            "{",
+            "[",
+            "{\"value\":}",
+            "{\"value\":1,}",
+            "{\"value\":\"\\uD800\"}",
+            "[1,]"
+        ]
+        for input in malformed {
+            XCTAssertThrowsError(try PTJSONValue(jsonString: input))
+        }
+
+        let input = Array(Data("[{\"id\":1},{\"id\":2}]".utf8))
+        for chunkSize in 1...4 {
+            let source = AsyncStream<Data> { continuation in
+                var offset = 0
+                while offset < input.count {
+                    let end = min(input.count, offset + chunkSize)
+                    continuation.yield(Data(input[offset..<end]))
+                    offset = end
+                }
+                continuation.finish()
+            }
+            var values: [StreamItem] = []
+            for try await value in PTModelChunkStreamDecoder<AsyncStream<Data>, StreamItem>(source: source) {
+                values.append(value)
+            }
+            XCTAssertEqual(values.map(\.id), [1, 2])
+        }
+    }
+
 #if SWIFT_PACKAGE
     func testMacroGeneratesStaticSchema() throws {
         let value = PTMacroFixture(id: 8, name: "macro", note: nil)
         let json = try PTStaticCodec.jsonValue(value)
         XCTAssertEqual(json, .object([
             "id": .number(try PTJSONNumber("8")),
-            "name": .string("macro")
+            "display_name": .string("macro")
         ]))
         XCTAssertEqual(try PTStaticCodec.jsonValue(value, using: PTModelEncoder(nilStrategy: .null)), .object([
             "id": .number(try PTJSONNumber("8")),
-            "name": .string("macro"),
-            "note": .null
+            "display_name": .string("macro"),
+            "meta": .object(["note": .null])
         ]))
         XCTAssertEqual(try PTStaticCodec.decode(PTMacroFixture.self, from: json), value)
+        let nested = try PTStaticCodec.decode(PTMacroFixture.self,
+                                              from: #"{"id":8,"display_name":"macro","meta":{"note":"nested"}}"#)
+        XCTAssertEqual(nested.note, "nested")
         XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields.map(\.name), ["id", "name", "note"])
+        XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields[1].mapping.encodeKey, "display_name")
+        XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields[2].path?.description, "$.meta.note")
+
+        let direct = try PTStaticCodec.decode(PTDirectMacroFixture.self,
+                                              from: Data(#"{"id":9,"title":"direct"}"#.utf8))
+        XCTAssertEqual(direct, PTDirectMacroFixture(id: 9, title: "direct"))
+
+        let policy = try PTStaticCodec.decode(PTMacroPolicyFixture.self,
+                                              from: Data(#"{"values":[1,"bad",2],"nested":"{\"id\":2,\"display_name\":\"nested\"}"}"#.utf8))
+        XCTAssertEqual(policy.count, 7)
+        XCTAssertEqual(policy.values, [1, 2])
+        XCTAssertEqual(policy.nested?.name, "nested")
+
+        let inferred = try PTStaticCodec.decode(PTInferredMacroFixture.self,
+                                                from: Data("{}".utf8))
+        XCTAssertEqual(inferred, PTInferredMacroFixture())
     }
 #endif
 

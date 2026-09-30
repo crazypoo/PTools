@@ -6,6 +6,10 @@
 
 ## 5.58.0 — 2026-09-29
 
+- 收口 PTModel 65% → 100% 执行路线中的 Foundation-only 契约：字段恢复 provider、诊断轨迹、数值溢出、Date/URL/Data/浮点策略、alias/path/Flat/lossy/Stringified、unknown enum、lifecycle、extras、polymorphic registry 和 typed persistence。
+- 新增字节级 `PTJSONFieldScanner`、稳定 hash dispatch、任意 `AsyncSequence<Data>` 分块数组解码和静态 Schema 直接字段写入；未知字段跳过、取消、资源上限和单项错误索引均有回归覆盖。
+- 新增 `PToolsModelUIKit`、`PToolsModelCombine` 适配产品以及 SmartCodable/KakaJSON 显式 Legacy adapter 产品；网络新入口保持 Data-first 的 `PTNetworkResponse<Model>`，旧 API 继续兼容。
+- 增加 `Scripts/PTModel/validate_65_to_100.sh` 和执行状态报告；未完成的 Macro 完整继承语义、内部第三方依赖迁移、差分/fuzz/TSan/真机及多平台发布门禁继续保持未发布状态。
 - 新增 Foundation-only 的 `PToolsModelCore` 与 `PToolsModel` SwiftPM 产品，以及 `PooTools/ModelCore`、`PooTools/Model` CocoaPods subspec。
 - 新增 `PTJSONValue` / `PTJSONNumber`，保留数字原始字面量，支持顶层标量、数组、对象、重复键策略和输入深度/大小限制。
 - 新增统一 `PTModelSource`、`PTModelDecoder`、`PTModelEncoder`、`PTPresence` 和类型化 `PTModelContext`，提供 JSON、Data、Foundation 容器和 Codable 双向转换入口。

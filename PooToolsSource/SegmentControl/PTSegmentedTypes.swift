@@ -112,18 +112,57 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
     /// Español: Propiedad heredada conservada hasta la próxima versión principal.
     /// 中文：保留旧角标属性至下一个大版本。
     @available(*, deprecated, message: "Use badgeDescriptor instead.")
-    public var badge: PTSegmentBadge?
+    public var badge: PTSegmentBadge? {
+        get { legacyBadgeStorage as? PTSegmentBadge }
+        set {
+            legacyBadgeStorage = newValue
+            legacyBadgeDescriptor = newValue?.descriptor
+        }
+    }
     public var badgeDescriptor: PTSegmentBadgeDescriptor?
     public var accessibilityLabel: String?
+    // English: Stores the legacy value without making the canonical renderer reference a deprecated symbol.
+    // Español: Almacena el valor heredado sin hacer que el renderizador canónico use un símbolo obsoleto.
+    // 中文：保存旧值，避免规范渲染器内部直接引用已弃用符号。
+    private var legacyBadgeStorage: Any?
+    private var legacyBadgeDescriptor: PTSegmentBadgeDescriptor?
 
+    @available(*, deprecated, message: "Use the badgeDescriptor initializer instead.")
     public init(id: AnyHashable,
                 content: PTSegmentContent,
                 badge: PTSegmentBadge? = nil,
                 accessibilityLabel: String? = nil,
                 badgeDescriptor: PTSegmentBadgeDescriptor? = nil) {
-        self.id = id
+        self.init(storageID: id,
+                  content: content,
+                  legacyBadgeStorage: badge,
+                  legacyBadgeDescriptor: badge?.descriptor,
+                  badgeDescriptor: badgeDescriptor,
+                  accessibilityLabel: accessibilityLabel)
+    }
+
+    public init(id: AnyHashable,
+                content: PTSegmentContent,
+                badgeDescriptor: PTSegmentBadgeDescriptor?,
+                accessibilityLabel: String? = nil) {
+        self.init(storageID: id,
+                  content: content,
+                  legacyBadgeStorage: nil,
+                  legacyBadgeDescriptor: nil,
+                  badgeDescriptor: badgeDescriptor,
+                  accessibilityLabel: accessibilityLabel)
+    }
+
+    private init(storageID: AnyHashable,
+                 content: PTSegmentContent,
+                 legacyBadgeStorage: Any?,
+                 legacyBadgeDescriptor: PTSegmentBadgeDescriptor?,
+                 badgeDescriptor: PTSegmentBadgeDescriptor?,
+                 accessibilityLabel: String?) {
+        self.id = storageID
         self.content = content
-        self.badge = badge
+        self.legacyBadgeStorage = legacyBadgeStorage
+        self.legacyBadgeDescriptor = legacyBadgeDescriptor
         self.badgeDescriptor = badgeDescriptor
         self.accessibilityLabel = accessibilityLabel
     }
@@ -132,7 +171,7 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
     /// Español: Descriptor canónico de insignia, con puente heredado como respaldo.
     /// 中文：角标的规范描述，旧版配置作为回退。
     public var resolvedBadgeDescriptor: PTSegmentBadgeDescriptor? {
-        badgeDescriptor ?? badge?.descriptor
+        badgeDescriptor ?? legacyBadgeDescriptor
     }
 
     public static func == (lhs: PTSegmentItem, rhs: PTSegmentItem) -> Bool {
@@ -143,8 +182,16 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
         hasher.combine(id)
     }
 
+    // English: Creates a title item without the legacy badge bridge.
+    // Español: Crea un elemento de título sin el puente de insignia heredado.
+    // 中文：创建不使用旧角标桥接的标题分段项。
+    public static func title(id: AnyHashable, _ title: String) -> Self {
+        Self(id: id, content: .title(title), badgeDescriptor: nil)
+    }
+
+    @available(*, deprecated, message: "Use title(id:_:badgeDescriptor:) instead.")
     public static func title(id: AnyHashable, _ title: String, badge: PTSegmentBadge? = nil) -> Self {
-        Self(id: id, content: .title(title), badge: badge)
+        Self(id: id, content: .title(title), badgeDescriptor: badge?.descriptor)
     }
 
     public static func title(id: AnyHashable,
@@ -153,8 +200,9 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
         Self(id: id, content: .title(title), badgeDescriptor: badgeDescriptor)
     }
 
+    @available(*, deprecated, message: "Use image(id:_:badgeDescriptor:) instead.")
     public static func image(id: AnyHashable, _ image: UIImage, badge: PTSegmentBadge? = nil) -> Self {
-        Self(id: id, content: .image(image), badge: badge)
+        Self(id: id, content: .image(image), badgeDescriptor: badge?.descriptor)
     }
 
     public static func image(id: AnyHashable,
@@ -163,12 +211,15 @@ public struct PTSegmentItem: @MainActor Identifiable, @MainActor Hashable {
         Self(id: id, content: .image(image), badgeDescriptor: badgeDescriptor)
     }
 
+    @available(*, deprecated, message: "Use titleImage(id:title:image:placement:badgeDescriptor:) instead.")
     public static func titleImage(id: AnyHashable,
                                   title: String,
                                   image: UIImage,
                                   placement: PTImagePlacement = .leading,
                                   badge: PTSegmentBadge? = nil) -> Self {
-        Self(id: id, content: .titleImage(title: title, image: image, placement: placement), badge: badge)
+        Self(id: id,
+             content: .titleImage(title: title, image: image, placement: placement),
+             badgeDescriptor: badge?.descriptor)
     }
 
     public static func titleImage(id: AnyHashable,

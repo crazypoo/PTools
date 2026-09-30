@@ -44,7 +44,11 @@
 	{"kind":"spm_only","module":"PToolsDate","reason":"SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility.","owner":"architecture","expiration":"2026-12-31"},
 	{"kind":"spm_only","module":"PToolsModelMacroPlugin","reason":"SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target.","owner":"model-core","expiration":"2027-03-31"},
 	{"kind":"spm_only","module":"PTModelBenchmark","reason":"Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"spm_only","module":"PToolsModelLegacyKakaJSON","reason":"SwiftPM exposes the explicit KakaJSON compatibility product under its long name; CocoaPods keeps the shorter ModelLegacyKakaJSON subspec for source compatibility.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"spm_only","module":"PToolsModelLegacySmartCodable","reason":"SwiftPM exposes the explicit SmartCodable compatibility product under its long name; CocoaPods keeps the shorter ModelLegacySmartCodable subspec for source compatibility.","owner":"model-core","expiration":"2027-03-31"},
 	{"kind":"pod_only","module":"Date","reason":"CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product.","owner":"packaging","expiration":"2026-12-31"},
+	{"kind":"pod_only","module":"ModelLegacyKakaJSON","reason":"CocoaPods uses the shorter ModelLegacyKakaJSON subspec name while SwiftPM exposes the canonical PToolsModelLegacyKakaJSON product.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"pod_only","module":"ModelLegacySmartCodable","reason":"CocoaPods uses the shorter ModelLegacySmartCodable subspec name while SwiftPM exposes the canonical PToolsModelLegacySmartCodable product.","owner":"model-core","expiration":"2027-03-31"},
     {"kind":"pod_only","module":"Appz","reason":"CocoaPods aggregate subspec without a standalone SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"pod_only","module":"FilterCamera","reason":"CocoaPods-only feature entry without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
     {"kind":"pod_only","module":"Flag","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
@@ -61,6 +65,8 @@
     {"kind":"pod_only","module":"ZipArchive","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"}
   ],
   "known_drift": [
+    {"kind":"settings","module":"PToolsModelCombine","reason":"SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional Combine adapter.","owner":"model-core","expiration":"2027-03-31"},
+    {"kind":"settings","module":"PToolsModelUIKit","reason":"SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional UIKit adapter.","owner":"model-core","expiration":"2027-03-31"},
     {"kind":"settings","module":"HTTPFilePortal","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
     {"kind":"settings","module":"HTTPServer","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
     {"kind":"dependency","module":"BilogyID","field":"internal_dependencies","reason":"CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core.","owner":"architecture","expiration":"2026-12-31"},

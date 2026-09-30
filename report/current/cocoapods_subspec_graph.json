@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
-  "generated_at": "2026-09-30T03:35:42Z",
+  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
+  "generated_at": "2026-09-30T15:19:07Z",
   "name": "PooTools",
   "version": "5.58.0",
   "platforms": {
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 138,
+  "subspec_count": 142,
   "subspecs": [
     {
       "name": "PooTools/Accessibility",
@@ -1759,6 +1759,46 @@
       }
     },
     {
+      "name": "PooTools/ModelLegacyKakaJSON",
+      "short_name": "ModelLegacyKakaJSON",
+      "local_dependencies": [],
+      "third_party_dependencies": [
+        "KakaJSON"
+      ],
+      "source_files": [
+        "PooToolsSource/PToolsModelLegacyKakaJSON/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModelLegacyKakaJSON"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/ModelLegacySmartCodable",
+      "short_name": "ModelLegacySmartCodable",
+      "local_dependencies": [],
+      "third_party_dependencies": [
+        "SmartCodable"
+      ],
+      "source_files": [
+        "PooToolsSource/PToolsModelLegacySmartCodable/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModelLegacySmartCodable"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
       "name": "PooTools/Motion",
       "short_name": "Motion",
       "local_dependencies": [
@@ -2021,6 +2061,46 @@
       "resources": [],
       "frameworks": [
         "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/PToolsModelCombine",
+      "short_name": "PToolsModelCombine",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsModelCombine/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModelCombine"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Combine",
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {}
+    },
+    {
+      "name": "PooTools/PToolsModelUIKit",
+      "short_name": "PToolsModelUIKit",
+      "local_dependencies": [
+        "PooTools/ModelCore"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsModelUIKit/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "PToolsModelUIKit"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
       ],
       "pod_target_xcconfig": {}
     },

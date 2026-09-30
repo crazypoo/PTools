@@ -23,20 +23,39 @@ var smartCodable = 0
 var kakaJSON = 0
 var ptModel = 0
 var adapters = 0
+var internalSmartCodable = 0
+var internalKakaJSON = 0
+var legacyNetworkCalls = 0
 for file in swiftFiles {
     guard let contents = try? String(contentsOf: file, encoding: .utf8) else { continue }
-    smartCodable += contents.components(separatedBy: "import SmartCodable").count - 1
-    kakaJSON += contents.components(separatedBy: "import KakaJSON").count - 1
+    let isLegacyAdapter = file.path.contains("PToolsModelLegacy") || file.path.contains("Fixtures")
+    let smartImports = contents.components(separatedBy: "import SmartCodable").count - 1
+    let kakaImports = contents.components(separatedBy: "import KakaJSON").count - 1
+    smartCodable += smartImports
+    kakaJSON += kakaImports
+    if isLegacyAdapter {
+        // English: Third-party imports are allowed only in explicit legacy adapters and fixtures.
+        // Español: Las importaciones de terceros solo se permiten en adaptadores heredados y fixtures explícitos.
+        // 中文：第三方 import 只允许出现在显式旧版适配器和 fixture 中。
+    } else {
+        internalSmartCodable += smartImports
+        internalKakaJSON += kakaImports
+    }
     ptModel += contents.components(separatedBy: "PTModel").count - 1
     adapters += contents.components(separatedBy: "PTNetworkLegacyResponseDecoder").count - 1
+    legacyNetworkCalls += contents.components(separatedBy: "requestApi(").count - 1
+    legacyNetworkCalls += contents.components(separatedBy: "requestBodyAPI(").count - 1
 }
 
 let report: [String: Int] = [
     "swiftFiles": swiftFiles.count,
     "smartCodableImports": smartCodable,
     "kakaJSONImports": kakaJSON,
+    "internalSmartCodableImports": internalSmartCodable,
+    "internalKakaJSONImports": internalKakaJSON,
     "ptModelReferences": ptModel,
-    "legacyNetworkAdapterReferences": adapters
+    "legacyNetworkAdapterReferences": adapters,
+    "remainingLegacyNetworkCalls": legacyNetworkCalls
 ]
 let data = try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys])
 if let output = String(data: data, encoding: .utf8) {

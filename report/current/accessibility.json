@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
-  "generated_at": "2026-09-30T03:33:01Z",
+  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
+  "generated_at": "2026-09-30T15:18:43Z",
   "counts": {
     "reduce_motion": 60,
-    "accessibility": 264,
+    "accessibility": 268,
     "reduce_transparency": 12,
     "dynamic_type": 21
   },
@@ -1528,7 +1528,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 212
+      "line": 211
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
+      "line": 288
     },
     {
       "rule": "accessibility",
@@ -1543,32 +1548,47 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 291
+      "line": 295
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 296
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
-      "line": 501
+      "line": 500
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 117
+      "line": 123
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 122
+      "line": 134
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
-      "line": 128
+      "line": 141
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "line": 147
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "line": 153
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "line": 161
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/SegmentControl/PTSegmentedTypes.swift",
+      "line": 167
     },
     {
       "rule": "reduce_motion",

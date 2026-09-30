@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "b9c7b523e410aa5499b8138b73fc26e7135aeaec",
-  "generated_at": "2026-09-30T01:50:49Z",
+  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
+  "generated_at": "2026-09-30T14:27:26Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -40,7 +40,11 @@
     "PToolsHTTPServer",
     "PToolsLogging",
     "PToolsModel",
+    "PToolsModelCombine",
     "PToolsModelCore",
+    "PToolsModelLegacyKakaJSON",
+    "PToolsModelLegacySmartCodable",
+    "PToolsModelUIKit",
     "PToolsNotifications",
     "PToolsOverlay",
     "PToolsPermissionCore",
@@ -213,6 +217,8 @@
     "Overlay",
     "PDF",
     "PToolsCore",
+    "PToolsModelCombine",
+    "PToolsModelUIKit",
     "PToolsPermissionCore",
     "PToolsPermissionUI",
     "PToolsUIFoundation",
@@ -262,6 +268,8 @@
   "spm_only": [
     "PTModelBenchmark",
     "PToolsDate",
+    "PToolsModelLegacyKakaJSON",
+    "PToolsModelLegacySmartCodable",
     "PToolsModelMacroPlugin"
   ],
   "pod_only": [
@@ -272,6 +280,8 @@
     "GCDWebServer",
     "InputAll",
     "MXMetricManagerKit",
+    "ModelLegacyKakaJSON",
+    "ModelLegacySmartCodable",
     "NFCKit",
     "NotificationBanner",
     "PopoverKit",
@@ -1191,6 +1201,32 @@
       }
     },
     {
+      "module": "PToolsModelCombine",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
+      "module": "PToolsModelUIKit",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "PToolsPermissionCore",
       "spm": {
         "defines": [],
@@ -1438,5 +1474,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "56b13906b396df9272688dc564f653ff810c9418d7cde61956c0dc47cceb6982"
+  "fingerprint": "f32dea1a49f852260ec3f892efaeb28c8a6ed213c3e0cd944070c3793eaa4555"
 }

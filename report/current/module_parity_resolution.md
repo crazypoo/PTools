@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: b9c7b523e410aa5499b8138b73fc26e7135aeaec
-Generated at: 2026-09-30T03:35:42Z
+Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
+Generated at: 2026-09-30T15:19:08Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `95`
+- Current exceptions: `101`
 - Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added.
 
 | Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -45,6 +45,8 @@ Generated at: 2026-09-30T03:35:42Z
 | GCDWebServer | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | InputAll | — | — | CocoaPods aggregate subspec without a standalone SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MXMetricManagerKit | — | — | CocoaPods-only optional integration without a SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| ModelLegacyKakaJSON | — | — | CocoaPods uses the shorter ModelLegacyKakaJSON subspec name while SwiftPM exposes the canonical PToolsModelLegacyKakaJSON product. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
+| ModelLegacySmartCodable | — | — | CocoaPods uses the shorter ModelLegacySmartCodable subspec name while SwiftPM exposes the canonical PToolsModelLegacySmartCodable product. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | NFCKit | — | — | CocoaPods-only optional integration without a SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | NotificationBanner | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | PopoverKit | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
@@ -90,6 +92,8 @@ Generated at: 2026-09-30T03:35:42Z
 | Notifications | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_NOTIFICATIONS"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the notification target; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | platform-infrastructure | 6.0.0 | 2026-12-31 |
 | Overlay | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_OVERLAY"],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_OVERLAY"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone overlay target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |
 | PToolsCore | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| PToolsModelCombine | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional Combine adapter. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
+| PToolsModelUIKit | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional UIKit adapter. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsPermissionCore | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | PToolsPermissionUI | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | PToolsUIFoundation | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-foundation | 6.0.0 | 2026-12-31 |
@@ -109,4 +113,6 @@ Generated at: 2026-09-30T03:35:42Z
 | MeidaPermission | ["MeidaLibraryPermission"] | [] | The 5.x CocoaPods spelling alias intentionally contains no source files and forwards to MediaPermission. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | PTModelBenchmark | — | — | Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsDate | — | — | SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| PToolsModelLegacyKakaJSON | — | — | SwiftPM exposes the explicit KakaJSON compatibility product under its long name; CocoaPods keeps the shorter ModelLegacyKakaJSON subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
+| PToolsModelLegacySmartCodable | — | — | SwiftPM exposes the explicit SmartCodable compatibility product under its long name; CocoaPods keeps the shorter ModelLegacySmartCodable subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsModelMacroPlugin | — | — | SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
