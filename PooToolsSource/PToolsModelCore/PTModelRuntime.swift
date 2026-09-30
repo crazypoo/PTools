@@ -54,6 +54,34 @@ public struct PTModelPatch: Sendable, Codable, Hashable, Equatable {
     }
 }
 
+public extension PTModelPatch {
+    // English: Missing means "no update"; null and value remain explicit patch operations.
+    // Español: Missing significa «sin actualización»; null y value siguen siendo operaciones explícitas.
+    // 中文：missing 表示“不更新”；null 和 value 才转换为显式 Patch 操作。
+    static func fromPresence<Value: Codable & Sendable & Equatable>(
+        _ presence: PTPresence<Value>,
+        at path: PTJSONPath,
+        encoder: PTModelEncoder = .init()
+    ) throws -> PTModelPatch {
+        switch presence {
+        case .missing:
+            return PTModelPatch()
+        case .null:
+            return PTModelPatch(operations: [.set(path: path, value: .null)])
+        case .value(let value):
+            return PTModelPatch(operations: [.set(path: path, value: try encoder.jsonValue(value))])
+        }
+    }
+
+    static func fromPresence<Value: Codable & Sendable & Equatable>(
+        _ presence: PTPresence<Value>,
+        key: String,
+        encoder: PTModelEncoder = .init()
+    ) throws -> PTModelPatch {
+        try fromPresence(presence, at: PTJSONPath([.key(key)]), encoder: encoder)
+    }
+}
+
 public enum PTModelDiff {
     public static func make(from old: PTJSONValue,
                             to new: PTJSONValue) -> PTModelPatch {
@@ -185,6 +213,25 @@ public struct PTModelMigrationChain: Sendable {
             if $0.fromVersion == $1.fromVersion { return $0.toVersion < $1.toVersion }
             return $0.fromVersion < $1.fromVersion
         }
+    }
+
+    // English: Read an optional persisted schema version without forcing callers to know the transport spelling.
+    // Español: Lee una versión de esquema persistida opcional sin obligar al llamador a conocer la clave del transporte.
+    // 中文：兼容常见传输字段读取持久化 Schema 版本，调用方无需关心具体字段名。
+    public func sourceVersion(in value: PTJSONValue) -> Int? {
+        guard case .object(let object) = value else { return nil }
+        for key in ["schemaVersion", "_schemaVersion", "version"] {
+            guard let value = object[key] else { continue }
+            switch value {
+            case .number(let number):
+                if let integer = number.int64Value { return Int(integer) }
+            case .string(let string):
+                if let integer = Int(string) { return integer }
+            default:
+                continue
+            }
+        }
+        return nil
     }
 
     public func migrate(_ value: PTJSONValue,

@@ -247,9 +247,12 @@ public struct PTJSONFieldScanner: Sendable {
 // Español: Solo despacha las claves solicitadas y decodifica sus slices; el scanner omite las claves desconocidas.
 // 中文：只分发请求字段并解析对应切片，未知字段由 Scanner 直接跳过。
 public enum PTStaticFieldDispatcher {
-    public static func decodeValues(from data: Data,
+    // English: Return raw field slices so scalar and collection codecs can choose their own decoding path.
+    // Español: Devuelve slices crudos para que cada codec escalar o de colección elija su ruta de decodificación.
+    // 中文：返回原始字段切片，让标量和集合 codec 自主选择解码路径。
+    public static func decodeSlices(from data: Data,
                                     fields: [PTModelFieldDescriptor],
-                                    decoder: PTModelDecoder = .init()) throws -> [String: PTJSONValue] {
+                                    decoder: PTModelDecoder = .init()) throws -> [String: Data] {
         var dispatch: [UInt64: [(String, String)]] = [:]
         for field in fields {
             for key in field.mapping.decodeKeys {
@@ -257,22 +260,30 @@ public enum PTStaticFieldDispatcher {
             }
         }
         var scanner = try PTJSONFieldScanner(data: data, limits: decoder.limits)
-        var result: [String: PTJSONValue] = [:]
+        var result: [String: Data] = [:]
         while let field = try scanner.next() {
             guard let candidates = dispatch[PTStableKeyHash.hash(field.key)],
                   let (_, property) = candidates.first(where: { $0.0 == field.key }) else { continue }
-            let value = try PTJSONValue(data: field.data,
-                                        duplicateKeyPolicy: decoder.duplicateKeyPolicy,
-                                        limits: decoder.limits)
             switch decoder.duplicateKeyPolicy {
             case .keepFirst where result[property] != nil:
                 continue
             case .reject where result[property] != nil:
                 throw PTModelError.duplicateKey(property)
             default:
-                result[property] = value
+                result[property] = field.data
             }
         }
         return result
+    }
+
+    public static func decodeValues(from data: Data,
+                                    fields: [PTModelFieldDescriptor],
+                                    decoder: PTModelDecoder = .init()) throws -> [String: PTJSONValue] {
+        let slices = try decodeSlices(from: data, fields: fields, decoder: decoder)
+        return try slices.reduce(into: [String: PTJSONValue]()) { result, entry in
+            result[entry.key] = try PTJSONValue(data: entry.value,
+                                                duplicateKeyPolicy: decoder.duplicateKeyPolicy,
+                                                limits: decoder.limits)
+        }
     }
 }

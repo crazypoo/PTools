@@ -10,7 +10,11 @@
 - ✅ 字典 key strategy、Set 确定性排序、重复 key 策略、Patch/Diff/Clone/Converter、Schema migration 和 JSON Schema 元数据保持在 Core。
 - ✅ `PToolsModelUIKit`、`PToolsModelCombine` 已与 Core 分层；Observation 适配器只在可用平台编译。
 - ✅ `PTJSONFieldScanner` 支持未知字段跳过、稳定 hash 二次字符串校验、资源上限和重复 key 策略。
+- ✅ `PTFieldRecovery` 已区分 missing/null/invalid/overflow/value；数值溢出会遵循 recovery policy，并保留独立的 overflow reason。
+- ✅ `PTModelSchema.decode` 与 `PTStaticCodec.decode` 共用字段 alias/path/flat 归一化；直接调用 Schema 不再绕过 canonical input normalization。
+- ✅ `PTModelPatch.fromPresence` 已明确 missing 不产生更新、null 产生显式 null、value 产生 set；补充 migration/defaults/extras 的组合入口。
 - ✅ `PTModelChunkStreamDecoder` 支持任意 `AsyncSequence<Data>` 分块、跨块字符串/嵌套值、取消、错误索引和有界缓冲；`PTStaticJSONWriter` 为生成 Schema 提供直接字段写入入口。
+- ✅ `PTFileDataChunkSequence` 与 `PTURLSessionDataChunkSequence` 提供有界 FileHandle/URLSession bytes source adapter，并传播取消与 HTTP 状态错误。
 - ✅ `@PTModel` 现已生成字段 descriptor、默认值、Lossy、Stringified、推断类型和 struct 直接解码入口；class/`@PTSubclass` 默认关闭直接构造路径，保留 Codable 回退，避免伪造继承安全性。
 - ✅ `PToolsModelUIKit`、`PToolsModelCombine` 和 Observation 适配器已加入 SwiftPM/源码分层；Core 仍不导入 UIKit、Combine 或 Observation。
 - ✅ SmartCodable/KakaJSON 旧入口已提供显式 Legacy adapter 产品和 CocoaPods opt-in subspec；新 `requestPTModel` 使用 `Data` 优先的 `PTModelNetworkResponse<Model>`，旧 `PTNetworkResponse` 保持传输层 API 兼容。
@@ -30,6 +34,8 @@
 | `swift package dump-package` | ✅ 通过 |
 | `pod ipc spec PooTools.podspec` | ✅ 通过 |
 | `git diff --check` / PTModel 静态门禁 | ✅ 通过 |
+| PTModel target/benchmark 编译 | ✅ `swift build --target PToolsModelTests`、`swift build --target PTModelBenchmark` 通过 |
+| PTModel 1000-task benchmark | ✅ 5 次迭代完成；P99 encode 3.027792 ms，P99 decode 24.120458 ms；encode/decode 各 1000 次 |
 | PooTools 源码 Xcode 警告门禁（Debug / Release） | ✅ 通过；源码 warning 为 0，Pods 与工程警告单独报告 |
 | Swift 6 严格并发 Xcode 警告门禁 | ⏸ 被外部 Pods 阻断：InAppViewDebugger、Swinject；未修改 Pods |
 | `swift test --filter PTModelCoreTests` | ⏸ SwiftPM 当前把 UIKit targets 当作 macOS target 构建，`PooToolsSource/CheckBox/PTCheckBox.swift` 无法导入 UIKit；不是 iOS workspace 测试通过证明 |
@@ -46,7 +52,7 @@ Legacy adapter 产品已经分层，但 `Network.swift` 和 `PTNetworkModelBridg
 
 ### Correctness / performance proof
 
-差分矩阵、property-based/fuzz、TSan 1000 并发回归、Release 真机基准、多平台 Archive 和真实 Consumer fixture 尚未在本机完成。Simulator 构建不能证明这些门禁；当前仅完成静态、宏展开、Core 编译和 iOS Simulator Debug/Release workspace 构建。
+差分矩阵、property-based/fuzz、TSan 1000 并发回归、Release 真机基准、多平台 Archive 和真实 Consumer fixture 尚未在本机完成。Simulator benchmark 已执行 1000-task stress，但不能替代 TSan、真机内存/分配和行为 parity；当前仍只完成静态、宏展开、Core 编译、benchmark 和 iOS Simulator Debug/Release workspace 构建。
 
 ### 仍未执行的强制路线
 

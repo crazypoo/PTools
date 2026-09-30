@@ -56,9 +56,15 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
     }
 
     public func decode(from value: PTJSONValue,
-                       using decoder: PTModelDecoder = .init()) throws -> Model {
+                       using decoder: PTModelDecoder = .init(),
+                       defaults: PTJSONValue? = nil) throws -> Model {
         let lifecycle = Model.self as? any PTModelLifecycle.Type
-        let input = try lifecycle?.ptWillDecode(value, using: decoder) ?? value
+        let merged = defaults.map { PTModelDefaultMerge.merge(defaults: $0, with: value) } ?? value
+        // English: Keep direct Schema decoding identical to the canonical static codec path.
+        // Español: Mantiene el decode directo de Schema idéntico a la ruta estática canónica.
+        // 中文：让直接 Schema 解码与规范静态 codec 路径保持一致。
+        let normalized = PTModelSchemaSupport.normalizedInput(merged, fields: metadata.fields)
+        let input = try lifecycle?.ptWillDecode(normalized, using: decoder) ?? normalized
         let model = try decodeClosure(input, decoder.scoped(to: .root))
         try lifecycle?.ptDidDecode(input, using: decoder)
         try validator?.validate(model,
@@ -150,6 +156,24 @@ public extension PTStaticModel {
 // Español: Normaliza las claves de transporte y rutas anotadas antes de entregar el modelo a Codable.
 // 中文：在 Codable 解码宏生成模型前，先统一转换网络字段名和注解路径。
 public enum PTModelSchemaSupport {
+    // English: Resolve one descriptor through its typed path and aliases before field recovery.
+    // Español: Resuelve un descriptor mediante su ruta tipada y sus alias antes de la recuperación.
+    // 中文：字段恢复前，统一按类型化路径和别名解析字段值。
+    public static func value(for field: PTModelFieldDescriptor,
+                             in object: PTJSONValue) throws -> PTJSONValue? {
+        if let path = field.path {
+            let prefix = Array(path.components.dropLast())
+            for key in field.mapping.decodeKeys {
+                let candidate = PTJSONPath(prefix + [.key(key)])
+                if let value = try object.value(at: candidate) {
+                    return value
+                }
+            }
+            return nil
+        }
+        return try object.aliasedValue(using: field.mapping)
+    }
+
     public static func normalizedInput(_ value: PTJSONValue,
                                        fields: [PTModelFieldDescriptor]) -> PTJSONValue {
         guard case .object(var object) = value else { return value }
@@ -253,7 +277,28 @@ public enum PTStaticCodec {
         from source: Source,
         using decoder: PTModelDecoder = .init()
     ) throws -> Model {
-        if Model.ptUsesDirectPath,
+        try decode(type,
+                   from: source,
+                   using: decoder,
+                   migration: nil,
+                   sourceVersion: nil,
+                   defaults: nil)
+    }
+
+    // English: Decode with an optional migration chain before schema normalization and direct construction.
+    // Español: Decodifica con una cadena de migración opcional antes de normalizar y construir directamente.
+    // 中文：在 Schema 归一化和直接构造前，可选执行版本迁移链。
+    public static func decode<Model: PTStaticModel, Source: PTModelSource>(
+        _ type: Model.Type,
+        from source: Source,
+        using decoder: PTModelDecoder = .init(),
+        migration: PTModelMigrationChain?,
+        sourceVersion: Int? = nil,
+        defaults: PTJSONValue? = nil
+    ) throws -> Model {
+        if migration == nil,
+           defaults == nil,
+           Model.ptUsesDirectPath,
            let data = source as? Data,
            canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
             let values = try decodeFields(data,
@@ -265,8 +310,11 @@ public enum PTStaticCodec {
             }
             return try Model.ptSchema.decode(from: .object(values), using: decoder)
         }
-        if Model.ptUsesDirectPath,
+
+        let input: PTJSONValue
+        if migration == nil,
            let string = source as? String,
+           Model.ptUsesDirectPath,
            canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
             let values = try decodeFields(Data(string.utf8),
                                           fields: Model.ptSchema.metadata.fields,
@@ -275,15 +323,75 @@ public enum PTStaticCodec {
                let model = try Model.ptDirectDecode(values, using: decoder) {
                 return model
             }
-            return try Model.ptSchema.decode(from: .object(values), using: decoder)
+            input = .object(values)
+        } else {
+            input = try decoder.jsonValue(from: source)
         }
-        return try Model.ptSchema.decode(from: decoder.jsonValue(from: source), using: decoder)
+
+        var migrated = input
+        if let migration {
+            guard let sourceVersion = sourceVersion ?? migration.sourceVersion(in: input) else {
+                throw PTModelError.migrationFailed("A source schema version is required")
+            }
+            migrated = try migration.migrate(input,
+                                             from: sourceVersion,
+                                             to: Model.ptSchema.metadata.version)
+        }
+
+        let merged = defaults.map { PTModelDefaultMerge.merge(defaults: $0, with: migrated) } ?? migrated
+        let normalized = PTModelSchemaSupport.normalizedInput(merged,
+                                                               fields: Model.ptSchema.metadata.fields)
+        if Model.ptUsesDirectPath,
+           (Model.self as? any PTModelLifecycle.Type) == nil,
+           case .object(let object) = normalized,
+           let model = try Model.ptDirectDecode(object, using: decoder) {
+            return model
+        }
+        return try Model.ptSchema.decode(from: normalized, using: decoder)
+    }
+
+    // English: Capture unknown members alongside a decoded model for forward-compatible consumers.
+    // Español: Captura miembros desconocidos junto al modelo decodificado para consumidores compatibles hacia delante.
+    // 中文：解码模型的同时捕获未知字段，支持向前兼容。
+    public static func decodeWithExtras<Model: PTStaticModel, Source: PTModelSource>(
+        _ type: Model.Type,
+        from source: Source,
+        using decoder: PTModelDecoder = .init(),
+        migration: PTModelMigrationChain? = nil,
+        sourceVersion: Int? = nil,
+        defaults: PTJSONValue? = nil
+    ) throws -> (model: Model, extras: PTExtras) {
+        let input = try decoder.jsonValue(from: source)
+        var migrated = input
+        if let migration {
+            guard let sourceVersion = sourceVersion ?? migration.sourceVersion(in: input) else {
+                throw PTModelError.migrationFailed("A source schema version is required")
+            }
+            migrated = try migration.migrate(input,
+                                             from: sourceVersion,
+                                             to: Model.ptSchema.metadata.version)
+        }
+        let knownKeys = Set(Model.ptSchema.metadata.fields.flatMap { field in
+            field.mapping.decodeKeys + [field.mapping.encodeKey, field.name]
+        })
+        let extras = try PTModelExtrasCodec.capture(migrated, knownKeys: knownKeys)
+        let model = try decode(type,
+                               from: source,
+                               using: decoder,
+                               migration: migration,
+                               sourceVersion: sourceVersion,
+                               defaults: defaults)
+        return (model, extras)
     }
 
     public static func encode<Model: PTStaticModel>(
         _ model: Model,
         using encoder: PTModelEncoder = .init()
     ) throws -> Data {
+        if let provider = model as? any PTExtrasProviding,
+           !provider.ptExtras.isEmpty {
+            return try encode(model, extras: provider.ptExtras, using: encoder)
+        }
         if !encoder.prettyPrinted,
            Model.ptUsesDirectPath,
            canUseDirectObjectPath(for: Model.ptSchema.metadata.fields),
@@ -293,6 +401,20 @@ public enum PTStaticCodec {
         return try Model.ptSchema.encode(model, using: encoder).jsonData(prettyPrinted: encoder.prettyPrinted,
                                                                          sortedKeys: encoder.sortedKeys || encoder.canonical,
                                                                          canonicalPolicy: encoder.canonical ? encoder.canonicalPolicy : nil)
+    }
+
+    // English: Merge captured extras at the final object boundary without changing the model's canonical schema.
+    // Español: Fusiona los extras capturados en el límite final del objeto sin cambiar el esquema canónico.
+    // 中文：在最终对象边界合并已捕获的 extras，不改变模型的规范 Schema。
+    public static func encode<Model: PTStaticModel>(
+        _ model: Model,
+        extras: PTExtras,
+        using encoder: PTModelEncoder = .init()
+    ) throws -> Data {
+        let value = try PTModelExtrasCodec.merge(Model.ptSchema.encode(model, using: encoder), extras: extras)
+        return try value.jsonData(prettyPrinted: encoder.prettyPrinted,
+                                  sortedKeys: encoder.sortedKeys || encoder.canonical,
+                                  canonicalPolicy: encoder.canonical ? encoder.canonicalPolicy : nil)
     }
 
     // English: Stream one static model directly to a sink when the generated schema exposes field values.

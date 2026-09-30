@@ -13,6 +13,6 @@
   ],
   "warmupIterations": 5,
   "measuredIterations": 30,
-  "metrics": ["wall_clock", "p50", "p95", "p99", "allocations", "peak_rss"],
+  "metrics": ["wall_clock", "p50", "p95", "p99", "concurrent_1000_encode", "concurrent_1000_decode", "allocations", "peak_rss"],
   "releaseClaim": "No faster-than-competitor claim until a real-device comparison passes the plan gate."
 }

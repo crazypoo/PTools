@@ -28,8 +28,12 @@ private struct BenchmarkResult: Codable, Sendable {
     let encodedBytes: Int
     let encodeP50Milliseconds: Double
     let encodeP95Milliseconds: Double
+    let encodeP99Milliseconds: Double
     let decodeP50Milliseconds: Double
     let decodeP95Milliseconds: Double
+    let decodeP99Milliseconds: Double
+    let concurrentEncodeCount: Int
+    let concurrentDecodeCount: Int
     let modelsPerSecond: Double
     let bytesPerSecond: Double
 }
@@ -57,50 +61,96 @@ private func argument(named name: String, default defaultValue: Int) -> Int {
     return value
 }
 
-do {
-    let count = argument(named: "--count", default: 1_000)
-    let iterations = argument(named: "--iterations", default: 5)
-    let models = (0..<count).map { index in
-        BenchmarkModel(id: index,
-                       name: "model-\(index)",
-                       tags: ["ptmodel", "benchmark", "\(index % 8)"],
-                       nested: .init(active: index.isMultiple(of: 2),
-                                     score: Double(index) / 10))
+// English: Run an explicit 1,000-task stress pass over immutable encoder and decoder values.
+// Español: Ejecuta una prueba explícita de 1.000 tareas sobre encoders y decoders inmutables.
+// 中文：对不可变 encoder 和 decoder 执行明确的 1,000 任务并发压力测试。
+private func runConcurrentStress(models: [BenchmarkModel],
+                                 encoder: PTModelEncoder,
+                                 decoder: PTModelDecoder) async throws -> (encode: Int, decode: Int) {
+    guard let model = models.first else { throw PTModelError.invalidInput }
+    let data = try encoder.encode(model)
+    let count = 1_000
+    let encodeCount = try await withThrowingTaskGroup(of: Bool.self, returning: Int.self) { group in
+        for _ in 0..<count {
+            group.addTask {
+                _ = try encoder.encode(model)
+                return true
+            }
+        }
+        var completed = 0
+        for try await succeeded in group where succeeded { completed += 1 }
+        return completed
     }
-    // English: Measure the default compatibility path; canonical mode is a separate opt-in contract.
-    // Español: Mide la ruta de compatibilidad predeterminada; el modo canónico es un contrato opt-in separado.
-    // 中文：基准测试默认兼容路径；canonical 模式是单独的显式选择契约。
-    let encoder = PTModelEncoder(sortedKeys: true)
-    let decoder = PTModelDecoder(policy: .strict)
-    var encodeMeasurements: [Double] = []
-    var decodeMeasurements: [Double] = []
-    var encodedData = Data()
+    let decodeCount = try await withThrowingTaskGroup(of: Bool.self, returning: Int.self) { group in
+        for _ in 0..<count {
+            group.addTask {
+                _ = try decoder.decode(BenchmarkModel.self, from: data)
+                return true
+            }
+        }
+        var completed = 0
+        for try await succeeded in group where succeeded { completed += 1 }
+        return completed
+    }
+    return (encodeCount, decodeCount)
+}
 
-    for _ in 0..<iterations {
-        encodeMeasurements.append(try elapsedMilliseconds {
-            encodedData = try encoder.encode(models)
-        })
-        decodeMeasurements.append(try elapsedMilliseconds {
-            _ = try decoder.decode([BenchmarkModel].self, from: encodedData)
-        })
-    }
+@main
+struct PTModelBenchmarkMain {
+    static func main() async {
+        do {
+            let count = argument(named: "--count", default: 1_000)
+            let iterations = argument(named: "--iterations", default: 5)
+            let models = (0..<count).map { index in
+                BenchmarkModel(id: index,
+                               name: "model-\(index)",
+                               tags: ["ptmodel", "benchmark", "\(index % 8)"],
+                               nested: .init(active: index.isMultiple(of: 2),
+                                             score: Double(index) / 10))
+            }
+            // English: Measure the default compatibility path; canonical mode is a separate opt-in contract.
+            // Español: Mide la ruta de compatibilidad predeterminada; el modo canónico es un contrato opt-in separado.
+            // 中文：基准测试默认兼容路径；canonical 模式是单独的显式选择契约。
+            let encoder = PTModelEncoder(sortedKeys: true)
+            let decoder = PTModelDecoder(policy: .strict)
+            var encodeMeasurements: [Double] = []
+            var decodeMeasurements: [Double] = []
+            var encodedData = Data()
 
-    let totalSeconds = (encodeMeasurements.reduce(0, +) + decodeMeasurements.reduce(0, +)) / 1_000
-    let result = BenchmarkResult(count: count,
-                                 iterations: iterations,
-                                 encodedBytes: encodedData.count,
-                                 encodeP50Milliseconds: percentile(encodeMeasurements, fraction: 0.50),
-                                 encodeP95Milliseconds: percentile(encodeMeasurements, fraction: 0.95),
-                                 decodeP50Milliseconds: percentile(decodeMeasurements, fraction: 0.50),
-                                 decodeP95Milliseconds: percentile(decodeMeasurements, fraction: 0.95),
-                                 modelsPerSecond: totalSeconds > 0 ? Double(count * iterations * 2) / totalSeconds : 0,
-                                 bytesPerSecond: totalSeconds > 0 ? Double(encodedData.count * iterations) / totalSeconds : 0)
-    let output = try JSONEncoder().encode(result)
-    guard let string = String(data: output, encoding: .utf8) else {
-        throw PTModelError.conversionFailed("Benchmark result is not UTF-8")
+            for _ in 0..<iterations {
+                encodeMeasurements.append(try elapsedMilliseconds {
+                    encodedData = try encoder.encode(models)
+                })
+                decodeMeasurements.append(try elapsedMilliseconds {
+                    _ = try decoder.decode([BenchmarkModel].self, from: encodedData)
+                })
+            }
+
+            let stress = try await runConcurrentStress(models: models,
+                                                       encoder: encoder,
+                                                       decoder: decoder)
+            let totalSeconds = (encodeMeasurements.reduce(0, +) + decodeMeasurements.reduce(0, +)) / 1_000
+            let result = BenchmarkResult(count: count,
+                                         iterations: iterations,
+                                         encodedBytes: encodedData.count,
+                                         encodeP50Milliseconds: percentile(encodeMeasurements, fraction: 0.50),
+                                         encodeP95Milliseconds: percentile(encodeMeasurements, fraction: 0.95),
+                                         encodeP99Milliseconds: percentile(encodeMeasurements, fraction: 0.99),
+                                         decodeP50Milliseconds: percentile(decodeMeasurements, fraction: 0.50),
+                                         decodeP95Milliseconds: percentile(decodeMeasurements, fraction: 0.95),
+                                         decodeP99Milliseconds: percentile(decodeMeasurements, fraction: 0.99),
+                                         concurrentEncodeCount: stress.encode,
+                                         concurrentDecodeCount: stress.decode,
+                                         modelsPerSecond: totalSeconds > 0 ? Double(count * iterations * 2) / totalSeconds : 0,
+                                         bytesPerSecond: totalSeconds > 0 ? Double(encodedData.count * iterations) / totalSeconds : 0)
+            let output = try JSONEncoder().encode(result)
+            guard let string = String(data: output, encoding: .utf8) else {
+                throw PTModelError.conversionFailed("Benchmark result is not UTF-8")
+            }
+            print(string)
+        } catch {
+            FileHandle.standardError.write(Data("PTModelBenchmark failed: \(error.localizedDescription)\n".utf8))
+            exit(1)
+        }
     }
-    print(string)
-} catch {
-    FileHandle.standardError.write(Data("PTModelBenchmark failed: \(error.localizedDescription)\n".utf8))
-    exit(1)
 }

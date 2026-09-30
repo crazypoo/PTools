@@ -311,14 +311,46 @@ public struct PTFieldRecovery<Value: Sendable>: Sendable {
                                             path: path,
                                             message: message,
                                             reason: .invalid(message)))
+            return try resolveInvalid(message,
+                                      reason: .invalid(message),
+                                      descriptor: descriptor,
+                                      path: path,
+                                      trace: &trace,
+                                      context: context)
+        case .overflow(let message):
+            trace.append(PTDecodeTraceEvent(kind: .invalid,
+                                            path: path,
+                                            message: message,
+                                            reason: .overflow))
+            return try resolveInvalid(message,
+                                      reason: .overflow,
+                                      descriptor: descriptor,
+                                      path: path,
+                                      trace: &trace,
+                                      context: context)
+        }
+    }
+
+    // English: Overflow follows the invalid-value recovery policy while retaining a distinct diagnostic reason.
+    // Español: El desbordamiento sigue la política de recuperación de valores inválidos y conserva una razón distinta.
+    // 中文：溢出复用无效值恢复策略，同时保留独立的诊断原因。
+    private func resolveInvalid(_ message: String,
+                                reason: PTFieldRecoveryReason,
+                                descriptor: PTModelFieldDescriptor,
+                                path: PTJSONPath,
+                                trace: inout PTDecodeTrace,
+                                context: PTModelContext) throws -> Value? {
             switch invalidPolicy {
             case .useDefault:
-                guard let defaultValue = try resolvedDefault(using: context) else { throw PTModelError.conversionFailed(message) }
+                guard let defaultValue = try resolvedDefault(using: context) else {
+                    if reason == .overflow { throw PTModelError.numericOverflow(message) }
+                    throw PTModelError.conversionFailed(message)
+                }
                 try validator?(defaultValue)
                 trace.append(PTDecodeTraceEvent(kind: .defaultValue,
                                                 path: path,
                                                 message: "Invalid value recovered with the field default.",
-                                                reason: .invalid(message)))
+                                                reason: reason))
                 return defaultValue
             case .useNil, .ignore:
                 if descriptor.required { throw PTModelError.requiredValue(path.description) }
@@ -327,9 +359,9 @@ public struct PTFieldRecovery<Value: Sendable>: Sendable {
                 }
                 return nil
             case .error:
+                if reason == .overflow { throw PTModelError.numericOverflow(message) }
                 throw PTModelError.conversionFailed(message)
             }
-        }
     }
 }
 
@@ -345,10 +377,7 @@ public extension PTModelDecoder {
         path: PTJSONPath = .root
     ) throws -> Value? {
         let fieldPath = path.appending(.key(field.mapping.encodeKey))
-        let state = decodeField(type,
-                                from: object,
-                                key: field.mapping.encodeKey,
-                                path: path)
+        let state = decodeField(type, from: object, field: field, path: path)
         return try recovery.resolve(state, descriptor: field, path: fieldPath)
     }
 
@@ -366,7 +395,7 @@ public extension PTModelDecoder {
         diagnosticSink: any PTModelDiagnosticSink = PTNoopDiagnosticSink()
     ) throws -> Value? {
         let fieldPath = path.appending(.key(field.mapping.encodeKey))
-        let state = decodeField(type, from: object, key: field.mapping.encodeKey, path: path)
+        let state = decodeField(type, from: object, field: field, path: path)
         let value = try recovery.resolve(state,
                                         descriptor: field,
                                         path: fieldPath,
@@ -380,5 +409,33 @@ public extension PTModelDecoder {
                                                      message: event.message ?? event.kind.rawValue))
         }
         return value
+    }
+
+    // English: Resolve aliases and nested paths before classifying the field state.
+    // Español: Resuelve alias y rutas anidadas antes de clasificar el estado del campo.
+    // 中文：先解析别名和嵌套路径，再判断字段状态。
+    private func decodeField<T: Decodable>(
+        _ type: T.Type,
+        from object: PTJSONValue,
+        field: PTModelFieldDescriptor,
+        path: PTJSONPath
+    ) -> PTModelFieldState<T> {
+        let fieldPath = path.appending(.key(field.mapping.encodeKey))
+        let value: PTJSONValue?
+        do {
+            value = try PTModelSchemaSupport.value(for: field, in: object)
+        } catch {
+            return .invalid(fieldPath.description)
+        }
+        guard let value else { return .missing }
+        if case .null = value { return .null }
+        do {
+            return .value(try decodeValue(type, from: value, path: fieldPath))
+        } catch let error as PTModelError {
+            if case .numericOverflow(let raw) = error { return .overflow(raw) }
+            return .invalid(fieldPath.description)
+        } catch {
+            return .invalid(fieldPath.description)
+        }
     }
 }

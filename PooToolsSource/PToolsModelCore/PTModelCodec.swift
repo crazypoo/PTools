@@ -169,6 +169,11 @@ public struct PTModelDecoder: Sendable {
         if case .null = value { return .null }
         do {
             return .value(try decodeValue(type, from: value, path: fieldPath))
+        } catch let error as PTModelError {
+            if case .numericOverflow(let raw) = error {
+                return .overflow(raw)
+            }
+            return .invalid(fieldPath.description)
         } catch {
             return .invalid(fieldPath.description)
         }

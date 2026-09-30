@@ -174,6 +174,7 @@ public enum PTModelFieldState<Value: Sendable>: Sendable {
     case missing
     case null
     case invalid(String)
+    case overflow(String)
     case value(Value)
 }
 

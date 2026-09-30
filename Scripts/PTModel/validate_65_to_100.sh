@@ -33,4 +33,15 @@ for file in PooToolsSource/PToolsModelCore/*.swift PooToolsSource/PToolsModel/*.
   xcrun swiftc -frontend -parse "$file" >/dev/null
 done
 
+rg -q 'encodeP99Milliseconds|decodeP99Milliseconds|concurrentEncodeCount|concurrentDecodeCount' \
+  Benchmarks/PTModel/Runner/main.swift || {
+  printf 'FAIL: PTModel benchmark runner is missing P99 or concurrency metrics\n' >&2
+  exit 1
+}
+
+rg -q 'concurrent_1000_encode|concurrent_1000_decode' Benchmarks/PTModel/manifest.json || {
+  printf 'FAIL: PTModel benchmark manifest is missing the 1,000-task stress metrics\n' >&2
+  exit 1
+}
+
 printf 'PASS: PTModel local 65-to-100 static gates\n'
