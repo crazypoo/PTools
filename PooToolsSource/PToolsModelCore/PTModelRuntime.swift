@@ -182,6 +182,13 @@ public protocol PTExtrasProviding: Sendable {
     var ptExtras: PTExtras { get }
 }
 
+// English: Models that opt in to automatic extras capture expose one mutable value slot, never a shared global bag.
+// Español: Los modelos que optan por capturar extras exponen un único valor mutable, nunca un contenedor global compartido.
+// 中文：选择自动捕获 extras 的模型只暴露一个可变值槽位，不使用共享全局容器。
+public protocol PTExtrasStoring: PTExtrasProviding {
+    var ptExtras: PTExtras { get set }
+}
+
 public enum PTModelDowngradePolicy: String, Sendable, Codable {
     case reject
     case bestEffort

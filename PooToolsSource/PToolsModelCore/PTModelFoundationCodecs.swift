@@ -164,6 +164,13 @@ public enum PTModelFoundationCodec {
               case .string(let string) = value else {
             throw PTModelError.typeMismatch(expected: "stringified JSON", actual: "non-string")
         }
+        // English: Prefer the static schema for nested PTModel values so aliases and annotations survive stringification.
+        // Español: Prioriza el esquema estático para valores PTModel anidados y conserva alias y anotaciones.
+        // 中文：字符串化的嵌套 PTModel 优先使用静态 Schema，确保别名和注解不会丢失。
+        if let staticType = type as? any PTStaticDecodableType.Type,
+           let decoded = try staticType.ptDecodeErased(from: Data(string.utf8), using: decoder) as? T {
+            return decoded
+        }
         return try decoder.decode(type, from: string)
     }
 

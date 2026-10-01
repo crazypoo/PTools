@@ -9,12 +9,20 @@
 import Foundation
 import KakaJSON
 
-@MainActor
 public enum PTLegacyKakaJSONAdapter {
     public static func decode<Model: Convertible>(_ type: Model.Type,
                                                    data: Data) throws -> Model {
         guard let string = String(data: data, encoding: .utf8),
               let model = string.kj.model(type) else {
+            throw PTLegacyKakaJSONError.decodeFailed
+        }
+        return model
+    }
+
+    public static func decode(_ type: Any.Type, data: Data) throws -> Any {
+        guard let modelType = type as? Convertible.Type,
+              let string = String(data: data, encoding: .utf8),
+              let model = string.kj.model(modelType) else {
             throw PTLegacyKakaJSONError.decodeFailed
         }
         return model

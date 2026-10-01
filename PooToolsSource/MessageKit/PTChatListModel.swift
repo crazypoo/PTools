@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import SmartCodable
 
-public enum PTChatMessageType:Int,SmartCaseDefaultable {
+public enum PTChatMessageType: Int {
     case Text
     case Map
     case Media
@@ -19,7 +18,7 @@ public enum PTChatMessageType:Int,SmartCaseDefaultable {
     case Typing
 }
 
-public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
+public enum PTChatMessageStatus: Int {
     case Sending
     case Arrived
     case Error
@@ -29,7 +28,7 @@ public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
 // SmartCodable's requirements are nonisolated in the legacy decoder; this UI model is only decoded and consumed on MainActor.
 // Los requisitos de SmartCodable no están aislados en el decodificador heredado; este modelo de UI solo se decodifica y consume en MainActor.
 // SmartCodable 的协议要求在旧解码器中是非隔离的；这个 UI 模型只在 MainActor 上解码和使用。
-open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
+open class PTChatListModel {
     private let storedDiffIdentifier: String
     private var resolvedDiffIdentifier: String? = nil
 
@@ -41,7 +40,7 @@ open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
     ///创建者ID
     public var creatorId:String = ""
     ///内容
-    @SmartAny public var msgContent:Any?
+    public var msgContent:Any?
     ///消息人头像
     public var senderCover:String = ""
     ///消息状态
@@ -59,9 +58,9 @@ open class PTChatListModel: @preconcurrency PTCodableModelProtocol {
     ///是否已讀
     public var isRead:Bool = false
     ///额外扩展字段
-    @SmartAny public var msgExten:Any?
+    public var msgExten:Any?
     
-    public required init() {
+    public init() {
         storedDiffIdentifier = UUID().uuidString
     }
 

@@ -18,6 +18,7 @@ enum PTMacroSourceBuilder {
         let wireKey: String
         let path: String?
         let defaultExpression: String?
+        let isMutable: Bool
         let required: Bool
         let flattened: Bool
         let lossy: Bool
@@ -31,12 +32,42 @@ enum PTMacroSourceBuilder {
 
     static func typeName(from declaration: some DeclGroupSyntax) -> String? {
         if let declaration = declaration.as(StructDeclSyntax.self) {
-            return declaration.name.text
+            return declaration.name.text + genericArguments(declaration.genericParameterClause)
         }
         if let declaration = declaration.as(ClassDeclSyntax.self) {
-            return declaration.name.text
+            return declaration.name.text + genericArguments(declaration.genericParameterClause)
         }
         return nil
+    }
+
+    // English: Generated references use generic parameter names, not their declaration constraints.
+    // Español: Las referencias generadas usan nombres de parámetros genéricos, no sus restricciones de declaración.
+    // 中文：宏生成的类型引用只使用泛型参数名，不把声明约束重复带入类型引用。
+    private static func genericArguments(_ clause: GenericParameterClauseSyntax?) -> String {
+        guard let clause, !clause.parameters.isEmpty else { return "" }
+        let names = clause.parameters.map { $0.name.text }.joined(separator: ", ")
+        return "<\(names)>"
+    }
+
+    static func superclassName(from declaration: some DeclGroupSyntax) -> String? {
+        guard let declaration = declaration.as(ClassDeclSyntax.self),
+              let inherited = declaration.inheritanceClause?.inheritedTypes.first?.type.trimmedDescription,
+              !["NSObject", "Codable", "Decodable", "Encodable", "Sendable"].contains(inherited) else {
+            return nil
+        }
+        return inherited
+    }
+
+    static func hasDirectClassInitializer(_ declaration: some DeclGroupSyntax,
+                                          fields: [FieldInfo]) -> Bool {
+        guard let declaration = declaration.as(ClassDeclSyntax.self) else { return false }
+        if declaration.memberBlock.members.contains(where: { member in
+            guard let initializer = member.decl.as(InitializerDeclSyntax.self) else { return false }
+            return initializer.signature.parameterClause.parameters.isEmpty
+        }) {
+            return true
+        }
+        return fields.allSatisfy { $0.defaultExpression != nil || $0.typeName.hasSuffix("?") }
     }
 
     static func fields(from declaration: some DeclGroupSyntax) throws -> [FieldInfo] {
@@ -54,8 +85,19 @@ enum PTMacroSourceBuilder {
             guard let typeName else {
                 throw MacroExpansionErrorMessage("@PTModel requires an explicit type for properties without a supported literal initializer")
             }
-            guard binding.accessorBlock == nil else {
-                throw MacroExpansionErrorMessage("@PTModel does not support computed properties or property observers")
+            if let accessorBlock = binding.accessorBlock {
+                let observerOnly: Bool
+                switch accessorBlock.accessors {
+                case .accessors(let accessors):
+                    observerOnly = accessors.allSatisfy { accessor in
+                        ["willSet", "didSet"].contains(accessor.accessorSpecifier.text)
+                    }
+                case .getter:
+                    observerOnly = false
+                }
+                guard observerOnly else {
+                    throw MacroExpansionErrorMessage("@PTModel only supports stored properties and willSet/didSet observers")
+                }
             }
             let modifiers = Set(variable.modifiers.map(\.name.text))
             guard modifiers.isDisjoint(with: ["static", "class", "lazy", "weak", "unowned"]) else {
@@ -95,6 +137,7 @@ enum PTMacroSourceBuilder {
                                     wireKey: wireKey,
                                     path: path,
                                     defaultExpression: defaultExpression,
+                                    isMutable: variable.bindingSpecifier.text == "var",
                                     required: required,
                                     flattened: flattened,
                                     lossy: names.contains("PTLossy"),
@@ -162,9 +205,25 @@ enum PTMacroSourceBuilder {
             .replacingOccurrences(of: "\"", with: "\\\"")
     }
 
+    static func accessPrefix(from declaration: some DeclGroupSyntax) -> String {
+        let modifiers: [String]
+        if let declaration = declaration.as(StructDeclSyntax.self) {
+            modifiers = declaration.modifiers.map(\.name.text)
+        } else if let declaration = declaration.as(ClassDeclSyntax.self) {
+            modifiers = declaration.modifiers.map(\.name.text)
+        } else {
+            modifiers = []
+        }
+        if modifiers.contains("open") { return "open " }
+        return modifiers.contains("public") ? "public " : ""
+    }
+
     static func schemaMember(typeName: String,
                              fields: [FieldInfo],
-                             supportsMemberwiseInit: Bool) -> DeclSyntax {
+                             supportsDirectConstruction: Bool,
+                             superclassName: String? = nil,
+                             isClass: Bool = false,
+                             accessPrefix: String = "") -> DeclSyntax {
         let decodeFields = fields.map {
             let decodeKeys = $0.wireKey == $0.name
                 ? "[\"\(escaped($0.name))\"]"
@@ -173,18 +232,6 @@ enum PTMacroSourceBuilder {
             let annotations = "[" + $0.annotations.map { "\"\(escaped($0))\"" }.joined(separator: ", ") + "]"
             return "PTModelFieldDescriptor(name: \"\(escaped($0.name))\", mapping: PTModelKeyMapping(decodeKeys: \(decodeKeys), encodeKey: \"\(escaped($0.wireKey))\"), encoding: \($0.encoding), missing: \($0.missing), null: \($0.null), invalid: \($0.invalid), required: \($0.required), flattened: \($0.flattened), path: \(path), annotations: Set(\(annotations)))"
         }.joined(separator: ", ")
-        let encodedFields = fields.map {
-            let decodeKeys = $0.wireKey == $0.name
-                ? "[\"\(escaped($0.name))\"]"
-                : "[\"\(escaped($0.wireKey))\", \"\(escaped($0.name))\"]"
-            let path = $0.path.map { "try? PTJSONPath.parse(\"\(escaped($0))\")" } ?? "nil"
-            let annotations = "[" + $0.annotations.map { "\"\(escaped($0))\"" }.joined(separator: ", ") + "]"
-            let descriptor = "PTModelFieldDescriptor(name: \"\(escaped($0.name))\", mapping: PTModelKeyMapping(decodeKeys: \(decodeKeys), encodeKey: \"\(escaped($0.wireKey))\"), encoding: \($0.encoding), missing: \($0.missing), null: \($0.null), invalid: \($0.invalid), required: \($0.required), flattened: \($0.flattened), path: \(path), annotations: Set(\(annotations)))"
-            let value = $0.stringified
-                ? "try encoder.optionalJSONValue(PTStringifiedValue(model.\($0.name)))"
-                : "try encoder.optionalJSONValue(model.\($0.name))"
-            return "(\(descriptor), \(value))"
-        }.joined(separator: ",\n                                                  ")
         // English: Structs can use their memberwise initializer for the direct scanner path; classes keep the Codable fallback.
         // Español: Las estructuras pueden usar su inicializador memberwise para el scanner directo; las clases conservan el fallback Codable.
         // 中文：结构体可以使用成员初始化器接入直接 Scanner，类继续使用 Codable 回退，避免猜测构造器签名。
@@ -217,46 +264,343 @@ enum PTMacroSourceBuilder {
             return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(decodedValue) } else { nil }"
         }.joined(separator: "\n            ")
         let directDecodeArguments = fields.map { "\($0.name): \($0.name)" }.joined(separator: ", ")
-        let directDecode = supportsMemberwiseInit ? """
+        let directAssignments = fields.map { "model.\($0.name) = \($0.name)" }.joined(separator: "\n            ")
+        let inheritedDirectDecode = superclassName.map {
+            "try _ = \($0).ptApplyDirectFields(fields, to: model, using: decoder)"
+        } ?? ""
+        let inheritedDirectSliceDecode = superclassName.map {
+            "try _ = \($0).ptApplyDirectFields(rawFields, to: model, using: decoder)"
+        } ?? ""
+        let directDecode: String
+        if supportsDirectConstruction && isClass {
+            directDecode = """
 
-        public static func ptDirectDecode(_ fields: [String: PTJSONValue], using decoder: PTModelDecoder) throws -> \(typeName)? {
+        \(accessPrefix)static func ptDirectDecode(_ fields: [String: PTJSONValue], using decoder: PTModelDecoder) throws -> \(typeName)? {
+            let model = \(typeName)()
+            \(inheritedDirectDecode)
+            \(directDecodeBody)
+            \(directAssignments)
+            return model
+        }
+        """
+        } else if supportsDirectConstruction {
+            directDecode = """
+
+        \(accessPrefix)static func ptDirectDecode(_ fields: [String: PTJSONValue], using decoder: PTModelDecoder) throws -> \(typeName)? {
             \(directDecodeBody)
             return \(typeName)(\(directDecodeArguments))
         }
+        """
+        } else {
+            directDecode = ""
+        }
+        let directSliceDecodeBody = fields.map { field in
+            let source = "rawFields[\"\(escaped(field.wireKey))\"] ?? rawFields[\"\(escaped(field.name))\"]"
+            let isOptional = field.typeName.hasSuffix("?")
+            let decodeTypeName = isOptional
+                ? String(field.typeName.dropLast()).trimmingCharacters(in: .whitespacesAndNewlines)
+                : field.typeName
+            let decodedValue: String
+            if field.stringified {
+                decodedValue = "try PTModelFoundationCodec.decodeStringified(\(decodeTypeName).self, from: .string(try decoder.decodeRaw(String.self, from: raw)), decoder: decoder)"
+            } else if field.lossy,
+                      let collection = lossyRawCollectionExpression(for: decodeTypeName) {
+                decodedValue = "try \(collection)"
+            } else if field.required || !isOptional {
+                decodedValue = "try decoder.decodeRaw(\(decodeTypeName).self, from: raw)"
+            } else {
+                decodedValue = "try decoder.decodeRaw(\(decodeTypeName).self, from: raw)"
+            }
+            if let defaultExpression = field.defaultExpression {
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(decodedValue) } else { \(defaultExpression) }"
+            }
+            if field.required || !isOptional {
+                let missingValue = field.lossy && lossyCollectionExpression(for: decodeTypeName) != nil
+                    ? "try decoder.decode(\(decodeTypeName).self, from: PTJSONValue.array([]))"
+                    : "try decoder.decode(\(decodeTypeName).self, from: PTJSONValue.null)"
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(decodedValue) } else { \(missingValue) }"
+            }
+            return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(decodedValue) } else { nil }"
+        }.joined(separator: "\n            ")
+        let directSliceDecode: String
+        if supportsDirectConstruction && isClass {
+            directSliceDecode = """
+
+        \(accessPrefix)static func ptDirectDecodeSlices(_ rawFields: [String: Data], using decoder: PTModelDecoder) throws -> \(typeName)? {
+            let model = \(typeName)()
+            \(inheritedDirectSliceDecode)
+            \(directSliceDecodeBody)
+            \(directAssignments)
+            return model
+        }
+        """
+        } else if supportsDirectConstruction {
+            directSliceDecode = """
+
+        \(accessPrefix)static func ptDirectDecodeSlices(_ rawFields: [String: Data], using decoder: PTModelDecoder) throws -> \(typeName)? {
+            \(directSliceDecodeBody)
+            return \(typeName)(\(directDecodeArguments))
+        }
+        """
+        } else {
+            directSliceDecode = ""
+        }
+        let schemaOnlyAnnotations = ["PTTransform", "PTValidate", "PTPolymorphic", "PTExtras"]
+        let hasSchemaOnlyAnnotations = fields.contains {
+            $0.annotations.contains(where: schemaOnlyAnnotations.contains)
+        }
+        let directPathFlag = supportsDirectConstruction && !hasSchemaOnlyAnnotations
+            ? "\(accessPrefix)static var ptUsesDirectPath: Bool { true }"
+            : "\(accessPrefix)static var ptUsesDirectPath: Bool { false }"
+        let ownFieldDeclarations = "[\(decodeFields)]"
+        let parentFields = superclassName.map { "\($0).ptSchema.metadata.fields" } ?? "[]"
+        let mergedFields = "PTModelSchemaSupport.mergedFields(parent: \(parentFields), own: ownFields)"
+        let ownEncodedValues = fields.enumerated().map {
+            let value = $0.element.stringified
+                ? "try encoder.optionalJSONValue(PTStringifiedValue(model.\($0.element.name)))"
+                : "try encoder.optionalJSONValue(model.\($0.element.name))"
+            return "(ownFields[\($0.offset)], \(value))"
+        }.joined(separator: ",\n                                                  ")
+        let inheritedEncodedValues = superclassName.map { "(try \($0).ptDirectFieldValues(model, using: encoder)) ?? []" } ?? "[]"
+        let encodedValues = "\(inheritedEncodedValues) + [\(ownEncodedValues)]"
+        let directApply = (isClass && supportsDirectConstruction) ? """
+
+        \(accessPrefix)static func ptApplyDirectFields(_ fields: [String: PTJSONValue], to model: \(typeName), using decoder: PTModelDecoder) throws -> \(typeName) {
+            \(directDecodeBody)
+            \(directAssignments)
+            return model
+        }
         """ : ""
-        let directPathFlag = supportsMemberwiseInit
-            ? "public static var ptUsesDirectPath: Bool { true }"
-            : "public static var ptUsesDirectPath: Bool { false }"
+        let directApplySlices = (isClass && supportsDirectConstruction) ? """
+
+        \(accessPrefix)static func ptApplyDirectFields(_ rawFields: [String: Data], to model: \(typeName), using decoder: PTModelDecoder) throws -> \(typeName) {
+            \(directSliceDecodeBody)
+            \(directAssignments)
+            return model
+        }
+        """ : ""
         return DeclSyntax(stringLiteral: """
         \(directPathFlag)
 
-        public static var ptSchema: PTModelSchema<\(typeName)> {
-            let fields: [PTModelFieldDescriptor] = [\(decodeFields)]
+        \(accessPrefix)static var ptSchemaPrecedence: PTStaticSchemaPrecedence { .staticBeforeCodable }
+
+        \(accessPrefix)static var ptSchema: PTModelSchema<\(typeName)> {
+            let ownFields: [PTModelFieldDescriptor] = \(ownFieldDeclarations)
+            let merged = \(mergedFields)
+            let fields = merged.fields
             return PTModelSchema<\(typeName)>(name: "\(escaped(typeName))",
                                        fields: fields,
+                                       conflicts: merged.conflicts,
                                        decode: { value, decoder in
-                                           try decoder.decode(\(typeName).self,
-                                                              from: PTModelSchemaSupport.normalizedInput(value, fields: fields))
+                                           let normalized = PTModelSchemaSupport.normalizedInput(value, fields: fields)
+                                           let annotated = try PTModelSchemaSupport.applyingAnnotations(to: normalized,
+                                                                                                           fields: fields,
+                                                                                                           modelType: \(typeName).self,
+                                                                                                           phase: .decode)
+                                           return try decoder.decode(\(typeName).self, from: annotated)
                                        },
                                        encode: { model, encoder in
-                                           try PTModelSchemaSupport.encodedOutput(encoder.object(fields: [
-                                                  \(encodedFields)
-                                           ]), fields: fields)
+                                           let encoded = try encoder.object(fields: \(encodedValues))
+                                           let annotated = try PTModelSchemaSupport.applyingAnnotations(to: encoded,
+                                                                                                           fields: fields,
+                                                                                                           modelType: \(typeName).self,
+                                                                                                           phase: .encode)
+                                           return try PTModelSchemaSupport.encodedOutput(annotated, fields: fields)
                                        })
         }
 
-        public static func ptDirectFieldValues(_ model: \(typeName), using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]? {
-            let fields = ptSchema.metadata.fields
-            return [
-                \(fields.enumerated().map {
-                    let value = $0.element.stringified
-                        ? "try encoder.optionalJSONValue(PTStringifiedValue(model.\($0.element.name)))"
-                        : "try encoder.optionalJSONValue(model.\($0.element.name))"
-                    return "(fields[\($0.offset)], \(value))"
-                }.joined(separator: ",\n                "))
-            ]
+        \(accessPrefix)static func ptDirectFieldValues(_ model: \(typeName), using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]? {
+            let ownFields: [PTModelFieldDescriptor] = \(ownFieldDeclarations)
+            return \(encodedValues)
         }
         \(directDecode)
+        \(directSliceDecode)
+        \(directApply)
+        \(directApplySlices)
+        """)
+    }
+
+    // English: Classes use overridable, type-erased schema members because a non-final class cannot conform to a Self-typed schema property.
+    // Español: Las clases usan miembros de esquema sobrescribibles y borrados por tipo porque una clase no final no puede conformar a una propiedad tipada con Self.
+    // 中文：非 final 类不能满足带 Self 的 Schema 属性，因此类模型使用可覆盖的类型擦除成员。
+    static func classSchemaMember(typeName: String,
+                                  fields: [FieldInfo],
+                                  superclassName: String?,
+                                  accessPrefix: String,
+                                  supportsDirectConstruction: Bool) -> DeclSyntax {
+        let decodeFields = fields.map {
+            let decodeKeys = $0.wireKey == $0.name
+                ? "[\"\(escaped($0.name))\"]"
+                : "[\"\(escaped($0.wireKey))\", \"\(escaped($0.name))\"]"
+            let path = $0.path.map { "try? PTJSONPath.parse(\"\(escaped($0))\")" } ?? "nil"
+            let annotations = "[" + $0.annotations.map { "\"\(escaped($0))\"" }.joined(separator: ", ") + "]"
+            return "PTModelFieldDescriptor(name: \"\(escaped($0.name))\", mapping: PTModelKeyMapping(decodeKeys: \(decodeKeys), encodeKey: \"\(escaped($0.wireKey))\"), encoding: \($0.encoding), missing: \($0.missing), null: \($0.null), invalid: \($0.invalid), required: \($0.required), flattened: \($0.flattened), path: \(path), annotations: Set(\(annotations)))"
+        }.joined(separator: ", ")
+        let ownFields = "[\(decodeFields)]"
+        let parentFields = superclassName.map { "\($0).ptClassSchemaMetadata.fields" } ?? "[]"
+        let mergedFields = "PTModelSchemaSupport.mergedFields(parent: \(parentFields), own: ownFields)"
+        let overridePrefix = superclassName == nil ? "" : "override "
+        let classPrefix = "\(accessPrefix)\(overridePrefix)class"
+        let directBody = fields.map { field in
+            let source = "fields[\"\(escaped(field.wireKey))\"] ?? fields[\"\(escaped(field.name))\"]"
+            let optional = field.typeName.hasSuffix("?")
+            let typeName = optional ? String(field.typeName.dropLast()).trimmingCharacters(in: .whitespacesAndNewlines) : field.typeName
+            let value: String
+            if field.stringified {
+                value = "try PTModelFoundationCodec.decodeStringified(\(typeName).self, from: raw, decoder: decoder)"
+            } else if field.lossy, let collection = lossyCollectionExpression(for: typeName) {
+                value = "try \(collection)"
+            } else if optional {
+                value = "try decoder.decodeOptional(\(typeName).self, from: raw)"
+            } else {
+                value = "try decoder.decode(\(typeName).self, from: raw)"
+            }
+            if let defaultExpression = field.defaultExpression {
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { \(defaultExpression) }"
+            }
+            if optional {
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { nil }"
+            }
+            return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { try decoder.decode(\(typeName).self, from: PTJSONValue.null) }"
+        }.joined(separator: "\n            ")
+        let sliceBody = fields.map { field in
+            let source = "rawFields[\"\(escaped(field.wireKey))\"] ?? rawFields[\"\(escaped(field.name))\"]"
+            let optional = field.typeName.hasSuffix("?")
+            let typeName = optional ? String(field.typeName.dropLast()).trimmingCharacters(in: .whitespacesAndNewlines) : field.typeName
+            let value: String
+            if field.stringified {
+                value = "try PTModelFoundationCodec.decodeStringified(\(typeName).self, from: .string(try decoder.decodeRaw(String.self, from: raw)), decoder: decoder)"
+            } else if field.lossy, let collection = lossyRawCollectionExpression(for: typeName) {
+                value = "try \(collection)"
+            } else {
+                value = "try decoder.decodeRaw(\(typeName).self, from: raw)"
+            }
+            if let defaultExpression = field.defaultExpression {
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { \(defaultExpression) }"
+            }
+            if optional {
+                return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { nil }"
+            }
+            return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(value) } else { try decoder.decode(\(typeName).self, from: PTJSONValue.null) }"
+        }.joined(separator: "\n            ")
+        let assignments = fields.map { "model.\($0.name) = \($0.name)" }.joined(separator: "\n            ")
+        let parentApply = superclassName.map { "try _ = \($0).ptClassApplyDirectFields(fields, to: model, using: decoder)" } ?? ""
+        let parentApplySlices = superclassName.map { "try _ = \($0).ptClassApplyDirectFields(rawFields, to: model, using: decoder)" } ?? ""
+        let parentValues = superclassName.map { "((try \($0).ptClassDirectFieldValues(model, using: encoder)) ?? [])" } ?? "[]"
+        let values = fields.enumerated().map { index, field in
+            let value = field.stringified
+                ? "try encoder.optionalJSONValue(PTStringifiedValue(model.\(field.name)))"
+                : "try encoder.optionalJSONValue(model.\(field.name))"
+            return "(ownFields[\(index)], \(value))"
+        }.joined(separator: ", ")
+        let schemaOnlyAnnotations = ["PTTransform", "PTValidate", "PTPolymorphic", "PTExtras"]
+        let hasSchemaOnlyAnnotations = fields.contains { $0.annotations.contains(where: schemaOnlyAnnotations.contains) }
+        let directFlag = supportsDirectConstruction &&
+            !hasSchemaOnlyAnnotations &&
+            fields.allSatisfy { $0.isMutable && $0.path == nil && !$0.flattened }
+        let directPrefix = directFlag ? "true" : "false"
+        let directDecodeMethods: String
+        if directFlag {
+            directDecodeMethods = """
+
+        \(classPrefix) func ptClassDirectDecode(_ fields: [String: PTJSONValue], using decoder: PTModelDecoder) throws -> AnyObject? {
+            let model = \(typeName)()
+            \(parentApply)
+            \(directBody)
+            \(assignments)
+            return model
+        }
+
+        \(classPrefix) func ptClassDirectDecodeSlices(_ rawFields: [String: Data], using decoder: PTModelDecoder) throws -> AnyObject? {
+            let model = \(typeName)()
+            \(parentApplySlices)
+            \(sliceBody)
+            \(assignments)
+            return model
+        }
+
+        \(classPrefix) func ptClassApplyDirectFields(_ fields: [String: PTJSONValue], to rawModel: AnyObject, using decoder: PTModelDecoder) throws -> AnyObject {
+            guard let model = rawModel as? \(typeName) else {
+                throw PTModelError.underlying("Generated class schema received an unexpected model type")
+            }
+            \(parentApply)
+            \(directBody)
+            \(assignments)
+            return model
+        }
+
+        \(classPrefix) func ptClassApplyDirectFields(_ rawFields: [String: Data], to rawModel: AnyObject, using decoder: PTModelDecoder) throws -> AnyObject {
+            guard let model = rawModel as? \(typeName) else {
+                throw PTModelError.underlying("Generated class schema received an unexpected model type")
+            }
+            \(parentApplySlices)
+            \(sliceBody)
+            \(assignments)
+            return model
+        }
+        """
+        } else {
+            directDecodeMethods = """
+
+        \(classPrefix) func ptClassDirectDecode(_ fields: [String: PTJSONValue], using decoder: PTModelDecoder) throws -> AnyObject? {
+            nil
+        }
+
+        \(classPrefix) func ptClassDirectDecodeSlices(_ rawFields: [String: Data], using decoder: PTModelDecoder) throws -> AnyObject? {
+            nil
+        }
+
+        \(classPrefix) func ptClassApplyDirectFields(_ fields: [String: PTJSONValue], to rawModel: AnyObject, using decoder: PTModelDecoder) throws -> AnyObject {
+            rawModel
+        }
+
+        \(classPrefix) func ptClassApplyDirectFields(_ rawFields: [String: Data], to rawModel: AnyObject, using decoder: PTModelDecoder) throws -> AnyObject {
+            rawModel
+        }
+        """
+        }
+        return DeclSyntax(stringLiteral: """
+        \(classPrefix) var ptClassSchemaMetadata: PTModelSchemaMetadata {
+            let ownFields: [PTModelFieldDescriptor] = \(ownFields)
+            let merged = \(mergedFields)
+            return PTModelSchemaMetadata(name: "\(escaped(typeName))", fields: merged.fields, conflicts: merged.conflicts)
+        }
+
+        \(classPrefix) var ptClassSchemaPrecedence: PTStaticSchemaPrecedence { .staticBeforeCodable }
+        \(classPrefix) var ptClassUsesDirectPath: Bool { \(directPrefix) }
+
+        \(classPrefix) func ptClassDecode(_ value: PTJSONValue, using decoder: PTModelDecoder) throws -> AnyObject {
+            let fields = Self.ptClassSchemaMetadata.fields
+            let normalized = PTModelSchemaSupport.normalizedInput(value, fields: fields)
+            let annotated = try PTModelSchemaSupport.applyingAnnotations(to: normalized,
+                                                                           fields: fields,
+                                                                           modelType: \(typeName).self,
+                                                                           phase: .decode)
+            return try decoder.decode(\(typeName).self, from: annotated)
+        }
+
+        \(classPrefix) func ptClassEncode(_ rawModel: AnyObject, using encoder: PTModelEncoder) throws -> PTJSONValue {
+            guard let model = rawModel as? \(typeName) else {
+                throw PTModelError.underlying("Generated class schema received an unexpected model type")
+            }
+            let ownFields: [PTModelFieldDescriptor] = \(ownFields)
+            let encoded = try encoder.object(fields: \(parentValues) + [\(values)])
+            let annotated = try PTModelSchemaSupport.applyingAnnotations(to: encoded,
+                                                                           fields: Self.ptClassSchemaMetadata.fields,
+                                                                           modelType: \(typeName).self,
+                                                                           phase: .encode)
+            return try PTModelSchemaSupport.encodedOutput(annotated, fields: Self.ptClassSchemaMetadata.fields)
+        }
+
+        \(directDecodeMethods)
+
+        \(classPrefix) func ptClassDirectFieldValues(_ rawModel: AnyObject, using encoder: PTModelEncoder) throws -> [(PTModelFieldDescriptor, PTJSONValue?)]? {
+            guard let model = rawModel as? \(typeName) else {
+                throw PTModelError.underlying("Generated class schema received an unexpected model type")
+            }
+            let ownFields: [PTModelFieldDescriptor] = \(ownFields)
+            return \(parentValues) + [\(values)]
+        }
         """)
     }
 
@@ -270,6 +614,20 @@ enum PTMacroSourceBuilder {
         }
         return "decoder.decodeArray(\(inner).self, from: raw, strategy: .skipInvalid)"
     }
+
+    // English: Use Data slices for generated lossy fields so the direct path stays tree-free for valid elements.
+    // Español: Usa slices Data para campos lossless generados y mantiene la ruta directa sin árbol para elementos válidos.
+    // 中文：生成的 Lossy 字段使用 Data 切片，让直接路径对有效元素保持无树解码。
+    private static func lossyRawCollectionExpression(for typeName: String) -> String? {
+        guard typeName.hasPrefix("[") && typeName.hasSuffix("]") else { return nil }
+        let inner = String(typeName.dropFirst().dropLast()).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !inner.isEmpty else { return nil }
+        if inner.hasSuffix("?") {
+            let element = String(inner.dropLast()).trimmingCharacters(in: .whitespacesAndNewlines)
+            return "decoder.decodeRawOptionalArray(\(element).self, from: raw, strategy: .preserveIndexAsNil)"
+        }
+        return "decoder.decodeRawArray(\(inner).self, from: raw, strategy: .skipInvalid)"
+    }
 }
 
 public struct PTModelMacro: MemberMacro, ExtensionMacro {
@@ -282,9 +640,25 @@ public struct PTModelMacro: MemberMacro, ExtensionMacro {
         guard let typeName = PTMacroSourceBuilder.typeName(from: declaration) else {
             throw MacroExpansionErrorMessage("@PTModel can only be attached to a struct or class")
         }
+        let fields = try PTMacroSourceBuilder.fields(from: declaration)
+        let isClass = declaration.as(ClassDeclSyntax.self) != nil
+        let supportsDirectConstruction = isClass
+            ? PTMacroSourceBuilder.hasDirectClassInitializer(declaration, fields: fields)
+            : true
+        if isClass {
+            return [PTMacroSourceBuilder.classSchemaMember(typeName: typeName,
+                                                           fields: fields,
+                                                           superclassName: nil,
+                                                           accessPrefix: PTMacroSourceBuilder.accessPrefix(from: declaration),
+                                                           supportsDirectConstruction: PTMacroSourceBuilder.hasDirectClassInitializer(declaration,
+                                                                                                                                            fields: fields))]
+        }
         return [PTMacroSourceBuilder.schemaMember(typeName: typeName,
-                                                  fields: try PTMacroSourceBuilder.fields(from: declaration),
-                                                  supportsMemberwiseInit: declaration.as(StructDeclSyntax.self) != nil)]
+                                                  fields: fields,
+                                                  supportsDirectConstruction: supportsDirectConstruction,
+                                                  superclassName: nil,
+                                                  isClass: false,
+                                                  accessPrefix: PTMacroSourceBuilder.accessPrefix(from: declaration))]
     }
 
     public static func expansion(
@@ -296,6 +670,9 @@ public struct PTModelMacro: MemberMacro, ExtensionMacro {
     ) throws -> [ExtensionDeclSyntax] {
         guard PTMacroSourceBuilder.typeName(from: declaration) != nil else {
             throw MacroExpansionErrorMessage("@PTModel can only be attached to a struct or class")
+        }
+        if declaration.as(ClassDeclSyntax.self) != nil {
+            throw MacroExpansionErrorMessage("@PTModel is for structs; use @PTSubclass for Codable classes")
         }
         return [try ExtensionDeclSyntax("extension \(type.trimmed): PTStaticModel {}")]
     }
@@ -311,9 +688,14 @@ public struct PTSubclassMacro: MemberMacro, ExtensionMacro {
         guard let typeName = PTMacroSourceBuilder.typeName(from: declaration) else {
             throw MacroExpansionErrorMessage("@PTSubclass can only be attached to a class")
         }
-        return [PTMacroSourceBuilder.schemaMember(typeName: typeName,
-                                                  fields: try PTMacroSourceBuilder.fields(from: declaration),
-                                                  supportsMemberwiseInit: false)]
+        let fields = try PTMacroSourceBuilder.fields(from: declaration)
+        let superclassName = PTMacroSourceBuilder.superclassName(from: declaration)
+        let supportsDirectConstruction = PTMacroSourceBuilder.hasDirectClassInitializer(declaration, fields: fields)
+        return [PTMacroSourceBuilder.classSchemaMember(typeName: typeName,
+                                                       fields: fields,
+                                                       superclassName: superclassName,
+                                                       accessPrefix: PTMacroSourceBuilder.accessPrefix(from: declaration),
+                                                       supportsDirectConstruction: supportsDirectConstruction)]
     }
 
     public static func expansion(
@@ -326,7 +708,7 @@ public struct PTSubclassMacro: MemberMacro, ExtensionMacro {
         guard declaration.is(ClassDeclSyntax.self) else {
             throw MacroExpansionErrorMessage("@PTSubclass can only be attached to a class")
         }
-        return [try ExtensionDeclSyntax("extension \(type.trimmed): PTStaticModel {}")]
+        return []
     }
 }
 

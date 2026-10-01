@@ -190,8 +190,13 @@ private final class PTModelTreeDecoder: Decoder {
 
     private func exactInteger<T: FixedWidthInteger>(_ type: T.Type, raw: String) throws -> T {
         if let value = T(raw) { return value }
+        // English: Non-numeric text is a type mismatch; only a numeric value outside the range is overflow.
+        // Español: El texto no numérico es una incompatibilidad de tipo; solo un número fuera del rango es desbordamiento.
+        // 中文：非数字文本属于类型不匹配，只有超出范围的数字才属于溢出。
+        guard let decimal = Decimal(string: raw, locale: Locale(identifier: "en_US_POSIX")) else {
+            throw PTModelError.typeMismatch(expected: "number", actual: "string")
+        }
         guard options.numericOverflowPolicy == .clamp,
-              let decimal = Decimal(string: raw, locale: Locale(identifier: "en_US_POSIX")),
               let minimum = Decimal(string: String(T.min), locale: Locale(identifier: "en_US_POSIX")),
               let maximum = Decimal(string: String(T.max), locale: Locale(identifier: "en_US_POSIX")) else {
             throw PTModelError.numericOverflow(raw)

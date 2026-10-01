@@ -97,6 +97,12 @@ public struct PTModelDecoder: Sendable {
             try lifecycle?.ptDidDecode(lifecycleValue, using: self)
             return model
         } catch {
+            // English: Numeric overflow is a validation result, not a reason to switch to Foundation's generic decoder.
+            // Español: El desbordamiento numérico es un resultado de validación, no un motivo para cambiar al decoder genérico de Foundation.
+            // 中文：数值溢出属于校验结果，不应因此切换到 Foundation 的普通解码器。
+            if case PTModelError.numericOverflow = error {
+                throw error
+            }
             // English: Keep the established Codable escape hatch for unsupported custom decoding implementations.
             // Español: Conserva la salida Codable existente para implementaciones de decodificación personalizadas no compatibles.
             // 中文：保留既有 Codable 逃生口，兼容暂不支持的自定义解码实现。
@@ -140,15 +146,64 @@ public struct PTModelDecoder: Sendable {
         }
     }
 
+    // English: Decode one already-isolated JSON slice with Foundation first; build PTJSONValue only for compatibility coercion.
+    // Español: Decodifica primero un slice JSON ya aislado con Foundation; solo crea PTJSONValue para la coerción compatible.
+    // 中文：对已经隔离的 JSON 切片优先使用 Foundation 解码，仅在兼容转换时创建 PTJSONValue。
+    public func decodeRaw<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
+        guard data.count <= limits.maxInputBytes else { throw PTModelError.inputTooLarge }
+        if let staticType = T.self as? any PTStaticDecodableType.Type {
+            // English: Nested PTModel values re-enter their static schema instead of falling back to JSONDecoder.
+            // Español: Los valores PTModel anidados vuelven a su esquema estático en lugar de usar JSONDecoder.
+            // 中文：嵌套 PTModel 值重新进入自身静态 Schema，避免回退到 JSONDecoder。
+            let decoded = try staticType.ptDecodeErased(from: data, using: self)
+            guard let typed = decoded as? T else {
+                throw PTModelError.underlying("Static model decoder returned an unexpected value type")
+            }
+            return typed
+        }
+        let jsonDecoder = JSONDecoder()
+        switch dateStrategy {
+        case .deferredToDate: jsonDecoder.dateDecodingStrategy = .deferredToDate
+        case .secondsSince1970: jsonDecoder.dateDecodingStrategy = .secondsSince1970
+        case .millisecondsSince1970: jsonDecoder.dateDecodingStrategy = .millisecondsSince1970
+        case .iso8601: jsonDecoder.dateDecodingStrategy = .iso8601
+        case .custom, .fallback: jsonDecoder.dateDecodingStrategy = .deferredToDate
+        }
+        switch dataStrategy {
+        case .deferredToData: jsonDecoder.dataDecodingStrategy = .deferredToData
+        case .base64, .utf8: jsonDecoder.dataDecodingStrategy = .base64
+        }
+        if floatingPointStrategy == .convertToString {
+            jsonDecoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "inf",
+                                                                                  negativeInfinity: "-inf",
+                                                                                  nan: "nan")
+        }
+        do {
+            return try jsonDecoder.decode(type, from: data)
+        } catch {
+            guard policy != .strict else { throw PTModelError.underlying(error.localizedDescription) }
+            let value = try PTJSONValue(data: data,
+                                        duplicateKeyPolicy: duplicateKeyPolicy,
+                                        limits: limits)
+            return try decodeValue(type, from: value)
+        }
+    }
+
     public func decodeValue<T: Decodable>(_ type: T.Type,
                                           from value: PTJSONValue,
                                           path: PTJSONPath = .root) throws -> T {
         do {
             return try decode(type, from: value)
         } catch {
+            // English: Keep numeric overflow visible to field recovery instead of hiding it as a generic conversion error.
+            // Español: Conserva el desbordamiento numérico visible para la recuperación del campo en lugar de ocultarlo como conversión genérica.
+            // 中文：保留数值溢出信息供字段恢复使用，不把它隐藏成普通转换错误。
+            if case PTModelError.numericOverflow = error {
+                throw error
+            }
             guard policy != .strict,
                   let fallback = try PTPrimitiveFallback.decode(type, value: value, coercion: coercionPolicy) else {
-                throw PTModelError.underlying("\(path.description): \(error.localizedDescription)")
+                throw PTModelError.underlying("\(path.description): \(String(reflecting: error))")
             }
             return fallback
         }
@@ -263,6 +318,68 @@ public struct PTModelDecoder: Sendable {
                     throw error
                 case .replaceWithDefault:
                     throw PTModelError.invalidCollectionElement("[\(index)]")
+                }
+            }
+        }
+        return result
+    }
+
+    // English: Decode lossy arrays from scanner slices so valid elements avoid PTJSONValue allocation.
+    // Español: Decodifica arrays tolerantes desde slices del scanner para evitar asignaciones PTJSONValue en elementos válidos.
+    // 中文：从 Scanner 原始切片解码宽松数组，让有效元素避免创建 PTJSONValue。
+    public func decodeRawArray<Element: Decodable>(_ type: Element.Type,
+                                                   from data: Data,
+                                                   strategy: PTLossyCollectionStrategy = .fail,
+                                                   defaultValue: Element? = nil) throws -> [Element] {
+        var scanner = try PTJSONScanner(data: data, limits: limits)
+        let slices = try scanner.collectArrayElementSlices()
+        var result: [Element] = []
+        result.reserveCapacity(slices.count)
+        for (index, slice) in slices.enumerated() {
+            do {
+                result.append(try decodeRaw(type, from: slice))
+            } catch {
+                switch strategy {
+                case .fail:
+                    throw error
+                case .skipInvalid:
+                    continue
+                case .preserveIndexAsNil:
+                    throw PTModelError.invalidCollectionElement("[\(index)] requires an optional element result")
+                case .replaceWithDefault:
+                    guard let defaultValue else {
+                        throw PTModelError.invalidCollectionElement("[\(index)]")
+                    }
+                    result.append(defaultValue)
+                }
+            }
+        }
+        return result
+    }
+
+    // English: Preserve invalid positions as nil while still decoding each valid array element from its raw slice.
+    // Español: Conserva las posiciones inválidas como nil y decodifica cada elemento válido desde su slice crudo.
+    // 中文：将无效位置保留为 nil，同时继续从原始切片解码有效数组元素。
+    public func decodeRawOptionalArray<Element: Decodable>(_ type: Element.Type,
+                                                           from data: Data,
+                                                           strategy: PTLossyCollectionStrategy = .preserveIndexAsNil) throws -> [Element?] {
+        var scanner = try PTJSONScanner(data: data, limits: limits)
+        let slices = try scanner.collectArrayElementSlices()
+        var result: [Element?] = []
+        result.reserveCapacity(slices.count)
+        for slice in slices {
+            do {
+                result.append(try decodeRaw(type, from: slice))
+            } catch {
+                switch strategy {
+                case .preserveIndexAsNil:
+                    result.append(nil)
+                case .skipInvalid:
+                    continue
+                case .fail:
+                    throw error
+                case .replaceWithDefault:
+                    throw PTModelError.invalidCollectionElement("Optional collection elements cannot use a default replacement")
                 }
             }
         }
@@ -464,17 +581,11 @@ public struct PTModelEncoder: Sendable {
     // 中文：静态 Schema 编码器在把字段写入对象前统一使用这个决策。
     public func encodedField(_ value: PTJSONValue?,
                              for field: PTModelFieldDescriptor) throws -> (String, PTJSONValue)? {
-        guard let value else {
-            let strategy: PTNilEncodingStrategy
-            switch field.encoding {
-            case .omit: strategy = .omit
-            case .null: strategy = .null
-            case .required: throw PTModelError.requiredValue(field.name)
-            case .inherit: strategy = field.nilStrategy ?? nilStrategy
-            }
-            return strategy == .null ? (field.mapping.encodeKey, .null) : nil
-        }
-        return (field.mapping.encodeKey, value)
+        let decision = try PTModelFieldDecision.resolve(value: value,
+                                                        field: field,
+                                                        nilStrategy: nilStrategy)
+        guard !decision.isOmitted, let encoded = decision.value else { return nil }
+        return (field.mapping.encodeKey, encoded)
     }
 
     // English: Nested static schemas inherit the current encoder path instead of starting a shared mutable frame.

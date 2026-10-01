@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SmartCodable
 
 // This mutable DTO is decoded before crossing into the MainActor.
 // Este DTO mutable se decodifica antes de cruzar al MainActor.
@@ -30,8 +29,10 @@ struct PTIPInfoPayload: PTCodableModelProtocol, Sendable {
 
     init() {}
 
-    static func mappingForKey() -> [SmartKeyTransformer]? {
-        [CodingKeys.asBaseic <--- "as"]
+    private enum CodingKeys: String, CodingKey {
+        case lon, zip, query
+        case asBaseic = "as"
+        case isp, countryCode, lat, city, region, timezone, org, country, status, regionName
     }
 }
 

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SmartCodable
 
 @objc public enum PTNetworkSpeedTestStateType:Int {
     case Download
@@ -152,7 +151,12 @@ extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @
                             historyModel.networkType = self.netWorkName
                             historyModel.date = Date().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
                             
-                            let jsonString = historyModel.toJSONString(prettyPrint: true) ?? ""
+                            let jsonString: String
+                            if let data = try? JSONEncoder().encode(historyModel) {
+                                jsonString = String(decoding: data, as: UTF8.self)
+                            } else {
+                                jsonString = ""
+                            }
                             PTNSLogConsole(jsonString,levelType: .notice,loggerType: .network)
                             self.saveHistory(jsonString: jsonString)
                             self.netSpeedStateType = .Free

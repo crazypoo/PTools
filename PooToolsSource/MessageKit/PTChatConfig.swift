@@ -10,7 +10,6 @@ import MapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
 #endif
-import SmartCodable
 
 public extension UIImage {
     @objc func resizeImage() -> UIImage {
@@ -29,12 +28,12 @@ public extension UIImage {
     }
 }
 
-public class PTMessageTextCustomAttTagModel:PTCodableModelProtocol {
+public final class PTMessageTextCustomAttTagModel {
     ///Example: \\xxxxx\\b
     public var tag:String = ""
-    @SmartAny public var tagColor:DynamicColor = .systemGray
-    @SmartAny public var tagSelectedColor:DynamicColor = .systemGray
-    required public init() {}
+    public var tagColor:DynamicColor = .systemGray
+    public var tagSelectedColor:DynamicColor = .systemGray
+    public init() {}
 }
 
 @MainActor

@@ -55,6 +55,15 @@ public enum PTModelExtrasCodec {
         }
         return .object(extras.merged(into: object))
     }
+
+    // English: Attach extras only to models that explicitly opt in; all other models remain unchanged.
+    // Español: Adjunta extras solo a modelos que optan explícitamente; los demás modelos permanecen sin cambios.
+    // 中文：只给显式选择的模型附加 extras，其余模型保持原样。
+    public static func attach<Model: Sendable>(_ extras: PTExtras, to model: Model) -> Model {
+        guard var storing = model as? any PTExtrasStoring else { return model }
+        storing.ptExtras = extras
+        return (storing as? Model) ?? model
+    }
 }
 
 // English: Unknown enum cases are explicit instead of silently inventing invalid values.
@@ -141,6 +150,25 @@ public struct PTPolymorphicRegistry<Base: Sendable>: Sendable {
             throw PTModelError.unsupportedFeature("Unknown polymorphic discriminator")
         }
         return try entry.decode(value, decoder)
+    }
+
+    // English: Resolve a discriminator at an explicit path before using the registry's stable wire key.
+    // Español: Resuelve el discriminator en una ruta explícita antes de usar la clave estable del registro.
+    // 中文：先从显式路径解析 discriminator，再复用注册表稳定的线路 key。
+    public func decode(_ value: PTJSONValue,
+                       descriptor: PTModelPolymorphicDescriptor,
+                       using decoder: PTModelDecoder = .init()) throws -> Base {
+        guard let discriminator = try value.value(at: descriptor.discriminatorPath) else {
+            throw PTModelError.requiredValue(descriptor.discriminatorPath.description)
+        }
+        guard case .string(let type) = discriminator else {
+            throw PTModelError.typeMismatch(expected: "string discriminator", actual: "non-string")
+        }
+        guard case .object(var object) = value else {
+            throw PTModelError.rootIsNotObject
+        }
+        object[discriminatorKey] = .string(type)
+        return try decode(.object(object), using: decoder)
     }
 
     public func encode(_ value: Base,

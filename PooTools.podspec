@@ -83,6 +83,7 @@ Pod::Spec.new do |s|
     end
 
     s.subspec 'ModelLegacyKakaJSON' do |subspec|
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'KakaJSON'
         subspec.source_files = 'PooToolsSource/PToolsModelLegacyKakaJSON/*.{h,m,swift}'
         subspec.frameworks = 'Foundation'
@@ -392,9 +393,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
         subspec.dependency 'Kingfisher'
-        subspec.dependency 'SmartCodable'
-        subspec.dependency 'SmartCodable/Inherit'
-        subspec.dependency 'KakaJSON'
         subspec.dependency 'lottie-ios'
         subspec.resource_bundles = {
             'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy','PooToolsSource/Resources/*.lproj']
@@ -416,6 +414,8 @@ Pod::Spec.new do |s|
     s.subspec 'Network' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/ModelCore'
+        subspec.dependency 'PooTools/ModelLegacySmartCodable'
+        subspec.dependency 'PooTools/ModelLegacyKakaJSON'
         subspec.dependency 'PooTools/Loading'
         subspec.dependency 'Alamofire'
         subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}'

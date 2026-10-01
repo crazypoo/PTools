@@ -9,7 +9,6 @@
 import UIKit
 import SwiftJWT
 import Alamofire
-import SmartCodable
 
 struct IpadScreenshotUrls: PTCodableModelProtocol, Sendable {
     init() {}
@@ -85,52 +84,54 @@ struct PTCheckUpdateModel: PTCodableModelProtocol, Sendable {
  unchecked conformance is an explicit compatibility allowlist until this
  public class-based decoder API can migrate to immutable snapshot structs.
  */
-public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFPaging: Codable, @unchecked Sendable {
     public var total: Int = 0
     public var limit: Int = 0
     required public init() {}
 }
 
-public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {
-    @SmartAny public var paging: PTTFPaging?
+public final class PTTFMeta: Codable, @unchecked Sendable {
+    public var paging: PTTFPaging?
     required public init() {}
 }
 
-public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {
-    @SmartAny public var links: PTTFLinks?
+public final class PTTLinkMainModel: Codable, @unchecked Sendable {
+    public var links: PTTFLinks?
     required public init() {}
 }
 
-public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {
-    @SmartAny public var app: PTTLinkMainModel?
-    @SmartAny public var builds: PTTLinkMainModel?
-    @SmartAny public var betaAppReviewSubmission:PTTLinkMainModel?
-    @SmartAny public var appStoreVersion:PTTLinkMainModel?
-    @SmartAny public var appEncryptionDeclaration:PTTLinkMainModel?
-    @SmartAny public var individualTesters:PTTLinkMainModel?
-    @SmartAny public var perfPowerMetrics:PTTLinkMainModel?
-    @SmartAny public var betaBuildLocalizations:PTTLinkMainModel?
-    @SmartAny public var betaGroups:PTTLinkMainModel?
-    @SmartAny public var diagnosticSignatures:PTTLinkMainModel?
-    @SmartAny public var preReleaseVersion:PTTLinkMainModel?
-    @SmartAny public var buildBetaDetail:PTTLinkMainModel?
-    @SmartAny public var icons:PTTLinkMainModel?
+public final class PTTFRelationships: Codable, @unchecked Sendable {
+    public var app: PTTLinkMainModel?
+    public var builds: PTTLinkMainModel?
+    public var betaAppReviewSubmission:PTTLinkMainModel?
+    public var appStoreVersion:PTTLinkMainModel?
+    public var appEncryptionDeclaration:PTTLinkMainModel?
+    public var individualTesters:PTTLinkMainModel?
+    public var perfPowerMetrics:PTTLinkMainModel?
+    public var betaBuildLocalizations:PTTLinkMainModel?
+    public var betaGroups:PTTLinkMainModel?
+    public var diagnosticSignatures:PTTLinkMainModel?
+    public var preReleaseVersion:PTTLinkMainModel?
+    public var buildBetaDetail:PTTLinkMainModel?
+    public var icons:PTTLinkMainModel?
     required public init() {}
 }
 
-public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFLinks: Codable, @unchecked Sendable {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
     
     required public init() {}
 
-    public class func mappingForKey() -> [SmartKeyTransformer]? {
-        [ CodingKeys.currentLink <--- "self" ]
+    private enum CodingKeys: String, CodingKey {
+        case currentLink = "self"
+        case related
+        case next
     }
 }
 
-public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {
     public var width:CGFloat = 0
     public var templateUrl:String = ""
     public var height:CGFloat = 0
@@ -138,7 +139,7 @@ public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable 
     required public init() {}
 }
 
-public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFAttributes: Codable, @unchecked Sendable {
     public var version: String = ""
     public var platform: String = ""
     public var minOsVersion:String = ""
@@ -151,7 +152,7 @@ public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {
     public var expirationDate:String = ""
     public var usesNonExemptEncryption:Bool = false
     public var computedMinVisionOsVersion:String = ""
-    @SmartAny public var iconAssetToken:PTTFIconAssetTokenModle?
+    public var iconAssetToken:PTTFIconAssetTokenModle?
     public var locale:String = ""
     public var whatsNew:String = ""
     public var publicLink:String = ""
@@ -169,27 +170,27 @@ public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {
     }
 }
 
-public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFVersionData: Codable, @unchecked Sendable {
     public var id: String = ""
-    @SmartAny public var relationships: PTTFRelationships?
-    @SmartAny public var links: PTTFLinks?
+    public var relationships: PTTFRelationships?
+    public var links: PTTFLinks?
     public var type: String = ""
-    @SmartAny public var attributes: PTTFAttributes?
+    public var attributes: PTTFAttributes?
     
     required public init() {}
 }
 
-public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {
-    @SmartAny public var meta: PTTFMeta?
-    @SmartAny public var links: PTTFLinks?
-    @SmartAny public var data: [PTTFVersionData]?
+public final class PTTFModelCollection: Codable, @unchecked Sendable {
+    public var meta: PTTFMeta?
+    public var links: PTTFLinks?
+    public var data: [PTTFVersionData]?
     
     required public init() {}
 }
 
-public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {
-    @SmartAny public var links:PTTFLinks?
-    @SmartAny public var data:PTTFVersionData?
+public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {
+    public var links:PTTFLinks?
+    public var data:PTTFVersionData?
     
     required public init() {}
 }
@@ -201,7 +202,7 @@ public struct PTAppleClaims: Claims, Sendable {
     let aud: String
 }
 
-public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {
+public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {
     var version:String = ""
     var desc:String = ""
     var downloadURL:String = ""
@@ -488,7 +489,7 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         }
     }
     
-    public static func appConnectApiRequest<T:SmartCodableX & Sendable>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping @MainActor @Sendable (Any?,String) -> Void,fail:@escaping @MainActor @Sendable (NSError) -> Void) {
+    public static func appConnectApiRequest<T: Codable & Sendable>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping @MainActor @Sendable (Any?,String) -> Void,fail:@escaping @MainActor @Sendable (NSError) -> Void) {
         if showHud {
             toggleHud(show: true)
         }

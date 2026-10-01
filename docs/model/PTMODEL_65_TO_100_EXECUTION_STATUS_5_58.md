@@ -1,67 +1,77 @@
-# PTModel 5.58.0：65% → 100% 执行状态
+# PTModel 5.58.0：R1–R3 执行状态
 
-> 本文记录 `/Users/jax/Downloads/PTools_5.58.0_PTModel_65_To_100_Final_Completion_Execution_Plan.md` 的实际执行结果。只有源码、构建和回归证据同时成立的条目才标记为已完成；设备、TSan、第三方差异和发布签名不会用静态检查代替。
+> 本文对应 `/Users/jax/Downloads/PTools_5.58.0_PTModel_Remaining_13_Percent_To_100_Plan.md`。
+> 本次只关闭 R1、R2、R3；R4 的真实项目、TSan、真机和多平台验证由业务项目继续执行。
 
-## 已落地的公共契约
+## 结论
 
-- ✅ `PTFieldRecovery` 支持固定默认值、`PTDefaultValueProvider` 闭包默认值、上下文读取、required/invalid/null/missing 决策和 `PTDecodeTrace`。
-- ✅ `PTNumericOverflowPolicy` 已进入基础数值解码；支持错误、默认值和边界夹紧。
-- ✅ `PTJSONPath`、多 key alias、Flat 字段、lossy collection、Stringified JSON、`Any` 到 `PTJSONValue`、Date/Data/URL、非有限浮点、未知枚举、lifecycle、extras、polymorphic registry 和 typed file store 已有 Foundation-only 实现。
-- ✅ 字典 key strategy、Set 确定性排序、重复 key 策略、Patch/Diff/Clone/Converter、Schema migration 和 JSON Schema 元数据保持在 Core。
-- ✅ `PToolsModelUIKit`、`PToolsModelCombine` 已与 Core 分层；Observation 适配器只在可用平台编译。
-- ✅ `PTJSONFieldScanner` 支持未知字段跳过、稳定 hash 二次字符串校验、资源上限和重复 key 策略。
-- ✅ `PTFieldRecovery` 已区分 missing/null/invalid/overflow/value；数值溢出会遵循 recovery policy，并保留独立的 overflow reason。
-- ✅ `PTModelSchema.decode` 与 `PTStaticCodec.decode` 共用字段 alias/path/flat 归一化；直接调用 Schema 不再绕过 canonical input normalization。
-- ✅ `PTModelPatch.fromPresence` 已明确 missing 不产生更新、null 产生显式 null、value 产生 set；补充 migration/defaults/extras 的组合入口。
-- ✅ `PTModelChunkStreamDecoder` 支持任意 `AsyncSequence<Data>` 分块、跨块字符串/嵌套值、取消、错误索引和有界缓冲；`PTStaticJSONWriter` 为生成 Schema 提供直接字段写入入口。
-- ✅ `PTFileDataChunkSequence` 与 `PTURLSessionDataChunkSequence` 提供有界 FileHandle/URLSession bytes source adapter，并传播取消与 HTTP 状态错误。
-- ✅ `@PTModel` 现已生成字段 descriptor、默认值、Lossy、Stringified、推断类型和 struct 直接解码入口；class/`@PTSubclass` 默认关闭直接构造路径，保留 Codable 回退，避免伪造继承安全性。
-- ✅ `PToolsModelUIKit`、`PToolsModelCombine` 和 Observation 适配器已加入 SwiftPM/源码分层；Core 仍不导入 UIKit、Combine 或 Observation。
-- ✅ SmartCodable/KakaJSON 旧入口已提供显式 Legacy adapter 产品和 CocoaPods opt-in subspec；新 `requestPTModel` 使用 `Data` 优先的 `PTModelNetworkResponse<Model>`，旧 `PTNetworkResponse` 保持传输层 API 兼容。
-- ✅ 分段控件保留原始 `public let lineView` 和旧角标 API；旧角标存储不再直接引用已弃用声明，无角标标题入口改走规范重载。
+| 路线 | 状态 | 关闭方式 |
+| --- | --- | --- |
+| R1 Semantics / Feature Parity | ✅ 完成 | 统一字段决策、Presence、默认值、转换/校验、动态解析、Extras、Patch 与回归矩阵 |
+| R2 Macro / Inheritance / Direct Fast Path | ✅ 完成 | `@PTModel`、`@PTSubclass`、N 级父类 Schema 合并、原始 Data slice 和 Foundation 直接 codec |
+| R3 Network / Migration / Dependency Split | ✅ 完成 | Core 依赖审计为 0、旧 API 兼容包装器保留、SwiftPM/CocoaPods Consumer fixture 建立并编译 |
+| R4 Quality / Performance / Release | ⏸ 待真实项目 | 不用静态检查替代 TSan、差分、Fuzz、真机和发布验证 |
 
-## 本轮构建证据
+## R1：语义收口
 
-| 检查 | 结果 |
-| --- | --- |
-| Foundation-only Core Swift 6 strict concurrency module | ✅ `swift build --target PToolsModel` 通过 |
-| PTModel macro expansion probe | ✅ defaults/lossy/stringified/direct path typecheck 通过 |
-| PooTools CocoaPods iOS Simulator Debug | ✅ Xcode workspace 通过 |
-| PooTools CocoaPods iOS Simulator Release | ✅ Xcode workspace 通过 |
-| PooTools-Example CocoaPods iOS Simulator Debug | ✅ Xcode workspace 通过 |
-| PooTools-Example CocoaPods iOS Simulator Release | ✅ Xcode workspace 通过 |
-| `pod install --no-repo-update` | ✅ 通过；仅更新本地 PooTools checksum |
-| `swift package dump-package` | ✅ 通过 |
-| `pod ipc spec PooTools.podspec` | ✅ 通过 |
-| `git diff --check` / PTModel 静态门禁 | ✅ 通过 |
-| PTModel target/benchmark 编译 | ✅ `swift build --target PToolsModelTests`、`swift build --target PTModelBenchmark` 通过 |
-| PTModel 1000-task benchmark | ✅ 5 次迭代完成；P99 encode 3.027792 ms，P99 decode 24.120458 ms；encode/decode 各 1000 次 |
-| PooTools 源码 Xcode 警告门禁（Debug / Release） | ✅ 通过；源码 warning 为 0，Pods 与工程警告单独报告 |
-| Swift 6 严格并发 Xcode 警告门禁 | ⏸ 被外部 Pods 阻断：InAppViewDebugger、Swinject；未修改 Pods |
-| `swift test --filter PTModelCoreTests` | ⏸ SwiftPM 当前把 UIKit targets 当作 macOS target 构建，`PooToolsSource/CheckBox/PTCheckBox.swift` 无法导入 UIKit；不是 iOS workspace 测试通过证明 |
+- ✅ `PTModelFieldDecision.resolve` 同时服务 Presence、missing/null/invalid/overflow、required、default 和 encoder nil 策略；Schema 与 StaticCodec 不再各自维护一套判定。
+- ✅ Optional、non-Optional、`PTPresence`、`PTRequired`、默认值和数值溢出矩阵已纳入 `PTModelCoreTests`。
+- ✅ `PTStaticSchemaPrecedence` 明确为 `.staticBeforeCodable` / `.codableOnly`；自定义 `Codable` 仍是兼容逃生口。
+- ✅ alias、typed path、Flat、前缀相似 key、Stringified、Lossy、数组/字典/Set、Date/Data/URL 和完整转义回归已覆盖。
+- ✅ `PTModelAnnotationProvider` 统一 `PTTransform` / `PTValidate` 的 decode 与 encode 阶段；宏生成的 Schema 会应用注解，Direct Path 对需要注解的模型自动关闭，避免语义绕过。
+- ✅ `PTAssociatedEnumTransformer`、`PTModelTypeResolver`、`PTModelDefaultMerge`、`PTModelUpdater` 和 `PTModelPatch.fromPresence` 提供类型化双向边界。
+- ✅ property observer 仅接受存储属性上的 `willSet` / `didSet`，计算属性和 getter-only 属性在宏展开期明确报错；观察副作用只在正常模型赋值时触发。
 
-## 仍不能诚实标记为 100% 的项
+## R2：宏、继承和 Direct Path
 
-### Macro / inheritance
+- ✅ `@PTModel` 支持稳定字段 descriptor、CodingKeys、Key/Path/Required/Flat/Ignore、Default、Lossy、Stringified、泛型字段和 property-wrapper 的 wrapped value。
+- ✅ `@PTSubclass` 支持父类 Schema 查找、N 级字段合并、继承 mapping/default、重复字段与 encode-key 冲突报告、父类字段应用和父类字段编码。
+- ✅ 根类显式声明 `PTStaticClassModel`，子类通过 `@PTSubclass` 复用继承的类型契约；这是 Swift 6 宏系统避免重复 conformance 的稳定写法，已由三层 class fixture 覆盖。
+- ✅ final class、不可变 `let` 字段和自定义 `Codable` 自动退出类 Direct Construction，使用安全 Codable fallback，不伪造空初始化器。
+- ✅ public/open 访问级别按宿主声明传播；generic type reference 使用参数名而不是重复约束；NSObject/ObjC-compatible stored fields 不进入额外的运行时反射路径。
+- ✅ Direct Path 顺序固定为 `scanner → field slice → Foundation codec → model`；普通 primitive、精确 Int/UInt、Decimal、Date/Data/URL、嵌套 PTModel、数组/字典/Set 和 Lossy array 均可使用原始 Data slice。
+- ✅ `PTJSONScanner.collectArrayElementSlices` 和 `PTModelDecoder.decodeRawArray/decodeRawOptionalArray` 共享资源限制、边界检查和 Lossy 策略，不重新构建完整 PTJSONValue 数组。
+- ✅ Path、Flat、Transform、Validate、Polymorphic、Extras 和 lifecycle 模型按语义自动回到规范 Schema/Codable 路径；这是 intentional fallback，不会为了“Direct”跳过语义。
+- ✅ lifecycle 在直接路径前后保持一致；带 lifecycle 的模型不会提前返回未触发 hook 的对象。
 
-当前宏已生成字段 descriptor、CodingKeys、Key/Path/Required/Flat/Ignore 标记、默认值/Lossy/Stringified 的直接字段路径和字段值入口；以下能力仍需要独立实现与 golden test：transform/validate/polymorphic/extras 注解语义、property-wrapper/Observation/ObjC/generic 字段规则、N-level `@PTSubclass` superclass schema 合并和冲突编译诊断。
+## R3：Network、迁移与依赖切分
 
-### Network / dependency split
+- ✅ `requestPTModel` / `PTNetworkResponseDecoder.ptModel` 是新类型化入口；旧 `requestApi`、`requestBodyAPI`、上传和 KakaJSON/Any decoder 保留在 deprecated 兼容边界。
+- ✅ `Network.swift` 的内部请求执行器不直接导入 SmartCodable/KakaJSON；旧 codec 只由 `PToolsModelLegacySmartCodable`、`PToolsModelLegacyKakaJSON` adapter 提供。
+- ✅ `Scripts/PTModel/audit_model_dependencies.swift` 当前硬门禁：
 
-Legacy adapter 产品已经分层，但 `Network.swift` 和 `PTNetworkModelBridge.swift` 仍保留历史 SmartCodable/KakaJSON 编译入口，内部业务模型尚未全部迁移。因此不能把 `internalSmartCodableImports == 0` 或 `internalKakaJSONImports == 0` 标记为通过。
+```text
+internalSmartCodableImports = 0
+internalKakaJSONImports = 0
+remainingLegacyNetworkCalls = 0
+```
 
-### Correctness / performance proof
+- ✅ Consumer fixture：`SmartCodableLegacyApp`、`KakaJSONLegacyApp`、`MixedLegacyApp`、`PTModelOnlyApp`、SwiftPM wiring、CocoaPods wiring。
+- ✅ SwiftPM 为四类 Consumer 建立独立 executable target；旧适配器不再把 UIKit/full `ptools` 传递给 KakaJSON adapter target。
+- ✅ CocoaPods 的 `ModelCore` / `Model` 不依赖第三方 codec；legacy subspec 继续 opt-in，保持旧项目迁移窗口。
 
-差分矩阵、property-based/fuzz、TSan 1000 并发回归、Release 真机基准、多平台 Archive 和真实 Consumer fixture 尚未在本机完成。Simulator benchmark 已执行 1000-task stress，但不能替代 TSan、真机内存/分配和行为 parity；当前仍只完成静态、宏展开、Core 编译、benchmark 和 iOS Simulator Debug/Release workspace 构建。
+## 已验证证据
 
-### 仍未执行的强制路线
+- ✅ `swift package dump-package`
+- ✅ `swift build --target PToolsModel`
+- ✅ `swift build --target PToolsModelTests`
+- ✅ `PToolsModelTests.xctest`：30 tests，0 failures
+- ✅ `swift build --target PToolsModelLegacySmartCodable`
+- ✅ `swift build --target PToolsModelLegacyKakaJSON`
+- ✅ `swift build --target PTModelLegacySmartCodableFixture`
+- ✅ `swift build --target PTModelLegacyKakaJSONFixture`
+- ✅ `swift build --target PTModelMixedLegacyFixture`
+- ✅ `swift build --target PTModelOnlyFixture`
+- ✅ `bash Scripts/PTModel/validate_65_to_100.sh`
+- ✅ `git diff --check`
+- ✅ iOS workspace `PooTools` Debug Simulator 构建通过。
+- ✅ iOS workspace `PooTools-Example` Debug / Release Simulator 构建通过；构建期间的 Pods 脚本警告未被计入 PTools 源码失败。
 
-- `PTStaticFieldDispatcher` 目前是“顶层字节扫描 + 字段值切片解码”，仍不是所有 primitive/collection/nested model 的最终无树直接解码器。
-- Network 内部仍有 SmartCodable/KakaJSON 兼容入口，`audit_model_dependencies.swift` 当前仍报告 `internalSmartCodableImports=8`、`internalKakaJSONImports=3`、`remainingLegacyNetworkCalls=2`；不能提前移除依赖。
-- Differential/property/fuzz/TSan、真实 Apple 设备 benchmark、macOS/tvOS/watchOS/visionOS Archive、SwiftPM/CocoaPods consumer fixture 和 API baseline 尚未执行。
+## R4 边界
 
-## 版本与发布规则
+R4 不在本次自动关闭范围内：真实项目仍需执行 TSan 1000-task、第三方 differential、property/fuzz、真机 allocation/RSS、Release 真机 benchmark、多平台 Archive 和真实旧项目运行回归。它们不会被本地模型单元测试或 Simulator 构建替代。
 
-- 当前版本继续为 `5.58.0`。
-- 未完成 Stage D/E 的依赖迁移、差分、TSan、真机和发布门禁前，不创建新的 tag。
-- CocoaPods 生成目录只作为构建产物；源码修复必须回到 `PooToolsSource`、`Package.swift` 和 `PooTools.podspec`。
+## 版本与发布
+
+- 当前 `VERSION` 保持 `5.58.0`。
+- 本次不创建 tag；R4 完成后再由发布流程决定 tag 和 release。

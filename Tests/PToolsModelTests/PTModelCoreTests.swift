@@ -40,12 +40,169 @@ public struct PTMacroPolicyFixture: Codable, Sendable, Equatable {
 
 @PTModel
 public struct PTInferredMacroFixture: Codable, Sendable, Equatable {
+    @PTDefault(1)
     public let count: Int
+    @PTDefault(true)
     public let enabled: Bool
 
     public init(count: Int = 1, enabled: Bool = true) {
         self.count = count
         self.enabled = enabled
+    }
+}
+
+@PTModel
+public struct PTGenericMacroFixture<Value: Codable & Sendable>: Codable, Sendable, Equatable where Value: Equatable {
+    public let value: Value
+
+    public init(value: Value) {
+        self.value = value
+    }
+}
+
+@PTModel
+public struct PTWrappedMacroFixture: Codable, Sendable, Equatable {
+    @PTKey("display_name")
+    @PTTestBox
+    public var name: String
+
+    public init(name: String) {
+        self.name = name
+    }
+}
+
+@propertyWrapper
+public struct PTTestBox<Value: Codable & Sendable>: Codable, Sendable, Equatable where Value: Equatable {
+    public var wrappedValue: Value
+
+    public init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+}
+
+@PTModel
+public struct PTAnnotationMacroFixture: Codable, Sendable, Equatable, PTModelAnnotationProvider {
+    @PTTransform
+    public let title: String
+    @PTValidate
+    public let count: Int
+
+    public init(title: String, count: Int) {
+        self.title = title
+        self.count = count
+    }
+
+    public static func ptTransform(value: PTJSONValue,
+                                   field: PTModelFieldDescriptor,
+                                   phase: PTModelAnnotationPhase) throws -> PTJSONValue? {
+        guard field.name == "title", case .string(let title) = value else { return nil }
+        return .string(phase == .decode ? title.uppercased() : title.lowercased())
+    }
+
+    public static func ptValidate(value: PTJSONValue,
+                                  field: PTModelFieldDescriptor,
+                                  phase: PTModelAnnotationPhase) throws {
+        guard field.name == "count" else { return }
+        guard case .number(let number) = value, Int(number.rawRepresentation) ?? -1 >= 0 else {
+            throw PTModelError.validationFailed("count must be non-negative")
+        }
+    }
+}
+
+@PTSubclass
+public class PTMacroBaseFixture: Codable, PTStaticClassModel {
+    @PTKey("base_id")
+    public var baseID: Int = 0
+
+    public required init() {}
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        baseID = try container.decodeIfPresent(Int.self, forKey: .baseID) ?? 0
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(baseID, forKey: .baseID)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case baseID = "base_id"
+    }
+}
+
+@PTSubclass
+public class PTMacroChildFixture: PTMacroBaseFixture {
+    @PTDefault("child")
+    public var label: String = "child"
+
+    public required init() {
+        super.init()
+    }
+
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        label = try container.decodeIfPresent(String.self, forKey: .label) ?? "child"
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(baseID, forKey: .baseID)
+        try container.encode(label, forKey: .label)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case baseID = "base_id"
+        case label
+    }
+}
+
+@PTSubclass
+public final class PTMacroGrandchildFixture: PTMacroChildFixture {
+    @PTDefault(3)
+    public var rank: Int = 3
+
+    public required init() {
+        super.init()
+    }
+
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        rank = try container.decodeIfPresent(Int.self, forKey: .rank) ?? 3
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(baseID, forKey: .baseID)
+        try container.encode(label, forKey: .label)
+        try container.encode(rank, forKey: .rank)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case baseID = "base_id"
+        case label
+        case rank
+    }
+}
+
+@PTSubclass
+public final class PTMacroImmutableFixture: Codable, PTStaticClassModel {
+    public let id: Int
+
+    public init(id: Int) {
+        self.id = id
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        id = try container.decode(Int.self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(id)
     }
 }
 #endif
@@ -238,6 +395,29 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertEqual(try PTModelEncoder(nilStrategy: .null).jsonString(synthesized), #"{"nested":["kept",null]}"#)
     }
 
+    func testOptionalRootAndPresenceFieldMatrix() throws {
+        struct OptionalRoot: Codable, Sendable, Equatable {
+            let value: String?
+        }
+
+        let decoder = PTModelDecoder(policy: .strict)
+        XCTAssertEqual(try decoder.decode(OptionalRoot.self, from: Data(#"{"value":null}"#.utf8)),
+                       OptionalRoot(value: nil))
+        XCTAssertEqual(try decoder.decode(OptionalRoot.self, from: Data(#"{"other":1}"#.utf8)),
+                       OptionalRoot(value: nil))
+
+        let encoder = PTModelEncoder(nilStrategy: .omit)
+        let value = try encoder.jsonValue(PresenceEnvelope(value: .value("value")))
+        XCTAssertEqual(value, .object(["value": .string("value")]))
+        XCTAssertEqual(try encoder.jsonValue(PresenceEnvelope(value: .missing)), .object([:]))
+        XCTAssertEqual(try encoder.jsonValue(PresenceEnvelope(value: .null)), .object(["value": .null]))
+
+        let required = PTModelFieldDescriptor(name: "required", encoding: .required)
+        XCTAssertThrowsError(try PTModelFieldDecision.resolve(value: nil,
+                                                              field: required,
+                                                              nilStrategy: .omit))
+    }
+
     func testUnicodeSurrogateAndParserLimits() throws {
         let value = try PTJSONValue(jsonString: #"{"emoji":"\uD83D\uDE00"}"#)
         guard case .object(let object) = value, case .string(let emoji) = object["emoji"] else {
@@ -255,6 +435,24 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertThrowsError(try PTJSONValue(jsonString: #""1234""#, limits: limits))
         XCTAssertThrowsError(try PTJSONValue(jsonString: "[1,2,3]", limits: limits))
         XCTAssertThrowsError(try PTJSONValue(jsonString: "1234", limits: limits))
+    }
+
+    func testEscapingAndResourceLimitBoundaries() throws {
+        let escaped = #"{"text":"quote \" slash \\ line\n tab\t emoji 😀"}"#
+        let value = try PTJSONValue(jsonString: escaped)
+        XCTAssertEqual(try value.requiredValue(at: PTJSONPath.parse("$.text")),
+                       .string("quote \" slash \\ line\n tab\t emoji 😀"))
+
+        let exactString = String(repeating: "x", count: 4)
+        let exactJSON = "\"\(exactString)\""
+        let oversizedJSON = "\"\(exactString)x\""
+        XCTAssertNoThrow(try PTJSONValue(jsonString: exactJSON, limits: PTModelLimits(maxStringBytes: 4)))
+        XCTAssertThrowsError(try PTJSONValue(jsonString: oversizedJSON, limits: PTModelLimits(maxStringBytes: 4)))
+
+        XCTAssertNoThrow(try PTJSONValue(jsonString: "[1,2]", limits: PTModelLimits(maxCollectionCount: 2)))
+        XCTAssertThrowsError(try PTJSONValue(jsonString: "[1,2,3]", limits: PTModelLimits(maxCollectionCount: 2)))
+        XCTAssertNoThrow(try PTJSONValue(jsonString: #"{"a":1,"b":2}"#, limits: PTModelLimits(maxObjectKeyCount: 2)))
+        XCTAssertThrowsError(try PTJSONValue(jsonString: #"{"a":1,"b":2,"c":3}"#, limits: PTModelLimits(maxObjectKeyCount: 2)))
     }
 
     func testFoundationBooleanAndSafeCoercion() throws {
@@ -378,6 +576,28 @@ final class PTModelCoreTests: XCTestCase {
         let encoded = try PTStaticCodec.encode(result.model, extras: result.extras)
         let encodedValue = try PTJSONValue(data: encoded)
         XCTAssertEqual(try encodedValue.requiredValue(at: PTJSONPath.parse("$.future")), .string("kept"))
+    }
+
+    func testSchemaConflictAndPrefixCollisionContracts() throws {
+        let parent = PTModelFieldDescriptor(name: "profile",
+                                            mapping: PTModelKeyMapping(decodeKeys: ["profile"], encodeKey: "profile"))
+        let child = PTModelFieldDescriptor(name: "profileName",
+                                           mapping: PTModelKeyMapping(decodeKeys: ["profile.name"], encodeKey: "profile.name"))
+        let merged = PTModelSchemaSupport.mergedFields(parent: [parent], own: [child])
+        XCTAssertTrue(merged.conflicts.isEmpty)
+
+        let duplicate = PTModelSchemaSupport.mergedFields(parent: [parent], own: [
+            PTModelFieldDescriptor(name: "other",
+                                   mapping: PTModelKeyMapping(decodeKeys: ["other"], encodeKey: "profile"))
+        ])
+        XCTAssertEqual(duplicate.conflicts.first?.code, "duplicate-encode-key")
+
+        let object = PTJSONValue.object([
+            "profile": .object(["name": .string("nested")]),
+            "profile.name": .string("literal")
+        ])
+        XCTAssertEqual(try object.requiredValue(at: PTJSONPath.parse("$.profile.name")), .string("nested"))
+        XCTAssertEqual(try object.requiredValue(at: PTJSONPath.parse("$.profile.name")), .string("nested"))
     }
 
     private var decoderForTests: PTModelDecoder {
@@ -610,6 +830,22 @@ final class PTModelCoreTests: XCTestCase {
         try scanner.skipUnknownSubtree()
         XCTAssertTrue(scanner.isAtEnd)
 
+        var arrayScanner = try PTJSONScanner(data: Data("[1,{\"nested\":true},2]".utf8))
+        let slices = try arrayScanner.collectArrayElementSlices()
+        XCTAssertEqual(slices.count, 3)
+
+        let decoder = PTModelDecoder()
+        XCTAssertEqual(try decoder.decodeRawArray(Int.self,
+                                                   from: Data("[1,\"bad\",2]".utf8),
+                                                   strategy: .skipInvalid),
+                       [1, 2])
+        let optionalValues = try decoder.decodeRawOptionalArray(Int.self,
+                                                                from: Data("[1,\"bad\",2]".utf8))
+        XCTAssertEqual(optionalValues.count, 3)
+        XCTAssertEqual(optionalValues[0], 1)
+        XCTAssertNil(optionalValues[1])
+        XCTAssertEqual(optionalValues[2], 2)
+
         let date = Date(timeIntervalSince1970: 1_700_000_000)
         let dateValue = try PTModelFoundationCodec.date(date, strategy: .secondsSince1970)
         XCTAssertEqual(try PTModelFoundationCodec.date(from: dateValue, strategy: .secondsSince1970), date)
@@ -672,7 +908,6 @@ final class PTModelCoreTests: XCTestCase {
         } catch {
             XCTAssertTrue(error.localizedDescription.contains("Trailing comma"))
         }
-
         let unicodeInput = Array(Data("[{\"text\":\"😀\"},{\"text\":\"\\uD83D\\uDE00\"}]".utf8))
         let unicodeSource = AsyncStream<Data> { continuation in
             for byte in unicodeInput { continuation.yield(Data([byte])) }
@@ -754,6 +989,51 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertNil(removed)
     }
 
+    func testDynamicResolverAssociatedEnumAndUpdaterParity() throws {
+        enum Event: Sendable, Equatable {
+            case text(String)
+            case count(Int)
+        }
+
+        let transformer = PTAssociatedEnumTransformer<Event, String>(
+            decode: { value, decoder in
+                guard case .object(let object) = value,
+                      case .string(let kind) = object["kind"] else {
+                    throw PTModelError.typeMismatch(expected: "event", actual: "value")
+                }
+                if kind == "text" {
+                    return .text(try decoder.decode(String.self, from: object["value"] ?? .null))
+                }
+                return .count(try decoder.decode(Int.self, from: object["value"] ?? .null))
+            },
+            encode: { event, encoder in
+                switch event {
+                case .text(let value):
+                    return .object(["kind": .string("text"), "value": try encoder.jsonValue(value)])
+                case .count(let value):
+                    return .object(["kind": .string("count"), "value": try encoder.jsonValue(value)])
+                }
+            })
+        let event = try transformer.decode(.object(["kind": .string("text"), "value": .string("hello")]), PTModelDecoder())
+        XCTAssertEqual(event, .text("hello"))
+        XCTAssertEqual(try transformer.encode(event, PTModelEncoder()),
+                       .object(["kind": .string("text"), "value": .string("hello")]))
+
+        struct Resolver: PTModelTypeResolver {
+            func resolveType(discriminator: PTJSONValue,
+                             context: PTModelContext) throws -> any PTStaticModel.Type {
+                PTMacroFixture.self
+            }
+        }
+        let resolved = try Resolver().resolveType(discriminator: .string("macro"), context: .init())
+        XCTAssertTrue(resolved == PTMacroFixture.self)
+
+        let source = PTMacroFixture(id: 1, name: "old", note: nil)
+        let patch = try PTModelPatch.fromPresence(.value("new"), key: "name")
+        let updated = try PTModelUpdater.update(source, with: patch)
+        XCTAssertEqual(updated.name, "new")
+    }
+
     func testConcurrentSessionsStayIndependent() async throws {
         let decoder = PTModelDecoder(policy: .strict)
         let encoder = PTModelEncoder()
@@ -832,37 +1112,130 @@ final class PTModelCoreTests: XCTestCase {
 #if SWIFT_PACKAGE
     func testMacroGeneratesStaticSchema() throws {
         let value = PTMacroFixture(id: 8, name: "macro", note: nil)
-        let json = try PTStaticCodec.jsonValue(value)
-        XCTAssertEqual(json, .object([
+        let json: PTJSONValue
+        do {
+            json = try PTStaticCodec.jsonValue(value)
+        } catch {
+            XCTFail("macro fixture encode failed: \(error)")
+            return
+        }
+        let expectedJSON = PTJSONValue.object([
             "id": .number(try PTJSONNumber("8")),
             "display_name": .string("macro")
-        ]))
-        XCTAssertEqual(try PTStaticCodec.jsonValue(value, using: PTModelEncoder(nilStrategy: .null)), .object([
-            "id": .number(try PTJSONNumber("8")),
-            "display_name": .string("macro"),
-            "meta": .object(["note": .null])
-        ]))
-        XCTAssertEqual(try PTStaticCodec.decode(PTMacroFixture.self, from: json), value)
-        let nested = try PTStaticCodec.decode(PTMacroFixture.self,
+        ])
+        XCTAssertEqual(json, expectedJSON)
+        do {
+            let encoded = try PTStaticCodec.jsonValue(value, using: PTModelEncoder(nilStrategy: .null))
+            XCTAssertEqual(encoded, .object([
+                "id": .number(try PTJSONNumber("8")),
+                "display_name": .string("macro"),
+                "meta": .object(["note": .null])
+            ]))
+        } catch {
+            XCTFail("macro fixture null encode failed: \(error)")
+            return
+        }
+        let decoded: PTMacroFixture
+        do {
+            decoded = try PTStaticCodec.decode(PTMacroFixture.self, from: json)
+        } catch {
+            XCTFail("macro fixture decode failed: \(error)")
+            return
+        }
+        XCTAssertEqual(decoded, value)
+        let nested: PTMacroFixture
+        do {
+            nested = try PTStaticCodec.decode(PTMacroFixture.self,
                                               from: #"{"id":8,"display_name":"macro","meta":{"note":"nested"}}"#)
+        } catch {
+            XCTFail("nested macro fixture decode failed: \(error)")
+            return
+        }
         XCTAssertEqual(nested.note, "nested")
         XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields.map(\.name), ["id", "name", "note"])
         XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields[1].mapping.encodeKey, "display_name")
         XCTAssertEqual(PTMacroFixture.ptSchema.metadata.fields[2].path?.description, "$.meta.note")
 
-        let direct = try PTStaticCodec.decode(PTDirectMacroFixture.self,
+        let direct: PTDirectMacroFixture
+        do {
+            direct = try PTStaticCodec.decode(PTDirectMacroFixture.self,
                                               from: Data(#"{"id":9,"title":"direct"}"#.utf8))
+        } catch {
+            XCTFail("direct macro fixture decode failed: \(error)")
+            return
+        }
         XCTAssertEqual(direct, PTDirectMacroFixture(id: 9, title: "direct"))
 
-        let policy = try PTStaticCodec.decode(PTMacroPolicyFixture.self,
+        let policy: PTMacroPolicyFixture
+        do {
+            policy = try PTStaticCodec.decode(PTMacroPolicyFixture.self,
                                               from: Data(#"{"values":[1,"bad",2],"nested":"{\"id\":2,\"display_name\":\"nested\"}"}"#.utf8))
+        } catch {
+            XCTFail("policy macro fixture decode failed: \(error)")
+            return
+        }
         XCTAssertEqual(policy.count, 7)
         XCTAssertEqual(policy.values, [1, 2])
         XCTAssertEqual(policy.nested?.name, "nested")
 
-        let inferred = try PTStaticCodec.decode(PTInferredMacroFixture.self,
+        let inferred: PTInferredMacroFixture
+        do {
+            inferred = try PTStaticCodec.decode(PTInferredMacroFixture.self,
                                                 from: Data("{}".utf8))
+        } catch {
+            XCTFail("inferred macro fixture decode failed: \(error)")
+            return
+        }
         XCTAssertEqual(inferred, PTInferredMacroFixture())
+
+        let generic = try PTStaticCodec.decode(PTGenericMacroFixture<Int>.self,
+                                               from: Data(#"{"value":7}"#.utf8))
+        XCTAssertEqual(generic, PTGenericMacroFixture(value: 7))
+
+        let wrapped = try PTStaticCodec.decode(PTWrappedMacroFixture.self,
+                                               from: Data(#"{"display_name":"wrapped"}"#.utf8))
+        XCTAssertEqual(wrapped.name, "wrapped")
+
+        let transformed = try PTStaticCodec.decode(PTAnnotationMacroFixture.self,
+                                                   from: Data(#"{"title":"hello","count":2}"#.utf8))
+        XCTAssertEqual(transformed.title, "HELLO")
+        XCTAssertThrowsError(try PTStaticCodec.decode(PTAnnotationMacroFixture.self,
+                                                      from: Data(#"{"title":"hello","count":-1}"#.utf8)))
+        let transformedData = try PTStaticCodec.encode(transformed)
+        XCTAssertEqual(try PTJSONValue(data: transformedData), .object([
+            "title": .string("hello"),
+            "count": .number(try PTJSONNumber("2"))
+        ]))
+
+        let child: PTMacroGrandchildFixture
+        do {
+            child = try PTStaticCodec.decode(PTMacroGrandchildFixture.self,
+                                             from: Data(#"{"base_id":9,"label":"child","rank":4}"#.utf8))
+        } catch {
+            XCTFail("class decode failed: \(error)")
+            return
+        }
+        XCTAssertEqual(child.baseID, 9)
+        XCTAssertEqual(child.label, "child")
+        XCTAssertEqual(child.rank, 4)
+        let childDefault: PTMacroGrandchildFixture
+        do {
+            childDefault = try PTStaticCodec.decode(PTMacroGrandchildFixture.self,
+                                                    from: Data(#"{"base_id":9}"#.utf8))
+        } catch {
+            XCTFail("class default decode failed: \(error)")
+            return
+        }
+        XCTAssertEqual(childDefault.label, "child")
+        XCTAssertEqual(childDefault.rank, 3)
+        XCTAssertEqual(try PTStaticCodec.encode(childDefault),
+                       Data(#"{"base_id":9,"label":"child","rank":3}"#.utf8))
+
+        XCTAssertFalse(PTMacroImmutableFixture.ptClassUsesDirectPath)
+        let immutable = try PTStaticCodec.decode(PTMacroImmutableFixture.self,
+                                                 from: Data("7".utf8))
+        XCTAssertEqual(immutable.id, 7)
+        XCTAssertEqual(try PTStaticCodec.encode(immutable), Data(#"{"id":7}"#.utf8))
     }
 #endif
 

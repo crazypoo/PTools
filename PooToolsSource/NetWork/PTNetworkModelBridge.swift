@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import SmartCodable
-import KakaJSON
 #if SWIFT_PACKAGE
 import PToolsModelCore
+import PToolsModelLegacySmartCodable
+import PToolsModelLegacyKakaJSON
 #endif
 
 public struct PTNetworkResponsePayload: Sendable {
@@ -112,36 +112,34 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
         }
     }
 
-#if SWIFT_PACKAGE
-    public static func smartCodable<T: SmartCodable & Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
-        PTNetworkResponseDecoder<T>(kind: .smartCodable) { payload in
-            guard let string = payload.string else { throw PTNetworkDecodeError.invalidUTF8 }
-            guard let model = T.deserialize(from: string) else {
-                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
+    // English: Legacy decoders stay type-erased and are available only through opt-in adapter products.
+    // Español: Los decodificadores heredados permanecen borrados por tipo y solo están disponibles mediante adaptadores opt-in.
+    // 中文：旧 decoder 使用类型擦除，仅通过显式 opt-in 适配器产品提供。
+    public static func legacy<T: Sendable>(_ type: T.Type,
+                                           kind: PTNetworkDecoderKind) -> PTNetworkResponseDecoder<T> {
+        PTNetworkResponseDecoder<T>(kind: kind) { payload in
+            let decoded: Any
+            switch kind {
+            case .smartCodable:
+                decoded = try PTLegacySmartCodableAdapter.decode(type, data: payload.data)
+            case .kakaJSON:
+                decoded = try PTLegacyKakaJSONAdapter.decode(type, data: payload.data)
+            default:
+                throw PTNetworkDecodeError.unsupportedDecoder(kind)
+            }
+            guard let model = decoded as? T else {
+                throw PTNetworkDecodeError.underlying("Legacy decoder returned an unexpected model type.")
             }
             return model
         }
     }
-#else
-    public static func smartCodable<T: SmartCodableX & Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
-        PTNetworkResponseDecoder<T>(kind: .smartCodable) { payload in
-            guard let string = payload.string else { throw PTNetworkDecodeError.invalidUTF8 }
-            guard let model = T.deserialize(from: string) else {
-                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
-            }
-            return model
-        }
-    }
-#endif
 
-    public static func kakaJSON<T: Convertible & Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
-        PTNetworkResponseDecoder<T>(kind: .kakaJSON) { payload in
-            guard let string = payload.string else { throw PTNetworkDecodeError.invalidUTF8 }
-            guard let model = string.kj.model(type) else {
-                throw PTNetworkDecodeError.underlying("KakaJSON could not decode the response.")
-            }
-            return model
-        }
+    public static func smartCodable<T: Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
+        legacy(type, kind: .smartCodable)
+    }
+
+    public static func kakaJSON<T: Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
+        legacy(type, kind: .kakaJSON)
     }
 }
 
@@ -161,33 +159,33 @@ public struct PTNetworkLegacyResponseDecoder<Output> {
         return try closure(payload)
     }
 
-#if SWIFT_PACKAGE
-    public static func smartCodable<T: SmartCodable>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
-        PTNetworkLegacyResponseDecoder<T> { payload in
-            guard let string = payload.string,
-                  let model = T.deserialize(from: string) else {
-                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
+    public static func legacy(_ type: Any.Type,
+                              kind: PTNetworkDecoderKind) -> PTNetworkLegacyResponseDecoder<Any> {
+        PTNetworkLegacyResponseDecoder<Any> { payload in
+            switch kind {
+            case .smartCodable:
+                return try PTLegacySmartCodableAdapter.decode(type, data: payload.data)
+            case .kakaJSON:
+                return try PTLegacyKakaJSONAdapter.decode(type, data: payload.data)
+            default:
+                throw PTNetworkDecodeError.unsupportedDecoder(kind)
             }
-            return model
         }
     }
-#else
-    public static func smartCodable<T: SmartCodableX>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
-        PTNetworkLegacyResponseDecoder<T> { payload in
-            guard let string = payload.string,
-                  let model = T.deserialize(from: string) else {
-                throw PTNetworkDecodeError.underlying("SmartCodable could not decode the response.")
-            }
-            return model
-        }
-    }
-#endif
 
-    public static func kakaJSON<T: Convertible>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
+    public static func smartCodable<T>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
         PTNetworkLegacyResponseDecoder<T> { payload in
-            guard let string = payload.string,
-                  let model = string.kj.model(type) else {
-                throw PTNetworkDecodeError.underlying("KakaJSON could not decode the response.")
+            guard let model = try legacy(type, kind: .smartCodable).decode(payload) as? T else {
+                throw PTNetworkDecodeError.underlying("SmartCodable returned an unexpected model type.")
+            }
+            return model
+        }
+    }
+
+    public static func kakaJSON<T>(_ type: T.Type) -> PTNetworkLegacyResponseDecoder<T> {
+        PTNetworkLegacyResponseDecoder<T> { payload in
+            guard let model = try legacy(type, kind: .kakaJSON).decode(payload) as? T else {
+                throw PTNetworkDecodeError.underlying("KakaJSON returned an unexpected model type.")
             }
             return model
         }

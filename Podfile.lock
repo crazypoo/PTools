@@ -117,7 +117,6 @@ PODS:
   - PooTools/Core (5.58.0):
     - IQKeyboardManagerSwift
     - IQKeyboardToolbarManager
-    - KakaJSON
     - Kingfisher
     - lottie-ios
     - PooTools/Date
@@ -126,8 +125,6 @@ PODS:
     - PooTools/PToolsCore
     - PooTools/PToolsUIFoundation
     - PooTools/Symbols
-    - SmartCodable
-    - SmartCodable/Inherit
     - SnapKit
   - PooTools/Country (5.58.0):
     - PooTools/Core
@@ -312,6 +309,11 @@ PODS:
   - PooTools/MicPermission (5.58.0):
     - PooTools/PToolsPermissionCore
   - PooTools/ModelCore (5.58.0)
+  - PooTools/ModelLegacyKakaJSON (5.58.0):
+    - KakaJSON
+    - PooTools/Core
+  - PooTools/ModelLegacySmartCodable (5.58.0):
+    - SmartCodable
   - PooTools/Motion (5.58.0):
     - PooTools/Core
     - PooTools/MotionPermission
@@ -324,6 +326,8 @@ PODS:
     - PooTools/Core
     - PooTools/Loading
     - PooTools/ModelCore
+    - PooTools/ModelLegacyKakaJSON
+    - PooTools/ModelLegacySmartCodable
   - PooTools/NotificationPermission (5.58.0):
     - PooTools/PToolsPermissionCore
   - PooTools/Notifications (5.58.0):
@@ -442,8 +446,6 @@ PODS:
   - SmartCodable (6.0.8):
     - SmartCodable/Core (= 6.0.8)
   - SmartCodable/Core (6.0.8)
-  - SmartCodable/Inherit (6.0.8):
-    - SmartCodable/Core
   - SnapKit (5.7.1)
   - SSZipArchive (2.6.0)
   - SVGAPlayer (2.5.7):
@@ -560,7 +562,7 @@ SPEC CHECKSUMS:
   lottie-ios: 6467ca7035120c5b0e0acee58bb679cf15875686
   PhoneNumberKit: d8a400a22cea696c20028ebfdf75560dc31144e1
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: e61281d8af8896efdc504f99da5580567e9855dc
+  PooTools: f2f2c7a9948b71b3bc64ddcd85b05be6365c9011
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
   SmartCodable: db7f9dc94eb9022ede18adf5052772432c5286c7
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a

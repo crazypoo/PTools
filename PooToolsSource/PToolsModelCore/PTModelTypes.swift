@@ -188,6 +188,51 @@ public struct PTModelLimits: Sendable, Codable, Equatable {
     }
 }
 
+// English: Schema conflicts are reported as data so callers can fail at the codec boundary instead of crashing during static initialization.
+// Español: Los conflictos del esquema se exponen como datos para que el codec falle en su límite y no durante la inicialización estática.
+// 中文：Schema 冲突以数据形式暴露，让 codec 在边界返回错误，而不是在静态初始化时崩溃。
+public struct PTModelSchemaConflict: Sendable, Codable, Hashable, Equatable {
+    public let code: String
+    public let key: String
+    public let fields: [String]
+
+    public init(code: String, key: String, fields: [String]) {
+        self.code = code
+        self.key = key
+        self.fields = fields
+    }
+}
+
+// English: One decision object keeps missing, null, required, and value emission consistent across static and Codable paths.
+// Español: Un único objeto de decisión mantiene coherentes missing, null, required y la emisión de valores entre las rutas estática y Codable.
+// 中文：统一决策对象，让静态路径和 Codable 路径对 missing、null、required 与值输出保持一致。
+public struct PTModelFieldDecision: Sendable, Equatable {
+    public let value: PTJSONValue?
+    public let isOmitted: Bool
+
+    public init(value: PTJSONValue?, isOmitted: Bool) {
+        self.value = value
+        self.isOmitted = isOmitted
+    }
+
+    public static func resolve(value: PTJSONValue?,
+                               field: PTModelFieldDescriptor,
+                               nilStrategy: PTNilEncodingStrategy) throws -> Self {
+        guard let value else {
+            let strategy: PTNilEncodingStrategy
+            switch field.encoding {
+            case .omit: strategy = .omit
+            case .null: strategy = .null
+            case .required: throw PTModelError.requiredValue(field.name)
+            case .inherit: strategy = field.nilStrategy ?? nilStrategy
+            }
+            return Self(value: strategy == .null ? .null : nil,
+                        isOmitted: strategy == .omit)
+        }
+        return Self(value: value, isOmitted: false)
+    }
+}
+
 public enum PTCodableInteropPolicy: String, Sendable, Codable {
     case preferPTModel
     case preferCustomCodable
@@ -415,6 +460,14 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
         self.path = path
         self.annotations = annotations
     }
+}
+
+// English: Static schema precedence is explicit: generated/manual PTModel schemas are authoritative, and Codable remains the escape hatch.
+// Español: La precedencia del esquema estático es explícita: PTModel generado/manual manda y Codable queda como salida de compatibilidad.
+// 中文：静态 Schema 优先级明确：生成或手写 PTModel Schema 为主，Codable 仅作为兼容回退。
+public enum PTStaticSchemaPrecedence: String, Sendable, Codable {
+    case staticBeforeCodable
+    case codableOnly
 }
 
 public typealias PTDecodingContext = PTModelContext

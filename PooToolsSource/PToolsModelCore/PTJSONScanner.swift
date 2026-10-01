@@ -34,6 +34,47 @@ public struct PTJSONScanner: Sendable {
         try skipValue()
     }
 
+    // English: Return bounded raw slices for one JSON array without building an intermediate PTJSONValue tree.
+    // Español: Devuelve slices JSON acotados para un array sin construir un árbol PTJSONValue intermedio.
+    // 中文：在不构建中间 PTJSONValue 树的情况下，返回 JSON 数组中每个元素的有界原始切片。
+    public mutating func collectArrayElementSlices() throws -> [Data] {
+        skipWhitespace()
+        try consume(0x5B)
+        skipWhitespace()
+        if currentByte == 0x5D {
+            index += 1
+            skipWhitespace()
+            guard index == data.count else {
+                throw PTModelError.invalidJSON("Trailing bytes after array")
+            }
+            return []
+        }
+
+        var slices: [Data] = []
+        slices.reserveCapacity(min(limits.maxCollectionCount, 16))
+        while true {
+            guard slices.count < limits.maxCollectionCount else {
+                throw PTModelError.collectionLimitExceeded
+            }
+            skipWhitespace()
+            let start = index
+            try skipValue(depth: 1)
+            let end = index
+            slices.append(data.subdata(in: start..<end))
+
+            skipWhitespace()
+            if currentByte == 0x5D {
+                index += 1
+                skipWhitespace()
+                guard index == data.count else {
+                    throw PTModelError.invalidJSON("Trailing bytes after array")
+                }
+                return slices
+            }
+            try consume(0x2C)
+        }
+    }
+
     public mutating func skipWhitespace() {
         while let byte = currentByte,
               byte == 0x20 || byte == 0x09 || byte == 0x0A || byte == 0x0D {
@@ -187,4 +228,3 @@ public struct PTJSONScanner: Sendable {
         return data[index]
     }
 }
-

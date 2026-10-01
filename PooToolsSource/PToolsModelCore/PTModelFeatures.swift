@@ -100,6 +100,47 @@ public struct PTModelValueTransformer<Value: Sendable>: Sendable {
     }
 }
 
+// English: Associated-value enums use the same typed, bidirectional boundary as ordinary custom values.
+// Español: Los enums con valores asociados usan el mismo límite tipado y bidireccional que los valores personalizados.
+// 中文：带关联值的枚举与普通自定义值共用同一个类型安全的双向转换边界。
+public struct PTAssociatedEnumTransformer<Enum: Sendable, Associated: Sendable>: Sendable {
+    public let decode: @Sendable (PTJSONValue, PTModelDecoder) throws -> Enum
+    public let encode: @Sendable (Enum, PTModelEncoder) throws -> PTJSONValue
+
+    public init(decode: @escaping @Sendable (PTJSONValue, PTModelDecoder) throws -> Enum,
+                encode: @escaping @Sendable (Enum, PTModelEncoder) throws -> PTJSONValue) {
+        self.decode = decode
+        self.encode = encode
+    }
+}
+
+// English: Annotation hooks keep transform and validation semantics in the generated Schema path instead of the direct fast path.
+// Español: Los hooks de anotaciones mantienen transform y validation en la ruta Schema generada, no en el fast path directo.
+// 中文：注解钩子统一在生成的 Schema 路径执行，避免直接 Fast Path 遗漏转换和校验语义。
+public enum PTModelAnnotationPhase: String, Sendable, Codable {
+    case decode
+    case encode
+}
+
+public protocol PTModelAnnotationProvider: Sendable {
+    static func ptTransform(value: PTJSONValue,
+                            field: PTModelFieldDescriptor,
+                            phase: PTModelAnnotationPhase) throws -> PTJSONValue?
+    static func ptValidate(value: PTJSONValue,
+                           field: PTModelFieldDescriptor,
+                           phase: PTModelAnnotationPhase) throws
+}
+
+public extension PTModelAnnotationProvider {
+    static func ptTransform(value: PTJSONValue,
+                            field: PTModelFieldDescriptor,
+                            phase: PTModelAnnotationPhase) throws -> PTJSONValue? { nil }
+
+    static func ptValidate(value: PTJSONValue,
+                           field: PTModelFieldDescriptor,
+                           phase: PTModelAnnotationPhase) throws {}
+}
+
 // English: Recursive default merge fills absent nested members while incoming payload values always win.
 // Español: La fusión recursiva completa miembros anidados ausentes y siempre prioriza el payload entrante.
 // 中文：递归默认合并补齐缺少的嵌套字段，并始终让输入 payload 覆盖默认值。

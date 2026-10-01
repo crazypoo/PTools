@@ -14,15 +14,15 @@
 // English: Generate a manual-schema-compatible PTStaticModel entry point for SwiftPM clients.
 // Español: Genera un punto de entrada PTStaticModel compatible con esquemas manuales para clientes SwiftPM.
 // 中文：为 SwiftPM 客户端生成兼容手写 Schema 的 PTStaticModel 入口。
-@attached(member, names: named(ptSchema), named(ptDirectFieldValues), named(ptDirectDecode), named(ptUsesDirectPath))
-@attached(extension, conformances: PTStaticModel)
+@attached(member, names: arbitrary)
+@attached(extension, conformances: PTStaticModel, names: arbitrary)
 public macro PTModel() = #externalMacro(module: "PToolsModelMacroPlugin", type: "PTModelMacro")
 
 // English: Generate the same static schema contract for a Codable subclass hierarchy.
 // Español: Genera el mismo contrato de esquema estático para una jerarquía de subclases Codable.
 // 中文：为 Codable 子类继承层级生成相同的静态 Schema 契约。
-@attached(member, names: named(ptSchema), named(ptDirectFieldValues), named(ptDirectDecode), named(ptUsesDirectPath))
-@attached(extension, conformances: PTStaticModel)
+@attached(member, names: arbitrary)
+@attached(extension, names: arbitrary)
 public macro PTSubclass() = #externalMacro(module: "PToolsModelMacroPlugin", type: "PTSubclassMacro")
 
 // English: Field annotations are intentionally marker macros; PTModel consumes their syntax into static descriptors.

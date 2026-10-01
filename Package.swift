@@ -47,6 +47,13 @@ let package = Package(
         // Español: Publica un runner reproducible de benchmarks PTModel sin dependencias de UIKit.
         // 中文：公开一个不依赖 UIKit 的可复现 PTModel 基准测试入口。
         .executable(name: "PTModelBenchmark", targets: ["PTModelBenchmark"]),
+        // English: Publish small opt-in consumer executables to compile the legacy boundary in isolation.
+        // Español: Publica ejecutables pequeños y opt-in para compilar el límite heredado de forma aislada.
+        // 中文：公开小型可选 Consumer 可执行目标，单独验证旧版兼容边界。
+        .executable(name: "PTModelLegacySmartCodableFixture", targets: ["PTModelLegacySmartCodableFixture"]),
+        .executable(name: "PTModelLegacyKakaJSONFixture", targets: ["PTModelLegacyKakaJSONFixture"]),
+        .executable(name: "PTModelMixedLegacyFixture", targets: ["PTModelMixedLegacyFixture"]),
+        .executable(name: "PTModelOnlyFixture", targets: ["PTModelOnlyFixture"]),
         // English: Publish the Foundation-only device identity and capability layer independently.
         // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
@@ -359,6 +366,7 @@ let package = Package(
             name: "PToolsModelLegacyKakaJSON",
             dependencies: ["KakaJSON"],
             path: "PooToolsSource/PToolsModelLegacyKakaJSON",
+            sources: ["PTLegacyKakaJSONAdapter.swift"],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
@@ -379,6 +387,32 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .executableTarget(
+            name: "PTModelLegacySmartCodableFixture",
+            dependencies: [
+                "PToolsModelLegacySmartCodable",
+                .product(name: "SmartCodable", package: "SmartCodable")
+            ],
+            path: "Fixtures/PTModelConsumers/SmartCodableLegacyApp"
+        ),
+        .executableTarget(
+            name: "PTModelLegacyKakaJSONFixture",
+            dependencies: [
+                "PToolsModelLegacyKakaJSON",
+                .product(name: "KakaJSON", package: "KakaJSON")
+            ],
+            path: "Fixtures/PTModelConsumers/KakaJSONLegacyApp"
+        ),
+        .executableTarget(
+            name: "PTModelMixedLegacyFixture",
+            dependencies: ["PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON"],
+            path: "Fixtures/PTModelConsumers/MixedLegacyApp"
+        ),
+        .executableTarget(
+            name: "PTModelOnlyFixture",
+            dependencies: ["PToolsModel"],
+            path: "Fixtures/PTModelConsumers/PTModelOnlyApp"
         ),
         // English: PToolsDevice has no PTools or third-party dependency and is safe to reuse across Apple platforms.
         // Español: PToolsDevice no depende de PTools ni de terceros y puede reutilizarse en plataformas Apple.
@@ -692,8 +726,6 @@ let package = Package(
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 "Kingfisher",
                 "PToolsSymbols",
-                "SmartCodable",
-                "KakaJSON",
                 .product(name: "Lottie", package: "lottie-ios"),
                 
             ],
@@ -757,7 +789,7 @@ let package = Package(
         // ==========================================
         // 核心中上层依赖模块
         // ==========================================
-        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),

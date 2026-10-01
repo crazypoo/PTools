@@ -43,8 +43,15 @@ for file in swiftFiles {
     }
     ptModel += contents.components(separatedBy: "PTModel").count - 1
     adapters += contents.components(separatedBy: "PTNetworkLegacyResponseDecoder").count - 1
-    legacyNetworkCalls += contents.components(separatedBy: "requestApi(").count - 1
-    legacyNetworkCalls += contents.components(separatedBy: "requestBodyAPI(").count - 1
+    // English: Count call sites only; declarations in the compatibility wrapper are not migration debt.
+    // Español: Cuenta solo los call sites; las declaraciones del wrapper de compatibilidad no son deuda de migración.
+    // 中文：只统计调用点；兼容包装器自身的方法声明不算迁移债务。
+    let callLines = contents.split(whereSeparator: \.isNewline).filter { line in
+        let text = line.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !text.contains("func requestApi") && !text.contains("func requestBodyAPI")
+    }.joined(separator: "\n")
+    legacyNetworkCalls += callLines.components(separatedBy: "requestApi(").count - 1
+    legacyNetworkCalls += callLines.components(separatedBy: "requestBodyAPI(").count - 1
 }
 
 let report: [String: Int] = [
@@ -61,3 +68,6 @@ let data = try JSONSerialization.data(withJSONObject: report, options: [.sortedK
 if let output = String(data: data, encoding: .utf8) {
     print(output)
 }
+print("internalSmartCodableImports = \(internalSmartCodable)")
+print("internalKakaJSONImports = \(internalKakaJSON)")
+print("remainingLegacyNetworkCalls = \(legacyNetworkCalls)")

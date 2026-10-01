@@ -8,12 +8,12 @@
 
 import UIKit
 
-public class PTNetworkSpeedHistoriaModel: PTCodableModelProtocol {
+public final class PTNetworkSpeedHistoriaModel: Codable {
     public var date:String = ""
     public var networkType:String = ""
     public var download:String = ""
     public var upload:String = ""
     public var latency:String = ""
     
-    public required init() {}
+    public init() {}
 }

@@ -34,7 +34,7 @@ class LXHomePopoverMainModel:LXSiwftBaseModel {
 }
 
 //MARK: 首頁Banner
-class YDSBaseModelEX: PTCodableModelProtocol {
+class YDSBaseModelEX: PTCodableModelProtocol, @unchecked Sendable {
     var code:String = ""
     var tips:String = ""
     var error:String = ""
@@ -44,7 +44,7 @@ class YDSBaseModelEX: PTCodableModelProtocol {
     required init() {}
 }
 
-class YDSBaseResultModel: PTCodableModelProtocol {
+class YDSBaseResultModel: PTCodableModelProtocol, @unchecked Sendable {
     var pages: Int = 0
     var startRow: String = ""
     var endRow: String = ""
@@ -68,7 +68,7 @@ class YDSHomeBannerMainModel:YDSBaseModel, @unchecked Sendable {
 }
 
 //@SmartSubclass
-class YDSHomeBannerResultModel:YDSBaseResultModel {
+class YDSHomeBannerResultModel:YDSBaseResultModel, @unchecked Sendable {
     @SmartAny var data:[YDSHomeBannerModel] = []
 }
 
