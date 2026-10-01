@@ -15,6 +15,23 @@
 - Streaming 解码需要顶层数组，且输入 `Data` 由调用方持有；这不是自动的 URLSession
   网络分块代理。
 
+## G1–G3 5.58.0 最终边界冻结
+
+本轮只冻结本仓库可验证的 G1、G2、G3。以下差异是有意保留的 Schema boundary，
+不是未发现的隐式回退：
+
+| 场景 | 冻结决策 | 原因 |
+| --- | --- | --- |
+| `@PTTransform` / `@PTValidate` | `INTENTIONAL_DIFFERENCE / SCHEMA_BOUNDARY` | 注解需要明确的 decode/encode phase；统一走 Schema 可保证钩子只执行一次。 |
+| `@PTPolymorphic` | `INTENTIONAL_DIFFERENCE / SCHEMA_BOUNDARY` | discriminator、registry 和 typed resolver 需要运行时上下文，不下沉为裸 Direct scanner。 |
+| `@PTExtras` | `INTENTIONAL_DIFFERENCE / EXPLICIT_OPT_IN` | 普通 decode 不隐式改变模型状态；`decodeWithExtras` 才捕获并 attach 未知字段。 |
+| `@objc dynamic` / Observation | `INTENTIONAL_DIFFERENCE / CODABLE_FALLBACK` | 不使用不安全反射猜测存储布局；宏诊断和手写 Schema 是显式边界。 |
+| 普通不可变 Codable 字段 | Direct | 使用稳定字段和静态 Schema，保持无第三方依赖的快速路径。 |
+
+`PTModelCoreTests` 的 Direct/Schema golden、Extras opt-in、Dynamic/Polymorphic/Patch
+组合回归、三层生命周期顺序以及 actor Sink contention benchmark 对上述边界提供本地
+证据。这里不宣称与 SmartCodable、KakaJSON 的全量 differential parity；该项属于 G4。
+
 ## 回滚方式
 
 业务模型迁移前继续使用 `PooTools/Core` 中的 `PTBaseModel`、SmartCodable 和 KakaJSON 入口。

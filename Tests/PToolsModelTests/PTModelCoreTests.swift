@@ -327,6 +327,86 @@ public final class PTMacroImmutableFixture: Codable, PTStaticClassModel {
 }
 #endif
 
+// English: Freeze explicit parent-to-child lifecycle order without shared mutable state.
+// Español: Congela el orden explícito de ciclo de vida padre-hijo sin estado mutable compartido.
+// 中文：在不使用共享可变状态的前提下冻结父子生命周期的显式顺序。
+private struct PTLifecycleOrderGolden: Codable, Sendable, Equatable, PTModelLifecycle {
+    let trace: [String]
+
+    private static func append(_ value: PTJSONValue,
+                               marker: String) -> PTJSONValue {
+        guard case .object(var object) = value else { return value }
+        let current: [PTJSONValue]
+        if case .array(let values) = object["trace"] {
+            current = values
+        } else {
+            current = []
+        }
+        object["trace"] = .array(current + [.string(marker)])
+        return .object(object)
+    }
+
+    private static func parent(_ value: PTJSONValue) -> PTJSONValue {
+        append(value, marker: "parent")
+    }
+
+    private static func child(_ value: PTJSONValue) -> PTJSONValue {
+        append(parent(value), marker: "child")
+    }
+
+    static func ptWillDecode(_ value: PTJSONValue,
+                             using decoder: PTModelDecoder) throws -> PTJSONValue {
+        append(child(value), marker: "grandchild")
+    }
+
+    static func ptWillEncode(_ value: PTJSONValue,
+                             using encoder: PTModelEncoder) throws -> PTJSONValue {
+        append(child(value), marker: "grandchild")
+    }
+}
+
+// English: Keep extras capture opt-in so ordinary decoding cannot create hidden state.
+// Español: Mantiene la captura de extras como opt-in para que el decode normal no cree estado oculto.
+// 中文：保持 extras 捕获为显式 opt-in，普通解码不会悄悄创建隐藏状态。
+private struct PTExtrasOptInGolden: Codable, Sendable, Equatable, PTStaticModel, PTExtrasStoring {
+    let id: Int
+    var ptExtras: PTExtras
+
+    init(id: Int, ptExtras: PTExtras = .init()) {
+        self.id = id
+        self.ptExtras = ptExtras
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        ptExtras = .init()
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+    }
+
+    static var ptSchema: PTModelSchema<Self> {
+        let idField = PTModelFieldDescriptor(name: "id", required: true)
+        return PTModelSchema(name: "PTExtrasOptInGolden",
+                             fields: [idField],
+                             decode: { value, decoder in
+                                 try decoder.decode(Self.self, from: value)
+                             },
+                             encode: { model, encoder in
+                                 try encoder.object(fields: [
+                                     (idField, encoder.jsonValue(model.id))
+                                 ])
+                             })
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+    }
+}
+
 final class PTModelCoreTests: XCTestCase {
     private struct User: Codable, Equatable, Sendable {
         let id: Int
@@ -1181,6 +1261,42 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertGreaterThan(snapshot.bytes, 500_000)
     }
 
+    // English: Measure serialized actor Sink access without sharing mutable state outside the actor.
+    // Español: Mide el acceso serializado al Sink actor sin compartir estado mutable fuera del actor.
+    // 中文：在不把可变状态带出 actor 的前提下测量 Sink 串行访问。
+    func testStreamingSinkActorContentionBenchmark() async throws {
+        let sink = PTModelCountingJSONSink()
+        let start = DispatchTime.now().uptimeNanoseconds
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for _ in 0..<1_000 {
+                group.addTask {
+                    try await sink.write(Data([0x31]))
+                }
+            }
+            try await group.waitForAll()
+        }
+        try await sink.finish()
+        let elapsedMilliseconds = Double(DispatchTime.now().uptimeNanoseconds - start) / 1_000_000
+        let snapshot = await sink.snapshot()
+        XCTAssertEqual(snapshot.writes, 1_000)
+        XCTAssertEqual(snapshot.bytes, 1_000)
+        print("PTModel actor sink contention: \(elapsedMilliseconds) ms / 1000 writes")
+    }
+
+    // English: Freeze the three-level lifecycle order as a small deterministic golden.
+    // Español: Congela el orden de ciclo de vida de tres niveles como un golden determinista pequeño.
+    // 中文：用小型确定性 golden 固化三层生命周期顺序。
+    func testNLevelLifecycleOrderGolden() throws {
+        let decoded = try PTModelDecoder().decode(PTLifecycleOrderGolden.self,
+                                                   from: #"{"trace":[]}"#)
+        XCTAssertEqual(decoded.trace, ["parent", "child", "grandchild"])
+
+        let encoded = try PTModelEncoder().encode(PTLifecycleOrderGolden(trace: ["seed"]))
+        let value = try PTJSONValue(data: encoded)
+        XCTAssertEqual(try value.requiredValue(at: PTJSONPath.parse("$.trace")),
+                       .array([.string("seed"), .string("parent"), .string("child"), .string("grandchild")]))
+    }
+
     func testAdvancedContracts() async throws {
         let decodedStatus = try PTEnumCodec.decode(TestStatus.self,
                                                    from: "future",
@@ -1262,6 +1378,60 @@ final class PTModelCoreTests: XCTestCase {
         let patch = try PTModelPatch.fromPresence(.value("new"), key: "name")
         let updated = try PTModelUpdater.update(source, with: patch)
         XCTAssertEqual(updated.name, "new")
+
+        let dynamicJSON = try PTStaticCodec.jsonValue(dynamic)
+        let displayNamePatch = try PTModelPatch.fromPresence(.value("new"), key: "display_name")
+        let patchedDynamicJSON = try displayNamePatch.applying(to: dynamicJSON)
+        let patchedDynamic = try PTStaticCodec.decode(PTMacroFixture.self,
+                                                      from: patchedDynamicJSON.jsonData())
+        XCTAssertEqual(patchedDynamic.name, "new")
+    }
+
+    // English: Freeze the intentional direct-versus-schema boundary while asserting equivalent model behavior.
+    // Español: Congela el límite intencional entre direct y Schema y verifica un comportamiento equivalente del modelo.
+    // 中文：冻结 Direct 与 Schema 的有意边界，同时验证模型行为保持一致。
+    func testDirectAndSchemaFallbackBoundariesGolden() throws {
+        XCTAssertTrue(PTDirectMacroFixture.ptUsesDirectPath)
+        XCTAssertFalse(PTAnnotationMacroFixture.ptUsesDirectPath)
+
+        let direct = try PTStaticCodec.decode(PTDirectMacroFixture.self,
+                                              from: Data(#"{"id":9,"title":"direct"}"#.utf8))
+        let annotated = try PTStaticCodec.decode(PTAnnotationMacroFixture.self,
+                                                 from: Data(#"{"title":"hello","count":2}"#.utf8))
+
+        XCTAssertEqual(direct, PTDirectMacroFixture(id: 9, title: "direct"))
+        XCTAssertEqual(annotated.title, "HELLO")
+        XCTAssertEqual(try PTJSONValue(data: PTStaticCodec.encode(direct)),
+                       .object(["id": .number(try PTJSONNumber("9")),
+                                "title": .string("direct")]))
+        XCTAssertEqual(try PTJSONValue(data: PTStaticCodec.encode(annotated)),
+                       .object(["title": .string("hello"),
+                                "count": .number(try PTJSONNumber("2"))]))
+    }
+
+    // English: Verify ordinary decode stays side-effect free while opt-in extras round-trip.
+    // Español: Verifica que el decode normal no tenga efectos secundarios y que extras opt-in hagan round-trip.
+    // 中文：验证普通解码无副作用，显式 extras 可以往返。
+    func testExtrasRemainExplicitAndRoundTrip() throws {
+        let source = Data(#"{"id":7,"future":"kept"}"#.utf8)
+        let ordinary = try PTStaticCodec.decode(PTExtrasOptInGolden.self, from: source)
+        XCTAssertTrue(ordinary.ptExtras.isEmpty)
+        let ordinaryJSON = try PTJSONValue(data: PTStaticCodec.encode(ordinary))
+        guard case .object(let ordinaryObject) = ordinaryJSON else {
+            return XCTFail("Expected ordinary model JSON object")
+        }
+        XCTAssertNil(ordinaryObject["future"])
+
+        let result = try PTStaticCodec.decodeWithExtras(PTExtrasOptInGolden.self,
+                                                        from: source)
+        XCTAssertEqual(result.extras["future"], .string("kept"))
+        XCTAssertEqual(result.model.ptExtras["future"], .string("kept"))
+        let roundTrip = try PTJSONValue(data: PTStaticCodec.encode(result.model,
+                                                                    extras: result.extras))
+        guard case .object(let roundTripObject) = roundTrip else {
+            return XCTFail("Expected extras round-trip JSON object")
+        }
+        XCTAssertEqual(roundTripObject["future"], .string("kept"))
     }
 
     func testConcurrentSessionsStayIndependent() async throws {

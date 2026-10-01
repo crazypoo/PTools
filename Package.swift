@@ -901,7 +901,12 @@ let package = Package(
         // 中文：模型转换测试独立于 UIKit 和旧版模型框架。
         .testTarget(
             name: "PToolsModelTests",
-            dependencies: ["PToolsModelCore", "PToolsModel"],
+            dependencies: [
+                "PToolsModelCore",
+                "PToolsModel",
+                "PToolsModelMacroPlugin",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+            ],
             path: "Tests/PToolsModelTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")

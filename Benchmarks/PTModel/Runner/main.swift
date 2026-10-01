@@ -22,6 +22,39 @@ public struct BenchmarkModel: Codable, Sendable {
     }
 }
 
+// English: Keep annotation hooks in a measured Schema-fallback fixture instead of pretending they are raw direct fields.
+// Español: Mantiene los hooks de anotación en un fixture medido de fallback Schema sin fingir que son campos directos.
+// 中文：使用可测量的 Schema 回退夹具承载注解钩子，不把它伪装成原始 Direct 字段。
+@PTModel
+public struct BenchmarkSchemaFallbackModel: Codable, Sendable, PTModelAnnotationProvider {
+    @PTTransform
+    public let title: String
+    @PTValidate
+    public let count: Int
+
+    public init(title: String, count: Int) {
+        self.title = title
+        self.count = count
+    }
+
+    public static func ptTransform(value: PTJSONValue,
+                                   field: PTModelFieldDescriptor,
+                                   phase: PTModelAnnotationPhase) throws -> PTJSONValue? {
+        guard field.name == "title", case .string(let title) = value else { return nil }
+        return .string(phase == .decode ? title.uppercased() : title.lowercased())
+    }
+
+    public static func ptValidate(value: PTJSONValue,
+                                  field: PTModelFieldDescriptor,
+                                  phase: PTModelAnnotationPhase) throws {
+        guard field.name == "count",
+              case .number(let number) = value,
+              Int(number.rawRepresentation) ?? -1 >= 0 else {
+            throw PTModelError.validationFailed("count must be non-negative")
+        }
+    }
+}
+
 private struct BenchmarkResult: Codable, Sendable {
     let count: Int
     let iterations: Int
@@ -32,6 +65,10 @@ private struct BenchmarkResult: Codable, Sendable {
     let decodeP50Milliseconds: Double
     let decodeP95Milliseconds: Double
     let decodeP99Milliseconds: Double
+    let directDecodeP50Milliseconds: Double
+    let schemaFallbackDecodeP50Milliseconds: Double
+    let directEncodeP50Milliseconds: Double
+    let schemaFallbackEncodeP50Milliseconds: Double
     let concurrentEncodeCount: Int
     let concurrentDecodeCount: Int
     let modelsPerSecond: Double
@@ -113,8 +150,20 @@ struct PTModelBenchmarkMain {
             // 中文：基准测试默认兼容路径；canonical 模式是单独的显式选择契约。
             let encoder = PTModelEncoder(sortedKeys: true)
             let decoder = PTModelDecoder(policy: .strict)
+            let directSample = BenchmarkModel(id: 1,
+                                              name: "direct",
+                                              tags: ["ptmodel"],
+                                              nested: .init(active: true, score: 1))
+            let directSampleData = try PTStaticCodec.encode(directSample)
+            let fallbackSampleData = Data(#"{"title":"fallback","count":2}"#.utf8)
+            let fallbackSample = try PTStaticCodec.decode(BenchmarkSchemaFallbackModel.self,
+                                                           from: fallbackSampleData)
             var encodeMeasurements: [Double] = []
             var decodeMeasurements: [Double] = []
+            var directDecodeMeasurements: [Double] = []
+            var schemaFallbackDecodeMeasurements: [Double] = []
+            var directEncodeMeasurements: [Double] = []
+            var schemaFallbackEncodeMeasurements: [Double] = []
             var encodedData = Data()
 
             for _ in 0..<iterations {
@@ -123,6 +172,28 @@ struct PTModelBenchmarkMain {
                 })
                 decodeMeasurements.append(try elapsedMilliseconds {
                     _ = try decoder.decode([BenchmarkModel].self, from: encodedData)
+                })
+                directDecodeMeasurements.append(try elapsedMilliseconds {
+                    for _ in models {
+                        _ = try PTStaticCodec.decode(BenchmarkModel.self,
+                                                      from: directSampleData)
+                    }
+                })
+                schemaFallbackDecodeMeasurements.append(try elapsedMilliseconds {
+                    for _ in models {
+                        _ = try PTStaticCodec.decode(BenchmarkSchemaFallbackModel.self,
+                                                      from: fallbackSampleData)
+                    }
+                })
+                directEncodeMeasurements.append(try elapsedMilliseconds {
+                    for _ in models {
+                        _ = try PTStaticCodec.encode(directSample)
+                    }
+                })
+                schemaFallbackEncodeMeasurements.append(try elapsedMilliseconds {
+                    for _ in models {
+                        _ = try PTStaticCodec.encode(fallbackSample)
+                    }
                 })
             }
 
@@ -139,6 +210,10 @@ struct PTModelBenchmarkMain {
                                          decodeP50Milliseconds: percentile(decodeMeasurements, fraction: 0.50),
                                          decodeP95Milliseconds: percentile(decodeMeasurements, fraction: 0.95),
                                          decodeP99Milliseconds: percentile(decodeMeasurements, fraction: 0.99),
+                                         directDecodeP50Milliseconds: percentile(directDecodeMeasurements, fraction: 0.50),
+                                         schemaFallbackDecodeP50Milliseconds: percentile(schemaFallbackDecodeMeasurements, fraction: 0.50),
+                                         directEncodeP50Milliseconds: percentile(directEncodeMeasurements, fraction: 0.50),
+                                         schemaFallbackEncodeP50Milliseconds: percentile(schemaFallbackEncodeMeasurements, fraction: 0.50),
                                          concurrentEncodeCount: stress.encode,
                                          concurrentDecodeCount: stress.decode,
                                          modelsPerSecond: totalSeconds > 0 ? Double(count * iterations * 2) / totalSeconds : 0,

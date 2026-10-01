@@ -197,6 +197,37 @@ final class PTNetworkQualityTests: XCTestCase {
         XCTAssertEqual(transport.data, payload)
     }
 
+    // English: Exercise the typed executor and legacy transport against the same host fixture.
+    // Español: Ejecuta el executor tipado y el transporte heredado contra el mismo fixture de host.
+    // 中文：让类型化执行器和旧版传输同时经过同一个宿主夹具，冻结两条入口的响应契约。
+    func testTypedAndLegacyHostEndpointsShareTransportContract() async throws {
+        let network = Network(configuration: PTNetworkConfig(),
+                              plugins: [],
+                              protocolClasses: [PTNetworkFixtureURLProtocol.self])
+        let request = PTNetworkRequest(url: URL(string: "ptfixture://typed")!,
+                                       method: "POST",
+                                       body: Data("body".utf8),
+                                       cachePolicy: .none,
+                                       deduplication: .none)
+        let executor = PTNetworkExecutor(network: network)
+        let (typedResponse, typedModel) = try await executor.execute(
+            request,
+            decoder: .ptModel(PTNetworkFixtureModel.self))
+
+        var legacyRequest = URLRequest(url: request.url)
+        legacyRequest.httpMethod = request.method
+        legacyRequest.httpBody = request.body
+        legacyRequest.cachePolicyType = .none
+        legacyRequest.dedupPolicy = .none
+        let legacyResponse = try await network.executeLegacyRequest(
+            url: request.url.absoluteString,
+            request: legacyRequest)
+
+        XCTAssertEqual(typedModel.value, 7)
+        XCTAssertEqual(typedResponse.statusCode, 200)
+        XCTAssertEqual(typedResponse.data, legacyResponse.data)
+    }
+
     func testLegacyTransportCancellationPropagatesToTheUnderlyingRequest() async throws {
         let network = Network(configuration: PTNetworkConfig(),
                               plugins: [],

@@ -87,6 +87,10 @@ enum PTMacroSourceBuilder {
 
     static func fields(from declaration: some DeclGroupSyntax) throws -> [FieldInfo] {
         var result: [FieldInfo] = []
+        // English: Reject duplicate wire keys before generating an ambiguous Schema.
+        // Español: Rechaza claves wire duplicadas antes de generar un Schema ambiguo.
+        // 中文：在生成有歧义的 Schema 前拒绝重复的 wire key。
+        var encodedKeys = Set<String>()
         let codingKeys = codingKeyMap(from: declaration)
         for member in declaration.memberBlock.members {
             guard let variable = member.decl.as(VariableDeclSyntax.self) else { continue }
@@ -123,6 +127,10 @@ enum PTMacroSourceBuilder {
                 return attribute
             }
             let names = attributes.map { $0.attributeName.trimmedDescription }
+            let ptNames = names.filter { $0.hasPrefix("PT") }
+            guard Set(ptNames).count == ptNames.count else {
+                throw MacroExpansionErrorMessage("PTModel annotations cannot be repeated on the same property")
+            }
             let isObjCCompatible = modifiers.contains("dynamic") || names.contains("objc")
             if names.contains("PTIgnored") {
                 if names.contains(where: { $0.hasPrefix("PT") && $0 != "PTIgnored" }) {
@@ -148,6 +156,9 @@ enum PTMacroSourceBuilder {
             if defaultAttribute != nil && defaultExpression == nil && !typeName.hasSuffix("?") {
                 throw MacroExpansionErrorMessage("@PTDefault requires an argument or a property initializer for non-optional fields")
             }
+            guard encodedKeys.insert(wireKey).inserted else {
+                throw MacroExpansionErrorMessage("@PTModel has duplicate encoded key '\(wireKey)'")
+            }
             result.append(FieldInfo(name: name,
                                     typeName: typeName,
                                     wireKey: wireKey,
@@ -166,6 +177,20 @@ enum PTMacroSourceBuilder {
                                     isObjCCompatible: isObjCCompatible))
         }
         return result
+    }
+
+    // English: Freeze subclass boundaries where inherited flattened keys cannot be resolved safely by a local macro expansion.
+    // Español: Congela los límites de subclase donde las claves aplanadas heredadas no pueden resolverse de forma segura en una expansión local.
+    // 中文：冻结本地宏展开无法安全解析继承扁平字段键的子类边界。
+    static func validateSubclassBoundary(_ declaration: some DeclGroupSyntax,
+                                         fields: [FieldInfo]) throws {
+        guard let classDeclaration = declaration.as(ClassDeclSyntax.self) else { return }
+        if classDeclaration.genericParameterClause != nil {
+            throw MacroExpansionErrorMessage("@PTSubclass does not support generic subclasses; use a concrete subclass or a manual PTStaticClassModel schema")
+        }
+        if fields.contains(where: \.flattened) {
+            throw MacroExpansionErrorMessage("@PTFlat is not supported on @PTSubclass fields because inherited flattened keys are ambiguous")
+        }
     }
 
     private static func inferredTypeName(from expression: ExprSyntax?) -> String? {
@@ -378,7 +403,10 @@ enum PTMacroSourceBuilder {
         } else {
             directSliceDecode = ""
         }
-        let schemaOnlyAnnotations = ["PTPolymorphic", "PTExtras"]
+        // English: Annotation hooks stay on the Schema path so decode/encode phases run exactly once.
+        // Español: Los hooks de anotación permanecen en la ruta Schema para ejecutar cada fase una sola vez.
+        // 中文：注解钩子统一保留在 Schema 路径，确保解码和编码阶段只执行一次。
+        let schemaOnlyAnnotations = ["PTTransform", "PTValidate", "PTPolymorphic", "PTExtras"]
         let hasSchemaOnlyAnnotations = fields.contains {
             $0.isObjCCompatible || $0.annotations.contains(where: schemaOnlyAnnotations.contains)
         }
@@ -739,6 +767,7 @@ public struct PTSubclassMacro: MemberMacro, ExtensionMacro {
         }
         try PTMacroSourceBuilder.validateTypeBoundary(declaration)
         let fields = try PTMacroSourceBuilder.fields(from: declaration)
+        try PTMacroSourceBuilder.validateSubclassBoundary(declaration, fields: fields)
         let superclassName = PTMacroSourceBuilder.superclassName(from: declaration)
         let supportsDirectConstruction = PTMacroSourceBuilder.hasDirectClassInitializer(declaration, fields: fields)
         return [PTMacroSourceBuilder.classSchemaMember(typeName: typeName,

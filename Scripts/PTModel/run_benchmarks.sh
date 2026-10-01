@@ -9,6 +9,7 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 repo_root="$(cd "$script_dir/../.." && pwd)"
 count="${PTMODEL_BENCHMARK_COUNT:-1000}"
 iterations="${PTMODEL_BENCHMARK_ITERATIONS:-5}"
+configuration="${PTMODEL_BENCHMARK_CONFIGURATION:-debug}"
 
 cd "$repo_root"
-exec swift run PTModelBenchmark --count "$count" --iterations "$iterations"
+exec swift run -c "$configuration" PTModelBenchmark --count "$count" --iterations "$iterations"
