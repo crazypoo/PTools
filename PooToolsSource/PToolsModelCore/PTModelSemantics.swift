@@ -134,6 +134,102 @@ public struct PTModelKeyMapping: Sendable, Codable, Hashable {
     }
 }
 
+// English: Key naming policy adds generated transport names after explicit aliases, so model declarations always win.
+// Español: La política de nombres añade nombres de transporte después de los alias explícitos, por lo que el modelo siempre tiene prioridad.
+// 中文：Key 命名策略只在显式别名之后追加传输名称，始终保证模型声明优先。
+public enum PTModelKeyNamingStrategy: String, Sendable, Codable, Equatable {
+    case exact
+    case snakeCase
+    case camelCase
+}
+
+// English: Global, model, and superclass naming policies are immutable and deterministic across decoding sessions.
+// Español: Las políticas global, de modelo y de superclase son inmutables y deterministas entre sesiones de decodificación.
+// 中文：全局、模型和父类命名策略都是不可变值，在不同解码会话中保持确定性。
+public struct PTModelKeyPolicy: Sendable, Codable, Equatable {
+    public let global: PTModelKeyNamingStrategy
+    public let model: PTModelKeyNamingStrategy?
+    public let superclass: PTModelKeyNamingStrategy?
+
+    public init(global: PTModelKeyNamingStrategy = .exact,
+                model: PTModelKeyNamingStrategy? = nil,
+                superclass: PTModelKeyNamingStrategy? = nil) {
+        self.global = global
+        self.model = model
+        self.superclass = superclass
+    }
+
+    public static let exact = Self()
+
+    public var isExact: Bool {
+        global == .exact && model == nil && superclass == nil
+    }
+
+    public func candidates(for field: PTModelFieldDescriptor,
+                           inherited: Bool = false) -> [String] {
+        let strategy = inherited || field.isInherited
+            ? (superclass ?? model ?? global)
+            : (model ?? global)
+        var result = field.mapping.decodeKeys
+        let names = [field.name, field.mapping.encodeKey]
+        for name in names {
+            let transformed = Self.transform(name, strategy: strategy)
+            if !result.contains(transformed) { result.append(transformed) }
+        }
+        return result
+    }
+
+    // English: Explicit wire aliases always win; naming policies only fill the default property name.
+    // Español: Los alias explícitos de transporte siempre ganan; las políticas solo completan el nombre predeterminado.
+    // 中文：显式传输别名始终优先，命名策略只转换默认属性名。
+    public func encodedKey(for field: PTModelFieldDescriptor,
+                           inherited: Bool = false) -> String {
+        guard field.mapping.encodeKey == field.name else { return field.mapping.encodeKey }
+        let strategy = inherited || field.isInherited
+            ? (superclass ?? model ?? global)
+            : (model ?? global)
+        return Self.transform(field.name, strategy: strategy)
+    }
+
+    private static func transform(_ name: String,
+                                  strategy: PTModelKeyNamingStrategy) -> String {
+        switch strategy {
+        case .exact:
+            return name
+        case .snakeCase:
+            let characters = Array(name)
+            var result = ""
+            for (index, character) in characters.enumerated() {
+                if character.isUppercase {
+                    let previous = index > 0 ? characters[index - 1] : nil
+                    let next = index + 1 < characters.count ? characters[index + 1] : nil
+                    let startsNewWord = index > 0 &&
+                        (previous?.isLowercase == true || previous?.isNumber == true || next?.isLowercase == true)
+                    if startsNewWord { result.append("_") }
+                    result.append(contentsOf: character.lowercased())
+                } else {
+                    result.append(character)
+                }
+            }
+            return result
+        case .camelCase:
+            var result = ""
+            var uppercaseNext = false
+            for character in name {
+                if character == "_" || character == "-" {
+                    uppercaseNext = true
+                } else if uppercaseNext {
+                    result.append(contentsOf: character.uppercased())
+                    uppercaseNext = false
+                } else {
+                    result.append(character)
+                }
+            }
+            return result
+        }
+    }
+}
+
 public enum PTLossyCollectionStrategy: String, Sendable, Codable {
     case fail
     case skipInvalid

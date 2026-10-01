@@ -17,6 +17,9 @@
 import UIKit
 import Foundation
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 let maxLength: CGFloat = 200
 let minLength: CGFloat = 2

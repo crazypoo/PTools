@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @objcMembers
 public class PTCycleLoadingView: UIView {

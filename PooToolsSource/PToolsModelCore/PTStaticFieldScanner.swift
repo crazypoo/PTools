@@ -253,6 +253,9 @@ public enum PTStaticFieldDispatcher {
     public static func decodeSlices(from data: Data,
                                     fields: [PTModelFieldDescriptor],
                                     decoder: PTModelDecoder = .init()) throws -> [String: Data] {
+        if fields.contains(where: { $0.path != nil || $0.flattened }) {
+            return try decodeStructuredSlices(from: data, fields: fields, decoder: decoder)
+        }
         var dispatch: [UInt64: [(String, String)]] = [:]
         for field in fields {
             for key in field.mapping.decodeKeys {
@@ -274,6 +277,115 @@ public enum PTStaticFieldDispatcher {
             }
         }
         return result
+    }
+
+    // English: Resolve nested paths and flattened fields from bounded slices without constructing the complete JSON tree.
+    // Español: Resuelve rutas anidadas y campos flat usando slices acotados sin construir el árbol JSON completo.
+    // 中文：仅通过有界切片解析嵌套 Path 和 Flat 字段，不创建完整 JSON 树。
+    private static func decodeStructuredSlices(from data: Data,
+                                               fields: [PTModelFieldDescriptor],
+                                               decoder: PTModelDecoder) throws -> [String: Data] {
+        let topLevel = try collectObjectSlices(from: data, decoder: decoder)
+        let ordinaryKeys = Set(fields.filter { $0.path == nil && !$0.flattened }
+            .flatMap { $0.mapping.decodeKeys })
+        let pathRootKeys = Set(fields.compactMap { field -> String? in
+            guard let first = field.path?.components.first,
+                  case .key(let key) = first else { return nil }
+            return key
+        })
+        let flatFields = fields.filter(\.flattened)
+        if flatFields.count > 1 {
+            throw PTModelError.duplicateKey("multiple-flattened-fields")
+        }
+
+        var result: [String: Data] = [:]
+        for field in fields {
+            if let path = field.path {
+                let candidates = pathCandidates(for: path, keys: field.mapping.decodeKeys)
+                for candidate in candidates {
+                    if let value = try rawSlice(at: candidate, in: data, decoder: decoder) {
+                        result[field.name] = value
+                        break
+                    }
+                }
+                continue
+            }
+            if field.flattened {
+                let nested = topLevel.filter { key, _ in
+                    !ordinaryKeys.contains(key) && !pathRootKeys.contains(key)
+                }
+                if !nested.isEmpty {
+                    result[field.name] = try objectData(nested)
+                }
+                continue
+            }
+            for key in field.mapping.decodeKeys {
+                if let value = topLevel[key] {
+                    result[field.name] = value
+                    break
+                }
+            }
+        }
+        return result
+    }
+
+    private static func collectObjectSlices(from data: Data,
+                                            decoder: PTModelDecoder) throws -> [String: Data] {
+        var scanner = try PTJSONFieldScanner(data: data, limits: decoder.limits)
+        var result: [String: Data] = [:]
+        while let field = try scanner.next() {
+            if result[field.key] != nil {
+                switch decoder.duplicateKeyPolicy {
+                case .keepFirst: continue
+                case .keepLast: result[field.key] = field.data
+                case .reject: throw PTModelError.duplicateKey(field.key)
+                }
+            } else {
+                result[field.key] = field.data
+            }
+        }
+        return result
+    }
+
+    private static func rawSlice(at path: PTJSONPath,
+                                 in data: Data,
+                                 decoder: PTModelDecoder) throws -> Data? {
+        var current = data
+        for component in path.components {
+            switch component {
+            case .key(let key):
+                let values = try collectObjectSlices(from: current, decoder: decoder)
+                guard let next = values[key] else { return nil }
+                current = next
+            case .index(let index):
+                var scanner = try PTJSONScanner(data: current, limits: decoder.limits)
+                let values = try scanner.collectArrayElementSlices()
+                guard values.indices.contains(index) else { return nil }
+                current = values[index]
+            }
+        }
+        return current
+    }
+
+    private static func pathCandidates(for path: PTJSONPath,
+                                       keys: [String]) -> [PTJSONPath] {
+        guard let last = path.components.last,
+              case .key = last else { return [path] }
+        let prefix = Array(path.components.dropLast())
+        return keys.map { PTJSONPath(prefix + [.key($0)]) }
+    }
+
+    private static func objectData(_ fields: [String: Data]) throws -> Data {
+        var bytes = Data("{".utf8)
+        for (index, key) in fields.keys.sorted().enumerated() {
+            if index > 0 { bytes.append(Data(",".utf8)) }
+            let keyData = try PTJSONValue.string(key).jsonData()
+            bytes.append(keyData)
+            bytes.append(Data(":".utf8))
+            if let value = fields[key] { bytes.append(value) }
+        }
+        bytes.append(Data("}".utf8))
+        return bytes
     }
 
     public static func decodeValues(from data: Data,

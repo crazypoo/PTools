@@ -13,6 +13,10 @@ import UIKit
 import Network
 import CoreTelephony
 import Photos
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsLoading
+#endif
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
@@ -408,8 +412,11 @@ public final class Network: @unchecked Sendable {
         Network.share.session.cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
+    // English: Keep response normalization internal so legacy and typed fixtures can verify the same boundary.
+    // Español: Mantiene la normalización de respuestas interna para que los fixtures heredados y tipados verifiquen el mismo límite.
+    // 中文：将响应归一化保持为 internal，让旧版和类型化夹具验证同一个边界。
     /// 🌟 内部通用预处理：脱离外壳保护、Pretty 输出与截断盾
-    private static func validateAndPreprocessResponse<T>(_ snapshot: PTNetworkResponseSnapshot) throws -> (PTBaseStructModel<T>, String) {
+    internal static func validateAndPreprocessResponse<T>(_ snapshot: PTNetworkResponseSnapshot) throws -> (PTBaseStructModel<T>, String) {
         var result = PTBaseStructModel<T>()
         result.resultData = snapshot.data
         
@@ -552,10 +559,13 @@ public final class Network: @unchecked Sendable {
     }
 
     /// 统一编码 Parameters，避免请求头声明为 JSON 时仍使用默认表单编码。
-    private class func encodeParameters(_ parameters: Parameters?,
-                                        into request: URLRequest,
-                                        encoder: ParameterEncoding,
-                                        jsonRequest: Bool) throws -> URLRequest {
+    // English: Keep one internal parameter encoder so legacy request fixtures can inspect the actual wire request.
+    // Español: Mantiene un único codificador interno para que los fixtures heredados inspeccionen la solicitud real.
+    // 中文：保留唯一的 internal 参数编码器，让旧请求夹具可以检查真实线路请求。
+    internal class func encodeParameters(_ parameters: Parameters?,
+                                         into request: URLRequest,
+                                         encoder: ParameterEncoding,
+                                         jsonRequest: Bool) throws -> URLRequest {
         guard let parameters, !parameters.isEmpty else { return request }
 
         // 显式 JSON 标记或 JSON Content-Type 都表示参数必须进入 JSON body。
@@ -713,9 +723,12 @@ public final class Network: @unchecked Sendable {
         try await Network.share.executeLegacyRequest(url: url, request: request, uploadBody: uploadBody)
     }
 
-    private func executeLegacyRequest(url: String,
-                                      request: URLRequest,
-                                      uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
+    // English: Keep the legacy transport seam internal so iOS compatibility fixtures can verify the real URLSession path.
+    // Español: Mantiene interna la costura de transporte heredada para que los fixtures iOS verifiquen la ruta real de URLSession.
+    // 中文：保留旧传输边界为 internal，让 iOS 兼容夹具可以验证真实 URLSession 路径。
+    internal func executeLegacyRequest(url: String,
+                                       request: URLRequest,
+                                       uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         var request = request
         let pluginSnapshot = plugins
         let configurationSnapshot = config
@@ -883,8 +896,8 @@ public final class Network: @unchecked Sendable {
     
     // MARK: - ================= 6. 🌟 强类型解析层：Codable/PTModel 统一接口 =================
     
-    private static func parseCodableResponse<T: Codable & Sendable>(_ snapshot: PTNetworkResponseSnapshot,
-                                                                     modelType: T.Type?) throws -> PTBaseStructModel<T> {
+    internal static func parseCodableResponse<T: Codable & Sendable>(_ snapshot: PTNetworkResponseSnapshot,
+                                                                      modelType: T.Type?) throws -> PTBaseStructModel<T> {
         var (result, jsonString) = try validateAndPreprocessResponse(snapshot) as (PTBaseStructModel<T>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             do {
@@ -1038,8 +1051,8 @@ public final class Network: @unchecked Sendable {
     
     // MARK: - ================= 7. ⚠️ 动态兼容层：KakaJSON 旧版保留接口 =================
     
-    private static func parseResponse(_ snapshot: PTNetworkResponseSnapshot,
-                                      modelType: Any.Type?) throws -> PTBaseStructModel<Any> {
+    internal static func parseResponse(_ snapshot: PTNetworkResponseSnapshot,
+                                       modelType: Any.Type?) throws -> PTBaseStructModel<Any> {
         var (result, jsonString) = try validateAndPreprocessResponse(snapshot) as (PTBaseStructModel<Any>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             do {

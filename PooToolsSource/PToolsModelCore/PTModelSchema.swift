@@ -71,7 +71,9 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
         // English: Keep direct Schema decoding identical to the canonical static codec path.
         // Español: Mantiene el decode directo de Schema idéntico a la ruta estática canónica.
         // 中文：让直接 Schema 解码与规范静态 codec 路径保持一致。
-        let normalized = PTModelSchemaSupport.normalizedInput(merged, fields: metadata.fields)
+        let normalized = PTModelSchemaSupport.normalizedInput(merged,
+                                                              fields: metadata.fields,
+                                                              keyPolicy: decoder.keyPolicy)
         let input = try lifecycle?.ptWillDecode(normalized, using: decoder) ?? normalized
         let model = try decodeClosure(input, decoder.scoped(to: .root))
         try lifecycle?.ptDidDecode(input, using: decoder)
@@ -108,6 +110,12 @@ public struct PTModelSchema<Model: Codable & Sendable>: Sendable {
             }
             if !field.annotations.isEmpty {
                 descriptor["x-pt-annotations"] = .array(field.annotations.sorted().map(PTJSONValue.string))
+            }
+            if field.annotations.contains("PTPolymorphic") {
+                descriptor["x-pt-polymorphic"] = .bool(true)
+            }
+            if let defaultExpression = field.defaultExpression {
+                descriptor["x-pt-default-expression"] = .string(defaultExpression)
             }
             properties[field.mapping.encodeKey] = .object(descriptor)
         }
@@ -258,7 +266,7 @@ public enum PTModelSchemaSupport {
         var seenNames: [String: String] = [:]
         var seenKeys: [String: String] = [:]
 
-        for field in parent + own {
+        for field in parent.map({ $0.withInheritance(true) }) + own {
             if let previous = seenNames[field.name] {
                 conflicts.append(PTModelSchemaConflict(code: "duplicate-field-name",
                                                         key: field.name,
@@ -301,13 +309,23 @@ public enum PTModelSchemaSupport {
 
     public static func normalizedInput(_ value: PTJSONValue,
                                        fields: [PTModelFieldDescriptor]) -> PTJSONValue {
+        normalizedInput(value, fields: fields, keyPolicy: .exact)
+    }
+
+    // English: Apply explicit aliases first, then the requested model naming policy without mutating the input tree.
+    // Español: Aplica primero los alias explícitos y después la política de nombres del modelo sin mutar el árbol de entrada.
+    // 中文：先处理显式别名，再应用模型命名策略，并且不修改输入树。
+    public static func normalizedInput(_ value: PTJSONValue,
+                                       fields: [PTModelFieldDescriptor],
+                                       keyPolicy: PTModelKeyPolicy) -> PTJSONValue {
         guard case .object(var object) = value else { return value }
         var consumedKeys = Set<String>()
         for field in fields {
-            consumedKeys.formUnion(field.mapping.decodeKeys)
+            let candidates = keyPolicy.candidates(for: field)
+            consumedKeys.formUnion(candidates)
             if let path = field.path {
                 var foundAtPath = false
-                for candidate in pathCandidates(for: path, mapping: field.mapping) {
+                for candidate in pathCandidates(for: path, keys: candidates) {
                     if let nested = try? value.value(at: candidate) {
                         object[field.name] = nested
                         foundAtPath = true
@@ -317,7 +335,7 @@ public enum PTModelSchemaSupport {
                 if foundAtPath { continue }
             }
             guard object[field.name] == nil,
-                  let source = field.mapping.decodeKeys.lazy.compactMap({ object[$0] }).first else { continue }
+                  let source = candidates.lazy.compactMap({ object[$0] }).first else { continue }
             object[field.name] = source
         }
 
@@ -338,28 +356,49 @@ public enum PTModelSchemaSupport {
         return .object(object)
     }
 
+    // English: Apply one field annotation without rebuilding the complete object tree on the direct path.
+    // Español: Aplica la anotación de un campo sin reconstruir todo el árbol de objetos en la ruta directa.
+    // 中文：直接路径只处理当前字段注解，不重新构建完整对象树。
+    public static func applyingAnnotation(to value: PTJSONValue,
+                                          field: PTModelFieldDescriptor,
+                                          modelType: Any.Type,
+                                          phase: PTModelAnnotationPhase) throws -> PTJSONValue {
+        guard let provider = modelType as? any PTModelAnnotationProvider.Type else { return value }
+        var updated = value
+        if field.annotations.contains("PTTransform"),
+           let transformed = try provider.ptTransform(value: value,
+                                                        field: field,
+                                                        phase: phase) {
+            updated = transformed
+        }
+        if field.annotations.contains("PTValidate") {
+            try provider.ptValidate(value: updated,
+                                     field: field,
+                                     phase: phase)
+        }
+        return updated
+    }
+
     // English: Apply annotation hooks after key/path normalization so every generated model shares one semantic order.
     // Español: Aplica los hooks después de normalizar claves y rutas para que todos los modelos generados compartan el mismo orden semántico.
     // 中文：在字段名和路径归一化后执行注解钩子，让所有生成模型遵循统一的语义顺序。
     public static func applyingAnnotations<Model>(to value: PTJSONValue,
                                                             fields: [PTModelFieldDescriptor],
                                                             modelType: Model.Type,
-                                                            phase: PTModelAnnotationPhase) throws -> PTJSONValue {
+                                                            phase: PTModelAnnotationPhase,
+                                                            keyPolicy: PTModelKeyPolicy = .exact) throws -> PTJSONValue {
         guard let provider = modelType as? any PTModelAnnotationProvider.Type,
               case .object(var object) = value else { return value }
         for field in fields where !field.annotations.isDisjoint(with: ["PTTransform", "PTValidate"]) {
-            guard let current = object[field.name] ?? object[field.mapping.encodeKey] else { continue }
-            var updated = current
-            if field.annotations.contains("PTTransform"),
-               let transformed = try provider.ptTransform(value: current, field: field, phase: phase) {
-                updated = transformed
-                object[field.name] = transformed
-                if field.mapping.encodeKey != field.name {
-                    object[field.mapping.encodeKey] = transformed
-                }
-            }
-            if field.annotations.contains("PTValidate") {
-                try provider.ptValidate(value: updated, field: field, phase: phase)
+            let encodedKey = keyPolicy.encodedKey(for: field)
+            guard let current = object[field.name] ?? object[encodedKey] ?? object[field.mapping.encodeKey] else { continue }
+            let updated = try applyingAnnotation(to: current,
+                                                  field: field,
+                                                  modelType: provider,
+                                                  phase: phase)
+            object[field.name] = updated
+            if encodedKey != field.name {
+                object[encodedKey] = updated
             }
         }
         return .object(object)
@@ -369,19 +408,20 @@ public enum PTModelSchemaSupport {
     // Español: La búsqueda de alias en una ruta solo cambia la clave final y conserva tipado el camino padre.
     // 中文：路径别名只替换末级 key，父路径仍由类型化路径控制。
     private static func pathCandidates(for path: PTJSONPath,
-                                      mapping: PTModelKeyMapping) -> [PTJSONPath] {
+                                      keys: [String]) -> [PTJSONPath] {
         guard let last = path.components.last,
               case .key = last else { return [path] }
         let prefix = Array(path.components.dropLast())
-        return mapping.decodeKeys.map { PTJSONPath(prefix + [.key($0)]) }
+        return keys.map { PTJSONPath(prefix + [.key($0)]) }
     }
 
     public static func encodedOutput(_ value: PTJSONValue,
-                                     fields: [PTModelFieldDescriptor]) throws -> PTJSONValue {
+                                     fields: [PTModelFieldDescriptor],
+                                     using encoder: PTModelEncoder = .init()) throws -> PTJSONValue {
         guard case .object(var object) = value else { return value }
         for field in fields {
             guard let path = field.path,
-                  let fieldValue = object.removeValue(forKey: field.mapping.encodeKey) else { continue }
+                  let fieldValue = object.removeValue(forKey: encoder.keyPolicy.encodedKey(for: field)) else { continue }
             guard case .object(let nestedObject) = try placing(fieldValue,
                                                                 at: path,
                                                                 in: .object(object)) else {
@@ -496,7 +536,8 @@ public enum PTStaticCodec {
            defaults == nil,
            Model.ptUsesDirectPath,
            let data = source as? Data,
-           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields,
+                                 keyPolicy: decoder.keyPolicy) {
             try PTModelSchemaSupport.throwIfInvalid(Model.ptSchema.metadata)
             let slices = try decodeFieldSlices(data,
                                                fields: Model.ptSchema.metadata.fields,
@@ -521,7 +562,8 @@ public enum PTStaticCodec {
         if migration == nil,
            let string = source as? String,
            Model.ptUsesDirectPath,
-           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields) {
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields,
+                                 keyPolicy: decoder.keyPolicy) {
             let data = Data(string.utf8)
             let slices = try decodeFieldSlices(data,
                                                fields: Model.ptSchema.metadata.fields,
@@ -556,7 +598,8 @@ public enum PTStaticCodec {
 
         let merged = defaults.map { PTModelDefaultMerge.merge(defaults: $0, with: migrated) } ?? migrated
         let normalized = PTModelSchemaSupport.normalizedInput(merged,
-                                                               fields: Model.ptSchema.metadata.fields)
+                                                               fields: Model.ptSchema.metadata.fields,
+                                                               keyPolicy: decoder.keyPolicy)
         if Model.ptUsesDirectPath,
            (Model.self as? any PTModelLifecycle.Type) == nil,
            case .object(let object) = normalized,
@@ -614,7 +657,8 @@ public enum PTStaticCodec {
         }
         if !encoder.prettyPrinted,
            Model.ptUsesDirectPath,
-           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields),
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields,
+                                  keyPolicy: encoder.keyPolicy),
            let fields = try Model.ptDirectFieldValues(model, using: encoder) {
             return try PTStaticJSONWriter.data(fields: fields, using: encoder)
         }
@@ -654,7 +698,8 @@ public enum PTStaticCodec {
     ) throws {
         if !encoder.prettyPrinted,
            Model.ptUsesDirectPath,
-           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields),
+           canUseDirectObjectPath(for: Model.ptSchema.metadata.fields,
+                                  keyPolicy: encoder.keyPolicy),
            let fields = try Model.ptDirectFieldValues(model, using: encoder) {
             try PTStaticJSONWriter.write(fields: fields, using: encoder, to: &sink)
             return
@@ -684,8 +729,18 @@ public enum PTStaticCodec {
         try PTStaticClassCodec.jsonValue(model, using: encoder)
     }
 
-    private static func canUseDirectObjectPath(for fields: [PTModelFieldDescriptor]) -> Bool {
-        fields.allSatisfy { $0.path == nil && !$0.flattened }
+    private static func canUseDirectObjectPath(for fields: [PTModelFieldDescriptor],
+                                               keyPolicy: PTModelKeyPolicy = .exact) -> Bool {
+        // English: The raw dispatcher handles path and flat fields; non-exact naming still needs tree normalization.
+        // Español: El dispatcher crudo maneja path y flat; los nombres no exactos todavía necesitan normalización en árbol.
+        // 中文：原始 dispatcher 已支持 Path 和 Flat，非 exact 命名仍需要树形归一化。
+        // English: Annotation fields use the normalized object direct path so transform/validate hooks run once.
+        // Español: Los campos anotados usan la ruta directa del objeto normalizado para ejecutar transform/validate una sola vez.
+        // 中文：带注解字段走归一化对象直达路径，确保 transform/validate 只执行一次。
+        guard fields.allSatisfy({ $0.annotations.isDisjoint(with: ["PTTransform", "PTValidate"]) }) else {
+            return false
+        }
+        return keyPolicy.isExact
     }
 }
 
@@ -709,7 +764,7 @@ public enum PTStaticClassCodec {
            let data = source as? Data,
            Model.ptClassUsesDirectPath,
            lifecycle == nil,
-           metadata.fields.allSatisfy({ $0.path == nil && !$0.flattened }) {
+           decoder.keyPolicy.isExact {
             let slices = try PTStaticFieldDispatcher.decodeSlices(from: data,
                                                                   fields: metadata.fields,
                                                                   decoder: decoder)
@@ -732,7 +787,9 @@ public enum PTStaticClassCodec {
                                              to: metadata.version)
         }
         let merged = defaults.map { PTModelDefaultMerge.merge(defaults: $0, with: migrated) } ?? migrated
-        let normalized = PTModelSchemaSupport.normalizedInput(merged, fields: metadata.fields)
+        let normalized = PTModelSchemaSupport.normalizedInput(merged,
+                                                              fields: metadata.fields,
+                                                              keyPolicy: decoder.keyPolicy)
         // English: Lifecycle hooks run before direct construction so hooks and Codable fallback observe the same input.
         // Español: Los hooks del ciclo de vida se ejecutan antes de construir directamente para igualar el fallback Codable.
         // 中文：生命周期钩子在直接构造前执行，让 Fast Path 与 Codable 回退看到相同输入。
@@ -779,7 +836,8 @@ public enum PTStaticClassCodec {
     }
 
     private static func metadataSupportsDirect<Model: PTStaticClassModel>(_ type: Model.Type) -> Bool {
-        type.ptClassSchemaMetadata.fields.allSatisfy { $0.path == nil && !$0.flattened }
+        _ = type
+        return true
     }
 }
 

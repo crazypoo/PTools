@@ -3,6 +3,12 @@
 // 中文：将重试、缓存、网络状态和上传支撑代码从 Network 门面中独立出来。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
 @preconcurrency import Alamofire
 import Network
 import CoreTelephony

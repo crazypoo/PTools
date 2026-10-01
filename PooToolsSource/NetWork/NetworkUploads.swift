@@ -3,6 +3,9 @@
 // 中文：将 multipart 准备和上传生命周期从请求解析中独立出来。
 
 import UIKit
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
 @preconcurrency import Alamofire
 import Photos
 

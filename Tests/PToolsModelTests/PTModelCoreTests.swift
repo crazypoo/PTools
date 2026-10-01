@@ -11,6 +11,74 @@ import XCTest
 @testable import PToolsModelCore
 import PToolsModel
 
+// English: A deterministic sink lets the streaming tests verify cleanup after partial writes.
+// Español: Un sink determinista permite verificar la limpieza después de escrituras parciales.
+// 中文：确定性 Sink 用于验证部分写入失败后的资源收尾。
+actor PTModelFailingJSONSink: PTAsyncJSONByteSink {
+    private let failOnWrite: Int
+    private var writeCount = 0
+    private var finishCount = 0
+
+    init(failOnWrite: Int) {
+        self.failOnWrite = failOnWrite
+    }
+
+    func write(_ data: Data) async throws {
+        writeCount += 1
+        if writeCount == failOnWrite {
+            throw PTModelError.underlying("intentional sink failure")
+        }
+    }
+
+    func finish() async throws {
+        finishCount += 1
+    }
+
+    func finishedCount() -> Int {
+        finishCount
+    }
+}
+
+// English: This sequence produces values lazily so the test does not build a 100k-element input array.
+// Español: Esta secuencia produce valores de forma perezosa y evita crear un array de 100k elementos.
+// 中文：该序列按需生成值，测试不会先创建包含 10 万项的输入数组。
+struct PTModelCountingSequence: AsyncSequence, Sendable {
+    typealias Element = Int
+
+    struct Iterator: AsyncIteratorProtocol, Sendable {
+        let end: Int
+        var current = 0
+
+        mutating func next() async -> Int? {
+            guard current < end else { return nil }
+            defer { current += 1 }
+            return current
+        }
+    }
+
+    let end: Int
+
+    func makeAsyncIterator() -> Iterator {
+        Iterator(end: end)
+    }
+}
+
+actor PTModelCountingJSONSink: PTAsyncJSONByteSink {
+    private var bytes = 0
+    private var writes = 0
+
+    func write(_ data: Data) async throws {
+        bytes += data.count
+        writes += 1
+    }
+
+    func finish() async throws {}
+
+    func snapshot() -> (bytes: Int, writes: Int) {
+        (bytes, writes)
+    }
+}
+
 #if SWIFT_PACKAGE
 @PTModel
 public struct PTMacroFixture: Codable, Sendable, Equatable {
@@ -68,6 +136,58 @@ public struct PTWrappedMacroFixture: Codable, Sendable, Equatable {
 
     public init(name: String) {
         self.name = name
+    }
+}
+
+@PTModel
+public struct PTComposedWrappedMacroFixture: Codable, Sendable, Equatable {
+    @PTTestBox
+    @PTClampedBox
+    public var value: Int
+
+    public init(value: Int) {
+        self.value = value
+    }
+}
+
+@propertyWrapper
+public struct PTClampedBox<Value: Codable & Sendable>: Codable, Sendable, Equatable where Value: Equatable {
+    public var wrappedValue: Value
+
+    public init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+}
+
+@PTModel
+public struct PTStructuredMacroFixture: Codable, Sendable, Equatable {
+    @PTPath("$.meta.note")
+    public let note: String
+    @PTFlat
+    public let profile: PTFlatProfile
+
+    public init(note: String, profile: PTFlatProfile) {
+        self.note = note
+        self.profile = profile
+    }
+}
+
+public struct PTFlatProfile: Codable, Sendable, Equatable {
+    public let name: String
+    public let age: Int
+
+    public init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+}
+
+@PTModel
+public struct PTKeyPolicyMacroFixture: Codable, Sendable, Equatable {
+    public let userID: Int
+
+    public init(userID: Int) {
+        self.userID = userID
     }
 }
 
@@ -453,6 +573,56 @@ final class PTModelCoreTests: XCTestCase {
         XCTAssertThrowsError(try PTJSONValue(jsonString: "[1,2,3]", limits: PTModelLimits(maxCollectionCount: 2)))
         XCTAssertNoThrow(try PTJSONValue(jsonString: #"{"a":1,"b":2}"#, limits: PTModelLimits(maxObjectKeyCount: 2)))
         XCTAssertThrowsError(try PTJSONValue(jsonString: #"{"a":1,"b":2,"c":3}"#, limits: PTModelLimits(maxObjectKeyCount: 2)))
+
+        XCTAssertNoThrow(try PTJSONValue(data: Data("0".utf8),
+                                         limits: PTModelLimits(maxInputBytes: 1)))
+        XCTAssertThrowsError(try PTJSONValue(data: Data("10".utf8),
+                                             limits: PTModelLimits(maxInputBytes: 1)))
+
+        XCTAssertNoThrow(try PTJSONValue(jsonString: #"{"a":1}"#,
+                                         limits: PTModelLimits(maxDepth: 1)))
+        XCTAssertThrowsError(try PTJSONValue(jsonString: #"{"a":{"b":1}}"#,
+                                             limits: PTModelLimits(maxDepth: 1)))
+
+        XCTAssertNoThrow(try PTJSONValue(jsonString: "123",
+                                         limits: PTModelLimits(maxNumberDigits: 3)))
+        XCTAssertThrowsError(try PTJSONValue(jsonString: "1234",
+                                             limits: PTModelLimits(maxNumberDigits: 3)))
+    }
+
+    func testIntegerAndSafeNumberBoundaryCorpus() throws {
+        let decoder = PTModelDecoder(policy: .strict)
+        XCTAssertEqual(try decoder.decode(Int.self,
+                                          from: Data(String(Int.min).utf8)), Int.min)
+        XCTAssertEqual(try decoder.decode(Int.self,
+                                          from: Data(String(Int.max).utf8)), Int.max)
+        XCTAssertThrowsError(try decoder.decode(Int.self,
+                                                from: Data("\(Int.max)0".utf8)))
+        XCTAssertEqual(try decoder.decode(UInt64.self,
+                                          from: Data(String(UInt64.max).utf8)), UInt64.max)
+        XCTAssertThrowsError(try decoder.decode(UInt64.self,
+                                                from: Data("\(UInt64.max)0".utf8)))
+
+        let safe = try PTJSONValue(jsonString: "9007199254740991")
+        let unsafeValue = try PTJSONValue(jsonString: "9007199254740993")
+        guard case .number(let safeNumber) = safe,
+              case .number(let unsafeNumber) = unsafeValue else {
+            return XCTFail("Expected exact JSON number values")
+        }
+        XCTAssertEqual(safeNumber.rawRepresentation, "9007199254740991")
+        XCTAssertEqual(unsafeNumber.rawRepresentation, "9007199254740993")
+    }
+
+    func testFieldDescriptorPersistenceKeepsOlderPayloadsReadable() throws {
+        let oldPayload = Data(#"{"name":"legacy","mapping":{"decodeKeys":["legacy"],"encodeKey":"legacy"},"encoding":"inherit","missing":"useNil","null":"useNil","invalid":"error","required":false,"flattened":false,"path":null,"annotations":[]}"#.utf8)
+        let decoded = try JSONDecoder().decode(PTModelFieldDescriptor.self, from: oldPayload)
+        XCTAssertFalse(decoded.isInherited)
+        XCTAssertNil(decoded.defaultExpression)
+
+        let current = PTModelFieldDescriptor(name: "count", defaultExpression: "0")
+        let encoded = try JSONEncoder().encode(current)
+        let roundTrip = try JSONDecoder().decode(PTModelFieldDescriptor.self, from: encoded)
+        XCTAssertEqual(roundTrip.defaultExpression, "0")
     }
 
     func testFoundationBooleanAndSafeCoercion() throws {
@@ -771,6 +941,21 @@ final class PTModelCoreTests: XCTestCase {
         guard case .object(let values) = schema else { return XCTFail("Expected JSON Schema object") }
         XCTAssertEqual(values["title"], .string("StaticEnvelope"))
         XCTAssertEqual(values["x-pt-schema-version"], .number(try PTJSONNumber("2")))
+
+        let annotatedSchema = PTModelSchema<StaticEnvelope>(
+            name: "AnnotatedEnvelope",
+            fields: [PTModelFieldDescriptor(name: "event",
+                                             annotations: ["PTPolymorphic"],
+                                             defaultExpression: "0")],
+            decode: { _, _ in throw PTModelError.invalidInput },
+            encode: { _, _ in throw PTModelError.invalidInput })
+        guard case .object(let annotatedSchemaObject) = annotatedSchema.jsonSchema(),
+              case .object(let properties) = annotatedSchemaObject["properties"],
+              case .object(let eventDescriptor) = properties["event"] else {
+            return XCTFail("Expected annotation schema metadata")
+        }
+        XCTAssertEqual(eventDescriptor["x-pt-polymorphic"], .bool(true))
+        XCTAssertEqual(eventDescriptor["x-pt-default-expression"], .string("0"))
     }
 
     func testPatchDiffCloneConversionAndMigration() throws {
@@ -947,6 +1132,19 @@ final class PTModelCoreTests: XCTestCase {
         let flushedData = await sink.value()
         XCTAssertEqual(flushedData, Data("[1,2]".utf8))
 
+        let boundedValues = AsyncStream<Int> { continuation in
+            continuation.yield(1)
+            continuation.yield(2)
+            continuation.finish()
+        }
+        let boundedSink = PTAsyncDataByteSink(maxBytes: 3)
+        do {
+            try await PTModelStreamEncoder<Int>().write(boundedValues, to: boundedSink)
+            XCTFail("Expected the bounded sink to reject an oversized document")
+        } catch let error as PTModelError {
+            XCTAssertEqual(error, .inputTooLarge)
+        }
+
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("ptmodel-chunks-\(UUID().uuidString).json")
         try Data("[{\"id\":1},{\"id\":2}]".utf8).write(to: fileURL)
         defer { try? FileManager.default.removeItem(at: fileURL) }
@@ -956,6 +1154,31 @@ final class PTModelCoreTests: XCTestCase {
             fileValues.append(item)
         }
         XCTAssertEqual(fileValues.map(\.id), [1, 2])
+    }
+
+    func testStreamingSinkFinishesAfterPartialWriteFailure() async throws {
+        let values = AsyncStream<Int> { continuation in
+            continuation.yield(1)
+            continuation.yield(2)
+            continuation.finish()
+        }
+        let sink = PTModelFailingJSONSink(failOnWrite: 3)
+        do {
+            try await PTModelStreamEncoder<Int>().write(values, to: sink)
+            XCTFail("Expected the sink to fail")
+        } catch let error as PTModelError {
+            XCTAssertEqual(error, .underlying("intentional sink failure"))
+        }
+        let finishedCount = await sink.finishedCount()
+        XCTAssertEqual(finishedCount, 1)
+    }
+
+    func testStreamingEncoderDoesNotAccumulateLargeSequenceInCore() async throws {
+        let sink = PTModelCountingJSONSink()
+        try await PTModelStreamEncoder<Int>().write(PTModelCountingSequence(end: 100_000), to: sink)
+        let snapshot = await sink.snapshot()
+        XCTAssertEqual(snapshot.writes, 200_001)
+        XCTAssertGreaterThan(snapshot.bytes, 500_000)
     }
 
     func testAdvancedContracts() async throws {
@@ -1027,6 +1250,13 @@ final class PTModelCoreTests: XCTestCase {
         }
         let resolved = try Resolver().resolveType(discriminator: .string("macro"), context: .init())
         XCTAssertTrue(resolved == PTMacroFixture.self)
+
+        let dynamic = try PTModelDynamicResolver.decode(
+            PTMacroFixture.self,
+            from: Data(#"{"kind":"macro","id":3,"display_name":"dynamic"}"#.utf8),
+            descriptor: PTModelPolymorphicDescriptor(discriminatorPath: try PTJSONPath.parse("$.kind")),
+            resolver: Resolver())
+        XCTAssertEqual(dynamic, PTMacroFixture(id: 3, name: "dynamic", note: nil))
 
         let source = PTMacroFixture(id: 1, name: "old", note: nil)
         let patch = try PTModelPatch.fromPresence(.value("new"), key: "name")

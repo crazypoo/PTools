@@ -1,6 +1,9 @@
 import Foundation
 import Alamofire
 import os.lock
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor public let AppTestMode = "PT App network environment test".localized()
 @MainActor public let AppCustomMode = "PT App network environment custom".localized()

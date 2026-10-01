@@ -436,6 +436,8 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
     public let flattened: Bool
     public let path: PTJSONPath?
     public let annotations: Set<String>
+    public let isInherited: Bool
+    public let defaultExpression: String?
 
     public init(name: String,
                 mapping: PTModelKeyMapping? = nil,
@@ -447,7 +449,9 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
                 required: Bool = false,
                 flattened: Bool = false,
                 path: PTJSONPath? = nil,
-                annotations: Set<String> = []) {
+                annotations: Set<String> = [],
+                isInherited: Bool = false,
+                defaultExpression: String? = nil) {
         self.name = name
         self.mapping = mapping ?? PTModelKeyMapping(decodeKeys: [name], encodeKey: name)
         self.encoding = encoding
@@ -459,6 +463,63 @@ public struct PTModelFieldDescriptor: Sendable, Codable, Hashable {
         self.flattened = flattened
         self.path = path
         self.annotations = annotations
+        self.isInherited = isInherited
+        self.defaultExpression = defaultExpression
+    }
+
+    // English: Decode descriptor metadata written before inheritance and default-expression fields existed.
+    // Español: Decodifica metadatos escritos antes de que existieran los campos de herencia y expresión predeterminada.
+    // 中文：兼容读取没有继承标记和默认表达式字段的旧版描述器数据。
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(name: try container.decode(String.self, forKey: .name),
+                  mapping: try container.decodeIfPresent(PTModelKeyMapping.self, forKey: .mapping),
+                  encoding: try container.decodeIfPresent(PTFieldEncodingPolicy.self, forKey: .encoding) ?? .inherit,
+                  nilStrategy: try container.decodeIfPresent(PTNilEncodingStrategy.self, forKey: .nilStrategy),
+                  missing: try container.decodeIfPresent(PTMissingPolicy.self, forKey: .missing) ?? .useDefault,
+                  null: try container.decodeIfPresent(PTNullPolicy.self, forKey: .null) ?? .useNil,
+                  invalid: try container.decodeIfPresent(PTInvalidValuePolicy.self, forKey: .invalid) ?? .error,
+                  required: try container.decodeIfPresent(Bool.self, forKey: .required) ?? false,
+                  flattened: try container.decodeIfPresent(Bool.self, forKey: .flattened) ?? false,
+                  path: try container.decodeIfPresent(PTJSONPath.self, forKey: .path),
+                  annotations: try container.decodeIfPresent(Set<String>.self, forKey: .annotations) ?? [],
+                  isInherited: try container.decodeIfPresent(Bool.self, forKey: .isInherited) ?? false,
+                  defaultExpression: try container.decodeIfPresent(String.self, forKey: .defaultExpression))
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case mapping
+        case encoding
+        case nilStrategy
+        case missing
+        case null
+        case invalid
+        case required
+        case flattened
+        case path
+        case annotations
+        case isInherited
+        case defaultExpression
+    }
+
+    // English: Copy a descriptor while marking the field as inherited by a generated subclass schema.
+    // Español: Copia un descriptor y marca el campo como heredado por el esquema de una subclase generada.
+    // 中文：复制字段描述符，并标记该字段来自生成子类的父类 Schema。
+    public func withInheritance(_ inherited: Bool) -> Self {
+        Self(name: name,
+             mapping: mapping,
+             encoding: encoding,
+             nilStrategy: nilStrategy,
+             missing: missing,
+             null: null,
+             invalid: invalid,
+             required: required,
+             flattened: flattened,
+             path: path,
+             annotations: annotations,
+             isInherited: inherited,
+             defaultExpression: defaultExpression)
     }
 }
 

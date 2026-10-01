@@ -11,23 +11,23 @@ import UIKit
 // This mutable DTO is decoded before crossing into the MainActor.
 // Este DTO mutable se decodifica antes de cruzar al MainActor.
 // 这个可变 DTO 只在进入 MainActor 之前负责解码。
-struct PTIPInfoPayload: PTCodableModelProtocol, Sendable {
-    var lon: Double = 0.0
-    var zip: String = ""
-    var query: String = ""
-    var asBaseic: String = ""
-    var isp: String = ""
-    var countryCode: String = ""
-    var lat: Double = 0.0
-    var city: String = ""
-    var region: String = ""
-    var timezone: String = ""
-    var org: String = ""
-    var country: String = ""
-    var status: String = ""
-    var regionName: String = ""
+public struct PTIPInfoPayload: PTCodableModelProtocol, Sendable {
+    public var lon: Double = 0.0
+    public var zip: String = ""
+    public var query: String = ""
+    public var asBaseic: String = ""
+    public var isp: String = ""
+    public var countryCode: String = ""
+    public var lat: Double = 0.0
+    public var city: String = ""
+    public var region: String = ""
+    public var timezone: String = ""
+    public var org: String = ""
+    public var country: String = ""
+    public var status: String = ""
+    public var regionName: String = ""
 
-    init() {}
+    public init() {}
 
     private enum CodingKeys: String, CodingKey {
         case lon, zip, query
@@ -55,7 +55,7 @@ public struct PTIPInfoSnapshot: Sendable {
     public let status: String
     public let regionName: String
 
-    init(payload: PTIPInfoPayload) {
+    public init(payload: PTIPInfoPayload) {
         lon = payload.lon
         zip = payload.zip
         query = payload.query

@@ -9,6 +9,12 @@
 
 import Foundation
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
 @preconcurrency import Alamofire
 #if canImport(PToolsLogging)
 import PToolsLogging

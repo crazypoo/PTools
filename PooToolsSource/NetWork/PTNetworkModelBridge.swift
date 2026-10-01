@@ -8,6 +8,7 @@
 
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsCore
 import PToolsModelCore
 import PToolsModelLegacySmartCodable
 import PToolsModelLegacyKakaJSON

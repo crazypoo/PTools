@@ -1,0 +1,5 @@
+platform :ios, '17.0'
+
+target 'PTModelCocoaPodsConsumer' do
+  pod 'PooTools/Model', :path => '../../../'
+end

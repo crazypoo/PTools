@@ -171,6 +171,30 @@ public protocol PTModelTypeResolver: Sendable {
                      context: PTModelContext) throws -> any PTStaticModel.Type
 }
 
+// English: Decode a discriminator-selected static model through one bounded, typed pipeline.
+// Español: Decodifica un modelo estático seleccionado por discriminator mediante una única tubería tipada y acotada.
+// 中文：通过统一的有界类型化管线，根据 discriminator 自动解码具体静态模型。
+public enum PTModelDynamicResolver {
+    public static func decode<Expected: Sendable, Source: PTModelSource>(
+        _ expectedType: Expected.Type,
+        from source: Source,
+        descriptor: PTModelPolymorphicDescriptor = .init(),
+        resolver: any PTModelTypeResolver,
+        decoder: PTModelDecoder = .init()
+    ) throws -> Expected {
+        let value = try decoder.jsonValue(from: source)
+        let discriminator = try value.requiredValue(at: descriptor.discriminatorPath)
+        let concreteType = try resolver.resolveType(discriminator: discriminator,
+                                                     context: decoder.context)
+        let decoded = try concreteType.ptDecodeErased(from: value.jsonData(), using: decoder)
+        guard let model = decoded as? Expected else {
+            throw PTModelError.typeMismatch(expected: String(reflecting: expectedType),
+                                             actual: String(reflecting: type(of: decoded)))
+        }
+        return model
+    }
+}
+
 public struct PTModelPolymorphicDescriptor: Sendable, Codable, Hashable, Equatable {
     public let discriminatorPath: PTJSONPath
     public let encodeDiscriminatorKey: String

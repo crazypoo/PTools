@@ -123,10 +123,17 @@ public extension PTAsyncJSONByteSink {
 
 public actor PTAsyncDataByteSink: PTAsyncJSONByteSink {
     private var data = Data()
+    private let maxBytes: Int?
 
-    public init() {}
+    public init(maxBytes: Int? = nil) {
+        self.maxBytes = maxBytes
+    }
 
     public func write(_ data: Data) async throws {
+        if let maxBytes,
+           self.data.count > maxBytes - data.count {
+            throw PTModelError.inputTooLarge
+        }
         self.data.append(data)
     }
 

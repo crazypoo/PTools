@@ -20,6 +20,7 @@ public struct PTModelDecoder: Sendable {
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
     public let coercionPolicy: PTValueCoercionPolicy
     public let numericOverflowPolicy: PTNumericOverflowPolicy
+    public let keyPolicy: PTModelKeyPolicy
     public let session: PTModelCodingSession
 
     public init(policy: PTDecodePolicy = .compatible,
@@ -33,6 +34,7 @@ public struct PTModelDecoder: Sendable {
                 dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
                 coercionPolicy: PTValueCoercionPolicy = .init(),
                 numericOverflowPolicy: PTNumericOverflowPolicy = .error,
+                keyPolicy: PTModelKeyPolicy = .exact,
                 session: PTModelCodingSession = .init()) {
         self.policy = policy
         self.duplicateKeyPolicy = duplicateKeyPolicy
@@ -45,6 +47,7 @@ public struct PTModelDecoder: Sendable {
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
         self.coercionPolicy = coercionPolicy
         self.numericOverflowPolicy = numericOverflowPolicy
+        self.keyPolicy = keyPolicy
         self.session = session
     }
 
@@ -65,6 +68,7 @@ public struct PTModelDecoder: Sendable {
                                dictionaryKeyStrategy: dictionaryKeyStrategy,
                                coercionPolicy: coercionPolicy,
                                numericOverflowPolicy: numericOverflowPolicy,
+                               keyPolicy: keyPolicy,
                                session: scopedSession)
     }
 
@@ -550,6 +554,7 @@ public struct PTModelEncoder: Sendable {
     public let dictionaryKeyStrategy: PTDictionaryKeyStrategy
     public let canonical: Bool
     public let canonicalPolicy: PTCanonicalJSONPolicy
+    public let keyPolicy: PTModelKeyPolicy
     public let session: PTModelCodingSession
 
     public init(prettyPrinted: Bool = false,
@@ -562,6 +567,7 @@ public struct PTModelEncoder: Sendable {
                 dictionaryKeyStrategy: PTDictionaryKeyStrategy = .stringOnly,
                 canonical: Bool = false,
                 canonicalPolicy: PTCanonicalJSONPolicy = .ptModel,
+                keyPolicy: PTModelKeyPolicy = .exact,
                 session: PTModelCodingSession = .init()) {
         self.prettyPrinted = prettyPrinted
         self.sortedKeys = sortedKeys
@@ -573,6 +579,7 @@ public struct PTModelEncoder: Sendable {
         self.dictionaryKeyStrategy = dictionaryKeyStrategy
         self.canonical = canonical
         self.canonicalPolicy = canonicalPolicy
+        self.keyPolicy = keyPolicy
         self.session = session
     }
 
@@ -585,7 +592,7 @@ public struct PTModelEncoder: Sendable {
                                                         field: field,
                                                         nilStrategy: nilStrategy)
         guard !decision.isOmitted, let encoded = decision.value else { return nil }
-        return (field.mapping.encodeKey, encoded)
+        return (keyPolicy.encodedKey(for: field), encoded)
     }
 
     // English: Nested static schemas inherit the current encoder path instead of starting a shared mutable frame.
@@ -604,6 +611,7 @@ public struct PTModelEncoder: Sendable {
                               dictionaryKeyStrategy: dictionaryKeyStrategy,
                               canonical: canonical,
                               canonicalPolicy: canonicalPolicy,
+                              keyPolicy: keyPolicy,
                               session: scopedSession)
     }
 

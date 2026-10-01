@@ -3,6 +3,9 @@
 // 中文：将 URLSession 诊断从请求构造和执行中独立出来。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // MARK: - ================= 9. 监控探针与耗时剖析 =================
 
