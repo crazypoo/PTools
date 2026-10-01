@@ -12,28 +12,26 @@ import UIKit
 public extension UIFeedbackGenerator {
     
     static func impactOccurred(_ style: Style) {
-        switch style {
-        case .light:
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-        case .medium:
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-        case .heavy:
-            let generator = UIImpactFeedbackGenerator(style: .heavy)
-            generator.impactOccurred()
-        case .notificationError:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.error)
-        case .notificationSuccess:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.success)
-        case .notificationWarning:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.warning)
-        case .selectionChanged:
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
+        // English: Keep this compatibility API on MainActor and delegate policy to PTFeedbackCenter.
+        // Español: Mantiene esta API compatible en MainActor y delega la política a PTFeedbackCenter.
+        // 中文：兼容入口统一在 MainActor 执行，并交由 PTFeedbackCenter 决定反馈策略。
+        PTMainActorBridge.perform {
+            switch style {
+            case .light:
+                PTFeedbackCenter.shared.emit(.selectionChanged)
+            case .medium:
+                PTFeedbackCenter.shared.emit(.navigation)
+            case .heavy:
+                PTFeedbackCenter.shared.emit(.actionConfirmed)
+            case .notificationError:
+                PTFeedbackCenter.shared.emit(.error)
+            case .notificationSuccess:
+                PTFeedbackCenter.shared.emit(.success)
+            case .notificationWarning:
+                PTFeedbackCenter.shared.emit(.warning)
+            case .selectionChanged:
+                PTFeedbackCenter.shared.emit(.selectionChanged)
+            }
         }
     }
     

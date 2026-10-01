@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
-  "generated_at": "2026-10-01T12:23:15Z",
+  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "generated_at": "2026-10-01T14:20:09Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -393,6 +393,12 @@
       "line": 1,
       "kind": "disk or custom cache",
       "text": "// English: This bounded actor is the shared cache contract for resource and computation caches."
+    },
+    {
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 15,
+      "kind": "disk or custom cache",
+      "text": "// English: Shared cache policy keeps limits, expiry, namespace and cleanup behavior explicit."
     },
     {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
@@ -907,10 +913,11 @@
   ],
   "bounded_memory_caches": 23,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T12:23:15Z",
+  "generatedAt": "2026-10-01T14:20:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
   "sourceVersion": "5.59.0",
-  "generatorVersion": "Scripts/report_cache_inventory.rb"
+  "generatorVersion": "Scripts/report_cache_inventory.rb",
+  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
 }

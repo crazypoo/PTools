@@ -55,7 +55,6 @@ PooToolsSource/DebugCrash/PTCrashHandler.swift
 PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift
 PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift
 PooToolsSource/ImageEditor/PTWeakProxy.swift
-PooToolsSource/ImagePicker/PTImagePicker.swift
 PooToolsSource/Inspector/KeyboardAnimatable.swift
 PooToolsSource/Inspector/MainThreadAsyncOperation.swift
 PooToolsSource/Inspector/MainThreadOperation.swift

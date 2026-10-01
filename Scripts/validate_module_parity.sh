@@ -7,6 +7,8 @@ set -euo pipefail
 # 中文：比较 SwiftPM 与 CocoaPods 的模块契约，但不修改业务源码。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+report_dir="${PTOOLS_REPORT_DIR:-$repo_root/report/current}"
+export PTOOLS_REPORT_DIR="$report_dir"
 mode="check"
 if [[ "${1:-}" == "--update" ]]; then
   mode="update"
@@ -18,7 +20,7 @@ fi
 ruby "$repo_root/Scripts/report_spm_dependency_graph.rb"
 ruby "$repo_root/Scripts/report_cocoapods_subspec_graph.rb"
 
-ruby - "$repo_root" "$mode" <<'RUBY'
+ruby - "$repo_root" "$mode" "$report_dir" <<'RUBY'
 require "digest"
 require "date"
 require "json"
@@ -27,10 +29,11 @@ require "time"
 
 repo_root = File.expand_path(ARGV.fetch(0))
 mode = ARGV.fetch(1)
-spm = JSON.parse(File.read(File.join(repo_root, "report/current/spm_dependency_graph.json")))
-pods = JSON.parse(File.read(File.join(repo_root, "report/current/cocoapods_subspec_graph.json")))
-json_path = File.join(repo_root, "report/current/module_parity.json")
-markdown_path = File.join(repo_root, "report/current/module_parity.md")
+report_dir = File.expand_path(ARGV.fetch(2))
+spm = JSON.parse(File.read(File.join(report_dir, "spm_dependency_graph.json")))
+pods = JSON.parse(File.read(File.join(report_dir, "cocoapods_subspec_graph.json")))
+json_path = File.join(report_dir, "module_parity.json")
+markdown_path = File.join(report_dir, "module_parity.md")
 
 # English: Normalize historical names only for comparison; preserve original names in the reports.
 # Español: Normaliza solo nombres históricos para comparar; conserva los nombres originales en los informes.
@@ -386,7 +389,7 @@ File.write(markdown_path, markdown.join("\n") + "\n")
 # English: Emit a reviewable resolution table with visible ownership for every exception.
 # Español: Emite una tabla revisable con responsable visible para cada excepción.
 # 中文：生成可审阅的 resolution 表，为每条例外显示负责人。
-resolution_path = File.join(repo_root, "report/current/module_parity_resolution.md")
+resolution_path = File.join(report_dir, "module_parity_resolution.md")
 resolution = []
 resolution << "<!--"
 resolution << "AUTO-GENERATED FILE."

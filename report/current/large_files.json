@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
-  "generated_at": "2026-10-01T12:23:15Z",
+  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "generated_at": "2026-10-01T14:20:09Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -46,7 +46,7 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTipsHaptic.swift",
-      "lines": 32,
+      "lines": 34,
       "classification": "ok"
     },
     {
@@ -501,7 +501,7 @@
     },
     {
       "path": "PooToolsSource/Button/PTMenuSheetButtonView.swift",
-      "lines": 431,
+      "lines": 434,
       "classification": "ok"
     },
     {
@@ -691,7 +691,7 @@
     },
     {
       "path": "PooToolsSource/Category/Device+PTEX.swift",
-      "lines": 402,
+      "lines": 413,
       "classification": "ok"
     },
     {
@@ -906,7 +906,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIFeedbackGenerator+PTEX.swift",
-      "lines": 53,
+      "lines": 51,
       "classification": "ok"
     },
     {
@@ -1091,7 +1091,7 @@
     },
     {
       "path": "PooToolsSource/CheckBox/PTCheckBox.swift",
-      "lines": 240,
+      "lines": 236,
       "classification": "ok"
     },
     {
@@ -1221,7 +1221,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "lines": 72,
+      "lines": 216,
       "classification": "ok"
     },
     {
@@ -1256,7 +1256,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "lines": 44,
+      "lines": 76,
       "classification": "ok"
     },
     {
@@ -1271,7 +1271,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "lines": 165,
+      "lines": 239,
       "classification": "ok"
     },
     {
@@ -1286,7 +1286,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTPhoneFeedBackControl.swift",
-      "lines": 67,
+      "lines": 79,
       "classification": "ok"
     },
     {
@@ -1645,6 +1645,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift",
+      "lines": 47,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/DebugNetwork/PTNetworkTimelineView.swift",
       "lines": 108,
       "classification": "ok"
@@ -1966,7 +1971,7 @@
     },
     {
       "path": "PooToolsSource/ImagePicker/PTImagePicker.swift",
-      "lines": 918,
+      "lines": 920,
       "classification": "ok"
     },
     {
@@ -3696,7 +3701,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "lines": 1844,
+      "lines": 1842,
       "classification": "architecture_exception"
     },
     {
@@ -4096,7 +4101,7 @@
     },
     {
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
-      "lines": 35,
+      "lines": 43,
       "classification": "ok"
     },
     {
@@ -4216,7 +4221,7 @@
     },
     {
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "lines": 271,
+      "lines": 278,
       "classification": "ok"
     },
     {
@@ -4431,7 +4436,7 @@
     },
     {
       "path": "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift",
-      "lines": 38,
+      "lines": 82,
       "classification": "ok"
     },
     {
@@ -5111,12 +5116,12 @@
     },
     {
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "lines": 687,
+      "lines": 684,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Slider/PTSlider.swift",
-      "lines": 208,
+      "lines": 209,
       "classification": "ok"
     },
     {
@@ -5434,10 +5439,11 @@
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T12:23:15Z",
+  "generatedAt": "2026-10-01T14:20:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
   "sourceVersion": "5.59.0",
-  "generatorVersion": "Scripts/validate_file_size_gate.sh"
+  "generatorVersion": "Scripts/validate_file_size_gate.sh",
+  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
 }

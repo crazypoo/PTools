@@ -374,8 +374,19 @@ public extension PTPOP where Base: UIDevice {
     //MARK: UINotificationFeedbackGenerator 来设置的手机振动
     ///UINotificationFeedbackGenerator 来设置的手机振动
     @MainActor static func notificationFeedbackGeneratorSuccess(_ notificationType: UINotificationFeedbackGenerator.FeedbackType) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(notificationType)
+        // English: Preserve the legacy API while forwarding to semantic feedback signals.
+        // Español: Conserva la API heredada y reenvía a señales hápticas semánticas.
+        // 中文：保留旧 API，同时转发为语义化触觉信号。
+        switch notificationType {
+        case .success:
+            PTFeedbackCenter.shared.emit(.success)
+        case .warning:
+            PTFeedbackCenter.shared.emit(.warning)
+        case .error:
+            PTFeedbackCenter.shared.emit(.error)
+        @unknown default:
+            PTFeedbackCenter.shared.emit(.warning)
+        }
     }
     
     //MARK: UIImpactFeedbackGenerator 来设置的手机振动
@@ -397,6 +408,6 @@ public extension PTPOP where Base: UIDevice {
     ///模拟选择滚轮一类控件时的震动
     ///UISelectionFeedbackGenerator中只有一个类型，是用来模拟选择滚轮一类控件时的震动，比如计时器中的picker滚动时就有这个效果。
     @MainActor static func selectionFeedbackGeneratorChanged() {
-        UISelectionFeedbackGenerator().selectionChanged()
+        PTFeedbackCenter.shared.emit(.selectionChanged)
     }
 }

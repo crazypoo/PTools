@@ -6,7 +6,7 @@ require "time"
 
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
-report_dir = File.join(repo_root, "report", "current")
+report_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(report_dir)
 
 pattern = /^\s*(?:(?:@[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?)\s*)*(public|open)\s+(?:(?:final|nonisolated)\s+)*(class|struct|enum|protocol|actor|func|init|var|let|typealias|subscript)\b/

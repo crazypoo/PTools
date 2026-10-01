@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
-  "generated_at": "2026-10-01T12:22:17Z",
+  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "generated_at": "2026-10-01T14:20:09Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -15704,25 +15704,41 @@
       "declaration": "public protocol PTModelProtocol: PTCodableModelProtocol, PTDiffableModel {}"
     },
     {
-      "key": "PooToolsSource/Core/PTCacheStore.swift|public|protocol|public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable",
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|struct|public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
       "line": 7,
       "access": "public",
-      "kind": "protocol",
-      "declaration": "public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable {"
+      "kind": "struct",
+      "declaration": "public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable {"
     },
     {
-      "key": "PooToolsSource/Core/PTCacheStore.swift|public|actor|public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore",
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let rawValue: String",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 17,
+      "line": 8,
       "access": "public",
-      "kind": "actor",
-      "declaration": "public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore {"
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(rawValue: String)",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|struct|public struct PTCachePolicy: Sendable, Equatable",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 18,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTCachePolicy: Sendable, Equatable {"
     },
     {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let countLimit: Int",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 18,
+      "line": 19,
       "access": "public",
       "kind": "let",
       "declaration": "public let countLimit: Int"
@@ -15730,23 +15746,215 @@
     {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let costLimit: Int",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 19,
+      "line": 20,
       "access": "public",
       "kind": "let",
       "declaration": "public let costLimit: Int"
     },
     {
-      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(countLimit: Int = 100,",
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let expiration: TimeInterval?",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let expiration: TimeInterval?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let namespace: PTCacheNamespace",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 22,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let namespace: PTCacheNamespace"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let clearsOnMemoryWarning: Bool",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let clearsOnMemoryWarning: Bool"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let lowDiskThreshold: Int64?",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let lowDiskThreshold: Int64?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let diskLimit: Int64?",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let diskLimit: Int64?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let diskTarget: Int64?",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
       "line": 26,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let diskTarget: Int64?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(countLimit: Int = 100,",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 28,
       "access": "public",
       "kind": "init",
       "declaration": "public init(countLimit: Int = 100,"
     },
     {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|enum|public enum PTCacheEvictionReason: String, Sendable, Codable",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 50,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTCacheEvictionReason: String, Sendable, Codable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|struct|public struct PTCacheMetrics: Sendable, Codable, Equatable",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 59,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTCacheMetrics: Sendable, Codable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let hits: UInt64",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 60,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let hits: UInt64"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let misses: UInt64",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let misses: UInt64"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let insertions: UInt64",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let insertions: UInt64"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let evictions: UInt64",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let evictions: UInt64"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let expiredEntries: UInt64",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let expiredEntries: UInt64"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let totalCost: Int",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 65,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let totalCost: Int"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let count: Int",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let count: Int"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let lastEvictionReason: PTCacheEvictionReason?",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let lastEvictionReason: PTCacheEvictionReason?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(hits: UInt64 = 0,",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 69,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(hits: UInt64 = 0,"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|protocol|public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "protocol",
+      "declaration": "public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|actor|public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|let|public let policy: PTCachePolicy",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 99,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let policy: PTCachePolicy"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|var|public var countLimit: Int",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 100,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var countLimit: Int { policy.countLimit }"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|var|public var costLimit: Int",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 101,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var costLimit: Int { policy.costLimit }"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(countLimit: Int = 100,",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 115,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(countLimit: Int = 100,"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|init|public init(policy: PTCachePolicy)",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 120,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(policy: PTCachePolicy) {"
+    },
+    {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func value(for key: Key) -> Value?",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 32,
+      "line": 124,
       "access": "public",
       "kind": "func",
       "declaration": "public func value(for key: Key) -> Value? {"
@@ -15754,7 +15962,7 @@
     {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func insert(_ value: Value, for key: Key, cost: Int)",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 39,
+      "line": 141,
       "access": "public",
       "kind": "func",
       "declaration": "public func insert(_ value: Value, for key: Key, cost: Int) {"
@@ -15762,7 +15970,7 @@
     {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func removeValue(for key: Key)",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 50,
+      "line": 158,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeValue(for key: Key) {"
@@ -15770,10 +15978,34 @@
     {
       "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func removeAll()",
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 56,
+      "line": 162,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeAll() {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func metrics() -> PTCacheMetrics",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 166,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func metrics() -> PTCacheMetrics {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func handleMemoryWarning()",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 177,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handleMemoryWarning() {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTCacheStore.swift|public|func|public func handleLowDisk()",
+      "path": "PooToolsSource/Core/PTCacheStore.swift",
+      "line": 182,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handleLowDisk() {"
     },
     {
       "key": "PooToolsSource/Core/PTFullScreenPopGesture.swift|open|class|open class PTFullscreenPopGesture",
@@ -16122,7 +16354,7 @@
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|class|public final class PTLifecycleBag",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 9,
+      "line": 10,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLifecycleBag {"
@@ -16130,7 +16362,7 @@
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|init|public init()",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 15,
+      "line": 19,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -16138,7 +16370,7 @@
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(_ task: Task<Void, Never>)",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 17,
+      "line": 21,
       "access": "public",
       "kind": "func",
       "declaration": "public func store(_ task: Task<Void, Never>) {"
@@ -16146,15 +16378,23 @@
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(observer: NSObjectProtocol)",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 21,
+      "line": 25,
       "access": "public",
       "kind": "func",
       "declaration": "public func store(observer: NSObjectProtocol) {"
     },
     {
+      "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(_ observation: NSKeyValueObservation)",
+      "path": "PooToolsSource/Core/PTLifecycleBag.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func store(_ observation: NSKeyValueObservation) {"
+    },
+    {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(_ timer: Timer)",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 25,
+      "line": 36,
       "access": "public",
       "kind": "func",
       "declaration": "public func store(_ timer: Timer) {"
@@ -16162,15 +16402,31 @@
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(_ displayLink: CADisplayLink)",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 29,
+      "line": 40,
       "access": "public",
       "kind": "func",
       "declaration": "public func store(_ displayLink: CADisplayLink) {"
     },
     {
+      "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func store(_ source: DispatchSource)",
+      "path": "PooToolsSource/Core/PTLifecycleBag.swift",
+      "line": 47,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func store(_ source: DispatchSource) {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func storeCancellation(_ cancellation: @escaping @MainActor () -> Void)",
+      "path": "PooToolsSource/Core/PTLifecycleBag.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func storeCancellation(_ cancellation: @escaping @MainActor () -> Void) {"
+    },
+    {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|func|public func invalidate()",
       "path": "PooToolsSource/Core/PTLifecycleBag.swift",
-      "line": 33,
+      "line": 58,
       "access": "public",
       "kind": "func",
       "declaration": "public func invalidate() {"
@@ -16784,9 +17040,17 @@
       "declaration": "public actor PTMediaCache {"
     },
     {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|let|public let policy: PTCachePolicy",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 61,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let policy: PTCachePolicy"
+    },
+    {
       "key": "PooToolsSource/Core/PTMediaCache.swift|public|init|public init(directory: URL? = nil,",
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 69,
+      "line": 77,
       "access": "public",
       "kind": "init",
       "declaration": "public init(directory: URL? = nil,"
@@ -16794,7 +17058,7 @@
     {
       "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func data(for key: PTMediaCacheKey) -> Data?",
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 79,
+      "line": 95,
       "access": "public",
       "kind": "func",
       "declaration": "public func data(for key: PTMediaCacheKey) -> Data? {"
@@ -16802,7 +17066,7 @@
     {
       "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func insert(_ data: Data, for key: PTMediaCacheKey)",
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 92,
+      "line": 117,
       "access": "public",
       "kind": "func",
       "declaration": "public func insert(_ data: Data, for key: PTMediaCacheKey) {"
@@ -16810,15 +17074,39 @@
     {
       "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func removeValue(for key: PTMediaCacheKey)",
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 100,
+      "line": 129,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeValue(for key: PTMediaCacheKey) {"
     },
     {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func metrics() -> PTCacheMetrics",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 133,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func metrics() -> PTCacheMetrics {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func handleMemoryWarning()",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 144,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handleMemoryWarning() {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func handleLowDisk()",
+      "path": "PooToolsSource/Core/PTMediaCache.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func handleLowDisk() {"
+    },
+    {
       "key": "PooToolsSource/Core/PTMediaCache.swift|public|func|public func removeAll()",
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 105,
+      "line": 165,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeAll() {"
@@ -16866,7 +17154,7 @@
     {
       "key": "PooToolsSource/Core/PTPhoneFeedBackControl.swift|public|enum|public enum PTPhoneFeedbackControl",
       "path": "PooToolsSource/Core/PTPhoneFeedBackControl.swift",
-      "line": 14,
+      "line": 13,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPhoneFeedbackControl {"
@@ -22198,6 +22486,30 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTNetworkRedactor {"
+    },
+    {
+      "key": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift|public|enum|public enum PTNetworkRegressionScenario: String, CaseIterable, Hashable, Sendable",
+      "path": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift",
+      "line": 7,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTNetworkRegressionScenario: String, CaseIterable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift|public|enum|public enum PTNetworkBodyStoreScenario: String, CaseIterable, Hashable, Sendable",
+      "path": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTNetworkBodyStoreScenario: String, CaseIterable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift|public|enum|public enum PTNetworkRegressionMatrix",
+      "path": "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift",
+      "line": 44,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTNetworkRegressionMatrix {"
     },
     {
       "key": "PooToolsSource/DebugNetwork/PTNetworkTimelineView.swift|public|class|public final class PTNetworkTimelineView: UIView",
@@ -32066,7 +32378,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func cleanSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 723,
+      "line": 721,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func cleanSystemLogView() {"
@@ -32074,7 +32386,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func createSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 888,
+      "line": 886,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func createSystemLogView() {"
@@ -32082,7 +32394,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 981,
+      "line": 979,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitDisabled = false"
@@ -32090,7 +32402,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitWarningDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 982,
+      "line": 980,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitWarningDisabled = false"
@@ -32098,7 +32410,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func print(_ items: Any, level: PTLogLevel = .info)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 984,
+      "line": 982,
       "access": "public",
       "kind": "func",
       "declaration": "public func print(_ items: Any, level: PTLogLevel = .info) {"
@@ -32106,7 +32418,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1075,
+      "line": 1073,
       "access": "public",
       "kind": "func",
       "declaration": "public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {"
@@ -32114,7 +32426,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clear()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1151,
+      "line": 1149,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -32122,7 +32434,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class PTTerminal:PFloatingButton",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1668,
+      "line": 1666,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTerminal:PFloatingButton {"
@@ -32130,7 +32442,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var systemText : PTInvertedTextView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1669,
+      "line": 1667,
       "access": "public",
       "kind": "var",
       "declaration": "public var systemText : PTInvertedTextView?"
@@ -32138,7 +32450,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttributedText(_ string: String)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1748,
+      "line": 1746,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttributedText(_ string: String) {"
@@ -32146,7 +32458,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func appendLog(_ item: PTLogBuffer.LogItem)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1765,
+      "line": 1763,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendLog(_ item: PTLogBuffer.LogItem) {"
@@ -42112,9 +42424,17 @@
       "declaration": "public var handler: (@MainActor @Sendable (PTFeedbackSignal) -> Void)?"
     },
     {
+      "key": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift|public|var|public var systemVibrationHandler: (@MainActor @Sendable () -> Void)?",
+      "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var systemVibrationHandler: (@MainActor @Sendable () -> Void)?"
+    },
+    {
       "key": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
-      "line": 30,
+      "line": 31,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -42122,10 +42442,18 @@
     {
       "key": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift|public|func|public func emit(_ signal: PTFeedbackSignal)",
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
-      "line": 32,
+      "line": 33,
       "access": "public",
       "kind": "func",
       "declaration": "public func emit(_ signal: PTFeedbackSignal) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift|public|func|public func emitSystemVibration()",
+      "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func emitSystemVibration() {"
     },
     {
       "key": "PooToolsSource/PToolsCore/PTMainActorBridge.swift|public|enum|public enum PTMainActorBridge",
@@ -44226,7 +44554,7 @@
     {
       "key": "PooToolsSource/PToolsFeedback/PTFeedback.swift|public|func|public func uninstallAsDefault()",
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 137,
+      "line": 143,
       "access": "public",
       "kind": "func",
       "declaration": "public func uninstallAsDefault() {"
@@ -44234,7 +44562,7 @@
     {
       "key": "PooToolsSource/PToolsFeedback/PTFeedback.swift|public|func|public func play(identifier: PTFeedbackPatternID,",
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 143,
+      "line": 150,
       "access": "public",
       "kind": "func",
       "declaration": "public func play(identifier: PTFeedbackPatternID,"
@@ -44242,7 +44570,7 @@
     {
       "key": "PooToolsSource/PToolsFeedback/PTFeedback.swift|public|func|public func resetEngine()",
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 177,
+      "line": 184,
       "access": "public",
       "kind": "func",
       "declaration": "public func resetEngine() {"
@@ -44250,7 +44578,7 @@
     {
       "key": "PooToolsSource/PToolsFeedback/PTFeedback.swift|public|func|public func playSystemVibration()",
       "path": "PooToolsSource/PToolsFeedback/PTFeedback.swift",
-      "line": 224,
+      "line": 231,
       "access": "public",
       "kind": "func",
       "declaration": "public func playSystemVibration() {"
@@ -53090,7 +53418,7 @@
     {
       "key": "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift|public|enum|public enum PTLegacyKakaJSONError: Error, LocalizedError, Sendable",
       "path": "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift",
-      "line": 32,
+      "line": 76,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLegacyKakaJSONError: Error, LocalizedError, Sendable {"
@@ -53098,7 +53426,7 @@
     {
       "key": "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift|public|var|public var errorDescription: String?",
       "path": "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift",
-      "line": 35,
+      "line": 79,
       "access": "public",
       "kind": "var",
       "declaration": "public var errorDescription: String? {"
@@ -71738,7 +72066,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|func|public func feedback()",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 74,
+      "line": 68,
       "access": "public",
       "kind": "func",
       "declaration": "public func feedback() {"
@@ -71746,7 +72074,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|func|public func prepare()",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 79,
+      "line": 75,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepare() {"
@@ -71754,7 +72082,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|class|open class Notification",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 86,
+      "line": 81,
       "access": "open",
       "kind": "class",
       "declaration": "open class Notification {"
@@ -71762,7 +72090,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|enum|public enum NotificationType",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 87,
+      "line": 82,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum NotificationType {"
@@ -71770,7 +72098,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|func|public func feedback(_ type: NotificationType)",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 105,
+      "line": 94,
       "access": "public",
       "kind": "func",
       "declaration": "public func feedback(_ type: NotificationType) {"
@@ -71778,7 +72106,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|func|public func prepare()",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 110,
+      "line": 108,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepare() {"
@@ -71786,7 +72114,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|public|protocol|public protocol PTRangeSeekSliderDelegate: AnyObject",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 121,
+      "line": 118,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTRangeSeekSliderDelegate: AnyObject {"
@@ -71794,7 +72122,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|class|open class PTRangeSeekSlider: UIControl",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 144,
+      "line": 141,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTRangeSeekSlider: UIControl {"
@@ -71802,7 +72130,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var minValue: CGFloat = 0.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 169,
+      "line": 166,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var minValue: CGFloat = 0.0 { didSet { refresh() } }"
@@ -71810,7 +72138,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var maxValue: CGFloat = 100.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 170,
+      "line": 167,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var maxValue: CGFloat = 100.0 { didSet { refresh() } }"
@@ -71818,7 +72146,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var selectedMinValue: CGFloat = 0.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 172,
+      "line": 169,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var selectedMinValue: CGFloat = 0.0 {"
@@ -71826,7 +72154,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var selectedMaxValue: CGFloat = 100.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 176,
+      "line": 173,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var selectedMaxValue: CGFloat = 100.0 {"
@@ -71834,7 +72162,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|open var minLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0)",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 180,
+      "line": 177,
       "access": "open",
       "kind": "var",
       "declaration": "open var minLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) {"
@@ -71842,7 +72170,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|open var maxLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0)",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 187,
+      "line": 184,
       "access": "open",
       "kind": "var",
       "declaration": "open var maxLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) {"
@@ -71850,7 +72178,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|open var numberFormatter: NumberFormatter =",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 194,
+      "line": 191,
       "access": "open",
       "kind": "var",
       "declaration": "open var numberFormatter: NumberFormatter = {"
@@ -71858,7 +72186,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var hideLabels: Bool = false",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 201,
+      "line": 198,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var hideLabels: Bool = false {"
@@ -71866,7 +72194,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var labelsFixed: Bool = false",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 208,
+      "line": 205,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var labelsFixed: Bool = false"
@@ -71874,7 +72202,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var minDistance: CGFloat = 0.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 209,
+      "line": 206,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var minDistance: CGFloat = 0.0 { didSet { if minDistance < 0.0 { minDistance = 0.0 } } }"
@@ -71882,7 +72210,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var maxDistance: CGFloat = .greatestFiniteMagnitude",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 210,
+      "line": 207,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var maxDistance: CGFloat = .greatestFiniteMagnitude { didSet { if maxDistance < 0.0 { maxDistance = .greatestFiniteMagnitude } } }"
@@ -71890,7 +72218,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var minLabelColor: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 212,
+      "line": 209,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var minLabelColor: UIColor?"
@@ -71898,7 +72226,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var maxLabelColor: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 213,
+      "line": 210,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var maxLabelColor: UIColor?"
@@ -71906,7 +72234,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var handleColor: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 214,
+      "line": 211,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var handleColor: UIColor?"
@@ -71914,7 +72242,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var handleBorderColor: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 215,
+      "line": 212,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var handleBorderColor: UIColor?"
@@ -71922,7 +72250,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var colorBetweenHandles: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 216,
+      "line": 213,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var colorBetweenHandles: UIColor?"
@@ -71930,7 +72258,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var initialColor: UIColor?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 217,
+      "line": 214,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var initialColor: UIColor?"
@@ -71938,7 +72266,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var disableRange: Bool = false",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 219,
+      "line": 216,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var disableRange: Bool = false {"
@@ -71946,7 +72274,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var enableStep: Bool = false",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 226,
+      "line": 223,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var enableStep: Bool = false"
@@ -71954,7 +72282,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var step: CGFloat = 0.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 227,
+      "line": 224,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var step: CGFloat = 0.0"
@@ -71962,7 +72290,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var handleImage: UIImage?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 229,
+      "line": 226,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var handleImage: UIImage? {"
@@ -71970,7 +72298,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var handleDiameter: CGFloat = 16.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 240,
+      "line": 237,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var handleDiameter: CGFloat = 16.0 {"
@@ -71978,7 +72306,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var selectedHandleDiameterMultiplier: CGFloat = 1.7",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 249,
+      "line": 246,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var selectedHandleDiameterMultiplier: CGFloat = 1.7"
@@ -71986,7 +72314,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var lineHeight: CGFloat = 1.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 251,
+      "line": 248,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var lineHeight: CGFloat = 1.0 { didSet { updateLineHeight() } }"
@@ -71994,7 +72322,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var handleBorderWidth: CGFloat = 0.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 252,
+      "line": 249,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var handleBorderWidth: CGFloat = 0.0 {"
@@ -72002,7 +72330,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var labelPadding: CGFloat = 8.0",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 258,
+      "line": 255,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var labelPadding: CGFloat = 8.0 { didSet { updateLabelPositions() } }"
@@ -72010,7 +72338,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var minLabelAccessibilityLabel: String?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 260,
+      "line": 257,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var minLabelAccessibilityLabel: String?"
@@ -72018,7 +72346,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var maxLabelAccessibilityLabel: String?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 261,
+      "line": 258,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var maxLabelAccessibilityLabel: String?"
@@ -72026,7 +72354,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var minLabelAccessibilityHint: String?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 262,
+      "line": 259,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var minLabelAccessibilityHint: String?"
@@ -72034,7 +72362,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|var|@IBInspectable open var maxLabelAccessibilityHint: String?",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 263,
+      "line": 260,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var maxLabelAccessibilityHint: String?"
@@ -72042,7 +72370,7 @@
     {
       "key": "PooToolsSource/Slider/PTRangeSeekSlider.swift|open|func|open func setupStyle()",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 400,
+      "line": 397,
       "access": "open",
       "kind": "func",
       "declaration": "open func setupStyle() {}"
@@ -72146,7 +72474,7 @@
     {
       "key": "PooToolsSource/Slider/PTSlider.swift|public|init|public init(showTitle: Bool = false, showRawValue: Bool = false)",
       "path": "PooToolsSource/Slider/PTSlider.swift",
-      "line": 81,
+      "line": 80,
       "access": "public",
       "kind": "init",
       "declaration": "public init(showTitle: Bool = false, showRawValue: Bool = false) {"
@@ -76289,10 +76617,11 @@
     }
   ],
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T12:22:17Z",
+  "generatedAt": "2026-10-01T14:20:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
   "sourceVersion": "5.59.0",
-  "generatorVersion": "Scripts/report_public_api.rb"
+  "generatorVersion": "Scripts/report_public_api.rb",
+  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
 }

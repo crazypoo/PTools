@@ -598,8 +598,6 @@ public class LocalConsole: NSObject {
         }
     }
     
-    lazy var feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
-    
     var debugBordersEnabled = false {
         didSet {
             PTDebugRuntimeAdapter.install()

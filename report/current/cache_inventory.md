@@ -1,11 +1,14 @@
 <!--
 Current report metadata.
+AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
 Source version: 5.59.0
-Generator version: @escaping () -> UIViewController?, with identifier: String) { |
-Generated at: 2026-10-01T12:30:41Z
+Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Generator version: 1
+Generator: Scripts/report_cache_inventory.rb
+Generated at: 2026-10-01T14:20:09Z
 -->
 
 # PTools 当前缓存盘点
@@ -79,6 +82,7 @@ Generated at: 2026-10-01T12:30:41Z
 | PooToolsSource/Category/UIImageView+PTEX.swift:579 | disk or custom cache | set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) } |
 | PooToolsSource/Core/BorderManager.swift:19 | disk or custom cache | // Previous configuration cache. |
 | PooToolsSource/Core/PTCacheStore.swift:1 | disk or custom cache | // English: This bounded actor is the shared cache contract for resource and computation caches. |
+| PooToolsSource/Core/PTCacheStore.swift:15 | disk or custom cache | // English: Shared cache policy keeps limits, expiry, namespace and cleanup behavior explicit. |
 | PooToolsSource/Core/PTGCDManager.swift:51 | NSCache | // 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer |
 | PooToolsSource/Core/PTGifManager.swift:179 | disk or custom cache | /// Check if this manager has cache for an imageView |
 | PooToolsSource/Core/PTGifManager.swift:180 | disk or custom cache | /// - Parameter imageView: The image view we're searching cache for |

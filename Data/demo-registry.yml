@@ -279,6 +279,26 @@ modules:
   canonical_module_id: null
   demos: []
 -
+  module_id: "model"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "model-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "model-legacy-kaka-json"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "model-legacy-smart-codable"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
   module_id: "motion"
   coverage: "documentation"
   canonical_module_id: null
@@ -927,6 +947,46 @@ modules:
 -
   module_id: "ptools-logging"
   coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-combine"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-combine-2"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-legacy-kaka-json"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-legacy-smart-codable"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-uikit"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-model-uikit-2"
+  coverage: "documentation"
   canonical_module_id: null
   demos: []
 -

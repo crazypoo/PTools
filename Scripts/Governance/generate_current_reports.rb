@@ -9,7 +9,7 @@ require "fileutils"
 require "time"
 
 repo_root = File.expand_path("../..", __dir__)
-current_dir = File.join(repo_root, "report", "current")
+current_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(current_dir)
 
 revision = `git -C "#{repo_root}" rev-parse HEAD`.strip
@@ -18,14 +18,16 @@ branch = "DETACHED" if branch.empty?
 version = File.read(File.join(repo_root, "VERSION")).strip
 generated_at = Time.now.utc.iso8601
 repository = "crazypoo/PTools"
+source_inputs_digest = `ruby "#{File.join(__dir__, "source_inputs_digest.rb")}"`.strip
 
-def metadata(repository, branch, revision, version, generator_version)
+def metadata(repository, branch, revision, version, generator_version, source_inputs_digest)
   {
     "repository" => repository,
     "branch" => branch,
     "sourceRevision" => revision,
     "sourceVersion" => version,
-    "generatorVersion" => generator_version
+    "generatorVersion" => generator_version,
+    "sourceInputsDigest" => source_inputs_digest
   }
 end
 
@@ -33,8 +35,8 @@ Dir.glob(File.join(current_dir, "*.json")).sort.each do |path|
   payload = JSON.parse(File.read(path))
   generator = payload["generator"] || payload["generatorVersion"] || "current-report-normalizer"
   payload["schemaVersion"] ||= payload["schema_version"] || 1
-  payload["generatedAt"] ||= payload["generated_at"] || generated_at
-  payload.merge!(metadata(repository, branch, revision, version, generator))
+  payload["generatedAt"] = generated_at
+  payload.merge!(metadata(repository, branch, revision, version, generator, source_inputs_digest))
   payload["source_revision"] = revision if payload.key?("source_revision")
   payload["generated_at"] = payload["generatedAt"] if payload.key?("generated_at")
   File.write(path, JSON.pretty_generate(payload) + "\n")
@@ -43,11 +45,14 @@ end
 report_metadata_header = [
   "<!--",
   "Current report metadata.",
+  "AUTO-GENERATED FILE.",
   "Repository: #{repository}",
   "Branch: #{branch}",
   "Source revision: #{revision}",
   "Source version: #{version}",
-  "Generator version: Scripts/governance/generate_current_reports.rb",
+  "Source inputs digest: #{source_inputs_digest}",
+  "Generator version: 1",
+  "Generator: Scripts/governance/generate_current_reports.rb",
   "Generated at: #{generated_at}",
   "-->"
 ].join("\n")
@@ -58,11 +63,14 @@ Dir.glob(File.join(current_dir, "*.md")).sort.each do |path|
   header = [
     "<!--",
     "Current report metadata.",
+    "AUTO-GENERATED FILE.",
     "Repository: #{repository}",
     "Branch: #{branch}",
     "Source revision: #{revision}",
     "Source version: #{version}",
-    "Generator version: #{generator}",
+    "Source inputs digest: #{source_inputs_digest}",
+    "Generator version: 1",
+    "Generator: #{generator}",
     "Generated at: #{generated_at}",
     "-->"
   ].join("\n")
@@ -74,15 +82,19 @@ Dir.glob(File.join(current_dir, "*.md")).sort.each do |path|
   File.write(path, content.end_with?("\n") ? content : "#{content}\n")
 end
 
-governance = metadata(repository, branch, revision, version, "Scripts/governance/generate_current_reports.rb")
+governance = metadata(repository, branch, revision, version, "Scripts/governance/generate_current_reports.rb", source_inputs_digest)
+governance["generator"] = "Scripts/governance/generate_current_reports.rb"
 governance["schemaVersion"] = 1
 governance["generatedAt"] = generated_at
+governance["source_revision"] = revision
+governance["generated_at"] = generated_at
 governance["reportDirectory"] = "report/current"
 governance["historicalDirectory"] = "report/baselines/<version>"
 File.write(File.join(current_dir, "governance.json"), JSON.pretty_generate(governance) + "\n")
 
 registry_path = File.join(repo_root, "Scripts", "concurrency_exception_registry.json")
-registry = JSON.parse(File.read(registry_path)).fetch("files", [])
+registry_payload = JSON.parse(File.read(registry_path))
+registry = registry_payload.fetch("exceptions", registry_payload.fetch("files", []))
 allowlist = File.readlines(File.join(repo_root, "Scripts", "unchecked_sendable_allowlist.txt"), chomp: true)
   .map(&:strip).reject { |line| line.empty? || line.start_with?("#") }
 declarations = []

@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
-  "generated_at": "2026-10-01T12:22:17Z",
+  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "generated_at": "2026-10-01T14:20:09Z",
   "counts": {
     "main_queue_async": 27,
     "task_detached": 29,
-    "unchecked_sendable": 68,
+    "unchecked_sendable": 67,
     "as_bang": 4
   },
   "locations": [
@@ -364,12 +364,6 @@
       "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
       "line": 11,
       "text": "public final class PTWeakProxy: NSObject, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/ImagePicker/PTImagePicker.swift",
-      "line": 589,
-      "text": "private struct SendableBox<T>: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
@@ -781,10 +775,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T12:22:17Z",
+  "generatedAt": "2026-10-01T14:20:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
   "sourceVersion": "5.59.0",
-  "generatorVersion": "Scripts/report_concurrency.rb"
+  "generatorVersion": "Scripts/report_concurrency.rb",
+  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
 }

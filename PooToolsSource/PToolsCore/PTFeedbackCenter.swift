@@ -26,10 +26,18 @@ public final class PTFeedbackCenter {
     public static let shared = PTFeedbackCenter()
 
     public var handler: (@MainActor @Sendable (PTFeedbackSignal) -> Void)?
+    public var systemVibrationHandler: (@MainActor @Sendable () -> Void)?
 
     public init() {}
 
     public func emit(_ signal: PTFeedbackSignal) {
         handler?(signal)
+    }
+
+    // English: Keep legacy system-vibration calls behind the same optional feedback adapter.
+    // Español: Mantiene las llamadas antiguas de vibración del sistema detrás del mismo adaptador opcional.
+    // 中文：将旧的系统震动调用统一收敛到同一个可选反馈适配器之后。
+    public func emitSystemVibration() {
+        systemVibrationHandler?()
     }
 }

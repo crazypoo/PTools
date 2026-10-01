@@ -7,7 +7,7 @@ require "rubygems"
 require "time"
 
 repo_root = File.expand_path("..", __dir__)
-current_dir = File.join(repo_root, "report", "current")
+current_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(current_dir)
 
 source_revision = `git -C "#{repo_root}" rev-parse HEAD`.strip

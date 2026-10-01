@@ -11,7 +11,7 @@ require "time"
 repo_root = File.expand_path("..", __dir__)
 source_root = File.join(repo_root, "PooToolsSource")
 allowlist_path = File.join(repo_root, "Scripts", "unchecked_sendable_allowlist.txt")
-report_dir = File.join(repo_root, "report", "current")
+report_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(report_dir)
 
 allowlisted = File.readlines(allowlist_path, chomp: true).filter_map do |line|
@@ -25,6 +25,7 @@ Dir.glob(File.join(source_root, "**", "*.swift")).sort.each do |file|
   relative = file.delete_prefix("#{repo_root}/")
   File.readlines(file).each_with_index do |line, index|
     next unless line.include?("@unchecked Sendable")
+    next if line.lstrip.start_with?("//")
     declarations << {
       "path" => relative,
       "line" => index + 1,

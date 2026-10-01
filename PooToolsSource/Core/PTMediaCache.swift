@@ -58,17 +58,33 @@ public struct PTMediaCacheKey: Hashable, Sendable {
 public actor PTMediaCache {
     public static let shared = PTMediaCache()
 
+    public let policy: PTCachePolicy
     private let directory: URL
     private let maximumDiskSize: Int64
     private let targetDiskSize: Int64
     private let maximumMemorySize: Int64 = 32 * 1024 * 1024
     private var memoryValues: [PTMediaCacheKey: Data] = [:]
+    private var expirationDates: [PTMediaCacheKey: Date] = [:]
     private var memorySize: Int64 = 0
     private var lastMaintenanceUptime: TimeInterval = 0
+    private var hitCount: UInt64 = 0
+    private var missCount: UInt64 = 0
+    private var insertionCount: UInt64 = 0
+    private var evictionCount: UInt64 = 0
+    private var expiredCount: UInt64 = 0
+    private var lastEvictionReason: PTCacheEvictionReason?
 
     public init(directory: URL? = nil,
                 maximumDiskSize: Int64 = 150 * 1024 * 1024,
                 targetDiskSize: Int64 = 100 * 1024 * 1024) {
+        self.policy = PTCachePolicy(countLimit: 512,
+                                    costLimit: 32 * 1024 * 1024,
+                                    expiration: 7 * 24 * 60 * 60,
+                                    namespace: "media",
+                                    clearsOnMemoryWarning: true,
+                                    lowDiskThreshold: 50 * 1024 * 1024,
+                                    diskLimit: maximumDiskSize,
+                                    diskTarget: targetDiskSize)
         let baseURL = directory ?? (FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first ?? FileManager.default.temporaryDirectory)
         self.directory = baseURL.appendingPathComponent("PTMediaCache", isDirectory: true)
         self.maximumDiskSize = max(1, maximumDiskSize)
@@ -77,13 +93,22 @@ public actor PTMediaCache {
     }
 
     public func data(for key: PTMediaCacheKey) -> Data? {
+        if isExpired(key) {
+            removeValue(for: key, reason: .expired)
+            expiredCount += 1
+            missCount += 1
+            return nil
+        }
         if let data = memoryValues[key] {
+            hitCount += 1
             return data
         }
         let url = fileURL(for: key)
         guard let data = try? Data(contentsOf: url, options: .mappedIfSafe), !data.isEmpty else {
+            missCount += 1
             return nil
         }
+        hitCount += 1
         storeInMemory(data, for: key)
         touch(url)
         return data
@@ -92,18 +117,54 @@ public actor PTMediaCache {
     public func insert(_ data: Data, for key: PTMediaCacheKey) {
         guard !data.isEmpty else { return }
         storeInMemory(data, for: key)
+        insertionCount += 1
+        if let expiration = policy.expiration {
+            expirationDates[key] = Date().addingTimeInterval(expiration)
+        }
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         try? data.write(to: fileURL(for: key), options: .atomic)
         trimIfNeeded()
     }
 
     public func removeValue(for key: PTMediaCacheKey) {
+        removeValue(for: key, reason: .manual)
+    }
+
+    public func metrics() -> PTCacheMetrics {
+        PTCacheMetrics(hits: hitCount,
+                       misses: missCount,
+                       insertions: insertionCount,
+                       evictions: evictionCount,
+                       expiredEntries: expiredCount,
+                       totalCost: Int(memorySize),
+                       count: memoryValues.count,
+                       lastEvictionReason: lastEvictionReason)
+    }
+
+    public func handleMemoryWarning() {
+        memoryValues.removeAll(keepingCapacity: false)
+        memorySize = 0
+        evictionCount += 1
+        lastEvictionReason = .memoryWarning
+    }
+
+    public func handleLowDisk() {
+        trimIfNeeded(force: true, reason: .lowDisk)
+    }
+
+    private func removeValue(for key: PTMediaCacheKey, reason: PTCacheEvictionReason) {
         removeFromMemory(key)
+        expirationDates.removeValue(forKey: key)
         try? FileManager.default.removeItem(at: fileURL(for: key))
+        if reason != .manual {
+            evictionCount += 1
+            lastEvictionReason = reason
+        }
     }
 
     public func removeAll() {
         memoryValues.removeAll(keepingCapacity: false)
+        expirationDates.removeAll(keepingCapacity: false)
         memorySize = 0
         guard let files = try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil) else { return }
         for url in files {
@@ -134,9 +195,9 @@ public actor PTMediaCache {
         memorySize -= Int64(data.count)
     }
 
-    private func trimIfNeeded() {
+    private func trimIfNeeded(force: Bool = false, reason: PTCacheEvictionReason = .costLimit) {
         let now = ProcessInfo.processInfo.systemUptime
-        guard now - lastMaintenanceUptime >= 60 else { return }
+        guard force || now - lastMaintenanceUptime >= 60 else { return }
         lastMaintenanceUptime = now
 
         guard let files = try? FileManager.default.contentsOfDirectory(at: directory,
@@ -159,7 +220,20 @@ public actor PTMediaCache {
         for entry in entries {
             try? FileManager.default.removeItem(at: entry.url)
             totalSize -= entry.size
+            evictionCount += 1
+            lastEvictionReason = reason
             if totalSize <= targetDiskSize { break }
         }
+    }
+
+    private func isExpired(_ key: PTMediaCacheKey) -> Bool {
+        if let expirationDate = expirationDates[key] {
+            return expirationDate <= .now
+        }
+        guard let expiration = policy.expiration else { return false }
+        let url = fileURL(for: key)
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
+              let modified = attributes[.modificationDate] as? Date else { return false }
+        return modified.addingTimeInterval(expiration) <= .now
     }
 }

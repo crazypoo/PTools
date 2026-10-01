@@ -118,8 +118,8 @@ allowed = File.readlines(allowlist_path, chomp: true).reject { |line| line.match
 registry = JSON.parse(File.read(registry_path))
 required_fields = registry.fetch("required_fields")
 categories = registry.fetch("category_definitions")
-entries = registry.fetch("files")
-paths = entries.map { |entry| entry.fetch("path") }.sort
+entries = registry.fetch("exceptions")
+paths = entries.map { |entry| entry.fetch("path") }.uniq.sort
 if paths != allowed
   missing = allowed - paths
   extra = paths - allowed
@@ -127,12 +127,16 @@ if paths != allowed
 end
 entries.each do |entry|
   abort "FAIL: concurrency registry entry is missing path" unless entry["path"].is_a?(String) && !entry["path"].strip.empty?
+  required_fields.each do |field|
+    value = entry[field]
+    abort "FAIL: concurrency registry entry is missing #{field}" unless value.is_a?(String) && !value.strip.empty? || field == "removeIn"
+  end
   category = entry.fetch("category")
   abort "FAIL: unknown concurrency registry category #{category.inspect}" unless categories.key?(category)
   abort "FAIL: concurrency registry path is missing #{entry.fetch("path")}" unless File.file?(entry.fetch("path"))
 end
 categories.each do |category, definition|
-  (required_fields - ["category"]).each do |field|
+  %w[system_type protection replacement_plan].each do |field|
     value = definition[field]
     abort "FAIL: concurrency category #{category} is missing #{field}" unless value.is_a?(String) && !value.strip.empty?
   end

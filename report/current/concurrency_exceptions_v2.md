@@ -1,11 +1,14 @@
 <!--
 Current report metadata.
+AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
 Source version: 5.59.0
-Generator version: Scripts/governance/generate_current_reports.rb
-Generated at: 2026-10-01T12:30:41Z
+Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Generator version: 1
+Generator: Scripts/governance/generate_current_reports.rb
+Generated at: 2026-10-01T14:20:09Z
 -->
 
 # Swift 6 Concurrency Exceptions v2
@@ -40,7 +43,6 @@ Generated at: 2026-10-01T12:30:41Z
 | `PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift` | `final class PTLoadedLibrariesViewModel: @unchecked Sendable {` | `@unchecked Sendable` | MAIN_ACTOR_ONLY | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift` | `final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {` | `@unchecked Sendable` | SYSTEM_WRAPPER | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/ImageEditor/PTWeakProxy.swift` | `public final class PTWeakProxy: NSObject, @unchecked Sendable {` | `@unchecked Sendable` | MAIN_ACTOR_ONLY | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
-| `PooToolsSource/ImagePicker/PTImagePicker.swift` | `private struct SendableBox<T>: @unchecked Sendable {` | `@unchecked Sendable` | SYSTEM_WRAPPER | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/Inspector/KeyboardAnimatable.swift` | `private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {` | `@unchecked Sendable` | MAIN_ACTOR_ONLY | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/Inspector/KeyboardAnimatable.swift` | `private final class PTNotificationBox: @unchecked Sendable {` | `@unchecked Sendable` | MAIN_ACTOR_ONLY | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/Inspector/KeyboardAnimatable.swift` | `private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {` | `@unchecked Sendable` | MAIN_ACTOR_ONLY | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
@@ -85,4 +87,4 @@ Generated at: 2026-10-01T12:30:41Z
 | `PooToolsSource/VideoEditor/VideoConverter.swift` | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | `@unchecked Sendable` | SYSTEM_WRAPPER | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 | `PooToolsSource/Vision/PTVision.swift` | `private struct PTObservationBox: @unchecked Sendable {` | `@unchecked Sendable` | SYSTEM_WRAPPER | system callback boundary; mutable state remains isolated | serial delegate/actor or MainActor boundary | Debug/Concurrency owner | keep until dedicated native callback adapter replaces it |
 
-Allowlisted files: 42. Business state must not be added to this list.
+Allowlisted files: 41. Business state must not be added to this list.

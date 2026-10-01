@@ -8,7 +8,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 allowlist="$repo_root/Scripts/file_size_allowlist.txt"
-report_dir="$repo_root/report/current"
+report_dir="${PTOOLS_REPORT_DIR:-$repo_root/report/current}"
 mkdir -p "$report_dir"
 
 while IFS='|' read -r path ticket reason; do

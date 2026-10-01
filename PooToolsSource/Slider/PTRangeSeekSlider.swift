@@ -65,19 +65,14 @@ open class TapticEngine {
     /// 包装 `UISelectionFeedbackGenerator` (选择切换感)
     @MainActor
     open class Selection {
-        private var generator: UISelectionFeedbackGenerator? = {
-            let generator = UISelectionFeedbackGenerator()
-            generator.prepare()
-            return generator
-        }()
-
         public func feedback() {
-            generator?.selectionChanged()
-            generator?.prepare()
+            // English: Preserve the legacy wrapper while routing selection feedback centrally.
+            // Español: Conserva el wrapper heredado y centraliza la respuesta de selección.
+            // 中文：保留旧包装器，同时集中处理选择反馈。
+            PTFeedbackCenter.shared.emit(.selectionChanged)
         }
 
         public func prepare() {
-            generator?.prepare()
         }
     }
 
@@ -96,19 +91,21 @@ open class TapticEngine {
             }
         }
 
-        private var generator: UINotificationFeedbackGenerator? = {
-            let generator = UINotificationFeedbackGenerator()
-            generator.prepare()
-            return generator
-        }()
-
         public func feedback(_ type: NotificationType) {
-            generator?.notificationOccurred(type.feedbackType)
-            generator?.prepare()
+            // English: Map the legacy notification enum to the shared semantic backend.
+            // Español: Mapea el enum heredado de notificación al backend semántico compartido.
+            // 中文：将旧通知枚举映射到共享的语义反馈后端。
+            switch type {
+            case .success:
+                PTFeedbackCenter.shared.emit(.success)
+            case .warning:
+                PTFeedbackCenter.shared.emit(.warning)
+            case .error:
+                PTFeedbackCenter.shared.emit(.error)
+            }
         }
 
         public func prepare() {
-            generator?.prepare()
         }
     }
 }

@@ -57,4 +57,12 @@ final class PTNetworkCaptureContractTests: XCTestCase {
         let filter = PTNetworkCaptureFilter(host: "example.com", onlyFailures: true)
         XCTAssertTrue(filter.matches(PTNetworkCaptureSummary(record: record)))
     }
+
+    func testRegressionMatrixCoversGovernanceScenarios() {
+        XCTAssertEqual(Set(PTNetworkRegressionMatrix.capture), Set(PTNetworkRegressionScenario.allCases))
+        XCTAssertEqual(Set(PTNetworkRegressionMatrix.bodyAndStore), Set(PTNetworkBodyStoreScenario.allCases))
+        XCTAssertTrue(PTNetworkRegressionMatrix.capture.contains(.debugOnOffParity))
+        XCTAssertTrue(PTNetworkRegressionMatrix.capture.contains(.realHost))
+        XCTAssertTrue(PTNetworkRegressionMatrix.bodyAndStore.contains(.oneThousandRecords))
+    }
 }

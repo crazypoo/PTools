@@ -11,7 +11,7 @@ require "open3"
 require "time"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-REPORT_DIR = File.join(REPO_ROOT, "report", "current")
+REPORT_DIR = ENV.fetch("PTOOLS_REPORT_DIR", File.join(REPO_ROOT, "report", "current"))
 JSON_PATH = File.join(REPORT_DIR, "cocoapods_subspec_graph.json")
 MARKDOWN_PATH = File.join(REPORT_DIR, "cocoapods_subspec_graph.md")
 

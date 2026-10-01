@@ -9,7 +9,7 @@ require "time"
 # 中文：盘点 UI 隔离代码附近可能较重的工作，但不把静态文本误认为真实运行时调度证明。
 
 repo_root = File.expand_path("..", __dir__)
-report_dir = File.join(repo_root, "report", "current")
+report_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(report_dir)
 
 targets = {

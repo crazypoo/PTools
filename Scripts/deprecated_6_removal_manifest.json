@@ -2,14 +2,245 @@
   "schemaVersion": 1,
   "targetVersion": "6.0.0",
   "entries": [
-    {"symbol":"Network.gobalUrl","replacement":"Network.globalURL","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"Network.socketGobalUrl","replacement":"Network.socketGlobalURL","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"GobalNavControl","replacement":"globalNavControl","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"gobalWebImageLoadOption","replacement":"webImageLoadOptions","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"heightlightColor","replacement":"highlightColor","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"netRequsetTime","replacement":"requestTimeout","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"PTCoreUserDefultsWrapper","replacement":"PTCoreUserDefaultsWrapper","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"BilogyID","replacement":"BioID","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
-    {"symbol":"MeidaPermission","replacement":"MediaPermission","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"}
+    {
+      "symbol": "Network.gobalUrl",
+      "replacement": "Network.globalURL",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": false,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "Network.socketGobalUrl",
+      "replacement": "Network.socketGlobalURL",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": false,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "GobalNavControl",
+      "replacement": "globalNavControl",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 1,
+        "locations": [
+          "PooToolsSource/Base/PTBaseNavControl.swift:166"
+        ]
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "gobalWebImageLoadOption",
+      "replacement": "webImageLoadOptions",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 2,
+        "locations": [
+          "PooToolsSource/Base/PTAppBaseConfig.swift:108",
+          "PooToolsSource/Debug/PTDevFunction.swift:34"
+        ]
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "heightlightColor",
+      "replacement": "highlightColor",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 3,
+        "locations": [
+          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:73",
+          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:88",
+          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:98"
+        ]
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "netRequsetTime",
+      "replacement": "requestTimeout",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 1,
+        "locations": [
+          "PooToolsSource/NetWork/NetworkTypes.swift:220"
+        ]
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "PTCoreUserDefultsWrapper",
+      "replacement": "PTCoreUserDefaultsWrapper",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 30,
+        "locations": [
+          "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:408",
+          "PooToolsSource/Core/PTAppUserdefault.swift:43",
+          "PooToolsSource/Core/PTAppUserdefault.swift:45",
+          "PooToolsSource/Core/PTAppUserdefault.swift:133",
+          "PooToolsSource/Debug/PTDebugFunction.swift:50",
+          "PooToolsSource/Debug/PTDebugFunction.swift:70",
+          "PooToolsSource/Debug/PTDebugViewController.swift:38",
+          "PooToolsSource/Debug/PTDebugViewController.swift:65",
+          "PooToolsSource/Debug/PTDebugViewController.swift:109",
+          "PooToolsSource/Debug/PTDebugViewController.swift:129",
+          "PooToolsSource/Debug/PTDebugViewController.swift:138",
+          "PooToolsSource/Debug/PTDebugViewController.swift:150",
+          "PooToolsSource/Debug/PTDebugViewController.swift:170",
+          "PooToolsSource/Debug/PTDebugViewController.swift:179",
+          "PooToolsSource/Debug/PTDevFunction.swift:22",
+          "PooToolsSource/Language/PTLanguage.swift:307",
+          "PooToolsSource/Language/PTLanguage.swift:310",
+          "PooToolsSource/Language/PTLanguage.swift:317",
+          "PooToolsSource/Language/PTLanguage.swift:320",
+          "PooToolsSource/Language/PTLanguage.swift:324",
+          "PooToolsSource/NetWork/Network.swift:341",
+          "PooToolsSource/NetWork/Network.swift:360",
+          "PooToolsSource/NetWork/NetworkTypes.swift:84",
+          "PooToolsSource/NetWork/NetworkTypes.swift:92",
+          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:103",
+          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:107",
+          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:109",
+          "PooToolsSource/PermissionCore/PTPermissionViewController.swift:200",
+          "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:30",
+          "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:36"
+        ]
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "BilogyID",
+      "replacement": "BioID",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": false,
+      "compatibilityForwarding": false,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    },
+    {
+      "symbol": "MeidaPermission",
+      "replacement": "MediaPermission",
+      "firstDeprecated": "5.x",
+      "internalUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "exampleUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "removeIn": "6.0.0",
+      "testsUsage": {
+        "count": 0,
+        "locations": []
+      },
+      "canonicalReplacementExists": false,
+      "compatibilityForwarding": false,
+      "migrationDoc": "CHANGELOG.md",
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+    }
   ]
 }

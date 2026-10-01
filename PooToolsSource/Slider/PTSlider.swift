@@ -64,7 +64,6 @@ public class PTSlider: UISlider {
     private let thumbBoundY: CGFloat = 20
     private let thumbBoundX: CGFloat = 10
     private var lastThumbBounds: CGRect = .zero
-    private let feedbackGenerator = UISelectionFeedbackGenerator()
     private var lastSteppedValue: Float?
     
     private lazy var sliderValueLabel: UILabel = {
@@ -101,7 +100,6 @@ public class PTSlider: UISlider {
         
         addSubview(sliderValueLabel)
         updateLabelConstraints()
-        feedbackGenerator.prepare()
     }
     
     // MARK: - Layout & Thumb
@@ -189,10 +187,13 @@ public class PTSlider: UISlider {
         
         // 2. 触发震动反馈
         if enableHapticFeedback {
+            // English: Emit selection feedback without retaining a control-specific generator.
+            // Español: Emite feedback de selección sin retener un generador por control.
+            // 中文：不再由控件持有生成器，统一发出选择反馈。
             if value == minimumValue || value == maximumValue {
-                feedbackGenerator.selectionChanged()
+                PTFeedbackCenter.shared.emit(.selectionChanged)
             } else if step > 0 && value != lastSteppedValue {
-                feedbackGenerator.selectionChanged()
+                PTFeedbackCenter.shared.emit(.selectionChanged)
                 lastSteppedValue = value
             }
         }

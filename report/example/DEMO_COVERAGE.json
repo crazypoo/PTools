@@ -1,7 +1,7 @@
 {
   "counts": {
     "compatibility_alias": 1,
-    "documentation": 100,
+    "documentation": 112,
     "extension_required": 3,
     "physical_device_required": 7,
     "runnable": 114
@@ -12,11 +12,11 @@
     "unresolved": []
   },
   "failures": [],
-  "generated_at": "2026-09-29T17:04:26+08:00",
+  "generated_at": "2026-10-01T20:52:08+08:00",
   "generator": "Scripts/Example/validate_demo_coverage.py",
   "missing": [],
-  "moduleCount": 225,
+  "moduleCount": 237,
   "schemaVersion": 1,
-  "source_revision": "e0490984d243f6f5c7cb3f92c5994bd9777a95e0",
-  "version": "5.57.4"
+  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "version": "5.59.0"
 }

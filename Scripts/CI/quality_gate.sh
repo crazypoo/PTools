@@ -149,8 +149,16 @@ run_named_gate() {
     governance)
       run_gate GOVERNANCE bash -c '
         set -euo pipefail
-        ruby Scripts/governance/generate_current_reports.rb
-        bash Scripts/governance/validate_current_reports.sh
+        bash Scripts/Governance/generate_all_current_reports.sh --check
+        bash Scripts/Governance/validate_current_reports.sh
+        python3 Scripts/Governance/validate_concurrency_registry.py
+        python3 Scripts/Governance/validate_dependency_freeze.py
+        python3 Scripts/Governance/validate_module_freeze.py
+        python3 Scripts/Governance/validate_public_api_freeze.py
+        python3 Scripts/Governance/validate_deprecated_manifest.py
+        python3 Scripts/Governance/validate_cache_governance.py
+        python3 Scripts/Governance/validate_lifecycle_resources.py
+        python3 Scripts/Governance/validate_haptic_backend.py
         bash Scripts/validate_559_debugnetwork.sh
       '
       ;;

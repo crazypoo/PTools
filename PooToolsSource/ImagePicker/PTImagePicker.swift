@@ -586,8 +586,12 @@ extension PTImagePicker {
     }
 }
 
-private struct SendableBox<T>: @unchecked Sendable {
-    let value: T
+// English: Store legacy picker results on MainActor and resume only with a Sendable signal.
+// Español: Guarda los resultados del selector heredado en MainActor y reanuda solo con una señal Sendable.
+// 中文：把旧选择器结果保存在 MainActor 中，只用 Sendable 信号恢复异步等待。
+@MainActor
+private final class PTMainActorPickerResultBox<Value> {
+    var result: Result<Value, PTImagePicker.PickerError>?
 }
 
 // MARK: - 控制器囘調
@@ -599,25 +603,23 @@ private extension PTImagePicker.Controller {
         self.completion = completion
     }
     
-    // 🚀 终极修复 2：改造 async 桥接方法，使用 Box 进行装箱和拆箱
+    // English: Keep the continuation on MainActor; picker values never cross a nonisolated boundary here.
+    // Español: Mantiene la continuación en MainActor; los valores del picker no cruzan aquí un límite no aislado.
+    // 中文：让 continuation 始终留在 MainActor，选择器结果不会在这里跨越非隔离边界。
     @MainActor
     func pickObject() async throws -> T {
-        // 让 continuation 传递我们的安全盒子 (SendableBox)
-        let box = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<SendableBox<T>, Error>) in
-            
+        let resultBox = PTMainActorPickerResultBox<T>()
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
             self.pickObject { result in
-                switch result {
-                case .success(let obj):
-                    // 成功时：把非 Sendable 的 T (如 UIImage) 装进盒子里传递
-                    continuation.resume(returning: SendableBox(value: obj))
-                case .failure(let error):
-                    // 失败时：错误类型通常天然是 Sendable 的，直接抛出
-                    continuation.resume(throwing: error)
-                }
+                resultBox.result = result
+                continuation.resume()
             }
         }
-        // 拆开盒子，返回真实的图片或数据对象
-        return box.value
+
+        guard let result = resultBox.result else {
+            throw PTImagePicker.PickerError.Other(nil)
+        }
+        return try result.get()
     }
 }
 

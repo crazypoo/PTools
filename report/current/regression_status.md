@@ -1,11 +1,14 @@
 <!--
 Current report metadata.
+AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
 Source version: 5.59.0
-Generator version: current-report-normalizer
-Generated at: 2026-10-01T12:30:41Z
+Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Generator version: 1
+Generator: Scripts/report_current_summaries.rb
+Generated at: 2026-10-01T14:20:09Z
 -->
 
 # PTools 当前回归状态
@@ -14,7 +17,7 @@ Generated at: 2026-10-01T12:30:41Z
 
 - 当前 podspec 版本：`5.59.0`
 - 最新正式 Git tag：`5.58.0`
-- 当前提交：`6a3f97d0ab05a4f04ab789c93804c84c787b5da6`
+- 当前提交：`fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e`
 - 当前状态：`static_and_build_evidence_required`
 
 ## 发布前仍需人工确认

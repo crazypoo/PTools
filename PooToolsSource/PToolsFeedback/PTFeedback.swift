@@ -125,8 +125,14 @@ public final class PTHapticEngine {
     // 中文：将可选触觉适配器安装到 Core 的语义反馈钩子之后。
     public func installAsDefault() {
         guard !isDefaultFeedbackHandlerInstalled else { return }
+        // English: Install both semantic and system-vibration callbacks at one backend boundary.
+        // Español: Instala los callbacks semánticos y de vibración del sistema en un único límite.
+        // 中文：在同一个后端边界统一安装语义反馈和系统震动回调。
         PTFeedbackCenter.shared.handler = { signal in
             PTHapticEngine.shared.play(PTFeedbackEvent(signal: signal))
+        }
+        PTFeedbackCenter.shared.systemVibrationHandler = {
+            PTHapticEngine.shared.playSystemVibration()
         }
         isDefaultFeedbackHandlerInstalled = true
     }
@@ -137,6 +143,7 @@ public final class PTHapticEngine {
     public func uninstallAsDefault() {
         guard isDefaultFeedbackHandlerInstalled else { return }
         PTFeedbackCenter.shared.handler = nil
+        PTFeedbackCenter.shared.systemVibrationHandler = nil
         isDefaultFeedbackHandlerInstalled = false
     }
 

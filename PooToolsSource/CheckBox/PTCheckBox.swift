@@ -65,14 +65,6 @@ public class PTCheckBox: UIControl {
     open lazy var checkmarkColor: UIColor = tintColor
     
     /// 修复：使用 Selection 震动反馈更适合 Checkbox 切换
-    fileprivate lazy var feedbackGenerator: UISelectionFeedbackGenerator = {
-        let generator = UISelectionFeedbackGenerator()
-        if self.useHapticFeedback {
-            generator.prepare()
-        }
-        return generator
-    }()
-
     // MARK: - 生命周期
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,8 +106,12 @@ public class PTCheckBox: UIControl {
         self.sendActions(for: .valueChanged)
         
         if self.useHapticFeedback {
-            self.feedbackGenerator.selectionChanged()
-            self.feedbackGenerator.prepare()
+            // English: Checkbox feedback uses the shared semantic selection signal.
+            // Español: La respuesta del checkbox usa la señal semántica de selección compartida.
+            // 中文：复选框反馈统一使用共享的语义选择信号。
+            PTMainActorBridge.perform {
+                PTFeedbackCenter.shared.emit(.selectionChanged)
+            }
         }
     }
 

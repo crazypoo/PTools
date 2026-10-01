@@ -16,14 +16,16 @@ public enum PTAlertTipsHaptic {
     
     @MainActor func impact() {
         #if os(iOS)
-        let generator = UINotificationFeedbackGenerator()
+        // English: Route alert feedback through the shared semantic haptic backend.
+        // Español: Enruta la respuesta háptica de la alerta mediante el backend semántico compartido.
+        // 中文：提示反馈统一转发到共享的语义触觉后端。
         switch self {
         case .success:
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.success)
+            PTFeedbackCenter.shared.emit(.success)
         case .warning:
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.warning)
+            PTFeedbackCenter.shared.emit(.warning)
         case .error:
-            generator.notificationOccurred(UINotificationFeedbackGenerator.FeedbackType.error)
+            PTFeedbackCenter.shared.emit(.error)
         case .none:
             break
         }

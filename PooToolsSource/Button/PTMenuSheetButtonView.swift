@@ -319,7 +319,10 @@ public class PTMenuSheetButtonView: UIView {
 
     private func impactHapticFeedback() {
         if isHapticFeedback {
-            UISelectionFeedbackGenerator().selectionChanged()
+            // English: Use the shared backend so menu feedback has one lifecycle and policy.
+            // Español: Usa el backend compartido para unificar el ciclo de vida y la política.
+            // 中文：使用共享后端，统一菜单反馈的生命周期和策略。
+            PTFeedbackCenter.shared.emit(.selectionChanged)
         }
     }
 }

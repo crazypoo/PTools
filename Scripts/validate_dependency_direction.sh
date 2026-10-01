@@ -7,16 +7,19 @@ set -euo pipefail
 # 中文：执行 6.0 之前路线图定义的依赖方向规则。
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+report_dir="${PTOOLS_REPORT_DIR:-$repo_root/report/current}"
+export PTOOLS_REPORT_DIR="$report_dir"
 ruby "$repo_root/Scripts/report_spm_dependency_graph.rb" >/dev/null
 
-ruby - "$repo_root" <<'RUBY'
+ruby - "$repo_root" "$report_dir" <<'RUBY'
 require "json"
 require "time"
 
 repo_root = File.expand_path(ARGV.fetch(0))
-graph_path = File.join(repo_root, "report/current/spm_dependency_graph.json")
-report_json_path = File.join(repo_root, "report/current/dependency_direction.json")
-report_markdown_path = File.join(repo_root, "report/current/dependency_direction.md")
+report_dir = File.expand_path(ARGV.fetch(1))
+graph_path = File.join(report_dir, "spm_dependency_graph.json")
+report_json_path = File.join(report_dir, "dependency_direction.json")
+report_markdown_path = File.join(report_dir, "dependency_direction.md")
 allowlist_path = File.join(repo_root, "Scripts/dependency_direction_allowlist.txt")
 graph = JSON.parse(File.read(graph_path))
 
