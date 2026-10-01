@@ -59,6 +59,14 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Benchmarks/PTModel/manifest.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Data/demo-registry.yml"
   kind: "SOURCE_OF_TRUTH"
   format: "yml"
@@ -1411,6 +1419,30 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Scripts/dependency_freeze.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/deprecated_6_removal_manifest.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/module_freeze.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Scripts/module_registry.json"
   kind: "DEV_TOOL"
   format: "json"
@@ -1436,6 +1468,14 @@
   action: "KEEP"
 -
   path: "Scripts/p1_public_api_intent.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/public_api_freeze.json"
   kind: "DEV_TOOL"
   format: "json"
   generated: false
@@ -1692,6 +1732,14 @@
   action: "KEEP"
 -
   path: "report/current/dependency_direction.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/governance.json"
   kind: "REPORT"
   format: "json"
   generated: true

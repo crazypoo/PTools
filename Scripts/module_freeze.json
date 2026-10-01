@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "versionSource": "VERSION",
+  "unknownDrift": 0,
+  "ownershipSource": "Scripts/module_registry.json",
+  "paritySource": "report/current/module_parity.json",
+  "allowedStatuses": ["INTENTIONAL", "BUG", "LEGACY", "REMOVE_IN_6"]
+}

@@ -12,6 +12,19 @@ cd "$repo_root"
 matrix="docs/maintainers/TEST_MATRIX.md"
 [[ -f "$matrix" ]] || { printf 'FAIL: test matrix is missing: %s\n' "$matrix" >&2; exit 1; }
 
+# English: Keep the check portable on hosts without ripgrep.
+# Español: Mantiene la comprobación portable en hosts sin ripgrep.
+# 中文：兼容未安装 ripgrep 的环境。
+contains_fixed() {
+  local needle="$1"
+  local file="$2"
+  if command -v rg >/dev/null 2>&1; then
+    rg -q --fixed-strings "$needle" "$file"
+  else
+    grep -Fq -- "$needle" "$file"
+  fi
+}
+
 domains=(
   PToolsCoreTests
   PToolsUIFoundationTests
@@ -29,7 +42,7 @@ domains=(
 )
 
 for domain in "${domains[@]}"; do
-  rg -q --fixed-strings "\`$domain\`" "$matrix" \
+  contains_fixed "\`$domain\`" "$matrix" \
     || { printf 'FAIL: test matrix is missing domain %s\n' "$domain" >&2; exit 1; }
 done
 
@@ -41,19 +54,20 @@ existing_targets=(
   PToolsNavigationTests
   PToolsMediaTests
   PToolsPermissionTests
+  PToolsDebugTests
 )
 
 for target in "${existing_targets[@]}"; do
   target_path="Tests/$target"
   [[ "$target" == "PToolsCoreTests" ]] && target_path="Tests/PooToolsCoreTests"
   [[ -d "$target_path" ]] || { printf 'FAIL: mapped test directory is missing: %s\n' "$target_path" >&2; exit 1; }
-  rg -q --fixed-strings "name: \"$target\"" Package.swift \
+  contains_fixed "name: \"$target\"" Package.swift \
     || { printf 'FAIL: Package.swift is missing test target %s\n' "$target" >&2; exit 1; }
 done
 
-rg -q --fixed-strings 'PToolsCollectionTests' "$matrix" \
+contains_fixed 'PToolsCollectionTests' "$matrix" \
   || { printf 'FAIL: collection compatibility mapping is missing\n' >&2; exit 1; }
-rg -q --fixed-strings 'Tests/PToolsListTests' "$matrix" \
+contains_fixed 'Tests/PToolsListTests' "$matrix" \
   || { printf 'FAIL: collection compatibility path is missing\n' >&2; exit 1; }
 
 printf 'PASS: 5.19 test domain matrix (%d domains, %d existing targets)\n' "${#domains[@]}" "${#existing_targets[@]}"

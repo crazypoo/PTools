@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
-  "generated_at": "2026-09-30T15:18:43Z",
+  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "generated_at": "2026-10-01T12:22:18Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 268,
@@ -1815,5 +1815,12 @@
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
       "line": 632
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T12:22:18Z",
+  "repository": "crazypoo/PTools",
+  "branch": "master",
+  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceVersion": "5.59.0",
+  "generatorVersion": "Scripts/report_accessibility.rb"
 }

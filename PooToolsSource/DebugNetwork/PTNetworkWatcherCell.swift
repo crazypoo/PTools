@@ -29,20 +29,51 @@ class PTNetworkWatcherCell: PTBaseNormalCell {
         return view
     }()
     
-    var cellModel: PTHttpModel! {
+    var summary: PTNetworkCaptureSummary? {
         didSet {
-            // 利用重构后双重安全校验的 isSuccess 驱动精准的 UI 色彩标识
-            let successColor: UIColor = cellModel.isSuccess ? .systemGreen : .systemRed
+            guard let summary else {
+                codeLabel.text = nil
+                infoLabel.attributedText = nil
+                return
+            }
+            let successColor: UIColor = summary.isSuccessful ? .systemGreen : .systemRed
             codeLabel.textColor = successColor
-            codeLabel.text = cellModel.statusCode
-            
+            codeLabel.text = summary.statusCode.map(String.init) ?? "—"
+
             let att: PTRichText = """
             \(wrap: .embedding("""
-            \("[\(cellModel.method ?? "")]", .foreground(.gray), .font(.appfont(size: 17)), .paragraph(.alignment(.left))) \(cellModel.startTime ?? "", .foreground(successColor), .font(.appfont(size: 12)), .paragraph(.alignment(.left)))
-            \(cellModel.id, .foreground(successColor), .font(.appfont(size: 18)), .paragraph(.alignment(.left))) \(cellModel.url?.absoluteString ?? "", .foreground(.gray), .font(.appfont(size: 13)), .paragraph(.alignment(.left)))
+            \("[\(summary.method)]", .foreground(.gray), .font(.appfont(size: 17)), .paragraph(.alignment(.left))) \(summary.completion?.rawValue ?? "pending", .foreground(successColor), .font(.appfont(size: 12)), .paragraph(.alignment(.left)))
+            \("#\(summary.sequence)", .foreground(successColor), .font(.appfont(size: 18)), .paragraph(.alignment(.left))) \(summary.url.absoluteString, .foreground(.gray), .font(.appfont(size: 13)), .paragraph(.alignment(.left)))
             """))
             """
             infoLabel.attributedText = att.value
+        }
+    }
+
+    // English: Render the legacy detail model without routing through the deprecated list property.
+    // Español: Renderiza el modelo heredado de detalle sin pasar por la propiedad obsoleta de la lista.
+    // 中文：详情页使用旧模型时直接渲染，避免经过已弃用的列表属性。
+    func configure(legacyModel: PTHttpModel) {
+        let successColor: UIColor = legacyModel.isSuccess ? .systemGreen : .systemRed
+        codeLabel.textColor = successColor
+        codeLabel.text = legacyModel.statusCode
+        let att: PTRichText = """
+        \(wrap: .embedding("""
+        \("[\(legacyModel.method ?? "")]", .foreground(.gray), .font(.appfont(size: 17)), .paragraph(.alignment(.left))) \(legacyModel.startTime ?? "", .foreground(successColor), .font(.appfont(size: 12)), .paragraph(.alignment(.left)))
+        \(legacyModel.id, .foreground(successColor), .font(.appfont(size: 18)), .paragraph(.alignment(.left))) \(legacyModel.url?.absoluteString ?? "", .foreground(.gray), .font(.appfont(size: 13)), .paragraph(.alignment(.left)))
+        """))
+        """
+        infoLabel.attributedText = att.value
+    }
+
+    @available(*, deprecated, message: "Use summary so the list does not retain full request and response bodies.")
+    var cellModel: PTHttpModel? {
+        didSet {
+            guard let cellModel else {
+                summary = nil
+                return
+            }
+            configure(legacyModel: cellModel)
         }
     }
     

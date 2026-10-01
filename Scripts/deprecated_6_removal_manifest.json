@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "targetVersion": "6.0.0",
+  "entries": [
+    {"symbol":"Network.gobalUrl","replacement":"Network.globalURL","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"Network.socketGobalUrl","replacement":"Network.socketGlobalURL","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"GobalNavControl","replacement":"globalNavControl","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"gobalWebImageLoadOption","replacement":"webImageLoadOptions","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"heightlightColor","replacement":"highlightColor","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"netRequsetTime","replacement":"requestTimeout","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"PTCoreUserDefultsWrapper","replacement":"PTCoreUserDefaultsWrapper","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"BilogyID","replacement":"BioID","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"},
+    {"symbol":"MeidaPermission","replacement":"MediaPermission","firstDeprecated":"5.x","internalUsage":"scan required","exampleUsage":"scan required","removeIn":"6.0"}
+  ]
+}

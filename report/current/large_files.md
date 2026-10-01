@@ -1,10 +1,11 @@
 <!--
-AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
-Generator: Scripts/validate_file_size_gate.sh
-Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
-Generated at: 2026-09-30T15:19:31Z
+Current report metadata.
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source version: 5.59.0
+Generator version: current-report-normalizer
+Generated at: 2026-10-01T12:30:41Z
 -->
 
 # 当前文件尺寸门禁
@@ -32,8 +33,8 @@ Generated at: 2026-09-30T15:19:31Z
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1586 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1835 | architecture_exception |
-| `PooToolsSource/NetWork/Network.swift` | 1096 | warning |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1844 | architecture_exception |
+| `PooToolsSource/NetWork/Network.swift` | 1120 | warning |
 | `PooToolsSource/PToolsForm/PTForm.swift` | 1175 | warning |
 | `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1598 | architecture_exception |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
-  "generated_at": "2026-09-30T14:27:26Z",
+  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "generated_at": "2026-10-01T12:14:09Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -14,6 +14,10 @@
     "PTMediaPermission",
     "PTMicPermission",
     "PTModelBenchmark",
+    "PTModelLegacyKakaJSONFixture",
+    "PTModelLegacySmartCodableFixture",
+    "PTModelMixedLegacyFixture",
+    "PTModelOnlyFixture",
     "PTMotionPermission",
     "PTNotificationPermission",
     "PTRemindersPermission",
@@ -267,6 +271,10 @@
   ],
   "spm_only": [
     "PTModelBenchmark",
+    "PTModelLegacyKakaJSONFixture",
+    "PTModelLegacySmartCodableFixture",
+    "PTModelMixedLegacyFixture",
+    "PTModelOnlyFixture",
     "PToolsDate",
     "PToolsModelLegacyKakaJSON",
     "PToolsModelLegacySmartCodable",
@@ -371,19 +379,14 @@
       "field": "third_party_dependencies",
       "spm": [
         "IQKeyboardManager",
-        "KakaJSON",
         "Kingfisher",
-        "SmartCodable",
         "SnapKit",
         "lottie-ios"
       ],
       "cocoapods": [
         "IQKeyboardManagerSwift",
         "IQKeyboardToolbarManager",
-        "KakaJSON",
         "Kingfisher",
-        "SmartCodable",
-        "SmartCodable/Inherit",
         "SnapKit",
         "lottie-ios"
       ]
@@ -461,12 +464,16 @@
         "Core",
         "Loading",
         "ModelCore",
-        "PToolsCore"
+        "PToolsCore",
+        "PToolsModelLegacyKakaJSON",
+        "PToolsModelLegacySmartCodable"
       ],
       "cocoapods": [
         "Core",
         "Loading",
-        "ModelCore"
+        "ModelCore",
+        "ModelLegacyKakaJSON",
+        "ModelLegacySmartCodable"
       ]
     },
     {
@@ -1474,5 +1481,12 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "f32dea1a49f852260ec3f892efaeb28c8a6ed213c3e0cd944070c3793eaa4555"
+  "fingerprint": "af2721a92a75bf46d53c8c70ac19383890f3d2b028f53b45a84bb1788b672bd0",
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T12:14:09Z",
+  "repository": "crazypoo/PTools",
+  "branch": "master",
+  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceVersion": "5.59.0",
+  "generatorVersion": "Scripts/validate_module_parity.sh"
 }

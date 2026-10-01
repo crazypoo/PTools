@@ -47,6 +47,14 @@ final class PTHttpDatasource {
         return true
     }
 
+    // English: This is a compatibility projection; PTNetworkCaptureStore remains the source of truth.
+    // Español: Esta es una proyección de compatibilidad; PTNetworkCaptureStore sigue siendo la fuente de verdad.
+    // 中文：这里仅是兼容投影，PTNetworkCaptureStore 才是唯一事实源。
+    @discardableResult
+    func add(record: PTNetworkCaptureRecord) -> Bool {
+        addHttpRequest(PTHttpModel(record: record))
+    }
+
     /// 清空所有数据源记录。
     func removeAll() {
         _httpModels.removeAll()

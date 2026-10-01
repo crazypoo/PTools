@@ -4,6 +4,14 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.59.0 — 2026-10-01
+
+- 完成 5.x Finalization Governance 2.0：current reports 绑定 HEAD，新增 Concurrency Exceptions v2、API/Module/Dependency freeze 清单和 stale-report 门禁。
+- 将 DebugNetwork 收敛为 observer-only：不可变 `PTNetworkCaptureRecord`、actor Store、UUID/单调序列、正文内存/磁盘预算、exactly-once finalize、URLSessionTaskMetrics 和 Timeline。
+- 新增请求/响应/正文类型化快照、重定向链、过滤、默认隐私脱敏、cURL/HAR/Text 导出和 PTools Network 只读适配器。
+- 移除 DebugNetwork 的 `PTThreadOperator`、业务缓存策略和通用 unchecked box；旧 UI 模型保留为兼容投影，localhost 压测改名为 `PTLoopbackThroughputBenchmark`。
+- 新增 DebugNetwork 能力矩阵、迁移/隐私/架构文档、合约测试与静态门禁；完整真机和真实宿主回归仍需集成方完成。
+
 ## 5.58.0 — 2026-09-29
 
 - 收口 PTModel 65% → 100% 执行路线中的 Foundation-only 契约：字段恢复 provider、诊断轨迹、数值溢出、Date/URL/Data/浮点策略、alias/path/Flat/lossy/Stringified、unknown enum、lifecycle、extras、polymorphic registry 和 typed persistence。

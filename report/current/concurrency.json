@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
-  "generated_at": "2026-09-30T15:18:42Z",
+  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "generated_at": "2026-10-01T12:22:17Z",
   "counts": {
     "main_queue_async": 27,
     "task_detached": 29,
-    "unchecked_sendable": 69,
+    "unchecked_sendable": 68,
     "as_bang": 4
   },
   "locations": [
@@ -158,73 +158,73 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 88,
-      "text": "public class PTTFPaging :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 87,
+      "text": "public final class PTTFPaging: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 94,
-      "text": "public class PTTFMeta :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 93,
+      "text": "public final class PTTFMeta: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 99,
-      "text": "public class PTTLinkMainModel:PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 98,
+      "text": "public final class PTTLinkMainModel: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 104,
-      "text": "public class PTTFRelationships :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 103,
+      "text": "public final class PTTFRelationships: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 121,
-      "text": "public class PTTFLinks :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 120,
+      "text": "public final class PTTFLinks: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 133,
-      "text": "public class PTTFIconAssetTokenModle:PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 134,
+      "text": "public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 141,
-      "text": "public class PTTFAttributes :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 142,
+      "text": "public final class PTTFAttributes: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 172,
-      "text": "public class PTTFVersionData :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 173,
+      "text": "public final class PTTFVersionData: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 182,
-      "text": "public class PTTFModelCollection :PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 183,
+      "text": "public final class PTTFModelCollection: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 190,
-      "text": "public class PTTFNewerBuildVersionModel:PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 191,
+      "text": "public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 204,
-      "text": "public class PTTFUpdateCustomModel:PTCodableModelProtocol,@unchecked Sendable {"
+      "line": 205,
+      "text": "public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 213,
+      "line": 214,
       "text": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {"
     },
     {
@@ -326,14 +326,8 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 21,
+      "line": 26,
       "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 24,
-      "text": "struct UncheckedSendableBox<T>: @unchecked Sendable {"
     },
     {
       "rule": "as_bang",
@@ -512,55 +506,55 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 142,
+      "line": 150,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 903,
+      "line": 924,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 12,
+      "line": 18,
       "text": "public final class NetworkReachability: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 60,
+      "line": 66,
       "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 398,
+      "line": 404,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 439,
+      "line": 445,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 448,
+      "line": 454,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 457,
+      "line": 463,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 466,
+      "line": 472,
       "text": "Task.detached(priority: .background) {"
     },
     {
@@ -785,5 +779,12 @@
       "line": 116,
       "text": "Task.detached(priority: .userInitiated) {"
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T12:22:17Z",
+  "repository": "crazypoo/PTools",
+  "branch": "master",
+  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceVersion": "5.59.0",
+  "generatorVersion": "Scripts/report_concurrency.rb"
 }

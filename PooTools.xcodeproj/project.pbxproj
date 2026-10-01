@@ -13,8 +13,6 @@
 		550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4A72AF17C090052539D /* AppDelegate.swift */; };
 		550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */; };
 		550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */; };
-		55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0020000000000000001 /* PTDemoCatalog.swift */; };
-		55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */; };
 		550CE4B72AF234E10052539D /* OSSKitImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 550CE4B62AF234E10052539D /* OSSKitImages.xcassets */; };
 		550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */; };
 		550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */; };
@@ -62,6 +60,8 @@
 		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
+		55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0020000000000000001 /* PTDemoCatalog.swift */; };
+		55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */; };
 		55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299922BEE205600CC970A /* PTImageListViewController.swift */; };
 		55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F3A9CF2E3B140F001A0571 /* HealthKit.framework */; };
 		55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */; };
@@ -162,8 +162,6 @@
 		550CE4A72AF17C090052539D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncNameViewController.swift; sourceTree = "<group>"; };
 		550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncDetailViewController.swift; sourceTree = "<group>"; };
-		55F0D0020000000000000001 /* PTDemoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoCatalog.swift; sourceTree = "<group>"; };
-		55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoSelectionCoordinator.swift; sourceTree = "<group>"; };
 		550CE4AE2AF233F40052539D /* OSSVoice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSVoice.swift; sourceTree = "<group>"; };
 		550CE4B02AF233F50052539D /* OSSUtterance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSUtterance.swift; sourceTree = "<group>"; };
 		550CE4B12AF233F50052539D /* OSSSpeech.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSSpeech.swift; sourceTree = "<group>"; };
@@ -401,12 +399,10 @@
 		557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+PTSwizzle.swift"; sourceTree = "<group>"; };
 		557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomHTTPProtocol.swift; sourceTree = "<group>"; };
 		557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLCache+PTDebugEX.swift"; sourceTree = "<group>"; };
-		557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTThreadOperator.swift; sourceTree = "<group>"; };
 		557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkHelper.swift; sourceTree = "<group>"; };
 		557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHttpDatasource.swift; sourceTree = "<group>"; };
 		557E3AA32C046F10002466A0 /* PTHttpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHttpModel.swift; sourceTree = "<group>"; };
 		557E3AA52C046F51002466A0 /* PTErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTErrorHelper.swift; sourceTree = "<group>"; };
-		557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCacheStoragePolicy.swift; sourceTree = "<group>"; };
 		557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+PTEX.swift"; sourceTree = "<group>"; };
 		557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTApplicationDirectories.swift; sourceTree = "<group>"; };
 		557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+PTEX.swift"; sourceTree = "<group>"; };
@@ -1008,6 +1004,8 @@
 		55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+PTEX.swift"; sourceTree = "<group>"; };
 		55ED0D252B1183E200391136 /* PTHeartRateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateManager.swift; sourceTree = "<group>"; };
 		55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditImageToolEngine.swift; sourceTree = "<group>"; };
+		55F0D0020000000000000001 /* PTDemoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoCatalog.swift; sourceTree = "<group>"; };
+		55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoSelectionCoordinator.swift; sourceTree = "<group>"; };
 		55F162E32B18E36200320925 /* C7Collector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7Collector.swift; sourceTree = "<group>"; };
 		55F162E52B18E3C200320925 /* C7CollectorVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorVideo.swift; sourceTree = "<group>"; };
 		55F162E72B18E3F300320925 /* C7CollectorCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorCamera.swift; sourceTree = "<group>"; };
@@ -3193,7 +3191,6 @@
 		55F516AE2FB2BC2400FECD49 /* DebugNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
 				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
 				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
 				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
@@ -3203,7 +3200,6 @@
 				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
 				55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */,
 				55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */,
-				557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */,
 			);
 			path = DebugNetwork;
 			sourceTree = "<group>";
@@ -3624,7 +3620,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		77DEF0E5330AE8F10D521FD7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3634,9 +3631,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3651,9 +3652,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

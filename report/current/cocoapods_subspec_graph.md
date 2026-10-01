@@ -1,16 +1,17 @@
 <!--
-AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
-Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
-Generated at: 2026-09-30T15:19:07Z
+Current report metadata.
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source version: 5.59.0
+Generator version: Scripts/report_cocoapods_subspec_graph.rb
+Generated at: 2026-10-01T12:30:41Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.58.0`
+- Podspec: `PooTools` `5.59.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -46,7 +47,7 @@ Generated at: 2026-09-30T15:19:07Z
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
 | `ContentState` | `PooTools/Accessibility`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
-| `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
+| `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
@@ -94,13 +95,13 @@ Generated at: 2026-09-30T15:19:07Z
 | `MicPermission` | `PooTools/PToolsPermissionCore` | — | `MicPermission` | — | — |
 | `Model` | `PooTools/ModelCore` | — | `PToolsModel` | Foundation | — |
 | `ModelCore` | — | — | `PToolsModelCore` | Foundation | — |
-| `ModelLegacyKakaJSON` | — | `KakaJSON` | `PToolsModelLegacyKakaJSON` | Foundation | — |
+| `ModelLegacyKakaJSON` | `PooTools/Core` | `KakaJSON` | `PToolsModelLegacyKakaJSON` | Foundation | — |
 | `ModelLegacySmartCodable` | — | `SmartCodable` | `PToolsModelLegacySmartCodable` | Foundation | — |
 | `Motion` | `PooTools/Core`, `PooTools/MotionPermission` | — | `Motion` | CoreMotion | — |
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |
 | `NetWork` | `PooTools/Network` | — | — | — | — |
-| `Network` | `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore` | `Alamofire` | `NetWork` | — | — |
+| `Network` | `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable` | `Alamofire` | `NetWork` | — | — |
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |

@@ -20,7 +20,8 @@ let PTNetworkTestFloatingTap = 9997
 class PTNetworkWatcherViewController: PTBaseViewController {
 
     private let viewModel = PTNetworkViewModel()
-    private var reloadNotificationToken: NSObjectProtocol?
+    private let lifecycleBag = PTLifecycleBag()
+    private var captureChangeTask: Task<Void, Never>?
     private var testTask: Task<Void, Never>?
     private var testRunID = UUID()
     let titleViewContainerWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - 88
@@ -66,7 +67,9 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var newCollectionView: PTCollectionView = {
+    lazy var newCollectionView: PTCollectionView = makeCollectionView()
+
+    private func makeCollectionView() -> PTCollectionView {
         let config = PTCollectionViewConfig()
         config.viewType = .Normal
         config.itemOriginalX = 0
@@ -76,20 +79,24 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTNetworkWatcherCell.ID: PTNetworkWatcherCell.self])
         view.cellInCollection = { collection, itemSection, indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row], let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherCell, let cellModel = itemRow.dataModel as? PTHttpModel {
-                cell.cellModel = cellModel
+            if let itemRow = itemSection.rows?[indexPath.row], let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherCell, let box = itemRow.dataModel as? PTNetworkSummaryBox {
+                cell.summary = box.value
                 return cell
             }
             return nil
         }
         view.collectionDidSelect = { [weak self] collection, model, indexPath in
-            if let itemRow = model.rows?[indexPath.row], let cellModel = itemRow.dataModel as? PTHttpModel {
-                let vc = PTNetworkWatcherDetailViewController(viewModel: cellModel)
-                self?.navigationController?.pushViewController(vc, animated: true)
+            if let itemRow = model.rows?[indexPath.row], let box = itemRow.dataModel as? PTNetworkSummaryBox {
+                let summary = box.value
+                Task { @MainActor [weak self] in
+                    guard let record = await PTNetworkCaptureStore.shared.record(id: summary.id) else { return }
+                    let vc = PTNetworkWatcherDetailViewController(viewModel: PTHttpModel(record: record))
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
             }
         }
         return view
-    }()
+    }
 
     var floatingView: PFloatingButton?
     lazy var speedLabel: UILabel = {
@@ -111,8 +118,10 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     lazy var deleteButton: UIButton = {
         let deleteButton = baseButtonCreate(image: UIImage(.trash))
         deleteButton.addActionHandlers { [weak self] _ in
-            self?.viewModel.handleClearAction()
-            self?.loadListModel()
+            Task { @MainActor [weak self] in
+                await self?.viewModel.handleClearAction()
+                self?.loadListModel()
+            }
         }
         return deleteButton
     }()
@@ -123,7 +132,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         testRunID = runID
         testTask = Task { @MainActor [weak self] in
             guard let self else { return }
-            let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
+            let networkSpeedMonitor = PTLoopbackThroughputBenchmark()
             await networkSpeedMonitor.startMonitoring()
             self.floatingButtonCreate()
 
@@ -164,7 +173,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         setCustomBackButtonView(backButton)
         setCustomRightButtons(buttons: [deleteButton, valueSwitch, testButton])
         setCustomTitleView(titleViewContailer)
-        if reloadNotificationToken == nil {
+        if captureChangeTask == nil {
             observers()
         }
     }
@@ -182,26 +191,42 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in make.edges.equalToSuperview() }
         
-        loadListModel()
+        Task { @MainActor [weak self] in
+            await self?.refreshData()
+        }
         setup()
     }
     
     func loadListModel() {
         var sections = [PTSection]()
-        let rows = viewModel.models.map { PTRows(ID: PTNetworkWatcherCell.ID, dataModel: $0) }
+        let rows = viewModel.summaries.map { PTRows(ID: PTNetworkWatcherCell.ID, dataModel: PTNetworkSummaryBox(value: $0)) }
         sections.append(PTSection(rows: rows))
         newCollectionView.showCollectionDetail(collectionData: sections)
+    }
+
+    private func refreshData() async {
+        await viewModel.refresh()
+        loadListModel()
     }
     
     func setup() { observers() }
     
     func observers() {
-        reloadNotificationToken = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "reloadHttp_PooTools"), object: nil, queue: .main) { [weak self] notification in
-            if let success = notification.object as? Bool {
-                Task { @MainActor in
-                    self?.reloadHttp(needScrollToEnd: self?.viewModel.reachEnd ?? true, success: success)
-                }
+        captureChangeTask = Task { @MainActor [weak self] in
+            let changes = await PTNetworkCaptureStore.shared.changes()
+            for await _ in changes {
+                guard !Task.isCancelled else { return }
+                // English: Coalesce bursts before touching the diffable collection.
+                // Español: Agrupa los bursts antes de tocar la colección diffable.
+                // 中文：先合并突发变更，再触碰 Diffable 列表。
+                try? await Task.sleep(nanoseconds: 150_000_000)
+                guard !Task.isCancelled else { return }
+                let shouldScroll = self?.viewModel.reachEnd ?? true
+                await self?.reloadHttp(needScrollToEnd: shouldScroll)
             }
+        }
+        if let captureChangeTask {
+            lifecycleBag.store(captureChangeTask)
         }
     }
 
@@ -212,21 +237,19 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         testRunID = UUID()
         floatingView?.removeFromSuperview()
         floatingView = nil
-        if let reloadNotificationToken {
-            NotificationCenter.default.removeObserver(reloadNotificationToken)
-            self.reloadNotificationToken = nil
-        }
+        captureChangeTask?.cancel()
+        captureChangeTask = nil
+        lifecycleBag.invalidate()
     }
     
-    func reloadHttp(needScrollToEnd: Bool = false, success: Bool = true) {
+    func reloadHttp(needScrollToEnd: Bool = false, success: Bool = true) async {
         guard viewModel.reloadDataFinish else { return }
-        viewModel.applyFilter()
-        loadListModel()
-        if needScrollToEnd { scrollToBottom() }
+        await refreshData()
+        if needScrollToEnd, !viewModel.summaries.isEmpty { scrollToBottom() }
     }
 
     private func scrollToBottom() {
-        if viewModel.models.count > 0 {
+        if !viewModel.summaries.isEmpty {
             newCollectionView.contentCollectionView.scrollToBottom()
         }
     }
@@ -251,6 +274,9 @@ extension PTNetworkWatcherViewController: UISearchBarDelegate {
 }
 
 // MARK: - 本地极限吞吐量性能压测引擎 (Network.framework 极客架构)
+// English: Preserve the historical public actor while exposing the descriptive benchmark alias below.
+// Español: Conserva el actor público histórico y expone debajo un alias descriptivo para el benchmark.
+// 中文：保留历史公开 Actor，并在下方提供描述性测速别名。
 public actor PTNetworkSpeedTestMonitor {
 
     private var connection: NWConnection?
@@ -380,3 +406,8 @@ public actor PTNetworkSpeedTestMonitor {
         uploadSpeed = Double(bytesSent) / elapsedTime
     }
 }
+
+// English: New code uses the explicit loopback benchmark name without a second implementation.
+// Español: El código nuevo usa el nombre explícito del benchmark loopback sin una segunda implementación.
+// 中文：新代码使用明确的 loopback 测速名称，不新增第二套实现。
+public typealias PTLoopbackThroughputBenchmark = PTNetworkSpeedTestMonitor

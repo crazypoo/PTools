@@ -24,6 +24,14 @@ extension URLSessionConfiguration {
             return
         }
         
+        // English: Register on the existing main-actor entry point; the once closure only performs runtime swizzling.
+        // Español: Registra el hook en la entrada existente del actor principal; el cierre once solo realiza el swizzle de runtime.
+        // 中文：在现有主 actor 入口登记 Hook；once 闭包只负责执行运行时交换。
+        PTDebugHookRegistryStore.shared.register(owner: "debug.network",
+                                                  kind: "irreversible install",
+                                                  activation: "runtime switch",
+                                                  hookID: "urlsessionconfiguration.swizzle")
+
         DispatchQueue.once(token: "pootools.urlsessionconfiguration.debug.swizzleMethods") {
             // English: These are class methods, so swizzle the metaclass rather than the instance method table.
             // Español: Son métodos de clase, por lo que se intercambia la metaclase y no la tabla de métodos de instancia.

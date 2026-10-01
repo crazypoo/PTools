@@ -718,6 +718,58 @@
   owner: "PTools maintainers"
   docs: true
 -
+  id: "model"
+  name: "Model"
+  swiftpm_product: ""
+  cocoapods_subspec: "Model"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "model-core"
+  name: "ModelCore"
+  swiftpm_product: ""
+  cocoapods_subspec: "ModelCore"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "model-legacy-kaka-json"
+  name: "ModelLegacyKakaJSON"
+  swiftpm_product: ""
+  cocoapods_subspec: "ModelLegacyKakaJSON"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "model-legacy-smart-codable"
+  name: "ModelLegacySmartCodable"
+  swiftpm_product: ""
+  cocoapods_subspec: "ModelLegacySmartCodable"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
   id: "motion"
   name: "Motion"
   swiftpm_product: ""
@@ -1446,6 +1498,7 @@
   dependencies:
     - "ptools"
     - "PToolsCore"
+    - "PToolsModelCore"
     - "PooToolsLoading"
     - "Alamofire"
   owner: "PTools maintainers"
@@ -2343,6 +2396,110 @@
   source: ""
   category: "unclassified"
   status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model"
+  name: "PToolsModel"
+  swiftpm_product: "PToolsModel"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-combine"
+  name: "PToolsModelCombine"
+  swiftpm_product: "PToolsModelCombine"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-combine-2"
+  name: "PToolsModelCombine"
+  swiftpm_product: ""
+  cocoapods_subspec: "PToolsModelCombine"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-core"
+  name: "PToolsModelCore"
+  swiftpm_product: "PToolsModelCore"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-legacy-kaka-json"
+  name: "PToolsModelLegacyKakaJSON"
+  swiftpm_product: "PToolsModelLegacyKakaJSON"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-legacy-smart-codable"
+  name: "PToolsModelLegacySmartCodable"
+  swiftpm_product: "PToolsModelLegacySmartCodable"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-uikit"
+  name: "PToolsModelUIKit"
+  swiftpm_product: "PToolsModelUIKit"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+-
+  id: "ptools-model-uikit-2"
+  name: "PToolsModelUIKit"
+  swiftpm_product: ""
+  cocoapods_subspec: "PToolsModelUIKit"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
   minimum_ios: "17.0"
   swift: "6+"
   dependencies: []

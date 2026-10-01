@@ -23,6 +23,13 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     }
     
     fileprivate var searchIsActivity: Bool = false
+
+    private lazy var timelineView: PTNetworkTimelineView = {
+        let view = PTNetworkTimelineView()
+        view.configure(metrics: viewModel.networkMetrics,
+                       responseBytes: Int64(viewModel.responseData?.count ?? 0))
+        return view
+    }()
         
     lazy var searchBar: PTSearchBar = {
         let view = PTSearchBar()
@@ -91,7 +98,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
                 let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
                 switch baseCell {
                 case let cell as PTNetworkWatcherCell:
-                    if let cellModel = itemRow.dataModel as? PTHttpModel { cell.cellModel = cellModel }
+                    if let cellModel = itemRow.dataModel as? PTHttpModel { cell.configure(legacyModel: cellModel) }
                     return cell
                 case let cell as PTNetworkWatcherDetailCell:
                     let cellModel = self.currentInfos[indexPath.section - 1]
@@ -147,13 +154,19 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         let collectionInset_Top: CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.top = 0
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView])
+        view.addSubviews([timelineView, newCollectionView])
+        timelineView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(collectionInset_Top)
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(154)
+        }
         newCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(timelineView.snp.bottom).offset(8)
         }
         loadListModel()
     }

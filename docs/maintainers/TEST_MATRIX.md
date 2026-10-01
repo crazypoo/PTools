@@ -19,7 +19,7 @@ iOS 宿主或真机验证的场景，以及尚未建立独立 target 的领域�
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | 权限状态和 completion 契约 | 系统弹窗、restricted/limited 真机状态 | 保留并纳入真机场景 |
 | `PToolsSystemTests` | — | 构建入口和源码契约 | Scene、通知、HealthKit、CoreNFC | 记录为真实宿主/真机门禁 |
 | `PToolsWebKitTests` | — | 源码和依赖边界扫描 | WebKit 页面、导航和 cookie | 记录为 Simulator 宿主门禁 |
-| `PToolsDebugTests` | — | Debug/LocalConsole 静态与构建检查 | 多 Scene、日志洪峰和开关生命周期 | 记录为 Debug Example 门禁 |
+| `PToolsDebugTests` | `Tests/PToolsDebugTests` | DebugNetwork immutable capture、脱敏、Store 和 filter 合约 | 多 Scene、日志洪峰和真实宿主生命周期 | 保留并纳入 Debug Example/Simulator 门禁 |
 | `PToolsInstrumentsTests` | — | Instruments 契约和报告结构检查 | 真机 trace、内存和长时间采样 | 记录为 Instruments 手工门禁 |
 | `PToolsP2Tests` | `Tests/PToolsP2Tests` | Configuration snapshot、flag、waveform 值契约 | ActivityKit、WidgetKit、音频设备和触觉硬件 | 保留并纳入 SwiftPM；系统行为由 Simulator/真机宿主门禁覆盖 |
 

@@ -465,6 +465,7 @@ public class LocalConsole: NSObject {
     private var lastFlushedSequence: UInt64 = 0
     
     private let logBuffer = PTLogBuffer(maxCount: 50000)
+    private let lifecycleBag = PTLifecycleBag()
     private var pendingUpdate = false
     private let throttleInterval: UInt64 = 50_000_000
     private var pendingUpdateTask: Task<Void, Never>?
@@ -671,6 +672,9 @@ public class LocalConsole: NSObject {
                 self.print(record)
             }
         }
+        if let memoryLogTask {
+            lifecycleBag.store(memoryLogTask)
+        }
 #endif
         debugEventObserverToken = PTDebugEventCenter.shared.addObserver { [weak self] event in
             guard event.name == "network.status",
@@ -718,6 +722,7 @@ public class LocalConsole: NSObject {
     
     @MainActor public func cleanSystemLogView() {
         let hadConsoleUI = terminal != nil || consoleOverlayWindow != nil || maskView != nil
+        lifecycleBag.invalidate()
         removeLogSink()
         stopMonitoringIfNeeded()
         removeKeyboardObservers()
@@ -926,6 +931,7 @@ public class LocalConsole: NSObject {
                 }
             }
         ]
+        keyboardObserverTokens.forEach { lifecycleBag.store(observer: $0) }
         flushUI()
     }
     
@@ -1530,6 +1536,9 @@ extension LocalConsole {
                 }
                 self.updateDynamicSystemInfo()
             }
+        }
+        if let dynamicReportTimer {
+            lifecycleBag.store(dynamicReportTimer)
         }
     }
     

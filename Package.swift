@@ -995,6 +995,17 @@ let package = Package(
             dependencies: ["PooToolsSocketKit"],
             path: "Tests/PToolsSocketKitTests"
         ),
+        // English: Keep DebugNetwork contract tests beside the observer target without adding a second capture implementation.
+        // Español: Mantiene las pruebas del contrato DebugNetwork junto al objetivo observador sin añadir otra implementación de captura.
+        // 中文：让 DebugNetwork 合约测试紧邻观测 target，避免新增第二套抓包实现。
+        .testTarget(
+            name: "PToolsDebugTests",
+            dependencies: ["PooToolsDEBUG"],
+            path: "Tests/PToolsDebugTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
         // English: Keep HTTP framing tests independent from UIKit and live network services.
         // Español: Mantén las pruebas de framing HTTP independientes de UIKit y de servicios de red reales.
         // 中文：HTTP framing 测试独立于 UIKit 和真实网络服务。

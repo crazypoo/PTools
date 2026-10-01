@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PooToolsNet
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: ptools, PToolsCore, PooToolsLoading, Alamofire.
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire.
 
 ## 7. Main APIs
 

@@ -243,9 +243,81 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Governance/generate_current_reports.rb"
+  language: "rb"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_current_reports.sh"
+  language: "sh"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Migration/cleanup_example_source_membership.rb"
   language: "rb"
   domain: "Migration"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/audit_model_dependencies.swift"
+  language: "swift"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/benchmark_models.swift"
+  language: "swift"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/migrate_kakajson.swift"
+  language: "swift"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/migrate_smartcodable.swift"
+  language: "swift"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/run_benchmarks.sh"
+  language: "sh"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/validate_65_to_100.sh"
+  language: "sh"
+  domain: "PTModel"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/PTModel/validate_f1_f3.sh"
+  language: "sh"
+  domain: "PTModel"
   status: "ACTIVE"
   canonical: true
   entrypoint: false
@@ -444,6 +516,14 @@
   action: "KEEP"
 -
   path: "Scripts/validate_519_package_tests_docs.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_559_debugnetwork.sh"
   language: "sh"
   domain: "Scripts"
   status: "ACTIVE"

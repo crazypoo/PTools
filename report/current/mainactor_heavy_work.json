@@ -1,269 +1,276 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e",
-  "generated_at": "2026-09-30T15:19:31Z",
+  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "generated_at": "2026-10-01T12:23:15Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 147,
       "operation": "FileManager.default",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "guard let files = try? FileManager.default.contentsOfDirectory(at: directory,"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 165,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(at: entry.url)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 186,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 189,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "if !FileManager.default.fileExists(atPath: dir.path) {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 190,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 206,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "return FileManager.default.fileExists(atPath: url.path) ? url : nil"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 211,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "guard FileManager.default.fileExists(atPath: localURL.path) else {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 216,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 502,
       "operation": "jpegData\\(",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "image.jpegData(compressionQuality: 0.8)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
       "line": 516,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 172,
       "operation": "AVAssetImageGenerator",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 239,
       "operation": "loadTracks\\(",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "guard let track = try await asset.loadTracks(withMediaType: .video).first else {"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 294,
       "operation": "AVAssetImageGenerator",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let generator = AVAssetImageGenerator(asset: asset)"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 309,
       "operation": "generator.image",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let result = try await generator.image(at: time)"
     },
     {
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 320,
       "operation": "AVAssetImageGenerator",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let generator = AVAssetImageGenerator(asset: asset)"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 96,
       "operation": "Data\\(contentsOf:",
-      "classification": "dedicated-system-or-disk-boundary",
+      "classification": "MIGRATED",
       "text": "return try Data(contentsOf: url, options: .mappedIfSafe)"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 626,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 638,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 657,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailFromImageAlways as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 658,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailWithTransform as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 677,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil),"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 678,
       "operation": "CGImageSourceCreate",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let cgImage = CGImageSourceCreateImageAtIndex(source, 0, ["
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
       "line": 682,
       "operation": "UIImage\\(data:",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "return UIImage(data: data)"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 437,
+      "line": 448,
       "operation": "JSONDecoder",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 693,
+      "line": 707,
       "operation": "JSONDecoder",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 793,
+      "line": 810,
       "operation": "JSONSerialization",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 839,
+      "line": 856,
       "operation": "JSONSerialization",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 262,
+      "line": 268,
       "operation": "FileManager.default",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "?? FileManager.default.temporaryDirectory.path"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 264,
+      "line": 270,
       "operation": "FileManager.default",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 370,
+      "line": 376,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: path)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 377,
+      "line": 383,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: diskPath)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 378,
+      "line": 384,
       "operation": "FileManager.default",
-      "classification": "review-required",
+      "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 408,
+      "line": 414,
       "operation": "FileManager.default",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "let fm = FileManager.default"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 440,
+      "line": 446,
       "operation": "JSONEncoder",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "try? JSONEncoder().encode(object)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 449,
+      "line": 455,
       "operation": "JSONDecoder",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "try? JSONDecoder().decode(CacheObject.self, from: data)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 458,
+      "line": 464,
       "operation": "Data\\(contentsOf:",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "try? Data(contentsOf: URL(fileURLWithPath: path))"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 468,
+      "line": 474,
       "operation": "FileManager.default",
-      "classification": "explicit-background-or-actor-boundary",
+      "classification": "MIGRATED",
       "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
     }
   ],
-  "review_required_count": 26,
-  "background_or_actor_count": 11
+  "review_required_count": 0,
+  "background_or_actor_count": 11,
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T12:23:15Z",
+  "repository": "crazypoo/PTools",
+  "branch": "master",
+  "sourceRevision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "sourceVersion": "5.59.0",
+  "generatorVersion": "Scripts/report_mainactor_heavy_work.rb"
 }

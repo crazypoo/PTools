@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 4a9dfe8a69da258e4f5c28799816ef2212bd4015
-Generated at: 2026-09-29T15:08:02Z
-Version source: 5.58.0
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Generated at: 2026-10-01T11:37:47Z
+Version source: 5.59.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -89,6 +89,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Overlay` | A | `PooTools/Overlay` | — | Keep; review drift |
 | `PDF` | A | `PooTools/PDF` | `PooToolsPDF` | Keep; review drift |
 | `PToolsCore` | A | `PooTools/PToolsCore` | `PToolsCore` | Keep; review drift |
+| `PToolsModelCombine` | A | `PooTools/PToolsModelCombine` | `PToolsModelCombine` | Keep; review drift |
+| `PToolsModelUIKit` | A | `PooTools/PToolsModelUIKit` | `PToolsModelUIKit` | Keep; review drift |
 | `PToolsPermissionCore` | A | `PooTools/PToolsPermissionCore` | `PToolsPermissionCore` | Keep; review drift |
 | `PToolsPermissionUI` | A | `PooTools/PToolsPermissionUI` | `PToolsPermissionUI` | Keep; review drift |
 | `PToolsUIFoundation` | A | `PooTools/PToolsUIFoundation` | `PToolsUIFoundation` | Keep; review drift |
@@ -141,6 +143,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `GCDWebServer` | B | `PooTools/GCDWebServer` | — | Parity decision before 6.0 |
 | `InputAll` | B | `PooTools/InputAll` | — | Parity decision before 6.0 |
 | `MXMetricManagerKit` | B | `PooTools/MXMetricManagerKit` | — | Parity decision before 6.0 |
+| `ModelLegacyKakaJSON` | B | `PooTools/ModelLegacyKakaJSON` | — | Parity decision before 6.0 |
+| `ModelLegacySmartCodable` | B | `PooTools/ModelLegacySmartCodable` | — | Parity decision before 6.0 |
 | `NFCKit` | B | `PooTools/NFCKit` | — | Parity decision before 6.0 |
 | `NotificationBanner` | B | `PooTools/NotificationBanner` | — | Parity decision before 6.0 |
 | `PopoverKit` | B | `PooTools/PopoverKit` | — | Parity decision before 6.0 |
@@ -149,7 +153,11 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `VideoCache` | B | `PooTools/VideoCache` | — | Parity decision before 6.0 |
 | `WebKit` | B | `PooTools/WebKit` | — | Parity decision before 6.0 |
 | `ZipArchive` | B | `PooTools/ZipArchive` | — | Parity decision before 6.0 |
+| `PTModelBenchmark` | C | — | `PTModelBenchmark` | Parity decision before 6.0 |
 | `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |
+| `PToolsModelLegacyKakaJSON` | C | — | `PToolsModelLegacyKakaJSON` | Parity decision before 6.0 |
+| `PToolsModelLegacySmartCodable` | C | — | `PToolsModelLegacySmartCodable` | Parity decision before 6.0 |
+| `PToolsModelMacroPlugin` | C | — | `PToolsModelMacroPlugin` | Parity decision before 6.0 |
 
 ## Compatibility entries
 

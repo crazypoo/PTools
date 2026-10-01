@@ -1,18 +1,19 @@
 <!--
-AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
-Generator: Scripts/report_singletons.rb
-Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
-Generated at: 2026-09-30T15:18:43Z
+Current report metadata.
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source version: 5.59.0
+Generator version: current-report-normalizer
+Generated at: 2026-10-01T12:30:41Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1619**
-- 单例声明计数：**128**
+- .shared / .share 调用文本计数：**1621**
+- 单例声明计数：**131**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
 | --- | --- | --- | --- | --- |
@@ -36,7 +37,7 @@ Generated at: 2026-09-30T15:18:43Z
 | PooToolsSource/CallMessageMail/PTPhoneBlock.swift:17 | shared | C Shared mutable service | public static let shared = PTPhoneBlock() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Category/UIScrollView+PTRefreshEX.swift:49 | shared | C Shared mutable service | public static let shared = PTRefreshConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/CheckDirtyWord/PTCheckFWords.swift:15 | share | C Shared mutable service | @MainActor public static let share = PTCheckFWords() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:214 | share | C Shared mutable service | @MainActor public static let share = PTCheckUpdateFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:215 | share | C Shared mutable service | @MainActor public static let share = PTCheckUpdateFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Contact/PTContact.swift:48 | share | C Shared mutable service | public static let share = PTContact() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTAppUserdefault.swift:45 | shared | C Shared mutable service | public static let shared = PTCoreUserDefultsWrapper() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Core/PTGCDManager.swift:49 | shared | C Shared mutable service | public static let shared = PTGCDManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
@@ -62,8 +63,11 @@ Generated at: 2026-09-30T15:18:43Z
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:274 | share | D Shared mutable UI or scene state | static let share = PTColorPickWindow() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/DebugCrash/PTCrashHandler.swift:206 | shared | C Shared mutable service | @MainActor public static let shared = PTCrashHandler() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugFile/PTFileBrowser.swift:15 | shared | A Stateless convenience or immutable utility | public static let shared = PTFileBrowser() | 优先保留；有可变状态时迁移为实例配置 |
-| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:418 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedMonitor() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:241 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedMonitor() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugNetwork/PTHttpDatasource.swift:13 | shared | C Shared mutable service | static let shared = PTHttpDatasource() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift:8 | shared | C Shared mutable service | public static let shared = PTNetworkCaptureStore() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift:173 | shared | C Shared mutable service | public static let shared = PTNetworkCaptureCenter() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugNetwork/PTNetworkDebugSupport.swift:82 | shared | C Shared mutable service | public static let shared = PTDebugHookRegistryStore() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugNetwork/PTNetworkHelper.swift:17 | shared | C Shared mutable service | static let shared = PTNetworkHelper() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift:14 | shared | C Shared mutable service | static let shared = PTDebugPerformanceToolKit.init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugPerformance/PTFPSTool.swift:14 | shared | C Shared mutable service | public static let shared = PTFPSTool.init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
@@ -81,7 +85,7 @@ Generated at: 2026-09-30T15:18:43Z
 | PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift:190 | shared | D Shared mutable UI or scene state | public static let shared = LaunchVisualizer() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift:254 | share | D Shared mutable UI or scene state | static let share = EntryWindow() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LivePhoto/PTLivePhoto.swift:86 | shared | C Shared mutable service | public static let shared = PTLivePhoto() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/Loading/PTHudView.swift:38 | share | D Shared mutable UI or scene state | public static let share = PTHudConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
+| PooToolsSource/Loading/PTHudView.swift:41 | share | D Shared mutable UI or scene state | public static let share = PTHudConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:155 | shared | D Shared mutable UI or scene state | static let shared = PTConsoleWindow() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LocalConsole/LocalConsole.swift:404 | shared | D Shared mutable UI or scene state | public static let shared = LocalConsole() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/LocalConsole/ResizeController.swift:17 | shared | D Shared mutable UI or scene state | public static let shared = ResizeController() | 按 Scene 或控制器实例保存；保留兼容入口 |
@@ -92,15 +96,15 @@ Generated at: 2026-09-30T15:18:43Z
 | PooToolsSource/Log/PTLogFileManager.swift:15 | shared | C Shared mutable service | public static let shared = PTLogFileManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:15 | shared | C Shared mutable service | public static let shared = MetricsManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:36 | share | C Shared mutable service | public static let share = PTMediaBrowserConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/MessageKit/PTChatConfig.swift:43 | share | C Shared mutable service | public static let share = PTChatConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/MessageKit/PTChatConfig.swift:42 | share | C Shared mutable service | public static let share = PTChatConfig() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Motion/PTMotion.swift:83 | shared | C Shared mutable service | public static let shared = PTMotion() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/NFC/PTNFCToolKit.swift:51 | shared | C Shared mutable service | public static let shared = PTNFCToolKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/NetWork/NetworkSupport.swift:14 | shared | C Shared mutable service | public static let shared = NetworkReachability() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/NetWork/NetworkSupport.swift:61 | shared | C Shared mutable service | public static let shared = PTNetWorkStatus() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/NetWork/NetworkSupport.swift:255 | shared | B Thread-safe shared cache or resource | static let shared = NetworkCache() | 保留共享入口，但必须有容量、过期和清理策略 |
-| PooToolsSource/NetWork/NetworkTypes.swift:289 | shared | C Shared mutable service | public static let shared = RequestDeduplicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/NetWork/PTNetworkArchitecture.swift:175 | shared | C Shared mutable service | public static let shared = PTNetworkExecutor(network: .share) | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:27 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedTestFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetWork/NetworkSupport.swift:20 | shared | C Shared mutable service | public static let shared = NetworkReachability() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetWork/NetworkSupport.swift:67 | shared | C Shared mutable service | public static let shared = PTNetWorkStatus() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetWork/NetworkSupport.swift:261 | shared | B Thread-safe shared cache or resource | static let shared = NetworkCache() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/NetWork/NetworkTypes.swift:292 | shared | C Shared mutable service | public static let shared = RequestDeduplicator() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetWork/PTNetworkArchitecture.swift:178 | shared | C Shared mutable service | public static let shared = PTNetworkExecutor(network: .share) | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:26 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedTestFunction() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/OSSKit/OSSSpeech.swift:198 | shared | C Shared mutable service | public static let shared = OSSSpeech() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Overlay/PTOverlayCore.swift:205 | shared | C Shared mutable service | public static let shared = PTOverlayDiagnostics() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Overlay/PTOverlayCore.swift:246 | shared | C Shared mutable service | public static let shared = PTOverlayRegistryStore() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

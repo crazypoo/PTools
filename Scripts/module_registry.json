@@ -41,6 +41,10 @@
     {"name":"Activities","spm_product":"PToolsActivities","spm_target":"PToolsActivities","pod_subspec":"Activities","source_path":"PooToolsSource/PToolsActivities","dependencies":[],"compile_flags":[],"resources":[],"category":"p2-extension"}
   ],
   "known_module_only": [
+	{"kind":"spm_only","module":"PTModelLegacyKakaJSONFixture","reason":"SwiftPM-only regression fixture for the legacy KakaJSON model adapter; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"spm_only","module":"PTModelLegacySmartCodableFixture","reason":"SwiftPM-only regression fixture for the legacy SmartCodable model adapter; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"spm_only","module":"PTModelMixedLegacyFixture","reason":"SwiftPM-only regression fixture covering mixed legacy model decoding; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
+	{"kind":"spm_only","module":"PTModelOnlyFixture","reason":"SwiftPM-only regression fixture for the model facade; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
 	{"kind":"spm_only","module":"PToolsDate","reason":"SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility.","owner":"architecture","expiration":"2026-12-31"},
 	{"kind":"spm_only","module":"PToolsModelMacroPlugin","reason":"SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target.","owner":"model-core","expiration":"2027-03-31"},
 	{"kind":"spm_only","module":"PTModelBenchmark","reason":"Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},

@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T13:28:00+08:00 -->
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Generated at: 2026-10-01T11:45:56+08:00 -->
 # Script Inventory
 
-- Version: `5.57.3`
-- Records: `102`
+- Version: `5.59.0`
+- Records: `112`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -39,7 +39,16 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | Scripts/Governance/audit_scripts.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_tests.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/find_duplicates.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_current_reports.rb | rb | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_current_reports.sh | sh | Governance | ACTIVE | True | KEEP |
 | Scripts/Migration/cleanup_example_source_membership.rb | rb | Migration | ACTIVE | True | KEEP |
+| Scripts/PTModel/audit_model_dependencies.swift | swift | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/benchmark_models.swift | swift | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/migrate_kakajson.swift | swift | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/migrate_smartcodable.swift | swift | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/run_benchmarks.sh | sh | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/validate_65_to_100.sh | sh | PTModel | ACTIVE | True | KEEP |
+| Scripts/PTModel/validate_f1_f3.sh | sh | PTModel | ACTIVE | True | KEEP |
 | Scripts/Privacy/validate_privacy_accessed_api.sh | sh | Privacy | ACTIVE | True | KEEP |
 | Scripts/Symbols/symbol-diff.sh | sh | Symbols | ACTIVE | True | KEEP |
 | Scripts/Symbols/update-symbols.sh | sh | Symbols | ACTIVE | True | KEEP |
@@ -65,6 +74,7 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | Scripts/validate_516_permission.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_517_ui.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_519_package_tests_docs.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_559_debugnetwork.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_58_contracts.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_592_quality.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_59_contracts.sh | sh | Scripts | ACTIVE | True | KEEP |

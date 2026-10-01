@@ -33,6 +33,7 @@ final class PTNetworkHelper {
     }()
     var measurementsTimer: Timer?
     private var speedUpdateTask: Task<Void, Never>?
+    private let lifecycleBag = PTLifecycleBag()
 
     private init() {
         self.mainColor = UIColor(hexString: "#42d459") ?? UIColor.green
@@ -53,12 +54,16 @@ final class PTNetworkHelper {
         floatingButtonCreate()
         // 开启每秒刷新悬浮窗网速显示的定时器
         measurementsTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
+        if let measurementsTimer {
+            lifecycleBag.store(measurementsTimer)
+        }
     }
 
     func disable() {
         guard isNetworkEnable else { return }
         isNetworkEnable = false
         PTCustomHTTPProtocol.stop()
+        lifecycleBag.invalidate()
         if let floatingView = floatingView {
             floatingView.removeFromSuperview()
             self.floatingView = nil
@@ -87,8 +92,8 @@ final class PTNetworkHelper {
         guard speedUpdateTask == nil else { return }
         speedUpdateTask = Task { @MainActor [weak self] in
             defer { self?.speedUpdateTask = nil }
-            let downloadSpeed = await PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024.0
-            let uploadSpeed = await PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024.0
+            let downloadSpeed = await PTNetworkThroughputMeter.shared.averageDownloadSpeed() / 1024.0
+            let uploadSpeed = await PTNetworkThroughputMeter.shared.averageUploadSpeed() / 1024.0
 
             self?.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
         }

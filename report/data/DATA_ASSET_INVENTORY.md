@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T13:28:00+08:00 -->
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Generated at: 2026-10-01T11:45:56+08:00 -->
 # Data Asset Inventory
 
-- Version: `5.57.3`
-- Records: `228`
+- Version: `5.59.0`
+- Records: `234`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -16,6 +16,7 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | .github/workflows/release-validation.yml | CI | yml | False | False | KEEP |
 | .swiftlint.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | .vscode/settings.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| Benchmarks/PTModel/manifest.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | Data/demo-registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | Data/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | Example/Extensions/extension_targets.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -185,10 +186,14 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | Scripts/CI/quality_gates.yml | DEV_TOOL | yml | False | False | KEEP |
 | Scripts/concurrency_exception_registry.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/dependency_freeze.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/deprecated_6_removal_manifest.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/module_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/module_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/naming_debt_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_performance_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_public_api_intent.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/public_api_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/registry.yml | DEV_TOOL | yml | False | False | KEEP |
 | Tests/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | _config.yml | CI | yml | False | False | KEEP |
@@ -221,6 +226,7 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | report/current/cocoapods_subspec_graph.json | REPORT | json | True | False | KEEP |
 | report/current/concurrency.json | REPORT | json | True | False | KEEP |
 | report/current/dependency_direction.json | REPORT | json | True | False | KEEP |
+| report/current/governance.json | REPORT | json | True | False | KEEP |
 | report/current/large_files.json | REPORT | json | True | False | KEEP |
 | report/current/mainactor_heavy_work.json | REPORT | json | True | False | KEEP |
 | report/current/module_parity.json | REPORT | json | True | False | KEEP |

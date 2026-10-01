@@ -1,10 +1,11 @@
 <!--
-AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
-Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
-Generated at: 2026-09-30T15:19:08Z
+Current report metadata.
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source version: 5.59.0
+Generator version: Scripts/report_spm_dependency_graph.rb
+Generated at: 2026-10-01T12:30:41Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,8 +14,8 @@ Generated at: 2026-09-30T15:19:08Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `146`
-- Core direct third-party dependencies: `6` (baseline `18`)
+- Target count: `151`
+- Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
 
@@ -30,6 +31,10 @@ Generated at: 2026-09-30T15:19:08Z
 | `PTMediaPermission` | `PTMediaPermission` |
 | `PTMicPermission` | `PTMicPermission` |
 | `PTModelBenchmark` | `PTModelBenchmark` |
+| `PTModelLegacyKakaJSONFixture` | `PTModelLegacyKakaJSONFixture` |
+| `PTModelLegacySmartCodableFixture` | `PTModelLegacySmartCodableFixture` |
+| `PTModelMixedLegacyFixture` | `PTModelMixedLegacyFixture` |
+| `PTModelOnlyFixture` | `PTModelOnlyFixture` |
 | `PTMotionPermission` | `PTMotionPermission` |
 | `PTNotificationPermission` | `PTNotificationPermission` |
 | `PTRemindersPermission` | `PTRemindersPermission` |
@@ -163,6 +168,10 @@ Generated at: 2026-09-30T15:19:08Z
 | `PTMediaPermission` | `PooToolsSource/MeidaLibraryPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTMicPermission` | `PooToolsSource/MicPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTModelBenchmark` | `Benchmarks/PTModel/Runner` | PToolsModel | — | 0 source entries / 0 resources |
+| `PTModelLegacyKakaJSONFixture` | `Fixtures/PTModelConsumers/KakaJSONLegacyApp` | PToolsModelLegacyKakaJSON | KakaJSON | 0 source entries / 0 resources |
+| `PTModelLegacySmartCodableFixture` | `Fixtures/PTModelConsumers/SmartCodableLegacyApp` | PToolsModelLegacySmartCodable | SmartCodable | 0 source entries / 0 resources |
+| `PTModelMixedLegacyFixture` | `Fixtures/PTModelConsumers/MixedLegacyApp` | PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable | — | 0 source entries / 0 resources |
+| `PTModelOnlyFixture` | `Fixtures/PTModelConsumers/PTModelOnlyApp` | PToolsModel | — | 0 source entries / 0 resources |
 | `PTMotionPermission` | `PooToolsSource/MotionPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTNotificationPermission` | `PooToolsSource/NotificationPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTRemindersPermission` | `PooToolsSource/RemindersPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
@@ -184,6 +193,7 @@ Generated at: 2026-09-30T15:19:08Z
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsDate` | `PooToolsSource/PToolsDate` | — | — | 0 source entries / 0 resources |
 | `PToolsDateTests` | `Tests/PToolsDateTests` | PToolsDate | — | 0 source entries / 0 resources |
+| `PToolsDebugTests` | `Tests/PToolsDebugTests` | PooToolsDEBUG | — | 0 source entries / 0 resources |
 | `PToolsDeepLink` | `PooToolsSource/PToolsDeepLink` | PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsDevice` | `PooToolsSource/PToolsDevice` | — | — | 0 source entries / 0 resources |
 | `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
@@ -200,13 +210,13 @@ Generated at: 2026-09-30T15:19:08Z
 | `PToolsModel` | `PooToolsSource/PToolsModel` | PToolsModelCore, PToolsModelMacroPlugin | — | 0 source entries / 0 resources |
 | `PToolsModelCombine` | `PooToolsSource/PToolsModelCombine` | — | — | 0 source entries / 0 resources |
 | `PToolsModelCore` | `PooToolsSource/PToolsModelCore` | — | — | 0 source entries / 0 resources |
-| `PToolsModelLegacyKakaJSON` | `PooToolsSource/PToolsModelLegacyKakaJSON` | — | KakaJSON | 0 source entries / 0 resources |
+| `PToolsModelLegacyKakaJSON` | `PooToolsSource/PToolsModelLegacyKakaJSON` | — | KakaJSON | 1 source entries / 0 resources |
 | `PToolsModelLegacySmartCodable` | `PooToolsSource/PToolsModelLegacySmartCodable` | — | SmartCodable | 0 source entries / 0 resources |
 | `PToolsModelMacroPlugin` | `PToolsModelMacros` | — | SwiftCompilerPlugin, SwiftSyntax, SwiftSyntaxBuilder, SwiftSyntaxMacros | 1 source entries / 0 resources |
-| `PToolsModelTests` | `Tests/PToolsModelTests` | PToolsModel, PToolsModelCore | — | 0 source entries / 0 resources |
+| `PToolsModelTests` | `Tests/PToolsModelTests` | PToolsModel, PToolsModelCore, PToolsModelMacroPlugin | SwiftSyntaxMacrosTestSupport | 0 source entries / 0 resources |
 | `PToolsModelUIKit` | `PooToolsSource/PToolsModelUIKit` | PToolsModelCore | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
-| `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | — | 0 source entries / 0 resources |
+| `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PooToolsNetWork | Alamofire | 0 source entries / 0 resources |
 | `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PTNotificationPermission, PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsOverlay` | `PooToolsSource/Overlay` | PToolsCore, PToolsLogging, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsActivities, PToolsAppIntents, PToolsAudio, PToolsConfiguration, PToolsCore, PToolsDocuments, PToolsFeedback, PToolsForm, PToolsRouteCore, PToolsWidgetCore, ptools | — | 0 source entries / 0 resources |
@@ -264,7 +274,7 @@ Generated at: 2026-09-30T15:19:08Z
 | `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsSymbols, PooToolsCustomerLabel, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsCore, PToolsModelCore, PooToolsLoading, ptools | Alamofire | 0 source entries / 0 resources |
+| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PooToolsLoading, ptools | Alamofire | 0 source entries / 0 resources |
 | `PooToolsNetworkSpeedTest` | `PooToolsSource/NetworkSpeedTest` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsPDF` | `PooToolsSource/PDF` | ptools | — | 0 source entries / 0 resources |
@@ -298,7 +308,7 @@ Generated at: 2026-09-30T15:19:08Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, KakaJSON, Kingfisher, Lottie, SmartCodable, SnapKit | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 28 source entries / 1 resources |
 
 ## Notes
 

@@ -1,10 +1,11 @@
 <!--
-AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
-Generator: Scripts/report_concurrency.rb
-Source revision: 9e7888628a473d8c424ab2bd6259d8a1dc8a6b9e
-Generated at: 2026-09-30T15:18:42Z
+Current report metadata.
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Source version: 5.59.0
+Generator version: current-report-normalizer
+Generated at: 2026-10-01T12:30:41Z
 -->
 
 # PTools 当前 Swift 6 并发扫描
@@ -16,7 +17,7 @@ Generated at: 2026-09-30T15:18:42Z
 | as_bang | 4 |
 | main_queue_async | 27 |
 | task_detached | 29 |
-| unchecked_sendable | 69 |
+| unchecked_sendable | 68 |
 
 ## 约束
 

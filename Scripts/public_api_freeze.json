@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "versionSource": "VERSION",
+  "categories": ["canonical", "compatibility", "internal", "experimental"],
+  "canonicalPolicy": "Only canonical public symbols receive the 6.0 stability promise.",
+  "compatibilityPolicy": "Compatibility symbols forward to canonical implementations and remain through the 5.x window.",
+  "baseline": "report/current/public_api.json"
+}

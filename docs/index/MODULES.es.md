@@ -66,6 +66,10 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [MeidaPermission](../modules/meida-permission/README.es.md) | `—` | `MeidaPermission` |
 | [MessageKit](../modules/message-kit/README.es.md) | `—` | `MessageKit` |
 | [MicPermission](../modules/mic-permission/README.es.md) | `—` | `MicPermission` |
+| [Model](../modules/model/README.es.md) | `—` | `Model` |
+| [ModelCore](../modules/model-core/README.es.md) | `—` | `ModelCore` |
+| [ModelLegacyKakaJSON](../modules/model-legacy-kaka-json/README.es.md) | `—` | `ModelLegacyKakaJSON` |
+| [ModelLegacySmartCodable](../modules/model-legacy-smart-codable/README.es.md) | `—` | `ModelLegacySmartCodable` |
 | [Motion](../modules/motion/README.es.md) | `—` | `Motion` |
 | [MotionPermission](../modules/motion-permission/README.es.md) | `—` | `MotionPermission` |
 | [MXMetricManagerKit](../modules/mxmetric-manager-kit/README.es.md) | `—` | `MXMetricManagerKit` |
@@ -188,6 +192,14 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [PToolsHTTPFilePortal](../modules/ptools-httpfile-portal/README.es.md) | `PToolsHTTPFilePortal` | `—` |
 | [PToolsHTTPServer](../modules/ptools-httpserver/README.es.md) | `PToolsHTTPServer` | `—` |
 | [PToolsLogging](../modules/ptools-logging/README.es.md) | `PToolsLogging` | `—` |
+| [PToolsModel](../modules/ptools-model/README.es.md) | `PToolsModel` | `—` |
+| [PToolsModelCombine](../modules/ptools-model-combine/README.es.md) | `PToolsModelCombine` | `—` |
+| [PToolsModelCombine](../modules/ptools-model-combine-2/README.es.md) | `—` | `PToolsModelCombine` |
+| [PToolsModelCore](../modules/ptools-model-core/README.es.md) | `PToolsModelCore` | `—` |
+| [PToolsModelLegacyKakaJSON](../modules/ptools-model-legacy-kaka-json/README.es.md) | `PToolsModelLegacyKakaJSON` | `—` |
+| [PToolsModelLegacySmartCodable](../modules/ptools-model-legacy-smart-codable/README.es.md) | `PToolsModelLegacySmartCodable` | `—` |
+| [PToolsModelUIKit](../modules/ptools-model-uikit/README.es.md) | `PToolsModelUIKit` | `—` |
+| [PToolsModelUIKit](../modules/ptools-model-uikit-2/README.es.md) | `—` | `PToolsModelUIKit` |
 | [PToolsNotifications](../modules/ptools-notifications/README.es.md) | `PToolsNotifications` | `—` |
 | [PToolsOverlay](../modules/ptools-overlay/README.es.md) | `PToolsOverlay` | `Overlay` |
 | [PToolsPermissionCore](../modules/ptools-permission-core/README.es.md) | `PToolsPermissionCore` | `PToolsPermissionCore` |

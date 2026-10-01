@@ -46,7 +46,11 @@ final class PTHttpModel: NSObject {
     var errorLocalizedDescription: String?
     var size: String?
     var index: Int = .zero
-    var id: String { String(index) }
+    var id: String { requestId ?? String(index) }
+    // English: Keep diagnostic metrics only at the legacy detail boundary.
+    // Español: Conserva las métricas de diagnóstico solo en el límite de detalle heredado.
+    // 中文：仅在旧详情页边界保留诊断指标。
+    var networkMetrics: PTNetworkTaskMetricsSnapshot?
 
     override init() {
         super.init()
@@ -68,5 +72,32 @@ final class PTHttpModel: NSObject {
         let isStatusCodeValid = (codeInt == 0 || (codeInt >= 200 && codeInt < 400))
         
         return hasNoError && isStatusCodeValid
+    }
+}
+
+// English: Convert the immutable capture record only at the legacy UI boundary.
+// Español: Convierte el registro inmutable únicamente en el límite de la UI heredada.
+// 中文：只在旧 UI 兼容边界把不可变抓包记录转换为旧模型。
+extension PTHttpModel {
+    convenience init(record: PTNetworkCaptureRecord) {
+        self.init()
+        requestId = record.id.uuidString
+        index = Int(clamping: record.sequence)
+        url = record.request.url
+        method = record.request.method
+        requestData = record.request.body.previewData
+        requestHeaderFields = record.request.headers
+        statusCode = record.response.map { String($0.statusCode) }
+        mimeType = record.response?.mimeType
+        responseData = record.response?.body.previewData
+        responseHeaderFields = record.response?.headers
+        startTime = ISO8601DateFormatter().string(from: record.timing.startedAt)
+        endTime = record.timing.endedAt.map { ISO8601DateFormatter().string(from: $0) }
+        totalDuration = record.timing.duration.map { String(format: "%.4f (s)", $0) }
+        size = ByteCountFormatter.string(fromByteCount: record.response?.body.totalBytes ?? 0, countStyle: .file)
+        errorDescription = record.error?.description
+        errorLocalizedDescription = record.error?.description
+        isImage = record.response?.mimeType?.localizedCaseInsensitiveContains("image") == true
+        networkMetrics = record.metrics
     }
 }

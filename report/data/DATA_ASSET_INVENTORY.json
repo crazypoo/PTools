@@ -66,6 +66,15 @@
     {
       "action": "KEEP",
       "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "Benchmarks/PTModel/manifest.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
       "format": "yml",
       "generated": false,
       "kind": "SOURCE_OF_TRUTH",
@@ -1590,6 +1599,33 @@
       "format": "json",
       "generated": false,
       "kind": "DEV_TOOL",
+      "path": "Scripts/dependency_freeze.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/deprecated_6_removal_manifest.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/module_freeze.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
       "path": "Scripts/module_registry.json",
       "source_of_truth": false
     },
@@ -1618,6 +1654,15 @@
       "generated": false,
       "kind": "DEV_TOOL",
       "path": "Scripts/p1_public_api_intent.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/public_api_freeze.json",
       "source_of_truth": false
     },
     {
@@ -1914,6 +1959,15 @@
       "format": "json",
       "generated": true,
       "kind": "REPORT",
+      "path": "report/current/governance.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
       "path": "report/current/large_files.json",
       "source_of_truth": false
     },
@@ -2053,8 +2107,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-09-29T13:28:00+08:00",
+  "generated_at": "2026-10-01T11:45:56+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "4df9222ab427a34dcac44f4fbe2bca2f9ca881ee",
-  "version": "5.57.3"
+  "source_revision": "6a3f97d0ab05a4f04ab789c93804c84c787b5da6",
+  "version": "5.59.0"
 }

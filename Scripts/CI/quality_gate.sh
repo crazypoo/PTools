@@ -146,6 +146,14 @@ run_named_gate() {
     concurrency)
       run_gate CONCURRENCY env PTOOLS_STRICT_CONCURRENCY=1 bash Scripts/validate_xcode_source_warnings.sh
       ;;
+    governance)
+      run_gate GOVERNANCE bash -c '
+        set -euo pipefail
+        ruby Scripts/governance/generate_current_reports.rb
+        bash Scripts/governance/validate_current_reports.sh
+        bash Scripts/validate_559_debugnetwork.sh
+      '
+      ;;
     pods)
       run_gate PODS bash -c '
         set -euo pipefail
@@ -196,7 +204,7 @@ require "fileutils"
 # 中文：汇总独立任务结果，不重复执行检查。
 
 report_dir, version_path = ARGV
-required = %w[VERSION DOCS EXAMPLE ARCHITECTURE TESTS CONCURRENCY PODS XCODE RELEASE]
+required = %w[VERSION DOCS EXAMPLE ARCHITECTURE TESTS CONCURRENCY GOVERNANCE PODS XCODE RELEASE]
 results = Dir.glob(File.join(report_dir, "**", "*.json")).filter_map do |path|
   next if File.basename(path) == "quality-report.json"
   JSON.parse(File.read(path))
@@ -239,7 +247,7 @@ case "$gate" in
   all)
     export QUALITY_REPORT_DIR="$report_dir"
     overall_status=0
-    for gate_name in version docs example architecture tests concurrency pods xcode release; do
+    for gate_name in version docs example architecture tests concurrency governance pods xcode release; do
       if ! "$0" "$gate_name"; then
         overall_status=1
       fi
@@ -260,11 +268,11 @@ case "$gate" in
       exit 1
     fi
     ;;
-  version|docs|example|architecture|tests|concurrency|pods|xcode|release)
+  version|docs|example|architecture|tests|concurrency|governance|pods|xcode|release)
     run_named_gate "$gate"
     ;;
   *)
-    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|example|architecture|tests|concurrency|pods|xcode|release|all|summary]\n' >&2
+    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|example|architecture|tests|concurrency|governance|pods|xcode|release|all|summary]\n' >&2
     exit 64
     ;;
 esac

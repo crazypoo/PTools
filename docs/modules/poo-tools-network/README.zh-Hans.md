@@ -55,7 +55,7 @@ import PooToolsNetwork
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：ptools, PToolsCore, PooToolsLoading, Alamofire。
+公开边界优先使用值类型。registry 记录的直接依赖：ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire。
 
 ## 7. 主要 API
 

@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 4df9222ab427a34dcac44f4fbe2bca2f9ca881ee
-Generated at: 2026-09-29T13:28:00+08:00 -->
+Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
+Generated at: 2026-10-01T11:45:56+08:00 -->
 # Document Inventory
 
-- Version: `5.57.3`
-- Records: `844`
+- Version: `5.59.0`
+- Records: `911`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -13,6 +13,9 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | Example/P0/README.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | Example/P1/README.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | Example/P2/README.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| Fixtures/PTModelConsumers/CocoaPodsConsumer/README.md | REFERENCE | en | ACTIVE | KEEP |
+| Fixtures/PTModelConsumers/README.md | REFERENCE | en | ACTIVE | KEEP |
+| Fixtures/PTModelConsumers/SwiftPMConsumer/README.md | REFERENCE | en | ACTIVE | KEEP |
 | PooToolsSource/PToolsLogging/README.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
 | README.md | ROOT | zh-Hans+en+es | ACTIVE | KEEP |
 | ROADMAP.md | ROOT | zh-Hans | ACTIVE | KEEP |
@@ -55,10 +58,20 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | docs/audits/SOCKETROCKET_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/audits/SWIFTDATE_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/audits/SWIFTERSWIFT_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK_ARCHITECTURE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK_CAPABILITY_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK_EXAMPLE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK_MIGRATION_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/debug/DEBUG_NETWORK_PRIVACY.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/dependencies/DEPENDENCY_POLICY.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/dependencies/THIRD_PARTY_NOTICES.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/examples/PTOOLS_HTTP_SERVER_INTEGRATION.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/examples/PTPOPOVER_EXAMPLE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/governance/DEPENDENCY_FREEZE_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/governance/DEPRECATED_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/governance/MODULE_FREEZE_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/governance/PUBLIC_API_6_FREEZE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/guides/EXAMPLE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/MIGRATION_5_22_LOGGING.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/MODULES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
@@ -101,6 +114,23 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | docs/migrations/SWIFTDATE_TO_PTOOLSDATE.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migrations/SWIFTERSWIFT_TO_PTOOLS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/YD_SHIP_ORDER_PTOOLS_PAGING_TUTORIAL.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/model/KAKJSON_1_1_2_BEHAVIOR_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_65_TO_100_EXECUTION_STATUS_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_BEHAVIOR_DIFFERENCES.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_BENCHMARKS_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_CODABLE_INTEROP.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_COMPATIBILITY_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_F1_F3_EXECUTION_STATUS_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_FIXTURES_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_FREEZE_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_G1_G3_EXECUTION_STATUS_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_GUIDE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_LICENSE_ATTRIBUTION.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_MIGRATION_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_UPSTREAM_ISSUE_AUDIT_5.58.0.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/SMARTCODABLE_4_4_4_BEHAVIOR_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/SMARTCODABLE_6_INHERIT_BEHAVIOR_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/SMARTCODABLE_CURRENT_BEHAVIOR_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/appz/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/appz/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/appz/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -266,6 +296,18 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | docs/modules/mic-permission/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/mic-permission/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/mic-permission/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/model-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/model-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/model-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/model-legacy-kaka-json/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/model-legacy-kaka-json/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/model-legacy-kaka-json/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/model-legacy-smart-codable/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/model-legacy-smart-codable/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/model-legacy-smart-codable/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/model/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/model/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/model/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/motion-permission/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/motion-permission/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/motion-permission/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -629,6 +671,30 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | docs/modules/ptools-logging/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-logging/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-logging/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine-2/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine-2/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine-2/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-combine/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-kaka-json/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-kaka-json/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-kaka-json/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-smart-codable/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-smart-codable/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-legacy-smart-codable/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit-2/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit-2/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit-2/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model-uikit/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-model/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-model/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-model/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-notifications/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-notifications/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-notifications/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -828,6 +894,7 @@ Generated at: 2026-09-29T13:28:00+08:00 -->
 | report/current/cache_inventory.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/cocoapods_subspec_graph.md | GENERATED | en | GENERATED | KEEP |
 | report/current/concurrency.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/current/concurrency_exceptions_v2.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/debug_dependency_graph.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/dependency_direction.md | GENERATED | en | GENERATED | KEEP |
 | report/current/dependency_graph.md | GENERATED | zh-Hans | GENERATED | KEEP |

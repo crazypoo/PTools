@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.58.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.59.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.58.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.33.0`；`5.59.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.59.0 5.x Finalization Governance 2.0 / DebugNetwork 2.0
+
+- ✅ DebugNetwork 改为 observer-only：不参与业务 cache、retry、auth、dedup、decoder 或响应决策。
+- ✅ 新增不可变 `PTNetworkCaptureRecord`、typed request/response/body snapshot、actor Store、预算淘汰和 exactly-once finalize。
+- ✅ 接入 URLSessionTaskMetrics、redirect chain、Timeline、advanced filter、AsyncStream 批量 UI、Scene presentation session 和 hook registry。
+- ✅ 新增默认脱敏、cURL/HAR/Text 导出、能力矩阵、迁移文档、Debug contract tests 和 DebugNetwork 质量门禁。
+- ✅ 增加 current report freshness、Concurrency Exceptions v2、module/API/dependency freeze manifest；5.x 兼容入口继续保留。
+- [ ] 仍需真实宿主/真机完成后台 URLSession、WKWebView、WebSocket、SSE、Network.framework、多 Scene 和 ON/OFF 业务一致性回归后再创建正式 `5.59.0` tag。
 
 ## 5.58.0 PTModel 基础融合入口
 

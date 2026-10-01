@@ -1,10 +1,6 @@
-//
-//  PTCustomHTTPProtocol.swift
-//  PooTools_Example
-//
-//  Created by 邓杰豪 on 2024/5/27.
-//  Copyright © 2024 crazypoo. All rights reserved.
-//
+// English: URLProtocol forwards traffic and emits immutable observations only.
+// Español: URLProtocol solo reenvía el tráfico y emite observaciones inmutables.
+// 中文：URLProtocol 只转发流量并发布不可变观测结果。
 
 import Foundation
 import os.lock
@@ -18,20 +14,30 @@ private enum PTNetworkCaptureState {
     }
 }
 
+private enum PTURLProtocolCaptureState: Equatable {
+    case idle
+    case running
+    case finalized
+}
+
+// English: URLProtocol is an SDK callback boundary; its mutable state stays on one serial delegate queue.
+// Español: URLProtocol es un límite de callbacks del SDK; su estado mutable vive en una cola serial del delegado.
+// 中文：URLProtocol 属于 SDK 回调边界；其可变状态只在一个串行代理队列中访问。
 final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
     private static let requestProperty = "com.custom.http.protocol"
-    
-    struct UncheckedSendableBox<T>: @unchecked Sendable {
-        let value: T
-        
-        init(_ value: T) {
-            self.value = value
-        }
-    }
-    
-    class func clearCache() {
-        URLCache.customHttp.removeAllCachedResponses()
-    }
+    private let bodyPolicy = PTNetworkBodyCapturePolicy()
+
+    private var session: URLSession?
+    private var dataTask: URLSessionDataTask?
+    private var response: HTTPURLResponse?
+    private var responseDate: Date?
+    private var responseData = Data()
+    private var capturedBytes: Int64 = 0
+    private var startedAt = Date()
+    private var endedAt: Date?
+    private var metrics: PTNetworkTaskMetricsSnapshot?
+    private var redirects: [PTNetworkRedirectSnapshot] = []
+    private var captureState: PTURLProtocolCaptureState = .idle
 
     class func start() {
         PTNetworkCaptureState.isEnabled = true
@@ -43,19 +49,11 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
         URLProtocol.unregisterClass(self)
     }
 
-    private class func checkNetworkEnableSynchronously() -> Bool {
-        // URLProtocol 回调可能运行在任意线程，只读取锁保护的布尔快照。
-        PTNetworkCaptureState.isEnabled
-    }
-
     private class func canServeRequest(_ request: URLRequest) -> Bool {
-        guard checkNetworkEnableSynchronously() else { return false }
-        if property(forKey: requestProperty, in: request) != nil { return false }
-
-        if let scheme = request.url?.scheme?.lowercased(), scheme == "http" || scheme == "https" {
-            return true
-        }
-        return false
+        guard PTNetworkCaptureState.isEnabled else { return false }
+        guard property(forKey: requestProperty, in: request) == nil else { return false }
+        guard let scheme = request.url?.scheme?.lowercased() else { return false }
+        return scheme == "http" || scheme == "https"
     }
 
     override class func canInit(with request: URLRequest) -> Bool {
@@ -67,403 +65,216 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
         return canServeRequest(request)
     }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        request
-    }
-
-    // 状态属性（由于声明了 @unchecked Sendable，我们需要确保对其修改都在 threadOperator 内）
-    private var session: URLSession?
-    private var dataTask: URLSessionDataTask?
-    private var cachePolicy: URLCache.StoragePolicy = .notAllowed
-    private var data: Data = .init()
-    private var didRetry = false
-    private var didReceiveData = false
-    private var startTime = Date()
-    private var endTime: Date?
-    private var response: HTTPURLResponse?
-    private var error: Error?
-    private var prevUrl: URL?
-    private var prevStartTime: Date?
-    private let maximumCapturedDataSize = 2 * 1024 * 1024
-    private var capturedDataSize = 0
-    private var didTruncateCapturedData = false
-
-    private var threadOperator: PTThreadOperator?
-
-    private func appendCapturedData(_ newData: Data) {
-        capturedDataSize += newData.count
-        guard data.count < maximumCapturedDataSize else {
-            didTruncateCapturedData = true
-            return
-        }
-
-        let remaining = maximumCapturedDataSize - data.count
-        if newData.count <= remaining {
-            data.append(newData)
-        } else {
-            data.append(contentsOf: newData.prefix(remaining))
-            didTruncateCapturedData = true
-        }
-    }
-
-    private func use(_ cache: CachedURLResponse) {
-        // 缓存命中时直接通知 URLProtocol client，不再通过无消费者的中间代理转发。
-        client?.urlProtocol(self, didReceive: cache.response, cacheStoragePolicy: .allowed)
-        client?.urlProtocol(self, didLoad: cache.data)
-        client?.urlProtocolDidFinishLoading(self)
-    }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
-        guard let mutableRequest = (request as NSObject).mutableCopy() as? NSMutableURLRequest else {
+        guard let mutableRequest = (request as NSURLRequest).mutableCopy() as? NSMutableURLRequest else {
             client?.urlProtocol(self, didFailWithError: URLError(.badURL))
             return
         }
-        
-        URLProtocol.setProperty(true, forKey: PTCustomHTTPProtocol.requestProperty, in: mutableRequest)
-        
-        // 🌟 设计思路：在进入 Task 之前，将可变的非 Sendable 类型转换为不可变的、线程安全的结构体值类型
-        let safeRequestToLaunch = mutableRequest as URLRequest
-        
-        Task { await PTNetworkSpeedMonitor.shared.addUploadSpeed(0) }
 
-        // 1. 优先校验静态资源持久化大文件缓存
-        if let cache = URLCache.customHttp.validCache(for: request) {
-            use(cache)
-            PTNSLogConsole("Use disk cache for \(request.url?.lastPathComponent ?? "")")
-            return
-        }
-        
-        // 2. 桥接打通业务网络模块的 Actor 内存/磁盘缓存
-        let cachePolicyRaw = request.allHTTPHeaderFields?["cachePolicy"] ?? ""
-        if cachePolicyRaw == PTNetworkCachePolicy.cacheOnly.rawValue ||
-           cachePolicyRaw == PTNetworkCachePolicy.cacheElseNetwork.rawValue {
-            
-            let originalRequest = request
-            
-            // 🌟 核心修复：使用你之前定义的 UncheckedSendableBox 将非 Sendable 的 self 包装起来
-            let selfBox = UncheckedSendableBox(self)
-            
-            // 异步等待读取 Actor 缓存（跨边界读取数据天然安全）
-            Task { @MainActor in
-                if let hitBusinessCacheData = await NetworkCache.shared.read(request: originalRequest) {
-                    guard let url = originalRequest.url,
-                          let fakeResponse = HTTPURLResponse(url: url,
-                                                             statusCode: 200,
-                                                             httpVersion: "HTTP/1.1",
-                                                             headerFields: originalRequest.allHTTPHeaderFields) else {
-                        selfBox.value.client?.urlProtocol(selfBox.value,
-                                                          didFailWithError: URLError(.badURL))
-                        return
-                    }
-                    let cachedResp = CachedURLResponse(response: fakeResponse, data: hitBusinessCacheData)
-                    
-                    // 🌟 在 MainActor 保护下，从盒子中取出 self 安全调用内部方法
-                    selfBox.value.use(cachedResp)
-                    PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")")
-                } else {
-                    // 🌟 同样从盒子中取出 self 发起实际网络请求
-                    selfBox.value.startActualNetworkRequest(with: safeRequestToLaunch)
-                }
-            }
-        } else {
-            startActualNetworkRequest(with: safeRequestToLaunch)
-        }
-    }
+        URLProtocol.setProperty(true, forKey: Self.requestProperty, in: mutableRequest)
+        let requestToLaunch = mutableRequest as URLRequest
+        startedAt = Date()
+        captureState = .running
 
-    // 🌟 Swift 6 升级: 提取原本在 startLoading 尾部的实际网络请求逻辑
-    private func startActualNetworkRequest(with request: URLRequest) {
-        threadOperator = PTThreadOperator()
-        startTime = Date()
-        prevUrl = request.url
-        prevStartTime = startTime
-        
-        let config = URLSessionConfiguration.default
-        session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
-        dataTask = session?.dataTask(with: request)
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = (configuration.protocolClasses ?? []).filter { $0 != Self.self }
+        let delegateQueue = OperationQueue()
+        delegateQueue.maxConcurrentOperationCount = 1
+        session = URLSession(configuration: configuration, delegate: self, delegateQueue: delegateQueue)
+        dataTask = session?.dataTask(with: requestToLaunch)
         dataTask?.resume()
     }
-    
+
     override func stopLoading() {
-        // 🌟 核心重构：整个生命周期方法在当前线程同步执行，完全不套用任何外层 Task
         dataTask?.cancel()
-        if let task = dataTask {
-            task.cancel()
-            dataTask = nil
+        finalize(error: URLError(.cancelled), completion: .cancelled)
+    }
+
+    private func append(_ data: Data) {
+        capturedBytes += Int64(data.count)
+        let remaining = bodyPolicy.absoluteCaptureLimit - responseData.count
+        guard remaining > 0 else { return }
+        responseData.append(contentsOf: data.prefix(remaining))
+    }
+
+    private func finalize(error: Error?, completion: PTNetworkCaptureCompletion) {
+        guard PTNetworkCaptureState.isEnabled, captureState != .finalized else { return }
+        captureState = .finalized
+        endedAt = Date()
+
+        let requestSnapshot = PTNetworkRequestSnapshot(request: request,
+                                                       startedAt: startedAt,
+                                                       bodyPolicy: bodyPolicy,
+                                                       fileNamespace: UUID().uuidString)
+        let responseSnapshot = response.map { value in
+            let body = PTNetworkBodyCapture.make(data: responseData,
+                                                 totalBytes: capturedBytes,
+                                                 policy: bodyPolicy,
+                                                 fileNamespace: UUID().uuidString)
+            return PTNetworkCaptureResponseSnapshot(statusCode: value.statusCode,
+                                             headers: value.allHeaderFields.reduce(into: [:]) { result, pair in
+                                                 result[String(describing: pair.key)] = String(describing: pair.value)
+                                             },
+                                             mimeType: value.mimeType,
+                                             body: body)
         }
-
-        guard PTCustomHTTPProtocol.checkNetworkEnableSynchronously() else { return }
-
-        // 🌟 在当前线程同步组装数据，直接读取属性，完全没有“闭包捕获 self”的场景，天然安全
-        let model = PTHttpModel()
-        model.url = request.url
-        model.method = request.httpMethod
-        model.mimeType = response?.mimeType
-
-        if let requestBody = request.httpBody {
-            model.requestData = requestBody
-        } else if let requestBodyStream = request.httpBodyStream {
-            model.requestData = requestBodyStream.toData()
-        }
-
-        if let httpResponse = response {
-            model.statusCode = "\(httpResponse.statusCode)"
-        }
-
-        model.responseData = data
-        model.size = ByteCountFormatter.string(fromByteCount: Int64(capturedDataSize), countStyle: .file)
-        model.isImage = (response?.mimeType?.contains("image")) ?? false
-
-        // 耗时精准计算
-        let startTimeDouble = startTime.timeIntervalSince1970
-        let endTimeDouble = Date().timeIntervalSince1970
-        let durationDouble = abs(endTimeDouble - startTimeDouble)
-        model.totalDuration = String(format: "%.4f (s)", durationDouble)
-
-        model.startTime = startTime.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
-        model.endTime = Date().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
-
-        model.errorDescription = error?.localizedDescription
-        model.errorLocalizedDescription = error?.localizedDescription
-        model.requestHeaderFields = request.allHTTPHeaderFields
-
-        if let response = response {
-            model.responseHeaderFields = response.allHeaderFields.convertKeysToString()
-            model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy")
-        }
-
-        if let responseDate = model.endTime {
-            model.responseHeaderFields?.updateValue(responseDate, forKey: "Response-Date")
-        }
-
-        if let urlString = model.url?.absoluteString {
-            let lowercasedURL = urlString.lowercased()
-            if ["png", "jpg", "gif", "jpeg"].contains(where: { lowercasedURL.hasSuffix(".\($0)") }) {
-                model.isImage = true
-            }
-        }
-
-        model.requestId = UUID().uuidString
-        
-        let finalModel = PTErrorHelper.handle(error, model: model)
-        
-        // 🌟 隔离提取法：将需要跨线程传递的干净数据单独提取为常量
-        let modelToSave = finalModel
-        let isSuccess = finalModel.isSuccess
-        // English: Publish a redacted request summary to the existing Debug event center without persisting a body.
-        // Español: Publica un resumen de solicitud redactado en el centro de eventos Debug existente sin guardar el cuerpo.
-        // 中文：向现有 Debug 事件中心发布脱敏请求摘要，不持久化请求或响应正文。
-        let networkPayload: [String: String] = [
-            "requestID": finalModel.requestId ?? "",
-            "method": finalModel.method ?? "GET",
-            "url": finalModel.url?.absoluteString ?? "",
-            "statusCode": finalModel.statusCode ?? "0",
-            "responseBytes": String(capturedDataSize),
-            "duration": String(durationDouble),
-            "retryCount": didRetry ? "1" : "0",
-            "fromCache": request.cachePolicy == .returnCacheDataDontLoad ? "true" : "false",
-            "cancelled": ((error as NSError?)?.code == NSURLErrorCancelled) ? "true" : "false"
+        let captureError = error.map(PTNetworkCaptureError.init)
+        let record = PTNetworkCaptureRecord(request: requestSnapshot,
+                                            response: responseSnapshot,
+                                            timing: PTNetworkTiming(startedAt: startedAt,
+                                                                   responseAt: responseDate,
+                                                                   endedAt: endedAt),
+                                            metrics: metrics,
+                                            error: captureError,
+                                            source: .urlProtocol,
+                                            completion: completion,
+                                            phase: .finalized,
+                                            redirects: redirects)
+        let redacted = record.redacted()
+        let payload: [String: String] = [
+            "requestID": record.id.uuidString,
+            "method": record.request.method,
+            "url": redacted.request.url.absoluteString,
+            "statusCode": String(record.response?.statusCode ?? 0),
+            "responseBytes": String(record.response?.body.totalBytes ?? 0),
+            "duration": String(record.timing.duration ?? 0),
+            "source": record.source.rawValue,
+            "completion": completion.rawValue
         ]
-        
-        // 🌟 仅仅将最后的存储与通知放入 Task，闭包里没有任何一个地方用到 self
-        Task { @MainActor in
-            PTDebugEventCenter.shared.publish(
-                PTDebugEvent(name: "network.request",
-                             source: "urlprotocol",
-                             payload: networkPayload)
-            )
-            if PTHttpDatasource.shared.addHttpRequest(modelToSave) {
-                // 通知刷新 UI，安全的切回到 MainActor
-                await MainActor.run {
-                    NotificationCenter.default.post(name: NSNotification.Name("reloadHttp_PooTools"), object: isSuccess)
-                }
+
+        Task {
+            _ = await PTNetworkCaptureCenter.shared.record(record)
+            await MainActor.run {
+                PTDebugEventCenter.shared.publish(
+                    PTDebugEvent(name: "network.request", source: "urlprotocol", payload: payload)
+                )
             }
         }
-    }
-
-    private func getCachePolicy(value: UInt?) -> String {
-        switch value {
-        case 0: return "useProtocolCachePolicy"
-        case 1: return "reloadIgnoringLocalCacheData"
-        case 2: return "returnCacheDataElseLoad"
-        case 3: return "returnCacheDataDontLoad"
-        case 4: return "reloadIgnoringLocalAndRemoteCacheData"
-        case 5: return "reloadRevalidatingCacheData"
-        default: return "reloadIgnoringCacheData"
-        }
-    }
-
-    private func canRetry(error: NSError) -> Bool {
-        guard error.code == Int(CFNetworkErrors.cfurlErrorNetworkConnectionLost.rawValue),
-              !didRetry,
-              !didReceiveData else {
-            return false
-        }
-        PTNSLogConsole("Retry download...")
-        return true
     }
 }
 
-// MARK: - URLSessionDataDelegate 代理实现 (依赖调度器切回目标线程)
-// MARK: - URLSessionDataDelegate 代理实现 (修复 Actor 并发调用)
 extension PTCustomHTTPProtocol: URLSessionDataDelegate {
-    
-    func urlSession(_: URLSession, task _: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
-        let handlerBox = UncheckedSendableBox(completionHandler)
-        threadOperator?.execute { [weak self] in
-            guard let self = self else { return }
-            PTNSLogConsole("willPerformHTTPRedirection")
-            self.client?.urlProtocol(self, wasRedirectedTo: request, redirectResponse: response)
-            self.response = response
-            handlerBox.value(request)
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    willPerformHTTPRedirection response: HTTPURLResponse,
+                    newRequest request: URLRequest,
+                    completionHandler: @escaping (URLRequest?) -> Void) {
+        if let from = task.currentRequest?.url, let to = request.url {
+            redirects.append(PTNetworkRedirectSnapshot(from: from,
+                                                       to: to,
+                                                       statusCode: response.statusCode))
+        }
+        client?.urlProtocol(self, wasRedirectedTo: request, redirectResponse: response)
+        completionHandler(request)
+    }
+
+    func urlSession(_ session: URLSession,
+                    dataTask: URLSessionDataTask,
+                    didReceive response: URLResponse,
+                    completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        self.response = response as? HTTPURLResponse
+        responseDate = Date()
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        completionHandler(.allow)
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        client?.urlProtocol(self, didLoad: data)
+        append(data)
+        if let startedAt = responseDate {
+            let elapsed = Date().timeIntervalSince(startedAt)
+            if elapsed > 0 {
+                Task { await PTNetworkThroughputMeter.shared.addDownloadSpeed(Double(data.count) / elapsed) }
+            }
         }
     }
 
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        let handlerBox = UncheckedSendableBox(completionHandler)
-        threadOperator?.execute { [weak self] in
-            guard let self = self else { return }
-            
-            if let httpResponse = response as? HTTPURLResponse, let originalRequest = dataTask.originalRequest {
-                // 接入刚重构的合规缓存判决类
-                self.cachePolicy = PTCacheStoragePolicy.cacheStoragePolicy(for: originalRequest, and: httpResponse)
-            }
-            
-            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: self.cachePolicy)
-            self.response = response as? HTTPURLResponse
-            self.endTime = Date()
-                        
-            // 测速模块上行速度统计 (安全解包)
-            if let safeEndTime = self.endTime {
-                let elapsedTime = safeEndTime.timeIntervalSince(self.startTime)
-                guard elapsedTime > 0 else {
-                    handlerBox.value(.allow)
-                    return
-                }
-                
-                // 🌟 修复：用 Task 包装 Actor 的方法调用
-                if let requestBody = dataTask.currentRequest?.httpBody {
-                    let uploadSpeed = Double(requestBody.count) / elapsedTime
-                    Task { await PTNetworkSpeedMonitor.shared.addUploadSpeed(uploadSpeed) }
-                } else if let urlString = dataTask.currentRequest?.url?.absoluteString,
-                          let stringData = urlString.data(using: .utf8) {
-                    let uploadSpeed = Double(stringData.count) / elapsedTime
-                    Task { await PTNetworkSpeedMonitor.shared.addUploadSpeed(uploadSpeed) }
-                }
-            }
-            handlerBox.value(.allow)
-        }
-    }
-
-    func urlSession(_ session: URLSession, dataTask task: URLSessionDataTask, didReceive data: Data) {
-        threadOperator?.execute { [weak self] in
-            guard let self = self else { return }
-
-            self.client?.urlProtocol(self, didLoad: data)
-            self.didReceiveData = true
-
-            if self.prevUrl != self.response?.url || self.prevStartTime != self.startTime {
-                self.data.removeAll(keepingCapacity: true)
-                self.capturedDataSize = 0
-                self.didTruncateCapturedData = false
-            }
-            self.appendCapturedData(data)
-            
-            self.endTime = Date()
-            
-            // 测速模块下行速度统计
-            if let safeEndTime = self.endTime {
-                let elapsedTime = safeEndTime.timeIntervalSince(self.startTime)
-                if elapsedTime > 0 {
-                    let downloadSpeed = Double(data.count) / elapsedTime
-                    // 🌟 修复：用 Task 包装 Actor 的方法调用
-                    Task { await PTNetworkSpeedMonitor.shared.addDownloadSpeed(downloadSpeed) }
-                }
-            }
-        }
+    func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        self.metrics = PTNetworkTaskMetricsSnapshot(metrics: metrics)
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        threadOperator?.execute { [weak self] in
-            guard let self = self else { return }
-            
-            if let error = error {
-                self.error = error
-                if self.canRetry(error: error as NSError), let originalRequest = task.originalRequest {
-                    self.didRetry = true
-                    self.dataTask = session.dataTask(with: originalRequest)
-                    self.dataTask?.resume()
-                    return
-                }
-                self.client?.urlProtocol(self, didFailWithError: error)
-                return
-            }
-
-            self.client?.urlProtocolDidFinishLoading(self)
-            
-            if self.cachePolicy == .allowed {
-                // 🌟 修复：用 Task 包装 Actor 的清理方法调用
-                Task { await PTNetworkSpeedMonitor.shared.clearSpeeds() }
-                
-                // 按需写入本地自定义持久化磁盘缓存
-                if !self.didTruncateCapturedData {
-                    URLCache.customHttp.storeIfNeeded(for: task, data: self.data)
-                }
-            }
+        if let error {
+            client?.urlProtocol(self, didFailWithError: error)
+            let completion: PTNetworkCaptureCompletion = (error as NSError).code == NSURLErrorCancelled ? .cancelled : .failed
+            finalize(error: error, completion: completion)
+        } else {
+            client?.urlProtocolDidFinishLoading(self)
+            finalize(error: nil, completion: .completed)
         }
+        self.session = nil
+        self.dataTask = nil
     }
 }
 
+private extension PTNetworkTaskMetricsSnapshot {
+    init(metrics: URLSessionTaskMetrics) {
+        let transaction = metrics.transactionMetrics.last
+        func duration(_ start: Date?, _ end: Date?) -> Duration? {
+            guard let start, let end else { return nil }
+            return .seconds(max(0, end.timeIntervalSince(start)))
+        }
+
+        let requestStart = transaction?.requestStartDate
+        let requestEnd = transaction?.requestEndDate
+        let responseStart = transaction?.responseStartDate
+        let responseEnd = transaction?.responseEndDate
+        self.init(dnsDuration: duration(transaction?.domainLookupStartDate, transaction?.domainLookupEndDate),
+                  connectDuration: duration(transaction?.connectStartDate, transaction?.connectEndDate),
+                  secureConnectionDuration: duration(transaction?.secureConnectionStartDate, transaction?.secureConnectionEndDate),
+                  requestDuration: duration(requestStart, requestEnd),
+                  ttfb: duration(requestEnd, responseStart),
+                  responseDuration: duration(responseStart, responseEnd),
+                  redirectCount: max(0, metrics.transactionMetrics.count - 1),
+                  protocolName: transaction?.networkProtocolName,
+                  isReusedConnection: transaction?.isReusedConnection ?? false,
+                  isProxyConnection: transaction?.isProxyConnection ?? false)
+    }
+}
+
+// English: Keep the historical actor as the storage owner; the correctly named API below is a source-compatible alias.
+// Español: Conserva el actor histórico como dueño del almacenamiento; la API con nombre correcto es un alias compatible.
+// 中文：保留历史 Actor 作为存储所有者，规范命名 API 通过类型别名保持源码兼容。
 public actor PTNetworkSpeedMonitor {
-    
     public static let shared = PTNetworkSpeedMonitor()
-    
-    // Actor 内部的属性天然是线程安全的，无需再加私有队列保护
-    private var downloadSpeeds: [Double] = [0.0]
-    private var uploadSpeeds: [Double] = [0.0]
-    
+
+    private var downloadSpeeds: [Double] = [0]
+    private var uploadSpeeds: [Double] = [0]
+
     private init() {}
-    
-    /// 获取当前下载速度记录
-    public func getDownloadSpeeds() -> [Double] {
-        return downloadSpeeds
-    }
-    
-    /// 获取当前上传速度记录
-    public func getUploadSpeeds() -> [Double] {
-        return uploadSpeeds
-    }
-    
-    /// 记录当前瞬时下载速度
+
+    public func getDownloadSpeeds() -> [Double] { downloadSpeeds }
+    public func getUploadSpeeds() -> [Double] { uploadSpeeds }
+
     public func addDownloadSpeed(_ speed: Double) {
         downloadSpeeds.append(speed)
-        if downloadSpeeds.count > 60 {
-            downloadSpeeds.removeFirst(downloadSpeeds.count - 60)
-        }
+        if downloadSpeeds.count > 60 { downloadSpeeds.removeFirst(downloadSpeeds.count - 60) }
     }
-    
-    /// 记录当前瞬时上传速度
+
     public func addUploadSpeed(_ speed: Double) {
         uploadSpeeds.append(speed)
-        if uploadSpeeds.count > 60 {
-            uploadSpeeds.removeFirst(uploadSpeeds.count - 60)
-        }
+        if uploadSpeeds.count > 60 { uploadSpeeds.removeFirst(uploadSpeeds.count - 60) }
     }
-    
-    /// 计算平均下载速度
+
     public func averageDownloadSpeed() -> Double {
-        guard !downloadSpeeds.isEmpty else { return 0.0 }
+        guard !downloadSpeeds.isEmpty else { return 0 }
         return downloadSpeeds.reduce(0, +) / Double(downloadSpeeds.count)
     }
-    
-    /// 计算平均上传速度
+
     public func averageUploadSpeed() -> Double {
-        guard !uploadSpeeds.isEmpty else { return 0.0 }
+        guard !uploadSpeeds.isEmpty else { return 0 }
         return uploadSpeeds.reduce(0, +) / Double(uploadSpeeds.count)
     }
-    
-    /// 清理所有测速缓存数据
+
     public func clearSpeeds() {
         downloadSpeeds = [0]
         uploadSpeeds = [0]
     }
 }
+
+// English: Canonical name for new code without duplicating the actor or its state.
+// Español: Nombre canónico para el código nuevo sin duplicar el actor ni su estado.
+// 中文：新代码使用的规范名称，不复制 Actor 和状态。
+public typealias PTNetworkThroughputMeter = PTNetworkSpeedMonitor

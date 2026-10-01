@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "versionSource": "VERSION",
+  "decisions": [
+    {"dependency":"CryptoSwift","decision":"KEEP","reason":"Public encryption compatibility remains in DataEncrypt.","nativeReplacement":"CryptoKit where the public contract permits.","removeIn":"6.0 reassessment with consumer migration evidence."},
+    {"dependency":"IOSSecuritySuite","decision":"KEEP","reason":"Security checks are not replaced by a generic helper.","nativeReplacement":"Apple Security and LocalAuthentication APIs where applicable.","removeIn":"6.0 reassessment."},
+    {"dependency":"Harbeth","decision":"OPTIONAL_PRODUCT","reason":"Image and video filters are feature-scoped.","nativeReplacement":"Core Image for basic filters.","removeIn":"6.0 optional boundary review."},
+    {"dependency":"PhoneNumberKit","decision":"KEEP","reason":"Phone parsing behavior is user-facing and not duplicated in Core.","nativeReplacement":"None with equivalent locale coverage.","removeIn":"6.0 reassessment."},
+    {"dependency":"CollectionViewPagingLayout","decision":"REMOVE_IN_6","reason":"PagingControl has a native replacement in the 5.x line.","nativeReplacement":"PTPagingView / PTSegmentedView.","removeIn":"6.0 after consumer migration."},
+    {"dependency":"FlagKit","decision":"OPTIONAL_PRODUCT","reason":"Country flag assets are optional UI content.","nativeReplacement":"Asset catalog or SF Symbols where available.","removeIn":"6.0 optional boundary review."},
+    {"dependency":"KTVHTTPCache","decision":"KEEP","reason":"Media cache remains outside DebugNetwork and supports existing media flows.","nativeReplacement":"URLCache is not a drop-in video cache replacement.","removeIn":"6.0 reassessment."},
+    {"dependency":"SSZipArchive","decision":"OPTIONAL_PRODUCT","reason":"Archive support is used by document/debug export flows.","nativeReplacement":"Foundation Compression only for narrow formats.","removeIn":"6.0 optional boundary review."}
+  ]
+}

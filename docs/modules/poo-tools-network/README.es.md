@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PooTools
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: ptools, PToolsCore, PooToolsLoading, Alamofire.
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire.
 
 ## 7. API principales
 
