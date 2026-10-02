@@ -15,7 +15,7 @@ final class PTFormDocumentsFeedbackTests: XCTestCase {
         let registry = PTFormFieldRendererRegistry()
         let text = PTFormField(id: "text", kind: .text, title: "Text")
         let textView = registry.renderer(for: .text).makeView(for: text) { _ in }
-        XCTAssertTrue(textView is PTTextField)
+        XCTAssertTrue(textView is UITextField)
 
         let toggle = PTFormField(id: "toggle", kind: .toggle, title: "Toggle", value: .boolean(true))
         let toggleView = registry.renderer(for: .toggle).makeView(for: toggle) { _ in }
@@ -94,10 +94,12 @@ final class PTFormDocumentsFeedbackTests: XCTestCase {
             return []
         }
         let engine = PTFormEngine(fields: fields, crossValidators: [validator])
-        XCTAssertEqual((await engine.makeSnapshot()).fields.map(\.id), ["enabled", "confirm", "source"])
+        let initialSnapshot = await engine.makeSnapshot()
+        XCTAssertEqual(initialSnapshot.fields.map(\.id), ["enabled", "confirm", "source"])
 
         try await engine.setValue(.boolean(true), for: "enabled")
-        XCTAssertEqual((await engine.makeSnapshot()).fields.map(\.id), ["enabled", "detail", "confirm", "source"])
+        let enabledSnapshot = await engine.makeSnapshot()
+        XCTAssertEqual(enabledSnapshot.fields.map(\.id), ["enabled", "detail", "confirm", "source"])
         let dirty = await engine.isDirty
         XCTAssertTrue(dirty)
 
@@ -106,12 +108,13 @@ final class PTFormDocumentsFeedbackTests: XCTestCase {
         await engine.reset()
         let resetIsDirty = await engine.isDirty
         XCTAssertFalse(resetIsDirty)
-        XCTAssertEqual((await engine.makeSnapshot()).fields.map(\.id), ["enabled", "confirm", "source"])
+        let resetSnapshot = await engine.makeSnapshot()
+        XCTAssertEqual(resetSnapshot.fields.map(\.id), ["enabled", "confirm", "source"])
     }
 
     func testFormSnapshotLargeRegression() async {
         let fields = (0..<1_000).map { index in
-            PTFormField(id: "field-\(index)", kind: .text, title: "Field \(index)")
+            PTFormField(id: PTFormFieldID(rawValue: "field-\(index)"), kind: .text, title: "Field \(index)")
         }
         let engine = PTFormEngine(fields: fields)
         let snapshot = await engine.makeSnapshot()

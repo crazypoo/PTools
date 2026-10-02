@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
-  "shared_call_count": 1657,
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
+  "shared_call_count": 1646,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -52,7 +52,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 129,
+      "line": 132,
       "declaration": "public static let shared = PTAudioCacheFileManager()",
       "name": "shared",
       "category": "B",
@@ -61,7 +61,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 197,
+      "line": 234,
       "declaration": "public static let shared = PTAudioService()",
       "name": "shared",
       "category": "B",
@@ -79,7 +79,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 51,
+      "line": 54,
       "declaration": "public static let shared = PTVideoManager()",
       "name": "shared",
       "category": "B",
@@ -88,7 +88,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 112,
+      "line": 115,
       "declaration": "static let shared = PTVideoFileDownloadCoordinator()",
       "name": "shared",
       "category": "B",
@@ -97,7 +97,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 177,
+      "line": 182,
       "declaration": "public static let shared = PTVideoFileCache()",
       "name": "shared",
       "category": "B",
@@ -187,7 +187,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 215,
+      "line": 338,
       "declaration": "@MainActor public static let share = PTCheckUpdateFunction()",
       "name": "share",
       "category": "C",
@@ -223,7 +223,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 59,
+      "line": 62,
       "declaration": "public static let shared = PTMediaCache()",
       "name": "shared",
       "category": "B",
@@ -1069,7 +1069,7 @@
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "line": 30,
+      "line": 32,
       "declaration": "public static let shared = PTRouterServiceManager()",
       "name": "shared",
       "category": "C",
@@ -1078,7 +1078,7 @@
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "line": 176,
+      "line": 178,
       "declaration": "public static let shared = PTServiceActionMapper()",
       "name": "shared",
       "category": "C",
@@ -1186,11 +1186,11 @@
     }
   ],
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_singletons.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

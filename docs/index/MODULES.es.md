@@ -193,13 +193,11 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [PToolsHTTPServer](../modules/ptools-httpserver/README.es.md) | `PToolsHTTPServer` | `—` |
 | [PToolsLogging](../modules/ptools-logging/README.es.md) | `PToolsLogging` | `—` |
 | [PToolsModel](../modules/ptools-model/README.es.md) | `PToolsModel` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine/README.es.md) | `PToolsModelCombine` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine-2/README.es.md) | `—` | `PToolsModelCombine` |
+| [PToolsModelCombine](../modules/ptools-model-combine/README.es.md) | `PToolsModelCombine` | `PToolsModelCombine` |
 | [PToolsModelCore](../modules/ptools-model-core/README.es.md) | `PToolsModelCore` | `—` |
 | [PToolsModelLegacyKakaJSON](../modules/ptools-model-legacy-kaka-json/README.es.md) | `PToolsModelLegacyKakaJSON` | `—` |
 | [PToolsModelLegacySmartCodable](../modules/ptools-model-legacy-smart-codable/README.es.md) | `PToolsModelLegacySmartCodable` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit/README.es.md) | `PToolsModelUIKit` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit-2/README.es.md) | `—` | `PToolsModelUIKit` |
+| [PToolsModelUIKit](../modules/ptools-model-uikit/README.es.md) | `PToolsModelUIKit` | `PToolsModelUIKit` |
 | [PToolsNotifications](../modules/ptools-notifications/README.es.md) | `PToolsNotifications` | `—` |
 | [PToolsOverlay](../modules/ptools-overlay/README.es.md) | `PToolsOverlay` | `Overlay` |
 | [PToolsPermissionCore](../modules/ptools-permission-core/README.es.md) | `PToolsPermissionCore` | `PToolsPermissionCore` |

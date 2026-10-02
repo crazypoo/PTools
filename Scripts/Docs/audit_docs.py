@@ -186,10 +186,11 @@ def modules_registry() -> list[dict[str, Any]]:
         metadata = old.get(spm or "") or old.get(pod or "") or old.get(name, {})
         module_id = str(metadata.get("module_id") or slug(name))
         original_id = module_id
-        suffix = 2
         while module_id in used_ids:
-            module_id = f"{original_id}-{suffix}"
-            suffix += 1
+            raise ValueError(
+                f"MODULE_DOC_SLUG_COLLISION: {original_id} ({name}); "
+                "define one canonical module_id and aliases in Scripts/module_registry.json"
+            )
         used_ids.add(module_id)
         category = str(metadata.get("category") or ("compatibility" if spm is None else "unclassified"))
         status = "stable" if metadata else ("compatibility" if spm is None else "review")
@@ -207,6 +208,8 @@ def modules_registry() -> list[dict[str, Any]]:
                 "dependencies": list(metadata.get("dependencies") or []),
                 "owner": "PTools maintainers",
                 "docs": True,
+                "canonical_slug": str(metadata.get("canonical_slug") or module_id),
+                "aliases": list(metadata.get("aliases") or []),
             }
         )
 
@@ -237,6 +240,8 @@ def registry_records(modules: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "dependencies": item["dependencies"],
             "owner": item["owner"],
             "docs": item["docs"],
+            "canonical_slug": item["canonical_slug"],
+            "aliases": item["aliases"],
         }
         for item in modules
     ]

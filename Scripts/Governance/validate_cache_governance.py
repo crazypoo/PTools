@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# English: Require every registered resource cache to declare limits, ownership and cleanup behavior.
-# Español: Exige límites, propiedad y limpieza para cada caché de recursos registrada.
-# 中文：要求每个登记的资源缓存明确容量、所有者和清理行为。
+# English: Require every registered resource cache to declare limits, ownership and its runtime contract.
+# Español: Exige límites, propiedad y contrato de ejecución para cada caché registrada.
+# 中文：要求每个登记的资源缓存明确容量、所有者和运行时契约。
 
 from __future__ import annotations
 
@@ -22,9 +22,10 @@ def fail(message: str) -> None:
 
 def main() -> None:
     payload = json.loads(MANIFEST.read_text())
-    if payload.get("schemaVersion") != 1:
-        fail("schemaVersion must be 1")
+    if payload.get("schemaVersion") != 2:
+        fail("schemaVersion must be 2")
     required = {"name", "path", "namespace", "implementation", "countLimit", "costLimit", "diskLimit", "expirationSeconds", "memoryWarning", "lowDisk", "metrics", "owner", "threadIsolation"}
+    contracts = {"NATIVE_PT_CACHE", "ADAPTED_PT_CACHE", "DEPENDENCY_MANAGED"}
     names: set[str] = set()
     for entry in payload.get("entries", []):
         missing = required - set(entry)
@@ -33,8 +34,26 @@ def main() -> None:
         if entry["name"] in names:
             fail(f"duplicate cache entry {entry['name']}")
         names.add(entry["name"])
-        if not (ROOT / entry["path"]).is_file():
+        source_path = ROOT / entry["path"]
+        if not source_path.is_file():
             fail(f"cache source does not exist: {entry['path']}")
+        contract = entry.get("contract")
+        if contract not in contracts:
+            fail(f"invalid contract for {entry['name']}: {contract}")
+        source = source_path.read_text(encoding="utf-8", errors="ignore")
+        if contract in {"NATIVE_PT_CACHE", "ADAPTED_PT_CACHE"}:
+            policy_symbol = entry.get("policySymbol")
+            if not isinstance(policy_symbol, str) or not policy_symbol.strip():
+                fail(f"policySymbol is required for {entry['name']}")
+            policy_references = source.count(policy_symbol)
+            if policy_references < 2:
+                fail(f"policySymbol {policy_symbol} is not wired in {entry['path']}")
+        if contract == "DEPENDENCY_MANAGED":
+            dependency = entry.get("dependency")
+            if not isinstance(dependency, str) or not dependency.strip():
+                fail(f"dependency is required for {entry['name']}")
+            if dependency not in source:
+                fail(f"dependency {dependency} is not referenced by {entry['path']}")
         if not entry["namespace"].strip() or not entry["owner"].strip() or not entry["threadIsolation"].strip():
             fail(f"incomplete cache ownership: {entry['name']}")
         if not entry["memoryWarning"].strip() or not entry["lowDisk"].strip():

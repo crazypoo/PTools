@@ -76,31 +76,154 @@ struct PTCheckUpdateModel: PTCodableModelProtocol, Sendable {
     init() {}
 }
 
+// English: TestFlight network responses use immutable value snapshots across async boundaries.
+// Español: Las respuestas de TestFlight usan instantáneas de valor inmutables entre límites async.
+// 中文：TestFlight 网络响应通过不可变值快照跨越异步边界。
+public struct PTTFPagingSnapshot: PTCodableModelProtocol {
+    public var total: Int = 0
+    public var limit: Int = 0
+    public init() {}
+}
+
+public struct PTTFMetaSnapshot: PTCodableModelProtocol {
+    public var paging: PTTFPagingSnapshot?
+    public init() {}
+}
+
+public struct PTTFLinkSnapshot: PTCodableModelProtocol {
+    public var currentLink: String = ""
+    public var related: String = ""
+    public var next: String = ""
+
+    public init() {}
+
+    private enum CodingKeys: String, CodingKey {
+        case currentLink = "self"
+        case related
+        case next
+    }
+}
+
+public struct PTTFLinkMainSnapshot: PTCodableModelProtocol {
+    public var links: PTTFLinkSnapshot?
+
+    public init() {}
+}
+
+public struct PTTFRelationshipsSnapshot: PTCodableModelProtocol {
+    public var app: PTTFLinkMainSnapshot?
+    public var builds: PTTFLinkMainSnapshot?
+    public var betaAppReviewSubmission: PTTFLinkMainSnapshot?
+    public var appStoreVersion: PTTFLinkMainSnapshot?
+    public var appEncryptionDeclaration: PTTFLinkMainSnapshot?
+    public var individualTesters: PTTFLinkMainSnapshot?
+    public var perfPowerMetrics: PTTFLinkMainSnapshot?
+    public var betaBuildLocalizations: PTTFLinkMainSnapshot?
+    public var betaGroups: PTTFLinkMainSnapshot?
+    public var diagnosticSignatures: PTTFLinkMainSnapshot?
+    public var preReleaseVersion: PTTFLinkMainSnapshot?
+    public var buildBetaDetail: PTTFLinkMainSnapshot?
+    public var icons: PTTFLinkMainSnapshot?
+
+    public init() {}
+}
+
+public struct PTTFIconAssetTokenSnapshot: PTCodableModelProtocol {
+    public var width: CGFloat = 0
+    public var templateUrl: String = ""
+    public var height: CGFloat = 0
+
+    public init() {}
+}
+
+public struct PTTFAttributesSnapshot: PTCodableModelProtocol {
+    public var version: String = ""
+    public var platform: String = ""
+    public var minOsVersion: String = ""
+    public var computedMinMacOsVersion: String = ""
+    public var lsMinimumSystemVersion: String = ""
+    public var uploadedDate: String = ""
+    public var expired: Bool = true
+    public var processingState: String = ""
+    public var buildAudienceType: String = ""
+    public var expirationDate: String = ""
+    public var usesNonExemptEncryption: Bool = false
+    public var computedMinVisionOsVersion: String = ""
+    public var iconAssetToken: PTTFIconAssetTokenSnapshot?
+    public var locale: String = ""
+    public var whatsNew: String = ""
+    public var publicLink: String = ""
+    public var name: String = ""
+
+    public init() {}
+
+    public var processingStateBool: Bool { processingState == "VALID" }
+}
+
+public struct PTTFVersionDataSnapshot: PTCodableModelProtocol {
+    public var id: String = ""
+    public var relationships: PTTFRelationshipsSnapshot?
+    public var links: PTTFLinkSnapshot?
+    public var type: String = ""
+    public var attributes: PTTFAttributesSnapshot?
+
+    public init() {}
+}
+
+public struct PTTFModelCollectionSnapshot: PTCodableModelProtocol {
+    public var meta: PTTFMetaSnapshot?
+    public var links: PTTFLinkSnapshot?
+    public var data: [PTTFVersionDataSnapshot]?
+
+    public init() {}
+}
+
+public struct PTTFNewerBuildVersionSnapshot: PTCodableModelProtocol {
+    public var links: PTTFLinkSnapshot?
+    public var data: PTTFVersionDataSnapshot?
+
+    public init() {}
+}
+
+public struct PTTFUpdateSnapshot: PTCodableModelProtocol {
+    public var version: String = ""
+    public var desc: String = ""
+    public var downloadURL: String = ""
+
+    public init(version: String = "", desc: String = "", downloadURL: String = "") {
+        self.version = version
+        self.desc = desc
+        self.downloadURL = downloadURL
+    }
+}
+
+// English: These reference models remain source-compatible adapters for callers on the 5.x API.
+// Español: Estos modelos de referencia permanecen como adaptadores compatibles con la API 5.x.
+// 中文：这些引用模型作为 5.x API 的源码兼容适配器保留。
 /*
  TF Mode
 
- These legacy reference models are retained for SmartCodable's TestFlight
- response shape. They are only consumed inside MainActor callbacks; the
- unchecked conformance is an explicit compatibility allowlist until this
- public class-based decoder API can migrate to immutable snapshot structs.
+ These legacy reference models remain source-compatible adapters; the public class-based decoder API can migrate to immutable snapshot structs.
+ Estos modelos de referencia mantienen la compatibilidad de origen; la API pública de decodificación basada en clases puede migrar a estructuras de instantáneas inmutables.
+ 这些旧引用模型用于保持源码兼容；基于公开类的解码 API 可以迁移到不可变快照结构体。
  */
-public final class PTTFPaging: Codable, @unchecked Sendable {
+public final class PTTFPaging: Codable {
     public var total: Int = 0
     public var limit: Int = 0
     required public init() {}
 }
 
-public final class PTTFMeta: Codable, @unchecked Sendable {
+public final class PTTFMeta: Codable {
     public var paging: PTTFPaging?
     required public init() {}
 }
 
-public final class PTTLinkMainModel: Codable, @unchecked Sendable {
+public final class PTTLinkMainModel: Codable {
     public var links: PTTFLinks?
     required public init() {}
 }
 
-public final class PTTFRelationships: Codable, @unchecked Sendable {
+public final class PTTFRelationships: Codable {
     public var app: PTTLinkMainModel?
     public var builds: PTTLinkMainModel?
     public var betaAppReviewSubmission:PTTLinkMainModel?
@@ -117,7 +240,7 @@ public final class PTTFRelationships: Codable, @unchecked Sendable {
     required public init() {}
 }
 
-public final class PTTFLinks: Codable, @unchecked Sendable {
+public final class PTTFLinks: Codable {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
@@ -131,7 +254,7 @@ public final class PTTFLinks: Codable, @unchecked Sendable {
     }
 }
 
-public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {
+public final class PTTFIconAssetTokenModle: Codable {
     public var width:CGFloat = 0
     public var templateUrl:String = ""
     public var height:CGFloat = 0
@@ -139,7 +262,7 @@ public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {
     required public init() {}
 }
 
-public final class PTTFAttributes: Codable, @unchecked Sendable {
+public final class PTTFAttributes: Codable {
     public var version: String = ""
     public var platform: String = ""
     public var minOsVersion:String = ""
@@ -170,7 +293,7 @@ public final class PTTFAttributes: Codable, @unchecked Sendable {
     }
 }
 
-public final class PTTFVersionData: Codable, @unchecked Sendable {
+public final class PTTFVersionData: Codable {
     public var id: String = ""
     public var relationships: PTTFRelationships?
     public var links: PTTFLinks?
@@ -180,7 +303,7 @@ public final class PTTFVersionData: Codable, @unchecked Sendable {
     required public init() {}
 }
 
-public final class PTTFModelCollection: Codable, @unchecked Sendable {
+public final class PTTFModelCollection: Codable {
     public var meta: PTTFMeta?
     public var links: PTTFLinks?
     public var data: [PTTFVersionData]?
@@ -188,7 +311,7 @@ public final class PTTFModelCollection: Codable, @unchecked Sendable {
     required public init() {}
 }
 
-public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {
+public final class PTTFNewerBuildVersionModel: Codable {
     public var links:PTTFLinks?
     public var data:PTTFVersionData?
     
@@ -202,7 +325,7 @@ public struct PTAppleClaims: Claims, Sendable {
     let aud: String
 }
 
-public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {
+public final class PTTFUpdateCustomModel: Codable {
     var version:String = ""
     var desc:String = ""
     var downloadURL:String = ""
@@ -211,7 +334,7 @@ public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {
 }
 
 @objcMembers
-public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
+public class PTCheckUpdateFunction: NSObject {
     @MainActor public static let share = PTCheckUpdateFunction()
     
     //MARK: LoadingHud
@@ -405,7 +528,7 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
             if test {
                 if isShowError {
                     Task { @MainActor in
-                        PTCoreUserDefultsWrapper.shared.AppNoMoreShowUpdate = true
+                        PTCoreUserDefaultsWrapper.shared.AppNoMoreShowUpdate = true
                     }
                 }
             }
@@ -445,9 +568,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
     }
     
     @MainActor func hudHide(completion:PTActionTask? = nil) {
-        if self.hud != nil {
-            self.hud?.hide { [weak self] in
-                self?.hud = nil
+        if let hud = self.hud {
+            self.hud = nil
+            hud.hide {
                 completion?()
             }
         }
@@ -526,16 +649,16 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
         var downLoadLink: String = ""
     }
     
-    public static func fetchTestFlightBuilds(issuerID: String, keyID: String, privateKey: String, expTime: TimeInterval = 1200, updateModelCallback: @escaping @MainActor @Sendable (PTTFUpdateCustomModel?) -> Void) {
+    public static func fetchTestFlightBuildSnapshots(issuerID: String, keyID: String, privateKey: String, expTime: TimeInterval = 1200, updateModelCallback: @escaping @MainActor @Sendable (PTTFUpdateSnapshot?) -> Void) {
         
         guard let token = generateJWT(issuerID: issuerID, keyID: keyID, privateKey: privateKey, expTime: expTime) else {
             PTNSLogConsole("无法生成 JWT")
             return
         }
         
-        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/builds", modelType: PTTFModelCollection.self) { result, jsonString in
+        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/builds", modelType: PTTFModelCollectionSnapshot.self) { result, jsonString in
             
-            guard let resultModel = result as? PTTFModelCollection,
+            guard let resultModel = result as? PTTFModelCollectionSnapshot,
                   let firstData = resultModel.data?.first,
                   !firstData.id.stringIsEmpty() else {
                 Task { @MainActor in updateModelCallback(nil) }
@@ -555,9 +678,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                 await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex,finishTask in
                     switch currentIndex {
                     case 0:
-                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/buildBetaDetails/\(buildId)/build", modelType: PTTFNewerBuildVersionModel.self, showHud: false) { newerResult, _ in
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/buildBetaDetails/\(buildId)/build", modelType: PTTFNewerBuildVersionSnapshot.self, showHud: false) { newerResult, _ in
                             
-                            if let resultModelBuilda = newerResult as? PTTFNewerBuildVersionModel,
+                            if let resultModelBuilda = newerResult as? PTTFNewerBuildVersionSnapshot,
                                let versionStr = resultModelBuilda.data?.attributes?.version {
                                 Task { @MainActor in
                                     // 通过常量实例去修改属性，安全！
@@ -569,9 +692,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                             finishTask()
                         }
                     case 1:
-                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: apiUrlString, modelType: PTTFModelCollection.self, showHud: false) { infoResult, _ in
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: apiUrlString, modelType: PTTFModelCollectionSnapshot.self, showHud: false) { infoResult, _ in
                             
-                            if let resultModelBuilda = infoResult as? PTTFModelCollection,
+                            if let resultModelBuilda = infoResult as? PTTFModelCollectionSnapshot,
                                let whatsNewStr = resultModelBuilda.data?.first?.attributes?.whatsNew {
                                 Task { @MainActor in
                                     updateState.note = whatsNewStr
@@ -584,9 +707,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                     case 2:
                         // 使用刚刚提前提取出来的 appID
                         let para = ["filter[app]": appID, "fields[betaGroups]": "name,publicLink"]
-                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/betaGroups", parameters: para, modelType: PTTFModelCollection.self, showHud: false) { newerResult, _ in
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/betaGroups", parameters: para, modelType: PTTFModelCollectionSnapshot.self, showHud: false) { newerResult, _ in
                             
-                            if let resultModelBuilda = newerResult as? PTTFModelCollection,
+                            if let resultModelBuilda = newerResult as? PTTFModelCollectionSnapshot,
                                let linkStr = resultModelBuilda.data?.filter({ !($0.attributes?.publicLink ?? "").stringIsEmpty() }).first?.attributes?.publicLink {
                                 Task { @MainActor in
                                     updateState.downLoadLink = linkStr
@@ -604,10 +727,9 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
                     Task { @MainActor in
                         // 💡 最终完成时，直接从我们的状态类中取值即可
                         PTNSLogConsole("\(updateState.build)\(updateState.note)")
-                        let updateModel = PTTFUpdateCustomModel()
-                        updateModel.version = updateState.build
-                        updateModel.downloadURL = updateState.downLoadLink
-                        updateModel.desc = updateState.note
+                        let updateModel = PTTFUpdateSnapshot(version: updateState.build,
+                                                             desc: updateState.note,
+                                                             downloadURL: updateState.downLoadLink)
                         
                         updateModelCallback(updateModel)
                     }
@@ -615,6 +737,31 @@ public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
             }
         } fail: { _ in
             Task { @MainActor in updateModelCallback(nil) }
+        }
+    }
+
+    // English: Preserve the 5.x reference-model callback as a thin MainActor adapter.
+    // Español: Conserva el callback con modelo de referencia de 5.x como un adaptador fino de MainActor.
+    // 中文：保留 5.x 引用模型回调，并将其限制为 MainActor 兼容适配层。
+    @available(*, deprecated, message: "Use fetchTestFlightBuildSnapshots(issuerID:keyID:privateKey:expTime:updateModelCallback:)")
+    public static func fetchTestFlightBuilds(issuerID: String,
+                                             keyID: String,
+                                             privateKey: String,
+                                             expTime: TimeInterval = 1200,
+                                             updateModelCallback: @escaping @MainActor @Sendable (PTTFUpdateCustomModel?) -> Void) {
+        fetchTestFlightBuildSnapshots(issuerID: issuerID,
+                                      keyID: keyID,
+                                      privateKey: privateKey,
+                                      expTime: expTime) { snapshot in
+            guard let snapshot else {
+                updateModelCallback(nil)
+                return
+            }
+            let model = PTTFUpdateCustomModel()
+            model.version = snapshot.version
+            model.desc = snapshot.desc
+            model.downloadURL = snapshot.downloadURL
+            updateModelCallback(model)
         }
     }
 }

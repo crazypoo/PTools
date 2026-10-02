@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
-Generated at: 2026-10-01T11:45:56+08:00 -->
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Generated at: 2026-10-01T22:26:33+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.59.0`
-- Records: `234`
+- Records: `237`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -185,6 +185,8 @@ Generated at: 2026-10-01T11:45:56+08:00 -->
 | PooToolsSource/Resource/Symbols.xcassets/Panel/identityPanel.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/Resource/Symbols.xcassets/empty.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | Scripts/CI/quality_gates.yml | DEV_TOOL | yml | False | False | KEEP |
+| Scripts/Governance/cache_governance.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/Governance/lifecycle_resource_allowlist.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/concurrency_exception_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/dependency_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/deprecated_6_removal_manifest.json | DEV_TOOL | json | False | False | KEEP |
@@ -193,6 +195,7 @@ Generated at: 2026-10-01T11:45:56+08:00 -->
 | Scripts/naming_debt_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_performance_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/p1_public_api_intent.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/public_api_classification.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/public_api_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/registry.yml | DEV_TOOL | yml | False | False | KEEP |
 | Tests/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |

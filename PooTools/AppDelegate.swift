@@ -156,10 +156,10 @@ class AppDelegate: PTAppWindowsDelegate {
 #endif
                 
 //#if DEBUG
-//        PTCoreUserDefultsWrapper.AppDebugMode = true
-//        lcm.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
+//        PTCoreUserDefaultsWrapper.AppDebugMode = true
+//        lcm.isVisiable = PTCoreUserDefaultsWrapper.shared.AppDebugMode
 //        if !lcm.terminal?.systemIsVisible
-//        lcm.isVisible = PTCoreUserDefultsWrapper.shared.AppDebugMode
+//        lcm.isVisible = PTCoreUserDefaultsWrapper.shared.AppDebugMode
 //        lcm.flex = {
 //#if canImport(FLEX)
 //            if FLEXManager.shared.isHidden {

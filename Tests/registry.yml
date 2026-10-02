@@ -128,3 +128,10 @@ targets:
     pr: true
     nightly: true
     release: true
+  - id: debug
+    target: PToolsDebugTests
+    path: Tests/PToolsDebugTests
+    type: [contract, integration, performance]
+    pr: true
+    nightly: true
+    release: true

@@ -187,13 +187,17 @@ public class PTSlider: UISlider {
         
         // 2. 触发震动反馈
         if enableHapticFeedback {
-            // English: Emit selection feedback without retaining a control-specific generator.
-            // Español: Emite feedback de selección sin retener un generador por control.
-            // 中文：不再由控件持有生成器，统一发出选择反馈。
+            // English: The standalone slider target uses UIKit's native selection feedback.
+            // Español: El destino independiente del slider usa la respuesta nativa de selección de UIKit.
+            // 中文：独立 slider target 使用 UIKit 原生的选择反馈。
             if value == minimumValue || value == maximumValue {
-                PTFeedbackCenter.shared.emit(.selectionChanged)
+                let feedback = UISelectionFeedbackGenerator()
+                feedback.prepare()
+                feedback.selectionChanged()
             } else if step > 0 && value != lastSteppedValue {
-                PTFeedbackCenter.shared.emit(.selectionChanged)
+                let feedback = UISelectionFeedbackGenerator()
+                feedback.prepare()
+                feedback.selectionChanged()
                 lastSteppedValue = value
             }
         }

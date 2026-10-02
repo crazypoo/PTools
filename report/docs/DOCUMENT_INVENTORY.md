@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
-Generated at: 2026-10-01T11:45:56+08:00 -->
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Generated at: 2026-10-01T22:26:33+08:00 -->
 # Document Inventory
 
 - Version: `5.59.0`
-- Records: `911`
+- Records: `912`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -901,6 +901,7 @@ Generated at: 2026-10-01T11:45:56+08:00 -->
 | report/current/deprecated_api.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/large_files.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/mainactor_heavy_work.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/current/mainactor_runtime_validation.md | GENERATED | en | GENERATED | KEEP |
 | report/current/module_parity.md | GENERATED | en | GENERATED | KEEP |
 | report/current/module_parity_resolution.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/current/public_api.md | GENERATED | zh-Hans | GENERATED | KEEP |

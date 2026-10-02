@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
 Source version: 5.59.0
-Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
 Generator version: 1
 Generator: Scripts/report_sendable_exceptions.rb
-Generated at: 2026-10-01T14:20:09Z
+Generated at: 2026-10-01T22:10:22Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -25,18 +25,6 @@ Generated at: 2026-10-01T14:20:09Z
 | `PooToolsSource/Category/PHAsset+PTEX.swift` | 21 | `public struct PTSendableAVAsset: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/PHAsset+PTEX.swift` | 45 | `private struct PTSendableExportSession: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 37 | `private struct PTVideoAssetSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 87 | `public final class PTTFPaging: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 93 | `public final class PTTFMeta: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 98 | `public final class PTTLinkMainModel: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 103 | `public final class PTTFRelationships: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 120 | `public final class PTTFLinks: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 134 | `public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 142 | `public final class PTTFAttributes: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 173 | `public final class PTTFVersionData: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 183 | `public final class PTTFModelCollection: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 191 | `public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 205 | `public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift` | 214 | `public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Core/OSSVoice.swift` | 162 | `public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Debug/PTApplicationDirectories.swift` | 11 | `final class PTApplicationDirectories: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/Debug/StdoutCapture.swift` | 11 | `struct PTReadCompletionNotificationBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
@@ -73,8 +61,6 @@ Generated at: 2026-10-01T14:20:09Z
 | `PooToolsSource/PhotoPicker/PTFetchImageOperation.swift` | 20 | `final class PTFetchImageOperation: Operation, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 18 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 26 | `public struct PTSendableDictionaryBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/Router/PTRouterManager.swift` | 23 | `private struct PTServiceTypeBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/Router/PTRouterServiceManager.swift` | 13 | `public final class PTLegacyRouterServiceBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/SocketKit/PTWebSocketClient.swift` | 363 | `private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/TouchInspector/TouchInspectorWindow.swift` | 15 | `private struct PTTouchValueBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/VideoEditor/CompositionInstruction.swift` | 11 | `class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |

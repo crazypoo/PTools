@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 268,
@@ -1153,12 +1153,12 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 1156
+      "line": 1155
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 1157
+      "line": 1156
     },
     {
       "rule": "reduce_motion",
@@ -1188,27 +1188,27 @@
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "line": 160
+      "line": 163
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "line": 161
+      "line": 164
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "line": 171
+      "line": 174
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "line": 200
+      "line": 203
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "line": 208
+      "line": 211
     },
     {
       "rule": "accessibility",
@@ -1263,77 +1263,77 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 25
+      "line": 28
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 30
+      "line": 33
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 34
+      "line": 37
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 154
+      "line": 157
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 165
+      "line": 168
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 175
+      "line": 178
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 207
+      "line": 210
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 222
+      "line": 225
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 236
+      "line": 239
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 321
+      "line": 324
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 333
+      "line": 336
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 342
+      "line": 345
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 481
+      "line": 484
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 486
+      "line": 489
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 490
+      "line": 493
     },
     {
       "rule": "reduce_motion",
@@ -1653,17 +1653,32 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 286
+      "line": 279
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 288
+      "line": 281
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 289
+      "line": 282
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 283
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 284
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 285
     },
     {
       "rule": "accessibility",
@@ -1673,52 +1688,57 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 291
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
       "line": 292
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 297
+      "line": 293
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 299
+      "line": 294
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 300
+      "line": 295
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 301
+      "line": 296
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 302
+      "line": 381
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 303
+      "line": 382
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 388
+      "line": 650
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 389
+      "line": 651
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 653
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 656
     },
     {
       "rule": "accessibility",
@@ -1728,17 +1748,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 658
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 660
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 663
+      "line": 659
     },
     {
       "rule": "accessibility",
@@ -1748,7 +1758,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 666
+      "line": 665
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+      "line": 668
     },
     {
       "rule": "accessibility",
@@ -1764,21 +1779,6 @@
       "rule": "accessibility",
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
       "line": 675
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 678
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 679
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "line": 682
     },
     {
       "rule": "accessibility",
@@ -1817,11 +1817,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_accessibility.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

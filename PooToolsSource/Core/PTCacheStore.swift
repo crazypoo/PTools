@@ -3,87 +3,9 @@
 // 中文：这个有界 Actor 是资源缓存和计算缓存的统一契约实现。
 
 import Foundation
-
-public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue.isEmpty ? "default" : rawValue
-    }
-}
-
-// English: Shared cache policy keeps limits, expiry, namespace and cleanup behavior explicit.
-// Español: La política común hace explícitos los límites, la caducidad, el espacio de nombres y la limpieza.
-// 中文：统一缓存策略明确容量限制、过期时间、命名空间和清理行为。
-public struct PTCachePolicy: Sendable, Equatable {
-    public let countLimit: Int
-    public let costLimit: Int
-    public let expiration: TimeInterval?
-    public let namespace: PTCacheNamespace
-    public let clearsOnMemoryWarning: Bool
-    public let lowDiskThreshold: Int64?
-    public let diskLimit: Int64?
-    public let diskTarget: Int64?
-
-    public init(countLimit: Int = 100,
-                costLimit: Int = 16 * 1024 * 1024,
-                expiration: TimeInterval? = nil,
-                namespace: String = "default",
-                clearsOnMemoryWarning: Bool = true,
-                lowDiskThreshold: Int64? = nil,
-                diskLimit: Int64? = nil,
-                diskTarget: Int64? = nil) {
-        self.countLimit = max(1, countLimit)
-        self.costLimit = max(0, costLimit)
-        self.expiration = expiration.flatMap { $0.isFinite && $0 > 0 ? $0 : nil }
-        self.namespace = PTCacheNamespace(rawValue: namespace)
-        self.clearsOnMemoryWarning = clearsOnMemoryWarning
-        self.lowDiskThreshold = lowDiskThreshold.flatMap { $0 > 0 ? $0 : nil }
-        self.diskLimit = diskLimit.flatMap { $0 > 0 ? $0 : nil }
-        self.diskTarget = diskTarget.flatMap { value in
-            guard value > 0 else { return nil }
-            return diskLimit.map { min(value, $0) } ?? value
-        }
-    }
-}
-
-public enum PTCacheEvictionReason: String, Sendable, Codable {
-    case expired
-    case countLimit
-    case costLimit
-    case memoryWarning
-    case lowDisk
-    case manual
-}
-
-public struct PTCacheMetrics: Sendable, Codable, Equatable {
-    public let hits: UInt64
-    public let misses: UInt64
-    public let insertions: UInt64
-    public let evictions: UInt64
-    public let expiredEntries: UInt64
-    public let totalCost: Int
-    public let count: Int
-    public let lastEvictionReason: PTCacheEvictionReason?
-
-    public init(hits: UInt64 = 0,
-                misses: UInt64 = 0,
-                insertions: UInt64 = 0,
-                evictions: UInt64 = 0,
-                expiredEntries: UInt64 = 0,
-                totalCost: Int = 0,
-                count: Int = 0,
-                lastEvictionReason: PTCacheEvictionReason? = nil) {
-        self.hits = hits
-        self.misses = misses
-        self.insertions = insertions
-        self.evictions = evictions
-        self.expiredEntries = expiredEntries
-        self.totalCost = totalCost
-        self.count = count
-        self.lastEvictionReason = lastEvictionReason
-    }
-}
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable {
     associatedtype Key

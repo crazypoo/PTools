@@ -5,6 +5,20 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 derived_data="$(mktemp -d "${TMPDIR:-/tmp}/ptools-xcode-warnings.XXXXXX")"
 build_log_dir="$(mktemp -d "${TMPDIR:-/tmp}/ptools-xcode-warnings-logs.XXXXXX")"
+
+# English: Prefer ripgrep, but keep the warning gate usable on minimal CI images.
+# Español: Prefiere ripgrep, pero mantiene la puerta de warnings utilizable en CI mínimo.
+# 中文：优先使用 ripgrep，同时保证精简 CI 环境也能运行警告门禁。
+if command -v rg >/dev/null 2>&1; then
+  search_regex() { rg "$@"; }
+  search_fixed() { rg --fixed-strings "$@"; }
+  search_not_fixed() { rg -v --fixed-strings "$@"; }
+else
+  search_regex() { grep -En "$@"; }
+  search_fixed() { grep -Fn -- "$@"; }
+  search_not_fixed() { grep -Fv -- "$@"; }
+fi
+
 cleanup() {
   while IFS= read -r process_id; do
     [[ -n "$process_id" && "$process_id" != "$$" ]] || continue
@@ -53,6 +67,7 @@ run_build() {
     -workspace "$repo_root/PooTools.xcworkspace" \
     -scheme PooTools-Example \
     -configuration "$configuration" \
+    -sdk iphonesimulator \
     -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath "$derived_data" \
     $strict_args \
@@ -67,12 +82,12 @@ run_build() {
   local source_warnings
   local dependency_warnings
   local project_warnings
-  source_errors="$(rg -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: error:" "$build_log" || true)"
-  source_warnings="$(rg -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: warning:" "$build_log" || true)"
-  dependency_warnings="$(rg -n 'warning:' "$build_log" | rg --fixed-strings "$repo_root/Pods/" || true)"
-  project_warnings="$(rg -n 'warning:' "$build_log" \
-    | rg -v --fixed-strings "$repo_root/PooToolsSource/" \
-    | rg -v --fixed-strings "$repo_root/Pods/" || true)"
+  source_errors="$(search_regex -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: error:" "$build_log" || true)"
+  source_warnings="$(search_regex -n -- "$repo_root/PooToolsSource/[^:]+:[0-9]+:[0-9]+: warning:" "$build_log" || true)"
+  dependency_warnings="$(search_regex -n 'warning:' "$build_log" | search_fixed "$repo_root/Pods/" || true)"
+  project_warnings="$(search_regex -n 'warning:' "$build_log" \
+    | search_not_fixed "$repo_root/PooToolsSource/" \
+    | search_not_fixed "$repo_root/Pods/" || true)"
 
   if [[ -n "$source_errors" ]]; then
     printf '%s\n' "$source_errors" >&2
@@ -92,8 +107,8 @@ run_build() {
   # Español: Solo clasifica como error un diagnóstico concreto con archivo y línea; el texto de una herramienta puede contener "error".
   # 中文：只把带有文件和行号的真实编译器诊断视为错误，工具命令文本可能只是包含 “error” 单词。
   if [[ "$build_exit" -eq 0 ]]; then
-    non_source_errors="$(rg -n '(^|/)[^:[:space:]]+:[0-9]+:[0-9]+: (fatal )?error:' "$build_log" \
-      | rg -v --fixed-strings "$repo_root/PooToolsSource/" || true)"
+    non_source_errors="$(search_regex -n '(^|/)[^:[:space:]]+:[0-9]+:[0-9]+: (fatal )?error:' "$build_log" \
+      | search_not_fixed "$repo_root/PooToolsSource/" || true)"
     if [[ -n "$non_source_errors" ]]; then
       printf '%s\n' "$non_source_errors" | head -40 >&2
       printf 'BLOCKED: Xcode emitted non-PooTools error diagnostics in %s despite exit code 0\n' "$configuration" >&2
@@ -104,28 +119,28 @@ run_build() {
   if [[ "$build_exit" -ne 0 ]]; then
     local dependency_blockers='Unable to resolve module dependency|could not build module|SmartCodable-Swift.h|Failed to clone repository|failed to clone repository|unable to access .*(github.com|gitlab.com)|could not resolve package|SwiftSyntax.*(error|failed)|swift-syntax.*(error|failed)|/(Pods|SourcePackages/checkouts)/[^:]+:[0-9]+:[0-9]+: error:'
     local configuration_blockers='search path .* not found|linker command failed|xcodebuild: error:|The workspace named .* does not contain a scheme'
-    if rg -q "$dependency_blockers" "$build_log"; then
+    if search_regex -q "$dependency_blockers" "$build_log"; then
       local direct_source_errors
       direct_source_errors="$(printf '%s\n' "$source_errors" \
-        | rg -v 'no such module|could not build module|failed to build module|SmartCodable-Swift.h' || true)"
+        | search_regex -v 'no such module|could not build module|failed to build module|SmartCodable-Swift.h' || true)"
       if [[ -z "$direct_source_errors" ]]; then
         printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
-        rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
+        search_regex -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
         printf 'FAIL [XCODE_EXTERNAL_DEPENDENCY] File %s Expected external dependencies build without blocking diagnostics Actual dependency diagnostics in %s Rule classify Pods and toolchain failures separately from PooTools source diagnostics\n' \
           "$build_log" "$configuration" >&2
         return 2
       fi
     fi
-    if rg -q "$dependency_blockers" "$build_log" && [[ -z "$source_errors" ]]; then
+    if search_regex -q "$dependency_blockers" "$build_log" && [[ -z "$source_errors" ]]; then
       printf 'BLOCKED: external dependency build failed in %s.\n' "$configuration" >&2
-      rg -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
+      search_regex -n "$dependency_blockers" "$build_log" | head -40 >&2 || true
       printf 'FAIL [XCODE_EXTERNAL_DEPENDENCY] File %s Expected external dependencies build without blocking diagnostics Actual dependency diagnostics in %s Rule classify Pods and toolchain failures separately from PooTools source diagnostics\n' \
         "$build_log" "$configuration" >&2
       return 2
     fi
-    if rg -qi "$configuration_blockers" "$build_log"; then
+    if search_regex -qi "$configuration_blockers" "$build_log"; then
       printf 'BLOCKED: project configuration or linker setup failed in %s.\n' "$configuration" >&2
-      rg -ni "$configuration_blockers" "$build_log" | head -40 >&2 || true
+      search_regex -ni "$configuration_blockers" "$build_log" | head -40 >&2 || true
       printf 'FAIL [XCODE_CONFIGURATION_BLOCKER] File %s Expected workspace and linker configuration to resolve Actual configuration diagnostics in %s Rule classify project setup failures separately from PooTools source diagnostics\n' \
         "$build_log" "$configuration" >&2
       return 3

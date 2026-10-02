@@ -106,12 +106,12 @@ public class PTCheckBox: UIControl {
         self.sendActions(for: .valueChanged)
         
         if self.useHapticFeedback {
-            // English: Checkbox feedback uses the shared semantic selection signal.
-            // Español: La respuesta del checkbox usa la señal semántica de selección compartida.
-            // 中文：复选框反馈统一使用共享的语义选择信号。
-            PTMainActorBridge.perform {
-                PTFeedbackCenter.shared.emit(.selectionChanged)
-            }
+            // English: The standalone checkbox target uses UIKit's native selection feedback.
+            // Español: El destino independiente del checkbox usa la respuesta nativa de selección de UIKit.
+            // 中文：独立复选框 target 使用 UIKit 原生的选择反馈。
+            let feedback = UISelectionFeedbackGenerator()
+            feedback.prepare()
+            feedback.selectionChanged()
         }
     }
 

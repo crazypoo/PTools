@@ -193,13 +193,11 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 | [PToolsHTTPServer](../modules/ptools-httpserver/README.en.md) | `PToolsHTTPServer` | `—` |
 | [PToolsLogging](../modules/ptools-logging/README.en.md) | `PToolsLogging` | `—` |
 | [PToolsModel](../modules/ptools-model/README.en.md) | `PToolsModel` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine/README.en.md) | `PToolsModelCombine` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine-2/README.en.md) | `—` | `PToolsModelCombine` |
+| [PToolsModelCombine](../modules/ptools-model-combine/README.en.md) | `PToolsModelCombine` | `PToolsModelCombine` |
 | [PToolsModelCore](../modules/ptools-model-core/README.en.md) | `PToolsModelCore` | `—` |
 | [PToolsModelLegacyKakaJSON](../modules/ptools-model-legacy-kaka-json/README.en.md) | `PToolsModelLegacyKakaJSON` | `—` |
 | [PToolsModelLegacySmartCodable](../modules/ptools-model-legacy-smart-codable/README.en.md) | `PToolsModelLegacySmartCodable` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit/README.en.md) | `PToolsModelUIKit` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit-2/README.en.md) | `—` | `PToolsModelUIKit` |
+| [PToolsModelUIKit](../modules/ptools-model-uikit/README.en.md) | `PToolsModelUIKit` | `PToolsModelUIKit` |
 | [PToolsNotifications](../modules/ptools-notifications/README.en.md) | `PToolsNotifications` | `—` |
 | [PToolsOverlay](../modules/ptools-overlay/README.en.md) | `PToolsOverlay` | `Overlay` |
 | [PToolsPermissionCore](../modules/ptools-permission-core/README.en.md) | `PToolsPermissionCore` | `PToolsPermissionCore` |

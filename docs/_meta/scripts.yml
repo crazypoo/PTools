@@ -235,7 +235,31 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Governance/compare_current_reports.rb"
+  language: "rb"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Governance/find_duplicates.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/generate_all_current_reports.sh"
+  language: "sh"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/generate_concurrency_registry_v2.py"
   language: "py"
   domain: "Governance"
   status: "ACTIVE"
@@ -251,8 +275,104 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Governance/generate_deprecated_6_manifest.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/generate_public_api_classification.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/generate_runtime_validation_report.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/source_inputs_digest.rb"
+  language: "rb"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_cache_governance.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_concurrency_registry.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Governance/validate_current_reports.sh"
   language: "sh"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_dependency_freeze.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_deprecated_manifest.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_haptic_backend.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_lifecycle_resources.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_module_freeze.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_public_api_freeze.py"
+  language: "py"
   domain: "Governance"
   status: "ACTIVE"
   canonical: true

@@ -11,6 +11,9 @@ import Harbeth
 import CoreImage
 import AVFoundation
 import Vision
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 #if SWIFT_PACKAGE
 // English: SwiftPM needs direct imports for Core and the shared Harbeth adapter.
@@ -1411,10 +1414,16 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     private var filterRenderTask: Task<Void, Never>?
     private var filterSourceIdentity: ObjectIdentifier?
     
+    // English: Filter previews use an explicit bounded cache policy.
+    // Español: Las previsualizaciones de filtros usan una política de caché acotada explícita.
+    // 中文：滤镜预览使用明确的有界缓存策略。
+    private let filterCachePolicy = PTCachePolicy(countLimit: 6,
+                                                   costLimit: 96 * 1024 * 1024,
+                                                   namespace: "image-editor-filter")
     private lazy var filterCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
-        cache.countLimit = 6
-        cache.totalCostLimit = 96 * 1024 * 1024
+        cache.countLimit = filterCachePolicy.countLimit
+        cache.totalCostLimit = filterCachePolicy.costLimit
         return cache
     }()
 

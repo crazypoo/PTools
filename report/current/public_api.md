@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
 Source version: 5.59.0
-Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
 Generator version: 1
 Generator: Scripts/report_public_api.rb
-Generated at: 2026-10-01T14:20:09Z
+Generated at: 2026-10-01T22:10:22Z
 -->
 
 # PTools 当前公开 API 清单
@@ -545,14 +545,14 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Base/PTAppBaseConfig.swift:169 | var | public | public var tabbarValueLabelColor: UIColor = .systemBlue |
 | PooToolsSource/Base/PTAppBaseConfig.swift:171 | var | public | public var tabBarAccessoryHeight: CGFloat = 44 |
 | PooToolsSource/Base/PTAppBaseConfig.swift:172 | var | public | public var tabBarAccessoryBottomSpacing: CGFloat = 10 |
-| PooToolsSource/Base/PTAudioCache.swift:15 | typealias | public | public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void |
-| PooToolsSource/Base/PTAudioCache.swift:127 | class | public | public final class PTAudioCacheFileManager { |
-| PooToolsSource/Base/PTAudioCache.swift:143 | func | public | public func cacheFileURL(for url: URL) -> URL { |
-| PooToolsSource/Base/PTAudioCache.swift:155 | func | public | public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:195 | class | public | public final class PTAudioService { |
-| PooToolsSource/Base/PTAudioCache.swift:216 | func | public | public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:256 | func | public | public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) { |
-| PooToolsSource/Base/PTAudioCache.swift:267 | enum | public | public enum PTAudioTranscoder { |
+| PooToolsSource/Base/PTAudioCache.swift:18 | typealias | public | public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void |
+| PooToolsSource/Base/PTAudioCache.swift:130 | class | public | public final class PTAudioCacheFileManager { |
+| PooToolsSource/Base/PTAudioCache.swift:152 | func | public | public func cacheFileURL(for url: URL) -> URL { |
+| PooToolsSource/Base/PTAudioCache.swift:164 | func | public | public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:232 | class | public | public final class PTAudioService { |
+| PooToolsSource/Base/PTAudioCache.swift:261 | func | public | public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:301 | func | public | public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) { |
+| PooToolsSource/Base/PTAudioCache.swift:312 | enum | public | public enum PTAudioTranscoder { |
 | PooToolsSource/Base/PTBaseButton.swift:15 | class | open | open class PTBaseButton: UIButton { |
 | PooToolsSource/Base/PTBaseButton.swift:35 | var | public | public var isLoading: Bool { loadingCoordinator.isLoading } |
 | PooToolsSource/Base/PTBaseButton.swift:55 | func | public | public func startLoading(indicatorColor: UIColor = .white) { |
@@ -1162,18 +1162,18 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Base/PTUnavailableFunction.swift:32 | var | public | public var customerView: UIView? = nil |
 | PooToolsSource/Base/PTUnavailableFunction.swift:35 | enum | public | public enum PTUnavailableState: Sendable { |
 | PooToolsSource/Base/PTUnavailableFunction.swift:43 | struct | public | public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态方法 |
-| PooToolsSource/Base/PTVideoCoverCache.swift:31 | struct | public | public struct PTVideoCacheItem { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:33 | let | public | public let originalURLString: String |
-| PooToolsSource/Base/PTVideoCoverCache.swift:36 | var | public | public var coverImage: UIImage? |
-| PooToolsSource/Base/PTVideoCoverCache.swift:39 | var | public | public var localVideoURL: URL? |
-| PooToolsSource/Base/PTVideoCoverCache.swift:42 | var | public | public var isFullyCached: Bool { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:49 | class | public | public final class PTVideoManager: Sendable { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:61 | func | public | @MainActor public func getVideoItem(for urlString: String, |
-| PooToolsSource/Base/PTVideoCoverCache.swift:175 | class | public | public final class PTVideoFileCache: Sendable { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:197 | func | public | public func cacheURL(for videoURL: URL) -> URL { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:204 | func | public | public func cachedFileURL(for url: URL) -> URL? { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:225 | func | public | public func prepareVideo(url: URL, |
-| PooToolsSource/Base/PTVideoCoverCache.swift:350 | enum | public | public enum PTVideoCoverCache { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:34 | struct | public | public struct PTVideoCacheItem { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:36 | let | public | public let originalURLString: String |
+| PooToolsSource/Base/PTVideoCoverCache.swift:39 | var | public | public var coverImage: UIImage? |
+| PooToolsSource/Base/PTVideoCoverCache.swift:42 | var | public | public var localVideoURL: URL? |
+| PooToolsSource/Base/PTVideoCoverCache.swift:45 | var | public | public var isFullyCached: Bool { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:52 | class | public | public final class PTVideoManager: Sendable { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:64 | func | public | @MainActor public func getVideoItem(for urlString: String, |
+| PooToolsSource/Base/PTVideoCoverCache.swift:180 | class | public | public final class PTVideoFileCache: Sendable { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:208 | func | public | public func cacheURL(for videoURL: URL) -> URL { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:215 | func | public | public func cachedFileURL(for url: URL) -> URL? { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:236 | func | public | public func prepareVideo(url: URL, |
+| PooToolsSource/Base/PTVideoCoverCache.swift:361 | enum | public | public enum PTVideoCoverCache { |
 | PooToolsSource/BioID/PTBiologyID.swift:13 | enum | public | @objc public enum PTBiometryStatus: Int { |
 | PooToolsSource/BioID/PTBiologyID.swift:22 | class | public | public class PTBiometricsManager: NSObject { |
 | PooToolsSource/BioID/PTBiologyID.swift:33 | var | public | public var currentBiometryStatus: PTBiometryStatus { |
@@ -1821,77 +1821,152 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/CheckDirtyWord/PTCheckFWords.swift:25 | func | public | public func initFilter(filePath: String = "") { |
 | PooToolsSource/CheckDirtyWord/PTCheckFWords.swift:62 | func | public | public func haveFWord(str:NSString) -> Bool { |
 | PooToolsSource/CheckDirtyWord/PTCheckFWords.swift:88 | func | public | public func filter(str:NSString) -> NSString { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:85 | class | public | public class-based decoder API can migrate to immutable snapshot structs. |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:87 | class | public | public final class PTTFPaging: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:88 | var | public | public var total: Int = 0 |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:89 | var | public | public var limit: Int = 0 |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:93 | class | public | public final class PTTFMeta: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:94 | var | public | public var paging: PTTFPaging? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:98 | class | public | public final class PTTLinkMainModel: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:99 | var | public | public var links: PTTFLinks? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:103 | class | public | public final class PTTFRelationships: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:104 | var | public | public var app: PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:105 | var | public | public var builds: PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:106 | var | public | public var betaAppReviewSubmission:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:107 | var | public | public var appStoreVersion:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:108 | var | public | public var appEncryptionDeclaration:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:109 | var | public | public var individualTesters:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:110 | var | public | public var perfPowerMetrics:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:111 | var | public | public var betaBuildLocalizations:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:112 | var | public | public var betaGroups:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:113 | var | public | public var diagnosticSignatures:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:114 | var | public | public var preReleaseVersion:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:115 | var | public | public var buildBetaDetail:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:116 | var | public | public var icons:PTTLinkMainModel? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:120 | class | public | public final class PTTFLinks: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:121 | var | public | public var currentLink: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:122 | var | public | public var related: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:123 | var | public | public var next:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:134 | class | public | public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:135 | var | public | public var width:CGFloat = 0 |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:136 | var | public | public var templateUrl:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:137 | var | public | public var height:CGFloat = 0 |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:142 | class | public | public final class PTTFAttributes: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:143 | var | public | public var version: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:144 | var | public | public var platform: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:145 | var | public | public var minOsVersion:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:146 | var | public | public var computedMinMacOsVersion:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:147 | var | public | public var lsMinimumSystemVersion:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:148 | var | public | public var uploadedDate:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:149 | var | public | public var expired:Bool = true |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:150 | var | public | public var processingState:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:151 | var | public | public var buildAudienceType:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:152 | var | public | public var expirationDate:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:153 | var | public | public var usesNonExemptEncryption:Bool = false |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:154 | var | public | public var computedMinVisionOsVersion:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:155 | var | public | public var iconAssetToken:PTTFIconAssetTokenModle? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:156 | var | public | public var locale:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:157 | var | public | public var whatsNew:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:158 | var | public | public var publicLink:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:159 | var | public | public var name:String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:163 | var | public | public var processingStateBool:Bool { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:173 | class | public | public final class PTTFVersionData: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:174 | var | public | public var id: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:175 | var | public | public var relationships: PTTFRelationships? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:176 | var | public | public var links: PTTFLinks? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:177 | var | public | public var type: String = "" |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:178 | var | public | public var attributes: PTTFAttributes? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:183 | class | public | public final class PTTFModelCollection: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:184 | var | public | public var meta: PTTFMeta? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:185 | var | public | public var links: PTTFLinks? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:186 | var | public | public var data: [PTTFVersionData]? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:191 | class | public | public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:192 | var | public | public var links:PTTFLinks? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:193 | var | public | public var data:PTTFVersionData? |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:198 | struct | public | public struct PTAppleClaims: Claims, Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:205 | class | public | public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:214 | class | public | public class PTCheckUpdateFunction: NSObject,@unchecked Sendable { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:220 | enum | public | public enum PTUpdateAlertType:Int { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:225 | func | public | @MainActor public func renewVersion(newVersion:String) -> (String,String) { |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:242 | func | public | @MainActor public func tfUpdate(force:Bool, |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:274 | func | public | @MainActor public func updateAlert(force:Bool, |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:318 | func | public | @MainActor public func checkUpdateAlert(appid:String, |
-| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:332 | func | public | @MainActor public func checkTheVersionWithappid(appid:String? = nil, |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:82 | struct | public | public struct PTTFPagingSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:83 | var | public | public var total: Int = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:84 | var | public | public var limit: Int = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:85 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:88 | struct | public | public struct PTTFMetaSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:89 | var | public | public var paging: PTTFPagingSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:90 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:93 | struct | public | public struct PTTFLinkSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:94 | var | public | public var currentLink: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:95 | var | public | public var related: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:96 | var | public | public var next: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:98 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:107 | struct | public | public struct PTTFLinkMainSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:108 | var | public | public var links: PTTFLinkSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:110 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:113 | struct | public | public struct PTTFRelationshipsSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:114 | var | public | public var app: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:115 | var | public | public var builds: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:116 | var | public | public var betaAppReviewSubmission: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:117 | var | public | public var appStoreVersion: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:118 | var | public | public var appEncryptionDeclaration: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:119 | var | public | public var individualTesters: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:120 | var | public | public var perfPowerMetrics: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:121 | var | public | public var betaBuildLocalizations: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:122 | var | public | public var betaGroups: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:123 | var | public | public var diagnosticSignatures: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:124 | var | public | public var preReleaseVersion: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:125 | var | public | public var buildBetaDetail: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:126 | var | public | public var icons: PTTFLinkMainSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:128 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:131 | struct | public | public struct PTTFIconAssetTokenSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:132 | var | public | public var width: CGFloat = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:133 | var | public | public var templateUrl: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:134 | var | public | public var height: CGFloat = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:136 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:139 | struct | public | public struct PTTFAttributesSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:140 | var | public | public var version: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:141 | var | public | public var platform: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:142 | var | public | public var minOsVersion: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:143 | var | public | public var computedMinMacOsVersion: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:144 | var | public | public var lsMinimumSystemVersion: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:145 | var | public | public var uploadedDate: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:146 | var | public | public var expired: Bool = true |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:147 | var | public | public var processingState: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:148 | var | public | public var buildAudienceType: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:149 | var | public | public var expirationDate: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:150 | var | public | public var usesNonExemptEncryption: Bool = false |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:151 | var | public | public var computedMinVisionOsVersion: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:152 | var | public | public var iconAssetToken: PTTFIconAssetTokenSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:153 | var | public | public var locale: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:154 | var | public | public var whatsNew: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:155 | var | public | public var publicLink: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:156 | var | public | public var name: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:158 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:160 | var | public | public var processingStateBool: Bool { processingState == "VALID" } |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:163 | struct | public | public struct PTTFVersionDataSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:164 | var | public | public var id: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:165 | var | public | public var relationships: PTTFRelationshipsSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:166 | var | public | public var links: PTTFLinkSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:167 | var | public | public var type: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:168 | var | public | public var attributes: PTTFAttributesSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:170 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:173 | struct | public | public struct PTTFModelCollectionSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:174 | var | public | public var meta: PTTFMetaSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:175 | var | public | public var links: PTTFLinkSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:176 | var | public | public var data: [PTTFVersionDataSnapshot]? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:178 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:181 | struct | public | public struct PTTFNewerBuildVersionSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:182 | var | public | public var links: PTTFLinkSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:183 | var | public | public var data: PTTFVersionDataSnapshot? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:185 | init | public | public init() {} |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:188 | struct | public | public struct PTTFUpdateSnapshot: PTCodableModelProtocol { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:189 | var | public | public var version: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:190 | var | public | public var desc: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:191 | var | public | public var downloadURL: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:193 | init | public | public init(version: String = "", desc: String = "", downloadURL: String = "") { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:210 | class | public | public final class PTTFPaging: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:211 | var | public | public var total: Int = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:212 | var | public | public var limit: Int = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:216 | class | public | public final class PTTFMeta: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:217 | var | public | public var paging: PTTFPaging? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:221 | class | public | public final class PTTLinkMainModel: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:222 | var | public | public var links: PTTFLinks? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:226 | class | public | public final class PTTFRelationships: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:227 | var | public | public var app: PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:228 | var | public | public var builds: PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:229 | var | public | public var betaAppReviewSubmission:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:230 | var | public | public var appStoreVersion:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:231 | var | public | public var appEncryptionDeclaration:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:232 | var | public | public var individualTesters:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:233 | var | public | public var perfPowerMetrics:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:234 | var | public | public var betaBuildLocalizations:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:235 | var | public | public var betaGroups:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:236 | var | public | public var diagnosticSignatures:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:237 | var | public | public var preReleaseVersion:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:238 | var | public | public var buildBetaDetail:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:239 | var | public | public var icons:PTTLinkMainModel? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:243 | class | public | public final class PTTFLinks: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:244 | var | public | public var currentLink: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:245 | var | public | public var related: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:246 | var | public | public var next:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:257 | class | public | public final class PTTFIconAssetTokenModle: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:258 | var | public | public var width:CGFloat = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:259 | var | public | public var templateUrl:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:260 | var | public | public var height:CGFloat = 0 |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:265 | class | public | public final class PTTFAttributes: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:266 | var | public | public var version: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:267 | var | public | public var platform: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:268 | var | public | public var minOsVersion:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:269 | var | public | public var computedMinMacOsVersion:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:270 | var | public | public var lsMinimumSystemVersion:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:271 | var | public | public var uploadedDate:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:272 | var | public | public var expired:Bool = true |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:273 | var | public | public var processingState:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:274 | var | public | public var buildAudienceType:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:275 | var | public | public var expirationDate:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:276 | var | public | public var usesNonExemptEncryption:Bool = false |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:277 | var | public | public var computedMinVisionOsVersion:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:278 | var | public | public var iconAssetToken:PTTFIconAssetTokenModle? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:279 | var | public | public var locale:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:280 | var | public | public var whatsNew:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:281 | var | public | public var publicLink:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:282 | var | public | public var name:String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:286 | var | public | public var processingStateBool:Bool { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:296 | class | public | public final class PTTFVersionData: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:297 | var | public | public var id: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:298 | var | public | public var relationships: PTTFRelationships? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:299 | var | public | public var links: PTTFLinks? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:300 | var | public | public var type: String = "" |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:301 | var | public | public var attributes: PTTFAttributes? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:306 | class | public | public final class PTTFModelCollection: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:307 | var | public | public var meta: PTTFMeta? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:308 | var | public | public var links: PTTFLinks? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:309 | var | public | public var data: [PTTFVersionData]? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:314 | class | public | public final class PTTFNewerBuildVersionModel: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:315 | var | public | public var links:PTTFLinks? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:316 | var | public | public var data:PTTFVersionData? |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:321 | struct | public | public struct PTAppleClaims: Claims, Sendable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:328 | class | public | public final class PTTFUpdateCustomModel: Codable { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:337 | class | public | public class PTCheckUpdateFunction: NSObject { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:343 | enum | public | public enum PTUpdateAlertType:Int { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:348 | func | public | @MainActor public func renewVersion(newVersion:String) -> (String,String) { |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:365 | func | public | @MainActor public func tfUpdate(force:Bool, |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:397 | func | public | @MainActor public func updateAlert(force:Bool, |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:441 | func | public | @MainActor public func checkUpdateAlert(appid:String, |
+| PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:455 | func | public | @MainActor public func checkTheVersionWithappid(appid:String? = nil, |
 | PooToolsSource/Circle/PTHalfCircleView.swift:11 | enum | public | @objc public enum PTHalfCircleViewType:Int,CaseIterable { |
 | PooToolsSource/Circle/PTHalfCircleView.swift:19 | class | public | public class PTHalfCircleView: UIView { |
 | PooToolsSource/Circle/PTHalfCircleView.swift:20 | var | public | public var circleType:PTHalfCircleViewType = .Right |
@@ -1979,44 +2054,20 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Core/PTBaseModel.swift:41 | struct | public | public struct PTDummyModel: PTCodableModelProtocol, Sendable { |
 | PooToolsSource/Core/PTBaseModel.swift:42 | init | public | public init() {} |
 | PooToolsSource/Core/PTBaseModel.swift:49 | protocol | public | public protocol PTModelProtocol: PTCodableModelProtocol, PTDiffableModel {} |
-| PooToolsSource/Core/PTCacheStore.swift:7 | struct | public | public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable { |
-| PooToolsSource/Core/PTCacheStore.swift:8 | let | public | public let rawValue: String |
-| PooToolsSource/Core/PTCacheStore.swift:10 | init | public | public init(rawValue: String) { |
-| PooToolsSource/Core/PTCacheStore.swift:18 | struct | public | public struct PTCachePolicy: Sendable, Equatable { |
-| PooToolsSource/Core/PTCacheStore.swift:19 | let | public | public let countLimit: Int |
-| PooToolsSource/Core/PTCacheStore.swift:20 | let | public | public let costLimit: Int |
-| PooToolsSource/Core/PTCacheStore.swift:21 | let | public | public let expiration: TimeInterval? |
-| PooToolsSource/Core/PTCacheStore.swift:22 | let | public | public let namespace: PTCacheNamespace |
-| PooToolsSource/Core/PTCacheStore.swift:23 | let | public | public let clearsOnMemoryWarning: Bool |
-| PooToolsSource/Core/PTCacheStore.swift:24 | let | public | public let lowDiskThreshold: Int64? |
-| PooToolsSource/Core/PTCacheStore.swift:25 | let | public | public let diskLimit: Int64? |
-| PooToolsSource/Core/PTCacheStore.swift:26 | let | public | public let diskTarget: Int64? |
-| PooToolsSource/Core/PTCacheStore.swift:28 | init | public | public init(countLimit: Int = 100, |
-| PooToolsSource/Core/PTCacheStore.swift:50 | enum | public | public enum PTCacheEvictionReason: String, Sendable, Codable { |
-| PooToolsSource/Core/PTCacheStore.swift:59 | struct | public | public struct PTCacheMetrics: Sendable, Codable, Equatable { |
-| PooToolsSource/Core/PTCacheStore.swift:60 | let | public | public let hits: UInt64 |
-| PooToolsSource/Core/PTCacheStore.swift:61 | let | public | public let misses: UInt64 |
-| PooToolsSource/Core/PTCacheStore.swift:62 | let | public | public let insertions: UInt64 |
-| PooToolsSource/Core/PTCacheStore.swift:63 | let | public | public let evictions: UInt64 |
-| PooToolsSource/Core/PTCacheStore.swift:64 | let | public | public let expiredEntries: UInt64 |
-| PooToolsSource/Core/PTCacheStore.swift:65 | let | public | public let totalCost: Int |
-| PooToolsSource/Core/PTCacheStore.swift:66 | let | public | public let count: Int |
-| PooToolsSource/Core/PTCacheStore.swift:67 | let | public | public let lastEvictionReason: PTCacheEvictionReason? |
-| PooToolsSource/Core/PTCacheStore.swift:69 | init | public | public init(hits: UInt64 = 0, |
-| PooToolsSource/Core/PTCacheStore.swift:88 | protocol | public | public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable { |
-| PooToolsSource/Core/PTCacheStore.swift:98 | actor | public | public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore { |
-| PooToolsSource/Core/PTCacheStore.swift:99 | let | public | public let policy: PTCachePolicy |
-| PooToolsSource/Core/PTCacheStore.swift:100 | var | public | public var countLimit: Int { policy.countLimit } |
-| PooToolsSource/Core/PTCacheStore.swift:101 | var | public | public var costLimit: Int { policy.costLimit } |
-| PooToolsSource/Core/PTCacheStore.swift:115 | init | public | public init(countLimit: Int = 100, |
-| PooToolsSource/Core/PTCacheStore.swift:120 | init | public | public init(policy: PTCachePolicy) { |
-| PooToolsSource/Core/PTCacheStore.swift:124 | func | public | public func value(for key: Key) -> Value? { |
-| PooToolsSource/Core/PTCacheStore.swift:141 | func | public | public func insert(_ value: Value, for key: Key, cost: Int) { |
-| PooToolsSource/Core/PTCacheStore.swift:158 | func | public | public func removeValue(for key: Key) { |
-| PooToolsSource/Core/PTCacheStore.swift:162 | func | public | public func removeAll() { |
-| PooToolsSource/Core/PTCacheStore.swift:166 | func | public | public func metrics() -> PTCacheMetrics { |
-| PooToolsSource/Core/PTCacheStore.swift:177 | func | public | public func handleMemoryWarning() { |
-| PooToolsSource/Core/PTCacheStore.swift:182 | func | public | public func handleLowDisk() { |
+| PooToolsSource/Core/PTCacheStore.swift:10 | protocol | public | public protocol PTCacheStore<Key, Value>: Sendable where Key: Hashable & Sendable, Value: Sendable { |
+| PooToolsSource/Core/PTCacheStore.swift:20 | actor | public | public actor PTMemoryCacheStore<Key: Hashable & Sendable, Value: Sendable>: PTCacheStore { |
+| PooToolsSource/Core/PTCacheStore.swift:21 | let | public | public let policy: PTCachePolicy |
+| PooToolsSource/Core/PTCacheStore.swift:22 | var | public | public var countLimit: Int { policy.countLimit } |
+| PooToolsSource/Core/PTCacheStore.swift:23 | var | public | public var costLimit: Int { policy.costLimit } |
+| PooToolsSource/Core/PTCacheStore.swift:37 | init | public | public init(countLimit: Int = 100, |
+| PooToolsSource/Core/PTCacheStore.swift:42 | init | public | public init(policy: PTCachePolicy) { |
+| PooToolsSource/Core/PTCacheStore.swift:46 | func | public | public func value(for key: Key) -> Value? { |
+| PooToolsSource/Core/PTCacheStore.swift:63 | func | public | public func insert(_ value: Value, for key: Key, cost: Int) { |
+| PooToolsSource/Core/PTCacheStore.swift:80 | func | public | public func removeValue(for key: Key) { |
+| PooToolsSource/Core/PTCacheStore.swift:84 | func | public | public func removeAll() { |
+| PooToolsSource/Core/PTCacheStore.swift:88 | func | public | public func metrics() -> PTCacheMetrics { |
+| PooToolsSource/Core/PTCacheStore.swift:99 | func | public | public func handleMemoryWarning() { |
+| PooToolsSource/Core/PTCacheStore.swift:104 | func | public | public func handleLowDisk() { |
 | PooToolsSource/Core/PTFullScreenPopGesture.swift:12 | class | open | open class PTFullscreenPopGesture { |
 | PooToolsSource/Core/PTFullScreenPopGesture.swift:33 | var | public | public var fullscreenPopGesture: UIPanGestureRecognizer { |
 | PooToolsSource/Core/PTFullScreenPopGesture.swift:46 | var | public | public var viewControllerBasedNavBarAppearanceEnabled: Bool { |
@@ -2137,24 +2188,24 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Core/PTMarcos_swift.swift:114 | let | public | @MainActor public let kPlatformName: String? = infoDictionary?["DTPlatformName"] as? String |
 | PooToolsSource/Core/PTMarcos_swift.swift:117 | let | public | @MainActor public let kiOSVersion: String = UIDevice.current.systemVersion |
 | PooToolsSource/Core/PTMarcos_swift.swift:120 | let | public | @MainActor public let kOSType: String = UIDevice.current.systemName + UIDevice.current.systemVersion |
-| PooToolsSource/Core/PTMediaCache.swift:11 | enum | public | public enum PTMediaCacheVariant: String, Hashable, Sendable { |
-| PooToolsSource/Core/PTMediaCache.swift:24 | struct | public | public struct PTMediaCacheKey: Hashable, Sendable { |
-| PooToolsSource/Core/PTMediaCache.swift:25 | let | public | public let resourceIdentifier: String |
-| PooToolsSource/Core/PTMediaCache.swift:26 | let | public | public let variant: PTMediaCacheVariant |
-| PooToolsSource/Core/PTMediaCache.swift:27 | let | public | public let pixelWidth: Int? |
-| PooToolsSource/Core/PTMediaCache.swift:28 | let | public | public let pixelHeight: Int? |
-| PooToolsSource/Core/PTMediaCache.swift:29 | let | public | public let frameNumber: Int? |
-| PooToolsSource/Core/PTMediaCache.swift:31 | init | public | public init(resourceIdentifier: String, |
-| PooToolsSource/Core/PTMediaCache.swift:58 | actor | public | public actor PTMediaCache { |
-| PooToolsSource/Core/PTMediaCache.swift:61 | let | public | public let policy: PTCachePolicy |
-| PooToolsSource/Core/PTMediaCache.swift:77 | init | public | public init(directory: URL? = nil, |
-| PooToolsSource/Core/PTMediaCache.swift:95 | func | public | public func data(for key: PTMediaCacheKey) -> Data? { |
-| PooToolsSource/Core/PTMediaCache.swift:117 | func | public | public func insert(_ data: Data, for key: PTMediaCacheKey) { |
-| PooToolsSource/Core/PTMediaCache.swift:129 | func | public | public func removeValue(for key: PTMediaCacheKey) { |
-| PooToolsSource/Core/PTMediaCache.swift:133 | func | public | public func metrics() -> PTCacheMetrics { |
-| PooToolsSource/Core/PTMediaCache.swift:144 | func | public | public func handleMemoryWarning() { |
-| PooToolsSource/Core/PTMediaCache.swift:151 | func | public | public func handleLowDisk() { |
-| PooToolsSource/Core/PTMediaCache.swift:165 | func | public | public func removeAll() { |
+| PooToolsSource/Core/PTMediaCache.swift:14 | enum | public | public enum PTMediaCacheVariant: String, Hashable, Sendable { |
+| PooToolsSource/Core/PTMediaCache.swift:27 | struct | public | public struct PTMediaCacheKey: Hashable, Sendable { |
+| PooToolsSource/Core/PTMediaCache.swift:28 | let | public | public let resourceIdentifier: String |
+| PooToolsSource/Core/PTMediaCache.swift:29 | let | public | public let variant: PTMediaCacheVariant |
+| PooToolsSource/Core/PTMediaCache.swift:30 | let | public | public let pixelWidth: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:31 | let | public | public let pixelHeight: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:32 | let | public | public let frameNumber: Int? |
+| PooToolsSource/Core/PTMediaCache.swift:34 | init | public | public init(resourceIdentifier: String, |
+| PooToolsSource/Core/PTMediaCache.swift:61 | actor | public | public actor PTMediaCache { |
+| PooToolsSource/Core/PTMediaCache.swift:64 | let | public | public let policy: PTCachePolicy |
+| PooToolsSource/Core/PTMediaCache.swift:80 | init | public | public init(directory: URL? = nil, |
+| PooToolsSource/Core/PTMediaCache.swift:98 | func | public | public func data(for key: PTMediaCacheKey) -> Data? { |
+| PooToolsSource/Core/PTMediaCache.swift:120 | func | public | public func insert(_ data: Data, for key: PTMediaCacheKey) { |
+| PooToolsSource/Core/PTMediaCache.swift:132 | func | public | public func removeValue(for key: PTMediaCacheKey) { |
+| PooToolsSource/Core/PTMediaCache.swift:136 | func | public | public func metrics() -> PTCacheMetrics { |
+| PooToolsSource/Core/PTMediaCache.swift:147 | func | public | public func handleMemoryWarning() { |
+| PooToolsSource/Core/PTMediaCache.swift:154 | func | public | public func handleLowDisk() { |
+| PooToolsSource/Core/PTMediaCache.swift:168 | func | public | public func removeAll() { |
 | PooToolsSource/Core/PTMediaLifecycle.swift:10 | protocol | public | public protocol PTMediaInvalidating: AnyObject { |
 | PooToolsSource/Core/PTMediaSaveService.swift:13 | enum | public | public enum PTMediaSaveError: Error, LocalizedError, Sendable { |
 | PooToolsSource/Core/PTMediaSaveService.swift:19 | var | public | public var errorDescription: String? { |
@@ -3102,106 +3153,106 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/ImageEditor/PTCutViewController.swift:905 | var | public | public var engineMinClipSize: CGSize { minClipSize } |
 | PooToolsSource/ImageEditor/PTCutViewController.swift:968 | var | public | public var isCircle = false { |
 | PooToolsSource/ImageEditor/PTCutViewController.swift:976 | var | public | public var isEditing = false { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:24 | struct | public | public struct PTCanvasMetrics { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:25 | let | public | public let ratio: CGFloat |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:26 | let | public | public let originalRatio: CGFloat |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:27 | let | public | public let toImageScale: CGFloat |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:28 | let | public | public let renderSize: CGSize |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:31 | enum | public | public enum PTClipPanEdge { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:36 | protocol | public | public protocol PTEditImageEngineContext: AnyObject { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:168 | func | public | public func getRawTextRects() -> [CGRect] { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:194 | struct | public | public struct PTTextStickerRenderer { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:273 | class | public | public class PTPassthroughView: UIView { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:289 | protocol | public | @MainActor public protocol PTEditImageToolEngine: AnyObject { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:302 | class | public | public class PTDrawEngine: NSObject, PTEditImageToolEngine { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:306 | var | public | public var canvasView: UIView { drawingImageView } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:316 | var | public | public var drawPaths: [PTDrawPath] = [] |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:318 | var | public | public var deleteDrawPaths: Set<PTDrawPath> = [] |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:320 | var | public | public var drawColor: UIColor = .systemRed |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:321 | var | public | public var defaultDrawPathWidth: CGFloat = 0 |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:322 | var | public | public var isEraserMode: Bool = false |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:332 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:336 | init | public | public init(context: PTEditImageEngineContext) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:341 | func | public | public func toolDidActivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:345 | func | public | public func toolDidDeactivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:350 | func | public | public func reloadRenderState() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:359 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:444 | func | public | public func drawLine() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:472 | class | public | public class PTMosaicEngine: NSObject, PTEditImageToolEngine { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:475 | var | public | public var canvasView: UIView { mosaicContainerView } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:500 | var | public | public var mosaicPaths: [PTDrawPath] = [] |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:501 | var | public | public var isEraserMode: Bool = false |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:507 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:509 | init | public | public init(context: PTEditImageEngineContext) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:514 | func | public | public func toolDidActivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:535 | func | public | public func toolDidDeactivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:539 | func | public | public func reloadRenderState() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:546 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:658 | func | public | public func updateBaseMosaicImage(_ newBaseImage: UIImage) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:665 | class | public | public class PTStickerEngine: NSObject, PTEditImageToolEngine { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:668 | var | public | public var customTextEditorClass: PTTextEditorConfigurable.Type = PTEditInputViewController.self |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:669 | var | public | public var canvasView: UIView { stickersContainer } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:684 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:686 | var | public | public var onStickerTapped: ((PTBaseStickerView) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:687 | var | public | public var onStickerAdded: ((PTBaseStickerView) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:689 | var | public | public var currentSelectedSticker: PTBaseStickerView? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:691 | var | public | public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:692 | var | public | public var onProcessingStateChanged: ((Bool) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:695 | init | public | public init(context: PTEditImageEngineContext) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:704 | func | public | public func toolDidActivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:708 | func | public | public func toolDidDeactivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:718 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:720 | func | public | public func reloadRenderState() { } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:757 | func | public | public func removeCurrentSelectedSticker() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:784 | func | public | public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:852 | func | public | public func updateSelectedTextSticker(newFont: UIFont? = nil, newColor: UIColor? = nil, newStyle: PTInputTextStyle? = nil) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:882 | func | public | public func addImageSticker(_ image: UIImage) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:901 | func | public | public func removeBackgroundForSelectedSticker() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:972 | func | public | public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:993 | func | public | public func bringSelectedToFront() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:998 | func | public | public func sendSelectedToBack() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1003 | func | public | public func centerSelectedHorizontally() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1009 | func | public | public func centerSelectedVertically() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1016 | func | public | public func moveSelectedOneLayerUp() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1030 | func | public | public func moveSelectedOneLayerDown() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1043 | func | public | public func fillSelectedStickerToScreen() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1097 | func | public | public func stickerBeginOperation(_ sticker: PTBaseStickerView) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1124 | func | public | public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1147 | func | public | public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1177 | func | public | public func stickerDidTap(_ sticker: PTBaseStickerView) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1187 | func | public | public func sticker(_ textSticker: PTTextStickerView, editText text: String) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1209 | func | public | public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1239 | class | public | public class PTAdjustEngine: NSObject, PTEditImageToolEngine { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1245 | var | public | public var canvasView: UIView { emptyCanvasView } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1254 | var | public | public var currentAdjustStatus = PTAdjustStatus() |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1255 | var | public | public var preAdjustStatus = PTAdjustStatus() |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1256 | var | public | public var selectedAdjustTool: PTHarBethFilter.FiltersTool? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1267 | init | public | public init(context: PTEditImageEngineContext) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1302 | func | public | public func toolDidActivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1308 | func | public | public func toolDidDeactivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1313 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1317 | func | public | public func reloadRenderState() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1325 | func | public | public func changeAdjustTool(_ tool: PTHarBethFilter.FiltersTool) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1378 | func | public | public func adjustFilterValueSet(filterImage: UIImage?) -> UIImage? { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1402 | class | public | public class PTFilterEngine: NSObject, PTEditImageToolEngine { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1407 | var | public | public var canvasView: UIView { emptyCanvasView } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1409 | var | public | public var currentFilter: PTHarBethFilter = .none |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1410 | var | public | public var thumbnailFilterImages: [UIImage] = [] |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1425 | init | public | public init(context: PTEditImageEngineContext) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1430 | func | public | public func toolDidActivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1434 | func | public | public func toolDidDeactivate() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1437 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { } |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1443 | func | public | public func reloadRenderState() { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1451 | func | public | public func generateFilterThumbnails() async { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1473 | func | public | public func changeFilter(_ filter: PTHarBethFilter) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1505 | protocol | public | public protocol PTClipEngineContext: AnyObject { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1510 | class | public | public class PTClipEngine: NSObject { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1514 | var | public | public var clipBoxFrame: CGRect = .zero |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1515 | var | public | public var selectedRatio: PTImageClipRatio |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1526 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1529 | var | public | public var onClipBoxFrameChanged: ((CGRect) -> Void)? |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1533 | init | public | public init(context: PTClipEngineContext, initialRatio: PTImageClipRatio) { |
-| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1541 | func | public | @MainActor public func handlePanGesture(_ pan: UIPanGestureRecognizer, in view: UIView) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:27 | struct | public | public struct PTCanvasMetrics { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:28 | let | public | public let ratio: CGFloat |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:29 | let | public | public let originalRatio: CGFloat |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:30 | let | public | public let toImageScale: CGFloat |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:31 | let | public | public let renderSize: CGSize |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:34 | enum | public | public enum PTClipPanEdge { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:39 | protocol | public | public protocol PTEditImageEngineContext: AnyObject { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:171 | func | public | public func getRawTextRects() -> [CGRect] { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:197 | struct | public | public struct PTTextStickerRenderer { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:276 | class | public | public class PTPassthroughView: UIView { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:292 | protocol | public | @MainActor public protocol PTEditImageToolEngine: AnyObject { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:305 | class | public | public class PTDrawEngine: NSObject, PTEditImageToolEngine { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:309 | var | public | public var canvasView: UIView { drawingImageView } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:319 | var | public | public var drawPaths: [PTDrawPath] = [] |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:321 | var | public | public var deleteDrawPaths: Set<PTDrawPath> = [] |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:323 | var | public | public var drawColor: UIColor = .systemRed |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:324 | var | public | public var defaultDrawPathWidth: CGFloat = 0 |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:325 | var | public | public var isEraserMode: Bool = false |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:335 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:339 | init | public | public init(context: PTEditImageEngineContext) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:344 | func | public | public func toolDidActivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:348 | func | public | public func toolDidDeactivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:353 | func | public | public func reloadRenderState() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:362 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:447 | func | public | public func drawLine() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:475 | class | public | public class PTMosaicEngine: NSObject, PTEditImageToolEngine { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:478 | var | public | public var canvasView: UIView { mosaicContainerView } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:503 | var | public | public var mosaicPaths: [PTDrawPath] = [] |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:504 | var | public | public var isEraserMode: Bool = false |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:510 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:512 | init | public | public init(context: PTEditImageEngineContext) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:517 | func | public | public func toolDidActivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:538 | func | public | public func toolDidDeactivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:542 | func | public | public func reloadRenderState() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:549 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:661 | func | public | public func updateBaseMosaicImage(_ newBaseImage: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:668 | class | public | public class PTStickerEngine: NSObject, PTEditImageToolEngine { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:671 | var | public | public var customTextEditorClass: PTTextEditorConfigurable.Type = PTEditInputViewController.self |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:672 | var | public | public var canvasView: UIView { stickersContainer } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:687 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:689 | var | public | public var onStickerTapped: ((PTBaseStickerView) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:690 | var | public | public var onStickerAdded: ((PTBaseStickerView) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:692 | var | public | public var currentSelectedSticker: PTBaseStickerView? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:694 | var | public | public var onRequestImageSelection: ((_ completion: @escaping (UIImage?) -> Void) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:695 | var | public | public var onProcessingStateChanged: ((Bool) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:698 | init | public | public init(context: PTEditImageEngineContext) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:707 | func | public | public func toolDidActivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:711 | func | public | public func toolDidDeactivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:721 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:723 | func | public | public func reloadRenderState() { } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:760 | func | public | public func removeCurrentSelectedSticker() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:787 | func | public | public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = PTInputTextStyle()) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:855 | func | public | public func updateSelectedTextSticker(newFont: UIFont? = nil, newColor: UIColor? = nil, newStyle: PTInputTextStyle? = nil) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:885 | func | public | public func addImageSticker(_ image: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:904 | func | public | public func removeBackgroundForSelectedSticker() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:975 | func | public | public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:996 | func | public | public func bringSelectedToFront() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1001 | func | public | public func sendSelectedToBack() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1006 | func | public | public func centerSelectedHorizontally() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1012 | func | public | public func centerSelectedVertically() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1019 | func | public | public func moveSelectedOneLayerUp() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1033 | func | public | public func moveSelectedOneLayerDown() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1046 | func | public | public func fillSelectedStickerToScreen() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1100 | func | public | public func stickerBeginOperation(_ sticker: PTBaseStickerView) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1127 | func | public | public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1150 | func | public | public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1180 | func | public | public func stickerDidTap(_ sticker: PTBaseStickerView) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1190 | func | public | public func sticker(_ textSticker: PTTextStickerView, editText text: String) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1212 | func | public | public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1242 | class | public | public class PTAdjustEngine: NSObject, PTEditImageToolEngine { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1248 | var | public | public var canvasView: UIView { emptyCanvasView } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1257 | var | public | public var currentAdjustStatus = PTAdjustStatus() |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1258 | var | public | public var preAdjustStatus = PTAdjustStatus() |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1259 | var | public | public var selectedAdjustTool: PTHarBethFilter.FiltersTool? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1270 | init | public | public init(context: PTEditImageEngineContext) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1305 | func | public | public func toolDidActivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1311 | func | public | public func toolDidDeactivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1316 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1320 | func | public | public func reloadRenderState() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1328 | func | public | public func changeAdjustTool(_ tool: PTHarBethFilter.FiltersTool) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1381 | func | public | public func adjustFilterValueSet(filterImage: UIImage?) -> UIImage? { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1405 | class | public | public class PTFilterEngine: NSObject, PTEditImageToolEngine { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1410 | var | public | public var canvasView: UIView { emptyCanvasView } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1412 | var | public | public var currentFilter: PTHarBethFilter = .none |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1413 | var | public | public var thumbnailFilterImages: [UIImage] = [] |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1434 | init | public | public init(context: PTEditImageEngineContext) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1439 | func | public | public func toolDidActivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1443 | func | public | public func toolDidDeactivate() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1446 | func | public | public func handlePanGesture(_ pan: UIPanGestureRecognizer) { } |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1452 | func | public | public func reloadRenderState() { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1460 | func | public | public func generateFilterThumbnails() async { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1482 | func | public | public func changeFilter(_ filter: PTHarBethFilter) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1514 | protocol | public | public protocol PTClipEngineContext: AnyObject { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1519 | class | public | public class PTClipEngine: NSObject { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1523 | var | public | public var clipBoxFrame: CGRect = .zero |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1524 | var | public | public var selectedRatio: PTImageClipRatio |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1535 | var | public | public var onInteractStateChanged: ((Bool) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1538 | var | public | public var onClipBoxFrameChanged: ((CGRect) -> Void)? |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1542 | init | public | public init(context: PTClipEngineContext, initialRatio: PTImageClipRatio) { |
+| PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1550 | func | public | @MainActor public func handlePanGesture(_ pan: UIPanGestureRecognizer, in view: UIView) { |
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:26 | class | public | public class PTEditImageViewController: PTBaseViewController { |
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:28 | var | public | public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)? |
 | PooToolsSource/ImageEditor/PTEditImageViewController.swift:32 | var | public | public var editResultBlock: (@MainActor @Sendable (PTImageEditorResult) -> Void)? |
@@ -4889,7 +4940,7 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/PDF/PTPDFPreviewController.swift:12 | let | public | public let url: URL |
 | PooToolsSource/PDF/PTPDFPreviewController.swift:15 | init | public | public init(url: URL) throws { |
 | PooToolsSource/PDF/PTViewToPDF.swift:15 | class | public | public class PTViewToPDF: NSObject { |
-| PooToolsSource/PDF/UIImage+PTpdfEX.swift:63 | enum | public | public enum PDFImageSize { |
+| PooToolsSource/PDF/UIImage+PTpdfEX.swift:66 | enum | public | public enum PDFImageSize { |
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:11 | enum | public | public enum PTAccessibilityRole: String, Codable, Sendable { |
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:21 | struct | public | public struct PTAccessibilityEnvironment: Codable, Hashable, Sendable { |
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:22 | let | public | public let isVoiceOverRunning: Bool |
@@ -5302,20 +5353,44 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:35 | let | public | public let isDegraded: Bool |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:36 | let | public | public let isCancelled: Bool |
 | PooToolsSource/PToolsCore/PTCoreValueTypes.swift:38 | init | public | public init(statusCode: Int? = nil, |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:52 | struct | public | public struct PTLocationSnapshot: Codable, Hashable, Sendable { |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:53 | let | public | public let latitude: Double |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:54 | let | public | public let longitude: Double |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:56 | init | public | public init(latitude: Double, longitude: Double) { |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:62 | protocol | public | public protocol PTLocationProviding: Sendable { |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:69 | struct | public | public struct PTBaseStructModel<T> { |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:70 | var | public | public var originalString: String = "" |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:71 | var | public | public var customerModel: T? |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:72 | var | public | public var resultData: Data? = Data() |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:74 | init | public | public init() {} |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:79 | typealias | public | public typealias PTLegacyStructModel = PTBaseStructModel<Any> |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:85 | struct | public | public struct PTSendableTypeBox<T: Sendable>: Sendable { |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:86 | let | public | public let type: T? |
-| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:88 | init | public | public init(_ type: T?) { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:52 | struct | public | public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:53 | let | public | public let rawValue: String |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:55 | init | public | public init(rawValue: String) { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:60 | struct | public | public struct PTCachePolicy: Sendable, Equatable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:61 | let | public | public let countLimit: Int |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:62 | let | public | public let costLimit: Int |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:63 | let | public | public let expiration: TimeInterval? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:64 | let | public | public let namespace: PTCacheNamespace |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:65 | let | public | public let clearsOnMemoryWarning: Bool |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:66 | let | public | public let lowDiskThreshold: Int64? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:67 | let | public | public let diskLimit: Int64? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:68 | let | public | public let diskTarget: Int64? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:70 | init | public | public init(countLimit: Int = 100, |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:92 | enum | public | public enum PTCacheEvictionReason: String, Sendable, Codable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:101 | struct | public | public struct PTCacheMetrics: Sendable, Codable, Equatable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:102 | let | public | public let hits: UInt64 |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:103 | let | public | public let misses: UInt64 |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:104 | let | public | public let insertions: UInt64 |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:105 | let | public | public let evictions: UInt64 |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:106 | let | public | public let expiredEntries: UInt64 |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:107 | let | public | public let totalCost: Int |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:108 | let | public | public let count: Int |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:109 | let | public | public let lastEvictionReason: PTCacheEvictionReason? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:111 | init | public | public init(hits: UInt64 = 0, |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:133 | struct | public | public struct PTLocationSnapshot: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:134 | let | public | public let latitude: Double |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:135 | let | public | public let longitude: Double |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:137 | init | public | public init(latitude: Double, longitude: Double) { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:143 | protocol | public | public protocol PTLocationProviding: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:150 | struct | public | public struct PTBaseStructModel<T> { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:151 | var | public | public var originalString: String = "" |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:152 | var | public | public var customerModel: T? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:153 | var | public | public var resultData: Data? = Data() |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:155 | init | public | public init() {} |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:160 | typealias | public | public typealias PTLegacyStructModel = PTBaseStructModel<Any> |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:166 | struct | public | public struct PTSendableTypeBox<T: Sendable>: Sendable { |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:167 | let | public | public let type: T? |
+| PooToolsSource/PToolsCore/PTCoreValueTypes.swift:169 | init | public | public init(_ type: T?) { |
 | PooToolsSource/PToolsCore/PTFeedbackCenter.swift:7 | enum | public | public enum PTFeedbackSignal: String, Codable, Hashable, Sendable { |
 | PooToolsSource/PToolsCore/PTFeedbackCenter.swift:25 | class | public | public final class PTFeedbackCenter { |
 | PooToolsSource/PToolsCore/PTFeedbackCenter.swift:28 | var | public | public var handler: (@MainActor @Sendable (PTFeedbackSignal) -> Void)? |
@@ -5700,15 +5775,15 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/PToolsForm/PTForm.swift:868 | let | public | public let configuration: PTFormConfiguration |
 | PooToolsSource/PToolsForm/PTForm.swift:869 | var | public | public var onEvent: (@MainActor @Sendable (PTFormEvent) -> Void)? |
 | PooToolsSource/PToolsForm/PTForm.swift:870 | var | public | public var showsValidationSummary = false |
-| PooToolsSource/PToolsForm/PTForm.swift:882 | init | public | public init(form: PTFormEngine) { |
-| PooToolsSource/PToolsForm/PTForm.swift:893 | init | public | public init(form: PTFormEngine, |
-| PooToolsSource/PToolsForm/PTForm.swift:910 | init | public | public init(form: PTFormEngine, |
-| PooToolsSource/PToolsForm/PTForm.swift:923 | init | public | public init(form: PTFormEngine, |
-| PooToolsSource/PToolsForm/PTForm.swift:1033 | func | public | public func refresh() async { |
-| PooToolsSource/PToolsForm/PTForm.swift:1064 | func | public | public func validate() async -> PTFormValidationResult { |
-| PooToolsSource/PToolsForm/PTForm.swift:1081 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
-| PooToolsSource/PToolsForm/PTForm.swift:1107 | func | public | public func focusField(_ id: PTFormFieldID) { |
-| PooToolsSource/PToolsForm/PTForm.swift:1112 | func | public | public func scrollToField(_ id: PTFormFieldID, animated: Bool = true) { |
+| PooToolsSource/PToolsForm/PTForm.swift:883 | init | public | public init(form: PTFormEngine) { |
+| PooToolsSource/PToolsForm/PTForm.swift:894 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:911 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:924 | init | public | public init(form: PTFormEngine, |
+| PooToolsSource/PToolsForm/PTForm.swift:1032 | func | public | public func refresh() async { |
+| PooToolsSource/PToolsForm/PTForm.swift:1063 | func | public | public func validate() async -> PTFormValidationResult { |
+| PooToolsSource/PToolsForm/PTForm.swift:1080 | func | public | public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws { |
+| PooToolsSource/PToolsForm/PTForm.swift:1106 | func | public | public func focusField(_ id: PTFormFieldID) { |
+| PooToolsSource/PToolsForm/PTForm.swift:1111 | func | public | public func scrollToField(_ id: PTFormFieldID, animated: Bool = true) { |
 | PooToolsSource/PToolsForm/PTFormConfiguration.swift:7 | struct | public | public struct PTFormInsets: Sendable, Codable, Hashable { |
 | PooToolsSource/PToolsForm/PTFormConfiguration.swift:8 | var | public | public var top: CGFloat |
 | PooToolsSource/PToolsForm/PTFormConfiguration.swift:9 | var | public | public var leading: CGFloat |
@@ -5877,11 +5952,11 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:58 | func | public | public func register(_ renderer: any PTFormSectionSupplementaryRenderer) { |
 | PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:62 | func | public | public func renderer(for identifier: String) -> (any PTFormSectionSupplementaryRenderer)? { |
 | PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:66 | func | public | public func makeView(content: PTFormSupplementaryContent, |
-| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:82 | func | public | public func dequeueView(content: PTFormSupplementaryContent, |
-| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:131 | class | public | public final class PTFormDefaultSectionHeader: PTBaseCollectionReusableView { |
-| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:165 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
-| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:176 | class | public | public final class PTFormDefaultSectionFooter: PTBaseCollectionReusableView { |
-| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:204 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:85 | func | public | public func dequeueView(content: PTFormSupplementaryContent, |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:134 | class | public | public final class PTFormDefaultSectionHeader: PTBaseCollectionReusableView { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:168 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:179 | class | public | public final class PTFormDefaultSectionFooter: PTBaseCollectionReusableView { |
+| PooToolsSource/PToolsForm/PTFormSectionRenderer.swift:207 | func | public | public func configure(text: PTFormSupplementaryText, theme: PTFormThemeAdapter) { |
 | PooToolsSource/PToolsForm/PTFormSnapshot.swift:7 | struct | public | public struct PTFormSupplementaryText: Sendable, Hashable { |
 | PooToolsSource/PToolsForm/PTFormSnapshot.swift:8 | var | public | public var title: String? |
 | PooToolsSource/PToolsForm/PTFormSnapshot.swift:9 | var | public | public var subtitle: String? |
@@ -7191,128 +7266,128 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/PToolsUIFoundation/PTRichText.swift:1209 | func | public | public func update(richText: PTRichText) { |
 | PooToolsSource/PToolsUIFoundation/PTRichText.swift:1362 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, |
 | PooToolsSource/PToolsUIFoundation/PTRichText.swift:1441 | enum | public | public enum PTRichTextRenderer { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:14 | struct | public | public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:15 | enum | public | public enum Kind: Codable, Hashable, Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:22 | let | public | public let id: String |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:23 | let | public | public let kind: Kind |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:24 | let | public | public let size: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:25 | let | public | public let accessibilityDescription: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:27 | init | public | public init(id: String = UUID().uuidString, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:41 | enum | public | public enum PTRichTextMediaKind: Sendable, Equatable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:49 | enum | public | public enum PTRichTextVideoPlaybackMode: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:58 | struct | public | public struct PTRichTextMediaDisplayConfiguration { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:59 | var | public | public var preferredSize: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:60 | var | public | public var maxWidth: CGFloat? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:61 | var | public | public var maxHeight: CGFloat? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:62 | var | public | public var contentMode: UIView.ContentMode |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:63 | var | public | public var cornerRadius: CGFloat |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:64 | var | public | public var alignment: PTRichTextAttachmentAlignment |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:65 | var | public | public var estimatedAspectRatio: CGFloat? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:66 | var | public | public var userInfo: [String: String] |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:68 | init | public | public init(preferredSize: CGSize? = nil, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:134 | enum | public | public enum PTRichTextAttachmentAlignment: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:145 | struct | public | public struct PTRichTextImageConfiguration { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:146 | var | public | public var size: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:147 | var | public | public var maxSize: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:148 | var | public | public var placeholder: UIImage? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:149 | var | public | public var failureImage: UIImage? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:150 | var | public | public var contentMode: UIView.ContentMode |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:151 | var | public | public var cornerRadius: CGFloat |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:152 | var | public | public var alignment: PTRichTextAttachmentAlignment |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:153 | var | public | public var estimatedAspectRatio: CGFloat? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:154 | var | public | public var accessibilityLabel: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:155 | var | public | public var userInfo: [String: String] |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:157 | init | public | public init(size: CGSize? = nil, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:195 | struct | public | public struct PTRichTextVideoConfiguration { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:196 | var | public | public var size: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:197 | var | public | public var maxSize: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:198 | var | public | public var posterSource: Any? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:199 | var | public | public var placeholder: UIImage? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:200 | var | public | public var failureImage: UIImage? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:201 | var | public | public var contentMode: UIView.ContentMode |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:202 | var | public | public var cornerRadius: CGFloat |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:203 | var | public | public var showsPlayIcon: Bool |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:204 | var | public | public var showsDuration: Bool |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:205 | var | public | public var thumbnailTime: CMTime? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:206 | var | public | public var thumbnailFrameNumber: Int |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:207 | var | public | public var accessibilityLabel: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:208 | var | public | public var playbackMode: PTRichTextVideoPlaybackMode |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:209 | var | public | public var estimatedAspectRatio: CGFloat? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:211 | init | public | public init(size: CGSize? = nil, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:255 | struct | public | public struct PTRichTextVideoMetadata: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:256 | let | public | public let duration: TimeInterval? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:257 | let | public | public let naturalSize: CGSize? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:258 | let | public | public let isLocal: Bool? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:260 | init | public | public init(duration: TimeInterval? = nil, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:272 | enum | public | public enum PTRichTextMediaError: Error, LocalizedError, Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:279 | var | public | public var errorDescription: String? { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:293 | enum | public | public enum PTRichTextMediaAction: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:301 | enum | public | public enum PTRichTextInteraction: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:306 | typealias | public | public typealias PTRichTextInteractionHandler = @MainActor @Sendable (PTRichTextInteraction) -> Void |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:312 | class | public | public final class PTRichTextMediaAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:313 | let | public | public let id: UUID |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:314 | let | public | public let kind: PTRichTextMediaKind |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:315 | let | public | public let source: Any |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:316 | var | public | public var posterSource: Any? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:317 | var | public | public var displayConfiguration: PTRichTextMediaDisplayConfiguration |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:318 | var | public | public var metadata: PTRichTextVideoMetadata |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:319 | var | public | public var failureImage: UIImage? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:320 | var | public | public var videoConfiguration: PTRichTextVideoConfiguration? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:321 | var | public | public var accessibilityLabel: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:322 | var | public | public var loadState: PTRichTextMediaLoadState = .idle |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:323 | var | public | public var generation: UInt64 = 0 |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:325 | init | public | public init(id: UUID = UUID(), |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:349 | enum | public | public enum PTRichTextMediaLoadState: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:361 | struct | public | public struct PTRichTextVideoLoadResult { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:362 | let | public | public let image: UIImage |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:363 | let | public | public let metadata: PTRichTextVideoMetadata |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:365 | init | public | public init(image: UIImage, metadata: PTRichTextVideoMetadata = .init()) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:375 | class | public | public final class PTRichTextMediaTextAttachment: NSTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:376 | let | public | public let media: PTRichTextMediaAttachment |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:377 | let | public | public let attachmentSize: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:379 | init | public | public init(media: PTRichTextMediaAttachment, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:393 | func | public | public func resolvedAttachment(with image: UIImage, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:404 | class | public | public final class PTRemoteImageTextAttachment: NSTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:405 | let | public | public let identifier: String |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:406 | let | public | public let mediaID: UUID |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:407 | let | public | public let remoteURL: URL |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:408 | let | public | public let attachmentSize: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:410 | init | public | public init(identifier: String, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:431 | func | public | public func resolvedAttachment(with image: UIImage) -> NSTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:478 | struct | public | public struct PTTextViewAttachmentDescriptor: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:479 | let | public | public let id: String |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:480 | let | public | public let size: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:481 | let | public | public let accessibilityDescription: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:482 | let | public | public let makeView: @MainActor @Sendable () -> UIView |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:484 | init | public | public init(id: String, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:498 | func | public | public func makeViewProvider(textAttachment: NSTextAttachment, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:514 | class | public | public final class PTTextAttachmentViewProvider: NSTextAttachmentViewProvider { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:517 | init | public | public init(descriptor: PTTextViewAttachmentDescriptor, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:552 | protocol | public | public protocol PTTextImageLoader: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:559 | typealias | public | public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:562 | struct | public | public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:563 | init | public | public init() {} |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:565 | func | public | public func image(for url: URL) async throws -> UIImage { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:580 | class | public | public final class PTTextAttachmentCoordinator { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:585 | init | public | public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:594 | init | public | public init(imageLoader: @escaping PTTextImageLoadHandler) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:599 | func | public | public func loadRemote(_ descriptor: PTTextAttachmentDescriptor, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:628 | func | public | public func cancel(id: String) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:634 | func | public | public func cancelAll() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:649 | class | public | public final class PTRichTextMediaLoadToken { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:656 | func | public | public func cancel() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:670 | class | public | public final class PTRichTextMediaLoader { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:671 | typealias | public | public typealias ImageLoader = @MainActor @Sendable (_ source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:673 | typealias | public | public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:677 | typealias | public | public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:687 | init | public | public init(imageLoader: @escaping ImageLoader, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:716 | func | public | public func clearCache() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:721 | func | public | public func loadImage(source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:747 | func | public | public func loadVideoPoster(source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:783 | func | public | public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:788 | func | public | public func loadImage(source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:807 | func | public | public func loadVideoPoster(source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:859 | enum | public | public enum PTRichTextVideoPosterRenderer { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:17 | struct | public | public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:18 | enum | public | public enum Kind: Codable, Hashable, Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:25 | let | public | public let id: String |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:26 | let | public | public let kind: Kind |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:27 | let | public | public let size: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:28 | let | public | public let accessibilityDescription: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:30 | init | public | public init(id: String = UUID().uuidString, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:44 | enum | public | public enum PTRichTextMediaKind: Sendable, Equatable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:52 | enum | public | public enum PTRichTextVideoPlaybackMode: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:61 | struct | public | public struct PTRichTextMediaDisplayConfiguration { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:62 | var | public | public var preferredSize: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:63 | var | public | public var maxWidth: CGFloat? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:64 | var | public | public var maxHeight: CGFloat? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:65 | var | public | public var contentMode: UIView.ContentMode |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:66 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:67 | var | public | public var alignment: PTRichTextAttachmentAlignment |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:68 | var | public | public var estimatedAspectRatio: CGFloat? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:69 | var | public | public var userInfo: [String: String] |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:71 | init | public | public init(preferredSize: CGSize? = nil, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:137 | enum | public | public enum PTRichTextAttachmentAlignment: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:148 | struct | public | public struct PTRichTextImageConfiguration { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:149 | var | public | public var size: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:150 | var | public | public var maxSize: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:151 | var | public | public var placeholder: UIImage? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:152 | var | public | public var failureImage: UIImage? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:153 | var | public | public var contentMode: UIView.ContentMode |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:154 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:155 | var | public | public var alignment: PTRichTextAttachmentAlignment |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:156 | var | public | public var estimatedAspectRatio: CGFloat? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:157 | var | public | public var accessibilityLabel: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:158 | var | public | public var userInfo: [String: String] |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:160 | init | public | public init(size: CGSize? = nil, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:198 | struct | public | public struct PTRichTextVideoConfiguration { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:199 | var | public | public var size: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:200 | var | public | public var maxSize: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:201 | var | public | public var posterSource: Any? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:202 | var | public | public var placeholder: UIImage? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:203 | var | public | public var failureImage: UIImage? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:204 | var | public | public var contentMode: UIView.ContentMode |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:205 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:206 | var | public | public var showsPlayIcon: Bool |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:207 | var | public | public var showsDuration: Bool |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:208 | var | public | public var thumbnailTime: CMTime? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:209 | var | public | public var thumbnailFrameNumber: Int |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:210 | var | public | public var accessibilityLabel: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:211 | var | public | public var playbackMode: PTRichTextVideoPlaybackMode |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:212 | var | public | public var estimatedAspectRatio: CGFloat? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:214 | init | public | public init(size: CGSize? = nil, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:258 | struct | public | public struct PTRichTextVideoMetadata: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:259 | let | public | public let duration: TimeInterval? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:260 | let | public | public let naturalSize: CGSize? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:261 | let | public | public let isLocal: Bool? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:263 | init | public | public init(duration: TimeInterval? = nil, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:275 | enum | public | public enum PTRichTextMediaError: Error, LocalizedError, Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:282 | var | public | public var errorDescription: String? { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:296 | enum | public | public enum PTRichTextMediaAction: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:304 | enum | public | public enum PTRichTextInteraction: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:309 | typealias | public | public typealias PTRichTextInteractionHandler = @MainActor @Sendable (PTRichTextInteraction) -> Void |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:315 | class | public | public final class PTRichTextMediaAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:316 | let | public | public let id: UUID |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:317 | let | public | public let kind: PTRichTextMediaKind |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:318 | let | public | public let source: Any |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:319 | var | public | public var posterSource: Any? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:320 | var | public | public var displayConfiguration: PTRichTextMediaDisplayConfiguration |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:321 | var | public | public var metadata: PTRichTextVideoMetadata |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:322 | var | public | public var failureImage: UIImage? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:323 | var | public | public var videoConfiguration: PTRichTextVideoConfiguration? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:324 | var | public | public var accessibilityLabel: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:325 | var | public | public var loadState: PTRichTextMediaLoadState = .idle |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:326 | var | public | public var generation: UInt64 = 0 |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:328 | init | public | public init(id: UUID = UUID(), |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:352 | enum | public | public enum PTRichTextMediaLoadState: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:364 | struct | public | public struct PTRichTextVideoLoadResult { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:365 | let | public | public let image: UIImage |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:366 | let | public | public let metadata: PTRichTextVideoMetadata |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:368 | init | public | public init(image: UIImage, metadata: PTRichTextVideoMetadata = .init()) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:378 | class | public | public final class PTRichTextMediaTextAttachment: NSTextAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:379 | let | public | public let media: PTRichTextMediaAttachment |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:380 | let | public | public let attachmentSize: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:382 | init | public | public init(media: PTRichTextMediaAttachment, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:396 | func | public | public func resolvedAttachment(with image: UIImage, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:407 | class | public | public final class PTRemoteImageTextAttachment: NSTextAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:408 | let | public | public let identifier: String |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:409 | let | public | public let mediaID: UUID |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:410 | let | public | public let remoteURL: URL |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:411 | let | public | public let attachmentSize: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:413 | init | public | public init(identifier: String, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:434 | func | public | public func resolvedAttachment(with image: UIImage) -> NSTextAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:481 | struct | public | public struct PTTextViewAttachmentDescriptor: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:482 | let | public | public let id: String |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:483 | let | public | public let size: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:484 | let | public | public let accessibilityDescription: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:485 | let | public | public let makeView: @MainActor @Sendable () -> UIView |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:487 | init | public | public init(id: String, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:501 | func | public | public func makeViewProvider(textAttachment: NSTextAttachment, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:517 | class | public | public final class PTTextAttachmentViewProvider: NSTextAttachmentViewProvider { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:520 | init | public | public init(descriptor: PTTextViewAttachmentDescriptor, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:555 | protocol | public | public protocol PTTextImageLoader: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:562 | typealias | public | public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:565 | struct | public | public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:566 | init | public | public init() {} |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:568 | func | public | public func image(for url: URL) async throws -> UIImage { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:583 | class | public | public final class PTTextAttachmentCoordinator { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:588 | init | public | public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:597 | init | public | public init(imageLoader: @escaping PTTextImageLoadHandler) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:602 | func | public | public func loadRemote(_ descriptor: PTTextAttachmentDescriptor, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:631 | func | public | public func cancel(id: String) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:637 | func | public | public func cancelAll() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:652 | class | public | public final class PTRichTextMediaLoadToken { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:659 | func | public | public func cancel() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:673 | class | public | public final class PTRichTextMediaLoader { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:674 | typealias | public | public typealias ImageLoader = @MainActor @Sendable (_ source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:676 | typealias | public | public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:680 | typealias | public | public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:696 | init | public | public init(imageLoader: @escaping ImageLoader, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:725 | func | public | public func clearCache() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:730 | func | public | public func loadImage(source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:756 | func | public | public func loadVideoPoster(source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:792 | func | public | public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:797 | func | public | public func loadImage(source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:816 | func | public | public func loadVideoPoster(source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:868 | enum | public | public enum PTRichTextVideoPosterRenderer { |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:17 | typealias | public | public typealias ConstraintView = UIView |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:18 | typealias | public | public typealias ConstraintEdgeInsets = UIEdgeInsets |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:24 | enum | public | public enum PTUIFoundationContext { |
@@ -8151,29 +8226,29 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Router/PTRouterManager.swift:16 | let | public | public let kSADelegateClassSensorsSuffix = "_CN.SENSORSDATA" |
 | PooToolsSource/Router/PTRouterManager.swift:18 | let | public | public let kSAppleSuffix = "com.apple" |
 | PooToolsSource/Router/PTRouterManager.swift:21 | let | public | public let kSCocoaPodsSuffix = "org.cocoapods" |
-| PooToolsSource/Router/PTRouterManager.swift:28 | class | public | public class PTRouterManager: NSObject { |
-| PooToolsSource/Router/PTRouterManager.swift:33 | var | public | public var useCache: Bool = false |
-| PooToolsSource/Router/PTRouterManager.swift:64 | class | public | public class func registerRouterMap(_ excludeCocoapods: Bool = false, |
-| PooToolsSource/Router/PTRouterManager.swift:162 | class | public | public class func loadRouterClass(excludeCocoapods: Bool = false, |
-| PooToolsSource/Router/PTRouterManager.swift:212 | class | public | public class func fetchRouterRegisterClass(_ excludeCocoapods: Bool = false, |
-| PooToolsSource/Router/PTRouterManager.swift:311 | class | public | public class func registerServices(excludeCocoapods: Bool = false) { |
+| PooToolsSource/Router/PTRouterManager.swift:24 | class | public | public class PTRouterManager: NSObject { |
+| PooToolsSource/Router/PTRouterManager.swift:29 | var | public | public var useCache: Bool = false |
+| PooToolsSource/Router/PTRouterManager.swift:60 | class | public | public class func registerRouterMap(_ excludeCocoapods: Bool = false, |
+| PooToolsSource/Router/PTRouterManager.swift:158 | class | public | public class func loadRouterClass(excludeCocoapods: Bool = false, |
+| PooToolsSource/Router/PTRouterManager.swift:208 | class | public | public class func fetchRouterRegisterClass(_ excludeCocoapods: Bool = false, |
+| PooToolsSource/Router/PTRouterManager.swift:307 | class | public | public class func registerServices(excludeCocoapods: Bool = false) { |
 | PooToolsSource/Router/PTRouterPattern.swift:11 | class | public | public class PTRouterPattern { |
 | PooToolsSource/Router/PTRouterPattern.swift:12 | var | public | public var patternString: String |
 | PooToolsSource/Router/PTRouterPattern.swift:13 | var | public | public var classString: String |
 | PooToolsSource/Router/PTRouterPattern.swift:14 | var | public | public var priority: UInt |
 | PooToolsSource/Router/PTRouterPattern.swift:21 | init | public | public init(_ string: String, classString: String, priority: UInt = 0) { |
 | PooToolsSource/Router/PTRouterPattern.swift:54 | func | public | public func matchResult(for requestURL: String) -> (matched: Bool, queries: [String: Sendable]) { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:13 | class | public | public final class PTLegacyRouterServiceBox: @unchecked Sendable { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:14 | let | public | @MainActor public let instance: NSObject |
-| PooToolsSource/Router/PTRouterServiceManager.swift:16 | init | public | @MainActor public init(instance: NSObject) { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:21 | typealias | public | public typealias PTServiceCreator = @Sendable () -> any Sendable |
-| PooToolsSource/Router/PTRouterServiceManager.swift:23 | enum | public | public enum PTServiceScope { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:29 | actor | public | public actor PTRouterServiceManager { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:40 | func | public | public func registerService<Service>(_ serviceType: Service.Type, scope: PTServiceScope = .singleton, creator: @Sendable @escaping () -> Service) { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:45 | func | public | public func getService<Service: Sendable>(_ serviceType: Service.Type) -> Service? { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:175 | class | public | public class PTServiceActionMapper { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:182 | func | public | public func register(protocolName: String, methodName: String, action: @escaping (Any?, Any?) -> Any?) { |
-| PooToolsSource/Router/PTRouterServiceManager.swift:188 | func | public | public func execute(protocolName: String, methodName: String, param: Any?, otherParam: Any?) -> (any Sendable)? { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:15 | class | public | public final class PTLegacyRouterServiceBox: Sendable { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:16 | let | public | @MainActor public let instance: NSObject |
+| PooToolsSource/Router/PTRouterServiceManager.swift:18 | init | public | @MainActor public init(instance: NSObject) { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:23 | typealias | public | public typealias PTServiceCreator = @Sendable () -> any Sendable |
+| PooToolsSource/Router/PTRouterServiceManager.swift:25 | enum | public | public enum PTServiceScope { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:31 | actor | public | public actor PTRouterServiceManager { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:42 | func | public | public func registerService<Service>(_ serviceType: Service.Type, scope: PTServiceScope = .singleton, creator: @Sendable @escaping () -> Service) { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:47 | func | public | public func getService<Service: Sendable>(_ serviceType: Service.Type) -> Service? { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:177 | class | public | public class PTServiceActionMapper { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:184 | func | public | public func register(protocolName: String, methodName: String, action: @escaping (Any?, Any?) -> Any?) { |
+| PooToolsSource/Router/PTRouterServiceManager.swift:190 | func | public | public func execute(protocolName: String, methodName: String, param: Any?, otherParam: Any?) -> (any Sendable)? { |
 | PooToolsSource/Router/PTRouterServiceProtocol.swift:13 | protocol | public | public protocol PTRouterServiceProtocol: NSObjectProtocol { |
 | PooToolsSource/Router/PTRouterServiceProtocol.swift:19 | protocol | public | public protocol PTRoutableController { |
 | PooToolsSource/Router/PTRouterServiceProtocol.swift:24 | protocol | public | public protocol PTServiceProtocol: AnyObject {} |
@@ -9022,47 +9097,47 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/Slider/PTRangeSeekSlider.swift:24 | class | open | open class Impact { |
 | PooToolsSource/Slider/PTRangeSeekSlider.swift:25 | enum | public | public enum ImpactStyle { |
 | PooToolsSource/Slider/PTRangeSeekSlider.swift:46 | func | public | public func feedback(_ style: ImpactStyle) { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:60 | func | public | public func prepare(_ style: ImpactStyle) { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:67 | class | open | open class Selection { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:68 | func | public | public func feedback() { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:75 | func | public | public func prepare() { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:81 | class | open | open class Notification { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:82 | enum | public | public enum NotificationType { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:94 | func | public | public func feedback(_ type: NotificationType) { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:108 | func | public | public func prepare() { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:118 | protocol | public | public protocol PTRangeSeekSliderDelegate: AnyObject { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:141 | class | open | open class PTRangeSeekSlider: UIControl { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:166 | var | open | @IBInspectable open var minValue: CGFloat = 0.0 { didSet { refresh() } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:167 | var | open | @IBInspectable open var maxValue: CGFloat = 100.0 { didSet { refresh() } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:169 | var | open | @IBInspectable open var selectedMinValue: CGFloat = 0.0 { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:173 | var | open | @IBInspectable open var selectedMaxValue: CGFloat = 100.0 { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:177 | var | open | open var minLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:184 | var | open | open var maxLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:191 | var | open | open var numberFormatter: NumberFormatter = { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:198 | var | open | @IBInspectable open var hideLabels: Bool = false { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:205 | var | open | @IBInspectable open var labelsFixed: Bool = false |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:206 | var | open | @IBInspectable open var minDistance: CGFloat = 0.0 { didSet { if minDistance < 0.0 { minDistance = 0.0 } } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:207 | var | open | @IBInspectable open var maxDistance: CGFloat = .greatestFiniteMagnitude { didSet { if maxDistance < 0.0 { maxDistance = .greatestFiniteMagnitude } } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:209 | var | open | @IBInspectable open var minLabelColor: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:210 | var | open | @IBInspectable open var maxLabelColor: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:211 | var | open | @IBInspectable open var handleColor: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:212 | var | open | @IBInspectable open var handleBorderColor: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:213 | var | open | @IBInspectable open var colorBetweenHandles: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:214 | var | open | @IBInspectable open var initialColor: UIColor? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:216 | var | open | @IBInspectable open var disableRange: Bool = false { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:223 | var | open | @IBInspectable open var enableStep: Bool = false |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:224 | var | open | @IBInspectable open var step: CGFloat = 0.0 |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:226 | var | open | @IBInspectable open var handleImage: UIImage? { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:237 | var | open | @IBInspectable open var handleDiameter: CGFloat = 16.0 { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:246 | var | open | @IBInspectable open var selectedHandleDiameterMultiplier: CGFloat = 1.7 |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:248 | var | open | @IBInspectable open var lineHeight: CGFloat = 1.0 { didSet { updateLineHeight() } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:249 | var | open | @IBInspectable open var handleBorderWidth: CGFloat = 0.0 { |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:255 | var | open | @IBInspectable open var labelPadding: CGFloat = 8.0 { didSet { updateLabelPositions() } } |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:257 | var | open | @IBInspectable open var minLabelAccessibilityLabel: String? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:258 | var | open | @IBInspectable open var maxLabelAccessibilityLabel: String? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:259 | var | open | @IBInspectable open var minLabelAccessibilityHint: String? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:260 | var | open | @IBInspectable open var maxLabelAccessibilityHint: String? |
-| PooToolsSource/Slider/PTRangeSeekSlider.swift:397 | func | open | open func setupStyle() {} |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:56 | func | public | public func prepare(_ style: ImpactStyle) { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:63 | class | open | open class Selection { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:64 | func | public | public func feedback() { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:73 | func | public | public func prepare() { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:79 | class | open | open class Notification { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:80 | enum | public | public enum NotificationType { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:92 | func | public | public func feedback(_ type: NotificationType) { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:101 | func | public | public func prepare() { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:111 | protocol | public | public protocol PTRangeSeekSliderDelegate: AnyObject { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:134 | class | open | open class PTRangeSeekSlider: UIControl { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:159 | var | open | @IBInspectable open var minValue: CGFloat = 0.0 { didSet { refresh() } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:160 | var | open | @IBInspectable open var maxValue: CGFloat = 100.0 { didSet { refresh() } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:162 | var | open | @IBInspectable open var selectedMinValue: CGFloat = 0.0 { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:166 | var | open | @IBInspectable open var selectedMaxValue: CGFloat = 100.0 { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:170 | var | open | open var minLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:177 | var | open | open var maxLabelFont: UIFont = UIFont.systemFont(ofSize: 12.0) { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:184 | var | open | open var numberFormatter: NumberFormatter = { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:191 | var | open | @IBInspectable open var hideLabels: Bool = false { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:198 | var | open | @IBInspectable open var labelsFixed: Bool = false |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:199 | var | open | @IBInspectable open var minDistance: CGFloat = 0.0 { didSet { if minDistance < 0.0 { minDistance = 0.0 } } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:200 | var | open | @IBInspectable open var maxDistance: CGFloat = .greatestFiniteMagnitude { didSet { if maxDistance < 0.0 { maxDistance = .greatestFiniteMagnitude } } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:202 | var | open | @IBInspectable open var minLabelColor: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:203 | var | open | @IBInspectable open var maxLabelColor: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:204 | var | open | @IBInspectable open var handleColor: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:205 | var | open | @IBInspectable open var handleBorderColor: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:206 | var | open | @IBInspectable open var colorBetweenHandles: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:207 | var | open | @IBInspectable open var initialColor: UIColor? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:209 | var | open | @IBInspectable open var disableRange: Bool = false { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:216 | var | open | @IBInspectable open var enableStep: Bool = false |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:217 | var | open | @IBInspectable open var step: CGFloat = 0.0 |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:219 | var | open | @IBInspectable open var handleImage: UIImage? { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:230 | var | open | @IBInspectable open var handleDiameter: CGFloat = 16.0 { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:239 | var | open | @IBInspectable open var selectedHandleDiameterMultiplier: CGFloat = 1.7 |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:241 | var | open | @IBInspectable open var lineHeight: CGFloat = 1.0 { didSet { updateLineHeight() } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:242 | var | open | @IBInspectable open var handleBorderWidth: CGFloat = 0.0 { |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:248 | var | open | @IBInspectable open var labelPadding: CGFloat = 8.0 { didSet { updateLabelPositions() } } |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:250 | var | open | @IBInspectable open var minLabelAccessibilityLabel: String? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:251 | var | open | @IBInspectable open var maxLabelAccessibilityLabel: String? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:252 | var | open | @IBInspectable open var minLabelAccessibilityHint: String? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:253 | var | open | @IBInspectable open var maxLabelAccessibilityHint: String? |
+| PooToolsSource/Slider/PTRangeSeekSlider.swift:390 | func | open | open func setupStyle() {} |
 | PooToolsSource/Slider/PTSlider.swift:12 | enum | public | public enum PTSliderTitlePosition: Int { |
 | PooToolsSource/Slider/PTSlider.swift:18 | class | public | public class PTSlider: UISlider { |
 | PooToolsSource/Slider/PTSlider.swift:23 | var | public | public var titleStyle: PTSliderTitlePosition = .top { |
@@ -9590,9 +9665,9 @@ Generated at: 2026-10-01T14:20:09Z
 | PooToolsSource/iOS17Tips/PTTip.swift:96 | var | public | public var message: Text? { |
 | PooToolsSource/iOS17Tips/PTTip.swift:103 | var | public | public var asset: Image? { |
 | PooToolsSource/iOS17Tips/PTTip.swift:109 | class | public | public class PTTip: NSObject { |
-| PooToolsSource/iOS17Tips/PTTip.swift:120 | func | public | public func appdelegateTipSet() { |
-| PooToolsSource/iOS17Tips/PTTip.swift:134 | func | public | @MainActor public func showTip(tips: any Tip, |
-| PooToolsSource/iOS17Tips/PTTip.swift:159 | func | public | public func showTipsInView(tips: any Tip, |
+| PooToolsSource/iOS17Tips/PTTip.swift:126 | func | public | public func appdelegateTipSet() { |
+| PooToolsSource/iOS17Tips/PTTip.swift:140 | func | public | @MainActor public func showTip(tips: any Tip, |
+| PooToolsSource/iOS17Tips/PTTip.swift:167 | func | public | public func showTipsInView(tips: any Tip, |
 
 ## 兼容规则
 

@@ -45,16 +45,12 @@ open class TapticEngine {
 
         public func feedback(_ style: ImpactStyle) {
             updateGeneratorIfNeeded(style)
-            switch style.feedbackStyle {
-            case .light:
-                PTFeedbackCenter.shared.emit(.selectionChanged)
-            case .medium:
-                PTFeedbackCenter.shared.emit(.submit)
-            case .heavy:
-                PTFeedbackCenter.shared.emit(.toggle)
-            default:
-                PTFeedbackCenter.shared.emit(.success)
-            }
+            // English: Keep this standalone target independent from the Core feedback module.
+            // Español: Mantén este destino independiente del módulo de feedback de Core.
+            // 中文：保持该独立 target 不依赖 Core 反馈模块。
+            let generator = UIImpactFeedbackGenerator(style: style.feedbackStyle)
+            generator.prepare()
+            generator.impactOccurred()
         }
 
         public func prepare(_ style: ImpactStyle) {
@@ -66,10 +62,12 @@ open class TapticEngine {
     @MainActor
     open class Selection {
         public func feedback() {
-            // English: Preserve the legacy wrapper while routing selection feedback centrally.
-            // Español: Conserva el wrapper heredado y centraliza la respuesta de selección.
-            // 中文：保留旧包装器，同时集中处理选择反馈。
-            PTFeedbackCenter.shared.emit(.selectionChanged)
+            // English: Use UIKit's native selection feedback in the standalone target.
+            // Español: Usa la respuesta nativa de selección de UIKit en el destino independiente.
+            // 中文：独立 target 使用 UIKit 原生的选择反馈。
+            let generator = UISelectionFeedbackGenerator()
+            generator.prepare()
+            generator.selectionChanged()
         }
 
         public func prepare() {
@@ -92,17 +90,12 @@ open class TapticEngine {
         }
 
         public func feedback(_ type: NotificationType) {
-            // English: Map the legacy notification enum to the shared semantic backend.
-            // Español: Mapea el enum heredado de notificación al backend semántico compartido.
-            // 中文：将旧通知枚举映射到共享的语义反馈后端。
-            switch type {
-            case .success:
-                PTFeedbackCenter.shared.emit(.success)
-            case .warning:
-                PTFeedbackCenter.shared.emit(.warning)
-            case .error:
-                PTFeedbackCenter.shared.emit(.error)
-            }
+            // English: Use UIKit's native notification feedback in the standalone target.
+            // Español: Usa la respuesta nativa de notificación de UIKit en el destino independiente.
+            // 中文：独立 target 使用 UIKit 原生的通知反馈。
+            let generator = UINotificationFeedbackGenerator()
+            generator.prepare()
+            generator.notificationOccurred(type.feedbackType)
         }
 
         public func prepare() {

@@ -2,13 +2,13 @@
 module: "PToolsModelCombine"
 module_id: "ptools-model-combine"
 language: "es"
-status: "review"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsModelCombine"
-cocoapods_subspec: "null"
-source: "manifest-only"
-category: "unclassified"
+cocoapods_subspec: "PToolsModelCombine"
+source: "PooToolsSource/PToolsModelCombine"
+category: "model-adapter"
 last_reviewed: "2026-09-28"
 canonical: false
 canonical_source: "README.en.md"
@@ -20,14 +20,14 @@ document_schema_version: 1
 
 ## 1. Descripción
 
-PToolsModelCombine es un módulo PTools de categoría unclassified. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
+PToolsModelCombine es un módulo PTools de categoría model-adapter. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
 
 ## 2. Requisitos
 
 - Plataforma: iOS 17.0+
 - Swift: 6+
-- Categoría: `unclassified`
-- Estado: `review`
+- Categoría: `model-adapter`
+- Estado: `stable`
 
 ## 3. Instalación
 
@@ -40,7 +40,7 @@ import PToolsModelCombine
 CocoaPods:
 
 ```ruby
-# No standalone CocoaPods subspec is published for this product.
+pod 'PooTools/PToolsModelCombine'
 ```
 
 ## 4. Importación
@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PToolsMo
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: PToolsModelCore.
 
 ## 7. API principales
 

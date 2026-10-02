@@ -20,9 +20,16 @@
         "locations": []
       },
       "canonicalReplacementExists": true,
-      "compatibilityForwarding": false,
+      "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 0,
+      "declarationLocations": [],
+      "canonicalEvidence": [
+        "PooToolsSource/Debug/PTDebugViewController.swift:40",
+        "PooToolsSource/NetWork/Network.swift:495"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "Network.socketGobalUrl",
@@ -42,19 +49,24 @@
         "locations": []
       },
       "canonicalReplacementExists": true,
-      "compatibilityForwarding": false,
+      "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 0,
+      "declarationLocations": [],
+      "canonicalEvidence": [
+        "PooToolsSource/Debug/PTDebugViewController.swift:67",
+        "PooToolsSource/SocketKit/PTSocketManager.swift:87"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "GobalNavControl",
       "replacement": "globalNavControl",
       "firstDeprecated": "5.x",
       "internalUsage": {
-        "count": 1,
-        "locations": [
-          "PooToolsSource/Base/PTBaseNavControl.swift:166"
-        ]
+        "count": 0,
+        "locations": []
       },
       "exampleUsage": {
         "count": 0,
@@ -68,18 +80,27 @@
       "canonicalReplacementExists": true,
       "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 1,
+      "declarationLocations": [
+        "PooToolsSource/Base/PTBaseNavControl.swift:166"
+      ],
+      "canonicalEvidence": [
+        "PooToolsSource/Base/PTBaseNavControl.swift:119",
+        "PooToolsSource/Base/PTBaseNavControl.swift:165",
+        "PooToolsSource/Base/PTBaseNavControl.swift:169",
+        "PooToolsSource/Base/PTBaseNavControl.swift:25",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsCropControl.swift:67"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "gobalWebImageLoadOption",
       "replacement": "webImageLoadOptions",
       "firstDeprecated": "5.x",
       "internalUsage": {
-        "count": 2,
-        "locations": [
-          "PooToolsSource/Base/PTAppBaseConfig.swift:108",
-          "PooToolsSource/Debug/PTDevFunction.swift:34"
-        ]
+        "count": 0,
+        "locations": []
       },
       "exampleUsage": {
         "count": 0,
@@ -93,19 +114,32 @@
       "canonicalReplacementExists": true,
       "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 2,
+      "declarationLocations": [
+        "PooToolsSource/Base/PTAppBaseConfig.swift:108",
+        "PooToolsSource/Debug/PTDevFunction.swift:34"
+      ],
+      "canonicalEvidence": [
+        "PooToolsSource/Base/PTAppBaseConfig.swift:107",
+        "PooToolsSource/Base/PTAppBaseConfig.swift:110",
+        "PooToolsSource/Base/PTAppBaseConfig.swift:97",
+        "PooToolsSource/Category/UIButton+PTEX.swift:51",
+        "PooToolsSource/Category/UIImageView+PTEX.swift:40",
+        "PooToolsSource/Debug/PTDebugFunction.swift:709",
+        "PooToolsSource/Debug/PTDevFunction.swift:20",
+        "PooToolsSource/Debug/PTDevFunction.swift:33",
+        "PooToolsSource/Debug/PTDevFunction.swift:35"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "heightlightColor",
       "replacement": "highlightColor",
       "firstDeprecated": "5.x",
       "internalUsage": {
-        "count": 3,
-        "locations": [
-          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:73",
-          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:88",
-          "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:98"
-        ]
+        "count": 0,
+        "locations": []
       },
       "exampleUsage": {
         "count": 0,
@@ -119,17 +153,31 @@
       "canonicalReplacementExists": true,
       "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 2,
+      "declarationLocations": [
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:73",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:88"
+      ],
+      "canonicalEvidence": [
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:337",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:70",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:72",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:74",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:75",
+        "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:98",
+        "PooToolsSource/Base/PTCollectionViewSkeleton.swift:123",
+        "PooToolsSource/Base/PTCollectionViewSkeleton.swift:125"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "netRequsetTime",
       "replacement": "requestTimeout",
       "firstDeprecated": "5.x",
       "internalUsage": {
-        "count": 1,
-        "locations": [
-          "PooToolsSource/NetWork/NetworkTypes.swift:220"
-        ]
+        "count": 0,
+        "locations": []
       },
       "exampleUsage": {
         "count": 0,
@@ -143,46 +191,34 @@
       "canonicalReplacementExists": true,
       "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 1,
+      "declarationLocations": [
+        "PooToolsSource/NetWork/NetworkTypes.swift:220"
+      ],
+      "canonicalEvidence": [
+        "PooToolsSource/NetWork/Network.swift:273",
+        "PooToolsSource/NetWork/NetworkTypes.swift:193",
+        "PooToolsSource/NetWork/NetworkTypes.swift:219",
+        "PooToolsSource/NetWork/NetworkTypes.swift:221",
+        "PooToolsSource/NetWork/NetworkTypes.swift:222",
+        "PooToolsSource/NetWork/NetworkTypes.swift:261",
+        "PooToolsSource/NetWork/NetworkTypes.swift:273",
+        "PooToolsSource/NetWork/PTNetworkArchitecture.swift:14",
+        "PooToolsSource/NetWork/PTNetworkArchitecture.swift:24",
+        "PooToolsSource/NetWork/PTNetworkArchitecture.swift:33",
+        "PooToolsSource/NetWork/PTNetworkArchitecture.swift:45",
+        "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift:51"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "PTCoreUserDefultsWrapper",
       "replacement": "PTCoreUserDefaultsWrapper",
       "firstDeprecated": "5.x",
       "internalUsage": {
-        "count": 30,
-        "locations": [
-          "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:408",
-          "PooToolsSource/Core/PTAppUserdefault.swift:43",
-          "PooToolsSource/Core/PTAppUserdefault.swift:45",
-          "PooToolsSource/Core/PTAppUserdefault.swift:133",
-          "PooToolsSource/Debug/PTDebugFunction.swift:50",
-          "PooToolsSource/Debug/PTDebugFunction.swift:70",
-          "PooToolsSource/Debug/PTDebugViewController.swift:38",
-          "PooToolsSource/Debug/PTDebugViewController.swift:65",
-          "PooToolsSource/Debug/PTDebugViewController.swift:109",
-          "PooToolsSource/Debug/PTDebugViewController.swift:129",
-          "PooToolsSource/Debug/PTDebugViewController.swift:138",
-          "PooToolsSource/Debug/PTDebugViewController.swift:150",
-          "PooToolsSource/Debug/PTDebugViewController.swift:170",
-          "PooToolsSource/Debug/PTDebugViewController.swift:179",
-          "PooToolsSource/Debug/PTDevFunction.swift:22",
-          "PooToolsSource/Language/PTLanguage.swift:307",
-          "PooToolsSource/Language/PTLanguage.swift:310",
-          "PooToolsSource/Language/PTLanguage.swift:317",
-          "PooToolsSource/Language/PTLanguage.swift:320",
-          "PooToolsSource/Language/PTLanguage.swift:324",
-          "PooToolsSource/NetWork/Network.swift:341",
-          "PooToolsSource/NetWork/Network.swift:360",
-          "PooToolsSource/NetWork/NetworkTypes.swift:84",
-          "PooToolsSource/NetWork/NetworkTypes.swift:92",
-          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:103",
-          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:107",
-          "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:109",
-          "PooToolsSource/PermissionCore/PTPermissionViewController.swift:200",
-          "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:30",
-          "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:36"
-        ]
+        "count": 0,
+        "locations": []
       },
       "exampleUsage": {
         "count": 0,
@@ -196,11 +232,48 @@
       "canonicalReplacementExists": true,
       "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 3,
+      "declarationLocations": [
+        "PooToolsSource/Core/PTAppUserdefault.swift:43",
+        "PooToolsSource/Core/PTAppUserdefault.swift:45",
+        "PooToolsSource/Core/PTAppUserdefault.swift:133"
+      ],
+      "canonicalEvidence": [
+        "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:531",
+        "PooToolsSource/Core/PTAppUserdefault.swift:133",
+        "PooToolsSource/Debug/PTDebugFunction.swift:50",
+        "PooToolsSource/Debug/PTDebugFunction.swift:70",
+        "PooToolsSource/Debug/PTDebugViewController.swift:109",
+        "PooToolsSource/Debug/PTDebugViewController.swift:129",
+        "PooToolsSource/Debug/PTDebugViewController.swift:138",
+        "PooToolsSource/Debug/PTDebugViewController.swift:150",
+        "PooToolsSource/Debug/PTDebugViewController.swift:170",
+        "PooToolsSource/Debug/PTDebugViewController.swift:179",
+        "PooToolsSource/Debug/PTDebugViewController.swift:38",
+        "PooToolsSource/Debug/PTDebugViewController.swift:65",
+        "PooToolsSource/Language/PTLanguage.swift:307",
+        "PooToolsSource/Language/PTLanguage.swift:310",
+        "PooToolsSource/Language/PTLanguage.swift:317",
+        "PooToolsSource/Language/PTLanguage.swift:320",
+        "PooToolsSource/Language/PTLanguage.swift:324",
+        "PooToolsSource/NetWork/Network.swift:341",
+        "PooToolsSource/NetWork/Network.swift:360",
+        "PooToolsSource/NetWork/NetworkTypes.swift:84",
+        "PooToolsSource/NetWork/NetworkTypes.swift:92",
+        "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:103",
+        "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:107",
+        "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:109",
+        "PooToolsSource/PermissionCore/PTPermissionViewController.swift:200",
+        "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:30",
+        "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:36"
+      ],
+      "kind": "swiftSymbol"
     },
     {
       "symbol": "BilogyID",
       "replacement": "BioID",
+      "kind": "moduleAlias",
       "firstDeprecated": "5.x",
       "internalUsage": {
         "count": 0,
@@ -215,14 +288,21 @@
         "count": 0,
         "locations": []
       },
-      "canonicalReplacementExists": false,
-      "compatibilityForwarding": false,
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 0,
+      "declarationLocations": [],
+      "canonicalEvidence": [
+        "Package.swift",
+        "PooTools.podspec"
+      ]
     },
     {
       "symbol": "MeidaPermission",
       "replacement": "MediaPermission",
+      "kind": "moduleAlias",
       "firstDeprecated": "5.x",
       "internalUsage": {
         "count": 0,
@@ -237,10 +317,17 @@
         "count": 0,
         "locations": []
       },
-      "canonicalReplacementExists": false,
-      "compatibilityForwarding": false,
+      "canonicalReplacementExists": true,
+      "compatibilityForwarding": true,
       "migrationDoc": "CHANGELOG.md",
-      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0."
+      "consumerEvidence": "Deterministic source/example/test scan at VERSION 5.59.0.",
+      "declarationCount": 0,
+      "declarationLocations": [],
+      "canonicalEvidence": [
+        "Package.swift",
+        "PooTools.podspec",
+        "Scripts/module_registry.json"
+      ]
     }
   ]
 }

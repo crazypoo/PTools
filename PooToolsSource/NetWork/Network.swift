@@ -338,7 +338,7 @@ public final class Network: @unchecked Sendable {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTBaseURLMode {
             case .Development:
-                let url_debug:String = PTCoreUserDefultsWrapper.shared.AppRequestUrl
+                let url_debug:String = PTCoreUserDefaultsWrapper.shared.AppRequestUrl
                 return url_debug.isEmpty ? Network.share.config.serverAddress_dev : url_debug
             case .Test:         return Network.share.config.serverAddress_dev
             case .Distribution: return Network.share.config.serverAddress
@@ -357,7 +357,7 @@ public final class Network: @unchecked Sendable {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTSocketURLMode {
             case .Development:
-                let url_debug:String = PTCoreUserDefultsWrapper.shared.AppSocketUrl
+                let url_debug:String = PTCoreUserDefaultsWrapper.shared.AppSocketUrl
                 return url_debug.isEmpty ? Network.share.config.socketAddress_dev : url_debug
             case .Test:         return Network.share.config.socketAddress_dev
             case .Distribution: return Network.share.config.socketAddress

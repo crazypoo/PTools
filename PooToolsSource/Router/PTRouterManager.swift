@@ -20,10 +20,6 @@ public let kSAppleSuffix = "com.apple"
 /// 排除cocoaPods相关库
 public let kSCocoaPodsSuffix = "org.cocoapods"
 
-private struct PTServiceTypeBox: @unchecked Sendable {
-    let cls: any PTRouterServiceProtocol.Type
-}
-
 @MainActor
 public class PTRouterManager: NSObject {
     

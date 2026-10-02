@@ -197,7 +197,7 @@ public class PTPermissionViewController: PTListViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTCoreUserDefultsWrapper.shared.AppFirstPermissionShowed = true
+        PTCoreUserDefaultsWrapper.shared.AppFirstPermissionShowed = true
     }
     
     public override func viewDidDisappear(_ animated: Bool) {

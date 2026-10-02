@@ -81,7 +81,7 @@ public typealias FileDownloadSuccess = @MainActor @Sendable (AFDownloadResponse<
 public typealias FileDownloadFail = @MainActor @Sendable (Error?) -> Void
 
 public var PTBaseURLMode: NetworkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
+    guard let sliderValue = PTCoreUserDefaultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     if sliderValue == "2" { return .Test }
     if sliderValue == "3" { return .Development }
@@ -89,7 +89,7 @@ public var PTBaseURLMode: NetworkEnvironment {
 }
 
 public var PTSocketURLMode: NetworkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppSocketServiceIdentifier else { return .Distribution }
+    guard let sliderValue = PTCoreUserDefaultsWrapper.shared.AppSocketServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     if sliderValue == "2" { return .Test }
     if sliderValue == "3" { return .Development }

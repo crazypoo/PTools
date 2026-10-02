@@ -33,7 +33,6 @@ PooToolsSource/Vision/PTVision.swift
 
 # compatibility-boundary: legacy framework, runtime and callback adapters
 PooToolsSource/Calendar/PTEventOnCalendar.swift
-PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift
 # Core/OSSVoice subclasses AVSpeechSynthesisVoice, an SDK reference type that cannot
 # declare native Sendable conformance. Its mutable compatibility properties are guarded
 # by an NSRecursiveLock; migrate callers to OSSVoiceInfo when the legacy class is retired.
@@ -61,8 +60,6 @@ PooToolsSource/Inspector/MainThreadOperation.swift
 PooToolsSource/MXMetricKitManager/MetricsManager.swift
 PooToolsSource/OSSKit/OSSSpeech.swift
 PooToolsSource/OSSKit/OSSUtterance.swift
-PooToolsSource/Router/PTRouterManager.swift
-PooToolsSource/Router/PTRouterServiceManager.swift
 # URLSession delegate proxy only: immutable trust policy and Sendable event closure cross the Foundation callback boundary; Socket state remains actor-owned.
 # Proxy del delegado de URLSession únicamente: solo cruzan la frontera de callbacks una política de confianza inmutable y un cierre de eventos Sendable; el estado queda en el actor.
 # 仅用于 URLSession 委托代理：跨 Foundation 回调边界的只有不可变信任策略和 Sendable 事件闭包，Socket 状态仍由 actor 独占。

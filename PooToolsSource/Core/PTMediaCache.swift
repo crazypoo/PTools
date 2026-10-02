@@ -4,6 +4,9 @@
 //
 
 import Foundation
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 // English: Cache variants are part of the key so originals, thumbnails, GIF frames, and Live Photo resources never collide.
 // Español: Las variantes forman parte de la clave para que originales, miniaturas, GIF y Live Photo nunca colisionen.

@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
 Source version: 5.59.0
-Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
 Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Generated at: 2026-10-01T14:20:09Z
+Generated at: 2026-10-01T22:10:22Z
 -->
 
 # PTools 当前依赖图

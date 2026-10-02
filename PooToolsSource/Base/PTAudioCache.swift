@@ -8,6 +8,9 @@
 
 import Foundation
 import AVFoundation
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 // Progress callback shared by Core media caches.
 // Callback de progreso compartido por las cachés multimedia de Core.
@@ -128,6 +131,12 @@ public final class PTAudioCacheFileManager {
 
     public static let shared = PTAudioCacheFileManager()
 
+    // English: The audio file policy documents the bounded disk contract for this adapter.
+    // Español: La política de audio documenta el contrato de disco acotado de este adaptador.
+    // 中文：音频文件策略明确该适配器使用的有界磁盘契约。
+    fileprivate let cachePolicy = PTCachePolicy(namespace: "media.audio-file",
+                                                 diskLimit: 256 * 1024 * 1024,
+                                                 diskTarget: 192 * 1024 * 1024)
     private let cacheDirectory: URL
 
     private init() {
@@ -176,6 +185,7 @@ public final class PTAudioCacheFileManager {
                                                                  progress: progress)
 
                 guard PTAudioTranscoder.needTranscode(localURL) else {
+                    self.trimCacheIfNeeded()
                     completion(localURL)
                     return
                 }
@@ -183,10 +193,37 @@ public final class PTAudioCacheFileManager {
                 try? FileManager.default.removeItem(at: finalM4AURL)
                 let resultURL = await PTAudioTranscoder.transcodeToM4A(from: localURL, to: finalM4AURL)
                 try? FileManager.default.removeItem(at: localURL)
+                self.trimCacheIfNeeded()
                 completion(resultURL)
             } catch {
                 completion(nil)
             }
+        }
+    }
+
+    // English: Trim the audio directory after a successful download without scanning it on every read.
+    // Español: Recorta el directorio de audio después de una descarga correcta sin escanearlo en cada lectura.
+    // 中文：仅在下载成功后整理音频目录，读取缓存时不重复扫描。
+    private func trimCacheIfNeeded() {
+        guard let maximumSize = cachePolicy.diskLimit,
+              let directoryTarget = cachePolicy.diskTarget else { return }
+        let files = (try? FileManager.default.contentsOfDirectory(
+            at: cacheDirectory,
+            includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
+            options: [.skipsHiddenFiles]
+        )) ?? []
+        var entries = files.compactMap { url -> (url: URL, size: Int64, date: Date)? in
+            guard let values = try? url.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]),
+                  let size = values.fileSize,
+                  let date = values.contentModificationDate else { return nil }
+            return (url, Int64(size), date)
+        }
+        var totalSize = entries.reduce(Int64.zero) { $0 + $1.size }
+        guard totalSize > maximumSize else { return }
+        entries.sort { $0.date < $1.date }
+        for entry in entries where totalSize > directoryTarget {
+            try? FileManager.default.removeItem(at: entry.url)
+            totalSize = max(0, totalSize - entry.size)
         }
     }
 }
@@ -196,6 +233,12 @@ public final class PTAudioService {
 
     public static let shared = PTAudioService()
 
+    // English: Derived durations use an explicit bounded cache policy.
+    // Español: Las duraciones derivadas usan una política de caché acotada explícita.
+    // 中文：派生时长使用明确的有界缓存策略。
+    private let durationCachePolicy = PTCachePolicy(countLimit: 256,
+                                                    costLimit: 256 * MemoryLayout<Float>.size,
+                                                    namespace: "media.audio-duration")
     private let durationCache: NSCache<NSString, NSNumber> = {
         let cache = NSCache<NSString, NSNumber>()
         cache.countLimit = 256
@@ -204,6 +247,8 @@ public final class PTAudioService {
     }()
 
     private init() {
+        durationCache.countLimit = durationCachePolicy.countLimit
+        durationCache.totalCostLimit = durationCachePolicy.costLimit
         // English: Drop derived durations under memory pressure; disk media remains available for reuse.
         // Español: Libera las duraciones derivadas bajo presión de memoria; los medios en disco siguen disponibles.
         // 中文：内存紧张时释放派生的时长缓存，磁盘媒体仍可继续复用。

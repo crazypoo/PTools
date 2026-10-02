@@ -46,6 +46,87 @@ public struct PTResponseMetadata: Sendable, Equatable {
     }
 }
 
+// English: Shared cache values stay in the Foundation-only Core product so every target uses one contract.
+// Español: Los valores compartidos de caché permanecen en Core, basado solo en Foundation, para que cada target use un contrato único.
+// 中文：共享缓存值类型放在仅依赖 Foundation 的 Core 产品中，让所有 target 使用同一契约。
+public struct PTCacheNamespace: RawRepresentable, Hashable, Codable, Sendable {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue.isEmpty ? "default" : rawValue
+    }
+}
+
+public struct PTCachePolicy: Sendable, Equatable {
+    public let countLimit: Int
+    public let costLimit: Int
+    public let expiration: TimeInterval?
+    public let namespace: PTCacheNamespace
+    public let clearsOnMemoryWarning: Bool
+    public let lowDiskThreshold: Int64?
+    public let diskLimit: Int64?
+    public let diskTarget: Int64?
+
+    public init(countLimit: Int = 100,
+                costLimit: Int = 16 * 1024 * 1024,
+                expiration: TimeInterval? = nil,
+                namespace: String = "default",
+                clearsOnMemoryWarning: Bool = true,
+                lowDiskThreshold: Int64? = nil,
+                diskLimit: Int64? = nil,
+                diskTarget: Int64? = nil) {
+        self.countLimit = max(1, countLimit)
+        self.costLimit = max(0, costLimit)
+        self.expiration = expiration.flatMap { $0.isFinite && $0 > 0 ? $0 : nil }
+        self.namespace = PTCacheNamespace(rawValue: namespace)
+        self.clearsOnMemoryWarning = clearsOnMemoryWarning
+        self.lowDiskThreshold = lowDiskThreshold.flatMap { $0 > 0 ? $0 : nil }
+        self.diskLimit = diskLimit.flatMap { $0 > 0 ? $0 : nil }
+        self.diskTarget = diskTarget.flatMap { value in
+            guard value > 0 else { return nil }
+            return diskLimit.map { min(value, $0) } ?? value
+        }
+    }
+}
+
+public enum PTCacheEvictionReason: String, Sendable, Codable {
+    case expired
+    case countLimit
+    case costLimit
+    case memoryWarning
+    case lowDisk
+    case manual
+}
+
+public struct PTCacheMetrics: Sendable, Codable, Equatable {
+    public let hits: UInt64
+    public let misses: UInt64
+    public let insertions: UInt64
+    public let evictions: UInt64
+    public let expiredEntries: UInt64
+    public let totalCost: Int
+    public let count: Int
+    public let lastEvictionReason: PTCacheEvictionReason?
+
+    public init(hits: UInt64 = 0,
+                misses: UInt64 = 0,
+                insertions: UInt64 = 0,
+                evictions: UInt64 = 0,
+                expiredEntries: UInt64 = 0,
+                totalCost: Int = 0,
+                count: Int = 0,
+                lastEvictionReason: PTCacheEvictionReason? = nil) {
+        self.hits = hits
+        self.misses = misses
+        self.insertions = insertions
+        self.evictions = evictions
+        self.expiredEntries = expiredEntries
+        self.totalCost = totalCost
+        self.count = count
+        self.lastEvictionReason = lastEvictionReason
+    }
+}
+
 // English: Location provider contracts carry only coordinates across actors.
 // Español: Los contratos de ubicación solo transportan coordenadas entre actores.
 // 中文：定位 Provider 只通过坐标值跨 actor 传递数据。

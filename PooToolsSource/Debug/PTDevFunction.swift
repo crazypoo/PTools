@@ -19,7 +19,7 @@ public class PTDevFunction: NSObject {
     // 中文：返回网络图片加载共用的 Kingfisher 配置。
     public class func webImageLoadOptions() -> KingfisherOptionsInfo {
 //        #if DEBUG
-//        let devServer:Bool = PTCoreUserDefultsWrapper.shared.WebImageOption
+//        let devServer:Bool = PTCoreUserDefaultsWrapper.shared.WebImageOption
 //        if devServer {
 //            return [KingfisherOptionsInfoItem.cacheOriginalImage]
 //        } else {

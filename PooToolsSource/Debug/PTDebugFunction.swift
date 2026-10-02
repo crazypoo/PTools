@@ -47,7 +47,7 @@ public class PTDebugFunction: NSObject {
             UserDefaults.standard.register(defaults: defaultsToRegister)
             UserDefaults.standard.synchronize()
         } else {
-            PTCoreUserDefultsWrapper.shared.AppServiceIdentifier = "1"
+            PTCoreUserDefaultsWrapper.shared.AppServiceIdentifier = "1"
             PTNSLogConsole("没有发现Settings.bundle",levelType: PTLogMode,loggerType: .settings)
         }
     }
@@ -67,7 +67,7 @@ public let TouchInspectorHitsDebug = "TS_Hit_debug"
 // Español: Estas propiedades obsoletas conservan la compatibilidad de código y reenvían el almacenamiento a la capa de preferencias de Debug.
 // 中文：这些弃用属性继续兼容旧代码，并把存储转发到 Debug 自己的偏好层。
 @available(*, deprecated, message: "使用 PTDebugPreferences；Use PTDebugPreferences.")
-public extension PTCoreUserDefultsWrapper {
+public extension PTCoreUserDefaultsWrapper {
     var AppDebugMode: Bool {
         get { PTUserDefaultsStore.value(ConsoleDebug, default: false) }
         set { PTUserDefaultsStore.set(newValue, forKey: ConsoleDebug) }

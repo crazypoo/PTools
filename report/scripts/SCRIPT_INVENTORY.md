@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
-Generated at: 2026-10-01T11:45:56+08:00 -->
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Generated at: 2026-10-01T22:26:33+08:00 -->
 # Script Inventory
 
 - Version: `5.59.0`
-- Records: `112`
+- Records: `127`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -38,9 +38,24 @@ Generated at: 2026-10-01T11:45:56+08:00 -->
 | Scripts/Governance/audit_repository.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_scripts.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_tests.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/compare_current_reports.rb | rb | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/find_duplicates.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_all_current_reports.sh | sh | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_concurrency_registry_v2.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/generate_current_reports.rb | rb | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_deprecated_6_manifest.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_public_api_classification.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_runtime_validation_report.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/source_inputs_digest.rb | rb | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_cache_governance.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_concurrency_registry.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_current_reports.sh | sh | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_dependency_freeze.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_deprecated_manifest.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_haptic_backend.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_lifecycle_resources.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_module_freeze.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_public_api_freeze.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Migration/cleanup_example_source_membership.rb | rb | Migration | ACTIVE | True | KEEP |
 | Scripts/PTModel/audit_model_dependencies.swift | swift | PTModel | ACTIVE | True | KEEP |
 | Scripts/PTModel/benchmark_models.swift | swift | PTModel | ACTIVE | True | KEEP |

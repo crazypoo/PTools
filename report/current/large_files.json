@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -236,7 +236,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "lines": 319,
+      "lines": 364,
       "classification": "ok"
     },
     {
@@ -426,7 +426,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 540,
+      "lines": 558,
       "classification": "ok"
     },
     {
@@ -1101,7 +1101,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "lines": 620,
+      "lines": 767,
       "classification": "ok"
     },
     {
@@ -1221,7 +1221,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "lines": 216,
+      "lines": 138,
       "classification": "ok"
     },
     {
@@ -1271,7 +1271,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "lines": 239,
+      "lines": 242,
       "classification": "ok"
     },
     {
@@ -1891,7 +1891,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "lines": 1695,
+      "lines": 1704,
       "classification": "architecture_exception"
     },
     {
@@ -4021,7 +4021,7 @@
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "lines": 259,
+      "lines": 305,
       "classification": "ok"
     },
     {
@@ -4096,7 +4096,7 @@
     },
     {
       "path": "PooToolsSource/PToolsCore/PTCoreValueTypes.swift",
-      "lines": 91,
+      "lines": 172,
       "classification": "ok"
     },
     {
@@ -4226,7 +4226,7 @@
     },
     {
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "lines": 1175,
+      "lines": 1174,
       "classification": "warning"
     },
     {
@@ -4241,7 +4241,7 @@
     },
     {
       "path": "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift",
-      "lines": 234,
+      "lines": 237,
       "classification": "ok"
     },
     {
@@ -4551,7 +4551,7 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "lines": 980,
+      "lines": 1000,
       "classification": "ok"
     },
     {
@@ -4836,7 +4836,7 @@
     },
     {
       "path": "PooToolsSource/Router/PTRouterManager.swift",
-      "lines": 437,
+      "lines": 433,
       "classification": "ok"
     },
     {
@@ -4856,7 +4856,7 @@
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "lines": 199,
+      "lines": 201,
       "classification": "ok"
     },
     {
@@ -5116,12 +5116,12 @@
     },
     {
       "path": "PooToolsSource/Slider/PTRangeSeekSlider.swift",
-      "lines": 684,
+      "lines": 677,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Slider/PTSlider.swift",
-      "lines": 209,
+      "lines": 213,
       "classification": "ok"
     },
     {
@@ -5431,7 +5431,7 @@
     },
     {
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "lines": 195,
+      "lines": 206,
       "classification": "ok"
     }
   ],
@@ -5439,11 +5439,11 @@
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 3,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/validate_file_size_gate.sh",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

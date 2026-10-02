@@ -10,6 +10,9 @@
 import Foundation
 import UIKit
 import AVFoundation
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 public struct PTTextAttachmentDescriptor: Codable, Hashable, Sendable {
     public enum Kind: Codable, Hashable, Sendable {
@@ -679,6 +682,12 @@ public final class PTRichTextMediaLoader {
     private let imageLoader: ImageLoader
     private let videoPosterLoader: VideoPosterLoader
     private let videoMetadataLoader: VideoMetadataLoader
+    // English: Rich-text media limits are explicit to prevent unbounded growth.
+    // Español: Los límites multimedia son explícitos para evitar crecimiento sin límite.
+    // 中文：富文本媒体缓存明确限制，避免无界增长。
+    private let cachePolicy = PTCachePolicy(countLimit: 100,
+                                             costLimit: 32 * 1024 * 1024,
+                                             namespace: "rich-text-media")
     private let imageCache = NSCache<NSString, UIImage>()
     private let posterCache = NSCache<NSString, UIImage>()
     private var imageTasks: [String: Task<UIImage, Error>] = [:]
@@ -690,8 +699,8 @@ public final class PTRichTextMediaLoader {
         self.imageLoader = imageLoader
         self.videoPosterLoader = videoPosterLoader
         self.videoMetadataLoader = videoMetadataLoader
-        imageCache.countLimit = 100
-        imageCache.totalCostLimit = 32 * 1024 * 1024
+        imageCache.countLimit = cachePolicy.countLimit
+        imageCache.totalCostLimit = cachePolicy.costLimit
         posterCache.countLimit = 60
         posterCache.totalCostLimit = 24 * 1024 * 1024
     }
@@ -857,7 +866,18 @@ public final class PTRichTextMediaLoader {
 // 中文：生成带缓存的视频封面，让 UILabel 和 UITextView 使用同一份静态附件。
 @MainActor
 public enum PTRichTextVideoPosterRenderer {
-    private static let cache = NSCache<NSString, UIImage>()
+    // English: The poster renderer uses the bounded rich-text cache contract.
+    // Español: El renderizador de póster usa el contrato de caché acotado de texto enriquecido.
+    // 中文：封面渲染器使用富文本统一的有界缓存契约。
+    private static let cachePolicy = PTCachePolicy(countLimit: 60,
+                                                    costLimit: 24 * 1024 * 1024,
+                                                    namespace: "rich-text-media-poster")
+    private static let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = cachePolicy.countLimit
+        cache.totalCostLimit = cachePolicy.costLimit
+        return cache
+    }()
     private static let memoryWarningObserver: NSObjectProtocol = NotificationCenter.default.addObserver(
         forName: UIApplication.didReceiveMemoryWarningNotification,
         object: nil,

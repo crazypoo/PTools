@@ -113,6 +113,12 @@ public class PTTip: NSObject {
 
     // TipUIPopoverViewController
     private var tipUIPopoverViewController: TipUIPopoverViewController?
+
+    // English: Keep TipKit observation tasks owned by the service so repeated presentation does not leak listeners.
+    // Español: Mantén las tareas de observación de TipKit en el servicio para que las presentaciones repetidas no filtren listeners.
+    // 中文：由服务持有 TipKit 观察任务，避免重复展示时监听任务泄漏。
+    private var popoverObservationTask: Task<Void, Never>?
+    private var viewObservationTask: Task<Void, Never>?
     
     /**
      这里只是一个常规使用在AppDelegate上的方法,如果自定义就自己在AppDelegate上编辑
@@ -136,7 +142,8 @@ public class PTTip: NSObject {
                                    content:UIViewController,
                                    actionHandler: ((Tip.Action) -> Void)? = nil,
                                    tipDismissHandler: PTActionTask? = nil) {
-        Task { @MainActor in
+        popoverObservationTask?.cancel()
+        popoverObservationTask = Task { @MainActor [weak self] in
             // 将弹窗实例作为局部变量管理，避免多个 Tip 冲突
             var activePopover: TipUIPopoverViewController?
             
@@ -152,6 +159,7 @@ public class PTTip: NSObject {
                     activePopover = nil
                 }
             }
+            self?.popoverObservationTask = nil
         }
     }
     
@@ -177,8 +185,10 @@ public class PTTip: NSObject {
             tipUIView.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        Task { @MainActor in
+        viewObservationTask?.cancel()
+        viewObservationTask = Task { @MainActor [weak self] in
             for await shouldDisplay in tips.shouldDisplayUpdates {
+                guard !Task.isCancelled else { break }
                 if shouldDisplay {
                     // 防止重复添加
                     if tipUIView.superview == nil {
@@ -190,6 +200,7 @@ public class PTTip: NSObject {
                     tipDismissHandler?()
                 }
             }
+            self?.viewObservationTask = nil
         }
     }
 }

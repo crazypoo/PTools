@@ -22,7 +22,12 @@ def fail(message: str) -> None:
 
 def main() -> None:
     payload = json.loads(MANIFEST.read_text())
-    required = {"symbol", "replacement", "internalUsage", "exampleUsage", "testsUsage", "canonicalReplacementExists", "compatibilityForwarding", "migrationDoc", "consumerEvidence", "removeIn"}
+    required = {
+        "symbol", "replacement", "kind", "internalUsage", "declarationCount", "declarationLocations",
+        "exampleUsage", "testsUsage", "canonicalReplacementExists", "canonicalEvidence",
+        "compatibilityForwarding", "migrationDoc", "consumerEvidence", "removeIn"
+    }
+    allowed_kinds = {"swiftSymbol", "moduleAlias", "productAlias", "subspecAlias"}
     for entry in payload.get("entries", []):
         missing = required - set(entry)
         if missing:
@@ -32,6 +37,21 @@ def main() -> None:
             fail(f"placeholder remains for {entry['symbol']}")
         if entry["removeIn"] != "6.0.0":
             fail(f"removeIn must be 6.0.0 for {entry['symbol']}")
+        if entry["kind"] not in allowed_kinds:
+            fail(f"unsupported kind {entry['kind']} for {entry['symbol']}")
+        if not isinstance(entry["declarationCount"], int) or entry["declarationCount"] < 0:
+            fail(f"invalid declarationCount for {entry['symbol']}")
+        if not isinstance(entry["declarationLocations"], list) or not isinstance(entry["canonicalEvidence"], list):
+            fail(f"invalid declaration/evidence fields for {entry['symbol']}")
+        if entry["internalUsage"].get("count") != 0:
+            # English: Internal compatibility call-sites must be migrated before the 6.0 removal window.
+            # Español: Las llamadas internas de compatibilidad deben migrarse antes de la ventana de eliminación 6.0.
+            # 中文：内部兼容调用点必须在 6.0 删除窗口前迁移完成。
+            fail(f"internal call-sites remain for {entry['symbol']}: {entry['internalUsage']}")
+        if not entry["canonicalReplacementExists"] or not entry["canonicalEvidence"]:
+            fail(f"canonical replacement evidence is missing for {entry['symbol']}")
+        if entry["kind"] in {"moduleAlias", "productAlias", "subspecAlias"} and not entry["compatibilityForwarding"]:
+            fail(f"module/product alias forwarding evidence is missing for {entry['symbol']}")
         if not entry["migrationDoc"] or not entry["consumerEvidence"]:
             fail(f"missing migration evidence for {entry['symbol']}")
     print(f"PASS [DEPRECATED_MANIFEST] entries={len(payload.get('entries', []))}")

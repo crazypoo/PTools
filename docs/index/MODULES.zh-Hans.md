@@ -193,13 +193,11 @@ generated: true
 | [PToolsHTTPServer](../modules/ptools-httpserver/README.zh-Hans.md) | `PToolsHTTPServer` | `—` |
 | [PToolsLogging](../modules/ptools-logging/README.zh-Hans.md) | `PToolsLogging` | `—` |
 | [PToolsModel](../modules/ptools-model/README.zh-Hans.md) | `PToolsModel` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine/README.zh-Hans.md) | `PToolsModelCombine` | `—` |
-| [PToolsModelCombine](../modules/ptools-model-combine-2/README.zh-Hans.md) | `—` | `PToolsModelCombine` |
+| [PToolsModelCombine](../modules/ptools-model-combine/README.zh-Hans.md) | `PToolsModelCombine` | `PToolsModelCombine` |
 | [PToolsModelCore](../modules/ptools-model-core/README.zh-Hans.md) | `PToolsModelCore` | `—` |
 | [PToolsModelLegacyKakaJSON](../modules/ptools-model-legacy-kaka-json/README.zh-Hans.md) | `PToolsModelLegacyKakaJSON` | `—` |
 | [PToolsModelLegacySmartCodable](../modules/ptools-model-legacy-smart-codable/README.zh-Hans.md) | `PToolsModelLegacySmartCodable` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit/README.zh-Hans.md) | `PToolsModelUIKit` | `—` |
-| [PToolsModelUIKit](../modules/ptools-model-uikit-2/README.zh-Hans.md) | `—` | `PToolsModelUIKit` |
+| [PToolsModelUIKit](../modules/ptools-model-uikit/README.zh-Hans.md) | `PToolsModelUIKit` | `PToolsModelUIKit` |
 | [PToolsNotifications](../modules/ptools-notifications/README.zh-Hans.md) | `PToolsNotifications` | `—` |
 | [PToolsOverlay](../modules/ptools-overlay/README.zh-Hans.md) | `PToolsOverlay` | `Overlay` |
 | [PToolsPermissionCore](../modules/ptools-permission-core/README.zh-Hans.md) | `PToolsPermissionCore` | `PToolsPermissionCore` |

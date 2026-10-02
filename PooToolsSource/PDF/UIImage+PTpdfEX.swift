@@ -8,6 +8,9 @@
 
 import UIKit
 import Foundation
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 // MARK: - UIImage+PDF
 public extension UIImage {
@@ -157,6 +160,16 @@ public extension UIImage {
     
     @MainActor static var pdfCacheOnDisk = false
     @MainActor static var pdfCacheInMemory = true
+
+    // English: PDF rendering cache limits follow the repository cache contract.
+    // Español: Los límites de la caché PDF siguen el contrato común del repositorio.
+    // 中文：PDF 渲染缓存限制遵循仓库统一缓存契约。
+    private static let pdfCachePolicy = PTCachePolicy(countLimit: 128,
+                                                       costLimit: 64 * 1024 * 1024,
+                                                       expiration: 7 * 24 * 60 * 60,
+                                                       namespace: "pdf-render",
+                                                       diskLimit: 128 * 1024 * 1024,
+                                                       diskTarget: 96 * 1024 * 1024)
     
     // all
     @MainActor static func removeAllPDFCache() {
@@ -204,7 +217,12 @@ public extension UIImage {
 extension UIImage {
     
     // MARK: - Memory Cache
-    @MainActor private static let imageCache = NSCache<NSString, UIImage>()
+    @MainActor private static let imageCache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = pdfCachePolicy.countLimit
+        cache.totalCostLimit = pdfCachePolicy.costLimit
+        return cache
+    }()
     
     @MainActor private static func cacheImageInMemory(_ image: UIImage, url: URL, size: CGSize, pageNumber: Int) {
         guard let hashString = pdfCacheHashString(with: url, size: size, pageNumber: pageNumber) else { return }
@@ -226,7 +244,35 @@ extension UIImage {
     }
     
     private static func cacheOnDisk(data: Data, url: URL) {
-        try? data.write(to: url, options: [])
+        guard (try? data.write(to: url, options: [])) != nil else { return }
+        trimPDFDiskCacheIfNeeded()
+    }
+
+    // English: Trim PDF files only after a write, keeping disk reads on the fast path.
+    // Español: Recorta los archivos PDF solo después de escribir para mantener rápida la lectura.
+    // 中文：仅在写入后整理 PDF 文件，让读取路径保持轻量。
+    private static func trimPDFDiskCacheIfNeeded() {
+        guard let maximumSize = pdfCachePolicy.diskLimit,
+              let directoryTarget = pdfCachePolicy.diskTarget,
+              let directoryURL = diskCacheDirectoryURL else { return }
+        let files = (try? FileManager.default.contentsOfDirectory(
+            at: directoryURL,
+            includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
+            options: [.skipsHiddenFiles]
+        )) ?? []
+        var entries = files.compactMap { url -> (url: URL, size: Int64, date: Date)? in
+            guard let values = try? url.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey]),
+                  let size = values.fileSize,
+                  let date = values.contentModificationDate else { return nil }
+            return (url, Int64(size), date)
+        }
+        var totalSize = entries.reduce(Int64.zero) { $0 + $1.size }
+        guard totalSize > maximumSize else { return }
+        entries.sort { $0.date < $1.date }
+        for entry in entries where totalSize > directoryTarget {
+            try? FileManager.default.removeItem(at: entry.url)
+            totalSize = max(0, totalSize - entry.size)
+        }
     }
     
     private static func pdfCacheURL(with url: URL, size: CGSize, pageNumber: Int) -> URL? {

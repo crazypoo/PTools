@@ -304,24 +304,24 @@ public final class PTLanguage: NSObject, Sendable {
     public var language: String {
         get {
             Self.languageLock.withLock {
-                let storedLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                let storedLanguage = PTCoreUserDefaultsWrapper.shared.AppLanguage
                 let selectedLanguage = Self.resolvedLanguage(for: storedLanguage)
                 if storedLanguage != selectedLanguage {
-                    PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
+                    PTCoreUserDefaultsWrapper.shared.AppLanguage = selectedLanguage
                 }
                 return selectedLanguage
             }
         } set {
             let selectedLanguage = Self.resolvedLanguage(for: newValue)
             let didChange = Self.languageLock.withLock {
-                let storedLanguage = PTCoreUserDefultsWrapper.shared.AppLanguage
+                let storedLanguage = PTCoreUserDefaultsWrapper.shared.AppLanguage
                 let currentLanguage = Self.resolvedLanguage(for: storedLanguage)
                 if storedLanguage != currentLanguage {
-                    PTCoreUserDefultsWrapper.shared.AppLanguage = currentLanguage
+                    PTCoreUserDefaultsWrapper.shared.AppLanguage = currentLanguage
                 }
                 guard selectedLanguage != currentLanguage else { return false }
 
-                PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
+                PTCoreUserDefaultsWrapper.shared.AppLanguage = selectedLanguage
                 return true
             }
             if didChange {

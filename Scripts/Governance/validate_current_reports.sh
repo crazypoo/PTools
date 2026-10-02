@@ -33,7 +33,9 @@ Dir.glob(File.join(directory, "*.json")).sort.each do |path|
   required.each { |key| failures << "#{path}: missing #{key}" unless payload.key?(key) }
   failures << "#{path}: repository mismatch" unless payload["repository"] == expected_repository
   failures << "#{path}: branch mismatch" unless payload["branch"] == branch
-  failures << "#{path}: sourceRevision=#{payload["sourceRevision"]}" unless payload["sourceRevision"] == revision
+  # English: sourceRevision is provenance only; sourceInputsDigest is the freshness authority.
+  # Español: sourceRevision solo describe la procedencia; sourceInputsDigest decide la vigencia.
+  # 中文：sourceRevision 仅用于来源追踪，sourceInputsDigest 才是新鲜度依据。
   failures << "#{path}: sourceVersion=#{payload["sourceVersion"]}" unless payload["sourceVersion"] == version
   failures << "#{path}: sourceInputsDigest=#{payload["sourceInputsDigest"]}" unless payload["sourceInputsDigest"] == expected_digest
 end

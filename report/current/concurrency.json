@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "counts": {
     "main_queue_async": 27,
     "task_detached": 29,
-    "unchecked_sendable": 67,
+    "unchecked_sendable": 53,
     "as_bang": 4
   },
   "locations": [
@@ -50,13 +50,13 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 122,
+      "line": 125,
       "text": "let task = Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 490,
+      "line": 508,
       "text": "await Task.detached(priority: .userInitiated) {"
     },
     {
@@ -154,78 +154,6 @@
       "path": "PooToolsSource/Category/UIControl+PTEX.swift",
       "line": 84,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + self.clickInterval) { [weak self] in"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 87,
-      "text": "public final class PTTFPaging: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 93,
-      "text": "public final class PTTFMeta: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 98,
-      "text": "public final class PTTLinkMainModel: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 103,
-      "text": "public final class PTTFRelationships: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 120,
-      "text": "public final class PTTFLinks: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 134,
-      "text": "public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 142,
-      "text": "public final class PTTFAttributes: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 173,
-      "text": "public final class PTTFVersionData: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 183,
-      "text": "public final class PTTFModelCollection: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 191,
-      "text": "public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 205,
-      "text": "public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 214,
-      "text": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {"
     },
     {
       "rule": "task_detached",
@@ -356,7 +284,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 923,
+      "line": 926,
       "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
     },
     {
@@ -672,18 +600,6 @@
       "text": "DispatchQueue.main.async {"
     },
     {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/Router/PTRouterManager.swift",
-      "line": 23,
-      "text": "private struct PTServiceTypeBox: @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
-      "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "line": 13,
-      "text": "public final class PTLegacyRouterServiceBox: @unchecked Sendable {"
-    },
-    {
       "rule": "main_queue_async",
       "path": "PooToolsSource/ScreenShot/UIView+PTSnapShot.swift",
       "line": 53,
@@ -775,11 +691,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_concurrency.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

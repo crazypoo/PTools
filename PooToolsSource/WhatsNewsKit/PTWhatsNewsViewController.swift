@@ -27,13 +27,13 @@ import SnapKit
 public class PTWhatsNews:NSObject {
 
     @MainActor public static func markCurrentVersionAsPresented() {
-        PTCoreUserDefultsWrapper.shared.PTWhatNewsLatestAppVersionPresented = kAppVersion!
+        PTCoreUserDefaultsWrapper.shared.PTWhatNewsLatestAppVersionPresented = kAppVersion!
     }
 
     @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool {
         let newVersion = currentVersion ?? kAppVersion
         guard let currentAppVersion = newVersion else { return false }
-        let previousAppVersion = PTCoreUserDefultsWrapper.shared.PTWhatNewsLatestAppVersionPresented
+        let previousAppVersion = PTCoreUserDefaultsWrapper.shared.PTWhatNewsLatestAppVersionPresented
         let didUpdate = previousAppVersion != currentAppVersion
         switch option {
         case .debug: return true

@@ -874,6 +874,7 @@ public final class PTFormViewController: PTBaseViewController {
     private var cachedFields: [PTFormFieldID: PTFormField] = [:]
     private var latestLocations: [PTFormFieldLocation] = []
     private var validationIssues: [PTFormFieldID: String] = [:]
+    private var announcedIssueIDs: Set<PTFormFieldID> = []
     private var refreshTask: Task<Void, Never>?
 
     // English: Preserve the original controller initializer for existing callers.
@@ -969,12 +970,10 @@ public final class PTFormViewController: PTBaseViewController {
                                                                      bottom: configuration.contentInsets.bottom,
                                                                      trailing: configuration.contentInsets.trailing)
         listView.registerClassCells(classs: [PTFormFieldCell.reuseID: PTFormFieldCell.self])
-        listView.registerSupplementaryView(ids: [PTFormDefaultSectionHeader.reuseID],
-                                           viewClass: PTFormDefaultSectionHeader.self,
-                                           kind: UICollectionView.elementKindSectionHeader)
-        listView.registerSupplementaryView(ids: [PTFormDefaultSectionFooter.reuseID],
-                                           viewClass: PTFormDefaultSectionFooter.self,
-                                           kind: UICollectionView.elementKindSectionFooter)
+        listView.registerSupplementaryView(classs: [PTFormDefaultSectionHeader.reuseID: PTFormDefaultSectionHeader.self],
+                                            kind: UICollectionView.elementKindSectionHeader)
+        listView.registerSupplementaryView(classs: [PTFormDefaultSectionFooter.reuseID: PTFormDefaultSectionFooter.self],
+                                            kind: UICollectionView.elementKindSectionFooter)
 
         listView.headerInCollection = { [weak self] kind, collectionView, section, indexPath in
             guard let self,

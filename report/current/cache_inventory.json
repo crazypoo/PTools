@@ -1,48 +1,54 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 199,
+      "line": 236,
+      "kind": "disk or custom cache",
+      "text": "// English: Derived durations use an explicit bounded cache policy."
+    },
+    {
+      "path": "PooToolsSource/Base/PTAudioCache.swift",
+      "line": 242,
       "kind": "NSCache",
       "text": "private let durationCache: NSCache<NSString, NSNumber> = {"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 200,
+      "line": 243,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, NSNumber>()"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 201,
+      "line": 244,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = 256"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 202,
+      "line": 245,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = 256 * MemoryLayout<Float>.size"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 203,
+      "line": 246,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 215,
+      "line": 260,
       "kind": "disk or custom cache",
       "text": "/// 获取音频时长（一定基于 cache 文件）"
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 255,
+      "line": 300,
       "kind": "disk or custom cache",
       "text": "/// 创建播放用 PlayerItem（只用 cache 文件）"
     },
@@ -138,73 +144,79 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 108,
+      "line": 111,
       "kind": "disk or custom cache",
       "text": "// English: A shared actor prevents concurrent callers from writing the same video cache file."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 172,
+      "line": 177,
       "kind": "disk or custom cache",
       "text": "/// Video file cache manager."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 249,
+      "line": 260,
       "kind": "disk or custom cache",
       "text": "/// Video cover cache and thumbnail request coordinator."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 351,
+      "line": 362,
+      "kind": "disk or custom cache",
+      "text": "// English: Keep thumbnail limits aligned with the shared cache contract."
+    },
+    {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 369,
       "kind": "NSCache",
       "text": "@MainActor private static let memoryCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 352,
+      "line": 370,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 353,
+      "line": 371,
       "kind": "disk or custom cache",
-      "text": "cache.countLimit = 100"
+      "text": "cache.countLimit = cachePolicy.countLimit"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 354,
+      "line": 372,
       "kind": "disk or custom cache",
-      "text": "cache.totalCostLimit = 50 * 1024 * 1024"
+      "text": "cache.totalCostLimit = cachePolicy.costLimit"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 355,
+      "line": 373,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 464,
+      "line": 482,
       "kind": "disk or custom cache",
       "text": "/// Preserves the URL-only key used by the video file cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 473,
+      "line": 491,
       "kind": "disk or custom cache",
       "text": "/// Writes a JPEG cache entry atomically on a utility task."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 495,
+      "line": 513,
       "kind": "disk or custom cache",
       "text": "// English: Encode generated thumbnails away from UI work before writing the disk cache."
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 510,
+      "line": 528,
       "kind": "disk or custom cache",
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
@@ -395,12 +407,6 @@
       "text": "// English: This bounded actor is the shared cache contract for resource and computation caches."
     },
     {
-      "path": "PooToolsSource/Core/PTCacheStore.swift",
-      "line": 15,
-      "kind": "disk or custom cache",
-      "text": "// English: Shared cache policy keeps limits, expiry, namespace and cleanup behavior explicit."
-    },
-    {
       "path": "PooToolsSource/Core/PTGCDManager.swift",
       "line": 51,
       "kind": "NSCache",
@@ -432,13 +438,13 @@
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 8,
+      "line": 11,
       "kind": "disk or custom cache",
       "text": "// English: Cache variants are part of the key so originals, thumbnails, GIF frames, and Live Photo resources never collide."
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
-      "line": 21,
+      "line": 24,
       "kind": "disk or custom cache",
       "text": "// English: A stable cache key is derived from media identity and rendering intent, not Swift's randomized hashValue."
     },
@@ -540,31 +546,37 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1414,
+      "line": 1417,
+      "kind": "disk or custom cache",
+      "text": "// English: Filter previews use an explicit bounded cache policy."
+    },
+    {
+      "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
+      "line": 1423,
       "kind": "NSCache",
       "text": "private lazy var filterCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1415,
+      "line": 1424,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1416,
+      "line": 1425,
       "kind": "disk or custom cache",
-      "text": "cache.countLimit = 6"
+      "text": "cache.countLimit = filterCachePolicy.countLimit"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1417,
+      "line": 1426,
       "kind": "disk or custom cache",
-      "text": "cache.totalCostLimit = 96 * 1024 * 1024"
+      "text": "cache.totalCostLimit = filterCachePolicy.costLimit"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1418,
+      "line": 1427,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
@@ -714,31 +726,61 @@
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "line": 155,
+      "line": 158,
       "kind": "disk or custom cache",
       "text": "// MARK: - Cache Public"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "line": 203,
+      "line": 164,
+      "kind": "disk or custom cache",
+      "text": "// English: PDF rendering cache limits follow the repository cache contract."
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "line": 216,
       "kind": "disk or custom cache",
       "text": "// MARK: - Cache Private"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "line": 206,
+      "line": 219,
       "kind": "disk or custom cache",
       "text": "// MARK: - Memory Cache"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "line": 207,
+      "line": 220,
       "kind": "NSCache",
-      "text": "@MainActor private static let imageCache = NSCache<NSString, UIImage>()"
+      "text": "@MainActor private static let imageCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
-      "line": 219,
+      "line": 221,
+      "kind": "NSCache",
+      "text": "let cache = NSCache<NSString, UIImage>()"
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "line": 222,
+      "kind": "disk or custom cache",
+      "text": "cache.countLimit = pdfCachePolicy.countLimit"
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "line": 223,
+      "kind": "disk or custom cache",
+      "text": "cache.totalCostLimit = pdfCachePolicy.costLimit"
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "line": 224,
+      "kind": "disk or custom cache",
+      "text": "return cache"
+    },
+    {
+      "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
+      "line": 237,
       "kind": "disk or custom cache",
       "text": "// MARK: - Disk Cache"
     },
@@ -759,6 +801,12 @@
       "line": 53,
       "kind": "disk or custom cache",
       "text": "// English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free."
+    },
+    {
+      "path": "PooToolsSource/PToolsCore/PTCoreValueTypes.swift",
+      "line": 49,
+      "kind": "disk or custom cache",
+      "text": "// English: Shared cache values stay in the Foundation-only Core product so every target uses one contract."
     },
     {
       "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
@@ -816,37 +864,67 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 682,
+      "line": 691,
       "kind": "NSCache",
       "text": "private let imageCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 683,
+      "line": 692,
       "kind": "NSCache",
       "text": "private let posterCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 860,
-      "kind": "NSCache",
-      "text": "private static let cache = NSCache<NSString, UIImage>()"
+      "line": 869,
+      "kind": "disk or custom cache",
+      "text": "// English: The poster renderer uses the bounded rich-text cache contract."
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 872,
+      "line": 875,
+      "kind": "NSCache",
+      "text": "private static let cache: NSCache<NSString, UIImage> = {"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 876,
+      "kind": "NSCache",
+      "text": "let cache = NSCache<NSString, UIImage>()"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 877,
+      "kind": "disk or custom cache",
+      "text": "cache.countLimit = cachePolicy.countLimit"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 878,
+      "kind": "disk or custom cache",
+      "text": "cache.totalCostLimit = cachePolicy.costLimit"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 879,
+      "kind": "disk or custom cache",
+      "text": "return cache"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+      "line": 892,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 881,
+      "line": 901,
       "kind": "disk or custom cache",
       "text": "if let cached = cache.object(forKey: key as NSString) {"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 941,
+      "line": 961,
       "kind": "disk or custom cache",
       "text": "cache.setObject(rendered, forKey: key as NSString)"
     },
@@ -870,7 +948,7 @@
     },
     {
       "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "line": 157,
+      "line": 159,
       "kind": "disk or custom cache",
       "text": "// MARK: - Service Clean Cache"
     },
@@ -911,13 +989,13 @@
       "text": "open func cache(viewController: UIViewController, with identifier: String) {"
     }
   ],
-  "bounded_memory_caches": 23,
+  "bounded_memory_caches": 25,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_cache_inventory.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

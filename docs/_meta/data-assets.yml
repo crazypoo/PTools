@@ -1411,6 +1411,22 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Scripts/Governance/cache_governance.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/Governance/lifecycle_resource_allowlist.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Scripts/concurrency_exception_registry.json"
   kind: "DEV_TOOL"
   format: "json"
@@ -1468,6 +1484,14 @@
   action: "KEEP"
 -
   path: "Scripts/p1_public_api_intent.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/public_api_classification.json"
   kind: "DEV_TOOL"
   format: "json"
   generated: false

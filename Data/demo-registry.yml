@@ -961,8 +961,8 @@ modules:
   demos: []
 -
   module_id: "ptools-model-combine-2"
-  coverage: "documentation"
-  canonical_module_id: null
+  coverage: "compatibility_alias"
+  canonical_module_id: "ptools-model-combine"
   demos: []
 -
   module_id: "ptools-model-core"
@@ -986,8 +986,8 @@ modules:
   demos: []
 -
   module_id: "ptools-model-uikit-2"
-  coverage: "documentation"
-  canonical_module_id: null
+  coverage: "compatibility_alias"
+  canonical_module_id: "ptools-model-uikit"
   demos: []
 -
   module_id: "ptools-notifications"

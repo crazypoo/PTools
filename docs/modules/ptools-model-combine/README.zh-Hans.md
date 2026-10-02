@@ -2,13 +2,13 @@
 module: "PToolsModelCombine"
 module_id: "ptools-model-combine"
 language: "zh-Hans"
-status: "review"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsModelCombine"
-cocoapods_subspec: "null"
-source: "manifest-only"
-category: "unclassified"
+cocoapods_subspec: "PToolsModelCombine"
+source: "PooToolsSource/PToolsModelCombine"
+category: "model-adapter"
 last_reviewed: "2026-09-28"
 canonical: false
 canonical_source: "README.en.md"
@@ -20,14 +20,14 @@ document_schema_version: 1
 
 ## 1. 概览
 
-PToolsModelCombine 是 PTools 的 unclassified 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
+PToolsModelCombine 是 PTools 的 model-adapter 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
 
 ## 2. 要求
 
 - 平台：iOS 17.0+
 - Swift：6+
-- 分类：`unclassified`
-- 状态：`review`
+- 分类：`model-adapter`
+- 状态：`stable`
 
 ## 3. 安装
 
@@ -40,7 +40,7 @@ import PToolsModelCombine
 CocoaPods：
 
 ```ruby
-# No standalone CocoaPods subspec is published for this product.
+pod 'PooTools/PToolsModelCombine'
 ```
 
 ## 4. 导入
@@ -55,7 +55,7 @@ import PToolsModelCombine
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：None declared by the registry.。
+公开边界优先使用值类型。registry 记录的直接依赖：PToolsModelCore。
 
 ## 7. 主要 API
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -28,7 +28,6 @@
     "PooToolsSource/VideoEditor/VideoConverter.swift",
     "PooToolsSource/Vision/PTVision.swift",
     "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-    "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
     "PooToolsSource/Core/OSSVoice.swift",
     "PooToolsSource/Debug/PTApplicationDirectories.swift",
     "PooToolsSource/Debug/StdoutCapture.swift",
@@ -42,8 +41,6 @@
     "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
     "PooToolsSource/OSSKit/OSSSpeech.swift",
     "PooToolsSource/OSSKit/OSSUtterance.swift",
-    "PooToolsSource/Router/PTRouterManager.swift",
-    "PooToolsSource/Router/PTRouterServiceManager.swift",
     "PooToolsSource/SocketKit/PTWebSocketClient.swift",
     "PooToolsSource/TouchInspector/TouchInspectorWindow.swift"
   ],
@@ -94,78 +91,6 @@
       "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
       "line": 37,
       "declaration": "private struct PTVideoAssetSendableBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 87,
-      "declaration": "public final class PTTFPaging: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 93,
-      "declaration": "public final class PTTFMeta: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 98,
-      "declaration": "public final class PTTLinkMainModel: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 103,
-      "declaration": "public final class PTTFRelationships: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 120,
-      "declaration": "public final class PTTFLinks: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 134,
-      "declaration": "public final class PTTFIconAssetTokenModle: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 142,
-      "declaration": "public final class PTTFAttributes: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 173,
-      "declaration": "public final class PTTFVersionData: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 183,
-      "declaration": "public final class PTTFModelCollection: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 191,
-      "declaration": "public final class PTTFNewerBuildVersionModel: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 205,
-      "declaration": "public final class PTTFUpdateCustomModel: Codable, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 214,
-      "declaration": "public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -385,18 +310,6 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/Router/PTRouterManager.swift",
-      "line": 23,
-      "declaration": "private struct PTServiceTypeBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/Router/PTRouterServiceManager.swift",
-      "line": 13,
-      "declaration": "public final class PTLegacyRouterServiceBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
       "line": 363,
       "declaration": "private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {",
@@ -452,11 +365,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_sendable_exceptions.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

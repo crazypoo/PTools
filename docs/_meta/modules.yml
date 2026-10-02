@@ -15,6 +15,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "appz"
+  aliases: []
 -
   id: "background-tasks"
   name: "BackgroundTasks"
@@ -28,6 +30,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "background-tasks"
+  aliases: []
 -
   id: "bank-card"
   name: "BankCard"
@@ -41,6 +45,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "bank-card"
+  aliases: []
 -
   id: "bilogy-id"
   name: "BilogyID"
@@ -54,6 +60,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "bilogy-id"
+  aliases: []
 -
   id: "bio-id"
   name: "BioID"
@@ -67,6 +75,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "bio-id"
+  aliases: []
 -
   id: "bluetooth-permission"
   name: "BluetoothPermission"
@@ -80,6 +90,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "bluetooth-permission"
+  aliases: []
 -
   id: "calendar"
   name: "Calendar"
@@ -93,6 +105,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "calendar"
+  aliases: []
 -
   id: "calendar-permission"
   name: "CalendarPermission"
@@ -106,6 +120,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "calendar-permission"
+  aliases: []
 -
   id: "camera-permission"
   name: "CameraPermission"
@@ -119,6 +135,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "camera-permission"
+  aliases: []
 -
   id: "check-dirty-word"
   name: "CheckDirtyWord"
@@ -132,6 +150,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "check-dirty-word"
+  aliases: []
 -
   id: "check-update"
   name: "CheckUpdate"
@@ -145,6 +165,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "check-update"
+  aliases: []
 -
   id: "chinese-pinyin"
   name: "ChinesePinyin"
@@ -158,6 +180,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "chinese-pinyin"
+  aliases: []
 -
   id: "circle"
   name: "Circle"
@@ -171,6 +195,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "circle"
+  aliases: []
 -
   id: "code-view"
   name: "CodeView"
@@ -184,6 +210,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "code-view"
+  aliases: []
 -
   id: "connectivity"
   name: "Connectivity"
@@ -197,6 +225,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "connectivity"
+  aliases: []
 -
   id: "contact"
   name: "Contact"
@@ -210,6 +240,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "contact"
+  aliases: []
 -
   id: "contacts-permission"
   name: "ContactsPermission"
@@ -223,6 +255,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "contacts-permission"
+  aliases: []
 -
   id: "core"
   name: "Core"
@@ -236,6 +270,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "core"
+  aliases: []
 -
   id: "country"
   name: "Country"
@@ -249,6 +285,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "country"
+  aliases: []
 -
   id: "customer-label"
   name: "CustomerLabel"
@@ -262,6 +300,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "customer-label"
+  aliases: []
 -
   id: "customer-number-keyboard"
   name: "CustomerNumberKeyboard"
@@ -275,6 +315,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "customer-number-keyboard"
+  aliases: []
 -
   id: "data-encrypt"
   name: "DataEncrypt"
@@ -288,6 +330,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "data-encrypt"
+  aliases: []
 -
   id: "date"
   name: "Date"
@@ -301,6 +345,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "date"
+  aliases: []
 -
   id: "debug"
   name: "DEBUG"
@@ -314,6 +360,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "debug"
+  aliases: []
 -
   id: "debug-tracking-eyes"
   name: "DEBUG_TrackingEyes"
@@ -327,6 +375,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "debug-tracking-eyes"
+  aliases: []
 -
   id: "deep-link"
   name: "DeepLink"
@@ -340,6 +390,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "deep-link"
+  aliases: []
 -
   id: "device"
   name: "Device"
@@ -353,6 +405,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "device"
+  aliases: []
 -
   id: "face-idpermission"
   name: "FaceIDPermission"
@@ -366,6 +420,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "face-idpermission"
+  aliases: []
 -
   id: "filter-camera"
   name: "FilterCamera"
@@ -379,6 +435,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "filter-camera"
+  aliases: []
 -
   id: "flag"
   name: "Flag"
@@ -392,6 +450,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "flag"
+  aliases: []
 -
   id: "gcdweb-server"
   name: "GCDWebServer"
@@ -405,6 +465,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "gcdweb-server"
+  aliases: []
 -
   id: "guide"
   name: "Guide"
@@ -418,6 +480,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "guide"
+  aliases: []
 -
   id: "hand-sign"
   name: "HandSign"
@@ -431,6 +495,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "hand-sign"
+  aliases: []
 -
   id: "harbeth-kit"
   name: "HarbethKit"
@@ -444,6 +510,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "harbeth-kit"
+  aliases: []
 -
   id: "health-permission"
   name: "HealthPermission"
@@ -457,6 +525,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "health-permission"
+  aliases: []
 -
   id: "heart-rate"
   name: "HeartRate"
@@ -470,6 +540,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "heart-rate"
+  aliases: []
 -
   id: "httpfile-portal"
   name: "HTTPFilePortal"
@@ -483,6 +555,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "httpfile-portal"
+  aliases: []
 -
   id: "httpserver"
   name: "HTTPServer"
@@ -496,6 +570,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "httpserver"
+  aliases: []
 -
   id: "hud"
   name: "Hud"
@@ -509,6 +585,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "hud"
+  aliases: []
 -
   id: "i-os17-tips"
   name: "iOS17Tips"
@@ -522,6 +600,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "i-os17-tips"
+  aliases: []
 -
   id: "iap"
   name: "IAP"
@@ -535,6 +615,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "iap"
+  aliases: []
 -
   id: "image-picker"
   name: "ImagePicker"
@@ -548,6 +630,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "image-picker"
+  aliases: []
 -
   id: "input"
   name: "Input"
@@ -561,6 +645,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "input"
+  aliases: []
 -
   id: "input-all"
   name: "InputAll"
@@ -574,6 +660,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "input-all"
+  aliases: []
 -
   id: "launch-time-profiler"
   name: "LaunchTimeProfiler"
@@ -587,6 +675,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "launch-time-profiler"
+  aliases: []
 -
   id: "layout"
   name: "Layout"
@@ -600,6 +690,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "layout"
+  aliases: []
 -
   id: "live-photo"
   name: "LivePhoto"
@@ -613,6 +705,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "live-photo"
+  aliases: []
 -
   id: "loading"
   name: "Loading"
@@ -626,6 +720,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "loading"
+  aliases: []
 -
   id: "location"
   name: "Location"
@@ -639,6 +735,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "location"
+  aliases: []
 -
   id: "location-permission"
   name: "LocationPermission"
@@ -652,6 +750,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "location-permission"
+  aliases: []
 -
   id: "logging"
   name: "Logging"
@@ -665,6 +765,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "logging"
+  aliases: []
 -
   id: "media-permission"
   name: "MediaPermission"
@@ -678,6 +780,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "media-permission"
+  aliases: []
 -
   id: "meida-permission"
   name: "MeidaPermission"
@@ -691,6 +795,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "meida-permission"
+  aliases: []
 -
   id: "message-kit"
   name: "MessageKit"
@@ -704,6 +810,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "message-kit"
+  aliases: []
 -
   id: "mic-permission"
   name: "MicPermission"
@@ -717,6 +825,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "mic-permission"
+  aliases: []
 -
   id: "model"
   name: "Model"
@@ -730,6 +840,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "model"
+  aliases: []
 -
   id: "model-core"
   name: "ModelCore"
@@ -743,6 +855,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "model-core"
+  aliases: []
 -
   id: "model-legacy-kaka-json"
   name: "ModelLegacyKakaJSON"
@@ -756,6 +870,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "model-legacy-kaka-json"
+  aliases: []
 -
   id: "model-legacy-smart-codable"
   name: "ModelLegacySmartCodable"
@@ -769,6 +885,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "model-legacy-smart-codable"
+  aliases: []
 -
   id: "motion"
   name: "Motion"
@@ -782,6 +900,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "motion"
+  aliases: []
 -
   id: "motion-permission"
   name: "MotionPermission"
@@ -795,6 +915,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "motion-permission"
+  aliases: []
 -
   id: "mxmetric-manager-kit"
   name: "MXMetricManagerKit"
@@ -808,6 +930,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "mxmetric-manager-kit"
+  aliases: []
 -
   id: "net-work"
   name: "NetWork"
@@ -821,6 +945,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "net-work"
+  aliases: []
 -
   id: "network-speed-test"
   name: "NetworkSpeedTest"
@@ -834,6 +960,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "network-speed-test"
+  aliases: []
 -
   id: "nfckit"
   name: "NFCKit"
@@ -847,6 +975,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "nfckit"
+  aliases: []
 -
   id: "notification-banner"
   name: "NotificationBanner"
@@ -860,6 +990,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "notification-banner"
+  aliases: []
 -
   id: "notification-permission"
   name: "NotificationPermission"
@@ -873,6 +1005,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "notification-permission"
+  aliases: []
 -
   id: "notifications"
   name: "Notifications"
@@ -886,6 +1020,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "notifications"
+  aliases: []
 -
   id: "osskit-speech"
   name: "OSSKitSpeech"
@@ -899,6 +1035,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "osskit-speech"
+  aliases: []
 -
   id: "page-control"
   name: "PageControl"
@@ -912,6 +1050,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "page-control"
+  aliases: []
 -
   id: "paging-control"
   name: "PagingControl"
@@ -925,6 +1065,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "paging-control"
+  aliases: []
 -
   id: "pdf"
   name: "PDF"
@@ -938,6 +1080,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "pdf"
+  aliases: []
 -
   id: "picker"
   name: "Picker"
@@ -951,6 +1095,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "picker"
+  aliases: []
 -
   id: "ping"
   name: "Ping"
@@ -964,6 +1110,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ping"
+  aliases: []
 -
   id: "poo-tools-all"
   name: "PooToolsAll"
@@ -977,6 +1125,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-all"
+  aliases: []
 -
   id: "poo-tools-bank-card"
   name: "PooToolsBankCard"
@@ -990,6 +1140,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-bank-card"
+  aliases: []
 -
   id: "poo-tools-banner"
   name: "PooToolsBanner"
@@ -1006,6 +1158,8 @@
     - "PToolsLogging"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-banner"
+  aliases: []
 -
   id: "poo-tools-bio-id"
   name: "PooToolsBioID"
@@ -1019,6 +1173,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-bio-id"
+  aliases: []
 -
   id: "poo-tools-calendar"
   name: "PooToolsCalendar"
@@ -1032,6 +1188,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-calendar"
+  aliases: []
 -
   id: "poo-tools-check-box"
   name: "PooToolsCheckBox"
@@ -1045,6 +1203,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-check-box"
+  aliases: []
 -
   id: "poo-tools-check-dirty-word"
   name: "PooToolsCheckDirtyWord"
@@ -1058,6 +1218,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-check-dirty-word"
+  aliases: []
 -
   id: "poo-tools-check-update"
   name: "PooToolsCheckUpdate"
@@ -1071,6 +1233,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-check-update"
+  aliases: []
 -
   id: "poo-tools-chinese-pinyin"
   name: "PooToolsChinesePinyin"
@@ -1084,6 +1248,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-chinese-pinyin"
+  aliases: []
 -
   id: "poo-tools-circle"
   name: "PooToolsCircle"
@@ -1097,6 +1263,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-circle"
+  aliases: []
 -
   id: "poo-tools-code-view"
   name: "PooToolsCodeView"
@@ -1110,6 +1278,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-code-view"
+  aliases: []
 -
   id: "poo-tools-contact"
   name: "PooToolsContact"
@@ -1123,6 +1293,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-contact"
+  aliases: []
 -
   id: "poo-tools-country"
   name: "PooToolsCountry"
@@ -1136,6 +1308,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-country"
+  aliases: []
 -
   id: "poo-tools-customer-label"
   name: "PooToolsCustomerLabel"
@@ -1149,6 +1323,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-customer-label"
+  aliases: []
 -
   id: "poo-tools-data-encrypt"
   name: "PooToolsDataEncrypt"
@@ -1162,6 +1338,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-data-encrypt"
+  aliases: []
 -
   id: "poo-tools-debug"
   name: "PooToolsDEBUG"
@@ -1175,6 +1353,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-debug"
+  aliases: []
 -
   id: "poo-tools-debugtracking-eyes"
   name: "PooToolsDEBUGTrackingEyes"
@@ -1188,6 +1368,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-debugtracking-eyes"
+  aliases: []
 -
   id: "poo-tools-guide"
   name: "PooToolsGuide"
@@ -1201,6 +1383,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-guide"
+  aliases: []
 -
   id: "poo-tools-hand-sign"
   name: "PooToolsHandSign"
@@ -1214,6 +1398,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-hand-sign"
+  aliases: []
 -
   id: "poo-tools-harbeth-kit"
   name: "PooToolsHarbethKit"
@@ -1227,6 +1413,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-harbeth-kit"
+  aliases: []
 -
   id: "poo-tools-heart-rate"
   name: "PooToolsHeartRate"
@@ -1240,6 +1428,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-heart-rate"
+  aliases: []
 -
   id: "poo-tools-hud"
   name: "PooToolsHud"
@@ -1253,6 +1443,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-hud"
+  aliases: []
 -
   id: "poo-tools-iap"
   name: "PooToolsIAP"
@@ -1266,6 +1458,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-iap"
+  aliases: []
 -
   id: "poo-tools-image-editor"
   name: "PooToolsImageEditor"
@@ -1284,6 +1478,8 @@
     - "PooToolsPhotoPicker"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-image-editor"
+  aliases: []
 -
   id: "poo-tools-image-picker"
   name: "PooToolsImagePicker"
@@ -1297,6 +1493,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-image-picker"
+  aliases: []
 -
   id: "poo-tools-input"
   name: "PooToolsInput"
@@ -1310,6 +1508,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-input"
+  aliases: []
 -
   id: "poo-tools-instructions"
   name: "PooToolsInstructions"
@@ -1324,6 +1524,8 @@
     - "PToolsOverlay"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-instructions"
+  aliases: []
 -
   id: "poo-tools-key-chain"
   name: "PooToolsKeyChain"
@@ -1337,6 +1539,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-key-chain"
+  aliases: []
 -
   id: "poo-tools-keyboard"
   name: "PooToolsKeyboard"
@@ -1350,6 +1554,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-keyboard"
+  aliases: []
 -
   id: "poo-tools-launch-time-profiler"
   name: "PooToolsLaunchTimeProfiler"
@@ -1363,6 +1569,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-launch-time-profiler"
+  aliases: []
 -
   id: "poo-tools-layout"
   name: "PooToolsLayout"
@@ -1376,6 +1584,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-layout"
+  aliases: []
 -
   id: "poo-tools-live-photo"
   name: "PooToolsLivePhoto"
@@ -1389,6 +1599,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-live-photo"
+  aliases: []
 -
   id: "poo-tools-loading"
   name: "PooToolsLoading"
@@ -1402,6 +1614,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-loading"
+  aliases: []
 -
   id: "poo-tools-location"
   name: "PooToolsLocation"
@@ -1415,6 +1629,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-location"
+  aliases: []
 -
   id: "poo-tools-media-core"
   name: "PooToolsMediaCore"
@@ -1428,6 +1644,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-media-core"
+  aliases: []
 -
   id: "poo-tools-media-viewer"
   name: "PooToolsMediaViewer"
@@ -1446,6 +1664,8 @@
     - "PooToolsLivePhoto"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-media-viewer"
+  aliases: []
 -
   id: "poo-tools-message-kit"
   name: "PooToolsMessageKit"
@@ -1459,6 +1679,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-message-kit"
+  aliases: []
 -
   id: "poo-tools-motion"
   name: "PooToolsMotion"
@@ -1472,6 +1694,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-motion"
+  aliases: []
 -
   id: "poo-tools-net-work"
   name: "PooToolsNetWork"
@@ -1485,6 +1709,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-net-work"
+  aliases: []
 -
   id: "poo-tools-network"
   name: "PooToolsNetwork"
@@ -1503,6 +1729,8 @@
     - "Alamofire"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-network"
+  aliases: []
 -
   id: "poo-tools-network-speed-test"
   name: "PooToolsNetworkSpeedTest"
@@ -1516,6 +1744,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-network-speed-test"
+  aliases: []
 -
   id: "poo-tools-osskit-speech"
   name: "PooToolsOSSKitSpeech"
@@ -1529,6 +1759,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-osskit-speech"
+  aliases: []
 -
   id: "poo-tools-page-control"
   name: "PooToolsPageControl"
@@ -1542,6 +1774,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-page-control"
+  aliases: []
 -
   id: "poo-tools-paging-control"
   name: "PooToolsPagingControl"
@@ -1555,6 +1789,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-paging-control"
+  aliases: []
 -
   id: "poo-tools-pdf"
   name: "PooToolsPDF"
@@ -1568,6 +1804,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-pdf"
+  aliases: []
 -
   id: "poo-tools-phone-info"
   name: "PooToolsPhoneInfo"
@@ -1581,6 +1819,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-phone-info"
+  aliases: []
 -
   id: "poo-tools-photo-picker"
   name: "PooToolsPhotoPicker"
@@ -1600,6 +1840,8 @@
     - "Kakapos"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-photo-picker"
+  aliases: []
 -
   id: "poo-tools-picker"
   name: "PooToolsPicker"
@@ -1613,6 +1855,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-picker"
+  aliases: []
 -
   id: "poo-tools-ping"
   name: "PooToolsPing"
@@ -1626,6 +1870,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-ping"
+  aliases: []
 -
   id: "poo-tools-popover"
   name: "PooToolsPopover"
@@ -1639,6 +1885,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-popover"
+  aliases: []
 -
   id: "poo-tools-progress-bar"
   name: "PooToolsProgressBar"
@@ -1652,6 +1900,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-progress-bar"
+  aliases: []
 -
   id: "poo-tools-rate-view"
   name: "PooToolsRateView"
@@ -1667,6 +1917,8 @@
     - "SnapKit"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-rate-view"
+  aliases: []
 -
   id: "poo-tools-router"
   name: "PooToolsRouter"
@@ -1680,6 +1932,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-router"
+  aliases: []
 -
   id: "poo-tools-scan-qrcode"
   name: "PooToolsScanQRCode"
@@ -1693,6 +1947,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-scan-qrcode"
+  aliases: []
 -
   id: "poo-tools-scroll-banner"
   name: "PooToolsScrollBanner"
@@ -1706,6 +1962,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-scroll-banner"
+  aliases: []
 -
   id: "poo-tools-search"
   name: "PooToolsSearch"
@@ -1719,6 +1977,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-search"
+  aliases: []
 -
   id: "poo-tools-search-bar"
   name: "PooToolsSearchBar"
@@ -1732,6 +1992,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-search-bar"
+  aliases: []
 -
   id: "poo-tools-security"
   name: "PooToolsSecurity"
@@ -1745,6 +2007,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-security"
+  aliases: []
 -
   id: "poo-tools-segmented"
   name: "PooToolsSegmented"
@@ -1758,6 +2022,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-segmented"
+  aliases: []
 -
   id: "poo-tools-share"
   name: "PooToolsShare"
@@ -1771,6 +2037,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-share"
+  aliases: []
 -
   id: "poo-tools-slider"
   name: "PooToolsSlider"
@@ -1786,6 +2054,8 @@
     - "SnapKit"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-slider"
+  aliases: []
 -
   id: "poo-tools-smart-screenshot"
   name: "PooToolsSmartScreenshot"
@@ -1799,6 +2069,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-smart-screenshot"
+  aliases: []
 -
   id: "poo-tools-socket-kit"
   name: "PooToolsSocketKit"
@@ -1812,6 +2084,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-socket-kit"
+  aliases: []
 -
   id: "poo-tools-speed-panel"
   name: "PooToolsSpeedPanel"
@@ -1825,6 +2099,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-speed-panel"
+  aliases: []
 -
   id: "poo-tools-step-count"
   name: "PooToolsStepCount"
@@ -1838,6 +2114,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-step-count"
+  aliases: []
 -
   id: "poo-tools-stepper"
   name: "PooToolsStepper"
@@ -1851,6 +2129,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-stepper"
+  aliases: []
 -
   id: "poo-tools-svg"
   name: "PooToolsSVG"
@@ -1864,6 +2144,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-svg"
+  aliases: []
 -
   id: "poo-tools-telephony"
   name: "PooToolsTelephony"
@@ -1877,6 +2159,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-telephony"
+  aliases: []
 -
   id: "poo-tools-tips-view"
   name: "PooToolsTipsView"
@@ -1890,6 +2174,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-tips-view"
+  aliases: []
 -
   id: "poo-tools-video-editor"
   name: "PooToolsVideoEditor"
@@ -1909,6 +2195,8 @@
     - "PooToolsLoading"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-video-editor"
+  aliases: []
 -
   id: "poo-tools-vision"
   name: "PooToolsVision"
@@ -1922,6 +2210,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-vision"
+  aliases: []
 -
   id: "poo-tools-whats-news-kit"
   name: "PooToolsWhatsNewsKit"
@@ -1935,6 +2225,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-tools-whats-news-kit"
+  aliases: []
 -
   id: "poo-toolsi-os17-tips"
   name: "PooToolsiOS17Tips"
@@ -1948,6 +2240,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "poo-toolsi-os17-tips"
+  aliases: []
 -
   id: "popover"
   name: "Popover"
@@ -1961,6 +2255,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "popover"
+  aliases: []
 -
   id: "popover-kit"
   name: "PopoverKit"
@@ -1974,6 +2270,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "popover-kit"
+  aliases: []
 -
   id: "progress-bar"
   name: "ProgressBar"
@@ -1987,6 +2285,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "progress-bar"
+  aliases: []
 -
   id: "ptbluetooth-permission"
   name: "PTBluetoothPermission"
@@ -2000,6 +2300,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptbluetooth-permission"
+  aliases: []
 -
   id: "ptcalendar-permission"
   name: "PTCalendarPermission"
@@ -2013,6 +2315,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptcalendar-permission"
+  aliases: []
 -
   id: "ptcamera-permission"
   name: "PTCameraPermission"
@@ -2026,6 +2330,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptcamera-permission"
+  aliases: []
 -
   id: "ptcontacts-permission"
   name: "PTContactsPermission"
@@ -2039,6 +2345,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptcontacts-permission"
+  aliases: []
 -
   id: "ptface-idpermission"
   name: "PTFaceIDPermission"
@@ -2052,6 +2360,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptface-idpermission"
+  aliases: []
 -
   id: "pthealth-permission"
   name: "PTHealthPermission"
@@ -2065,6 +2375,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "pthealth-permission"
+  aliases: []
 -
   id: "ptlocation-permission"
   name: "PTLocationPermission"
@@ -2078,6 +2390,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptlocation-permission"
+  aliases: []
 -
   id: "ptmedia-permission"
   name: "PTMediaPermission"
@@ -2091,6 +2405,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptmedia-permission"
+  aliases: []
 -
   id: "ptmic-permission"
   name: "PTMicPermission"
@@ -2104,6 +2420,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptmic-permission"
+  aliases: []
 -
   id: "ptmotion-permission"
   name: "PTMotionPermission"
@@ -2117,6 +2435,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptmotion-permission"
+  aliases: []
 -
   id: "ptnotification-permission"
   name: "PTNotificationPermission"
@@ -2130,6 +2450,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptnotification-permission"
+  aliases: []
 -
   id: "ptools"
   name: "ptools"
@@ -2143,6 +2465,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools"
+  aliases: []
 -
   id: "ptools-accessibility"
   name: "PToolsAccessibility"
@@ -2157,6 +2481,8 @@
     - "PToolsUIFoundation"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-accessibility"
+  aliases: []
 -
   id: "ptools-activities"
   name: "PToolsActivities"
@@ -2170,6 +2496,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-activities"
+  aliases: []
 -
   id: "ptools-app-intents"
   name: "PToolsAppIntents"
@@ -2184,6 +2512,8 @@
     - "PToolsRouteCore"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-app-intents"
+  aliases: []
 -
   id: "ptools-audio"
   name: "PToolsAudio"
@@ -2198,6 +2528,8 @@
     - "PTMicPermission"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-audio"
+  aliases: []
 -
   id: "ptools-background-tasks"
   name: "PToolsBackgroundTasks"
@@ -2211,6 +2543,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-background-tasks"
+  aliases: []
 -
   id: "ptools-bluetooth"
   name: "PToolsBluetooth"
@@ -2224,6 +2558,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-bluetooth"
+  aliases: []
 -
   id: "ptools-configuration"
   name: "PToolsConfiguration"
@@ -2239,6 +2575,8 @@
     - "PToolsStorageCore"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-configuration"
+  aliases: []
 -
   id: "ptools-connectivity"
   name: "PToolsConnectivity"
@@ -2252,6 +2590,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-connectivity"
+  aliases: []
 -
   id: "ptools-content-state"
   name: "PToolsContentState"
@@ -2267,6 +2607,8 @@
     - "PToolsAccessibility"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-content-state"
+  aliases: []
 -
   id: "ptools-core"
   name: "PToolsCore"
@@ -2280,6 +2622,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-core"
+  aliases: []
 -
   id: "ptools-date"
   name: "PToolsDate"
@@ -2293,6 +2637,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-date"
+  aliases: []
 -
   id: "ptools-deep-link"
   name: "PToolsDeepLink"
@@ -2306,6 +2652,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-deep-link"
+  aliases: []
 -
   id: "ptools-device"
   name: "PToolsDevice"
@@ -2319,6 +2667,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-device"
+  aliases: []
 -
   id: "ptools-documents"
   name: "PToolsDocuments"
@@ -2332,6 +2682,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-documents"
+  aliases: []
 -
   id: "ptools-feedback"
   name: "PToolsFeedback"
@@ -2345,6 +2697,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-feedback"
+  aliases: []
 -
   id: "ptools-form"
   name: "PToolsForm"
@@ -2362,6 +2716,8 @@
     - "PToolsAccessibility"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-form"
+  aliases: []
 -
   id: "ptools-httpfile-portal"
   name: "PToolsHTTPFilePortal"
@@ -2375,6 +2731,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-httpfile-portal"
+  aliases: []
 -
   id: "ptools-httpserver"
   name: "PToolsHTTPServer"
@@ -2388,6 +2746,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-httpserver"
+  aliases: []
 -
   id: "ptools-logging"
   name: "PToolsLogging"
@@ -2401,6 +2761,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-logging"
+  aliases: []
 -
   id: "ptools-model"
   name: "PToolsModel"
@@ -2414,32 +2776,25 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model"
+  aliases: []
 -
   id: "ptools-model-combine"
   name: "PToolsModelCombine"
   swiftpm_product: "PToolsModelCombine"
-  cocoapods_subspec: ""
-  source: ""
-  category: "unclassified"
-  status: "review"
-  minimum_ios: "17.0"
-  swift: "6+"
-  dependencies: []
-  owner: "PTools maintainers"
-  docs: true
--
-  id: "ptools-model-combine-2"
-  name: "PToolsModelCombine"
-  swiftpm_product: ""
   cocoapods_subspec: "PToolsModelCombine"
-  source: ""
-  category: "compatibility"
-  status: "compatibility"
+  source: "PooToolsSource/PToolsModelCombine"
+  category: "model-adapter"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "PToolsModelCore"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model-combine"
+  aliases:
+    - "ptools-model-combine-2"
 -
   id: "ptools-model-core"
   name: "PToolsModelCore"
@@ -2453,6 +2808,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model-core"
+  aliases: []
 -
   id: "ptools-model-legacy-kaka-json"
   name: "PToolsModelLegacyKakaJSON"
@@ -2466,6 +2823,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model-legacy-kaka-json"
+  aliases: []
 -
   id: "ptools-model-legacy-smart-codable"
   name: "PToolsModelLegacySmartCodable"
@@ -2479,32 +2838,26 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model-legacy-smart-codable"
+  aliases: []
 -
   id: "ptools-model-uikit"
   name: "PToolsModelUIKit"
   swiftpm_product: "PToolsModelUIKit"
-  cocoapods_subspec: ""
-  source: ""
-  category: "unclassified"
-  status: "review"
-  minimum_ios: "17.0"
-  swift: "6+"
-  dependencies: []
-  owner: "PTools maintainers"
-  docs: true
--
-  id: "ptools-model-uikit-2"
-  name: "PToolsModelUIKit"
-  swiftpm_product: ""
   cocoapods_subspec: "PToolsModelUIKit"
-  source: ""
-  category: "compatibility"
-  status: "compatibility"
+  source: "PooToolsSource/PToolsModelUIKit"
+  category: "model-adapter"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "PToolsModelCore"
+    - "PToolsUIFoundation"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-model-uikit"
+  aliases:
+    - "ptools-model-uikit-2"
 -
   id: "ptools-notifications"
   name: "PToolsNotifications"
@@ -2518,6 +2871,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-notifications"
+  aliases: []
 -
   id: "ptools-overlay"
   name: "PToolsOverlay"
@@ -2534,6 +2889,8 @@
     - "PToolsLogging"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-overlay"
+  aliases: []
 -
   id: "ptools-permission-core"
   name: "PToolsPermissionCore"
@@ -2547,6 +2904,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-permission-core"
+  aliases: []
 -
   id: "ptools-permission-ui"
   name: "PToolsPermissionUI"
@@ -2562,6 +2921,8 @@
     - "PToolsUIFoundation"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-permission-ui"
+  aliases: []
 -
   id: "ptools-route-core"
   name: "PToolsRouteCore"
@@ -2575,6 +2936,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-route-core"
+  aliases: []
 -
   id: "ptools-simulation"
   name: "PToolsSimulation"
@@ -2589,6 +2952,8 @@
     - "PToolsSimulationCore"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-simulation"
+  aliases: []
 -
   id: "ptools-simulation-core"
   name: "PToolsSimulationCore"
@@ -2602,6 +2967,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-simulation-core"
+  aliases: []
 -
   id: "ptools-storage"
   name: "PToolsStorage"
@@ -2615,6 +2982,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-storage"
+  aliases: []
 -
   id: "ptools-storage-core"
   name: "PToolsStorageCore"
@@ -2628,6 +2997,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-storage-core"
+  aliases: []
 -
   id: "ptools-symbols"
   name: "PToolsSymbols"
@@ -2641,6 +3012,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-symbols"
+  aliases: []
 -
   id: "ptools-theme"
   name: "PToolsTheme"
@@ -2655,6 +3028,8 @@
     - "PToolsUIFoundation"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-theme"
+  aliases: []
 -
   id: "ptools-uifoundation"
   name: "PToolsUIFoundation"
@@ -2669,6 +3044,8 @@
     - "SnapKit"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-uifoundation"
+  aliases: []
 -
   id: "ptools-widget-core"
   name: "PToolsWidgetCore"
@@ -2686,6 +3063,8 @@
     - "PToolsDeepLink"
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptools-widget-core"
+  aliases: []
 -
   id: "ptreminders-permission"
   name: "PTRemindersPermission"
@@ -2699,6 +3078,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptreminders-permission"
+  aliases: []
 -
   id: "ptsiri-permission"
   name: "PTSiriPermission"
@@ -2712,6 +3093,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptsiri-permission"
+  aliases: []
 -
   id: "ptspeech-permission"
   name: "PTSpeechPermission"
@@ -2725,6 +3108,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "ptspeech-permission"
+  aliases: []
 -
   id: "pttracking-permission"
   name: "PTTrackingPermission"
@@ -2738,6 +3123,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "pttracking-permission"
+  aliases: []
 -
   id: "reminders-permission"
   name: "RemindersPermission"
@@ -2751,6 +3138,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "reminders-permission"
+  aliases: []
 -
   id: "route-core"
   name: "RouteCore"
@@ -2764,6 +3153,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "route-core"
+  aliases: []
 -
   id: "router"
   name: "Router"
@@ -2777,6 +3168,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "router"
+  aliases: []
 -
   id: "scan-qrcode"
   name: "ScanQRCode"
@@ -2790,6 +3183,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "scan-qrcode"
+  aliases: []
 -
   id: "scroll-banner"
   name: "ScrollBanner"
@@ -2803,6 +3198,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "scroll-banner"
+  aliases: []
 -
   id: "search"
   name: "Search"
@@ -2816,6 +3213,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "search"
+  aliases: []
 -
   id: "search-bar"
   name: "SearchBar"
@@ -2829,6 +3228,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "search-bar"
+  aliases: []
 -
   id: "security"
   name: "Security"
@@ -2842,6 +3243,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "security"
+  aliases: []
 -
   id: "security-suite"
   name: "SecuritySuite"
@@ -2855,6 +3258,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "security-suite"
+  aliases: []
 -
   id: "segmented"
   name: "Segmented"
@@ -2868,6 +3273,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "segmented"
+  aliases: []
 -
   id: "share"
   name: "Share"
@@ -2881,6 +3288,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "share"
+  aliases: []
 -
   id: "siri-permission"
   name: "SiriPermission"
@@ -2894,6 +3303,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "siri-permission"
+  aliases: []
 -
   id: "smart-screenshot"
   name: "SmartScreenshot"
@@ -2907,6 +3318,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "smart-screenshot"
+  aliases: []
 -
   id: "socket-kit"
   name: "SocketKit"
@@ -2920,6 +3333,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "socket-kit"
+  aliases: []
 -
   id: "speech-recognizer-permission"
   name: "SpeechRecognizerPermission"
@@ -2933,6 +3348,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "speech-recognizer-permission"
+  aliases: []
 -
   id: "speed-panel"
   name: "SpeedPanel"
@@ -2946,6 +3363,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "speed-panel"
+  aliases: []
 -
   id: "step-count"
   name: "StepCount"
@@ -2959,6 +3378,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "step-count"
+  aliases: []
 -
   id: "stepper"
   name: "Stepper"
@@ -2972,6 +3393,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "stepper"
+  aliases: []
 -
   id: "storage"
   name: "Storage"
@@ -2985,6 +3408,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "storage"
+  aliases: []
 -
   id: "storage-core"
   name: "StorageCore"
@@ -2998,6 +3423,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "storage-core"
+  aliases: []
 -
   id: "svg"
   name: "SVG"
@@ -3011,6 +3438,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "svg"
+  aliases: []
 -
   id: "svga"
   name: "SVGA"
@@ -3024,6 +3453,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "svga"
+  aliases: []
 -
   id: "tabbar"
   name: "Tabbar"
@@ -3037,6 +3468,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "tabbar"
+  aliases: []
 -
   id: "telephony"
   name: "Telephony"
@@ -3050,6 +3483,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "telephony"
+  aliases: []
 -
   id: "tips-view"
   name: "TipsView"
@@ -3063,6 +3498,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "tips-view"
+  aliases: []
 -
   id: "tracking-permission"
   name: "TrackingPermission"
@@ -3076,6 +3513,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "tracking-permission"
+  aliases: []
 -
   id: "video-cache"
   name: "VideoCache"
@@ -3089,6 +3528,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "video-cache"
+  aliases: []
 -
   id: "vision"
   name: "Vision"
@@ -3102,6 +3543,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "vision"
+  aliases: []
 -
   id: "web-kit"
   name: "WebKit"
@@ -3115,6 +3558,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "web-kit"
+  aliases: []
 -
   id: "whats-news-kit"
   name: "WhatsNewsKit"
@@ -3128,6 +3573,8 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "whats-news-kit"
+  aliases: []
 -
   id: "zip-archive"
   name: "ZipArchive"
@@ -3141,3 +3588,5 @@
   dependencies: []
   owner: "PTools maintainers"
   docs: true
+  canonical_slug: "zip-archive"
+  aliases: []

@@ -1,75 +1,75 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
-  "generated_at": "2026-10-01T14:20:09Z",
+  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "generated_at": "2026-10-01T22:10:22Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 147,
+      "line": 152,
       "operation": "FileManager.default",
-      "classification": "MIGRATED",
+      "classification": "INTENTIONAL",
       "text": "guard let files = try? FileManager.default.contentsOfDirectory(at: directory,"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 165,
+      "line": 170,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(at: entry.url)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 186,
+      "line": 197,
       "operation": "FileManager.default",
-      "classification": "INTENTIONAL",
+      "classification": "MIGRATED",
       "text": "let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 189,
+      "line": 200,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "if !FileManager.default.fileExists(atPath: dir.path) {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 190,
+      "line": 201,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 206,
+      "line": 217,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "return FileManager.default.fileExists(atPath: url.path) ? url : nil"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 211,
+      "line": 222,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "guard FileManager.default.fileExists(atPath: localURL.path) else {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 216,
+      "line": 227,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 502,
+      "line": 520,
       "operation": "jpegData\\(",
       "classification": "MIGRATED",
       "text": "image.jpegData(compressionQuality: 0.8)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 516,
+      "line": 534,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {"
@@ -267,11 +267,11 @@
   "review_required_count": 0,
   "background_or_actor_count": 11,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T14:20:09Z",
+  "generatedAt": "2026-10-01T22:10:22Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e",
+  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_mainactor_heavy_work.rb",
-  "sourceInputsDigest": "f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9"
+  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
 }

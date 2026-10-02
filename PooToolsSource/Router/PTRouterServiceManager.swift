@@ -8,9 +8,11 @@
 
 import Foundation
 
-/// Transfers ownership of a legacy Objective-C service through the actor registry.
-/// Consumers must access `instance` on the main actor; the wrapped object is not thread-safe.
-public final class PTLegacyRouterServiceBox: @unchecked Sendable {
+// English: Keeps a legacy Objective-C service main-actor isolated while the registry transfers only this immutable box.
+// Español: Mantiene el servicio Objective-C heredado aislado en MainActor y el registro solo transfiere esta caja inmutable.
+// 中文：让旧版 Objective-C 服务保持 MainActor 隔离，注册表只传递这个不可变包装器。
+@MainActor
+public final class PTLegacyRouterServiceBox: Sendable {
     @MainActor public let instance: NSObject
 
     @MainActor public init(instance: NSObject) {

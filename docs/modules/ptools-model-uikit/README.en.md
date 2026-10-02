@@ -2,13 +2,13 @@
 module: "PToolsModelUIKit"
 module_id: "ptools-model-uikit"
 language: "en"
-status: "review"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsModelUIKit"
-cocoapods_subspec: "null"
-source: "manifest-only"
-category: "unclassified"
+cocoapods_subspec: "PToolsModelUIKit"
+source: "PooToolsSource/PToolsModelUIKit"
+category: "model-adapter"
 last_reviewed: "2026-09-28"
 canonical: true
 canonical_source: "self"
@@ -20,14 +20,14 @@ document_schema_version: 1
 
 ## 1. Overview
 
-PToolsModelUIKit is a PTools unclassified module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
+PToolsModelUIKit is a PTools model-adapter module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
 
 ## 2. Requirements
 
 - Platform: iOS 17.0+
 - Swift: 6+
-- Category: `unclassified`
-- Status: `review`
+- Category: `model-adapter`
+- Status: `stable`
 
 ## 3. Installation
 
@@ -40,7 +40,7 @@ import PToolsModelUIKit
 CocoaPods:
 
 ```ruby
-# No standalone CocoaPods subspec is published for this product.
+pod 'PooTools/PToolsModelUIKit'
 ```
 
 ## 4. Import
@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PToolsModel
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry..
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: PToolsModelCore, PToolsUIFoundation.
 
 ## 7. Main APIs
 

@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
 Source version: 5.59.0
-Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
+Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
 Generator version: 1
 Generator: Scripts/report_mainactor_heavy_work.rb
-Generated at: 2026-10-01T14:20:09Z
+Generated at: 2026-10-01T22:10:22Z
 -->
 
 # MainActor 重活盘点
@@ -21,16 +21,16 @@ Generated at: 2026-10-01T14:20:09Z
 
 | 文件 | 行号 | 操作 | 分类 | 代码 |
 | --- | ---: | --- | --- | --- |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 147 | `FileManager.default` | MIGRATED | `guard let files = try? FileManager.default.contentsOfDirectory(at: directory,` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 165 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(at: entry.url)` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 186 | `FileManager.default` | INTENTIONAL | `let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 189 | `FileManager.default` | INTENTIONAL | `if !FileManager.default.fileExists(atPath: dir.path) {` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 190 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 206 | `FileManager.default` | INTENTIONAL | `return FileManager.default.fileExists(atPath: url.path) ? url : nil` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 211 | `FileManager.default` | INTENTIONAL | `guard FileManager.default.fileExists(atPath: localURL.path) else {` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 216 | `FileManager.default` | INTENTIONAL | `if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 502 | `jpegData\(` | MIGRATED | `image.jpegData(compressionQuality: 0.8)` |
-| `PooToolsSource/Base/PTVideoCoverCache.swift` | 516 | `FileManager.default` | INTENTIONAL | `let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 152 | `FileManager.default` | INTENTIONAL | `guard let files = try? FileManager.default.contentsOfDirectory(at: directory,` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 170 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(at: entry.url)` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 197 | `FileManager.default` | MIGRATED | `let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 200 | `FileManager.default` | INTENTIONAL | `if !FileManager.default.fileExists(atPath: dir.path) {` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 201 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 217 | `FileManager.default` | INTENTIONAL | `return FileManager.default.fileExists(atPath: url.path) ? url : nil` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 222 | `FileManager.default` | INTENTIONAL | `guard FileManager.default.fileExists(atPath: localURL.path) else {` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 227 | `FileManager.default` | INTENTIONAL | `if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 520 | `jpegData\(` | MIGRATED | `image.jpegData(compressionQuality: 0.8)` |
+| `PooToolsSource/Base/PTVideoCoverCache.swift` | 534 | `FileManager.default` | INTENTIONAL | `let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 172 | `AVAssetImageGenerator` | INTENTIONAL | `let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 239 | `loadTracks\(` | MIGRATED | `guard let track = try await asset.loadTracks(withMediaType: .video).first else {` |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 294 | `AVAssetImageGenerator` | INTENTIONAL | `let generator = AVAssetImageGenerator(asset: asset)` |

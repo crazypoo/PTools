@@ -5,3 +5,7 @@ open|func|open func kj_modelKey(from property: KakaJSON.Property) -> ModelProper
 open|func|open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any?
 public|class|mappingForKey
 public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(
+# English: Remove a stale public-API inventory entry that came from a prose comment, not a declaration.
+# Español: Elimina una entrada obsoleta del inventario que provenía de un comentario, no de una declaración.
+# 中文：移除由注释误采集、并非真实声明的过期公开 API 清单项。
+public|class|public class-based decoder API can migrate to immutable snapshot structs.

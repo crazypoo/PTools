@@ -117,11 +117,11 @@ public final class PTFormCollectionAdapter {
 
             let appearance = resolvedConfiguration.appearance
             switch appearance?.backgroundStyle {
-            case .card, .grouped:
+            case .some(.card), .some(.grouped):
                 model.decorationBackgroundColor = themeAdapter.fieldColor()
                 model.decorationCornerRadius = appearance?.cornerRadius ?? themeAdapter.cornerRadius()
                 model.decorationShadowOpacity = appearance?.shadow?.opacity ?? 0.08
-            case .none:
+            case .some(.none):
                 model.decorationBackgroundColor = .clear
             case nil:
                 break

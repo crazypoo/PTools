@@ -9,6 +9,9 @@
 import UIKit
 import AVFoundation
 import CryptoKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 // Serializes thumbnail file I/O so image decoding and disk access never block MainActor.
 // Serializa el acceso a los archivos para que la decodificación y el disco no bloqueen MainActor.
@@ -136,11 +139,13 @@ private actor PTVideoFileDownloadCoordinator {
 // 中文：视频文件容量维护只读取文件元数据，不解码缓存视频。
 private actor PTVideoFileDiskMaintenance {
     private let directory: URL
-    private let maximumSize: Int64 = 512 * 1024 * 1024
-    private let targetSize: Int64 = 384 * 1024 * 1024
+    private let maximumSize: Int64
+    private let targetSize: Int64
 
-    init(directory: URL) {
+    init(directory: URL, policy: PTCachePolicy) {
         self.directory = directory
+        self.maximumSize = policy.diskLimit ?? 512 * 1024 * 1024
+        self.targetSize = policy.diskTarget ?? 384 * 1024 * 1024
     }
 
     func trimIfNeeded() {
@@ -179,6 +184,12 @@ public final class PTVideoFileCache: Sendable {
     private let directoryName = "PTVideoFileCache"
     
     // 🌟 Swift 6 改进：摒弃 lazy var，改为通过 init 初始化的 let 常量，彻底消除并发读写隐患
+    // English: The policy is immutable and shared with the maintenance actor.
+    // Español: La política es inmutable y se comparte con el actor de mantenimiento.
+    // 中文：策略不可变，并与维护 Actor 共享。
+    private let cachePolicy = PTCachePolicy(namespace: "media.video-file",
+                                             diskLimit: 512 * 1024 * 1024,
+                                             diskTarget: 384 * 1024 * 1024)
     private let cacheDirectory: URL
     private let diskMaintenance: PTVideoFileDiskMaintenance
 
@@ -190,7 +201,7 @@ public final class PTVideoFileCache: Sendable {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         }
         self.cacheDirectory = dir
-        self.diskMaintenance = PTVideoFileDiskMaintenance(directory: dir)
+        self.diskMaintenance = PTVideoFileDiskMaintenance(directory: dir, policy: cachePolicy)
     }
 
     /// 同一个 URL → 同一个文件路径
@@ -348,10 +359,17 @@ private final class PTVideoCoverPendingTask {
 }
 
 public enum PTVideoCoverCache {
+    // English: Keep thumbnail limits aligned with the shared cache contract.
+    // Español: Mantiene los límites de miniaturas alineados con el contrato común.
+    // 中文：让缩略图限制与统一缓存契约保持一致。
+    @MainActor private static let cachePolicy = PTCachePolicy(countLimit: 100,
+                                                               costLimit: 50 * 1024 * 1024,
+                                                               namespace: "media.video-thumbnail")
+
     @MainActor private static let memoryCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
-        cache.countLimit = 100
-        cache.totalCostLimit = 50 * 1024 * 1024
+        cache.countLimit = cachePolicy.countLimit
+        cache.totalCostLimit = cachePolicy.costLimit
         return cache
     }()
 

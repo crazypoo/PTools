@@ -1,14 +1,10 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: master
-Source revision: fd66ba388d2f4b8448b52d434ef02d2fdfd5d56e
-Source version: 5.59.0
-Source inputs digest: f65daecb5c4328289fea7efd63b8becda2567f98942e0f2f1c6937ded0182aa9
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/validate_module_parity.sh
-Generated at: 2026-10-01T14:20:09Z
+Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Generated at: 2026-10-01T22:11:41Z
 -->
 
 # SwiftPM / CocoaPods Module Parity

@@ -68,11 +68,14 @@ public final class PTFormSectionRendererRegistry {
                          kind: String) -> UICollectionReusableView {
         switch content {
         case .text(let text):
-            let view = kind == UICollectionView.elementKindSectionHeader
-                ? PTFormDefaultSectionHeader(frame: .zero)
-                : PTFormDefaultSectionFooter(frame: .zero)
-            view.configure(text: text, theme: context.theme)
-            return view
+            if kind == UICollectionView.elementKindSectionHeader {
+                let header = PTFormDefaultSectionHeader(frame: .zero)
+                header.configure(text: text, theme: context.theme)
+                return header
+            }
+            let footer = PTFormDefaultSectionFooter(frame: .zero)
+            footer.configure(text: text, theme: context.theme)
+            return footer
         case .custom(let identifier):
             return renderers[identifier]?.makeView(content: content, context: context)
                 ?? PTFormMissingSectionView(identifier: identifier)

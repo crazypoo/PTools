@@ -48,7 +48,15 @@ def yaml_scalar(value: str) -> str:
 
 def module_ids() -> set[str]:
     text = (ROOT / "docs/_meta/modules.yml").read_text(encoding="utf-8")
-    return set(re.findall(r"^  id:\s*\"([^\"]+)\"\s*$", text, re.MULTILINE))
+    ids = set(re.findall(r"^  id:\s*\"([^\"]+)\"\s*$", text, re.MULTILINE))
+    # English: Compatibility aliases are catalog identities too, but they resolve to one canonical module.
+    # Español: Los alias de compatibilidad también son identidades del catálogo y resuelven a un módulo canónico.
+    # 中文：兼容别名也是目录身份，但最终解析到唯一 canonical module。
+    registry = json.loads((ROOT / "Scripts/module_registry.json").read_text(encoding="utf-8"))
+    for module in registry.get("modules", []):
+        if isinstance(module, dict):
+            ids.update(alias for alias in module.get("aliases", []) if isinstance(alias, str))
+    return ids
 
 
 def demo_entries() -> list[dict[str, object]]:
