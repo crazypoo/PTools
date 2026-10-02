@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class PTWeakProxy: NSObject, @unchecked Sendable {
+public final class PTWeakProxy: NSObject {
     
     /// 真正的目标对象，使用 weak 弱引用避免内存泄漏
     private weak var target: NSObjectProtocol?

@@ -10,7 +10,8 @@ import UIKit
 import PooTools
 import SnapKit
 
-class PTSpeechViewController: PTBaseViewController {
+@MainActor
+final class PTSpeechViewController: PTBaseViewController {
 
     let speechKit = OSSSpeech.shared
     var isRecording:Bool = false
@@ -217,7 +218,7 @@ class PTSpeechViewController: PTBaseViewController {
 }
 
 //MARK: OSSSpeechDelegate
-extension PTSpeechViewController:@preconcurrency OSSSpeechDelegate {
+extension PTSpeechViewController: OSSSpeechDelegate {
     //MARK: 语音发送操作
     func recordButtonPressed() {
         if avCaptureDeviceAuthorize(avMediaType: .audio) {

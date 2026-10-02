@@ -140,28 +140,6 @@
       "removeIn": null
     },
     {
-      "path": "PooToolsSource/Debug/PTApplicationDirectories.swift",
-      "symbol": "PTApplicationDirectories",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTApplicationDirectories; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "Debug",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
-      "path": "PooToolsSource/Debug/StdoutCapture.swift",
-      "symbol": "PTReadCompletionNotificationBox",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTReadCompletionNotificationBox; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "Debug",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
       "symbol": "PTSafeExceptionBox",
       "category": "SYSTEM_WRAPPER",
@@ -184,17 +162,6 @@
       "removeIn": null
     },
     {
-      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
-      "symbol": "PTLoadedLibrariesViewModel",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTLoadedLibrariesViewModel; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "DebugLibs",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
       "symbol": "PTCustomHTTPProtocol",
       "category": "SYSTEM_WRAPPER",
@@ -206,70 +173,26 @@
       "removeIn": null
     },
     {
-      "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
-      "symbol": "PTWeakProxy",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTWeakProxy; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "ImageEditor",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "symbol": "PTWeakSelfBox",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTWeakSelfBox; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "Inspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "symbol": "PTNotificationBox",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTNotificationBox; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "Inspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "symbol": "PTKeyboardActionBox",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTKeyboardActionBox; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "Inspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
-    },
-    {
       "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
       "symbol": "MainThreadAsyncOperation",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "PhotoKit, AVFoundation, Vision, CoreNFC, URLProtocol or Operation framework object",
       "reason": "Audited compatibility boundary for MainThreadAsyncOperation; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
+      "protection": "The wrapper owns only the framework object crossing the callback boundary; mutable state stays local to the framework queue or an explicit lock.",
       "owner": "Inspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
+      "replacementPlan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it.",
+      "removeIn": null
     },
     {
       "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
       "symbol": "MainThreadOperation",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "PhotoKit, AVFoundation, Vision, CoreNFC, URLProtocol or Operation framework object",
       "reason": "Audited compatibility boundary for MainThreadOperation; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
+      "protection": "The wrapper owns only the framework object crossing the callback boundary; mutable state stays local to the framework queue or an explicit lock.",
       "owner": "Inspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
+      "replacementPlan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it.",
+      "removeIn": null
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
@@ -534,17 +457,6 @@
       "owner": "SocketKit",
       "replacementPlan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it.",
       "removeIn": null
-    },
-    {
-      "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "symbol": "PTTouchValueBox",
-      "category": "MAIN_ACTOR_ONLY",
-      "systemType": "UIKit, debug UI, lifecycle, metric or proxy object",
-      "reason": "Audited compatibility boundary for PTTouchValueBox; mutable state is not treated as implicitly safe.",
-      "protection": "Creation, mutation and callbacks are confined to MainActor; background work returns values only.",
-      "owner": "TouchInspector",
-      "replacementPlan": "Keep UI state MainActor-isolated and remove the compatibility marker after all callbacks are actor-aware.",
-      "removeIn": "6.0.0"
     },
     {
       "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",

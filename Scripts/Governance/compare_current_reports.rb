@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-# English: Compare reports after removing only nondeterministic timestamps.
-# Español: Compara informes eliminando únicamente marcas de tiempo no deterministas.
-# 中文：只移除非确定性时间戳后比较报告内容。
+# English: Compare reports after removing timestamps and commit-local provenance.
+# Español: Compara informes eliminando marcas de tiempo y procedencia local del commit.
+# 中文：比较报告时移除时间戳和仅属于当前提交的来源信息。
 
 require "fileutils"
 require "json"
@@ -26,7 +26,10 @@ def canonicalize(source, destination)
           case value
           when Hash
             value.each_with_object({}) do |(key, child), result|
-              next if %w[generatedAt generated_at].include?(key)
+              # English: The digest is authoritative; revision fields are informational.
+              # Español: El resumen es la autoridad; las revisiones solo son informativas.
+              # 中文：摘要是唯一新鲜度依据；版本字段仅供信息展示。
+              next if %w[generatedAt generated_at sourceRevision source_revision].include?(key)
               result[key] = scrub.call(child)
             end
           when Array
@@ -41,7 +44,9 @@ def canonicalize(source, destination)
       end
     else
       content = File.read(path)
-      content = content.lines.reject { |line| line.match?(/Generated at: /) }.join
+      content = content.lines.reject do |line|
+        line.match?(/Generated at: /) || line.match?(/Source revision: /)
+      end.join
       File.write(output, content)
     end
   end

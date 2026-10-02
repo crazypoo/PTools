@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
-  "generated_at": "2026-10-01T22:10:22Z",
+  "source_revision": "26d9a4ef27a56e1b0f3e130443230a878e99abb0",
+  "generated_at": "2026-10-02T06:44:02Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -27248,12 +27248,12 @@
       "declaration": "public var image: UIImage {"
     },
     {
-      "key": "PooToolsSource/ImageEditor/PTWeakProxy.swift|public|class|public final class PTWeakProxy: NSObject, @unchecked Sendable",
+      "key": "PooToolsSource/ImageEditor/PTWeakProxy.swift|public|class|public final class PTWeakProxy: NSObject",
       "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
       "line": 11,
       "access": "public",
       "kind": "class",
-      "declaration": "public final class PTWeakProxy: NSObject, @unchecked Sendable {"
+      "declaration": "public final class PTWeakProxy: NSObject {"
     },
     {
       "key": "PooToolsSource/ImageEditor/PTWeakProxy.swift|public|init|public init(target: NSObjectProtocol)",
@@ -29202,7 +29202,7 @@
     {
       "key": "PooToolsSource/Inspector/KeyboardAnimatable.swift|public|typealias|public typealias KeyboardAnimationInfo = (duration: TimeInterval, keyboardFrame: CGRect, curve: UIView.AnimationCurve)",
       "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 32,
+      "line": 45,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias KeyboardAnimationInfo = (duration: TimeInterval, keyboardFrame: CGRect, curve: UIView.AnimationCurve)"
@@ -29210,7 +29210,7 @@
     {
       "key": "PooToolsSource/Inspector/KeyboardAnimatable.swift|public|typealias|public typealias KeyboardAnimations = @MainActor @Sendable (KeyboardAnimationInfo) -> Void",
       "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 35,
+      "line": 48,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias KeyboardAnimations = @MainActor @Sendable (KeyboardAnimationInfo) -> Void"
@@ -29218,7 +29218,7 @@
     {
       "key": "PooToolsSource/Inspector/KeyboardAnimatable.swift|public|typealias|public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosition) -> Void",
       "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 36,
+      "line": 49,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosition) -> Void"
@@ -29226,7 +29226,7 @@
     {
       "key": "PooToolsSource/Inspector/KeyboardAnimatable.swift|public|protocol|@objc public protocol KeyboardAnimatable: AnyObject",
       "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 40,
+      "line": 53,
       "access": "public",
       "kind": "protocol",
       "declaration": "@objc public protocol KeyboardAnimatable: AnyObject {"
@@ -32794,7 +32794,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|@MainActor public func createSystemLogView()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 886,
+      "line": 889,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func createSystemLogView() {"
@@ -32802,7 +32802,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 979,
+      "line": 982,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitDisabled = false"
@@ -32810,7 +32810,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var isCharacterLimitWarningDisabled = false",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 980,
+      "line": 983,
       "access": "public",
       "kind": "var",
       "declaration": "public var isCharacterLimitWarningDisabled = false"
@@ -32818,7 +32818,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func print(_ items: Any, level: PTLogLevel = .info)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 982,
+      "line": 985,
       "access": "public",
       "kind": "func",
       "declaration": "public func print(_ items: Any, level: PTLogLevel = .info) {"
@@ -32826,7 +32826,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1073,
+      "line": 1076,
       "access": "public",
       "kind": "func",
       "declaration": "public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {"
@@ -32834,7 +32834,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func clear()",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1149,
+      "line": 1152,
       "access": "public",
       "kind": "func",
       "declaration": "public func clear() {"
@@ -32842,7 +32842,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|class|public class PTTerminal:PFloatingButton",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1666,
+      "line": 1669,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTerminal:PFloatingButton {"
@@ -32850,7 +32850,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|var|public var systemText : PTInvertedTextView?",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1667,
+      "line": 1670,
       "access": "public",
       "kind": "var",
       "declaration": "public var systemText : PTInvertedTextView?"
@@ -32858,7 +32858,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func setAttributedText(_ string: String)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1746,
+      "line": 1749,
       "access": "public",
       "kind": "func",
       "declaration": "public func setAttributedText(_ string: String) {"
@@ -32866,7 +32866,7 @@
     {
       "key": "PooToolsSource/LocalConsole/LocalConsole.swift|public|func|public func appendLog(_ item: PTLogBuffer.LogItem)",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1763,
+      "line": 1766,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendLog(_ item: PTLogBuffer.LogItem) {"
@@ -37826,7 +37826,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|protocol|public protocol OSSSpeechDelegate: AnyObject, Sendable",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 113,
+      "line": 116,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol OSSSpeechDelegate: AnyObject, Sendable {"
@@ -37834,7 +37834,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|class|public class OSSSpeech: NSObject, @unchecked Sendable",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 126,
+      "line": 129,
       "access": "public",
       "kind": "class",
       "declaration": "public class OSSSpeech: NSObject, @unchecked Sendable {"
@@ -37842,7 +37842,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var srp = SFSpeechRecognizer.self",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 157,
+      "line": 160,
       "access": "public",
       "kind": "var",
       "declaration": "public var srp = SFSpeechRecognizer.self"
@@ -37850,7 +37850,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var audioSession: AVAudioSession",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 161,
+      "line": 164,
       "access": "public",
       "kind": "var",
       "declaration": "public var audioSession: AVAudioSession {"
@@ -37858,7 +37858,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var voice: OSSVoice?",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 172,
+      "line": 175,
       "access": "public",
       "kind": "var",
       "declaration": "public var voice: OSSVoice? {"
@@ -37866,7 +37866,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var shouldUseOnDeviceRecognition: Bool",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 176,
+      "line": 179,
       "access": "public",
       "kind": "var",
       "declaration": "public var shouldUseOnDeviceRecognition: Bool {"
@@ -37874,7 +37874,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var recognitionTaskType: OSSSpeechRecognitionTaskType",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 180,
+      "line": 183,
       "access": "public",
       "kind": "var",
       "declaration": "public var recognitionTaskType: OSSSpeechRecognitionTaskType {"
@@ -37882,7 +37882,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var utterance: OSSUtterance?",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 184,
+      "line": 187,
       "access": "public",
       "kind": "var",
       "declaration": "public var utterance: OSSUtterance? {"
@@ -37890,7 +37890,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var saveRecord: Bool",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 188,
+      "line": 191,
       "access": "public",
       "kind": "var",
       "declaration": "public var saveRecord: Bool {"
@@ -37898,7 +37898,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|var|public var onUpdate: (([Float]) -> Void)?",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 192,
+      "line": 195,
       "access": "public",
       "kind": "var",
       "declaration": "public var onUpdate: (([Float]) -> Void)? {"
@@ -37906,7 +37906,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|@MainActor public func speakText(_ text: String? = nil)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 209,
+      "line": 212,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func speakText(_ text: String? = nil) {"
@@ -37914,7 +37914,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|@MainActor public func speakAttributedText(attributedText: NSAttributedString)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 226,
+      "line": 229,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func speakAttributedText(attributedText: NSAttributedString) {"
@@ -37922,7 +37922,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func pauseSpeaking()",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 243,
+      "line": 246,
       "access": "public",
       "kind": "func",
       "declaration": "public func pauseSpeaking() {"
@@ -37930,7 +37930,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func continueSpeaking()",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 246,
+      "line": 249,
       "access": "public",
       "kind": "func",
       "declaration": "public func continueSpeaking() {"
@@ -37938,7 +37938,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func stopSpeaking()",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 249,
+      "line": 252,
       "access": "public",
       "kind": "func",
       "declaration": "public func stopSpeaking() {"
@@ -37946,7 +37946,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func recordVoice(requestMicPermission requested: Bool = true)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 292,
+      "line": 295,
       "access": "public",
       "kind": "func",
       "declaration": "public func recordVoice(requestMicPermission requested: Bool = true) {"
@@ -37954,7 +37954,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func endVoiceRecording()",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 302,
+      "line": 305,
       "access": "public",
       "kind": "func",
       "declaration": "public func endVoiceRecording() {"
@@ -37962,7 +37962,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func clearSpokenText()",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 306,
+      "line": 309,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearSpokenText() {"
@@ -37970,7 +37970,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func getDocumentsDirectory() -> URL",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 546,
+      "line": 549,
       "access": "public",
       "kind": "func",
       "declaration": "public func getDocumentsDirectory() -> URL {"
@@ -37978,7 +37978,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func deleteVoiceFolderItem(url: URL?)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 550,
+      "line": 553,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteVoiceFolderItem(url: URL?) {"
@@ -37986,7 +37986,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func recognizeSpeech(filePath: URL, finalBlock: (@Sendable (_ text: String) -> Void)? = nil)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 577,
+      "line": 580,
       "access": "public",
       "kind": "func",
       "declaration": "public func recognizeSpeech(filePath: URL, finalBlock: (@Sendable (_ text: String) -> Void)? = nil) {"
@@ -37994,7 +37994,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 630,
+      "line": 633,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) {"
@@ -38002,7 +38002,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didHypothesizeTranscription transcription: SFTranscription)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 645,
+      "line": 648,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didHypothesizeTranscription transcription: SFTranscription) {"
@@ -38010,7 +38010,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 650,
+      "line": 653,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {"
@@ -38018,7 +38018,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognitionDidDetectSpeech(_ task: SFSpeechRecognitionTask)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 654,
+      "line": 657,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognitionDidDetectSpeech(_ task: SFSpeechRecognitionTask) {}"
@@ -38026,7 +38026,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognitionTaskFinishedReadingAudio(_ task: SFSpeechRecognitionTask)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 655,
+      "line": 658,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognitionTaskFinishedReadingAudio(_ task: SFSpeechRecognitionTask) {}"
@@ -38034,7 +38034,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 656,
+      "line": 659,
       "access": "public",
       "kind": "func",
       "declaration": "public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {}"
@@ -38042,7 +38042,7 @@
     {
       "key": "PooToolsSource/OSSKit/OSSSpeech.swift|public|func|public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool)",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 660,
+      "line": 663,
       "access": "public",
       "kind": "func",
       "declaration": "public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {"
@@ -75202,7 +75202,7 @@
     {
       "key": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift|public|class|public class TouchInspectorWindow: UIWindow",
       "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "line": 21,
+      "line": 17,
       "access": "public",
       "kind": "class",
       "declaration": "public class TouchInspectorWindow: UIWindow {"
@@ -75210,7 +75210,7 @@
     {
       "key": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift|public|var|public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled",
       "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "line": 23,
+      "line": 19,
       "access": "public",
       "kind": "var",
       "declaration": "public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled {"
@@ -75218,7 +75218,7 @@
     {
       "key": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift|public|var|public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled",
       "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "line": 30,
+      "line": 26,
       "access": "public",
       "kind": "var",
       "declaration": "public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled {"
@@ -77217,11 +77217,11 @@
     }
   ],
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T22:10:22Z",
+  "generatedAt": "2026-10-02T06:44:02Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "sourceRevision": "26d9a4ef27a56e1b0f3e130443230a878e99abb0",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_public_api.rb",
-  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
+  "sourceInputsDigest": "6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184"
 }

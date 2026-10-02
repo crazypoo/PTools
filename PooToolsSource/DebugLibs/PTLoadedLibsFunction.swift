@@ -27,7 +27,8 @@ extension PTLoadedLibrary: Equatable {
     }
 }
 
-final class PTLoadedLibrariesViewModel: @unchecked Sendable {
+@MainActor
+final class PTLoadedLibrariesViewModel {
     
     // MARK: - Public Types
     
@@ -42,7 +43,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     private var searchText: String = ""
 
     // Callback for UI updates
-    var onLoadingStateChanged: ((Int) -> Void)?
+    var onLoadingStateChanged: (@MainActor @Sendable (Int) -> Void)?
     
     // MARK: - Public Methods
     
@@ -72,17 +73,17 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
             
             // Load classes asynchronously
             let libraryPath = filteredLibraries[index].path
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                let classes = self?.fetchClasses(from: libraryPath) ?? []
-                
-                DispatchQueue.main.async {
-                    guard let self = self, index < self.filteredLibraries.count else { return }
-                    self.filteredLibraries[index].classes = classes
-                    self.filteredLibraries[index].isLoading = false
-                    
-                    // Notify UI to update
-                    self.onLoadingStateChanged?(index)
-                }
+            Task { @MainActor [weak self] in
+                let classes = await Task.detached(priority: .userInitiated) {
+                    Self.fetchClasses(from: libraryPath)
+                }.value
+
+                guard let self, index < self.filteredLibraries.count else { return }
+                self.filteredLibraries[index].classes = classes
+                self.filteredLibraries[index].isLoading = false
+
+                // Notify UI to update
+                self.onLoadingStateChanged?(index)
             }
         }
     }
@@ -178,7 +179,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     }
     
     // 🌟 优化点：使用 objc_copyClassNamesForImage 大幅提升性能，并修复内存泄漏
-    private func fetchClasses(from libraryPath: String) -> [String] {
+    private nonisolated static func fetchClasses(from libraryPath: String) -> [String] {
         var classes: [String] = []
         var classCount: UInt32 = 0
         

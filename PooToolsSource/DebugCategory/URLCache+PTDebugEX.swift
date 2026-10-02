@@ -15,7 +15,7 @@ extension URLCache {
         let diskCapacity = 1024 * 1024 * 1024 // 1 GB
         
         // 确保 Caches 路径存在，避免底层存取失败
-        let cacheDirectory = PTApplicationDirectories.shared.support.appendingPathComponent("Caches")
+        let cacheDirectory = PTApplicationDirectories.support.appendingPathComponent("Caches")
         if !FileManager.default.fileExists(atPath: cacheDirectory.path) {
             try? FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
         }
@@ -80,4 +80,3 @@ extension URLCache {
         }
     }
 }
-

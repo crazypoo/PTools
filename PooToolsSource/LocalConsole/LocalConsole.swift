@@ -759,10 +759,13 @@ public class LocalConsole: NSObject {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            self.keyboardHeight = keyboardRectangle.height
-        }
+        let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        keyboardWillShow(frame: keyboardFrame)
+    }
+
+    private func keyboardWillShow(frame: CGRect?) {
+        guard let frame else { return }
+        keyboardHeight = frame.height
     }
     
     @objc func keyboardWillHide() {
@@ -923,9 +926,9 @@ public class LocalConsole: NSObject {
                 }
             },
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { [weak self] notification in
-                let box = PTReadCompletionNotificationBox(value: notification)
+                let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
                 PTMainActorBridge.perform { [weak self] in
-                    self?.keyboardWillShow(box.value)
+                    self?.keyboardWillShow(frame: keyboardFrame)
                 }
             }
         ]

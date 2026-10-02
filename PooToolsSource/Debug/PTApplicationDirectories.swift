@@ -8,10 +8,8 @@
 
 import Foundation
 
-final class PTApplicationDirectories: @unchecked Sendable {
-    static let shared = PTApplicationDirectories()
-
-    var support: URL {
+enum PTApplicationDirectories {
+    static var support: URL {
         guard let supportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
             fatalError("Unable to retrieve application support directory.")
         }

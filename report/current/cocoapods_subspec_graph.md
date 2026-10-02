@@ -1,10 +1,14 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 26d9a4ef27a56e1b0f3e130443230a878e99abb0
+Source version: 5.59.0
+Source inputs digest: 6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184
+Generator version: 1
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
-Generated at: 2026-10-01T22:11:41Z
+Generated at: 2026-10-02T06:44:02Z
 -->
 
 # CocoaPods Subspec Graph

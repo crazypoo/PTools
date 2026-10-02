@@ -44,7 +44,10 @@ Dir.glob(File.join(directory, "*.md")).sort.each do |path|
   content = File.read(path)
   failures << "#{path}: missing Repository" unless content.include?("Repository: #{expected_repository}")
   failures << "#{path}: missing Branch" unless content.include?("Branch: #{branch}")
-  failures << "#{path}: missing Source revision" unless content.include?("Source revision: #{revision}")
+  # English: Keep the revision as provenance; freshness is checked by the digest.
+  # Español: Conserva la revisión como procedencia; la vigencia se valida con el resumen.
+  # 中文：版本号只用于来源追踪；报告新鲜度由摘要校验。
+  failures << "#{path}: missing Source revision" unless content.match?(/^Source revision:\s+\S+/)
   failures << "#{path}: missing Source version" unless content.include?("Source version: #{version}")
   failures << "#{path}: missing or stale Source inputs digest" unless content.include?("Source inputs digest: #{expected_digest}")
   failures << "#{path}: missing Generator version" unless content.include?("Generator version:")

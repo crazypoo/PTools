@@ -8,24 +8,37 @@
 
 import UIKit
 
-private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {
-    weak var value: T?
-    init(_ value: T?) { self.value = value }
-}
+// English: Keep only Sendable keyboard values across the notification task boundary.
+// Español: Solo cruza el límite de la tarea un valor de teclado que sea Sendable.
+// 中文：通知任务边界只传递符合 Sendable 的键盘值。
+private struct PTKeyboardAnimationSnapshot: Sendable {
+    let duration: TimeInterval
+    let keyboardFrame: CGRect
+    let curveRawValue: Int
 
-// 用于安全传递带有 Any 类型的 Notification
-private final class PTNotificationBox: @unchecked Sendable {
-    let notification: Notification
-    init(_ notification: Notification) { self.notification = notification }
-}
+    init?(notification: Notification) {
+        guard
+            notification.userInfo?[.keyboardIsLocalKey] as? Bool == true,
+            let duration = notification.userInfo?[.durationKey] as? Double,
+            let keyboardFrame = notification.userInfo?[.frameKey] as? CGRect,
+            let curveRawValue = notification.userInfo?[.curveKey] as? Int,
+            UIView.AnimationCurve(rawValue: curveRawValue) != nil
+        else {
+            return nil
+        }
 
-// 用于安全传递外部的动画闭包
-private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {
-    let animations: Anim
-    let completion: Comp
-    init(_ animations: Anim, _ completion: Comp) {
-        self.animations = animations
-        self.completion = completion
+        self.duration = duration
+        self.keyboardFrame = keyboardFrame
+        self.curveRawValue = curveRawValue
+    }
+
+    @MainActor
+    var info: KeyboardAnimationInfo {
+        KeyboardAnimationInfo(
+            duration: duration,
+            keyboardFrame: keyboardFrame,
+            curve: UIView.AnimationCurve(rawValue: curveRawValue) ?? .easeInOut
+        )
     }
 }
 
@@ -44,6 +57,25 @@ public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosit
 // 定义一个静态 Key 用于关联对象存储
 private enum AssociatedKeys {
     @MainActor static var keyboardTokens:UInt8 = 0
+}
+
+// English: Keep UIKit's completion-handler call in a synchronous MainActor helper.
+// Español: Mantén la llamada de finalización de UIKit en un auxiliar síncrono de MainActor.
+// 中文：将 UIKit 的完成回调调用放在同步的 MainActor 辅助方法中。
+@MainActor
+private func pt_startKeyboardAnimation(
+    info: KeyboardAnimationInfo,
+    animations: @escaping KeyboardAnimations,
+    completion: KeyboardCompletion?
+) {
+    let animator = UIViewPropertyAnimator(duration: info.duration, curve: info.curve)
+    animator.addAnimations {
+        animations(info)
+    }
+    if let completion {
+        animator.addCompletion(completion)
+    }
+    animator.startAnimation()
 }
 
 // MARK: - KeyboardAnimatable Extension
@@ -69,30 +101,19 @@ public extension KeyboardAnimatable {
         // 添加前先尝试移除旧的，防止多次注册导致动画错乱
         stopAnimatingWhenKeyboard(notificationName)
         
-        let weakSelfBox = PTWeakSelfBox(self)
-        let actionBox = PTKeyboardActionBox(animations, completion)
-
         _ = notificationCenter.addObserver(
             forName: notificationName.rawValue,
             object: nil,
             queue: .main // 运行时仍然保证投递到主队列
         ) { notification in
-            let notifBox = PTNotificationBox(notification)
-            // 🌟 4. 开启 Task 回到主线程，安全拆箱并执行
+            guard let snapshot = PTKeyboardAnimationSnapshot(notification: notification) else { return }
+
             Task { @MainActor in
-                // 拆箱 self，如果对象已经被销毁则直接返回，安全可靠
-                guard weakSelfBox.value != nil else { return }
-                
-                let keyboardAnimation = KeyboardAnimation(
-                    animation: actionBox.animations,
-                    completion: actionBox.completion
-                )
-                
-                // 执行你的自定义动画扩展，使用拆箱后的 notification
-                UIView.animate(
-                    withKeyboardNotification: notifBox.notification,
-                    animations: keyboardAnimation.animation,
-                    completion: keyboardAnimation.completion
+                let info = snapshot.info
+                pt_startKeyboardAnimation(
+                    info: info,
+                    animations: animations,
+                    completion: completion
                 )
             }
         }

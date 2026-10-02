@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Source revision: 26d9a4ef27a56e1b0f3e130443230a878e99abb0
 Source version: 5.59.0
-Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
+Source inputs digest: 6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184
 Generator version: 1
 Generator: Scripts/validate_file_size_gate.sh
-Generated at: 2026-10-01T22:10:22Z
+Generated at: 2026-10-02T06:44:02Z
 -->
 
 # 当前文件尺寸门禁
@@ -36,7 +36,7 @@ Generated at: 2026-10-01T22:10:22Z
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1586 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1054 | warning |
 | `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1842 | architecture_exception |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1845 | architecture_exception |
 | `PooToolsSource/NetWork/Network.swift` | 1120 | warning |
 | `PooToolsSource/PToolsForm/PTForm.swift` | 1174 | warning |
 | `PooToolsSource/PToolsUIFoundation/PTRichText.swift` | 1598 | architecture_exception |

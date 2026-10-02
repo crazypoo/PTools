@@ -8,10 +8,6 @@
 
 import UIKit
 
-struct PTReadCompletionNotificationBox: @unchecked Sendable {
-    let value: Notification
-}
-
 @MainActor
 final class StdoutCapture {
 
@@ -104,9 +100,9 @@ final class StdoutCapture {
 
         // listen in to the readHandle notification
         notificationToken = NotificationCenter.default.addObserver(forName: FileHandle.readCompletionNotification, object: pipeReadHandle, queue: .main) { [weak self] notification in
-            let box = PTReadCompletionNotificationBox(value: notification)
-            PTMainActorBridge.perform { [weak self] in
-                self?.handlePipeNotification(notification: box.value)
+            let data = notification.userInfo?[NSFileHandleNotificationDataItem] as? Data
+            PTMainActorBridge.perform { [weak self, data] in
+                self?.handlePipeData(data)
             }
         }
 
@@ -137,10 +133,14 @@ final class StdoutCapture {
 
     @objc
     func handlePipeNotification(notification: Notification) {
+        handlePipeData(notification.userInfo?[NSFileHandleNotificationDataItem] as? Data)
+    }
+
+    private func handlePipeData(_ data: Data?) {
         guard isCapturing else { return }
         inputPipe?.fileHandleForReading.readInBackgroundAndNotify()
 
-        if let data = notification.userInfo?[NSFileHandleNotificationDataItem] as? Data,
+        if let data,
            let str = String(data: data, encoding: String.Encoding.utf8),
            let logUrl {
             /// write the data back into the output pipe. the output pipe's write

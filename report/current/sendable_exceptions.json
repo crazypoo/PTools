@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
-  "generated_at": "2026-10-01T22:10:22Z",
+  "source_revision": "26d9a4ef27a56e1b0f3e130443230a878e99abb0",
+  "generated_at": "2026-10-02T06:44:02Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -29,20 +29,14 @@
     "PooToolsSource/Vision/PTVision.swift",
     "PooToolsSource/Calendar/PTEventOnCalendar.swift",
     "PooToolsSource/Core/OSSVoice.swift",
-    "PooToolsSource/Debug/PTApplicationDirectories.swift",
-    "PooToolsSource/Debug/StdoutCapture.swift",
     "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-    "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
     "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-    "PooToolsSource/ImageEditor/PTWeakProxy.swift",
-    "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-    "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
     "PooToolsSource/Inspector/MainThreadOperation.swift",
+    "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
     "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
     "PooToolsSource/OSSKit/OSSSpeech.swift",
     "PooToolsSource/OSSKit/OSSUtterance.swift",
-    "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-    "PooToolsSource/TouchInspector/TouchInspectorWindow.swift"
+    "PooToolsSource/SocketKit/PTWebSocketClient.swift"
   ],
   "declarations": [
     {
@@ -100,18 +94,6 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/Debug/PTApplicationDirectories.swift",
-      "line": 11,
-      "declaration": "final class PTApplicationDirectories: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/Debug/StdoutCapture.swift",
-      "line": 11,
-      "declaration": "struct PTReadCompletionNotificationBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
       "line": 14,
       "declaration": "private struct PTSafeExceptionBox: @unchecked Sendable {",
@@ -124,50 +106,20 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
-      "line": 30,
-      "declaration": "final class PTLoadedLibrariesViewModel: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
       "line": 26,
       "declaration": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {",
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/ImageEditor/PTWeakProxy.swift",
-      "line": 11,
-      "declaration": "public final class PTWeakProxy: NSObject, @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 11,
-      "declaration": "private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 17,
-      "declaration": "private final class PTNotificationBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
-      "path": "PooToolsSource/Inspector/KeyboardAnimatable.swift",
-      "line": 23,
-      "declaration": "private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
       "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
-      "line": 9,
+      "line": 12,
       "declaration": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
-      "line": 9,
+      "line": 12,
       "declaration": "class MainThreadOperation: Operation, @unchecked Sendable {",
       "allowlisted": true
     },
@@ -245,13 +197,13 @@
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 126,
+      "line": 129,
       "declaration": "public class OSSSpeech: NSObject, @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 382,
+      "line": 385,
       "declaration": "final class ConverterState: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -316,12 +268,6 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
-      "line": 15,
-      "declaration": "private struct PTTouchValueBox: @unchecked Sendable {",
-      "allowlisted": true
-    },
-    {
       "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",
       "line": 11,
       "declaration": "class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {",
@@ -365,11 +311,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T22:10:22Z",
+  "generatedAt": "2026-10-02T06:44:02Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
+  "sourceRevision": "26d9a4ef27a56e1b0f3e130443230a878e99abb0",
   "sourceVersion": "5.59.0",
   "generatorVersion": "Scripts/report_sendable_exceptions.rb",
-  "sourceInputsDigest": "4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32"
+  "sourceInputsDigest": "6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184"
 }

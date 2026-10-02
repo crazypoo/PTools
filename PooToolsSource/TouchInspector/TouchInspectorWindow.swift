@@ -12,10 +12,6 @@
 import Foundation
 import UIKit
 
-private struct PTTouchValueBox: @unchecked Sendable {
-    let value: NSValue
-}
-
 @MainActor
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
@@ -34,7 +30,7 @@ public class TouchInspectorWindow: UIWindow {
         }
     }
     
-    private var touchOverlays: [NSValue : TouchOverlayView] = [:]
+    private var touchOverlays: [ObjectIdentifier: TouchOverlayView] = [:]
     
     public override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
@@ -57,31 +53,31 @@ public class TouchInspectorWindow: UIWindow {
     
     private func handleTouchesEvent(_ event: UIEvent) {
         for touch in event.allTouches ?? [] {
-            let touchValue = NSValue(nonretainedObject: touch)
+            let touchID = ObjectIdentifier(touch)
             let touchLocationInWindow = touch.location(in: self)
             let touchPhase = touch.phase
             
             if touchPhase == .began {
-                createTouchOverlay(for: touchValue)
+                createTouchOverlay(for: touchID)
             }
             
-            updateTouchOverlay(for: touchValue, location: touchLocationInWindow, hitTestedView: hitTest(touchLocationInWindow, with: event))
+            updateTouchOverlay(for: touchID, location: touchLocationInWindow, hitTestedView: hitTest(touchLocationInWindow, with: event))
             
             if touchPhase == .ended || touchPhase == .cancelled {
-                removeTouchOverlay(for: touchValue)
+                removeTouchOverlay(for: touchID)
             }
         }
     }
     
-    private func createTouchOverlay(for touchValue: NSValue) {
+    private func createTouchOverlay(for touchID: ObjectIdentifier) {
         let overlay = TouchOverlayView()
-        touchOverlays[touchValue] = overlay
+        touchOverlays[touchID] = overlay
         addSubview(overlay)
         overlay.present()
     }
 
-    private func updateTouchOverlay(for touchValue: NSValue, location: CGPoint, hitTestedView: UIView?) {
-        guard let overlay = touchOverlays[touchValue] else { return }
+    private func updateTouchOverlay(for touchID: ObjectIdentifier, location: CGPoint, hitTestedView: UIView?) {
+        guard let overlay = touchOverlays[touchID] else { return }
         
         overlay.hitTestingOverlay.text = hitTestOverlayDescription(for: location, hitTestedView: hitTestedView)
         overlay.hitTestingOverlay.isHidden = !showHitTesting
@@ -89,13 +85,12 @@ public class TouchInspectorWindow: UIWindow {
         bringSubviewToFront(overlay)
     }
         
-    private func removeTouchOverlay(for touchValue: NSValue) {
-        guard let overlay = touchOverlays[touchValue] else { return }
-        let safeBox = PTTouchValueBox(value: touchValue)
+    private func removeTouchOverlay(for touchID: ObjectIdentifier) {
+        guard let overlay = touchOverlays[touchID] else { return }
         overlay.hide {
             PTGCDManager.shared.runOnMain {
                 overlay.removeFromSuperview()
-                self.touchOverlays.removeValue(forKey: safeBox.value)
+                self.touchOverlays.removeValue(forKey: touchID)
             }
         }
     }

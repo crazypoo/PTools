@@ -42,21 +42,13 @@ PooToolsSource/Calendar/PTEventOnCalendar.swift
 # Core/OSSVoice 继承无法原生声明 Sendable 的 SDK 引用类型 AVSpeechSynthesisVoice；其可变兼容
 # 属性由 NSRecursiveLock 保护，待旧类淘汰后迁移调用方到 OSSVoiceInfo。
 PooToolsSource/Core/OSSVoice.swift
-PooToolsSource/Debug/PTApplicationDirectories.swift
-# system notification callback boundary: Notification is consumed immediately on the MainActor.
-# límite de callback de notificación del sistema: Notification se consume inmediatamente en MainActor.
-# 系统通知回调边界：Notification 会立即在 MainActor 上消费。
-PooToolsSource/Debug/StdoutCapture.swift
 # synchronous UIKit Objective-C forwarding returns an immediate system responder
 # el forwarding síncrono de Objective-C de UIKit devuelve un responder del sistema de inmediato
 # UIKit 的同步 Objective-C 转发会立即返回系统 responder
 PooToolsSource/DebugCrash/PTCrashHandler.swift
-PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift
 PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift
-PooToolsSource/ImageEditor/PTWeakProxy.swift
-PooToolsSource/Inspector/KeyboardAnimatable.swift
-PooToolsSource/Inspector/MainThreadAsyncOperation.swift
 PooToolsSource/Inspector/MainThreadOperation.swift
+PooToolsSource/Inspector/MainThreadAsyncOperation.swift
 PooToolsSource/MXMetricKitManager/MetricsManager.swift
 PooToolsSource/OSSKit/OSSSpeech.swift
 PooToolsSource/OSSKit/OSSUtterance.swift
@@ -64,4 +56,3 @@ PooToolsSource/OSSKit/OSSUtterance.swift
 # Proxy del delegado de URLSession únicamente: solo cruzan la frontera de callbacks una política de confianza inmutable y un cierre de eventos Sendable; el estado queda en el actor.
 # 仅用于 URLSession 委托代理：跨 Foundation 回调边界的只有不可变信任策略和 Sendable 事件闭包，Socket 状态仍由 actor 独占。
 PooToolsSource/SocketKit/PTWebSocketClient.swift
-PooToolsSource/TouchInspector/TouchInspectorWindow.swift

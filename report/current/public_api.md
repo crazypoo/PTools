@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
+Source revision: 26d9a4ef27a56e1b0f3e130443230a878e99abb0
 Source version: 5.59.0
-Source inputs digest: 4caf138b6ab1c85771b47b142436225495a9f22124e365083fb05dd723906f32
+Source inputs digest: 6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184
 Generator version: 1
 Generator: Scripts/report_public_api.rb
-Generated at: 2026-10-01T22:10:22Z
+Generated at: 2026-10-02T06:44:02Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3422,7 +3422,7 @@ Generated at: 2026-10-01T22:10:22Z
 | PooToolsSource/ImageEditor/PTStickerManager.swift:942 | var | public | public var font: UIFont? |
 | PooToolsSource/ImageEditor/PTStickerManager.swift:944 | var | public | public var style: PTInputTextStyle |
 | PooToolsSource/ImageEditor/PTStickerManager.swift:946 | var | public | public var image: UIImage { |
-| PooToolsSource/ImageEditor/PTWeakProxy.swift:11 | class | public | public final class PTWeakProxy: NSObject, @unchecked Sendable { |
+| PooToolsSource/ImageEditor/PTWeakProxy.swift:11 | class | public | public final class PTWeakProxy: NSObject { |
 | PooToolsSource/ImageEditor/PTWeakProxy.swift:18 | init | public | public init(target: NSObjectProtocol) { |
 | PooToolsSource/ImageEditor/PTWeakProxy.swift:26 | class | public | public class func proxy(withTarget target: NSObjectProtocol) -> PTWeakProxy { |
 | PooToolsSource/ImagePicker/PTImagePicker.swift:22 | enum | public | public enum PTSystemMediaPickerKind: Sendable { |
@@ -3666,10 +3666,10 @@ Generated at: 2026-10-01T22:10:22Z
 | PooToolsSource/Inspector/InspectorProvider.swift:19 | init | public | public init(closure: @escaping (From) -> To) { |
 | PooToolsSource/Inspector/InspectorProvider.swift:27 | func | public | public func hash(into hasher: inout Hasher) { |
 | PooToolsSource/Inspector/KeyCommandsSectionDataSource.swift:108 | typealias | public | public typealias AllCases = [UIKeyModifierFlags] |
-| PooToolsSource/Inspector/KeyboardAnimatable.swift:32 | typealias | public | public typealias KeyboardAnimationInfo = (duration: TimeInterval, keyboardFrame: CGRect, curve: UIView.AnimationCurve) |
-| PooToolsSource/Inspector/KeyboardAnimatable.swift:35 | typealias | public | public typealias KeyboardAnimations = @MainActor @Sendable (KeyboardAnimationInfo) -> Void |
-| PooToolsSource/Inspector/KeyboardAnimatable.swift:36 | typealias | public | public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosition) -> Void |
-| PooToolsSource/Inspector/KeyboardAnimatable.swift:40 | protocol | public | @objc public protocol KeyboardAnimatable: AnyObject { |
+| PooToolsSource/Inspector/KeyboardAnimatable.swift:45 | typealias | public | public typealias KeyboardAnimationInfo = (duration: TimeInterval, keyboardFrame: CGRect, curve: UIView.AnimationCurve) |
+| PooToolsSource/Inspector/KeyboardAnimatable.swift:48 | typealias | public | public typealias KeyboardAnimations = @MainActor @Sendable (KeyboardAnimationInfo) -> Void |
+| PooToolsSource/Inspector/KeyboardAnimatable.swift:49 | typealias | public | public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosition) -> Void |
+| PooToolsSource/Inspector/KeyboardAnimatable.swift:53 | protocol | public | @objc public protocol KeyboardAnimatable: AnyObject { |
 | PooToolsSource/Inspector/KeyboardAnimation.swift:13 | struct | public | public struct KeyboardAnimation { |
 | PooToolsSource/Inspector/KeyboardAnimation.swift:20 | init | public | public init(animation: @escaping KeyboardAnimations, completion: KeyboardCompletion? = nil) { |
 | PooToolsSource/Inspector/KeyboardNotificationName.swift:12 | enum | public | public enum KeyboardNotificationName { |
@@ -4115,16 +4115,16 @@ Generated at: 2026-10-01T22:10:22Z
 | PooToolsSource/LocalConsole/LocalConsole.swift:576 | var | public | public var maskView:PTDevMaskView? |
 | PooToolsSource/LocalConsole/LocalConsole.swift:584 | var | public | public var showAllUserDefaultsKeys = false { |
 | PooToolsSource/LocalConsole/LocalConsole.swift:721 | func | public | @MainActor public func cleanSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:886 | func | public | @MainActor public func createSystemLogView() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:979 | var | public | public var isCharacterLimitDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:980 | var | public | public var isCharacterLimitWarningDisabled = false |
-| PooToolsSource/LocalConsole/LocalConsole.swift:982 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1073 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1149 | func | public | public func clear() { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1666 | class | public | public class PTTerminal:PFloatingButton { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1667 | var | public | public var systemText : PTInvertedTextView? |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1746 | func | public | public func setAttributedText(_ string: String) { |
-| PooToolsSource/LocalConsole/LocalConsole.swift:1763 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:889 | func | public | @MainActor public func createSystemLogView() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:982 | var | public | public var isCharacterLimitDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:983 | var | public | public var isCharacterLimitWarningDisabled = false |
+| PooToolsSource/LocalConsole/LocalConsole.swift:985 | func | public | public func print(_ items: Any, level: PTLogLevel = .info) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1076 | func | public | public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1152 | func | public | public func clear() { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1669 | class | public | public class PTTerminal:PFloatingButton { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1670 | var | public | public var systemText : PTInvertedTextView? |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1749 | func | public | public func setAttributedText(_ string: String) { |
+| PooToolsSource/LocalConsole/LocalConsole.swift:1766 | func | public | public func appendLog(_ item: PTLogBuffer.LogItem) { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:11 | class | public | public class PTInvertedTextView: UITextView { |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:13 | var | public | public var pendingOffsetChange = false |
 | PooToolsSource/LocalConsole/PTInvertedTextView.swift:26 | var | public | public var cancelNextContentSizeDidSet = false |
@@ -4744,34 +4744,34 @@ Generated at: 2026-10-01T22:10:22Z
 | PooToolsSource/OSSKit/OSSSpeech.swift:89 | var | public | @MainActor public var error: Error? { |
 | PooToolsSource/OSSKit/OSSSpeech.swift:96 | enum | public | public enum OSSSpeechRecognitionTaskType: Int, Sendable { |
 | PooToolsSource/OSSKit/OSSSpeech.swift:102 | var | public | public var taskType: SFSpeechRecognitionTaskHint { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:113 | protocol | public | public protocol OSSSpeechDelegate: AnyObject, Sendable { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:126 | class | public | public class OSSSpeech: NSObject, @unchecked Sendable { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:157 | var | public | public var srp = SFSpeechRecognizer.self |
-| PooToolsSource/OSSKit/OSSSpeech.swift:161 | var | public | public var audioSession: AVAudioSession { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:172 | var | public | public var voice: OSSVoice? { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:176 | var | public | public var shouldUseOnDeviceRecognition: Bool { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:180 | var | public | public var recognitionTaskType: OSSSpeechRecognitionTaskType { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:184 | var | public | public var utterance: OSSUtterance? { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:188 | var | public | public var saveRecord: Bool { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:192 | var | public | public var onUpdate: (([Float]) -> Void)? { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:209 | func | public | @MainActor public func speakText(_ text: String? = nil) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:226 | func | public | @MainActor public func speakAttributedText(attributedText: NSAttributedString) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:243 | func | public | public func pauseSpeaking() { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:246 | func | public | public func continueSpeaking() { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:249 | func | public | public func stopSpeaking() { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:292 | func | public | public func recordVoice(requestMicPermission requested: Bool = true) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:302 | func | public | public func endVoiceRecording() { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:306 | func | public | public func clearSpokenText() { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:546 | func | public | public func getDocumentsDirectory() -> URL { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:550 | func | public | public func deleteVoiceFolderItem(url: URL?) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:577 | func | public | public func recognizeSpeech(filePath: URL, finalBlock: (@Sendable (_ text: String) -> Void)? = nil) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:630 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:645 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didHypothesizeTranscription transcription: SFTranscription) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:650 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) { |
-| PooToolsSource/OSSKit/OSSSpeech.swift:654 | func | public | public func speechRecognitionDidDetectSpeech(_ task: SFSpeechRecognitionTask) {} |
-| PooToolsSource/OSSKit/OSSSpeech.swift:655 | func | public | public func speechRecognitionTaskFinishedReadingAudio(_ task: SFSpeechRecognitionTask) {} |
-| PooToolsSource/OSSKit/OSSSpeech.swift:656 | func | public | public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {} |
-| PooToolsSource/OSSKit/OSSSpeech.swift:660 | func | public | public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:116 | protocol | public | public protocol OSSSpeechDelegate: AnyObject, Sendable { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:129 | class | public | public class OSSSpeech: NSObject, @unchecked Sendable { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:160 | var | public | public var srp = SFSpeechRecognizer.self |
+| PooToolsSource/OSSKit/OSSSpeech.swift:164 | var | public | public var audioSession: AVAudioSession { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:175 | var | public | public var voice: OSSVoice? { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:179 | var | public | public var shouldUseOnDeviceRecognition: Bool { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:183 | var | public | public var recognitionTaskType: OSSSpeechRecognitionTaskType { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:187 | var | public | public var utterance: OSSUtterance? { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:191 | var | public | public var saveRecord: Bool { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:195 | var | public | public var onUpdate: (([Float]) -> Void)? { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:212 | func | public | @MainActor public func speakText(_ text: String? = nil) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:229 | func | public | @MainActor public func speakAttributedText(attributedText: NSAttributedString) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:246 | func | public | public func pauseSpeaking() { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:249 | func | public | public func continueSpeaking() { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:252 | func | public | public func stopSpeaking() { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:295 | func | public | public func recordVoice(requestMicPermission requested: Bool = true) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:305 | func | public | public func endVoiceRecording() { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:309 | func | public | public func clearSpokenText() { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:549 | func | public | public func getDocumentsDirectory() -> URL { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:553 | func | public | public func deleteVoiceFolderItem(url: URL?) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:580 | func | public | public func recognizeSpeech(filePath: URL, finalBlock: (@Sendable (_ text: String) -> Void)? = nil) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:633 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:648 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didHypothesizeTranscription transcription: SFTranscription) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:653 | func | public | public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) { |
+| PooToolsSource/OSSKit/OSSSpeech.swift:657 | func | public | public func speechRecognitionDidDetectSpeech(_ task: SFSpeechRecognitionTask) {} |
+| PooToolsSource/OSSKit/OSSSpeech.swift:658 | func | public | public func speechRecognitionTaskFinishedReadingAudio(_ task: SFSpeechRecognitionTask) {} |
+| PooToolsSource/OSSKit/OSSSpeech.swift:659 | func | public | public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {} |
+| PooToolsSource/OSSKit/OSSSpeech.swift:663 | func | public | public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) { |
 | PooToolsSource/OSSKit/OSSUtterance.swift:27 | class | public | public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable { |
 | PooToolsSource/Overlay/PTOverlayAnimation.swift:7 | enum | public | public enum PTOverlayTransition: Sendable { |
 | PooToolsSource/Overlay/PTOverlayAnimation.swift:17 | class | public | public final class PTOverlayAnimator { |
@@ -9416,9 +9416,9 @@ Generated at: 2026-10-01T22:10:22Z
 | PooToolsSource/TipsView/PTTipsView.swift:709 | func | open | @objc open func hide(forced: Bool = false) { |
 | PooToolsSource/TipsView/PTTipsView.swift:751 | func | open | open func startActionAnimation() { |
 | PooToolsSource/TipsView/PTTipsView.swift:755 | func | open | open func stopActionAnimation(_ completion: (() -> Void)? = nil) { |
-| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:21 | class | public | public class TouchInspectorWindow: UIWindow { |
-| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:23 | var | public | public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled { |
-| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:30 | var | public | public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled { |
+| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:17 | class | public | public class TouchInspectorWindow: UIWindow { |
+| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:19 | var | public | public var showTouches: Bool = PTDebugPreferences.shared.isTouchOverlayEnabled { |
+| PooToolsSource/TouchInspector/TouchInspectorWindow.swift:26 | var | public | public var showHitTesting: Bool = PTDebugPreferences.shared.isHitTestingEnabled { |
 | PooToolsSource/TrackingPermission/PTPermissionTracking.swift:23 | class | public | public class PTPermissionTracking: PTPermission { |
 | PooToolsSource/TrackingPermission/PTPermissionTracking.swift:26 | var | open | open var usageDescriptionKey: String? { "NSUserTrackingUsageDescription" } |
 | PooToolsSource/VideoEditor/Compositor.swift:15 | class | public | public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable { |
