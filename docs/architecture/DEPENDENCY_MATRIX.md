@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
-Generated at: 2026-10-01T11:37:50Z
-Version source: 5.59.0
+Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Generated at: 2026-10-02T14:00:03Z
+Version source: 5.60.0
 -->
 
 # Direct Dependency Matrix
@@ -39,7 +39,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContentState` | `Accessibility`, `Connectivity`, `Core`, `PToolsAccessibility`, `PToolsConnectivity`, `PToolsTheme`, `Theme`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `Core` | `Date`, `Device`, `Logging`, `PToolsCore`, `PToolsDate`, `PToolsDevice`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `KakaJSON`, `Kingfisher`, `Lottie`, `SmartCodable`, `SmartCodable/Inherit`, `SnapKit`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Date`, `Device`, `Logging`, `PToolsCore`, `PToolsDate`, `PToolsDevice`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `Lottie`, `SnapKit`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | — | No direct third-party dependency | Deprecate alias |
@@ -86,12 +86,12 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `MicPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Model` | `ModelCore`, `PToolsModelCore`, `PToolsModelMacroPlugin` | — | No direct third-party dependency | Keep; review direct drift |
 | `ModelCore` | — | — | No direct third-party dependency | Keep; review direct drift |
-| `ModelLegacyKakaJSON` | — | `KakaJSON` | 6.0 review | Keep; review direct drift |
+| `ModelLegacyKakaJSON` | `Core` | `KakaJSON` | 6.0 review | Keep; review direct drift |
 | `ModelLegacySmartCodable` | — | `SmartCodable` | 6.0 review | Keep; review direct drift |
 | `Motion` | `Core`, `MotionPermission`, `PTMotionPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MotionPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `NFCKit` | `Core` | — | No direct third-party dependency | Keep; review direct drift |
-| `NetWork` | `Core`, `Loading`, `ModelCore`, `Network`, `PToolsCore`, `PToolsModelCore`, `PooToolsLoading`, `ptools` | `Alamofire` | 6.0 review | Deprecate alias |
+| `NetWork` | `Core`, `Loading`, `ModelCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `Network`, `PToolsCore`, `PToolsModelCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PooToolsLoading`, `ptools` | `Alamofire` | 6.0 review | Deprecate alias |
 | `NetworkSpeedTest` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `NotificationBanner` | `Banner` | — | No direct third-party dependency | Keep; review direct drift |
 | `NotificationPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
@@ -100,6 +100,10 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Overlay` | `Logging`, `PToolsCore`, `PToolsUIFoundation` | — | No direct third-party dependency | Keep; review direct drift |
 | `PDF` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `PTModelBenchmark` | `PToolsModel` | — | No direct third-party dependency | Keep; review direct drift |
+| `PTModelLegacyKakaJSONFixture` | `PToolsModelLegacyKakaJSON` | `KakaJSON` | 6.0 review | Keep; review direct drift |
+| `PTModelLegacySmartCodableFixture` | `PToolsModelLegacySmartCodable` | `SmartCodable` | 6.0 review | Keep; review direct drift |
+| `PTModelMixedLegacyFixture` | `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable` | — | No direct third-party dependency | Keep; review direct drift |
+| `PTModelOnlyFixture` | `PToolsModel` | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsDate` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsModelCombine` | — | — | No direct third-party dependency | Keep; review direct drift |

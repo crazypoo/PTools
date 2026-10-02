@@ -7,16 +7,16 @@
     "runnable": 114
   },
   "factoryCoverage": {
-    "descriptorCount": 52,
+    "descriptorCount": 53,
     "policy": "main_actor_registry_or_compatibility_host",
     "unresolved": []
   },
   "failures": [],
-  "generated_at": "2026-10-01T22:26:33+08:00",
+  "generated_at": "2026-10-02T14:50:53+08:00",
   "generator": "Scripts/Example/validate_demo_coverage.py",
   "missing": [],
   "moduleCount": 237,
   "schemaVersion": 1,
-  "source_revision": "e9e0402b99b3bcc1a95b156a8b19ae2f857c8218",
-  "version": "5.59.0"
+  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "version": "5.60.0"
 }

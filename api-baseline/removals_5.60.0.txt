@@ -1,0 +1,11 @@
+# English: Carry forward the reviewed compatibility changes from the 5.58 model/network migration.
+# Español: Mantiene los cambios de compatibilidad revisados de la migración de modelo/red 5.58.
+# 中文：延续 5.58 模型/网络迁移中已审阅的兼容性变更。
+open|func|open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey
+open|func|open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any?
+public|class|mappingForKey
+public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(
+# English: Keep the stale inventory entry acknowledged until the historical baseline is replaced.
+# Español: Mantiene reconocida la entrada obsoleta hasta sustituir la línea base histórica.
+# 中文：在替换历史基线前继续登记这条过期清单项。
+public|class|public class-based decoder API can migrate to immutable snapshot structs.

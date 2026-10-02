@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: e9e0402b99b3bcc1a95b156a8b19ae2f857c8218
-Generated at: 2026-10-01T22:26:33+08:00 -->
+Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Generated at: 2026-10-02T14:50:53+08:00 -->
 # Data Asset Inventory
 
-- Version: `5.59.0`
+- Version: `5.60.0`
 - Records: `237`
 
 | path | kind | format | generated | source_of_truth | action |

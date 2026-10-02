@@ -53,6 +53,8 @@ import PooToolsNetwork
 
 优先选择最小的 product 或 subspec。registry 中的名称是 `PooToolsNetwork`，不要猜测没有发布的 product 或依赖。
 
+类型化 PTModel 响应路径必须显式指定：使用 `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")`，或把同一路径传给 `Network.requestPTModel` 的 `modelPath`。默认 `.root` 保持旧行为，decoder 不会自动猜测 `data`、`result` 或 `payload`。详见 `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`。
+
 ## 6. 核心概念
 
 公开边界优先使用值类型。registry 记录的直接依赖：ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire。
@@ -60,6 +62,8 @@ import PooToolsNetwork
 ## 7. 主要 API
 
 只使用源码中稳定的公开符号。完整符号数据属于自动生成的 API 报告，不在手写指南中重复维护。
+
+类型化 PTModel 响应路径必须显式指定：使用 `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")`，或把同一路径传给 `Network.requestPTModel` 的 `modelPath`。默认 `.root` 保持旧行为，decoder 不会自动猜测 `data`、`result` 或 `payload`。详见 `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`。
 
 ## 8. 常见场景
 
@@ -117,6 +121,10 @@ UI 集成必须保留 Dynamic Type、VoiceOver、Reduce Motion、Reduce Transpar
 
 参见 Example 工程和领域测试 registry 获取可执行覆盖。宿主专属 Entitlement 仍由宿主负责。
 
+可运行的确定性覆盖：`network.ptmodel-lab`。
+
 ## 22. 相关文档
 
 [文档索引](../../index/README.zh-Hans.md) · [架构](../../architecture/ARCHITECTURE.md) · [质量](../../maintainers/QUALITY.md)
+
+类型化 PTModel 响应路径必须显式指定：使用 `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")`，或把同一路径传给 `Network.requestPTModel` 的 `modelPath`。默认 `.root` 保持旧行为，decoder 不会自动猜测 `data`、`result` 或 `payload`。详见 `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`。

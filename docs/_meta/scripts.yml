@@ -651,6 +651,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_560_ptmodel_network.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_58_contracts.sh"
   language: "sh"
   domain: "Scripts"

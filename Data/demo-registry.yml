@@ -588,6 +588,7 @@ modules:
   canonical_module_id: null
   demos:
     - "network.local-network"
+    - "network.ptmodel-lab"
 -
   module_id: "poo-tools-network-speed-test"
   coverage: "runnable"

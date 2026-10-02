@@ -63,6 +63,8 @@ public enum PTNetworkDecodeError: Error, LocalizedError, Sendable, Equatable {
     case emptyPayload
     case invalidUTF8
     case unsupportedDecoder(PTNetworkDecoderKind)
+    case modelPathNotFound(PTJSONPath)
+    case modelPathTypeMismatch(path: PTJSONPath, expected: String, actual: String)
     case underlying(String)
 
     public var errorDescription: String? {
@@ -70,6 +72,9 @@ public enum PTNetworkDecodeError: Error, LocalizedError, Sendable, Equatable {
         case .emptyPayload: return "The network response has no payload."
         case .invalidUTF8: return "The network response is not valid UTF-8."
         case .unsupportedDecoder(let kind): return "Unsupported network decoder: \(kind.rawValue)."
+        case .modelPathNotFound(let path): return "No JSON value exists at \(path.description)."
+        case .modelPathTypeMismatch(let path, let expected, let actual):
+            return "Cannot decode \(path.description) as \(expected); received \(actual)."
         case .underlying(let message): return message
         }
     }
@@ -96,9 +101,48 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
         }
     }
 
-    public static func ptModel<T: Decodable & Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
+    /// English: Select the model root explicitly; the root default preserves the pre-5.60 behavior.
+    /// Español: Selecciona explícitamente la raíz del modelo; la raíz predeterminada conserva el comportamiento anterior a 5.60.
+    /// 中文：显式选择模型根节点；默认使用 root，保持 5.60 之前的行为不变。
+    ///
+    /// ```swift
+    /// let decoder = PTNetworkResponseDecoder<User>.ptModel(User.self, at: "$.data")
+    /// let user = try decoder.decode(payload)
+    /// ```
+    ///
+    /// The path is explicit; `data`, `result`, and `payload` are never guessed.
+    public static func ptModel<T: Decodable & Sendable>(_ type: T.Type,
+                                                        at path: PTJSONPath = .root,
+                                                        decoder: PTModelDecoder = .init(policy: .compatible)) -> PTNetworkResponseDecoder<T> {
         PTNetworkResponseDecoder<T>(kind: .ptModel) { payload in
-            try PTModelDecoder(policy: .compatible).decode(type, from: payload.data)
+            guard path != .root else {
+                return try decoder.decode(type, from: payload.data)
+            }
+
+            let root = try decoder.jsonValue(from: payload.data)
+            let selected: PTJSONValue
+            do {
+                selected = try root.requiredValue(at: path)
+            } catch let error as PTModelError {
+                switch error {
+                case .requiredValue:
+                    throw PTNetworkDecodeError.modelPathNotFound(path)
+                case .pathTypeMismatch:
+                    throw PTNetworkDecodeError.modelPathTypeMismatch(path: path,
+                                                                       expected: "JSON value",
+                                                                       actual: "incompatible path component")
+                default:
+                    throw error
+                }
+            }
+
+            do {
+                return try decoder.decodeValue(type, from: selected, path: path)
+            } catch {
+                throw PTNetworkDecodeError.modelPathTypeMismatch(path: path,
+                                                                   expected: String(reflecting: type),
+                                                                   actual: selected.ptNetworkTypeName)
+            }
         }
     }
 
@@ -141,6 +185,22 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
 
     public static func kakaJSON<T: Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
         legacy(type, kind: .kakaJSON)
+    }
+}
+
+private extension PTJSONValue {
+    // English: Keep diagnostics value-typed so path failures never expose Foundation's dynamic JSON objects.
+    // Español: Mantiene los diagnósticos tipados para que los fallos de ruta nunca expongan objetos JSON dinámicos de Foundation.
+    // 中文：诊断信息保持值类型，路径失败不会暴露 Foundation 动态 JSON 对象。
+    var ptNetworkTypeName: String {
+        switch self {
+        case .null: return "null"
+        case .bool: return "Boolean"
+        case .number: return "Number"
+        case .string: return "String"
+        case .array: return "Array"
+        case .object: return "Object"
+        }
     }
 }
 

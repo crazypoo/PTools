@@ -205,6 +205,10 @@ enum PTDemoSelectionCoordinator {
                 PTGCDManager.shared.runOnMain {
                     PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6596749489", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
                 }
+            } else if descriptor.id.rawValue == "network.ptmodel-lab" {
+                PTGCDManager.shared.runOnMain {
+                    controller.navigationController?.pushViewController(PTModelNetworkDemoViewController(), animated: true)
+                }
             } else if descriptor.id.rawValue == "navigation.route" {
                 PTGCDManager.shared.runOnMain {
                     UIAlertController.baseActionSheet(title: "Route", titles: ["example"], otherBlock: { sheet,index,title in

@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 26d9a4ef27a56e1b0f3e130443230a878e99abb0
-Source version: 5.59.0
-Source inputs digest: 6aaa6f6be0320ecf737bee8c48fe02589aa0bdf3bae9f182aa3b2d2a2870b184
+Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Source version: 5.60.0
+Source inputs digest: 87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0
 Generator version: 1
 Generator: Scripts/report_public_api.rb
-Generated at: 2026-10-02T06:44:02Z
+Generated at: 2026-10-02T14:08:37Z
 -->
 
 # PTools 当前公开 API 清单
@@ -4550,9 +4550,9 @@ Generated at: 2026-10-02T06:44:02Z
 | PooToolsSource/NetWork/Network.swift:411 | class | public | public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) { |
 | PooToolsSource/NetWork/Network.swift:581 | typealias | public | public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T> |
 | PooToolsSource/NetWork/Network.swift:866 | func | public | public func performCodableRequest<T: Codable & Sendable>( |
-| PooToolsSource/NetWork/Network.swift:993 | class | public | public class func requestPTModel<T: Decodable & Sendable>(needGobal: Bool = true, |
-| PooToolsSource/NetWork/Network.swift:1015 | class | public | public class func requestCodableBodyAPI<T: Codable & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, |
-| PooToolsSource/NetWork/Network.swift:1069 | class | public | public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Any.Type? = nil) async throws -> PTBaseStructModel<Any> { |
+| PooToolsSource/NetWork/Network.swift:1014 | class | public | public class func requestPTModel<T: Decodable & Sendable>(needGobal: Bool = true, |
+| PooToolsSource/NetWork/Network.swift:1040 | class | public | public class func requestCodableBodyAPI<T: Codable & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, |
+| PooToolsSource/NetWork/Network.swift:1094 | class | public | public class func requestBodyAPI(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post, cachePolicy: PTNetworkCachePolicy? = nil, modelType: Any.Type? = nil) async throws -> PTBaseStructModel<Any> { |
 | PooToolsSource/NetWork/NetworkMetrics.swift:12 | class | public | public final class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate { |
 | PooToolsSource/NetWork/NetworkMetrics.swift:13 | func | public | public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics) { |
 | PooToolsSource/NetWork/NetworkSupport.swift:18 | class | public | public final class NetworkReachability: @unchecked Sendable { |
@@ -4699,14 +4699,14 @@ Generated at: 2026-10-02T06:44:02Z
 | PooToolsSource/NetWork/PTNetworkModelBridge.swift:49 | init | public | public init(payload: PTNetworkResponsePayload, model: Model) { |
 | PooToolsSource/NetWork/PTNetworkModelBridge.swift:55 | enum | public | public enum PTNetworkDecoderKind: String, Sendable, Codable { |
 | PooToolsSource/NetWork/PTNetworkModelBridge.swift:62 | enum | public | public enum PTNetworkDecodeError: Error, LocalizedError, Sendable, Equatable { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:68 | var | public | public var errorDescription: String? { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:78 | struct | public | public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:79 | let | public | public let kind: PTNetworkDecoderKind |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:82 | init | public | public init(kind: PTNetworkDecoderKind, |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:88 | func | public | public func decode(_ payload: PTNetworkResponsePayload) throws -> Output { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:151 | struct | public | public struct PTNetworkLegacyResponseDecoder<Output> { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:154 | init | public | public init(decode: @escaping (PTNetworkResponsePayload) throws -> Output) { |
-| PooToolsSource/NetWork/PTNetworkModelBridge.swift:158 | func | public | public func decode(_ payload: PTNetworkResponsePayload) throws -> Output { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:70 | var | public | public var errorDescription: String? { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:83 | struct | public | public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:84 | let | public | public let kind: PTNetworkDecoderKind |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:87 | init | public | public init(kind: PTNetworkDecoderKind, |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:93 | func | public | public func decode(_ payload: PTNetworkResponsePayload) throws -> Output { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:204 | struct | public | public struct PTNetworkLegacyResponseDecoder<Output> { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:207 | init | public | public init(decode: @escaping (PTNetworkResponsePayload) throws -> Output) { |
+| PooToolsSource/NetWork/PTNetworkModelBridge.swift:211 | func | public | public func decode(_ payload: PTNetworkResponsePayload) throws -> Output { |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:11 | class | public | public final class PTNetworkSpeedHistoriaModel: Codable { |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:12 | var | public | public var date:String = "" |
 | PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift:13 | var | public | public var networkType:String = "" |

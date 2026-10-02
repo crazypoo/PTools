@@ -987,9 +987,30 @@ public final class Network: @unchecked Sendable {
         return try parseCodableResponse(snapshot, modelType: modelType)
     }
 
-    // English: New callers receive typed bytes, metadata, and a PTModel value without the legacy string wrapper.
-    // Español: Los nuevos llamadores reciben bytes, metadatos y un modelo PTModel tipado sin el wrapper de texto heredado.
-    // 中文：新调用方直接获得类型化字节、元数据和 PTModel，不再依赖旧的字符串包装器。
+    /// English: Executes a request and decodes a Sendable model from an explicit JSON path.
+    /// Español: Ejecuta una solicitud y decodifica un modelo Sendable desde una ruta JSON explícita.
+    /// 中文：执行请求，并从显式 JSON 路径解码 Sendable 模型。
+    ///
+    /// Root response:
+    ///
+    /// ```swift
+    /// let response = try await Network.requestPTModel(
+    ///     urlStr: endpoint,
+    ///     modelType: User.self
+    /// )
+    /// ```
+    ///
+    /// Wrapped response:
+    ///
+    /// ```swift
+    /// let response = try await Network.requestPTModel(
+    ///     urlStr: endpoint,
+    ///     modelType: User.self,
+    ///     modelPath: "$.data"
+    /// )
+    /// ```
+    ///
+    /// `modelPath` never guesses `data`, `result`, or `payload`; `.root` remains the default.
     public class func requestPTModel<T: Decodable & Sendable>(needGobal: Bool = true,
                                                                 urlStr: URLConvertible,
                                                                 method: HTTPMethod = .post,
@@ -998,7 +1019,9 @@ public final class Network: @unchecked Sendable {
                                                                 cachePolicy: PTNetworkCachePolicy? = nil,
                                                                 modelType: T.Type,
                                                                 encoder: ParameterEncoding = URLEncoding.default,
-                                                                jsonRequest: Bool = false) async throws -> PTModelNetworkResponse<T> {
+                                                                jsonRequest: Bool = false,
+                                                                modelPath: PTJSONPath = .root,
+                                                                decoder: PTModelDecoder = .init(policy: .compatible)) async throws -> PTModelNetworkResponse<T> {
         let snapshot = try await _internalRequestApi(needGobal: needGobal,
                                                      urlStr: urlStr,
                                                      method: method,
@@ -1008,7 +1031,9 @@ public final class Network: @unchecked Sendable {
                                                      encoder: encoder,
                                                      jsonRequest: jsonRequest)
         let payload = PTNetworkResponsePayload(snapshot: snapshot)
-        let model = try PTNetworkResponseDecoder<T>.ptModel(modelType).decode(payload)
+        let model = try PTNetworkResponseDecoder<T>.ptModel(modelType,
+                                                             at: modelPath,
+                                                             decoder: decoder).decode(payload)
         return PTModelNetworkResponse(payload: payload, model: model)
     }
     

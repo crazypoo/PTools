@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.59.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.60.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.33.0`；`5.59.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.60.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+
+## 5.60.0 Unified Architecture / PTModel / Network Usability
+
+- ✅ 保持 PTModel 递归解码核心不变，补充普通 Nested Object、嵌套数组、可选值、字典和 Stringified JSON 回归。
+- ✅ 新增 Network 显式 `modelPath`：根模型、`$.data`、深层路径和数组路径统一由 `PTJSONPath` 选择。
+- ✅ 新增路径缺失与路径类型不匹配的类型化错误；默认 root 行为保持兼容，不自动猜测响应包裹字段。
+- ✅ 增加 `network.ptmodel-lab` 确定性 Demo、5.60.0 Quick Start 和 Nested JSON 语义文档。
+- [ ] SwiftPM / CocoaPods 全量 parity、God File 物理拆分、Scene UI Singleton 去全局和真实宿主/真机回归继续按 5.60.0 收口门禁执行；未完成前不创建正式 `5.60.0` tag。
 
 ## 5.59.0 5.x Finalization Governance 2.0 / DebugNetwork 2.0
 

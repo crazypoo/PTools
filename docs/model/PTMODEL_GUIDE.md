@@ -218,6 +218,19 @@ let (_, user) = try await PTNetworkExecutor.shared.execute(
 
 `PTNetworkResponsePayload` 同时提供 `data`、`metadata`、`url` 和懒加载的 `string` / `utf8String`。旧 callback、SmartCodable 和 KakaJSON 入口不在本轮删除。
 
+5.60.0 的完整实战入口见 [PTModel + Network Quick Start](PTMODEL_NETWORK_QUICKSTART_5_60.md)。普通 Nested Model、Response Envelope 和 JSON Stringified Model 的区别见
+[Nested JSON 语义](PTMODEL_NETWORK_NESTED_JSON_5_60.md)。
+
+包装响应不自动猜测 `data`、`result` 或 `payload`，请显式传入 `modelPath`：
+
+```swift
+let response = try await Network.requestPTModel(
+    urlStr: endpoint,
+    modelType: User.self,
+    modelPath: "$.data"
+)
+```
+
 ## Foundation 输入
 
 ```swift

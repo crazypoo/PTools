@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.59.0`，外部依赖阻断的 Xcode 回归完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.60.0`，外部依赖阻断的 Xcode 回归完成前不创建正式 tag。
 
 DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、过滤、脱敏 cURL/HAR/Text 导出和多 Scene presentation。使用方式见 [DebugNetwork 指南](docs/debug/DEBUG_NETWORK.md)。
 
@@ -42,6 +42,9 @@ struct User: Codable { let id: Int; let name: String }
 let user = try User.pt.model(from: #"{"id":1,"name":"Jax"}"#)
 let json = try user.pt.jsonString()
 ```
+
+PTModel 与 Network 的嵌套模型、响应包裹和 `modelPath` 用法见
+[5.60.0 Quick Start](docs/model/PTMODEL_NETWORK_QUICKSTART_5_60.md)。
 
 设备身份与系统能力可单独使用 SwiftPM `PToolsDevice` 或 CocoaPods `PooTools/Device`，迁移方式见
 [DeviceKit 迁移指南](docs/migrations/DEVICEKIT_TO_PTOOLS_DEVICE.md)。

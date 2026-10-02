@@ -53,6 +53,8 @@ import PooToolsNetwork
 
 Usa el producto o subspec mínimo publicado. El nombre del registro es `PooToolsNetwork`; no inventes productos ni dependencias no publicadas.
 
+La selección de la respuesta PTModel es explícita: usa `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` o pasa la misma ruta como `modelPath` a `Network.requestPTModel`. `.root` conserva el comportamiento heredado; el decoder nunca adivina `data`, `result` ni `payload`. Consulta `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.
+
 ## 6. Conceptos principales
 
 La frontera pública prioriza tipos de valor. Dependencias directas registradas: ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire.
@@ -60,6 +62,8 @@ La frontera pública prioriza tipos de valor. Dependencias directas registradas:
 ## 7. API principales
 
 Usa solo símbolos públicos estables. La referencia completa pertenece a los informes de API generados.
+
+La selección de la respuesta PTModel es explícita: usa `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` o pasa la misma ruta como `modelPath` a `Network.requestPTModel`. `.root` conserva el comportamiento heredado; el decoder nunca adivina `data`, `result` ni `payload`. Consulta `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.
 
 ## 8. Casos de uso
 
@@ -117,6 +121,10 @@ Ante un problema, verifica selección de módulo, target membership, Scene conte
 
 Consulta el proyecto Example y el registro de tests para cobertura ejecutable. Los entitlements del host son responsabilidad del host.
 
+Cobertura determinista ejecutable: `network.ptmodel-lab`.
+
 ## 22. Documentación relacionada
 
 [Índice de documentación](../../index/README.es.md) · [Arquitectura](../../architecture/ARCHITECTURE.md) · [Calidad](../../maintainers/QUALITY.md)
+
+La selección de la respuesta PTModel es explícita: usa `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` o pasa la misma ruta como `modelPath` a `Network.requestPTModel`. `.root` conserva el comportamiento heredado; el decoder nunca adivina `data`, `result` ni `payload`. Consulta `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.

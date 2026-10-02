@@ -946,7 +946,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsNetworkTests",
-            dependencies: ["PooToolsNetWork", "Alamofire"],
+            dependencies: ["PooToolsNetWork", "PToolsModelCore", "Alamofire"],
             path: "Tests/PToolsNetworkTests"
         ),
         .testTarget(

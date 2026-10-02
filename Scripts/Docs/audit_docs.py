@@ -377,6 +377,34 @@ def module_document(item: dict[str, Any], language: str) -> str:
             "[Índice de documentación](../../index/README.es.md) · [Arquitectura](../../architecture/ARCHITECTURE.md) · [Calidad](../../maintainers/QUALITY.md)",
         ],
     }[language]
+    if item["id"] == "poo-tools-network":
+        network_guidance = {
+            "en": (
+                "Typed PTModel response selection is explicit: use `PTNetworkResponseDecoder.ptModel(User.self, at: \"$.data\")` "
+                "or pass the same path as `modelPath` to `Network.requestPTModel`. The default `.root` preserves the legacy behavior; "
+                "the decoder never guesses `data`, `result`, or `payload`. See `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`."
+            ),
+            "zh-Hans": (
+                "类型化 PTModel 响应路径必须显式指定：使用 `PTNetworkResponseDecoder.ptModel(User.self, at: \"$.data\")`，"
+                "或把同一路径传给 `Network.requestPTModel` 的 `modelPath`。默认 `.root` 保持旧行为，decoder 不会自动猜测 `data`、`result` 或 `payload`。"
+                "详见 `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`。"
+            ),
+            "es": (
+                "La selección de la respuesta PTModel es explícita: usa `PTNetworkResponseDecoder.ptModel(User.self, at: \"$.data\")` "
+                "o pasa la misma ruta como `modelPath` a `Network.requestPTModel`. `.root` conserva el comportamiento heredado; "
+                "el decoder nunca adivina `data`, `result` ni `payload`. Consulta `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`."
+            ),
+        }[language]
+        demo_guidance = {
+            "en": "Runnable deterministic coverage: `network.ptmodel-lab`.",
+            "zh-Hans": "可运行的确定性覆盖：`network.ptmodel-lab`。",
+            "es": "Cobertura determinista ejecutable: `network.ptmodel-lab`.",
+        }[language]
+        bodies = list(bodies)
+        bodies[4] = f"{bodies[4]}\n\n{network_guidance}"
+        bodies[6] = f"{bodies[6]}\n\n{network_guidance}"
+        bodies[20] = f"{bodies[20]}\n\n{demo_guidance}"
+        bodies[21] = f"{bodies[21]}\n\n{network_guidance}"
     lines = [front_matter(item, language, canonical), f"# {item['name']}", ""]
     for index, (heading, body) in enumerate(zip(SECTION_NAMES[language], bodies), start=1):
         lines.extend([f"## {index}. {heading}", "", body, ""])

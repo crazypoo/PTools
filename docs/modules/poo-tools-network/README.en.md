@@ -53,6 +53,8 @@ import PooToolsNetwork
 
 Use the smallest published product or subspec. The registry name is `PooToolsNetwork`; do not infer an unpublished product or dependency.
 
+Typed PTModel response selection is explicit: use `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` or pass the same path as `modelPath` to `Network.requestPTModel`. The default `.root` preserves the legacy behavior; the decoder never guesses `data`, `result`, or `payload`. See `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.
+
 ## 6. Core Concepts
 
 The public boundary is value-first where possible. Direct dependencies recorded by the registry: ptools, PToolsCore, PToolsModelCore, PooToolsLoading, Alamofire.
@@ -60,6 +62,8 @@ The public boundary is value-first where possible. Direct dependencies recorded 
 ## 7. Main APIs
 
 Use only stable public symbols documented by the module source. Complete symbol data belongs to generated API reports, not hand-maintained prose.
+
+Typed PTModel response selection is explicit: use `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` or pass the same path as `modelPath` to `Network.requestPTModel`. The default `.root` preserves the legacy behavior; the decoder never guesses `data`, `result`, or `payload`. See `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.
 
 ## 8. Common Use Cases
 
@@ -117,6 +121,10 @@ If behavior is unexpected, verify module selection, target membership, scene con
 
 See the repository Example project and the domain test registry for executable coverage. Host-specific entitlements remain the host's responsibility.
 
+Runnable deterministic coverage: `network.ptmodel-lab`.
+
 ## 22. Related Documentation
 
 [Documentation index](../../index/README.en.md) · [Architecture](../../architecture/ARCHITECTURE.md) · [Quality](../../maintainers/QUALITY.md)
+
+Typed PTModel response selection is explicit: use `PTNetworkResponseDecoder.ptModel(User.self, at: "$.data")` or pass the same path as `modelPath` to `Network.requestPTModel`. The default `.root` preserves the legacy behavior; the decoder never guesses `data`, `result`, or `payload`. See `../../model/PTMODEL_NETWORK_QUICKSTART_5_60.md`.

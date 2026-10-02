@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 6a3f97d0ab05a4f04ab789c93804c84c787b5da6
-Generated at: 2026-10-01T11:37:47Z
-Version source: 5.59.0
+Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Generated at: 2026-10-02T13:59:57Z
+Version source: 5.60.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -154,6 +154,10 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `WebKit` | B | `PooTools/WebKit` | — | Parity decision before 6.0 |
 | `ZipArchive` | B | `PooTools/ZipArchive` | — | Parity decision before 6.0 |
 | `PTModelBenchmark` | C | — | `PTModelBenchmark` | Parity decision before 6.0 |
+| `PTModelLegacyKakaJSONFixture` | C | — | `PTModelLegacyKakaJSONFixture` | Parity decision before 6.0 |
+| `PTModelLegacySmartCodableFixture` | C | — | `PTModelLegacySmartCodableFixture` | Parity decision before 6.0 |
+| `PTModelMixedLegacyFixture` | C | — | `PTModelMixedLegacyFixture` | Parity decision before 6.0 |
+| `PTModelOnlyFixture` | C | — | `PTModelOnlyFixture` | Parity decision before 6.0 |
 | `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |
 | `PToolsModelLegacyKakaJSON` | C | — | `PToolsModelLegacyKakaJSON` | Parity decision before 6.0 |
 | `PToolsModelLegacySmartCodable` | C | — | `PToolsModelLegacySmartCodable` | Parity decision before 6.0 |

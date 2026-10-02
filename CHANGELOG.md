@@ -4,6 +4,14 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.60.0 — 2026-10-02
+
+- 新增 `PTNetworkResponseDecoder.ptModel(_:at:decoder:)`，支持显式 `$.data`、深层对象和数组路径解码；默认 `.root` 保持旧行为。
+- 新增 `Network.requestPTModel(..., modelPath:decoder:)`，不自动猜测 `data`、`result` 或 `payload`，并保留原始响应载荷和元数据。
+- 新增 `PTNetworkDecodeError.modelPathNotFound` 与 `modelPathTypeMismatch`，让响应路径错误可定位。
+- 增加普通嵌套 Model、可选嵌套 Model、数组、字典和 Stringified JSON 回归测试、Quick Start、Nested JSON 语义文档及确定性 Example Demo。
+- 5.60.0 继续保留 5.x 兼容入口；SwiftPM 与 CocoaPods 的宏能力差异保持明确，不修改第三方依赖。
+
 ## 5.59.0 — 2026-10-01
 
 - 完成 5.x Finalization Governance 2.0：current reports 绑定 HEAD，新增 Concurrency Exceptions v2、API/Module/Dependency freeze 清单和 stale-report 门禁。

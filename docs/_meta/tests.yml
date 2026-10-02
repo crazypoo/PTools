@@ -42,8 +42,14 @@
   target: "PToolsDebugTests"
   path: "Tests/PToolsDebugTests"
   level: "CONTRACT"
-  file_count: 1
+  file_count: 7
   files:
+    - "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkHTTPFixture.swift"
+    - "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkURLProtocolStub.swift"
+    - "Tests/PToolsDebugTests/PTDebugNetworkBodyStoreTests.swift"
+    - "Tests/PToolsDebugTests/PTDebugNetworkCaptureMatrixTests.swift"
+    - "Tests/PToolsDebugTests/PTDebugNetworkParityTests.swift"
+    - "Tests/PToolsDebugTests/PTDebugNetworkPerformanceTests.swift"
     - "Tests/PToolsDebugTests/PTNetworkCaptureContractTests.swift"
   canonical: true
   action: "KEEP"
@@ -97,10 +103,11 @@
   target: "PToolsModelTests"
   path: "Tests/PToolsModelTests"
   level: "CONTRACT"
-  file_count: 2
+  file_count: 3
   files:
     - "Tests/PToolsModelTests/PTModelCoreTests.swift"
     - "Tests/PToolsModelTests/PTModelMacroGoldenTests.swift"
+    - "Tests/PToolsModelTests/PTModelNestedModelTests.swift"
   canonical: true
   action: "KEEP"
 -
@@ -116,8 +123,9 @@
   target: "PToolsNetworkTests"
   path: "Tests/PToolsNetworkTests"
   level: "CONTRACT"
-  file_count: 1
+  file_count: 2
   files:
+    - "Tests/PToolsNetworkTests/PTNetworkModelPathTests.swift"
     - "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
   canonical: true
   action: "KEEP"
