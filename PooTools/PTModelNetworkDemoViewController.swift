@@ -8,7 +8,7 @@ import UIKit
 import PooTools
 
 @MainActor
-final class PTModelNetworkDemoViewController: UIViewController {
+final class PTModelNetworkDemoViewController: PTBaseViewController {
     private struct Profile: Codable, Sendable, Equatable {
         let nickname: String
     }
@@ -23,7 +23,7 @@ final class PTModelNetworkDemoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "PTModel + Network"
+        pt_Title = "PTModel + Network"
         view.backgroundColor = .systemBackground
         configureView()
         showIntro()
